@@ -242,7 +242,7 @@ The guard YAML parser intentionally supports a small subset of YAML so the scrip
 Use a tag for reproducible installs:
 
 ```sh
-AI_COCKPIT_TEMPLATE_REF=v0.1.0 \
+AI_COCKPIT_TEMPLATE_REF=v0.1.1 \
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust
 ```
 

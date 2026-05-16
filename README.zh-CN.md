@@ -230,7 +230,7 @@ Guard YAML 解析器只支持一个很小的 YAML 子集，因此脚本只依赖
 使用 tag 可以获得可复现安装：
 
 ```sh
-AI_COCKPIT_TEMPLATE_REF=v0.1.0 \
+AI_COCKPIT_TEMPLATE_REF=v0.1.1 \
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust
 ```
 
