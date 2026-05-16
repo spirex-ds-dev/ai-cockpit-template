@@ -35,7 +35,9 @@ AI coding agents can:
 
 Your AI agent should not have root access to your repository.
 
-AI Cockpit adds a lightweight AI review workflow to AI-assisted development.
+AI Cockpit is AI Change Governance for coding agents.
+
+It adds a lightweight AI review workflow to AI-assisted development.
 
 ![AI Cockpit demo](docs/assets/ai-cockpit-demo.gif)
 
@@ -134,5 +136,7 @@ generic, rust, flutter, typescript, python, go, java, kotlin, swift, ruby, php, 
 - [Configuration](docs/configuration.md)
 - [Architecture](docs/architecture.md)
 - [Design Philosophy](docs/design-philosophy.md)
+- [Case Study: AI rollback corruption](docs/case-study-ai-rollback-corruption.md)
+- [Launch copy](docs/launch.md)
 - [Suggested GitHub Topics](docs/topics.md)
 - [Language examples](examples/)

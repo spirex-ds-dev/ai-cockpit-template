@@ -35,7 +35,9 @@ AI 编码代理可能会：
 
 你的 AI agent 不应该拥有整个仓库的 root access。
 
-AI Cockpit 为 AI 辅助开发增加一套轻量 AI review workflow。
+AI Cockpit 是面向 coding agents 的 AI Change Governance。
+
+它为 AI 辅助开发增加一套轻量 AI review workflow。
 
 ![AI Cockpit demo](docs/assets/ai-cockpit-demo.gif)
 
@@ -134,5 +136,7 @@ generic, rust, flutter, typescript, python, go, java, kotlin, swift, ruby, php, 
 - [配置](docs/configuration.md)
 - [架构](docs/architecture.md)
 - [设计思想](docs/design-philosophy.md)
+- [案例：AI rollback corruption](docs/case-study-ai-rollback-corruption.md)
+- [传播文案](docs/launch.md)
 - [GitHub topics 建议](docs/topics.md)
 - [语言 examples](examples/)
