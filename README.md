@@ -5,6 +5,8 @@ keywords:
   - ai-agents
   - codex
   - gemini
+  - claude
+  - cursor
   - antigravity
   - agentic-coding
   - developer-tools
@@ -49,6 +51,14 @@ Strong systems are always controlled through layers: plan, boundary, verificatio
 
 The result naturally resembles an aviation control system: not because the structure was imported, but because the underlying problem is the same.
 
+## Supported Agent Environments
+
+- Codex: `AGENTS.md`
+- Gemini: `GEMINI.md`
+- Claude: `CLAUDE.md`
+- Cursor: `.cursor/rules/ai-cockpit.mdc`
+- Antigravity and other agents: use the same Contract, Summary, Makefile, and guard workflow.
+
 ## What It Provides
 
 - Work Item Contract: the task boundary before an AI agent changes files.
@@ -82,6 +92,9 @@ The result naturally resembles an aviation control system: not because the struc
       work_item_summary.example.json
     active/
     archive/
+.cursor/
+  rules/
+    ai-cockpit.mdc
 examples/
   flutter/
   rust/
@@ -106,13 +119,20 @@ templates/
     Makefile.ai
   stacks/
     flutter.mk
+    go.mk
     generic.mk
+    java.mk
+    kotlin.mk
+    php.mk
     python.mk
+    ruby.mk
     rust.mk
+    swift.mk
     typescript.mk
 install.sh
 Makefile
 AGENTS.md
+CLAUDE.md
 GEMINI.md
 ```
 
@@ -149,6 +169,13 @@ rust
 flutter
 typescript
 python
+go
+java
+kotlin
+swift
+ruby
+php
+csharp
 ```
 
 Installer options:
@@ -163,7 +190,8 @@ Installer options:
 By default, the installer is conservative:
 
 - It writes `Makefile.ai` and `Makefile.ai.stack` instead of modifying an existing Makefile.
-- It appends AI Cockpit sections to existing `AGENTS.md` and `GEMINI.md`.
+- It appends AI Cockpit sections to existing `AGENTS.md`, `GEMINI.md`, and `CLAUDE.md`.
+- It installs Cursor rules under `.cursor/rules/ai-cockpit.mdc`.
 - It skips existing files unless `--force` is provided.
 
 After install, add this line to your project Makefile unless you used `--update-makefile`:
@@ -244,6 +272,54 @@ PROJECT_TEST = python3 -m pytest
 PROJECT_LINT = python3 -m ruff check .
 ```
 
+Go:
+
+```make
+PROJECT_FORMAT_CHECK = test -z "$$(gofmt -l .)"
+PROJECT_TEST = go test ./...
+PROJECT_LINT = go vet ./...
+```
+
+Java / Kotlin:
+
+```make
+PROJECT_FORMAT_CHECK = ./gradlew spotlessCheck
+PROJECT_TEST = ./gradlew test
+PROJECT_LINT = ./gradlew check
+```
+
+Swift:
+
+```make
+PROJECT_FORMAT_CHECK = swift format lint --recursive .
+PROJECT_TEST = swift test
+PROJECT_LINT = swift build -Xswiftc -warnings-as-errors
+```
+
+Ruby:
+
+```make
+PROJECT_FORMAT_CHECK = bundle exec rubocop --format simple
+PROJECT_TEST = bundle exec rake test
+PROJECT_LINT = bundle exec rubocop
+```
+
+PHP:
+
+```make
+PROJECT_FORMAT_CHECK = vendor/bin/php-cs-fixer fix --dry-run --diff
+PROJECT_TEST = vendor/bin/phpunit
+PROJECT_LINT = vendor/bin/phpstan analyse
+```
+
+C#:
+
+```make
+PROJECT_FORMAT_CHECK = dotnet format --verify-no-changes
+PROJECT_TEST = dotnet test
+PROJECT_LINT = dotnet build -warnaserror
+```
+
 You can also update `.ai/cockpit/checks.yaml` so agents know which checks to choose for each task.
 
 ## Guard Configuration
@@ -260,7 +336,7 @@ The guard YAML parser intentionally supports a small subset of YAML so the scrip
 Use a tag for reproducible installs:
 
 ```sh
-AI_COCKPIT_TEMPLATE_REF=v0.1.1 \
+AI_COCKPIT_TEMPLATE_REF=v0.2.0 \
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust
 ```
 

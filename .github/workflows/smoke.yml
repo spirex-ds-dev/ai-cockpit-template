@@ -29,6 +29,13 @@ jobs:
             cd "$tmp"
             printf 'include Makefile.ai\n' > Makefile
             "$GITHUB_WORKSPACE/install.sh" --stack rust --dry-run
+            "$GITHUB_WORKSPACE/install.sh" --stack go --dry-run
+            "$GITHUB_WORKSPACE/install.sh" --stack java --dry-run
+            "$GITHUB_WORKSPACE/install.sh" --stack kotlin --dry-run
+            "$GITHUB_WORKSPACE/install.sh" --stack swift --dry-run
+            "$GITHUB_WORKSPACE/install.sh" --stack ruby --dry-run
+            "$GITHUB_WORKSPACE/install.sh" --stack php --dry-run
+            "$GITHUB_WORKSPACE/install.sh" --stack csharp --dry-run
           )
 
       - name: Install into temporary repository
@@ -57,4 +64,3 @@ jobs:
             "$GITHUB_WORKSPACE/install.sh" --stack typescript --update-makefile
             "$GITHUB_WORKSPACE/install.sh" --stack typescript --dry-run --update-makefile
           )
-

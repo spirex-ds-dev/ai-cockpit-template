@@ -10,7 +10,20 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-STACKS = {"generic", "rust", "flutter", "typescript", "python"}
+STACKS = {
+    "generic",
+    "rust",
+    "flutter",
+    "typescript",
+    "python",
+    "go",
+    "java",
+    "kotlin",
+    "swift",
+    "ruby",
+    "php",
+    "csharp",
+}
 SCRIPT_NAMES = {
     "ai_archive_work_item.py",
     "ai_check_backtrack.py",
@@ -67,6 +80,7 @@ class Installer:
         self.target.mkdir(parents=True, exist_ok=True)
 
         self.copy_tree(".ai")
+        self.copy_tree(".cursor")
         self.copy_scripts()
         self.copy_file("templates/make/Makefile.ai", "Makefile.ai")
         self.copy_file(f"templates/stacks/{self.stack}.mk", "Makefile.ai.stack")
@@ -74,6 +88,7 @@ class Installer:
             self.copy_tree("examples")
         self.install_agent_doc("AGENTS.md")
         self.install_agent_doc("GEMINI.md")
+        self.install_agent_doc("CLAUDE.md")
         if self.update_makefile:
             self.append_makefile_include()
 

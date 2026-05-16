@@ -1,0 +1,6 @@
+# Go stack preset for AI Cockpit.
+
+PROJECT_FORMAT_CHECK = test -z "$$(gofmt -l .)"
+PROJECT_TEST = go test ./...
+PROJECT_LINT = go vet ./...
+

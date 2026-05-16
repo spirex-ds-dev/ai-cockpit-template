@@ -18,7 +18,7 @@ Environment:
   AI_COCKPIT_TEMPLATE_REF=main
 
 Common options passed through to the Python installer:
-  --stack generic|rust|flutter|typescript|python
+  --stack generic|rust|flutter|typescript|python|go|java|kotlin|swift|ruby|php|csharp
   --dry-run
   --force
   --with-examples
