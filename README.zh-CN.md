@@ -1,8 +1,13 @@
 ---
 author: Ray
-description: 面向 Codex、Gemini、Antigravity 和其他 AI 编码代理的语言无关 AI 治理模板。
+description: 面向 Codex、Gemini、Claude、Cursor、Antigravity 和其他 AI 编码代理的语言无关 AI 治理模板。
 keywords:
   - ai-agents
+  - ai-agent
+  - ai-workflow
+  - code-review
+  - llmops
+  - ai-safety
   - codex
   - gemini
   - claude
@@ -10,6 +15,7 @@ keywords:
   - antigravity
   - agentic-coding
   - developer-tools
+  - developer-workflow
   - governance
   - template
   - automation
@@ -37,7 +43,7 @@ AI Cockpit 让 AI 生成的变更有边界、可审查、可审计。
 
 你可以把它理解成：给 AI 生成变更加上一层 Git 式纪律，围绕 scope、checks、summary 和 status 建立控制。
 
-## 使用起来是什么感觉
+## 30 秒理解
 
 Before：
 
@@ -58,21 +64,25 @@ Cockpit 已更新。
 Review 从上下文开始。
 ```
 
-## 它会拦住什么
+## 3 分钟安装
 
-```text
-[BLOCKED]
-Scope violation detected.
-
-Unauthorized file modification:
-- src/auth/payment.rs
-
-Allowed scope:
-- src/auth/session.rs
-- tests/auth/session_test.rs
+```sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust
 ```
 
-## 任务生命周期
+启动一个受治理的 AI 任务：
+
+```sh
+make ai-start TASK=example_change TITLE="Example change" MODE=code
+```
+
+带检查和审计记录完成它：
+
+```sh
+make ai-finish TASK=example_change
+```
+
+## 工作方式
 
 ```text
 Plan -> Scope -> Verify -> Summarize -> Status -> Archive
@@ -88,334 +98,39 @@ Plan -> Scope -> Verify -> Summarize -> Status -> Archive
 | Cockpit Status | 用一个生成视图展示当前 AI 任务状态。 |
 | Finish Flow | 只有检查通过后才归档 Work Item。 |
 
-## 安装
-
-```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust
-```
-
-然后启动一个受治理的 AI 任务：
-
-```sh
-make ai-start TASK=example_change TITLE="Example change" MODE=code
-```
-
-## 支持的代理环境
-
-- Codex：`AGENTS.md`
-- Gemini：`GEMINI.md`
-- Claude：`CLAUDE.md`
-- Cursor：`.cursor/rules/ai-cockpit.mdc`
-- Antigravity 和其他代理：使用同一套 Contract、Summary、Makefile 和 guard workflow。
-
-## 支持的技术栈
+## 它会拦住什么
 
 ```text
-generic
-rust
-flutter
-typescript
-python
-go
-java
-kotlin
-swift
-ruby
-php
-csharp
+[BLOCKED]
+Scope violation detected.
+
+Unauthorized file modification:
+- src/auth/payment.rs
+
+Allowed scope:
+- src/auth/session.rs
+- tests/auth/session_test.rs
 ```
 
-## 面向谁
+## 支持
 
-- 正在生产代码库中引入 AI 编码代理的团队。
-- 希望 AI 生成的 diff 有边界、可审查、可回滚的维护者。
-- 需要在 Rust、Flutter、TypeScript、Python 或混合语言代码库中使用同一套 AI 工作流的工程师。
-- 希望轻量治理，但不想引入服务、数据库或专有运行时的组织。
-
-## 目录结构
+代理：
 
 ```text
-.ai/
-  cockpit/
-    README.md
-    checks.yaml
-    current_status.md
-  guards/
-    backtrack_policy.yaml
-    cockpit_status_policy.yaml
-    coverage_policy.yaml
-    file_boundary.yaml
-    file_ownership.yaml
-    scope_policy.yaml
-    summary_policy.yaml
-  work-items/
-    _templates/
-      work_item_contract.example.json
-      work_item_summary.example.json
-    active/
-    archive/
-.cursor/
-  rules/
-    ai-cockpit.mdc
-examples/
-  csharp/
-  flutter/
-  go/
-  java/
-  kotlin/
-  php/
-  python/
-  ruby/
-  rust/
-  swift/
-  typescript/
-scripts/
-  ai_*.py
-  install_ai_cockpit.py
-templates/
-  make/
-    Makefile.ai
-  stacks/
-    flutter.mk
-    go.mk
-    generic.mk
-    java.mk
-    kotlin.mk
-    php.mk
-    python.mk
-    ruby.mk
-    rust.mk
-    swift.mk
-    typescript.mk
-install.sh
-Makefile
-AGENTS.md
-CLAUDE.md
-GEMINI.md
+Codex, Gemini, Claude, Cursor, Antigravity, and other coding agents
 ```
 
-## 快速开始
-
-可以把本仓库作为 GitHub template 创建新项目，也可以安装到已有项目。
-
-### 安装到已有项目
-
-从本地 clone 安装：
-
-```sh
-/path/to/ai-cockpit-template/install.sh --stack rust
-```
-
-远程一键安装：
-
-```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust
-```
-
-更安全的两步安装：
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh -o install-ai-cockpit.sh
-sh install-ai-cockpit.sh --stack rust
-```
-
-支持的 stack preset：
+技术栈：
 
 ```text
-generic
-rust
-flutter
-typescript
-python
-go
-java
-kotlin
-swift
-ruby
-php
-csharp
+generic, rust, flutter, typescript, python, go, java, kotlin, swift, ruby, php, csharp
 ```
 
-安装器选项：
+## 进阶文档
 
-```text
---dry-run          只展示将执行的操作，不写文件。
---force            覆盖已有 AI Cockpit 文件。
---with-examples    把 examples/ 复制到目标代码库。
---update-makefile  向目标 Makefile 追加 "include Makefile.ai"。
-```
-
-默认安装是保守的：
-
-- 写入 `Makefile.ai` 和 `Makefile.ai.stack`，不直接改已有 Makefile。
-- 对已有 `AGENTS.md`、`GEMINI.md` 和 `CLAUDE.md` 追加 AI Cockpit section。
-- 安装 Cursor 规则到 `.cursor/rules/ai-cockpit.mdc`。
-- 已存在的文件默认跳过，除非使用 `--force`。
-
-如果没有使用 `--update-makefile`，请在项目 Makefile 中加入：
-
-```make
-include Makefile.ai
-```
-
-### 创建 Work Item
-
-创建 Work Item：
-
-```sh
-make ai-start TASK=example_change TITLE="Example change" MODE=code
-```
-
-编辑生成的 Contract：
-
-```text
-.ai/work-items/active/example_change.contract.json
-```
-
-只在 Contract 声明的 `scope` 内修改代码或文档。
-
-更新 Summary：
-
-```text
-.ai/work-items/active/example_change.summary.json
-```
-
-执行 finish flow：
-
-```sh
-make ai-finish TASK=example_change
-```
-
-Finish flow 会运行 AI 检查，生成 `.ai/cockpit/current_status.md`，检查状态，运行项目质量检查，并在通过后归档 Contract 和 Summary。
-
-## 自定义项目检查
-
-安装器会写入 `Makefile.ai.stack`。Stack preset 通过这些变量配置命令：
-
-```make
-PROJECT_FORMAT_CHECK = printf '%s\n' 'No formatter configured.'
-PROJECT_TEST = printf '%s\n' 'No test command configured.'
-PROJECT_LINT = printf '%s\n' 'No linter configured.'
-```
-
-Rust：
-
-```make
-PROJECT_FORMAT_CHECK = cargo fmt --all -- --check
-PROJECT_TEST = cargo test
-PROJECT_LINT = cargo clippy --all-targets -- -D warnings
-```
-
-Flutter：
-
-```make
-PROJECT_FORMAT_CHECK = dart format --set-exit-if-changed .
-PROJECT_TEST = flutter test
-PROJECT_LINT = flutter analyze
-```
-
-TypeScript：
-
-```make
-PROJECT_FORMAT_CHECK = npm run format:check
-PROJECT_TEST = npm test
-PROJECT_LINT = npm run lint
-```
-
-Python：
-
-```make
-PROJECT_FORMAT_CHECK = python3 -m ruff format --check .
-PROJECT_TEST = python3 -m pytest
-PROJECT_LINT = python3 -m ruff check .
-```
-
-Go：
-
-```make
-PROJECT_FORMAT_CHECK = test -z "$$(gofmt -l .)"
-PROJECT_TEST = go test ./...
-PROJECT_LINT = go vet ./...
-```
-
-Java / Kotlin：
-
-```make
-PROJECT_FORMAT_CHECK = ./gradlew spotlessCheck
-PROJECT_TEST = ./gradlew test
-PROJECT_LINT = ./gradlew check
-```
-
-Swift：
-
-```make
-PROJECT_FORMAT_CHECK = swift format lint --recursive .
-PROJECT_TEST = swift test
-PROJECT_LINT = swift build -Xswiftc -warnings-as-errors
-```
-
-Ruby：
-
-```make
-PROJECT_FORMAT_CHECK = bundle exec rubocop --format simple
-PROJECT_TEST = bundle exec rake test
-PROJECT_LINT = bundle exec rubocop
-```
-
-PHP：
-
-```make
-PROJECT_FORMAT_CHECK = vendor/bin/php-cs-fixer fix --dry-run --diff
-PROJECT_TEST = vendor/bin/phpunit
-PROJECT_LINT = vendor/bin/phpstan analyse
-```
-
-C#：
-
-```make
-PROJECT_FORMAT_CHECK = dotnet format --verify-no-changes
-PROJECT_TEST = dotnet test
-PROJECT_LINT = dotnet build -warnaserror
-```
-
-也可以更新 `.ai/cockpit/checks.yaml`，让代理知道每个任务应该选择哪些检查。
-
-## Guard 配置
-
-- `.ai/guards/file_ownership.yaml` 控制 restricted / forbidden AI 写入。
-- `.ai/guards/file_boundary.yaml` 阻止 generated 和 runtime artifact 混入代码 diff。
-- `.ai/guards/coverage_policy.yaml` 定义生产代码和测试路径 pattern。
-- `.ai/guards/scope_policy.yaml` 定义 always allowed 路径和可选 dependency scope 规则。
-
-Guard YAML 解析器只支持一个很小的 YAML 子集，因此脚本只依赖 Python 标准库。
-
-## 设计思想
-
-人类文明不断建立系统，让系统进化，然后面对一个必然结果：系统复杂度逐渐超出人的直接掌控。到这个阶段，复杂度必须被压缩：内部过程成为 black box，而 cockpit 把人需要采取行动的状态反馈回来。
-
-这个框架是我为当前 AI 开发问题设计出来的。发想本身并不新，也不是照搬航空系统。只是当我认真解决同一个控制问题时，最后自然会得到相似的形状。
-
-强系统一定会被控制：计划、边界、验证、记录、状态显示。AI 开发同样需要这些层：
-
-| AI 开发问题 | 需要的控制层 | 航空系统类比 |
-| --- | --- | --- |
-| 作业计划模糊 | Work Item Contract | 飞行计划 |
-| 修改范围不明 | Scope Guard | 管制区域 |
-| 验证不充分 | Required checks | 仪表确认 |
-| 记录没有留下 | Change Summary 和 archive | 黑匣子 |
-| 当前状态不可见 | Cockpit Status | 驾驶舱 |
-
-所以最终结构自然接近航空控制系统：不是因为引入了外部形式，而是因为底层问题相同。
-
-## 版本化安装
-
-使用 tag 可以获得可复现安装：
-
-```sh
-AI_COCKPIT_TEMPLATE_REF=v0.2.0 \
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust
-```
-
-## 模板策略
-
-不要把业务逻辑、个人路径、真实 API key、GitHub secret 或组织专属运行时配置加入本仓库。模板保持通用，真实项目策略放到采用该模板的代码库中。
+- [安装](docs/installation.md)
+- [配置](docs/configuration.md)
+- [架构](docs/architecture.md)
+- [设计思想](docs/design-philosophy.md)
+- [GitHub topics 建议](docs/topics.md)
+- [语言 examples](examples/)
