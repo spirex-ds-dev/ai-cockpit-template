@@ -1,18 +1,46 @@
+---
+author: AI Cockpit Template contributors
+description: Language-agnostic AI governance template for Codex, Gemini, Antigravity, and other agentic coding tools.
+keywords:
+  - ai-agents
+  - codex
+  - gemini
+  - antigravity
+  - agentic-coding
+  - developer-tools
+  - governance
+  - template
+  - automation
+  - ci
+---
+
 # ai-cockpit-template
 
-Language-agnostic AI governance template. Works with Rust, Flutter, TypeScript, Python, and other codebases by customizing Makefile checks and scope rules.
+[中文](README.zh-CN.md) | [日本語](README.ja.md)
 
-This template gives Codex, Gemini, Antigravity, and other coding agents an engineering-grade workflow for bounded code changes, verification, and audit records.
+`ai-cockpit-template` is a language-agnostic AI governance scaffold for engineering teams that use Codex, Gemini, Antigravity, or other coding agents. It adds a repeatable cockpit around AI-assisted code changes: define the task boundary first, keep the agent inside scope, require verification, summarize the change, and preserve an audit trail.
+
+## Who It Is For
+
+- Teams adopting AI coding agents in production repositories.
+- Maintainers who want AI-generated diffs to be bounded, reviewable, and reversible.
+- Engineers who need the same AI workflow across Rust, Flutter, TypeScript, Python, or mixed-language codebases.
+- Organizations that want lightweight governance without adding a service, database, or proprietary runtime.
+
+## Problem It Solves
+
+AI agents can move fast, but they can also drift outside the requested task, delete tests, rewrite unrelated files, skip verification, or leave reviewers guessing what changed. This template turns each AI task into an explicit Work Item with machine-checkable scope, required checks, and a final summary.
 
 ## What It Provides
 
 - Work Item Contract: the task boundary before an AI agent changes files.
 - Scope Guard: blocks changes outside the declared scope.
-- Backtrack Guard: reports undeclared removal of tests, snapshots, or audit records.
+- Backtrack Guard: reports undeclared removal of tests, snapshots, or Work Item records.
 - Coverage Guard: reports production changes without matching test changes.
 - Change Summary: records what changed, what was verified, and what risk remains.
 - Cockpit Status: a generated one-screen view of the current AI task state.
 - Finish Flow: validates checks and archives the Work Item only after the workflow passes.
+- Installer: a non-destructive installer for adding AI Cockpit to existing repositories.
 
 ## Repository Layout
 
@@ -23,33 +51,51 @@ This template gives Codex, Gemini, Antigravity, and other coding agents an engin
     checks.yaml
     current_status.md
   guards/
+    backtrack_policy.yaml
+    cockpit_status_policy.yaml
+    coverage_policy.yaml
     file_boundary.yaml
     file_ownership.yaml
-    backtrack_policy.yaml
-    coverage_policy.yaml
     scope_policy.yaml
     summary_policy.yaml
-    cockpit_status_policy.yaml
   work-items/
     _templates/
+      work_item_contract.example.json
+      work_item_summary.example.json
     active/
     archive/
+examples/
+  flutter/
+  rust/
+  typescript/
 scripts/
-  ai_start.py
-  ai_finish.py
-  ai_check_work_item.py
-  ai_check_scope.py
-  ai_check_guards.py
+  ai_archive_work_item.py
   ai_check_backtrack.py
   ai_check_coverage_guard.py
-  ai_check_summary.py
-  ai_generate_status.py
+  ai_check_guards.py
+  ai_check_scope.py
   ai_check_status.py
-  ai_archive_work_item.py
-examples/
-  rust/
-  flutter/
-  typescript/
+  ai_check_summary.py
+  ai_check_work_item.py
+  ai_common.py
+  ai_finish.py
+  ai_generate_status.py
+  ai_observability.py
+  ai_start.py
+  install_ai_cockpit.py
+templates/
+  make/
+    Makefile.ai
+  stacks/
+    flutter.mk
+    generic.mk
+    python.mk
+    rust.mk
+    typescript.mk
+install.sh
+Makefile
+AGENTS.md
+GEMINI.md
 ```
 
 ## Quick Start
@@ -64,7 +110,7 @@ From a local clone of this template:
 /path/to/ai-cockpit-template/install.sh --stack rust
 ```
 
-For a remote GitHub repository, set the template repo and pipe the installer:
+Remote one-command install:
 
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust
@@ -80,7 +126,11 @@ sh install-ai-cockpit.sh --stack rust
 Supported stack presets:
 
 ```text
-generic, rust, flutter, typescript, python
+generic
+rust
+flutter
+typescript
+python
 ```
 
 Installer options:
@@ -136,43 +186,44 @@ The finish flow runs AI checks, generates `.ai/cockpit/current_status.md`, check
 
 ## Customizing Project Checks
 
-The template keeps project-specific commands in the Makefile:
+The installer writes `Makefile.ai.stack`. Stack presets configure these command variables:
 
 ```make
-project-format-check:
-	cargo fmt --all -- --check
-
-project-test:
-	cargo test
-
-project-lint:
-	cargo clippy --all-targets -- -D warnings
+PROJECT_FORMAT_CHECK = printf '%s\n' 'No formatter configured.'
+PROJECT_TEST = printf '%s\n' 'No test command configured.'
+PROJECT_LINT = printf '%s\n' 'No linter configured.'
 ```
 
-For Flutter:
+Rust:
 
 ```make
-project-format-check:
-	dart format --set-exit-if-changed .
-
-project-test:
-	flutter test
-
-project-lint:
-	flutter analyze
+PROJECT_FORMAT_CHECK = cargo fmt --all -- --check
+PROJECT_TEST = cargo test
+PROJECT_LINT = cargo clippy --all-targets -- -D warnings
 ```
 
-For TypeScript:
+Flutter:
 
 ```make
-project-format-check:
-	npm run format:check
+PROJECT_FORMAT_CHECK = dart format --set-exit-if-changed .
+PROJECT_TEST = flutter test
+PROJECT_LINT = flutter analyze
+```
 
-project-test:
-	npm test
+TypeScript:
 
-project-lint:
-	npm run lint
+```make
+PROJECT_FORMAT_CHECK = npm run format:check
+PROJECT_TEST = npm test
+PROJECT_LINT = npm run lint
+```
+
+Python:
+
+```make
+PROJECT_FORMAT_CHECK = python3 -m ruff format --check .
+PROJECT_TEST = python3 -m pytest
+PROJECT_LINT = python3 -m ruff check .
 ```
 
 You can also update `.ai/cockpit/checks.yaml` so agents know which checks to choose for each task.
@@ -186,10 +237,30 @@ You can also update `.ai/cockpit/checks.yaml` so agents know which checks to cho
 
 The guard YAML parser intentionally supports a small subset of YAML so the scripts can run with Python's standard library only.
 
+## Versioned Install
+
+Use a tag for reproducible installs:
+
+```sh
+AI_COCKPIT_TEMPLATE_REF=v0.1.0 \
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust
+```
+
 ## Suggested Repository Topics
 
-`ai-agents`, `codex`, `gemini`, `agentic-coding`, `developer-tools`, `governance`, `template`, `automation`, `ci`
+```text
+ai-agents
+codex
+gemini
+agentic-coding
+developer-tools
+governance
+template
+automation
+ci
+```
 
 ## Template Policy
 
 Do not add business logic, personal paths, real API keys, GitHub secrets, or organization-specific runtime configuration to this repository. Keep examples generic and move real project policy into the adopting repository.
+

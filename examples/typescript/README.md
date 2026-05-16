@@ -1,21 +1,24 @@
+---
+author: AI Cockpit Template contributors
+description: TypeScript stack adaptation example for AI Cockpit.
+keywords:
+  - typescript
+  - ai-cockpit
+  - ai-agents
+  - governance
+---
+
 # TypeScript Adaptation Example
 
-Use these Makefile targets in a TypeScript repository:
+Use this stack preset in `Makefile.ai.stack` for a TypeScript repository:
 
 ```make
-project-format-check:
-	npm run format:check
-
-project-test:
-	npm test
-
-project-lint:
-	npm run lint
-
-quality: project-format-check project-test project-lint diff-check
+PROJECT_FORMAT_CHECK = npm run format:check
+PROJECT_TEST = npm test
+PROJECT_LINT = npm run lint
 ```
 
-Suggested guard patterns:
+Suggested guard patterns for `.ai/guards/coverage_policy.yaml`:
 
 ```yaml
 production:

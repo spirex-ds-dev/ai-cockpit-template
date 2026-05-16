@@ -1,21 +1,24 @@
+---
+author: AI Cockpit Template contributors
+description: Rust stack adaptation example for AI Cockpit.
+keywords:
+  - rust
+  - ai-cockpit
+  - ai-agents
+  - governance
+---
+
 # Rust Adaptation Example
 
-Use these Makefile targets in a Rust repository:
+Use this stack preset in `Makefile.ai.stack` for a Rust repository:
 
 ```make
-project-format-check:
-	cargo fmt --all -- --check
-
-project-test:
-	cargo test
-
-project-lint:
-	cargo clippy --all-targets -- -D warnings
-
-quality: project-format-check project-test project-lint diff-check
+PROJECT_FORMAT_CHECK = cargo fmt --all -- --check
+PROJECT_TEST = cargo test
+PROJECT_LINT = cargo clippy --all-targets -- -D warnings
 ```
 
-Suggested guard patterns:
+Suggested guard patterns for `.ai/guards/coverage_policy.yaml`:
 
 ```yaml
 production:
