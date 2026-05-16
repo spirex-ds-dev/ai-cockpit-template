@@ -1,5 +1,6 @@
 ---
 author: Ray
+title: "AI Cockpit"
 description: AI Cockpit workspace overview and workflow guide.
 keywords:
   - ai-cockpit
