@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import subprocess
 import sys
 from pathlib import Path
 
@@ -46,12 +47,12 @@ def validate_status_consistency(status_path: Path = DEFAULT_STATUS) -> list[str]
 
     if contract_ids != summary_ids:
         for item in sorted(contract_ids - summary_ids):
-            issues.append(f"active Contract has no matching Summary: {item}")
+            issues.append(f"active Contract has no matching Summary: {item}; create the missing Summary or archive/remove the Contract")
         for item in sorted(summary_ids - contract_ids):
-            issues.append(f"active Summary has no matching Contract: {item}")
+            issues.append(f"active Summary has no matching Contract: {item}; create the missing Contract or archive/remove the Summary")
 
     if len(contract_ids) > 1:
-        issues.append(f"multiple active Work Items found: {', '.join(sorted(contract_ids))}")
+        issues.append(f"multiple active Work Items found: {', '.join(sorted(contract_ids))}; keep only one active Work Item")
 
     if not text:
         issues.append(f"cockpit status is missing: {relative(status_path)}")
@@ -59,7 +60,7 @@ def validate_status_consistency(status_path: Path = DEFAULT_STATUS) -> list[str]
 
     if not contract_ids and not summary_ids:
         if "- State: `no_active_work_item`" not in text:
-            issues.append("cockpit status is not no_active_work_item while no active Work Item exists")
+            issues.append("cockpit status is not no_active_work_item while no active Work Item exists; run `make repair-ai-status`")
         return issues
 
     if len(contract_ids) == 1 and len(summary_ids) == 1 and contract_ids == summary_ids:
@@ -67,25 +68,66 @@ def validate_status_consistency(status_path: Path = DEFAULT_STATUS) -> list[str]
         contract_path = relative(ACTIVE_DIR / f"{task}.contract.json")
         summary_path = relative(ACTIVE_DIR / f"{task}.summary.json")
         if "- State: `no_active_work_item`" in text:
-            issues.append("cockpit status is no_active_work_item while an active Work Item exists")
+            issues.append("cockpit status is no_active_work_item while an active Work Item exists; run `make repair-ai-status`")
         if f"- Task: `{task}`" not in text:
-            issues.append(f"cockpit status Task does not match active Work Item: {task}")
+            issues.append(f"cockpit status Task does not match active Work Item: {task}; run `make repair-ai-status`")
         if f"- Contract Path: `{contract_path}`" not in text:
-            issues.append(f"cockpit status Contract Path does not match active Contract: {contract_path}")
+            issues.append(f"cockpit status Contract Path does not match active Contract: {contract_path}; run `make repair-ai-status`")
         if f"- Summary Path: `{summary_path}`" not in text:
-            issues.append(f"cockpit status Summary Path does not match active Summary: {summary_path}")
+            issues.append(f"cockpit status Summary Path does not match active Summary: {summary_path}; run `make repair-ai-status`")
 
     return issues
+
+
+def repair_status(status_path: Path = DEFAULT_STATUS) -> int:
+    contracts = active_contracts()
+    summaries = active_summaries()
+    contract_ids = {path.name.removesuffix(".contract.json") for path in contracts}
+    summary_ids = {path.name.removesuffix(".summary.json") for path in summaries}
+
+    if contract_ids != summary_ids or len(contract_ids) > 1:
+        for issue in validate_status_consistency(status_path):
+            print(f"[ERROR] cannot auto-repair: {issue}", file=sys.stderr)
+        return 1
+
+    command = [sys.executable, "scripts/ai_generate_status.py"]
+    if not contract_ids:
+        command.append("--no-active")
+    else:
+        task = next(iter(contract_ids))
+        command.extend(
+            [
+                relative(ACTIVE_DIR / f"{task}.contract.json"),
+                "--summary",
+                relative(ACTIVE_DIR / f"{task}.summary.json"),
+            ]
+        )
+    if status_path != DEFAULT_STATUS:
+        command.extend(["--output", str(status_path)])
+    result = subprocess.run(command, cwd=PROJECT_ROOT, check=False)
+    if result.returncode != 0:
+        return result.returncode
+
+    issues = validate_status_consistency(status_path)
+    if issues:
+        for issue in issues:
+            print(f"[ERROR] repair did not produce consistent status: {issue}", file=sys.stderr)
+        return 1
+    print("ai status repaired")
+    return 0
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Validate AI Cockpit active/status consistency.")
     parser.add_argument("--status", default=str(DEFAULT_STATUS), help="Path to current_status.md.")
+    parser.add_argument("--repair", action="store_true", help="Regenerate current_status.md when the active state is repairable.")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    if args.repair:
+        return repair_status(Path(args.status))
     issues = validate_status_consistency(Path(args.status))
     if issues:
         for issue in issues:

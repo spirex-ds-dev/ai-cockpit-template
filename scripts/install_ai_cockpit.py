@@ -29,6 +29,7 @@ SCRIPT_NAMES = {
     "ai_check_backtrack.py",
     "ai_check_coverage_guard.py",
     "ai_check_guards.py",
+    "ai_check_review_policy.py",
     "ai_check_scope.py",
     "ai_check_status.py",
     "ai_check_status_consistency.py",

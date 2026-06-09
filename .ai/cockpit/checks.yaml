@@ -32,6 +32,10 @@ checks:
     command: make check-ai-guards
     purpose: Validate file ownership and boundary guard manifests.
 
+  aiReviewPolicy:
+    commandTemplate: make check-ai-review-policy SUMMARY={summaryPath}
+    purpose: Report changes that should receive explicit Summary review focus.
+
   aiBacktrack:
     command: make check-ai-backtrack
     purpose: Report undeclared removal of tests, snapshots, work item evidence, or configured protected patterns.
@@ -56,11 +60,16 @@ checks:
     command: make check-ai-status-consistency
     purpose: Verify active Work Item files and current_status.md agree, including no-active state.
 
+  aiStatusRepair:
+    command: make repair-ai-status
+    purpose: Regenerate current_status.md for no-active state or one paired active Work Item.
+
 selectionRules:
   - Prefer the verification commands declared in the active Work Item Contract.
   - Run Scope Guard before finishing any code-changing task.
   - Run Backtrack Guard when tests, snapshots, generated outputs, or .ai/work-items/** are changed.
   - Run Coverage Guard when production code changes.
   - Run Status Consistency after generating or checking current_status.md.
+  - Run Review Policy when .ai/**, agent rules, Makefile, AI scripts, or CI files change.
   - Changes to .ai/**, agent rule files, Makefile, or CI should include review focus in the Summary reviewReadiness field.
   - Customize projectFormat/projectTest/projectLint in the Makefile for Rust, Flutter, TypeScript, Python, or another stack.
