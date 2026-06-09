@@ -45,7 +45,11 @@ def main() -> int:
     if consistency_issues:
         for issue in consistency_issues:
             print(f"[ERROR] {issue}", file=sys.stderr)
-        print("ERROR: fix Work Item lifecycle/status consistency before creating a new Work Item", file=sys.stderr)
+        print(
+            "ERROR: fix Work Item lifecycle/status consistency before creating a new Work Item. "
+            "Run `make repair-ai-status` when the active files are paired; otherwise clean up active Work Item files manually.",
+            file=sys.stderr,
+        )
         return 1
 
     contract_path = ACTIVE_DIR / f"{task}.contract.json"
