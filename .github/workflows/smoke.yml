@@ -10,12 +10,10 @@ on:
 jobs:
   template-smoke:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Compile scripts
         run: python3 -m py_compile scripts/*.py
