@@ -10,14 +10,14 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from ai_common import load_json
+from ai_common import load_json, verification_key
 
 
 def required_verification(contract: dict[str, Any]) -> list[str]:
     return [
-        item.get("command")
+        verification_key(item)
         for item in contract.get("verification", [])
-        if isinstance(item, dict) and item.get("required") is True and isinstance(item.get("command"), str)
+        if isinstance(item, dict) and item.get("required") is True and verification_key(item)
     ]
 
 
@@ -29,9 +29,9 @@ def verification_status(summary: dict[str, Any] | None) -> dict[str, str]:
     if not isinstance(summary, dict):
         return {}
     return {
-        item.get("command"): item.get("result")
+        verification_key(item): item.get("result")
         for item in summary.get("verification", [])
-        if isinstance(item, dict) and isinstance(item.get("command"), str) and isinstance(item.get("result"), str)
+        if isinstance(item, dict) and verification_key(item) and isinstance(item.get("result"), str)
     }
 
 

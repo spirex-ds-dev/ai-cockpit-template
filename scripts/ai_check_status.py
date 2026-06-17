@@ -10,7 +10,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from ai_common import load_json
+from ai_common import load_json, verification_key
 from ai_observability import create_observability, elapsed_ms
 
 
@@ -19,9 +19,9 @@ REQUIRED_FIELDS = ("workItemId", "mode")
 
 def required_commands(contract: dict[str, Any]) -> list[str]:
     return [
-        item.get("command")
+        verification_key(item)
         for item in contract.get("verification", [])
-        if isinstance(item, dict) and item.get("required") is True and isinstance(item.get("command"), str)
+        if isinstance(item, dict) and item.get("required") is True and verification_key(item)
     ]
 
 
@@ -64,7 +64,7 @@ def main() -> int:
     if "## Blocking" not in blocking_section or "- none" not in blocking_section:
         issues.append("Blocking section is not none")
 
-    verification_status = {item.get("command"): item.get("result") for item in summary.get("verification", []) if isinstance(item, dict)}
+    verification_status = {verification_key(item): item.get("result") for item in summary.get("verification", []) if isinstance(item, dict)}
     for command in required_commands(contract):
         expected = f"- `{command}`: passed"
         if verification_status.get(command) != "passed":
@@ -85,4 +85,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

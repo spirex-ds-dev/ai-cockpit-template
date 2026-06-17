@@ -22,12 +22,13 @@ PROJECT_LINT ?= printf '%s\n' 'No project linter configured. Set PROJECT_LINT in
 	project-format-check project-test project-lint diff-check quality \
 	ai-start ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-review-policy \
-	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item
+	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item check-ai-pr
 
 ai-help:
 	@printf '%s\n' 'AI Cockpit commands:'
 	@printf '%s\n' '  make ai-start TASK=<task> TITLE="..." MODE=code'
 	@printf '%s\n' '  make check-ai'
+	@printf '%s\n' '  make check-ai-pr AI_BASE_COMMIT=<merge-base-sha>'
 	@printf '%s\n' '  make ai-finish TASK=<task>'
 	@printf '%s\n' '  make quality'
 
@@ -57,7 +58,7 @@ check-ai-scope:
 	$(AI_PYTHON) scripts/ai_check_scope.py $(CONTRACT)
 
 check-ai-guards:
-	$(AI_PYTHON) scripts/ai_check_guards.py
+	$(AI_PYTHON) scripts/ai_check_guards.py $(if $(CONTRACT),--contract $(CONTRACT))
 
 check-ai-agent-risk:
 	$(AI_PYTHON) scripts/ai_check_agent_risk.py $(if $(CONTRACT),--contract $(CONTRACT)) $(if $(SUMMARY),--summary $(SUMMARY))
@@ -96,7 +97,7 @@ check-ai:
 	@if [ -n "$(CONTRACT)" ]; then \
 		"$${MAKE:-make}" check-ai-contract CONTRACT="$(CONTRACT)" && \
 		"$${MAKE:-make}" check-ai-scope CONTRACT="$(CONTRACT)" && \
-		"$${MAKE:-make}" check-ai-guards && \
+		"$${MAKE:-make}" check-ai-guards CONTRACT="$(CONTRACT)" && \
 		"$${MAKE:-make}" check-ai-agent-risk CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
 		"$${MAKE:-make}" check-ai-review-policy SUMMARY="$(SUMMARY)" && \
 		"$${MAKE:-make}" check-ai-backtrack && \
@@ -114,6 +115,9 @@ check-ai:
 		"$${MAKE:-make}" check-ai-backtrack && \
 		"$${MAKE:-make}" check-ai-coverage-guard; \
 	fi
+
+check-ai-pr:
+	$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
 
 ai-finish:
 	$(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)"

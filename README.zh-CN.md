@@ -97,8 +97,8 @@ Plan -> Scope -> Verify -> Summarize -> Status -> Archive
 | --- | --- |
 | Work Item Contract | 在 AI 修改文件前声明任务边界。 |
 | Scope Guard | 阻止超出声明 scope 的变更。 |
-| Backtrack Guard | 报告未声明删除测试、snapshot 或 Work Item 记录。 |
-| Coverage Guard | 报告没有对应测试变更的生产代码修改。 |
+| Backtrack Guard | 默认阻止删除受保护的测试、snapshot 或 Work Item 记录。 |
+| Coverage Guard | 默认阻止没有对应测试变更的已配置生产代码修改。 |
 | Agent Risk Guard | 针对「prompt 仅是建议」、「mid-task 漂移」和「过度声明」风险的硬门控。 |
 | AI Review Policy | 标记需要在 Change Summary 中明确说明 review 重点的治理和 CI 变更（仅报告）。 |
 | Checkpoint | Mid-task 完整性快照，用于在完成前检测 scope 漂移。 |
@@ -106,6 +106,16 @@ Plan -> Scope -> Verify -> Summarize -> Status -> Archive
 | Change Summary | 记录改了什么、验证了什么、还剩什么风险。 |
 | Cockpit Status | 用一个生成视图展示当前 AI 任务状态。 |
 | Finish Flow | 只有检查通过后才归档 Work Item。 |
+
+## 信任模型
+
+- `ai-start` 记录 `baseCommit` 和任务开始前脏文件的内容指纹。
+- Contract v2 只能引用 `.ai/cockpit/checks.yaml` 中注册的 check ID，不能提供任意命令。
+- `ai-finish` 记录 check ID、退出码、执行 commit、Contract hash、command hash 和脱敏输出摘要；这些是结构化记录，不是密码学证明。
+- 安装器会分发相同的 PR validator 和 Make target。归档 Work Item 后，CI 运行 `make check-ai-pr AI_BASE_COMMIT=<merge-base>`。
+- 每个非豁免 PR 路径必须由同一对 Contract/Summary 同时声明 scope 和 `changedFiles`。
+- restricted/destructive approval 是 Contract 内的自声明流程记录；可信人工批准应由 CODEOWNERS、受保护 CI environment 或平台身份事件提供。
+- AI Cockpit 用于减少误操作和流程漂移，不是针对恶意代理的安全沙箱。项目测试或 `make quality` 必须作为独立 required CI check 运行。
 
 ## 它会拦住什么
 

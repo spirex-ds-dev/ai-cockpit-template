@@ -4,13 +4,14 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import time
 from pathlib import Path
 from typing import Any
 
-from ai_common import PROJECT_ROOT, load_json, non_empty_string, simple_yaml_lists
+from ai_common import PROJECT_ROOT, load_json, non_empty_string, simple_yaml_lists, verification_key
 from ai_observability import create_observability, elapsed_ms
 
 
@@ -22,26 +23,26 @@ NON_CODING_STATUSES = {"defer", "needs_human_decision", "block"}
 def command_prefixes(contract: dict[str, Any]) -> list[str]:
     values: list[str] = []
     for item in contract.get("verification", []):
-        if isinstance(item, dict) and item.get("required") is True and isinstance(item.get("command"), str):
-            values.append(item["command"])
+        if isinstance(item, dict) and item.get("required") is True and verification_key(item):
+            values.append(verification_key(item))
     return values
 
 
 def has_required_gate(commands: list[str], required_prefix: str) -> bool:
-    return any(command.startswith(required_prefix) for command in commands)
+    return required_prefix in commands
 
 
 def matching_required_commands(commands: list[str], required_prefix: str) -> list[str]:
-    return [command for command in commands if command.startswith(required_prefix)]
+    return [command for command in commands if command == required_prefix]
 
 
 def summary_status(summary: dict[str, Any] | None) -> dict[str, str]:
     if not isinstance(summary, dict):
         return {}
     return {
-        item.get("command"): item.get("result")
+        verification_key(item): item.get("result")
         for item in summary.get("verification", [])
-        if isinstance(item, dict) and isinstance(item.get("command"), str) and isinstance(item.get("result"), str)
+        if isinstance(item, dict) and verification_key(item) and isinstance(item.get("result"), str)
     }
 
 
@@ -54,7 +55,9 @@ def checkpoint_evidence(summary: dict[str, Any] | None) -> list[dict[str, Any]]:
     return [item for item in evidence if isinstance(item, dict)]
 
 
-def validate_agent_risks(contract: dict[str, Any], summary: dict[str, Any] | None) -> list[str]:
+def validate_agent_risks(
+    contract: dict[str, Any], summary: dict[str, Any] | None, *, expected_contract_hash: str = ""
+) -> list[str]:
     issues: list[str] = []
     policy_lists = simple_yaml_lists(POLICY)
     required_gates = policy_lists.get("risks.promptIsAdvice.requiredVerification", [])
@@ -64,7 +67,7 @@ def validate_agent_risks(contract: dict[str, Any], summary: dict[str, Any] | Non
         if not has_required_gate(commands, required):
             issues.append(f"missing required AI hard gate verification: {required}")
             continue
-        if isinstance(summary, dict) and required != "make check-ai-agent-risk":
+        if isinstance(summary, dict) and required != "aiAgentRisk":
             passed = [command for command in matching_required_commands(commands, required) if statuses.get(command) == "passed"]
             if not passed:
                 issues.append(f"required AI hard gate is not passed in Summary: {required}")
@@ -108,6 +111,16 @@ def validate_agent_risks(contract: dict[str, Any], summary: dict[str, Any] | Non
                 for key in ("acceptanceCount", "unknownCount", "requiredChecks", "requiredChecksPassed"):
                     if not isinstance(item.get(key), int):
                         issues.append(f"checkpointEvidence[{item.get('stage')}].{key} must be integer")
+                if expected_contract_hash and item.get("contractHash") != expected_contract_hash:
+                    issues.append(f"checkpointEvidence[{item.get('stage')}] contractHash is stale")
+                expected_counts = {
+                    "acceptanceCount": len(contract.get("acceptance", [])) if isinstance(contract.get("acceptance"), list) else 0,
+                    "unknownCount": len(contract.get("unknowns", [])) if isinstance(contract.get("unknowns"), list) else 0,
+                    "requiredChecks": len(commands),
+                }
+                for key, expected in expected_counts.items():
+                    if item.get(key) != expected:
+                        issues.append(f"checkpointEvidence[{item.get('stage')}].{key} is stale")
 
     return issues
 
@@ -132,7 +145,8 @@ def main() -> int:
         print(f"Failed to run agent risk check: {exc}", file=sys.stderr)
         return 1
 
-    issues = validate_agent_risks(contract, summary)
+    expected_hash = hashlib.sha256(Path(args.contract).read_bytes()).hexdigest()[:16]
+    issues = validate_agent_risks(contract, summary, expected_contract_hash=expected_hash)
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(
         json.dumps(

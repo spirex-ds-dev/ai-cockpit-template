@@ -1,0 +1,340 @@
+{
+  "workItemId": "archive-upgrade-integrity",
+  "contractPath": ".ai/work-items/archive/2026/archive-upgrade-integrity.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/archive-upgrade-integrity.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/archive-upgrade-integrity.summary.json",
+      "reason": "Recorded implementation scope, verification evidence, and residual risk."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/archive-upgrade-integrity.contract.json",
+      "reason": "Archived Work Item audit evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/archive-upgrade-integrity.summary.json",
+      "reason": "Archived Work Item audit evidence."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Regenerated Cockpit status for this Work Item."
+    },
+    {
+      "path": ".gitignore",
+      "reason": "Ignored in-repository upgrade backups."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Discovered all changed archive evidence and rejected mutation, deletion, rename, and unpaired additions."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Added active-state and version preflight, managed ignore upgrades, post-copy validation, and automatic rollback."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Covered Summary-only tampering, Contract-only mutation, deletion, rename, and valid aggregate evidence."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Covered backup ignores, active upgrade refusal and override, version failures, and rollback."
+    },
+    {
+      "path": "docs/architecture.md",
+      "reason": "Documented immutable archive evidence semantics."
+    },
+    {
+      "path": "docs/installation.md",
+      "reason": "Documented upgrade preflight, override, ignored backups, version checks, and rollback."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Exposed the active-upgrade override in installer help."
+    }
+  ],
+  "sourcesUsed": [
+    "user review supplied on 2026-06-17",
+    "scripts/ai_check_pr.py",
+    "scripts/install_ai_cockpit.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:02.726475+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "3778debfbbf4f1fab94a8eb66bc0d28af1b1ccf39a2b9a8be51a109b0a0586e4",
+      "commandHash": "a64e7431c3b5686a71f0019b324cba5d33720a423acf7d3ca27a9a5dd4036f1c",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/archive-upgrade-integrity.contract.json work item contract check passed: .ai/work-items/active/archive-upgrade-integrity.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:02.896338+00:00",
+      "exitCode": 0,
+      "durationMs": 166,
+      "outputDigest": "031a9214d636d045a231991675a79452249391c896cd2fba996c389a65ea81df",
+      "commandHash": "eb0777aa55177dc33bb977ea6608e4ea5f84e192e67dab4f83e824e56ad2d646",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/archive-upgrade-integrity.contract.json scope guard passed: 9 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:03.047291+00:00",
+      "exitCode": 0,
+      "durationMs": 149,
+      "outputDigest": "a30d1c121957c92b6022339df04a49229f1f8d19def2d748695c480c1535bd5f",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/archive-upgrade-integrity.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/archive-upgrade-integrity.contract.json SUMMARY=.ai/work-items/active/archive-upgrade-integrity.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:03.096021+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "79767b125f83b9705111569ba6b56db0113aaeb83d1b74c684fe5918d17d946a",
+      "commandHash": "e3cae8e448827995cd22405766b31b071d1d1975ebd3d3c036473e0fdfbf6466",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/archive-upgrade-integrity.contract.json --summary .ai/work-items/active/archive-upgrade-integrity.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `archive-upgrade-integrity` - Contract Hash: `f1f906053c678101` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `7` - Unknown Count: `0` - Required Checks: `1"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:03.246483+00:00",
+      "exitCode": 0,
+      "durationMs": 149,
+      "outputDigest": "2e10507278c435f42ed553b9c7e9a86351d4ce24f002b95a01b6fa97856cdef6",
+      "commandHash": "c484c6b4ff939fbdf5d3f2bcb0e1bec246740813a8aa3546bb4a8a000da8833b",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/archive-upgrade-integrity.summary.json review policy matched 2 path(s) [review] scripts/ai_check_pr.py [review] .ai/cockpit/current_status.md review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:03.382640+00:00",
+      "exitCode": 0,
+      "durationMs": 135,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:03.521579+00:00",
+      "exitCode": 0,
+      "durationMs": 137,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "quality",
+      "command": "make quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:09.858293+00:00",
+      "exitCode": 0,
+      "durationMs": 6335,
+      "outputDigest": "b3bab2e9f5f9af7eebad49e64262d89e2d14dc703679bd1ff8991c65fa64fc68",
+      "commandHash": "e483963884b442f0092037d5409f23ba2e2c9c9bfec6670efa7529b84ce15b8b",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q ............................................ [100%] 44 passed in 6.11s PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m py_compile scripts/*.py tests/*.py git diff --check"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/archive-upgrade-integrity.contract.json SUMMARY=.ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:09.904347+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "3ff68ee92c8eea5cf5d8e7a43529259e3c31a976402d67b55f61d0f7f4f15a65",
+      "commandHash": "301243a5eee333f015eb56d1a5d54b34819928d18e0f6a3b7066e1015c5f8616",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/archive-upgrade-integrity.contract.json --summary .ai/work-items/active/archive-upgrade-integrity.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/archive-upgrade-integrity.contract.json SUMMARY=.ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:09.947472+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "39d7712b4feb6b52d1857b0f5022456137a241308d06e601fe639c0002165f96",
+      "commandHash": "e1419d5486c37c512052e6ff3f12628c3dfab34440b7c1695c4f7271631d6c6c",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/archive-upgrade-integrity.contract.json --summary .ai/work-items/active/archive-upgrade-integrity.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:09.989149+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/archive-upgrade-integrity.contract.json SUMMARY=.ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:10.033403+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "59311433212d45c0821dff623da3bf8ffbd3f7cfcea8f75317d3c7b4ac12f7a8",
+      "commandHash": "bb7adcd52b67192e05acbbd2409e210e5432311b1db831ea3950a033ac1a581b",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/archive-upgrade-integrity.contract.json --summary .ai/work-items/active/archive-upgrade-integrity.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/archive-upgrade-integrity.summary.json CONTRACT=.ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:17:10.152419+00:00",
+      "exitCode": 0,
+      "durationMs": 117,
+      "outputDigest": "2e6cdfb09f3722d9a3a781d7141d3defa2e776a3442915492a7dc53d98130704",
+      "commandHash": "e8e346465558ee1b78bf8f7428b3ae2b36b7b962d70904640c65ac72cb634fb2",
+      "contractHash": "f1f906053c67810130bfa76d3330508481f564b45fa0263564b373f7b260c3f0",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/archive-upgrade-integrity.summary.json --contract .ai/work-items/active/archive-upgrade-integrity.contract.json ai summary check passed: .ai/work-items/active/archive-upgrade-integrity.summary.json"
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Archive and upgrade trust-boundary behavior changed; focused and full executable tests cover the new failure paths."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    "The default python3 executable did not provide pytest; verification uses the repository-local .venv runtime."
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "upgrade migrations",
+      "detail": "The installer validates direction and runtime consistency but future schema versions will still need explicit migration functions when replacement alone is insufficient.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "Implementation is complete and all required checks are delegated to ai-finish for bound execution evidence.",
+    "expectedReviewFocus": [
+      "Archive name-status handling and immutable evidence policy.",
+      "Upgrade preflight ordering, rollback completeness, and explicit active-state override."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [
+    "A later Work Item must not be able to claim a modified older archive Summary.",
+    "Upgrade backups must not pollute Git state and upgrades must not silently change semantics during active work."
+  ],
+  "userCorrectionSolidification": [
+    "Archive integrity requirements are enforced in scripts/ai_check_pr.py and regression tests.",
+    "Upgrade safety requirements are enforced in scripts/install_ai_cockpit.py, managed ignore rules, documentation, and tests."
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "f1f906053c678101",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 13,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed scope, acceptance, unknowns, verification, and trust-boundary risks before editing."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "f1f906053c678101",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 13,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed final scope and test results before delegated ai-finish verification."
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not claim cryptographic archive immutability or generic future-schema migration; report only the enforced PR and installer behavior."
+}

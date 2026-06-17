@@ -14,12 +14,37 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Select governance diff baseline
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            base="$(git merge-base HEAD "origin/${{ github.base_ref }}")"
+          elif [[ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]]; then
+            base="${{ github.event.before }}"
+          else
+            base="$(git rev-parse HEAD)"
+          fi
+          printf 'AI_BASE_COMMIT=%s\n' "$base" >> "$GITHUB_ENV"
 
       - name: Compile scripts
         run: python3 -m py_compile scripts/*.py
 
+      - name: Install test runner
+        run: python3 -m pip install --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Run governance regression suite
+        run: python3 -m pytest -q
+
       - name: Run template AI checks
-        run: make check-ai
+        run: |
+          if [[ "${{ github.event_name }}" != "workflow_dispatch" ]]; then
+            make check-ai-pr AI_BASE_COMMIT="$AI_BASE_COMMIT"
+          else
+            make check-ai
+          fi
 
       - name: Installer dry run
         run: |
@@ -46,6 +71,8 @@ jobs:
             cd "$tmp"
             printf 'include Makefile.ai\n' > Makefile
             "$GITHUB_WORKSPACE/install.sh" --stack generic --with-examples
+            test -f scripts/ai_check_pr.py
+            grep -q '^check-ai-pr:' Makefile.ai
             test -f examples/csharp/README.md
             test -f examples/go/README.md
             test -f examples/java/README.md
@@ -56,8 +83,36 @@ jobs:
             test -f examples/swift/README.md
             python3 -m py_compile scripts/*.py
             make check-ai
-            make quality
+            if make quality; then
+              echo 'generic quality must fail until project checks are configured' >&2
+              exit 1
+            fi
+            git config user.email test@example.invalid
+            git config user.name 'CI Smoke'
+            git add .
+            git commit -m 'initial template install'
+            base="$(git rev-parse HEAD)"
+            mkdir -p .ai/work-items/archive/2026
+            cp "$GITHUB_WORKSPACE/.ai/work-items/archive/2026/trust_boundary_hardening.contract.json" .ai/work-items/archive/2026/install_smoke.contract.json
+            cp "$GITHUB_WORKSPACE/.ai/work-items/archive/2026/trust_boundary_hardening.summary.json" .ai/work-items/archive/2026/install_smoke.summary.json
+            make check-ai-pr AI_BASE_COMMIT="$base"
             make ai-start TASK=ci_smoke TITLE="CI smoke" MODE=investigate
+            python3 - <<'PY'
+            import json
+            from pathlib import Path
+
+            path = Path('.ai/work-items/active/ci_smoke.contract.json')
+            contract = json.loads(path.read_text())
+            contract['scope'].append('.ai/guards/scope_policy.yaml')
+            contract['restrictedWriteApproval'] = {
+                'approved': True,
+                'approvedBy': 'CI smoke',
+                'reason': 'Verify installed Makefile.ai passes Contract approval to the guard.',
+            }
+            path.write_text(json.dumps(contract, indent=2) + '\n')
+            PY
+            printf '\n# install smoke restricted approval\n' >> .ai/guards/scope_policy.yaml
+            make check-ai-guards CONTRACT=.ai/work-items/active/ci_smoke.contract.json
           )
 
       - name: Reinstall is idempotent

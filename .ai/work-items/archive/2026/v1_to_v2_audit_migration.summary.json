@@ -1,0 +1,323 @@
+{
+  "workItemId": "v1_to_v2_audit_migration",
+  "contractPath": ".ai/work-items/archive/2026/v1_to_v2_audit_migration.contract.json",
+  "changedFiles": [
+    {
+      "path": "requirements-dev.txt",
+      "reason": "Adopted an uncommitted pre-v2 dependency declaration into v2 audit ownership."
+    },
+    {
+      "path": "tests/conftest.py",
+      "reason": "Adopted pre-v2 test bootstrap into v2 audit ownership."
+    },
+    {
+      "path": "tests/test_contract_and_policy.py",
+      "reason": "Adopted pre-v2 policy tests into v2 audit ownership."
+    },
+    {
+      "path": ".ai/guards/backtrack_policy.yaml",
+      "reason": "Adopted pre-v2 blocking policy into v2 audit ownership."
+    },
+    {
+      "path": ".ai/guards/scope_policy.yaml",
+      "reason": "Adopted pre-v2 dependency scope policy into v2 audit ownership."
+    },
+    {
+      "path": "scripts/ai_check_backtrack.py",
+      "reason": "Adopted pre-v2 backtrack enforcement into v2 audit ownership."
+    },
+    {
+      "path": "scripts/ai_check_coverage_guard.py",
+      "reason": "Adopted pre-v2 coverage enforcement into v2 audit ownership."
+    },
+    {
+      "path": "scripts/ai_check_guards.py",
+      "reason": "Adopted pre-v2 restricted-write enforcement into v2 audit ownership."
+    },
+    {
+      "path": "scripts/ai_check_scope.py",
+      "reason": "Adopted pre-v2 scope enforcement into v2 audit ownership."
+    },
+    {
+      "path": "templates/stacks/generic.mk",
+      "reason": "Adopted pre-v2 generic fail-closed preset into v2 audit ownership."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v1_to_v2_audit_migration.contract.json",
+      "reason": "Archived Work Item audit evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v1_to_v2_audit_migration.summary.json",
+      "reason": "Archived Work Item audit evidence."
+    }
+  ],
+  "sourcesUsed": [
+    "failed aggregate PR check after Contract v1 rejection"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:09.255769+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "dba3769a5873204e9b90e3594cbece41f7c8d29da400e05c1a83147365dab3cb",
+      "commandHash": "585b978f568ad6dc9a76d37920a8b2c2075b0a62994a9f856c0ec644ed53f28d",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/v1_to_v2_audit_migration.contract.json work item contract check passed: .ai/work-items/active/v1_to_v2_audit_migration.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:09.405136+00:00",
+      "exitCode": 0,
+      "durationMs": 148,
+      "outputDigest": "69c99251e945dd7fe388590da14846d2f7046f7c5ed51ff27f16257c181a0c73",
+      "commandHash": "f2d052b63524d50363935da77cb895781677703e6c23b73a9190ef54b2db3f69",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/v1_to_v2_audit_migration.contract.json scope guard passed: 0 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:09.570559+00:00",
+      "exitCode": 0,
+      "durationMs": 164,
+      "outputDigest": "e8a14432ff512fb5648a34aab99f9b67bdf5cfd0c117c70963e5475bc7957cc6",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/v1_to_v2_audit_migration.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/v1_to_v2_audit_migration.contract.json SUMMARY=.ai/work-items/active/v1_to_v2_audit_migration.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:09.626027+00:00",
+      "exitCode": 0,
+      "durationMs": 54,
+      "outputDigest": "8588f5e42ce7071b3c56fc90c1f8845b5fa51c192242364d23e51812ee281c94",
+      "commandHash": "3fa2f0e16971eb1b89e6ced6f7948562fb51c5e3fdb177c940ac02e850a70706",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/v1_to_v2_audit_migration.contract.json --summary .ai/work-items/active/v1_to_v2_audit_migration.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `v1_to_v2_audit_migration` - Contract Hash: `8371ee5247fedff0` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `3` - Unknown Count: `0` - Required Checks: `13` "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:09.750762+00:00",
+      "exitCode": 0,
+      "durationMs": 123,
+      "outputDigest": "6a95fdc53b3558372de57914728f67b8402875ed0643042a3d6fe834b1c13881",
+      "commandHash": "5465cb210ddd436d476cdec79d1e06b6086731ed02bf19adfbf695ba38a6de45",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/v1_to_v2_audit_migration.summary.json review policy: no matched paths report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:09.892477+00:00",
+      "exitCode": 0,
+      "durationMs": 140,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:10.015635+00:00",
+      "exitCode": 0,
+      "durationMs": 122,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "quality",
+      "command": "make quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:15.731642+00:00",
+      "exitCode": 0,
+      "durationMs": 5714,
+      "outputDigest": "688abdee0f89f3ca4a4978d1a98c59e7b82607399c0ce4c67ccba3e65386740f",
+      "commandHash": "e483963884b442f0092037d5409f23ba2e2c9c9bfec6670efa7529b84ce15b8b",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q .................................... [100%] 36 passed in 5.48s PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m py_compile scripts/*.py tests/*.py git diff --check"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/v1_to_v2_audit_migration.contract.json SUMMARY=.ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:15.783246+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "0f77de4c1ba3ad81d38c67e485773e2379c51cb10c2fdebf735f4c054d8015b7",
+      "commandHash": "da0a7994f692c9594c4bb51eb94b8ef732c8ce37167d2eed8bc66cbf7a4f6460",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/v1_to_v2_audit_migration.contract.json --summary .ai/work-items/active/v1_to_v2_audit_migration.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/v1_to_v2_audit_migration.contract.json SUMMARY=.ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:15.831705+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "8bf90ad2d0cb4e48882002b3ab8cee79b1b2f30900f1293d131326c2ed3d4c2c",
+      "commandHash": "2c0a0a369837a5e84464c63c615efbf1f388b87b20d9b0d0d350f0f75a57bb9c",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/v1_to_v2_audit_migration.contract.json --summary .ai/work-items/active/v1_to_v2_audit_migration.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:15.879452+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/v1_to_v2_audit_migration.contract.json SUMMARY=.ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:15.930013+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "abb350fbf7632dbb66816b589bed591ef468ae14a6915d84fbe34dba10648b6c",
+      "commandHash": "7a62c7c18725aa3f16ed38c37bb5d14737eeb9b0c1f63e9b104415b4c2dc0f80",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/v1_to_v2_audit_migration.contract.json --summary .ai/work-items/active/v1_to_v2_audit_migration.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/v1_to_v2_audit_migration.summary.json CONTRACT=.ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:02:16.040185+00:00",
+      "exitCode": 0,
+      "durationMs": 108,
+      "outputDigest": "a8d2d136a73db046720f688223f029958ecc7139bec647d2a8fda9c9c354d983",
+      "commandHash": "add91f952296ee4e74c89538bbf103149e1e9ef7fe7e5ed36d8a4f6c11a69fb4",
+      "contractHash": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/v1_to_v2_audit_migration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v1_to_v2_audit_migration.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/v1_to_v2_audit_migration.summary.json --contract .ai/work-items/active/v1_to_v2_audit_migration.contract.json ai summary check passed: .ai/work-items/active/v1_to_v2_audit_migration.summary.json"
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Audit-only migration; adopted file contents are unchanged."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    "target/ai_*.json",
+    "target/ai_observability.jsonl"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "The aggregate gate supplied the exact ownership gap list.",
+    "expectedReviewFocus": [
+      "Pre-v2 path adoption only"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "verified",
+    "localization": "not_applicable",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [
+    ".ai/work-items/archive/2026/v1_to_v2_audit_migration.contract.json"
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "detail": "Aggregate ownership gaps reviewed.",
+      "contractHash": "8371ee5247fedff0",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 13,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "detail": "Adopted paths verified unchanged.",
+      "contractHash": "8371ee5247fedff0",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 13,
+      "requiredChecksPassed": 0
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "This Summary claims audit ownership migration, not implementation changes to adopted files."
+}

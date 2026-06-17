@@ -1,0 +1,349 @@
+{
+  "workItemId": "distribution_parity_hardening",
+  "contractPath": ".ai/work-items/archive/2026/distribution_parity_hardening.contract.json",
+  "changedFiles": [
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Added installed check-ai-pr and Contract-aware Guard wiring."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Distributed ai_check_pr.py and excluded template active/archive history."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Required one paired Contract/Summary owner for every non-exempt PR path."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Executed installed PR validation and restricted approval behavior in a temporary repository."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Verified installed script, targets, guard wiring, and clean Work Item directories."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Rejected cross-pair scope and changedFiles claims."
+    },
+    {
+      "path": "README.md",
+      "reason": "Synchronized installed PR behavior and paired ownership semantics."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Added the current trust model and corrected hard-gate behavior in Chinese."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Added the current trust model and corrected hard-gate behavior in Japanese."
+    },
+    {
+      "path": "docs/installation.md",
+      "reason": "Documented installed PR validation, clean audit directories, and CI command."
+    },
+    {
+      "path": "docs/configuration.md",
+      "reason": "Documented paired ownership and generic fail-closed behavior."
+    },
+    {
+      "path": "docs/architecture.md",
+      "reason": "Specified Work Item-level paired PR attribution."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Synchronized cockpit guidance with installed aggregate PR validation."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/distribution_parity_hardening.contract.json",
+      "reason": "Archived Work Item audit evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/distribution_parity_hardening.summary.json",
+      "reason": "Archived Work Item audit evidence."
+    }
+  ],
+  "sourcesUsed": [
+    "user third-round review supplied on 2026-06-17",
+    "templates/make/Makefile.ai",
+    "scripts/install_ai_cockpit.py",
+    "docs/installation.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/distribution_parity_hardening.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:00.170082+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "e5e4f3ed8fe3786b6a8fe0da584e525885485c84aeeeec9a76af796552162166",
+      "commandHash": "85e3630f305fabb6fc8b08427e67e11a48e575424689f7f983d533f1e82e5f0c",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/distribution_parity_hardening.contract.json work item contract check passed: .ai/work-items/active/distribution_parity_hardening.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/distribution_parity_hardening.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:00.304503+00:00",
+      "exitCode": 0,
+      "durationMs": 133,
+      "outputDigest": "e85f8b834f47f763843e464234803fd09d86f29abd152a0bb9398af9fec6ddbe",
+      "commandHash": "e537d37c664bd590d8fc285f93548801c4ec15203cba8fd883b448da26b671a8",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/distribution_parity_hardening.contract.json scope guard passed: 13 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:00.447273+00:00",
+      "exitCode": 0,
+      "durationMs": 141,
+      "outputDigest": "b1f1d52dcaa0308c91d43cda244626847981b3ef421a300f04fd74b57ca16a92",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/distribution_parity_hardening.contract.json [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/smoke.yml (.github/workflows/**) - CI workflow configuration. guard check completed: 2 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/distribution_parity_hardening.contract.json SUMMARY=.ai/work-items/active/distribution_parity_hardening.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:00.493707+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "f81e14bf390c1043be649194f4eddf990dd04be5a8dbf36172e311a466377b54",
+      "commandHash": "8b090a6439e1324e01c7bc5b9fdb30bec0a3e0e7cffcf4a0e729aea7ad33be6d",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/distribution_parity_hardening.contract.json --summary .ai/work-items/active/distribution_parity_hardening.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `distribution_parity_hardening` - Contract Hash: `14346647f0d48bf4` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `0` - Require"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/distribution_parity_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:00.623429+00:00",
+      "exitCode": 0,
+      "durationMs": 128,
+      "outputDigest": "6da431cbd1f1513ed2ad724bbe3fdb6394f954700388b1c8d63e7d00b1be4e18",
+      "commandHash": "0ae9bcc3b36740d917c8b775994abf85943346f5e8681b1a7e62f60932c4a929",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/distribution_parity_hardening.summary.json review policy matched 4 path(s) [review] scripts/ai_check_pr.py [review] .ai/cockpit/README.md [review] .github/workflows/smoke.yml [review] templates/make/Makefile.ai review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:00.747869+00:00",
+      "exitCode": 0,
+      "durationMs": 123,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:00.875419+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "quality",
+      "command": "make quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:02.344321+00:00",
+      "exitCode": 0,
+      "durationMs": 1467,
+      "outputDigest": "44ab680a57fcb34b303f5a2273f370cef75ab5cafcb3a3f6ed9b9994669d2c07",
+      "commandHash": "e483963884b442f0092037d5409f23ba2e2c9c9bfec6670efa7529b84ce15b8b",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q ........................... [100%] 27 passed in 1.23s PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m py_compile scripts/*.py tests/*.py git diff --check"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/distribution_parity_hardening.contract.json SUMMARY=.ai/work-items/active/distribution_parity_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:02.397684+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "50f050934e2f9f666224c6bd6d17e7a9468e423c5474c1d39964d54b15276a96",
+      "commandHash": "1d968fc4a31a608cade8ecd7b9dfc616c2f7548d14945757ec143e8f20926c66",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/distribution_parity_hardening.contract.json --summary .ai/work-items/active/distribution_parity_hardening.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/distribution_parity_hardening.contract.json SUMMARY=.ai/work-items/active/distribution_parity_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:02.452741+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "f4ce8696a6d9fb0d7fb17f6bf27cf069768c7d685e4ae3939abb0561fd2a4293",
+      "commandHash": "064bf603cf511a38c74852e625ac882cb879e4959afbf1335b28c7e2d63f5f46",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/distribution_parity_hardening.contract.json --summary .ai/work-items/active/distribution_parity_hardening.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:02.506601+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/distribution_parity_hardening.contract.json SUMMARY=.ai/work-items/active/distribution_parity_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:02.563957+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "daa8b0a99391373372da1993244838eea9ab7189b702dcdc6014980df1fcf28e",
+      "commandHash": "32b1bef1aae0887260e995e5cdf6c3baad2d80f1e94ab0140c140a0dac5e2520",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/distribution_parity_hardening.contract.json --summary .ai/work-items/active/distribution_parity_hardening.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/distribution_parity_hardening.summary.json CONTRACT=.ai/work-items/active/distribution_parity_hardening.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:23:02.714082+00:00",
+      "exitCode": 0,
+      "durationMs": 148,
+      "outputDigest": "b31e03bd658e95169f910bb913478de3ec26e774534764a603ae38b6244f5127",
+      "commandHash": "32423c256681d5dd43d18066c42cd65f7e3d460ad67a3eb559b199019e12a061",
+      "contractHash": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/distribution_parity_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/distribution_parity_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/distribution_parity_hardening.summary.json --contract .ai/work-items/active/distribution_parity_hardening.contract.json ai summary check passed: .ai/work-items/active/distribution_parity_hardening.summary.json"
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Installer and CI distribution behavior changed; both unit and real temporary-repository installation tests passed."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    "target/ai_*.json",
+    "target/ai_observability.jsonl"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    "The installer previously copied the template repository's active and archived Work Item history; this was discovered by real installation validation and removed."
+  ],
+  "residualRisks": [],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "Distribution parity, paired attribution, and documentation synchronization have executable coverage.",
+    "expectedReviewFocus": [
+      "Installed Make target parity",
+      "Clean Work Item directory installation",
+      "Paired PR path ownership"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified",
+    "userVisibleOutput": "verified",
+    "persistence": "verified",
+    "localization": "verified",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "verified"
+  },
+  "userCorrectionsCaptured": [
+    "Installed artifacts omitted ai_check_pr.py and check-ai-pr.",
+    "Installed Guard did not pass Contract approval.",
+    "Aggregate scope and changedFiles unions allowed cross-pair attribution."
+  ],
+  "userCorrectionSolidification": [
+    "tests/test_installer.py",
+    "tests/test_pr_aggregate.py",
+    ".github/workflows/smoke.yml",
+    "docs/installation.md"
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "detail": "Installer, distributed Makefile, aggregate attribution, and documentation drift reviewed before implementation.",
+      "contractHash": "14346647f0d48bf4",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 13,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "detail": "Real temporary installation, installed PR check, restricted approval, tests, and document scan reviewed.",
+      "contractHash": "14346647f0d48bf4",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 13,
+      "requiredChecksPassed": 0
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Installation parity is claimed only for artifacts and commands exercised in temporary-repository validation."
+}

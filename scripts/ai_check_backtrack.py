@@ -9,11 +9,12 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 
-from ai_common import PROJECT_ROOT, changed_name_status, included
+from ai_common import PROJECT_ROOT, changed_name_status, included, simple_yaml_scalars
 from ai_observability import create_observability, elapsed_ms
 
 
 REPORT_PATH = PROJECT_ROOT / "target" / "ai_backtrack_report.json"
+POLICY_PATH = PROJECT_ROOT / ".ai" / "guards" / "backtrack_policy.yaml"
 
 
 @dataclass(frozen=True)
@@ -50,10 +51,11 @@ def main() -> int:
         return 1
 
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    report_only = simple_yaml_scalars(POLICY_PATH).get("reportOnly", "true").lower() == "true"
     report = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "status": "warning" if items else "none",
-        "reportOnly": True,
+        "reportOnly": report_only,
         "items": [asdict(item) for item in items],
     }
     REPORT_PATH.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -61,13 +63,17 @@ def main() -> int:
     obs = create_observability()
     duration = elapsed_ms(start)
     if items:
-        print(f"backtrack guard report-only warnings: {len(items)}")
+        mode = "report-only warnings" if report_only else "blocking findings"
+        print(f"backtrack guard {mode}: {len(items)}")
         for item in items:
             print(f"[{item.severity}] {item.kind}: {item.path} - {item.detail}")
             obs.guard_violation(check_id="aiBacktrack", severity=item.severity, path=item.path, detail=f"{item.kind}: {item.detail}")
     else:
         print("backtrack guard: no issues")
     print(f"report: {REPORT_PATH.relative_to(PROJECT_ROOT)}")
+    if items and not report_only:
+        obs.check_failed(check_id="aiBacktrack", duration_ms=duration, detail="protected evidence removal")
+        return 1
     obs.check_passed(check_id="aiBacktrack", duration_ms=duration, fields={"warnings": len(items)})
     return 0
 

@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from ai_common import load_json, non_empty_string
+from ai_common import contains_machine_path, load_check_registry, load_json, non_empty_string
 from ai_observability import create_observability, elapsed_ms
 
 
@@ -34,6 +34,9 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "executionDecision",
     "preReviewWarnings",
     "riskAssessment",
+    "baseCommit",
+    "baselineDirtyPaths",
+    "restrictedWriteApproval",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -76,11 +79,26 @@ def validate_verification(data: dict[str, Any]) -> list[str]:
     values = data.get("verification")
     if not isinstance(values, list) or not values:
         return ["verification must contain at least one item"]
+    version = data.get("contractVersion")
+    registry = load_check_registry()
+    seen: set[str] = set()
     for index, item in enumerate(values):
         if not isinstance(item, dict):
             issues.append(f"verification[{index}] must be an object")
             continue
-        if not non_empty_string(item.get("command")):
+        if version == 2:
+            check_id = item.get("check")
+            if not non_empty_string(check_id):
+                issues.append(f"verification[{index}].check is required")
+            elif check_id not in registry:
+                issues.append(f"verification[{index}].check is not registered: {check_id}")
+            elif check_id in seen:
+                issues.append(f"verification[{index}].check is duplicated: {check_id}")
+            else:
+                seen.add(check_id)
+            if "command" in item:
+                issues.append(f"verification[{index}].command is forbidden in contractVersion 2")
+        elif not non_empty_string(item.get("command")):
             issues.append(f"verification[{index}].command is required")
         if not isinstance(item.get("required"), bool):
             issues.append(f"verification[{index}].required must be boolean")
@@ -145,6 +163,57 @@ def validate_optional_readiness(data: dict[str, Any]) -> list[str]:
     return issues
 
 
+def validate_baseline_and_approvals(data: dict[str, Any]) -> list[str]:
+    issues: list[str] = []
+    base = data.get("baseCommit")
+    requires_baseline = data.get("contractVersion") == 2
+    if requires_baseline and (not non_empty_string(base) or len(base.strip()) < 7):
+        issues.append("baseCommit must be a non-empty Git commit identifier")
+    dirty = data.get("baselineDirtyPaths")
+    if requires_baseline and not isinstance(dirty, list):
+        issues.append("baselineDirtyPaths must be a list")
+    elif isinstance(dirty, list):
+        for index, item in enumerate(dirty):
+            if not isinstance(item, dict):
+                issues.append(f"baselineDirtyPaths[{index}] must be an object")
+                continue
+            for key in ("path", "status", "fingerprint"):
+                if not non_empty_string(item.get(key)):
+                    issues.append(f"baselineDirtyPaths[{index}].{key} is required")
+
+    destructive = data.get("destructiveChangePolicy")
+    if not isinstance(destructive, dict):
+        issues.append("destructiveChangePolicy must be an object")
+    else:
+        for key in ("allowed", "requiresHumanApproval"):
+            if not isinstance(destructive.get(key), bool):
+                issues.append(f"destructiveChangePolicy.{key} must be boolean")
+        patterns = destructive.get("allowPatterns")
+        if not isinstance(patterns, list) or any(not non_empty_string(item) for item in patterns):
+            issues.append("destructiveChangePolicy.allowPatterns must be a list of non-empty strings")
+        if patterns and destructive.get("allowed") is not True:
+            issues.append("destructiveChangePolicy.allowPatterns require allowed true")
+        evidence = destructive.get("approvalEvidence")
+        if destructive.get("allowed") is True and destructive.get("requiresHumanApproval") is True:
+            if not isinstance(evidence, dict) or evidence.get("approved") is not True:
+                issues.append("destructive changes require approvalEvidence.approved true")
+            elif not non_empty_string(evidence.get("approvedBy")) or not non_empty_string(evidence.get("reason")):
+                issues.append("destructive approvalEvidence requires approvedBy and reason")
+
+    approval = data.get("restrictedWriteApproval")
+    if approval is not None:
+        if not isinstance(approval, dict):
+            issues.append("restrictedWriteApproval must be an object")
+        else:
+            if not isinstance(approval.get("approved"), bool):
+                issues.append("restrictedWriteApproval.approved must be boolean")
+            if approval.get("approved") is True and (
+                not non_empty_string(approval.get("approvedBy")) or not non_empty_string(approval.get("reason"))
+            ):
+                issues.append("approved restrictedWriteApproval requires approvedBy and reason")
+    return issues
+
+
 def validate_contract(data: dict[str, Any]) -> list[str]:
     issues: list[str] = []
     for key in REQUIRED_FIELDS:
@@ -154,8 +223,8 @@ def validate_contract(data: dict[str, Any]) -> list[str]:
         if key not in ALLOWED_FIELDS:
             issues.append(f"unknown field: {key}")
 
-    if data.get("contractVersion") != 1:
-        issues.append("contractVersion must be 1")
+    if data.get("contractVersion") not in {1, 2}:
+        issues.append("contractVersion must be 1 or 2")
     if data.get("mode") not in MODES:
         issues.append(f"mode must be one of {sorted(MODES)}")
     for key in ("workItemId", "title", "rollbackNote"):
@@ -169,6 +238,7 @@ def validate_contract(data: dict[str, Any]) -> list[str]:
     issues.extend(validate_sources(data))
     issues.extend(validate_verification(data))
     issues.extend(validate_optional_readiness(data))
+    issues.extend(validate_baseline_and_approvals(data))
 
     if not isinstance(data.get("notCodable"), bool):
         issues.append("notCodable must be boolean")
@@ -181,6 +251,17 @@ def validate_contract(data: dict[str, Any]) -> list[str]:
         status = decision.get("status") if isinstance(decision, dict) else ""
         if status == "continue":
             issues.append("unknowns or notCodable require executionDecision.status other than continue")
+    def scan_machine_paths(value: Any, location: str) -> None:
+        if isinstance(value, str) and contains_machine_path(value):
+            issues.append(f"{location} contains a machine-specific path")
+        elif isinstance(value, dict):
+            for key, child in value.items():
+                scan_machine_paths(child, f"{location}.{key}")
+        elif isinstance(value, list):
+            for index, child in enumerate(value):
+                scan_machine_paths(child, f"{location}[{index}]")
+
+    scan_machine_paths(data, "contract")
     return issues
 
 

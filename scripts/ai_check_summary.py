@@ -4,13 +4,24 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import time
 from pathlib import Path
 from typing import Any
 
-from ai_common import PROJECT_ROOT, changed_paths, included, load_json, non_empty_string, simple_yaml_lists
+from ai_common import (
+    PROJECT_ROOT,
+    changed_paths,
+    contains_machine_path,
+    included,
+    load_json,
+    non_empty_string,
+    render_check_command,
+    simple_yaml_lists,
+    verification_key,
+)
 from ai_observability import create_observability, elapsed_ms
 
 
@@ -48,7 +59,14 @@ def summary_exempt_patterns() -> list[str]:
     return policy_lists.get("allowAlways", [])
 
 
-def validate_summary(summary: dict[str, Any], contract: dict[str, Any] | None) -> list[str]:
+def validate_summary(
+    summary: dict[str, Any],
+    contract: dict[str, Any] | None,
+    *,
+    expected_contract_hash: str = "",
+    contract_path: str = "",
+    summary_path: str = "",
+) -> list[str]:
     issues: list[str] = []
     for key in REQUIRED_FIELDS:
         if key not in summary:
@@ -71,10 +89,54 @@ def validate_summary(summary: dict[str, Any], contract: dict[str, Any] | None) -
             if not isinstance(item, dict):
                 issues.append(f"verification[{index}] must be an object")
                 continue
-            if not non_empty_string(item.get("command")):
-                issues.append(f"verification[{index}].command is required")
+            key = verification_key(item)
+            if not key:
+                issues.append(f"verification[{index}] requires check or command")
+            if isinstance(contract, dict) and contract.get("contractVersion") == 2:
+                if not non_empty_string(item.get("check")):
+                    issues.append(f"verification[{index}].check is required for contractVersion 2")
+                else:
+                    try:
+                        expected_command, _ = render_check_command(
+                            item["check"],
+                            contract_path=item.get("executionContractPath", contract_path),
+                            summary_path=item.get("executionSummaryPath", summary_path),
+                        )
+                        if item.get("command") != expected_command and item.get("result") == "passed":
+                            issues.append(f"verification[{index}].command does not match registered check")
+                    except ValueError as exc:
+                        issues.append(f"verification[{index}]: {exc}")
             if item.get("result") not in RESULTS:
                 issues.append(f"verification[{index}].result must be one of {sorted(RESULTS)}")
+            if item.get("result") == "passed" and (
+                not isinstance(contract, dict) or contract.get("contractVersion") == 2
+            ):
+                if item.get("runner") != "ai_finish":
+                    issues.append(f"verification[{index}] passed result requires runner ai_finish")
+                if not non_empty_string(item.get("executedAt")):
+                    issues.append(f"verification[{index}].executedAt is required for passed result")
+                if not isinstance(item.get("exitCode"), int) or item.get("exitCode") != 0:
+                    issues.append(f"verification[{index}].exitCode must be 0 for passed result")
+                if not isinstance(item.get("durationMs"), int) or item.get("durationMs") < 0:
+                    issues.append(f"verification[{index}].durationMs must be a non-negative integer")
+                digest = item.get("outputDigest")
+                if not non_empty_string(digest) or len(digest) != 64 or any(ch not in "0123456789abcdef" for ch in digest):
+                    issues.append(f"verification[{index}].outputDigest must be a SHA-256 hex digest")
+                if isinstance(contract, dict) and contract.get("contractVersion") == 2:
+                    command = item.get("command", "")
+                    command_hash = hashlib.sha256(" ".join(command.split()).encode("utf-8")).hexdigest()
+                    if item.get("commandHash") != command_hash:
+                        issues.append(f"verification[{index}].commandHash does not match command")
+                    if expected_contract_hash and item.get("contractHash") != expected_contract_hash:
+                        issues.append(f"verification[{index}].contractHash does not match Contract")
+                    for path_key in ("executionContractPath", "executionSummaryPath"):
+                        if not non_empty_string(item.get(path_key)) or Path(item[path_key]).is_absolute():
+                            issues.append(f"verification[{index}].{path_key} must be a repository-relative path")
+                    commit_sha = item.get("commitSha")
+                    if not non_empty_string(commit_sha) or len(commit_sha) not in {40, 64} or any(
+                        ch not in "0123456789abcdef" for ch in commit_sha
+                    ):
+                        issues.append(f"verification[{index}].commitSha must be a Git object id")
 
     risk = summary.get("risk")
     if not isinstance(risk, dict):
@@ -156,13 +218,25 @@ def validate_summary(summary: dict[str, Any], contract: dict[str, Any] | None) -
     if "overclaimPrevention" in summary and not non_empty_string(summary.get("overclaimPrevention")):
         issues.append("overclaimPrevention must be a non-empty string")
 
+    def scan_machine_paths(value: Any, location: str) -> None:
+        if isinstance(value, str) and contains_machine_path(value):
+            issues.append(f"{location} contains a machine-specific path")
+        elif isinstance(value, dict):
+            for key, child in value.items():
+                scan_machine_paths(child, f"{location}.{key}")
+        elif isinstance(value, list):
+            for index, child in enumerate(value):
+                scan_machine_paths(child, f"{location}[{index}]")
+
+    scan_machine_paths(summary, "summary")
+
     if contract is not None:
         required = [
-            item.get("command")
+            verification_key(item)
             for item in contract.get("verification", [])
-            if isinstance(item, dict) and item.get("required") is True and non_empty_string(item.get("command"))
+            if isinstance(item, dict) and item.get("required") is True and verification_key(item)
         ]
-        status = {item.get("command"): item.get("result") for item in summary.get("verification", []) if isinstance(item, dict)}
+        status = {verification_key(item): item.get("result") for item in summary.get("verification", []) if isinstance(item, dict)}
         missing = [command for command in required if command not in status]
         non_passed = [command for command in required if status.get(command) != "passed"]
         if missing:
@@ -172,9 +246,9 @@ def validate_summary(summary: dict[str, Any], contract: dict[str, Any] | None) -
     return issues
 
 
-def validate_changed_files_cover_diff(summary: dict[str, Any]) -> list[str]:
+def validate_changed_files_cover_diff(summary: dict[str, Any], contract: dict[str, Any] | None = None) -> list[str]:
     try:
-        paths = changed_paths()
+        paths = changed_paths(contract)
     except RuntimeError as exc:
         return [f"failed to read changed paths: {exc}"]
 
@@ -211,8 +285,15 @@ def main() -> int:
         return 1
 
     obs = create_observability(work_item_id=summary.get("workItemId", ""))
-    issues = validate_summary(summary, contract)
-    issues.extend(validate_changed_files_cover_diff(summary))
+    expected_hash = hashlib.sha256(Path(args.contract).read_bytes()).hexdigest() if args.contract else ""
+    issues = validate_summary(
+        summary,
+        contract,
+        expected_contract_hash=expected_hash,
+        contract_path=args.contract or "",
+        summary_path=args.summary,
+    )
+    issues.extend(validate_changed_files_cover_diff(summary, contract))
     duration = elapsed_ms(start)
     if issues:
         for issue in issues:

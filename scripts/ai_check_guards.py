@@ -4,12 +4,13 @@
 from __future__ import annotations
 
 import json
+import argparse
 import sys
 import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from ai_common import PROJECT_ROOT, changed_paths, first_match, parse_simple_manifest
+from ai_common import PROJECT_ROOT, changed_paths, first_match, load_json, parse_simple_manifest
 from ai_observability import create_observability, elapsed_ms
 
 
@@ -29,7 +30,7 @@ class GuardItem:
     detail: str
 
 
-def detect(paths: list[str]) -> list[GuardItem]:
+def detect(paths: list[str], *, restricted_approved: bool = False) -> list[GuardItem]:
     ownership = parse_simple_manifest(OWNERSHIP)
     boundary = parse_simple_manifest(BOUNDARY)
     items: list[GuardItem] = []
@@ -41,7 +42,8 @@ def detect(paths: list[str]) -> list[GuardItem]:
             if ai_write in FORBIDDEN_WRITES:
                 items.append(GuardItem("error", "forbidden_write", path, pattern, data.get("reason", "")))
             elif ai_write == "restricted":
-                items.append(GuardItem("warning", "restricted_write", path, pattern, data.get("reason", "")))
+                severity = "warning" if restricted_approved else "error"
+                items.append(GuardItem(severity, "restricted_write", path, pattern, data.get("reason", "")))
         boundary_match = first_match(path, boundary)
         if boundary_match:
             pattern, data = boundary_match
@@ -51,11 +53,17 @@ def detect(paths: list[str]) -> list[GuardItem]:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Validate ownership and boundary guards.")
+    parser.add_argument("--contract")
+    args = parser.parse_args()
     start = time.time()
     try:
-        paths = changed_paths()
-        items = detect(paths)
-    except RuntimeError as exc:
+        contract = load_json(Path(args.contract)) if args.contract else None
+        approval = contract.get("restrictedWriteApproval") if isinstance(contract, dict) else None
+        restricted_approved = isinstance(approval, dict) and approval.get("approved") is True
+        paths = changed_paths(contract)
+        items = detect(paths, restricted_approved=restricted_approved)
+    except (OSError, ValueError, RuntimeError) as exc:
         print(f"guard check failed: {exc}", file=sys.stderr)
         return 1
 
@@ -78,4 +86,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

@@ -41,6 +41,8 @@ PROJECT_TEST = printf '%s\n' 'No test command configured.'
 PROJECT_LINT = printf '%s\n' 'No linter configured.'
 ```
 
+Those lines illustrate variable names only. The shipped generic preset fails closed until all three commands are configured; it does not treat placeholder output as a successful quality gate.
+
 Examples:
 
 ```make
@@ -71,6 +73,20 @@ PROJECT_LINT = go vet ./...
 
 The guard YAML parser intentionally supports a small subset of YAML so the scripts can run with Python's standard library only.
 
+Restricted paths are hard failures unless the active Contract contains an explicitly approved `restrictedWriteApproval` with an approver and reason. `destructiveChangePolicy.allowPatterns` is inactive unless destructive changes are allowed and any required human approval evidence is present.
+
+These approval objects are explicit workflow records, not trusted identity assertions: an agent that can edit the Contract can also edit those fields. Organizations that require trustworthy approval must enforce it outside the repository-controlled Contract through CODEOWNERS/required reviews, protected environments, or CI checks backed by platform identity.
+
+`scope_policy.yaml` `dependencyScopeRules` maps a changed source pattern to required companion change patterns. The default template requires governance script changes to include tests.
+
+For pull-request CI, set `AI_BASE_COMMIT` to `git merge-base HEAD <target-branch>`. This makes every diff-aware guard inspect committed PR changes in a clean checkout.
+
+The lifecycle permits one active Work Item per worktree. A branch may archive several serial Work Items before commit. CI validates every changed archive pair against the full PR diff, and each non-exempt path must be both in one Contract's scope, outside that Contract's outOfScope, and in its paired Summary's `changedFiles`. Cross-pair scope/report claims do not satisfy ownership. Use separate worktrees for truly parallel Work Items.
+
+Version 2 Contracts list `verification[].check` IDs only. Add or approve executable checks in `.ai/cockpit/checks.yaml`; each command must invoke an explicit Make target. Raw Contract command strings are rejected.
+
+`check-ai-pr` validates governance records and the complete diff but does not rerun every historical project check. Configure project tests or `make quality` as a separate required CI job.
+
 ## Agent Environments
 
 - Codex: `AGENTS.md`
@@ -78,4 +94,3 @@ The guard YAML parser intentionally supports a small subset of YAML so the scrip
 - Claude: `CLAUDE.md`
 - Cursor: `.cursor/rules/ai-cockpit.mdc`
 - Antigravity and other agents: use the same Contract, Summary, Makefile, and guard workflow.
-

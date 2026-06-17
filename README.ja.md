@@ -97,8 +97,8 @@ Plan -> Scope -> Verify -> Summarize -> Status -> Archive
 | --- | --- |
 | Work Item Contract | AI がファイルを変更する前にタスク境界を宣言する。 |
 | Scope Guard | 宣言された scope 外の変更を防ぐ。 |
-| Backtrack Guard | テスト、snapshot、Work Item 記録の未宣言削除を報告する。 |
-| Coverage Guard | テスト変更を伴わない production code の変更を報告する。 |
+| Backtrack Guard | 保護対象のテスト、snapshot、Work Item 記録の削除をデフォルトでブロックする。 |
+| Coverage Guard | 対応するテスト変更がない設定済み production code の変更をデフォルトでブロックする。 |
 | Agent Risk Guard | prompt-is-advice、mid-task ドリフト、unknown-overclaim リスクに対するハードゲート。 |
 | AI Review Policy | ガバナンス・ CI 変更のレビューフォーカスを Change Summary に明記するよう促す（報告のみ）。 |
 | Checkpoint | mid-task 整合性スナップショット。完了前に scope ドリフトを検知する。 |
@@ -106,6 +106,16 @@ Plan -> Scope -> Verify -> Summarize -> Status -> Archive
 | Change Summary | 変更内容、検証結果、残るリスクを記録する。 |
 | Cockpit Status | 現在の AI タスク状態を生成ビューで表示する。 |
 | Finish Flow | チェック通過後にのみ Work Item を archive する。 |
+
+## 信頼モデル
+
+- `ai-start` は `baseCommit` と開始前の dirty path の内容 fingerprint を記録する。
+- Contract v2 は `.ai/cockpit/checks.yaml` に登録された check ID のみ参照でき、任意コマンドを指定できない。
+- `ai-finish` は check ID、終了コード、実行 commit、Contract hash、command hash、redact 済み出力要約を記録する。これは構造化記録であり暗号学的証明ではない。
+- installer は同じ PR validator と Make target を配布する。Work Item archive 後、CI で `make check-ai-pr AI_BASE_COMMIT=<merge-base>` を実行する。
+- 非 exempt の各 PR path は、同じ Contract/Summary pair の scope と `changedFiles` の両方に属する必要がある。
+- restricted/destructive approval は Contract 内の自己申告型 workflow record である。信頼できる人間承認には CODEOWNERS、protected CI environment、platform identity event を使用する。
+- AI Cockpit は誤操作と process drift を抑える仕組みであり、悪意ある agent に対する security sandbox ではない。project test または `make quality` は独立した required CI check として実行する。
 
 ## 何を検出するか
 

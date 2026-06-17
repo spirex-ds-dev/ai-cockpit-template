@@ -1,0 +1,441 @@
+{
+  "contractVersion": 2,
+  "workItemId": "archive-upgrade-integrity",
+  "mode": "code",
+  "title": "Harden archive integrity and upgrade safety",
+  "baseCommit": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/README.md",
+      "status": "M",
+      "fingerprint": "1b852b8d1b138213ac25cc3eb93f2570252ce462f32ce0050af8910199026df8"
+    },
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "status": "M",
+      "fingerprint": "15b63662602a144a3e950a02ef192e770b7f850d1e961e28b40ff865d6ffe719"
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "14f0b88f519953681ad4fbb81c7c0270291795250c0de5ee7c10f594585609e4"
+    },
+    {
+      "path": ".ai/cockpit/version.json",
+      "status": "A",
+      "fingerprint": "52063639263e446fc3a80c7ae230fe3e53e5b9225908266a122d92dc191c6b12"
+    },
+    {
+      "path": ".ai/guards/agent_risk_policy.yaml",
+      "status": "M",
+      "fingerprint": "dd0cac9bfe0a6675c1664b08bf21c45e1cd58a39c1d9180b3ac1875c5ee55bb9"
+    },
+    {
+      "path": ".ai/guards/backtrack_policy.yaml",
+      "status": "M",
+      "fingerprint": "aea285340cb45e9547f8eac9305eb5248e88b37b32865d522e9497c1bb29383d"
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "status": "M",
+      "fingerprint": "5ca3ed877afb945ce3aa4fdb10fe95e8620def34d354d53f2b6dfd26d1e8cc06"
+    },
+    {
+      "path": ".ai/guards/scope_policy.yaml",
+      "status": "M",
+      "fingerprint": "24576b4510952972ac4b349a0614895b10da32dc8e8c32bb0e7b33f4964a8e76"
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_contract.example.json",
+      "status": "M",
+      "fingerprint": "1d30f765def8aae06d2eb191a0c97d4ea706627d4dee94745b0541add9af67be"
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_summary.example.json",
+      "status": "M",
+      "fingerprint": "2555917f3a7c5485319433ffa35b0e947a075d3809db8cdce60138eb6f8a80fb"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/distribution_parity_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "14346647f0d48bf4f2bdbf7a7350852bc2dd2cba98048e2a25d2fff179f4df87"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/distribution_parity_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "d16e8b9917e9ef151cf182d271c3199a3582cf4cad3c36acd32ba83a599512f6"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release_gate_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release_gate_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "0e8f4bdbfa0da024826957aa3042c7e870e2b4dd7f4e4384367cbec4855aaa88"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/trust_boundary_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/trust_boundary_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "6df3ff0e4a4f607253bc0723c2d9999be6bba457a4508ab9dd0517eddc51c4cf"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v1_to_v2_audit_migration.contract.json",
+      "status": "A",
+      "fingerprint": "8371ee5247fedff0c785ffe82b89ae4da34e5f360bf9f7112ebcc9243e0004f7"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v1_to_v2_audit_migration.summary.json",
+      "status": "A",
+      "fingerprint": "5c912f58a18210f577ea516f8309226c1317c3feabeb81badcc2f1c660ee4176"
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "status": "M",
+      "fingerprint": "5d13f90a130a4fb6e492775d760bf192afda66fb33616e849a6b9d0a2353fae7"
+    },
+    {
+      "path": ".gitignore",
+      "status": "M",
+      "fingerprint": "5e758bac902af69362b3ee1a20c45b2aad1a1774ced17b650d936a1b58f4a00f"
+    },
+    {
+      "path": "Makefile",
+      "status": "M",
+      "fingerprint": "b75931e84969a7dc082ebb86a0931f22ec7028d8dc8286258b327257cc2bed75"
+    },
+    {
+      "path": "README.ja.md",
+      "status": "M",
+      "fingerprint": "c4b444ead02d7a9bfde77cfd30902300818360e6ed6a06b6949268595bf5d8c8"
+    },
+    {
+      "path": "README.md",
+      "status": "M",
+      "fingerprint": "b176f092a5774f439e2700627184d9c53954ed067a02e1e698e33a40d1f24063"
+    },
+    {
+      "path": "README.zh-CN.md",
+      "status": "M",
+      "fingerprint": "10669009243b54d2da8a2030a7d867ba1a7654e375712f7f8f8534ff3caf21af"
+    },
+    {
+      "path": "docs/architecture.md",
+      "status": "M",
+      "fingerprint": "d21380736203829a30044d99cfe766041bb85b6595761ee154d2b89e062ce85b"
+    },
+    {
+      "path": "docs/configuration.md",
+      "status": "M",
+      "fingerprint": "41195716a1eff2e04344ba913a9657db5c615716bd67d82f131ed14f17175c81"
+    },
+    {
+      "path": "docs/installation.md",
+      "status": "M",
+      "fingerprint": "b8ebaa6c7528c2eec235142f49e8fb483b8047a8363463c3d6c8eacd5581fa84"
+    },
+    {
+      "path": "install.sh",
+      "status": "M",
+      "fingerprint": "34866862af7712758dc21089f5e36b2da983535fdf7ccfeb2e2fa3882d81623c"
+    },
+    {
+      "path": "requirements-dev.txt",
+      "status": "A",
+      "fingerprint": "26db60f3749b2d582ef13e54530725d1038086c5b72953678670871c2b85e15a"
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "status": "M",
+      "fingerprint": "ad7eae8e187b1af9587834d37370d76efee7b18082e6b8c68e248a24d77bf5b8"
+    },
+    {
+      "path": "scripts/ai_check_agent_risk.py",
+      "status": "M",
+      "fingerprint": "7ead1f2e0b8a0d81b5d5e0f77134370272a390a1c52d489fff1d51876cb240aa"
+    },
+    {
+      "path": "scripts/ai_check_backtrack.py",
+      "status": "M",
+      "fingerprint": "6a40ea5bdd964ae6375fb21d4434f9d3e39048bd5c2d1b0677f722a2f9d266c9"
+    },
+    {
+      "path": "scripts/ai_check_coverage_guard.py",
+      "status": "M",
+      "fingerprint": "0111c4e71df1873184b201a47da44239b820cf3acbc1aa988c83ad21d024b3aa"
+    },
+    {
+      "path": "scripts/ai_check_guards.py",
+      "status": "M",
+      "fingerprint": "b560eeefbb9e4005f4bace7ad190227ac92c889a2791bc80964f4471ab8a2af1"
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "status": "A",
+      "fingerprint": "0b77e195134242fbe664cb62d72de60495d58e817ffb49bcf451e27cc569d479"
+    },
+    {
+      "path": "scripts/ai_check_scope.py",
+      "status": "M",
+      "fingerprint": "37974a24b1c6d5552a4fbcb3f486c848ad1abc082fa8bb7e19e17a518d7ef0ea"
+    },
+    {
+      "path": "scripts/ai_check_status.py",
+      "status": "M",
+      "fingerprint": "278b18a59eceb7c2f81e628a1050e15df560adaaee54970fd3f03f253b22798b"
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "status": "M",
+      "fingerprint": "675e11e709702940ee4c97ee8985f4fe2f7dff29bffd04de61f3c9dedc75ccf4"
+    },
+    {
+      "path": "scripts/ai_check_work_item.py",
+      "status": "M",
+      "fingerprint": "dec3a102606173beda81f69a1fd88d804922c5bf8a4eb2ded7109fb83dd6c3c8"
+    },
+    {
+      "path": "scripts/ai_checkpoint.py",
+      "status": "M",
+      "fingerprint": "2522eb88a8ee711501cab6db162b59acc6b82785c5a12d3981fc3e4752b363d7"
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "status": "M",
+      "fingerprint": "569b42a0f4c6c3f9cfa7c6622d360610ecb6d7fabd2e1327b68ef3a071d602cb"
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "status": "M",
+      "fingerprint": "4a1e9b4b5dcff2f89cd69885336c198b2b17f7f253bc4669d91784d504498041"
+    },
+    {
+      "path": "scripts/ai_generate_status.py",
+      "status": "M",
+      "fingerprint": "6f78fb0482a0ff2e6ce3e636e59c6f638f1c6f66272c76f6ab8f1a824d9419ae"
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "status": "M",
+      "fingerprint": "5c4af2b1ad890c8a4dc1e96ab20fc6e1c6e68340084afd8bd83b1844db19775c"
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "status": "M",
+      "fingerprint": "b9ecd33ec2336cc08580d7e3f4fdeb99d4174999b77fe3cd0b60d90700ca6650"
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "status": "M",
+      "fingerprint": "f307274d6ea60408d6b3d9cd4f87a9e5170a7243afdf570f5ad23e026ad753f9"
+    },
+    {
+      "path": "templates/stacks/generic.mk",
+      "status": "M",
+      "fingerprint": "ce61f0469ab003239597b46aeeb525f1d37f9b7c127b97fd10d105538cc8b7d0"
+    },
+    {
+      "path": "tests/conftest.py",
+      "status": "A",
+      "fingerprint": "9bde3653056ca1552ea3c38747339f8a047b2eb3760de72a72f79a50358574b5"
+    },
+    {
+      "path": "tests/test_baseline_diff.py",
+      "status": "A",
+      "fingerprint": "14002b14719619c7440d3a0cdb072f5f03c25e96303f89b77f860bdbceb3ecf3"
+    },
+    {
+      "path": "tests/test_contract_and_policy.py",
+      "status": "A",
+      "fingerprint": "a449c24a7801c2902d8b25b81d32b80a19ecf6a2c118c8178db74503c09c13eb"
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "status": "A",
+      "fingerprint": "b8e2de0d27f9dfdd484ec246c37ec33bfa2597d57151e12f0fc973006ca7444f"
+    },
+    {
+      "path": "tests/test_guards_and_status.py",
+      "status": "A",
+      "fingerprint": "25fcc39c2d23e3bd8c8b827fba9e856ccab193ee7212806de861522a0f72de91"
+    },
+    {
+      "path": "tests/test_install_sh.py",
+      "status": "A",
+      "fingerprint": "ac98d4f1778d743a2cf0bbf81a1351ea19bad192d7ea46998a265e0fe765b518"
+    },
+    {
+      "path": "tests/test_installer.py",
+      "status": "A",
+      "fingerprint": "23e0ed8b49be934a974a6ccffdea64607663a715918bed1d1e30ae30ff2763e2"
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "status": "A",
+      "fingerprint": "5036d2c63577990c47dc8268418cbf8586137153202b14e4e604d7ef2dd0c69c"
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "status": "A",
+      "fingerprint": "5b73b37603797901677da48b519a13ee3ddccca5ff4c8490fa3260c93b775111"
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "status": "A",
+      "fingerprint": "ec8ad2d9d752b1e9fb23b2b84a1eacf0c0633701b640d422e9c01430b86df8fe"
+    },
+    {
+      "path": "tests/test_verification_evidence.py",
+      "status": "A",
+      "fingerprint": "f50451ab2b334e349e113f05c009e79d0eb6645afbbbcb3d297ea4b3f32240fe"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/archive-upgrade-integrity.contract.json",
+    ".ai/work-items/active/archive-upgrade-integrity.summary.json",
+    ".ai/work-items/archive/2026/archive-upgrade-integrity.contract.json",
+    ".ai/work-items/archive/2026/archive-upgrade-integrity.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".gitignore",
+    "scripts/ai_check_pr.py",
+    "scripts/install_ai_cockpit.py",
+    "install.sh",
+    "tests/test_pr_aggregate.py",
+    "tests/test_installer.py",
+    "docs/architecture.md",
+    "docs/installation.md"
+  ],
+  "outOfScope": [
+    ".ai/guards/**",
+    ".github/**",
+    "Makefile",
+    "templates/**"
+  ],
+  "sources": [
+    {
+      "path": "user-review-2026-06-17",
+      "reason": "Reports the archive Summary-only tampering reproduction and upgrade safety gaps."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Defines aggregate PR archive discovery, pair validation, and ownership checks."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Defines upgrade backup, local ignore, and overwrite behavior."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "audit_integrity",
+      "upgrade_safety",
+      "backward_compatibility"
+    ],
+    "reason": "PR evidence selection and installer preflight are trust-boundary code; regressions could reject valid releases or overwrite an installation."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The reported reproductions define concrete fail-closed behavior and can be covered with isolated tests."
+  },
+  "preReviewWarnings": [
+    "Confirm newly added archive pairs still pass while any modification, deletion, or rename of existing archive evidence fails.",
+    "Confirm upgrade preflight is read-only on failure and the explicit active-work override remains visible and documented."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Any added, modified, deleted, or renamed archived Contract/Summary path is discovered from the full PR name-status diff.",
+    "A newly added archive Contract and Summary must be introduced as a pair; existing archive Contract/Summary records are immutable by default.",
+    "Summary-only tampering, Contract-only changes, archive rename, and archive deletion are rejected by tests.",
+    "Installer-generated ignore rules include active review records and in-repository upgrade backups, including upgrades of an existing managed ignore section.",
+    "Upgrade refuses to write when active Work Item JSON exists unless --upgrade-with-active is explicitly provided.",
+    "Upgrade rejects distribution downgrades and malformed version metadata before writing files.",
+    "Installer and archive-integrity behavior are documented and the complete project quality suite passes."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

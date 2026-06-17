@@ -8,12 +8,12 @@ risks:
     control: hard_gate
     reason: Prompt instructions are not enforcement; required Makefile gates must verify the actual diff and Work Item state.
     requiredVerification:
-      - "make check-ai-contract"
-      - "make check-ai-scope"
-      - "make check-ai-agent-risk"
-      - "make check-ai-change-summary"
-      - "make generate-cockpit-status"
-      - "make check-ai-status"
+      - "aiWorkItem"
+      - "aiScope"
+      - "aiAgentRisk"
+      - "aiSummary"
+      - "aiStatus"
+      - "aiStatusCheck"
     effectiveVerification: required gates must be present in Contract verification and passed in Summary when Summary is provided.
 
   midTaskDrift:

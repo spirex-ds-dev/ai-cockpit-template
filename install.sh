@@ -21,6 +21,8 @@ Common options passed through to the Python installer:
   --stack generic|rust|flutter|typescript|python|go|java|kotlin|swift|ruby|php|csharp
   --dry-run
   --force
+  --upgrade
+  --upgrade-with-active
   --with-examples
   --update-makefile
 USAGE
@@ -50,7 +52,8 @@ trap cleanup EXIT
 
 if [ -z "$SOURCE" ]; then
   TMPDIR_AI_COCKPIT=$(mktemp -d)
-  URL="https://github.com/$REPO/archive/refs/heads/$REF.tar.gz"
+  # GitHub's generic archive endpoint resolves branch names, tag names, and commit SHAs.
+  URL="https://github.com/$REPO/archive/$REF.tar.gz"
   echo "Downloading AI Cockpit template from $URL"
   if command -v curl >/dev/null 2>&1; then
     curl -fsSL "$URL" | tar -xz -C "$TMPDIR_AI_COCKPIT" --strip-components=1

@@ -15,7 +15,7 @@ AI_PYTHON ?= PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
 	project-format-check project-test project-lint diff-check quality \
 	ai-start ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-review-policy \
-	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item
+	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item check-ai-pr
 
 help:
 	@printf '%s\n' 'AI Cockpit template commands:'
@@ -41,13 +41,13 @@ help:
 	@printf '%s\n' 'Customize project-format-check, project-test, and project-lint for your stack.'
 
 project-format-check:
-	@printf '%s\n' 'No project formatter configured. Override project-format-check in this Makefile.'
+	git diff --check
 
 project-test:
-	@printf '%s\n' 'No project test command configured. Override project-test in this Makefile.'
+	$(AI_PYTHON) -m pytest -q
 
 project-lint:
-	@printf '%s\n' 'No project linter configured. Override project-lint in this Makefile.'
+	$(AI_PYTHON) -m py_compile scripts/*.py tests/*.py
 
 diff-check:
 	git diff --check
@@ -64,7 +64,7 @@ check-ai-scope:
 	$(AI_PYTHON) scripts/ai_check_scope.py $(CONTRACT)
 
 check-ai-guards:
-	$(AI_PYTHON) scripts/ai_check_guards.py
+	$(AI_PYTHON) scripts/ai_check_guards.py $(if $(CONTRACT),--contract $(CONTRACT))
 
 check-ai-agent-risk:
 	$(AI_PYTHON) scripts/ai_check_agent_risk.py $(if $(CONTRACT),--contract $(CONTRACT)) $(if $(SUMMARY),--summary $(SUMMARY))
@@ -103,7 +103,7 @@ check-ai:
 	@if [ -n "$(CONTRACT)" ]; then \
 		"$${MAKE:-make}" check-ai-contract CONTRACT="$(CONTRACT)" && \
 		"$${MAKE:-make}" check-ai-scope CONTRACT="$(CONTRACT)" && \
-		"$${MAKE:-make}" check-ai-guards && \
+		"$${MAKE:-make}" check-ai-guards CONTRACT="$(CONTRACT)" && \
 		"$${MAKE:-make}" check-ai-agent-risk CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
 		"$${MAKE:-make}" check-ai-review-policy SUMMARY="$(SUMMARY)" && \
 		"$${MAKE:-make}" check-ai-backtrack && \
@@ -121,6 +121,9 @@ check-ai:
 		"$${MAKE:-make}" check-ai-backtrack && \
 		"$${MAKE:-make}" check-ai-coverage-guard; \
 	fi
+
+check-ai-pr:
+	$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
 
 ai-finish:
 	$(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)"

@@ -1,13 +1,14 @@
 # Coverage Guard policy.
-# This is report-only by default. Customize patterns for each repository.
+# Blocking by default in this template. Set reportOnly: true to make it advisory.
 
 version: 1
-reportOnly: true
+reportOnly: false
 
 production:
   include:
     - "src/**"
     - "lib/**"
+    - "scripts/ai_*.py"
   exclude:
     - "tests/**"
     - "test/**"
@@ -23,4 +24,3 @@ tests:
 
 output:
   json: target/ai_coverage_guard_report.json
-

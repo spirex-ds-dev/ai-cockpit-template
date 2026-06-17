@@ -8,7 +8,7 @@ import re
 import sys
 from pathlib import Path
 
-from ai_common import PROJECT_ROOT, save_json
+from ai_common import PROJECT_ROOT, capture_dirty_baseline, current_head, save_json
 from ai_check_status_consistency import validate_status_consistency
 from ai_observability import create_observability
 
@@ -59,14 +59,21 @@ def main() -> int:
         return 1
 
     title = args.title or task.replace("_", " ")
+    base_commit = current_head()
+    if not base_commit:
+        print("ERROR: ai-start requires an initial Git commit so baseCommit is trustworthy.", file=sys.stderr)
+        return 1
+    baseline_dirty_paths = capture_dirty_baseline()
     contract_rel = contract_path.relative_to(PROJECT_ROOT).as_posix()
     summary_rel = summary_path.relative_to(PROJECT_ROOT).as_posix()
     contract = {
-        "contractVersion": 1,
+        "contractVersion": 2,
         "workItemId": task,
         "mode": args.mode,
         "title": title,
-        "scope": [contract_rel, summary_rel],
+        "baseCommit": base_commit,
+        "baselineDirtyPaths": baseline_dirty_paths,
+        "scope": [contract_rel, summary_rel, ".ai/work-items/archive/**"],
         "outOfScope": [],
         "sources": [{"path": contract_rel, "reason": "Initial Work Item skeleton."}],
         "unknowns": ["Replace this with concrete open questions, or clear it before mode code."],
@@ -91,20 +98,31 @@ def main() -> int:
         ],
         "checkpointPolicy": {
             "requiredBeforeFinish": True,
-            "requiredStages": ["before_finish"],
+            "requiredStages": ["before_edit", "before_finish"],
             "reason": "Record at least one checkpoint before finishing to reduce mid-task drift.",
         },
         "acceptance": ["The Work Item Contract is updated for the actual task."],
         "verification": [
-            {"command": f"make check-ai-contract CONTRACT={contract_rel}", "required": True},
-            {"command": f"make check-ai-scope CONTRACT={contract_rel}", "required": True},
-            {"command": "make check-ai-backtrack", "required": True},
-            {"command": "make check-ai-coverage-guard", "required": False},
-            {"command": f"make check-ai-change-summary SUMMARY={summary_rel} CONTRACT={contract_rel}", "required": True},
-            {"command": f"make generate-cockpit-status CONTRACT={contract_rel} SUMMARY={summary_rel}", "required": True},
-            {"command": f"make check-ai-status CONTRACT={contract_rel} SUMMARY={summary_rel}", "required": True},
+            {"check": "aiWorkItem", "required": True},
+            {"check": "aiScope", "required": True},
+            {"check": "aiGuards", "required": True},
+            {"check": "aiCheckpoint", "required": True},
+            {"check": "aiAgentRisk", "required": True},
+            {"check": "aiReviewPolicy", "required": True},
+            {"check": "aiBacktrack", "required": True},
+            {"check": "aiCoverage", "required": True},
+            {"check": "aiSummary", "required": True},
+            {"check": "aiStatus", "required": True},
+            {"check": "aiStatusCheck", "required": True},
+            {"check": "aiStatusConsistency", "required": True},
+            {"check": "quality", "required": True},
         ],
         "destructiveChangePolicy": {"allowed": False, "requiresHumanApproval": True, "allowPatterns": []},
+        "restrictedWriteApproval": {
+            "approved": False,
+            "approvedBy": "",
+            "reason": "Set only when a human explicitly approves restricted governance paths.",
+        },
         "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
     }
     summary = {
@@ -115,7 +133,7 @@ def main() -> int:
             {"path": summary_rel, "reason": "Created the AI Change Summary skeleton."},
         ],
         "sourcesUsed": [contract_rel],
-        "verification": [{"command": item["command"], "result": "not_run"} for item in contract["verification"]],
+        "verification": [{"check": item["check"], "result": "not_run"} for item in contract["verification"]],
         "unknownsRemaining": ["Replace this before finishing the Work Item."],
         "risk": {"level": "medium", "detail": "Initial skeleton; scope and acceptance still need task-specific review."},
         "generatedFiles": [],

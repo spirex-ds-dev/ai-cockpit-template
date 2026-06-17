@@ -62,3 +62,7 @@ The Contract readiness fields record whether the agent can implement and verify 
 Keep these fields language-neutral when this template is copied into another repository.
 
 Run `make check-ai-review-policy SUMMARY=<summary.json>` to report governance-sensitive paths declared in `.ai/guards/ai_review_policy.yaml`. The check is report-only and records whether `reviewReadiness.expectedReviewFocus` is present in the Summary.
+
+After archive, PR CI runs `make check-ai-pr AI_BASE_COMMIT=<merge-base>`. The installed distribution includes this target and validator. Every non-exempt path in the complete PR diff must be jointly owned by one changed archive pair: scoped by its Contract, not excluded by that Contract, and reported by its paired Summary.
+
+PR evidence requires Contract version 2; version 1 is legacy-read-only and cannot be introduced as new PR evidence. Contract approval fields are self-declared records, not proof of human identity. Use protected platform review for trusted approval and run project tests independently from the governance PR check.

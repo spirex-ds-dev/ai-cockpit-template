@@ -1,0 +1,446 @@
+{
+  "contractVersion": 2,
+  "workItemId": "distribution_parity_hardening",
+  "mode": "code",
+  "title": "Distribution parity and paired PR ownership",
+  "baseCommit": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "status": "M",
+      "fingerprint": "15b63662602a144a3e950a02ef192e770b7f850d1e961e28b40ff865d6ffe719"
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "0ef53eb220d803922bf59c7c13f79b48f6d3a88da2a8b85cc5d7ae6f74d44b34"
+    },
+    {
+      "path": ".ai/guards/agent_risk_policy.yaml",
+      "status": "M",
+      "fingerprint": "dd0cac9bfe0a6675c1664b08bf21c45e1cd58a39c1d9180b3ac1875c5ee55bb9"
+    },
+    {
+      "path": ".ai/guards/backtrack_policy.yaml",
+      "status": "M",
+      "fingerprint": "aea285340cb45e9547f8eac9305eb5248e88b37b32865d522e9497c1bb29383d"
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "status": "M",
+      "fingerprint": "eb1d3f71010445049a2e1d4e37914cbf1658fa7aa839a38112436de5cb7af2ef"
+    },
+    {
+      "path": ".ai/guards/scope_policy.yaml",
+      "status": "M",
+      "fingerprint": "24576b4510952972ac4b349a0614895b10da32dc8e8c32bb0e7b33f4964a8e76"
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_contract.example.json",
+      "status": "M",
+      "fingerprint": "1d30f765def8aae06d2eb191a0c97d4ea706627d4dee94745b0541add9af67be"
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_summary.example.json",
+      "status": "M",
+      "fingerprint": "2555917f3a7c5485319433ffa35b0e947a075d3809db8cdce60138eb6f8a80fb"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/agent_risk_control_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "563a73326178bc7462d477aeadb56372b23099531829586ff36043ec099927de"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/agent_risk_control_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "bbd3f33835eaa7e79b25e17b554791c4d8361d4afda212210327931889b34b62"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/agent_risk_effectiveness_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "9835c4948b037ecfec721c9ce2a675d3e752e657879bdac65d1eee1d3fa1403b"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/agent_risk_effectiveness_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "6a6cf4c49e2bbaee4d621d11e4a37ffe081375ddf88c21e18fa1ab910eed9a5e"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/allow_generated_status_scope.contract.json",
+      "status": "A",
+      "fingerprint": "29c531d2e6c5086bfe7a395fd61bdeb8b8a99cf904aa8539efec9f340c569259"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/allow_generated_status_scope.summary.json",
+      "status": "A",
+      "fingerprint": "c342469db658da4f1e3a6238fa1fa79dc38fb31373c653ddc7c8e2b135c2c925"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/dedupe_generated_artifact_policy.contract.json",
+      "status": "A",
+      "fingerprint": "74888a290bd8fa5dae1e0a6299e755a8cc3891f369d7cea97a9b4235f1c952ef"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/dedupe_generated_artifact_policy.summary.json",
+      "status": "A",
+      "fingerprint": "ce9351134e3438e66c1925b733a93cc5125c70bab412ab17450c7bab71fb02d4"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix_summary_and_bytecode_guards.contract.json",
+      "status": "A",
+      "fingerprint": "4e6147d1cbb0dda592d417ae02018a6a5dd9771203c747c73edda53680b3d564"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix_summary_and_bytecode_guards.summary.json",
+      "status": "A",
+      "fingerprint": "61e927bd57ab7881914c5697569f9a15599532bc267df9eec8f736f99489c4f3"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/move_summary_exempt_policy.contract.json",
+      "status": "A",
+      "fingerprint": "c88446f0d5397a36c822d6002998f42a57f72d48323634298ec9854665d0f7ea"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/move_summary_exempt_policy.summary.json",
+      "status": "A",
+      "fingerprint": "e7d0358f6b01a43abdd344e1e2f59be92289f813ad7e7de3b84578fc83174b6f"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/multi_work_item_ci_selection.contract.json",
+      "status": "A",
+      "fingerprint": "6475d87ada7e33cf16d52afae87e15299de980ea4444cb166fbd992eb5d14d1d"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/multi_work_item_ci_selection.summary.json",
+      "status": "A",
+      "fingerprint": "15743299842e8e23d6b0a27f685d19403b3af1ce35ea16d6492ff9c8788cfcae"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/portable_pr_make_invocation.contract.json",
+      "status": "A",
+      "fingerprint": "e202d8298a4c5f777d84f32554a75dba6cfa1fb77d1db9660735aa3592abb5d5"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/portable_pr_make_invocation.summary.json",
+      "status": "A",
+      "fingerprint": "fbaafc6d55126d4530ad19b97d8fba1a749372f3b8574927dbcc82c1d7fc8c17"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/production_governance_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "d488c22dd81874393a0b3f90dc1c1415d35946118f509827689f117dd8c27d56"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/production_governance_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "cd6f121c533ea988abad5328c3c1ae6d50ed4ca578fafc3e6b6d8d70d20332c7"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_policy_and_status_repair.contract.json",
+      "status": "A",
+      "fingerprint": "6cc9f7b0c2dc80664894d2c6fa2b47d7b73935eb3c2ddd7f896e80aca1681006"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_policy_and_status_repair.summary.json",
+      "status": "A",
+      "fingerprint": "9a2517343378ae308276fb99bebb949296faca1ca82f93d38f2c40d784bc0141"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/template_lifecycle_review_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "4449610f730befe1d63b914d213ca723e84d2cc4ccbdfc8f1215f789eb3deec4"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/template_lifecycle_review_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "428e5b0bf567473b80195b71107ee160a2b16c8519f619b5c67e458af600e9c7"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/trust_boundary_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/trust_boundary_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "6df3ff0e4a4f607253bc0723c2d9999be6bba457a4508ab9dd0517eddc51c4cf"
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "status": "M",
+      "fingerprint": "d9be7a73c038e31752a7f9b736ca7ba2a3d13bae0e5804a039e1b0084490be58"
+    },
+    {
+      "path": ".gitignore",
+      "status": "M",
+      "fingerprint": "e96c7363363df80679237e52e35d6336375a396de8e46cf1d1a4f3f5a67fefb6"
+    },
+    {
+      "path": "Makefile",
+      "status": "M",
+      "fingerprint": "b75931e84969a7dc082ebb86a0931f22ec7028d8dc8286258b327257cc2bed75"
+    },
+    {
+      "path": "README.md",
+      "status": "M",
+      "fingerprint": "d3dd3a92e712b869e658f9f1c99a22b83128091db6bcb45b86102c02748605be"
+    },
+    {
+      "path": "docs/architecture.md",
+      "status": "M",
+      "fingerprint": "354a75a0f454968e3e0e8d1368f75eaa6f47ec18088770d142921eb991956587"
+    },
+    {
+      "path": "docs/configuration.md",
+      "status": "M",
+      "fingerprint": "09f6c80df331eb89893fcdccd655df142d2dfa49e432d4390beac15f9f68a03d"
+    },
+    {
+      "path": "requirements-dev.txt",
+      "status": "A",
+      "fingerprint": "26db60f3749b2d582ef13e54530725d1038086c5b72953678670871c2b85e15a"
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "status": "M",
+      "fingerprint": "ad7eae8e187b1af9587834d37370d76efee7b18082e6b8c68e248a24d77bf5b8"
+    },
+    {
+      "path": "scripts/ai_check_agent_risk.py",
+      "status": "M",
+      "fingerprint": "7ead1f2e0b8a0d81b5d5e0f77134370272a390a1c52d489fff1d51876cb240aa"
+    },
+    {
+      "path": "scripts/ai_check_backtrack.py",
+      "status": "M",
+      "fingerprint": "6a40ea5bdd964ae6375fb21d4434f9d3e39048bd5c2d1b0677f722a2f9d266c9"
+    },
+    {
+      "path": "scripts/ai_check_coverage_guard.py",
+      "status": "M",
+      "fingerprint": "0111c4e71df1873184b201a47da44239b820cf3acbc1aa988c83ad21d024b3aa"
+    },
+    {
+      "path": "scripts/ai_check_guards.py",
+      "status": "M",
+      "fingerprint": "b560eeefbb9e4005f4bace7ad190227ac92c889a2791bc80964f4471ab8a2af1"
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "status": "A",
+      "fingerprint": "b2204e27b9d2dd96b3e2a2512979a5705be8b260f1eece22ee4b8791dc241100"
+    },
+    {
+      "path": "scripts/ai_check_scope.py",
+      "status": "M",
+      "fingerprint": "37974a24b1c6d5552a4fbcb3f486c848ad1abc082fa8bb7e19e17a518d7ef0ea"
+    },
+    {
+      "path": "scripts/ai_check_status.py",
+      "status": "M",
+      "fingerprint": "278b18a59eceb7c2f81e628a1050e15df560adaaee54970fd3f03f253b22798b"
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "status": "M",
+      "fingerprint": "675e11e709702940ee4c97ee8985f4fe2f7dff29bffd04de61f3c9dedc75ccf4"
+    },
+    {
+      "path": "scripts/ai_check_work_item.py",
+      "status": "M",
+      "fingerprint": "dec3a102606173beda81f69a1fd88d804922c5bf8a4eb2ded7109fb83dd6c3c8"
+    },
+    {
+      "path": "scripts/ai_checkpoint.py",
+      "status": "M",
+      "fingerprint": "2522eb88a8ee711501cab6db162b59acc6b82785c5a12d3981fc3e4752b363d7"
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "status": "M",
+      "fingerprint": "569b42a0f4c6c3f9cfa7c6622d360610ecb6d7fabd2e1327b68ef3a071d602cb"
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "status": "M",
+      "fingerprint": "4a1e9b4b5dcff2f89cd69885336c198b2b17f7f253bc4669d91784d504498041"
+    },
+    {
+      "path": "scripts/ai_generate_status.py",
+      "status": "M",
+      "fingerprint": "6f78fb0482a0ff2e6ce3e636e59c6f638f1c6f66272c76f6ab8f1a824d9419ae"
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "status": "M",
+      "fingerprint": "5c4af2b1ad890c8a4dc1e96ab20fc6e1c6e68340084afd8bd83b1844db19775c"
+    },
+    {
+      "path": "templates/stacks/generic.mk",
+      "status": "M",
+      "fingerprint": "ce61f0469ab003239597b46aeeb525f1d37f9b7c127b97fd10d105538cc8b7d0"
+    },
+    {
+      "path": "tests/conftest.py",
+      "status": "A",
+      "fingerprint": "9bde3653056ca1552ea3c38747339f8a047b2eb3760de72a72f79a50358574b5"
+    },
+    {
+      "path": "tests/test_baseline_diff.py",
+      "status": "A",
+      "fingerprint": "14002b14719619c7440d3a0cdb072f5f03c25e96303f89b77f860bdbceb3ecf3"
+    },
+    {
+      "path": "tests/test_contract_and_policy.py",
+      "status": "A",
+      "fingerprint": "a449c24a7801c2902d8b25b81d32b80a19ecf6a2c118c8178db74503c09c13eb"
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "status": "A",
+      "fingerprint": "5036d2c63577990c47dc8268418cbf8586137153202b14e4e604d7ef2dd0c69c"
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "status": "A",
+      "fingerprint": "cc1336ca3925c258018ad8ddb257fbc2f73082d8ca2cf97254febc1ce981ee57"
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "status": "A",
+      "fingerprint": "ec8ad2d9d752b1e9fb23b2b84a1eacf0c0633701b640d422e9c01430b86df8fe"
+    },
+    {
+      "path": "tests/test_verification_evidence.py",
+      "status": "A",
+      "fingerprint": "f50451ab2b334e349e113f05c009e79d0eb6645afbbbcb3d297ea4b3f32240fe"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/distribution_parity_hardening.contract.json",
+    ".ai/work-items/active/distribution_parity_hardening.summary.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/README.md",
+    ".github/workflows/**",
+    "README.md",
+    "README.zh-CN.md",
+    "README.ja.md",
+    "docs/**",
+    "scripts/ai_check_pr.py",
+    "scripts/install_ai_cockpit.py",
+    "templates/make/Makefile.ai",
+    "tests/**"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "user third-round review supplied on 2026-06-17",
+      "reason": "Identifies missing installed PR validator/target, missing Contract propagation, and cross-pair aggregate ownership." 
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "distribution_parity",
+      "aggregate_ownership"
+    ],
+    "reason": "Installed artifacts must preserve repository governance behavior and CI must bind each path to one archive pair."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The installer omissions and aggregate ownership counterexample are concrete and testable."
+  },
+  "preReviewWarnings": [
+    "Review root/distributed Make target parity.",
+    "Review installer script inventory and installed-repository smoke coverage.",
+    "Review paired Contract/Summary path ownership semantics."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Installed repositories contain ai_check_pr.py and a working check-ai-pr target.",
+    "Distributed check-ai-guards passes the active Contract so restricted approvals work after installation.",
+    "Installation smoke creates archived evidence and successfully executes check-ai-pr in the temporary repository.",
+    "Every non-exempt PR path is jointly authorized and reported by the same Contract/Summary pair.",
+    "English, Chinese, Japanese, installation, configuration, and architecture docs accurately describe installed behavior."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "repository owner via 2026-06-17 third-round review",
+    "reason": "The requested release parity fix requires CI, distribution templates, installer, tests, docs, and archived evidence changes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

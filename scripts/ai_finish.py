@@ -4,11 +4,16 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import re
 import subprocess
 import sys
 import time
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
 
-from ai_common import PROJECT_ROOT
+from ai_common import PROJECT_ROOT, current_head, load_json, redact_machine_paths, render_check_command, save_json, verification_key
 from ai_observability import create_observability, elapsed_ms
 
 
@@ -21,11 +26,97 @@ def task_paths(task: str) -> tuple[str, str]:
     return contract.relative_to(PROJECT_ROOT).as_posix(), summary.relative_to(PROJECT_ROOT).as_posix()
 
 
-def run(command: list[str]) -> tuple[int, int]:
+def run(command: list[str]) -> tuple[int, int, str]:
     print("$ " + " ".join(command))
     start = time.time()
-    result = subprocess.run(command, cwd=PROJECT_ROOT, check=False)
-    return result.returncode, elapsed_ms(start)
+    result = subprocess.run(command, cwd=PROJECT_ROOT, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    if result.stdout:
+        print(result.stdout, end="" if result.stdout.endswith("\n") else "\n")
+    return result.returncode, elapsed_ms(start), result.stdout or ""
+
+
+def evidence(
+    check_id: str,
+    command: str,
+    code: int,
+    duration: int,
+    output: str,
+    *,
+    contract_hash: str,
+    commit_sha: str,
+    execution_contract_path: str,
+    execution_summary_path: str,
+) -> dict[str, Any]:
+    compact = " ".join(output.split())[:500]
+    compact = re.sub(r"(?i)(api[_-]?key|token|password|secret)(\s*[:=]\s*)\S+", r"\1\2[REDACTED]", compact)
+    compact = redact_machine_paths(compact)
+    return {
+        "check": check_id,
+        "command": command,
+        "result": "passed" if code == 0 else "failed",
+        "runner": "ai_finish",
+        "executedAt": datetime.now(timezone.utc).isoformat(),
+        "exitCode": code,
+        "durationMs": duration,
+        "outputDigest": hashlib.sha256(output.encode("utf-8")).hexdigest(),
+        "commandHash": hashlib.sha256(" ".join(command.split()).encode("utf-8")).hexdigest(),
+        "contractHash": contract_hash,
+        "commitSha": commit_sha,
+        "executionContractPath": execution_contract_path,
+        "executionSummaryPath": execution_summary_path,
+        "outputSummary": compact,
+    }
+
+
+def pending_evidence(
+    check_id: str,
+    command: str,
+    *,
+    contract_hash: str,
+    commit_sha: str,
+    execution_contract_path: str,
+    execution_summary_path: str,
+) -> dict[str, Any]:
+    item = evidence(
+        check_id,
+        command,
+        0,
+        0,
+        "pending transactional validation",
+        contract_hash=contract_hash,
+        commit_sha=commit_sha,
+        execution_contract_path=execution_contract_path,
+        execution_summary_path=execution_summary_path,
+    )
+    item["runner"] = "ai_finish_pending"
+    return item
+
+
+def record_result(summary_path: Path, item: dict[str, Any]) -> None:
+    summary = load_json(summary_path)
+    values = summary.get("verification", [])
+    if not isinstance(values, list):
+        values = []
+    summary["verification"] = [
+        entry for entry in values
+        if not (isinstance(entry, dict) and verification_key(entry) == verification_key(item))
+    ] + [item]
+    save_json(summary_path, summary)
+
+
+def verification_priority(item: dict[str, Any]) -> int:
+    check_id = verification_key(item)
+    if check_id == "aiStatus":
+        return 20
+    if check_id == "aiStatusCheck":
+        return 30
+    if check_id == "aiStatusConsistency":
+        return 40
+    if check_id == "aiAgentRisk":
+        return 50
+    if check_id == "aiSummary":
+        return 51
+    return 10
 
 
 def parse_args() -> argparse.Namespace:
@@ -46,42 +137,128 @@ def main() -> int:
         print(f"ERROR: Summary does not exist: {summary}", file=sys.stderr)
         return 1
 
+    contract_path = PROJECT_ROOT / contract
+    summary_path = PROJECT_ROOT / summary
+    contract_data = load_json(contract_path)
+    if contract_data.get("contractVersion") != 2:
+        print("ERROR: ai-finish executes only contractVersion 2 check-ID Contracts", file=sys.stderr)
+        return 2
+    contract_hash = hashlib.sha256(contract_path.read_bytes()).hexdigest()
+    commit_sha = current_head()
+    declared = contract_data.get("verification", [])
+    if not isinstance(declared, list):
+        print("ERROR: Contract verification must be a list", file=sys.stderr)
+        return 1
+
     obs = create_observability(work_item_id=args.task)
     total_start = time.time()
-    commands = [
-        ["make", "check-ai-contract", f"CONTRACT={contract}"],
-        ["make", "check-ai-scope", f"CONTRACT={contract}"],
-        ["make", "check-ai-guards"],
-        ["make", "ai-checkpoint", f"CONTRACT={contract}", f"SUMMARY={summary}", "STAGE=before_finish"],
-        ["make", "check-ai-agent-risk", f"CONTRACT={contract}", f"SUMMARY={summary}"],
-        ["make", "check-ai-review-policy", f"SUMMARY={summary}"],
-        ["make", "check-ai-backtrack"],
-        ["make", "check-ai-coverage-guard"],
-        ["make", "check-ai-change-summary", f"SUMMARY={summary}", f"CONTRACT={contract}"],
-        ["make", "generate-cockpit-status", f"CONTRACT={contract}", f"SUMMARY={summary}"],
-        ["make", "check-ai-status", f"CONTRACT={contract}", f"SUMMARY={summary}"],
-        ["make", "check-ai-status-consistency"],
-    ]
-    if not args.skip_quality:
-        commands.append(["make", "quality"])
-
-    for command in commands:
-        cmd_str = " ".join(command)
-        check_id = command[1] if len(command) > 1 else cmd_str
+    declared_items = [item for item in declared if isinstance(item, dict)]
+    declared_items.sort(key=verification_priority)
+    transactional_markers_written = False
+    for item in declared_items:
+        if not isinstance(item, dict):
+            continue
+        check_id = verification_key(item)
+        if not check_id or "command" in item:
+            print("ERROR: contractVersion 2 verification must use registered check IDs only", file=sys.stderr)
+            return 2
+        if args.skip_quality and check_id == "quality":
+            if item.get("required") is True:
+                print("ERROR: --skip-quality cannot skip required Contract verification", file=sys.stderr)
+                return 2
+            continue
+        try:
+            cmd_str, command = render_check_command(
+                check_id, contract_path=contract, summary_path=summary
+            )
+        except ValueError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
         obs.check_started(check_id=check_id, command=cmd_str)
-        code, duration = run(command)
-        if code != 0:
+        # Status, Agent Risk, and Summary form a self-referential lifecycle
+        # cluster. Pending markers let status stabilize but are rejected by the
+        # Summary checker if execution stops before actual evidence replaces them.
+        if not transactional_markers_written and verification_priority(item) >= 20:
+            for candidate in declared_items:
+                if verification_priority(candidate) >= 20:
+                    candidate_id = verification_key(candidate)
+                    candidate_command, _ = render_check_command(
+                        candidate_id, contract_path=contract, summary_path=summary
+                    )
+                    record_result(
+                        summary_path,
+                        pending_evidence(
+                            candidate_id,
+                            candidate_command,
+                            contract_hash=contract_hash,
+                            commit_sha=commit_sha,
+                            execution_contract_path=contract,
+                            execution_summary_path=summary,
+                        ),
+                    )
+            transactional_markers_written = True
+        # The Summary checker validates its own record. Replace only its pending
+        # runner immediately before execution; failure overwrites it as failed.
+        if check_id == "aiSummary":
+            record_result(
+                summary_path,
+                evidence(
+                    check_id,
+                    cmd_str,
+                    0,
+                    0,
+                    "pending transactional validation",
+                    contract_hash=contract_hash,
+                    commit_sha=commit_sha,
+                    execution_contract_path=contract,
+                    execution_summary_path=summary,
+                ),
+            )
+        code, duration, output = run(command)
+        record_result(
+            summary_path,
+            evidence(
+                check_id,
+                cmd_str,
+                code,
+                duration,
+                output,
+                contract_hash=contract_hash,
+                commit_sha=commit_sha,
+                execution_contract_path=contract,
+                execution_summary_path=summary,
+            ),
+        )
+        if code != 0 and item.get("required") is True:
             obs.check_failed(check_id=check_id, command=cmd_str, duration_ms=duration)
             obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
             return code
-        obs.check_passed(check_id=check_id, command=cmd_str, duration_ms=duration)
+        if code == 0:
+            obs.check_passed(check_id=check_id, command=cmd_str, duration_ms=duration)
+        else:
+            obs.check_failed(check_id=check_id, command=cmd_str, duration_ms=duration, detail="optional verification failed")
+
+    # Summary/status are self-referential artifacts. Stabilize them after all
+    # declared result evidence has been written, then attest without mutating.
+    stabilization = [
+        ["make", "generate-cockpit-status", f"CONTRACT={contract}", f"SUMMARY={summary}"],
+        ["make", "check-ai-status", f"CONTRACT={contract}", f"SUMMARY={summary}"],
+        ["make", "check-ai-status-consistency"],
+        ["make", "check-ai-agent-risk", f"CONTRACT={contract}", f"SUMMARY={summary}"],
+        ["make", "check-ai-change-summary", f"SUMMARY={summary}", f"CONTRACT={contract}"],
+    ]
+    for command in stabilization:
+        code, _, _ = run(command)
+        if code != 0:
+            obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+            return code
 
     print("Work Item finish checks passed")
     if args.archive:
         archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
         cmd_str = " ".join(archive_command)
         obs.check_started(check_id="archive-work-item", command=cmd_str)
-        code, duration = run(archive_command)
+        code, duration, _ = run(archive_command)
         if code != 0:
             obs.check_failed(check_id="archive-work-item", command=cmd_str, duration_ms=duration)
             obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))

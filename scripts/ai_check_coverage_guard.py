@@ -10,7 +10,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from ai_common import PROJECT_ROOT, changed_paths, included, simple_yaml_lists
+from ai_common import PROJECT_ROOT, changed_paths, included, simple_yaml_lists, simple_yaml_scalars
 from ai_observability import create_observability, elapsed_ms
 
 
@@ -57,10 +57,11 @@ def main() -> int:
         return 1
 
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    report_only = simple_yaml_scalars(POLICY).get("reportOnly", "true").lower() == "true"
     report = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "status": "warning" if items else "none",
-        "reportOnly": True,
+        "reportOnly": report_only,
         "changedPaths": paths,
         "items": [asdict(item) for item in items],
     }
@@ -69,17 +70,20 @@ def main() -> int:
     obs = create_observability()
     duration = elapsed_ms(start)
     if items:
-        print(f"coverage guard report-only warnings: {len(items)}")
+        mode = "report-only warnings" if report_only else "blocking findings"
+        print(f"coverage guard {mode}: {len(items)}")
         for item in items:
             print(f"[{item.severity}] {item.kind}: {item.path} - {item.detail}")
             obs.guard_violation(check_id="aiCoverageGuard", severity=item.severity, path=item.path, detail=f"{item.kind}: {item.detail}")
     else:
         print("coverage guard: no issues")
     print(f"report: {REPORT_PATH.relative_to(PROJECT_ROOT)}")
+    if items and not report_only:
+        obs.check_failed(check_id="aiCoverageGuard", duration_ms=duration, detail="production changes lack test changes")
+        return 1
     obs.check_passed(check_id="aiCoverageGuard", duration_ms=duration, fields={"warnings": len(items)})
     return 0
 
 
 if __name__ == "__main__":
     sys.exit(main())
-

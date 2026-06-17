@@ -1,0 +1,358 @@
+{
+  "contractVersion": 2,
+  "workItemId": "trust_boundary_hardening",
+  "mode": "code",
+  "title": "Trust boundary and aggregate PR hardening",
+  "baseCommit": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "29d43b61bb793e486f1df20886618f28def3529e1d6c460afc1271f60594ad5c"
+    },
+    {
+      "path": ".ai/guards/backtrack_policy.yaml",
+      "status": "M",
+      "fingerprint": "aea285340cb45e9547f8eac9305eb5248e88b37b32865d522e9497c1bb29383d"
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "status": "M",
+      "fingerprint": "eb1d3f71010445049a2e1d4e37914cbf1658fa7aa839a38112436de5cb7af2ef"
+    },
+    {
+      "path": ".ai/guards/scope_policy.yaml",
+      "status": "M",
+      "fingerprint": "24576b4510952972ac4b349a0614895b10da32dc8e8c32bb0e7b33f4964a8e76"
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_contract.example.json",
+      "status": "M",
+      "fingerprint": "34165135700b97113088c391c7d0cd559f30ed06ea39ad80296966d8a7954232"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/agent_risk_control_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "563a73326178bc7462d477aeadb56372b23099531829586ff36043ec099927de"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/agent_risk_control_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "bbd3f33835eaa7e79b25e17b554791c4d8361d4afda212210327931889b34b62"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/agent_risk_effectiveness_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "9835c4948b037ecfec721c9ce2a675d3e752e657879bdac65d1eee1d3fa1403b"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/agent_risk_effectiveness_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "6a6cf4c49e2bbaee4d621d11e4a37ffe081375ddf88c21e18fa1ab910eed9a5e"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/allow_generated_status_scope.contract.json",
+      "status": "A",
+      "fingerprint": "29c531d2e6c5086bfe7a395fd61bdeb8b8a99cf904aa8539efec9f340c569259"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/allow_generated_status_scope.summary.json",
+      "status": "A",
+      "fingerprint": "c342469db658da4f1e3a6238fa1fa79dc38fb31373c653ddc7c8e2b135c2c925"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/dedupe_generated_artifact_policy.contract.json",
+      "status": "A",
+      "fingerprint": "74888a290bd8fa5dae1e0a6299e755a8cc3891f369d7cea97a9b4235f1c952ef"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/dedupe_generated_artifact_policy.summary.json",
+      "status": "A",
+      "fingerprint": "ce9351134e3438e66c1925b733a93cc5125c70bab412ab17450c7bab71fb02d4"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix_summary_and_bytecode_guards.contract.json",
+      "status": "A",
+      "fingerprint": "4e6147d1cbb0dda592d417ae02018a6a5dd9771203c747c73edda53680b3d564"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix_summary_and_bytecode_guards.summary.json",
+      "status": "A",
+      "fingerprint": "61e927bd57ab7881914c5697569f9a15599532bc267df9eec8f736f99489c4f3"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/move_summary_exempt_policy.contract.json",
+      "status": "A",
+      "fingerprint": "c88446f0d5397a36c822d6002998f42a57f72d48323634298ec9854665d0f7ea"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/move_summary_exempt_policy.summary.json",
+      "status": "A",
+      "fingerprint": "e7d0358f6b01a43abdd344e1e2f59be92289f813ad7e7de3b84578fc83174b6f"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/multi_work_item_ci_selection.contract.json",
+      "status": "A",
+      "fingerprint": "6475d87ada7e33cf16d52afae87e15299de980ea4444cb166fbd992eb5d14d1d"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/multi_work_item_ci_selection.summary.json",
+      "status": "A",
+      "fingerprint": "3bb031af9829e89d9e9b9f1ec0919998969cfb18309051248d0d39a3f027b098"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/portable_pr_make_invocation.contract.json",
+      "status": "A",
+      "fingerprint": "e202d8298a4c5f777d84f32554a75dba6cfa1fb77d1db9660735aa3592abb5d5"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/portable_pr_make_invocation.summary.json",
+      "status": "A",
+      "fingerprint": "82ac5b47b6d385f524a37bb2290fe637a55751ce15fb3524ce85b20087b3b131"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/production_governance_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "2c93a153f094a7b054f76dc4295975c8c084aea1eb18ff7851634fe628328726"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/production_governance_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "ac0045aec2118ca51610b02c0ea353ecf5f9964c719e61c519f3cde37595aa8b"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_policy_and_status_repair.contract.json",
+      "status": "A",
+      "fingerprint": "6cc9f7b0c2dc80664894d2c6fa2b47d7b73935eb3c2ddd7f896e80aca1681006"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_policy_and_status_repair.summary.json",
+      "status": "A",
+      "fingerprint": "9a2517343378ae308276fb99bebb949296faca1ca82f93d38f2c40d784bc0141"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/template_lifecycle_review_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "0253e0d12980154bb2f68e8461e2347f41227e8eab8a5e1b5219b4919b07679c"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/template_lifecycle_review_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "26548f3098b4bb2014feeec31f6ed7f1bd0334d43e00a6c3ef8123d02d942e95"
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "status": "M",
+      "fingerprint": "3b03c703ed0cd5eba77178519b8505ebf7facbf92f2580571fc2a320326d7549"
+    },
+    {
+      "path": ".gitignore",
+      "status": "M",
+      "fingerprint": "e96c7363363df80679237e52e35d6336375a396de8e46cf1d1a4f3f5a67fefb6"
+    },
+    {
+      "path": "Makefile",
+      "status": "M",
+      "fingerprint": "c349ceb94e891f0505b170cf5b3997268faa315d9361675bf1efe51aa0de588c"
+    },
+    {
+      "path": "README.md",
+      "status": "M",
+      "fingerprint": "defb2e2845ec807915a2ed96515ab11f08c3bf39d331bd84b012f2bf2b67281d"
+    },
+    {
+      "path": "docs/architecture.md",
+      "status": "M",
+      "fingerprint": "03890370d54297639648d7dac8bd9065a9a5fd1c7c7f0ebba6c597c200e364ab"
+    },
+    {
+      "path": "docs/configuration.md",
+      "status": "M",
+      "fingerprint": "5528c143df89fb5378f71636169ea537e88dcb1998a2fa50691a38a6a032435f"
+    },
+    {
+      "path": "requirements-dev.txt",
+      "status": "A",
+      "fingerprint": "26db60f3749b2d582ef13e54530725d1038086c5b72953678670871c2b85e15a"
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "status": "M",
+      "fingerprint": "19ac43dc821ec39a1322bde6046fc21b98b0b4b070080c7efb3d0679dbb31004"
+    },
+    {
+      "path": "scripts/ai_check_agent_risk.py",
+      "status": "M",
+      "fingerprint": "bd070f41e287d3da034bb9054f0ede983a008d5d998b116f7f134ec39e6aac8e"
+    },
+    {
+      "path": "scripts/ai_check_backtrack.py",
+      "status": "M",
+      "fingerprint": "6a40ea5bdd964ae6375fb21d4434f9d3e39048bd5c2d1b0677f722a2f9d266c9"
+    },
+    {
+      "path": "scripts/ai_check_coverage_guard.py",
+      "status": "M",
+      "fingerprint": "0111c4e71df1873184b201a47da44239b820cf3acbc1aa988c83ad21d024b3aa"
+    },
+    {
+      "path": "scripts/ai_check_guards.py",
+      "status": "M",
+      "fingerprint": "b560eeefbb9e4005f4bace7ad190227ac92c889a2791bc80964f4471ab8a2af1"
+    },
+    {
+      "path": "scripts/ai_check_scope.py",
+      "status": "M",
+      "fingerprint": "37974a24b1c6d5552a4fbcb3f486c848ad1abc082fa8bb7e19e17a518d7ef0ea"
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "status": "M",
+      "fingerprint": "74983abf0a5eaa2d30d2926660385e353d5167a1da9c676a7ecf434cb773a055"
+    },
+    {
+      "path": "scripts/ai_check_work_item.py",
+      "status": "M",
+      "fingerprint": "58effe93a418a0f39ab6f9fc6da420edf3d5322c23693795ffe3c93df71c2b8f"
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "status": "M",
+      "fingerprint": "5c4ef13cdbb62d562d81ee9faa55fef0f1fd28d10f6805a2c84a66a9fd79ca0c"
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "status": "M",
+      "fingerprint": "5e5d8af9ea468e13d01748280960f30a603328822487590c18d02fe2e4772772"
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "status": "M",
+      "fingerprint": "a84f98a8a282c4b692fb4f464fba64efbf5da3da0dca9ca1251e111711223bf6"
+    },
+    {
+      "path": "templates/stacks/generic.mk",
+      "status": "M",
+      "fingerprint": "ce61f0469ab003239597b46aeeb525f1d37f9b7c127b97fd10d105538cc8b7d0"
+    },
+    {
+      "path": "tests/conftest.py",
+      "status": "A",
+      "fingerprint": "9bde3653056ca1552ea3c38747339f8a047b2eb3760de72a72f79a50358574b5"
+    },
+    {
+      "path": "tests/test_baseline_diff.py",
+      "status": "A",
+      "fingerprint": "b9a070abc54514bea2de5772813816de4587b76007efb5ba5bc01dd5b89f412d"
+    },
+    {
+      "path": "tests/test_contract_and_policy.py",
+      "status": "A",
+      "fingerprint": "a449c24a7801c2902d8b25b81d32b80a19ecf6a2c118c8178db74503c09c13eb"
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "status": "A",
+      "fingerprint": "2f71e5edb5d6ee57491fbc28f5ed4f1855b3e9a9731f2ac7936aabaeb54a3867"
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "status": "A",
+      "fingerprint": "60af877fd41ab80f655fd4728d201b5871ccda812e1ac215157a56e8823501ef"
+    },
+    {
+      "path": "tests/test_verification_evidence.py",
+      "status": "A",
+      "fingerprint": "191e6c63ede69965f7734312669ccf9ae1bf42db994fa117133d4027a3691713"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/trust_boundary_hardening.contract.json",
+    ".ai/work-items/active/trust_boundary_hardening.summary.json",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/_templates/**",
+    ".ai/cockpit/**",
+    ".ai/guards/**",
+    ".github/workflows/**",
+    "Makefile",
+    "README.md",
+    "docs/**",
+    "scripts/**",
+    "tests/**"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "user re-review supplied on 2026-06-17",
+      "reason": "Identifies arbitrary verification execution, incomplete multi-Work-Item PR coverage, forgeable evidence claims, and local path leakage."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "command_execution",
+      "pr_diff_coverage",
+      "audit_privacy"
+    ],
+    "reason": "The changes redefine command and CI trust boundaries and require adversarial regression coverage."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The review supplies concrete exploits, required behavior, and verification criteria."
+  },
+  "preReviewWarnings": [
+    "Review check registry parsing and ensure Contract-controlled strings never become executables.",
+    "Review aggregate PR coverage against the complete merge-base diff.",
+    "Review evidence binding and path redaction."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ai-finish accepts only registered check IDs from checks.yaml; raw Contract commands and shell indirection are rejected.",
+    "PR validation loads every changed archived Contract/Summary and requires union scope and changedFiles coverage for the complete merge-base diff without dirty-baseline exclusions.",
+    "Execution records bind check ID, normalized command hash, Contract hash, and commit SHA and are described as structured records rather than tamper-evident proof.",
+    "Generated and existing versioned audit records contain no personal absolute paths.",
+    "Adversarial and aggregate PR regression tests pass."
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "projectTest", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "repository owner via 2026-06-17 re-review request",
+    "reason": "The requested trust-boundary fixes require governance policy, CI, Makefile, scripts, docs, tests, and audit cleanup changes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

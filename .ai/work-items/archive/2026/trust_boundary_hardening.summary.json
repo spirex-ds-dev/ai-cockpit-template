@@ -1,0 +1,445 @@
+{
+  "workItemId": "trust_boundary_hardening",
+  "contractPath": ".ai/work-items/archive/2026/trust_boundary_hardening.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "reason": "Registered the quality check for check-ID execution."
+    },
+    {
+      "path": ".ai/guards/agent_risk_policy.yaml",
+      "reason": "Expressed hard gates as registered check IDs."
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_contract.example.json",
+      "reason": "Migrated the Contract example to version 2 check IDs."
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_summary.example.json",
+      "reason": "Migrated the Summary example to check IDs without fabricated passed evidence."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Replaced closing-Contract selection with aggregate PR validation."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Routed check-ai-pr through the aggregate validator."
+    },
+    {
+      "path": "README.md",
+      "reason": "Documented registered checks and structured, non-cryptographic records."
+    },
+    {
+      "path": "docs/architecture.md",
+      "reason": "Specified command trust boundaries and complete PR diff semantics."
+    },
+    {
+      "path": "docs/configuration.md",
+      "reason": "Documented check registration and multi-Work-Item aggregate CI."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Redacted machine paths before Summary archival."
+    },
+    {
+      "path": "scripts/ai_check_agent_risk.py",
+      "reason": "Validated required hard gates by check ID."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Added all-archive aggregate scope, changedFiles, approval, and privacy validation."
+    },
+    {
+      "path": "scripts/ai_check_status.py",
+      "reason": "Read verification state by check ID."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Validated registry commands and bound execution metadata."
+    },
+    {
+      "path": "scripts/ai_check_work_item.py",
+      "reason": "Required registered IDs for version 2 Contracts and rejected machine paths."
+    },
+    {
+      "path": "scripts/ai_checkpoint.py",
+      "reason": "Displayed and counted verification by check ID."
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "Added check registry, full-diff mode, and path redaction helpers."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Removed Contract command execution and resolved registered Make checks only."
+    },
+    {
+      "path": "scripts/ai_generate_status.py",
+      "reason": "Generated status using check IDs."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Generated version 2 check-ID Contracts and Summaries."
+    },
+    {
+      "path": "tests/test_baseline_diff.py",
+      "reason": "Covered full-diff mode without dirty-baseline exclusions."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Verified the PR target invokes aggregate validation."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Covered multiple Work Items and uncovered earlier PR paths."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Updated ai-start assertions for version 2 check IDs."
+    },
+    {
+      "path": "tests/test_verification_evidence.py",
+      "reason": "Covered command injection rejection, registry enforcement, bindings, and redaction."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/production_governance_hardening.contract.json",
+      "reason": "Removed an overstated tamper-evident claim."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/production_governance_hardening.summary.json",
+      "reason": "Removed overclaiming language and redacted a local path."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/portable_pr_make_invocation.summary.json",
+      "reason": "Redacted a local path from structured output."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/multi_work_item_ci_selection.summary.json",
+      "reason": "Redacted a local path from structured output."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/template_lifecycle_review_hardening.contract.json",
+      "reason": "Replaced personal source paths with portable placeholders."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/template_lifecycle_review_hardening.summary.json",
+      "reason": "Replaced personal source paths with portable placeholders."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/trust_boundary_hardening.contract.json",
+      "reason": "Archived Work Item audit evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/trust_boundary_hardening.summary.json",
+      "reason": "Archived Work Item audit evidence."
+    }
+  ],
+  "sourcesUsed": [
+    "user re-review supplied on 2026-06-17",
+    ".ai/cockpit/checks.yaml",
+    ".github/workflows/smoke.yml"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/trust_boundary_hardening.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:11.196800+00:00",
+      "exitCode": 0,
+      "durationMs": 81,
+      "outputDigest": "7c773b443501d004834522d51b6f9399b5791fb1cb68ec23bd33abef065f9407",
+      "commandHash": "6bc20be96493ebda710de71757eef96dfed7250a0898e229c45662763d55a921",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/trust_boundary_hardening.contract.json work item contract check passed: .ai/work-items/active/trust_boundary_hardening.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/trust_boundary_hardening.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:11.366839+00:00",
+      "exitCode": 0,
+      "durationMs": 168,
+      "outputDigest": "e94bd8b6be5093f33f91a39c2284654de288e39400e373e842fa794407d60de2",
+      "commandHash": "c7330a1537a681f9ab97bf5825e0e9e7ac347b1dd1200b48f786872af4ae1473",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/trust_boundary_hardening.contract.json scope guard passed: 31 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:11.514996+00:00",
+      "exitCode": 0,
+      "durationMs": 146,
+      "outputDigest": "7cfbfe5823fb2a19dee7dbdd3a74a2a7a516d0b275dc84689bb20b8481651583",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/trust_boundary_hardening.contract.json [warning] restricted_write: .ai/cockpit/checks.yaml (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/guards/agent_risk_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. [warning] restricted_write: .github/workflows/smoke.yml (.github/workflows/**) - CI workflow co"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/trust_boundary_hardening.contract.json SUMMARY=.ai/work-items/active/trust_boundary_hardening.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:11.567475+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "6c0e956619933e420bc213584e1f00cff7a4de2e9857f97f2339d5a016813ade",
+      "commandHash": "107d62a5b3617434dff39ed6d68b8d85ab987465e179b362317d7ae4f0df819a",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/trust_boundary_hardening.contract.json --summary .ai/work-items/active/trust_boundary_hardening.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `trust_boundary_hardening` - Contract Hash: `58a6e8397fbe8bdc` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `0` - Required Checks: `14` "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/trust_boundary_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:11.732689+00:00",
+      "exitCode": 0,
+      "durationMs": 164,
+      "outputDigest": "b46eafc5595c7b57411b91bf07577b24d1c181c51bcb379bd41fb49f74c250b0",
+      "commandHash": "e6c99a3330a26d19eeef0335a47d15941ea8d09cab64d397416268024a91cbc7",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/trust_boundary_hardening.summary.json review policy matched 19 path(s) [review] .ai/work-items/archive/2026/production_governance_hardening.contract.json [review] .ai/work-items/archive/2026/template_lifecycle_review_hardening.contract.json [review] scripts/ai_check_pr.py [review] .ai/cockpit/checks.yaml [review] .ai/guards/agent_risk_policy.yaml [review] .ai/work-items/_templates/work_it"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:11.868635+00:00",
+      "exitCode": 0,
+      "durationMs": 134,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:12.002049+00:00",
+      "exitCode": 0,
+      "durationMs": 132,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "projectTest",
+      "command": "make project-test",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:13.449522+00:00",
+      "exitCode": 0,
+      "durationMs": 1446,
+      "outputDigest": "3ea44286a0ed517e675ca48b2f4401e9d98d12ce8265774a75ef1cdfb16d8ac1",
+      "commandHash": "d0b73478e499b6f7e2ac386f397018a41a0a64b29f3c0ab85264974d2dd42af8",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q ......................... [100%] 25 passed in 1.31s"
+    },
+    {
+      "check": "quality",
+      "command": "make quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:14.842565+00:00",
+      "exitCode": 0,
+      "durationMs": 1391,
+      "outputDigest": "032973f9028987a913e406757116345fcccb16a663fbcab34aa21cfac4125067",
+      "commandHash": "e483963884b442f0092037d5409f23ba2e2c9c9bfec6670efa7529b84ce15b8b",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q ......................... [100%] 25 passed in 1.17s PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m py_compile scripts/*.py tests/*.py git diff --check"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/trust_boundary_hardening.contract.json SUMMARY=.ai/work-items/active/trust_boundary_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:14.894017+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "7dfc4f8c49bcbf406630f25e515b9e1c688ecfc5c3bb7ad16a7055230286996b",
+      "commandHash": "88136056131ba8e4777c56fe3a01820da8debc4010cd4cb21e4e76c2cc8fdd0a",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/trust_boundary_hardening.contract.json --summary .ai/work-items/active/trust_boundary_hardening.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/trust_boundary_hardening.contract.json SUMMARY=.ai/work-items/active/trust_boundary_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:14.944372+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "0778cd29a01a63a679888f5a0fd669c85459e3b9b09b4c3cfacff1dc751922d6",
+      "commandHash": "6c773c26fa1c0a91a8d6f5b91548c22a4b84ddc24b2dd08b82c7a93421e42f5d",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/trust_boundary_hardening.contract.json --summary .ai/work-items/active/trust_boundary_hardening.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:14.993747+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/trust_boundary_hardening.contract.json SUMMARY=.ai/work-items/active/trust_boundary_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:15.043051+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "62eda92ea4cdc767879364484f7e53877a8bba3d6505c253475dd5161b3a53bb",
+      "commandHash": "8f89c26e9f0cacbf2e81567398c931beeb857004cfd2119e7ce276f4e9ce7e0e",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/trust_boundary_hardening.contract.json --summary .ai/work-items/active/trust_boundary_hardening.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/trust_boundary_hardening.summary.json CONTRACT=.ai/work-items/active/trust_boundary_hardening.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T06:09:15.180622+00:00",
+      "exitCode": 0,
+      "durationMs": 136,
+      "outputDigest": "e1a26ae755a485debf1afc4007af7c9725aaae2b311dc8d0a96a722384355d25",
+      "commandHash": "d30bea6cf1a837bd0e657d64e7d0ed9e2572f5080c476ccf600380f88522b96f",
+      "contractHash": "58a6e8397fbe8bdc92952f38e33d3cf5c4defbf57f7dd6e10306213943970175",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/trust_boundary_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_boundary_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/trust_boundary_hardening.summary.json --contract .ai/work-items/active/trust_boundary_hardening.contract.json ai summary check passed: .ai/work-items/active/trust_boundary_hardening.summary.json"
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Command and CI trust boundaries changed; adversarial and aggregate tests cover the identified attacks."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    "target/ai_*.json",
+    "target/ai_observability.jsonl"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    "Legacy version 1 archives remain readable but cannot be executed by ai-finish; version 2 is required for execution."
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "attestation",
+      "detail": "Execution records are validation metadata, not signed attestations.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "Both reported P0 issues are closed with regression coverage; execution records intentionally remain non-cryptographic.",
+    "expectedReviewFocus": [
+      "Check registry trust boundary",
+      "Aggregate PR coverage",
+      "Evidence binding and path privacy"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified",
+    "userVisibleOutput": "verified",
+    "persistence": "verified",
+    "localization": "not_applicable",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "verified"
+  },
+  "userCorrectionsCaptured": [
+    "Raw Contract command execution is an unsafe trust boundary.",
+    "Closing-only CI omits earlier Work Item changes.",
+    "Execution metadata was overstated as tamper-evident.",
+    "Archived output leaked personal paths."
+  ],
+  "userCorrectionSolidification": [
+    "tests/test_verification_evidence.py",
+    "tests/test_pr_aggregate.py",
+    "scripts/ai_check_pr.py",
+    "docs/architecture.md"
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "detail": "Threat examples, aggregate PR semantics, and privacy scope reviewed before implementation.",
+      "contractHash": "58a6e8397fbe8bdc",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "detail": "Adversarial, aggregate, binding, and redaction tests reviewed before finish.",
+      "contractHash": "58a6e8397fbe8bdc",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Execution metadata is reported as structured traceability data, not cryptographic proof."
+}

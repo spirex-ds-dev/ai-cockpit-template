@@ -36,7 +36,7 @@ def main() -> int:
     start = time.time()
     try:
         contract = load_json(Path(args.contract))
-        paths = changed_paths()
+        paths = changed_paths(contract)
     except (OSError, json.JSONDecodeError, ValueError, RuntimeError) as exc:
         print(f"Failed to run scope guard: {exc}", file=sys.stderr)
         return 1
@@ -47,8 +47,13 @@ def main() -> int:
     policy_lists = simple_yaml_lists(SCOPE_POLICY)
     allow_patterns = policy_lists.get("allowAlways", [])
     destructive = contract.get("destructiveChangePolicy")
-    if isinstance(destructive, dict):
-        allow_patterns.extend(item for item in destructive.get("allowPatterns", []) if isinstance(item, str))
+    if isinstance(destructive, dict) and destructive.get("allowed") is True:
+        evidence = destructive.get("approvalEvidence")
+        approved = destructive.get("requiresHumanApproval") is False or (
+            isinstance(evidence, dict) and evidence.get("approved") is True
+        )
+        if approved:
+            allow_patterns.extend(item for item in destructive.get("allowPatterns", []) if isinstance(item, str))
 
     issues: list[str] = []
     for path in paths:
@@ -58,6 +63,17 @@ def main() -> int:
             issues.append(f"path matches outOfScope: {path}")
         if not included(path, scope):
             issues.append(f"path is not covered by scope: {path}")
+
+    dependency_rules = {
+        key.removeprefix("dependencyScopeRules."): values
+        for key, values in policy_lists.items()
+        if key.startswith("dependencyScopeRules.")
+    }
+    for trigger, required_patterns in dependency_rules.items():
+        if any(included(path, [trigger]) for path in paths):
+            for required_pattern in required_patterns:
+                if not any(included(path, [required_pattern]) for path in paths):
+                    issues.append(f"dependency scope rule requires {required_pattern} when {trigger} changes")
 
     duration = elapsed_ms(start)
     if issues:
@@ -72,4 +88,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from ai_common import PROJECT_ROOT, load_json, save_json
+from ai_common import PROJECT_ROOT, load_json, redact_machine_paths_in_data, save_json
 from ai_observability import AiEvent, AiEventLevel, AiEventType, create_observability
 
 
@@ -79,8 +79,21 @@ def main() -> int:
 
     target_dir.mkdir(parents=True, exist_ok=True)
     if summary_path.exists():
-        summary = load_json(summary_path)
+        summary = redact_machine_paths_in_data(load_json(summary_path))
         summary["contractPath"] = (target_dir / contract_path.name).relative_to(PROJECT_ROOT).as_posix()
+        changed = summary.get("changedFiles", [])
+        if isinstance(changed, list):
+            replacements = {
+                contract_path.relative_to(PROJECT_ROOT).as_posix(): (target_dir / contract_path.name).relative_to(PROJECT_ROOT).as_posix(),
+                summary_path.relative_to(PROJECT_ROOT).as_posix(): (target_dir / summary_path.name).relative_to(PROJECT_ROOT).as_posix(),
+            }
+            for item in changed:
+                if isinstance(item, dict) and item.get("path") in replacements:
+                    item["path"] = replacements[item["path"]]
+            existing = {item.get("path") for item in changed if isinstance(item, dict)}
+            for target in replacements.values():
+                if target not in existing:
+                    changed.append({"path": target, "reason": "Archived Work Item audit evidence."})
         save_json(summary_path, summary)
 
     for src, target in files_to_move:
@@ -95,4 +108,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

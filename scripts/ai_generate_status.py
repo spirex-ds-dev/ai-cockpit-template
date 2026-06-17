@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from ai_common import PROJECT_ROOT, load_json
+from ai_common import PROJECT_ROOT, load_json, verification_key
 from ai_observability import DEFAULT_LOG_PATH, create_observability
 
 
@@ -64,11 +64,11 @@ def status_for(
     if summary is None:
         blockers.append("summary is missing")
     else:
-        status = {item.get("command"): item.get("result") for item in summary.get("verification", []) if isinstance(item, dict)}
+        status = {verification_key(item): item.get("result") for item in summary.get("verification", []) if isinstance(item, dict)}
         for item in contract.get("verification", []):
             if not isinstance(item, dict) or item.get("required") is not True:
                 continue
-            command = item.get("command")
+            command = verification_key(item)
             if status.get(command) != "passed":
                 blockers.append(f"required check not passed: {command}")
     return ("blocked", blockers) if blockers else ("ready_for_review", [])
@@ -177,7 +177,7 @@ def main() -> int:
     if verification:
         for item in verification:
             if isinstance(item, dict):
-                lines.append(f"- `{item.get('command', '')}`: {item.get('result', '')}")
+                lines.append(f"- `{verification_key(item)}`: {item.get('result', '')}")
     else:
         lines.append("- none")
 
@@ -218,4 +218,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

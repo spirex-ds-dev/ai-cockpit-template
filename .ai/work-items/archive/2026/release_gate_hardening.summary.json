@@ -1,0 +1,381 @@
+{
+  "workItemId": "release_gate_hardening",
+  "contractPath": ".ai/work-items/archive/2026/release_gate_hardening.contract.json",
+  "changedFiles": [
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Rejected newly added or modified Contract v1 archive evidence."
+    },
+    {
+      "path": ".gitignore",
+      "reason": "Kept named pre-v2 local history out of PR evidence while preserving v2 archives."
+    },
+    {
+      "path": ".ai/cockpit/version.json",
+      "reason": "Published distribution, Contract schema, and minimum Python versions."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Added upgrade backups, managed marker replacement, version installation, and active-state ignore rules."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Used the generic GitHub archive endpoint for branch, tag, and SHA references."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Covered the Contract v1 downgrade exploit."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Covered versioning, clean installation, backups, policies, markers, and upgrade behavior."
+    },
+    {
+      "path": "tests/test_install_sh.py",
+      "reason": "Covered branch/tag/SHA-compatible archive URL construction."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Covered full finish required failure, retry success, archive success, and archive collision."
+    },
+    {
+      "path": "tests/test_guards_and_status.py",
+      "reason": "Added direct backtrack, coverage, checkpoint, status, and retry circuit-breaker tests."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Corrected the comment to match blocking defaults."
+    },
+    {
+      "path": "README.md",
+      "reason": "Clarified approval trust, sandbox limits, and independent project CI."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Synchronized trust and independent CI limits in Chinese."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Synchronized trust and independent CI limits in Japanese."
+    },
+    {
+      "path": "docs/installation.md",
+      "reason": "Documented upgrade, backups, version refs, requirements, and platform support."
+    },
+    {
+      "path": "docs/configuration.md",
+      "reason": "Documented approval identity limits and independent project checks."
+    },
+    {
+      "path": "docs/architecture.md",
+      "reason": "Documented v1 PR rejection and external trust boundaries."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Documented v1 legacy-read-only behavior and approval limits."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release_gate_hardening.contract.json",
+      "reason": "Archived Work Item audit evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release_gate_hardening.summary.json",
+      "reason": "Archived Work Item audit evidence."
+    }
+  ],
+  "sourcesUsed": [
+    "user fourth-round review supplied on 2026-06-17",
+    "scripts/ai_check_pr.py",
+    "scripts/install_ai_cockpit.py",
+    "install.sh"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/release_gate_hardening.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:23.193241+00:00",
+      "exitCode": 0,
+      "durationMs": 54,
+      "outputDigest": "0f4c1819491e9c371853cbd19b3182ab52bdb56acfbf00210322685ac0e84ba8",
+      "commandHash": "8c330512b4ee18bd0cda9b781494f5577818112dfd714534d616be6aebd3f8fa",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/release_gate_hardening.contract.json work item contract check passed: .ai/work-items/active/release_gate_hardening.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/release_gate_hardening.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:23.347521+00:00",
+      "exitCode": 0,
+      "durationMs": 152,
+      "outputDigest": "3ff3f4b59deaec5f90ef559272f743c0581c46cf6802a059d707c8bc0ccf5f14",
+      "commandHash": "da7db643a399d54abf68a84c1e1f7508ba393f52a6a47fbaee125dbae343c02e",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/release_gate_hardening.contract.json scope guard passed: 18 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:23.519580+00:00",
+      "exitCode": 0,
+      "durationMs": 170,
+      "outputDigest": "1ad4c76c5e65bbd2c75e26805114515eaad048eba83891cc8f180e791aa14c41",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/release_gate_hardening.contract.json [warning] restricted_write: .ai/cockpit/version.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/guards/coverage_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. guard ch"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/release_gate_hardening.contract.json SUMMARY=.ai/work-items/active/release_gate_hardening.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:23.572973+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "4a40b6ac60f3fb9bfd772b2787329469c18dbe39ebd54b32d16a2863799b3bdd",
+      "commandHash": "f3c58d2109f8ebcf6a180f93b932bbeaf4de9d0e1c38ba707e4e67780a5e8475",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/release_gate_hardening.contract.json --summary .ai/work-items/active/release_gate_hardening.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `release_gate_hardening` - Contract Hash: `fd8c4398deb83216` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count: `0` - Required Checks: `13` - Requ"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/release_gate_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:23.692392+00:00",
+      "exitCode": 0,
+      "durationMs": 118,
+      "outputDigest": "896a5360718099c804c2045a26c6f586a6226b5fcaa19deee93085fc106c180e",
+      "commandHash": "e3ca8a0cbe653e9ca14174d52a36faa3ac5265e9621acb15c566cd51dae9fd94",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/release_gate_hardening.summary.json review policy matched 4 path(s) [review] .ai/cockpit/version.json [review] scripts/ai_check_pr.py [review] .ai/cockpit/README.md [review] .ai/guards/coverage_policy.yaml review focus recorded: 4 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:23.831814+00:00",
+      "exitCode": 0,
+      "durationMs": 138,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:23.955989+00:00",
+      "exitCode": 0,
+      "durationMs": 122,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "quality",
+      "command": "make quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:29.574618+00:00",
+      "exitCode": 0,
+      "durationMs": 5617,
+      "outputDigest": "26d6e0dec2c012576f164d237d3d58b7b34e078e4f513db706c50a90ec535fda",
+      "commandHash": "e483963884b442f0092037d5409f23ba2e2c9c9bfec6670efa7529b84ce15b8b",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q .................................... [100%] 36 passed in 5.39s PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m py_compile scripts/*.py tests/*.py git diff --check"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/release_gate_hardening.contract.json SUMMARY=.ai/work-items/active/release_gate_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:29.626215+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "17bfdccdc038761c3ec2e6655eb72abc7e2a2a38d063d30b2946e19e9fa774ca",
+      "commandHash": "9e15462b83efbe607d49692f859113745a545d4b9ff0a7ac8cd77282fe9a2383",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/release_gate_hardening.contract.json --summary .ai/work-items/active/release_gate_hardening.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/release_gate_hardening.contract.json SUMMARY=.ai/work-items/active/release_gate_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:29.674010+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "2cb8ac49d02e86b41941390cb3205ade6c9b421f6f56e93f67b7ea67513270a1",
+      "commandHash": "a6196b36dc2d8ef2428ccf09fce725d242cfeff7208b547df686c90e9d10b77f",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/release_gate_hardening.contract.json --summary .ai/work-items/active/release_gate_hardening.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:29.719952+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/release_gate_hardening.contract.json SUMMARY=.ai/work-items/active/release_gate_hardening.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:29.770026+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "871056b665cceea359a994a4feb22ca8c6e2df20d03848ba456b7adda0a38164",
+      "commandHash": "e64703b3a8f9d5a8ce211b501ee492034bf9bf4b0bfc6fd42cc30a71e448405d",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/release_gate_hardening.contract.json --summary .ai/work-items/active/release_gate_hardening.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/release_gate_hardening.summary.json CONTRACT=.ai/work-items/active/release_gate_hardening.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-17T10:00:29.881765+00:00",
+      "exitCode": 0,
+      "durationMs": 110,
+      "outputDigest": "d5e8e03842257b89adb5a52bba9cf3ad0a4d51c3e1ba4f7d860e6e94085c5b5c",
+      "commandHash": "f7af66eecbd7a6185813d8190aeabbf45aa8392b48fd5c9cd89cd91f2c5db6a2",
+      "contractHash": "fd8c4398deb832160653329cc72c9182181c9ff10aba346db0cb51a40a4f4b91",
+      "commitSha": "591c1a3cbdc7516c11544a9797dfcd9a5710eb07",
+      "executionContractPath": ".ai/work-items/active/release_gate_hardening.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_gate_hardening.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/release_gate_hardening.summary.json --contract .ai/work-items/active/release_gate_hardening.contract.json ai summary check passed: .ai/work-items/active/release_gate_hardening.summary.json"
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Release gates and upgrades changed; downgrade, installation, upgrade, and lifecycle paths have executable coverage."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    "target/ai_*.json",
+    "target/ai_observability.jsonl"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    "Pre-v2 local history cannot be trusted as new PR evidence and remains local-only rather than being rewritten with fabricated v2 execution records."
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "human approval",
+      "detail": "Repository approval fields remain workflow records; trusted identity must be enforced by the hosting platform.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "The release-blocking downgrade is closed and upgrade/lifecycle paths are tested; external approval remains an explicit platform responsibility.",
+    "expectedReviewFocus": [
+      "v1 PR rejection",
+      "upgrade backup and marker replacement",
+      "finish retry and archive failure",
+      "platform trust boundary"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified",
+    "userVisibleOutput": "verified",
+    "persistence": "verified",
+    "localization": "verified",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "verified"
+  },
+  "userCorrectionsCaptured": [
+    "Contract v1 could downgrade around v2 PR enforcement.",
+    "Approval fields do not establish human identity.",
+    "Installer lacked a coherent upgrade path.",
+    "Tag installation used a branch-only URL.",
+    "Finish lifecycle lacked end-to-end failure and recovery tests."
+  ],
+  "userCorrectionSolidification": [
+    "tests/test_pr_aggregate.py",
+    "tests/test_installer.py",
+    "tests/test_finish_e2e.py",
+    "docs/installation.md",
+    "docs/architecture.md"
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "detail": "Downgrade, upgrade, install ref, lifecycle, trust, and platform requirements reviewed before implementation.",
+      "contractHash": "fd8c4398deb83216",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 13,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "detail": "Downgrade, upgrade backup, full finish recovery, policy tests, syntax, and docs reviewed.",
+      "contractHash": "fd8c4398deb83216",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 13,
+      "requiredChecksPassed": 0
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Repository approval records are not described as trusted identity or sandbox isolation."
+}

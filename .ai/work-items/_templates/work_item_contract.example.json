@@ -1,8 +1,10 @@
 {
-  "contractVersion": 1,
+  "contractVersion": 2,
   "workItemId": "example-task",
   "mode": "code",
   "title": "Example task",
+  "baseCommit": "replace-with-git-head-at-task-start",
+  "baselineDirtyPaths": [],
   "scope": [
     "src/example_module.ext",
     "tests/example_module_test.ext"
@@ -42,6 +44,7 @@
   "checkpointPolicy": {
     "requiredBeforeFinish": true,
     "requiredStages": [
+      "before_edit",
       "before_finish"
     ],
     "reason": "Record checkpoints so scope, acceptance, unknowns, and verification stay visible during long-running work."
@@ -53,15 +56,15 @@
   ],
   "verification": [
     {
-      "command": "make project-format-check",
+      "check": "projectFormat",
       "required": true
     },
     {
-      "command": "make project-test",
+      "check": "projectTest",
       "required": true
     },
     {
-      "command": "make project-lint",
+      "check": "projectLint",
       "required": true
     }
   ],
@@ -69,6 +72,11 @@
     "allowed": false,
     "requiresHumanApproval": true,
     "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only after explicit human approval for restricted paths."
   },
   "rollbackNote": "Revert the diff for this task and restore related tests and docs."
 }
