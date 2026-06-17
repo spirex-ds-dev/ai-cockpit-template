@@ -1,0 +1,132 @@
+{
+  "contractVersion": 2,
+  "workItemId": "ci-base-env-isolation",
+  "mode": "code",
+  "title": "Isolate test repositories from CI baseline environment",
+  "baseCommit": "1a670f4cc217a72f830dca830ebe5a0636529714",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/ci-base-env-isolation.contract.json",
+    ".ai/work-items/active/ci-base-env-isolation.summary.json",
+    ".ai/work-items/archive/2026/ci-base-env-isolation.contract.json",
+    ".ai/work-items/archive/2026/ci-base-env-isolation.summary.json",
+    ".ai/cockpit/current_status.md",
+    "tests/conftest.py"
+  ],
+  "outOfScope": [
+    "scripts/**",
+    ".github/**"
+  ],
+  "sources": [
+    {
+      "path": "github-actions-smoke-2026-06-17",
+      "reason": "Shows temporary-repository tests inheriting workflow AI_BASE_COMMIT and rejecting a commit absent from the fixture repository."
+    },
+    {
+      "path": "tests/test_baseline_diff.py",
+      "reason": "Exercises fixture-local Git baselines and the one test that intentionally sets AI_BASE_COMMIT."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "test_isolation",
+      "ci_environment"
+    ],
+    "reason": "A global CI baseline is valid for repository checks but must not leak into tests that create independent Git repositories."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The failure is reproducible by setting AI_BASE_COMMIT while running the fixture-repository tests."
+  },
+  "preReviewWarnings": [
+    "Confirm the fixture clears AI_BASE_COMMIT by default while tests can still opt in with monkeypatch.setenv."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Temporary-repository tests do not inherit the workflow-level AI_BASE_COMMIT.",
+    "The explicit environment-override test continues to verify runtime precedence.",
+    "The six reported failures pass when the suite is run with AI_BASE_COMMIT set to the previous repository commit.",
+    "The complete quality and AI governance checks pass."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
