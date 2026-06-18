@@ -10,6 +10,7 @@ from pathlib import Path
 
 from ai_common import PROJECT_ROOT, capture_dirty_baseline, current_head, save_json
 from ai_check_status_consistency import validate_status_consistency
+from ai_generate_status import write_active_status
 from ai_observability import create_observability
 
 
@@ -231,8 +232,22 @@ def main() -> int:
         "knownGaps": ["Replace this before finishing the Work Item."],
         "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
     }
+    status_path = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
+    previous_status = status_path.read_bytes() if status_path.exists() else None
     save_json(contract_path, contract)
     save_json(summary_path, summary)
+    try:
+        write_active_status(contract_path, summary_path)
+    except (OSError, RuntimeError, ValueError) as exc:
+        contract_path.unlink(missing_ok=True)
+        summary_path.unlink(missing_ok=True)
+        if previous_status is None:
+            status_path.unlink(missing_ok=True)
+        else:
+            status_path.parent.mkdir(parents=True, exist_ok=True)
+            status_path.write_bytes(previous_status)
+        print(f"ERROR: failed to generate Cockpit status; Work Item creation rolled back: {exc}", file=sys.stderr)
+        return 1
     print(f"Work Item skeleton created: {task}")
     print(f"contract: {contract_rel}")
     print(f"summary: {summary_rel}")

@@ -13,6 +13,7 @@ AI_PYTHON ?= PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
 
 .PHONY: help \
 	project-format-check project-test project-lint diff-check quality \
+	check-docs-metadata \
 	ai-start ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy \
 	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item check-ai-pr
@@ -36,6 +37,7 @@ help:
 	@printf '%s\n' '  make ai-finish TASK=<task>'
 	@printf '%s\n' '  make check-ai'
 	@printf '%s\n' '  make quality'
+	@printf '%s\n' '  make check-docs-metadata'
 	@printf '%s\n' '  make archive-work-item CONTRACT=<contract.json> [ARGS="--dry-run"]'
 	@printf '%s\n' ''
 	@printf '%s\n' 'Customize project-format-check, project-test, and project-lint for your stack.'
@@ -52,7 +54,10 @@ project-lint:
 diff-check:
 	git diff --check
 
-quality: project-format-check project-test project-lint diff-check
+check-docs-metadata:
+	$(AI_PYTHON) scripts/check_docs_metadata.py
+
+quality: project-format-check project-test project-lint diff-check check-docs-metadata
 
 ai-start:
 	$(AI_PYTHON) scripts/ai_start.py --task "$(TASK)" --title "$(TITLE)" --mode "$(MODE)"

@@ -72,7 +72,7 @@ Review 从上下文开始。
 ## 3 分钟安装
 
 ```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust --update-makefile
 ```
 
 启动一个受治理的 AI 任务：
@@ -142,8 +142,12 @@ Codex, Gemini, Claude, Cursor, Antigravity, and other coding agents
 技术栈：
 
 ```text
-generic, rust, flutter, typescript, python, go, java, kotlin, swift, ruby, php, csharp
+generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ruby, php, csharp
 ```
+
+技术栈预设是可按项目修改的起点，不负责安装依赖。目标项目必须已具备 formatter、测试运行器、SDK 和构建插件；例如 Java 和 Android 预设要求 Gradle Wrapper 与 Spotless 配置，Python 预设要求 Ruff 和 pytest。`examples/` 仅覆盖部分技术栈，目前并未包含每一种预设。
+
+治理运行时本身不依赖目标语言，但技术栈预设和默认 guard 路径并不代表完整的框架支持。将其设为 CI 必需检查前，必须根据目标仓库调整 `Makefile.ai.stack` 和 `.ai/guards/coverage_policy.yaml`。
 
 ## 运行环境要求
 

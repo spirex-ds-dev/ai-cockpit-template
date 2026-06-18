@@ -8,19 +8,34 @@ production:
   include:
     - "src/**"
     - "lib/**"
+    - "app/src/main/**"
+    - "Sources/**"
+    - "**/*.cs"
     - "scripts/ai_*.py"
   exclude:
     - "tests/**"
     - "test/**"
+    - "Tests/**"
+    - "*.Tests/**/*"
+    - "app/src/test/**"
+    - "app/src/androidTest/**"
     - "**/*test*"
     - "**/*spec*"
+    - "**/*Test*"
+    - "**/*Spec*"
 
 tests:
   include:
     - "tests/**"
     - "test/**"
+    - "Tests/**"
+    - "*.Tests/**/*"
+    - "app/src/test/**"
+    - "app/src/androidTest/**"
     - "**/*test*"
     - "**/*spec*"
+    - "**/*Test*"
+    - "**/*Spec*"
 
 output:
   json: target/ai_coverage_guard_report.json

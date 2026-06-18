@@ -2,6 +2,8 @@ import subprocess
 import json
 from pathlib import Path
 
+import pytest
+
 from install_ai_cockpit import Installer
 
 
@@ -90,6 +92,38 @@ def test_upgrade_backs_up_policies_and_replaces_agent_marker_section(tmp_path):
         check=False,
     )
     assert result.returncode == 0
+
+
+@pytest.mark.parametrize("name", ["AGENTS.md", "GEMINI.md", "CLAUDE.md"])
+def test_upgrade_preserves_unmarked_agent_rules(tmp_path, name):
+    custom_rules = "# Local Rules\n\nKEEP-ME\n"
+    (tmp_path / name).write_text(custom_rules, encoding="utf-8")
+
+    upgrade = Installer(
+        source=ROOT, target=tmp_path, stack="generic", force=False, dry_run=False,
+        with_examples=False, update_makefile=True, upgrade=True,
+    )
+
+    assert upgrade.install() == 0
+    upgraded = (tmp_path / name).read_text(encoding="utf-8")
+    assert upgraded.startswith(custom_rules)
+    assert "KEEP-ME" in upgraded
+    assert "<!-- AI_COCKPIT_SECTION -->" in upgraded
+    assert "<!-- /AI_COCKPIT_SECTION -->" in upgraded
+
+
+def test_commented_makefile_include_does_not_suppress_active_include(tmp_path):
+    makefile = tmp_path / "Makefile"
+    makefile.write_text("# include Makefile.ai\n", encoding="utf-8")
+    installer = Installer(
+        source=ROOT, target=tmp_path, stack="generic", force=False, dry_run=False,
+        with_examples=False, update_makefile=True,
+    )
+
+    assert installer.install() == 0
+    lines = makefile.read_text(encoding="utf-8").splitlines()
+    assert "# include Makefile.ai" in lines
+    assert "include Makefile.ai" in lines
 
 
 def test_upgrade_refuses_active_work_item_before_writing(tmp_path):

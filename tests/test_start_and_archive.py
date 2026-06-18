@@ -6,6 +6,10 @@ import ai_archive_work_item
 import ai_start
 
 
+def stub_active_status(monkeypatch):
+    monkeypatch.setattr(ai_start, "write_active_status", lambda *_args, **_kwargs: None)
+
+
 def test_ai_start_default_contains_agent_risk_gate(tmp_path, monkeypatch):
     active = tmp_path / ".ai" / "work-items" / "active"
     active.mkdir(parents=True)
@@ -14,6 +18,7 @@ def test_ai_start_default_contains_agent_risk_gate(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
+    stub_active_status(monkeypatch)
     monkeypatch.setattr(ai_start, "create_observability", lambda **_: type("Obs", (), {"work_item_started": lambda *a, **k: None})())
     monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "sample", "--mode", "code"])
 
@@ -36,6 +41,7 @@ def test_ai_start_requires_initial_commit(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
     monkeypatch.setattr(ai_start, "current_head", lambda: "")
+    stub_active_status(monkeypatch)
     monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "sample"])
 
     assert ai_start.main() == 1
@@ -67,6 +73,7 @@ def test_ai_start_journeys(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
+    stub_active_status(monkeypatch)
     monkeypatch.setattr(ai_start, "create_observability", lambda **_: type("Obs", (), {"work_item_started": lambda *a, **k: None})())
 
     # Test refactor journey
@@ -85,3 +92,39 @@ def test_ai_start_journeys(tmp_path, monkeypatch):
     contract_c = json.loads((active / "cleanup_task.contract.json").read_text(encoding="utf-8"))
     assert contract_c["destructiveChangePolicy"]["allowed"] is True
     assert contract_c["destructiveChangePolicy"]["requiresHumanApproval"] is True
+
+
+def test_ai_start_generates_active_status(tmp_path, monkeypatch):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    generated = []
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
+    monkeypatch.setattr(ai_start, "write_active_status", lambda contract, summary: generated.append((contract, summary)))
+    monkeypatch.setattr(ai_start, "create_observability", lambda **_: type("Obs", (), {"work_item_started": lambda *a, **k: None})())
+    monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "status_task", "--mode", "code"])
+
+    assert ai_start.main() == 0
+    assert generated == [(active / "status_task.contract.json", active / "status_task.summary.json")]
+
+
+def test_ai_start_rolls_back_pair_when_status_generation_fails(tmp_path, monkeypatch):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    status = tmp_path / ".ai" / "cockpit" / "current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text("previous status\n", encoding="utf-8")
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
+    monkeypatch.setattr(ai_start, "write_active_status", lambda *_: (_ for _ in ()).throw(RuntimeError("status failed")))
+    monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "status_task", "--mode", "code"])
+
+    assert ai_start.main() == 1
+    assert not list(active.glob("status_task.*.json"))
+    assert status.read_text(encoding="utf-8") == "previous status\n"

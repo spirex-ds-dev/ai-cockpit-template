@@ -1,0 +1,172 @@
+{
+  "contractVersion": 2,
+  "workItemId": "address-repository-review",
+  "mode": "code",
+  "title": "Address repository maturity review findings",
+  "baseCommit": "5597fca90ceeb33a86c0ce408183d1bb7de4bb30",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/address-repository-review.contract.json",
+    ".ai/work-items/active/address-repository-review.summary.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/checks.yaml",
+    ".ai/cockpit/current_status.md",
+    ".ai/glossary.md",
+    "Makefile",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/**",
+    "examples/**",
+    "scripts/install_ai_cockpit.py",
+    "scripts/check_docs_metadata.py",
+    "templates/stacks/**",
+    "tests/test_installer.py",
+    "tests/test_docs_metadata.py"
+  ],
+  "outOfScope": [
+    "Adding a minimal or interactive installation mode",
+    "Rewriting all Japanese documentation",
+    "Changing governance runtime semantics beyond installer upgrade safety"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/address-repository-review.contract.json",
+      "reason": "Initial Work Item skeleton."
+    },
+    {
+      "path": "README.md",
+      "reason": "User-reported quick-install and support-matrix findings."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "User-reported destructive upgrade behavior."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Existing installer regression coverage."
+    },
+    {
+      "path": "docs/configuration.md",
+      "reason": "User-reported stack support drift."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "installer_data_preservation",
+      "documentation_consistency"
+    ],
+    "reason": "Installer upgrade behavior affects user-authored agent rules; documentation checks touch repository governance entrypoints."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The reported defects are reproducible and have bounded implementation and verification paths."
+  },
+  "preReviewWarnings": [
+    "Review preservation of unmarked agent rule files during upgrade.",
+    "Review documentation check scope to avoid language-specific false positives."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "All three README quick-install commands produce a Makefile containing ai-start.",
+    "Upgrade preserves pre-existing unmarked AGENTS.md, GEMINI.md, and CLAUDE.md content and adds a managed section.",
+    "Supported stack lists include android and describe presets as customizable starting points with tool prerequisites.",
+    "The specifically reported Japanese and repository glossary terminology defects are corrected.",
+    "A Make target validates Markdown front matter and supported-stack consistency, with regression tests.",
+    "All Contract-required AI and project checks pass."
+  ],
+  "guidelines": [
+    "Preserve user-authored files during installer upgrades.",
+    "Keep documentation checks language-neutral, dependency-free, and driven by the installer stack registry.",
+    "Do not hand-edit generated cockpit status."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    },
+    {
+      "check": "docsMetadata",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "repository user",
+    "reason": "The user explicitly requested correction of the reported governance documentation and missing documentation quality gate."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

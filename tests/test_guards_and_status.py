@@ -1,9 +1,13 @@
 import json
+from pathlib import Path
 
 import ai_check_backtrack
 import ai_check_coverage_guard
 import ai_checkpoint
 import ai_generate_status
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_backtrack_detects_deleted_test_and_work_item():
@@ -23,6 +27,30 @@ def test_coverage_detects_production_change_without_test(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_check_coverage_guard, "POLICY", policy)
     assert ai_check_coverage_guard.detect(["src/service.py"])
     assert ai_check_coverage_guard.detect(["src/service.py", "tests/test_service.py"]) == []
+
+
+def test_default_coverage_policy_covers_advertised_stack_layouts(monkeypatch):
+    monkeypatch.setattr(ai_check_coverage_guard, "POLICY", ROOT / ".ai" / "guards" / "coverage_policy.yaml")
+    production_paths = [
+        "app/src/main/kotlin/com/example/Feature.kt",
+        "Sources/App/Feature.swift",
+        "MyApp/Services/Feature.cs",
+        "src/main/java/com/example/Feature.java",
+        "lib/feature.dart",
+    ]
+    for path in production_paths:
+        assert ai_check_coverage_guard.detect([path]), path
+
+
+def test_default_coverage_policy_recognizes_stack_test_layouts(monkeypatch):
+    monkeypatch.setattr(ai_check_coverage_guard, "POLICY", ROOT / ".ai" / "guards" / "coverage_policy.yaml")
+    cases = [
+        ("app/src/main/kotlin/Feature.kt", "app/src/test/kotlin/FeatureTest.kt"),
+        ("Sources/App/Feature.swift", "Tests/AppTests/FeatureTests.swift"),
+        ("MyApp/Services/Feature.cs", "MyApp.Tests/FeatureTests.cs"),
+    ]
+    for production, test in cases:
+        assert ai_check_coverage_guard.detect([production, test]) == []
 
 
 def test_checkpoint_next_action_stops_on_unknowns():
@@ -47,3 +75,8 @@ def test_retry_circuit_breaker_counts_consecutive_failures(tmp_path):
     )
     assert state == "blocked_by_ai_loop"
     assert blockers
+
+
+def test_project_relative_accepts_relative_repository_path():
+    path = Path(".ai/work-items/active/task.contract.json")
+    assert ai_generate_status.project_relative(path) == path.as_posix()

@@ -24,6 +24,7 @@ typescript
 python
 go
 java
+android
 kotlin
 swift
 ruby
@@ -42,6 +43,10 @@ PROJECT_LINT = printf '%s\n' 'No linter configured.'
 ```
 
 Those lines illustrate variable names only. The shipped generic preset fails closed until all three commands are configured; it does not treat placeholder output as a successful quality gate.
+
+Presets are editable starting points rather than dependency installers or universal compatibility guarantees. Before using one, make sure its formatter, test runner, SDK, and build plugins are configured in the target repository. In particular, the Java and Android presets expect a Gradle wrapper and Spotless; the Python preset expects Ruff and pytest. `examples/` demonstrates selected stacks and does not mirror every available preset.
+
+Stack selection changes quality commands only; it does not install a stack-specific guard policy. The default Coverage Guard includes several common layouts (`src/`, `lib/`, Android `app/src/main/`, Swift `Sources/`, and C# files), but repositories must review production/test patterns in `.ai/guards/coverage_policy.yaml` before treating the gate as complete framework coverage.
 
 Examples:
 

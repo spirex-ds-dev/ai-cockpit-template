@@ -1,10 +1,12 @@
 ---
 author: Ray
+title: "Contract and Summary Fields"
+description: Work Item Contract v2 と AI Change Summary のフィールドリファレンス。
 ---
 
 # AI Cockpit フィールド・スキーマ解説書
 
-本ドキュメントでは、AI Cockpit 変更管理フレームワークにおける **Work Item Contract (契約)** および **Change Summary (要約)** 内の各フィールドについて、スキーマ定義、期待される値、および Sentinel などの本番運用で活用されている拡張フィールドも含めて詳細に解説します。
+本ドキュメントでは、AI Cockpit 変更管理フレームワークにおける **Work Item Contract (契約)** および **Change Summary (要約)** 内の各フィールドについて、スキーマ定義と期待される値を解説します。
 
 ---
 
@@ -153,7 +155,7 @@ AI 代理（AI Agent）がコード開発を開始する前に、タスクの境
   - 開発中に見つかった副作用やコードベースの問題、リファクタリング推奨事項など。
 - **`residualRisks`**: `array[object]`
   - 人間のレビュー担当者に引き継ぐべき残存リスク。
-  - **Sentinel 拡張スキーマ**:
+  - 各要素のスキーマ:
     - `level`: `"low" | "medium" | "high"`
     - `area`: 該当するシステム領域。
     - `detail`: リスクの詳細説明。
@@ -161,7 +163,7 @@ AI 代理（AI Agent）がコード開発を開始する前に、タスクの境
     - `followUpCandidate`: `boolean` - 別タスクを起票して後続対応すべきか。
 - **`reviewReadiness`**: `object`
   - レビューの準備状況。
-  - `status`: `"ready" | "not_ready"` (Sentinel では `"ready_with_risks"` を許容)
+  - `status`: `"ready" | "ready_with_risks" | "not_ready" | "blocked"`
   - `reason`: その状態である理由。
   - `expectedReviewFocus`: レビュー時に特に注視してほしい具体的な観点の配列。
 - **`knownGaps`**: `array[string]`
@@ -169,9 +171,9 @@ AI 代理（AI Agent）がコード開発を開始する前に、タスクの境
 
 ---
 
-## 3. Sentinel 固有の高度な拡張フィールド
+## 3. 追加の監査フィールド
 
-Sentinel などの成熟した商用プロダクトでは、ガバナンスをさらに強固にするために、テンプレートの Summary に以下のメタデータ構造を追加して記録しています。
+Summary では、レビュー経緯やユーザーからの修正を追跡するために、以下のメタデータも記録できます。
 
 - **`checkpointReview`**: `array[object]` (Summary)
   - 人間や AI 自体による中途チェックポイントでのレビュー結果、及び判定理由を保存する配列。

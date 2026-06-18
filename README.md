@@ -72,7 +72,7 @@ Review starts from context.
 ## 3-Minute Install
 
 ```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh)" -- --stack rust --update-makefile
 ```
 
 Start a governed AI task:
@@ -150,8 +150,12 @@ Codex, Gemini, Claude, Cursor, Antigravity, and other coding agents
 Stacks:
 
 ```text
-generic, rust, flutter, typescript, python, go, java, kotlin, swift, ruby, php, csharp
+generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ruby, php, csharp
 ```
+
+Stack presets are customizable starting points, not dependency installers. The selected project's formatter, test runner, SDK, and build plugins must already be available; for example, the Java and Android presets expect a Gradle wrapper and Spotless configuration, while Python expects Ruff and pytest. The examples directory covers selected stacks and does not currently include every preset.
+
+The governance runtime is language-agnostic, but stack presets and default guard paths are not universal framework support. Review `Makefile.ai.stack` and `.ai/guards/coverage_policy.yaml` against the target repository before making them required CI gates.
 
 ## Runtime Requirements
 

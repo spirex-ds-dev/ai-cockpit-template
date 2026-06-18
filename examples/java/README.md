@@ -35,7 +35,7 @@ production:
     - "**/*Test.java"     # JUnit テストクラス（Test で終わる）
     - "**/*Tests.java"    # JUnit テストクラス（Tests で終わる）
     - "**/*Spec.java"     # Spock など
-    - "**/*IT.java"       # 结合テスト（Integration Test）
+    - "**/*IT.java"       # 結合テスト（Integration Test）
 
 tests:
   include:

@@ -1,0 +1,257 @@
+{
+  "contractVersion": 2,
+  "workItemId": "address_adoption_review",
+  "mode": "code",
+  "title": "Address installation lifecycle and stack guard review",
+  "baseCommit": "5597fca90ceeb33a86c0ce408183d1bb7de4bb30",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "status": "M",
+      "fingerprint": "35f530becde935a6c7ec19e56db82c52a8637c9042b4becebd22e4224af6e195"
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "387c9d85293c84b0bf65f043a52e007cda141e8671c809e3f0ebd70ae85700d8"
+    },
+    {
+      "path": ".ai/glossary.md",
+      "status": "M",
+      "fingerprint": "d0efef4e8ded0c3b3269b8888e2179c364d764b8a427a46eb76266acbc256264"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/address-repository-review.contract.json",
+      "status": "A",
+      "fingerprint": "9abe670be5ea06ffcb78a17a7121bed18c172525c051483a01c0cb306749df23"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/address-repository-review.summary.json",
+      "status": "A",
+      "fingerprint": "5f0d7b2d82abd0b8953c22a83147724fc52821aff1dc4185da920fc1e63f12f2"
+    },
+    {
+      "path": "Makefile",
+      "status": "M",
+      "fingerprint": "89439fac2bf731aaa7d15a4ea249fe2e145ac71484e91fc8148571247d02726c"
+    },
+    {
+      "path": "README.ja.md",
+      "status": "M",
+      "fingerprint": "10784d9d05a794ff8d3db351e8bbf8ba197191d6a06b65ad2147970d67d7d329"
+    },
+    {
+      "path": "README.md",
+      "status": "M",
+      "fingerprint": "8360789e992e4cf631fcfbb47eeb699d7f629bdece93421131c99e75c36a8861"
+    },
+    {
+      "path": "README.zh-CN.md",
+      "status": "M",
+      "fingerprint": "e7503d562eaac7fefde3b387a62b470b0d656a80c3a887a7f9562c229f24accc"
+    },
+    {
+      "path": "docs/architecture.md",
+      "status": "M",
+      "fingerprint": "41bead4cbd958fbe4c7d4bbefb87cc9ab0fa339ba81cd98df8ad93c3200f4777"
+    },
+    {
+      "path": "docs/configuration.md",
+      "status": "M",
+      "fingerprint": "528e3ae7d22d540069d5382ce95252fc7995d4e46d999f16c4b6f561b9ee4dc3"
+    },
+    {
+      "path": "docs/contract-fields.md",
+      "status": "M",
+      "fingerprint": "3e5c8c658509e67582f2a5be7ef3c524c7eac12c1d9eefad3588d782a8c479e8"
+    },
+    {
+      "path": "docs/installation.md",
+      "status": "M",
+      "fingerprint": "203b94e6e746470df9a09eb65bd301aa2e2d0d27aa358dc152d6490757f60de7"
+    },
+    {
+      "path": "examples/java/README.md",
+      "status": "M",
+      "fingerprint": "1e2f743504da57a213d14b4d8629859ce902cde964ccb575045bccc5e4c689f0"
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "status": "A",
+      "fingerprint": "a24cfd48d85ba47dbae7be5162157cf6ca853babd751db903a6c38efb327403b"
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "status": "M",
+      "fingerprint": "522ea91281bb2d49ef3cc66b16de018569913096428907bcd11771d177813104"
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "status": "A",
+      "fingerprint": "2a38e1e15fe272d7773f2b1ff05863fc450bdfb0ab658d660af9aa507b6bfdd4"
+    },
+    {
+      "path": "tests/test_installer.py",
+      "status": "M",
+      "fingerprint": "01cd3fd6b1c9b96f7f7e1b890373cc8ef330150741ebe7ef8546de2252c5cf1f"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/address_adoption_review.contract.json",
+    ".ai/work-items/active/address_adoption_review.summary.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/guards/coverage_policy.yaml",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/configuration.md",
+    "docs/installation.md",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_start.py",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_installer.py",
+    "tests/test_start_and_archive.py"
+  ],
+  "outOfScope": [
+    "Adding per-stack guard files or changing the installer distribution format",
+    "Translating every Japanese document",
+    "Reducing Contract v2 governance fields"
+  ],
+  "sources": [
+    {
+      "path": "docs/installation.md",
+      "reason": "User-reported broken official installation sequence."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "User-reported commented Makefile include false positive."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "User-reported cross-stack production path gaps."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "User-reported lifecycle status inconsistency after ai-start."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "installer_entrypoint",
+      "lifecycle_consistency",
+      "coverage_policy"
+    ],
+    "reason": "Changes affect installation, generated lifecycle state, and blocking cross-stack coverage policy."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "All reported defects have reproducible local tests and bounded fixes."
+  },
+  "preReviewWarnings": [
+    "Review default coverage patterns for false positives and test exclusions.",
+    "Review ai-start status generation for partial-write behavior."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Every official quick-install sequence uses --update-makefile before make ai-start.",
+    "A commented Makefile include does not prevent installation of an active include line.",
+    "Default Coverage Guard detects Android, Swift, and typical C# production paths while recognizing their test layouts.",
+    "ai-start generates current_status.md and immediate status-consistency validation passes.",
+    "Installation documentation contains an explicit Contract edit checklist, complete finish walkthrough, recovery guidance, and CI example.",
+    "Public support wording states that guard paths and quality presets require project-specific configuration.",
+    "All required AI and project checks pass."
+  ],
+  "guidelines": [
+    "Lifecycle commands must leave generated status consistent before returning success.",
+    "Coverage defaults must cover advertised common layouts without treating known test layouts as production.",
+    "Installer detection must parse effective Makefile lines rather than comments.",
+    "Do not hand-edit generated cockpit status."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "repository user",
+    "reason": "The user explicitly requested fixes to the coverage guard policy and lifecycle status behavior."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

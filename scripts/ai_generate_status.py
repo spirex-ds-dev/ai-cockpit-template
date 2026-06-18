@@ -19,6 +19,13 @@ BACKTRACK_REPORT = PROJECT_ROOT / "target" / "ai_backtrack_report.json"
 DEFAULT_RETRY_THRESHOLD = 5
 
 
+def project_relative(path: Path) -> str:
+    try:
+        return path.resolve().relative_to(PROJECT_ROOT.resolve()).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
 def consecutive_failure_count(work_item_id: str, log_path: Path = DEFAULT_LOG_PATH) -> int:
     if not work_item_id or not log_path.exists():
         return 0
@@ -127,26 +134,25 @@ def write_no_active_status(output: Path) -> None:
     output.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def main() -> int:
-    args = parse_args()
-    output = Path(args.output)
-    if args.no_active or not args.contract:
-        write_no_active_status(output)
-        print(f"cockpit status generated (no active Work Item): {output}")
-        return 0
+def write_active_status(
+    contract_path: Path,
+    summary_path: Path | None,
+    *,
+    output: Path = DEFAULT_OUTPUT,
+    observability_log: Path = DEFAULT_LOG_PATH,
+    retry_threshold: int = DEFAULT_RETRY_THRESHOLD,
+) -> None:
     try:
-        contract = load_json(Path(args.contract))
-        summary_path = Path(args.summary) if args.summary else None
+        contract = load_json(contract_path)
         summary = load_json(summary_path) if summary_path and summary_path.exists() else None
     except (OSError, json.JSONDecodeError, ValueError) as exc:
-        print(f"Failed to generate Cockpit status: {exc}", file=sys.stderr)
-        return 1
+        raise RuntimeError(f"Failed to generate Cockpit status: {exc}") from exc
 
     state, blockers = status_for(
         contract,
         summary,
-        retry_threshold=args.retry_threshold,
-        observability_log=Path(args.observability_log),
+        retry_threshold=retry_threshold,
+        observability_log=observability_log,
     )
     backtrack = load_json(BACKTRACK_REPORT) if BACKTRACK_REPORT.exists() else None
     changed_files = summary.get("changedFiles", []) if isinstance(summary, dict) else []
@@ -166,8 +172,8 @@ def main() -> int:
         f"- Task: `{contract.get('workItemId', '')}`",
         f"- Mode: `{contract.get('mode', '')}`",
         f"- State: `{state}`",
-        f"- Contract Path: `{args.contract}`",
-        f"- Summary Path: `{args.summary or ''}`",
+        f"- Contract Path: `{project_relative(contract_path)}`",
+        f"- Summary Path: `{project_relative(summary_path) if summary_path else ''}`",
         "",
         "## Blocking",
         "",
@@ -210,9 +216,29 @@ def main() -> int:
 
     create_observability(work_item_id=contract.get("workItemId", "")).status_generated(
         state=state,
-        output_path=str(output.relative_to(PROJECT_ROOT)),
+        output_path=project_relative(output),
         fields={"blockers": len(blockers), "changedFiles": len(changed_files)},
     )
+
+
+def main() -> int:
+    args = parse_args()
+    output = Path(args.output)
+    if args.no_active or not args.contract:
+        write_no_active_status(output)
+        print(f"cockpit status generated (no active Work Item): {output}")
+        return 0
+    try:
+        write_active_status(
+            Path(args.contract),
+            Path(args.summary) if args.summary else None,
+            output=output,
+            observability_log=Path(args.observability_log),
+            retry_threshold=args.retry_threshold,
+        )
+    except (RuntimeError, ValueError) as exc:
+        print(exc, file=sys.stderr)
+        return 1
     return 0
 
 

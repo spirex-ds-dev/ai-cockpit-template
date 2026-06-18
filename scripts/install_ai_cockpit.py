@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 import sys
 from dataclasses import dataclass
@@ -307,13 +308,11 @@ class Installer:
                 dst.write_text(replacement, encoding="utf-8")
             return
         section = self.agent_section(src)
+        detail = "add AI Cockpit section"
         if self.upgrade:
             self.backup_path(dst)
-            self.record("replace", dst, "replace legacy unmarked agent rules with managed section")
-            if not self.dry_run:
-                dst.write_text(section, encoding="utf-8")
-            return
-        self.record("append", dst, "add AI Cockpit section")
+            detail = "preserve unmarked agent rules and add managed section"
+        self.record("append", dst, detail)
         if self.dry_run:
             return
         with dst.open("a", encoding="utf-8") as handle:
@@ -337,7 +336,8 @@ class Installer:
                     self.created_paths.add(dst)
             return
         text = dst.read_text(encoding="utf-8")
-        if include_line in text:
+        active_include = re.compile(r"^\s*include\s+Makefile\.ai\s*(?:#.*)?$")
+        if any(active_include.match(line) for line in text.splitlines()):
             self.record("skip", dst, "Makefile.ai already included")
             return
         if self.upgrade:
