@@ -20,6 +20,10 @@ ROOT = Path(__file__).resolve().parents[1]
 RELEASE = ROOT / "release.json"
 PUBLIC_REPOSITORY = "https://github.com/xinglun/ai-cockpit-template.git"
 
+# Prevent git sub-commands from referencing the parent repository in CI
+for key in ["GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY", "GIT_COMMON_DIR"]:
+    os.environ.pop(key, None)
+
 
 def highest_semver_tag(refs: str) -> str:
     tags = {
