@@ -4,6 +4,8 @@ import sys
 import ai_check_review_policy
 import ai_check_status
 import ai_check_status_consistency
+import ai_checkpoint
+import ai_finish
 
 
 class ObservabilityStub:
@@ -82,3 +84,76 @@ def test_status_consistency_covers_empty_paired_and_unpaired_states(tmp_path, mo
         encoding="utf-8",
     )
     assert ai_check_status_consistency.validate_status_consistency(status) == []
+
+
+def test_checkpoint_main_reports_required_state(tmp_path, monkeypatch, capsys):
+    contract = tmp_path / "task.contract.json"
+    summary = tmp_path / "task.summary.json"
+    contract.write_text(json.dumps({
+        "workItemId": "task",
+        "mode": "code",
+        "notCodable": False,
+        "executionDecision": {"status": "continue"},
+        "scope": ["src/**"],
+        "outOfScope": [],
+        "unknowns": [],
+        "acceptance": ["done"],
+        "verification": [{"check": "quality", "required": True}],
+    }), encoding="utf-8")
+    summary.write_text(json.dumps({
+        "verification": [{"check": "quality", "result": "passed"}],
+        "reviewReadiness": {"expectedReviewFocus": ["quality"]},
+    }), encoding="utf-8")
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["ai_checkpoint.py", "--contract", str(contract), "--summary", str(summary), "--stage", "before_finish"],
+    )
+
+    assert ai_checkpoint.main() == 0
+    output = capsys.readouterr().out
+    assert "Required Checks Passed: `1`" in output
+    assert "Ready for final status generation" in output
+
+
+def test_finish_evidence_redacts_and_replaces_existing_result(tmp_path, monkeypatch):
+    summary = tmp_path / "task.summary.json"
+    summary.write_text(json.dumps({
+        "verification": [{"check": "quality", "result": "not_run"}],
+    }), encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    item = ai_finish.evidence(
+        "quality",
+        "make quality",
+        0,
+        12,
+        "token=secret-value /Users/example/project passed",
+        contract_hash="a" * 64,
+        commit_sha="b" * 40,
+        execution_contract_path=".ai/work-items/active/task.contract.json",
+        execution_summary_path=".ai/work-items/active/task.summary.json",
+    )
+    ai_finish.record_result(summary, item)
+
+    recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
+    assert recorded == [item]
+    assert "secret-value" not in item["outputSummary"]
+    assert "<LOCAL_PATH>" in item["outputSummary"]
+    assert ai_finish.pending_evidence(
+        "quality",
+        "make quality",
+        contract_hash="a" * 64,
+        commit_sha="b" * 40,
+        execution_contract_path="contract.json",
+        execution_summary_path="summary.json",
+    )["runner"] == "ai_finish_pending"
+
+
+def test_finish_main_fails_when_contract_is_missing(tmp_path, monkeypatch):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "missing"])
+
+    assert ai_finish.main() == 1

@@ -43,6 +43,20 @@ def test_check_rejects_stack_tier_drift(tmp_path):
     assert "README.zh-CN.md: stack compatibility tiers do not match executable CI evidence" in check_repository(tmp_path)
 
 
+def test_check_rejects_release_capability_drift(tmp_path):
+    copy_documentation(tmp_path)
+    readme = tmp_path / "README.ja.md"
+    readme.write_text(
+        readme.read_text(encoding="utf-8").replace(
+            "<!-- release-capabilities: auditable-adoption,sha256-verification -->",
+            "<!-- release-capabilities: runtime-only -->",
+        ),
+        encoding="utf-8",
+    )
+
+    assert "README.ja.md: release capability marker is missing or inconsistent" in check_repository(tmp_path)
+
+
 def test_check_rejects_missing_front_matter_field(tmp_path):
     copy_documentation(tmp_path)
     readme = tmp_path / "README.ja.md"

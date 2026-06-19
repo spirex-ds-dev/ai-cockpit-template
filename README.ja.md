@@ -167,7 +167,9 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 
 インストールで完了するのはガバナンス実行系の配置であり、本番運用向けの適合確認ではありません。品質コマンド、Coverage 対象パス、PR CI を設定した後、Coverage policy の `adoptionReviewed` を `true` に変更し、`make check-ai-adoption-ready` を実行してください。これは静的な設定完全性の検査であり、プロジェクトコマンドの有効性を証明するものではありません。CI では `make quality` と `check-ai-pr` の成功を別途必須にしてください。
 
-固定済みの公開版には、現在のソースツリーにある初回導入用の監査フローがまだ含まれていません。AI Cockpit を導入する PR 自体に `check-ai-pr` を適用する場合は、先にインストールガイドのバージョン境界を確認してください。
+<!-- release-capabilities: auditable-adoption,sha256-verification -->
+
+現在の公開版には、監査可能な初回導入フローと、利用者が指定した SHA256 による検証機能が含まれています。プロジェクト固有の品質コマンド、Coverage 対象パス、CI は引き続き明示的な調整が必要です。
 
 ## 動作環境要件
 
@@ -176,7 +178,7 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 - POSIX 準拠のシェルおよび GNU Make 実行環境。
 - Linux および macOS は、ローカル実行および CI 用として公式にサポートされています。ネイティブの Windows シェルはサポートされていないため、WSL (Windows Subsystem for Linux) または他の POSIX ターミナルで実行してください。
 
-リポジトリの `make quality` は、スクリプトカバレッジ 60% を下限とする全テスト、`scripts/` と `tests/` への Ruff、型注釈を整備した中核ツール群への Mypy、中・高重要度を対象とする Bandit、Python コンパイル、差分検査、ドキュメント整合性検査を実行します。Mypy の対象は意図的に限定しており、包括的な除外を追加せず段階的に拡大します。
+リポジトリの `make quality` は、スクリプトカバレッジ全体の下限 60% とライフサイクル上重要な各スクリプトの回帰防止下限、`scripts/` と `tests/` への Ruff、型注釈を整備した中核ツール群への Mypy、中・高重要度を対象とする Bandit、Python コンパイル、差分検査、ドキュメント整合性検査を実行します。Mypy の対象は意図的に限定しており、包括的な除外を追加せず段階的に拡大します。
 
 ## 詳細ドキュメント
 

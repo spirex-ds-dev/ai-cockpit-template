@@ -14,6 +14,7 @@ from install_ai_cockpit import STACKS
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_FRONT_MATTER = ("author", "title", "description")
 README_FILES = ("README.md", "README.ja.md", "README.zh-CN.md")
+README_CAPABILITY_MARKER = "<!-- release-capabilities: auditable-adoption,sha256-verification -->"
 VERIFIED_STACKS = ("python", "go", "rust", "typescript")
 TEMPLATE_ONLY_STACKS = ("generic", "flutter", "java", "android", "kotlin", "swift", "ruby", "php", "csharp")
 JAPANESE_STYLE_RULES = {
@@ -88,6 +89,8 @@ def installation_command_errors(root: Path) -> list[str]:
                 errors.append(f"{relative}: primary README must not hardcode a concrete release version")
             if "main/release.json" not in text or "${RELEASE_TAG}/install.sh" not in text:
                 errors.append(f"{relative}: primary install command must resolve the tagged installer from release.json")
+            if README_CAPABILITY_MARKER not in text:
+                errors.append(f"{relative}: release capability marker is missing or inconsistent")
         for number, line in enumerate(text.splitlines(), start=1):
             if "raw.githubusercontent.com/xinglun/ai-cockpit-template/main/install.sh" in line:
                 errors.append(f"{relative}:{number}: remote installer must use a fixed tag or commit")
@@ -117,6 +120,8 @@ def japanese_style_errors(root: Path) -> list[str]:
             for phrase, reason in JAPANESE_STYLE_RULES.items():
                 if phrase in line:
                     errors.append(f"{relative}:{number}: Japanese style: {reason}: {phrase}")
+            if re.search(r"\d+つ", line):
+                errors.append(f"{relative}:{number}: Japanese style: add a space between a number and つ")
     return errors
 
 

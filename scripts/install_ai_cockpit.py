@@ -124,6 +124,7 @@ class Installer:
             return 2
         try:
             self.validate_agent_markers()
+            self.validate_managed_conflicts()
         except (OSError, ValueError) as exc:
             print(f"ERROR: installation failed before writing: {exc}", file=sys.stderr)
             return 2
@@ -148,8 +149,7 @@ class Installer:
             self.install_gitignore()
             if self.update_makefile:
                 self.append_makefile_include()
-            if self.upgrade:
-                self.validate_upgraded_installation()
+            self.validate_managed_installation()
             if self.create_adoption:
                 self.finalize_adoption_records()
         except (OSError, json.JSONDecodeError, ValueError, subprocess.SubprocessError) as exc:
@@ -178,20 +178,95 @@ class Installer:
             if text.index(AGENT_MARKER) > text.index(AGENT_END_MARKER):
                 raise ValueError(f"{name}: malformed AI Cockpit markers; end marker appears before start marker")
 
-    def validate_upgraded_installation(self) -> None:
+    def tree_copy_pairs(self, relative: str) -> list[tuple[Path, Path]]:
+        src = self.source / relative
+        dst = self.target / relative
+        if not src.exists():
+            return []
+        pairs: list[tuple[Path, Path]] = []
+        for item in src.rglob("*"):
+            if item.is_dir():
+                continue
+            rel = item.relative_to(src)
+            if relative == ".ai" and rel.as_posix() in {"cockpit/current_status.md", "glossary.md"}:
+                continue
+            if relative == ".ai" and len(rel.parts) >= 3 and rel.parts[:2] == ("work-items", "active") and rel.name != ".gitkeep":
+                continue
+            if relative == ".ai" and len(rel.parts) >= 3 and rel.parts[:2] == ("work-items", "archive") and rel.name != ".gitkeep":
+                continue
+            pairs.append((item, dst / rel))
+        return pairs
+
+    def managed_copy_pairs(self) -> list[tuple[Path, Path]]:
+        pairs = [*self.tree_copy_pairs(".ai"), *self.tree_copy_pairs(".cursor")]
+        pairs.extend(
+            (self.source / "scripts" / name, self.target / "scripts" / name)
+            for name in sorted(SCRIPT_NAMES)
+        )
+        pairs.append((self.source / "templates" / "make" / "Makefile.ai", self.target / "Makefile.ai"))
+        if self.with_examples:
+            pairs.extend(self.tree_copy_pairs("examples"))
+        return pairs
+
+    def validate_managed_conflicts(self) -> None:
+        if self.force or self.upgrade:
+            return
+        pairs = self.managed_copy_pairs()
+        if not (self.target / ".ai" / "cockpit" / "version.json").exists():
+            pairs.append(
+                (self.source / "templates" / "stacks" / f"{self.stack}.mk", self.target / "Makefile.ai.stack")
+            )
+        conflicts = []
+        for src, dst in pairs:
+            if not dst.exists():
+                continue
+            if not dst.is_file() or src.read_bytes() != dst.read_bytes():
+                conflicts.append(dst.relative_to(self.target).as_posix())
+        if conflicts:
+            formatted = "\n  - ".join(sorted(conflicts))
+            raise ValueError(
+                "managed file conflicts detected; move the files, use --force for intentional replacement, "
+                f"or use --upgrade for an existing installation:\n  - {formatted}"
+            )
+
+    def validate_managed_installation(self) -> None:
         if self.dry_run:
             return
         source_version = self.load_version(self.source / ".ai" / "cockpit" / "version.json")
         installed_version = self.load_version(self.target / ".ai" / "cockpit" / "version.json")
         if installed_version != source_version:
             raise ValueError("installed version metadata does not match the source distribution")
-        required = [
-            self.target / "Makefile.ai",
-            *(self.target / "scripts" / name for name in SCRIPT_NAMES),
-        ]
-        missing = [path.relative_to(self.target).as_posix() for path in required if not path.is_file()]
-        if missing:
-            raise ValueError(f"upgraded installation is missing managed files: {', '.join(missing)}")
+        invalid = []
+        for src, dst in self.managed_copy_pairs():
+            if not dst.is_file() or src.read_bytes() != dst.read_bytes():
+                invalid.append(dst.relative_to(self.target).as_posix())
+        stack = self.target / "Makefile.ai.stack"
+        if not stack.is_file():
+            invalid.append("Makefile.ai.stack")
+        if invalid:
+            raise ValueError(f"installed managed files are missing or inconsistent: {', '.join(sorted(invalid))}")
+
+        modules = ", ".join(path.stem for path in sorted((self.target / "scripts").glob("ai_*.py")))
+        import_result = subprocess.run(
+            [sys.executable, "-c", f"import {modules}"],
+            cwd=self.target,
+            text=True,
+            capture_output=True,
+            check=False,
+            env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1", "PYTHONPATH": str(self.target / "scripts")},
+        )
+        if import_result.returncode != 0:
+            raise ValueError(f"installed Python runtime import failed: {import_result.stderr.strip()}")
+
+        make_result = subprocess.run(
+            ["make", "-f", "Makefile.ai", "-n", "ai-help"],
+            cwd=self.target,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if make_result.returncode != 0:
+            raise ValueError(f"installed Makefile.ai validation failed: {make_result.stderr.strip()}")
 
     def rollback_installation(self) -> None:
         for original, backup in reversed(list(self.backups.items())):
@@ -392,23 +467,8 @@ class Installer:
         print(f"{kind}: {path.relative_to(self.target) if path.is_relative_to(self.target) else path} - {detail}")
 
     def copy_tree(self, relative: str) -> None:
-        src = self.source / relative
-        dst = self.target / relative
-        if not src.exists():
-            return
-        for item in src.rglob("*"):
-            if item.is_dir():
-                continue
-            rel = item.relative_to(src)
-            if relative == ".ai" and rel.as_posix() == "cockpit/current_status.md":
-                continue
-            if relative == ".ai" and rel.as_posix() == "glossary.md":
-                continue
-            if relative == ".ai" and len(rel.parts) >= 3 and rel.parts[:2] == ("work-items", "active") and rel.name != ".gitkeep":
-                continue
-            if relative == ".ai" and len(rel.parts) >= 3 and rel.parts[:2] == ("work-items", "archive") and rel.name != ".gitkeep":
-                continue
-            self.copy_path(item, dst / rel)
+        for src, dst in self.tree_copy_pairs(relative):
+            self.copy_path(src, dst)
 
     def install_initial_status(self) -> None:
         active_dir = self.target / ".ai" / "work-items" / "active"

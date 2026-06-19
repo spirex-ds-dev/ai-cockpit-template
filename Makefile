@@ -51,11 +51,12 @@ project-format-check:
 	git diff --check
 
 project-test:
-	$(AI_PYTHON) -m pytest -q --cov=scripts --cov-report=term-missing --cov-fail-under=60
+	$(AI_PYTHON) -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60
+	$(AI_PYTHON) scripts/check_critical_coverage.py
 
 project-lint:
 	$(AI_PYTHON) -m ruff check scripts tests
-	$(AI_PYTHON) -m mypy scripts/ai_check_adoption_ready.py scripts/ai_doctor.py scripts/check_docs_metadata.py scripts/check_release_distribution.py
+	$(AI_PYTHON) -m mypy scripts/ai_check_adoption_ready.py scripts/ai_doctor.py scripts/check_docs_metadata.py scripts/check_release_distribution.py scripts/check_critical_coverage.py
 	$(AI_PYTHON) -m bandit -q -r scripts -ll
 	$(AI_PYTHON) -m py_compile scripts/*.py tests/*.py
 

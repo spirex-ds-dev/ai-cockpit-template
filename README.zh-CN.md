@@ -167,7 +167,9 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 
 安装只完成治理运行时部署，并不代表生产适配完成。配置质量命令、Coverage 路径和 PR CI 后，将 Coverage policy 中的 `adoptionReviewed` 设置为 `true`，再运行 `make check-ai-adoption-ready`。这是静态配置完整性检查，不能证明项目命令有效；CI 仍须分别要求 `make quality` 和 `check-ai-pr` 成功。
 
-当前固定公开版本尚未包含源码树中的首次 adoption 审计流程。如果准备在同一个 PR 中引入 AI Cockpit 并运行 `check-ai-pr`，请先阅读安装文档中的版本边界。
+<!-- release-capabilities: auditable-adoption,sha256-verification -->
+
+当前公开版本已经包含可审计的首次采用流程，以及调用方提供 SHA256 时的校验能力。项目质量命令、Coverage 路径和 CI 仍需针对目标工程明确适配。
 
 ## 运行环境要求
 
@@ -176,7 +178,7 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 - 兼容 POSIX shell 和 GNU Make 的命令执行环境。
 - 官方支持 Linux 和 macOS 运行和 CI。原生 Windows shell 暂不支持，请在 WSL (Windows Subsystem for Linux) 或其他 POSIX 终端中运行。
 
-仓库的 `make quality` 会运行全部测试并要求脚本覆盖率不低于 60%，对 `scripts/` 和 `tests/` 执行 Ruff，对已完成类型标注的核心工具子集执行 Mypy，同时执行中高等级 Bandit 扫描、Python 编译、差分检查和文档一致性检查。Mypy 当前有意限定范围，后续扩展不得依赖宽泛忽略规则。
+仓库的 `make quality` 会运行全部测试，要求脚本总覆盖率不低于 60%，并对生命周期关键脚本设置分文件回归下限；同时对 `scripts/` 和 `tests/` 执行 Ruff，对已完成类型标注的核心工具子集执行 Mypy，并执行中高等级 Bandit 扫描、Python 编译、差分检查和文档一致性检查。Mypy 当前有意限定范围，后续扩展不得依赖宽泛忽略规则。
 
 ## 版本与迁移策略
 

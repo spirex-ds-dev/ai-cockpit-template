@@ -1,0 +1,432 @@
+{
+  "workItemId": "install_integrity_release_docs",
+  "contractPath": ".ai/work-items/archive/2026/install_integrity_release_docs.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/install_integrity_release_docs.contract.json",
+      "reason": "Declared installer integrity, release documentation, and critical coverage scope."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/install_integrity_release_docs.summary.json",
+      "reason": "Recorded verification and patch-release residual risk."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated active Work Item status."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Added pre-write managed conflicts and post-install content/import/Make validation for every install."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Covered multi-conflict failure, no writes, import failure, Make failure, and rollback behavior."
+    },
+    {
+      "path": "README.md",
+      "reason": "Corrected public adoption capability and documented critical per-file coverage floors."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Corrected the stale release claim and Japanese spacing while documenting coverage floors."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Corrected the stale release claim and documented critical per-file coverage floors."
+    },
+    {
+      "path": "docs/architecture.md",
+      "reason": "Corrected Japanese product and PR-level spacing."
+    },
+    {
+      "path": "docs/design-philosophy.md",
+      "reason": "Corrected Japanese number/counter spacing."
+    },
+    {
+      "path": "docs/overview.ja.md",
+      "reason": "Corrected Japanese number/counter spacing."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Enforced synchronized multilingual release capability markers and Japanese spacing."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Covered release capability marker drift."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Covered Checkpoint main flow and Finish evidence/failure helpers directly."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Generated coverage JSON and enforced critical per-file regression floors."
+    },
+    {
+      "path": "scripts/check_critical_coverage.py",
+      "reason": "Added per-file coverage floors for nine lifecycle-critical modules."
+    },
+    {
+      "path": "tests/test_critical_coverage.py",
+      "reason": "Covered accepted, missing, and regressed per-file coverage reports."
+    }
+  ],
+  "sourcesUsed": [
+    "User v0.5.0 engineering review dated 2026-06-19",
+    "scripts/install_ai_cockpit.py",
+    "release.json",
+    ".ai/glossary.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/install_integrity_release_docs.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:32.483096+00:00",
+      "exitCode": 0,
+      "durationMs": 58,
+      "outputDigest": "bdea30d4a62cc53f7ea976211f55f12f6d85f416b1f7f851fc0c39ace8ea04c9",
+      "commandHash": "43caae555311db3fc7bae4025366deb5cb9c347bcc893021085f2cc90e868de8",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/install_integrity_release_docs.contract.json work item contract check passed: .ai/work-items/active/install_integrity_release_docs.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/install_integrity_release_docs.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:32.640475+00:00",
+      "exitCode": 0,
+      "durationMs": 156,
+      "outputDigest": "9051fd0e193e17a78e023d408514198131871fb2178be1aaccfcf92fd5064624",
+      "commandHash": "c4f4752331f866237a589dff24db1e10434c1317866c66017c23b7fdb549b3f9",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/install_integrity_release_docs.contract.json scope guard passed: 15 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:32.777283+00:00",
+      "exitCode": 0,
+      "durationMs": 135,
+      "outputDigest": "b636a41e28a86a9c4ddd1e34d87ee1eedcdd8e90b047a7aa5483be0da78a14fb",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/install_integrity_release_docs.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/install_integrity_release_docs.contract.json SUMMARY=.ai/work-items/active/install_integrity_release_docs.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:32.833310+00:00",
+      "exitCode": 0,
+      "durationMs": 54,
+      "outputDigest": "b747dcd6f71337d716a4b6a62107e430758c145103ec9fb1b0a010654fbcce3b",
+      "commandHash": "b7dfba1e1d8bc2e7c6b6ff14629345aadafad2a16f79280d18bf40460477cb03",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/install_integrity_release_docs.contract.json --summary .ai/work-items/active/install_integrity_release_docs.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `install_integrity_release_docs` - Contract Hash: `2ed409a36c339fd4` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `8` - Unknown Count: `0` - Requ"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/install_integrity_release_docs.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:32.975514+00:00",
+      "exitCode": 0,
+      "durationMs": 140,
+      "outputDigest": "fad1c6e0c5f6359ea90943e3a8acbecbc01273ed71058b65a00da37fb65c7996",
+      "commandHash": "67791d6e5579e6fdf68a2064fb7f651e09b0862c6cb6120784fb3f8c513ac22d",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/install_integrity_release_docs.summary.json review policy matched 2 path(s) [review] .ai/cockpit/current_status.md [review] Makefile review focus recorded: 5 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:33.104787+00:00",
+      "exitCode": 0,
+      "durationMs": 128,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:33.230216+00:00",
+      "exitCode": 0,
+      "durationMs": 123,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/install_integrity_release_docs.contract.json SUMMARY=.ai/work-items/active/install_integrity_release_docs.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:33.291522+00:00",
+      "exitCode": 0,
+      "durationMs": 59,
+      "outputDigest": "6a76bcf2778702daebf10a0184829a34fe3fcbc28b4e38f33a164ef837fb3440",
+      "commandHash": "aaf090479810bb5cb89eb9fbea063f3110446e82a05a29adf8b71dbb2352b07b",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/install_integrity_release_docs.contract.json --summary .ai/work-items/active/install_integrity_release_docs.summary.json guidelines compliance check passed: 5 guideline(s) verified"
+    },
+    {
+      "check": "quality",
+      "command": "make quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:47.148981+00:00",
+      "exitCode": 0,
+      "durationMs": 13856,
+      "outputDigest": "ae13086281dbbbcd81f6ced82990da40c1d602545199c030d7562070ac5383eb",
+      "commandHash": "e483963884b442f0092037d5409f23ba2e2c9c9bfec6670efa7529b84ce15b8b",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60 ........................................................................ [ 63%] ......................................... [100%] ================================ tests coverage ================================ _______________ coverage: platform darwin, python 3.14.4-final-0 _______________ Name Stmts Miss Cover Missing -------"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/install_integrity_release_docs.contract.json SUMMARY=.ai/work-items/active/install_integrity_release_docs.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:47.563741+00:00",
+      "exitCode": 0,
+      "durationMs": 58,
+      "outputDigest": "d65634108ac4d62b3bbcf0d9f6ba43f45381cc0b715b20d23bc48a5e5c9630bd",
+      "commandHash": "16d23f2325261d1cbfee1d5a7d7d5eff8a03c69f2df5df42da1cee39c64a44f4",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/install_integrity_release_docs.contract.json --summary .ai/work-items/active/install_integrity_release_docs.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/install_integrity_release_docs.contract.json SUMMARY=.ai/work-items/active/install_integrity_release_docs.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:47.621969+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "16c14c4ec4efbacec3c108e27b6e7a1489701b67008636f116fd81fe8cff14aa",
+      "commandHash": "e06d92f68b5fcb47ac172d69a23a802decc86b692dcd5cf4ebb46c75731106a7",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/install_integrity_release_docs.contract.json --summary .ai/work-items/active/install_integrity_release_docs.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:47.678917+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/install_integrity_release_docs.contract.json SUMMARY=.ai/work-items/active/install_integrity_release_docs.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:47.737784+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "6a5a757c0f57dfaa3b406024b6f58182aae00d8f783462f9b75b171c55812514",
+      "commandHash": "ff982bc2c319125d276cbb6a1f746dc8c35bc500a2f922ecd8f9f3163ab65e27",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/install_integrity_release_docs.contract.json --summary .ai/work-items/active/install_integrity_release_docs.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/install_integrity_release_docs.summary.json CONTRACT=.ai/work-items/active/install_integrity_release_docs.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-19T10:19:47.861306+00:00",
+      "exitCode": 0,
+      "durationMs": 122,
+      "outputDigest": "37d0328a0e371c866005573dc00718e9ff38277c5914e0f8bc5dd362b013dd4a",
+      "commandHash": "9578ccbf8710759e9402b273bbbb81a836b970bbf611f828d6121a4b4fc33fef",
+      "contractHash": "2ed409a36c339fd434da39353793663bee2f4374342c4949ca8b9de6925cef17",
+      "commitSha": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+      "executionContractPath": ".ai/work-items/active/install_integrity_release_docs.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/install_integrity_release_docs.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/install_integrity_release_docs.summary.json --contract .ai/work-items/active/install_integrity_release_docs.contract.json ai summary check passed: .ai/work-items/active/install_integrity_release_docs.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Never report installation success when managed runtime files are incomplete or inconsistent.",
+      "compliant": true,
+      "evidence": "All installs validate managed bytes, runtime imports, and Make parsing before reporting completion."
+    },
+    {
+      "guideline": "Detect conflicts before the first write and list actionable repository-relative paths.",
+      "compliant": true,
+      "evidence": "Fresh-install conflicts are enumerated from the same copy pairs and fail before transaction setup."
+    },
+    {
+      "guideline": "Preserve explicitly project-owned files and idempotent identical content.",
+      "compliant": true,
+      "evidence": "Glossary and existing-install stack policy remain unchanged; byte-identical managed files are allowed."
+    },
+    {
+      "guideline": "Published capability statements must derive from release metadata and remain synchronized across languages.",
+      "compliant": true,
+      "evidence": "Three READMEs carry the same machine-checked adoption/SHA256 capability marker."
+    },
+    {
+      "guideline": "Do not hand-edit generated cockpit status.",
+      "compliant": true,
+      "evidence": "Status was generated by lifecycle commands."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "Installer ownership and validation changes affect clean installs, reinstalls, force installs, and upgrades."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    "target/coverage.json",
+    "target/.coverage"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    "Existing conflicting managed scripts previously produced a partial successful installation.",
+    "All three READMEs retained a pre-v0.5.0 adoption capability statement after release.",
+    "Overall coverage alone did not prevent lifecycle-critical module regressions."
+  ],
+  "residualRisks": [
+    {
+      "level": "high",
+      "area": "published_tag",
+      "detail": "The immutable v0.5.0 tag predates these fixes; publish a new patch tag rather than moving v0.5.0.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    },
+    {
+      "level": "medium",
+      "area": "critical_coverage",
+      "detail": "Checkpoint reached 87% and Finish 39%; Scope, Status Generation, Summary, Archive, Review Policy, and Status Consistency remain below 70% but now have regression floors.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    },
+    {
+      "level": "medium",
+      "area": "installation_modes",
+      "detail": "Minimal/core/full installation modes and a one-page onboarding path remain unimplemented.",
+      "reviewRecommended": false,
+      "followUpCandidate": true
+    },
+    {
+      "level": "medium",
+      "area": "framework_ci",
+      "detail": "Nine Preset-only stacks still lack real-project CI evidence.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "Both P1 defects are fixed with regression tests; critical coverage has direct tests and per-file floors, but publication requires a new patch release.",
+    "expectedReviewFocus": [
+      "Managed conflict ownership",
+      "Post-install import and Make validation",
+      "First-install rollback",
+      "Multilingual capability marker",
+      "Critical coverage ratchet"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified",
+    "userVisibleOutput": "verified",
+    "persistence": "verified",
+    "localization": "verified",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "verified"
+  },
+  "userCorrectionsCaptured": [
+    "Address the v0.5.0 engineering review without overstating production readiness."
+  ],
+  "userCorrectionSolidification": [
+    "Installer completion now requires verified runtime integrity; release capability markers are machine checked."
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "detail": "Partial install reproduction, file ownership, rollback, stale release claims, and coverage baseline reviewed.",
+      "contractHash": "2ed409a36c339fd4",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "detail": "113 tests, 65.68 percent total coverage, nine critical floors, installer conflict/import/Make tests, docs, and v0.5.0 remote contract reviewed.",
+      "contractHash": "2ed409a36c339fd4",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0
+    }
+  ],
+  "knownGaps": [
+    "A new patch tag is required for public delivery.",
+    "Several lifecycle-critical modules remain below the long-term 70 percent target.",
+    "Preset-only real-project CI and reduced installation modes remain future work."
+  ],
+  "overclaimPrevention": "Do not describe v0.5.0 as containing these post-tag fixes or per-file floors as meeting the long-term 70 percent target."
+}

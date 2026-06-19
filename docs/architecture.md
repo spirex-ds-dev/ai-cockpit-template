@@ -13,7 +13,7 @@ keywords:
 
 ## コンポーネントの依存関係とプロセスフロー
 
-AI Cockpitフレームワーク内における、タスクの開始からPRの検証にいたるまでのライフサイクルとデータ/コントロールのフローは以下の通りです。
+AI Cockpit フレームワーク内における、タスクの開始から PR の検証にいたるまでのライフサイクルとデータ/コントロールのフローは以下の通りです。
 
 ```mermaid
 graph TD
@@ -21,7 +21,7 @@ graph TD
     Dev --> Check["check-ai (各種ガードによる検証)"]
     Check --> Finish["ai-finish (検証記録とステージ確認)"]
     Finish --> Archive["アーカイブ保存 (変更不可の履歴記録)"]
-    Archive --> PR["check-ai-pr (PRレベルの統合監査)"]
+    Archive --> PR["check-ai-pr (PR レベルの統合監査)"]
 
     subgraph 状態とガバナンス
         Contract["Contract (契約書)"]

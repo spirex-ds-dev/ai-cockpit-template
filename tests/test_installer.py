@@ -62,6 +62,47 @@ def test_installed_distribution_contains_pr_and_approval_wiring(tmp_path):
     assert 'scripts/ai_check_pr.py --base "abc123"' in result.stdout
 
 
+def test_fresh_install_rejects_all_conflicting_managed_files_before_writing(tmp_path, capsys):
+    common = tmp_path / "scripts" / "ai_common.py"
+    doctor = tmp_path / "scripts" / "ai_doctor.py"
+    common.parent.mkdir(parents=True)
+    common.write_text("KEEP-COMMON\n", encoding="utf-8")
+    doctor.write_text("KEEP-DOCTOR\n", encoding="utf-8")
+    installer = Installer(
+        source=ROOT, target=tmp_path, stack="generic", force=False, dry_run=False,
+        with_examples=False, update_makefile=True,
+    )
+
+    assert installer.install() == 2
+    error = capsys.readouterr().err
+    assert "managed file conflicts detected" in error
+    assert "scripts/ai_common.py" in error
+    assert "scripts/ai_doctor.py" in error
+    assert common.read_text(encoding="utf-8") == "KEEP-COMMON\n"
+    assert doctor.read_text(encoding="utf-8") == "KEEP-DOCTOR\n"
+    assert not (tmp_path / "Makefile.ai").exists()
+
+
+def test_managed_installation_validation_checks_imports_and_make_entrypoint(tmp_path, monkeypatch):
+    installer = Installer(
+        source=ROOT, target=tmp_path, stack="generic", force=False, dry_run=False,
+        with_examples=False, update_makefile=True,
+    )
+    assert installer.install() == 0
+    monkeypatch.setattr(installer, "managed_copy_pairs", lambda: [])
+
+    doctor = tmp_path / "scripts" / "ai_doctor.py"
+    original_doctor = doctor.read_text(encoding="utf-8")
+    doctor.write_text("import definitely_missing_ai_cockpit_module\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="Python runtime import failed"):
+        installer.validate_managed_installation()
+
+    doctor.write_text(original_doctor, encoding="utf-8")
+    (tmp_path / "Makefile.ai").write_text("broken make syntax:\n\tunterminated ' quote\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="Makefile.ai validation failed"):
+        installer.validate_managed_installation()
+
+
 def test_missing_stack_file_project_quality_targets_fail_closed(tmp_path):
     installer = Installer(
         source=ROOT, target=tmp_path, stack="generic", force=False, dry_run=False,
@@ -329,7 +370,7 @@ def test_upgrade_rolls_back_when_post_copy_validation_fails(tmp_path, monkeypatc
     )
     monkeypatch.setattr(
         upgrade,
-        "validate_upgraded_installation",
+        "validate_managed_installation",
         lambda: (_ for _ in ()).throw(ValueError("simulated validation failure")),
     )
 
@@ -350,7 +391,7 @@ def test_failed_upgrade_removes_new_gitignore(tmp_path, monkeypatch):
     )
     monkeypatch.setattr(
         upgrade,
-        "validate_upgraded_installation",
+        "validate_managed_installation",
         lambda: (_ for _ in ()).throw(ValueError("simulated validation failure")),
     )
 

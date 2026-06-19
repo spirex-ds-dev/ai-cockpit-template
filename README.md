@@ -175,7 +175,9 @@ The governance runtime is language-agnostic, but stack presets and default guard
 
 Installation deploys the runtime; it does not complete production adaptation. After configuring quality commands, Coverage paths, and PR CI, set `adoptionReviewed: true` in the Coverage policy and run `make check-ai-adoption-ready`. This is a static configuration completeness check, not proof that project commands are effective; require successful `make quality` and `check-ai-pr` CI runs separately.
 
-The pinned public release does not yet include the auditable first-adoption bootstrap available in the current source tree. See the installation guide before using `check-ai-pr` on the same PR that introduces AI Cockpit.
+<!-- release-capabilities: auditable-adoption,sha256-verification -->
+
+The current public release includes auditable first-adoption bootstrap and caller-provided SHA256 verification. Project-specific quality, Coverage paths, and CI still require explicit adaptation.
 
 ## Runtime Requirements
 
@@ -184,7 +186,7 @@ The pinned public release does not yet include the auditable first-adoption boot
 - POSIX-compliant shell and GNU Make execution environment.
 - Linux and macOS are officially supported for local execution and CI. Native Windows shells are not supported; please run inside WSL (Windows Subsystem for Linux) or another POSIX terminal.
 
-Repository `make quality` runs the full test suite with a 60% script coverage floor, Ruff over `scripts/` and `tests/`, Mypy over the explicitly typed core tool subset, Bandit for medium/high findings, Python compilation, diff checks, and documentation consistency. The typed subset is intentionally narrower than the complete runtime and must be expanded without blanket ignores.
+Repository `make quality` runs the full test suite with a 60% overall script coverage floor and per-file regression floors for lifecycle-critical scripts, Ruff over `scripts/` and `tests/`, Mypy over the explicitly typed core tool subset, Bandit for medium/high findings, Python compilation, diff checks, and documentation consistency. The typed subset is intentionally narrower than the complete runtime and must be expanded without blanket ignores.
 
 ## Advanced Docs
 

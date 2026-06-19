@@ -1,0 +1,168 @@
+{
+  "contractVersion": 2,
+  "workItemId": "install_integrity_release_docs",
+  "mode": "code",
+  "title": "Fail incomplete installs and align release documentation",
+  "baseCommit": "33da3ede3cbb0ef33c44c4a76ee62a0df3f12a5c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/install_integrity_release_docs.contract.json",
+    ".ai/work-items/active/install_integrity_release_docs.summary.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_installer.py",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/architecture.md",
+    "docs/design-philosophy.md",
+    "docs/overview.ja.md",
+    "scripts/check_docs_metadata.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_core_gates.py",
+    "Makefile",
+    "scripts/check_critical_coverage.py",
+    "tests/test_critical_coverage.py"
+  ],
+  "outOfScope": [
+    "Publishing another release tag",
+    "Adding real-project CI for every Preset-only stack",
+    "Implementing minimal/core/full installation modes",
+    "Claiming every lifecycle-critical module reaches 70 percent coverage in this Work Item"
+  ],
+  "sources": [
+    {
+      "path": "User v0.5.0 engineering review dated 2026-06-19",
+      "reason": "Reports partial-install success, stale multilingual release claims, and critical orchestration coverage gaps."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Owns conflict behavior, transaction rollback, and installed runtime validation."
+    },
+    {
+      "path": "release.json",
+      "reason": "Defines the published adoption and SHA256 capability source of truth."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "partial_install",
+      "rollback_integrity",
+      "release_documentation_drift",
+      "critical_test_depth"
+    ],
+    "reason": "Changing first-install ownership and post-install validation affects every target repository."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Conflict detection, import validation, Make parsing, and capability text are reproducible in isolated tests."
+  },
+  "preReviewWarnings": [
+    "Project-owned glossary and customized stack commands must remain preservable.",
+    "Post-install validation failures must roll back first installs as well as upgrades."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A fresh install fails before writing when a managed target file exists with different content and reports every conflict path.",
+    "Identical managed files remain idempotent and project-owned glossary behavior remains unchanged.",
+    "Every non-dry-run install validates managed file contents, imports all installed Python runtime modules, and parses the installed Make entrypoint.",
+    "A post-install validation failure rolls back a first install to its original tree.",
+    "All three READMEs state that the current public release includes auditable first adoption.",
+    "Documentation metadata tests prevent multilingual adoption capability drift.",
+    "Direct tests expand critical finish/checkpoint failure and helper coverage where bounded.",
+    "All required governance and project checks pass."
+  ],
+  "guidelines": [
+    "Never report installation success when managed runtime files are incomplete or inconsistent.",
+    "Detect conflicts before the first write and list actionable repository-relative paths.",
+    "Preserve explicitly project-owned files and idempotent identical content.",
+    "Published capability statements must derive from release metadata and remain synchronized across languages.",
+    "Do not hand-edit generated cockpit status."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user request in current thread",
+    "reason": "The requested fix modifies installer trust boundaries and governance documentation."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
