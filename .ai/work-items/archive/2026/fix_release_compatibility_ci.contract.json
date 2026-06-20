@@ -1,0 +1,151 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix_release_compatibility_ci",
+  "mode": "code",
+  "title": "Fix release compatibility CI fixtures",
+  "baseCommit": "8a43f7f28486bf824960fa92c0759d33a1dd5936",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "235121e5d1a6619eb9926c267ddf68070bec797766b7461aff71a493d05bf296"
+    },
+    {
+      "path": ".kiro/steering/ai-cockpit.md",
+      "status": "A",
+      "fingerprint": "42039ec6276a8a732a0b70d068b8053775756064e4eb53578cfb0a16855e7aa1"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/fix_release_compatibility_ci.contract.json",
+    ".ai/work-items/active/fix_release_compatibility_ci.summary.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".github/workflows/compatibility.yml"
+  ],
+  "outOfScope": [
+    "release.json",
+    "install.sh",
+    "templates/**",
+    "scripts/**",
+    ".kiro/**"
+  ],
+  "sources": [
+    {
+      "path": "GitHub Actions run 27862323867",
+      "reason": "PR #3 compatibility logs identify Rust formatting, .NET solution extension, and Ruby parser fixture failures."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Defines the failing minimal-project fixtures."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "ci_fixture_portability"
+    ],
+    "reason": "The fixes are limited to generated compatibility fixtures and do not change distributed runtime behavior."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user supplied the exact failures after approving the focused CI fixture fixes."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Rust fixture is formatted before the quality check.",
+    "C# fixture supports both .sln and .slnx solution outputs.",
+    "Ruby fixture parses under RuboCop's Ruby 2.7 default.",
+    "Full project quality and the affected GitHub Actions jobs pass."
+  ],
+  "guidelines": [
+    "Keep fixes limited to the failing compatibility fixtures.",
+    "Prefer portable fixture syntax over increasing minimum language versions.",
+    "Do not move or overwrite the published v0.5.11 tag."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User-approved CI repair",
+    "reason": "The user provided all three failing CI logs after the focused remediation plan."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
