@@ -70,8 +70,13 @@ jobs:
           (
             cd "$tmp"
             unset AI_BASE_COMMIT
+            git config user.email test@example.invalid
+            git config user.name 'CI Smoke'
             printf 'include Makefile.ai\n' > Makefile
-            "$GITHUB_WORKSPACE/install.sh" --stack generic --with-examples
+            git add Makefile
+            git commit -m 'initial host project'
+            base="$(git rev-parse HEAD)"
+            "$GITHUB_WORKSPACE/install.sh" --stack generic --with-examples --create-adoption
             test -f scripts/ai_check_pr.py
             grep -q '^check-ai-pr:' Makefile.ai
             test -f examples/csharp/README.md
@@ -83,19 +88,15 @@ jobs:
             test -f examples/ruby/README.md
             test -f examples/swift/README.md
             python3 -m py_compile scripts/*.py
-            git config user.email test@example.invalid
-            git config user.name 'CI Smoke'
-            git add .
-            git commit -m 'initial template install'
-            make check-ai
+            find scripts -type d -name __pycache__ -prune -exec rm -rf {} +
             if make ai-cockpit-quality; then
               echo 'generic quality must fail until project checks are configured' >&2
               exit 1
             fi
-            base="$(git rev-parse HEAD)"
-            mkdir -p .ai/work-items/archive/2026
-            cp "$GITHUB_WORKSPACE/.ai/work-items/archive/2026/trust_boundary_hardening.contract.json" .ai/work-items/archive/2026/install_smoke.contract.json
-            cp "$GITHUB_WORKSPACE/.ai/work-items/archive/2026/trust_boundary_hardening.summary.json" .ai/work-items/archive/2026/install_smoke.summary.json
+            make ai-finish TASK=adopt_ai_cockpit
+            git add .
+            git commit -m 'install template'
+            make check-ai
             make check-ai-pr AI_BASE_COMMIT="$base"
             make ai-start TASK=ci_smoke TITLE="CI smoke" MODE=investigate
             python3 -c 'import json; from pathlib import Path; path = Path(".ai/work-items/active/ci_smoke.contract.json"); contract = json.loads(path.read_text()); contract["scope"].append(".ai/guards/scope_policy.yaml"); contract["restrictedWriteApproval"] = {"approved": True, "approvedBy": "CI smoke", "reason": "Verify installed Makefile.ai passes Contract approval to the guard."}; path.write_text(json.dumps(contract, indent=2) + "\n")'

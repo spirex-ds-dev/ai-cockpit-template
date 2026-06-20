@@ -1,0 +1,156 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix_install_smoke_evidence",
+  "mode": "code",
+  "title": "Generate valid install smoke evidence",
+  "baseCommit": "94b638c217ea47113ed52bbc37b2840d06f88c61",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "68cca9787011864307db97278f4ee8f1dd55544b5a669d482c179849aa7a7b98"
+    },
+    {
+      "path": ".kiro/steering/ai-cockpit.md",
+      "status": "A",
+      "fingerprint": "42039ec6276a8a732a0b70d068b8053775756064e4eb53578cfb0a16855e7aa1"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/fix_install_smoke_evidence.contract.json",
+    ".ai/work-items/active/fix_install_smoke_evidence.summary.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".github/workflows/smoke.yml"
+  ],
+  "outOfScope": [
+    "scripts/**",
+    "templates/**",
+    "tests/**",
+    ".kiro/**"
+  ],
+  "sources": [
+    {
+      "path": "GitHub Actions run 27861965225",
+      "reason": "The current smoke run rejects renamed historical Summary commands against the installed check catalog."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "The install smoke step copies unrelated historical evidence instead of producing evidence in the installed repository."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "The --create-adoption workflow generates a bounded Contract and Summary for first-install verification."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "ci_evidence_integrity",
+      "installation_smoke"
+    ],
+    "reason": "The smoke workflow must validate installed evidence using the installed check catalog."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The failing Summary entries and supported adoption workflow fully determine the CI correction."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Install smoke generates adoption evidence inside the temporary repository.",
+    "The generated adoption Work Item finishes and archives successfully.",
+    "check-ai-pr validates the complete installation diff using installed evidence.",
+    "Generic project quality remains verified as fail-closed before configuration.",
+    "Full project quality checks pass."
+  ],
+  "guidelines": [
+    "Do not copy or rename historical Work Item evidence as CI fixtures.",
+    "Generate verification evidence with the same installed check catalog that validates it.",
+    "Keep the generic stack quality commands fail-closed until project configuration."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User-requested CI repair",
+    "reason": "The user provided the failing smoke output and requested the repository issue be resolved."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
