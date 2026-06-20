@@ -1,0 +1,156 @@
+{
+  "contractVersion": 2,
+  "workItemId": "isolate_release_ai_base_commit",
+  "mode": "code",
+  "title": "Isolate release checker AI base commit",
+  "baseCommit": "aac2d5978e82d2fb6ca8dbcb6087a1ddcfcef508",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "6014eb3ddbdeaadc639706af7cc625a6f9f313a7a0a15729797d2e10fe4a846a"
+    },
+    {
+      "path": ".kiro/steering/ai-cockpit.md",
+      "status": "A",
+      "fingerprint": "42039ec6276a8a732a0b70d068b8053775756064e4eb53578cfb0a16855e7aa1"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/isolate_release_ai_base_commit.contract.json",
+    ".ai/work-items/active/isolate_release_ai_base_commit.summary.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    "scripts/check_release_distribution.py",
+    "tests/test_release_distribution.py"
+  ],
+  "outOfScope": [
+    ".github/workflows/smoke.yml",
+    "scripts/install_ai_cockpit.py",
+    "release.json",
+    ".kiro/**"
+  ],
+  "sources": [
+    {
+      "path": "GitHub Actions run 27861756355",
+      "reason": "The current aac2d59 run exposes AI_BASE_COMMIT=f63d5b6 to the release-distribution step and fails scope validation in the temporary project."
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "baseline_diff gives AI_BASE_COMMIT precedence over Contract baseCommit."
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Defines the environment inherited by the public installer journey."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "baseline_environment_leak",
+      "release_validation"
+    ],
+    "reason": "A job-level governance baseline must not override the temporary adoption Contract baseline."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The failing Actions environment and baseline precedence identify the exact leaked variable."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Release fixture subprocesses do not inherit AI_BASE_COMMIT from the caller job.",
+    "The temporary adoption journey uses its own Contract baseCommit.",
+    "A regression test reproduces the GitHub Actions job-level AI_BASE_COMMIT environment.",
+    "check-release-distribution and full project quality checks pass."
+  ],
+  "guidelines": [
+    "Do not mutate the caller process environment.",
+    "Strip repository and governance baseline overrides from isolated release subprocesses.",
+    "Preserve explicit AI_BASE_COMMIT only for the final check-ai-pr command that intentionally supplies the temporary repository base."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

@@ -22,8 +22,12 @@ PUBLIC_REPOSITORY = "https://github.com/xinglun/ai-cockpit-template.git"
 
 
 def clean_git_environment() -> dict[str, str]:
-    """Return an environment with no ambient Git repository or object-store overrides."""
-    return {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
+    """Return an environment with no ambient Git repository or baseline overrides."""
+    return {
+        key: value
+        for key, value in os.environ.items()
+        if not key.startswith("GIT_") and key != "AI_BASE_COMMIT"
+    }
 
 
 def highest_semver_tag(refs: str) -> str:

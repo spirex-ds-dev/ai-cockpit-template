@@ -77,11 +77,13 @@ def test_exercise_public_distribution_ignores_hostile_ambient_git_environment(tm
         "GIT_CONFIG_COUNT": "1",
         "GIT_CONFIG_KEY_0": "core.bare",
         "GIT_CONFIG_VALUE_0": "true",
+        "AI_BASE_COMMIT": "f" * 40,
     }.items():
         monkeypatch.setenv(key, value)
 
     exercise_public_distribution(PUBLIC_CONTRACT_FIXTURE, tag="v-test", quality_target="quality")
     assert os.environ["GIT_DIR"] == str(parent_git)
+    assert os.environ["AI_BASE_COMMIT"] == "f" * 40
 
 
 def test_exercise_public_distribution_rejects_missing_documented_target():
