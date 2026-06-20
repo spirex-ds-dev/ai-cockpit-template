@@ -84,6 +84,7 @@ jobs:
             rust)
               cargo init --lib --name ai_cockpit_smoke -q
               printf 'pub fn add(a: i32, b: i32) -> i32 { a + b }\n\n#[cfg(test)]\nmod tests { #[test] fn adds() { assert_eq!(super::add(1, 2), 3); } }\n' > src/lib.rs
+              cargo fmt --all
               ;;
             typescript)
               cat > package.json <<'EOF'
@@ -190,10 +191,10 @@ jobs:
           gem 'minitest', '~> 5.25'
           gem 'rake', '~> 13.2'
           gem 'rubocop', '~> 1.70'
-          EOF
+              EOF
               mkdir -p lib test
-              printf 'module App\n  def self.add(a, b) = a + b\nend\n' > lib/app.rb
-              printf "require 'minitest/autorun'\nrequire_relative '../lib/app'\nclass AppTest < Minitest::Test\n  def test_add = assert_equal(3, App.add(1, 2))\nend\n" > test/app_test.rb
+              printf 'module App\n  def self.add(a, b)\n    a + b\n  end\nend\n' > lib/app.rb
+              printf "require 'minitest/autorun'\nrequire_relative '../lib/app'\nclass AppTest < Minitest::Test\n  def test_add\n    assert_equal(3, App.add(1, 2))\n  end\nend\n" > test/app_test.rb
               printf "require 'rake/testtask'\nRake::TestTask.new { |t| t.pattern = 'test/**/*_test.rb' }\n" > Rakefile
               bundle install --jobs 4 --retry 3
               bundle exec rubocop -A
@@ -223,13 +224,15 @@ jobs:
               ;;
             csharp)
               dotnet new sln -n Smoke
+              solution="$(find . -maxdepth 1 -type f -name 'Smoke.sln*' -print -quit)"
+              test -n "$solution"
               dotnet new classlib -n App -o src/App
               dotnet new xunit -n App.Tests -o tests/App.Tests
-              dotnet sln Smoke.sln add src/App/App.csproj tests/App.Tests/App.Tests.csproj
+              dotnet sln "$solution" add src/App/App.csproj tests/App.Tests/App.Tests.csproj
               dotnet add tests/App.Tests/App.Tests.csproj reference src/App/App.csproj
               printf 'namespace App; public static class Calculator { public static int Add(int a, int b) => a + b; }\n' > src/App/Calculator.cs
               printf 'using App; namespace App.Tests; public class CalculatorTests { [Fact] public void Adds() => Assert.Equal(3, Calculator.Add(1, 2)); }\n' > tests/App.Tests/CalculatorTests.cs
-              dotnet format Smoke.sln
+              dotnet format "$solution"
               ;;
           esac
           git add .
