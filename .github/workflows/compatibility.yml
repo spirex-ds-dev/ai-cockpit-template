@@ -222,6 +222,19 @@ jobs:
               composer install --no-interaction --no-progress
               vendor/bin/php-cs-fixer fix
               ;;
+            csharp)
+              dotnet new sln -n Smoke
+              solution="$(find . -maxdepth 1 -type f -name 'Smoke.sln*' -print -quit)"
+              test -n "$solution"
+              dotnet new classlib -n App -o src/App
+              dotnet new xunit -n App.Tests -o tests/App.Tests
+              dotnet sln "$solution" add src/App/App.csproj tests/App.Tests/App.Tests.csproj
+              dotnet add tests/App.Tests/App.Tests.csproj reference src/App/App.csproj
+              printf 'namespace App; public static class Calculator { public static int Add(int a, int b) => a + b; }\n' > src/App/Calculator.cs
+              printf 'using App; namespace App.Tests; public class CalculatorTests { [Fact] public void Adds() => Assert.Equal(3, Calculator.Add(1, 2)); }\n' > tests/App.Tests/CalculatorTests.cs
+              dotnet format "$solution"
+              ;;
+          esac
           git add .
           git commit -qm initial
           "$GITHUB_WORKSPACE/install.sh" --stack "$STACK" --update-makefile
@@ -279,6 +292,13 @@ jobs:
             android)
               mkdir -p app/src/main/java/example/smoke app/src/test/java/example/smoke app/src/main
               cat > settings.gradle.kts <<'EOF'
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
           rootProject.name = "ai-cockpit-android-smoke"
           include(":app")
           EOF

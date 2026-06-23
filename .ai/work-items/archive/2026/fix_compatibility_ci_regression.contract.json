@@ -1,0 +1,56 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix_compatibility_ci_regression",
+  "mode": "code",
+  "title": "Fix compatibility CI shell and Android plugin repos",
+  "baseCommit": "7896987e030e621dd41577c3d9dd1254390927b2",
+  "baselineDirtyPaths": [
+    {
+      "path": ".kiro/steering/ai-cockpit.md",
+      "status": "A",
+      "fingerprint": "42039ec6276a8a732a0b70d068b8053775756064e4eb53578cfb0a16855e7aa1"
+    }
+  ],
+  "scope": [
+    ".github/workflows/compatibility.yml",
+    ".ai/work-items/active/fix_compatibility_ci_regression.contract.json",
+    ".ai/work-items/active/fix_compatibility_ci_regression.summary.json"
+  ],
+  "outOfScope": ["release.json", "AGENTS.md", ".kiro/**"],
+  "sources": [
+    {"path": ".github/workflows/compatibility.yml", "reason": "CI logs show bash syntax error at git add and Android AGP resolution failure."},
+    {"path": "Git show af7fd20:.github/workflows/compatibility.yml", "reason": "Restore missing csharp case and esac in extended-real-stack-quality."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "low", "riskTypes": ["ci"], "reason": "Workflow-only fix restoring prior csharp branch and Android pluginManagement repos."},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "Root cause identified from CI logs and git history."},
+  "preReviewWarnings": ["Confirm compatibility workflow on GitHub Actions after push."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "CI workflow regression fix."},
+  "acceptance": [
+    "extended-real-stack-quality bash script passes bash -n.",
+    "Android smoke settings.gradle.kts declares google() in pluginManagement.",
+    "csharp case and esac restored in extended-real-stack-quality."
+  ],
+  "guidelines": ["Do not remove existing stack matrix jobs when editing compatibility.yml."],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user CI failure report", "reason": "CI workflow fix."},
+  "rollbackNote": "Revert compatibility.yml to prior mobile-stack-quality edit."
+}
