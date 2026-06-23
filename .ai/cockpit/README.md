@@ -12,6 +12,8 @@ keywords:
 
 # AI Cockpit
 
+[日本語](README.ja.md)
+
 AI Cockpit is a small governance layer for agentic coding. It gives Codex, Gemini, Antigravity, or another coding agent a shared operating contract before files are changed.
 
 The cockpit is intentionally language-agnostic. The Python scripts validate the AI workflow, while the Makefile delegates product-specific checks to commands that each repository can customize.
@@ -34,6 +36,19 @@ The cockpit is intentionally language-agnostic. The Python scripts validate the 
 6. Review the generated status and archived Contract/Summary.
 
 `current_status.md` is generated. Do not hand-edit it.
+
+## Post-Install Onboarding
+
+After installation, consolidate doctor, calibration, and readiness guidance into three phases:
+
+```sh
+make ai-onboard              # environment → calibration → readiness
+make ai-onboard PHASE=1      # environment only
+make ai-onboard PHASE=2      # calibration only
+make ai-onboard PHASE=3      # readiness only
+```
+
+See [Adoption Readiness](adoption.md) for the detailed checklist.
 
 ## Lifecycle Checks
 

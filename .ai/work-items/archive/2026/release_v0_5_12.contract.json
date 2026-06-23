@@ -1,0 +1,139 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_v0_5_12",
+  "mode": "code",
+  "title": "Release v0.5.12",
+  "baseCommit": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+  "baselineDirtyPaths": [
+    {
+      "path": ".kiro/steering/ai-cockpit.md",
+      "status": "A",
+      "fingerprint": "42039ec6276a8a732a0b70d068b8053775756064e4eb53578cfb0a16855e7aa1"
+    }
+  ],
+  "scope": [
+    "release.json",
+    "install.sh",
+    "docs/installation.md",
+    "docs/launch.md",
+    "examples/*/README.md",
+    "tests/test_install_script.py",
+    ".ai/README.md",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    ".ai/cockpit/adoption.md",
+    ".ai/cockpit/adoption.ja.md",
+    ".ai/cockpit/system_invariants.json",
+    ".ai/work-items/archive/2026/platform_stack_onboarding.contract.json",
+    ".ai/work-items/archive/2026/platform_stack_onboarding.summary.json",
+    ".ai/work-items/archive/2026/review_improvements.contract.json",
+    ".ai/work-items/archive/2026/review_improvements.summary.json",
+    "docs/configuration.md",
+    "docs/non-make-adaptation.ja.md",
+    "scripts/ai_onboard.py",
+    "scripts/check_critical_coverage.py",
+    "scripts/check_docs_metadata.py",
+    "scripts/install_ai_cockpit.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    ".github/workflows/compatibility.yml",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "tests/test_ai_onboard.py",
+    "tests/test_core_gates.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_doctor.py",
+    "tests/test_installer.py",
+    "tests/test_makefile.py",
+    "tests/test_onboard_e2e.py",
+    ".ai/work-items/active/release_v0_5_12.contract.json",
+    ".ai/work-items/active/release_v0_5_12.summary.json"
+  ],
+  "outOfScope": [
+    ".kiro/**",
+    "tests/test_release_distribution.py",
+    ".ai/work-items/archive/2026/release_v0_5_11.contract.json",
+    ".ai/work-items/archive/2026/release_v0_5_11.summary.json"
+  ],
+  "sources": [
+    {
+      "path": "release.json",
+      "reason": "Canonical public release metadata to advance from v0.5.11 to v0.5.12."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/platform_stack_onboarding.summary.json",
+      "reason": "Feature batch included in this release: onboard E2E, mobile CI smoke, tier sync."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Defines consistency requirements for public release references."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["public_release", "version_consistency", "ci"],
+    "reason": "A new immutable public tag changes installation entrypoints; mobile-stack-quality must pass on hosted CI."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User approved full v0.5.12 release with commit, tag, and push."
+  },
+  "preReviewWarnings": [
+    "check-release-distribution passes only after the immutable v0.5.12 tag is visible on the public remote.",
+    "Verify mobile-stack-quality on GitHub Actions after push."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": ["before_edit", "before_finish"],
+    "reason": "Release combines feature batch and version bump across docs, CI, and installer defaults."
+  },
+  "acceptance": [
+    "release.json declares v0.5.12.",
+    "Public installer defaults, documentation, examples, and install script tests reference v0.5.12.",
+    "Feature batch from platform_stack_onboarding and review_improvements is included.",
+    "make quality and documentation metadata checks pass.",
+    "Repository is ready for v0.5.12 tag commit and push."
+  ],
+  "guidelines": [
+    "Treat release.json as the canonical public release version.",
+    "Keep installer defaults, documentation, examples, and direct tests synchronized.",
+    "Do not move or overwrite an existing public tag.",
+    "Do not include unrelated .kiro files in release commits."
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user release v0.5.12 request",
+    "reason": "Release updates governance docs, system_invariants, and CI workflow."
+  },
+  "rollbackNote": "Revert release metadata, feature batch, and restore v0.5.11 references if the tag is not published."
+}

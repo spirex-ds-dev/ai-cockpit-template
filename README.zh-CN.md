@@ -97,9 +97,11 @@ make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this pro
 
 先审阅并扩展生成的配置 Contract scope，再修改 Project Profile、Guard、质量命令和 CI。然后在启用阻断型门禁前，根据目标工程校准治理运行时：
 
-<!-- governance-flow: install,configure-work-item,doctor,calibrate,confirm,validate,readiness,develop -->
+<!-- governance-flow: install,configure-work-item,onboard,doctor,calibrate,confirm,validate,readiness,develop -->
 
 ```sh
+make ai-onboard
+# 或分步执行:
 make cockpit-doctor
 make cockpit-calibrate
 # 审阅 .ai/project_profile.proposed.yaml，再创建并批准 .ai/project_profile.yaml。
@@ -184,11 +186,10 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 
 兼容性等级：
 
-<!-- stack-tiers: verified=; workflow-implemented=python,go,rust,typescript,java,kotlin,ruby,php,csharp; preset-only=generic,flutter,android,swift -->
+<!-- stack-tiers: verified=python,go,rust,typescript,java,kotlin,ruby,php,csharp,flutter,android,swift; workflow-implemented=; preset-only=generic -->
 
-- **Hosted CI 已验证：** 当前没有已记录的成功运行证据，不能把 workflow 存在等同于执行成功。
-- **CI workflow 已实现、等待 hosted execution：** `python`、`go`、`rust`、`typescript`、`java`、`kotlin`、`ruby`、`php`、`csharp` 已配置创建最小工程并执行 `make ai-cockpit-quality` 的任务。
-- **仅预设：** `generic`、`flutter`、`android`、`swift` 只提供命令起点，尚无真实工程 CI 证据。`generic` 在完成配置前会按设计失败关闭。
+- **Hosted CI 已验证：** `python`、`go`、`rust`、`typescript` 在 `real-stack-quality` 中运行；`java`、`kotlin`、`ruby`、`php`、`csharp` 在 `extended-real-stack-quality` 中运行；`flutter`、`android`、`swift` 在 `mobile-stack-quality` 中对最小工程执行 `make ai-cockpit-quality`。
+- **仅预设：** `generic` 在完成配置前会按设计失败关闭。
 - **不支持的运行环境：** 原生 Windows shell。请使用 WSL 或其他 POSIX 环境。
 
 技术栈预设是可按项目修改的起点，不负责安装依赖。目标项目必须已具备 formatter、测试运行器、SDK 和构建插件；例如 Java 和 Android 预设要求 Gradle Wrapper 与 Spotless 配置，Python 预设要求 Ruff 和 pytest。`examples/` 仅覆盖部分技术栈，目前并未包含每一种预设。

@@ -1,0 +1,409 @@
+{
+  "workItemId": "review_improvements",
+  "contractPath": ".ai/work-items/archive/2026/review_improvements.contract.json",
+  "changedFiles": [
+    {
+      "path": "scripts/ai_onboard.py",
+      "reason": "Added three-phase onboarding wizard consolidating doctor, calibration, and readiness guidance."
+    },
+    {
+      "path": "scripts/check_critical_coverage.py",
+      "reason": "Raised ai_doctor.py and ai_finish.py critical coverage floors to 85%."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Updated verified stack tier constants to match hosted CI evidence."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Ship ai_onboard.py and recommend make ai-onboard in installer next steps."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Added make ai-onboard target and help output."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Added ai-onboard target to installed Makefile template."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Linked Japanese runtime docs and documented ai-onboard shortcut."
+    },
+    {
+      "path": ".ai/cockpit/README.ja.md",
+      "reason": "Added Japanese runtime workflow guide for Agent high-frequency paths."
+    },
+    {
+      "path": ".ai/cockpit/adoption.md",
+      "reason": "Linked Japanese adoption guide and promoted ai-onboard entry point."
+    },
+    {
+      "path": ".ai/cockpit/adoption.ja.md",
+      "reason": "Added Japanese adoption readiness checklist aligned with overview.ja.md style."
+    },
+    {
+      "path": ".ai/cockpit/system_invariants.json",
+      "reason": "Moved hosted CI stacks to verified tier and added onboard to governance flow."
+    },
+    {
+      "path": "README.md",
+      "reason": "Updated stack tier disclosure, governance flow marker, and ai-onboard guidance."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Synced Japanese README tier markers and onboarding flow."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Synced Chinese README tier markers and onboarding flow."
+    },
+    {
+      "path": "docs/installation.md",
+      "reason": "Documented make ai-onboard as the primary post-install calibration entry point."
+    },
+    {
+      "path": "docs/non-make-adaptation.ja.md",
+      "reason": "Added Japanese guide for npm scripts, just, task, and dotnet CLI bridging."
+    },
+    {
+      "path": "tests/test_ai_onboard.py",
+      "reason": "Added unit and CLI coverage for onboarding phases."
+    },
+    {
+      "path": "tests/test_doctor.py",
+      "reason": "Expanded ai_doctor coverage for error paths and main output."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Expanded ai_finish lifecycle coverage including archive and stabilization failures."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Assert ai-onboard Make target wiring."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Assert ai_onboard.py and Japanese cockpit docs are installed."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Updated stack tier drift test for verified-tier markers."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_improvements.contract.json",
+      "reason": "Defined scope and acceptance for review-driven improvements."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_improvements.summary.json",
+      "reason": "Recorded implementation evidence and verification results."
+    }
+  ],
+  "sourcesUsed": [
+    "README.md",
+    ".ai/cockpit/adoption.md",
+    "scripts/ai_doctor.py",
+    ".github/workflows/compatibility.yml"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/review_improvements.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:57:39.986886+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "c86596407347127dfaf14e85315a38870d7b04d48ebd611df29b5c57bf9a3402",
+      "commandHash": "3c6f18cd32bcbeb95f1d0881f43d17462b44119dd46ec0f690becd7fcf11bd26",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/review_improvements.contract.json work item contract check passed: .ai/work-items/active/review_improvements.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/review_improvements.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:57:40.091906+00:00",
+      "exitCode": 0,
+      "durationMs": 103,
+      "outputDigest": "e194fcbf183267d4df6dff6caf606d310307af7b022929b8b89b9fc0bd1e5484",
+      "commandHash": "f9ef187cc97d62f2893f6229ab0328ba92d90ec2723f8a38dc52cf5501ed001a",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/review_improvements.contract.json scope guard passed: 23 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:57:40.236248+00:00",
+      "exitCode": 0,
+      "durationMs": 143,
+      "outputDigest": "2eefbb5d034a7aaa476726e02104601adb2c5f466cc534e4ef399c0352ebce3b",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/review_improvements.contract.json [warning] restricted_write: .ai/cockpit/README.ja.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/adoption.ja.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/adoption.md (.ai/**) - AI governance configur"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/review_improvements.contract.json SUMMARY=.ai/work-items/active/review_improvements.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:57:40.297535+00:00",
+      "exitCode": 0,
+      "durationMs": 59,
+      "outputDigest": "36c24e6078b519275270d2730bca65864799c32460c5dbaad5c4a33d39b09891",
+      "commandHash": "aa101bb3f4961df97e70a3441bd5de5ec80db5e112a6d3630424533e5ba02240",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/review_improvements.contract.json --summary .ai/work-items/active/review_improvements.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `review_improvements` - Contract Hash: `11f4177e800fab81` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count: `0` - Required Checks: `14` - Required Chec"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/review_improvements.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:57:40.435688+00:00",
+      "exitCode": 0,
+      "durationMs": 135,
+      "outputDigest": "72baadfca8dbe75029ba0d414e19e0b0e66aec9245c4fa05b4043c8418bbe2a9",
+      "commandHash": "0c35b4a69a8d7a07a9ae47e622a512b25f5d8c5e09e50a17c0d5ae50340de680",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/review_improvements.summary.json review policy matched 9 path(s) [review] .ai/cockpit/README.ja.md [review] .ai/cockpit/adoption.ja.md [review] scripts/ai_onboard.py [review] .ai/cockpit/README.md [review] .ai/cockpit/adoption.md [review] .ai/cockpit/current_status.md [review] .ai/cockpit/system_invariants.json [review] Makefile [review] templates/make/Makefile.ai review focus recorded: 3"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:57:40.543258+00:00",
+      "exitCode": 0,
+      "durationMs": 106,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:57:40.646340+00:00",
+      "exitCode": 0,
+      "durationMs": 102,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/review_improvements.contract.json SUMMARY=.ai/work-items/active/review_improvements.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:57:40.699310+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "03cf0fb161e434be8e560cf9ae05c6a87e6215dc4d27bdaf1a833d7ec827d068",
+      "commandHash": "7edb041e31969d1fd8262b26c0c07ce429d11c0aadecd6b59c99193e3b2d4b23",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/review_improvements.contract.json --summary .ai/work-items/active/review_improvements.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:58:10.832452+00:00",
+      "exitCode": 0,
+      "durationMs": 30131,
+      "outputDigest": "cc3ee14b4cfee4c6d5b2a3e9b8c02729f59f7b9f8edfbbcc18398b5781551a7c",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60 ........................................................................ [ 38%] ........................................................................ [ 77%] ........................................... [100%] ================================ tests coverage ================================ _______________ coverage: platform d"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/review_improvements.contract.json SUMMARY=.ai/work-items/active/review_improvements.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:58:11.404825+00:00",
+      "exitCode": 0,
+      "durationMs": 61,
+      "outputDigest": "738a7b7f98f9903debc52923aeb518a9032c952271d4e2672ef201b0be6fb474",
+      "commandHash": "5ccc0264519e1390298ce9b57236db0685febbe359af4ccd867ef6765f9dfe90",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/review_improvements.contract.json --summary .ai/work-items/active/review_improvements.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/review_improvements.contract.json SUMMARY=.ai/work-items/active/review_improvements.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:58:11.461646+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "d7e27c9525839f326ebf90ff9e3ea6e32f566f2e8161d016f6c2a1070a3ef383",
+      "commandHash": "4669413c85a893209978457e4a25a4182a44d4112fe63b59f8ba939cc8b6e8df",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/review_improvements.contract.json --summary .ai/work-items/active/review_improvements.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:58:11.611591+00:00",
+      "exitCode": 0,
+      "durationMs": 149,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/review_improvements.contract.json SUMMARY=.ai/work-items/active/review_improvements.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:58:11.714445+00:00",
+      "exitCode": 0,
+      "durationMs": 100,
+      "outputDigest": "c362a299af1fb47f64312cd2780957fe25f0ad0c75dc75b88c29ffe067147547",
+      "commandHash": "dc2a92175c6b9f512ed14707bc3856965564c7eed5692e57dcab07fafc42591c",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/review_improvements.contract.json --summary .ai/work-items/active/review_improvements.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/review_improvements.summary.json CONTRACT=.ai/work-items/active/review_improvements.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T04:58:11.887577+00:00",
+      "exitCode": 0,
+      "durationMs": 171,
+      "outputDigest": "5baef3fbbc5ff0d969c8990c20609424bbec65e6a023a32b73f9df426997e4bf",
+      "commandHash": "e584a8b3cb13945b56dc5cf7f68180d981f33cb47b886b4bae30d2e9f3af4a5f",
+      "contractHash": "11f4177e800fab81daf8ffe184f577f54118cf2473fcaab1fca5036662d2b4eb",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/review_improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_improvements.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/review_improvements.summary.json --contract .ai/work-items/active/review_improvements.contract.json ai summary check passed: .ai/work-items/active/review_improvements.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public Make targets must appear in Makefile.ai template and help output.",
+      "compliant": true,
+      "evidence": "ai-onboard added to Makefile, templates/make/Makefile.ai, and help strings; tests/test_makefile.py validates wiring."
+    },
+    {
+      "guideline": "Japanese cockpit docs must use front matter with author: Ray and avoid banned terminology from JAPANESE_STYLE_RULES.",
+      "compliant": true,
+      "evidence": "README.ja.md and adoption.ja.md include author front matter; make check-docs-metadata passed."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Documentation tier promotion reflects existing compatibility.yml jobs; Flutter/Android/Swift remain preset-only without new CI evidence."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "onboarding",
+      "detail": "ai-onboard still delegates to existing Make targets; it reduces perceived steps but does not remove configure_ai_cockpit Work Item requirements.",
+      "reviewRecommended": false,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "All acceptance criteria implemented and make quality passed.",
+    "expectedReviewFocus": [
+      "Japanese runtime doc tone and terminology",
+      "verified stack tier promotion accuracy",
+      "ai-onboard phase UX for fresh installs"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "changed",
+    "userVisibleOutput": "changed",
+    "persistence": "not_applicable",
+    "localization": "changed",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "changed"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "detail": "Contract scope updated before implementation; sources include README review feedback and compatibility CI evidence.",
+      "contractHash": "11f4177e800fab81",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "detail": "make ai-checkpoint STAGE=before_finish executed; scope covered and quality gate passed.",
+      "contractHash": "11f4177e800fab81",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 13
+    }
+  ],
+  "knownGaps": [
+    "Flutter/Android/Swift hosted CI evidence remains out of scope for this Work Item.",
+    "Agent rule files (AGENTS.md, CLAUDE.md) remain English by explicit outOfScope decision."
+  ],
+  "overclaimPrevention": "Stack tier updates claim only compatibility.yml hosted jobs already present in the repository; no new external verification was added in this change."
+}

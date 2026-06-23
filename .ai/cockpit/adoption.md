@@ -6,9 +6,17 @@ description: Installed, repository-local guidance for completing AI Cockpit adop
 
 # Adoption Readiness
 
+[日本語](adoption.ja.md)
+
 Installation deploys the governance runtime. It does not prove that project-specific quality commands, Coverage Guard paths, or pull-request CI are correct.
 
-Before making AI Cockpit a required production gate:
+Before making AI Cockpit a required production gate, run the guided flow:
+
+```sh
+make ai-onboard
+```
+
+Or follow the detailed checklist:
 
 1. Run `make cockpit-doctor` to record project facts, evidence, confidence, candidate boundaries, Guard mismatches, and unknowns.
 2. Run `make cockpit-calibrate`. Review the proposed Profile without treating suggestions as approvals.

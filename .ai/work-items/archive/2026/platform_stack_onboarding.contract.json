@@ -1,0 +1,131 @@
+{
+  "contractVersion": 2,
+  "workItemId": "platform_stack_onboarding",
+  "mode": "code",
+  "title": "Sync config tiers, mobile CI smoke, onboard E2E and locale",
+  "baseCommit": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "docs/configuration.md",
+    "docs/installation.md",
+    "docs/non-make-adaptation.ja.md",
+    "scripts/check_docs_metadata.py",
+    "scripts/ai_onboard.py",
+    "scripts/check_critical_coverage.py",
+    "scripts/install_ai_cockpit.py",
+    ".ai/README.md",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    ".ai/cockpit/adoption.md",
+    ".ai/cockpit/adoption.ja.md",
+    ".ai/cockpit/system_invariants.json",
+    ".ai/work-items/archive/2026/review_improvements.contract.json",
+    ".ai/work-items/archive/2026/review_improvements.summary.json",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    ".github/workflows/compatibility.yml",
+    ".kiro/steering/ai-cockpit.md",
+    "tests/test_docs_metadata.py",
+    "tests/test_ai_onboard.py",
+    "tests/test_onboard_e2e.py",
+    "tests/test_doctor.py",
+    "tests/test_core_gates.py",
+    "tests/test_makefile.py",
+    "tests/test_installer.py",
+    ".ai/work-items/active/platform_stack_onboarding.contract.json",
+    ".ai/work-items/active/platform_stack_onboarding.summary.json"
+  ],
+  "outOfScope": [
+    "release.json",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".cursor/rules/**"
+  ],
+  "sources": [
+    {
+      "path": "docs/configuration.md",
+      "reason": "Stack tier section drifted from README and check_docs_metadata constants."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Existing real-stack and extended-stack smoke patterns for new mobile presets."
+    },
+    {
+      "path": "scripts/ai_onboard.py",
+      "reason": "Add locale output and E2E coverage target."
+    },
+    {
+      "path": "tests/test_adoption_e2e.py",
+      "reason": "Fresh install E2E pattern for onboard journey test."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["ci", "documentation"],
+    "reason": "Mobile stack CI depends on hosted runner toolchains for Flutter, Android SDK, and Swift."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Scope, acceptance, and verification are explicit."
+  },
+  "preReviewWarnings": [
+    "Verify compatibility.yml mobile-stack-quality job definitions before promoting flutter, android, and swift to verified."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": ["before_edit", "before_finish"],
+    "reason": "Cross-cutting docs, CI, runtime script, and metadata guard changes."
+  },
+  "acceptance": [
+    "docs/configuration.md includes stack tier marker and prose aligned with README and check_docs_metadata.",
+    "check_docs_metadata validates configuration.md tier marker consistency.",
+    ".ai/README.md links to .ai/cockpit/README.ja.md.",
+    "compatibility.yml runs hosted smoke for flutter, android, and swift; system_invariants and README tiers list them as verified.",
+    "tests/test_onboard_e2e.py exercises install plus full ai-onboard three-phase path.",
+    "ai_onboard supports --locale ja and LANG=ja_JP.UTF-8 Japanese output.",
+    "ai_doctor.py and ai_finish.py remain at or above 85% critical coverage floors.",
+    "make quality passes."
+  ],
+  "guidelines": [
+    "Tier markers in docs must match check_docs_metadata VERIFIED_STACKS and system_invariants.json.",
+    "Japanese onboard strings must follow JAPANESE_STYLE_RULES."
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user platform onboarding request",
+    "reason": "User requested updates to .ai/README.md and system_invariants.json."
+  },
+  "rollbackNote": "Revert configuration tier sync, mobile CI job, onboard locale/E2E changes, and tier marker updates."
+}

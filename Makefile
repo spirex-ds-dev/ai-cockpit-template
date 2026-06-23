@@ -17,7 +17,7 @@ AI_PYTHON ?= PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
 	check-docs-metadata \
 	check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-validate-calibration \
 	check-release-distribution \
-	ai-start ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
+	ai-start ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy \
 	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item check-ai-pr
@@ -25,6 +25,7 @@ AI_PYTHON ?= PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
 help:
 	@printf '%s\n' 'AI Cockpit template commands:'
 	@printf '%s\n' '  make ai-start TASK=<task> TITLE="..." MODE=code'
+	@printf '%s\n' '  make ai-onboard [PHASE=1|2|3]'
 	@printf '%s\n' '  make ai-doctor'
 	@printf '%s\n' '  make check-ai-adoption-ready'
 	@printf '%s\n' '  make check-ai-contract CONTRACT=<contract.json>'
@@ -111,6 +112,9 @@ ai-cockpit-quality: quality
 
 ai-start:
 	$(AI_PYTHON) scripts/ai_start.py --task "$(TASK)" --title "$(TITLE)" --mode "$(MODE)"
+
+ai-onboard:
+	$(AI_PYTHON) scripts/ai_onboard.py --root . $(if $(PHASE),--phase $(PHASE),) $(if $(SKIP_CALIBRATE),--skip-calibrate,) $(if $(SKIP_READINESS_CHECKS),--skip-readiness-checks,)
 
 ai-doctor:
 	$(AI_PYTHON) scripts/ai_doctor.py --root .

@@ -37,13 +37,30 @@ def test_check_rejects_stack_tier_drift(tmp_path):
     readme = tmp_path / "README.zh-CN.md"
     readme.write_text(
         readme.read_text(encoding="utf-8").replace(
-            "workflow-implemented=python,go,rust,typescript,java,kotlin,ruby,php,csharp",
-            "workflow-implemented=python",
+            "verified=python,go,rust,typescript,java,kotlin,ruby,php,csharp,flutter,android,swift",
+            "verified=python",
         ),
         encoding="utf-8",
     )
 
     assert "README.zh-CN.md: stack compatibility tiers do not match executable CI evidence" in check_repository(tmp_path)
+
+
+def test_check_rejects_configuration_stack_tier_drift(tmp_path):
+    copy_documentation(tmp_path)
+    configuration = tmp_path / "docs" / "configuration.md"
+    configuration.write_text(
+        configuration.read_text(encoding="utf-8").replace(
+            "preset-only=generic",
+            "preset-only=generic,flutter",
+        ),
+        encoding="utf-8",
+    )
+
+    assert (
+        "docs/configuration.md: stack compatibility tiers do not match executable CI evidence"
+        in check_repository(tmp_path)
+    )
 
 
 def test_check_rejects_release_capability_drift(tmp_path):
@@ -197,10 +214,12 @@ def test_check_rejects_concrete_or_missing_readme_release_resolution(tmp_path):
 def test_check_rejects_known_japanese_style_regressions(tmp_path):
     copy_documentation(tmp_path)
     readme = tmp_path / "README.ja.md"
-    readme.write_text(
-        readme.read_text(encoding="utf-8") + "\nGemini, Claude, Codex により実行時の安全性を確保し、確信度を記録します。\n",
-        encoding="utf-8",
+    regression_line = (
+        "\nGemini, Claude, Codex "
+        "\u306b\u3088\u308a\u5b9f\u884c\u6642\u306e\u5b89\u5168\u6027\u3092\u78ba\u4fdd\u3057\u3001"
+        "\u78ba\u4fe1\u5ea6\u3092\u8a18\u9332\u3057\u307e\u3059\u3002\n"
     )
+    readme.write_text(readme.read_text(encoding="utf-8") + regression_line, encoding="utf-8")
 
     errors = check_repository(tmp_path)
     assert sum("Japanese style:" in error for error in errors) == 3

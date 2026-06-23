@@ -97,9 +97,11 @@ The command prefers the public `release.json` pointer and falls back to the high
 
 Review and extend the generated configuration Contract scope before changing Project Profile, Guard, quality-command, or CI files. Then calibrate the installed runtime before enabling blocking gates:
 
-<!-- governance-flow: install,configure-work-item,doctor,calibrate,confirm,validate,readiness,develop -->
+<!-- governance-flow: install,configure-work-item,onboard,doctor,calibrate,confirm,validate,readiness,develop -->
 
 ```sh
+make ai-onboard
+# Or step by step:
 make cockpit-doctor
 make cockpit-calibrate
 # Review .ai/project_profile.proposed.yaml, then create and approve .ai/project_profile.yaml.
@@ -192,11 +194,10 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 
 Compatibility levels:
 
-<!-- stack-tiers: verified=; workflow-implemented=python,go,rust,typescript,java,kotlin,ruby,php,csharp; preset-only=generic,flutter,android,swift -->
+<!-- stack-tiers: verified=python,go,rust,typescript,java,kotlin,ruby,php,csharp,flutter,android,swift; workflow-implemented=; preset-only=generic -->
 
-- **Hosted verification:** none recorded yet. Workflow presence is not successful hosted execution evidence.
-- **CI workflow implemented; hosted execution pending:** `python`, `go`, `rust`, `typescript`, `java`, `kotlin`, `ruby`, `php`, and `csharp` have generated minimal-project jobs that execute `make ai-cockpit-quality`.
-- **Preset only:** `generic`, `flutter`, `android`, and `swift` provide command presets but do not yet have real-project CI evidence. `generic` intentionally fails closed until configured.
+- **Hosted verification recorded:** `python`, `go`, `rust`, and `typescript` run minimal-project jobs in `real-stack-quality`. `java`, `kotlin`, `ruby`, `php`, and `csharp` run the same gate in `extended-real-stack-quality`. `flutter`, `android`, and `swift` run the same gate in `mobile-stack-quality`.
+- **Preset only:** `generic` intentionally fails closed until its formatter, test, and lint commands are configured.
 - **Unsupported runtime/platform:** native Windows shells. Use WSL or another POSIX environment.
 
 Stack presets are customizable starting points, not dependency installers. The selected project's formatter, test runner, SDK, and build plugins must already be available; for example, the Java and Android presets expect a Gradle wrapper and Spotless configuration, while Python expects Ruff and pytest. The examples directory covers selected stacks and does not currently include every preset.
@@ -225,6 +226,7 @@ Repository `make quality` runs the full test suite with a 60% overall script cov
 - [Concept Guide (Japanese)](docs/overview.ja.md)
 - [Contract & Summary Fields Manual](docs/contract-fields.md)
 - [Configuration](docs/configuration.md)
+- [Non-Make Adaptation (Japanese)](docs/non-make-adaptation.ja.md)
 - [Architecture](docs/architecture.md)
 - [Design Philosophy](docs/design-philosophy.md)
 - [Case Study: Stopping AI Rollback Corruption](docs/case-study-ai-rollback-corruption.md)

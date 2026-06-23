@@ -34,11 +34,13 @@ csharp
 
 ## Project Checks
 
+<!-- stack-tiers: verified=python,go,rust,typescript,java,kotlin,ruby,php,csharp,flutter,android,swift; workflow-implemented=; preset-only=generic -->
+
 Compatibility evidence is tiered:
 
-- **Hosted verification:** no successful hosted compatibility run is recorded yet.
-- **CI workflow implemented; hosted execution pending:** Python, Go, Rust, TypeScript, Java, Kotlin, Ruby, PHP, and C# have generated minimal-project jobs that execute their preset through `make ai-cockpit-quality`.
-- **Preset only:** Flutter, Android, and Swift provide editable commands but do not yet have real-project CI evidence. The generic preset intentionally fails closed until configured.
+- **Hosted verification recorded:** `python`, `go`, `rust`, and `typescript` run minimal-project jobs in `real-stack-quality`. `java`, `kotlin`, `ruby`, `php`, and `csharp` run the same gate in `extended-real-stack-quality`. `flutter`, `android`, and `swift` run the same gate in `mobile-stack-quality`.
+- **Preset only:** `generic` provides editable fail-closed commands but intentionally fails `ai-cockpit-quality` until configured.
+- **Unsupported runtime/platform:** native Windows shells. Use WSL or another POSIX environment.
 
 CI verification proves the documented minimal project only. It does not guarantee compatibility with every framework version, plugin set, monorepo layout, SDK, or generated-code policy.
 

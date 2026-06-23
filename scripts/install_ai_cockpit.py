@@ -51,6 +51,7 @@ SCRIPT_NAMES = {
     "ai_check_work_item.py",
     "ai_common.py",
     "ai_finish.py",
+    "ai_onboard.py",
     "ai_generate_status.py",
     "ai_observability.py",
     "ai_start.py",
@@ -685,7 +686,7 @@ class Installer:
             print("  1. Run: make ai-finish TASK=adopt_ai_cockpit")
             print("  2. Commit the installation and archived adoption evidence together.")
             print("  3. In PR CI run: make check-ai-pr AI_BASE_COMMIT=<pre-adoption-commit>")
-            print("  4. Run: make cockpit-doctor && make cockpit-calibrate")
+            print("  4. Run: make ai-onboard  # or: make cockpit-doctor && make cockpit-calibrate")
             print("  5. Confirm .ai/project_profile.yaml, validate Guards, then run: make check-ai-adoption-ready")
             return
         if not self.has_initial_commit():

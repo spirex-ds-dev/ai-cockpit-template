@@ -16,9 +16,12 @@ REQUIRED_FRONT_MATTER = ("author", "title", "description")
 README_FILES = ("README.md", "README.ja.md", "README.zh-CN.md")
 README_CAPABILITY_MARKER = "<!-- release-capabilities: auditable-adoption,sha256-verification -->"
 README_PREREQUISITE_MARKER = "<!-- install-prerequisites: python3.10,git-initial-commit,curl,gnu-make,posix -->"
-VERIFIED_STACKS: tuple[str, ...] = ()
-WORKFLOW_IMPLEMENTED_STACKS = ("python", "go", "rust", "typescript", "java", "kotlin", "ruby", "php", "csharp")
-TEMPLATE_ONLY_STACKS = ("generic", "flutter", "android", "swift")
+VERIFIED_STACKS: tuple[str, ...] = (
+    "python", "go", "rust", "typescript", "java", "kotlin", "ruby", "php", "csharp",
+    "flutter", "android", "swift",
+)
+WORKFLOW_IMPLEMENTED_STACKS: tuple[str, ...] = ()
+TEMPLATE_ONLY_STACKS = ("generic",)
 JAPANESE_STYLE_RULES = {
     "Gemini, Claude, Codex": "use Japanese punctuation between agent names",
     "実行時の安全性を確保": "do not overstate command registry guarantees",
@@ -54,6 +57,14 @@ def front_matter_errors(path: Path) -> list[str]:
     return [f"{path}: front matter missing {key}" for key in REQUIRED_FRONT_MATTER if key not in keys]
 
 
+def tier_marker() -> str:
+    return (
+        "<!-- stack-tiers: verified=" + ",".join(VERIFIED_STACKS)
+        + "; workflow-implemented=" + ",".join(WORKFLOW_IMPLEMENTED_STACKS)
+        + "; preset-only=" + ",".join(TEMPLATE_ONLY_STACKS) + " -->"
+    )
+
+
 def stack_errors(root: Path) -> list[str]:
     ordered_stacks = [
         "generic", "rust", "flutter", "typescript", "python", "go", "java",
@@ -63,23 +74,21 @@ def stack_errors(root: Path) -> list[str]:
         return ["scripts/check_docs_metadata.py: canonical stack order does not match installer STACKS"]
 
     readme_list = ", ".join(ordered_stacks)
-    tier_marker = (
-        "<!-- stack-tiers: verified=" + ",".join(VERIFIED_STACKS)
-        + "; workflow-implemented=" + ",".join(WORKFLOW_IMPLEMENTED_STACKS)
-        + "; preset-only=" + ",".join(TEMPLATE_ONLY_STACKS) + " -->"
-    )
+    marker = tier_marker()
     errors = []
     for name in README_FILES:
         text = (root / name).read_text(encoding="utf-8")
         if readme_list not in text:
             errors.append(f"{name}: supported-stack list does not match installer STACKS")
-        if tier_marker not in text:
+        if marker not in text:
             errors.append(f"{name}: stack compatibility tiers do not match executable CI evidence")
 
     configuration = (root / "docs" / "configuration.md").read_text(encoding="utf-8")
     configuration_list = "\n".join(ordered_stacks)
     if configuration_list not in configuration:
         errors.append("docs/configuration.md: supported-stack list does not match installer STACKS")
+    if marker not in configuration:
+        errors.append("docs/configuration.md: stack compatibility tiers do not match executable CI evidence")
     return errors
 
 

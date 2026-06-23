@@ -1,0 +1,434 @@
+{
+  "workItemId": "platform_stack_onboarding",
+  "contractPath": ".ai/work-items/archive/2026/platform_stack_onboarding.contract.json",
+  "changedFiles": [
+    {
+      "path": "docs/configuration.md",
+      "reason": "Synced stack tier marker and hosted verification prose with README."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Added tier_marker helper and configuration.md tier validation; promoted mobile stacks to verified."
+    },
+    {
+      "path": "scripts/ai_onboard.py",
+      "reason": "Added en/ja locale output via --locale and LANG/LC_ALL detection."
+    },
+    {
+      "path": ".ai/README.md",
+      "reason": "Linked Japanese cockpit runtime guide."
+    },
+    {
+      "path": ".ai/cockpit/system_invariants.json",
+      "reason": "Moved flutter, android, swift to verified tier."
+    },
+    {
+      "path": "README.md",
+      "reason": "Updated compatibility tier markers and mobile-stack-quality disclosure."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Synced Japanese tier markers."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Synced Chinese tier markers."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Added mobile-stack-quality job for flutter, android, and swift."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Added configuration tier drift test and fixed Japanese regression fixture encoding."
+    },
+    {
+      "path": "tests/test_ai_onboard.py",
+      "reason": "Updated for locale API and added calibration/run_all coverage."
+    },
+    {
+      "path": "tests/test_onboard_e2e.py",
+      "reason": "Added fresh install full ai-onboard journey and Japanese locale output test."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Added ai_finish run/record_result coverage tests."
+    },
+    {
+      "path": ".ai/cockpit/README.ja.md",
+      "reason": "Japanese cockpit runtime guide from review_improvements batch."
+    },
+    {
+      "path": ".ai/cockpit/adoption.ja.md",
+      "reason": "Japanese adoption guide from review_improvements batch."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Three-phase ai-onboard documentation updates."
+    },
+    {
+      "path": ".ai/cockpit/adoption.md",
+      "reason": "Onboarding adoption flow documentation updates."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_improvements.contract.json",
+      "reason": "Archived prior Work Item included in same baseCommit diff."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_improvements.summary.json",
+      "reason": "Archived prior Work Item Summary included in same baseCommit diff."
+    },
+    {
+      "path": ".kiro/steering/ai-cockpit.md",
+      "reason": "Kiro steering rules for AI Cockpit workflow."
+    },
+    {
+      "path": "docs/non-make-adaptation.ja.md",
+      "reason": "Japanese non-Make adaptation guide."
+    },
+    {
+      "path": "docs/installation.md",
+      "reason": "Installation docs aligned with ai-onboard three-phase flow."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Added ai-onboard target and related Make entrypoints."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Template Make targets for ai-onboard."
+    },
+    {
+      "path": "scripts/check_critical_coverage.py",
+      "reason": "Critical coverage floors for ai_doctor and ai_finish."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Installer updates supporting onboard journey."
+    },
+    {
+      "path": "tests/test_doctor.py",
+      "reason": "ai_doctor coverage tests."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Installer test updates."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Makefile ai-onboard target tests."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/platform_stack_onboarding.contract.json",
+      "reason": "Work Item Contract."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/platform_stack_onboarding.summary.json",
+      "reason": "AI Change Summary."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/configuration.md",
+    ".github/workflows/compatibility.yml",
+    "scripts/ai_onboard.py",
+    "tests/test_adoption_e2e.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/platform_stack_onboarding.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:14.188524+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "3f2ce70ce33360f572af477d82acdb1b0e22d227e2d5c07ce588eeab45477a8e",
+      "commandHash": "9680005cece2cc3d6b28791b954115f11e75c00b9cc5441e12ee0155ef8c4999",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/platform_stack_onboarding.contract.json work item contract check passed: .ai/work-items/active/platform_stack_onboarding.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/platform_stack_onboarding.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:14.289419+00:00",
+      "exitCode": 0,
+      "durationMs": 99,
+      "outputDigest": "d7ec01424eab637bc1b52d40edc9b528588776092d5441cbf681f5c5c6801f2f",
+      "commandHash": "433ba366ea30264d96ebc1e2f08b4eb33b987952bb0420af7bcabca268887ea7",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/platform_stack_onboarding.contract.json scope guard passed: 30 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:14.443212+00:00",
+      "exitCode": 0,
+      "durationMs": 152,
+      "outputDigest": "8c45ee7eab283fd837c99203d9499cf6ea479d68bff2dacd47600cedbb9ce66c",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/platform_stack_onboarding.contract.json [warning] restricted_write: .ai/cockpit/README.ja.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/adoption.ja.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/README.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuratio"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/platform_stack_onboarding.contract.json SUMMARY=.ai/work-items/active/platform_stack_onboarding.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:14.494731+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "c1e21038f0785a01d8e0f8998671533f48a23d30029600e4cfea8cec98c1b3e6",
+      "commandHash": "bd8431e38d28f32d8568f98ce51d599ae863da6e2637f1e8130e085ab5ad3448",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/platform_stack_onboarding.contract.json --summary .ai/work-items/active/platform_stack_onboarding.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `platform_stack_onboarding` - Contract Hash: `c93b2d3464e68e90` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `8` - Unknown Count: `0` - Required Checks: `1"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/platform_stack_onboarding.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:14.601178+00:00",
+      "exitCode": 0,
+      "durationMs": 105,
+      "outputDigest": "696593a5c3d813dd5bc8b85937c5734be5d0fdc4419b0b8bb4eaf13fb9856cb4",
+      "commandHash": "6c4d88ddfe8f7392f14cd4d3a0c0e72e232113f047ba525f58b24449f58a2419",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/platform_stack_onboarding.summary.json review policy matched 12 path(s) [review] .ai/cockpit/README.ja.md [review] .ai/cockpit/adoption.ja.md [review] .ai/work-items/archive/2026/review_improvements.contract.json [review] scripts/ai_onboard.py [review] .ai/README.md [review] .ai/cockpit/README.md [review] .ai/cockpit/adoption.md [review] .ai/cockpit/current_status.md [review] .ai/cockpit/"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:14.744865+00:00",
+      "exitCode": 0,
+      "durationMs": 142,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:14.880809+00:00",
+      "exitCode": 0,
+      "durationMs": 134,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/platform_stack_onboarding.contract.json SUMMARY=.ai/work-items/active/platform_stack_onboarding.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:14.954284+00:00",
+      "exitCode": 0,
+      "durationMs": 71,
+      "outputDigest": "1250c44a4eff84cf9cc53d49df01d084cc3c15ab98c11ecda9371a0b51ad39f4",
+      "commandHash": "f7cdfaa02455f471b6b61363f4252c61d4981eebfd9aaf02b318b74a7cb9fd09",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/platform_stack_onboarding.contract.json --summary .ai/work-items/active/platform_stack_onboarding.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:43.176910+00:00",
+      "exitCode": 0,
+      "durationMs": 28220,
+      "outputDigest": "53a17f0d47e098bd735ed006f6ef8f2bae1d1c21e04b8c09f8411863146bf758",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60 ........................................................................ [ 36%] ........................................................................ [ 73%] ................................................... [100%] ================================ tests coverage ================================ _______________ coverage: pl"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/platform_stack_onboarding.contract.json SUMMARY=.ai/work-items/active/platform_stack_onboarding.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:43.600214+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "a0ab9ef48618873cda90b0b98a4a7ce08ce6be68f47ee1f3c0f2f1576f2ead03",
+      "commandHash": "daf2c6ba792a42ebf19267548ddb49d7b78d1fb4c50db3a8440943d06fc60a2c",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/platform_stack_onboarding.contract.json --summary .ai/work-items/active/platform_stack_onboarding.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/platform_stack_onboarding.contract.json SUMMARY=.ai/work-items/active/platform_stack_onboarding.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:43.652558+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "2e0d08c1784fe16a4541c2cbdd6eb516a20f6e4ff39c53361da27f8ada33c135",
+      "commandHash": "6fbc92c8a46b9ab9b09f38e6c7666eaff164a4cdf842af98f019bc4f0775f1e6",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/platform_stack_onboarding.contract.json --summary .ai/work-items/active/platform_stack_onboarding.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:43.705138+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/platform_stack_onboarding.contract.json SUMMARY=.ai/work-items/active/platform_stack_onboarding.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:43.760286+00:00",
+      "exitCode": 0,
+      "durationMs": 54,
+      "outputDigest": "92273b9c197022a58437ac77d7f4ddcf48119a973c95aa1345eb758ca743e627",
+      "commandHash": "92a5b600ed43e0852b334ef11f0f0c599d76c3920e2dd8fd589a59f8c57faa50",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/platform_stack_onboarding.contract.json --summary .ai/work-items/active/platform_stack_onboarding.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/platform_stack_onboarding.summary.json CONTRACT=.ai/work-items/active/platform_stack_onboarding.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-06-23T05:13:43.872198+00:00",
+      "exitCode": 0,
+      "durationMs": 111,
+      "outputDigest": "b2ba111a975010289248651376f36e1160efdf7434540074c5f63629dae5e812",
+      "commandHash": "a3cb3559ba7b74c408c6c38c91378d70e1c1ce0082c04b62a8720aad723c719b",
+      "contractHash": "c93b2d3464e68e9079ff6fa16dc9b14a11bb146f42c8fa39af1bd948f3952ead",
+      "commitSha": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+      "executionContractPath": ".ai/work-items/active/platform_stack_onboarding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/platform_stack_onboarding.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/platform_stack_onboarding.summary.json --contract .ai/work-items/active/platform_stack_onboarding.contract.json ai summary check passed: .ai/work-items/active/platform_stack_onboarding.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Tier markers in docs must match check_docs_metadata VERIFIED_STACKS and system_invariants.json.",
+      "compliant": true,
+      "evidence": "make check-docs-metadata and make check-ai-system-invariants passed."
+    },
+    {
+      "guideline": "Japanese onboard strings must follow JAPANESE_STYLE_RULES.",
+      "compliant": true,
+      "evidence": "Japanese messages avoid banned phrases; make check-docs-metadata passed."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Mobile CI jobs are new; hosted results depend on GitHub runner toolchains."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "ci",
+      "detail": "mobile-stack-quality has not executed on GitHub yet in this workspace session.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "All acceptance criteria implemented and make quality passed.",
+    "expectedReviewFocus": [
+      "mobile-stack-quality CI job definitions",
+      "configuration.md tier wording",
+      "ai_onboard Japanese output UX"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "changed",
+    "userVisibleOutput": "changed",
+    "persistence": "not_applicable",
+    "localization": "changed",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "detail": "Confirmed tier drift in configuration.md and mobile preset CI gap before editing.",
+      "contractHash": "c93b2d3464e68e90",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "detail": "make quality passed with new onboard E2E and metadata checks.",
+      "contractHash": "c93b2d3464e68e90",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 14
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Hosted CI success for mobile stacks is declared in docs and workflow but not executed locally in this session."
+}

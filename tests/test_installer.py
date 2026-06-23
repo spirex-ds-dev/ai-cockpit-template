@@ -25,7 +25,10 @@ def test_installed_distribution_contains_pr_and_approval_wiring(tmp_path):
     assert (tmp_path / "scripts" / "ai_check_pr.py").is_file()
     assert (tmp_path / ".ai" / "README.md").is_file()
     assert (tmp_path / "scripts" / "ai_doctor.py").is_file()
+    assert (tmp_path / "scripts" / "ai_onboard.py").is_file()
     assert (tmp_path / "scripts" / "ai_check_adoption_ready.py").is_file()
+    assert (tmp_path / ".ai" / "cockpit" / "README.ja.md").is_file()
+    assert (tmp_path / ".ai" / "cockpit" / "adoption.ja.md").is_file()
     assert "<!-- AI_COCKPIT_SECTION -->" in (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
     managed = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
     assert "\n---\n" not in managed

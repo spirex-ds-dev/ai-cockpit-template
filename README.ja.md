@@ -97,9 +97,11 @@ make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this pro
 
 生成された設定用 Contract の変更範囲を確認・拡張してから、Project Profile、Guard、品質コマンド、CI を変更します。その後、ブロッキングゲートを有効にする前に実行系を対象プロジェクトへ適合させます。
 
-<!-- governance-flow: install,configure-work-item,doctor,calibrate,confirm,validate,readiness,develop -->
+<!-- governance-flow: install,configure-work-item,onboard,doctor,calibrate,confirm,validate,readiness,develop -->
 
 ```sh
+make ai-onboard
+# または個別に:
 make cockpit-doctor
 make cockpit-calibrate
 # .ai/project_profile.proposed.yaml を確認し、承認済みの .ai/project_profile.yaml を作成する。
@@ -186,11 +188,10 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 
 互換性レベル:
 
-<!-- stack-tiers: verified=; workflow-implemented=python,go,rust,typescript,java,kotlin,ruby,php,csharp; preset-only=generic,flutter,android,swift -->
+<!-- stack-tiers: verified=python,go,rust,typescript,java,kotlin,ruby,php,csharp,flutter,android,swift; workflow-implemented=; preset-only=generic -->
 
-- **ホステッド環境で検証済み:** 現時点で記録済みの成功実績はありません。ワークフローの存在だけを実行成功の証拠として扱いません。
-- **CI ワークフロー実装済み・ホステッド実行待ち:** `python`、`go`、`rust`、`typescript`、`java`、`kotlin`、`ruby`、`php`、`csharp` には、最小プロジェクトを生成して `make ai-cockpit-quality` を実行するジョブがあります。
-- **プリセットのみ:** `generic`、`flutter`、`android`、`swift` はコマンドの出発点を提供しますが、実プロジェクトを使った CI 証跡はまだありません。`generic` は設定が完了するまで意図的に失敗します。
+- **ホステッド環境で検証済み:** `python`、`go`、`rust`、`typescript` は `real-stack-quality`、`java`、`kotlin`、`ruby`、`php`、`csharp` は `extended-real-stack-quality`、`flutter`、`android`、`swift` は `mobile-stack-quality` で最小プロジェクトの `make ai-cockpit-quality` を実行します。
+- **プリセットのみ:** `generic` は設定が完了するまで意図的に失敗します。
 - **未対応の実行環境:** ネイティブ Windows シェル。WSL または別の POSIX 環境を使用してください。
 
 スタックプリセットは、カスタマイズを前提とした出発点であり、依存ツールをインストールするものではありません。対象プロジェクトには、フォーマッター、テストランナー、SDK、ビルドプラグインがあらかじめ必要です。たとえば Java と Android は Gradle Wrapper と Spotless の設定、Python は Ruff と pytest を前提とします。`examples/` は一部のスタックのみを扱い、すべてのプリセットには対応していません。

@@ -1,0 +1,182 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_improvements",
+  "mode": "code",
+  "title": "Implement review-driven onboarding, i18n, and quality improvements",
+  "baseCommit": "af7fd20b3a16cf6a72f773c5200a649d29ab6b6a",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "1b3620453f7c651f295b7f6804e5f906a10bcd453f0ba63b0b98c87f287e9d8f"
+    },
+    {
+      "path": ".kiro/steering/ai-cockpit.md",
+      "status": "A",
+      "fingerprint": "42039ec6276a8a732a0b70d068b8053775756064e4eb53578cfb0a16855e7aa1"
+    }
+  ],
+  "scope": [
+    "scripts/ai_onboard.py",
+    "scripts/check_critical_coverage.py",
+    "scripts/check_docs_metadata.py",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_ai_onboard.py",
+    "tests/test_doctor.py",
+    "tests/test_core_gates.py",
+    "tests/test_makefile.py",
+    "tests/test_installer.py",
+    "tests/test_docs_metadata.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    ".ai/cockpit/adoption.md",
+    ".ai/cockpit/adoption.ja.md",
+    ".ai/cockpit/system_invariants.json",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/installation.md",
+    "docs/non-make-adaptation.ja.md",
+    ".ai/work-items/active/review_improvements.contract.json",
+    ".ai/work-items/active/review_improvements.summary.json"
+  ],
+  "outOfScope": [
+    ".github/workflows/compatibility.yml",
+    "release.json",
+    ".cursor/rules/**",
+    "AGENTS.md",
+    "CLAUDE.md"
+  ],
+  "sources": [
+    {
+      "path": "README.md",
+      "reason": "Review feedback on onboarding friction, i18n gaps, and stack tier disclosure."
+    },
+    {
+      "path": ".ai/cockpit/adoption.md",
+      "reason": "Existing adoption checklist to consolidate into ai-onboard."
+    },
+    {
+      "path": "scripts/ai_doctor.py",
+      "reason": "Doctor diagnostics reused by onboarding phase 1."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Hosted CI evidence for updating verified stack tiers in documentation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "documentation",
+      "verification"
+    ],
+    "reason": "Documentation tier updates must stay aligned with system_invariants.json and README markers."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Scope, sources, acceptance, and verification are explicit."
+  },
+  "preReviewWarnings": [
+    "Verify stack tier markers match system_invariants.json after moving hosted CI stacks to verified."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Multi-file governance and documentation change spanning runtime entrypoints."
+  },
+  "acceptance": [
+    "make ai-onboard runs a three-phase guided flow that consolidates doctor, calibrate, and readiness guidance.",
+    ".ai/cockpit/README.ja.md and adoption.ja.md provide Japanese runtime documentation aligned with overview.ja.md style.",
+    "docs/non-make-adaptation.ja.md documents npm scripts, just, and task bridging patterns.",
+    "Hosted CI stacks are recorded as verified in system_invariants.json and README tier markers.",
+    "ai_doctor.py and ai_finish.py meet raised critical coverage floors with additional tests.",
+    "make quality passes including check-docs-metadata and check-ai-system-invariants."
+  ],
+  "guidelines": [
+    "New public Make targets must appear in Makefile.ai template and help output.",
+    "Japanese cockpit docs must use front matter with author: Ray and avoid banned terminology from JAPANESE_STYLE_RULES."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user review improvement request",
+    "reason": "User requested review-driven improvements to cockpit runtime docs, system invariants, and Make entrypoints."
+  },
+  "rollbackNote": "Revert onboarding script, Japanese cockpit docs, tier marker updates, and coverage floor changes."
+}

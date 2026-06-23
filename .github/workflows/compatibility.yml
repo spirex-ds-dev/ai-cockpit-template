@@ -222,17 +222,129 @@ jobs:
               composer install --no-interaction --no-progress
               vendor/bin/php-cs-fixer fix
               ;;
-            csharp)
-              dotnet new sln -n Smoke
-              solution="$(find . -maxdepth 1 -type f -name 'Smoke.sln*' -print -quit)"
-              test -n "$solution"
-              dotnet new classlib -n App -o src/App
-              dotnet new xunit -n App.Tests -o tests/App.Tests
-              dotnet sln "$solution" add src/App/App.csproj tests/App.Tests/App.Tests.csproj
-              dotnet add tests/App.Tests/App.Tests.csproj reference src/App/App.csproj
-              printf 'namespace App; public static class Calculator { public static int Add(int a, int b) => a + b; }\n' > src/App/Calculator.cs
-              printf 'using App; namespace App.Tests; public class CalculatorTests { [Fact] public void Adds() => Assert.Equal(3, Calculator.Add(1, 2)); }\n' > tests/App.Tests/CalculatorTests.cs
-              dotnet format "$solution"
+          git add .
+          git commit -qm initial
+          "$GITHUB_WORKSPACE/install.sh" --stack "$STACK" --update-makefile
+          make ai-cockpit-quality
+
+  mobile-stack-quality:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - stack: flutter
+            os: ubuntu-latest
+          - stack: android
+            os: ubuntu-latest
+          - stack: swift
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - uses: subosito/flutter-action@v2
+        if: matrix.stack == 'flutter'
+        with:
+          channel: stable
+          cache: true
+      - uses: actions/setup-java@v5
+        if: matrix.stack == 'android'
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+        if: matrix.stack == 'android'
+      - uses: gradle/actions/setup-gradle@v5
+        if: matrix.stack == 'android'
+        with:
+          gradle-version: "8.12"
+      - name: Create and verify mobile minimal project
+        shell: bash
+        env:
+          STACK: ${{ matrix.stack }}
+        run: |
+          set -euo pipefail
+          project="$(mktemp -d)"
+          cd "$project"
+          git init -q
+          git config user.email test@example.invalid
+          git config user.name 'Compatibility CI'
+          case "$STACK" in
+            flutter)
+              flutter create --org com.example.invalid --project-name ai_cockpit_smoke .
+              dart format .
+              ;;
+            android)
+              mkdir -p app/src/main/java/example/smoke app/src/test/java/example/smoke app/src/main
+              cat > settings.gradle.kts <<'EOF'
+          rootProject.name = "ai-cockpit-android-smoke"
+          include(":app")
+          EOF
+              cat > build.gradle.kts <<'EOF'
+          plugins {
+              id("com.android.application") version "8.7.3" apply false
+              id("com.diffplug.spotless") version "7.0.2" apply false
+          }
+          EOF
+              cat > app/build.gradle.kts <<'EOF'
+          plugins {
+              id("com.android.application")
+              id("com.diffplug.spotless")
+          }
+          android {
+              namespace = "example.smoke"
+              compileSdk = 35
+              defaultConfig {
+                  applicationId = "example.smoke"
+                  minSdk = 24
+                  targetSdk = 35
+              }
+          }
+          repositories { google(); mavenCentral() }
+          dependencies { testImplementation("junit:junit:4.13.2") }
+          spotless { java { googleJavaFormat() } }
+          EOF
+              cat > app/src/main/AndroidManifest.xml <<'EOF'
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android" />
+          EOF
+              printf 'package example.smoke;\n\npublic final class App { private App() {} public static int add(int a, int b) { return a + b; } }\n' > app/src/main/java/example/smoke/App.java
+              printf 'package example.smoke;\n\nimport org.junit.Test;\nimport static org.junit.Assert.assertEquals;\npublic class AppTest { @Test public void adds() { assertEquals(3, App.add(1, 2)); } }\n' > app/src/test/java/example/smoke/AppTest.java
+              cat > gradle.properties <<'EOF'
+          android.useAndroidX=true
+          android.nonTransitiveRClass=true
+          EOF
+              gradle wrapper --gradle-version 8.12
+              ./gradlew spotlessApply
+              ;;
+            swift)
+              brew install swift-format
+              mkdir -p Sources/AiCockpitSmoke Tests/AiCockpitSmokeTests
+              cat > Package.swift <<'EOF'
+          // swift-tools-version: 5.9
+          import PackageDescription
+          let package = Package(
+              name: "AiCockpitSmoke",
+              targets: [
+                  .target(name: "AiCockpitSmoke"),
+                  .testTarget(name: "AiCockpitSmokeTests", dependencies: ["AiCockpitSmoke"]),
+              ]
+          )
+          EOF
+              cat > Sources/AiCockpitSmoke/App.swift <<'EOF'
+          public enum App {
+              public static func add(_ a: Int, _ b: Int) -> Int { a + b }
+          }
+          EOF
+              cat > Tests/AiCockpitSmokeTests/AppTests.swift <<'EOF'
+          import XCTest
+          @testable import AiCockpitSmoke
+          final class AppTests: XCTestCase {
+              func testAdds() { XCTAssertEqual(App.add(1, 2), 3) }
+          }
+          EOF
+              swift format format --recursive .
               ;;
           esac
           git add .
