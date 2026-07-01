@@ -1,0 +1,329 @@
+{
+  "workItemId": "local_calibration_phase_b_doctor",
+  "contractPath": ".ai/work-items/archive/2026/local_calibration_phase_b_doctor.contract.json",
+  "changedFiles": [
+    {
+      "path": "scripts/ai_project_doctor.py",
+      "reason": "Added iOS BUILD signals, *Tests suffix scan, xcodeproj sibling production heuristic, and boundary merge helpers."
+    },
+    {
+      "path": "tests/test_ai_project_doctor.py",
+      "reason": "Coverage Guard associated tests for ai_project_doctor iOS layout signals."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/local_calibration_phase_b_doctor.contract.json",
+      "reason": "Phase B Work Item Contract."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/local_calibration_phase_b_doctor.summary.json",
+      "reason": "Phase B AI Change Summary."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/plans/local-calibration-template-improvements.md",
+    "scripts/ai_project_doctor.py",
+    "tests/test_project_governance.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:24:52.100730+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "773602b87feba8f2171a480f9ebcb793850695d080bc2612b449a770a7840857",
+      "commandHash": "4eecfed4749848dd69d3ded43aede159f28dd1ffedd65e52f34f5ec5b9b2c780",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/local_calibration_phase_b_doctor.contract.json work item contract check passed: .ai/work-items/active/local_calibration_phase_b_doctor.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:24:52.200888+00:00",
+      "exitCode": 0,
+      "durationMs": 83,
+      "outputDigest": "0623ff6e509ad643408c3abc0e81fbfd1bff5f1677feb0550ca69da47a02557a",
+      "commandHash": "813d2deaff89e28093875fbe03fad940752c97c69df9b0a5b9eda2984d65e9b6",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/local_calibration_phase_b_doctor.contract.json scope guard passed: 3 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:24:52.337520+00:00",
+      "exitCode": 0,
+      "durationMs": 125,
+      "outputDigest": "119d0b74b38550954a6e247fb915310eea5c59af0a0b257b6f8a9e0d4d831e78",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/local_calibration_phase_b_doctor.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/local_calibration_phase_b_doctor.contract.json SUMMARY=.ai/work-items/active/local_calibration_phase_b_doctor.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:24:52.401757+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "cc385cbc0111b1fe062075848d4d5fa750d16e3e0bb88f9d2e163466b12834e3",
+      "commandHash": "8b49fcdd1e99eb26141250890736db9ce5bc0fbc2893e0441ed442bf7fce18f5",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/local_calibration_phase_b_doctor.contract.json --summary .ai/work-items/active/local_calibration_phase_b_doctor.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `local_calibration_phase_b_doctor` - Contract Hash: `445635eb016f2605` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count: `0` "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:24:52.501789+00:00",
+      "exitCode": 0,
+      "durationMs": 89,
+      "outputDigest": "044efbe2eb073d14c8f6aff468536238b477c11dad57b7e0bd9fb0905be0b0cf",
+      "commandHash": "286b22d41d1ebc80b502c8dc6d0055d55cd29715147dd1d704b87608f17b9734",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/local_calibration_phase_b_doctor.summary.json review policy matched 2 path(s) [review] .ai/cockpit/current_status.md [review] scripts/ai_project_doctor.py review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:24:52.598866+00:00",
+      "exitCode": 0,
+      "durationMs": 86,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:24:52.695560+00:00",
+      "exitCode": 0,
+      "durationMs": 84,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/local_calibration_phase_b_doctor.contract.json SUMMARY=.ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:24:52.889618+00:00",
+      "exitCode": 0,
+      "durationMs": 183,
+      "outputDigest": "04d76858a009f9b77777680aaf0f0ce6acab48853e80b92c089fb55c28649ace",
+      "commandHash": "c72fd4ef0a0157d1c32b15e2eeca662ffd8f9882008dc61f0e9d479413c40ae1",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/local_calibration_phase_b_doctor.contract.json --summary .ai/work-items/active/local_calibration_phase_b_doctor.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:25:34.971007+00:00",
+      "exitCode": 0,
+      "durationMs": 42068,
+      "outputDigest": "9c28655445d12d97262581227005adc0ceb878a21e0bf354fd9f3b63c5ddd735",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60 ........................................................................ [ 35%] ........................................................................ [ 71%] ......................................................... [100%] ================================ tests coverage ================================ _______________ covera"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/local_calibration_phase_b_doctor.contract.json SUMMARY=.ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:25:35.708097+00:00",
+      "exitCode": 0,
+      "durationMs": 270,
+      "outputDigest": "55530195aae7c6c3fb50bb36ac8ff02a57ca4a2456d358de0b64d8e0f1c7a82b",
+      "commandHash": "dc0c9f42a1922ecc9c09f5f122cb776a9add26306e4125ee284838d325c801b0",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/local_calibration_phase_b_doctor.contract.json --summary .ai/work-items/active/local_calibration_phase_b_doctor.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/local_calibration_phase_b_doctor.contract.json SUMMARY=.ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:25:35.859935+00:00",
+      "exitCode": 0,
+      "durationMs": 134,
+      "outputDigest": "d6ed2928261757889316b10dac484a6ce004f46f69327fa54dda3176f5ee4dca",
+      "commandHash": "dcb0d58305fa09caa54f07eb0d5605530e748cb5f54a6e5ab070ef1321067c8a",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/local_calibration_phase_b_doctor.contract.json --summary .ai/work-items/active/local_calibration_phase_b_doctor.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:25:35.963707+00:00",
+      "exitCode": 0,
+      "durationMs": 96,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/local_calibration_phase_b_doctor.contract.json SUMMARY=.ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:25:36.085272+00:00",
+      "exitCode": 0,
+      "durationMs": 114,
+      "outputDigest": "ec2b88dada25da9ab1b0650f8c640132ecfe10e62d8b7eefd4397ae5e893ca02",
+      "commandHash": "f8fdcda791728d49ba8db6266aaee223206867beb33cebe7f7361485e0bb04ad",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/local_calibration_phase_b_doctor.contract.json --summary .ai/work-items/active/local_calibration_phase_b_doctor.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/local_calibration_phase_b_doctor.summary.json CONTRACT=.ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:25:36.257609+00:00",
+      "exitCode": 0,
+      "durationMs": 156,
+      "outputDigest": "cfd6c7c9b0cb1f79333e13f3fa8477065d6dad40c8e53737cb45aad0cceb3a70",
+      "commandHash": "6c2d5e8d3008842dd95f8392915ad458501ba0be6e341958eef5342a23b280e4",
+      "contractHash": "445635eb016f26059885dffc0c36100fd6b8df2c05c2de5d61a90c1dee0b41f3",
+      "commitSha": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/local_calibration_phase_b_doctor.summary.json --contract .ai/work-items/active/local_calibration_phase_b_doctor.contract.json ai summary check passed: .ai/work-items/active/local_calibration_phase_b_doctor.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Doctor reports facts only; do not auto-write Guard YAML or Makefile.ai.stack.",
+      "compliant": true,
+      "evidence": "scan_project remains read-only; calibration test unchanged."
+    },
+    {
+      "guideline": "Use repository-root shallow scans with depth limits; avoid unbounded recursive glob.",
+      "compliant": true,
+      "evidence": "suffix_directory_candidates uses root.iterdir(); xcode heuristics use root.glob('*.xcodeproj') only."
+    },
+    {
+      "guideline": "Do not add project-specific presets or customer identifiers.",
+      "compliant": true,
+      "evidence": "Neutral MyApp placeholders in tests only."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Shallow root scans with regression tests for Flutter and SPM layouts."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "heuristic_accuracy",
+      "detail": "xcodeproj sibling heuristic may miss nested monorepo layouts; blocking unknowns remain when no match.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "Phase B acceptance covered by tests/test_project_governance.py.",
+    "expectedReviewFocus": [
+      "Root-only scan performance",
+      "first_evidence directory bundles for Xcode artifacts"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "changed",
+    "userVisibleOutput": "changed",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "changed",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "445635eb016f2605",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed Phase B scope before editing doctor scanner."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "445635eb016f2605",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0,
+      "detail": "Implementation complete; ai-finish pending."
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Doctor suggestions are not boundary approvals; nested monorepo Xcode layouts are out of scope."
+}

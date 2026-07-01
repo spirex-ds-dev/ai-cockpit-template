@@ -30,6 +30,9 @@ BUILD_SIGNALS = {
     "python-packaging": ("pyproject.toml", "setup.py"), "cargo": ("Cargo.toml",),
     "go-modules": ("go.mod",), "bundler": ("Gemfile",), "composer": ("composer.json",),
     "dotnet": ("**/*.sln", "**/*.csproj"), "swift-package-manager": ("Package.swift",),
+    "cocoapods": ("Podfile",),
+    "xcode-project": ("*.xcodeproj",),
+    "xcode-workspace": ("*.xcworkspace",),
 }
 INFRA_SIGNALS = {
     "github-actions": (".github/workflows/*.yml", ".github/workflows/*.yaml"),
@@ -44,7 +47,10 @@ NATIVE_ROOTS = ("android", "ios", "macos", "windows", "linux")
 
 def first_evidence(root: Path, patterns: tuple[str, ...]) -> str | None:
     for pattern in patterns:
-        matches = sorted(path for path in root.glob(pattern) if path.is_file())
+        matches = sorted(
+            path for path in root.glob(pattern)
+            if path.is_file() or path.is_dir()
+        )
         if matches:
             return matches[0].relative_to(root).as_posix()
     return None
@@ -90,6 +96,75 @@ def directory_candidates(root: Path, names: tuple[str, ...], kind: str) -> list[
     return result
 
 
+def suffix_directory_candidates(
+    root: Path,
+    suffix: str,
+    kind: str,
+    *,
+    confidence: str = "medium",
+) -> list[dict[str, str]]:
+    """リポジトリ直下の *Tests 等、名前サフィックスでディレクトリ候補を収集する。"""
+    result: list[dict[str, str]] = []
+    try:
+        for path in sorted(root.iterdir()):
+            if not path.is_dir() or path.name.startswith("."):
+                continue
+            if path.name.endswith(suffix):
+                result.append(
+                    {
+                        "path": f"{path.name}/**",
+                        "kind": kind,
+                        "confidence": confidence,
+                        "evidence": path.name,
+                    }
+                )
+    except OSError:
+        return result
+    return result
+
+
+def xcode_production_candidates(root: Path) -> list[dict[str, str]]:
+    """*.xcodeproj 同階層の保守的なソースディレクトリ候補を提案する。"""
+    result: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for project in sorted(root.glob("*.xcodeproj")):
+        if not project.is_dir():
+            continue
+        stem = project.stem
+        for candidate_name in (stem, "Sources", "Classes", "src"):
+            if candidate_name in seen:
+                continue
+            path = root / candidate_name
+            if not path.is_dir() or candidate_name.startswith("."):
+                continue
+            if candidate_name.endswith("Tests") or candidate_name in {"Tests", "test", "tests"}:
+                continue
+            seen.add(candidate_name)
+            result.append(
+                {
+                    "path": f"{candidate_name}/**",
+                    "kind": "production",
+                    "confidence": "medium",
+                    "evidence": f"{project.name}:{candidate_name}",
+                }
+            )
+            break
+    return result
+
+
+def merge_boundary_candidates(*groups: list[dict[str, str]]) -> list[dict[str, str]]:
+    merged: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for group in groups:
+        for item in group:
+            path = item.get("path")
+            if not isinstance(path, str) or path in seen:
+                continue
+            seen.add(path)
+            merged.append(item)
+    return merged
+
+
 def project_signals(root: Path, infrastructure: list[dict[str, str]]) -> dict[str, list[dict[str, str]]]:
     dependency_text = ""
     for name in ("pubspec.yaml", "package.json", "Gemfile", "pyproject.toml"):
@@ -115,8 +190,14 @@ def project_signals(root: Path, infrastructure: list[dict[str, str]]) -> dict[st
 
 
 def scan_project(root: Path) -> dict[str, Any]:
-    production = directory_candidates(root, ("src", "lib", "app", "Sources", "cmd", "pkg", "internal"), "production")
-    tests = directory_candidates(root, ("tests", "test", "Tests", "spec"), "test")
+    production = merge_boundary_candidates(
+        directory_candidates(root, ("src", "lib", "app", "Sources", "cmd", "pkg", "internal"), "production"),
+        xcode_production_candidates(root),
+    )
+    tests = merge_boundary_candidates(
+        directory_candidates(root, ("tests", "test", "Tests", "spec"), "test"),
+        suffix_directory_candidates(root, "Tests", "test"),
+    )
     generated = directory_candidates(root, ("build", "dist", "generated", ".dart_tool"), "generated")
     critical = directory_candidates(
         root, (".github", "fastlane", "migrations", "db", "infra", "deploy", "release", "security", "android", "ios"), "critical"

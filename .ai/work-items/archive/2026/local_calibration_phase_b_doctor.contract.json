@@ -1,0 +1,159 @@
+{
+  "contractVersion": 2,
+  "workItemId": "local_calibration_phase_b_doctor",
+  "mode": "code",
+  "title": "Phase B: project doctor iOS layout signals",
+  "baseCommit": "2ceb336a9152ffc185616f92b1935896d2b96a75",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "placeholder"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/local_calibration_phase_b_doctor.contract.json",
+    ".ai/work-items/active/local_calibration_phase_b_doctor.summary.json",
+    ".ai/cockpit/current_status.md",
+    "scripts/ai_project_doctor.py",
+    "tests/test_project_governance.py",
+    "tests/test_ai_project_doctor.py"
+  ],
+  "outOfScope": [
+    "docs/**",
+    "examples/**",
+    "templates/**",
+    "Makefile.ai.stack",
+    ".ai/guards/**",
+    "特定プロジェクト向け preset"
+  ],
+  "sources": [
+    {
+      "path": "docs/plans/local-calibration-template-improvements.md",
+      "reason": "Phase B scope: BUILD signals, *Tests roots, xcodeproj heuristics, tests."
+    },
+    {
+      "path": "scripts/ai_project_doctor.py",
+      "reason": "Doctor scanner to extend with read-only iOS layout facts."
+    },
+    {
+      "path": "tests/test_project_governance.py",
+      "reason": "Existing scan_project regression tests."
+    }
+  ],
+  "problemStatement": "Legacy iOS repositories use Podfile, Xcode projects, and FooTests/ layouts that the project doctor does not detect, producing extra blocking unknowns. Phase B adds read-only evidence without auto-approving boundaries or generating xcodebuild commands.",
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "false_positive_detection",
+      "performance"
+    ],
+    "reason": "Shallow root scans must not regress Flutter/SPM detection or slow large monorepos."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Phase B behavior is specified with existing test harness."
+  },
+  "preReviewWarnings": [
+    "Confirm root-only globs avoid deep monorepo walks.",
+    "Confirm blocking unknown logic is unchanged when no signals match."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Doctor heuristics affect calibration proposals."
+  },
+  "acceptance": [
+    "BUILD signals include Podfile, *.xcodeproj, and *.xcworkspace with evidence when present at repository root.",
+    "Test root candidates include immediate child directories whose names end with Tests.",
+    "Production root candidates include conservative sibling directories for *.xcodeproj at repository root when matched.",
+    "Doctor still emits blocking unknowns when boundaries cannot be determined; suggestions are not approvals.",
+    "Flutter and SPM scan_project regression tests pass.",
+    "pytest tests/test_project_governance.py passes."
+  ],
+  "guidelines": [
+    "Doctor reports facts only; do not auto-write Guard YAML or Makefile.ai.stack.",
+    "Use repository-root shallow scans with depth limits; avoid unbounded recursive glob.",
+    "Do not add project-specific presets or customer identifiers."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "No restricted governance path edits in Phase B."
+  },
+  "rollbackNote": "Revert ai_project_doctor.py and test changes."
+}
