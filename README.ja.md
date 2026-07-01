@@ -223,6 +223,4 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 - [アーキテクチャ](docs/architecture.md)
 - [設計思想](docs/design-philosophy.md)
 - [ケーススタディ: AI rollback corruption](docs/case-study-ai-rollback-corruption.md)
-- [ローンチ用コピー](docs/launch.md)
-- [推奨される GitHub Topics](docs/topics.md)
 - [各言語のサンプル](examples/)

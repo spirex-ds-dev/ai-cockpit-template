@@ -226,6 +226,4 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 - [架构](docs/architecture.md)
 - [设计思想](docs/design-philosophy.md)
 - [案例：AI rollback corruption](docs/case-study-ai-rollback-corruption.md)
-- [传播文案](docs/launch.md)
-- [GitHub topics 建议](docs/topics.md)
 - [语言 examples](examples/)

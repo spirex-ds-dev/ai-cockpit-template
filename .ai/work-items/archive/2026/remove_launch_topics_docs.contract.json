@@ -1,0 +1,153 @@
+{
+  "contractVersion": 2,
+  "workItemId": "remove_launch_topics_docs",
+  "mode": "code",
+  "title": "Remove launch and topics docs",
+  "baseCommit": "7d84cd4e5726e6c47fd815a68eed58108f930f8d",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "a4641bdf48cae1a563ec5d4b351b1aa59308682e20cf1b829e9d01412bf667ad"
+    }
+  ],
+  "scope": [
+    "README.md",
+    "README.zh-CN.md",
+    "README.ja.md",
+    "docs/launch.md",
+    "docs/topics.md",
+    ".ai/work-items/active/remove_launch_topics_docs.contract.json",
+    ".ai/work-items/active/remove_launch_topics_docs.summary.json"
+  ],
+  "outOfScope": [
+    "examples/**",
+    ".github/**",
+    "scripts/**",
+    "tests/**"
+  ],
+  "sources": [
+    {
+      "path": "README.md",
+      "reason": "Contains links to the docs that the user asked to remove."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Contains the localized links to the docs that the user asked to remove."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Contains the Japanese links to the docs that the user asked to remove."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "link_integrity",
+      "documentation_drift"
+    ],
+    "reason": "Deleting two now-unneeded docs requires removing every inbound link so the README remains navigable."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The requested deletion and link cleanup are fully specified."
+  },
+  "preReviewWarnings": [
+    "Confirm every inbound link to docs/launch.md and docs/topics.md is removed before finish."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "docs/launch.md and docs/topics.md are deleted.",
+    "README.md and README.zh-CN.md no longer link to the deleted docs.",
+    "README.ja.md no longer links to the deleted docs.",
+    "No remaining repository links point to the deleted docs."
+  ],
+  "guidelines": [
+    "Do not leave broken Markdown links behind.",
+    "Limit the change to the requested documentation deletion and inbound link cleanup."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

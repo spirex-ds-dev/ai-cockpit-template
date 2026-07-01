@@ -284,6 +284,4 @@ Repository `make quality` runs the full test suite with a 60% overall script cov
 - [Documentation Architecture](docs/reference/documentation-architecture.md)
 - [Design Philosophy](docs/philosophy/design-philosophy.md)
 - [Case Study: Stopping AI Rollback Corruption](docs/case-study-ai-rollback-corruption.md)
-- [Promotional Material](docs/launch.md)
-- [GitHub Topic Recommendations](docs/topics.md)
 - [Language Examples](examples/)
