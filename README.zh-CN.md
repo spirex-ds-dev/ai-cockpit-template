@@ -189,6 +189,7 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 <!-- stack-tiers: verified=python,go,rust,typescript,java,kotlin,ruby,php,csharp,flutter,android,swift; workflow-implemented=; preset-only=generic -->
 
 - **Hosted CI 已验证：** `python`、`go`、`rust`、`typescript` 在 `real-stack-quality` 中运行；`java`、`kotlin`、`ruby`、`php`、`csharp` 在 `extended-real-stack-quality` 中运行；`flutter`、`android`、`swift` 在 `mobile-stack-quality` 中对最小工程执行 `make ai-cockpit-quality`。
+- **Swift 验证范围：** `mobile-stack-quality` 仅覆盖最小 Swift Package Manager fixture，不包含 Xcode 工程、workspace 或 CocoaPods；这些布局需在安装后进行 Project Calibration。详见 [Installation](docs/getting-started/installation.md) 与 [Swift Adaptation Example](examples/swift/README.md)。
 - **仅预设：** `generic` 在完成配置前会按设计失败关闭。
 - **不支持的运行环境：** 原生 Windows shell。请使用 WSL 或其他 POSIX 环境。
 

@@ -191,6 +191,7 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 <!-- stack-tiers: verified=python,go,rust,typescript,java,kotlin,ruby,php,csharp,flutter,android,swift; workflow-implemented=; preset-only=generic -->
 
 - **ホステッド環境で検証済み:** `python`、`go`、`rust`、`typescript` は `real-stack-quality`、`java`、`kotlin`、`ruby`、`php`、`csharp` は `extended-real-stack-quality`、`flutter`、`android`、`swift` は `mobile-stack-quality` で最小プロジェクトの `make ai-cockpit-quality` を実行します。
+- **Swift 検証範囲:** `mobile-stack-quality` は最小 Swift Package Manager fixture のみを対象とします。Xcode プロジェクト、workspace、CocoaPods はホステッド検証の対象外であり、導入後の Project Calibration が必要です。詳細は [Installation](docs/getting-started/installation.md) と [Swift Adaptation Example](examples/swift/README.md) を参照してください。
 - **プリセットのみ:** `generic` は設定が完了するまで意図的に失敗します。
 - **未対応の実行環境:** ネイティブ Windows シェル。WSL または別の POSIX 環境を使用してください。
 

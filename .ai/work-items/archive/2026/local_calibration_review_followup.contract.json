@@ -1,0 +1,147 @@
+{
+  "contractVersion": 2,
+  "workItemId": "local_calibration_review_followup",
+  "mode": "code",
+  "title": "Review follow-up: i18n Swift verified and plan closure",
+  "baseCommit": "6905fc89839016b927df0860e30a4bdd18d3e9af",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/local_calibration_review_followup.contract.json",
+    ".ai/work-items/active/local_calibration_review_followup.summary.json",
+    ".ai/cockpit/current_status.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/plans/local-calibration-template-improvements.md"
+  ],
+  "outOfScope": [
+    "README.md",
+    "release.json",
+    "scripts/**",
+    "tests/**",
+    "D-3 mobile-stack-quality Xcode fixture"
+  ],
+  "sources": [
+    {
+      "path": "README.md",
+      "reason": "English Swift verified footnote to mirror in ja/zh READMEs."
+    },
+    {
+      "path": "docs/plans/local-calibration-template-improvements.md",
+      "reason": "Plan document to mark Phase A-D implementation closure."
+    }
+  ],
+  "problemStatement": "Post-review follow-up: Japanese and Chinese READMEs lack the Swift verified scope footnote from Phase A, and the improvement plan document still reads as an open plan without closure status.",
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "documentation_drift"
+    ],
+    "reason": "Documentation-only parity and plan status update."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Scoped documentation follow-up from release review."
+  },
+  "preReviewWarnings": [
+    "Confirm ja/zh footnote matches README.md Swift verified meaning."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Small doc-only follow-up still requires checkpoint before finish."
+  },
+  "acceptance": [
+    "README.ja.md includes Swift verified scope footnote equivalent to README.md.",
+    "README.zh-CN.md includes Swift verified scope footnote equivalent to README.md.",
+    "docs/plans/local-calibration-template-improvements.md records Phase A-D completion and D-3 deferral.",
+    "make check-docs-metadata passes."
+  ],
+  "guidelines": [
+    "Plan document body remains Japanese with YAML front matter author: Ray.",
+    "Do not change README.md English footnote wording in this task."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false
+    },
+    {
+      "check": "docsMetadata",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Documentation-only task."
+  },
+  "rollbackNote": "Revert i18n README footnotes and plan closure section."
+}

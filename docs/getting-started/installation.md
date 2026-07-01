@@ -96,7 +96,7 @@ AI Cockpit fits a **generic template plus local calibration** model. Installatio
 4. **Staged CI:** start with **L1** governance only—full Git history plus `make check-ai-pr`. After L1 is stable, add **L2** `make ai-cockpit-quality` as a separate required job.
 5. **Pilot Work Item:** run one governed task with quality optional if needed, then promote quality and Coverage to blocking gates.
 
-See [Local Calibration Template Improvements](../plans/local-calibration-template-improvements.md) for the template-side phased plan. The installed [Adoption Readiness](../../.ai/cockpit/adoption.md) checklist mirrors these steps for day-to-day use.
+The installed [Adoption Readiness](../../.ai/cockpit/adoption.md) checklist mirrors these steps for day-to-day use.
 
 ### Phase 4. Project Calibration
 
@@ -188,7 +188,7 @@ Installation is complete when validation succeeds and the first Work Item walkth
 The installed `.ai/cockpit/version.json` records the distribution and Contract schema version. Use `--upgrade` for an existing installation:
 
 ```sh
-CURRENT_VERSION=v0.5.14
+CURRENT_VERSION=v0.5.15
 TARGET_VERSION='<release-tag-newer-than-current>'
 test "$TARGET_VERSION" != "$CURRENT_VERSION"
 INSTALLER="$(mktemp)"
