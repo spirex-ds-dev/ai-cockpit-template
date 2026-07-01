@@ -65,6 +65,53 @@ def test_installed_distribution_contains_pr_and_approval_wiring(tmp_path):
     assert 'scripts/ai_check_pr.py --base "abc123"' in result.stdout
 
 
+def test_installed_cursor_rule_defaults_to_opt_in_apply(tmp_path):
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+
+    assert installer.install() == 0
+    rule = (tmp_path / ".cursor" / "rules" / "ai-cockpit.mdc").read_text(encoding="utf-8")
+    assert "alwaysApply: false" in rule
+    assert "Always Apply" in rule
+
+
+def test_create_adoption_warns_on_dirty_worktree_and_tracked_hygiene(tmp_path, capsys):
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test"], cwd=tmp_path, check=True)
+    (tmp_path / "README.md").write_text("# Project\n", encoding="utf-8")
+    (tmp_path / ".DS_Store").write_text("noise\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "add", "-f", ".DS_Store"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "commit", "-qm", "initial"], cwd=tmp_path, check=True)
+    (tmp_path / "dirty.txt").write_text("pending\n", encoding="utf-8")
+
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+        create_adoption=True,
+    )
+
+    assert installer.install() == 2
+    error = capsys.readouterr().err
+    assert "WARN: Git worktree is not clean" in error
+    assert "WARN: Tracked files commonly ignored locally (.DS_Store" in error
+    assert "ERROR: --create-adoption requires a clean Git worktree before installation." in error
+    assert not (tmp_path / ".ai").exists()
+
+
 def test_fresh_install_rejects_all_conflicting_managed_files_before_writing(tmp_path, capsys):
     common = tmp_path / "scripts" / "ai_common.py"
     doctor = tmp_path / "scripts" / "ai_doctor.py"

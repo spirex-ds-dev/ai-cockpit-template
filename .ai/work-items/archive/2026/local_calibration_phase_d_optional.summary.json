@@ -1,0 +1,355 @@
+{
+  "workItemId": "local_calibration_phase_d_optional",
+  "contractPath": ".ai/work-items/archive/2026/local_calibration_phase_d_optional.contract.json",
+  "changedFiles": [
+    {
+      "path": ".cursor/rules/ai-cockpit.mdc",
+      "reason": "Default alwaysApply to false with opt-in guidance."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Adoption preflight WARN for dirty worktree and tracked hygiene files."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Document preflight warnings and Cursor alwaysApply default."
+    },
+    {
+      "path": "docs/reference/upgrade.md",
+      "reason": "Cursor rule default change note for upgraders."
+    },
+    {
+      "path": ".ai/cockpit/adoption.md",
+      "reason": "Cursor alwaysApply opt-in guidance."
+    },
+    {
+      "path": ".ai/cockpit/adoption.ja.md",
+      "reason": "Japanese mirror for Cursor alwaysApply guidance."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Tests for Cursor default and adoption preflight warnings."
+    },
+    {
+      "path": "tests/test_adoption_e2e.py",
+      "reason": "Unit test for adoption_preflight_warnings helper."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/local_calibration_phase_d_optional.contract.json",
+      "reason": "Archived Work Item audit evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/local_calibration_phase_d_optional.summary.json",
+      "reason": "Archived Work Item audit evidence."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/plans/local-calibration-template-improvements.md",
+    ".cursor/rules/ai-cockpit.mdc",
+    "scripts/install_ai_cockpit.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:01.915776+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "39b721f48f24f43cd0b5b14d627d7a621819226717502331e5b8cf1185d1cd93",
+      "commandHash": "3ac716a2a8550e848336b82a0d24704642de4e1e8de5b18b86223e45b41b6dd1",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/local_calibration_phase_d_optional.contract.json work item contract check passed: .ai/work-items/active/local_calibration_phase_d_optional.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:02.018888+00:00",
+      "exitCode": 0,
+      "durationMs": 95,
+      "outputDigest": "6fb15c959de38d5627cbe214695df05d496dbfbcfbf4b53cb3aee9c85c9397f4",
+      "commandHash": "1131e9dd3e04dfc06ca677a82d8195ff9cd515512522b44fd51aebe3b7e0a82b",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/local_calibration_phase_d_optional.contract.json scope guard passed: 9 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:02.162039+00:00",
+      "exitCode": 0,
+      "durationMs": 132,
+      "outputDigest": "e65d6086e81c54ccb5cc8f733d926e93cf001e2bf373e3481712d9f52df47dff",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/local_calibration_phase_d_optional.contract.json [warning] restricted_write: .ai/cockpit/adoption.ja.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/adoption.md (.ai/**) - AI governance configuration. [warning] restricted_write: .cursor/rules/ai-cockpit.mdc (.cursor/rules/**) - Cursor operating rules. guard check completed: 3 warning(s) report: target/ai_guard"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/local_calibration_phase_d_optional.contract.json SUMMARY=.ai/work-items/active/local_calibration_phase_d_optional.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:02.226292+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "a29d945074aa4631df3eb519de42736da460403785fde139fe51ff87f9c57e53",
+      "commandHash": "db04bf5358dbcf884b9fff4f8938be4047d3bbff6d269eccc40771c0181db259",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/local_calibration_phase_d_optional.contract.json --summary .ai/work-items/active/local_calibration_phase_d_optional.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `local_calibration_phase_d_optional` - Contract Hash: `6f975fb33a9031ac` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:02.331369+00:00",
+      "exitCode": 0,
+      "durationMs": 99,
+      "outputDigest": "4463e571317ac6ce3c6afeba3559c0e8603aa171b207f7af43117bfe3042b30f",
+      "commandHash": "ccadbadf9c7ff34a122898b3403597764e0ec6c685746b27c0e16cc7829f95d0",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/local_calibration_phase_d_optional.summary.json review policy matched 4 path(s) [review] .ai/cockpit/adoption.ja.md [review] .ai/cockpit/adoption.md [review] .ai/cockpit/current_status.md [review] .cursor/rules/ai-cockpit.mdc review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:02.488879+00:00",
+      "exitCode": 0,
+      "durationMs": 118,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:02.599928+00:00",
+      "exitCode": 0,
+      "durationMs": 101,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/local_calibration_phase_d_optional.contract.json SUMMARY=.ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:02.690183+00:00",
+      "exitCode": 0,
+      "durationMs": 76,
+      "outputDigest": "11500903f1e5e121f31d130fb87513dd2f10c1d3c76b8a6cc0ac19ae8494b714",
+      "commandHash": "ccdcdb1e6de75fbee4a7ccbf8f7b03b20e6bbfa23647b7ea01fa0588498ddd1b",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/local_calibration_phase_d_optional.contract.json --summary .ai/work-items/active/local_calibration_phase_d_optional.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:44.714121+00:00",
+      "exitCode": 0,
+      "durationMs": 42011,
+      "outputDigest": "52da40c1833fa31731a343b1bd257d9c1548bce7321fd3f4ab22755e2bc1a263",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60 ........................................................................ [ 35%] ........................................................................ [ 70%] ............................................................ [100%] ================================ tests coverage ================================ _______________ cov"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/local_calibration_phase_d_optional.contract.json SUMMARY=.ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:45.290077+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "1a789e07720261f2e8fd25c29aec4dc85252f1d269997185632ac699148f86b4",
+      "commandHash": "82e7234494103810d02fd9bd04b9019776cc2576fc22cd7e7feffd7085d4b3f0",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/local_calibration_phase_d_optional.contract.json --summary .ai/work-items/active/local_calibration_phase_d_optional.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/local_calibration_phase_d_optional.contract.json SUMMARY=.ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:45.353260+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "0553499333c18541c072cf841507c989ff1a2a475553964812539a1b65fcddd9",
+      "commandHash": "95df57b130b1304331675e12e66fe93a1e61adfc6ddb97762c41ace2d06bacae",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/local_calibration_phase_d_optional.contract.json --summary .ai/work-items/active/local_calibration_phase_d_optional.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:45.412648+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/local_calibration_phase_d_optional.contract.json SUMMARY=.ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:45.625771+00:00",
+      "exitCode": 0,
+      "durationMs": 202,
+      "outputDigest": "4783e2427f0e724a5eec077a5014884741dc9bf040a973711b29c9d109453a80",
+      "commandHash": "54ad5c42282c8826efc4ab695b1150277b668e41d051771a5926c244cc278112",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/local_calibration_phase_d_optional.contract.json --summary .ai/work-items/active/local_calibration_phase_d_optional.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/local_calibration_phase_d_optional.summary.json CONTRACT=.ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-01T22:44:45.752933+00:00",
+      "exitCode": 0,
+      "durationMs": 121,
+      "outputDigest": "e5baa530d81f59030d557e78df0d22cc86b5e2e580f912cfd613915c82f6c7b6",
+      "commandHash": "5342ed714a2cd5e5b2bd4f305d970e438c16daa0fff389bae350691bea8721b3",
+      "contractHash": "6f975fb33a9031ace8a202c48b9e68d61b24a5a190a8b3846385ba1bf5d81edf",
+      "commitSha": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+      "executionContractPath": ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/local_calibration_phase_d_optional.summary.json --contract .ai/work-items/active/local_calibration_phase_d_optional.contract.json ai summary check passed: .ai/work-items/active/local_calibration_phase_d_optional.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Do not weaken --create-adoption fail-closed checks; warnings only.",
+      "compliant": true,
+      "evidence": "ERROR paths unchanged; WARN emitted before hard failure."
+    },
+    {
+      "guideline": "Document D-3 deferral explicitly in knownGaps or overclaimPrevention.",
+      "compliant": true,
+      "evidence": "D-3 out of scope in Contract; knownGaps records deferral."
+    },
+    {
+      "guideline": "restrictedWriteApproval required for .ai/cockpit/adoption*.md and .cursor/** edits.",
+      "compliant": true,
+      "evidence": "Contract restrictedWriteApproval approved for Phase D scope."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "alwaysApply false changes default enforcement for new installs; teams must opt in for strict mode."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "d3_deferred",
+      "detail": "mobile-stack-quality Xcode fixture not added; SPM-only hosted verification remains documented in Phase A.",
+      "reviewRecommended": false,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "Phase D D-1/D-2 implemented; D-3 explicitly deferred.",
+    "expectedReviewFocus": [
+      "alwaysApply default UX",
+      "Preflight WARN versus ERROR behavior"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "changed",
+    "userVisibleOutput": "changed",
+    "persistence": "not_applicable",
+    "localization": "changed",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "6f975fb33a9031ac",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed Phase D scope; D-3 deferred per plan."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "6f975fb33a9031ac",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0,
+      "detail": "Implementation complete; ai-finish pending."
+    }
+  ],
+  "knownGaps": [
+    "D-3 mobile-stack-quality Xcode fixture deferred; Phase A SPM verified footnote is the chosen alternative."
+  ],
+  "overclaimPrevention": "No Xcode CI fixture was added to mobile-stack-quality in this Work Item."
+}

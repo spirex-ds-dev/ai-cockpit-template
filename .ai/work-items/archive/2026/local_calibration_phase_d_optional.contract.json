@@ -1,0 +1,162 @@
+{
+  "contractVersion": 2,
+  "workItemId": "local_calibration_phase_d_optional",
+  "mode": "code",
+  "title": "Phase D: optional adoption UX improvements",
+  "baseCommit": "2ad0795e5d19db289b39e5655a78377afc1b63e3",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "be3d77ff041c73453561ae78b831afc64735ff4c7a346fb0fd8f08673c6bde38"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/local_calibration_phase_d_optional.contract.json",
+    ".ai/work-items/active/local_calibration_phase_d_optional.summary.json",
+    ".ai/cockpit/adoption.md",
+    ".ai/cockpit/adoption.ja.md",
+    ".ai/cockpit/current_status.md",
+    ".cursor/rules/ai-cockpit.mdc",
+    "docs/getting-started/installation.md",
+    "docs/reference/upgrade.md",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_adoption_e2e.py",
+    "tests/test_installer.py"
+  ],
+  "outOfScope": [
+    "mobile-stack-quality Xcode fixture (D-3 deferred; SPM-only documentation is sufficient)",
+    "release.json version bump",
+    "templates/stacks/**",
+    "特定プロジェクト向け preset"
+  ],
+  "sources": [
+    {
+      "path": "docs/plans/local-calibration-template-improvements.md",
+      "reason": "Phase D items D-1/D-2 and explicit D-3 deferral."
+    },
+    {
+      "path": ".cursor/rules/ai-cockpit.mdc",
+      "reason": "Cursor rule alwaysApply default."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Adoption preflight for --create-adoption."
+    }
+  ],
+  "problemStatement": "Phase D improves optional adoption UX: Cursor rules opt in rather than force Work Items on read-only tasks, and the installer warns about dirty worktrees and tracked hygiene files before --create-adoption fails. D-3 Xcode CI fixture remains deferred after Phase A SPM scope documentation.",
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "breaking_ux_change",
+      "installer_behavior"
+    ],
+    "reason": "alwaysApply default change affects every new installation; preflight warnings must not weaken fail-closed adoption checks."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "D-1 and D-2 are specified; D-3 explicitly deferred with documented rationale."
+  },
+  "preReviewWarnings": [
+    "Confirm alwaysApply false still allows manual rule enablement in Cursor.",
+    "Confirm adoption preflight still fails closed after warnings."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Installer and Cursor defaults affect all new adoptions."
+  },
+  "acceptance": [
+    "Installed Cursor rule defaults to alwaysApply: false with documentation for opt-in enforcement.",
+    "docs/reference/upgrade.md notes the Cursor rule default change for adopters upgrading or reinstalling.",
+    "scripts/install_ai_cockpit.py emits WARN messages for dirty worktrees and tracked hygiene files before --create-adoption hard failure.",
+    "Adoption preflight still requires clean worktree, initial commit, and no active Work Item.",
+    "D-3 mobile-stack-quality Xcode fixture is not added; deferral recorded in Summary.",
+    "tests cover preflight warnings and installed Cursor rule default."
+  ],
+  "guidelines": [
+    "Do not weaken --create-adoption fail-closed checks; warnings only.",
+    "Document D-3 deferral explicitly in knownGaps or overclaimPrevention.",
+    "restrictedWriteApproval required for .ai/cockpit/adoption*.md and .cursor/** edits."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "local calibration Phase D plan",
+    "reason": "Phase D scopes Cursor rule and adoption doc updates for alwaysApply and preflight guidance."
+  },
+  "rollbackNote": "Revert alwaysApply, installer preflight warnings, and Phase D documentation."
+}

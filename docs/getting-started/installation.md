@@ -37,6 +37,10 @@ command -v make
 
 The work tree should be clean, the repository should already have at least one commit, Python must be 3.10 or newer, and `make` must resolve on `PATH`. If any check fails, fix the repository state first.
 
+When you use `--create-adoption`, the installer prints **WARN** messages before it fails closed on a dirty worktree or on tracked hygiene files such as `.DS_Store`. Clean or untrack those files before retrying.
+
+For Cursor users, the installed `.cursor/rules/ai-cockpit.mdc` defaults to `alwaysApply: false`. Enable **Always Apply** locally when you want governance on read-only sessions too.
+
 ### Phase 2. Install
 
 Use the Quick Install entry in [README.md](../../README.md) and choose the stack that matches the target repository:

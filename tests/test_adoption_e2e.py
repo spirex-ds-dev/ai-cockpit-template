@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from install_ai_cockpit import Installer
+from install_ai_cockpit import Installer, adoption_preflight_warnings
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -57,3 +57,19 @@ def test_adoption_requires_clean_committed_repository(tmp_path):
     )
     assert installer.install() == 2
     assert not (tmp_path / ".ai").exists()
+
+
+def test_adoption_preflight_warnings_list_tracked_hygiene_without_writing(tmp_path):
+    assert run(tmp_path, "git", "init", "-q").returncode == 0
+    assert run(tmp_path, "git", "config", "user.email", "test@example.invalid").returncode == 0
+    assert run(tmp_path, "git", "config", "user.name", "Test").returncode == 0
+    (tmp_path / "README.md").write_text("# Project\n", encoding="utf-8")
+    (tmp_path / ".DS_Store").write_text("noise\n", encoding="utf-8")
+    assert run(tmp_path, "git", "add", "README.md").returncode == 0
+    assert run(tmp_path, "git", "add", "-f", ".DS_Store").returncode == 0
+    assert run(tmp_path, "git", "commit", "-qm", "initial").returncode == 0
+
+    warnings = adoption_preflight_warnings(tmp_path)
+
+    assert any("Tracked files commonly ignored locally" in item for item in warnings)
+    assert not any("dirty" in item.lower() for item in warnings)

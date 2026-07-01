@@ -75,6 +75,8 @@ target/ai_*.jsonl
 GITIGNORE_RULES = tuple(
     line for line in GITIGNORE_SECTION.splitlines() if line and not line.startswith("#")
 )
+COMMON_TRACKED_HYGIENE_NAMES = frozenset({".DS_Store", "Thumbs.db"})
+COMMON_TRACKED_HYGIENE_SUFFIXES = (".xcuserstate",)
 RESERVED_MAKE_TARGETS = {
     "ai-cockpit-project-format-check",
     "ai-cockpit-project-test",
@@ -89,6 +91,54 @@ class Action:
     kind: str
     path: Path
     detail: str
+
+
+def git_target_args(target: Path) -> list[str]:
+    return [f"--git-dir={target / '.git'}", f"--work-tree={target}"]
+
+
+def adoption_preflight_warnings(target: Path) -> list[str]:
+    """--create-adoption 失敗前に dirty worktree と tracked 衛生ファイルを警告する。"""
+    warnings: list[str] = []
+    git_args = git_target_args(target)
+    status = subprocess.run(
+        ["git", *git_args, "status", "--porcelain"],
+        cwd=target,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if status.returncode == 0 and status.stdout.strip():
+        dirty_lines = [line.rstrip() for line in status.stdout.strip().splitlines()]
+        preview = ", ".join(dirty_lines[:5])
+        if len(dirty_lines) > 5:
+            preview = f"{preview} (+{len(dirty_lines) - 5} more)"
+        warnings.append(
+            "Git worktree is not clean "
+            f"({preview}); --create-adoption requires a clean worktree before installation."
+        )
+    ls_files = subprocess.run(
+        ["git", *git_args, "ls-files"],
+        cwd=target,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if ls_files.returncode == 0:
+        tracked_hygiene = []
+        for path in ls_files.stdout.splitlines():
+            name = Path(path).name
+            if name in COMMON_TRACKED_HYGIENE_NAMES or name.endswith(COMMON_TRACKED_HYGIENE_SUFFIXES):
+                tracked_hygiene.append(path)
+        if tracked_hygiene:
+            preview = ", ".join(tracked_hygiene[:5])
+            if len(tracked_hygiene) > 5:
+                preview = f"{preview} (+{len(tracked_hygiene) - 5} more)"
+            warnings.append(
+                "Tracked files commonly ignored locally "
+                f"({preview}); remove or untrack them before adoption to avoid noisy diffs."
+            )
+    return warnings
 
 
 class Installer:
@@ -328,17 +378,19 @@ class Installer:
         if self.upgrade:
             print("ERROR: --create-adoption is for first installation and cannot be combined with --upgrade.", file=sys.stderr)
             return False
+        for warning in adoption_preflight_warnings(self.target):
+            print(f"WARN: {warning}", file=sys.stderr)
         # --git-dir を明示することで、CI 環境での git 自動発見が親リポジトリを誤って使うことを防ぐ。
-        git_dir = str(self.target / ".git")
+        git_args = git_target_args(self.target)
         head = subprocess.run(
-            ["git", f"--git-dir={git_dir}", "rev-parse", "--verify", "HEAD"],
+            ["git", *git_args, "rev-parse", "--verify", "HEAD"],
             text=True, capture_output=True, check=False,
         )
         if head.returncode != 0:
             print("ERROR: --create-adoption requires a Git repository with at least one commit.", file=sys.stderr)
             return False
         status = subprocess.run(
-            ["git", f"--git-dir={git_dir}", "--work-tree={}".format(self.target), "status", "--porcelain"],
+            ["git", *git_args, "status", "--porcelain"],
             cwd=self.target,
             text=True, capture_output=True, check=False,
         )

@@ -37,3 +37,9 @@ include Makefile.ai
 ```
 
 Use [Distribution](distribution.md) for installer options and release capability details, and [Troubleshooting](troubleshooting.md) for recovery paths when an upgrade does not complete cleanly.
+
+## Cursor rule default
+
+New installations ship `.cursor/rules/ai-cockpit.mdc` with `alwaysApply: false`. Read-only investigation no longer forces a Work Item by default. Teams that want stricter enforcement can enable **Always Apply** in Cursor rule settings or set `alwaysApply: true` after reviewing local workflow impact.
+
+Existing installations keep their current rule file until you upgrade or merge the managed `.cursor` tree from a newer template release.
