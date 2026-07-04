@@ -1,0 +1,226 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_v0_5_17",
+  "mode": "code",
+  "title": "Release v0.5.17",
+  "baseCommit": "ac110556ea7f50187aa9804a4c31ab1a7277f20c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/archive/2026/release_v0_5_17.contract.json",
+    ".ai/work-items/archive/2026/release_v0_5_17.summary.json",
+    ".gitignore",
+    "docs/getting-started/installation.md",
+    "docs/reference/upgrade.md",
+    "examples/csharp/README.md",
+    "examples/flutter/README.md",
+    "examples/go/README.md",
+    "examples/java/README.md",
+    "examples/kotlin/README.md",
+    "examples/php/README.md",
+    "examples/python/README.md",
+    "examples/ruby/README.md",
+    "examples/rust/README.md",
+    "examples/swift/README.md",
+    "examples/typescript/README.md",
+    "install.sh",
+    "tests/test_install_script.py"
+  ],
+  "outOfScope": [
+    ".ai/guards/**",
+    ".ai/project_profile.yaml",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/configuration.md",
+    "docs/reference/distribution.md",
+    "docs/reference/documentation-architecture.md",
+    "docs/reference/troubleshooting.md",
+    "scripts/**",
+    ".github/**"
+  ],
+  "sources": [
+    {
+      "path": ".gitignore",
+      "reason": "Add .!*!.DS_Store pattern to ignore macOS Finder lock files that were appearing as untracked."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Keep the default AI_COCKPIT_TEMPLATE_REF aligned with release.json v0.5.17."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Update the documented current version in the upgrade flow."
+    },
+    {
+      "path": "docs/reference/upgrade.md",
+      "reason": "Update the documented current version in the upgrade flow."
+    },
+    {
+      "path": "examples/csharp/README.md",
+      "reason": "Keep the example install command aligned with the published release tag."
+    },
+    {
+      "path": "examples/flutter/README.md",
+      "reason": "Keep the example install command aligned with the published release tag."
+    },
+    {
+      "path": "examples/go/README.md",
+      "reason": "Keep the example install command aligned with the published release tag."
+    },
+    {
+      "path": "examples/java/README.md",
+      "reason": "Keep the example install command aligned with the published release tag."
+    },
+    {
+      "path": "examples/kotlin/README.md",
+      "reason": "Keep the example install command aligned with the published release tag."
+    },
+    {
+      "path": "examples/php/README.md",
+      "reason": "Keep the example install command aligned with the published release tag."
+    },
+    {
+      "path": "examples/python/README.md",
+      "reason": "Keep the example install command aligned with the published release tag."
+    },
+    {
+      "path": "examples/ruby/README.md",
+      "reason": "Keep the example install command aligned with the published release tag."
+    },
+    {
+      "path": "examples/rust/README.md",
+      "reason": "Keep the example install command aligned with the published release tag."
+    },
+    {
+      "path": "examples/swift/README.md",
+      "reason": "Keep the example install command aligned with the published release tag."
+    },
+    {
+      "path": "examples/typescript/README.md",
+      "reason": "Keep the example install command aligned with the published release tag."
+    },
+    {
+      "path": "tests/test_install_script.py",
+      "reason": "Keep the installer regression test aligned with the new release tag."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "intent": {
+    "problem": "The v0.5.17 release tag was created before the version references in install.sh, docs, examples, and test were updated from v0.5.16. The CI smoke check caught the drift and failed. This work item captures the fix: synchronize all version references to v0.5.17.",
+    "constraints": [
+      "Only version metadata files are in scope.",
+      "Guard policies, README files, and scripts are out of scope."
+    ],
+    "rationale": "Keeping version references synchronized is required for the installer regression test and the check_docs_metadata consistency check to pass."
+  },
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "release_metadata_drift"
+    ],
+    "reason": "Version sync across installer default ref, upgrade docs, example READMEs, and regression test."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Straightforward version metadata synchronization fix."
+  },
+  "preReviewWarnings": [
+    "Confirm install.sh, docs, examples, and tests/test_install_script.py all reference v0.5.17."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "install.sh default AI_COCKPIT_TEMPLATE_REF is v0.5.17.",
+    "docs/getting-started/installation.md and docs/reference/upgrade.md show v0.5.17 in their upgrade examples.",
+    "examples/**/README.md install commands resolve v0.5.17.",
+    "tests/test_install_script.py expects the v0.5.17 archive URL.",
+    "make quality and make project-test pass.",
+    "CI smoke check-ai-pr passes with this Work Item archived."
+  ],
+  "guidelines": [
+    "Keep release metadata synchronized across the installer, upgrade examples, and regression tests.",
+    "Do not change unrelated language-stack presets or guard policies in a version bump task."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs to v0.5.16 references."
+}
