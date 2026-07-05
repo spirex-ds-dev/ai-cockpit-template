@@ -158,3 +158,24 @@ def test_pr_rejects_archive_delete_and_rename(tmp_path, monkeypatch):
     issues = ai_check_pr.validate_pr_bundle("a" * 40, [])
 
     assert sum("archive PR policy is append-only" in issue for issue in issues) == 2
+
+def test_pr_allows_no_op_archive_restoration(tmp_path, monkeypatch):
+    """M-status archive file whose HEAD blob matches base^ blob is a no-op restore and must pass."""
+    new = write_pair(tmp_path, "new", ["src/new.py"], ["src/new.py"])
+    new_contract = new.relative_to(tmp_path).as_posix()
+    new_summary = new_contract.replace(".contract", ".summary")
+    old = write_pair(tmp_path, "old", ["src/old.py"], ["src/old.py"])
+    old_summary = old.relative_to(tmp_path).as_posix().replace(".contract", ".summary")
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    # Simulate: old_summary has M status (accidentally changed at base, restored at HEAD)
+    paths = ["src/new.py", new_contract, new_summary, old_summary]
+    patch_changes(monkeypatch, paths, statuses={old_summary: "M"})
+    # Patch _is_no_op_restore so the M-status old_summary is treated as a no-op restore
+    monkeypatch.setattr(ai_check_pr, "_is_no_op_restore", lambda base, path: path == old_summary)
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [new])
+
+    assert not any("append-only" in issue for issue in issues), issues

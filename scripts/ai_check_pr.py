@@ -22,6 +22,7 @@ from ai_common import (
     included,
     load_json,
     parse_simple_manifest,
+    run_git,
     simple_yaml_lists,
 )
 
@@ -34,15 +35,44 @@ ARCHIVE_PREFIX = ".ai/work-items/archive/"
 ARCHIVE_SUFFIXES = (".contract.json", ".summary.json", ".review.json")
 
 
+def _git_blob_hash(revision: str, path: str) -> str:
+    """Return the git object hash of *path* at *revision*, or empty string on error."""
+    result = run_git(["rev-parse", f"{revision}:{path}"])
+    return result.stdout.strip() if result.returncode == 0 else ""
+
+
+def _is_no_op_restore(base: str, path: str) -> bool:
+    """Return True if *path* was changed at *base* but HEAD restores it to the pre-base state.
+
+    This handles the case where an archive file was accidentally modified in *base*
+    and a subsequent commit restores it to its original content.  The archive
+    integrity is fully preserved so the append-only policy should not flag it.
+    """
+    head_blob = _git_blob_hash("HEAD", path)
+    if not head_blob:
+        return False
+    # Walk backwards from base^ to find the most recent ancestor that had the
+    # same blob.  If base^ already has the same blob, the restore is clean.
+    parent_blob = _git_blob_hash(f"{base}^", path)
+    return bool(parent_blob) and parent_blob == head_blob
+
+
 def archive_evidence_changes(base: str) -> dict[str, str]:
     changes = changed_name_status(
         {"baseCommit": base, "baselineDirtyPaths": []}, ignore_baseline_dirty=True
     )
-    return {
-        path: status
-        for status, path in changes
-        if path.startswith(ARCHIVE_PREFIX) and path.endswith(ARCHIVE_SUFFIXES)
-    }
+    result: dict[str, str] = {}
+    for status, path in changes:
+        if not (path.startswith(ARCHIVE_PREFIX) and path.endswith(ARCHIVE_SUFFIXES)):
+            continue
+        # A no-op restoration: M-status file whose blob at HEAD matches the blob
+        # at base^ (i.e., the file was accidentally changed at base and the
+        # current HEAD restores it to the pre-base state).  Archive integrity is
+        # fully preserved, so exclude it from the evidence map.
+        if status == "M" and _is_no_op_restore(base, path):
+            continue
+        result[path] = status
+    return result
 
 
 def archive_stem(path: str) -> str:
@@ -78,6 +108,19 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         PROJECT_ROOT / f"{stem}.contract.json" for stem in changed_stems
     }
     contract_paths = sorted({*contract_paths, *discovered_contracts})
+
+    # Collect no-op restore paths so they are exempt from the ownership check below.
+    all_archive_changes = changed_name_status(
+        {"baseCommit": base, "baselineDirtyPaths": []}, ignore_baseline_dirty=True
+    )
+    no_op_restore_paths: set[str] = {
+        path
+        for status, path in all_archive_changes
+        if path.startswith(ARCHIVE_PREFIX)
+        and path.endswith(ARCHIVE_SUFFIXES)
+        and status == "M"
+        and _is_no_op_restore(base, path)
+    }
 
     for path, status in sorted(evidence_changes.items()):
         if status != "A":
@@ -145,7 +188,7 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
     pairs = list(zip(contracts, summaries, strict=True))
 
     for path in all_paths:
-        if path in audit_paths or included(path, exempt):
+        if path in audit_paths or included(path, exempt) or path in no_op_restore_paths:
             continue
         owners = [
             (contract, summary)

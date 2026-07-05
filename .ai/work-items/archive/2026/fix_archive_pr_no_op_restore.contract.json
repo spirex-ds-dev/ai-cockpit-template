@@ -1,0 +1,126 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix_archive_pr_no_op_restore",
+  "mode": "code",
+  "title": "Fix check-ai-pr to allow no-op archive restorations",
+  "baseCommit": "f2791d30c0fc6685b2dd06719b85f241fcbae3aa",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fix_archive_pr_no_op_restore.contract.json",
+    ".ai/work-items/active/fix_archive_pr_no_op_restore.summary.json",
+    ".ai/work-items/archive/2026/fix_archive_pr_no_op_restore.contract.json",
+    ".ai/work-items/archive/2026/fix_archive_pr_no_op_restore.summary.json",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    ".ai/guards/coverage_policy.yaml"
+  ],
+  "outOfScope": [
+    ".ai/guards/agent_risk_policy.yaml",
+    ".ai/guards/ai_review_policy.yaml",
+    ".ai/guards/backtrack_policy.yaml",
+    ".ai/guards/cockpit_status_policy.yaml",
+    ".ai/guards/file_boundary.yaml",
+    ".ai/guards/file_ownership.yaml",
+    ".ai/guards/scope_policy.yaml",
+    ".ai/guards/summary_policy.yaml",
+    ".github/**",
+    "examples/**",
+    "Makefile",
+    "Makefile.ai.*",
+    "docs/**",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "install.sh"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "The archive_evidence_changes function needs to exclude M-status files whose git blob is identical to HEAD (no-op restorations)."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "A new test must verify that no-op restorations (M with identical content) are allowed through."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "intent": {
+    "problem": "When an archived Work Item file is accidentally modified in commit A, then restored to its original state in commit B, the CI check-ai-pr (base=A) sees the restoration commit as an M-status change to an archive file and fails with 'archive PR policy is append-only'. This is a false positive: the archive integrity is fully preserved (blob content unchanged from original). The current code has no way to distinguish a harmful tampering from a harmless no-op restoration.",
+    "constraints": [
+      "The fix must not weaken the protection against actual archive tampering (content changes)",
+      "A genuine M with different content must still be rejected",
+      "The no-op detection must compare git blob hash of the file at base commit vs HEAD",
+      "The existing test test_pr_rejects_summary_only_tampering_even_when_new_work_item_claims_it must still pass",
+      "A new test must cover the no-op restoration case"
+    ],
+    "rationale": "The append-only policy exists to protect archive evidence integrity, not to prevent restoring accidentally corrupted files to their correct state. A no-op restoration (M where blob at HEAD == blob at some earlier correct ancestor) should be treated as a pass-through since the net change to archive content is zero."
+  },
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "governance_script"
+    ],
+    "reason": "Targeted fix to a single check in ai_check_pr.py. The condition is conservative: only files where the git object hash is unchanged are excluded."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Fix is well-scoped. Compare git blob at base commit vs HEAD for M-status archive files."
+  },
+  "preReviewWarnings": [
+    "Verify the no-op detection uses git object hashes, not file content comparison, to avoid subprocess overhead.",
+    "Ensure test_pr_rejects_summary_only_tampering_even_when_new_work_item_claims_it still passes."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_finish"
+    ],
+    "reason": "Single checkpoint sufficient for this focused fix."
+  },
+  "acceptance": [
+    "scripts/ai_check_pr.py: M-status archive files with identical blob to base commit are excluded from append-only violation",
+    "tests/test_pr_aggregate.py: new test verifies no-op restoration passes",
+    "existing tamper-rejection tests still pass",
+    "make check-ai-pr AI_BASE_COMMIT=edb2246 passes locally",
+    "make quality passes"
+  ],
+  "guidelines": [
+    "Use git cat-file or git show to compare blob hashes, not file content",
+    "Keep the change minimal and focused on the no-op detection only",
+    "Do not change the error message wording for genuine M violations"
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "Ray",
+    "reason": ".ai/guards/coverage_policy.yaml requires adding a prAggregate association for scripts/ai_check_pr.py so the coverage guard recognizes tests/test_pr_aggregate.py as its test counterpart."
+  },
+  "rollbackNote": "Revert changes to scripts/ai_check_pr.py and tests/test_pr_aggregate.py."
+}
