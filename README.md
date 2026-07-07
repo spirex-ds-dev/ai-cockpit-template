@@ -291,7 +291,8 @@ Repository `make quality` runs the full test suite with a 60% overall script cov
 
 ## Version Evolution
 
-- **V2 — Intent-aware Development (current)**: Work Item Contracts now include an optional `intent` section (`problem`, `constraints`, `rationale`, and more) so agents understand *why* a change exists, not only *what* to change. Intent becomes a first-class governance object, creating a complete governance loop: Intent → Contract → Implementation → Verification → Summary (Intent Alignment). Both `intent` and Summary `intentAlignment` are optional, fully backward-compatible, and should be left empty when context is not provided. See [Roadmap (V1–V4)](docs/roadmap.md) and [V2 Implementation Plan](docs/reference/v2-implementation-plan.md).
+- **V2 — Intent-aware Development (completed)**: Work Item Contracts include an optional `intent` section (`problem`, `constraints`, `rationale`, and more) so agents understand *why* a change exists, not only *what* to change. Intent is a first-class governance object, and both `intent` and Summary `intentAlignment` are optional and fully backward-compatible. See [Roadmap (V1–V4)](docs/roadmap.md) and [V2 Implementation Plan](docs/reference/v2-implementation-plan.md).
+- **V2.5 — Governance Compression (implemented, current capability)**: Summary is Repository Truth, and Cockpit is the Human Decision State. Cockpit compresses repository evidence into recommendation-oriented signals such as `ready_for_review`, `ready_with_risks`, `needs_investigation`, and `blocked` without inventing new facts.
 
 ## Advanced Docs
 

@@ -1,0 +1,199 @@
+{
+  "contractVersion": 2,
+  "workItemId": "align_cockpit_runtime_guide_ja",
+  "mode": "code",
+  "title": "Align Japanese cockpit runtime guide",
+  "baseCommit": "35ff9e68fefe557bfe8e0f335c2b7934fea8a82f",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/README.md",
+      "status": "M",
+      "fingerprint": "6d44bbb96b7cccad6ccf3952a8966972c38f806a239da356a4d52e9cb3d02140"
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "7f11732c9eeedd77c099e6625a4193db4ba6b6b23dfb79157430658df24aecac"
+    },
+    {
+      "path": ".ai/glossary.md",
+      "status": "M",
+      "fingerprint": "0c299412be8b2f0a343ba6986a905055708ddc8faffaac43068e819fb5768e2e"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/align_v2_5_docs_and_status.contract.json",
+      "status": "A",
+      "fingerprint": "563ad83d6f4cdc854641972ef3f64c8b80e52df12aa51765d051e899e9c9b90f"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/align_v2_5_docs_and_status.summary.json",
+      "status": "A",
+      "fingerprint": "0b22de69b093c726cf9fb9bbf601083865fab80790b973324120a90e4eb0957f"
+    },
+    {
+      "path": "README.ja.md",
+      "status": "M",
+      "fingerprint": "4394f353a0a5ca95832fdd5085d67404432cfa092c5a7be0a6d77f2fdad0b9b9"
+    },
+    {
+      "path": "README.md",
+      "status": "M",
+      "fingerprint": "333321c5067914135fe628abed65444c7d9177e279b51e13a0ed63d97398c82d"
+    },
+    {
+      "path": "README.zh-CN.md",
+      "status": "M",
+      "fingerprint": "0c787c5ea2736d1143840f70fe938f58838c0935bce1df73753fba94be84a3c0"
+    },
+    {
+      "path": "docs/architecture.md",
+      "status": "M",
+      "fingerprint": "b154e83869f7f744abc4760060ac06c4dfb3205557451dd89706a27c94775cec"
+    },
+    {
+      "path": "docs/contract-fields.md",
+      "status": "M",
+      "fingerprint": "4468d00137a12ef8ce157303feae9d7945e1398c73232d45c0a693671379466c"
+    }
+  ],
+  "scope": [
+    ".ai/cockpit/README.ja.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/active/align_cockpit_runtime_guide_ja.contract.json",
+    ".ai/work-items/active/align_cockpit_runtime_guide_ja.summary.json",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "English cockpit runtime guide already documents the Governance Compression layer and serves as the source of truth."
+    },
+    {
+      "path": "docs/roadmap.md",
+      "reason": "Roadmap already marks V2.5 as implemented and names the governance compression layer."
+    },
+    {
+      "path": "docs/reference/v2-5-governance-compression-plan.md",
+      "reason": "Reference plan defines the Cockpit recommendation vocabulary and human decision state."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "documentation_drift"
+    ],
+    "reason": "This is a narrow language-sync update for an already implemented runtime guide."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The Japanese cockpit guide can be aligned directly from the English runtime guide and roadmap."
+  },
+  "preReviewWarnings": [
+    "Keep the Japanese cockpit guide aligned with the English runtime guide and terminology.",
+    "Regenerate current_status.md after the edit."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    ".ai/cockpit/README.ja.md explains the Governance Compression / Cockpit recommendation layer.",
+    "The Japanese runtime guide keeps V2.5 terminology aligned with the English cockpit guide and roadmap.",
+    "current_status.md is regenerated and remains consistent after the change."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The Japanese cockpit runtime guide still describes only the V2 lifecycle and does not explain the implemented Governance Compression layer or the recommendation-oriented current status output.",
+    "constraints": [
+      "Do not change the already-implemented governance behavior.",
+      "Keep terminology consistent with the English cockpit guide and roadmap.",
+      "Regenerate current_status.md instead of hand-editing it."
+    ],
+    "rationale": "Bring the Japanese runtime guide into alignment with the already-implemented V2.5 cockpit model so the repository entrypoints stay consistent across languages."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user request in current thread",
+    "reason": "The task explicitly requires synchronized updates to the Japanese cockpit runtime guide under .ai/cockpit/."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

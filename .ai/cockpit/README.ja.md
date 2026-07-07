@@ -72,6 +72,25 @@ AI Cockpit はプロンプト指示をガイダンスとして扱い、強制力
 
 Contract の `checkpointPolicy.requiredBeforeFinish` が true の場合、完了前に Summary の `checkpointEvidence` に checkpoint 使用を記録する。
 
+## Governance Compression
+
+V2.5 では、Repository Truth が確立された後にもう 1 層が追加されます。
+
+```text
+Summary (Repository Truth) → Cockpit (Governance Compression) → Human Decision
+```
+
+Cockpit は Summary を複製しません。Contract、Summary、verification の証拠を圧縮して、レビュー担当者や保守者が判断しやすい状態を示します。
+
+`current_status.md` は次の項目を表します。
+
+- `Recommendation`
+- `Governance Signals`
+- `Evidence`
+- `Decision Drivers`
+
+これらの項目は説明可能で保守的であるべきです。証拠が欠けている場合、それを楽観的な結果に置き換えてはいけません。
+
 ## レビュー準備
 
 Contract の readiness フィールドは、コーディング開始前にエージェントが実装と検証を実行できるかを記録します。Summary の readiness フィールドは残留リスク、期待レビュー注視点、境界チェック、ユーザー修正、既知ギャップ、未検証の主張を記録します。
@@ -83,3 +102,5 @@ Contract の readiness フィールドは、コーディング開始前にエー
 アーカイブ後、PR CI は `make check-ai-pr AI_BASE_COMMIT=<merge-base>` を実行する。インストール済み配布物にはこのターゲットと検証器が含まれる。PR diff 全体の非免除パスは、1 つの変更済みアーカイブペアによって共同所有されなければならない。Contract の scope 内かつ outOfScope 外であり、対応 Summary に報告されていること。
 
 PR 証跡には Contract version 2 が必要である。version 1 はレガシー読み取り専用で、新規 PR 証跡として導入できない。Contract の承認フィールドは自己申告記録であり、人間 ID の証明ではない。信頼できる承認には保護されたプラットフォームレビューを使い、ガバナンス PR チェックとは独立してプロジェクトテストを実行する。
+
+Summary は Repository Truth、Cockpit は Human Decision State です。Cockpit は事実を増やさず、レビュー可否、ブロック、調査要否を判断するための圧縮された信号だけを示します。

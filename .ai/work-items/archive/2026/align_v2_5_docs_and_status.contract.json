@@ -1,0 +1,168 @@
+{
+  "contractVersion": 2,
+  "workItemId": "align_v2_5_docs_and_status",
+  "mode": "code",
+  "title": "Align V2/V2.5 docs and cockpit status",
+  "baseCommit": "35ff9e68fefe557bfe8e0f335c2b7934fea8a82f",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "ad2581b2f4d0b1aed943b1d9c58469d8f991c07720798e7e8d7d87c57666186a"
+    }
+  ],
+  "scope": [
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    ".ai/cockpit/README.md",
+    ".ai/glossary.md",
+    "docs/architecture.md",
+    "docs/contract-fields.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/active/align_v2_5_docs_and_status.contract.json",
+    ".ai/work-items/active/align_v2_5_docs_and_status.summary.json",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "scripts/**",
+    ".github/workflows/**",
+    "release.json",
+    "install.sh",
+    "examples/**"
+  ],
+  "sources": [
+    {
+      "path": "docs/roadmap.md",
+      "reason": "Roadmap already positions V2 as completed and V2.5 as the current governance compression capability."
+    },
+    {
+      "path": "docs/reference/v2-5-governance-compression-plan.md",
+      "reason": "Defines the intended Cockpit recommendation layer and vocabulary."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Runtime guidance must reflect the implementation, not the old V2-only loop."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "documentation_drift",
+      "status_hygiene"
+    ],
+    "reason": "The docs and generated status must remain aligned with the already-implemented V2.5 cockpit behavior."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The doc alignment and status repair are concrete and verifiable."
+  },
+  "preReviewWarnings": [
+    "Keep README, glossary, and cockpit runtime wording consistent across languages.",
+    "Ensure current_status.md is regenerated, not hand-edited."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "README.md, README.ja.md, and README.zh-CN.md describe V2 as completed and V2.5 as the implemented current capability.",
+    ".ai/cockpit/README.md explains the Governance Compression / Cockpit recommendation layer.",
+    ".ai/glossary.md and docs/architecture.md include the V2.5 terminology and component mapping.",
+    "current_status.md is regenerated and passes status consistency checks."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The documentation entrypoints still describe V2 as current and the runtime guide does not yet explain the implemented Cockpit recommendation layer, while the generated current_status.md has drifted from the clean worktree state.",
+    "constraints": [
+      "Do not change the already-implemented governance behavior.",
+      "Keep terminology consistent across English, Japanese, and Chinese docs.",
+      "Regenerate current_status.md instead of hand-editing it."
+    ],
+    "rationale": "Align the repository-facing documentation and generated status with the already-implemented V2/V2.5 split so readers see V2 as complete and Cockpit as the human decision layer."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user request in current thread",
+    "reason": "The task explicitly requires synchronized updates to .ai/cockpit/README.md and .ai/glossary.md."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

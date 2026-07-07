@@ -87,6 +87,11 @@ Cockpit が更新される。
 
 **前提条件:** POSIX シェルを利用できる Linux、macOS、または WSL、Python 3.10 以上、Git、curl、GNU Make、および 1 件以上のコミットがあるクリーンな Git リポジトリが必要です。選択したスタックのフォーマッター、テストランナー、SDK、ビルドプラグインも事前にインストールしてください。
 
+## バージョンの進化
+
+- **V2 — Intent-aware Development（完了）**: Work Item Contract に任意の `intent` セクション（`problem`、`constraints`、`rationale` など）を追加し、AI が「何を変えるか」だけでなく「なぜその変更が存在するか」を理解できるようにします。`intent` と Summary の `intentAlignment` はどちらも任意で、文脈がない場合は空欄のままでかまいません。詳細は [ロードマップ (V1〜V4)](docs/roadmap.md) と [V2 Implementation Plan](docs/reference/v2-implementation-plan.md) を参照してください。
+- **V2.5 — Governance Compression（実装済み、現在の機能）**: Summary は Repository Truth、Cockpit は Human Decision State です。Cockpit はリポジトリ証拠を圧縮して、`ready_for_review`、`ready_with_risks`、`needs_investigation`、`blocked` のような意思決定向けシグナルを出します。
+
 ## 最新の公開ランタイムをインストール
 
 ```sh
@@ -157,7 +162,7 @@ Plan -> Scope -> Verify -> Summarize -> Status -> Archive
 | Checkpoint | 作業途中の整合性スナップショット。完了前に変更範囲の逸脱を検出する。 |
 | Status Consistency Guard | `current_status.md` が現在作業中の Work Item と一致するか検証する。 |
 | Change Summary | 変更内容、検証結果、残るリスクを記録する。 |
-| Cockpit Status | 現在の AI タスク状態を生成ビューで表示する。 |
+| Cockpit Status | 現在の AI タスク状態を生成ビューで表示し、Governance Compression の結果を反映する。 |
 | Finish Flow | チェック通過後にのみ Work Item をアーカイブする。 |
 
 ## 信頼モデル

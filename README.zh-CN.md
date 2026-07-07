@@ -91,6 +91,11 @@ Review 从上下文开始。
 
 **前置条件：**支持 POSIX shell 的 Linux、macOS 或 WSL；Python 3.10+；Git、curl 和 GNU Make；以及至少已有一个提交且工作树干净的 Git 仓库。所选 stack 的 formatter、测试运行器、SDK 和构建插件也必须预先安装。
 
+## 版本演进
+
+- **V2 — Intent-aware Development（已完成）**：Work Item Contract 新增可选的 `intent` 节点（`problem`、`constraints`、`rationale` 等字段），让 AI 不只知道“改什么”，也知道“为什么存在这次变更”。`intent` 和 Summary 的 `intentAlignment` 都是可选的，在缺少上下文时可以留空。详见 [Roadmap](docs/roadmap.md) 和 [V2 Implementation Plan](docs/reference/v2-implementation-plan.md)。
+- **V2.5 — Governance Compression（已实现，当前能力）**：Summary 是 Repository Truth，Cockpit 是 Human Decision State。Cockpit 会把仓库证据压缩成面向决策的信号，例如 `ready_for_review`、`ready_with_risks`、`needs_investigation`、`blocked`，但不会发明新事实。
+
 ## 安装最新公开运行时
 
 ```sh
@@ -159,7 +164,7 @@ Plan -> Scope -> Verify -> Summarize -> Status -> Archive
 | Checkpoint | Mid-task 完整性快照，用于在完成前检测 scope 漂移。 |
 | Status Consistency Guard | 验证 Cockpit 状态与当前 active Work Item 集合是否一致。 |
 | Change Summary | 记录改了什么、验证了什么、还剩什么风险。 |
-| Cockpit Status | 用一个生成视图展示当前 AI 任务状态。 |
+| Cockpit Status | 用一个生成视图展示当前 AI 任务状态，并反映 Governance Compression 的结果。 |
 | Finish Flow | 只有检查通过后才归档 Work Item。 |
 
 ## 信任模型

@@ -32,6 +32,25 @@ Intent → Contract → Implementation → Verification → Summary (Intent Alig
 | **Verification** | Does it meet requirements? |
 | **Summary** | Did we achieve the intended goal? |
 
+## Governance Compression
+
+V2.5 adds a second layer after Repository Truth is established:
+
+```text
+Summary (Repository Truth) → Cockpit (Governance Compression) → Human Decision
+```
+
+Cockpit does not duplicate Summary. It compresses contract, summary, and verification evidence into decision-oriented status for reviewers and maintainers.
+
+`current_status.md` now surfaces:
+
+- `Recommendation`
+- `Governance Signals`
+- `Evidence`
+- `Decision Drivers`
+
+These fields should remain explainable and conservative. Missing evidence should not be rewritten as a positive outcome.
+
 ## Core Files
 
 - `checks.yaml`: check catalog and project-specific command selection guidance.
@@ -51,6 +70,7 @@ Intent → Contract → Implementation → Verification → Summary (Intent Alig
 7. Review the generated status and archived Contract/Summary.
 
 Intent drives Contract. Contract drives Implementation. Verification validates execution. Summary validates alignment back to Intent.
+Summary becomes Repository Truth, and Cockpit compresses that truth into a human decision state.
 
 Unknowns and `notCodable` are valid outputs, not failures. Summary is both an audit record and a collaboration handoff. Checkpoints exist to reduce drift in longer tasks, not merely to satisfy compliance.
 

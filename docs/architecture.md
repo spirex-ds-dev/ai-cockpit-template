@@ -97,6 +97,7 @@ scripts/
   ai_check_work_item.py
   ai_checkpoint.py
   ai_common.py
+  ai_governance_compression.py
   ai_finish.py
   ai_generate_status.py
   ai_observability.py
@@ -130,7 +131,8 @@ GEMINI.md
 | Checkpoint | 開発中の整合性スナップショットであり、スコープ、受け入れ、および検証状態のドリフトを検出します。 |
 | Status Consistency Guard | `current_status.md` が現在のアクティブなワークアイテムと一致しているかを検証します。 |
 | Change Summary | 変更されたファイル、合格した検証、リスク評価、生成ファイル、および破壊的変更の履歴を記録します。 |
-| Cockpit Status | アクティブな AI タスクの現在の状態を統合表示するステータス画面を生成します。 |
+| Cockpit Status | Summary、Contract、verification evidence から圧縮された Human Decision State を生成します。V2.5 では Recommendation、Governance Signals、Evidence、Decision Drivers を表示します。 |
+| Governance Compression | 事実の重複ではなく、レビュー可否・保留・調査要否・ブロック要否に必要な信号へ情報を圧縮する層です。 |
 | Observability | 各チェックの実行ごとに構造化された JSONL イベントを `target/ai_observability.jsonl` に追記します。 |
 | Finish Flow | 必須の検証チェックを実行し、合格した場合にワークアイテムをアーカイブします。 |
 
