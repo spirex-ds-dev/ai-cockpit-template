@@ -11,14 +11,15 @@ import subprocess
 import sys
 import tarfile
 import tempfile
-import urllib.error
-import urllib.request
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 RELEASE = ROOT / "release.json"
-PUBLIC_REPOSITORY = "https://github.com/xinglun/ai-cockpit-template.git"
+PUBLIC_REPOSITORY = os.environ.get(
+    "AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY",
+    "https://github.com/xinglun/ai-cockpit-template.git",
+)
 
 
 def clean_git_environment() -> dict[str, str]:
@@ -218,12 +219,37 @@ def exercise_public_distribution(script: bytes, *, tag: str, quality_target: str
             raise RuntimeError(f"{tag}: configuration Work Item pair is missing")
 
 
+def fetch_tagged_installer(tag: str) -> bytes:
+    with tempfile.TemporaryDirectory(prefix="ai-cockpit-public-release-clone-") as raw:
+        clone_dir = Path(raw) / "repo"
+        clone = run_command(
+            [
+                "git",
+                "clone",
+                "--depth",
+                "1",
+                "--branch",
+                tag,
+                "--single-branch",
+                PUBLIC_REPOSITORY,
+                str(clone_dir),
+            ],
+            cwd=ROOT,
+            env=clean_git_environment(),
+        )
+        if clone.returncode != 0:
+            raise RuntimeError(f"failed to clone public release tag {tag}: {clone.stderr.strip()}")
+        installer = clone_dir / "install.sh"
+        if not installer.is_file():
+            raise RuntimeError(f"{tag}: cloned release is missing install.sh")
+        return installer.read_bytes()
+
+
 def main() -> int:
     metadata = json.loads(RELEASE.read_text(encoding="utf-8"))
     tag = metadata["releaseTag"]
     supported = metadata["capabilities"]["sha256ArchiveVerification"]
     quality_target = metadata["publicContract"]["projectQualityTarget"]
-    url = f"https://raw.githubusercontent.com/xinglun/ai-cockpit-template/{tag}/install.sh"
     try:
         tags = run_command(["git", "ls-remote", "--tags", "--refs", PUBLIC_REPOSITORY], cwd=ROOT)
         if tags.returncode != 0:
@@ -231,12 +257,10 @@ def main() -> int:
         latest_tag = highest_semver_tag(tags.stdout)
         if tag != latest_tag:
             raise RuntimeError(f"release.json points to {tag}, but highest public tag is {latest_tag}")
-        # The URL is constructed from a fixed HTTPS GitHub origin and a validated release tag.
-        with urllib.request.urlopen(url, timeout=30) as response:  # nosec B310
-            script = response.read()
+        script = fetch_tagged_installer(tag)
         exercise_installer(script, tag=tag, sha256_supported=supported)
         exercise_public_distribution(script, tag=tag, quality_target=quality_target)
-    except (OSError, KeyError, TypeError, ValueError, RuntimeError, urllib.error.URLError) as exc:
+    except (OSError, KeyError, TypeError, ValueError, RuntimeError) as exc:
         print(f"release distribution check failed: {exc}", file=sys.stderr)
         return 1
     print(f"release distribution check passed: {tag}")
