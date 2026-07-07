@@ -65,7 +65,7 @@ def git_extraheader_args(repository_url: str) -> list[str]:
         return []
     config_key = f"http.https://{host}/.extraheader"
     result = run_command(
-        ["git", "config", "--local", "--get-all", config_key],
+        ["git", "config", "--get-all", config_key],
         cwd=ROOT,
         env=clean_git_environment(),
     )

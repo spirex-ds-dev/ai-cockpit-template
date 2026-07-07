@@ -1,0 +1,167 @@
+{
+  "contractVersion": 2,
+  "workItemId": "private_repo_release_auth",
+  "mode": "code",
+  "title": "Reuse checkout auth for release distribution checks",
+  "baseCommit": "464539c1f22831b34317a3f90ba840bd0d5c71d9",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "a5899979798a3a7a8bb5ce3e3093aae67d279a358cd3b81a924c1a0f98911ac7"
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "status": "M",
+      "fingerprint": "1e2d9218dbaa23d38ae0ebcff11b92ff139d1dddf42596ad2bfeb47d2aa46646"
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "status": "M",
+      "fingerprint": "99783fb88cdd5bacd4d4a9c6a89693b81573adbfeac76fe4d9604ca2c474390b"
+    }
+  ],
+  "scope": [
+    "scripts/check_release_distribution.py",
+    "tests/test_release_distribution.py",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/active/private_repo_release_auth.contract.json",
+    ".ai/work-items/active/private_repo_release_auth.summary.json",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    ".github/workflows/**",
+    "release.json",
+    "install.sh",
+    "docs/**",
+    "examples/**"
+  ],
+  "sources": [
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Release distribution validation needs to reuse checkout-auth headers so private GitHub CI can clone the tagged release."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Regression coverage must confirm both checkout-auth reuse and explicit public repository overrides."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_distribution",
+      "private_ci"
+    ],
+    "reason": "The fix changes how release validation reuses GitHub auth context without changing public release semantics."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The release auth reuse fix is concrete and verifiable."
+  },
+  "preReviewWarnings": [
+    "Verify that no credential material is echoed into logs."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "make check-release-distribution can run in a private repository CI environment.",
+    "The release distribution check still works in a public repository environment.",
+    "Regression tests cover checkout-auth headers and explicit repository overrides."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The release distribution check fails in private GitHub CI because the clone step does not reuse the authenticated checkout context provided by actions/checkout.",
+    "constraints": [
+      "Do not change the public release validation semantics beyond how Git auth is reused.",
+      "Keep the check reproducible in CI and locally.",
+      "Do not expose credential material in logs."
+    ],
+    "rationale": "Reusing the checkout-auth context keeps the public release verification path intact while making it work in private-repo CI."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

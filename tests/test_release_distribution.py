@@ -117,7 +117,7 @@ def test_public_repository_override_is_honored(monkeypatch):
 
 def test_git_extraheader_args_uses_checkout_header(monkeypatch):
     def fake_run_command(command, *, cwd, env=None):
-        if command == ["git", "config", "--local", "--get-all", "http.https://github.com/.extraheader"]:
+        if command == ["git", "config", "--get-all", "http.https://github.com/.extraheader"]:
             return SimpleNamespace(returncode=0, stdout="AUTHORIZATION: basic abc123\n")
         raise AssertionError(f"unexpected command: {command!r}")
 
