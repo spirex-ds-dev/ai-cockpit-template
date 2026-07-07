@@ -1,0 +1,242 @@
+{
+  "contractVersion": 2,
+  "workItemId": "v2_intent_aware_development",
+  "mode": "code",
+  "title": "V2 Intent-aware Development Stability",
+  "baseCommit": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "cce6e08d2df354d5da317fd3f5ed5240c0d73d3452c13c07a4c9739c850dde41"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v2_5_governance_compression_plan.contract.json",
+      "status": "A",
+      "fingerprint": "cfa3d34ab51bb0f110face931ffd01a98e5f76ec9518be20cda6b883391aaa79"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v2_5_governance_compression_plan.summary.json",
+      "status": "A",
+      "fingerprint": "fd7f5bb67f8668cda17b0095cf8d8c9d3e5b784663f9f7be8f4929a1d16ede03"
+    },
+    {
+      "path": "docs/reference/v2-5-governance-compression-plan.md",
+      "status": "A",
+      "fingerprint": "2ea4c6bd6dfed9c45b79ab412063611a8d62da13a071de8e87ef41670aa667e8"
+    },
+    {
+      "path": "docs/roadmap.md",
+      "status": "M",
+      "fingerprint": "d97cbcb501a70a637903cb032ebed427b5b276d0584d2c1d4edbe35fcd87c79b"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/v2_intent_aware_development.contract.json",
+    ".ai/work-items/active/v2_intent_aware_development.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/README.md",
+    ".ai/cockpit/README.md",
+    ".ai/glossary.md",
+    ".ai/work-items/_templates/work_item_contract.example.json",
+    ".ai/work-items/_templates/work_item_summary.example.json",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/contract-fields.md",
+    "docs/roadmap.md",
+    "docs/reference/v2-implementation-plan.md",
+    "docs/work-item-style-guide.md",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    "scripts/ai_checkpoint.py",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_check_work_item.py",
+    "tests/test_ai_check_summary.py",
+    "tests/test_ai_checkpoint.py",
+    "tests/test_checkpoint_intent.py",
+    "tests/test_contract_and_policy.py",
+    "tests/test_contract_examples.py",
+    "tests/test_core_gates.py",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "docs/reference/v2-5-governance-compression-plan.md",
+    "scripts/ai_check_review_policy.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_check_status.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_start.py",
+    ".ai/guards/**",
+    ".ai/cockpit/checks.yaml",
+    "Makefile",
+    ".github/**",
+    ".gitlab-ci.yml"
+  ],
+  "sources": [
+    {
+      "path": "docs/roadmap.md",
+      "reason": "Defines V2 as Intent-aware Development and keeps V2.5 as the next-stage reference."
+    },
+    {
+      "path": "docs/reference/v2-implementation-plan.md",
+      "reason": "Defines the incremental V2 phases and the required phase-status synchronization."
+    },
+    {
+      "path": "docs/reference/v2-5-governance-compression-plan.md",
+      "reason": "Constrains the work so V2.5 remains a reference-only next stage."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines canonical Intent, Summary, Intent Alignment, and Repository Governance Layer terminology."
+    },
+    {
+      "path": ".ai/README.md",
+      "reason": "Documents the required workflow and the optional intent guidance."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Documents checkpoint output, summary intent alignment, and lifecycle expectations."
+    },
+    {
+      "path": "docs/contract-fields.md",
+      "reason": "Defines the Contract and Summary field semantics that must stay backward-compatible."
+    },
+    {
+      "path": "docs/work-item-style-guide.md",
+      "reason": "Explains how to write optional intent and summary alignment fields without inventing context."
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "reason": "Guides agent behavior and intent handling in generated templates."
+    },
+    {
+      "path": "user request",
+      "reason": "Specifies the V2 goal, the optional intent and intentAlignment requirements, and the prohibited V2.5 work."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "scope_unclear"
+    ],
+    "reason": "The task spans validators, checkpoint output, templates, docs, and tests, so the main risk is keeping V2 optional intent semantics consistent across all surfaces without drifting into V2.5 compression behavior."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Scope, sources, acceptance, and verification are explicit and the task remains within V2."
+  },
+  "preReviewWarnings": [
+    "Review that optional intent handling remains permissive without inventing missing context.",
+    "Review that checkpoint output surfaces intent context defaults rather than failing when intent fields are absent.",
+    "Review that V2.5 governance compression is not implemented ahead of the V2 stability work."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Contract version 2 accepts no intent, intent: null, intent: {}, partial intent fields, and complete intent without requiring fabricated context.",
+    "Summary validation accepts optional intentAlignment, including absent, null, empty, partial, and complete forms.",
+    "ai-checkpoint displays problem, constraints, and rationale context and shows not provided when those fields are missing.",
+    "Templates, README guidance, and agent operating rules consistently say intent is encouraged but optional and should not be invented.",
+    "V1 archive compatibility remains intact and the V2 implementation plan phase statuses reflect the actual engineering state.",
+    "The V2 lifecycle full pass succeeds through make ai-finish and Cockpit status remains generatable and consistent."
+  ],
+  "guidelines": [
+    "Keep V2 Intent-aware Development separate from V2.5 Governance Compression.",
+    "Treat intent and intentAlignment as optional governance evidence; do not fabricate missing context.",
+    "Preserve backward compatibility for V1 archives and partial V2 records."
+  ],
+  "intent": {
+    "problem": "The repository already treats intent as a first-class V2 concept, but the validator, checkpoint output, templates, and docs still need to agree on the same optional semantics. The system must accept absent or partial intent data without forcing fabricated context, and the Summary layer needs an optional intentAlignment record so V2 can close the governance loop cleanly.",
+    "constraints": [
+      "Keep V2.5 governance compression as a next-stage reference only.",
+      "Accept no intent, intent: null, intent: {}, partial intent fields, and complete intent.",
+      "Accept optional intentAlignment with the same permissive compatibility."
+    ],
+    "rationale": "Making V2 stable first ensures repository truth is reliable before any human-decision compression work is attempted. Optional intent fields preserve backward compatibility while still encouraging richer context when it is genuinely available."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user request",
+    "reason": "The user explicitly requested template and agent-guidance alignment for V2 intent handling."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

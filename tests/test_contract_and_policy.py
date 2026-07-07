@@ -1,5 +1,6 @@
 import ai_check_guards
 import ai_check_agent_risk
+import ai_check_summary
 import ai_check_scope
 import ai_check_work_item
 
@@ -22,6 +23,32 @@ def valid_contract():
         "verification": [{"command": "python3 -m pytest", "required": True}],
         "destructiveChangePolicy": {"allowed": False, "requiresHumanApproval": True, "allowPatterns": []},
         "rollbackNote": "revert",
+    }
+
+
+def valid_summary():
+    return {
+        "workItemId": "task",
+        "contractPath": ".ai/work-items/active/task.contract.json",
+        "changedFiles": [{"path": "scripts/app.py", "reason": "Fixture change."}],
+        "sourcesUsed": ["spec"],
+        "verification": [{"check": "quality", "result": "passed"}],
+        "unknownsRemaining": [],
+        "risk": {"level": "low", "detail": "fixture"},
+        "generatedFiles": [],
+        "destructiveChanges": [],
+        "observedIssues": [],
+        "reviewReadiness": {"status": "ready", "reason": "fixture", "expectedReviewFocus": []},
+        "boundaryChecks": {
+            "runtimeEntrypoints": "not_applicable",
+            "userVisibleOutput": "not_applicable",
+            "persistence": "not_applicable",
+            "localization": "not_applicable",
+            "generatedArtifacts": "not_applicable",
+            "makeEntrypoints": "not_applicable",
+        },
+        "knownGaps": [],
+        "overclaimPrevention": "fixture",
     }
 
 
@@ -127,6 +154,13 @@ def test_intent_absent_is_fully_backward_compatible():
     assert ai_check_work_item.validate_contract(contract) == []
 
 
+def test_intent_null_is_backward_compatible():
+    """intent: null は意図未記入として受け入れられる。"""
+    contract = valid_contract()
+    contract["intent"] = None
+    assert ai_check_work_item.validate_contract(contract) == []
+
+
 def test_intent_empty_object_is_valid():
     """intent: {} は全フィールド任意のため合法。"""
     contract = valid_contract()
@@ -207,3 +241,34 @@ def test_intent_list_field_empty_list_is_valid():
     contract["intent"] = {"constraints": [], "nonGoals": []}
     assert ai_check_work_item.validate_contract(contract) == []
 
+
+def test_summary_intent_alignment_is_optional_and_permissive():
+    """intentAlignment は absent / null / partial / full のいずれも受け入れる。"""
+    summary = valid_summary()
+    contract = {"workItemId": "task", "contractVersion": 1}
+    assert ai_check_summary.validate_summary(summary, contract) == []
+
+    summary["intentAlignment"] = None
+    assert ai_check_summary.validate_summary(summary, contract) == []
+
+    summary["intentAlignment"] = {}
+    assert ai_check_summary.validate_summary(summary, contract) == []
+
+    summary["intentAlignment"] = {"problemResolved": True}
+    assert ai_check_summary.validate_summary(summary, contract) == []
+
+    summary["intentAlignment"] = {
+        "problemResolved": True,
+        "constraintsRespected": True,
+        "nonGoalsAvoided": False,
+        "rationaleValidated": "Approach matches the recorded rationale.",
+    }
+    assert ai_check_summary.validate_summary(summary, contract) == []
+
+    summary["intentAlignment"] = {
+        "problemResolutionEvidence": "Legacy archive evidence remains readable.",
+        "constraintsRespectEvidence": "Legacy archive evidence remains readable.",
+        "nonGoalsAvoided": True,
+        "rationaleValidated": "Compatibility is preserved for archived summaries.",
+    }
+    assert ai_check_summary.validate_summary(summary, contract) == []

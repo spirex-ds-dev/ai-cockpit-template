@@ -212,6 +212,51 @@ V2 establishes the schema. V3+ can build validation tooling.
 
 ---
 
+## V2.5 — Governance Compression（proposed）
+
+**Purpose**: Convert repository truth into human decision state.
+
+V2.5 positions Cockpit as the layer that consumes governance records and presents a concise operational state for human review.
+
+The governance flow becomes:
+
+```text
+Intent
+  ↓
+Contract
+  ↓
+Implementation
+  ↓
+Verification
+  ↓
+Summary (Repository Truth)
+  ↓
+Cockpit (Governance Compression)
+  ↓
+Human Decision
+```
+
+### Key Shift
+
+V2.5 is not primarily an AI completion feature. It is a human review feature.
+
+The four layers have distinct responsibilities:
+
+| Layer | Question |
+| --- | --- |
+| Intent | Why do this? |
+| Contract | How should this be done? |
+| Summary | What actually happened? |
+| Cockpit | What decision should a human make now? |
+
+Summary should continue becoming a complete audit record. Cockpit should compress that repository truth into decision-oriented signals such as Intent resolved, Acceptance complete, Unknowns resolved, Verification passed, Residual risk low, and Recommendation ready for review.
+
+Completion Assurance becomes one component of Governance Compression rather than the milestone name.
+
+See [V2.5 Governance Compression Plan](reference/v2-5-governance-compression-plan.md) for the proposed development plan.
+
+---
+
 ## V3 — Repository Intelligence
 
 **Purpose**: Accumulate long-term repository engineering knowledge beyond individual tasks.
@@ -273,6 +318,14 @@ Implementation proceeds in four incremental phases:
 4. **Templates & AI Integration**: Update templates and agent guidance to leverage intent naturally
 
 See [V2 Implementation Plan](reference/v2-implementation-plan.md) for detailed phase breakdown.
+
+### Proposed Next Milestone
+
+**V2.5 — Governance Compression**
+
+After V2 establishes Intent-aware repository truth, V2.5 should make Cockpit the human review compression layer that turns Summary evidence into operational recommendations.
+
+See [V2.5 Governance Compression Plan](reference/v2-5-governance-compression-plan.md) for the proposed development plan.
 
 ---
 

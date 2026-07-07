@@ -125,6 +125,9 @@ def test_checkpoint_main_reports_required_state(tmp_path, monkeypatch, capsys):
     assert ai_checkpoint.main() == 0
     output = capsys.readouterr().out
     assert "Required Checks Passed: `1`" in output
+    assert "problem: not provided" in output
+    assert "constraint: not provided" in output
+    assert "rationale: not provided" in output
     assert "Ready for final status generation" in output
 
 

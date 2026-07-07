@@ -229,7 +229,7 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 
 ## バージョン進化
 
-- **V2 — Intent-aware Development（現行）**: Work Item Contract に `intent` セクション（`problem`・`constraints`・`rationale` など）を追加。AI が「なぜその変更が存在するか」を理解できるようにします。全フィールド任意・後方互換。詳細は [ロードマップ (V1〜V4)](docs/roadmap.md) を参照してください。
+- **V2 — Intent-aware Development（現行）**: Work Item Contract に `intent` セクション（`problem`・`constraints`・`rationale` など）を追加。AI が「なぜその変更が存在するか」を理解できるようにします。`intent` と Summary の `intentAlignment` はどちらも任意で、文脈がない場合は空欄のままにできます。全フィールド後方互換です。詳細は [ロードマップ (V1〜V4)](docs/roadmap.md) を参照してください。
 
 ## 詳細ドキュメント
 

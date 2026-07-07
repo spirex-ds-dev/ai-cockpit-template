@@ -1,0 +1,176 @@
+{
+  "contractVersion": 2,
+  "workItemId": "v2_5_governance_compression_plan",
+  "mode": "code",
+  "title": "V2.5 Governance Compression Development Plan",
+  "baseCommit": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "9e4840b3f5660ee5815b1eba27a5adae194719545c9d5a4e4eb9e9a0f563df4b"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/v2_5_governance_compression_plan.contract.json",
+    ".ai/work-items/active/v2_5_governance_compression_plan.summary.json",
+    ".ai/cockpit/current_status.md",
+    "docs/roadmap.md",
+    "docs/reference/v2-5-governance-compression-plan.md"
+  ],
+  "outOfScope": [
+    "scripts/**",
+    "Makefile",
+    ".github/**",
+    ".gitlab-ci.yml",
+    ".ai/guards/**",
+    ".ai/cockpit/checks.yaml",
+    ".ai/work-items/archive/**"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/v2_5_governance_compression_plan.contract.json",
+      "reason": "Defines the scope, acceptance, and verification for this planning task."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines canonical Intent, Contract, Summary, Cockpit Status, and Repository Governance Layer terminology."
+    },
+    {
+      "path": "docs/roadmap.md",
+      "reason": "Defines the current V1-V4 roadmap and the V2 Intent-aware Development milestone."
+    },
+    {
+      "path": "docs/reference/v2-implementation-plan.md",
+      "reason": "Defines the current V2 implementation phases that V2.5 must build on without replacing."
+    },
+    {
+      "path": "user request",
+      "reason": "Provides the V2.5 Governance Compression positioning, architecture, principles, and human review focus."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "documentation",
+      "governance_positioning"
+    ],
+    "reason": "The change is documentation-only but touches roadmap positioning, so the main risk is misrepresenting the V2.5 boundary between Repository Truth and Human Decision."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Scope, sources, acceptance, and verification are explicit for a documentation planning change."
+  },
+  "preReviewWarnings": [
+    "Review whether V2.5 is clearly positioned as Human Review governance compression rather than an AI completion feature.",
+    "Review whether Completion Assurance is treated as a component of Governance Compression, not the primary milestone."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The repository state, roadmap, and V2 implementation plan are reviewed before drafting V2.5.",
+    "A V2.5 development plan is added under docs/reference and positions the milestone as Governance Compression.",
+    "The V2.5 plan clearly separates Repository Truth in Summary from Human Decision in Cockpit.",
+    "Completion Assurance is documented as one governance signal inside Governance Compression.",
+    "The roadmap references V2.5 between V2 and V3 without replacing the existing V2 plan.",
+    "No implementation, schema, Makefile, CI, guard, or script changes are made in this planning task."
+  ],
+  "guidelines": [
+    "Keep V2.5 language repository-agnostic and human-review oriented.",
+    "Preserve the V2 Intent-aware Development milestone and avoid presenting V2.5 as a replacement for V2.",
+    "Do not introduce implementation requirements outside the declared documentation scope."
+  ],
+  "intent": {
+    "problem": "As Summary evolves into a comprehensive repository truth and audit record, human reviewers should not have to manually reconstruct whether a Work Item can be merged, reviewed, blocked, or investigated. V2.5 needs a development plan that repositions Cockpit as the layer that compresses repository governance facts into operational human decision state.",
+    "constraints": [
+      "Preserve existing V2 Intent-aware Development positioning.",
+      "Keep V2.5 repository-agnostic and schema-conscious.",
+      "Do not implement validators or status generation changes in this planning task.",
+      "Keep Summary as the source of repository truth and Cockpit as derived operational status."
+    ],
+    "rationale": "A standalone V2.5 plan lets the project align on the architectural shift from AI completion support to human review decision support before implementation changes are scoped."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

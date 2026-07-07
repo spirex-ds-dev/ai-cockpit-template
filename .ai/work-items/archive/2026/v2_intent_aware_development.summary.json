@@ -1,0 +1,436 @@
+{
+  "workItemId": "v2_intent_aware_development",
+  "contractPath": ".ai/work-items/archive/2026/v2_intent_aware_development.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/v2_intent_aware_development.contract.json",
+      "reason": "Defined the V2 scope, acceptance, intent, and verification for the stability work."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v2_intent_aware_development.summary.json",
+      "reason": "Recorded the AI Change Summary for the V2 stability work."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated Cockpit status for the active V2 work item."
+    },
+    {
+      "path": ".ai/README.md",
+      "reason": "Clarified optional intent guidance and optional intentAlignment summary evidence."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Aligned the Cockpit workflow guide with optional intent and summary intentAlignment handling."
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_summary.example.json",
+      "reason": "Added an optional intentAlignment example to the Summary template."
+    },
+    {
+      "path": "CLAUDE.md",
+      "reason": "Aligned Claude guidance with optional intent and optional intentAlignment recording."
+    },
+    {
+      "path": "GEMINI.md",
+      "reason": "Aligned Gemini guidance with optional intent and optional intentAlignment recording."
+    },
+    {
+      "path": "README.md",
+      "reason": "Updated the project overview to state that intentAlignment is optional and evidence-based."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Aligned the Japanese overview with optional intentAlignment guidance."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Aligned the Chinese overview with optional intentAlignment guidance."
+    },
+    {
+      "path": "docs/contract-fields.md",
+      "reason": "Documented optional Summary intentAlignment fields and their semantics."
+    },
+    {
+      "path": "docs/reference/v2-implementation-plan.md",
+      "reason": "Updated the V2 phase statuses to reflect completed engineering work."
+    },
+    {
+      "path": "docs/work-item-style-guide.md",
+      "reason": "Added guidance for writing optional intentAlignment evidence without inventing context."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Added validator compatibility for optional intentAlignment summary data."
+    },
+    {
+      "path": "scripts/ai_checkpoint.py",
+      "reason": "Changed checkpoint output to always show problem, constraints, and rationale with not provided defaults."
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "reason": "Updated agent guidance to avoid inventing intent context and to record optional intentAlignment only when available."
+    },
+    {
+      "path": "tests/test_checkpoint_intent.py",
+      "reason": "Added coverage for missing intent context in checkpoint output."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Added a test module whose name matches the summary validator production module for coverage guard association."
+    },
+    {
+      "path": "tests/test_ai_checkpoint.py",
+      "reason": "Added a test module whose name matches the checkpoint production module for coverage guard association."
+    },
+    {
+      "path": "tests/test_contract_and_policy.py",
+      "reason": "Added coverage for intent: null and optional Summary intentAlignment compatibility."
+    },
+    {
+      "path": "tests/test_contract_examples.py",
+      "reason": "Verified the template Summary example includes an optional intentAlignment section."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Confirmed the checkpoint CLI surfaces default intent context in the end-to-end flow."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/v2_intent_aware_development.contract.json",
+    ".ai/work-items/_templates/work_item_contract.example.json",
+    ".ai/work-items/_templates/work_item_summary.example.json",
+    ".ai/README.md",
+    ".ai/cockpit/README.md",
+    ".ai/glossary.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/contract-fields.md",
+    "docs/roadmap.md",
+    "docs/reference/v2-implementation-plan.md",
+    "docs/reference/v2-5-governance-compression-plan.md",
+    "docs/work-item-style-guide.md",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_checkpoint.py",
+    "scripts/ai_check_work_item.py",
+    "tests/test_checkpoint_intent.py",
+    "tests/test_ai_check_summary.py",
+    "tests/test_ai_checkpoint.py",
+    "tests/test_contract_and_policy.py",
+    "tests/test_contract_examples.py",
+    "tests/test_core_gates.py",
+    "user request"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/v2_intent_aware_development.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:31:58.980855+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "7feeaa793c3db93a3d788b1956438fdf4c307ffc0fbd0d3af864e238b8eece33",
+      "commandHash": "15deae32ef3df806c57c3680d47ced7a7a0d181b708dd7929319710293ac10bf",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/v2_intent_aware_development.contract.json work item contract check passed: .ai/work-items/active/v2_intent_aware_development.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/v2_intent_aware_development.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:31:59.170603+00:00",
+      "exitCode": 0,
+      "durationMs": 149,
+      "outputDigest": "3c19ab02999b6f452bd1bc69ec6abd51cc5d1f092489bb9f7c629f30110e2f87",
+      "commandHash": "221010a1eaeab22703e748e5d97b62cd427e14aa81c805dcebe439a296cbf874",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/v2_intent_aware_development.contract.json scope guard passed: 21 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:31:59.330852+00:00",
+      "exitCode": 0,
+      "durationMs": 155,
+      "outputDigest": "9c3a991021e9a732d34532220a3103f4d9ee17d5df19c2d8bb1b0ba29c73a54d",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/v2_intent_aware_development.contract.json [warning] restricted_write: .ai/README.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. [warning] restricted_write: CLAUDE.md (CLAUDE.md) - Claude operating rules. [warning] restricted_write: GEMINI.md (GEMINI.md) - Gemini operating rules. guard check completed: 4 warnin"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/v2_intent_aware_development.contract.json SUMMARY=.ai/work-items/active/v2_intent_aware_development.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:31:59.385277+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "a5417835ccb81e485c3ff91e245bdd6ec6d27f2dbf201099c00f25ed5c91a34b",
+      "commandHash": "b97da1732cb6ee7e93eb28329471c4284826706c22f61b34ddccd16b7aa5e8a7",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/v2_intent_aware_development.contract.json --summary .ai/work-items/active/v2_intent_aware_development.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `v2_intent_aware_development` - Contract Hash: `956d1869fe7654d6` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count: `0` - Required Chec"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/v2_intent_aware_development.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:31:59.540162+00:00",
+      "exitCode": 0,
+      "durationMs": 148,
+      "outputDigest": "6ec1e9e44f418f06e14cede329db4fc1e12f5a09cc3d1a9d1ccc0acba710d9f1",
+      "commandHash": "b9664341852118cc1f452309773d1315e5d0de9dc9fc89d2804617d5df1b1308",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/v2_intent_aware_development.summary.json review policy matched 8 path(s) [review] .ai/README.md [review] .ai/cockpit/README.md [review] .ai/cockpit/current_status.md [review] .ai/work-items/_templates/work_item_summary.example.json [review] CLAUDE.md [review] GEMINI.md [review] scripts/ai_check_summary.py [review] scripts/ai_checkpoint.py review focus recorded: 3 item(s) report: target/ai"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:31:59.679128+00:00",
+      "exitCode": 0,
+      "durationMs": 134,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:31:59.817966+00:00",
+      "exitCode": 0,
+      "durationMs": 131,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/v2_intent_aware_development.contract.json SUMMARY=.ai/work-items/active/v2_intent_aware_development.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:31:59.881380+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "1e808054da5d1a3ce6aab1346c765ca70e68d15a44f3c17238fd090aafa9aa60",
+      "commandHash": "783bfbc397d2c2b6c0eedec09f19489960b5349149ab1f69f5108e832da146ef",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/v2_intent_aware_development.contract.json --summary .ai/work-items/active/v2_intent_aware_development.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:32:43.017845+00:00",
+      "exitCode": 0,
+      "durationMs": 43131,
+      "outputDigest": "cf85335d6ad7c34c76fb88b55fde733bf35a0aa8db8459cd0356ba768b547c05",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60 ........................................................................ [ 30%] ........................................................................ [ 60%] ........................................................................ [ 90%] ........................ [100%] ================================ tests coverage ========"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/v2_intent_aware_development.contract.json SUMMARY=.ai/work-items/active/v2_intent_aware_development.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:32:43.527817+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "cec2a493bddadfd33a6c9478ed71371f25967ebf23e4809494d96b3c053da801",
+      "commandHash": "ff091662355641aad7068a97623ceeb93dded5ce08235703b852a331e8a4e587",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/v2_intent_aware_development.contract.json --summary .ai/work-items/active/v2_intent_aware_development.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/v2_intent_aware_development.contract.json SUMMARY=.ai/work-items/active/v2_intent_aware_development.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:32:43.589384+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "8af4246de399e4118f710ca63784f8093284c8c8a91c1a64229f8ebc04c00e02",
+      "commandHash": "14c5abf5f448c57d84efd97103ba4b4219c72c3501751779f190f824347f88c4",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/v2_intent_aware_development.contract.json --summary .ai/work-items/active/v2_intent_aware_development.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:32:43.641546+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/v2_intent_aware_development.contract.json SUMMARY=.ai/work-items/active/v2_intent_aware_development.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:32:43.703360+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "84fb4b1cbccc62faccb145e54b6e15df46696827eb0b4e20ddc06415315f794b",
+      "commandHash": "4680bf18692b6c7ef6e96a4671b9d988e642cd6bd7011d59d13a93bad4c1449c",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/v2_intent_aware_development.contract.json --summary .ai/work-items/active/v2_intent_aware_development.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/v2_intent_aware_development.summary.json CONTRACT=.ai/work-items/active/v2_intent_aware_development.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T08:32:43.850729+00:00",
+      "exitCode": 0,
+      "durationMs": 142,
+      "outputDigest": "fece0603b2516278950c4f385c66f64d8be552e8f204eedd5015116c0c394bc1",
+      "commandHash": "9a4140badbca8ac8bf2015fab0e2995add883704701e7c628be5e8a241a0cbce",
+      "contractHash": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/v2_intent_aware_development.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/v2_intent_aware_development.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/v2_intent_aware_development.summary.json --contract .ai/work-items/active/v2_intent_aware_development.contract.json ai summary check passed: .ai/work-items/active/v2_intent_aware_development.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep V2 Intent-aware Development separate from V2.5 Governance Compression.",
+      "compliant": true,
+      "evidence": "The contract and docs keep V2.5 as a next-stage reference while the implementation work stays on optional intent compatibility and checkpoint behavior."
+    },
+    {
+      "guideline": "Treat intent and intentAlignment as optional governance evidence; do not fabricate missing context.",
+      "compliant": true,
+      "evidence": "The checkpoint now prints not provided defaults, the validators accept absent/null/partial intent data, and the guidance explicitly tells agents to leave missing context empty."
+    },
+    {
+      "guideline": "Preserve backward compatibility for V1 archives and partial V2 records.",
+      "compliant": true,
+      "evidence": "The contract validator keeps V1 archive behavior intact while tests cover intent absent, intent null, partial intent, and optional Summary intentAlignment compatibility."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The work touches validators, checkpoint output, templates, and documentation, so the remaining risk is consistency drift across the repo until the final finish checks run."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "review",
+      "detail": "The finish flow still needs to prove that the updated Summary and Cockpit status remain consistent after the final checkpoint and verification pass.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "All required checks passed through ai_finish.py and Cockpit status was regenerated successfully.",
+    "expectedReviewFocus": [
+      "Optional intent and intentAlignment compatibility.",
+      "Checkpoint defaults for missing intent context.",
+      "V2.5 remaining reference-only and not implemented as compression."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "956d1869fe7654d6",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed scope, acceptance, unknowns, and verification before editing."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "956d1869fe7654d6",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 6,
+      "detail": "Reviewed scope, acceptance, unknowns, verification, and next action before finishing."
+    }
+  ],
+  "knownGaps": [],
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "Optional intent handling, summary compatibility, checkpoint defaults, and documentation alignment were implemented without introducing V2.5 compression behavior."
+  },
+  "overclaimPrevention": "State unverified items plainly until the before_finish checkpoint and ai-finish verification pass complete."
+}

@@ -1,0 +1,311 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix_intent_alignment_legacy_compatibility",
+  "mode": "code",
+  "title": "Fix legacy intentAlignment compatibility",
+  "baseCommit": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/README.md",
+      "status": "M",
+      "fingerprint": "4d33c710325169e39c624a4ae783d63dfe744263a37fc583abca2db59984408b"
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "status": "M",
+      "fingerprint": "8574a8830c8c038d62e56dfc9d1a5b885e96e39e6f974c3e212765ac048699fe"
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "a43fe611f3171d35c7cd4aa896f0b8821ab80fec571e9fce8b3c4cba5c7424e4"
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_summary.example.json",
+      "status": "M",
+      "fingerprint": "bd72541ba6b9e58dce4afcd714785e5acaa5b257afa10e5cbb7e554fb56293a8"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v2_5_governance_compression_plan.contract.json",
+      "status": "A",
+      "fingerprint": "cfa3d34ab51bb0f110face931ffd01a98e5f76ec9518be20cda6b883391aaa79"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v2_5_governance_compression_plan.summary.json",
+      "status": "A",
+      "fingerprint": "fd7f5bb67f8668cda17b0095cf8d8c9d3e5b784663f9f7be8f4929a1d16ede03"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v2_intent_aware_development.contract.json",
+      "status": "A",
+      "fingerprint": "956d1869fe7654d643bca20f3264d812eb12863590ca0e6015ba5359e67f9dc2"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v2_intent_aware_development.summary.json",
+      "status": "A",
+      "fingerprint": "d00edfc2f157ea55125d12edfe704a11760513797a7f0ed7fbbe2941cbe8a45e"
+    },
+    {
+      "path": "CLAUDE.md",
+      "status": "M",
+      "fingerprint": "6d01e980cb7a4adfcd68bc231b5b03f7c75c91813340969d4296b961e7a6e2de"
+    },
+    {
+      "path": "GEMINI.md",
+      "status": "M",
+      "fingerprint": "26ffb47ba1bc254300b2de2716a07dfd9e23dd395e9612e8386ee823b46b5841"
+    },
+    {
+      "path": "README.ja.md",
+      "status": "M",
+      "fingerprint": "0f41cd1284ad3b54717ad79816ba8d0f9e105f48b46a585ae34fcb9b2d8567af"
+    },
+    {
+      "path": "README.md",
+      "status": "M",
+      "fingerprint": "9cee717dba3d4ff2a88754cf8c28ea3531b30681842bc22dab52ae2bfc96c710"
+    },
+    {
+      "path": "README.zh-CN.md",
+      "status": "M",
+      "fingerprint": "0fc32285f1e5abff1215a69be4cf40ee0b069d6adb33d5b048d0a67cec4947f2"
+    },
+    {
+      "path": "docs/contract-fields.md",
+      "status": "M",
+      "fingerprint": "1d2313abf949f45f79173dd4a747d4c40516bfbbc3503ff014de55801a82caa5"
+    },
+    {
+      "path": "docs/reference/v2-5-governance-compression-plan.md",
+      "status": "A",
+      "fingerprint": "2ea4c6bd6dfed9c45b79ab412063611a8d62da13a071de8e87ef41670aa667e8"
+    },
+    {
+      "path": "docs/reference/v2-implementation-plan.md",
+      "status": "M",
+      "fingerprint": "8d6b78343b93c0c1b5cbabdf5b9fda359b35da5322ae3a4c27e5b773846ec5d9"
+    },
+    {
+      "path": "docs/roadmap.md",
+      "status": "M",
+      "fingerprint": "d97cbcb501a70a637903cb032ebed427b5b276d0584d2c1d4edbe35fcd87c79b"
+    },
+    {
+      "path": "docs/work-item-style-guide.md",
+      "status": "M",
+      "fingerprint": "d17e4ef86658451d8741155cead756a45cb98c3eddd4e2a7394ef52810787c44"
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "status": "M",
+      "fingerprint": "fca5c1b4e4b4cbc6227c83c39a1fcf9e931d49e31bece225640cd93cb62447e2"
+    },
+    {
+      "path": "scripts/ai_checkpoint.py",
+      "status": "M",
+      "fingerprint": "6ff2e4a120afc0460c6d47a9fc5c074797332c44e201dbc119b855cb228e60ea"
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "status": "M",
+      "fingerprint": "61ae1bed9d4c982be9f17e3a5083b796bcdb60257cb084caf8e094e0ebe9bf72"
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "status": "A",
+      "fingerprint": "fd9afe5cb15fd0bd70cbb26d92210acda6463d6f9c25844872aa546123f3a6fb"
+    },
+    {
+      "path": "tests/test_ai_checkpoint.py",
+      "status": "A",
+      "fingerprint": "0b17462d5038f35bca98324b9f0d06a6bf46e691402be60ae36e12ac6185ed36"
+    },
+    {
+      "path": "tests/test_checkpoint_intent.py",
+      "status": "M",
+      "fingerprint": "a473a6a62dffeb668fc9fe81a2b6a8be2e8118d99b0c362f5e28740af700b613"
+    },
+    {
+      "path": "tests/test_contract_and_policy.py",
+      "status": "M",
+      "fingerprint": "5e0d978e0f01d13932550c495225e5f65458ea1f1bbeab346d2ca7602b86d4a6"
+    },
+    {
+      "path": "tests/test_contract_examples.py",
+      "status": "M",
+      "fingerprint": "b98ff3ebb1e12b44fd20afb65f439d122c63474aef5187ef4311271a9e222eca"
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "status": "M",
+      "fingerprint": "1bccda0784275d226e9e297f2672e9689521ea633c04c3e13c0a1b2c9f1294c1"
+    }
+  ],
+  "scope": [
+    "scripts/ai_check_summary.py",
+    "tests/test_ai_check_summary.py",
+    "tests/test_contract_and_policy.py",
+    ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+    ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json"
+  ],
+  "outOfScope": [
+    "docs/roadmap.md",
+    "docs/reference/v2-implementation-plan.md",
+    "docs/reference/v2-5-governance-compression-plan.md",
+    "scripts/ai_checkpoint.py",
+    "templates/**",
+    "V2.5 implementation work"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Validator source that rejects legacy intentAlignment evidence keys."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/realign_ai_cockpit_v2.summary.json",
+      "reason": "Archived summary that uses legacy problemResolutionEvidence and constraintsRespectEvidence fields."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix_archive_pr_no_op_restore.summary.json",
+      "reason": "Another archived summary that uses the same legacy intentAlignment shape."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Canonical terminology for Intent, Summary, and Intent Alignment."
+    },
+    {
+      "path": ".ai/README.md",
+      "reason": "Workspace workflow guidance for optional intent and optional intentAlignment."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Lifecycle guidance and checkpoint requirements."
+    },
+    {
+      "path": "docs/roadmap.md",
+      "reason": "Confirms V2 stays focused on repository truth reliability before V2.5."
+    },
+    {
+      "path": "docs/reference/v2-implementation-plan.md",
+      "reason": "Confirms the V2 implementation phase boundary and completion state."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "compatibility_regression"
+    ],
+    "reason": "Narrow validator compatibility fix; primary risk is accidentally rejecting archived summaries or widening schema too far."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Compatibility fix is fully specified and ready to implement."
+  },
+  "preReviewWarnings": [
+    "Confirm archived summaries remain readable when they still use legacy intentAlignment.*Evidence fields."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Legacy intentAlignment evidence keys remain valid for archived summaries.",
+    "Canonical intentAlignment keys still validate.",
+    "Unknown intentAlignment keys outside the compatibility list still fail.",
+    "Regression tests cover archived and canonical payload shapes."
+  ],
+  "guidelines": [
+    "Keep the validator backward-compatible with archived summaries.",
+    "Do not implement V2.5 governance compression behavior."
+  ],
+  "intent": {
+    "problem": "The new optional intentAlignment validator rejects archived summaries that still use legacy problemResolutionEvidence and constraintsRespectEvidence fields, which makes existing archive records unreadable.",
+    "constraints": [
+      "Keep contractVersion 2 behavior backward-compatible.",
+      "Preserve canonical intentAlignment fields.",
+      "Do not implement V2.5 or broaden the validator beyond archive compatibility."
+    ],
+    "rationale": "Accepting the legacy evidence aliases keeps the repository truth stable while preserving the canonical V2 schema for new summaries."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

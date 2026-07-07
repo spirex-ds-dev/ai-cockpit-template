@@ -21,6 +21,7 @@ def test_static_examples_match_ai_start_defaults():
     assert contract["checkpointPolicy"]["requiredStages"] == ai_start.DEFAULT_CHECKPOINT_STAGES
     assert [item["check"] for item in summary["verification"]] == ai_start.DEFAULT_VERIFICATION_CHECKS
     assert [item["stage"] for item in summary["checkpointEvidence"]] == ai_start.DEFAULT_CHECKPOINT_STAGES
+    assert summary["intentAlignment"] == {}
 
 
 def test_example_contract_contains_all_agent_risk_hard_gates():

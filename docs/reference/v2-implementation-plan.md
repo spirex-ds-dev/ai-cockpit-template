@@ -20,7 +20,7 @@ V2 introduces Intent as a first-class governance object. The implementation is d
 
 ## Phase 1: Roadmap Documentation
 
-**Status**: Current phase
+**Status**: Completed
 
 **Scope**:
 - Revise `docs/roadmap.md` to establish new architectural positioning
@@ -49,7 +49,7 @@ V2 introduces Intent as a first-class governance object. The implementation is d
 
 ## Phase 2: Contract Schema Validation
 
-**Status**: Not started
+**Status**: Completed
 
 **Scope**:
 - Verify V2 Contract schema already supports all intent fields correctly
@@ -76,7 +76,7 @@ V2 introduces Intent as a first-class governance object. The implementation is d
 
 ## Phase 3: Summary Intent Alignment
 
-**Status**: Not started
+**Status**: Completed
 
 **Scope**:
 - Design Summary `intentAlignment` section schema
@@ -104,7 +104,7 @@ V2 introduces Intent as a first-class governance object. The implementation is d
 
 ## Phase 4: Templates & AI Integration
 
-**Status**: Not started
+**Status**: Completed
 
 **Scope**:
 - Update Work Item Contract template with improved intent field guidance

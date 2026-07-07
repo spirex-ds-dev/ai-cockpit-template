@@ -26,7 +26,7 @@ Intent → Contract → Implementation → Verification → Summary (Intent Alig
 
 | Phase | Purpose |
 | --- | --- |
-| **Intent** | Why does this work exist? (problem, constraints, rationale) |
+| **Intent** | Why does this work exist? (problem, constraints, rationale; optional and can be left as not provided) |
 | **Contract** | What should change? (scope, acceptance, verification) |
 | **Implementation** | What actually changed? |
 | **Verification** | Does it meet requirements? |
@@ -44,9 +44,9 @@ Intent → Contract → Implementation → Verification → Summary (Intent Alig
 
 1. Declare Intent (optional but recommended): Why does this work exist? What constraints must be respected? What's the rationale?
 2. Create a Work Item with `make ai-start TASK=<task> TITLE="..." MODE=code`.
-3. Edit the Contract until scope, sources, acceptance, verification, risk assessment, agent capability, and execution decision are explicit. Fill `intent.problem`, `intent.constraints`, and `intent.rationale` when context is available — all fields are optional.
+3. Edit the Contract until scope, sources, acceptance, verification, risk assessment, agent capability, and execution decision are explicit. Fill `intent.problem`, `intent.constraints`, and `intent.rationale` when context is available, or leave them empty / not provided when context is missing.
 4. Implement only inside the declared scope.
-5. Update the Summary with changed files, checks, risks, review readiness, boundary checks, known gaps, any destructive changes, and intent alignment validation.
+5. Update the Summary with changed files, checks, risks, review readiness, boundary checks, known gaps, any destructive changes, and optional `intentAlignment` evidence when it exists.
 6. Run `make ai-finish TASK=<task>`.
 7. Review the generated status and archived Contract/Summary.
 

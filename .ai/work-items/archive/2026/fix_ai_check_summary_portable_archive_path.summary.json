@@ -1,0 +1,328 @@
+{
+  "workItemId": "fix_ai_check_summary_portable_archive_path",
+  "contractPath": ".ai/work-items/archive/2026/fix_ai_check_summary_portable_archive_path.contract.json",
+  "changedFiles": [
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Resolve the archive fixture path from PROJECT_ROOT instead of a hardcoded checkout path."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix_ai_check_summary_portable_archive_path.contract.json",
+      "reason": "Update the Work Item Contract to match the portability fix."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix_ai_check_summary_portable_archive_path.summary.json",
+      "reason": "Replace the skeleton summary with the implementation record."
+    }
+  ],
+  "sourcesUsed": [
+    "tests/test_ai_check_summary.py",
+    "scripts/ai_common.py",
+    ".ai/work-items/archive/2026/realign_ai_cockpit_v2.summary.json",
+    ".ai/glossary.md",
+    ".ai/README.md",
+    ".ai/cockpit/README.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:10.560311+00:00",
+      "exitCode": 0,
+      "durationMs": 83,
+      "outputDigest": "bb1ae108cb122e16a0b0941e11d5e0e80a03c3da719b04925f173474b30f9d88",
+      "commandHash": "7a4bb0cd27bb84edb426a4406dcf88ea810f7730369f0063ce21c5e57b525a49",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json work item contract check passed: .ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:10.737321+00:00",
+      "exitCode": 0,
+      "durationMs": 164,
+      "outputDigest": "7df034fbe73a6bea244b3803e53d155e2d9d33afe6382def4d2ba3a2920b29bd",
+      "commandHash": "b3ab777b4794cd724898696632da006b31d6cf1507e4656263c1dfbbd4015efa",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json scope guard passed: 2 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:10.932246+00:00",
+      "exitCode": 0,
+      "durationMs": 182,
+      "outputDigest": "54948ba846639af2e9c26965abcb12acc7b61deb0b340d3b07e8cba7baab534a",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json SUMMARY=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:10.997094+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "fd0afdac9af54914e46ecd2e5e5cf58855f8ce10db93f7f6663aa0f9e2c6724d",
+      "commandHash": "feaf4b290c65f4e2991c9023065c45497d504eeaa4e49f44bf37c4629f12ec69",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json --summary .ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix_ai_check_summary_portable_archive_path` - Contract Hash: `f374efcf2fd66c43` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Co"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:11.148904+00:00",
+      "exitCode": 0,
+      "durationMs": 144,
+      "outputDigest": "6cec755fe01b063f6ecd0ec52088a106918a05e92a6bf4da17036b5e797fce94",
+      "commandHash": "022687a53d866a23825da51939a041e0d4bbfd5f39c87d1f201e93fde74faad8",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json review policy matched 1 path(s) [review] .ai/cockpit/current_status.md review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:11.321929+00:00",
+      "exitCode": 0,
+      "durationMs": 167,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:11.491060+00:00",
+      "exitCode": 0,
+      "durationMs": 141,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json SUMMARY=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:11.546083+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "fafc173dab183b387c92cdb963e2c2ce831884c281abbcbca20f536d4322b8cc",
+      "commandHash": "0792d59fd65b40e93bd85938793ec0035abcb71ea14492bd2bc0da4a170898d3",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json --summary .ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:58.027093+00:00",
+      "exitCode": 0,
+      "durationMs": 46475,
+      "outputDigest": "41acddb5400c6d7b18771721c823e9948ba24b97b6255fb779b5c908019f1d7e",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60 ........................................................................ [ 29%] ........................................................................ [ 59%] ........................................................................ [ 89%] ......................... [100%] ================================ tests coverage ======="
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json SUMMARY=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:58.581720+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "7239e9363f451ac9d308ea1953a50806032fe80ef7f64e91ab06fdc8a424f699",
+      "commandHash": "d34d33125a68a33f7536f87a8bc62afb5a550eb93786b8cc46d847759312deaf",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json --summary .ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json SUMMARY=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:58.634975+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "8138cc967e6feacf5dc7c17e860044a85cbc644136a83eb5dc76453ba878c522",
+      "commandHash": "027f338f18fc8f76309ee130223de73f807d8acd55f52b6bbc2ffe39cfd2c8c1",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json --summary .ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:58.684450+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json SUMMARY=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:58.747209+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "8b924764d049d83f1f7e79b2beca2839f04bf021bdf4336cc495ad2b49246449",
+      "commandHash": "a0640233cb59670670944cbf7593d5899f233e96f0016526c2ded7ae16177999",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json --summary .ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json CONTRACT=.ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:15:58.894960+00:00",
+      "exitCode": 0,
+      "durationMs": 137,
+      "outputDigest": "97b3224d95aaf2864ccf7112726dfaf3b47c2bec73aa324da0a2bfd69d4dfc97",
+      "commandHash": "d0dd206e74e938e1ff9ae3ec280051f91d77e6924d2bee942ccb89ff88577c3f",
+      "contractHash": "f374efcf2fd66c433884d9391e2a7f13176f694dd8b2ff5a456eec471c8463fd",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json --contract .ai/work-items/active/fix_ai_check_summary_portable_archive_path.contract.json ai summary check passed: .ai/work-items/active/fix_ai_check_summary_portable_archive_path.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep repository fixtures portable across checkout paths and CI.",
+      "compliant": true,
+      "evidence": "The regression test now resolves the archive summary path from ai_common.PROJECT_ROOT."
+    },
+    {
+      "guideline": "Do not introduce V2.5 behavior.",
+      "compliant": true,
+      "evidence": "The change only updates a test fixture path and keeps the summary validator behavior unchanged."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Very small portability fix; the main risk is leaving machine-specific paths in a template repository."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "portability",
+      "detail": "Any future test fixture path should continue to derive from the repository root.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "not_ready",
+    "reason": "Required checks have not run yet.",
+    "expectedReviewFocus": [
+      "The regression test no longer hardcodes a machine-specific checkout path.",
+      "Legacy archive summary coverage still passes.",
+      "No production validator behavior changed."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "timestamp": "2026-07-07T09:15:02Z",
+      "contractHash": "f374efcf2fd66c43",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0,
+      "reason": "Contract narrowed to the portable test path fix."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "timestamp": "2026-07-07T09:13:35Z",
+      "contractHash": "f374efcf2fd66c43",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0,
+      "reason": "Portable path fix and local verification are complete; finish will record the remaining governance checks."
+    }
+  ],
+  "knownGaps": [
+    "Required checks still need to run and be recorded before finish."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified."
+}

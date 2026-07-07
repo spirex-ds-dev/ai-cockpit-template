@@ -24,6 +24,15 @@ Use `problemStatement` for a one-line summary of the problem. Use the `intent` s
 
 The `intent` section can be omitted entirely without breaking validation. All fields are optional.
 
+Use `intentAlignment` in the Summary to close the loop after implementation:
+
+- `problemResolved` — whether the declared problem was actually addressed.
+- `constraintsRespected` — whether the task stayed inside the stated constraints.
+- `nonGoalsAvoided` — whether out-of-scope work was avoided.
+- `rationaleValidated` — whether the chosen approach proved sound.
+
+Like `intent`, `intentAlignment` is optional. Leave it empty when the task has no meaningful context to validate, or when the evidence is not available yet.
+
 
 ## Scope Before Implementation
 

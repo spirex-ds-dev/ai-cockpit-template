@@ -18,10 +18,10 @@ Read these files before changing the repository:
 
 ## Key Concepts
 
-- **Intent**: Why work exists — problem, constraints, rationale (optional but recommended)
+- **Intent**: Why work exists — problem, constraints, rationale (optional but recommended; leave blank or mark `not provided` when context is missing)
 - **Contract**: What should change — scope, acceptance, verification
 - **Implementation**: What actually changed
 - **Verification**: Does it meet requirements?
-- **Summary**: Did we achieve the intended goal? Intent alignment validation
+- **Summary**: Did we achieve the intended goal? Intent alignment validation is optional and should only be filled when evidence exists
 
 Guard policies live under `.ai/guards/`. Generated Cockpit Status must be updated through the Make targets documented in `.ai/cockpit/README.md`, not edited manually.

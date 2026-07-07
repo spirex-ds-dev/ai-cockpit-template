@@ -41,6 +41,17 @@ REQUIRED_FIELDS = (
 RESULTS = {"passed", "failed", "not_run"}
 RISK_LEVELS = {"low", "medium", "high"}
 REVIEW_READINESS_STATUSES = {"not_ready", "ready", "ready_with_risks", "blocked"}
+INTENT_ALIGNMENT_BOOL_KEYS = {"problemResolved", "constraintsRespected", "nonGoalsAvoided"}
+INTENT_ALIGNMENT_STRING_KEYS = {"rationaleValidated"}
+
+
+def intent_alignment_is_compat_evidence_key(key: str) -> bool:
+    """Return True for legacy archive evidence aliases.
+
+    Older archived summaries used ``*Evidence`` field names for the same
+    intent-alignment facts. Keep those readable without forcing archive rewrites.
+    """
+    return key.endswith("Evidence")
 
 
 def changed_file_paths(summary: dict[str, Any]) -> set[str]:
@@ -206,6 +217,8 @@ def validate_summary(
             if focus is not None and (not isinstance(focus, list) or any(not non_empty_string(item) for item in focus)):
                 issues.append("reviewReadiness.expectedReviewFocus must be a list of non-empty strings")
 
+    issues.extend(validate_intent_alignment(summary))
+
     boundary = summary.get("boundaryChecks")
     if boundary is not None:
         if not isinstance(boundary, dict):
@@ -244,6 +257,39 @@ def validate_summary(
             issues.append(f"Summary is missing required verification: {', '.join(missing)}")
         if non_passed:
             issues.append(f"required verification is not passed: {', '.join(non_passed)}")
+    return issues
+
+
+def validate_intent_alignment(summary: dict[str, Any]) -> list[str]:
+    """Validate the optional Summary intentAlignment section.
+
+    The section may be absent, null, empty, partially populated, or complete.
+    Legacy archived summaries may also use ``*Evidence`` aliases for the same
+    fields, and those remain accepted for backward compatibility.
+    """
+    issues: list[str] = []
+    alignment = summary.get("intentAlignment")
+    if alignment is None:
+        return issues
+    if not isinstance(alignment, dict):
+        issues.append("intentAlignment must be an object")
+        return issues
+
+    for key in alignment:
+        if key not in INTENT_ALIGNMENT_BOOL_KEYS | INTENT_ALIGNMENT_STRING_KEYS and not intent_alignment_is_compat_evidence_key(key):
+            issues.append(f"intentAlignment.{key} is not a recognized field")
+
+    for key in INTENT_ALIGNMENT_BOOL_KEYS:
+        value = alignment.get(key)
+        if value is not None and not isinstance(value, bool):
+            issues.append(f"intentAlignment.{key} must be boolean when provided")
+
+    for key, value in alignment.items():
+        if key not in INTENT_ALIGNMENT_STRING_KEYS and not intent_alignment_is_compat_evidence_key(key):
+            continue
+        if value is not None and not non_empty_string(value):
+            issues.append(f"intentAlignment.{key} must be a non-empty string when provided")
+
     return issues
 
 

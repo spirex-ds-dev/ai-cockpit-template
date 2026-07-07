@@ -1,0 +1,338 @@
+{
+  "workItemId": "fix_intent_alignment_legacy_compatibility",
+  "contractPath": ".ai/work-items/archive/2026/fix_intent_alignment_legacy_compatibility.contract.json",
+  "changedFiles": [
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Allow legacy intentAlignment evidence aliases for archived summaries."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Add regression coverage for canonical and archived legacy intentAlignment payloads."
+    },
+    {
+      "path": "tests/test_contract_and_policy.py",
+      "reason": "Extend the Summary compatibility test with legacy intentAlignment evidence keys."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix_intent_alignment_legacy_compatibility.contract.json",
+      "reason": "Update the Work Item Contract to the actual compatibility fix."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix_intent_alignment_legacy_compatibility.summary.json",
+      "reason": "Replace the skeleton summary with the actual implementation record."
+    }
+  ],
+  "sourcesUsed": [
+    "scripts/ai_check_summary.py",
+    ".ai/work-items/archive/2026/realign_ai_cockpit_v2.summary.json",
+    ".ai/work-items/archive/2026/fix_archive_pr_no_op_restore.summary.json",
+    ".ai/glossary.md",
+    ".ai/README.md",
+    ".ai/cockpit/README.md",
+    "docs/roadmap.md",
+    "docs/reference/v2-implementation-plan.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:03.877789+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "c9f1d41fd83b715858a23b1cd9149e6cca729cc815113c316bfa218c73038341",
+      "commandHash": "12b603efbe0af9fb38f2248543481c36c4200adf5d36f8d341afdda8b2cad35a",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json work item contract check passed: .ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:04.060591+00:00",
+      "exitCode": 0,
+      "durationMs": 160,
+      "outputDigest": "7956bb3c03b0f58d54aa5161c2f61f87776f61d8cd40c16143fe711c574cca2f",
+      "commandHash": "1d68538554532c3a8c98ba999e3f825300f79499416ee71ab5fb57dde86fe183",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json scope guard passed: 4 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:04.222897+00:00",
+      "exitCode": 0,
+      "durationMs": 153,
+      "outputDigest": "e7f4401dfcf5cdcde272b59482c9fd167950db01571a4371805fe9fd6ccf310e",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json SUMMARY=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:04.276727+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "82ff3c3115221ee52f1929d2f8548b5d76a795fb4395b0d28a226e38bdb90376",
+      "commandHash": "ed2a640cf8830da561786e0341bac9aa6a5ad8c0b778d73c843cd5bacee80b51",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json --summary .ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix_intent_alignment_legacy_compatibility` - Contract Hash: `062a891baa80dfb9` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:04.428138+00:00",
+      "exitCode": 0,
+      "durationMs": 146,
+      "outputDigest": "72e4131a3b0045c7c39a2e3c56f6d1346b64ae2f3ffd2e131ceccd97a92babc1",
+      "commandHash": "c5adb19c4d09bb82837d521ec2d93d8a2eda713b1017ab1c6d25e440fb82d297",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json review policy matched 2 path(s) [review] .ai/cockpit/current_status.md [review] scripts/ai_check_summary.py review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:04.575877+00:00",
+      "exitCode": 0,
+      "durationMs": 143,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:04.705628+00:00",
+      "exitCode": 0,
+      "durationMs": 122,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json SUMMARY=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:04.764342+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "fa862d8bf3f488964dbc39e8dff8f699cd02415a355960b8be30f67abac1b6d7",
+      "commandHash": "60ae835e58afa57871200193820e02cbca97e7e72f680a7c753a244d8829dec2",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json --summary .ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:49.182017+00:00",
+      "exitCode": 0,
+      "durationMs": 44412,
+      "outputDigest": "5eb9937bb96c2306415d0b70a6d61869eecb618993c1f82d1966f10d6bb355f5",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60 ........................................................................ [ 29%] ........................................................................ [ 59%] ........................................................................ [ 89%] ......................... [100%] ================================ tests coverage ======="
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json SUMMARY=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:49.728869+00:00",
+      "exitCode": 0,
+      "durationMs": 62,
+      "outputDigest": "f7acc294e4ce3460be57dc2e3dfff1f8294a075744fc8b71a7149ca05a3377d9",
+      "commandHash": "306655df12f894e4cd52a3db8e4d504e0677238614bf4ca50819cd1667725f70",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json --summary .ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json SUMMARY=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:49.789958+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "c88f267069e15439533676514bffa06d2980bb131f403e910c6d6e6b7d454749",
+      "commandHash": "91942bcce57f37a6f2bc57718d59ed4f4b263061b374877c8eafffc0d2708074",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json --summary .ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:49.838132+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json SUMMARY=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:49.897454+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "7d84e4e84f0a7b8a399c74d6928ec0a678cd8db908dd72e902e61397a8b67663",
+      "commandHash": "e763800412c385dc38561f045049aba3df12812b8c6d9f1b9ee3eb87c6c7911d",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json --summary .ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json CONTRACT=.ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T09:08:50.034290+00:00",
+      "exitCode": 0,
+      "durationMs": 132,
+      "outputDigest": "b935b2e6297e93c6b52ce3ecd7a0a8cfb9713a54b244d8220e3bb1e3f1543a7a",
+      "commandHash": "b126399f222649755c4d86ec5e16fe2de4b8feb073316a256940fcbcf6df6351",
+      "contractHash": "062a891baa80dfb91d17ea24575ab4e07a6cb8809008ebba38955e4826a285fb",
+      "commitSha": "361b17a00a1beadbc57edb20e3607a1b3c6ff1fd",
+      "executionContractPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json --contract .ai/work-items/active/fix_intent_alignment_legacy_compatibility.contract.json ai summary check passed: .ai/work-items/active/fix_intent_alignment_legacy_compatibility.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep the validator backward-compatible with archived summaries.",
+      "compliant": true,
+      "evidence": "The validator now accepts archived intentAlignment.*Evidence aliases while preserving the canonical fields."
+    },
+    {
+      "guideline": "Do not implement V2.5 governance compression behavior.",
+      "compliant": true,
+      "evidence": "The fix is limited to backward-compatible summary validation and regression tests."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Compatibility-only change; main risk is accidentally widening the validator beyond archived evidence aliases."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "archive compatibility",
+      "detail": "Archived summaries using legacy *Evidence keys must continue to validate after future validator changes.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "not_ready",
+    "reason": "Required AI checks have not been run yet.",
+    "expectedReviewFocus": [
+      "Archived summaries using legacy intentAlignment.*Evidence keys still validate.",
+      "Canonical intentAlignment keys still validate.",
+      "Unknown non-legacy intentAlignment keys still fail."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "timestamp": "2026-07-07T09:06:04Z",
+      "contractHash": "062a891baa80dfb9",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0,
+      "reason": "Contract narrowed to legacy intentAlignment compatibility and optional archive readability."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "timestamp": "2026-07-07T09:06:04Z",
+      "contractHash": "062a891baa80dfb9",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 1,
+      "reason": "Scope now includes the additional regression test; finish will run the remaining governance checks."
+    }
+  ],
+  "knownGaps": [
+    "Required AI checks still need to be run and recorded before finish."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified."
+}

@@ -50,23 +50,38 @@ def review_focus(summary: dict[str, Any] | None) -> list[str]:
 def intent_context(contract: dict[str, Any]) -> list[str]:
     """intent セクションからチェックポイント表示用のコンテキスト行を抽出する。
 
-    値が記入されているフィールドのみ表示し、未記入（None / 空リスト）はスキップする。
+    intent が欠落・null・空でもチェックポイントが止まらないよう、
+    problem / constraint / rationale の3要素を常に表示する。
     """
     intent = contract.get("intent")
-    if not isinstance(intent, dict):
-        return []
     lines: list[str] = []
+    if not isinstance(intent, dict):
+        return [
+            "problem: not provided",
+            "constraint: not provided",
+            "rationale: not provided",
+        ]
     problem = intent.get("problem")
     if isinstance(problem, str) and problem.strip():
         lines.append(f"problem: {problem.strip()}")
+    else:
+        lines.append("problem: not provided")
     constraints = intent.get("constraints")
     if isinstance(constraints, list) and constraints:
+        appended = False
         for item in constraints:
             if isinstance(item, str) and item.strip():
                 lines.append(f"constraint: {item.strip()}")
+                appended = True
+        if not appended:
+            lines.append("constraint: not provided")
+    else:
+        lines.append("constraint: not provided")
     rationale = intent.get("rationale")
     if isinstance(rationale, str) and rationale.strip():
         lines.append(f"rationale: {rationale.strip()}")
+    else:
+        lines.append("rationale: not provided")
     return lines
 
 
