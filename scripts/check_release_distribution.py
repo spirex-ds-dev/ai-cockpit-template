@@ -308,7 +308,7 @@ def fetch_tagged_installer(tag: str) -> bytes:
                 PUBLIC_REPOSITORY,
                 str(clone_dir),
             ],
-            cwd=ROOT,
+            cwd=Path(raw),
             env=clone_git_environment(),
         )
         if clone.returncode != 0:
@@ -319,6 +319,18 @@ def fetch_tagged_installer(tag: str) -> bytes:
         return installer.read_bytes()
 
 
+def list_remote_tags(repository_url: str) -> str:
+    with tempfile.TemporaryDirectory(prefix="ai-cockpit-public-release-query-") as raw:
+        query = run_command(
+            ["git", *git_extraheader_args(repository_url), "ls-remote", "--tags", "--refs", repository_url],
+            cwd=Path(raw),
+            env=clone_git_environment(),
+        )
+        if query.returncode != 0:
+            raise RuntimeError(f"failed to list public tags: {query.stderr.strip()}")
+        return query.stdout
+
+
 def main() -> int:
     metadata = json.loads(RELEASE.read_text(encoding="utf-8"))
     tag = metadata["releaseTag"]
@@ -326,13 +338,7 @@ def main() -> int:
     quality_target = metadata["publicContract"]["projectQualityTarget"]
     local_source = os.environ.get("AI_COCKPIT_TEMPLATE_SOURCE")
     try:
-        tags = run_command(
-            ["git", *git_extraheader_args(PUBLIC_REPOSITORY), "ls-remote", "--tags", "--refs", PUBLIC_REPOSITORY],
-            cwd=ROOT,
-        )
-        if tags.returncode != 0:
-            raise RuntimeError(f"failed to list public tags: {tags.stderr.strip()}")
-        latest_tag = highest_semver_tag(tags.stdout)
+        latest_tag = highest_semver_tag(list_remote_tags(PUBLIC_REPOSITORY))
         if tag != latest_tag:
             raise RuntimeError(f"release.json points to {tag}, but highest public tag is {latest_tag}")
         script = fetch_tagged_installer(tag)

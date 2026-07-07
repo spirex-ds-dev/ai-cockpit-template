@@ -1,0 +1,333 @@
+{
+  "workItemId": "release_distribution_duplicate_auth",
+  "contractPath": ".ai/work-items/archive/2026/release_distribution_duplicate_auth.contract.json",
+  "changedFiles": [
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Run release Git commands from an isolated working directory so checkout auth is not injected twice."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Add regression coverage for isolated Git command execution and checkout-auth reuse."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Regenerate cockpit status for the active release distribution auth fix."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release_distribution_duplicate_auth.contract.json",
+      "reason": "Record the actual scope, intent, and acceptance for the release distribution auth fix."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release_distribution_duplicate_auth.summary.json",
+      "reason": "Record implementation, verification, and handoff details for the release distribution auth fix."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+    "scripts/check_release_distribution.py",
+    "tests/test_release_distribution.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:58:29.668364+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "7cc2e14f0f0d3b1896fb4e7b3cd1e2123466688b814ed75adb200ec216cc69da",
+      "commandHash": "3222d9d745850419c282bf07d7dbfa886a2207b9d518279991aac96ff6935936",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/release_distribution_duplicate_auth.contract.json work item contract check passed: .ai/work-items/active/release_distribution_duplicate_auth.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:58:29.842031+00:00",
+      "exitCode": 0,
+      "durationMs": 168,
+      "outputDigest": "567c4ba77e348ef459c47a93d1082bafe2fdfb1f06a06a7c1408ece1713ded8d",
+      "commandHash": "3fc101460db82cec3fd78624602be30ee58350bae186e4c534bda732a2092056",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/release_distribution_duplicate_auth.contract.json scope guard passed: 3 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:58:30.003047+00:00",
+      "exitCode": 0,
+      "durationMs": 148,
+      "outputDigest": "a8b3ce4f199f1e7b18cf1156d18650851304edcdf94bfdc1476470977c9695b2",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/release_distribution_duplicate_auth.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/release_distribution_duplicate_auth.contract.json SUMMARY=.ai/work-items/active/release_distribution_duplicate_auth.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:58:30.052349+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "9ea3bf94abe5f86bda97b6f2d94581f91bcc6065a5ca62064ea1f416b98a95b8",
+      "commandHash": "05626a2aec80b89981c1f5c1f0978cbadb7039e75ad88b4f2e12cb2907c7928e",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/release_distribution_duplicate_auth.contract.json --summary .ai/work-items/active/release_distribution_duplicate_auth.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `release_distribution_duplicate_auth` - Contract Hash: `560198bf74370d83` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `3` - Unknown Co"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:58:30.191357+00:00",
+      "exitCode": 0,
+      "durationMs": 132,
+      "outputDigest": "8cdc14a01e8c66357615ef897993a7bbfd50c36ab4009841f73b75f7337cc543",
+      "commandHash": "844688c41754a0edd8d0fabe84e52568fb4538934a09791673f9352c0190b794",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/release_distribution_duplicate_auth.summary.json review policy matched 1 path(s) [review] .ai/cockpit/current_status.md review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:58:30.325441+00:00",
+      "exitCode": 0,
+      "durationMs": 128,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:58:30.461241+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/release_distribution_duplicate_auth.contract.json SUMMARY=.ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:58:30.528640+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "279d9f06d17f2fd1f5a22741fbb892edf7369ba8f560f679d01ca1d3d8257a39",
+      "commandHash": "250f384768a21ee6b49f54d88e6c3705237b8954e3e8c89bf0edc968e24dadc9",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/release_distribution_duplicate_auth.contract.json --summary .ai/work-items/active/release_distribution_duplicate_auth.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:59:16.910729+00:00",
+      "exitCode": 0,
+      "durationMs": 46371,
+      "outputDigest": "4ef70351aa5cf62311b37e78c473210215011cc6ff72593d8599c7c604149651",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60 ........................................................................ [ 27%] ........................................................................ [ 55%] ........................................................................ [ 83%] .......................................... [100%] ================================ tests"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/release_distribution_duplicate_auth.contract.json SUMMARY=.ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:59:17.447803+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "a46c13ff7aa2641f94311f56c2ec53b6e03ff3cee9fe709df745e13f21cd7ebc",
+      "commandHash": "f9c7e47a255dfcd47dbf7f417cba52bc926c53b9d5723676fe1d8126ef4497e6",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/release_distribution_duplicate_auth.contract.json --summary .ai/work-items/active/release_distribution_duplicate_auth.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/release_distribution_duplicate_auth.contract.json SUMMARY=.ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:59:17.512261+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "caf8cd8fde93fd1a100d200888c58d35645a9bef7039d3e2e24ca0c909dbc1c9",
+      "commandHash": "e0b143070dcab5865b1228f0b0ede5ba07a357b2fdd45ac2c15422e1ee7d9cf3",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/release_distribution_duplicate_auth.contract.json --summary .ai/work-items/active/release_distribution_duplicate_auth.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:59:17.569554+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/release_distribution_duplicate_auth.contract.json SUMMARY=.ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:59:17.640419+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "a123dd77f12fa3c125fdb2fe34094ef23fba4fa167da5d48e6b4198ab9be8e80",
+      "commandHash": "29c38f1e0830e46964b64376caa7595f97a179e378725f65395b5c5f7033bc3e",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/release_distribution_duplicate_auth.contract.json --summary .ai/work-items/active/release_distribution_duplicate_auth.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/release_distribution_duplicate_auth.summary.json CONTRACT=.ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-07T13:59:17.793235+00:00",
+      "exitCode": 0,
+      "durationMs": 140,
+      "outputDigest": "592e5e554523e984d734add31c2a0ff93e64f7a3629def823c84cf801deb5168",
+      "commandHash": "2e2686629c06199f5b36dd8b3426dbe89f662f56e03d5fd5eab14c8dbc19fc97",
+      "contractHash": "560198bf74370d83d9ffa8cb94c1fbecc79aa9ab1d08ebeb5c04c390a118af9d",
+      "commitSha": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+      "executionContractPath": ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/release_distribution_duplicate_auth.summary.json --contract .ai/work-items/active/release_distribution_duplicate_auth.contract.json ai summary check passed: .ai/work-items/active/release_distribution_duplicate_auth.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "The fix does not add a public API."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The change stays within the release distribution checker and its regression test."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The fix changes where the release validation commands run so they do not inherit duplicate checkout auth from the active repository."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    "GitHub Actions failed the release distribution check because the public tag verification path inherited checkout auth twice and Git rejected the duplicate Authorization header."
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "private-ci access",
+      "detail": "The fix depends on running release Git commands from a temp directory outside the checked-out repository.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "not_ready",
+    "reason": "Implementation and verification still need to run.",
+    "expectedReviewFocus": [
+      "scripts/check_release_distribution.py runs public Git commands from outside the checked-out repository",
+      "tests/test_release_distribution.py covers checkout-auth reuse and isolated Git command execution",
+      "No credential material is echoed into logs"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "detail": "Checkpoint captured before editing the release distribution Git isolation fix.",
+      "contractHash": "560198bf74370d83",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "detail": "Checkpoint captured before finish verification for the release distribution Git isolation fix.",
+      "contractHash": "560198bf74370d83",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 14,
+      "requiredChecksPassed": 0
+    }
+  ],
+  "knownGaps": [
+    "Implementation and verification still need to be completed."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified."
+}

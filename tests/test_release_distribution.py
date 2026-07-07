@@ -128,6 +128,24 @@ def test_git_extraheader_args_uses_checkout_header(monkeypatch):
     ]
 
 
+def test_list_remote_tags_runs_outside_repo_root(monkeypatch):
+    seen = {}
+
+    def fake_run_command(command, *, cwd, env=None):
+        seen["command"] = command
+        seen["cwd"] = cwd
+        if command == ["git", "config", "--get-all", "http.https://github.com/.extraheader"]:
+            return SimpleNamespace(returncode=0, stdout="AUTHORIZATION: basic abc123\n", stderr="")
+        if command[:3] == ["git", "-c", "http.https://github.com/.extraheader=AUTHORIZATION: basic abc123"] and command[3:6] == ["ls-remote", "--tags", "--refs"]:
+            return SimpleNamespace(returncode=0, stdout="a refs/tags/v0.5.19\n", stderr="")
+        raise AssertionError(f"unexpected command: {command!r}")
+
+    monkeypatch.setattr(release_distribution, "run_command", fake_run_command)
+    assert release_distribution.list_remote_tags("https://github.com/xinglun/ai-cockpit-template.git") == "a refs/tags/v0.5.19\n"
+    assert seen["cwd"] != release_distribution.ROOT
+    assert seen["command"] != ["git", "config", "--get-all", "http.https://github.com/.extraheader"]
+
+
 def test_highest_semver_tag_uses_numeric_version_order():
     refs = "\n".join([
         "a refs/tags/v0.5.9",

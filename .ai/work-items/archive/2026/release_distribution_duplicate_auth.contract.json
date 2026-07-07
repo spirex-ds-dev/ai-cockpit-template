@@ -1,0 +1,158 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_distribution_duplicate_auth",
+  "mode": "code",
+  "title": "Avoid duplicate checkout auth during release checks",
+  "baseCommit": "717019c68b228dae7c766a3f3b6df2efb18e4310",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "9365dee13160b58b60257600240d26d9756cc033870bc654204afec6c09b517b"
+    }
+  ],
+  "scope": [
+    "scripts/check_release_distribution.py",
+    "tests/test_release_distribution.py",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/active/release_distribution_duplicate_auth.contract.json",
+    ".ai/work-items/active/release_distribution_duplicate_auth.summary.json",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    ".github/workflows/**",
+    "release.json",
+    "install.sh",
+    "docs/**",
+    "examples/**"
+  ],
+  "sources": [
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Release distribution checks must avoid duplicate checkout auth when running Git commands in private CI."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Regression coverage must confirm the Git command isolation and checkout-auth reuse behavior."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_distribution",
+      "private_ci"
+    ],
+    "reason": "The fix changes how release validation reuses GitHub auth context without changing public release semantics."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The release auth reuse fix is concrete and verifiable."
+  },
+  "preReviewWarnings": [
+    "Verify that no credential material is echoed into logs.",
+    "Verify Git commands do not inherit duplicate checkout auth headers."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "make check-release-distribution completes in a private repository CI context without duplicate Authorization headers.",
+    "The release distribution check still works in a public repository environment.",
+    "Regression tests cover checkout-auth reuse and isolated Git command execution."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "GitHub Actions now runs the repository as private, and the release distribution check can fail when it reuses checkout auth twice during the public tag verification flow.",
+    "constraints": [
+      "Do not change public release validation semantics beyond preventing duplicate auth injection.",
+      "Keep the check reproducible in CI and locally.",
+      "Do not expose credential material in logs."
+    ],
+    "rationale": "Run release Git commands from an isolated working directory so the checkout-auth context can be reused safely without being injected twice."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
