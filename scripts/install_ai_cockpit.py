@@ -53,6 +53,7 @@ SCRIPT_NAMES = {
     "ai_finish.py",
     "ai_onboard.py",
     "ai_generate_status.py",
+    "ai_governance_compression.py",
     "ai_observability.py",
     "ai_start.py",
     "ai_project_profile.py",

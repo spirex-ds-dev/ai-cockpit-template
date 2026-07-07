@@ -8,6 +8,7 @@ import ai_check_status
 import ai_check_status_consistency
 import ai_checkpoint
 import ai_finish
+import ai_governance_compression
 
 
 class ObservabilityStub:
@@ -52,23 +53,39 @@ def test_status_check_main_accepts_matching_ready_status(tmp_path, monkeypatch):
     contract.write_text(json.dumps({
         "workItemId": "task",
         "mode": "code",
-        "verification": [{"check": "aiWorkItem", "required": True}],
+        "acceptance": ["done"],
+        "verification": [{"check": "quality", "required": True}],
     }), encoding="utf-8")
     summary.write_text(json.dumps({
-        "verification": [{"check": "aiWorkItem", "result": "passed"}],
+        "verification": [{"check": "quality", "result": "passed"}],
+        "reviewReadiness": {"status": "ready", "reason": "fixture", "expectedReviewFocus": []},
+        "unknownsRemaining": [],
+        "risk": {"level": "low", "detail": "fixture"},
+        "guidelinesCompliance": [],
+        "checkpointEvidence": [],
+        "residualRisks": [],
     }), encoding="utf-8")
+    model = ai_governance_compression.derive_governance_status(
+        json.loads(contract.read_text(encoding="utf-8")),
+        json.loads(summary.read_text(encoding="utf-8")),
+    )
     status.write_text(
-        "- Task: `task`\n- Mode: `code`\n"
-        f"- Contract Path: `{contract}`\n- Summary Path: `{summary}`\n"
-        "- State: `ready_for_review`\n## Blocking\n- none\n"
-        "## Required Checks\n- `aiWorkItem`: passed\n",
+        ai_governance_compression.render_active_status(
+            model,
+            work_item_id="task",
+            mode="code",
+            contract_path=str(contract),
+            summary_path=str(summary),
+            generated_at="<timestamp>",
+        ),
         encoding="utf-8",
     )
     monkeypatch.setattr(ai_check_status, "create_observability", lambda **kwargs: ObservabilityStub())
+    monkeypatch.setattr(ai_check_status, "BACKTRACK_REPORT", tmp_path / "backtrack.json")
     monkeypatch.setattr(sys, "argv", ["ai_check_status.py", str(status), "--contract", str(contract), "--summary", str(summary)])
 
     assert ai_check_status.main() == 0
-    assert ai_check_status.required_commands(json.loads(contract.read_text(encoding="utf-8"))) == ["aiWorkItem"]
+    assert ai_check_status.required_commands(json.loads(contract.read_text(encoding="utf-8"))) == ["quality"]
 
 
 def test_status_consistency_covers_empty_paired_and_unpaired_states(tmp_path, monkeypatch):

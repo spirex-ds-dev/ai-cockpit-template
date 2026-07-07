@@ -122,8 +122,8 @@ def test_retry_circuit_breaker_counts_consecutive_failures(tmp_path):
         retry_threshold=2,
         observability_log=log,
     )
-    assert state == "blocked_by_ai_loop"
-    assert blockers
+    assert state == "blocked"
+    assert blockers == ["retry circuit breaker: consecutive check failures 2/2"]
 
 
 def test_project_relative_accepts_relative_repository_path():
@@ -141,11 +141,17 @@ def test_generate_active_status_renders_evidence_and_backtrack(tmp_path, monkeyp
         "mode": "code",
         "notCodable": False,
         "unknowns": [],
+        "acceptance": ["done"],
         "verification": [{"check": "quality", "required": True}],
     }), encoding="utf-8")
     summary.write_text(json.dumps({
+        "reviewReadiness": {"status": "ready", "reason": "fixture", "expectedReviewFocus": []},
         "verification": [{"check": "quality", "result": "passed"}],
-        "changedFiles": [{"path": "src/app.py", "reason": "feature"}],
+        "unknownsRemaining": [],
+        "risk": {"level": "low", "detail": "fixture"},
+        "guidelinesCompliance": [],
+        "checkpointEvidence": [],
+        "residualRisks": [],
     }), encoding="utf-8")
     backtrack.write_text(json.dumps({
         "status": "passed",
@@ -161,9 +167,11 @@ def test_generate_active_status_renders_evidence_and_backtrack(tmp_path, monkeyp
 
     ai_generate_status.write_active_status(contract, summary, output=output, observability_log=tmp_path / "events.jsonl")
     text = output.read_text(encoding="utf-8")
-    assert "ready_for_review" in text
-    assert "`quality`: passed" in text
-    assert "`src/app.py`: feature" in text
+    assert "Recommendation: `ready_for_review`" in text
+    assert "## Governance Signals" in text
+    assert "## Evidence" in text
+    assert "Verification: `quality: passed`" in text
+    assert "Backtrack" in text
     assert "test: `tests/test_app.py` - present" in text
 
 

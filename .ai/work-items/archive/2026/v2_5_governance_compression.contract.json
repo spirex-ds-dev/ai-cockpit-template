@@ -1,0 +1,193 @@
+{
+  "contractVersion": 2,
+  "workItemId": "v2_5_governance_compression",
+  "mode": "code",
+  "title": "V2.5 Governance Compression",
+  "baseCommit": "23b4df26be6b65dfcaca7e5353f5a88add3e80d9",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "7469ea1b8259c2489953944bd174f08105b4a998dea1d4c3383e6bc11df56c58"
+    }
+  ],
+  "scope": [
+    "scripts/ai_governance_compression.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_check_status.py",
+    "scripts/ai_check_status_consistency.py",
+    "scripts/install_ai_cockpit.py",
+    ".ai/guards/coverage_policy.yaml",
+    "tests/test_guards_and_status.py",
+    "tests/test_core_gates.py",
+    "tests/test_governance_compression.py",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/active/v2_5_governance_compression.contract.json",
+    ".ai/work-items/active/v2_5_governance_compression.summary.json",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "docs/**",
+    "templates/**",
+    ".ai/work-items/_templates/**",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "V3 Repository Intelligence",
+    "V4 Organization Governance"
+  ],
+  "sources": [
+    {
+      "path": "docs/roadmap.md",
+      "reason": "Defines V2.5 as Governance Compression after V2 is stable."
+    },
+    {
+      "path": "docs/reference/v2-implementation-plan.md",
+      "reason": "Confirms V2 intent-aware development is already complete."
+    },
+    {
+      "path": "docs/reference/v2-5-governance-compression-plan.md",
+      "reason": "Provides the proposed V2.5 architecture, phases, and conservative recommendation model."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines Intent, Intent Alignment, and Repository Governance Layer terms."
+    },
+    {
+      "path": ".ai/README.md",
+      "reason": "States that Summary is repository truth and Cockpit should only compress existing evidence."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Documents generated status expectations and lifecycle checks."
+    },
+    {
+      "path": "docs/contract-fields.md",
+      "reason": "Defines optional Contract and Summary fields, including intent and intentAlignment."
+    },
+    {
+      "path": "docs/work-item-style-guide.md",
+      "reason": "Reinforces intent-first, evidence-driven summary writing and optional intent alignment."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_derivation",
+      "status_compatibility"
+    ],
+    "reason": "Multiple status entrypoints must be updated without inventing new information or breaking no-active behavior."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "V2.5 derivation and status integration are fully specified and ready to implement."
+  },
+  "preReviewWarnings": [
+    "Verify Cockpit does not invent information that is absent from Contract, Summary, or check evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Cockpit status derives recommendation-oriented governance signals from Contract, Summary, and check evidence.",
+    "The derivation layer is pure and testable without file I/O.",
+    "Status generation and status checking consume the new governance model.",
+    "Legacy Summary and archive records remain readable."
+  ],
+  "guidelines": [
+    "Cockpit must only compress existing evidence and must not invent missing facts.",
+    "Keep derivation conservative when evidence is missing."
+  ],
+  "intent": {
+    "problem": "Cockpit still reports a fact list and a generic ready_for_review state. V2.5 needs to compress repository truth into a human decision state without copying Summary verbatim.",
+    "constraints": [
+      "Summary remains the repository truth source.",
+      "Cockpit must derive only from Contract, Summary, and check evidence.",
+      "No LLM or project-specific hardcoding in the generic derivation layer.",
+      "Do not implement V3 or V4."
+    ],
+    "rationale": "A pure derivation layer gives a conservative, explainable bridge from repository truth to human decision state while preserving compatibility."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "V2.5 governance compression work item",
+    "reason": "Coverage policy mapping for scripts/ai_check_status.py must stay aligned with existing status tests."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

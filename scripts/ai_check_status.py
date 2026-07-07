@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import time
 from pathlib import Path
@@ -12,6 +13,8 @@ from typing import Any
 
 from ai_common import load_json, verification_key
 from ai_observability import create_observability, elapsed_ms
+from ai_generate_status import BACKTRACK_REPORT, DEFAULT_LOG_PATH, DEFAULT_RETRY_THRESHOLD, project_relative, status_for
+from ai_governance_compression import derive_governance_status, render_active_status
 
 
 REQUIRED_FIELDS = ("workItemId", "mode")
@@ -23,6 +26,10 @@ def required_commands(contract: dict[str, Any]) -> list[str]:
         for item in contract.get("verification", [])
         if isinstance(item, dict) and item.get("required") is True and verification_key(item)
     ]
+
+
+def normalize_generated_at(text: str) -> str:
+    return re.sub(r"- Generated At: `[^`]+`", "- Generated At: `<timestamp>`", text)
 
 
 def parse_args() -> argparse.Namespace:
@@ -54,23 +61,38 @@ def main() -> int:
         if isinstance(value, str) and f"`{value}`" not in status:
             issues.append(f"status is missing Contract {key}: {value}")
 
-    if f"- Contract Path: `{args.contract}`" not in status:
-        issues.append("status Contract Path does not match")
-    if f"- Summary Path: `{args.summary}`" not in status:
-        issues.append("status Summary Path does not match")
-    if "- State: `ready_for_review`" not in status:
-        issues.append("status is not ready_for_review")
-    blocking_section = status.split("## Required Checks", 1)[0]
-    if "## Blocking" not in blocking_section or "- none" not in blocking_section:
-        issues.append("Blocking section is not none")
+    state, blockers = status_for(
+        contract,
+        summary,
+        retry_threshold=DEFAULT_RETRY_THRESHOLD,
+        observability_log=DEFAULT_LOG_PATH,
+    )
+    model = derive_governance_status(contract, summary)
+    backtrack = load_json(BACKTRACK_REPORT) if BACKTRACK_REPORT.exists() else None
+    if state == "blocked" and blockers and blockers[0].startswith("retry circuit breaker"):
+        model = {
+            **model,
+            "recommendation": "blocked",
+            "decisionDrivers": blockers,
+            "evidence": {
+                **model["evidence"],
+                "summary": model["evidence"].get("summary", []) + [blockers[0]],
+            },
+        }
+    expected = render_active_status(
+        model,
+        work_item_id=str(contract.get("workItemId", "")),
+        mode=str(contract.get("mode", "")),
+        contract_path=args.contract,
+        summary_path=args.summary,
+        generated_at="<timestamp>",
+        backtrack_report=project_relative(BACKTRACK_REPORT) if isinstance(backtrack, dict) else None,
+        backtrack_status=(backtrack.get("status") if isinstance(backtrack, dict) and isinstance(backtrack.get("status"), str) else None),
+        backtrack_items=(backtrack.get("items") if isinstance(backtrack, dict) and isinstance(backtrack.get("items"), list) else None),
+    )
 
-    verification_status = {verification_key(item): item.get("result") for item in summary.get("verification", []) if isinstance(item, dict)}
-    for command in required_commands(contract):
-        expected = f"- `{command}`: passed"
-        if verification_status.get(command) != "passed":
-            issues.append(f"Summary required check is not passed: {command}")
-        if expected not in status:
-            issues.append(f"status does not show required check as passed: {command}")
+    if normalize_generated_at(status) != normalize_generated_at(expected):
+        issues.append("status content does not match compressed governance model")
 
     duration = elapsed_ms(start)
     if issues:
