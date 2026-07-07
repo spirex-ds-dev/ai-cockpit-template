@@ -1,0 +1,156 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix_localized_version_narrative_and_status",
+  "mode": "code",
+  "title": "Fix localized version narrative and status consistency",
+  "baseCommit": "40c49b8f0e2b7e43b75aebaa1c3120b4b496362c",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "8331a7381baad4f312dd59f0876d75d07e67da84c60ddbb09cf7a0518ddc5d88"
+    }
+  ],
+  "scope": [
+    "README.ja.md",
+    "README.zh-CN.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/active/fix_localized_version_narrative_and_status.contract.json",
+    ".ai/work-items/active/fix_localized_version_narrative_and_status.summary.json",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "README.ja.md",
+      "reason": "Japanese README still contains an older V2-only narrative that conflicts with the new V2/V2.5 entrypoint wording."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Chinese README still contains an older V2-only migration narrative that conflicts with the new V2/V2.5 entrypoint wording."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated cockpit status must match the clean worktree and no-active state."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "documentation_drift",
+      "status_hygiene"
+    ],
+    "reason": "The task is a localized documentation cleanup plus generated status repair."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The conflicting narratives and stale status are concrete and fixable."
+  },
+  "preReviewWarnings": [
+    "Remove or rewrite the legacy V2-only paragraphs so the localized READMEs do not contradict the entrypoint summary.",
+    "Regenerate current_status.md instead of hand-editing it."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "README.ja.md and README.zh-CN.md no longer contain a conflicting V2-only version narrative.",
+    "The localized README version sections agree with the V2 completed / V2.5 implemented entrypoint wording.",
+    "current_status.md is regenerated and check-ai-status-consistency passes on a clean worktree."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The localized README files still include older V2-only migration text that conflicts with the newer V2 completed / V2.5 implemented story, and the generated cockpit status still reflects stale changed files on a clean checkout.",
+    "constraints": [
+      "Do not change any governance behavior.",
+      "Keep the localized README version narrative consistent with the English entrypoint and roadmap.",
+      "Regenerate current_status.md instead of editing it by hand."
+    ],
+    "rationale": "Remove conflicting version narratives at the user-facing entrypoints and restore status hygiene so the repository remains self-consistent on a clean worktree."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user request in current thread",
+    "reason": "The task explicitly requires regenerating .ai/cockpit/current_status.md."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

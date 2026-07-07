@@ -234,11 +234,10 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 
 仓库的 `make quality` 会运行全部测试，要求脚本总覆盖率不低于 60%，并对生命周期关键脚本设置分文件回归下限；同时对 `scripts/` 和 `tests/` 执行 Ruff，对全部治理脚本执行 Mypy，并执行中高等级 Bandit 扫描、Python 编译、差分检查和文档一致性检查。
 
-## 版本与迁移策略
+## 迁移与兼容性
 
-- **Contract v2 升级**：本项目在 `contractVersion: 2` 起引入了严格的 Check ID 映射机制以防注入风险。
-- **V2 — Intent-aware Development**：Work Item Contract 新增可选的 `intent` 节点（`problem`、`constraints`、`rationale` 等字段），让 AI 理解「为什么这个变更存在」而不只是「改什么」。`intent` 和 Summary 的 `intentAlignment` 都是可选的，缺少上下文时可以留空。全字段可空，完全向后兼容。详见 [Roadmap](docs/roadmap.md)。
-- **历史归档兼容 (v1 Archive)**：在 `.ai/work-items/archive/` 中的历史 `v1` Contract 记录以只读方式被保留和兼容，但全新创建的任务必须强制使用 `v2` 格式。
+- `contractVersion: 2` 通过严格的 Check ID 映射机制防止注入风险。
+- `.ai/work-items/archive/` 中的历史 `v1` Contract 记录以只读方式被保留和兼容，但全新创建的任务必须使用 `v2` 格式。
 
 ## 进阶文档
 
