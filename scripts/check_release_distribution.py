@@ -31,6 +31,21 @@ def clean_git_environment() -> dict[str, str]:
     }
 
 
+def clone_git_environment() -> dict[str, str]:
+    """Return an environment suitable for cloning without ambient repo state."""
+    env = dict(os.environ)
+    for key in (
+        "GIT_DIR",
+        "GIT_WORK_TREE",
+        "GIT_INDEX_FILE",
+        "GIT_PREFIX",
+        "GIT_CEILING_DIRECTORIES",
+        "AI_BASE_COMMIT",
+    ):
+        env.pop(key, None)
+    return env
+
+
 def highest_semver_tag(refs: str) -> str:
     tags = {
         match.group(1)
@@ -50,16 +65,34 @@ def fixture_archive(path: Path) -> None:
         archive.addfile(info, io.BytesIO(payload))
 
 
-def fake_curl(path: Path) -> None:
+def fake_git(path: Path) -> None:
     path.write_text(
         "#!/usr/bin/env python3\n"
         "import os, shutil, sys\n"
+        "from pathlib import Path\n"
         "args = sys.argv[1:]\n"
-        "archive = os.environ['RELEASE_CONTRACT_ARCHIVE']\n"
-        "if '-o' in args:\n"
-        "    shutil.copy2(archive, args[args.index('-o') + 1])\n"
+        "i = 0\n"
+        "while i < len(args) and args[i].startswith('-'):\n"
+        "    if args[i] == '-C':\n"
+        "        i += 2\n"
+        "    else:\n"
+        "        i += 1\n"
+        "cmd = args[i] if i < len(args) else ''\n"
+        "rest = args[i + 1:]\n"
+        "if cmd == 'clone':\n"
+        "    url = next(item for item in rest if item.startswith('https://') or item.startswith('git@'))\n"
+        "    open(os.environ['URL_LOG'], 'w', encoding='utf-8').write(url)\n"
+        "    destination = Path(rest[-1])\n"
+        "    source = Path(os.environ['FAKE_SOURCE_DIR'])\n"
+        "    if destination.exists():\n"
+        "        shutil.rmtree(destination)\n"
+        "    shutil.copytree(source, destination)\n"
+        "elif cmd == 'archive':\n"
+        "    out = rest[rest.index('-o') + 1]\n"
+        "    shutil.copy2(os.environ['FAKE_ARCHIVE'], out)\n"
         "else:\n"
-        "    sys.stdout.buffer.write(open(archive, 'rb').read())\n",
+        "    print(f'unexpected git invocation: {args!r}', file=sys.stderr)\n"
+        "    sys.exit(1)\n",
         encoding="utf-8",
     )
     path.chmod(0o755)
@@ -70,23 +103,32 @@ def exercise_installer(script: bytes, *, tag: str, sha256_supported: bool) -> No
         temp = Path(raw)
         target = temp / "target"
         bin_dir = temp / "bin"
+        source_dir = temp / "source"
         target.mkdir()
         bin_dir.mkdir()
+        (source_dir / "scripts").mkdir(parents=True)
         installer = temp / "install.sh"
         installer.write_bytes(script)
         installer.chmod(0o755)
+        (source_dir / "scripts" / "install_ai_cockpit.py").write_text(
+            "#!/usr/bin/env python3\nimport sys\nprint('release contract fixture')\nsys.exit(0)\n",
+            encoding="utf-8",
+        )
         archive = temp / "source.tar.gz"
         fixture_archive(archive)
-        fake_curl(bin_dir / "curl")
+        fake_git(bin_dir / "git")
         env = os.environ.copy()
         env.update(
             {
                 "PATH": f"{bin_dir}{os.pathsep}{env['PATH']}",
                 "AI_COCKPIT_TEMPLATE_REF": tag,
                 "AI_COCKPIT_TEMPLATE_SHA256": "0" * 64,
+                "FAKE_SOURCE_DIR": str(source_dir),
                 "RELEASE_CONTRACT_ARCHIVE": str(archive),
+                "URL_LOG": str(temp / "url.txt"),
             }
         )
+        env.pop("AI_COCKPIT_TEMPLATE_SOURCE", None)
         result = subprocess.run(
             [str(installer), "--stack", "generic"], cwd=target, env=env,
             text=True, capture_output=True, check=False,
@@ -105,7 +147,13 @@ def run_command(command: list[str], *, cwd: Path, env: dict[str, str] | None = N
     return subprocess.run(command, cwd=cwd, env=env, text=True, capture_output=True, check=False)
 
 
-def exercise_public_distribution(script: bytes, *, tag: str, quality_target: str) -> None:
+def exercise_public_distribution(
+    script: bytes,
+    *,
+    tag: str,
+    quality_target: str,
+    source_path: str | None = None,
+) -> None:
     """Install the real tagged distribution and exercise its documented adoption contract."""
     if not re.fullmatch(r"[A-Za-z0-9_.][A-Za-z0-9_.-]*", quality_target):
         raise RuntimeError(f"{tag}: invalid public quality target: {quality_target!r}")
@@ -136,6 +184,8 @@ def exercise_public_distribution(script: bytes, *, tag: str, quality_target: str
         install_env = {**isolated_env}
         install_env.pop("AI_COCKPIT_TEMPLATE_SHA256", None)
         install_env["AI_COCKPIT_TEMPLATE_REF"] = tag
+        if source_path:
+            install_env["AI_COCKPIT_TEMPLATE_SOURCE"] = source_path
         installed = run_command(
             [str(installer), "--stack", "generic", "--update-makefile", "--create-adoption"],
             cwd=project,
@@ -235,7 +285,7 @@ def fetch_tagged_installer(tag: str) -> bytes:
                 str(clone_dir),
             ],
             cwd=ROOT,
-            env=clean_git_environment(),
+            env=clone_git_environment(),
         )
         if clone.returncode != 0:
             raise RuntimeError(f"failed to clone public release tag {tag}: {clone.stderr.strip()}")
@@ -250,6 +300,7 @@ def main() -> int:
     tag = metadata["releaseTag"]
     supported = metadata["capabilities"]["sha256ArchiveVerification"]
     quality_target = metadata["publicContract"]["projectQualityTarget"]
+    local_source = os.environ.get("AI_COCKPIT_TEMPLATE_SOURCE")
     try:
         tags = run_command(["git", "ls-remote", "--tags", "--refs", PUBLIC_REPOSITORY], cwd=ROOT)
         if tags.returncode != 0:
@@ -259,7 +310,7 @@ def main() -> int:
             raise RuntimeError(f"release.json points to {tag}, but highest public tag is {latest_tag}")
         script = fetch_tagged_installer(tag)
         exercise_installer(script, tag=tag, sha256_supported=supported)
-        exercise_public_distribution(script, tag=tag, quality_target=quality_target)
+        exercise_public_distribution(script, tag=tag, quality_target=quality_target, source_path=local_source)
     except (OSError, KeyError, TypeError, ValueError, RuntimeError) as exc:
         print(f"release distribution check failed: {exc}", file=sys.stderr)
         return 1

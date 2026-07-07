@@ -60,19 +60,17 @@ trap cleanup EXIT
 
 if [ -z "$SOURCE" ]; then
   TMPDIR_AI_COCKPIT=$(mktemp -d)
-  ARCHIVE="$TMPDIR_AI_COCKPIT/source.tar.gz"
-  # GitHub's generic archive endpoint resolves branch names, tag names, and commit SHAs.
-  URL="https://github.com/$REPO/archive/$REF.tar.gz"
-  echo "Downloading AI Cockpit template from $URL"
-  if command -v curl >/dev/null 2>&1; then
-    curl -fsSL "$URL" -o "$ARCHIVE"
-  elif command -v wget >/dev/null 2>&1; then
-    wget -qO "$ARCHIVE" "$URL"
-  else
-    echo "ERROR: curl or wget is required for remote install." >&2
+  SOURCE="$TMPDIR_AI_COCKPIT/source"
+  URL="https://github.com/$REPO.git"
+  echo "Cloning AI Cockpit template from $URL at $REF"
+  if ! command -v git >/dev/null 2>&1; then
+    echo "ERROR: git is required for remote install." >&2
     exit 2
   fi
+  git clone --depth 1 --branch "$REF" --single-branch "$URL" "$SOURCE"
   if [ -n "$EXPECTED_SHA256" ]; then
+    ARCHIVE="$TMPDIR_AI_COCKPIT/source.tar.gz"
+    git -C "$SOURCE" archive --format=tar.gz --prefix=ai-cockpit/ HEAD -o "$ARCHIVE"
     if command -v sha256sum >/dev/null 2>&1; then
       ACTUAL_SHA256=$(sha256sum "$ARCHIVE" | awk '{print $1}')
     elif command -v shasum >/dev/null 2>&1; then
@@ -89,8 +87,6 @@ if [ -z "$SOURCE" ]; then
     fi
     echo "Verified archive SHA256: $ACTUAL_SHA256"
   fi
-  tar -xzf "$ARCHIVE" -C "$TMPDIR_AI_COCKPIT" --strip-components=1
-  SOURCE="$TMPDIR_AI_COCKPIT"
 fi
 
 exec python3 "$SOURCE/scripts/install_ai_cockpit.py" --source "$SOURCE" --target "." "$@"
