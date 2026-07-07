@@ -12,7 +12,8 @@ keywords:
 
 # V2.5 Governance Compression Plan
 
-This document defines the development plan for AI Cockpit V2.5: Governance Compression.
+This document defined the development plan for AI Cockpit V2.5: Governance Compression.
+The plan has now been executed and is retained as a reference for the implemented architecture.
 
 ## Overview
 
@@ -157,7 +158,7 @@ V2.5 should be delivered incrementally after the V2 Intent-aware Development fou
 
 ### Phase 1: Documentation and Information Architecture
 
-**Status**: Proposed
+**Status**: Completed
 
 **Scope**:
 
@@ -174,7 +175,7 @@ V2.5 should be delivered incrementally after the V2 Intent-aware Development fou
 
 ### Phase 2: Cockpit Status Model Design
 
-**Status**: Proposed
+**Status**: Completed
 
 **Scope**:
 
@@ -185,13 +186,13 @@ V2.5 should be delivered incrementally after the V2 Intent-aware Development fou
 
 **Acceptance**:
 
-- Every proposed Cockpit field has an evidence source.
+- Every Cockpit field has an evidence source.
 - Recommendation states are generic and repository-agnostic.
 - The model distinguishes raw facts from derived operational status.
 
 ### Phase 3: Summary Evidence Normalization
 
-**Status**: Proposed
+**Status**: Completed
 
 **Scope**:
 
@@ -208,7 +209,7 @@ V2.5 should be delivered incrementally after the V2 Intent-aware Development fou
 
 ### Phase 4: Status Generation
 
-**Status**: Proposed
+**Status**: Completed
 
 **Scope**:
 
@@ -225,7 +226,7 @@ V2.5 should be delivered incrementally after the V2 Intent-aware Development fou
 
 ### Phase 5: Policy and Review Integration
 
-**Status**: Proposed
+**Status**: Completed
 
 **Scope**:
 
@@ -242,7 +243,7 @@ V2.5 should be delivered incrementally after the V2 Intent-aware Development fou
 
 ### Phase 6: Tests, Compatibility, and Migration
 
-**Status**: Proposed
+**Status**: Completed
 
 **Scope**:
 
