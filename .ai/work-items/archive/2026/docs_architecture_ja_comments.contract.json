@@ -1,0 +1,180 @@
+{
+  "contractVersion": 2,
+  "workItemId": "docs_architecture_ja_comments",
+  "mode": "code",
+  "title": "Add Japanese comments to architecture layout",
+  "baseCommit": "fe7970911c35fc7f5fbb49fe5ebe34213bc72434",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "fa5bd05fa2b539adb83ff7cb685f0d62232a0c7c"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v25_stabilization_release_hardening.contract.json",
+      "status": "A",
+      "fingerprint": "010d731ab2791aaae84252347d12620566ffc181"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/v25_stabilization_release_hardening.summary.json",
+      "status": "A",
+      "fingerprint": "cb7ddfa356b0023c0dead8aab2930c027cf0fdd6"
+    },
+    {
+      "path": "README.ja.md",
+      "status": "M",
+      "fingerprint": "0898573b7aed7133256215fbe7e1e0a48327d6a5"
+    },
+    {
+      "path": "README.md",
+      "status": "M",
+      "fingerprint": "a1f57d4b47991cf0ad7600c8e7d02cf78411c5ca"
+    },
+    {
+      "path": "docs/reference/how-to-read-cockpit-status.md",
+      "status": "A",
+      "fingerprint": "7adb01b99a25e28c49bae7a0e50744110a5935ce"
+    },
+    {
+      "path": "docs/reference/v2-5-governance-compression-plan.md",
+      "status": "M",
+      "fingerprint": "90187d07002f0a023e3d3d7f1add60bb808efb21"
+    },
+    {
+      "path": "docs/roadmap.md",
+      "status": "M",
+      "fingerprint": "7941419fbeb934930521e209ed0af3573e673868"
+    }
+  ],
+  "scope": [
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/2026/v25_stabilization_release_hardening.contract.json",
+    ".ai/work-items/archive/2026/v25_stabilization_release_hardening.summary.json",
+    ".ai/work-items/_templates/work_item_contract.example.json",
+    ".ai/work-items/active/docs_architecture_ja_comments.contract.json",
+    ".ai/work-items/active/docs_architecture_ja_comments.summary.json",
+    "README.ja.md",
+    "README.md",
+    "docs/architecture.md",
+    "docs/reference/how-to-read-cockpit-status.md",
+    "docs/reference/v2-5-governance-compression-plan.md",
+    "docs/roadmap.md"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "docs/architecture.md",
+      "reason": "Contains the repository layout block that needs Japanese inline comments."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines AI Cockpit terminology used in the architecture overview."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Confirms the Cockpit vocabulary and repository governance layer names."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "documentation_drift"
+    ],
+    "reason": "This is a narrow documentation-only wording update."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The requested localization can be completed directly from the current architecture note and glossary."
+  },
+  "preReviewWarnings": [
+    "Keep the repository layout order unchanged while adding Japanese comments.",
+    "Do not modify unrelated governance files that are already dirty in the worktree."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record checkpoints to show the scope and verification state before and after the doc edit."
+  },
+  "acceptance": [
+    "The repository layout block in docs/architecture.md includes Japanese comments for the listed paths.",
+    "The order and structure of the layout block remain intact.",
+    "Only the scoped architecture document, the contract template example, and the active Work Item records are changed for this task."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user request in current thread",
+    "reason": "The task is an explicit documentation update under docs/architecture.md."
+  },
+  "intent": {
+    "problem": "The architecture layout snippet in docs/architecture.md is missing Japanese inline comments for the repository paths and section labels.",
+    "constraints": [
+      "Keep the existing hierarchy and ordering of the layout block.",
+      "Do not change unrelated files or governance outputs outside the task scope.",
+      "Preserve the existing wording elsewhere in the document."
+    ],
+    "rationale": "Adding Japanese comments makes the architecture reference easier to read for Japanese-speaking contributors without changing the underlying architecture description."
+  },
+  "rollbackNote": "Revert the docs/architecture.md change and delete the active Work Item records for this task."
+}

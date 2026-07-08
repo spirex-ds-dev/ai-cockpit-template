@@ -1,0 +1,189 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_v0_5_20",
+  "mode": "code",
+  "title": "Sync release metadata to v0.5.20",
+  "baseCommit": "4c2668d587e57255218fd05d90f5bfad710711f0",
+  "baselineDirtyPaths": [],
+  "intent": {
+    "problem": "The published distribution check fails because release.json still points to v0.5.19 while v0.5.20 has already been tagged.",
+    "constraints": [
+      "Keep the release metadata and fixed-version examples aligned on the same published version.",
+      "Do not change compatibility workflow execution locally; compatibility validation should remain a GitHub Actions concern."
+    ],
+    "rationale": "Synchronizing the release metadata with the new tag restores the public release contract without changing installer behavior."
+  },
+  "scope": [
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/2026/docs_architecture_ja_comments.contract.json",
+    ".ai/work-items/archive/2026/docs_architecture_ja_comments.summary.json",
+    ".ai/work-items/active/release_v0_5_20.contract.json",
+    ".ai/work-items/active/release_v0_5_20.summary.json",
+    "docs/getting-started/installation.md",
+    "docs/reference/upgrade.md",
+    "examples/csharp/README.md",
+    "examples/flutter/README.md",
+    "examples/go/README.md",
+    "examples/java/README.md",
+    "examples/kotlin/README.md",
+    "examples/php/README.md",
+    "examples/python/README.md",
+    "examples/ruby/README.md",
+    "examples/rust/README.md",
+    "examples/swift/README.md",
+    "examples/typescript/README.md",
+    "install.sh",
+    "release.json",
+    "tests/test_release_distribution.py"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "release.json",
+      "reason": "Canonical public release metadata that must match the published tag."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Installer default ref must stay aligned with the published release version."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Installation docs include a fixed version example that should match the new release."
+    },
+    {
+      "path": "docs/reference/upgrade.md",
+      "reason": "Upgrade docs include a fixed version example that should match the new release."
+    },
+    {
+      "path": "examples/**/README.md",
+      "reason": "Example install commands hardcode the published release tag."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Regression coverage should reflect the published release tag used by the distribution check."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Defines the GitHub Actions workflow that should exercise compatibility instead of local ad-hoc runs."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "version_sync",
+      "docs_drift"
+    ],
+    "reason": "Bumping the published release tag requires consistent updates across release metadata, installer defaults, fixed-version docs, and the release distribution fixture."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The version bump is mechanical once the published release tag is chosen."
+  },
+  "preReviewWarnings": [
+    "Keep the release tag identical across release.json, install.sh, docs, examples, and tests.",
+    "Do not run compatibility locally; only observe the GitHub Actions result."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "release.json points to v0.5.20.",
+    "install.sh and the fixed-version documentation examples reference v0.5.20 consistently.",
+    "The release distribution regression test reflects the new published version.",
+    "The repository remains ready for the v0.5.20 tag and push workflow."
+  ],
+  "guidelines": [
+    "Keep release metadata synchronized across all fixed-version references.",
+    "Treat compatibility validation as a GitHub Actions concern instead of a local smoke test."
+  ],
+  "intent": {
+    "problem": "The public release contract is stale after the v0.5.20 tag was pushed.",
+    "constraints": [
+      "Do not alter compatibility workflow semantics.",
+      "Keep the version bump consistent across all user-facing release references."
+    ],
+    "rationale": "Users and automated checks should see one canonical published version."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
