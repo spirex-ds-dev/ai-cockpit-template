@@ -51,6 +51,8 @@ Cockpit does not duplicate Summary. It compresses contract, summary, and verific
 
 These fields should remain explainable and conservative. Missing evidence should not be rewritten as a positive outcome.
 
+V2.6 adds a generic `Scenario Coverage` signal for medium/high risk Work Items. It distinguishes `complete`, `incomplete`, `not_required`, and `unknown` without hard-coding release/auth/installer scenario libraries into Core. Scenario content stays in the Work Item, while Cockpit only compresses the evidence into a reviewer-facing signal.
+
 ## Core Files
 
 - `checks.yaml`: check catalog and project-specific command selection guidance.
@@ -108,6 +110,14 @@ The default template maps three common agent risks to controls:
 - Unknown overclaim: Contract validation and Agent Risk Guard require unknowns or `notCodable` states to use a non-coding execution decision instead of continuing implementation.
 
 Record checkpoint usage in Summary `checkpointEvidence` before finishing when the Contract `checkpointPolicy.requiredBeforeFinish` is true.
+
+Keep these concepts separate:
+
+- `unknowns`: unresolved facts or design questions.
+- `scenarioCoverage`: known scenarios that are verified, unverified, or not_applicable.
+- `residualRisks`: reviewer-accepted risks that remain after implementation.
+- `followUps`: concrete future actions that were not resolved in the current Work Item.
+- `unverifiedScenarios`: scenario names that must remain visible until they are verified.
 
 ## Review Readiness
 

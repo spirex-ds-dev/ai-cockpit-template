@@ -54,6 +54,7 @@ def test_status_check_main_accepts_matching_ready_status(tmp_path, monkeypatch):
         "workItemId": "task",
         "mode": "code",
         "acceptance": ["done"],
+        "riskAssessment": {"level": "low", "riskTypes": [], "reason": "fixture"},
         "verification": [{"check": "quality", "required": True}],
     }), encoding="utf-8")
     summary.write_text(json.dumps({

@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from ai_common import contains_machine_path, load_check_registry, load_json, non_empty_string
+from ai_common import contains_machine_path, load_check_registry, load_json, non_empty_string, validate_scenario_coverage
 from ai_observability import create_observability, elapsed_ms
 
 
@@ -41,6 +41,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "guidelines",
     "intent",
     "problemStatement",
+    "scenarioCoverage",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -165,6 +166,8 @@ def validate_optional_readiness(data: dict[str, Any]) -> list[str]:
                 issues.append("checkpointPolicy.requiredStages must be a list of non-empty strings")
             if "reason" in checkpoint and not non_empty_string(checkpoint.get("reason")):
                 issues.append("checkpointPolicy.reason must be a non-empty string")
+
+    issues.extend(validate_scenario_coverage(data.get("scenarioCoverage")))
 
     return issues
 

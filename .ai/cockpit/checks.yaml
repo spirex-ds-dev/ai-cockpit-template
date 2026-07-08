@@ -72,6 +72,10 @@ checks:
     command: make check-ai-coverage-guard
     purpose: Report production changes that do not include test changes.
 
+  aiScenarioCoverage:
+    commandTemplate: make check-ai-scenario-coverage CONTRACT={contractPath} SUMMARY={summaryPath}
+    purpose: Report scenario coverage findings and policy thresholds for medium/high risk Work Items.
+
   aiGuidelines:
     commandTemplate: make check-ai-guidelines CONTRACT={contractPath} SUMMARY={summaryPath}
     purpose: Validate that guidelines defined in the Contract are complied with and verified in the Summary.

@@ -85,6 +85,23 @@ associations:
     tests:
       - "tests/test_guards_and_status.py"
       - "tests/test_guard_failure_paths.py"
+  scenarioCoverageCheck:
+    production:
+      - "scripts/ai_check_scenario_coverage.py"
+    tests:
+      - "tests/test_governance_compression.py"
+      - "tests/test_guards_and_status.py"
+  workItemValidation:
+    production:
+      - "scripts/ai_check_work_item.py"
+    tests:
+      - "tests/test_contract_and_policy.py"
+  sharedGovernanceCore:
+    production:
+      - "scripts/ai_common.py"
+    tests:
+      - "tests/test_ai_check_summary.py"
+      - "tests/test_contract_and_policy.py"
   prAggregate:
     production:
       - "scripts/ai_check_pr.py"

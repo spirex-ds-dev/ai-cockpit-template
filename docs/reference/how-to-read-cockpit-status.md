@@ -1,7 +1,7 @@
 ---
 author: Ray
 title: "How to Read Cockpit Status"
-description: Reviewer-facing guide to interpreting AI Cockpit current_status.md during V2.5 stabilization.
+description: Reviewer-facing guide to interpreting AI Cockpit current_status.md during V2.5/V2.6 stabilization.
 keywords:
   - ai-cockpit
   - cockpit-status
@@ -12,7 +12,7 @@ keywords:
 
 # How to Read Cockpit Status
 
-This page explains how to read the generated Cockpit Status during V2.5 stabilization and release hardening.
+This page explains how to read the generated Cockpit Status during V2.5/V2.6 stabilization and release hardening.
 It is written for reviewers, maintainers, and approvers who want the shortest path from status to decision.
 
 ## Read Order
@@ -23,6 +23,7 @@ Start with these fields in order:
 2. `Decision Drivers`
 3. `Governance Signals`
 4. `Evidence`
+5. `Scenario Coverage` if present in the signals list
 
 `Recommendation` gives the decision state. `Decision Drivers` explains why that state was chosen.
 `Governance Signals` show the compressed judgment, and `Evidence` points back to the repository truth.
@@ -42,6 +43,7 @@ Start with these fields in order:
 - If `Recommendation` is `ready_with_risks`, read the `Residual Risk` signal first.
 - If `Recommendation` is `needs_investigation`, read `Verification`, `Unknowns`, and `Acceptance` before making a merge decision.
 - If `Recommendation` is `blocked`, stop at `Decision Drivers`; the status is already telling you not to proceed.
+- If `Scenario Coverage` is `incomplete`, decide whether the Work Item has explicit `ready_with_risks` acknowledgement plus `residualRisks`, `followUps`, or `unverifiedScenarios`. If it does, the task may still be reviewable with risks; if it does not, treat the missing coverage as investigation work.
 
 ## Reviewer-Facing Examples
 
@@ -59,6 +61,7 @@ Governance Signals:
 - Guidelines: satisfied
 - Checkpoints: complete
 - Residual Risk: low
+- Scenario Coverage: not_required
 
 Decision Drivers:
 - none
@@ -78,6 +81,7 @@ Governance Signals:
 - Guidelines: satisfied
 - Checkpoints: complete
 - Residual Risk: medium
+- Scenario Coverage: complete
 
 Decision Drivers:
 - highest residual risk: medium
@@ -85,7 +89,27 @@ Decision Drivers:
 
 Use this when the implementation is ready, but the reviewer should consciously accept the stated risk.
 
-### 3. Missing Verification
+### 3. Scenario Coverage Incomplete but Ready With Risks
+
+```text
+Recommendation: ready_with_risks
+Governance Signals:
+- Intent: resolved
+- Acceptance: complete
+- Unknowns: resolved
+- Verification: passed
+- Scenario Coverage: incomplete
+- Guidelines: satisfied
+- Checkpoints: complete
+- Residual Risk: medium
+
+Decision Drivers:
+- required scenario unverified: GitHub Actions checkout extraheader reuse
+```
+
+Use this when the task is ready for review, but one or more required scenarios remain unverified and the Summary explicitly records the residual risk, follow-up path, or unverified scenario list.
+
+### 4. Missing Verification
 
 ```text
 Recommendation: needs_investigation
@@ -97,6 +121,7 @@ Governance Signals:
 - Guidelines: satisfied
 - Checkpoints: incomplete
 - Residual Risk: low
+- Scenario Coverage: not_required
 
 Decision Drivers:
 - required verification incomplete (missing: aiSummary; not_run: aiStatusCheck)
@@ -104,7 +129,7 @@ Decision Drivers:
 
 Use this when required checks are still missing or have not been recorded as passed.
 
-### 4. Unknowns Remaining
+### 5. Unknowns Remaining
 
 ```text
 Recommendation: needs_investigation
@@ -116,6 +141,7 @@ Governance Signals:
 - Guidelines: satisfied
 - Checkpoints: complete
 - Residual Risk: low
+- Scenario Coverage: not_required
 
 Decision Drivers:
 - contract unknowns: 1
@@ -124,7 +150,7 @@ Decision Drivers:
 
 Use this when the Work Item still has open questions and the reviewer should not treat it as finished.
 
-### 5. Intent Unresolved
+### 6. Intent Unresolved
 
 ```text
 Recommendation: needs_investigation
@@ -136,6 +162,7 @@ Governance Signals:
 - Guidelines: satisfied
 - Checkpoints: complete
 - Residual Risk: low
+- Scenario Coverage: not_required
 
 Decision Drivers:
 - intent alignment unresolved for: problem, constraints

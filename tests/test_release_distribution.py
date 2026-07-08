@@ -151,11 +151,11 @@ def test_list_remote_tags_runs_outside_repo_root(monkeypatch):
         if command == ["git", "config", "--get-all", "http.https://github.com/.extraheader"]:
             return SimpleNamespace(returncode=0, stdout="AUTHORIZATION: basic abc123\n", stderr="")
         if command[:3] == ["git", "-c", "http.https://github.com/.extraheader=AUTHORIZATION: basic abc123"] and command[3:6] == ["ls-remote", "--tags", "--refs"]:
-            return SimpleNamespace(returncode=0, stdout="a refs/tags/v0.5.20\n", stderr="")
+            return SimpleNamespace(returncode=0, stdout="a refs/tags/v0.5.21\n", stderr="")
         raise AssertionError(f"unexpected command: {command!r}")
 
     monkeypatch.setattr(release_distribution, "run_command", fake_run_command)
-    assert release_distribution.list_remote_tags("https://github.com/xinglun/ai-cockpit-template.git") == "a refs/tags/v0.5.20\n"
+    assert release_distribution.list_remote_tags("https://github.com/xinglun/ai-cockpit-template.git") == "a refs/tags/v0.5.21\n"
     assert seen["cwd"] != release_distribution.ROOT
     assert seen["command"] != ["git", "config", "--get-all", "http.https://github.com/.extraheader"]
 

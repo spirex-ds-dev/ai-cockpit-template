@@ -40,6 +40,7 @@ SCRIPT_NAMES = {
     "ai_check_agent_risk.py",
     "ai_check_backtrack.py",
     "ai_check_coverage_guard.py",
+    "ai_check_scenario_coverage.py",
     "ai_check_guidelines.py",
     "ai_check_guards.py",
     "ai_check_pr.py",

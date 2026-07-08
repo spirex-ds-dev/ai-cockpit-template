@@ -1,8 +1,11 @@
+import pytest
+
 import ai_check_guards
 import ai_check_agent_risk
 import ai_check_summary
 import ai_check_scope
 import ai_check_work_item
+from ai_common import load_json
 
 
 def valid_contract():
@@ -120,6 +123,44 @@ def test_stale_checkpoint_hash_is_rejected():
     }
     issues = ai_check_agent_risk.validate_agent_risks(contract, summary, expected_contract_hash="new")
     assert "checkpointEvidence[before_finish] contractHash is stale" in issues
+
+
+@pytest.mark.parametrize(
+    ("content", "duplicate_key"),
+    [
+        ('{"intent":{"problem":"a","problem":"b"}}', "problem"),
+        ('{"verification":[{"check":"quality","required":true,"check":"quality-2"}]}', "check"),
+        ('{"scenarioCoverage":[{"scenario":"a","required":true,"status":"verified","evidence":[],"scenario":"b"}]}', "scenario"),
+    ],
+)
+def test_duplicate_keys_in_governance_json_fail(tmp_path, content, duplicate_key):
+    path = tmp_path / "governance.json"
+    path.write_text(content, encoding="utf-8")
+
+    with pytest.raises(ValueError, match=f"duplicate key in {path.as_posix()}: {duplicate_key}"):
+        load_json(path)
+
+
+def test_scenario_coverage_validation_rejects_invalid_contract_entries():
+    contract = valid_contract()
+    contract["scenarioCoverage"] = [
+        {
+            "scenario": "example verified scenario",
+            "required": True,
+            "status": "verified",
+            "evidence": [],
+        },
+        {
+            "scenario": "example not applicable scenario",
+            "required": True,
+            "status": "not_applicable",
+            "evidence": [],
+        },
+    ]
+
+    issues = ai_check_work_item.validate_contract(contract)
+    assert "scenarioCoverage[0].evidence must contain at least one item when status is verified" in issues
+    assert "scenarioCoverage[1].reason is required when status is not_applicable" in issues
 
 
 def test_parse_yaml_invalid_syntax(tmp_path):

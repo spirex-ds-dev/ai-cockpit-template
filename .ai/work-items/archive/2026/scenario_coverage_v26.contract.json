@@ -1,0 +1,220 @@
+{
+  "contractVersion": 2,
+  "workItemId": "scenario_coverage_v26",
+  "mode": "code",
+  "title": "V2.6 Scenario Coverage and duplicate-key rejection",
+  "baseCommit": "7897ed285fca384beefb53eb6bdc924e28337430",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "13df22bf59b4faeb6deaacc384b540dca97490319550897e6823b5f01bf7a98b"
+    }
+  ],
+  "scope": [
+    "Makefile",
+    ".ai/cockpit/checks.yaml",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    ".ai/glossary.md",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/guards/scenario_coverage_policy.yaml",
+    ".ai/work-items/_templates/work_item_contract.example.json",
+    ".ai/work-items/_templates/work_item_summary.example.json",
+    "docs/contract-fields.md",
+    "docs/roadmap.md",
+    "docs/reference/how-to-read-cockpit-status.md",
+    "scripts/ai_common.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_start.py",
+    "scripts/ai_governance_compression.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_check_status.py",
+    "scripts/ai_checkpoint.py",
+    "scripts/ai_check_scenario_coverage.py",
+    "scripts/install_ai_cockpit.py",
+    "templates/make/Makefile.ai",
+    "tests/test_ai_check_work_item.py",
+    "tests/test_ai_check_summary.py",
+    "tests/test_contract_and_policy.py",
+    "tests/test_contract_examples.py",
+    "tests/test_core_gates.py",
+    "tests/test_governance_compression.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_verification_evidence.py",
+    "tests/test_guard_failure_paths.py"
+  ],
+  "outOfScope": [
+    ".ai/work-items/archive/**",
+    "docs/reference/v2-5-governance-compression-plan.md",
+    "V3 Repository Intelligence"
+  ],
+  "sources": [
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Defines the current Governance Compression model and Cockpit status workflow."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines the repository terms and architectural boundaries for Governance Compression and Cockpit Status."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Defines the path-based coverage guard rules that must remain aligned with the new Scenario Coverage validators."
+    },
+    {
+      "path": ".ai/guards/scenario_coverage_policy.yaml",
+      "reason": "Defines the hard-risk policy for Scenario Coverage warnings and hard gates."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Installer must ship the new Scenario Coverage guard script into generated repositories."
+    },
+    {
+      "path": "docs/contract-fields.md",
+      "reason": "Documents the Contract and Summary field model that must be extended for scenario coverage."
+    },
+    {
+      "path": "docs/reference/how-to-read-cockpit-status.md",
+      "reason": "Provides the reviewer-facing Cockpit interpretation that must reflect Scenario Coverage."
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_contract.example.json",
+      "reason": "The example Contract template must be updated to show the new optional field."
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_summary.example.json",
+      "reason": "The example Summary template must be updated to show the new optional field and evidence rules."
+    }
+  ],
+  "problemStatement": "Medium and high risk Work Items need a generic way to prove which risk-domain scenarios were verified, which remain unverified, and which do not apply, without hard-coding domain libraries into Core.",
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "schema_change",
+      "status_model",
+      "verification"
+    ],
+    "reason": "This task changes shared governance schemas, adds a new guard, and updates Cockpit status derivation without changing product code."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Scope, sources, acceptance, and verification are explicit for a bounded V2.6 governance update."
+  },
+  "preReviewWarnings": [
+    "Review the duplicate-key loader behavior on active Contract/Summary JSON first.",
+    "Check that Scenario Coverage stays generic and does not bake release/auth scenario libraries into Core."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record checkpoints before and after the edit set to keep the V2.6 schema and status changes explainable."
+  },
+  "acceptance": [
+    "Duplicate keys in active Contract and Summary JSON fail with file-path and repeated-key diagnostics.",
+    "Scenario Coverage is validated as an optional shared structure with verified, unverified, and not_applicable rules.",
+    "A dedicated `make check-ai-scenario-coverage` target reports scenario coverage findings and feeds Cockpit status.",
+    "Cockpit status exposes a Scenario Coverage signal that distinguishes complete, incomplete, not_required, and unknown states.",
+    "Templates, docs, and tests are updated so V2.6 remains generic and backward compatible for low-risk Work Items."
+  ],
+  "guidelines": [
+    "Keep Scenario Coverage mechanism generic; scenario content stays in the Work Item, not in Core policy catalogs.",
+    "Document new public commands and user-facing governance fields."
+  ],
+  "intent": {
+    "problem": "Medium and high risk Work Items need a generic way to prove which risk-domain scenarios were verified, which remain unverified, and which do not apply, without hard-coding domain libraries into Core.",
+    "constraints": [
+      "Keep the implementation backward compatible for low-risk Work Items that do not need Scenario Coverage.",
+      "Reject duplicate keys in active governance JSON so repeated fields cannot hide or override required evidence.",
+      "Keep scenario content project-owned and avoid introducing release/auth-specific scenario catalogs into the template."
+    ],
+    "rationale": "A small schema and guard extension can surface risk-domain coverage in the existing Governance Compression model while preserving AI Cockpit's language-agnostic, repository-owned design."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user request in chat",
+    "reason": "The user explicitly requested the V2.6 governance update across .ai governance files and Makefile entrypoints."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

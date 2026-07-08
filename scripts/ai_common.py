@@ -16,10 +16,23 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 CHECKS_PATH = PROJECT_ROOT / ".ai" / "cockpit" / "checks.yaml"
+SCENARIO_COVERAGE_STATUSES = {"verified", "unverified", "not_applicable"}
+
+
+def _reject_duplicate_keys(path: Path) -> Any:
+    def hook(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        data: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in data:
+                raise ValueError(f"duplicate key in {path.as_posix()}: {key}")
+            data[key] = value
+        return data
+
+    return hook
 
 
 def load_json(path: Path) -> dict[str, Any]:
-    data = json.loads(path.read_text(encoding="utf-8"))
+    data = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_reject_duplicate_keys(path))
     if not isinstance(data, dict):
         raise ValueError("root must be a JSON object")
     return data
@@ -282,6 +295,39 @@ def simple_yaml_scalars(path: Path) -> dict[str, str]:
 
 def non_empty_string(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
+
+
+def validate_scenario_coverage(values: Any, *, field_name: str = "scenarioCoverage") -> list[str]:
+    issues: list[str] = []
+    if values is None:
+        return issues
+    if not isinstance(values, list):
+        return [f"{field_name} must be a list"]
+    for index, item in enumerate(values):
+        prefix = f"{field_name}[{index}]"
+        if not isinstance(item, dict):
+            issues.append(f"{prefix} must be an object")
+            continue
+        if not non_empty_string(item.get("scenario")):
+            issues.append(f"{prefix}.scenario is required")
+        if not isinstance(item.get("required"), bool):
+            issues.append(f"{prefix}.required must be boolean")
+        status = item.get("status")
+        if status not in SCENARIO_COVERAGE_STATUSES:
+            issues.append(f"{prefix}.status must be one of {sorted(SCENARIO_COVERAGE_STATUSES)}")
+        evidence = item.get("evidence")
+        if not isinstance(evidence, list):
+            issues.append(f"{prefix}.evidence must be a list")
+        elif any(not non_empty_string(entry) for entry in evidence):
+            issues.append(f"{prefix}.evidence must be a list of non-empty strings")
+        if status == "verified" and isinstance(evidence, list) and not evidence:
+            issues.append(f"{prefix}.evidence must contain at least one item when status is verified")
+        if status == "not_applicable":
+            if not non_empty_string(item.get("reason")):
+                issues.append(f"{prefix}.reason is required when status is not_applicable")
+        elif "reason" in item and item.get("reason") is not None and not isinstance(item.get("reason"), str):
+            issues.append(f"{prefix}.reason must be a string when provided")
+    return issues
 
 
 def load_check_registry(path: Path = CHECKS_PATH) -> dict[str, dict[str, str]]:

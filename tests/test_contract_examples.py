@@ -18,8 +18,20 @@ def test_static_examples_match_ai_start_defaults():
     summary = load("work_item_summary.example.json")
 
     assert contract["verification"] == ai_start.default_verification()
+    assert [item["scenario"] for item in contract["scenarioCoverage"]] == [
+        "example verified scenario",
+        "example unverified scenario",
+        "example not applicable scenario",
+    ]
     assert contract["checkpointPolicy"]["requiredStages"] == ai_start.DEFAULT_CHECKPOINT_STAGES
     assert [item["check"] for item in summary["verification"]] == ai_start.DEFAULT_VERIFICATION_CHECKS
+    assert [item["scenario"] for item in summary["scenarioCoverage"]] == [
+        "example verified scenario",
+        "example unverified scenario",
+        "example not applicable scenario",
+    ]
+    assert summary["followUps"] == ["Verify the unverified scenario after the external system run completes."]
+    assert summary["unverifiedScenarios"] == ["example unverified scenario"]
     assert [item["stage"] for item in summary["checkpointEvidence"]] == ai_start.DEFAULT_CHECKPOINT_STAGES
     assert summary["intentAlignment"] == {}
 

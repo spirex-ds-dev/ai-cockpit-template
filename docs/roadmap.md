@@ -259,6 +259,36 @@ See [V2.5 Governance Compression Plan](reference/v2-5-governance-compression-pla
 
 ---
 
+## V2.6 — Scenario Coverage / Risk Domain Scenario Matrix
+
+**Purpose**: Add a generic Scenario Coverage layer so medium/high-risk Work Items can prove which risk-domain scenarios were verified, which remain unverified, and which are not_applicable.
+
+V2.6 does not add built-in release/auth/installer scenario libraries to Core. It adds the mechanism, then lets each repository or Work Item provide its own scenario content.
+
+### Key Shift
+
+V2.6 keeps `acceptance` as the task-completion contract, but adds a separate signal for risk-domain coverage. This prevents medium/high-risk tasks from looking clean when a reviewer still needs to inspect unverified scenarios.
+
+### Scope Boundaries
+
+- Add duplicate-key rejection for active JSON governance files.
+- Add optional `scenarioCoverage` structures to Contract and Summary.
+- Add `make check-ai-scenario-coverage` and wire it into Cockpit status.
+- Keep `unknowns`, `residualRisks`, `followUps`, and `unverifiedScenarios` separate.
+- Keep scenario content project-owned and language-neutral.
+
+### Review Outcome
+
+V2.6 aims to make medium/high-risk Work Items land in one of three reviewer states:
+
+- fully covered and ready
+- ready with explicitly acknowledged risks
+- needs investigation because coverage is incomplete or too ambiguous
+
+See the V2.6 implementation notes and reviewer-facing examples in the Cockpit docs and Work Item templates.
+
+---
+
 ## V3 — Repository Intelligence
 
 **Purpose**: Accumulate long-term repository engineering knowledge beyond individual tasks.

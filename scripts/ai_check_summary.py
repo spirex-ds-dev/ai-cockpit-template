@@ -21,6 +21,7 @@ from ai_common import (
     render_check_command,
     simple_yaml_lists,
     verification_key,
+    validate_scenario_coverage,
 )
 from ai_observability import create_observability, elapsed_ms
 
@@ -159,7 +160,7 @@ def validate_summary(
         if not non_empty_string(risk.get("detail")):
             issues.append("risk.detail is required")
 
-    for key in ("sourcesUsed", "unknownsRemaining", "generatedFiles", "destructiveChanges", "observedIssues", "guidelinesCompliance"):
+    for key in ("sourcesUsed", "unknownsRemaining", "generatedFiles", "destructiveChanges", "observedIssues", "guidelinesCompliance", "followUps", "unverifiedScenarios"):
         if key in summary and not isinstance(summary.get(key), list):
             issues.append(f"{key} must be a list")
 
@@ -231,6 +232,8 @@ def validate_summary(
 
     if "overclaimPrevention" in summary and not non_empty_string(summary.get("overclaimPrevention")):
         issues.append("overclaimPrevention must be a non-empty string")
+
+    issues.extend(validate_scenario_coverage(summary.get("scenarioCoverage")))
 
     def scan_machine_paths(value: Any, location: str) -> None:
         if isinstance(value, str) and contains_machine_path(value):

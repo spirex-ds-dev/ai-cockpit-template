@@ -142,6 +142,7 @@ def test_generate_active_status_renders_evidence_and_backtrack(tmp_path, monkeyp
         "notCodable": False,
         "unknowns": [],
         "acceptance": ["done"],
+        "riskAssessment": {"level": "low", "riskTypes": [], "reason": "fixture"},
         "verification": [{"check": "quality", "required": True}],
     }), encoding="utf-8")
     summary.write_text(json.dumps({

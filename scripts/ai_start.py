@@ -18,7 +18,7 @@ JOURNEYS = ["feature", "bugfix", "refactor", "cleanup"]
 DEFAULT_CHECKPOINT_STAGES = ["before_edit", "before_finish"]
 DEFAULT_VERIFICATION_CHECKS = [
     "aiWorkItem", "aiScope", "aiGuards", "aiCheckpoint", "aiAgentRisk",
-    "aiReviewPolicy", "aiBacktrack", "aiCoverage", "aiGuidelines", "aiSummary",
+    "aiReviewPolicy", "aiBacktrack", "aiCoverage", "aiScenarioCoverage", "aiGuidelines", "aiSummary",
     "aiStatus", "aiStatusCheck", "aiStatusConsistency", "quality",
 ]
 

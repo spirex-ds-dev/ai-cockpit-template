@@ -1,0 +1,498 @@
+{
+  "workItemId": "scenario_coverage_v26",
+  "contractPath": ".ai/work-items/archive/2026/scenario_coverage_v26.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/scenario_coverage_v26.contract.json",
+      "reason": "Declared the V2.6 scope, acceptance, sources, and verification boundaries."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/scenario_coverage_v26.summary.json",
+      "reason": "Recorded the implementation handoff and checkpoint evidence for V2.6."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Documented the Scenario Coverage signal and the distinction between scenario coverage, residual risks, follow-ups, and unknowns."
+    },
+    {
+      "path": ".ai/cockpit/README.ja.md",
+      "reason": "Kept the Japanese Cockpit guide aligned with the V2.6 Scenario Coverage model."
+    },
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "reason": "Registered the new aiScenarioCoverage check for Contract and Summary validation."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated the active Cockpit status view for the Work Item."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Added the Scenario Coverage vocabulary and updated the Governance Compression boundary."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Added coverage associations so the new production scripts retain explicit test-path coverage."
+    },
+    {
+      "path": ".ai/guards/scenario_coverage_policy.yaml",
+      "reason": "Added the policy file that defines hard-risk Scenario Coverage thresholds."
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_contract.example.json",
+      "reason": "Showed the optional scenarioCoverage structure in the Contract template."
+    },
+    {
+      "path": ".ai/work-items/_templates/work_item_summary.example.json",
+      "reason": "Showed the optional scenarioCoverage, followUps, and unverifiedScenarios structures in the Summary template."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Added the check-ai-scenario-coverage target to the repository command entrypoints."
+    },
+    {
+      "path": "docs/contract-fields.md",
+      "reason": "Documented scenarioCoverage, followUps, and unverifiedScenarios as V2.6 Summary fields."
+    },
+    {
+      "path": "docs/reference/how-to-read-cockpit-status.md",
+      "reason": "Explained how reviewers should interpret Scenario Coverage in Cockpit Status."
+    },
+    {
+      "path": "docs/roadmap.md",
+      "reason": "Added the V2.6 Scenario Coverage roadmap entry and scope boundaries."
+    },
+    {
+      "path": "scripts/ai_check_scenario_coverage.py",
+      "reason": "Implemented the new Scenario Coverage guard and report output."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Validated the new scenarioCoverage field and companion Summary lists."
+    },
+    {
+      "path": "scripts/ai_check_work_item.py",
+      "reason": "Validated the new scenarioCoverage field in Work Item Contracts."
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "Added duplicate-key rejecting JSON loading and shared scenarioCoverage validation."
+    },
+    {
+      "path": "scripts/ai_governance_compression.py",
+      "reason": "Compressed Scenario Coverage into Cockpit status and recommendation signals."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Added aiScenarioCoverage to the default required verification set."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Ensured generated repositories receive the new Scenario Coverage guard script."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Propagated the new check-ai-scenario-coverage target into installed repositories."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Added regression coverage for scenarioCoverage validation."
+    },
+    {
+      "path": "tests/test_contract_and_policy.py",
+      "reason": "Added duplicate-key rejection and scenarioCoverage Contract validation tests."
+    },
+    {
+      "path": "tests/test_contract_examples.py",
+      "reason": "Verified the example Contract and Summary expose the new optional fields."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Updated status/rendering fixtures to include Scenario Coverage-aware risk metadata."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Updated checkpoint counts for the new verification check."
+    },
+    {
+      "path": "tests/test_governance_compression.py",
+      "reason": "Added Scenario Coverage recommendation and signal coverage tests."
+    },
+    {
+      "path": "tests/test_guards_and_status.py",
+      "reason": "Updated status rendering fixtures for Scenario Coverage-aware risk metadata."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/scenario_coverage_v26.contract.json",
+    ".ai/cockpit/README.md",
+    ".ai/glossary.md",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/guards/scenario_coverage_policy.yaml",
+    "docs/contract-fields.md",
+    "docs/reference/how-to-read-cockpit-status.md",
+    "docs/roadmap.md",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_common.py",
+    "scripts/ai_governance_compression.py",
+    "scripts/ai_start.py",
+    "scripts/install_ai_cockpit.py",
+    "templates/make/Makefile.ai"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "duplicate key rejection for active Contract and Summary JSON",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q tests/test_contract_and_policy.py tests/test_ai_check_summary.py"
+      ]
+    },
+    {
+      "scenario": "Scenario Coverage guard reports findings to target/ai_scenario_coverage_report.json",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/scenario_coverage_v26.contract.json SUMMARY=.ai/work-items/active/scenario_coverage_v26.summary.json"
+      ]
+    },
+    {
+      "scenario": "GitHub Actions checkout extraheader reuse",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "Only verifiable after a GitHub Actions run completes."
+    },
+    {
+      "scenario": "legacy install path",
+      "required": false,
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This Work Item does not change legacy install behavior."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/scenario_coverage_v26.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:40:26.625356+00:00",
+      "exitCode": 0,
+      "durationMs": 70,
+      "outputDigest": "9d1fd05dbb95155d5c15eed84e71895d3586b9963b0fa1480cad3a60aec01eb3",
+      "commandHash": "a02160f2222f59f4e7aeb9ae2c62e7fdff7f7fde7ecd29b4e4832c66e6414a9b",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/scenario_coverage_v26.contract.json work item contract check passed: .ai/work-items/active/scenario_coverage_v26.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/scenario_coverage_v26.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:40:26.750507+00:00",
+      "exitCode": 0,
+      "durationMs": 118,
+      "outputDigest": "843f9679bc6548edda05a96b4cd9b66371ae5023d58960a5e31b04b6951080b7",
+      "commandHash": "5e1d9dd67a96da3101d3a37f64c40c1d0c8c1a1201cb3640ca0d04e9c9670dfb",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/scenario_coverage_v26.contract.json scope guard passed: 28 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:40:26.908625+00:00",
+      "exitCode": 0,
+      "durationMs": 148,
+      "outputDigest": "e85c9afb15cb48b12a2851b36625e565c4271a145cd93fda4a24096d240620e5",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/scenario_coverage_v26.contract.json [warning] restricted_write: .ai/guards/scenario_coverage_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. [warning] restricted_write: .ai/cockpit/README.ja.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. "
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/scenario_coverage_v26.contract.json SUMMARY=.ai/work-items/active/scenario_coverage_v26.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:40:26.962713+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "3606a4eae2262f24f0ab287f32d9e9ec5fbafb7c3b1413f85a603fe5e81d5117",
+      "commandHash": "27e9b5de8ae8a39802b980e2c48054c4774f259a9385f5b1639a086aaf913849",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/scenario_coverage_v26.contract.json --summary .ai/work-items/active/scenario_coverage_v26.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `scenario_coverage_v26` - Contract Hash: `76b8c82b27253ef0` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `0` - Required Checks: `15` - Require"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/scenario_coverage_v26.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:40:27.096250+00:00",
+      "exitCode": 0,
+      "durationMs": 129,
+      "outputDigest": "f490a9e1325e50ed896100d17b70792483d70616234a29a72b1f8ac8ed73e6cf",
+      "commandHash": "e0e6c5b72860815d6de644e37b97c3bef4bbd38d7d5e8263550090ffc2d8746f",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/scenario_coverage_v26.summary.json review policy matched 17 path(s) [review] .ai/guards/scenario_coverage_policy.yaml [review] scripts/ai_check_scenario_coverage.py [review] .ai/cockpit/README.ja.md [review] .ai/cockpit/README.md [review] .ai/cockpit/checks.yaml [review] .ai/cockpit/current_status.md [review] .ai/glossary.md [review] .ai/guards/coverage_policy.yaml [review] .ai/work-items"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:40:27.216173+00:00",
+      "exitCode": 0,
+      "durationMs": 116,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:40:27.360768+00:00",
+      "exitCode": 0,
+      "durationMs": 133,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/scenario_coverage_v26.contract.json SUMMARY=.ai/work-items/active/scenario_coverage_v26.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:40:27.422110+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "ae60aa2e20d888a0f47f92824ba327ff68a6deaff87e6c43fdb032a018edd7c8",
+      "commandHash": "c6f4e240626c0c95196232c39f116ed9028a4dd0b7b84c5c5ec79707f7efdda7",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/scenario_coverage_v26.contract.json --summary .ai/work-items/active/scenario_coverage_v26.summary.json [warning] required_scenario_unverified: GitHub Actions checkout extraheader reuse - required scenario remains unverified report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/scenario_coverage_v26.contract.json SUMMARY=.ai/work-items/active/scenario_coverage_v26.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:40:27.472900+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "5953e8f4345495ae01de887463924a70840efec1b39fb18f86544c5fea0fe0f8",
+      "commandHash": "baf62b877697118c039bb13aac2f8947df4787a6a726611fe32278d191eda2e7",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/scenario_coverage_v26.contract.json --summary .ai/work-items/active/scenario_coverage_v26.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:41:12.052897+00:00",
+      "exitCode": 0,
+      "durationMs": 44575,
+      "outputDigest": "0a008a09ab62c8f686ef797ce1e0fe59089bc7c21ac45cc25951b0d8606dbd9d",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60 ........................................................................ [ 27%] ........................................................................ [ 54%] ........................................................................ [ 81%] .................................................. [100%] =============================="
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/scenario_coverage_v26.contract.json SUMMARY=.ai/work-items/active/scenario_coverage_v26.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:41:12.521869+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "3ea7fef4c8f90628cbcc98c2e73fecde89e266392ac24798e02abd399f0ab1fb",
+      "commandHash": "c5cce16718a31de16cca1e8fbf502350fdb76a077227b26e44dd90afa9e9ad82",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/scenario_coverage_v26.contract.json --summary .ai/work-items/active/scenario_coverage_v26.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/scenario_coverage_v26.contract.json SUMMARY=.ai/work-items/active/scenario_coverage_v26.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:41:12.578981+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "0063b11260349a0e0a81742860f3350051cb283f3d37b8b06f66488416bcd7f0",
+      "commandHash": "93f7f169850f2dccc55964bd0d862a1e8aca67bd346952974551ea1320c6b442",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/scenario_coverage_v26.contract.json --summary .ai/work-items/active/scenario_coverage_v26.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:41:12.621830+00:00",
+      "exitCode": 0,
+      "durationMs": 38,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/scenario_coverage_v26.contract.json SUMMARY=.ai/work-items/active/scenario_coverage_v26.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:41:12.690915+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "86088917f0bb22d8c6ef4cd771d4dbcef20089a89caece39ec22d9a70ff5c7b1",
+      "commandHash": "8f5948b0b7eb59091118bc61b8f870fa2b7c21d029d8ae1e2cdaec4d2d562cff",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/scenario_coverage_v26.contract.json --summary .ai/work-items/active/scenario_coverage_v26.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/scenario_coverage_v26.summary.json CONTRACT=.ai/work-items/active/scenario_coverage_v26.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T05:41:12.806733+00:00",
+      "exitCode": 0,
+      "durationMs": 108,
+      "outputDigest": "31b0e5e05d7b6b34c032cf4d2fbea340425f3c5376b0c89247142543a8e0be97",
+      "commandHash": "a47ed7f8a42ab9544d87cb004a43d9174863ec3592a196fe57a91a914b67b19b",
+      "contractHash": "76b8c82b27253ef08ded178fe7d834847639f33af36046430154209427252937",
+      "commitSha": "7897ed285fca384beefb53eb6bdc924e28337430",
+      "executionContractPath": ".ai/work-items/active/scenario_coverage_v26.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/scenario_coverage_v26.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/scenario_coverage_v26.summary.json --contract .ai/work-items/active/scenario_coverage_v26.contract.json ai summary check passed: .ai/work-items/active/scenario_coverage_v26.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep Scenario Coverage mechanism generic; scenario content stays in the Work Item, not in Core policy catalogs.",
+      "compliant": true,
+      "evidence": "Implemented shared validators, guard policy, and Cockpit compression without hard-coded release/auth scenario catalogs."
+    },
+    {
+      "guideline": "Document new public commands and user-facing governance fields.",
+      "compliant": true,
+      "evidence": "Updated the Cockpit docs, roadmap, field reference, and Makefile entrypoints for the new check."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The change touches shared governance loaders, validators, status generation, installer behavior, and multiple templates/docs, while one CI-only scenario remains unverified."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    "target/ai_scenario_coverage_report.json"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "followUps": [
+    "Verify GitHub Actions checkout extraheader reuse after a real workflow run completes."
+  ],
+  "unverifiedScenarios": [
+    "GitHub Actions checkout extraheader reuse"
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "ci",
+      "detail": "GitHub Actions checkout extraheader reuse can only be verified in a real workflow run, so reviewer acceptance is still needed for that scenario.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "The V2.6 implementation is complete, but one CI-only Scenario Coverage item remains unverified and is tracked explicitly.",
+    "expectedReviewFocus": [
+      "Duplicate-key rejection on active JSON governance files.",
+      "Scenario Coverage signal semantics and hard-gate thresholds.",
+      "Installer/template parity for the new Scenario Coverage command."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "verified"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "76b8c82b27253ef0",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 15,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed the updated V2.6 scope, acceptance, unknowns, and verification before editing implementation files."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "76b8c82b27253ef0",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 15,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed the final V2.6 implementation state, scope, and verification set before finishing."
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified."
+}

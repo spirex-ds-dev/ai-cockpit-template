@@ -24,6 +24,7 @@ def complete_contract() -> dict:
         },
         "guidelines": ["Keep portable"],
         "checkpointPolicy": {"requiredBeforeFinish": True, "requiredStages": ["before_edit", "before_finish"]},
+        "riskAssessment": {"level": "low", "riskTypes": [], "reason": "fixture"},
         "verification": [{"check": "quality", "required": True}],
         "unknowns": [],
         "notCodable": False,
@@ -70,6 +71,7 @@ def test_complete_low_risk_recommends_ready_for_review():
         "Acceptance": "complete",
         "Unknowns": "resolved",
         "Verification": "passed",
+        "Scenario Coverage": "not_required",
         "Guidelines": "satisfied",
         "Checkpoints": "complete",
         "Residual Risk": "low",
@@ -180,7 +182,7 @@ def test_guideline_violation_blocks():
     model = ai_governance_compression.derive_governance_status(contract, summary)
 
     assert model["recommendation"] == "blocked"
-    assert model["signals"][4]["value"] == "violated"
+    assert model["signals"][5]["value"] == "violated"
 
 
 def test_missing_checkpoint_evidence_needs_investigation():
@@ -191,7 +193,34 @@ def test_missing_checkpoint_evidence_needs_investigation():
     model = ai_governance_compression.derive_governance_status(contract, summary)
 
     assert model["recommendation"] == "needs_investigation"
-    assert model["signals"][5]["value"] == "incomplete"
+    assert model["signals"][6]["value"] == "incomplete"
+
+
+def test_scenario_coverage_unverified_can_be_ready_with_risks_when_explicitly_acknowledged():
+    contract = complete_contract()
+    contract["riskAssessment"] = {"level": "high", "riskTypes": ["ci"], "reason": "fixture"}
+    summary = complete_summary()
+    summary["reviewReadiness"]["status"] = "ready_with_risks"
+    summary["residualRisks"] = [
+        {"level": "medium", "area": "ci", "detail": "fixture", "reviewRecommended": True, "followUpCandidate": False}
+    ]
+    summary["followUps"] = ["Verify checkout extraheader reuse in CI."]
+    summary["unverifiedScenarios"] = ["GitHub Actions checkout extraheader reuse"]
+    summary["scenarioCoverage"] = [
+        {
+            "scenario": "GitHub Actions checkout extraheader reuse",
+            "required": True,
+            "status": "unverified",
+            "evidence": [],
+            "reason": "Awaiting workflow completion.",
+        }
+    ]
+
+    model = ai_governance_compression.derive_governance_status(contract, summary)
+
+    assert model["recommendation"] == "ready_with_risks"
+    assert model["signals"][4]["value"] == "incomplete"
+    assert any("required scenario unverified" in item for item in model["decisionDrivers"])
 
 
 def test_legacy_archive_summary_remains_readable():

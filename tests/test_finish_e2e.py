@@ -68,7 +68,7 @@ def prepare_work_item(tmp_path: Path, *, archive_collision: bool = False):
         "knownGaps": [],
         "checkpointEvidence": [
             {"stage": stage, "recorded": True, "detail": "fixture", "contractHash": contract_hash,
-             "acceptanceCount": 1, "unknownCount": 0, "requiredChecks": 14, "requiredChecksPassed": 0}
+             "acceptanceCount": 1, "unknownCount": 0, "requiredChecks": 15, "requiredChecksPassed": 0}
             for stage in ("before_edit", "before_finish")
         ],
     })

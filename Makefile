@@ -20,6 +20,7 @@ AI_PYTHON ?= PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
 	ai-start ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy \
+	check-ai-scenario-coverage \
 	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item check-ai-pr
 
 help:
@@ -36,6 +37,7 @@ help:
 	@printf '%s\n' '  make check-ai-review-policy SUMMARY=<summary.json>'
 	@printf '%s\n' '  make check-ai-backtrack'
 	@printf '%s\n' '  make check-ai-coverage-guard'
+	@printf '%s\n' '  make check-ai-scenario-coverage'
 	@printf '%s\n' '  make check-ai-change-summary SUMMARY=<summary.json> CONTRACT=<contract.json>'
 	@printf '%s\n' '  make generate-cockpit-status CONTRACT=<contract.json> SUMMARY=<summary.json>'
 	@printf '%s\n' '  make check-ai-status CONTRACT=<contract.json> SUMMARY=<summary.json>'
@@ -143,6 +145,9 @@ check-ai-backtrack:
 check-ai-coverage-guard:
 	$(AI_PYTHON) scripts/ai_check_coverage_guard.py
 
+check-ai-scenario-coverage:
+	$(AI_PYTHON) scripts/ai_check_scenario_coverage.py $(if $(CONTRACT),--contract $(CONTRACT)) $(if $(SUMMARY),--summary $(SUMMARY))
+
 check-ai-guidelines:
 	$(AI_PYTHON) scripts/ai_check_guidelines.py --contract $(CONTRACT) --summary $(SUMMARY)
 
@@ -176,6 +181,7 @@ check-ai:
 		"$${MAKE:-make}" check-ai-review-policy SUMMARY="$(SUMMARY)" && \
 		"$${MAKE:-make}" check-ai-backtrack && \
 		"$${MAKE:-make}" check-ai-coverage-guard && \
+		"$${MAKE:-make}" check-ai-scenario-coverage CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
 		"$${MAKE:-make}" check-ai-guidelines CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
 		"$${MAKE:-make}" check-ai-change-summary SUMMARY="$(SUMMARY)" CONTRACT="$(CONTRACT)" && \
 		"$${MAKE:-make}" generate-cockpit-status CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
