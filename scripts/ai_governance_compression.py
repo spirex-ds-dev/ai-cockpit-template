@@ -791,6 +791,7 @@ def render_active_status(
     backtrack_report: str | None = None,
     backtrack_status: str | None = None,
     backtrack_items: list[dict[str, Any]] | None = None,
+    preflight_review: dict[str, Any] | None = None,
 ) -> str:
     timestamp = generated_at or datetime.now(timezone.utc).isoformat()
     lines = [
@@ -816,6 +817,22 @@ def render_active_status(
     ]
     for signal in model["signals"]:
         lines.append(f"- {signal['name']}: {signal['value']}")
+
+    review_status = preflight_review.get("status") if isinstance(preflight_review, dict) else None
+    review_recommendation = preflight_review.get("recommendation") if isinstance(preflight_review, dict) else None
+    review_drivers = preflight_review.get("decisionDrivers") if isinstance(preflight_review, dict) else None
+    if non_empty_string(review_status) and non_empty_string(review_recommendation):
+        lines.extend(["", "## Preflight Review", ""])
+        lines.append(f"- Status: `{review_status}`")
+        lines.append(f"- Recommendation: `{review_recommendation}`")
+        lines.append("- Decision Drivers:")
+        if isinstance(review_drivers, list) and any(non_empty_string(item) for item in review_drivers):
+            lines.extend(f"  - {item}" for item in review_drivers if non_empty_string(item))
+        else:
+            lines.append("  - none")
+        lines.append(
+            "- Pause Rule: `Cockpit Status keeps the Preflight Review visible for reviewers, but it does not replace the pre-implementation pause.`"
+        )
 
     lines.extend(["", "## Evidence", ""])
     for key in ("contract", "summary", "verification", "intentAlignment", "scenarioCoverage", "guidelines", "checkpoints", "residualRisk", "reviewReadiness"):

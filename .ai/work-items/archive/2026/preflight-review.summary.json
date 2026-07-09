@@ -1,0 +1,407 @@
+{
+  "workItemId": "preflight-review",
+  "contractPath": ".ai/work-items/archive/2026/preflight-review.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/preflight-review.contract.json",
+      "reason": "Declared the implementation scope, acceptance, scenario coverage, and verification for the Preflight Review work item."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-review.summary.json",
+      "reason": "Recorded the final AI Change Summary for the Preflight Review work item."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Documented the advisory-first Preflight Review flow and its Make targets."
+    },
+    {
+      "path": ".ai/cockpit/README.ja.md",
+      "reason": "Documented the advisory-first Preflight Review flow in Japanese."
+    },
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "reason": "Registered the new Preflight Review check target in the Cockpit catalog."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defined the new Preflight Review governance term."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Associated the new production script with its tests for coverage guard purposes."
+    },
+    {
+      "path": ".ai/guards/preflight_review_policy.yaml",
+      "reason": "Added the advisory-first policy and gate toggle for Preflight Review."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Added the generate and check Make targets for Preflight Review."
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "reason": "Implemented the Preflight Review derivation, generation, and validation logic."
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "reason": "Exposed the new Preflight Review flow in the distributed agent rules template."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Exposed the new Preflight Review Make targets in the distributed template."
+    },
+    {
+      "path": "tests/test_preflight_review.py",
+      "reason": "Added unit tests for the Preflight Review derivation, advisory check, and gated failure path."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    ".ai/cockpit/checks.yaml",
+    ".ai/glossary.md",
+    ".ai/guards/scenario_coverage_policy.yaml",
+    "scripts/ai_governance_compression.py",
+    "scripts/ai_checkpoint.py",
+    "scripts/ai_check_scenario_coverage.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_summary.py",
+    "templates/make/Makefile.ai"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/preflight-review.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:01.868788+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "4b48c159ece31f5b4d2f99ecf2d1d1b2062a50ca7a3cebb314ebb17daab9a14c",
+      "commandHash": "93bc928c4a36dcc36afe1a68906f6ef58c44ffe2528e085be20fc5762b69b636",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/preflight-review.contract.json work item contract check passed: .ai/work-items/active/preflight-review.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/preflight-review.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:02.045673+00:00",
+      "exitCode": 0,
+      "durationMs": 156,
+      "outputDigest": "af5b91ba0d45bc86fbe9f4bc00473f435931bca6858422be2655cdc410bd12fa",
+      "commandHash": "59bac281b57d078f8eac72a84f7337a516f188fb10eef979e016c84d4be49f68",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/preflight-review.contract.json scope guard passed: 12 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:02.214258+00:00",
+      "exitCode": 0,
+      "durationMs": 161,
+      "outputDigest": "7d8c91ea46ff31bc8da4e6ad008d9f3dd24e3a7c0434cf5720a802a22fa0a381",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/preflight-review.contract.json [warning] restricted_write: .ai/guards/preflight_review_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. [warning] restricted_write: .ai/cockpit/README.ja.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. [warni"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/preflight-review.contract.json SUMMARY=.ai/work-items/active/preflight-review.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:02.271729+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "9ae3caacb2bf8be91b4f35d35b6ef6fe3fc9c996b8c77363dae7d2086d79a44f",
+      "commandHash": "a17f45483edc5143fd9dd0b468c69fd05c0e04b0928ab88042dd1dbcb54e2681",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/preflight-review.contract.json --summary .ai/work-items/active/preflight-review.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `preflight-review` - Contract Hash: `2d68dad272660602` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `0` - Required Checks: `16` - Required Checks Passed"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/preflight-review.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:02.407933+00:00",
+      "exitCode": 0,
+      "durationMs": 129,
+      "outputDigest": "704c0bcfb349770f24534f0030e8c0d2a10e17284acda766ac73b486f886beec",
+      "commandHash": "b49b6a37b26bfbc3bfdc610aee0bdd5d283ff55116d2cf34736c743992352030",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/preflight-review.summary.json review policy matched 10 path(s) [review] .ai/guards/preflight_review_policy.yaml [review] scripts/ai_preflight_review.py [review] .ai/cockpit/README.ja.md [review] .ai/cockpit/README.md [review] .ai/cockpit/checks.yaml [review] .ai/cockpit/current_status.md [review] .ai/glossary.md [review] .ai/guards/coverage_policy.yaml [review] Makefile [review] templates"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:02.562408+00:00",
+      "exitCode": 0,
+      "durationMs": 153,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:02.695991+00:00",
+      "exitCode": 0,
+      "durationMs": 125,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/preflight-review.contract.json SUMMARY=.ai/work-items/active/preflight-review.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:02.762118+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "82d0b0e00a71689c445f81ff334ba7063247e1e8f4dce4447aebd9a5af340cea",
+      "commandHash": "c39067533e758a4a1839afe47e2b30436e92f4a780211ca8a40ad58ea83d70b5",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/preflight-review.contract.json --summary .ai/work-items/active/preflight-review.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/preflight-review.contract.json SUMMARY=.ai/work-items/active/preflight-review.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:02.820038+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "e4edc38115242fc5d485957fba47f64a827a2abf9fcf610d93d176c0ace73aee",
+      "commandHash": "68884654e685dc8dfcd49751c4325b4cc9147b1a277a9bc4362010bf797452c2",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/preflight-review.contract.json --summary .ai/work-items/active/preflight-review.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:52.663416+00:00",
+      "exitCode": 0,
+      "durationMs": 49836,
+      "outputDigest": "1c021d5f477a61c3354cbef88aca8ab3d464c3ebb57cd5611b3208f515becc64",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=60 ........................................................................ [ 26%] ........................................................................ [ 53%] ........................................................................ [ 80%] ...................................................... [100%] =========================="
+    },
+    {
+      "check": "aiPreflightReview",
+      "command": "make check-ai-preflight-review CONTRACT=.ai/work-items/active/preflight-review.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:52.717739+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "8683932a28929d968fb133c81f403ca2acae4c40a73c38cf81bd6673e59e217b",
+      "commandHash": "93f159809d7b78ef3f354e519b9184ed237b508a932faa0deb1ad73e800f4efa",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_preflight_review.py --check --contract .ai/work-items/active/preflight-review.contract.json preflight review check passed: <PROJECT_ROOT>/target/ai_preflight_review.json"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/preflight-review.contract.json SUMMARY=.ai/work-items/active/preflight-review.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:53.217194+00:00",
+      "exitCode": 0,
+      "durationMs": 59,
+      "outputDigest": "31e3333bb724ad8a09baab42a5445c6a7e14378a55f1c39a36d3e086f9c8c72f",
+      "commandHash": "472e1a38981368f85e43a400182f59572ee5aec3fa3e6aa2df649f5e8c2ba60b",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/preflight-review.contract.json --summary .ai/work-items/active/preflight-review.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/preflight-review.contract.json SUMMARY=.ai/work-items/active/preflight-review.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:53.288088+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "4fa0452f723071fe88371f931a2965d4759d3f3ad1606694f8ce5f4aa658b78b",
+      "commandHash": "07452c8c93db8d506acb4326cd84e3d07cab647939a18f2c2762ce527a26b3e5",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/preflight-review.contract.json --summary .ai/work-items/active/preflight-review.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:53.355230+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/preflight-review.contract.json SUMMARY=.ai/work-items/active/preflight-review.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:53.467749+00:00",
+      "exitCode": 0,
+      "durationMs": 100,
+      "outputDigest": "6c5dba5dc383371c8b4d294f8e8f4f7bb21292675ba4cf5b350511bb1dbf5c65",
+      "commandHash": "4b21cbed569f980a042642c5ec06939dfe00af565887b84d824f95204581c8d4",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/preflight-review.contract.json --summary .ai/work-items/active/preflight-review.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/preflight-review.summary.json CONTRACT=.ai/work-items/active/preflight-review.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-08T23:36:53.751428+00:00",
+      "exitCode": 0,
+      "durationMs": 239,
+      "outputDigest": "956e74fdae1fc446854be5c6b52da5011d5098c751cee8025f179a0653194d26",
+      "commandHash": "52913f9f37faa92b7b61a4b7014b2e086d6b72ffb324c998c6224dcf7db7a465",
+      "contractHash": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547",
+      "commitSha": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+      "executionContractPath": ".ai/work-items/active/preflight-review.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/preflight-review.summary.json",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/preflight-review.summary.json --contract .ai/work-items/active/preflight-review.contract.json ai summary check passed: .ai/work-items/active/preflight-review.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep the derivation generic and policy-driven.",
+      "compliant": true,
+      "evidence": "The implementation reads policy from .ai/guards/preflight_review_policy.yaml and derives signals from Contract evidence only."
+    },
+    {
+      "guideline": "Do not add new Contract fields or change Summary structure.",
+      "compliant": true,
+      "evidence": "The change used existing Contract fields and preserved the current Summary schema."
+    },
+    {
+      "guideline": "Keep advisory behavior as the default unless a policy explicitly enables gating.",
+      "compliant": true,
+      "evidence": "The default policy sets gateEnabled to false and check-ai-preflight-review only blocks when policy enables blockedStatuses."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The new readiness view is intentionally conservative and policy-driven; gate enforcement remains opt-in through repository configuration."
+  },
+  "generatedFiles": [
+    {
+      "path": "target/ai_preflight_review.json",
+      "reason": "Generated advisory Preflight Review report used by check-ai-preflight-review."
+    }
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "heuristics",
+      "detail": "The acceptance and source heuristics are conservative and may need tuning as other repositories adopt the template.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    },
+    {
+      "level": "medium",
+      "area": "policy",
+      "detail": "Gate behavior is intentionally opt-in; repository maintainers must explicitly enable blocked statuses if they want enforcement.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "The implementation and tests are complete, but the policy-driven gate behavior and heuristic tuning should receive explicit review.",
+    "expectedReviewFocus": [
+      "Preflight Review heuristics and signal explanations.",
+      "Advisory-first default behavior and policy-enabled gating."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified",
+    "userVisibleOutput": "verified",
+    "persistence": "verified",
+    "localization": "verified",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "verified"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "2d68dad272660602",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 2,
+      "detail": "Reviewed scope, acceptance, unknowns, and required verification before finishing."
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not claim Preflight Review gate enforcement unless .ai/guards/preflight_review_policy.yaml explicitly enables gateEnabled and blockedStatuses."
+}

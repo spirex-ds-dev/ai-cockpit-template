@@ -20,7 +20,7 @@ AI_PYTHON ?= PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
 	ai-start ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy \
-	check-ai-scenario-coverage \
+	check-ai-scenario-coverage generate-ai-preflight-review check-ai-preflight-review ai-preflight \
 	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item check-ai-pr
 
 help:
@@ -38,6 +38,9 @@ help:
 	@printf '%s\n' '  make check-ai-backtrack'
 	@printf '%s\n' '  make check-ai-coverage-guard'
 	@printf '%s\n' '  make check-ai-scenario-coverage'
+	@printf '%s\n' '  make ai-preflight'
+	@printf '%s\n' '  make generate-ai-preflight-review'
+	@printf '%s\n' '  make check-ai-preflight-review'
 	@printf '%s\n' '  make check-ai-change-summary SUMMARY=<summary.json> CONTRACT=<contract.json>'
 	@printf '%s\n' '  make generate-cockpit-status CONTRACT=<contract.json> SUMMARY=<summary.json>'
 	@printf '%s\n' '  make check-ai-status CONTRACT=<contract.json> SUMMARY=<summary.json>'
@@ -147,6 +150,16 @@ check-ai-coverage-guard:
 
 check-ai-scenario-coverage:
 	$(AI_PYTHON) scripts/ai_check_scenario_coverage.py $(if $(CONTRACT),--contract $(CONTRACT)) $(if $(SUMMARY),--summary $(SUMMARY))
+
+ai-preflight:
+	$(AI_PYTHON) scripts/ai_preflight_review.py $(if $(CONTRACT),--contract $(CONTRACT))
+	$(AI_PYTHON) scripts/ai_preflight_review.py --check $(if $(CONTRACT),--contract $(CONTRACT))
+
+generate-ai-preflight-review:
+	$(AI_PYTHON) scripts/ai_preflight_review.py $(if $(CONTRACT),--contract $(CONTRACT))
+
+check-ai-preflight-review:
+	$(AI_PYTHON) scripts/ai_preflight_review.py --check $(if $(CONTRACT),--contract $(CONTRACT))
 
 check-ai-guidelines:
 	$(AI_PYTHON) scripts/ai_check_guidelines.py --contract $(CONTRACT) --summary $(SUMMARY)

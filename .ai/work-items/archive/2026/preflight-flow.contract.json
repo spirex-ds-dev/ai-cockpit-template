@@ -1,0 +1,292 @@
+{
+  "contractVersion": 2,
+  "workItemId": "preflight-flow",
+  "mode": "code",
+  "title": "Integrate Preflight Review into startup flow",
+  "baseCommit": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/README.ja.md",
+      "status": "M",
+      "fingerprint": "1821e40937b0fb2e752ab964e30e2634f3003c4204ba1fc2dced821bae760ef8"
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "status": "M",
+      "fingerprint": "74907534df5ef9fda7c7b7da973fb9f60103635f824051cfb7a8023a7970ee35"
+    },
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "status": "M",
+      "fingerprint": "4941770f526991a476916e28e9251c9a3132869fbe8015c4fc1e0a94fc4ec5cc"
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "06baf641112e8e9f46d7f32d453fd08f5f55c47a0265e8ac9e7a5518618c0014"
+    },
+    {
+      "path": ".ai/glossary.md",
+      "status": "M",
+      "fingerprint": "6c78f3b9542f05572594f09ee0e3e948ae32c141b9407efa9763ea3dadb40d54"
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "status": "M",
+      "fingerprint": "22a392666a055a354b01e1f3ac2f90927b1a2e83185bd77f0a16c0ee3d4abd55"
+    },
+    {
+      "path": ".ai/guards/preflight_review_policy.yaml",
+      "status": "A",
+      "fingerprint": "a69dd8a00a2549d4cde7eaabda866eaf6f146b02b4620265f3777a708dc5ff79"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-review.contract.json",
+      "status": "A",
+      "fingerprint": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-review.summary.json",
+      "status": "A",
+      "fingerprint": "9d7e3715a3144ddef288377bd9f50a1c37f102cc7ed62991e69f30aab0198544"
+    },
+    {
+      "path": "Makefile",
+      "status": "M",
+      "fingerprint": "93e34d1dffe3af59bc6b417f877c661efcab9944cb4cc88e88dfa3c66b608771"
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "status": "A",
+      "fingerprint": "9346270839989e4df0cee91d9821e42786edf5b16b9d0bf58d0b4417fdd177c3"
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "status": "M",
+      "fingerprint": "29a3dbc6ed10dc6a068515debf55eea65ed929b0e0055d2169139889cfeefb0c"
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "status": "M",
+      "fingerprint": "8b589d16406a780aed03f2b809efe03d6928bdc2ef29513325b04560780371dc"
+    },
+    {
+      "path": "tests/test_preflight_review.py",
+      "status": "A",
+      "fingerprint": "1032b26c63ec7d0d77081cc2b5b0803bf9299ba5d81b3d89f9b961a1a17b1b54"
+    }
+  ],
+  "scope": [
+    "scripts/ai_start.py",
+    "scripts/install_ai_cockpit.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    ".ai/cockpit/checks.yaml",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    "tests/test_makefile.py",
+    "tests/test_project_governance_journey.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_start_and_archive.py",
+    ".ai/work-items/active/preflight-flow.contract.json",
+    ".ai/work-items/active/preflight-flow.summary.json",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "scripts/ai_preflight_review.py",
+    ".ai/guards/preflight_review_policy.yaml",
+    ".ai/glossary.md",
+    ".ai/cockpit/current_status.md"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Startup entrypoint that should front-load Preflight Review."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Installed distributions must copy the startup preflight script."
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "reason": "Existing advisory/gate report generator reused by the startup flow."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Public Make target wiring for the startup and preflight flow."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Installed Make target wiring must stay in sync with the root Makefile."
+    },
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "reason": "Check catalog is the generic registry for the new preflight entrypoint."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Make target wiring regression coverage."
+    },
+    {
+      "path": "tests/test_project_governance_journey.py",
+      "reason": "End-to-end startup flow coverage for code-mode work items."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Coverage guard association for the ai-start lifecycle path."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Unit-level ai-start regression coverage for the startup preflight hook."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "workflow_integration",
+      "cli_behavior",
+      "governance_wiring"
+    ],
+    "reason": "This change alters the startup path and Make wiring, but it reuses the existing Preflight Review engine and stays generic."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The startup flow and its verification path are now explicit."
+  },
+  "preReviewWarnings": [
+    "Confirm the new startup hook stays advisory by default and only blocks when policy enables gating."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "make ai-preflight is exposed as the generic startup preflight entrypoint.",
+    "make ai-start in code mode generates and shows the Preflight Review before implementation begins.",
+    "The Preflight Review remains advisory by default and only blocks when policy explicitly enables gating.",
+    "Makefile, template Makefile, checks catalog, docs, and tests stay in sync with the new flow."
+  ],
+  "guidelines": [
+    "Keep the startup hook generic and evidence-driven.",
+    "Prefer Makefile and checks catalog wiring over hard-coded policy in scripts."
+  ],
+  "intent": {
+    "problem": "AI Cockpit already has a standalone Preflight Review, but the startup path still lets implementation begin without surfacing the readiness evidence first.",
+    "constraints": [
+      "Do not add new Contract fields or change Summary structure for the Preflight Review feature itself.",
+      "Default behavior must remain advisory-first and only block when policy explicitly enables gating.",
+      "Keep the signal derivation generic and grounded in Contract evidence."
+    ],
+    "rationale": "The implementation entrypoint should expose readiness and risk signals before coding starts so implicit assumptions are visible at the moment of handoff."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiPreflight",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "code-mode ai-start generates and displays the Preflight Review before implementation",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "make ai-preflight stays advisory when gateEnabled is false",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "make ai-preflight fails only when gateEnabled is true and the report status is blocked",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user request in this conversation",
+    "reason": "The user explicitly requested the startup-flow change across governance files and Makefile entrypoints."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

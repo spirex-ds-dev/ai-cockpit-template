@@ -88,6 +88,7 @@ Review starts from context.
 - **V2 - Intent-aware Development (completed)**: Work Item Contracts gained the optional `intent` node (`problem`, `constraints`, `rationale`, and related fields), so AI can understand not only what to change but why the work exists.
 - **V2.5 - Governance Compression (implemented, stabilizing)**: Summary became Repository Truth and Cockpit became the Human Decision layer. Cockpit compresses repository evidence into decision-oriented signals such as `ready_for_review`, `ready_with_risks`, `needs_investigation`, and `blocked`.
 - **V2.6 - Scenario Coverage (current capability)**: Medium/high-risk Work Items can record generic scenario coverage without hard-coding release/auth/installer scenario libraries into Core. Scenario content stays in the Work Item, and the policy source lives in `.ai/guards/scenario_coverage_policy.yaml`.
+- **V2.6.5 - Preflight Review (current capability)**: `make ai-start TASK=<task> TITLE="..." MODE=code` surfaces an advisory Preflight Review before implementation begins. It follows the principle of **Evidence over Self-Declaration**: readiness is derived from Contract evidence, not from agent confidence. When the review is `needs_human_confirmation` or `not_ready`, the agent workflow must pause and report the review before coding continues.
 
 <!-- install-prerequisites: python3.10,git-initial-commit,curl,gnu-make,posix -->
 

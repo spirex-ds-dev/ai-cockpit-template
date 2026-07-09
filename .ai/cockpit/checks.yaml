@@ -64,6 +64,10 @@ checks:
     commandTemplate: make check-ai-review-policy SUMMARY={summaryPath}
     purpose: Report changes that should receive explicit Summary review focus.
 
+  aiPreflight:
+    command: make ai-preflight
+    purpose: Generate and validate the startup Preflight Review before implementation begins.
+
   aiBacktrack:
     command: make check-ai-backtrack
     purpose: Report undeclared removal of tests, snapshots, work item evidence, or configured protected patterns.
@@ -75,6 +79,10 @@ checks:
   aiScenarioCoverage:
     commandTemplate: make check-ai-scenario-coverage CONTRACT={contractPath} SUMMARY={summaryPath}
     purpose: Report scenario coverage findings and policy thresholds for medium/high risk Work Items.
+
+  aiPreflightReview:
+    commandTemplate: make check-ai-preflight-review CONTRACT={contractPath}
+    purpose: Report the derived Preflight Review readiness assessment and enforce any configured gate statuses.
 
   aiGuidelines:
     commandTemplate: make check-ai-guidelines CONTRACT={contractPath} SUMMARY={summaryPath}
@@ -108,6 +116,7 @@ selectionRules:
   - Run Agent Risk Guard before finishing any active Work Item.
   - Run an AI checkpoint before finishing long-running or governance-sensitive tasks.
   - Run Scope Guard before finishing any code-changing task.
+  - Run `make ai-preflight` before implementation begins when you want the readiness report surfaced in the startup flow.
   - Run Backtrack Guard when tests, snapshots, generated outputs, or .ai/work-items/** are changed.
   - Run Coverage Guard when production code changes.
   - Run Status Consistency after generating or checking current_status.md.

@@ -21,6 +21,8 @@ make ai-start TASK=example_change TITLE="Example change" MODE=code
 
 `ai-start` requires the target to be a Git repository with at least one commit so `baseCommit` can identify a trustworthy diff baseline. For a new repository, create and commit its initial files before running this command. The installer prints a warning when this prerequisite is not met.
 
+When you run `make ai-start TASK=<task> TITLE="..." MODE=code`, the command shows a Preflight Review before implementation begins. That review is advisory by default, but if it returns `needs_human_confirmation` or `not_ready`, the agent workflow must pause and report the review to the user before coding continues.
+
 Edit the generated Contract:
 
 ```text

@@ -35,6 +35,13 @@ AI Cockpit は、エージェント型開発のための協調エンジニアリ
 5. `make ai-finish TASK=<task>` を実行する。
 6. 生成されたステータスとアーカイブ済み Contract/Summary をレビューする。
 
+前置フローで readiness を先に見せたい場合は `make ai-preflight` を実行してください。
+このターゲットは助言的な Preflight Review を生成してから検証します。既定では advisory のままで、policy が gate を有効にした場合のみ `needs_human_confirmation` や `not_ready` が失敗になります。
+`make generate-ai-preflight-review` は検証を行わずにレポートだけ生成したい場合に使えます。
+`make check-ai-preflight-review` は生成済みレポートの構造を検証し、policy が有効な場合のみ gate として動作します。
+
+V2.6.5 では Preflight Review を追加します。原則は **Evidence over Self-Declaration** で、実装可否は AI の自信ではなく Contract の証拠から派生させます。`make ai-start TASK=<task> TITLE="..." MODE=code` と `make ai-preflight` は実装前にこのレビューを表示します。既定では advisory のままで、`needs_human_confirmation` または `not_ready` の場合だけ、エージェントの作業フローは pause してユーザーへ報告します。
+
 `unknowns` や `notCodable` は失敗ではなく有効な出力です。Summary は監査記録であると同時に協働の引き継ぎです。checkpoint は長いタスクのドリフトを防ぐための環境支援であり、単なる遵守項目ではありません。
 
 `current_status.md` は生成物です。手編集しないでください。
@@ -55,6 +62,9 @@ make ai-onboard PHASE=3      # 導入準備のみ
 ## ライフサイクルチェック
 
 `make ai-start` は新しい skeleton 作成前にライフサイクル preflight を実行します。アクティブ Contract/Summary が不整合、複数 Work Item が同時アクティブ、`current_status.md` が実状態と不一致の場合は開始を拒否します。
+`MODE=code` ではさらに `make ai-preflight` を実行し、実装開始前に Preflight Review を表示します。`needs_human_confirmation` または `not_ready` の場合、エージェントはここで一度停止し、レビュー内容をユーザーへ報告してから実装判断を進めます。
+
+Cockpit Status はレビュアー向けに Preflight Review を見えるままに保ちますが、実装前の pause の代わりにはなりません。
 
 `current_status.md` を生成または検証した後、Work Item を完了せずにライフサイクル状態だけ確認する場合は `make check-ai-status-consistency` を実行します。
 

@@ -30,6 +30,7 @@ Before changing code, docs, CI, build files, or AI governance files:
 7. Update the AI Change Summary before finishing.
    Summary is not only an audit artifact; it is also the handoff record for reviewers and the next collaborator.
 8. Run the AI checks and project checks declared in the Contract.
+9. When `make ai-start ... MODE=code` or `make ai-preflight` reports `needs_human_confirmation` or `not_ready`, pause and report the Preflight Review to the user before coding continues. Advisory mode means the command may exit successfully; it does not permit silent implementation.
 
 `unknowns` and `notCodable` are valid outputs when the task is not ready for coding. `make ai-checkpoint` is environment support against long-task drift, not paperwork.
 

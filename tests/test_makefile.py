@@ -19,7 +19,17 @@ def test_check_ai_pr_uses_aggregate_validator():
 
 def test_project_governance_make_targets_are_public():
     result = subprocess.run(
-        ["make", "-n", "cockpit-doctor", "cockpit-calibrate", "cockpit-validate-calibration", "check-ai-guard-calibration", "ai-onboard", "PHASE=2"],
+        [
+            "make",
+            "-n",
+            "cockpit-doctor",
+            "cockpit-calibrate",
+            "cockpit-validate-calibration",
+            "check-ai-guard-calibration",
+            "ai-onboard",
+            "PHASE=2",
+            "ai-preflight",
+        ],
         text=True, capture_output=True, check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
@@ -27,6 +37,7 @@ def test_project_governance_make_targets_are_public():
     assert "ai_calibrate.py generate" in result.stdout
     assert "ai_check_guard_calibration.py" in result.stdout
     assert "ai_onboard.py" in result.stdout
+    assert "ai_preflight_review.py" in result.stdout
 
 
 def test_make_prefers_project_venv_and_allows_explicit_python_override(tmp_path):

@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 
@@ -5,6 +6,7 @@ import ai_check_backtrack
 import ai_check_coverage_guard
 import ai_checkpoint
 import ai_generate_status
+import ai_preflight_review
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -174,6 +176,70 @@ def test_generate_active_status_renders_evidence_and_backtrack(tmp_path, monkeyp
     assert "Verification: `quality: passed`" in text
     assert "Backtrack" in text
     assert "test: `tests/test_app.py` - present" in text
+
+
+def test_generate_active_status_includes_latest_preflight_review(tmp_path, monkeypatch):
+    contract = tmp_path / "task.contract.json"
+    summary = tmp_path / "task.summary.json"
+    output = tmp_path / "status.md"
+    contract.write_text(json.dumps({
+        "workItemId": "task",
+        "mode": "code",
+        "notCodable": False,
+        "unknowns": [],
+        "acceptance": ["done"],
+        "riskAssessment": {"level": "medium", "riskTypes": ["governance"], "reason": "fixture"},
+        "sources": [{"path": "docs/design.md", "reason": "fixture"}],
+        "verification": [{"check": "quality", "required": True}],
+    }), encoding="utf-8")
+    summary.write_text(json.dumps({
+        "reviewReadiness": {"status": "ready", "reason": "fixture", "expectedReviewFocus": []},
+        "verification": [{"check": "quality", "result": "passed"}],
+        "unknownsRemaining": [],
+        "risk": {"level": "medium", "detail": "fixture"},
+        "guidelinesCompliance": [],
+        "checkpointEvidence": [],
+        "residualRisks": [],
+    }), encoding="utf-8")
+    (tmp_path / "preflight_review_policy.yaml").write_text(
+        "version: 1\ngateEnabled: false\nblockedStatuses: []\n",
+        encoding="utf-8",
+    )
+    preflight = ai_preflight_review.derive_report(
+        {
+            "workItemId": "task",
+            "mode": "code",
+            "scope": ["src/**"],
+            "outOfScope": ["docs/**"],
+            "intent": {},
+            "unknowns": ["gap"],
+            "acceptance": ["Clarify required scenarios before implementation."],
+            "sources": [{"path": "docs/design.md", "reason": "fixture"}],
+            "scenarioCoverage": [],
+            "verification": [{"check": "quality", "required": True}],
+            "riskAssessment": {"level": "medium", "riskTypes": ["governance"], "reason": "fixture"},
+        },
+        contract_path=contract,
+        policy_path=tmp_path / "preflight_review_policy.yaml",
+    )
+    preflight["workItemId"] = "task"
+    preflight["contractHash"] = hashlib.sha256(contract.read_bytes()).hexdigest()[:16]
+    (tmp_path / "target").mkdir()
+    (tmp_path / "target" / "ai_preflight_review.json").write_text(json.dumps(preflight, indent=2) + "\n", encoding="utf-8")
+    monkeypatch.setattr(ai_generate_status, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_generate_status, "BACKTRACK_REPORT", tmp_path / "backtrack.json")
+    monkeypatch.setattr(
+        ai_generate_status,
+        "create_observability",
+        lambda **_kwargs: type("Obs", (), {"status_generated": lambda *_args, **_kwargs: None})(),
+    )
+
+    ai_generate_status.write_active_status(contract, summary, output=output, observability_log=tmp_path / "events.jsonl")
+    text = output.read_text(encoding="utf-8")
+    assert "## Preflight Review" in text
+    assert "Status: `needs_human_confirmation`" in text
+    assert "Recommendation: `Clarify intent before implementation.`" in text
+    assert "Cockpit Status keeps the Preflight Review visible for reviewers" in text
 
 
 def test_generate_status_main_handles_no_active_and_invalid_contract(tmp_path, monkeypatch):

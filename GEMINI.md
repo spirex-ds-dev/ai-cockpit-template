@@ -33,6 +33,8 @@ If the Contract contains an `intent` section, read it before implementing. When 
 If the Contract has `mode: code`, then `unknowns` must be empty and `notCodable` must be `false`.
 If `unknowns` remain or the task is `notCodable`, report that state explicitly instead of forcing implementation.
 
+When `make ai-start ... MODE=code` or `make ai-preflight` reports `needs_human_confirmation` or `not_ready`, pause and report the Preflight Review to the user before coding continues. The command can still exit successfully in advisory mode; the agent workflow must not silently continue.
+
 ## Summary Required
 
 Before declaring the work complete, update the matching Summary with:

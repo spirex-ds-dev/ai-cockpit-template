@@ -23,5 +23,6 @@ Read these files before changing the repository:
 - **Implementation**: What actually changed
 - **Verification**: Does it meet requirements?
 - **Summary**: Did we achieve the intended goal? Intent alignment validation is optional and should only be filled when evidence exists
+- **Preflight Review**: A before-code readiness view derived from Contract evidence. `make ai-start ... MODE=code` and `make ai-preflight` surface it before implementation; if it is `needs_human_confirmation` or `not_ready`, the agent must pause and report it to the user before coding continues.
 
 Guard policies live under `.ai/guards/`. Generated Cockpit Status must be updated through the Make targets documented in `.ai/cockpit/README.md`, not edited manually.

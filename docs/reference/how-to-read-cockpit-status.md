@@ -14,19 +14,33 @@ keywords:
 
 This page explains how to read the generated Cockpit Status during V2.5/V2.6 stabilization and release hardening.
 It is written for reviewers, maintainers, and approvers who want the shortest path from status to decision.
+If you are about to start implementation, read the latest Preflight Review first. Cockpit Status is for reviewer visibility; it does not replace the pre-implementation pause.
 
 ## Read Order
 
 Start with these fields in order:
 
-1. `Recommendation`
-2. `Decision Drivers`
-3. `Governance Signals`
-4. `Evidence`
-5. `Scenario Coverage` if present in the signals list
+1. `Preflight Review` if present in the active Work Item workflow
+2. `Recommendation`
+3. `Decision Drivers`
+4. `Governance Signals`
+5. `Evidence`
+6. `Scenario Coverage` if present in the signals list
+
+`Preflight Review` derives implementation readiness from Contract evidence. It is advisory by default and should be shown before coding starts.
 
 `Recommendation` gives the decision state. `Decision Drivers` explains why that state was chosen.
 `Governance Signals` show the compressed judgment, and `Evidence` points back to the repository truth.
+
+## What the Preflight Review Means
+
+| Status | Meaning |
+| --- | --- |
+| `ready` | The Contract evidence is sufficient to begin implementation without a human clarification pause. |
+| `needs_human_confirmation` | The Contract evidence is usable, but the reviewer should clarify the missing or weak signals before coding continues. |
+| `not_ready` | The Contract evidence does not yet support implementation, so the pause should continue until the gap is resolved. |
+
+The review is an advisory view, not an AI confidence statement. It is derived from existing Contract evidence such as `intent`, `unknowns`, `sources`, `acceptance`, `scope`, `outOfScope`, `riskAssessment`, `scenarioCoverage`, and `verification`.
 
 ## What the Recommendation Means
 
@@ -44,6 +58,7 @@ Start with these fields in order:
 - If `Recommendation` is `needs_investigation`, read `Verification`, `Unknowns`, and `Acceptance` before making a merge decision.
 - If `Recommendation` is `blocked`, stop at `Decision Drivers`; the status is already telling you not to proceed.
 - If `Scenario Coverage` is `incomplete`, decide whether the Work Item has explicit `ready_with_risks` acknowledgement plus `residualRisks`, `followUps`, or `unverifiedScenarios`. If it does, the task may still be reviewable with risks; if it does not, treat the missing coverage as investigation work.
+- If the Preflight Review is `needs_human_confirmation` or `not_ready`, pause implementation and report the review to the user before continuing, even if Cockpit Status is otherwise visible and readable.
 
 ## Reviewer-Facing Examples
 

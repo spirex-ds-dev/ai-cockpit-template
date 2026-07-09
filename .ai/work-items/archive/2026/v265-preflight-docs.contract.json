@@ -1,0 +1,375 @@
+{
+  "contractVersion": 2,
+  "workItemId": "v265-preflight-docs",
+  "mode": "code",
+  "title": "Document V2.6.5 Preflight Review and pause rule",
+  "baseCommit": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/README.ja.md",
+      "status": "M",
+      "fingerprint": "fd4ca91d28af0cd613f7e098f18be1380565113836bd92c8b5469987e650b671"
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "status": "M",
+      "fingerprint": "6c6c07f8db2de16a843631d20b7c22fb4d57d81f59037536006042ae48c4fb1e"
+    },
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "status": "M",
+      "fingerprint": "0de3986920a67dc0d0708f14438c615758febdf3500288e628cb1f1f3c146189"
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "ebfa9e7cd1237fd03a781fa11a0773dacad56b283540e370d381a3b20fbd8633"
+    },
+    {
+      "path": ".ai/glossary.md",
+      "status": "M",
+      "fingerprint": "5b7c7d73add4545088c3d6a11a109047f758ac99465ba0ec35de1366c62d85fa"
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "status": "M",
+      "fingerprint": "92343e3e5f9945321ea97be99a7f1dd1b1fe15e353b70c92600dbad5cf12e677"
+    },
+    {
+      "path": ".ai/guards/preflight_review_policy.yaml",
+      "status": "A",
+      "fingerprint": "a69dd8a00a2549d4cde7eaabda866eaf6f146b02b4620265f3777a708dc5ff79"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-flow-summary-fix.contract.json",
+      "status": "A",
+      "fingerprint": "c1a3074bd86278b79bc7e9073421b32cad8e038621ac702364d7ada6833db922"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-flow-summary-fix.summary.json",
+      "status": "A",
+      "fingerprint": "5e70a1d28ffa3ac45ccdd7199299ad4224cc4dcc2fba4c8ac475ed3334a8da91"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-flow.contract.json",
+      "status": "A",
+      "fingerprint": "685f51d30ec98dc607b377fe1787ac60bac272b2fa0fd40aa8d4a9e348409aa3"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-flow.summary.json",
+      "status": "A",
+      "fingerprint": "662613318b2629a3aaf84690a9f90dce89a37e1353a17446e7a1574e3e27f039"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-report-consistency-cleanup.contract.json",
+      "status": "A",
+      "fingerprint": "b1f488cf42498e39e231d3dc9fb768c577b075cde4d84cefae64b14b97693822"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-report-consistency-cleanup.summary.json",
+      "status": "A",
+      "fingerprint": "8b406a91b58696e5d1cb521c9c383d4a2fb4be94ce1fa35410674d83dd846652"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-review-visibility-pause.contract.json",
+      "status": "A",
+      "fingerprint": "27f7f90da0d4046f0303cc53a55a93a6970b791511bdae43533c1bc9192bf88a"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-review-visibility-pause.summary.json",
+      "status": "A",
+      "fingerprint": "d83ede714eb4198c2956f6a1437850acac11fda10088b7fad4dfc6a41b0197d0"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-review.contract.json",
+      "status": "A",
+      "fingerprint": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-review.summary.json",
+      "status": "A",
+      "fingerprint": "9d7e3715a3144ddef288377bd9f50a1c37f102cc7ed62991e69f30aab0198544"
+    },
+    {
+      "path": "Makefile",
+      "status": "M",
+      "fingerprint": "474b5a1a787e2ee5f4a42b0a5bfa06d905adf0a62cbffcec4a42fb635815946b"
+    },
+    {
+      "path": "scripts/ai_check_status.py",
+      "status": "M",
+      "fingerprint": "e844f8aabe8220fa930d7a6bdfbc94ba56ec0c493370a6490dfc23a99d463352"
+    },
+    {
+      "path": "scripts/ai_generate_status.py",
+      "status": "M",
+      "fingerprint": "8273495a6200c4607eb7796a178cd4f31f2b2b8ae59c29488fb06cf27a4e61b6"
+    },
+    {
+      "path": "scripts/ai_governance_compression.py",
+      "status": "M",
+      "fingerprint": "1833b9504e5eda73cb4195c814455c7340fad2d648f0973a449505c3e569ed1c"
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "status": "A",
+      "fingerprint": "aca37159d6be64ab52e174cae2fec62afdc237e3d3d0215f7cb72a31bf17bd08"
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "status": "M",
+      "fingerprint": "671ec8880c541a445a8574287bfaf4afdcdd9fca45a385a7547c39d693f042ba"
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "status": "M",
+      "fingerprint": "24c327d1b75a73a7001019fb3770623188a9d318c5a96d195654125797590f48"
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "status": "M",
+      "fingerprint": "7dfd9f18bcde403125bdf5d3868a374135bf5a8466c0247b3ac9a0076ab99964"
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "status": "M",
+      "fingerprint": "ff6c9f3e65836648b9f3b9060f7732c95937c2f50af087d6c46a35659db29b47"
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "status": "M",
+      "fingerprint": "643f51a3480bceebd2b4b84954f85558b0b7f87b283ef80e33e6e0bc1518ee05"
+    },
+    {
+      "path": "tests/test_guards_and_status.py",
+      "status": "M",
+      "fingerprint": "0aef6a8ee7e27f0f9e48f95bdf238aed89dd3f07f2054f4b9cb2a15543861ab9"
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "status": "M",
+      "fingerprint": "ff17b948db709c23893232319fdb00af39375cf8531da4d51a91292e09317b86"
+    },
+    {
+      "path": "tests/test_preflight_review.py",
+      "status": "A",
+      "fingerprint": "fb5b8bb27238889662dc36c15a68a916b6d1656f77e26cfefb6cbd5992fdb744"
+    },
+    {
+      "path": "tests/test_project_governance_journey.py",
+      "status": "M",
+      "fingerprint": "6f7077732da265d93de0dde132b0bdab62eebbb3ea2892e0722a80e6c8e377b8"
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "status": "M",
+      "fingerprint": "01a1ad7ae7de1fefd789f280ff42b313d1e313b567e5d79d22905988eb869d27"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/v265-preflight-docs.contract.json",
+    ".ai/work-items/active/v265-preflight-docs.summary.json",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/getting-started/first-work-item.md",
+    "docs/reference/how-to-read-cockpit-status.md",
+    "docs/roadmap.md",
+    "AGENTS.md",
+    "GEMINI.md",
+    "CLAUDE.md",
+    ".ai/README.md",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    ".ai/glossary.md",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    "templates/glossary.md"
+  ],
+  "outOfScope": [
+    "Do not add target/ai_preflight_review.md.",
+    "Do not change production code or generated status artifacts beyond the required documentation references."
+  ],
+  "sources": [
+    {
+      "path": "README.md",
+      "reason": "Root README needs the V2.6.5 Preflight Review story and startup-flow guidance."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Japanese root README needs the same V2.6.5 and pause-rule guidance."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Simplified Chinese root README needs the same V2.6.5 and pause-rule guidance."
+    },
+    {
+      "path": "docs/getting-started/first-work-item.md",
+      "reason": "First Work Item walkthrough should surface the preflight pause before coding."
+    },
+    {
+      "path": "docs/reference/how-to-read-cockpit-status.md",
+      "reason": "Reviewer guide needs a Preflight Review section and pause-rule clarification."
+    },
+    {
+      "path": "docs/roadmap.md",
+      "reason": "Roadmap should place V2.6.5 and its evidence-over-self-declaration principle."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Root agent rules must reflect the pause rule for non-ready Preflight Review states."
+    },
+    {
+      "path": "GEMINI.md",
+      "reason": "Gemini operating rules should match the shared pause and advisory guidance."
+    },
+    {
+      "path": "CLAUDE.md",
+      "reason": "Claude operating rules should match the shared pause and advisory guidance."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Cockpit workflow guide must describe V2.6.5 and the pause rule."
+    },
+    {
+      "path": ".ai/cockpit/README.ja.md",
+      "reason": "Japanese cockpit workflow guide must describe V2.6.5 and the pause rule."
+    },
+    {
+      "path": ".ai/README.md",
+      "reason": "AI governance workspace entrypoint should mention the preflight pause workflow."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Glossary needs canonical definitions for Preflight Review and the pause rule."
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "reason": "Distributed agent rules must stay consistent with the root docs."
+    },
+    {
+      "path": "templates/glossary.md",
+      "reason": "Distributed glossary should carry the governance terms when templates are copied."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "documentation_consistency"
+    ],
+    "reason": "This task only aligns documentation and agent guidance with the already-implemented Preflight Review behavior."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The documentation updates are bounded and can be verified locally."
+  },
+  "preReviewWarnings": [
+    "Keep the three READMEs and the agent docs in sync on V2.6.5 wording.",
+    "Do not add a markdown preflight artifact."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The three root README files describe V2.6.5 Preflight Review and the advisory pause rule consistently.",
+    "The first Work Item guide explains that ai-start MODE=code shows Preflight Review before coding and that non-ready status pauses the agent workflow.",
+    "The Cockpit Status reading guide includes a Preflight Review section and states that it is reviewer visibility, not a substitute for the pre-implementation pause.",
+    "Root agent docs and templates use the same pause-rule wording.",
+    "The distributed glossary carries the governance terms only where it is meant to be copied into downstream repos."
+  ],
+  "guidelines": [
+    "Keep the three README variants semantically aligned.",
+    "Keep the agent operating rules and template rules consistent.",
+    "Prefer canonical glossary terms over ad hoc wording."
+  ],
+  "intent": {
+    "problem": "The repository already implements V2.6.5 Preflight Review behavior, but the top-level documentation and agent rules still stop at V2.6 Scenario Coverage and do not explain the pause rule consistently.",
+    "constraints": [
+      "Keep the wording aligned across English, Japanese, and Simplified Chinese README files.",
+      "Do not introduce a new markdown preflight artifact.",
+      "Keep the guidance generic and evidence-driven."
+    ],
+    "rationale": "New adopters and agent runners should see the same preflight guidance in the README, the getting-started flow, the cockpit reading guide, and the root agent rules."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiPreflightReview",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user request in this conversation",
+    "reason": "The user explicitly requested changes to root docs, agent rules, cockpit docs, and distributed templates."
+  },
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

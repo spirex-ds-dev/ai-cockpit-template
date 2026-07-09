@@ -13,7 +13,7 @@ from typing import Any
 
 from ai_common import load_json, verification_key
 from ai_observability import create_observability, elapsed_ms
-from ai_generate_status import BACKTRACK_REPORT, DEFAULT_LOG_PATH, DEFAULT_RETRY_THRESHOLD, project_relative, status_for
+from ai_generate_status import BACKTRACK_REPORT, DEFAULT_LOG_PATH, DEFAULT_RETRY_THRESHOLD, load_preflight_review, project_relative, status_for
 from ai_governance_compression import derive_governance_status, render_active_status
 
 
@@ -69,6 +69,7 @@ def main() -> int:
     )
     model = derive_governance_status(contract, summary)
     backtrack = load_json(BACKTRACK_REPORT) if BACKTRACK_REPORT.exists() else None
+    preflight_review = load_preflight_review(contract, Path(args.contract))
     if state == "blocked" and blockers and blockers[0].startswith("retry circuit breaker"):
         model = {
             **model,
@@ -89,6 +90,7 @@ def main() -> int:
         backtrack_report=project_relative(BACKTRACK_REPORT) if isinstance(backtrack, dict) else None,
         backtrack_status=(backtrack.get("status") if isinstance(backtrack, dict) and isinstance(backtrack.get("status"), str) else None),
         backtrack_items=(backtrack.get("items") if isinstance(backtrack, dict) and isinstance(backtrack.get("items"), list) else None),
+        preflight_review=preflight_review,
     )
 
     if normalize_generated_at(status) != normalize_generated_at(expected):

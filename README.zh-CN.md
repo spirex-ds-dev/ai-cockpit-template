@@ -96,6 +96,7 @@ Review 从上下文开始。
 - **V2 — Intent-aware Development（已完成）**：Work Item Contract 新增可选的 `intent` 节点（`problem`、`constraints`、`rationale` 等字段），让 AI 不只知道“改什么”，也知道“为什么存在这次变更”。`intent` 和 Summary 的 `intentAlignment` 都是可选的，在缺少上下文时可以留空。详见 [Roadmap](docs/roadmap.md) 和 [V2 Implementation Plan](docs/reference/v2-implementation-plan.md)。
 - **V2.5 — Governance Compression（已实现，稳定中）**：Summary 是 Repository Truth，Cockpit 是 Human Decision State。Cockpit 会把仓库证据压缩成面向决策的信号，例如 `ready_for_review`、`ready_with_risks`、`needs_investigation`、`blocked`，但不会发明新事实。
 - **V2.6 — Scenario Coverage（当前能力）**：中高风险 Work Item 可以记录通用的场景覆盖结果，而不需要把 release/auth/installer 的场景库硬编码进 Core。场景内容仍然由 Work Item 持有，策略来源在 `.ai/guards/scenario_coverage_policy.yaml`。
+- **V2.6.5 — Preflight Review（当前能力）**：`make ai-start TASK=<task> TITLE="..." MODE=code` 会在实现前显示 Preflight Review。其原则是 **Evidence over Self-Declaration**：ready 与否来自 Contract 证据，而不是 AI 的自我声明。若 review 为 `needs_human_confirmation` 或 `not_ready`，agent workflow 必须暂停，并在继续编码前向用户报告该 review。
 
 ## 安装最新公开运行时
 

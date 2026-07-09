@@ -1,0 +1,345 @@
+{
+  "contractVersion": 2,
+  "workItemId": "preflight-review-visibility-pause",
+  "mode": "code",
+  "title": "Make Preflight Review visible before implementation and in Cockpit Status",
+  "baseCommit": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/README.ja.md",
+      "status": "M",
+      "fingerprint": "b35da4fc023a25b2411796dfb3686d0e0ec6a1b00ac54a92fb0724e1eedd06c4"
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "status": "M",
+      "fingerprint": "b1d2dba7253350188af7761a268f7869a74efb9a424c9e2824a8f3bb98625357"
+    },
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "status": "M",
+      "fingerprint": "0de3986920a67dc0d0708f14438c615758febdf3500288e628cb1f1f3c146189"
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "eadddf53cff5224e442c1ae26f64867cfee2fb00772cbc68801cfe44a3645b52"
+    },
+    {
+      "path": ".ai/glossary.md",
+      "status": "M",
+      "fingerprint": "6c78f3b9542f05572594f09ee0e3e948ae32c141b9407efa9763ea3dadb40d54"
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "status": "M",
+      "fingerprint": "22a392666a055a354b01e1f3ac2f90927b1a2e83185bd77f0a16c0ee3d4abd55"
+    },
+    {
+      "path": ".ai/guards/preflight_review_policy.yaml",
+      "status": "A",
+      "fingerprint": "a69dd8a00a2549d4cde7eaabda866eaf6f146b02b4620265f3777a708dc5ff79"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-flow-summary-fix.contract.json",
+      "status": "A",
+      "fingerprint": "c1a3074bd86278b79bc7e9073421b32cad8e038621ac702364d7ada6833db922"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-flow-summary-fix.summary.json",
+      "status": "A",
+      "fingerprint": "6087e01646bd0425d96bd83887f74abe466cb7096bddfdce5b7986c1328a1f8f"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-flow.contract.json",
+      "status": "A",
+      "fingerprint": "685f51d30ec98dc607b377fe1787ac60bac272b2fa0fd40aa8d4a9e348409aa3"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-flow.summary.json",
+      "status": "A",
+      "fingerprint": "662613318b2629a3aaf84690a9f90dce89a37e1353a17446e7a1574e3e27f039"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-review.contract.json",
+      "status": "A",
+      "fingerprint": "2d68dad272660602ce30e26ae0e57b33b67aa096b61ab61352cf5846e3a48547"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-review.summary.json",
+      "status": "A",
+      "fingerprint": "9d7e3715a3144ddef288377bd9f50a1c37f102cc7ed62991e69f30aab0198544"
+    },
+    {
+      "path": "Makefile",
+      "status": "M",
+      "fingerprint": "474b5a1a787e2ee5f4a42b0a5bfa06d905adf0a62cbffcec4a42fb635815946b"
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "status": "A",
+      "fingerprint": "9346270839989e4df0cee91d9821e42786edf5b16b9d0bf58d0b4417fdd177c3"
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "status": "M",
+      "fingerprint": "958b24099cc1ff3289d8fd091d27fd62bee0031698bee1d9f0e130f751566976"
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "status": "M",
+      "fingerprint": "24c327d1b75a73a7001019fb3770623188a9d318c5a96d195654125797590f48"
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "status": "M",
+      "fingerprint": "9a71a5fa5dc707a25ab5c310ead610646e453268457edbfdc5b602925629d14b"
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "status": "M",
+      "fingerprint": "ff6c9f3e65836648b9f3b9060f7732c95937c2f50af087d6c46a35659db29b47"
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "status": "M",
+      "fingerprint": "643f51a3480bceebd2b4b84954f85558b0b7f87b283ef80e33e6e0bc1518ee05"
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "status": "M",
+      "fingerprint": "ff17b948db709c23893232319fdb00af39375cf8531da4d51a91292e09317b86"
+    },
+    {
+      "path": "tests/test_preflight_review.py",
+      "status": "A",
+      "fingerprint": "1032b26c63ec7d0d77081cc2b5b0803bf9299ba5d81b3d89f9b961a1a17b1b54"
+    },
+    {
+      "path": "tests/test_project_governance_journey.py",
+      "status": "M",
+      "fingerprint": "439dee5086fce571295620e9f1e85e0e46d12a5df1e4e5e1f09dfc2a9720108b"
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "status": "M",
+      "fingerprint": "3092d8add58d55099fd480834006afad88dd2e559b63adab3197d6e62066969e"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/preflight-review-visibility-pause.contract.json",
+    ".ai/work-items/active/preflight-review-visibility-pause.summary.json",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/glossary.md",
+    ".ai/guards/coverage_policy.yaml",
+    "scripts/ai_check_status.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_governance_compression.py",
+    "scripts/ai_preflight_review.py",
+    "scripts/ai_start.py",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    "tests/test_guards_and_status.py",
+    "tests/test_preflight_review.py",
+    "tests/test_project_governance_journey.py",
+    "tests/test_start_and_archive.py"
+  ],
+  "outOfScope": [
+    "No new markdown artifact should be created for preflight output; the generated JSON report remains the machine-readable artifact.",
+    "Unrelated workflow, installer, guard, or archive records are out of scope."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "reason": "Implements the derived Preflight Review report and its stdout rendering."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Surfaces the Preflight Review in MODE=code before implementation continues."
+    },
+    {
+      "path": "scripts/ai_generate_status.py",
+      "reason": "Generates Cockpit Status for active Work Items."
+    },
+    {
+      "path": "scripts/ai_governance_compression.py",
+      "reason": "Renders the Cockpit Status view."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Documents the active Work Item workflow and cockpit status behavior."
+    },
+    {
+      "path": "tests/test_preflight_review.py",
+      "reason": "Covers the advisory and gated preflight review behavior."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "workflow_visibility",
+      "status_rendering"
+    ],
+    "reason": "This task changes user-visible startup output and Cockpit Status rendering, so the pause behavior must remain explicit and explainable."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user request in this conversation",
+    "reason": "The user explicitly requested changes to AI governance files, workflow docs, and Makefile entrypoints."
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The change is bounded to visibility/pause wiring and can be verified locally."
+  },
+  "preReviewWarnings": [
+    "Keep the Preflight Review machine-readable artifact as JSON only; do not add a new markdown report file.",
+    "Ensure Cockpit Status surfaces the latest preflight review without replacing the required pause in the AI workflow."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "MODE=code ai-start prints the Preflight Review before implementation continues.",
+    "The Preflight Review output includes an explicit attention or pause message when the status is needs_human_confirmation or not_ready.",
+    "Cockpit Status summarizes the latest Preflight Review status, recommendation, and decision drivers.",
+    "No new target/ai_preflight_review.md artifact is introduced.",
+    "The workflow docs explicitly state that Cockpit Status visibility does not replace the pre-implementation pause."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Generate a Preflight Review from the active Contract",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "make generate-ai-preflight-review"
+      ]
+    },
+    {
+      "scenario": "Print a visible pause banner when the status is not ready",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_preflight_review.py",
+        "tests/test_project_governance_journey.py"
+      ]
+    },
+    {
+      "scenario": "Surface the latest Preflight Review in Cockpit Status",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "scripts/ai_generate_status.py",
+        "tests/test_guards_and_status.py"
+      ]
+    },
+    {
+      "scenario": "Keep gate enforcement opt-in and advisory by default",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "scripts/ai_preflight_review.py",
+        ".ai/guards/preflight_review_policy.yaml"
+      ]
+    }
+  ],
+  "guidelines": [
+    "Keep the Preflight Review generic and evidence-driven.",
+    "Do not replace the pause rule with a silent success path.",
+    "Prefer workflow docs and generated status updates over ad hoc human-facing files."
+  ],
+  "intent": {
+    "problem": "The repository already generates a Preflight Review, but the startup flow and Cockpit Status do not make the pause rule explicit enough for human reviewers.",
+    "constraints": [
+      "Keep the derived readiness view advisory by default.",
+      "Do not add a new markdown report artifact.",
+      "Do not hard-code project-specific rules into the generic preflight derivation."
+    ],
+    "rationale": "The AI should surface contract evidence before coding begins, and reviewers should see that pause rule in both the startup output and the generated status."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiPreflightReview",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

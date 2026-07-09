@@ -6,6 +6,7 @@ import ai_start
 
 def stub_active_status(monkeypatch):
     monkeypatch.setattr(ai_start, "write_active_status", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(ai_start, "run_make", lambda *_args, **_kwargs: (0, ""))
 
 
 def test_ai_start_refreshes_only_stale_no_active_status(monkeypatch):
@@ -166,12 +167,16 @@ def test_ai_start_generates_active_status(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
-    monkeypatch.setattr(ai_start, "write_active_status", lambda contract, summary: generated.append((contract, summary)))
+    monkeypatch.setattr(ai_start, "write_active_status", lambda contract, summary, **_kwargs: generated.append((contract, summary)))
+    monkeypatch.setattr(ai_start, "run_make", lambda *_args, **_kwargs: (0, ""))
     monkeypatch.setattr(ai_start, "create_observability", lambda **_: type("Obs", (), {"work_item_started": lambda *a, **k: None})())
     monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "status_task", "--mode", "code"])
 
     assert ai_start.main() == 0
-    assert generated == [(active / "status_task.contract.json", active / "status_task.summary.json")]
+    assert generated == [
+        (active / "status_task.contract.json", active / "status_task.summary.json"),
+        (active / "status_task.contract.json", active / "status_task.summary.json"),
+    ]
 
 
 def test_ai_start_rolls_back_pair_when_status_generation_fails(tmp_path, monkeypatch):

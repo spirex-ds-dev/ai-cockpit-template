@@ -30,9 +30,9 @@ def prepare_work_item(tmp_path: Path, *, archive_collision: bool = False):
     run(tmp_path, "git", "config", "user.name", "Test")
     assert run(tmp_path, "git", "add", ".").returncode == 0
     assert run(tmp_path, "git", "commit", "-qm", "base").returncode == 0
-    assert run(
-        tmp_path, "make", "ai-start", "TASK=e2e", "TITLE=E2E", "MODE=code", f"PYTHON={sys.executable}"
-    ).returncode == 0
+    start = run(tmp_path, "make", "ai-start", "TASK=e2e", "TITLE=E2E", "MODE=code", f"PYTHON={sys.executable}")
+    assert start.returncode == 0, start.stdout + start.stderr
+    assert "Preflight Review" in start.stdout
 
     contract_path = tmp_path / ".ai/work-items/active/e2e.contract.json"
     summary_path = tmp_path / ".ai/work-items/active/e2e.summary.json"

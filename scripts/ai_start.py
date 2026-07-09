@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import subprocess
 import sys
 from ai_common import PROJECT_ROOT, capture_dirty_baseline, current_head, save_json
 from ai_check_status_consistency import DEFAULT_STATUS, validate_status_consistency
@@ -50,6 +51,17 @@ def refresh_stale_no_active_status(issues: list[str]) -> list[str]:
         write_no_active_status(DEFAULT_STATUS)
         return validate_status_consistency()
     return issues
+
+
+def run_make(target: str, *, contract: str | None = None) -> tuple[int, str]:
+    command = ["make", target]
+    if contract:
+        command.append(f"CONTRACT={contract}")
+    try:
+        result = subprocess.run(command, cwd=PROJECT_ROOT, text=True, capture_output=True, check=False)
+    except OSError as exc:
+        return 127, str(exc)
+    return result.returncode, (result.stdout or "") + (result.stderr or "")
 
 
 def main() -> int:
@@ -258,11 +270,24 @@ def main() -> int:
             status_path.write_bytes(previous_status)
         print(f"ERROR: failed to generate Cockpit status; Work Item creation rolled back: {exc}", file=sys.stderr)
         return 1
+
+    create_observability(work_item_id=task).work_item_started(fields={"mode": args.mode, "title": title})
+
+    if args.mode == "code":
+        code, output = run_make("ai-preflight", contract=contract_rel)
+        if output.strip():
+            print(output.rstrip())
+        try:
+            write_active_status(contract_path, summary_path, announce=False)
+        except (OSError, RuntimeError, ValueError) as exc:
+            print(f"ERROR: failed to refresh Cockpit status after Preflight Review: {exc}", file=sys.stderr)
+            return 1
+        if code != 0:
+            return code
+
     print(f"Work Item skeleton created: {task}")
     print(f"contract: {contract_rel}")
     print(f"summary: {summary_rel}")
-
-    create_observability(work_item_id=task).work_item_started(fields={"mode": args.mode, "title": title})
     return 0
 
 

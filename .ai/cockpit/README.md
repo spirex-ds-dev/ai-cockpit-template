@@ -53,6 +53,8 @@ These fields should remain explainable and conservative. Missing evidence should
 
 V2.6 adds a generic `Scenario Coverage` signal for medium/high risk Work Items. It distinguishes `complete`, `incomplete`, `not_required`, and `unknown` without hard-coding release/auth/installer scenario libraries into Core. The policy source lives in `.ai/guards/scenario_coverage_policy.yaml`; scenario content stays in the Work Item, while Cockpit only compresses the evidence into a reviewer-facing signal.
 
+V2.6.5 adds Preflight Review. It follows the principle of **Evidence over Self-Declaration**: implementation readiness is derived from Contract evidence, not from agent confidence. `make ai-start TASK=<task> TITLE="..." MODE=code` and `make ai-preflight` surface that review before implementation begins. By default the review is advisory; when it reports `needs_human_confirmation` or `not_ready`, the agent workflow must pause and report the review to the user before coding continues.
+
 ## Core Files
 
 - `checks.yaml`: check catalog and project-specific command selection guidance.
@@ -71,6 +73,14 @@ V2.6 adds a generic `Scenario Coverage` signal for medium/high risk Work Items. 
 5. Update the Summary with changed files, checks, risks, review readiness, boundary checks, known gaps, any destructive changes, and optional `intentAlignment` evidence when it exists.
 6. Run `make ai-finish TASK=<task>`.
 7. Review the generated status and archived Contract/Summary.
+
+If you want the startup flow to surface readiness before implementation, run `make ai-preflight`.
+That target generates the advisory Preflight Review and then validates it. By default it stays advisory; when policy enables gating, `needs_human_confirmation` or `not_ready` can fail the check.
+`make generate-ai-preflight-review` still exists if you want to generate the report without the validation step.
+`make check-ai-preflight-review` validates the generated report structure and only acts as a gate when the policy enables it.
+
+When `ai-start` or `ai-preflight` reports `needs_human_confirmation` or `not_ready`, the agent must pause and report the Preflight Review to the user before implementation continues.
+Cockpit Status keeps the Preflight Review visible for reviewers, but it does not replace that pre-implementation pause.
 
 Intent drives Contract. Contract drives Implementation. Verification validates execution. Summary validates alignment back to Intent.
 Summary becomes Repository Truth, and Cockpit compresses that truth into a human decision state.
@@ -95,6 +105,7 @@ See [Adoption Readiness](adoption.md) for the detailed checklist.
 ## Lifecycle Checks
 
 `make ai-start` runs a lifecycle preflight before creating a new skeleton. It refuses to start when active Contract/Summary files are unpaired, more than one Work Item is active, or `current_status.md` disagrees with the active/no-active state.
+In `MODE=code`, it also runs `make ai-preflight` so the Preflight Review is shown before implementation begins. If that review reports `needs_human_confirmation` or `not_ready`, the agent must pause, present the review to the user, and only then continue with implementation decisions.
 
 Run `make check-ai-status-consistency` after generating or checking `current_status.md` when you need to validate the lifecycle state without finishing the Work Item.
 

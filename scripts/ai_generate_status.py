@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from datetime import datetime, timezone
@@ -83,6 +84,34 @@ def repository_changes_for_status(output: Path) -> list[str]:
     return sorted(path for path in changed_paths() if path != status_path)
 
 
+def default_preflight_report_path() -> Path:
+    return PROJECT_ROOT / "target" / "ai_preflight_review.json"
+
+
+def load_preflight_review(
+    contract: dict[str, Any],
+    contract_path: Path,
+    report_path: Path | None = None,
+) -> dict[str, Any] | None:
+    report_path = report_path or default_preflight_report_path()
+    if not report_path.exists():
+        return None
+    try:
+        report = load_json(report_path)
+    except (OSError, json.JSONDecodeError, ValueError):
+        return None
+    if not isinstance(report, dict):
+        return None
+    if report.get("workItemId") != contract.get("workItemId"):
+        return None
+    expected_hash = hashlib.sha256(contract_path.read_bytes()).hexdigest()[:16]
+    if report.get("contractHash") != expected_hash:
+        return None
+    if not isinstance(report.get("status"), str) or not isinstance(report.get("recommendation"), str):
+        return None
+    return report
+
+
 def write_no_active_status(output: Path) -> None:
     try:
         repository_changes = repository_changes_for_status(output)
@@ -145,6 +174,7 @@ def write_active_status(
     output: Path = DEFAULT_OUTPUT,
     observability_log: Path = DEFAULT_LOG_PATH,
     retry_threshold: int = DEFAULT_RETRY_THRESHOLD,
+    announce: bool = True,
 ) -> None:
     try:
         contract = load_json(contract_path)
@@ -159,6 +189,7 @@ def write_active_status(
         observability_log=observability_log,
     )
     backtrack = load_json(BACKTRACK_REPORT) if BACKTRACK_REPORT.exists() else None
+    preflight_review = load_preflight_review(contract, contract_path)
     model = derive_governance_status(contract, summary)
     if state == "blocked" and blockers and blockers[0].startswith("retry circuit breaker"):
         model = {
@@ -181,10 +212,12 @@ def write_active_status(
         backtrack_report=project_relative(BACKTRACK_REPORT) if BACKTRACK_REPORT.exists() else None,
         backtrack_status=(backtrack.get("status") if isinstance(backtrack, dict) and isinstance(backtrack.get("status"), str) else None),
         backtrack_items=(backtrack.get("items") if isinstance(backtrack, dict) and isinstance(backtrack.get("items"), list) else None),
+        preflight_review=preflight_review,
     )
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(status_text, encoding="utf-8")
-    print(f"cockpit status generated: {output}")
+    if announce:
+        print(f"cockpit status generated: {output}")
 
     create_observability(work_item_id=contract.get("workItemId", "")).status_generated(
         state=state,

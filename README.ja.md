@@ -92,6 +92,7 @@ Cockpit が更新される。
 - **V2 — Intent-aware Development（完了）**: Work Item Contract に任意の `intent` セクション（`problem`、`constraints`、`rationale` など）を追加し、AI が「何を変えるか」だけでなく「なぜその変更が存在するか」を理解できるようにします。`intent` と Summary の `intentAlignment` はどちらも任意で、文脈がない場合は空欄のままでかまいません。詳細は [ロードマップ (V1〜V4)](docs/roadmap.md) と [V2 Implementation Plan](docs/reference/v2-implementation-plan.md) を参照してください。
 - **V2.5 — Governance Compression（実装済み、安定化中）**: Summary は Repository Truth、Cockpit は Human Decision State です。Cockpit はリポジトリ証拠を圧縮して、`ready_for_review`、`ready_with_risks`、`needs_investigation`、`blocked` のような意思決定向けシグナルを出します。V3 に進む前に、[Cockpit Status の読み方](docs/reference/how-to-read-cockpit-status.md) を使って、実 Work Item 上でレビュー向けの挙動を確認してください。
 - **V2.6 — Scenario Coverage（現在の機能）**: 中高リスク Work Item は、release/auth/installer のような場面別ライブラリを Core に固定せず、通用的な Scenario Coverage を記録できます。場面の内容は Work Item が保持し、ポリシーの出所は `.ai/guards/scenario_coverage_policy.yaml` です。
+- **V2.6.5 — Preflight Review（現在の機能）**: `make ai-start TASK=<task> TITLE="..." MODE=code` は実装前に Preflight Review を表示します。原則は **Evidence over Self-Declaration** で、readiness は Contract の証拠から派生し、AI の自信表明では決めません。レビューが `needs_human_confirmation` または `not_ready` の場合、エージェントの作業フローは pause して、実装を続ける前にレビュー内容をユーザーへ報告します。
 
 ## 最新の公開ランタイムをインストール
 

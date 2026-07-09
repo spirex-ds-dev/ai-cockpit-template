@@ -1,0 +1,224 @@
+{
+  "contractVersion": 2,
+  "workItemId": "preflight-review",
+  "mode": "code",
+  "title": "Add Preflight Review derivation",
+  "baseCommit": "d1c6ee0ff0ca0307770b36511466f42f266ef69a",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "5bda4f407f4742bfcd14ae8a8e655923086a82a85e15a3af577f897ba9c3053d"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/preflight-review.contract.json",
+    ".ai/work-items/active/preflight-review.summary.json",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    ".ai/cockpit/checks.yaml",
+    ".ai/glossary.md",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/guards/preflight_review_policy.yaml",
+    "Makefile",
+    "scripts/ai_preflight_review.py",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    "templates/make/Makefile.ai",
+    "tests/test_preflight_review.py"
+  ],
+  "outOfScope": [
+    ".ai/cockpit/current_status.md",
+    "target/**"
+  ],
+  "sources": [
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Defines the Cockpit workflow, status vocabulary, and generated artifacts."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines the generic governance terms and Scenario Coverage boundary."
+    },
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "reason": "Registers Cockpit checks and Make targets."
+    },
+    {
+      "path": ".ai/guards/scenario_coverage_policy.yaml",
+      "reason": "Shows how guard-driven policy gates are configured without hard-coding product rules."
+    },
+    {
+      "path": "scripts/ai_governance_compression.py",
+      "reason": "Existing evidence-compression model to keep the new derivation consistent."
+    },
+    {
+      "path": "scripts/ai_checkpoint.py",
+      "reason": "Existing contract-evidence reporting pattern to preserve generic contract readability."
+    },
+    {
+      "path": "scripts/ai_check_scenario_coverage.py",
+      "reason": "Existing report-only guard pattern for policy-driven evidence checks."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Template entrypoint that must expose the new Make targets."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_change",
+      "policy_routing",
+      "heuristic_design"
+    ],
+    "reason": "The new review must stay advisory-first, generic, and backward-compatible while deriving readiness from existing Contract evidence."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Scope, sources, acceptance, and verification are explicit for implementing Preflight Review."
+  },
+  "preReviewWarnings": [
+    "Keep Preflight Review advisory-first by default and only fail through policy-enabled gate statuses.",
+    "Derive each signal from Contract evidence; do not add new Contract fields or self-declared readiness."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_finish"
+    ],
+    "reason": "Record a checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "make generate-ai-preflight-review emits a readable readiness assessment for the active Work Item and writes a structured report artifact.",
+    "make check-ai-preflight-review validates the generated report structure and policy configuration while remaining advisory unless configuration enables gating.",
+    "Preflight Review derives ready, needs_human_confirmation, and not_ready from existing Contract evidence without adding new Contract fields or requiring AI self-declaration.",
+    "The assessment explains why each signal was assigned by citing the underlying Contract evidence.",
+    "The existing AI checks and current status generation continue to pass with the new Preflight Review targets and policy file in place."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Generate a Preflight Review from the active Contract",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "make generate-ai-preflight-review"
+      ]
+    },
+    {
+      "scenario": "Validate the generated Preflight Review in advisory mode",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "make check-ai-preflight-review"
+      ]
+    },
+    {
+      "scenario": "Fail the check only when policy enables a blocked status",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_preflight_review.py"
+      ]
+    }
+  ],
+  "guidelines": [
+    "Keep the derivation generic and policy-driven.",
+    "Do not add new Contract fields or change Summary structure.",
+    "Keep advisory behavior as the default unless a policy explicitly enables gating."
+  ],
+  "intent": {
+    "problem": "Add a Preflight Review that derives implementation readiness from existing Work Item Contract evidence before implementation starts.",
+    "constraints": [
+      "Do not add new Contract fields or modify Summary structure.",
+      "Do not let the AI self-declare ready or not ready.",
+      "Keep the derivation generic and policy-driven.",
+      "Default to advisory behavior; only enable gating through configuration."
+    ],
+    "rationale": "A derived readiness view makes the pre-implementation decision explainable, generic, and auditable without introducing a new self-assessment step."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    },
+    {
+      "check": "aiPreflightReview",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly requested changes to AI Cockpit governance files and Makefile entrypoints."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

@@ -291,6 +291,31 @@ See the V2.6 implementation notes and reviewer-facing examples in the Cockpit do
 
 ---
 
+## V2.6.5 — Preflight Review / Evidence over Self-Declaration
+
+**Purpose**: Show implementation readiness before coding starts by deriving a Preflight Review from existing Work Item Contract evidence.
+
+V2.6.5 does not ask the AI whether it feels ready. It exposes whether the repository record supports implementation by reading the Contract fields that already exist: `intent`, `unknowns`, `sources`, `acceptance`, `scope`, `outOfScope`, `riskAssessment`, `scenarioCoverage`, and `verification`.
+
+The review is advisory by default and becomes a gate only when policy explicitly enables that behavior. The workflow rule is separate from exit codes: when the review is `needs_human_confirmation` or `not_ready`, the agent must pause and report the review before implementation continues.
+
+### Key Shift
+
+V2.6.5 keeps Cockpit Status as reviewer visibility, but adds a pre-implementation pause rule for agent workflows. That keeps the evidence visible without turning the default flow into a hard stop.
+
+### Scope Boundaries
+
+- Add a generic Preflight Review view derived from existing Contract evidence.
+- Keep the output advisory by default and configurable as a gate.
+- Keep the logic generic and repository-neutral.
+- Keep Cockpit Status readable for reviewers without making it a substitute for pre-implementation pause.
+
+### Review Outcome
+
+V2.6.5 aims to make implementation start with the evidence already surfaced, so reviewers can see `ready`, `needs_human_confirmation`, or `not_ready` before code changes begin.
+
+---
+
 ## V3 — Repository Intelligence
 
 **Purpose**: Accumulate long-term repository engineering knowledge beyond individual tasks.

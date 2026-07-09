@@ -143,9 +143,10 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
     run(project, "git", "add", ".")
     assert run(project, "git", "commit", "-qm", "adopt cockpit").returncode == 0
 
-    assert run(
-        project, "make", "ai-start", "TASK=configure_ai_cockpit", "MODE=code", f"PYTHON={sys.executable}"
-    ).returncode == 0
+    start = run(project, "make", "ai-start", "TASK=configure_ai_cockpit", "MODE=code", f"PYTHON={sys.executable}")
+    assert start.returncode == 0, start.stdout + start.stderr
+    assert "Preflight Review" in start.stdout
+    assert "Preflight Review requires attention before implementation." in start.stdout
     assert run(project, "make", "cockpit-doctor", f"PYTHON={sys.executable}").returncode == 0
     assert run(project, "make", "cockpit-calibrate", f"PYTHON={sys.executable}").returncode == 0
     (project / ".ai" / "project_profile.yaml").write_text(confirmed_profile(), encoding="utf-8")
@@ -171,7 +172,10 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
     run(project, "git", "add", ".")
     assert run(project, "git", "commit", "-qm", "calibrate boundaries").returncode == 0
 
-    assert run(project, "make", "ai-start", "TASK=normal_change", "MODE=code", f"PYTHON={sys.executable}").returncode == 0
+    start = run(project, "make", "ai-start", "TASK=normal_change", "MODE=code", f"PYTHON={sys.executable}")
+    assert start.returncode == 0, start.stdout + start.stderr
+    assert "Preflight Review" in start.stdout
+    assert "Preflight Review requires attention before implementation." in start.stdout
     (project / "src" / "app.py").write_text("def add(a, b):\n    return a + b\n\ndef subtract(a, b):\n    return a - b\n", encoding="utf-8")
     (project / "tests" / "test_app.py").write_text("import unittest\nfrom src.app import add, subtract\nclass T(unittest.TestCase):\n    def test_math(self):\n        self.assertEqual(add(1, 2), 3)\n        self.assertEqual(subtract(3, 2), 1)\n", encoding="utf-8")
     prepare_work_item(project, "normal_change", ["src/app.py", "tests/test_app.py"])
