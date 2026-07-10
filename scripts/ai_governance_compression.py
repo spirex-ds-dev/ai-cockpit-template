@@ -12,6 +12,12 @@ from datetime import datetime, timezone
 from typing import Any
 
 from ai_common import PROJECT_ROOT, non_empty_string, simple_yaml_lists, verification_key
+from ai_scenario_policy import has_risk_ack, is_hard_risk, scenario_items
+from ai_risk_policy import residual_risk_signal
+from ai_review_readiness_policy import review_readiness_signal
+from ai_verification_policy import verification_signal
+from ai_acceptance_policy import acceptance_signal
+from ai_intent_policy import intent_alignment_signal
 
 
 RECOMMENDATIONS = {
@@ -151,31 +157,13 @@ def _risk_levels(summary: dict[str, Any]) -> list[str]:
     return levels
 
 
-def _scenario_items(summary: dict[str, Any]) -> list[dict[str, Any]]:
-    values = summary.get("scenarioCoverage")
-    if not isinstance(values, list):
-        return []
-    return [item for item in values if isinstance(item, dict)]
-
-
 def _scenario_coverage_hard_risk(contract: dict[str, Any]) -> bool:
-    risk = _dict(contract.get("riskAssessment"))
-    risk_types = {item for item in _string_list(risk.get("riskTypes"))}
     policy_hard_types = set(simple_yaml_lists(SCENARIO_COVERAGE_POLICY).get("hardRiskTypes", []))
-    if not policy_hard_types:
-        policy_hard_types = DEFAULT_HARD_SCENARIO_RISK_TYPES
-    return any(item in policy_hard_types for item in risk_types)
+    return is_hard_risk(contract, policy_hard_types or DEFAULT_HARD_SCENARIO_RISK_TYPES)
 
 
 def _scenario_coverage_explicit_risk_ack(summary: dict[str, Any] | None) -> bool:
-    summary_dict = _summary_or_empty(summary)
-    review = _dict(summary_dict.get("reviewReadiness"))
-    if review.get("status") != "ready_with_risks":
-        return False
-    if not _string_list(summary_dict.get("followUps")) and not _string_list(summary_dict.get("unverifiedScenarios")):
-        return False
-    residuals = summary_dict.get("residualRisks")
-    return isinstance(residuals, list) and any(isinstance(item, dict) for item in residuals)
+    return has_risk_ack(summary)
 
 
 def _scenario_coverage_signal(contract: dict[str, Any], summary: dict[str, Any] | None) -> dict[str, Any]:
@@ -192,7 +180,7 @@ def _scenario_coverage_signal(contract: dict[str, Any], summary: dict[str, Any] 
             "not_applicable": [],
             "hardRisk": _scenario_coverage_hard_risk(contract),
         }
-    items = _scenario_items(summary)
+    items = scenario_items(summary)
     hard_risk = _scenario_coverage_hard_risk(contract)
 
     if not items:
@@ -311,132 +299,6 @@ def _scenario_coverage_signal(contract: dict[str, Any], summary: dict[str, Any] 
     }
 
 
-def _intent_alignment_signal(contract: dict[str, Any], summary: dict[str, Any]) -> dict[str, Any]:
-    intent = _dict(contract.get("intent"))
-    if not intent:
-        return {
-            "value": "not_applicable",
-            "evidence": ["contract.intent is absent"],
-            "sources": ["contract.intent"],
-        }
-
-    meaningful = _has_meaningful_intent(contract)
-    alignment = summary.get("intentAlignment")
-    if not isinstance(alignment, dict) or not alignment:
-        return {
-            "value": "unknown" if meaningful else "not_applicable",
-            "evidence": [
-                "summary.intentAlignment is missing" if meaningful else "contract.intent has no meaningful content",
-            ],
-            "sources": ["contract.intent", "summary.intentAlignment"],
-        }
-
-    problem_present = non_empty_string(intent.get("problem"))
-    constraints_present = bool(_string_list(intent.get("constraints")))
-    non_goals_present = bool(_string_list(intent.get("nonGoals")))
-    rationale_present = non_empty_string(intent.get("rationale"))
-
-    problem_value = alignment.get("problemResolved")
-    problem_evidence = alignment.get("problemResolutionEvidence")
-    constraints_value = alignment.get("constraintsRespected")
-    constraints_evidence = alignment.get("constraintsRespectEvidence")
-    non_goals_value = alignment.get("nonGoalsAvoided")
-    rationale_value = alignment.get("rationaleValidated")
-
-    applicable: list[str] = []
-    unresolved: list[str] = []
-    unknown: list[str] = []
-
-    def classify(field: str, present: bool, canonical_value: Any, legacy_value: Any) -> None:
-        if not present:
-            return
-        applicable.append(field)
-        if isinstance(canonical_value, bool):
-            if not canonical_value:
-                unresolved.append(field)
-            return
-        if non_empty_string(legacy_value):
-            return
-        elif canonical_value is None:
-            unknown.append(field)
-        else:
-            unresolved.append(field)
-
-    classify("problem", problem_present, problem_value, problem_evidence)
-    classify("constraints", constraints_present, constraints_value, constraints_evidence)
-    classify("nonGoals", non_goals_present, non_goals_value, None)
-    classify("rationale", rationale_present, rationale_value if isinstance(rationale_value, str) else None, rationale_value)
-
-    if not applicable:
-        return {
-            "value": "not_applicable",
-            "evidence": ["contract.intent has no meaningful content"],
-            "sources": ["contract.intent"],
-        }
-
-    if unresolved:
-        return {
-            "value": "unresolved",
-            "evidence": [f"intent alignment unresolved for: {', '.join(unresolved)}"],
-            "sources": ["contract.intent", "summary.intentAlignment"],
-        }
-    if unknown:
-        return {
-            "value": "unknown",
-            "evidence": [f"intent alignment missing evidence for: {', '.join(unknown)}"],
-            "sources": ["contract.intent", "summary.intentAlignment"],
-        }
-
-    evidence = []
-    if problem_present:
-        evidence.append("problem")
-    if constraints_present:
-        evidence.append("constraints")
-    if non_goals_present:
-        evidence.append("nonGoals")
-    if rationale_present:
-        evidence.append("rationale")
-    return {
-        "value": "resolved",
-        "evidence": [f"intent alignment validated for: {', '.join(evidence)}"],
-        "sources": ["contract.intent", "summary.intentAlignment"],
-    }
-
-
-def _verification_signal(contract: dict[str, Any], summary: dict[str, Any]) -> dict[str, Any]:
-    required = _required_checks(contract)
-    index = _verification_index(summary)
-    missing = [check for check in required if check not in index]
-    failed = [check for check in required if index.get(check) == "failed"]
-    not_run = [check for check in required if index.get(check) == "not_run"]
-    passed = [check for check in required if index.get(check) == "passed"]
-
-    if failed:
-        value = "failed"
-        evidence = [f"required verification failed: {', '.join(failed)}"]
-    elif missing or not_run:
-        value = "incomplete"
-        detail = []
-        if missing:
-            detail.append(f"missing: {', '.join(missing)}")
-        if not_run:
-            detail.append(f"not_run: {', '.join(not_run)}")
-        evidence = [f"required verification incomplete ({'; '.join(detail)})"]
-    else:
-        value = "passed"
-        evidence = [f"required verification passed: {len(passed)}/{len(required)}"]
-    return {
-        "value": value,
-        "evidence": evidence,
-        "sources": ["contract.verification", "summary.verification"],
-        "required": required,
-        "passed": passed,
-        "failed": failed,
-        "missing": missing,
-        "not_run": not_run,
-    }
-
-
 def _unknowns_signal(contract: dict[str, Any], summary: dict[str, Any] | None) -> dict[str, Any]:
     contract_unknowns = _string_list(contract.get("unknowns"))
     summary_unknowns = _string_list(_summary_or_empty(summary).get("unknownsRemaining"))
@@ -459,62 +321,6 @@ def _unknowns_signal(contract: dict[str, Any], summary: dict[str, Any] | None) -
         "value": "resolved",
         "evidence": ["no open unknowns recorded"],
         "sources": ["contract.unknowns", "summary.unknownsRemaining"],
-    }
-
-
-def _acceptance_signal(contract: dict[str, Any], summary: dict[str, Any] | None, verification: dict[str, Any]) -> dict[str, Any]:
-    if summary is None:
-        return {
-            "value": "unknown",
-            "evidence": ["summary is missing"],
-            "sources": ["contract.acceptance", "summary.verification", "summary.reviewReadiness"],
-        }
-
-    acceptance = contract.get("acceptance")
-    if not isinstance(acceptance, list) or not acceptance:
-        return {
-            "value": "unknown",
-            "evidence": ["contract.acceptance is missing"],
-            "sources": ["contract.acceptance", "summary.verification", "summary.reviewReadiness"],
-        }
-
-    review = _dict(summary.get("reviewReadiness"))
-    review_status = review.get("status")
-    if review_status not in {"ready", "ready_with_risks", "not_ready", "blocked"}:
-        review_status = "unknown"
-
-    if verification["value"] != "passed":
-        return {
-            "value": "incomplete",
-            "evidence": [f"required verification is {verification['value']}"],
-            "sources": ["contract.acceptance", "summary.verification", "summary.reviewReadiness"],
-        }
-
-    if _string_list(summary.get("unknownsRemaining")):
-        return {
-            "value": "incomplete",
-            "evidence": ["summary.unknownsRemaining is not empty"],
-            "sources": ["contract.acceptance", "summary.verification", "summary.reviewReadiness"],
-        }
-
-    if review_status == "unknown":
-        return {
-            "value": "unknown",
-            "evidence": ["summary.reviewReadiness is missing"],
-            "sources": ["contract.acceptance", "summary.verification", "summary.reviewReadiness"],
-        }
-
-    if review_status in {"not_ready", "blocked"}:
-        return {
-            "value": "incomplete",
-            "evidence": [f"reviewReadiness.status is {review_status}"],
-            "sources": ["contract.acceptance", "summary.verification", "summary.reviewReadiness"],
-        }
-
-    return {
-        "value": "complete",
-        "evidence": [f"reviewReadiness.status is {review_status}"],
-        "sources": ["contract.acceptance", "summary.verification", "summary.reviewReadiness"],
     }
 
 
@@ -588,48 +394,6 @@ def _checkpoint_signal(contract: dict[str, Any], summary: dict[str, Any] | None)
     }
 
 
-def _residual_risk_signal(summary: dict[str, Any] | None) -> dict[str, Any]:
-    if summary is None:
-        return {
-            "value": "unknown",
-            "evidence": ["summary is missing"],
-            "sources": ["summary.risk", "summary.residualRisks"],
-        }
-
-    levels = _risk_levels(summary)
-    if not levels:
-        return {
-            "value": "unknown",
-            "evidence": ["no residual risk evidence recorded"],
-            "sources": ["summary.risk", "summary.residualRisks"],
-        }
-
-    level = _max_risk_level(levels)
-    return {
-        "value": level,
-        "evidence": [f"highest residual risk: {level}"],
-        "sources": ["summary.risk", "summary.residualRisks"],
-    }
-
-
-def _review_readiness(summary: dict[str, Any] | None) -> dict[str, Any]:
-    if summary is None:
-        return {
-            "status": "unknown",
-            "focus": [],
-            "sources": ["summary.reviewReadiness"],
-        }
-    readiness = _dict(summary.get("reviewReadiness"))
-    status = readiness.get("status")
-    if status not in {"not_ready", "ready", "ready_with_risks", "blocked"}:
-        status = "unknown"
-    return {
-        "status": status,
-        "focus": _string_list(readiness.get("expectedReviewFocus")),
-        "sources": ["summary.reviewReadiness"],
-    }
-
-
 def _destructive_change_violation(contract: dict[str, Any], summary: dict[str, Any] | None) -> bool:
     policy = _dict(contract.get("destructiveChangePolicy"))
     if policy.get("allowed") is True:
@@ -644,8 +408,8 @@ def derive_governance_status(contract: dict[str, Any], summary: dict[str, Any] |
     summary_dict = summary if isinstance(summary, dict) else None
 
     signals = {}
-    signals["Intent"] = _intent_alignment_signal(contract, _summary_or_empty(summary_dict))
-    verification = _verification_signal(contract, _summary_or_empty(summary_dict))
+    signals["Intent"] = intent_alignment_signal(contract, _summary_or_empty(summary_dict))
+    verification = verification_signal(_required_checks(contract), _verification_index(_summary_or_empty(summary_dict)))
     signals["Verification"] = {
         "value": verification["value"],
         "evidence": verification["evidence"],
@@ -658,12 +422,12 @@ def derive_governance_status(contract: dict[str, Any], summary: dict[str, Any] |
         "sources": scenario_coverage["sources"],
     }
     signals["Unknowns"] = _unknowns_signal(contract, summary_dict)
-    signals["Acceptance"] = _acceptance_signal(contract, summary_dict, verification)
+    signals["Acceptance"] = acceptance_signal(contract, summary_dict, verification)
     signals["Guidelines"] = _guidelines_signal(contract, summary_dict)
     signals["Checkpoints"] = _checkpoint_signal(contract, summary_dict)
-    signals["Residual Risk"] = _residual_risk_signal(summary_dict)
+    signals["Residual Risk"] = residual_risk_signal(summary_dict)
 
-    review = _review_readiness(summary_dict)
+    review = review_readiness_signal(summary_dict)
     decision_drivers: list[str] = []
 
     if contract.get("mode") == "code" and contract.get("notCodable") is True:
@@ -736,7 +500,7 @@ def derive_governance_status(contract: dict[str, Any], summary: dict[str, Any] |
         f"acceptance={len(_string_list(contract.get('acceptance')))}",
         f"unknowns={len(_string_list(contract.get('unknowns')))}",
         f"guidelines={len(_string_list(contract.get('guidelines')))}",
-        f"scenarioCoverage={'present' if _scenario_items(_summary_or_empty(summary_dict)) else 'absent'}",
+        f"scenarioCoverage={'present' if scenario_items(_summary_or_empty(summary_dict)) else 'absent'}",
         f"checkpointPolicy={'required' if _dict(contract.get('checkpointPolicy')).get('requiredBeforeFinish') else 'not_required'}",
     ]
     summary_evidence = [

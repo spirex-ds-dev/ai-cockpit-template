@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from ai_common import PROJECT_ROOT, load_json, simple_yaml_lists, simple_yaml_scalars, validate_scenario_coverage
+from ai_readiness_policy import has_explicit_blocker
 
 
 ALLOWED_STATUSES = {"ready", "needs_human_confirmation", "not_ready"}
@@ -559,6 +560,9 @@ def risk_context(contract: dict[str, Any]) -> dict[str, Any]:
 
 
 def overall_status(signals: list[Signal], context: dict[str, Any]) -> str:
+    contract = context.get("contract", {})
+    if has_explicit_blocker(contract):
+        return "not_ready"
     values = {signal.value for signal in signals}
     if context["scope"]["value"] in {"Missing", "Inconsistent"}:
         return "not_ready"
@@ -595,6 +599,7 @@ def recommendation_for(status: str, signals: list[Signal], context: dict[str, An
 
 def build_context(contract: dict[str, Any]) -> dict[str, Any]:
     return {
+        "contract": contract,
         "scope": asdict(scope_signal(contract)),
         "outOfScope": asdict(out_of_scope_signal(contract)),
         "risk": risk_context(contract),

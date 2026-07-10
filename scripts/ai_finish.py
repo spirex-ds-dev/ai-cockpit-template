@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import re
 import subprocess
 import sys
 import time
@@ -13,7 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from ai_common import PROJECT_ROOT, current_head, load_json, redact_machine_paths, render_check_command, save_json, verification_key
+from ai_common import PROJECT_ROOT, current_head, load_json, redact_machine_paths, redact_sensitive_output, render_check_command, save_json, verification_key
 from ai_observability import create_observability, elapsed_ms
 
 
@@ -48,7 +47,7 @@ def evidence(
     execution_summary_path: str,
 ) -> dict[str, Any]:
     compact = " ".join(output.split())[:500]
-    compact = re.sub(r"(?i)(api[_-]?key|token|password|secret)(\s*[:=]\s*)\S+", r"\1\2[REDACTED]", compact)
+    compact = redact_sensitive_output(compact)
     compact = redact_machine_paths(compact)
     return {
         "check": check_id,

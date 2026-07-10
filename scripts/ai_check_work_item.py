@@ -115,6 +115,11 @@ def validate_verification(data: dict[str, Any]) -> list[str]:
 def validate_optional_readiness(data: dict[str, Any]) -> list[str]:
     issues: list[str] = []
 
+    if data.get("contractVersion") == 2:
+        for key in ("riskAssessment", "agentCapability", "executionDecision", "checkpointPolicy"):
+            if key not in data:
+                issues.append(f"contractVersion 2 requires field: {key}")
+
     risk = data.get("riskAssessment")
     if risk is not None:
         if not isinstance(risk, dict):

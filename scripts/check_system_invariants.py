@@ -102,11 +102,15 @@ def invariant_issues(root: Path = ROOT) -> list[str]:
     default_match = re.search(r'^REF="\$\{AI_COCKPIT_TEMPLATE_REF:-(v\d+\.\d+\.\d+)\}"', (root / "install.sh").read_text(encoding="utf-8"), re.MULTILINE)
     if not default_match or default_match.group(1) != release.get("releaseTag"):
         issues.append("install.sh default version differs from release.json")
-    targets = make_targets(root / "Makefile") | make_targets(root / "templates" / "make" / "Makefile.ai")
+    host_targets = make_targets(root / "Makefile")
+    distribution_targets = make_targets(root / "templates" / "make" / "Makefile.ai")
+    targets = host_targets | distribution_targets
     registry_ids = check_ids(root / ".ai" / "cockpit" / "checks.yaml")
     for definition in re.findall(r"^    command(?:Template)?:\s+make\s+([A-Za-z0-9_.-]+)", (root / ".ai" / "cockpit" / "checks.yaml").read_text(encoding="utf-8"), re.MULTILINE):
         if definition not in targets:
             issues.append(f"checks.yaml references missing Make target: {definition}")
+        if definition not in distribution_targets:
+            issues.append(f"checks.yaml references target missing from installed Makefile.ai: {definition}")
     contract_template = json.loads((root / ".ai" / "work-items" / "_templates" / "work_item_contract.example.json").read_text(encoding="utf-8"))
     for item in contract_template.get("verification", []):
         if isinstance(item, dict) and item.get("check") not in registry_ids:

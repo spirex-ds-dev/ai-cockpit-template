@@ -14,6 +14,10 @@ def write_pair(root, name, scope, changed):
         "baseCommit": "a" * 40, "baselineDirtyPaths": [], "scope": scope, "outOfScope": [],
         "sources": ["spec"], "unknowns": [], "notCodable": False, "acceptance": ["done"],
         "verification": [{"check": "projectTest", "required": False}],
+        "riskAssessment": {"level": "low", "riskTypes": [], "reason": "fixture"},
+        "agentCapability": {"canImplement": True, "canVerify": True, "needsHumanDecision": False, "blockedReason": ""},
+        "executionDecision": {"status": "continue", "reason": "fixture"},
+        "checkpointPolicy": {"requiredBeforeFinish": False, "requiredStages": [], "reason": "fixture"},
         "destructiveChangePolicy": {"allowed": False, "requiresHumanApproval": True, "allowPatterns": []},
         "rollbackNote": "revert",
     }

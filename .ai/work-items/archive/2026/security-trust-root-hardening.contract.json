@@ -1,0 +1,185 @@
+{
+  "contractVersion": 2,
+  "workItemId": "security-trust-root-hardening",
+  "mode": "code",
+  "title": "Harden installer, secret redaction, and fail-closed readiness",
+  "baseCommit": "df2be6c5f17742eab5f6b28b3d6bfb22e1b23276",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "ab1ecca638ec768297925600e65ecb959570e55e746caf404944983ad5d11c1b"
+    }
+  ],
+  "scope": [
+    "scripts/ai_common.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/check_system_invariants.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_preflight_review.py",
+    "scripts/ai_readiness_policy.py",
+    "scripts/ai_risk_policy.py",
+    "scripts/ai_review_readiness_policy.py",
+    "scripts/ai_verification_policy.py",
+    "scripts/ai_acceptance_policy.py",
+    "scripts/ai_intent_policy.py",
+    "tests/test_verification_policy.py",
+    "tests/test_acceptance_policy.py",
+    "tests/test_intent_policy.py",
+    "scripts/ai_scenario_policy.py",
+    "scripts/ai_governance_compression.py",
+    "scripts/check_critical_coverage.py",
+    "scripts/install_ai_cockpit.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    ".ai/guards/coverage_policy.yaml",
+    ".github/workflows/smoke.yml",
+    "tests/test_finish_e2e.py",
+    "tests/test_preflight_review.py",
+    "tests/test_readiness_policy.py",
+    "tests/test_scenario_coverage_gate.py",
+    "tests/test_critical_coverage.py",
+    "tests/test_install_script.py",
+    "tests/test_project_governance.py",
+    "tests/test_pr_aggregate.py",
+    ".ai/work-items/active/security-trust-root-hardening.contract.json",
+    ".ai/work-items/active/security-trust-root-hardening.summary.json",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": ["changes to unrelated governance policies and distribution targets"],
+  "sources": [
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Review evidence identifies symlink escape in destination writes."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Review evidence identifies credential persistence in outputSummary."
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "reason": "Review evidence identifies readiness ignoring execution blockers."
+    }
+  ],
+  "unknowns": [],
+  "scenarioCoverage": [
+    {"scenario": "installer rejects symlinked destination ancestor", "required": true, "status": "unverified", "evidence": ["regression test planned in tests/test_install_script.py"]},
+    {"scenario": "finish redacts credential-shaped verification output", "required": true, "status": "unverified", "evidence": ["regression test planned in tests/test_finish_e2e.py"]},
+    {"scenario": "preflight blocks explicit execution and capability blockers", "required": true, "status": "unverified", "evidence": ["regression test planned in tests/test_preflight_review.py"]}
+  ],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["installer_boundary", "credential_persistence", "fail_open_readiness"],
+    "reason": "Security trust-root hardening across installer writes, persisted verification evidence, and preflight readiness."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Scope, sources, acceptance, and verification are defined for the selected hardening fixes."
+  },
+  "preReviewWarnings": [
+    "Review destination containment, credential redaction breadth, and blocker precedence in preflight."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Installer rejects symlinked destination files and ancestor directories before any write or backup.",
+    "Persisted verification output redacts bearer, cloud, GitHub, and PEM credential formats.",
+    "Preflight returns not_ready when notCodable, blocked/deferred execution, or incapable agent state is present.",
+    "Regression tests cover each security boundary and existing behavior remains green."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Security review found three trust-root failures that can write outside an installation target, persist credentials in versioned audit records, or misclassify explicitly blocked Work Items as implementation-ready.",
+    "constraints": ["Keep the repository language-neutral and preserve existing public command behavior except for unsafe writes/readiness claims.", "Use standard-library implementations and add regression coverage within the selected script/test scope."],
+    "rationale": "These fixes restore fail-closed boundaries at the installer, evidence persistence, and preflight decision points before broader governance improvements are attempted."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User instruction: continue",
+    "reason": "User explicitly authorized continuation of the remaining governance hardening, including Makefile quality-gate wiring."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

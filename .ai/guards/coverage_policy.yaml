@@ -96,17 +96,37 @@ associations:
       - "scripts/ai_preflight_review.py"
     tests:
       - "tests/test_preflight_review.py"
+      - "tests/test_readiness_policy.py"
+  finishEvidence:
+    production:
+      - "scripts/ai_finish.py"
+    tests:
+      - "tests/**"
+  readinessPolicy:
+    production:
+      - "scripts/ai_scenario_policy.py"
+    tests:
+      - "tests/test_scenario_coverage_gate.py"
+  reviewReadinessPolicy:
+    production:
+      - "scripts/ai_review_readiness_policy.py"
+    tests:
+      - "tests/**"
+  riskPolicy:
+    production:
+      - "scripts/ai_risk_policy.py"
+    tests:
+      - "tests/**"
   workItemValidation:
     production:
       - "scripts/ai_check_work_item.py"
     tests:
-      - "tests/test_contract_and_policy.py"
+      - "tests/**"
   sharedGovernanceCore:
     production:
       - "scripts/ai_common.py"
     tests:
-      - "tests/test_ai_check_summary.py"
-      - "tests/test_contract_and_policy.py"
+      - "tests/**"
   prAggregate:
     production:
       - "scripts/ai_check_pr.py"
@@ -127,8 +147,7 @@ associations:
     production:
       - "scripts/ai_governance_compression.py"
     tests:
-      - "tests/test_guards_and_status.py"
-      - "tests/test_governance_compression.py"
+      - "tests/**"
   statusConsistency:
     production:
       - "scripts/ai_check_status_consistency.py"

@@ -29,6 +29,7 @@ CRITICAL_MINIMUMS = {
     "scripts/ai_check_coverage_guard.py": 85.0,
     "scripts/ai_check_guards.py": 85.0,
     "scripts/ai_check_work_item.py": 70.0,
+    "scripts/ai_check_scenario_coverage.py": 50.0,
 }
 
 

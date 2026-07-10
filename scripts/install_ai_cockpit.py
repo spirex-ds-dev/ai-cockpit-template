@@ -51,6 +51,13 @@ SCRIPT_NAMES = {
     "ai_check_summary.py",
     "ai_check_work_item.py",
     "ai_common.py",
+    "ai_scenario_policy.py",
+    "ai_readiness_policy.py",
+    "ai_risk_policy.py",
+    "ai_review_readiness_policy.py",
+    "ai_verification_policy.py",
+    "ai_acceptance_policy.py",
+    "ai_intent_policy.py",
     "ai_finish.py",
     "ai_onboard.py",
     "ai_generate_status.py",
@@ -574,6 +581,7 @@ class Installer:
             self.record("skip", self.target / ".ai" / "cockpit" / "current_status.md", "preserve active Work Item status")
             return
         dst = self.target / ".ai" / "cockpit" / "current_status.md"
+        self.assert_safe_destination(dst)
         existed = dst.exists()
         if existed:
             self.backup_path(dst)
@@ -609,6 +617,7 @@ class Installer:
         self.copy_path(self.source / src_relative, self.target / dst_relative)
 
     def copy_path(self, src: Path, dst: Path, *, executable: bool = False) -> None:
+        self.assert_safe_destination(dst)
         existed = dst.exists()
         if existed and not (self.force or self.upgrade):
             self.record("skip", dst, "already exists")
@@ -626,6 +635,7 @@ class Installer:
             dst.chmod(dst.stat().st_mode | 0o111)
 
     def backup_path(self, path: Path) -> None:
+        self.assert_safe_destination(path)
         if path in self.backups:
             return
         relative = path.relative_to(self.target)
@@ -637,8 +647,21 @@ class Installer:
         shutil.copy2(path, backup)
         self.backups.setdefault(path, backup)
 
+    def assert_safe_destination(self, path: Path) -> None:
+        """Reject symlinked destination components so installation stays in target."""
+        try:
+            relative = path.relative_to(self.target)
+        except ValueError as exc:
+            raise RuntimeError(f"refusing destination outside target: {path}") from exc
+        current = self.target
+        for component in relative.parts:
+            current /= component
+            if current.is_symlink():
+                raise RuntimeError(f"refusing symlinked destination: {current.relative_to(self.target)}")
+
     def install_agent_doc(self, name: str) -> None:
         dst = self.target / name
+        self.assert_safe_destination(dst)
         if not dst.exists():
             self.record("write", dst, "install managed AI Cockpit section")
             if not self.dry_run:
@@ -681,6 +704,7 @@ class Installer:
 
     def append_makefile_include(self) -> None:
         dst = self.target / "Makefile"
+        self.assert_safe_destination(dst)
         include_line = "include Makefile.ai"
         if not dst.exists():
             self.record("write", dst, "create Makefile with AI Cockpit include")
@@ -704,6 +728,7 @@ class Installer:
 
     def install_gitignore(self) -> None:
         dst = self.target / ".gitignore"
+        self.assert_safe_destination(dst)
         existed = dst.exists()
         text = dst.read_text(encoding="utf-8") if dst.exists() else ""
         missing_rules = [rule for rule in GITIGNORE_RULES if rule not in text.splitlines()]

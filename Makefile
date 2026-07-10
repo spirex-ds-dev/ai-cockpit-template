@@ -103,7 +103,7 @@ check-ai-project-profile:
 check-ai-guard-calibration: check-ai-project-profile
 	$(AI_PYTHON) scripts/ai_check_guard_calibration.py --root .
 
-quality: project-format-check project-test project-lint diff-check check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration
+quality: project-format-check project-test project-lint diff-check check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency
 
 ai-cockpit-project-format-check: project-format-check
 

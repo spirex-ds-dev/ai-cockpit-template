@@ -172,7 +172,7 @@ def included(path: str, patterns: list[str]) -> bool:
 
 def parse_simple_manifest(path: Path) -> dict[str, dict[str, str]]:
     if not path.exists():
-        return {}
+        raise ValueError(f"required guard manifest is missing: {path.as_posix()}")
     parsed = parse_yaml(path)
     manifest: dict[str, dict[str, str]] = {}
     for k, v in parsed.items():
@@ -240,6 +240,9 @@ def parse_yaml(path: Path) -> dict[str, Any]:
 
             if not isinstance(parent_container, dict):
                 raise ValueError(f"Syntax Error in {path.name}:{line_idx}: Cannot define key-value pair under a list.")
+
+            if key in parent_container:
+                raise ValueError(f"Duplicate key in {path.name}:{line_idx}: {key}")
 
             if val:
                 parent_container[key] = [] if val == "[]" else val
@@ -380,6 +383,21 @@ def redact_machine_paths(value: str) -> str:
     redacted = value.replace(str(PROJECT_ROOT), "<PROJECT_ROOT>")
     redacted = re.sub(r"/(?:Users|home)/[^/\s]+/(?:[^\s\"']+)", "<LOCAL_PATH>", redacted)
     redacted = re.sub(r"[A-Za-z]:\\Users\\[^\\\s]+\\(?:[^\s\"']+)", "<LOCAL_PATH>", redacted)
+    return redacted
+
+
+def redact_sensitive_output(value: str) -> str:
+    """Remove common credential formats before output is persisted in a Summary."""
+    redacted = value
+    patterns = [
+        (r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]+", "Bearer [REDACTED]"),
+        (r"\bAKIA[0-9A-Z]{16}\b", "[AWS_KEY_REDACTED]"),
+        (r"\bgh[pousr]_[A-Za-z0-9_]{20,}\b", "[GITHUB_TOKEN_REDACTED]"),
+        (r"-----BEGIN [^-]+-----.*?-----END [^-]+-----", "[PRIVATE_KEY_REDACTED]"),
+        (r"(?i)\b(api[_-]?key|token|password|secret|credential)\b(\s*[:=]\s*)[^\s,;]+", r"\1\2[REDACTED]"),
+    ]
+    for pattern, replacement in patterns:
+        redacted = re.sub(pattern, replacement, redacted, flags=re.DOTALL if "BEGIN" in pattern else 0)
     return redacted
 
 

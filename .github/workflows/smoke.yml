@@ -35,6 +35,9 @@ jobs:
       - name: Run repository quality gates
         run: make quality
 
+      - name: Verify clean-checkout Cockpit status consistency
+        run: make check-ai-status-consistency
+
       - name: Verify documented public release contract
         run: make check-release-distribution
 

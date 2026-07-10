@@ -81,6 +81,12 @@ cockpit-validate-calibration:
 check-ai-project-profile:
 	$(AI_PYTHON) scripts/ai_calibrate.py validate --profile .ai/project_profile.yaml --confirmed
 
+check-docs-metadata:
+	$(AI_PYTHON) scripts/check_docs_metadata.py
+
+check-ai-system-invariants:
+	$(AI_PYTHON) scripts/check_system_invariants.py
+
 check-ai-guard-calibration: check-ai-project-profile
 	$(AI_PYTHON) scripts/ai_check_guard_calibration.py --root .
 
