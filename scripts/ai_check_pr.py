@@ -253,6 +253,8 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         issues.extend(f"{contract_rel}: {issue}" for issue in machine_path_issues(contract))
         issues.extend(f"{summary_rel}: {issue}" for issue in machine_path_issues(summary))
 
+    archive_entries.sort(key=lambda entry: entry[3])
+
     all_paths = changed_paths(
         {"baseCommit": base, "baselineDirtyPaths": []}, ignore_baseline_dirty=True
     )
@@ -280,8 +282,7 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
                 f"complete PR diff path lacks paired ownership (same Contract scope and Summary changedFiles): {path}"
             )
             continue
-        # The PR audit resolves overlapping archive claims deterministically:
-        # the last matching archive pair in PR input order wins for a given path.
+        # The PR audit resolves overlapping archive claims by the stable archive rank.
         _, effective_contract, _, _ = owners[-1]
         owner_match = first_match(path, ownership)
         if owner_match:

@@ -153,7 +153,7 @@ def test_aggregate_pr_prefers_latest_effective_owner(tmp_path, monkeypatch):
     assert issues == []
 
 
-def test_aggregate_pr_prefers_input_order_over_rank(tmp_path, monkeypatch):
+def test_aggregate_pr_prefers_higher_rank_over_input_order(tmp_path, monkeypatch):
     first = write_pair(
         tmp_path, "z_unapproved", [".github/workflows/ci.yml"], [".github/workflows/ci.yml"]
     )
@@ -195,11 +195,11 @@ def test_aggregate_pr_prefers_input_order_over_rank(tmp_path, monkeypatch):
         ],
     )
 
-    issues = ai_check_pr.validate_pr_bundle("a" * 40, [first, second])
-    assert not any("restricted path lacks approval" in issue for issue in issues)
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [second, first])
+    assert any("restricted path lacks approval" in issue for issue in issues)
 
 
-def test_aggregate_pr_rejects_when_unapproved_archive_is_last_in_order(tmp_path, monkeypatch):
+def test_aggregate_pr_rejects_when_higher_ranked_archive_is_unapproved(tmp_path, monkeypatch):
     first = write_pair(
         tmp_path,
         "a_approved",

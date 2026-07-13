@@ -1,0 +1,159 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n3_archive_owner_selection",
+  "mode": "code",
+  "title": "稳定重叠归档的 ownership 选择规则",
+  "baseCommit": "95e3361c847e6b84b99cdab549a163b1dc942981",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "6dff7aa1879e359d37b4ce70b41da7c6d56786e289ccae44684494c3066f80cf"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_n3_archive_owner_selection.contract.json",
+    ".ai/work-items/active/review_n3_archive_owner_selection.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/2026/review_n3_archive_owner_selection.*",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py"
+  ],
+  "outOfScope": ["No-op restore rules", "Status gate changes", "Public release tag or push"],
+  "sources": [
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "R7 archive ownership stability requirement."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Archive pair ranking and effective owner selection implementation."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Existing overlapping archive owner regression tests."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["governance_determinism"],
+    "reason": "The change makes the existing rank policy effective without changing path scope or restore semantics."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Implement deterministic archive owner selection and verify overlapping claims."
+  },
+  "preReviewWarnings": ["Owner selection must be determined by archive rank, not incidental input order."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Overlapping archive owners are sorted by archive_pair_rank before effective owner selection.",
+    "Tests prove rank wins regardless of archive input order and restricted approval follows the ranked owner.",
+    "Existing no-op restore behavior remains unchanged.",
+    "Full AI and project quality checks pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The PR checker computes archive_pair_rank but selects owners using owners[-1], allowing input order to override the documented latest archive rule.",
+    "constraints": ["Do not change no-op restore semantics.", "Do not edit existing archive evidence.", "Do not publish or push."],
+    "rationale": "A deterministic rank must be applied at the point of effective owner selection so overlapping claims remain reviewable and stable."
+  },
+  "scenarioCoverage": [
+    {"scenario": "A higher-ranked archive owner wins when input order is reversed.", "required": true, "status": "verified", "evidence": ["tests/test_pr_aggregate.py"]},
+    {"scenario": "Restricted approval is evaluated against the ranked effective owner.", "required": true, "status": "verified", "evidence": ["scripts/ai_check_pr.py", "tests/test_pr_aggregate.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
