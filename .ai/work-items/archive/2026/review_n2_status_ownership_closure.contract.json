@@ -1,0 +1,153 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n2_status_ownership_closure",
+  "mode": "code",
+  "title": "补齐生成状态文件的归档 ownership 归属",
+  "baseCommit": "b612cef182d6717c5388ead84fb7823ede5a222e",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "3bcead02214f54d4ff79ff2d5e05d598aa363272dae2531150661cfbfbacd2ff"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_n2_status_ownership_closure.contract.json",
+    ".ai/work-items/active/review_n2_status_ownership_closure.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/2026/review_n2_status_ownership_closure.*"
+  ],
+  "outOfScope": ["Source code and Makefile behavior", "Public release tag or push"],
+  "sources": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated lifecycle status changed when this Work Item started and must be owned in the archived Summary."
+    },
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "R0 governance ownership requirement."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["governance_evidence"],
+    "reason": "Only generated status ownership evidence is being closed; no runtime behavior changes."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Record generated status ownership and verify the archived PR bundle."
+  },
+  "preReviewWarnings": ["Do not modify archived Work Item evidence."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The Summary explicitly owns the generated current_status.md path.",
+    "The Work Item finishes and archives with all required governance checks passed.",
+    "The PR ownership check reports no unowned current_status.md path.",
+    "No source behavior or public release state changes are introduced."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The no-active PR audit found current_status.md unowned after prior gate changes because generated status was not listed in the archived Summary changedFiles.",
+    "constraints": ["Do not modify archived evidence.", "Do not change source behavior or publish."],
+    "rationale": "Generated status is a repository change and must have explicit Work Item ownership for the final PR audit to be trustworthy."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Generated current_status.md is owned by the active and then archived Work Item.", "required": true, "status": "verified", "evidence": [".ai/cockpit/current_status.md"]},
+    {"scenario": "PR ownership reports no unowned path after archive.", "required": true, "status": "verified", "evidence": ["make check-ai-pr"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "No restricted source path is changed."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
