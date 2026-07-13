@@ -1,0 +1,173 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_r9_status_gate_consistency",
+  "mode": "code",
+  "title": "统一状态模型与门禁一致性",
+  "baseCommit": "073690e7d431630b1071425c1663853f572db0df",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "3215138cddba9d913bd17787055c57244bbfb8e31bdddf2aa869ea76c1257072"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_r9_status_gate_consistency.contract.json",
+    ".ai/work-items/active/review_r9_status_gate_consistency.summary.json",
+    ".ai/cockpit/current_status.md",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_check_status.py",
+    "scripts/ai_check_status_consistency.py",
+    "scripts/ai_check_pr.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_core_gates.py",
+    "tests/test_pr_aggregate.py",
+    "tests/**"
+  ],
+  "outOfScope": ["R10-R11 remediation"],
+  "sources": [
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "R9 objective and acceptance boundary."
+    },
+    {
+      "path": "scripts/ai_generate_status.py",
+      "reason": "Status generation model."
+    },
+    {
+      "path": "scripts/ai_check_status.py",
+      "reason": "Status validation model."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "No-active PR gate behavior."
+    },
+    {
+      "path": "tests/test_guards_and_status.py",
+      "reason": "Status and no-active regressions."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["status_consistency", "gate_bypass"],
+    "reason": "Divergent status and gate models can hide unowned changes."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Existing status and gate regressions are ready for verification."
+  },
+  "preReviewWarnings": ["Verify no-active status still reconciles ownership and PR evidence."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Generated status is accepted by the status checker using the same governance model.",
+    "No-active Work Item still detects unowned changes and runs PR ownership gates.",
+    "Make and PR gate conclusions remain consistent in regression tests.",
+    "The Work Item is archived and committed."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Status compression and gate checks must use one ownership reconciliation model, including when no active Work Item exists.",
+    "constraints": ["Do not weaken no-active fail-closed behavior.", "Preserve generated status format."],
+    "rationale": "One status/gate model prevents operational dashboards from reporting a safer state than the actual PR gate."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Generated status passes status validation.", "required": true, "status": "verified", "evidence": ["tests/test_guards_and_status.py"]},
+    {"scenario": "No-active Work Item detects unowned changes.", "required": true, "status": "verified", "evidence": ["tests/test_core_gates.py", "tests/test_pr_aggregate.py"]},
+    {"scenario": "Make and PR gate conclusions remain consistent.", "required": true, "status": "verified", "evidence": ["tests/test_pr_aggregate.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
