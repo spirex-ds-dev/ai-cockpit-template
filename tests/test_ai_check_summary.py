@@ -43,6 +43,40 @@ def test_passed_v2_evidence_requires_worktree_digest():
     assert "verification[0].worktreeDigest is required for passed result" in issues
 
 
+def test_legacy_archive_summary_without_v2_fields_remains_readable():
+    item = ai_finish.evidence(
+        "projectTest",
+        "make ai-cockpit-project-test",
+        0,
+        1,
+        "passed\n",
+        contract_hash="b" * 64,
+        commit_sha="a" * 40,
+        execution_contract_path=".ai/work-items/archive/2026/task.contract.json",
+        execution_summary_path=".ai/work-items/archive/2026/task.summary.json",
+        worktree_digest="c" * 64,
+    )
+    item.pop("worktreeDigest")
+    summary = {
+        "workItemId": "task",
+        "contractPath": ".ai/work-items/archive/2026/task.contract.json",
+        "changedFiles": [{"path": "scripts/ai_check_summary.py", "reason": "fixture"}],
+        "sourcesUsed": ["fixture"],
+        "verification": [item],
+        "unknownsRemaining": [],
+        "risk": {"level": "low", "detail": "fixture"},
+        "generatedFiles": [],
+        "destructiveChanges": [],
+        "observedIssues": [],
+    }
+    issues = ai_check_summary.validate_summary(
+        summary,
+        {"contractVersion": 2, "workItemId": "task"},
+        legacy_archive=True,
+    )
+    assert issues == []
+
+
 def test_intent_alignment_validator_accepts_empty_and_partial_payloads():
     assert ai_check_summary.validate_intent_alignment({"intentAlignment": {}}) == []
     assert ai_check_summary.validate_intent_alignment({"intentAlignment": None}) == []

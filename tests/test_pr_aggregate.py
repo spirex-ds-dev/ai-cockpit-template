@@ -463,6 +463,38 @@ def test_aggregate_pr_rejects_contract_v1_downgrade(tmp_path, monkeypatch):
     assert any("PR archive evidence requires contractVersion 2" in issue for issue in issues)
 
 
+def test_aggregate_pr_accepts_v2_summary_without_digest_before_migration(tmp_path, monkeypatch):
+    legacy = write_pair(tmp_path, "legacy", ["src/a.py"], ["src/a.py"])
+    contract = json.loads(legacy.read_text(encoding="utf-8"))
+    contract["baseCommit"] = "b" * 40
+    legacy.write_text(json.dumps(contract), encoding="utf-8")
+    summary_path = Path(str(legacy).replace(".contract.json", ".summary.json"))
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary["verification"] = [{"check": "projectTest", "result": "passed"}]
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    monkeypatch.setattr(
+        ai_check_pr,
+        "run_git",
+        lambda args: type("Result", (), {"returncode": 1, "stdout": "", "stderr": ""})(),
+    )
+    patch_changes(
+        monkeypatch,
+        [
+            ".ai/work-items/archive/2026/legacy.contract.json",
+            ".ai/work-items/archive/2026/legacy.summary.json",
+            "src/a.py",
+        ],
+    )
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [legacy])
+
+    assert not any("worktreeDigest" in issue for issue in issues)
+
+
 def test_pr_rejects_summary_only_tampering_even_when_new_work_item_claims_it(tmp_path, monkeypatch):
     old = write_pair(tmp_path, "old", ["src/old.py"], ["src/old.py"])
     old_summary = str(old.relative_to(tmp_path)).replace(".contract", ".summary")

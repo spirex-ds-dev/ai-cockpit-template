@@ -33,6 +33,9 @@ OWNERSHIP_POLICY = PROJECT_ROOT / ".ai" / "guards" / "file_ownership.yaml"
 
 ARCHIVE_PREFIX = ".ai/work-items/archive/"
 ARCHIVE_SUFFIXES = (".contract.json", ".summary.json", ".review.json")
+# Worktree-bound verification evidence became mandatory at this migration point.
+# Archives created before it remain immutable historical evidence.
+WORKTREE_DIGEST_INTRODUCED_AT = "63ec6fcd3c8f945b379966d43457e44ccaeba258"
 
 
 def _git_blob_hash(revision: str, path: str) -> str:
@@ -155,6 +158,17 @@ def archive_pair_rank(contract_path: Path, summary_path: Path) -> tuple[int, str
     return timestamp, contract_rel, summary_rel
 
 
+def is_legacy_archive(contract: dict[str, Any], summary: dict[str, Any]) -> bool:
+    """Return whether an archive pair predates strict worktree evidence."""
+    if summary.get("summaryVersion") != 2:
+        return True
+    base_commit = contract.get("baseCommit")
+    if not isinstance(base_commit, str) or not base_commit:
+        return False
+    result = run_git(["merge-base", "--is-ancestor", WORKTREE_DIGEST_INTRODUCED_AT, base_commit])
+    return result.returncode != 0
+
+
 def machine_path_issues(value: Any, location: str = "root") -> list[str]:
     issues: list[str] = []
     if isinstance(value, str) and contains_machine_path(value):
@@ -240,6 +254,7 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         if contract.get("contractVersion") != 2:
             issues.append(f"{contract_rel}: PR archive evidence requires contractVersion 2")
         issues.extend(f"{contract_rel}: {issue}" for issue in validate_contract(contract))
+        legacy_archive = is_legacy_archive(contract, summary)
         issues.extend(
             f"{summary_rel}: {issue}"
             for issue in validate_summary(
@@ -248,6 +263,7 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
                 expected_contract_hash=hashlib.sha256(contract_path.read_bytes()).hexdigest(),
                 contract_path=contract_rel,
                 summary_path=summary_rel,
+                legacy_archive=legacy_archive,
             )
         )
         issues.extend(f"{contract_rel}: {issue}" for issue in machine_path_issues(contract))

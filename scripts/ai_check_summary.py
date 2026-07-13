@@ -99,13 +99,14 @@ def validate_summary(
     expected_contract_hash: str = "",
     contract_path: str = "",
     summary_path: str = "",
+    legacy_archive: bool = False,
 ) -> list[str]:
     issues: list[str] = []
     for key in REQUIRED_FIELDS:
         if key not in summary:
             issues.append(f"missing field: {key}")
 
-    if summary.get("summaryVersion") != 2:
+    if summary.get("summaryVersion") != 2 and not legacy_archive:
         issues.append("summaryVersion must be 2")
 
     for key in summary:
@@ -115,7 +116,7 @@ def validate_summary(
     if contract is not None and summary.get("workItemId") != contract.get("workItemId"):
         issues.append("workItemId does not match the Contract")
 
-    if contract_path:
+    if contract_path and not legacy_archive:
         expected_contract_path = Path(contract_path).as_posix()
         if summary.get("contractPath") != expected_contract_path:
             issues.append("contractPath does not match the Contract path")
@@ -201,6 +202,7 @@ def validate_summary(
                         issues.append(f"verification[{index}].commandHash does not match command")
                     if (
                         expected_contract_hash
+                        and not legacy_archive
                         and item.get("contractHash") != expected_contract_hash
                     ):
                         issues.append(f"verification[{index}].contractHash does not match Contract")
@@ -221,9 +223,10 @@ def validate_summary(
                         issues.append(f"verification[{index}].commitSha must be a Git object id")
                     worktree_digest = item.get("worktreeDigest")
                     if worktree_digest is None:
-                        issues.append(
-                            f"verification[{index}].worktreeDigest is required for passed result"
-                        )
+                        if not legacy_archive:
+                            issues.append(
+                                f"verification[{index}].worktreeDigest is required for passed result"
+                            )
                     elif (
                         not non_empty_string(worktree_digest)
                         or len(str(worktree_digest)) != 64
