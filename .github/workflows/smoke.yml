@@ -38,7 +38,7 @@ jobs:
           printf 'AI_BASE_COMMIT=%s\n' "$base" >> "$GITHUB_ENV"
 
       - name: Install development quality tools
-        run: python3 -m pip install --disable-pip-version-check -r requirements-dev.lock
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
 
       - name: Run repository quality gates
         run: make quality

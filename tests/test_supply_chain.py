@@ -206,9 +206,15 @@ def test_supply_chain_accepts_explicit_source_commit(monkeypatch):
     assert calls == [["git", "rev-parse", "source-ref^{commit}"]]
 
 
-def test_sbom_reports_direct_and_transitive_coverage_without_overclaiming(tmp_path, monkeypatch):
+def test_sbom_reports_generated_direct_transitive_and_hash_coverage(tmp_path, monkeypatch):
     lock = tmp_path / "requirements.lock"
-    lock.write_text("demo==1.0\n", encoding="utf-8")
+    lock.write_text(
+        "demo==1.0 \\\n+    --hash=sha256:abc\n"
+        "    # via -r requirements-dev.in\n"
+        "transitive==2.0 \\\n+    --hash=sha256:def\n"
+        "    # via demo\n",
+        encoding="utf-8",
+    )
     monkeypatch.setattr(check_supply_chain, "LOCK_FILE", lock)
     monkeypatch.setattr(check_supply_chain, "WORKFLOW_DIR", tmp_path)
     monkeypatch.setattr(check_supply_chain, "source_commit_sha", lambda _=None: "source")
@@ -216,8 +222,30 @@ def test_sbom_reports_direct_and_transitive_coverage_without_overclaiming(tmp_pa
     coverage = check_supply_chain.build_sbom()["metadata"]["supplyChainCoverage"]
     assert coverage["workflowActions"] == 0
     assert coverage["lockedDirectDependencies"] == 1
-    assert coverage["lockSemantics"]["transitiveDependencies"]["status"] == "not_generated"
-    assert coverage["lockSemantics"]["hashPins"] is False
+    assert coverage["lockedDependencies"] == 2
+    assert coverage["lockSemantics"]["transitiveDependencies"] == {
+        "status": "generated",
+        "count": 1,
+        "source": "requirements-dev.lock",
+    }
+    assert coverage["lockSemantics"]["hashPins"] is True
+    assert coverage["lockSemantics"]["requireHashesCompatible"] is True
+
+
+def test_lock_semantics_fails_closed_when_a_package_has_no_hash(tmp_path):
+    lock = tmp_path / "requirements.lock"
+    lock.write_text(
+        "demo==1.0 \\\n+    --hash=sha256:abc\n"
+        "    # via -r requirements-dev.in\n"
+        "missing-hash==2.0\n"
+        "    # via demo\n",
+        encoding="utf-8",
+    )
+
+    semantics = check_supply_chain.lock_semantics(lock)
+
+    assert semantics["hashPins"] is False
+    assert semantics["requireHashesCompatible"] is False
 
 
 def test_supply_chain_baselines_match_repository_state():

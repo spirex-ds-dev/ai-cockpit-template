@@ -1,0 +1,410 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "review_n5_supply_chain_completeness",
+  "contractPath": ".ai/work-items/archive/2026/review_n5_supply_chain_completeness.contract.json",
+  "changedFiles": [
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "Parse pip-compile attribution and enforce complete direct/transitive/hash lock semantics."
+    },
+    {
+      "path": "requirements-dev.in",
+      "reason": "Define the stable direct dependency input for reproducible lock generation."
+    },
+    {
+      "path": "requirements-dev.lock",
+      "reason": "Regenerated all direct and transitive development dependencies with artifact SHA-256 hashes."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Require hash-validated installation in smoke CI."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Require hash-validated installation in compatibility CI."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Generated SBOM with 21 direct and 22 transitive locked dependencies."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Regenerated provenance with the current lock and SBOM digests."
+    },
+    {
+      "path": "release.json",
+      "reason": "Synchronized release digests with generated supply-chain evidence."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Document reproducible lock generation and strict hash installation."
+    },
+    {
+      "path": "tests/test_supply_chain.py",
+      "reason": "Cover direct/transitive attribution and fail-closed missing-hash behavior."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_n5_supply_chain_completeness.contract.json",
+      "reason": "Record the expanded supply-chain evidence scope and stable lock source."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_n5_supply_chain_completeness.summary.json",
+      "reason": "Record N5 implementation and verification evidence."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/review-remediation-backlog.md",
+    "scripts/check_supply_chain.py",
+    ".ai/cockpit/sbom.json",
+    "docs/reference/distribution.md",
+    "requirements-dev.in",
+    "release.json"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:00:34.910559+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "25bc833f01cf28b80c2f701f24a1821f80df6604cfabc45f3e7a75549b179de8",
+      "commandHash": "d6ea1b0dfa154537aab59602846b661361f1a7cd7b6790c60217d7a45feb2ac9",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "757cb4fbc1ff76c86878efa760ea6641864ec96f6c1ec7beb5979a430577594f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/review_n5_supply_chain_completeness.contract.json work item contract check passed: .ai/work-items/active/review_n5_supply_chain_completeness.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:00:35.052721+00:00",
+      "exitCode": 0,
+      "durationMs": 94,
+      "outputDigest": "8e04643178fedae1db3ba484eebfd1d41d76fd2da9fd47a4025c5611cb87b8fe",
+      "commandHash": "4404064e0698d844f781a94e3c07f1be3668437500220ec6b88a376caf2ec79c",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "757cb4fbc1ff76c86878efa760ea6641864ec96f6c1ec7beb5979a430577594f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/review_n5_supply_chain_completeness.contract.json scope guard passed: 11 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:00:35.238269+00:00",
+      "exitCode": 0,
+      "durationMs": 121,
+      "outputDigest": "8f41ad48fc1cb4eff2b98f44f47da19bffcc6ffc92d9ffa4ddd2fa26df1cda34",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "757cb4fbc1ff76c86878efa760ea6641864ec96f6c1ec7beb5979a430577594f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/review_n5_supply_chain_completeness.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/compatibility.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: .github/workflows"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/review_n5_supply_chain_completeness.contract.json SUMMARY=.ai/work-items/active/review_n5_supply_chain_completeness.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:00:35.554922+00:00",
+      "exitCode": 0,
+      "durationMs": 251,
+      "outputDigest": "0fe7e8a239acce8c5b4425d8e7941127ab2fe3631e8a3d28ffe02ee86b4605f5",
+      "commandHash": "528d55289f1f6334a588d3e499b7e3eeb204e430a6ab74d2e0c947b0d98e0578",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "757cb4fbc1ff76c86878efa760ea6641864ec96f6c1ec7beb5979a430577594f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/review_n5_supply_chain_completeness.contract.json --summary .ai/work-items/active/review_n5_supply_chain_completeness.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `review_n5_supply_chain_completeness` - Contract Hash: `e66965a31f94d0dc` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Co"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:00:35.734410+00:00",
+      "exitCode": 0,
+      "durationMs": 117,
+      "outputDigest": "c581d468b1dc19b202c8eb61ab0cea87f4fdd834d21bdf5eb1964e8b4d84a7b8",
+      "commandHash": "cb8608668e1a963c5d402a38a0e2e4beca8247cd1be402a344ff81a249ef659d",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "757cb4fbc1ff76c86878efa760ea6641864ec96f6c1ec7beb5979a430577594f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/review_n5_supply_chain_completeness.summary.json review policy matched 5 path(s) [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/sbom.json [review] .github/workflows/compatibility.yml [review] .github/workflows/smoke.yml review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:00:35.907156+00:00",
+      "exitCode": 0,
+      "durationMs": 117,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "757cb4fbc1ff76c86878efa760ea6641864ec96f6c1ec7beb5979a430577594f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:00:36.047038+00:00",
+      "exitCode": 0,
+      "durationMs": 90,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "757cb4fbc1ff76c86878efa760ea6641864ec96f6c1ec7beb5979a430577594f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/review_n5_supply_chain_completeness.contract.json SUMMARY=.ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:00:36.153304+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "67987956f5138c5809f0dc20f94cf0692fa485ae7b9a843d8775385759c24c4c",
+      "commandHash": "d8cbaf99f9483aba251b7ea9e19226f56c1834ec67f3183dce770a61d25b300a",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "757cb4fbc1ff76c86878efa760ea6641864ec96f6c1ec7beb5979a430577594f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/review_n5_supply_chain_completeness.contract.json --summary .ai/work-items/active/review_n5_supply_chain_completeness.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/review_n5_supply_chain_completeness.contract.json SUMMARY=.ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:00:36.258392+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "49146929c8032574445c723bc45a056a01220392f9e55b5db61235124f3f0b2b",
+      "commandHash": "45decd51f7623d3690067921a1f26acdb2709922b775f2e20a66fc5761c0d97a",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "757cb4fbc1ff76c86878efa760ea6641864ec96f6c1ec7beb5979a430577594f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/review_n5_supply_chain_completeness.contract.json --summary .ai/work-items/active/review_n5_supply_chain_completeness.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:00:36.558132+00:00",
+      "exitCode": 0,
+      "durationMs": 233,
+      "outputDigest": "31729706c431c8b50d2ba63626f600df2d23f1d2b6cc0305f26bcfccc69522a8",
+      "commandHash": "65ec6aa521df0c743e7b6962acab5631c4fcc581e976430e0e9eff695d6c7db0",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "757cb4fbc1ff76c86878efa760ea6641864ec96f6c1ec7beb5979a430577594f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/review_n5_supply_chain_completeness.contract.json ## Diff Ownership Preview - active_owned: `11`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sbom.json` — cov"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:01:37.346276+00:00",
+      "exitCode": 0,
+      "durationMs": 60736,
+      "outputDigest": "ec38a3fff39da2a223d2bea6ebc25c987fd834b08b69aa7f5aba53c77976e669",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "757cb4fbc1ff76c86878efa760ea6641864ec96f6c1ec7beb5979a430577594f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 87 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=80 ........................................................................ [ 18%] ........................................................................ [ 37%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/review_n5_supply_chain_completeness.contract.json SUMMARY=.ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:01:38.760420+00:00",
+      "exitCode": 0,
+      "durationMs": 236,
+      "outputDigest": "5b83bcd5f7126aa2909b15418a1b1d3b73b2715c1847ee9aa580d53fa2e2eaac",
+      "commandHash": "bd55b77b9909fba44c788110bf92b80f026b3a517324d8e2a4bc8d9ece77e854",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "383a7f2954755edcbc91b5b7aefeb51a9589e3c43ebdd5d74748872c10dc16e4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/review_n5_supply_chain_completeness.contract.json --summary .ai/work-items/active/review_n5_supply_chain_completeness.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/review_n5_supply_chain_completeness.contract.json SUMMARY=.ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:01:39.021090+00:00",
+      "exitCode": 0,
+      "durationMs": 212,
+      "outputDigest": "f19479596ecdf8fd8e91a84d85ae17e628c40fb76fc1c69e83e33832c63072d0",
+      "commandHash": "513fb1185eeb63573e962a0622f9142bd426c75a623e5df9ebb9c543e6acd1cb",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "383a7f2954755edcbc91b5b7aefeb51a9589e3c43ebdd5d74748872c10dc16e4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/review_n5_supply_chain_completeness.contract.json --summary .ai/work-items/active/review_n5_supply_chain_completeness.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:01:39.117269+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "383a7f2954755edcbc91b5b7aefeb51a9589e3c43ebdd5d74748872c10dc16e4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/review_n5_supply_chain_completeness.contract.json SUMMARY=.ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:01:39.213154+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "bb0958fac203c03f090e8cf83761615ef562b69159db544e5c4b02dbcc71c568",
+      "commandHash": "cd1d9a33ba007c1612c5fa343d0b435cb61fe9365ba1aed05be0d34d5eabed00",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "383a7f2954755edcbc91b5b7aefeb51a9589e3c43ebdd5d74748872c10dc16e4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/review_n5_supply_chain_completeness.contract.json --summary .ai/work-items/active/review_n5_supply_chain_completeness.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/review_n5_supply_chain_completeness.summary.json CONTRACT=.ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T14:01:39.378834+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "cea81a1b08e244a83cb3bc0585c4bb258a2505a17f0c391d413581bacece7446",
+      "commandHash": "8ae2478676676f327d144967d0cc0e96d4998a2753619161edbc84a987abc3e2",
+      "contractHash": "e66965a31f94d0dc944806682ee15b6c1d9ed62ab4a70ce21cb6314e6cae8011",
+      "commitSha": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+      "executionContractPath": ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+      "worktreeDigest": "383a7f2954755edcbc91b5b7aefeb51a9589e3c43ebdd5d74748872c10dc16e4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/review_n5_supply_chain_completeness.summary.json --contract .ai/work-items/active/review_n5_supply_chain_completeness.contract.json ai summary check passed: .ai/work-items/active/review_n5_supply_chain_completeness.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "No public API was added; the lock semantics helper is an internal validator detail covered by tests."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The change remains within scripts/check_supply_chain.py and its existing test module."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The lock and evidence are reproducible from requirements-dev.in; release publication and trusted attestation remain outside N5."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Initial skeleton; replace with actual residual risks before finishing.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "All 16 required verification checks passed and the Work Item was archived.",
+    "expectedReviewFocus": [
+      "Verify the 21 direct / 22 transitive split remains aligned with pip-compile annotations.",
+      "Verify release.json digests match the generated lock, SBOM, and provenance files."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "e66965a31f94d0dc",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Confirmed the final N5 scope, acceptance, and explicit supply-chain evidence boundaries before the implementation diff was finalized."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "e66965a31f94d0dc",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15,
+      "detail": "Recorded after the focused and full quality checks passed; the remaining risk gate is being rerun after checkpoint evidence was restored."
+    }
+  ],
+  "knownGaps": [
+    "The repository does not publish signed archive checksums or external provenance attestations; this remains a documented release-level limitation."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified."
+}

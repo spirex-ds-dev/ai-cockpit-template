@@ -97,16 +97,45 @@ def parse_workflow_actions(root: Path) -> list[dict[str, str]]:
 
 
 def lock_semantics(path: Path) -> dict[str, Any]:
-    """Describe what the requirements lock can and cannot guarantee."""
-    lines = [line.strip() for line in read_text(path).splitlines() if line.strip()]
-    pinned = [line for line in lines if "==" in line and not line.startswith("#")]
-    hashed = [line for line in pinned if "--hash=" in line]
+    """Describe direct, transitive, version, and artifact-hash lock coverage."""
+    entries: list[dict[str, bool]] = []
+    current: dict[str, bool] | None = None
+    for raw_line in read_text(path).splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        if "==" in line and not line.startswith("#"):
+            current = {"hashed": False, "direct": False, "hasVia": False}
+            entries.append(current)
+            continue
+        if current is None:
+            continue
+        if "--hash=sha256:" in line:
+            current["hashed"] = True
+        if line.startswith("# via") or line.startswith("#   "):
+            current["hasVia"] = True
+            if "requirements-dev.in" in line:
+                current["direct"] = True
+
+    # Older hand-maintained locks had no pip-compile attribution. Preserve their
+    # direct-only interpretation while generated locks expose transitive edges.
+    if entries and not any(entry["hasVia"] for entry in entries):
+        for entry in entries:
+            entry["direct"] = True
+
+    direct = sum(entry["direct"] for entry in entries)
+    transitive = len(entries) - direct
     return {
-        "directDependencies": len(pinned),
-        "transitiveDependencies": {"status": "not_generated", "source": "requirements-dev.lock"},
-        "versionPins": True,
-        "hashPins": bool(pinned) and len(hashed) == len(pinned),
-        "requireHashesCompatible": bool(pinned) and len(hashed) == len(pinned),
+        "directDependencies": direct,
+        "lockedDependencies": len(entries),
+        "transitiveDependencies": {
+            "status": "generated" if transitive else "not_generated",
+            "count": transitive,
+            "source": "requirements-dev.lock",
+        },
+        "versionPins": bool(entries),
+        "hashPins": bool(entries) and all(entry["hashed"] for entry in entries),
+        "requireHashesCompatible": bool(entries) and all(entry["hashed"] for entry in entries),
     }
 
 
@@ -143,6 +172,7 @@ def release_commit_sha() -> str:
 def build_sbom(source_commit: str | None = None) -> dict[str, Any]:
     lock_components = parse_requirements_lock(LOCK_FILE)
     action_components = parse_workflow_actions(WORKFLOW_DIR)
+    semantics = lock_semantics(LOCK_FILE)
     components = [*lock_components, *action_components]
     components = sorted(components, key=lambda item: (item["type"], item["name"], item["version"]))
     return {
@@ -156,8 +186,9 @@ def build_sbom(source_commit: str | None = None) -> dict[str, Any]:
             },
             "supplyChainCoverage": {
                 "workflowActions": len(action_components),
-                "lockedDirectDependencies": len(lock_components),
-                "lockSemantics": lock_semantics(LOCK_FILE),
+                "lockedDirectDependencies": semantics["directDependencies"],
+                "lockedDependencies": len(lock_components),
+                "lockSemantics": semantics,
             },
         },
         "components": components,

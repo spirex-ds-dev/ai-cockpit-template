@@ -1,0 +1,179 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n5_supply_chain_completeness",
+  "mode": "code",
+  "title": "补齐供应链 SBOM 与 hash 锁定语义",
+  "baseCommit": "63ec6fcd3c8f945b379966d43457e44ccaeba258",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "01d19e0556c7577a250db5fdfbe495e5d63a4600e57b382d3db242ff9a309343"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_n5_supply_chain_completeness.contract.json",
+    ".ai/work-items/active/review_n5_supply_chain_completeness.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/2026/review_n5_supply_chain_completeness.*",
+    "scripts/check_supply_chain.py",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "release.json",
+    "requirements-dev.in",
+    "requirements-dev.lock",
+    ".github/workflows/smoke.yml",
+    ".github/workflows/compatibility.yml",
+    "docs/reference/distribution.md",
+    "tests/test_supply_chain.py"
+  ],
+  "outOfScope": ["Adopter baseline exclusion", "Release publication", "Unrelated application dependency changes"],
+  "sources": [
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "R3 supply-chain completeness requirement and known boundary."
+    },
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "SBOM parser and lock semantics implementation."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Generated supply-chain evidence baseline."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Published supply-chain capability and limitation claims."
+    },
+    {
+      "path": "requirements-dev.in",
+      "reason": "Stable direct dependency input for reproducible lock generation."
+    },
+    {
+      "path": "release.json",
+      "reason": "Release metadata carries digests for generated supply-chain evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["supply_chain_evidence"],
+    "reason": "Supply-chain claims must not exceed reproducibly generated evidence."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Inspect and improve reproducible SBOM/lock evidence without claiming unavailable transitive coverage."
+  },
+  "preReviewWarnings": ["Do not claim complete transitive dependency or hash-lock coverage without reproducible evidence."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Workflow actions and direct lock entries remain fully represented in the SBOM.",
+    "Transitive dependency and hash-pin capabilities are either implemented with reproducible evidence or explicitly fail closed and documented.",
+    "Generated SBOM/provenance and release digests remain internally consistent.",
+    "Focused supply-chain tests and full project/governance checks pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The current SBOM records workflow actions and direct version pins but explicitly lacks transitive dependency generation and artifact hash pins.",
+    "constraints": ["Do not fabricate dependency evidence.", "Do not publish or push a release."],
+    "rationale": "Supply-chain documentation must accurately reflect what can be reproduced and verified from repository inputs."
+  },
+  "scenarioCoverage": [
+    {"scenario": "All workflow uses occurrences and direct lock entries are represented in generated SBOM evidence.", "required": true, "status": "verified", "evidence": [".ai/cockpit/sbom.json", "tests/test_supply_chain.py"]},
+    {"scenario": "Unsupported transitive/hash guarantees are rejected or explicitly surfaced in metadata and docs.", "required": true, "status": "verified", "evidence": ["scripts/check_supply_chain.py", "docs/reference/distribution.md"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly approved continuing N5 to complete the supply-chain remediation, including CI and generated evidence paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

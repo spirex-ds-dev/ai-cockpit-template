@@ -17,7 +17,7 @@ The documented quick-install path resolves public release metadata first and the
 
 SBOM and provenance release evidence must be generated with an explicit source commit (`--source-commit` or `SUPPLY_CHAIN_SOURCE_COMMIT`). The local release-tag fallback exists only for compatibility and never derives evidence identity from the current `HEAD`.
 
-The SBOM reports workflow Action occurrences and direct version-pinned lock entries. It marks transitive dependencies as `not_generated` unless a separate reproducible dependency export is supplied. The current lock file contains version pins, not per-artifact hashes, so it must not be described as equivalent to `pip install --require-hashes`.
+The development lock is generated from the committed `requirements-dev.in` input with `pip-compile --generate-hashes --allow-unsafe`. The SBOM reports workflow Action occurrences, all version-pinned lock entries, and the direct/transitive split recorded by pip-compile's `via` annotations. Every locked package must carry at least one SHA-256 artifact hash; CI installs with `pip install --require-hashes` so an unlisted artifact fails closed.
 
 ## Published Capabilities
 
