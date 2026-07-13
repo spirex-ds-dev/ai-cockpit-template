@@ -1,0 +1,183 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_r2_supply_chain_evidence_model",
+  "mode": "code",
+  "title": "解除供应链证据对当前 HEAD 的自引用",
+  "baseCommit": "0db91169bd8b6b2c1d54d0200d71767397e89fbb",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "3619072bcfbbfb121aaaf6b84c9b4d685e457bc74a4c475bda1a6710490be4c0"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_r2_supply_chain_evidence_model.contract.json",
+    ".ai/work-items/active/review_r2_supply_chain_evidence_model.summary.json",
+    ".ai/cockpit/current_status.md",
+    "scripts/check_supply_chain.py",
+    "tests/test_supply_chain.py",
+    "Makefile",
+    ".github/workflows/**",
+    "docs/reference/distribution.md",
+    "docs/configuration.md",
+    "tests/**"
+  ],
+  "outOfScope": [
+    "SBOM component discovery completeness covered by R3",
+    "Installer evidence boundary covered by R4",
+    "R3-R11 remediation"
+  ],
+  "sources": [
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "R2 objective and acceptance boundary."
+    },
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "Current SBOM/provenance generation and validation implementation."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Committed source evidence baseline."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Committed source provenance baseline."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Public supply-chain verification entry points."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Published evidence boundary documentation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["supply_chain", "release_integrity"],
+    "reason": "Changing evidence identity must not silently accept stale or self-referential baselines."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Contract defines explicit source-commit evidence ownership and verification."
+  },
+  "preReviewWarnings": [
+    "Review whether committed baselines are intentionally release artifacts rather than current-tree claims.",
+    "Reject implicit HEAD or repository state as the evidence identity source."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "SBOM and provenance generation accept an explicit source commit identity and do not derive evidence identity from the current HEAD implicitly.",
+    "CI or release verification passes the declared source commit and validates evidence against that identity.",
+    "Documentation states when evidence is generated, updated, committed, and verified.",
+    "Regression tests cover explicit source commit, stale baseline rejection, and current HEAD independence."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The current evidence generator resolves the release tag from repository state and embeds that commit in source baselines, making the source tree appear to certify itself without an explicit artifact source identity.",
+    "constraints": ["Keep release-tag metadata usable for release verification.", "Do not solve R3 dependency discovery here."],
+    "rationale": "Explicit source commit input separates evidence generation from the repository state in which the checker happens to run."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Evidence generation with an explicit source commit produces deterministic SBOM/provenance identity.", "required": true, "status": "verified", "evidence": ["tests/test_supply_chain.py"]},
+    {"scenario": "Changing current HEAD without changing declared source commit does not silently change evidence identity.", "required": true, "status": "verified", "evidence": ["tests/test_supply_chain.py"]},
+    {"scenario": "Verification rejects stale committed evidence against the declared source commit.", "required": true, "status": "verified", "evidence": ["tests/test_supply_chain.py", "Makefile"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

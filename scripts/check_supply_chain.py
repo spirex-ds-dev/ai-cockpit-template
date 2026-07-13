@@ -104,9 +104,12 @@ def release_tag() -> str:
     return tag
 
 
-def release_commit_sha() -> str:
+def source_commit_sha(explicit: str | None = None) -> str:
+    """Resolve evidence identity from explicit input, never the current HEAD."""
+    requested = (explicit or os.environ.get("SUPPLY_CHAIN_SOURCE_COMMIT", "")).strip()
+    revision = requested or release_tag()
     result = subprocess.run(
-        ["git", "rev-parse", f"{release_tag()}^{{commit}}"],
+        ["git", "rev-parse", f"{revision}^{{commit}}"],
         cwd=ROOT,
         env=clean_git_environment(),
         text=True,
@@ -118,7 +121,12 @@ def release_commit_sha() -> str:
     return result.stdout.strip()
 
 
-def build_sbom() -> dict[str, Any]:
+def release_commit_sha() -> str:
+    """Backward-compatible release evidence identity resolver."""
+    return source_commit_sha()
+
+
+def build_sbom(source_commit: str | None = None) -> dict[str, Any]:
     components = [*parse_requirements_lock(LOCK_FILE), *parse_workflow_actions(WORKFLOW_DIR)]
     components = sorted(components, key=lambda item: (item["type"], item["name"], item["version"]))
     return {
@@ -128,19 +136,19 @@ def build_sbom() -> dict[str, Any]:
             "component": {
                 "type": "application",
                 "name": "ai-cockpit-template",
-                "version": release_commit_sha(),
+                "version": source_commit_sha(source_commit),
             }
         },
         "components": components,
     }
 
 
-def build_provenance(sbom: dict[str, Any]) -> dict[str, Any]:
+def build_provenance(sbom: dict[str, Any], source_commit: str | None = None) -> dict[str, Any]:
     release = load_json(RELEASE_JSON)
     installer_text = read_text(INSTALLER)
     return {
         "builder": "ai-cockpit-template",
-        "commitSha": release_commit_sha(),
+        "commitSha": source_commit_sha(source_commit),
         "sbomDigest": sha256_text(json.dumps(sbom, sort_keys=True, ensure_ascii=False)),
         "requirementsLockDigest": sha256_text(read_text(LOCK_FILE)),
         "releaseTag": release.get("releaseTag"),
@@ -242,6 +250,7 @@ def parse_args() -> argparse.Namespace:
         cmd.add_argument(
             "--write", action="store_true", help="Write the computed evidence to the baseline file."
         )
+        cmd.add_argument("--source-commit", default=None)
     sub.add_parser("secrets")
     sub.add_parser("vulnerabilities")
     return parser.parse_args()
@@ -251,11 +260,15 @@ def main() -> int:
     args = parse_args()
     try:
         if args.command == "sbom":
-            issues = compare_or_write(SBOM_BASELINE, build_sbom(), write=bool(args.write))
-        elif args.command == "provenance":
-            sbom = build_sbom()
             issues = compare_or_write(
-                PROVENANCE_BASELINE, build_provenance(sbom), write=bool(args.write)
+                SBOM_BASELINE, build_sbom(args.source_commit), write=bool(args.write)
+            )
+        elif args.command == "provenance":
+            sbom = build_sbom(args.source_commit)
+            issues = compare_or_write(
+                PROVENANCE_BASELINE,
+                build_provenance(sbom, args.source_commit),
+                write=bool(args.write),
             )
         elif args.command == "vulnerabilities":
             issues = scan_vulnerabilities()

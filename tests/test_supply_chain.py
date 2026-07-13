@@ -194,6 +194,18 @@ def test_supply_chain_uses_release_tag_commit_not_head(monkeypatch):
         assert "AI_BASE_COMMIT" not in env
 
 
+def test_supply_chain_accepts_explicit_source_commit(monkeypatch):
+    calls = []
+
+    def fake_run(command, *, cwd, env, text, capture_output, check):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 0, stdout="source-commit\n", stderr="")
+
+    monkeypatch.setattr(check_supply_chain.subprocess, "run", fake_run)
+    assert check_supply_chain.source_commit_sha("source-ref") == "source-commit"
+    assert calls == [["git", "rev-parse", "source-ref^{commit}"]]
+
+
 def test_supply_chain_baselines_match_repository_state():
     assert (
         subprocess.run(
