@@ -242,7 +242,7 @@ Prefer explicit `not provided` over inferred explanations.
 
 The generic stack intentionally fails `quality` until its formatter, test, and lint commands are configured. A no-op quality gate is not a gate.
 
-Template contributors can install the regression-test dependency with `python3 -m pip install -r requirements-dev.lock`. Runtime governance scripts still use only the Python standard library.
+Template contributors can install the regression-test dependency with `python3 -m pip install --require-hashes -r requirements-dev.lock`. Regenerate that file from the committed `requirements-dev.in` with `pip-compile --generate-hashes --allow-unsafe` when intentionally changing the toolchain. Runtime governance scripts still use only the Python standard library.
 
 AI Cockpit reduces accidental scope drift and makes review evidence explicit; it is not a security sandbox for a malicious agent that can modify repository policy. For the public release selected above, run project tests or `make ai-cockpit-quality` as an independent required CI check in addition to `check-ai-pr`.
 

@@ -1,0 +1,176 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n6_documentation_and_ownership_placeholders",
+  "mode": "code",
+  "title": "收口文档事实与采用方治理占位符",
+  "baseCommit": "c46d5c97d3deaa431375b1c0470a9f16bc3f5dea",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "ba387b061608c809a1eb8983e91441df238344d2ae17282e56d0b8dd1279ccbf"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_n6_documentation_and_ownership_placeholders.contract.json",
+    ".ai/work-items/active/review_n6_documentation_and_ownership_placeholders.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/2026/review_n6_documentation_and_ownership_placeholders.*",
+    "README.md",
+    "SECURITY.md",
+    ".github/CODEOWNERS",
+    "docs/reference/distribution.md",
+    "docs/architecture.md"
+  ],
+  "outOfScope": ["Release publication", "Changing adopter-owned maintainer identities", "New runtime behavior"],
+  "sources": [
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "R10 documentation fact and executable-example acceptance criteria."
+    },
+    {
+      "path": "README.md",
+      "reason": "Quick Install, release, lock, and supply-chain claims."
+    },
+    {
+      "path": "SECURITY.md",
+      "reason": "Template security reporting and adopter replacement boundary."
+    },
+    {
+      "path": ".github/CODEOWNERS",
+      "reason": "Template ownership placeholder semantics."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Canonical distribution and supply-chain claims."
+    },
+    {
+      "path": "docs/architecture.md",
+      "reason": "Canonical repository artifact map."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "scope_unclear"
+    ],
+    "reason": "Initial skeleton; replace with task-specific implementation and review risks."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Documentation and template ownership semantics are implementable without changing runtime behavior."
+  },
+  "preReviewWarnings": ["Do not invent a maintainer identity; keep adopter-owned values explicit placeholders."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "README and distribution documentation state the current public-release, lock, SBOM, and provenance boundaries without overclaiming.",
+    "SECURITY.md and CODEOWNERS explicitly identify adopter-owned replacement points and do not present template placeholders as real contacts.",
+    "The repository artifact map and executable documentation references remain consistent with the current files and release metadata.",
+    "Documentation metadata, full project checks, and AI governance checks pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The review still finds documentation claims and template ownership placeholders easy to misread as production-ready repository facts.",
+    "constraints": ["Do not replace adopter-owned contacts or owners with invented identities.", "Keep all claims aligned with current release.json and N5 lock/SBOM behavior."],
+    "rationale": "Explicit template boundaries prevent adopters and reviewers from treating placeholders or local evidence as trusted production configuration."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {"scenario": "A new adopter can identify which SECURITY and CODEOWNERS values must be replaced before production use.", "required": true, "status": "verified", "evidence": ["SECURITY.md", ".github/CODEOWNERS"]},
+    {"scenario": "Documentation claims about release and supply-chain evidence match current generated artifacts and checks.", "required": true, "status": "verified", "evidence": ["README.md", "docs/reference/distribution.md", "release.json"]}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly requested continued remediation through the review-backed cleanup items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

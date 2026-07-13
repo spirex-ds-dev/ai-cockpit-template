@@ -170,7 +170,8 @@ templates/                             # テンプレート群
 install.sh                             # インストールエントリーポイント
 Makefile                               # プロジェクト共通タスク
 release.json                           # Release/public-distribution metadata
-requirements-dev.lock                   # Locked development quality dependencies
+requirements-dev.in                     # Direct development dependency input
+requirements-dev.lock                   # Direct/transitive hash-locked quality dependencies
 
 .github/workflows/                     # push/PR 用 CI
   smoke.yml                            # テンプレート smoke CI
