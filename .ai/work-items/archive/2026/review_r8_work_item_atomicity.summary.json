@@ -1,0 +1,382 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "review_r8_work_item_atomicity",
+  "contractPath": ".ai/work-items/archive/2026/review_r8_work_item_atomicity.contract.json",
+  "changedFiles": [
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Verified atomic active Work Item creation."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Verified evidence-bound finish behavior."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Verified concurrency and archive target rejection."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Verified finish lifecycle behavior."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_r8_work_item_atomicity.contract.json",
+      "reason": "Defined R8 scope and acceptance."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_r8_work_item_atomicity.summary.json",
+      "reason": "Recorded R8 verification evidence."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/review-remediation-backlog.md",
+    "scripts/ai_start.py",
+    "scripts/ai_finish.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_finish_e2e.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:48:52.367836+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "e4a4226814f8e89421a3a95fe0bd72b85b67c886196ac42a86a242551672df8d",
+      "commandHash": "9d58fb6bfb3d7ac358936e628961afbf106c396f7982fccf23142e915eaa06b7",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "d256f509cafcdce1b225277c10085294775a91b15c5d1e8e4fa391a79342ddd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/review_r8_work_item_atomicity.contract.json work item contract check passed: .ai/work-items/active/review_r8_work_item_atomicity.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:48:52.508510+00:00",
+      "exitCode": 0,
+      "durationMs": 91,
+      "outputDigest": "daf276ebad4158d3cb4bf90f671f9283aa2eac100987ba6a13d5e6f5f7db479c",
+      "commandHash": "59ca44e73e9ee95228cdc0a756719562c39ec1b910cbcd1ef91f7dad16b68f97",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "d256f509cafcdce1b225277c10085294775a91b15c5d1e8e4fa391a79342ddd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/review_r8_work_item_atomicity.contract.json scope guard passed: 1 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:48:52.692657+00:00",
+      "exitCode": 0,
+      "durationMs": 121,
+      "outputDigest": "c58335c81f185ac58c381ea374e62d5fa47bc6ba09b3dbb21793fce2707524ef",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "d256f509cafcdce1b225277c10085294775a91b15c5d1e8e4fa391a79342ddd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/review_r8_work_item_atomicity.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/review_r8_work_item_atomicity.contract.json SUMMARY=.ai/work-items/active/review_r8_work_item_atomicity.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:48:52.997471+00:00",
+      "exitCode": 0,
+      "durationMs": 245,
+      "outputDigest": "8ac36539df85b4687636f8182ff016bdcc152027fdbfafab01e5f0efd87484bf",
+      "commandHash": "20298cf08cbf958ec425850c71086d6b52a48ce45be7682a5bd7077a76364a27",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "d256f509cafcdce1b225277c10085294775a91b15c5d1e8e4fa391a79342ddd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/review_r8_work_item_atomicity.contract.json --summary .ai/work-items/active/review_r8_work_item_atomicity.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `review_r8_work_item_atomicity` - Contract Hash: `e33db641310a7e09` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Require"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:48:53.176674+00:00",
+      "exitCode": 0,
+      "durationMs": 115,
+      "outputDigest": "0763f61766465395a3ec924e321de8b82ed732490fc0f1bce522f18166c94f68",
+      "commandHash": "335ddb89532d7e154c7afa5f1faf4dc1b5e5a91fa569f98165a4f6f6c22d876c",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "d256f509cafcdce1b225277c10085294775a91b15c5d1e8e4fa391a79342ddd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/review_r8_work_item_atomicity.summary.json review policy matched 1 path(s) [review] .ai/cockpit/current_status.md review focus recorded: 1 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:48:53.338510+00:00",
+      "exitCode": 0,
+      "durationMs": 115,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "d256f509cafcdce1b225277c10085294775a91b15c5d1e8e4fa391a79342ddd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:48:53.476483+00:00",
+      "exitCode": 0,
+      "durationMs": 87,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "d256f509cafcdce1b225277c10085294775a91b15c5d1e8e4fa391a79342ddd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/review_r8_work_item_atomicity.contract.json SUMMARY=.ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:48:53.579118+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "c1798d201973352481bc31cfa2a4c6b1b3cb15947f8083e48b5d4c02e0db7cd3",
+      "commandHash": "3def6c78184885720fb257e75b8631ea313a80ce7a021dfdff18f3ec3427383b",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "d256f509cafcdce1b225277c10085294775a91b15c5d1e8e4fa391a79342ddd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/review_r8_work_item_atomicity.contract.json --summary .ai/work-items/active/review_r8_work_item_atomicity.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/review_r8_work_item_atomicity.contract.json SUMMARY=.ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:48:53.683186+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "989cd251752ddec679f3db1159765c54bcf407ebe227d903292b12c6123a264c",
+      "commandHash": "ede4b300e803b2da57e3390a6403e09c5c0108a20b9ba93c6700ad8dd72f16e8",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "d256f509cafcdce1b225277c10085294775a91b15c5d1e8e4fa391a79342ddd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/review_r8_work_item_atomicity.contract.json --summary .ai/work-items/active/review_r8_work_item_atomicity.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:48:53.979245+00:00",
+      "exitCode": 0,
+      "durationMs": 235,
+      "outputDigest": "a7c1800fd599d57f5b7450cf42a6937dd626e27b9db31993016e7dbcda643858",
+      "commandHash": "2ef06de961055b2ff4fd0ab861f8b727507322e8864d5a1a2bad9dfe890b1adf",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "d256f509cafcdce1b225277c10085294775a91b15c5d1e8e4fa391a79342ddd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/review_r8_work_item_atomicity.contract.json ## Diff Ownership Preview - active_owned: `1`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:49:53.957883+00:00",
+      "exitCode": 0,
+      "durationMs": 59920,
+      "outputDigest": "f483aa0286931c6d130aa28ef04111b142d78afb47d0c9a8262038070bb01e65",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "d256f509cafcdce1b225277c10085294775a91b15c5d1e8e4fa391a79342ddd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 87 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=80 ........................................................................ [ 18%] ........................................................................ [ 37%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/review_r8_work_item_atomicity.contract.json SUMMARY=.ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:49:55.334182+00:00",
+      "exitCode": 0,
+      "durationMs": 231,
+      "outputDigest": "5f1b7dbc968f8a89397b64ca9cca11aed5e051ad91871e872000c00a3c350750",
+      "commandHash": "64b31ce57bc563a57d44e3a1a670be1957f32dd3dff47aac50d96c5f6a815afd",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "8962f5483e7c769753aff63dc04be7263648bbbff583978f09d90144ea517d9e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/review_r8_work_item_atomicity.contract.json --summary .ai/work-items/active/review_r8_work_item_atomicity.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/review_r8_work_item_atomicity.contract.json SUMMARY=.ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:49:55.601679+00:00",
+      "exitCode": 0,
+      "durationMs": 218,
+      "outputDigest": "2f20ac102f51dd9ad946e515a57b828c1a3b7efb8045be76166d8cf342481c8e",
+      "commandHash": "ec4944bed95bc7264ad87823137f39bedea96834530d4082c3fdf3a10cdad026",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "8962f5483e7c769753aff63dc04be7263648bbbff583978f09d90144ea517d9e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/review_r8_work_item_atomicity.contract.json --summary .ai/work-items/active/review_r8_work_item_atomicity.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:49:55.706734+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "8962f5483e7c769753aff63dc04be7263648bbbff583978f09d90144ea517d9e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/review_r8_work_item_atomicity.contract.json SUMMARY=.ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:49:55.812069+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "45ab1931d4b8beeb5c59f02ef31fd00f474aec0fdf4c1584edb5d6291416db40",
+      "commandHash": "30191680fa55db65cf2de4ac05eb9a7ea191f29e81f6aa0e3627963701222fcf",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "8962f5483e7c769753aff63dc04be7263648bbbff583978f09d90144ea517d9e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/review_r8_work_item_atomicity.contract.json --summary .ai/work-items/active/review_r8_work_item_atomicity.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/review_r8_work_item_atomicity.summary.json CONTRACT=.ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:49:55.988991+00:00",
+      "exitCode": 0,
+      "durationMs": 113,
+      "outputDigest": "d73a99be151908abcb67642427314756b4a7a26331d905af6900c8e756752cff",
+      "commandHash": "282248c924dd7747dbe3556d536765bc100fda2e0d1ebd5d425cd7eed0fad790",
+      "contractHash": "e33db641310a7e09ef0063cfff17423769fcc536026301c520b86ccfd5afe245",
+      "commitSha": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+      "executionContractPath": ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+      "worktreeDigest": "8962f5483e7c769753aff63dc04be7263648bbbff583978f09d90144ea517d9e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/review_r8_work_item_atomicity.summary.json --contract .ai/work-items/active/review_r8_work_item_atomicity.contract.json ai summary check passed: .ai/work-items/active/review_r8_work_item_atomicity.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "No public API added."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "No cross-feature internal imports added."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Lifecycle and evidence-binding regression tests pass."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "concurrency",
+      "detail": "Concurrent callers still depend on filesystem locking semantics of the host platform.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "Focused lifecycle tests pass; full verification is being recorded.",
+    "expectedReviewFocus": [
+      "Confirm digest binding and atomic creation remain fail-closed."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "e33db641310a7e09",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed Work Item lifecycle and evidence binding before editing."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "e33db641310a7e09",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Focused lifecycle tests passed before finish."
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified."
+}

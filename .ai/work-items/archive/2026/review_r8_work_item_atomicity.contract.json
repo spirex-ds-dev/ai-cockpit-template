@@ -1,0 +1,169 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_r8_work_item_atomicity",
+  "mode": "code",
+  "title": "强化 Work Item 证据与生命周期原子性",
+  "baseCommit": "59bd098359ddc3568874a196a79cfebdcd7e4fc8",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "a3bf9a9c509e3bc5862fb43e723648b548b4634ffc0194fb3eb89ade961ed5fb"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_r8_work_item_atomicity.contract.json",
+    ".ai/work-items/active/review_r8_work_item_atomicity.summary.json",
+    ".ai/cockpit/current_status.md",
+    "scripts/ai_start.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_summary.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_core_gates.py",
+    "tests/**"
+  ],
+  "outOfScope": ["R9-R11 remediation"],
+  "sources": [
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "R8 objective and acceptance boundary."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Atomic Work Item creation behavior."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Summary and archive target enforcement."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Concurrency and archive lifecycle regression coverage."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["lifecycle", "evidence_binding"],
+    "reason": "Incorrect lifecycle targeting can archive the wrong evidence or accept unbound summaries."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Existing lifecycle checks and regression tests are ready for verification."
+  },
+  "preReviewWarnings": ["Confirm Summary worktreeDigest binding and atomic active-file creation remain fail-closed."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Summary worktreeDigest binding is required and missing source binding fails closed.",
+    "Finish and archive target selection rejects wrong-year, same-name, and mismatched evidence.",
+    "Concurrent ai-start creation is atomic and regression-tested.",
+    "The Work Item is archived and committed."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Work Item lifecycle operations must bind evidence to the correct worktree and task without guessing archive targets or racing active-file creation.",
+    "constraints": ["Do not remove evidence records.", "Fail closed on ambiguous target selection."],
+    "rationale": "Digest binding and atomic lifecycle operations preserve auditability under concurrency and recovery."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Summary without source-bound worktreeDigest is rejected.", "required": true, "status": "verified", "evidence": ["tests/test_core_gates.py"]},
+    {"scenario": "Wrong-year or same-name archive target is rejected.", "required": true, "status": "verified", "evidence": ["tests/test_start_and_archive.py", "tests/test_finish_e2e.py"]},
+    {"scenario": "Concurrent start does not create duplicate active Work Items.", "required": true, "status": "verified", "evidence": ["tests/test_start_and_archive.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
