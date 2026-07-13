@@ -312,6 +312,25 @@ def test_no_op_restore_uses_current_worktree_not_head(
     assert ["hash-object", "--no-filters", path] in [list(call) for call in calls]
 
 
+def test_no_op_restore_accepts_direct_parent_of_pr_base(tmp_path, monkeypatch):
+    base = "a" * 40
+    path = ".ai/work-items/archive/2026/example.summary.json"
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    def fake_run_git(args):
+        if args == ["hash-object", "--no-filters", path]:
+            return fake_git_result(stdout="parent-blob\n")
+        if args == ["rev-parse", f"{base}:{path}"]:
+            return fake_git_result(stdout="bad-base-blob\n")
+        if args == ["rev-parse", f"{base}^:{path}"]:
+            return fake_git_result(stdout="parent-blob\n")
+        return fake_git_result(stdout="\n")
+
+    monkeypatch.setattr(ai_check_pr, "run_git", fake_run_git)
+
+    assert ai_check_pr._is_no_op_restore(base, path) is True
+
+
 def test_pr_bundle_does_not_exempt_dirty_archive_restore_from_ownership(tmp_path, monkeypatch):
     new = write_pair(tmp_path, "new", ["src/new.py"], ["src/new.py"])
     new_contract = new.relative_to(tmp_path).as_posix()

@@ -1,0 +1,189 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_r0_restore_base_compatibility",
+  "mode": "code",
+  "title": "兼容 PR 基线父提交的归档恢复判定",
+  "baseCommit": "e201e83993f565de378e06c98d90a7c66ae6f0ce",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "67ad86574a1341434a4cb4fe0e0d95a647540b493a3d46bccb0dd9a94255a367"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_r0_restore_base_compatibility.contract.json",
+    ".ai/work-items/active/review_r0_restore_base_compatibility.summary.json",
+    ".ai/cockpit/current_status.md",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py"
+  ],
+  "outOfScope": [
+    "editing archived Contract or Summary records",
+    "changing append-only policy for dirty archive modifications",
+    "R1-R11 implementation"
+  ],
+  "sources": [
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "R0 acceptance requires clean archive restore handling."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_r0_governance_baseline.contract.json",
+      "reason": "Archived R0 scope and residual risk identify the post-commit PR base boundary."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Current PR archive evidence implementation."
+    }
+  ],
+  "problemStatement": "A clean R0 restoration commit may restore an archive file to the direct parent of the PR base commit when the base already contains the bad historical edit. The PR audit must recognize that exact parent blob without accepting dirty content.",
+  "scenarioCoverage": [
+    {
+      "scenario": "worktree matches PR base archive blob",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_pr_aggregate.py"]
+    },
+    {
+      "scenario": "worktree matches direct parent of PR base archive blob",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "This follow-up adds the regression coverage and implementation."
+    },
+    {
+      "scenario": "dirty archive content remains rejected",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_pr_aggregate.py"]
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "archive_integrity",
+      "verification"
+    ],
+    "reason": "The change affects only a narrow archive restore comparison, but a false positive could hide a dirty historical edit."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The follow-up scope and acceptance evidence are explicit."
+  },
+  "preReviewWarnings": [
+    "Review base and direct-parent blob comparison; keep dirty archive rejection unchanged."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Clean archive restoration is accepted when the current worktree matches either the PR base blob or its direct parent blob.",
+    "Dirty archive modification remains rejected by the append-only policy.",
+    "Regression tests cover base match, direct-parent match, and dirty mismatch.",
+    "The Work Item passes all required AI/project checks and is archived before its follow-up commit."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The first R0 commit restored archive records to the parent of the previous bad baseline commit, while the PR checker only compared against the base itself.",
+    "constraints": [
+      "Do not modify archived evidence records.",
+      "Do not permit arbitrary ancestor content or dirty content as a restore.",
+      "Keep the fix limited to PR archive restore comparison and tests."
+    ],
+    "rationale": "Supporting both exact base restoration and exact direct-parent restoration preserves append-only integrity across corrective follow-up commits."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

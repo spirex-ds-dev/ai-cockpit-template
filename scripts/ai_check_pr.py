@@ -54,17 +54,22 @@ def _git_records(output: str) -> list[str]:
 
 
 def _is_no_op_restore(base: str, path: str) -> bool:
-    """Return True if the current worktree restores *path* to the PR base blob.
+    """Return True if the worktree restores *path* to an allowed PR baseline blob.
 
     This handles the case where an archive file was accidentally modified in a
-    previous commit and the current change restores it to the merge-base content.
-    The archive integrity is fully preserved so append-only policy should not flag it.
+    previous commit and the current change restores it to the merge-base content
+    or to the direct parent of that base. The latter is needed when the PR base
+    already contains the accidental archive edit. The archive integrity is fully
+    preserved so append-only policy should not flag it.
     """
     worktree_blob = _worktree_blob_hash(path)
     if not worktree_blob:
         return False
-    base_blob = _git_blob_hash(base, path)
-    return bool(base_blob) and base_blob == worktree_blob
+    for revision in (base, f"{base}^"):
+        baseline_blob = _git_blob_hash(revision, path)
+        if baseline_blob and baseline_blob == worktree_blob:
+            return True
+    return False
 
 
 def archive_evidence_changes(base: str) -> dict[str, str]:
