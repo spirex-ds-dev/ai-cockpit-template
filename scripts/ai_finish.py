@@ -143,6 +143,42 @@ def record_result(summary_path: Path, item: dict[str, Any]) -> None:
     save_json(summary_path, summary)
 
 
+def promote_review_readiness(summary: dict[str, Any]) -> dict[str, Any]:
+    """Derive review readiness from recorded verification and residual risk."""
+    verification = summary.get("verification")
+    unknowns = summary.get("unknownsRemaining")
+    complete = (
+        isinstance(verification, list)
+        and bool(verification)
+        and all(isinstance(item, dict) and item.get("result") == "passed" for item in verification)
+        and isinstance(unknowns, list)
+        and not unknowns
+    )
+    existing = summary.get("reviewReadiness")
+    expected_focus = (
+        existing.get("expectedReviewFocus", [])
+        if isinstance(existing, dict) and isinstance(existing.get("expectedReviewFocus"), list)
+        else []
+    )
+    if not complete:
+        return {
+            "status": "not_ready",
+            "reason": "Required verification or known-unknown evidence is incomplete.",
+            "expectedReviewFocus": expected_focus,
+        }
+    residual_risks = summary.get("residualRisks")
+    has_residual_risk = isinstance(residual_risks, list) and bool(residual_risks)
+    return {
+        "status": "ready_with_risks" if has_residual_risk else "ready",
+        "reason": (
+            "All required verification passed; residual risk remains documented."
+            if has_residual_risk
+            else "All required verification passed and no residual risk remains."
+        ),
+        "expectedReviewFocus": expected_focus,
+    }
+
+
 def verification_priority(item: dict[str, Any]) -> int:
     check_id = verification_key(item)
     if check_id == "aiStatus":
@@ -313,6 +349,10 @@ def main() -> int:
                 duration_ms=duration,
                 detail="optional verification failed",
             )
+
+    summary_data = load_json(summary_path)
+    summary_data["reviewReadiness"] = promote_review_readiness(summary_data)
+    save_json(summary_path, summary_data)
 
     # Summary/status are self-referential artifacts. Stabilize them after all
     # declared result evidence has been written, then attest without mutating.

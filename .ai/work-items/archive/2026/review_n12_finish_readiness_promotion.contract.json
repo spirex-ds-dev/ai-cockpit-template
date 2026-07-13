@@ -1,0 +1,175 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n12_finish_readiness_promotion",
+  "mode": "code",
+  "title": "修复 finish 后 review readiness 未收敛",
+  "baseCommit": "b3ee23d9fe8ce8ab5721f6b328e943877bd7dea5",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/review_n12_finish_readiness_promotion.contract.json",
+    ".ai/work-items/active/review_n12_finish_readiness_promotion.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**",
+    "scripts/ai_finish.py",
+    "tests/test_finish_readiness.py"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Finish lifecycle currently records passed checks without promoting reviewReadiness."
+    },
+    {
+      "path": "scripts/ai_acceptance_policy.py",
+      "reason": "Defines readiness as an input to acceptance and final governance state."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Existing finish lifecycle test boundary."
+    }
+  ],
+  "problemStatement": "ai-finish archives Summary files with reviewReadiness.status still set to not_ready even after all required checks pass, creating contradictory completion evidence.",
+  "scenarioCoverage": [
+    {
+      "scenario": "All required verification results pass and no unknowns remain.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Documented residual risks produce ready_with_risks rather than an overclaim of ready.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Any failed required verification or unknowns preserve not_ready.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["governance_state", "verification"],
+    "reason": "Readiness is a decision signal; promotion must be evidence-based and must not overclaim when risks or unknowns remain."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The root cause is local to ai-finish, the readiness policy is explicit, and unit tests can cover promotion and fail-closed behavior."
+  },
+  "preReviewWarnings": [
+    "Review that readiness is promoted only from verification evidence and residual risk is preserved."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ai-finish promotes a fully verified Summary to ready or ready_with_risks before status generation and archive.",
+    "Failed required checks or remaining unknowns do not promote readiness.",
+    "Regression tests cover all readiness outcomes.",
+    "Historical archive evidence remains append-only and is not rewritten."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "ai-finish archives Summary files with reviewReadiness.status still not_ready after all required checks pass.",
+    "constraints": [
+      "Promote readiness only from recorded verification evidence.",
+      "Preserve residual risk and leave historical archive files immutable."
+    ],
+    "rationale": "Review readiness is a governance decision signal and must converge with the evidence produced by the finish lifecycle."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly requested correction of the self-check finding and continuation of the remediation loop."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
