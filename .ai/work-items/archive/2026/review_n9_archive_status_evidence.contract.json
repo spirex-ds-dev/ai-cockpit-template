@@ -1,0 +1,154 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n9_archive_status_evidence",
+  "mode": "code",
+  "title": "归档时自动记录生成状态证据",
+  "baseCommit": "fe7b733013f7e94f70245313e5b32ba9e0fd2f3d",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "578572dd8e4f3c9da97a96c39be72f00f7ede57982080946a36727367fc2e550"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_n9_archive_status_evidence.contract.json",
+    ".ai/work-items/active/review_n9_archive_status_evidence.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/2026/review_n9_archive_status_evidence.*",
+    "scripts/ai_archive_work_item.py",
+    "tests/test_start_and_archive.py"
+  ],
+  "outOfScope": ["Changing prior archived evidence", "Release publication"],
+  "sources": [
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Archive generator must record the status artifact it creates."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Regression coverage for archived status ownership."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "archive_evidence"
+    ],
+    "reason": "The generated status must be recorded before the immutable Summary is archived."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The change is localized and regression-tested."
+  },
+  "preReviewWarnings": [
+    "Replace with task-specific review focus, or clear when no special review focus remains."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Archive generation records the generated current_status.md in the archived Summary changedFiles.",
+    "Archive regression tests pass without weakening immutable archive behavior.",
+    "Full project and AI checks pass, then the Work Item is archived and committed locally."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Archive generation creates current_status.md after the Summary snapshot, leaving the generated file unowned.",
+    "constraints": ["Do not rewrite prior archived evidence.", "Record the generated status path in the new archived Summary."],
+    "rationale": "Making the archive operation record its own generated evidence closes the ownership loop at the source."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

@@ -212,6 +212,16 @@ def main() -> int:
             summary["contractPath"] = archived_contract
             changed = summary.get("changedFiles", [])
             if isinstance(changed, list):
+                if not any(
+                    isinstance(item, dict) and item.get("path") == ".ai/cockpit/current_status.md"
+                    for item in changed
+                ):
+                    changed.append(
+                        {
+                            "path": ".ai/cockpit/current_status.md",
+                            "reason": "Generated no-active cockpit status after archival.",
+                        }
+                    )
                 for item in changed:
                     if isinstance(item, dict) and item.get("path") in replacements:
                         item["path"] = replacements[item["path"]]
