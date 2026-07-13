@@ -1,0 +1,383 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "review_n16_private_key_redaction",
+  "contractPath": ".ai/work-items/archive/2026/review_n16_private_key_redaction.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/review_n16_private_key_redaction.contract.json",
+      "reason": "Declares the private-key redaction boundary and acceptance criteria."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_n16_private_key_redaction.summary.json",
+      "reason": "Records redaction implementation and verification evidence."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated Cockpit status for the active Work Item lifecycle."
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "Uses one header-family matcher with end-of-input fallback for private-key output redaction."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Covers generic, RSA, and OpenSSH terminated and unterminated redaction evidence."
+    },
+    {
+      "path": "tests/test_supply_chain.py",
+      "reason": "Verifies repository secret scanning remains clean after adding redaction fixtures."
+    }
+  ],
+  "sourcesUsed": [
+    "scripts/ai_common.py",
+    "tests/test_core_gates.py",
+    "tests/test_supply_chain.py",
+    "docs/review-remediation-backlog.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:55:36.015932+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "33e55052d336611df0cf48e3b1aef487e810f30be2c65eae6b409faa4dd4c143",
+      "commandHash": "5c23b575024d9e97d822e3388a3d21b456dc45fb04bc75337ca9fb9140059bd7",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "4e51afced1624c7d6660dcd74262b248b211c7f8148781682e7df388d7e219a0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/review_n16_private_key_redaction.contract.json work item contract check passed: .ai/work-items/active/review_n16_private_key_redaction.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:55:36.162646+00:00",
+      "exitCode": 0,
+      "durationMs": 96,
+      "outputDigest": "7af7e4ba2c1b40b81423af8dc8a9d51b3886ce679a8e6b8094541dc8e0a2eb52",
+      "commandHash": "185a9d4bd1ea788f40884b712bbb53cffebaa0dbdf5d9fe8e9cee08710895f38",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "4e51afced1624c7d6660dcd74262b248b211c7f8148781682e7df388d7e219a0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/review_n16_private_key_redaction.contract.json scope guard passed: 3 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:55:36.328355+00:00",
+      "exitCode": 0,
+      "durationMs": 118,
+      "outputDigest": "967eff17a30f1d3c60a4521aa93c569337aea708211ea8ca9a5a656b6841f2b2",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "4e51afced1624c7d6660dcd74262b248b211c7f8148781682e7df388d7e219a0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/review_n16_private_key_redaction.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/review_n16_private_key_redaction.contract.json SUMMARY=.ai/work-items/active/review_n16_private_key_redaction.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:55:36.631892+00:00",
+      "exitCode": 0,
+      "durationMs": 244,
+      "outputDigest": "46e39d5939da11c92756ef0c8d7ab19531842217b06ec0b2eb62c4e90e97f66a",
+      "commandHash": "7e9d5c6d7b2df727fbc814f96f09e1f4183961d883fa47d63d69cc7d5a5d9214",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "4e51afced1624c7d6660dcd74262b248b211c7f8148781682e7df388d7e219a0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/review_n16_private_key_redaction.contract.json --summary .ai/work-items/active/review_n16_private_key_redaction.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `review_n16_private_key_redaction` - Contract Hash: `26ff31acbbf02886` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:55:36.803214+00:00",
+      "exitCode": 0,
+      "durationMs": 107,
+      "outputDigest": "6be9e8481f604bfce4c6fea7bc68351af1d8a7229b19a472646b48398e06d3dd",
+      "commandHash": "bd8859bea83156cea3cdf9afa5fb4988757e8006470e374e02e591c6a57bc32f",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "4e51afced1624c7d6660dcd74262b248b211c7f8148781682e7df388d7e219a0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/review_n16_private_key_redaction.summary.json review policy matched 2 path(s) [review] .ai/cockpit/current_status.md [review] scripts/ai_common.py review focus recorded: 1 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:55:36.966461+00:00",
+      "exitCode": 0,
+      "durationMs": 112,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "4e51afced1624c7d6660dcd74262b248b211c7f8148781682e7df388d7e219a0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:55:37.099617+00:00",
+      "exitCode": 0,
+      "durationMs": 88,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "4e51afced1624c7d6660dcd74262b248b211c7f8148781682e7df388d7e219a0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/review_n16_private_key_redaction.contract.json SUMMARY=.ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:55:37.193570+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "26ab07e3367b0940e2b77071aae6a35732d3d2341bbe6f5ea48404dc94b6a1a2",
+      "commandHash": "4e7ca852880df927b6d5152ce6f649436bd573ec10ba38489fcd045c6fcd1bce",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "4e51afced1624c7d6660dcd74262b248b211c7f8148781682e7df388d7e219a0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/review_n16_private_key_redaction.contract.json --summary .ai/work-items/active/review_n16_private_key_redaction.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/review_n16_private_key_redaction.contract.json SUMMARY=.ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:55:37.290870+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "58cf30846e52be8236be9e9956ab5caa7c7a92ebfc2959e017f5a04e308ac9bb",
+      "commandHash": "1fc60480207857e46e3837d1e7f6ae55e0e8c656c68a566c062ea664e7a0b51c",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "4e51afced1624c7d6660dcd74262b248b211c7f8148781682e7df388d7e219a0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/review_n16_private_key_redaction.contract.json --summary .ai/work-items/active/review_n16_private_key_redaction.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:55:37.568278+00:00",
+      "exitCode": 0,
+      "durationMs": 217,
+      "outputDigest": "7eea60199e0e1042ef3541fa6d93a4f093d217af7e8a0ed02eb0f0317520defb",
+      "commandHash": "aa99b9fe84d6b5f741691192ae48301c8db2d1bf3f7f50862a4408925038e4dd",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "4e51afced1624c7d6660dcd74262b248b211c7f8148781682e7df388d7e219a0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/review_n16_private_key_redaction.contract.json ## Diff Ownership Preview - active_owned: `3`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `scripts/ai_common.py` — covered by Contract scope - [active_owned] `tests/test_core_gates.py` — covered by "
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:56:34.745085+00:00",
+      "exitCode": 0,
+      "durationMs": 57116,
+      "outputDigest": "98316841257b0bf9a3490295892d047972e6a16512a6a7e0af63e14d515e8b50",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "4e51afced1624c7d6660dcd74262b248b211c7f8148781682e7df388d7e219a0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 88 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=80 ........................................................................ [ 18%] ........................................................................ [ 36%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/review_n16_private_key_redaction.contract.json SUMMARY=.ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:56:36.064505+00:00",
+      "exitCode": 0,
+      "durationMs": 238,
+      "outputDigest": "bcd473089ab903eab0a7968e585376788bbcb100575ad2be63161c435fbcc479",
+      "commandHash": "4e85ad8b5cff56d961e5ac88a03cd4eeeb129666ce4123a93d3d2d93d179ea9a",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "71b44b5c83cec73fb930962d5a88cd076c1f352a070ea44d42c5aecce1a8ca26",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/review_n16_private_key_redaction.contract.json --summary .ai/work-items/active/review_n16_private_key_redaction.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/review_n16_private_key_redaction.contract.json SUMMARY=.ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:56:36.313275+00:00",
+      "exitCode": 0,
+      "durationMs": 200,
+      "outputDigest": "3cdd5ce4ca2d65356d177b7acd0e173b742fad78fe840d86aa60baea51bd5447",
+      "commandHash": "f72d51ab18aed63ea24c7747a8fdd0620c0e593c24ae1fc3c5519ca1c8ae71a0",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "71b44b5c83cec73fb930962d5a88cd076c1f352a070ea44d42c5aecce1a8ca26",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/review_n16_private_key_redaction.contract.json --summary .ai/work-items/active/review_n16_private_key_redaction.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:56:36.411441+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "71b44b5c83cec73fb930962d5a88cd076c1f352a070ea44d42c5aecce1a8ca26",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/review_n16_private_key_redaction.contract.json SUMMARY=.ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:56:36.512580+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "41a50d9a300c8349eaf314fe9b634de410432dc444e1e69410ca47e45f0ef2bf",
+      "commandHash": "4bc547da982dd4e0a5d0f54fbfc6c2d60fb8e59ddb2f9e382765050a42b19652",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "71b44b5c83cec73fb930962d5a88cd076c1f352a070ea44d42c5aecce1a8ca26",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/review_n16_private_key_redaction.contract.json --summary .ai/work-items/active/review_n16_private_key_redaction.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/review_n16_private_key_redaction.summary.json CONTRACT=.ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T23:56:36.661585+00:00",
+      "exitCode": 0,
+      "durationMs": 100,
+      "outputDigest": "9dac6c225a5f0f093cc2b61d6b975475a3aa50ff9b97580ada33c79e3ea04be9",
+      "commandHash": "caae5c35586ac40573d1e59bc7f3337e9488b6eb3e4c870eb9acfeb055cb41f4",
+      "contractHash": "26ff31acbbf028867710c9771cde1d5987836c6914b15c8ece59d46c57a2f31d",
+      "commitSha": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+      "executionContractPath": ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+      "worktreeDigest": "71b44b5c83cec73fb930962d5a88cd076c1f352a070ea44d42c5aecce1a8ca26",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/review_n16_private_key_redaction.summary.json --contract .ai/work-items/active/review_n16_private_key_redaction.contract.json ai summary check passed: .ai/work-items/active/review_n16_private_key_redaction.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "The private helper behavior is documented by its docstring and covered by redaction tests; no public API is introduced."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The change remains within the existing common output helper and tests; no cross-feature internal import is added."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Private-key header families are handled by one matcher, with secret scanning and Summary evidence tests covering the disclosure boundary."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "secret_redaction",
+      "detail": "Future private-key header variants should retain the same PRIVATE KEY naming convention to remain covered by the family matcher.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Verify no private-key body material appears in Summary verification output."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "26ff31acbbf02886",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Confirmed the all-header-family redaction boundary before editing."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "26ff31acbbf02886",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Recorded after focused redaction and secret-scanning tests passed; full finish checks follow."
+    }
+  ],
+  "knownGaps": [
+    "No known implementation gap remains; future key header formats should be covered by the same family convention."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified."
+}

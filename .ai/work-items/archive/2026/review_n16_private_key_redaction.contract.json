@@ -1,0 +1,189 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n16_private_key_redaction",
+  "mode": "code",
+  "title": "扩展未闭合私钥片段脱敏",
+  "baseCommit": "a9946e4f73ad33ee37d79a8a6bafbb125377f3c2",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "c48031f8e930d353665606dca8fbba861324e73ab9c1b754925e16443e62b91d"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_n16_private_key_redaction.contract.json",
+    ".ai/work-items/active/review_n16_private_key_redaction.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**",
+    "scripts/ai_common.py",
+    "tests/test_core_gates.py",
+    "tests/test_supply_chain.py"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "Current sensitive-output redaction patterns only cover the generic unterminated header."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Summary verification evidence tests that assert private-key output is redacted."
+    },
+    {
+      "path": "tests/test_supply_chain.py",
+      "reason": "Existing secret scanning and redaction fixtures."
+    },
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "Defines the private-key redaction remediation acceptance."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "secret_disclosure",
+      "verification_evidence"
+    ],
+    "reason": "A missed private-key header can persist secret material in durable Summary evidence; the matcher must fail closed at end-of-input without weakening normal output redaction."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Terminated generic, RSA, and OpenSSH private-key blocks are replaced without body leakage.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Unterminated generic, RSA, and OpenSSH private-key fragments are replaced through end-of-input.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Summary verification output cannot retain private-key body fragments after redaction.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The leak is reproducible in the current redaction function and can be fixed with a bounded header-family matcher and regression tests."
+  },
+  "preReviewWarnings": [
+    "Verify all BEGIN … PRIVATE KEY header families redact through matching footer or end-of-input, including output embedded in Summary verification evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Every BEGIN … PRIVATE KEY header family is redacted through its matching footer or end-of-input.",
+    "Generic, RSA, and OpenSSH unterminated fragments do not retain private-key body material in output.",
+    "Existing terminated private-key redaction behavior remains covered and passing.",
+    "The remediation is recorded with Summary evidence and no secret material."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Summary output redaction handles an unterminated generic PRIVATE KEY header but leaks RSA PRIVATE KEY and OPENSSH PRIVATE KEY body fragments when their END marker is missing.",
+    "constraints": [
+      "Never persist private-key body material in Summary or verification output.",
+      "Keep terminated key redaction behavior unchanged.",
+      "Do not add secret fixtures containing real credentials."
+    ],
+    "rationale": "One header-family matcher with end-of-input fallback closes the leak consistently for all private-key formats and prevents future format-specific omissions."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly requested the remediation loop to continue until all listed review blockers are completed."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

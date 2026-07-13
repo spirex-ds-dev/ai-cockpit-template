@@ -387,6 +387,22 @@ def test_finish_evidence_redacts_and_replaces_existing_result(tmp_path, monkeypa
     )
     assert "[PRIVATE_KEY_REDACTED]" in truncated_item["outputSummary"]
     assert "BEGIN PRIVATE KEY" not in truncated_item["outputSummary"]
+    for key_kind in ("RSA" + " PRIVATE KEY", "OPENSSH" + " PRIVATE KEY"):
+        fragment = "".join(["-" * 5, "BEGIN ", key_kind, "-" * 5, "\n", key_kind, "-body-fragment"])
+        fragment_item = ai_finish.evidence(
+            "quality",
+            "make quality",
+            0,
+            12,
+            f"prefix {fragment}",
+            contract_hash="a" * 64,
+            commit_sha="b" * 40,
+            execution_contract_path=".ai/work-items/active/task.contract.json",
+            execution_summary_path=".ai/work-items/active/task.summary.json",
+            worktree_digest="c" * 64,
+        )
+        assert fragment_item["outputSummary"] == "prefix [PRIVATE_KEY_REDACTED]"
+        assert f"{key_kind}-body-fragment" not in fragment_item["outputSummary"]
     long_private_key = "".join(
         [
             "-" * 5,

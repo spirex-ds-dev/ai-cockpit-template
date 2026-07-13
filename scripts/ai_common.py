@@ -506,8 +506,11 @@ def redact_sensitive_output(value: str) -> str:
         (r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]+", "Bearer [REDACTED]"),
         (r"\bAKIA[0-9A-Z]{16}\b", "[AWS_KEY_REDACTED]"),
         (r"\bgh[pousr]_[A-Za-z0-9_]{20,}\b", "[GITHUB_TOKEN_REDACTED]"),
-        (r"-----BEGIN [^-]+-----.*?-----END [^-]+-----", "[PRIVATE_KEY_REDACTED]"),
-        (r"-" * 5 + r"BEGIN PRIVATE KEY" + r"-" * 5 + r".*\Z", "[PRIVATE_KEY_REDACTED]"),
+        (
+            r"-----BEGIN (?P<private_key_kind>(?:[A-Z0-9]+ )*PRIVATE KEY)-----"
+            r".*?(?:-----END (?P=private_key_kind)-----|\Z)",
+            "[PRIVATE_KEY_REDACTED]",
+        ),
         (
             r"(?i)\b(api[_-]?key|token|password|secret|credential)\b(\s*[:=]\s*)[^\s,;]+",
             r"\1\2[REDACTED]",
