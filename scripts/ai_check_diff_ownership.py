@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from ai_check_summary import changed_file_paths
-from ai_check_pr import archive_evidence_changes, archive_pair_rank
+from ai_check_pr import _is_no_op_restore, archive_evidence_changes, archive_pair_rank
 from ai_common import (
     PROJECT_ROOT,
     changed_name_status,
@@ -237,6 +237,9 @@ def preview(*, base: str = "", contract: dict[str, Any] | None = None) -> list[O
     values: list[Ownership] = []
     for status, path in changed:
         if path.startswith(".ai/work-items/archive/") and status != "A":
+            restore_base = f"{base}^" if not explicit_base else base
+            if base and status == "M" and _is_no_op_restore(restore_base, path):
+                continue
             values.append(
                 Ownership(
                     path,

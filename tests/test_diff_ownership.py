@@ -240,3 +240,19 @@ def test_pr_preview_reports_archive_audit_paths_as_append_only(monkeypatch):
     ]
     assert [item.state for item in items] == ["unowned", "unowned", "active_owned"]
     assert "append-only" in items[0].detail
+
+
+def test_pr_preview_skips_clean_no_op_archive_restore(monkeypatch):
+    active = ownership.Owner("active", "task", contract(["docs/**"]), None)
+    restored = ".ai/work-items/archive/2026/task.summary.json"
+    changed = [("M", restored), ("M", "docs/guide.md")]
+    monkeypatch.setattr(ownership, "changed_name_status", lambda *_args, **_kwargs: changed)
+    monkeypatch.setattr(ownership, "archive_evidence_changes", lambda _base: {})
+    monkeypatch.setattr(ownership, "_is_no_op_restore", lambda _base, path: path == restored)
+    monkeypatch.setattr(ownership, "owners", lambda **_kwargs: [active])
+    monkeypatch.setattr(ownership, "parse_simple_manifest", lambda _path: {})
+
+    items = ownership.preview(base="merge-base")
+
+    assert [item.path for item in items] == ["docs/guide.md"]
+    assert items[0].state == "active_owned"

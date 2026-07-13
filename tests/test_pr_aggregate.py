@@ -300,7 +300,7 @@ def test_no_op_restore_uses_current_worktree_not_head(
         calls.append(tuple(args))
         if args == ["hash-object", "--no-filters", path]:
             return fake_git_result(stdout=f"{worktree_hash}\n")
-        if args == ["rev-parse", f"{base}^:{path}"]:
+        if args == ["rev-parse", f"{base}:{path}"]:
             return fake_git_result(stdout=f"{parent_hash}\n")
         if args == ["rev-parse", f"HEAD:{path}"]:
             raise AssertionError("no-op restore check must not consult HEAD")
@@ -329,7 +329,7 @@ def test_pr_bundle_does_not_exempt_dirty_archive_restore_from_ownership(tmp_path
             )
         if args == ["hash-object", "--no-filters", restored_summary]:
             return fake_git_result(stdout="dirty-worktree\n")
-        if args == ["rev-parse", f"{'a' * 40}^:{restored_summary}"]:
+        if args == ["rev-parse", f"{'a' * 40}:{restored_summary}"]:
             return fake_git_result(stdout="parent-blob\n")
         return fake_git_result(stdout="\n")
 
@@ -369,7 +369,7 @@ def test_pr_bundle_still_exempts_clean_archive_restore_from_ownership(tmp_path, 
             )
         if args == ["hash-object", "--no-filters", restored_summary]:
             return fake_git_result(stdout="shared-blob\n")
-        if args == ["rev-parse", f"{'a' * 40}^:{restored_summary}"]:
+        if args == ["rev-parse", f"{'a' * 40}:{restored_summary}"]:
             return fake_git_result(stdout="shared-blob\n")
         return fake_git_result(stdout="\n")
 
@@ -386,6 +386,42 @@ def test_pr_bundle_still_exempts_clean_archive_restore_from_ownership(tmp_path, 
         "complete PR diff path lacks paired ownership" in issue and restored_summary in issue
         for issue in issues
     )
+
+
+def test_pr_bundle_ignores_clean_archive_restore_as_archive_evidence(tmp_path, monkeypatch):
+    new = write_pair(tmp_path, "new", ["src/new.py"], ["src/new.py"])
+    new_contract = new.relative_to(tmp_path).as_posix()
+    new_summary = new_contract.replace(".contract", ".summary")
+    restored_summary = ".ai/work-items/archive/2026/restored.summary.json"
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+
+    def fake_run_git(args):
+        if args == ["diff", "--name-status", "-z", "a" * 40 + "...HEAD"]:
+            return fake_git_result(
+                stdout="\0".join(
+                    [f"A\t{new_contract}", f"A\t{new_summary}", f"M\t{restored_summary}"]
+                )
+                + "\0"
+            )
+        if args == ["hash-object", "--no-filters", restored_summary]:
+            return fake_git_result(stdout="shared-blob\n")
+        if args == ["rev-parse", f"{'a' * 40}:{restored_summary}"]:
+            return fake_git_result(stdout="shared-blob\n")
+        return fake_git_result(stdout="\n")
+
+    monkeypatch.setattr(ai_check_pr, "run_git", fake_run_git)
+    patch_changes(
+        monkeypatch,
+        [new_contract, new_summary, restored_summary],
+        statuses={restored_summary: "M"},
+    )
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [new])
+
+    assert not any(restored_summary in issue for issue in issues)
 
 
 def test_aggregate_pr_rejects_contract_v1_downgrade(tmp_path, monkeypatch):

@@ -54,17 +54,17 @@ def _git_records(output: str) -> list[str]:
 
 
 def _is_no_op_restore(base: str, path: str) -> bool:
-    """Return True if *path* was changed at *base* but HEAD restores it to the pre-base state.
+    """Return True if the current worktree restores *path* to the PR base blob.
 
-    This handles the case where an archive file was accidentally modified in *base*
-    and a subsequent commit restores it to its original content.  The archive
-    integrity is fully preserved so the append-only policy should not flag it.
+    This handles the case where an archive file was accidentally modified in a
+    previous commit and the current change restores it to the merge-base content.
+    The archive integrity is fully preserved so append-only policy should not flag it.
     """
     worktree_blob = _worktree_blob_hash(path)
     if not worktree_blob:
         return False
-    parent_blob = _git_blob_hash(f"{base}^", path)
-    return bool(parent_blob) and parent_blob == worktree_blob
+    base_blob = _git_blob_hash(base, path)
+    return bool(base_blob) and base_blob == worktree_blob
 
 
 def archive_evidence_changes(base: str) -> dict[str, str]:
@@ -105,6 +105,10 @@ def archive_evidence_changes(base: str) -> dict[str, str]:
         )
     for status, path in ordered_changes:
         if not (path.startswith(ARCHIVE_PREFIX) and path.endswith(ARCHIVE_SUFFIXES)):
+            continue
+        # A later commit may restore a historical archive file to the exact
+        # parent blob. It is not new evidence and must not become a PR owner.
+        if status == "M" and _is_no_op_restore(base, path):
             continue
         saw_archive_evidence = True
         result[path] = status
@@ -162,7 +166,9 @@ def machine_path_issues(value: Any, location: str = "root") -> list[str]:
 def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
     issues: list[str] = []
     evidence_changes = archive_evidence_changes(base)
-    changed_stems = dict.fromkeys(archive_stem(path) for path in evidence_changes)
+    changed_stems = dict.fromkeys(
+        archive_stem(path) for path, status in evidence_changes.items() if status == "A"
+    )
     discovered_contracts = [
         PROJECT_ROOT / f"{archive_stem(path)}.contract.json"
         for path in evidence_changes
