@@ -1,0 +1,391 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "review_r3_sbom_completeness",
+  "contractPath": ".ai/work-items/archive/2026/review_r3_sbom_completeness.contract.json",
+  "changedFiles": [
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "Added explicit SBOM coverage and lock semantics metadata."
+    },
+    {
+      "path": "tests/test_supply_chain.py",
+      "reason": "Covered direct, transitive, and hash-lock semantics."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Regenerated SBOM baseline with coverage metadata."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Regenerated provenance baseline after SBOM change."
+    },
+    {
+      "path": "release.json",
+      "reason": "Synchronized release supply-chain digests with regenerated evidence."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Documented actual SBOM and lock guarantees."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_r3_sbom_completeness.contract.json",
+      "reason": "Defined R3 scope and acceptance."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_r3_sbom_completeness.summary.json",
+      "reason": "Recorded R3 implementation evidence."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/review-remediation-backlog.md",
+    "scripts/check_supply_chain.py",
+    "requirements-dev.lock",
+    ".github/workflows/compatibility.yml",
+    "tests/test_supply_chain.py",
+    "docs/reference/distribution.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:30:44.894472+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "11e6af6ddeb8077a5335148a0319446846c464b7fb9bc328d6fc62953675a416",
+      "commandHash": "f78562f1f06720d24d649b6f56822f2af274a9c67e8d917c29c15255009d58d7",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "6dac6af2a3627971bc9b8b73fae94276e7c09483064d3cae4213ebeb15a75fd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/review_r3_sbom_completeness.contract.json work item contract check passed: .ai/work-items/active/review_r3_sbom_completeness.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:30:45.054615+00:00",
+      "exitCode": 0,
+      "durationMs": 105,
+      "outputDigest": "bc588ba699b6f814e6f8583a62929e4e9919b74a0b89466b51727de79be34527",
+      "commandHash": "da0ecf6d76949eabd4845e97ac4b6eaecc3bfdbc7b258cee6afa7a5f8d6e3e9a",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "6dac6af2a3627971bc9b8b73fae94276e7c09483064d3cae4213ebeb15a75fd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/review_r3_sbom_completeness.contract.json scope guard passed: 7 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:30:45.243174+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "aa14e0e89ee89eb090d7fbd39e10139fc07124eb900a8e067981960d1a93349b",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "6dac6af2a3627971bc9b8b73fae94276e7c09483064d3cae4213ebeb15a75fd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/review_r3_sbom_completeness.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. guard check completed: 2 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/review_r3_sbom_completeness.contract.json SUMMARY=.ai/work-items/active/review_r3_sbom_completeness.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:30:45.518412+00:00",
+      "exitCode": 0,
+      "durationMs": 227,
+      "outputDigest": "5df86d7ffba17a89d675a96d60cf3a869da9e4d410b4605cac32f04b7de200ce",
+      "commandHash": "a16e10f632d98ec22550205607e3bc19527d69ef086ee752f08f77ca762e51ff",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "6dac6af2a3627971bc9b8b73fae94276e7c09483064d3cae4213ebeb15a75fd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/review_r3_sbom_completeness.contract.json --summary .ai/work-items/active/review_r3_sbom_completeness.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `review_r3_sbom_completeness` - Contract Hash: `8bcded4cc8b0e63e` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Required Chec"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:30:45.675810+00:00",
+      "exitCode": 0,
+      "durationMs": 104,
+      "outputDigest": "6383a1a64ff3493aa86e0d688210165c079fb8e673eedc38ee7ad02508d42f76",
+      "commandHash": "f48a9349576e70e3a02a3f3ba67753f94977281fe18c21740e8bfae9abe25181",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "6dac6af2a3627971bc9b8b73fae94276e7c09483064d3cae4213ebeb15a75fd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/review_r3_sbom_completeness.summary.json review policy matched 3 path(s) [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/sbom.json review focus recorded: 1 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:30:45.841667+00:00",
+      "exitCode": 0,
+      "durationMs": 107,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "6dac6af2a3627971bc9b8b73fae94276e7c09483064d3cae4213ebeb15a75fd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:30:46.001128+00:00",
+      "exitCode": 0,
+      "durationMs": 104,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "6dac6af2a3627971bc9b8b73fae94276e7c09483064d3cae4213ebeb15a75fd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/review_r3_sbom_completeness.contract.json SUMMARY=.ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:30:46.112405+00:00",
+      "exitCode": 0,
+      "durationMs": 54,
+      "outputDigest": "db0b617aa76e79959ef9e6e7180d61203deaa1945a532510bb836bb1fbd94537",
+      "commandHash": "97c03ca9c62e113213bc4b7ef9b839cb47eecc6b71439a1645a187d42badad23",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "6dac6af2a3627971bc9b8b73fae94276e7c09483064d3cae4213ebeb15a75fd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/review_r3_sbom_completeness.contract.json --summary .ai/work-items/active/review_r3_sbom_completeness.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/review_r3_sbom_completeness.contract.json SUMMARY=.ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:30:46.233954+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "594d21f896955edcb7dd892a1dfc698df0ad0851b99a581405d8b69d38a17d90",
+      "commandHash": "152346a804ca1d669841b7e81c2c916c733ebddfc6e0703ee41d43620c91b098",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "6dac6af2a3627971bc9b8b73fae94276e7c09483064d3cae4213ebeb15a75fd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/review_r3_sbom_completeness.contract.json --summary .ai/work-items/active/review_r3_sbom_completeness.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:30:46.493599+00:00",
+      "exitCode": 0,
+      "durationMs": 209,
+      "outputDigest": "20d50e66df9095d7094e7aeeee6ce5a57cd09e90dc05171e36d868a120ee9584",
+      "commandHash": "3ebe72695627dfbd3de6c0c50cd285c8d539ca9e1ad4317955b17f5b46c3c220",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "6dac6af2a3627971bc9b8b73fae94276e7c09483064d3cae4213ebeb15a75fd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/review_r3_sbom_completeness.contract.json ## Diff Ownership Preview - active_owned: `7`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sbom.json` — covered by C"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:31:45.871750+00:00",
+      "exitCode": 0,
+      "durationMs": 59317,
+      "outputDigest": "3c811414b72ae13a74fa1ca89fd40339723ba365708dc345d00c4e007e4464fc",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "6dac6af2a3627971bc9b8b73fae94276e7c09483064d3cae4213ebeb15a75fd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 87 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=80 ........................................................................ [ 18%] ........................................................................ [ 37%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/review_r3_sbom_completeness.contract.json SUMMARY=.ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:31:47.266986+00:00",
+      "exitCode": 0,
+      "durationMs": 229,
+      "outputDigest": "f81d4ed2bac2d32bb30115841ed4a7082e71a68803632c145287021741aaffb5",
+      "commandHash": "72a6d8109c5ac954c0894ab75fd15953d7ac83ed6150c06c552a18f8777f7a2e",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "920fd920c6fb28b05bc5d67536aeb9f41e430430686c0d4c3b25dc0efcfa0990",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/review_r3_sbom_completeness.contract.json --summary .ai/work-items/active/review_r3_sbom_completeness.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/review_r3_sbom_completeness.contract.json SUMMARY=.ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:31:47.541589+00:00",
+      "exitCode": 0,
+      "durationMs": 225,
+      "outputDigest": "3b9983464309b22fcc6985f815a369207cf027462142231444c957fd7dc5f8bc",
+      "commandHash": "68eb5c8f6c108f6f585257c3451c49ba1ff4b7aa646f4d1900a2b97f13b7284a",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "920fd920c6fb28b05bc5d67536aeb9f41e430430686c0d4c3b25dc0efcfa0990",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/review_r3_sbom_completeness.contract.json --summary .ai/work-items/active/review_r3_sbom_completeness.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:31:47.642687+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "920fd920c6fb28b05bc5d67536aeb9f41e430430686c0d4c3b25dc0efcfa0990",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/review_r3_sbom_completeness.contract.json SUMMARY=.ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:31:47.749169+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "fbd92510bd4a26f22830daee9eab21d3be69e968c03b71add5ba7743ac6f750b",
+      "commandHash": "759c2b9ac628921240eecc038750dd0c34071cece2d7ed165e1827415d81f60a",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "920fd920c6fb28b05bc5d67536aeb9f41e430430686c0d4c3b25dc0efcfa0990",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/review_r3_sbom_completeness.contract.json --summary .ai/work-items/active/review_r3_sbom_completeness.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/review_r3_sbom_completeness.summary.json CONTRACT=.ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T12:31:47.910812+00:00",
+      "exitCode": 0,
+      "durationMs": 107,
+      "outputDigest": "a7e670a810ddb64eeb1948bed3893d67f8b4b81228b0eb176baa325380ca9952",
+      "commandHash": "e979db04973f44a76aa4e9e311122d28a8d0b65abedf57056d8df7f1efef1b12",
+      "contractHash": "8bcded4cc8b0e63eba9261ac67d5db180c538aa50d88864c0d39cea6930c5cdf",
+      "commitSha": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+      "executionContractPath": ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+      "worktreeDigest": "920fd920c6fb28b05bc5d67536aeb9f41e430430686c0d4c3b25dc0efcfa0990",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/review_r3_sbom_completeness.summary.json --contract .ai/work-items/active/review_r3_sbom_completeness.contract.json ai summary check passed: .ai/work-items/active/review_r3_sbom_completeness.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "No new public API beyond documented SBOM metadata."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "No cross-feature internal imports added."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Coverage metadata distinguishes Action occurrences, direct lock entries, and unavailable transitive generation."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "transitive_dependencies",
+      "detail": "Transitive dependencies remain explicitly marked not_generated until a reproducible export is supplied.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "Targeted tests and regenerated evidence pass; full verification is being recorded.",
+    "expectedReviewFocus": [
+      "Confirm no transitive coverage is implied by direct lock entries."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "8bcded4cc8b0e63e",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed SBOM direct/transitive coverage boundary before editing."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "8bcded4cc8b0e63e",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Ran ai-checkpoint before finish after SBOM baseline regeneration and targeted verification."
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified."
+}

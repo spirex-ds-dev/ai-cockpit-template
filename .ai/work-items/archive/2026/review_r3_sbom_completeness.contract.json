@@ -1,0 +1,182 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_r3_sbom_completeness",
+  "mode": "code",
+  "title": "补齐 SBOM 完整性与锁定语义",
+  "baseCommit": "13ec57601385e06fe74fe4ccfd04539a0377d15b",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "0a2bf1fce15daaa1a52c86df6088f3756727de768a7954064d134168e3dddb73"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_r3_sbom_completeness.contract.json",
+    ".ai/work-items/active/review_r3_sbom_completeness.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "release.json",
+    "scripts/check_supply_chain.py",
+    "tests/test_supply_chain.py",
+    "requirements-dev.lock",
+    ".github/workflows/**",
+    "docs/reference/distribution.md",
+    "docs/configuration.md",
+    "tests/**"
+  ],
+  "outOfScope": [
+    "Changing evidence source identity covered by R2",
+    "Installer evidence boundary covered by R4",
+    "R4-R11 remediation"
+  ],
+  "sources": [
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "R3 objective and acceptance boundary."
+    },
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "Current SBOM discovery implementation."
+    },
+    {
+      "path": "requirements-dev.lock",
+      "reason": "Locked direct dependency input."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Workflow Action inventory input."
+    },
+    {
+      "path": "tests/test_supply_chain.py",
+      "reason": "Supply-chain regression coverage."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["supply_chain", "completeness"],
+    "reason": "Incomplete component discovery can create false confidence in dependency coverage."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Contract is complete for the SBOM completeness audit and implementation."
+  },
+  "preReviewWarnings": [
+    "Do not claim transitive dependency coverage from a direct lockfile parser alone.",
+    "Verify every workflow uses occurrence and preserve lock hash semantics."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "All workflow Action uses occurrences and all locked direct dependencies are discovered in a repeatable SBOM report.",
+    "Transitive dependency coverage and lock hash guarantees are explicitly reported without overclaiming.",
+    "Regression tests cover Action discovery, direct dependency discovery, and incomplete-lock behavior.",
+    "Documentation states the real scope of --require-hashes and SBOM coverage."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The current SBOM parser discovers direct lock entries and workflow actions but does not make transitive dependency coverage or lock guarantees explicit.",
+    "constraints": ["Do not change R2 source identity semantics.", "Keep generation deterministic and usable in offline CI."],
+    "rationale": "A report that distinguishes direct, transitive, and workflow coverage prevents supply-chain evidence from being interpreted more strongly than its inputs justify."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Every workflow uses occurrence is represented in the Action component inventory.", "required": true, "status": "verified", "evidence": ["tests/test_supply_chain.py"]},
+    {"scenario": "Every direct locked dependency is represented and lock hash semantics are reported.", "required": true, "status": "verified", "evidence": ["tests/test_supply_chain.py", "requirements-dev.lock"]},
+    {"scenario": "Transitive dependency coverage is either generated from a reproducible environment or explicitly marked as unavailable.", "required": true, "status": "verified", "evidence": ["scripts/check_supply_chain.py", "docs/reference/distribution.md"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized continuous R3-R11 remediation execution."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

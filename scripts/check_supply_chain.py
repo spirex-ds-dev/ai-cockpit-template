@@ -96,6 +96,20 @@ def parse_workflow_actions(root: Path) -> list[dict[str, str]]:
     return components
 
 
+def lock_semantics(path: Path) -> dict[str, Any]:
+    """Describe what the requirements lock can and cannot guarantee."""
+    lines = [line.strip() for line in read_text(path).splitlines() if line.strip()]
+    pinned = [line for line in lines if "==" in line and not line.startswith("#")]
+    hashed = [line for line in pinned if "--hash=" in line]
+    return {
+        "directDependencies": len(pinned),
+        "transitiveDependencies": {"status": "not_generated", "source": "requirements-dev.lock"},
+        "versionPins": True,
+        "hashPins": bool(pinned) and len(hashed) == len(pinned),
+        "requireHashesCompatible": bool(pinned) and len(hashed) == len(pinned),
+    }
+
+
 def release_tag() -> str:
     release = load_json(RELEASE_JSON)
     tag = release.get("releaseTag")
@@ -127,7 +141,9 @@ def release_commit_sha() -> str:
 
 
 def build_sbom(source_commit: str | None = None) -> dict[str, Any]:
-    components = [*parse_requirements_lock(LOCK_FILE), *parse_workflow_actions(WORKFLOW_DIR)]
+    lock_components = parse_requirements_lock(LOCK_FILE)
+    action_components = parse_workflow_actions(WORKFLOW_DIR)
+    components = [*lock_components, *action_components]
     components = sorted(components, key=lambda item: (item["type"], item["name"], item["version"]))
     return {
         "bomFormat": "CycloneDX",
@@ -137,7 +153,12 @@ def build_sbom(source_commit: str | None = None) -> dict[str, Any]:
                 "type": "application",
                 "name": "ai-cockpit-template",
                 "version": source_commit_sha(source_commit),
-            }
+            },
+            "supplyChainCoverage": {
+                "workflowActions": len(action_components),
+                "lockedDirectDependencies": len(lock_components),
+                "lockSemantics": lock_semantics(LOCK_FILE),
+            },
         },
         "components": components,
     }

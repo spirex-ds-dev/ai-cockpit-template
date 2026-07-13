@@ -206,6 +206,20 @@ def test_supply_chain_accepts_explicit_source_commit(monkeypatch):
     assert calls == [["git", "rev-parse", "source-ref^{commit}"]]
 
 
+def test_sbom_reports_direct_and_transitive_coverage_without_overclaiming(tmp_path, monkeypatch):
+    lock = tmp_path / "requirements.lock"
+    lock.write_text("demo==1.0\n", encoding="utf-8")
+    monkeypatch.setattr(check_supply_chain, "LOCK_FILE", lock)
+    monkeypatch.setattr(check_supply_chain, "WORKFLOW_DIR", tmp_path)
+    monkeypatch.setattr(check_supply_chain, "source_commit_sha", lambda _=None: "source")
+
+    coverage = check_supply_chain.build_sbom()["metadata"]["supplyChainCoverage"]
+    assert coverage["workflowActions"] == 0
+    assert coverage["lockedDirectDependencies"] == 1
+    assert coverage["lockSemantics"]["transitiveDependencies"]["status"] == "not_generated"
+    assert coverage["lockSemantics"]["hashPins"] is False
+
+
 def test_supply_chain_baselines_match_repository_state():
     assert (
         subprocess.run(
