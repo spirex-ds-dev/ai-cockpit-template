@@ -1,0 +1,175 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_r10_documentation_truth",
+  "mode": "code",
+  "title": "收口文档事实与可执行示例",
+  "baseCommit": "2029c7fdbd1f742f0d0eaf27dd1e3118d5312159",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "8b3a80c93dcf923a40ccaa0cdb065811eaa209e94ca5f788c9b995cb32342e57"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_r10_documentation_truth.contract.json",
+    ".ai/work-items/active/review_r10_documentation_truth.summary.json",
+    ".ai/cockpit/current_status.md",
+    "README.md",
+    "SECURITY.md",
+    "CODEOWNERS",
+    "docs/**",
+    "scripts/check_docs_metadata.py",
+    "scripts/check_system_invariants.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_project_governance.py",
+    "tests/test_release_distribution.py",
+    "tests/**"
+  ],
+  "outOfScope": ["R11 final evidence package"],
+  "sources": [
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "R10 objective and acceptance boundary."
+    },
+    {
+      "path": "README.md",
+      "reason": "Primary documented workflow and repository facts."
+    },
+    {
+      "path": "docs/**",
+      "reason": "Installation, distribution, architecture, and governance references."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Executable documentation metadata validation."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Documentation fact regression coverage."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["documentation_truth", "executable_examples"],
+    "reason": "Stale documentation can cause unsafe installation or governance behavior despite passing code tests."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Documentation checks and release regressions are ready for review-backed verification."
+  },
+  "preReviewWarnings": ["Review repository, release tag, RAW/REF/SHA, downgrade, and calibration claims against executable behavior."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "README and reference docs match repository, release, installation, upgrade, calibration, and supply-chain behavior.",
+    "SECURITY/CODEOWNERS and template placeholders are explicit and non-misleading.",
+    "Key examples are covered by executable documentation or release tests.",
+    "The Work Item is archived and committed."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Documentation is an operational interface; stale release, installation, and governance claims can invalidate otherwise correct implementation evidence.",
+    "constraints": ["Keep examples project-neutral.", "Do not claim public capabilities absent from release checks."],
+    "rationale": "Fact-driven documentation checks reduce drift between the template's operational contract and its prose."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Documentation metadata and required governance facts pass automated checks.", "required": true, "status": "verified", "evidence": ["tests/test_docs_metadata.py"]},
+    {"scenario": "Release and installation examples match executable public behavior.", "required": true, "status": "verified", "evidence": ["tests/test_release_distribution.py"]},
+    {"scenario": "Governance documentation and placeholders remain system-invariant compliant.", "required": true, "status": "verified", "evidence": ["tests/test_project_governance.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
