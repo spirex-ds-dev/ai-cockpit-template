@@ -1,0 +1,175 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n10_no_active_status_ownership_checker",
+  "mode": "cleanup",
+  "title": "修复 ownership checker 对合法 no-active 状态的误判",
+  "baseCommit": "c987b03eb7279bedc77e089816bc477c42d28a06",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "cec3183a789a125123d931e07bb7c43a03a7f3e01ad87e7b7955df3dd633c9f7"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+    ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**",
+    "scripts/ai_check_diff_ownership.py",
+    "tests/test_diff_ownership.py"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines no_active_work_item and ownership evidence semantics."
+    },
+    {
+      "path": "scripts/ai_check_diff_ownership.py",
+      "reason": "Current ownership preview implementation that misclassifies generated no-active status."
+    },
+    {
+      "path": "tests/test_diff_ownership.py",
+      "reason": "Existing ownership preview regression tests."
+    }
+  ],
+  "problemStatement": "After the last archived Work Item, the generated no-active cockpit status is a valid governance artifact but local diff ownership reports it as unowned, preventing the required verification loop from converging.",
+  "scenarioCoverage": [
+    {
+      "scenario": "Generated no-active current_status.md is excluded from ownership violations.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Unrelated changed paths and invalid/manual status changes remain fail-closed.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["governance_false_positive", "verification"],
+    "reason": "The exception must be narrowly limited to the generator-owned no-active status and must not hide arbitrary changes."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The failure is reproducible, the implementation boundary is explicit, and regression tests can verify both the exception and fail-closed behavior."
+  },
+  "preReviewWarnings": [
+    "Review that the generated-status exception cannot claim ordinary files or malformed status content."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Generated no-active current_status.md does not produce an unowned ownership finding.",
+    "The exception is narrow and invalid or unrelated changes remain reported.",
+    "Regression tests cover local and PR ownership preview behavior.",
+    "The AI Change Summary records verification and residual risk."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "A generated no-active cockpit status is a valid governance artifact, but the local ownership preview treats its refresh as an unowned change after archival.",
+    "constraints": [
+      "Keep ownership checks fail-closed for ordinary and malformed files.",
+      "Do not change archive append-only behavior or claim unrelated paths."
+    ],
+    "rationale": "The status generator owns current_status.md when no active Work Item exists; recognizing that narrow generated state removes a false positive without weakening evidence requirements for real changes."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly instructed continued execution of the review-remediation loop, including generated .ai status evidence."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

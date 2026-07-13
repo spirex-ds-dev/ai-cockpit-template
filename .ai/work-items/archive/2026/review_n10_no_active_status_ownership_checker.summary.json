@@ -1,0 +1,378 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "review_n10_no_active_status_ownership_checker",
+  "contractPath": ".ai/work-items/archive/2026/review_n10_no_active_status_ownership_checker.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/review_n10_no_active_status_ownership_checker.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_n10_no_active_status_ownership_checker.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated cockpit status for the active Work Item and later no-active state."
+    },
+    {
+      "path": "scripts/ai_check_diff_ownership.py",
+      "reason": "Exclude only valid generator-owned no-active status from local ownership violations."
+    },
+    {
+      "path": "tests/test_diff_ownership.py",
+      "reason": "Add regression coverage for valid and malformed no-active status content."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/glossary.md",
+    "scripts/ai_check_diff_ownership.py",
+    "tests/test_diff_ownership.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:51:56.255103+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "e86a8ba57bc151050446e714d2ffe4e455480109f47d1aa82da50155e6868f9a",
+      "commandHash": "487c5ef592468734154131eeefe32dd804c8106764904eae03e2016109aa4f7b",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "650377383d3313936808ab2be5a5724f290e3b301c086a941ef5174432d9a44a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json work item contract check passed: .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:51:56.431098+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "fd59c72a6d34d13426023921d7711ae03d5f05d731b1f0cf5650f7ba997eb369",
+      "commandHash": "d6f11e9f0944a6f250c33aba85420e4fe0371da0e347123cb755cf70e0220621",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "650377383d3313936808ab2be5a5724f290e3b301c086a941ef5174432d9a44a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json scope guard passed: 3 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:51:56.623886+00:00",
+      "exitCode": 0,
+      "durationMs": 130,
+      "outputDigest": "4964f0c0974141e51c67da5cdeecce5488aa5c1c5d39e27ab69101d18689089d",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "650377383d3313936808ab2be5a5724f290e3b301c086a941ef5174432d9a44a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json SUMMARY=.ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:51:56.919152+00:00",
+      "exitCode": 0,
+      "durationMs": 245,
+      "outputDigest": "daa01e819ccd3c6bd4884b7574928af4e105b4939af74d16df7b800d783bb837",
+      "commandHash": "89682e54b3653a0106403e7921063bbdbeecae331df765c3a22c5dba1891f0bc",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "650377383d3313936808ab2be5a5724f290e3b301c086a941ef5174432d9a44a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json --summary .ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `review_n10_no_active_status_ownership_checker` - Contract Hash: `f982ebd80641b6be` - Mode: `cleanup` - notCodable: `False` - Execution Decision: `continue` - A"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:51:57.077037+00:00",
+      "exitCode": 0,
+      "durationMs": 101,
+      "outputDigest": "57703f2a102f70c1334ed26dff9e44bb8d3e7d66438b4ff5603418b318cdb458",
+      "commandHash": "edb70b23ad225e9bca3a38c889835b474f0166a20f3f3528b16082bd4e21b052",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "650377383d3313936808ab2be5a5724f290e3b301c086a941ef5174432d9a44a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json review policy matched 2 path(s) [review] .ai/cockpit/current_status.md [review] scripts/ai_check_diff_ownership.py review focus recorded: 1 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:51:57.243378+00:00",
+      "exitCode": 0,
+      "durationMs": 107,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "650377383d3313936808ab2be5a5724f290e3b301c086a941ef5174432d9a44a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:51:57.404649+00:00",
+      "exitCode": 0,
+      "durationMs": 103,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "650377383d3313936808ab2be5a5724f290e3b301c086a941ef5174432d9a44a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json SUMMARY=.ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:51:57.522533+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "98c55e3347dd59d22a4edf03225cfeee652ae60585cd9f9c289b0ab52dcda95e",
+      "commandHash": "15a648cc01d490f208274aec753302f59c0faf845837cd38c7abfa79f5deb93a",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "650377383d3313936808ab2be5a5724f290e3b301c086a941ef5174432d9a44a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json --summary .ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json SUMMARY=.ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:51:57.641605+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "7eb7d4eaaf3118c3cd569466fa00ba415747acf491f61bf77d85225d50d334a2",
+      "commandHash": "65c050338c7bad7e28440c1369e6f82d88baa4714d7e698992ae67b618156dbe",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "650377383d3313936808ab2be5a5724f290e3b301c086a941ef5174432d9a44a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json --summary .ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:51:57.938379+00:00",
+      "exitCode": 0,
+      "durationMs": 244,
+      "outputDigest": "af37989d2c52b88569c874a21238dbb7b16a1fade689de264193bedef52a6ebd",
+      "commandHash": "36563c20fa8e44dd32c622bd525418b7e18051ae7452ab335afc147af53ffcdd",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "650377383d3313936808ab2be5a5724f290e3b301c086a941ef5174432d9a44a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json ## Diff Ownership Preview - active_owned: `3`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `scripts/ai_check_diff_ownership.py` — covered by Contract scope - [active_owned] `tests/test_d"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:52:58.680906+00:00",
+      "exitCode": 0,
+      "durationMs": 60680,
+      "outputDigest": "cff16759e5184f1cb9c58b5ef7fe8e1647dee97abad67f30544b1dab36c1e026",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "650377383d3313936808ab2be5a5724f290e3b301c086a941ef5174432d9a44a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 87 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=80 ........................................................................ [ 18%] ........................................................................ [ 37%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json SUMMARY=.ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:53:00.060665+00:00",
+      "exitCode": 0,
+      "durationMs": 228,
+      "outputDigest": "1b1733949c368f77e49e58b17fcdef0500b4e4bd7b3dacc9b77e5e7c4d15383f",
+      "commandHash": "7fad881fc52ed5bc00ed13a9e3a91e09b3a673b352d7da6b32bd36793b015fe2",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "39c3fc3132089549d013b85f385c58d8f7d54a5bec0387d0a4dfbeccb1237fdb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json --summary .ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json SUMMARY=.ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:53:00.318504+00:00",
+      "exitCode": 0,
+      "durationMs": 210,
+      "outputDigest": "594aab26851583f43cf41a4ea7a7908a17690b4577bcf78ed835c896612037a4",
+      "commandHash": "b389b45cff8e1da221970564965284b1c292c83ec27c1deadda4f0baa01c69a9",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "39c3fc3132089549d013b85f385c58d8f7d54a5bec0387d0a4dfbeccb1237fdb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json --summary .ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:53:00.417346+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "39c3fc3132089549d013b85f385c58d8f7d54a5bec0387d0a4dfbeccb1237fdb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json SUMMARY=.ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:53:00.520610+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "bfadb97954f3025dbae87dce72d27a5032ec41bbeb4be8d1120ebc428e818195",
+      "commandHash": "dfda88798bb273fe005116a1895bfb69b6aa26809b3fb73a9dbdde17b2d7c10b",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "39c3fc3132089549d013b85f385c58d8f7d54a5bec0387d0a4dfbeccb1237fdb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json --summary .ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json CONTRACT=.ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-13T22:53:00.699501+00:00",
+      "exitCode": 0,
+      "durationMs": 117,
+      "outputDigest": "a2b460e54e23b5502b5d1c292751cf9dbb60f4b009216019920e8d1c50647b00",
+      "commandHash": "e5dfa7c99e147f7cab233396f0e30acc9c33d704587a75d19d4dcbd1d2830c7b",
+      "contractHash": "f982ebd80641b6bea99798a6add5d401f444a11820b99d7ed6c981908b370420",
+      "commitSha": "c987b03eb7279bedc77e089816bc477c42d28a06",
+      "executionContractPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json",
+      "worktreeDigest": "39c3fc3132089549d013b85f385c58d8f7d54a5bec0387d0a4dfbeccb1237fdb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json --contract .ai/work-items/active/review_n10_no_active_status_ownership_checker.contract.json ai summary check passed: .ai/work-items/active/review_n10_no_active_status_ownership_checker.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "No public API is added; the change is internal governance behavior."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "No cross-feature internal import is added."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The exception is intentionally narrow; malformed or unrelated paths remain fail-closed."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "governance",
+      "detail": "The generated-status marker check must remain aligned with the status generator format.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "not_ready",
+    "reason": "Required checks are pending.",
+    "expectedReviewFocus": [
+      "Verify that only valid generated no-active status is exempted from ownership findings."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "f982ebd80641b6be",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Confirmed the narrowed ownership-checker scope and fail-closed acceptance criteria before implementation."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "f982ebd80641b6be",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3,
+      "detail": "Recorded after focused tests, Contract, scope, guards, and full quality checks passed; remaining finish checks are being rerun."
+    }
+  ],
+  "knownGaps": [
+    "Release publication remains outside this Work Item."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified."
+}
