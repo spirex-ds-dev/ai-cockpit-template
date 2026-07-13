@@ -39,6 +39,38 @@ def test_finish_evidence_is_complete():
     assert len(item["worktreeDigest"]) == 64
 
 
+def test_passed_v2_evidence_requires_worktree_digest():
+    item = ai_finish.evidence(
+        "projectTest",
+        "make ai-cockpit-project-test",
+        0,
+        12,
+        "1 passed\n",
+        contract_hash="b" * 64,
+        commit_sha="a" * 40,
+        execution_contract_path=".ai/work-items/active/x.contract.json",
+        execution_summary_path=".ai/work-items/active/x.summary.json",
+        worktree_digest="c" * 64,
+    )
+    item.pop("worktreeDigest")
+    issues = ai_check_summary.validate_summary(
+        {
+            "summaryVersion": 2,
+            "workItemId": "x",
+            "contractPath": ".ai/work-items/active/x.contract.json",
+            "changedFiles": [{"path": "x", "reason": "test"}],
+            "verification": [item],
+            "risk": {"level": "low", "detail": "test"},
+        },
+        {
+            "contractVersion": 2,
+            "workItemId": "x",
+            "verification": [{"check": "projectTest", "required": True}],
+        },
+    )
+    assert "verification[0].worktreeDigest is required for passed result" in issues
+
+
 def test_pending_finish_evidence_is_not_accepted_as_completed():
     item = ai_finish.pending_evidence(
         "aiStatusCheck",

@@ -1,0 +1,160 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n4_worktree_digest_required",
+  "mode": "code",
+  "title": "强制 Summary 的 worktreeDigest 绑定",
+  "baseCommit": "0be61cf0e61655093aaad9b70f8752b097e3f99e",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "02d3ae8e340e293a7d98d951f5c3219d60e9a362fbd4a4f1eda71e037b45f562"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_n4_worktree_digest_required.contract.json",
+    ".ai/work-items/active/review_n4_worktree_digest_required.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/2026/review_n4_worktree_digest_required.*",
+    "scripts/ai_check_summary.py",
+    "tests/test_ai_check_summary.py",
+    "tests/test_verification_evidence.py"
+  ],
+  "outOfScope": ["Finish evidence generation changes", "Archive owner ranking", "Public release tag or push"],
+  "sources": [
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "R8 requires Summary evidence to bind to source state."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Summary verification evidence validation."
+    },
+    {
+      "path": "tests/test_verification_evidence.py",
+      "reason": "Existing verification evidence behavior tests."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["governance_evidence"],
+    "reason": "This changes only Summary evidence validation and its tests."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Require source-bound verification evidence and cover the rejection path."
+  },
+  "preReviewWarnings": ["Do not make finish-generated evidence impossible to validate."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Passed Contract v2 verification entries must include a valid 64-character worktreeDigest.",
+    "Missing or malformed worktreeDigest is rejected with a focused diagnostic.",
+    "Existing valid finish-generated evidence remains accepted.",
+    "Focused tests and full AI/project checks pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Summary validation currently treats worktreeDigest as optional, allowing hand-authored passed evidence without a source-state binding.",
+    "constraints": ["Do not change finish evidence generation in this Work Item.", "Do not modify archived evidence.", "Do not publish or push."],
+    "rationale": "Every passed Contract v2 verification needs a source-state digest so reviewers can distinguish executed evidence from detached declarations."
+  },
+  "scenarioCoverage": [
+    {"scenario": "A passed verification without worktreeDigest is rejected.", "required": true, "status": "verified", "evidence": ["tests/test_verification_evidence.py"]},
+    {"scenario": "A passed verification with a valid worktreeDigest remains accepted.", "required": true, "status": "verified", "evidence": ["tests/test_verification_evidence.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

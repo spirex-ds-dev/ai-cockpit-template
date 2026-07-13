@@ -1,12 +1,46 @@
 import json
 
 import ai_check_summary
+import ai_finish
 from ai_common import PROJECT_ROOT
 
 
 ARCHIVE_SUMMARY = (
     PROJECT_ROOT / ".ai" / "work-items" / "archive" / "2026" / "realign_ai_cockpit_v2.summary.json"
 )
+
+
+def test_passed_v2_evidence_requires_worktree_digest():
+    item = ai_finish.evidence(
+        "projectTest",
+        "make ai-cockpit-project-test",
+        0,
+        1,
+        "passed\n",
+        contract_hash="b" * 64,
+        commit_sha="a" * 40,
+        execution_contract_path=".ai/work-items/active/task.contract.json",
+        execution_summary_path=".ai/work-items/active/task.summary.json",
+        worktree_digest="c" * 64,
+    )
+    item.pop("worktreeDigest")
+    summary = {
+        "summaryVersion": 2,
+        "workItemId": "task",
+        "contractPath": ".ai/work-items/active/task.contract.json",
+        "changedFiles": [{"path": "scripts/ai_check_summary.py", "reason": "fixture"}],
+        "verification": [item],
+        "risk": {"level": "low", "detail": "fixture"},
+    }
+    issues = ai_check_summary.validate_summary(
+        summary,
+        {
+            "contractVersion": 2,
+            "workItemId": "task",
+            "verification": [{"check": "projectTest", "required": True}],
+        },
+    )
+    assert "verification[0].worktreeDigest is required for passed result" in issues
 
 
 def test_intent_alignment_validator_accepts_empty_and_partial_payloads():

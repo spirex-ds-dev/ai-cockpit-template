@@ -220,7 +220,11 @@ def validate_summary(
                     ):
                         issues.append(f"verification[{index}].commitSha must be a Git object id")
                     worktree_digest = item.get("worktreeDigest")
-                    if worktree_digest is not None and (
+                    if worktree_digest is None:
+                        issues.append(
+                            f"verification[{index}].worktreeDigest is required for passed result"
+                        )
+                    elif (
                         not non_empty_string(worktree_digest)
                         or len(str(worktree_digest)) != 64
                         or any(ch not in "0123456789abcdef" for ch in str(worktree_digest))
