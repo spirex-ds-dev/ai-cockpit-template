@@ -21,7 +21,7 @@ def test_release_documentation_requires_one_verified_commit():
     documentation = (ROOT / "docs" / "reference" / "distribution.md").read_text(encoding="utf-8")
 
     assert "Both `smoke` and `compatibility`" in documentation
-    assert "historical `v0.5.24` tag is immutable" in documentation
+    assert "historical release tag is immutable" in documentation
     assert "Maintainers dispatch `.github/workflows/release.yml`" in documentation
     assert "release.json.releaseTag" in documentation
 

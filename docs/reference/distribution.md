@@ -21,7 +21,7 @@ SBOM and provenance release evidence must be generated with an explicit source c
 
 Changes enter `main` through a pull request. Both `smoke` and `compatibility` also run on `main` pushes, so the commit selected for release has fresh repository-level and cross-platform evidence. Maintainers dispatch `.github/workflows/release.yml` with a new tag and the exact verified `main` SHA. The workflow rejects existing tags, requires the source SHA to equal the workflow SHA, requires successful smoke and compatibility runs for that SHA, verifies `release.json`, and only then creates the tag and GitHub Release.
 
-The historical `v0.5.24` tag is immutable evidence and is not rewritten. A future release must be created from a commit that has completed the full required checks and must use a new metadata unit whose `release.json.releaseTag` matches the requested tag.
+The historical release tag is immutable evidence and is not rewritten. A future release must be created from a commit that has completed the full required checks and must use a new metadata unit whose `release.json.releaseTag` matches the requested tag.
 
 ## Archive evidence index
 

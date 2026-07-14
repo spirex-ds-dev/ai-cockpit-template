@@ -211,11 +211,11 @@ def test_release_distribution_fails_closed_on_supply_chain_drift(monkeypatch, tm
 
 def test_main_rejects_tag_missing_evidence_even_when_worktree_has_it(monkeypatch, capsys):
     metadata = json.loads(release_distribution.RELEASE.read_text(encoding="utf-8"))
-    metadata["releaseTag"] = "v0.5.24"
+    metadata["releaseTag"] = "v0.5.25"
     monkeypatch.setattr(
         release_distribution,
         "list_remote_tags",
-        lambda _repository: "a refs/tags/v0.5.24\n",
+        lambda _repository: "a refs/tags/v0.5.25\n",
     )
     monkeypatch.setattr(
         release_distribution,
