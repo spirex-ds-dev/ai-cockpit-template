@@ -79,6 +79,20 @@ def _current_worktree_digest(contract: dict[str, object]) -> str:
     return _worktree_digest(changed_paths(contract))
 
 
+def _next_archive_sequence() -> int:
+    """Return the next monotonic sequence recorded in archived Summary evidence."""
+    highest = 0
+    for summary_path in ARCHIVE_BASE_DIR.rglob("*.summary.json"):
+        try:
+            summary = load_json(summary_path)
+        except (OSError, ValueError):
+            continue
+        value = summary.get("archiveSequence")
+        if isinstance(value, int) and not isinstance(value, bool):
+            highest = max(highest, value)
+    return highest + 1
+
+
 def _validate_archive_inputs(
     contract_path: Path, contract: dict, summary_path: Path | None, summary: dict | None
 ) -> list[str]:
@@ -188,6 +202,7 @@ def main() -> int:
             print(f"  {src.relative_to(PROJECT_ROOT)} -> {target.relative_to(PROJECT_ROOT)}")
         return 0
 
+    archive_sequence = _next_archive_sequence()
     target_dir.mkdir(parents=True, exist_ok=True)
     try:
         for src, target in files_to_move:
@@ -210,6 +225,7 @@ def main() -> int:
                 )
             summary = redact_machine_paths_in_data(load_json(target_dir / summary_path.name))
             summary["contractPath"] = archived_contract
+            summary["archiveSequence"] = archive_sequence
             changed = summary.get("changedFiles", [])
             if isinstance(changed, list):
                 if not any(

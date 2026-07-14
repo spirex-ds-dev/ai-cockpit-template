@@ -303,3 +303,26 @@ def test_summary_validator_rejects_unknown_active_fields():
     )
 
     assert "unknown field: unexpectedField" in issues
+
+
+def test_summary_validator_accepts_positive_archive_sequence_and_rejects_invalid_value():
+    summary = {
+        "summaryVersion": 2,
+        "workItemId": "task",
+        "contractPath": ".ai/work-items/archive/2026/task.contract.json",
+        "changedFiles": [{"path": "scripts/app.py", "reason": "changed"}],
+        "sourcesUsed": ["spec"],
+        "verification": [{"check": "quality", "result": "not_run"}],
+        "unknownsRemaining": [],
+        "risk": {"level": "low", "detail": "fixture"},
+        "generatedFiles": [],
+        "destructiveChanges": [],
+        "observedIssues": [],
+        "archiveSequence": 3,
+    }
+    contract = {"contractVersion": 2, "workItemId": "task", "verification": []}
+
+    assert ai_check_summary.validate_summary(summary, contract, legacy_archive=True) == []
+    summary["archiveSequence"] = 0
+    issues = ai_check_summary.validate_summary(summary, contract, legacy_archive=True)
+    assert "archiveSequence must be a positive integer when present" in issues

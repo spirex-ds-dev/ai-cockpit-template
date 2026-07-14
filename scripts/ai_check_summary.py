@@ -40,6 +40,7 @@ REQUIRED_FIELDS = (
     "observedIssues",
 )
 ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
+    "archiveSequence",
     "boundaryChecks",
     "checkpointEvidence",
     "checkpointReview",
@@ -137,6 +138,14 @@ def validate_summary(
         for item in changed
     ):
         issues.append("changedFiles must be a list of objects with path and reason")
+
+    archive_sequence = summary.get("archiveSequence")
+    if archive_sequence is not None and (
+        not isinstance(archive_sequence, int)
+        or isinstance(archive_sequence, bool)
+        or archive_sequence < 1
+    ):
+        issues.append("archiveSequence must be a positive integer when present")
 
     verification = summary.get("verification")
     if not isinstance(verification, list) or not verification:

@@ -273,6 +273,7 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     assert ai_archive_work_item.main() == 0
     archived_summary = next(archive.glob("*/task.summary.json"))
     data = json.loads(archived_summary.read_text(encoding="utf-8"))
+    assert data["archiveSequence"] == 1
     assert "/active/" not in data["contractPath"]
     assert all(
         "/archive/" in item["path"] or item["path"] == ".ai/cockpit/current_status.md"

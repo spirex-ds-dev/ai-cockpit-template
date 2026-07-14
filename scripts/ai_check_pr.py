@@ -36,6 +36,9 @@ ARCHIVE_SUFFIXES = (".contract.json", ".summary.json", ".review.json")
 # Worktree-bound verification evidence became mandatory at this migration point.
 # Archives created before it remain immutable historical evidence.
 WORKTREE_DIGEST_INTRODUCED_AT = "63ec6fcd3c8f945b379966d43457e44ccaeba258"
+# New archive pairs use explicit ordering evidence. Older pairs remain readable
+# through the timestamp fallback and are never rewritten in place.
+ARCHIVE_SEQUENCE_INTRODUCED_AT = "f0b7caa9fdc8fa0bc25cf8c099fc2cef5f0c61b7"
 
 
 def _git_blob_hash(revision: str, path: str) -> str:
@@ -148,6 +151,13 @@ def archive_pair_rank(contract_path: Path, summary_path: Path) -> tuple[int, str
         summary_rel = summary_path.relative_to(PROJECT_ROOT).as_posix()
     except ValueError:
         return 0, contract_path.as_posix(), summary_path.as_posix()
+    try:
+        summary = load_json(summary_path)
+    except (OSError, ValueError, json.JSONDecodeError):
+        summary = {}
+    sequence = summary.get("archiveSequence") if isinstance(summary, dict) else None
+    if isinstance(sequence, int) and not isinstance(sequence, bool) and sequence > 0:
+        return sequence, contract_rel, summary_rel
     result = run_git(["log", "-1", "--format=%ct", "--", contract_rel, summary_rel])
     if result.returncode != 0:
         return 0, contract_rel, summary_rel
@@ -156,6 +166,23 @@ def archive_pair_rank(contract_path: Path, summary_path: Path) -> tuple[int, str
     except ValueError:
         timestamp = 0
     return timestamp, contract_rel, summary_rel
+
+
+def archive_sequence_required(contract: dict[str, Any]) -> bool:
+    base_commit = contract.get("baseCommit")
+    if not isinstance(base_commit, str) or not base_commit:
+        return False
+    result = run_git(["merge-base", "--is-ancestor", ARCHIVE_SEQUENCE_INTRODUCED_AT, base_commit])
+    return result.returncode == 0
+
+
+def archive_sequence_issue(contract: dict[str, Any], summary: dict[str, Any]) -> str | None:
+    if not archive_sequence_required(contract):
+        return None
+    sequence = summary.get("archiveSequence")
+    if not isinstance(sequence, int) or isinstance(sequence, bool) or sequence < 1:
+        return "archiveSequence must be a positive integer for new archive evidence"
+    return None
 
 
 def is_legacy_archive(contract: dict[str, Any], summary: dict[str, Any]) -> bool:
@@ -266,10 +293,29 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
                 legacy_archive=legacy_archive,
             )
         )
+        sequence_issue = archive_sequence_issue(contract, summary)
+        if sequence_issue:
+            issues.append(f"{summary_rel}: {sequence_issue}")
         issues.extend(f"{contract_rel}: {issue}" for issue in machine_path_issues(contract))
         issues.extend(f"{summary_rel}: {issue}" for issue in machine_path_issues(summary))
 
     archive_entries.sort(key=lambda entry: entry[3])
+
+    sequences: dict[int, str] = {}
+    for contract_path, contract, summary, _rank in archive_entries:
+        if not archive_sequence_required(contract):
+            continue
+        sequence = summary.get("archiveSequence")
+        if not isinstance(sequence, int) or isinstance(sequence, bool) or sequence < 1:
+            continue
+        contract_rel = contract_path.relative_to(PROJECT_ROOT).as_posix()
+        previous = sequences.get(sequence)
+        if previous is not None:
+            issues.append(
+                f"archiveSequence {sequence} is duplicated by {previous} and {contract_rel}"
+            )
+        else:
+            sequences[sequence] = contract_rel
 
     all_paths = changed_paths(
         {"baseCommit": base, "baselineDirtyPaths": []}, ignore_baseline_dirty=True

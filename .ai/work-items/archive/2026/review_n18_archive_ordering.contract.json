@@ -1,0 +1,214 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n18_archive_ordering",
+  "mode": "code",
+  "title": "修复归档覆盖顺序可验证性",
+  "baseCommit": "f0b7caa9fdc8fa0bc25cf8c099fc2cef5f0c61b7",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "93807acf7d8442be6b4fbfea7e2ff27aa202631c7a89ddfab39191e6410e52af"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_n18_archive_ordering.contract.json",
+    ".ai/work-items/active/review_n18_archive_ordering.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_pr.py",
+    "scripts/ai_check_diff_ownership.py",
+    "scripts/ai_check_summary.py",
+    "tests/test_pr_aggregate.py",
+    "tests/test_diff_ownership.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_ai_check_summary.py"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Current archive flow moves evidence without recording an explicit monotonic archive order."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "PR ownership rank currently falls back to commit timestamp and path order."
+    },
+    {
+      "path": "scripts/ai_check_diff_ownership.py",
+      "reason": "Local ownership preview uses the same archive rank for overlapping claims."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Summary validation must accept and validate the archive ordering evidence field."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "PR archive owner selection and rank regression tests."
+    },
+    {
+      "path": "tests/test_diff_ownership.py",
+      "reason": "Ownership preview ordering tests."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Archive lifecycle behavior tests."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Summary schema compatibility and validation tests."
+    },
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "Defines verifiable archive ownership ordering acceptance."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "ownership_integrity",
+      "archive_compatibility"
+    ],
+    "reason": "Incorrect overlap ordering can assign restricted or generated files to the wrong Work Item; historical archives must remain readable while new archives require explicit ordering evidence."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A newly archived Work Item records one positive archiveSequence in both Contract and Summary.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Overlapping new archive claims are resolved by archiveSequence regardless of same-second commit time or path names.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Missing, duplicate, or invalid new sequence evidence fails closed while legacy archives remain readable.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The existing timestamp/path heuristic is directly visible and can be replaced with sequence-backed ordering plus legacy compatibility."
+  },
+  "preReviewWarnings": [
+    "Verify duplicate, missing, or non-monotonic archive sequence evidence cannot silently decide ownership."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "New archived Work Items receive a positive monotonic archiveSequence recorded in the archived evidence pair.",
+    "PR and local ownership ranking use archiveSequence when present and preserve legacy fallback only for historical archives.",
+    "Missing, duplicate, or invalid sequence evidence is rejected for new archive overlap decisions.",
+    "Same-second archive fixtures prove ownership does not depend on path names or commit timestamps."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Overlapping archived Work Items are currently ordered by second-level commit time followed by archive path, which can assign ownership to the wrong pair when commits share timestamps or paths sort differently from responsibility order.",
+    "constraints": [
+      "Do not rewrite historical archive files solely to add ordering metadata.",
+      "New archive ordering must be deterministic and verifiable from repository evidence.",
+      "Keep PR and local ownership preview semantics aligned."
+    ],
+    "rationale": "A monotonic sequence assigned at archival time expresses responsibility order directly and removes path names from the authority decision while preserving a bounded compatibility path for legacy records."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly requested the remediation loop to continue until all listed review blockers are completed."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
