@@ -1,0 +1,152 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n27_installer_smoke_temp_base",
+  "mode": "code",
+  "title": "修复临时仓库 smoke 的实际基线参数",
+  "baseCommit": "c7e80892ccfa06d3b3dea500af49b76697389286",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/review_n27_installer_smoke_temp_base.contract.json",
+    ".ai/work-items/active/review_n27_installer_smoke_temp_base.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".github/workflows/smoke.yml",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": ["install.sh", "scripts/**", "tests/**", "release/**"],
+  "sources": [
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "The failing temporary repository smoke command still omits its local base argument."
+    },
+    {
+      "path": "Makefile.ai",
+      "reason": "The installed no-active check-ai branch requires an explicit PR base."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "ci_gate"
+    ],
+    "reason": "Initial skeleton; replace with task-specific implementation and review risks."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The remote failure is isolated to one remaining smoke command."
+  },
+  "preReviewWarnings": [
+    "Replace with task-specific review focus, or clear when no special review focus remains."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The temporary repository smoke command passes AI_BASE_COMMIT=\"$base\" to make check-ai.",
+    "The existing check-ai-pr command continues to use the same temporary repository base.",
+    "The complete local quality and governance gates pass."
+  ],
+  "guidelines": [
+    "Keep CI commands explicit about the repository whose baseline they consume.",
+    "Do not weaken or remove the installed template's PR ownership gate.",
+    "Keep the change limited to the remaining temporary-repository smoke command."
+  ],
+  "intent": {
+    "problem": "N26 changed the workflow_dispatch check-ai call, but the installer smoke block has a separate make check-ai invocation that still runs without its temporary repository base.",
+    "constraints": ["Preserve source checkout environment isolation.", "Use the temporary repository's initial commit as the PR baseline."],
+    "rationale": "Passing the saved local base at the actual failing call makes the installed template smoke path complete its own PR gate."
+  },
+  "scenarioCoverage": [
+    {"scenario": "temporary repository check-ai uses local base", "required": true, "status": "verified", "evidence": ["The installer smoke command passes AI_BASE_COMMIT=\"$base\"."]},
+    {"scenario": "source baseline remains isolated", "required": true, "status": "verified", "evidence": ["The temporary repository subshell still unsets inherited AI_BASE_COMMIT."]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized continued remediation of remote CI blockers."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
