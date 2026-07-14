@@ -1,0 +1,152 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n28_installer_smoke_local_vs_pr_base",
+  "mode": "code",
+  "title": "分离安装 smoke 的本地与 PR 基线",
+  "baseCommit": "847a4a30d2eb24a5e098e62dcd4476cf0d119361",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/review_n28_installer_smoke_local_vs_pr_base.contract.json",
+    ".ai/work-items/active/review_n28_installer_smoke_local_vs_pr_base.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".github/workflows/smoke.yml",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": ["install.sh", "scripts/**", "tests/**", "release/**"],
+  "sources": [
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "The smoke workflow must separate local no-diff checks from the full PR diff audit."
+    },
+    {
+      "path": "Makefile.ai",
+      "reason": "check-ai and check-ai-pr consume different baseline semantics."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "ci_gate"
+    ],
+    "reason": "Initial skeleton; replace with task-specific implementation and review risks."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Remote evidence distinguishes local HEAD validation from the explicit PR base audit."
+  },
+  "preReviewWarnings": [
+    "Replace with task-specific review focus, or clear when no special review focus remains."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The temporary repository local check-ai invocation uses HEAD as its no-diff baseline.",
+    "The check-ai-pr invocation continues to use the temporary repository's initial commit.",
+    "The complete local quality and governance gates pass."
+  ],
+  "guidelines": [
+    "Keep local and PR baseline semantics explicit in CI commands.",
+    "Do not weaken or remove the installed template's PR ownership gate.",
+    "Keep the change limited to smoke-test baseline selection."
+  ],
+  "intent": {
+    "problem": "Passing the temporary repository's initial commit to local check-ai makes coverage guard inspect the whole installed template as a current change; local checks need HEAD while PR audit needs the initial commit.",
+    "constraints": ["Preserve source checkout environment isolation.", "Keep check-ai-pr against the pre-install commit."],
+    "rationale": "Explicitly separating the two baselines validates each gate against the repository state it is designed to inspect."
+  },
+  "scenarioCoverage": [
+    {"scenario": "local installed-repository check-ai", "required": true, "status": "verified", "evidence": ["The smoke command uses AI_BASE_COMMIT=HEAD to produce an empty local diff."]},
+    {"scenario": "PR ownership audit", "required": true, "status": "verified", "evidence": ["The smoke command keeps check-ai-pr AI_BASE_COMMIT=\"$base\"."]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized continued remediation of remote CI blockers."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
