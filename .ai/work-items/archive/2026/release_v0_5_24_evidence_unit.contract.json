@@ -1,0 +1,184 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_v0_5_24_evidence_unit",
+  "mode": "code",
+  "title": "建立 v0.5.24 不可变发布证据单元",
+  "baseCommit": "e8fb44d1dab4de5965913604f359f25d3ae453e8",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "511b3a82e3f269c207548807fa0c5fe1e4d76382226006ba3a1021bddca32388"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/release_v0_5_24_evidence_unit.contract.json",
+    ".ai/work-items/active/release_v0_5_24_evidence_unit.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "release.json",
+    "install.sh",
+    "tests/test_release_distribution.py",
+    "tests/test_supply_chain.py",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "scripts/**",
+    "docs/**",
+    ".github/**",
+    "requirements-dev.in",
+    "requirements-dev.lock"
+  ],
+  "sources": [
+    {
+      "path": "release.json",
+      "reason": "Declares the immutable release tag and digests for one published release unit."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Carries the release tag and provenance inputs consumed by distribution verification."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Regenerated SBOM must describe the exact release commit and remain digest-consistent."
+    },
+    {
+      "path": "requirements-dev.lock",
+      "reason": "Existing committed lock file is part of the release evidence unit and must remain digest-consistent."
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Defines the tag/worktree evidence consistency gate."
+    },
+    {
+      "path": "https://github.com/xinglun/ai-cockpit-template/actions",
+      "reason": "Remote workflow results provide post-push release and distribution verification."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_integrity", "immutable_evidence", "distribution_verification"],
+    "reason": "The change creates a new immutable release unit and must not rewrite the existing v0.5.23 tag."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The release mismatch is bounded: publish a new tag whose checked-in evidence matches its declared release tag."
+  },
+  "preReviewWarnings": [
+    "Confirm v0.5.23 remains unchanged, v0.5.24 contains the exact evidence files, and distribution validation inspects the tag rather than the working tree."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "release.json and .ai/cockpit/provenance.json declare v0.5.24.",
+    "The release digests match the committed lock, SBOM, and provenance files.",
+    "Annotated tag v0.5.24 is created from the release commit and pushed without modifying v0.5.23.",
+    "Local and remote distribution checks validate the v0.5.24 tag as one immutable evidence unit."
+  ],
+  "guidelines": [
+    "Do not rewrite or move historical release evidence.",
+    "Keep release metadata, generated evidence, and the immutable tag internally consistent."
+  ],
+  "intent": {
+    "problem": "The mainline CI smoke run rejects the current release declaration because release.json claims v0.5.23 while the updated supply-chain evidence belongs to the new mainline commit and cannot be retrofitted into the existing immutable tag.",
+    "constraints": ["Do not rewrite v0.5.23 or any historical archive.", "Do not weaken distribution checks.", "Publish the release files and tag from the same commit.", "Keep the Work Item archive immutable after completion."],
+    "rationale": "A new v0.5.24 evidence unit preserves release provenance and lets the distribution gate compare the tag contents against the declaration instead of accepting current-branch evidence as historical evidence."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Release metadata and evidence digest consistency", "required": true, "status": "verified", "evidence": ["Local supply-chain checks passed."]},
+    {"scenario": "Historical v0.5.23 remains immutable", "required": true, "status": "verified", "evidence": ["Remote v0.5.23 remains present and unchanged while v0.5.24 was added."]},
+    {"scenario": "Anonymous distribution verification against v0.5.24", "required": true, "status": "verified", "evidence": ["make check-release-distribution passed against the public v0.5.24 tag."]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized continued remediation, commit, tag, push, and release handling."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
