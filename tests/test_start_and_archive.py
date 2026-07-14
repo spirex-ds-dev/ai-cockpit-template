@@ -242,6 +242,10 @@ def test_archive_dry_run_and_successful_review_item(tmp_path, monkeypatch):
         any(str(part).endswith("ai_generate_status.py") for part in cmd) and "--no-active" in cmd
         for cmd in calls
     )
+    index = json.loads((archive / "index.json").read_text(encoding="utf-8"))
+    assert index["indexVersion"] == 1
+    assert index["entries"][0]["workItemId"] == "task"
+    assert index["entries"][0]["contractPath"].endswith("task.contract.json")
 
 
 def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
@@ -281,6 +285,10 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     )
     assert any(item["path"].endswith("task.review.json") for item in data["changedFiles"])
     assert any(item["path"] == ".ai/cockpit/current_status.md" for item in data["changedFiles"])
+    index = json.loads((archive / "index.json").read_text(encoding="utf-8"))
+    assert index["entries"][0]["summaryPath"].endswith("task.summary.json")
+    assert len(index["entries"][0]["contractSha256"]) == 64
+    assert len(index["entries"][0]["summarySha256"]) == 64
 
 
 def test_archive_rolls_back_when_status_regeneration_fails(tmp_path, monkeypatch):
@@ -306,6 +314,41 @@ def test_archive_rolls_back_when_status_regeneration_fails(tmp_path, monkeypatch
         return None
 
     monkeypatch.setattr(ai_archive_work_item.subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        ai_archive_work_item,
+        "create_observability",
+        lambda **_kwargs: type("Obs", (), {"record": lambda *_args, **_kwargs: None})(),
+    )
+    monkeypatch.setattr(sys, "argv", ["ai_archive_work_item.py", str(contract)])
+
+    assert ai_archive_work_item.main() == 1
+    assert contract.exists()
+    assert summary.exists()
+    assert not list(archive.glob("*/task.contract.json"))
+
+
+def test_archive_rolls_back_when_index_write_fails(tmp_path, monkeypatch):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    archive = tmp_path / ".ai" / "work-items" / "archive"
+    active.mkdir(parents=True)
+    contract = active / "task.contract.json"
+    summary = active / "task.summary.json"
+    contract.write_text(json.dumps(archive_contract("code")), encoding="utf-8")
+    summary.write_text(json.dumps(archive_summary()), encoding="utf-8")
+    monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_archive_work_item, "ARCHIVE_BASE_DIR", archive)
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_archive_work_item, "validate_contract", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr(ai_archive_work_item, "validate_summary", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr(
+        ai_archive_work_item, "_current_worktree_digest", lambda _contract: "a" * 64
+    )
+    monkeypatch.setattr(ai_archive_work_item.subprocess, "run", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(
+        ai_archive_work_item,
+        "_write_archive_index",
+        lambda _index: (_ for _ in ()).throw(OSError("disk full")),
+    )
     monkeypatch.setattr(
         ai_archive_work_item,
         "create_observability",
