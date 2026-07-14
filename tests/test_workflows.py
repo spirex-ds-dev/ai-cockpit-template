@@ -37,6 +37,11 @@ def test_release_workflow_is_exact_sha_and_action_dependency_free():
     assert "gh auth setup-git" in workflow
     assert 'git fetch --no-tags --quiet origin "${SOURCE_COMMIT}"' in workflow
     assert "smoke.yml" in workflow and "compatibility.yml" in workflow
+    assert "deadline=$((SECONDS + 900))" in workflow
+    assert 'any(.[]; .conclusion == "success")' in workflow
+    assert 'any(.[]; .status != "completed")' in workflow
+    assert "timed out waiting for ${workflow}" in workflow
+    assert "sleep 15" in workflow
     assert "gh release create" in workflow
     assert "gh workflow run smoke.yml" in workflow
     assert "actions/checkout" not in workflow

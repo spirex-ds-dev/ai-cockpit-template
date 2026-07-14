@@ -1,0 +1,179 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_gate_wait_for_checks",
+  "mode": "code",
+  "title": "release gate wait for checks",
+  "baseCommit": "6a2144c5c7465b053418e11f3ce82f527692e10b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".github/workflows/release.yml",
+    "tests/test_workflows.py",
+    ".ai/work-items/active/release_gate_wait_for_checks.contract.json",
+    ".ai/work-items/active/release_gate_wait_for_checks.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "Application source code, non-workflow tests, release metadata, Makefile, CI workflows other than release.yml, and GitHub release/tag creation outside this Work Item."
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "The failed release run checked required workflows before compatibility had completed."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Workflow behavior requires regression coverage for waiting and failure handling."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository workflow requires successful exact-SHA checks before release publication."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+      "riskTypes": [
+      "release_gate_timing"
+    ],
+    "reason": "The release gate must wait for exact-SHA required workflows without weakening their success requirement."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The task scope, evidence, acceptance, scenarios, and verification are explicit."
+  },
+  "preReviewWarnings": [
+    "Confirm the gate waits for exact-SHA required workflow completion and fails closed on failure or timeout."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "release.yml waits until smoke.yml and compatibility.yml for SOURCE_COMMIT finish before evaluating their conclusions.",
+    "The release gate publishes only when both exact-SHA workflows conclude success; failure and timeout stop publication.",
+    "tests/test_workflows.py verifies the wait loop, success condition, and fail-closed behavior.",
+    "The release workflow remains strict for tag identity, exact source SHA, and post-release smoke dispatch."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The release workflow can evaluate the exact-SHA prerequisite before the compatibility workflow has completed, causing a valid release attempt to fail prematurely.",
+    "constraints": [
+      "Do not bypass or downgrade required workflow checks.",
+      "Preserve exact source SHA and tag validation.",
+      "Keep the change limited to release workflow logic and its regression tests."
+    ],
+    "rationale": "Waiting for terminal conclusions makes the gate deterministic while preserving the existing fail-closed publication policy."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "smoke and compatibility are still running for the exact source SHA",
+      "required": true,
+      "status": "unverified",
+      "evidence": [".github/workflows/release.yml", "tests/test_workflows.py"]
+    },
+    {
+      "scenario": "both exact-SHA required workflows finish successfully",
+      "required": true,
+      "status": "unverified",
+      "evidence": [".github/workflows/release.yml", "tests/test_workflows.py"]
+    },
+    {
+      "scenario": "a required workflow fails or does not complete before timeout",
+      "required": true,
+      "status": "unverified",
+      "evidence": [".github/workflows/release.yml", "tests/test_workflows.py"]
+    }
+  ],
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly confirmed continuation after reviewing the release gate timing failure and approved the workflow adjustment."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
