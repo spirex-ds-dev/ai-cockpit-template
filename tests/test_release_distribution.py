@@ -11,6 +11,7 @@ from check_release_distribution import (
     exercise_installer,
     exercise_public_distribution,
     highest_semver_tag,
+    is_next_patch_release,
 )
 
 
@@ -257,6 +258,13 @@ def test_public_repository_override_is_honored(monkeypatch):
     finally:
         monkeypatch.delenv("AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY", raising=False)
         importlib.reload(release_distribution)
+
+
+def test_release_preparation_accepts_only_next_patch_release():
+    assert is_next_patch_release("v0.5.25", "v0.5.24")
+    assert not is_next_patch_release("v0.6.0", "v0.5.24")
+    assert not is_next_patch_release("v0.5.27", "v0.5.24")
+    assert not is_next_patch_release("0.5.25", "v0.5.24")
 
 
 def test_list_remote_tags_runs_outside_repo_root(monkeypatch):
