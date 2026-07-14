@@ -1,0 +1,432 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "review_n17_docs_e2e_contract",
+  "contractPath": ".ai/work-items/archive/2026/review_n17_docs_e2e_contract.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/review_n17_docs_e2e_contract.contract.json",
+      "reason": "Declares documentation, installer routing, and upgrade compatibility acceptance."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/review_n17_docs_e2e_contract.summary.json",
+      "reason": "Records documentation and executable contract verification."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated Cockpit status for the active Work Item lifecycle."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Accepts complete public mirror URLs in addition to owner/repo shorthand."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Rejects release semver downgrades before target writes."
+    },
+    {
+      "path": ".ai/cockpit/version.json",
+      "reason": "Records the managed runtime release semver."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Regenerated installer digest evidence after the shell installer routing change."
+    },
+    {
+      "path": "release.json",
+      "reason": "Updates the provenance evidence digest declared by the release metadata."
+    },
+    {
+      "path": "README.md",
+      "reason": "Passes the configured public repository to the installer."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Aligns Chinese Quick Install variables with the executable contract."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Aligns Japanese Quick Install variables with the executable contract."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Documents actual no-active status command behavior."
+    },
+    {
+      "path": "docs/reference/upgrade.md",
+      "reason": "Documents release semver downgrade protection and repository routing."
+    },
+    {
+      "path": "tests/test_install_sh.py",
+      "reason": "Verifies custom mirror URL routing in the shell installer."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Verifies release semver downgrade rejection before writes."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Verifies multilingual Quick Install and documentation behavior contracts."
+    }
+  ],
+  "sourcesUsed": [
+    "install.sh",
+    "scripts/install_ai_cockpit.py",
+    ".ai/cockpit/version.json",
+    "README.md",
+    "README.zh-CN.md",
+    "README.ja.md",
+    "docs/getting-started/installation.md",
+    "docs/reference/upgrade.md",
+    "tests/test_install_sh.py",
+    "tests/test_installer.py",
+    "tests/test_docs_metadata.py",
+    "docs/review-remediation-backlog.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:05:23.640854+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "bd877bc366fc0c0e0275f4f0449629b4770bfb967b6d0887fddb653b1cee20d5",
+      "commandHash": "e5e8810a0fda31d407549e64cab57d247f08f0451cd0c64230fd7b7b1b4f4194",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "3682df899264ef06d73ead69a03c7f3454239ab1d26c25358a0dcb00d11894dc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/review_n17_docs_e2e_contract.contract.json work item contract check passed: .ai/work-items/active/review_n17_docs_e2e_contract.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:05:23.799716+00:00",
+      "exitCode": 0,
+      "durationMs": 104,
+      "outputDigest": "79e221ce3224f5eb22e344c1958365f7c39164357843fc96e60d89d3c25ca25c",
+      "commandHash": "e35bb0b1669ce183894d025763cdc5712539d5a36349e311869442fa8567d122",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "3682df899264ef06d73ead69a03c7f3454239ab1d26c25358a0dcb00d11894dc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/review_n17_docs_e2e_contract.contract.json scope guard passed: 14 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:05:23.979035+00:00",
+      "exitCode": 0,
+      "durationMs": 122,
+      "outputDigest": "df70be701871ef6570335af65ae14de050ecb13386e9e5d22a5c616ebe149a49",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "3682df899264ef06d73ead69a03c7f3454239ab1d26c25358a0dcb00d11894dc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/review_n17_docs_e2e_contract.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/version.json (.ai/**) - AI governance configuration. guard check completed: 2 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/review_n17_docs_e2e_contract.contract.json SUMMARY=.ai/work-items/active/review_n17_docs_e2e_contract.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:05:24.256565+00:00",
+      "exitCode": 0,
+      "durationMs": 224,
+      "outputDigest": "9f7679f66d6f2eb118b80b598aeecd54a9ba4449631b1d6a8c06d9ef419358f2",
+      "commandHash": "8bc0c94eb2ae37c5794873e0e71cc3c48f1582f7276ab78b02bdddca52853f5a",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "3682df899264ef06d73ead69a03c7f3454239ab1d26c25358a0dcb00d11894dc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/review_n17_docs_e2e_contract.contract.json --summary .ai/work-items/active/review_n17_docs_e2e_contract.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `review_n17_docs_e2e_contract` - Contract Hash: `7c0ec2c756263a4b` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Required C"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:05:24.420589+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "ea54e8868ed5ffe58213b80af40a469c72e3def4e5f89cd2fa48b027ffcd6a89",
+      "commandHash": "c499534ffb37d1746680b66007e7ce017e55e271f5adf8957015edb9d2cd9fa6",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "3682df899264ef06d73ead69a03c7f3454239ab1d26c25358a0dcb00d11894dc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/review_n17_docs_e2e_contract.summary.json review policy matched 3 path(s) [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/version.json review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:05:24.589197+00:00",
+      "exitCode": 0,
+      "durationMs": 120,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "3682df899264ef06d73ead69a03c7f3454239ab1d26c25358a0dcb00d11894dc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:05:24.735668+00:00",
+      "exitCode": 0,
+      "durationMs": 96,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "3682df899264ef06d73ead69a03c7f3454239ab1d26c25358a0dcb00d11894dc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/review_n17_docs_e2e_contract.contract.json SUMMARY=.ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:05:24.837996+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "70a1e2a74677a234e1ba6581225de7b0654d89bd44125cc6513bb0f2bc19136d",
+      "commandHash": "d99ade2228b533f93ee20b5a7aef37bf3f07dc105906d1215d85419b94236a1b",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "3682df899264ef06d73ead69a03c7f3454239ab1d26c25358a0dcb00d11894dc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/review_n17_docs_e2e_contract.contract.json --summary .ai/work-items/active/review_n17_docs_e2e_contract.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/review_n17_docs_e2e_contract.contract.json SUMMARY=.ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:05:24.937986+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "dd6e876262c5385f758d4adc50832dc8d4d84fc464426025b1be0d8f3777bcc1",
+      "commandHash": "82164445ad0f6796af90fd408b2e2b678f139bac52663afd5ff6447384af5d0f",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "3682df899264ef06d73ead69a03c7f3454239ab1d26c25358a0dcb00d11894dc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/review_n17_docs_e2e_contract.contract.json --summary .ai/work-items/active/review_n17_docs_e2e_contract.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:05:25.202575+00:00",
+      "exitCode": 0,
+      "durationMs": 212,
+      "outputDigest": "07d6edeb8a9964f718ef1de72815eb7ec8cc0513761c87847811564b348bcd6d",
+      "commandHash": "eee308d7f8b1b0bfc476613baf5c86920cd734c947e20a92b5db1784dc70f407",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "3682df899264ef06d73ead69a03c7f3454239ab1d26c25358a0dcb00d11894dc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/review_n17_docs_e2e_contract.contract.json ## Diff Ownership Preview - active_owned: `14`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/version.json` — covered"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:06:24.158774+00:00",
+      "exitCode": 0,
+      "durationMs": 58902,
+      "outputDigest": "44e06dc85176f7948e57c728d91d191cbd859c09e640425a90182bfc135de7c2",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "3682df899264ef06d73ead69a03c7f3454239ab1d26c25358a0dcb00d11894dc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 88 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=80 ........................................................................ [ 18%] ........................................................................ [ 36%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/review_n17_docs_e2e_contract.contract.json SUMMARY=.ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:06:25.500018+00:00",
+      "exitCode": 0,
+      "durationMs": 234,
+      "outputDigest": "c476096f745d5ca91260697d8b5839d7ddf8645f2ca143adfce87fcd03af07ef",
+      "commandHash": "44592a067bb829c8e7d6b6f0c8769c79ede234169dce8c2621fa5efcccd6f997",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "493197080a53524f66fb41b67a954941ad0189f7588d8e5f62c184eaeea1f44e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/review_n17_docs_e2e_contract.contract.json --summary .ai/work-items/active/review_n17_docs_e2e_contract.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/review_n17_docs_e2e_contract.contract.json SUMMARY=.ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:06:25.761483+00:00",
+      "exitCode": 0,
+      "durationMs": 212,
+      "outputDigest": "19262a464a16beb8c58cbd6b780db1493adb2841ecfb83e854f1935d1554b97a",
+      "commandHash": "cf33c6512c93e6e55e7cf016563721593755e433d90cf344e6611fe0401e49bd",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "493197080a53524f66fb41b67a954941ad0189f7588d8e5f62c184eaeea1f44e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/review_n17_docs_e2e_contract.contract.json --summary .ai/work-items/active/review_n17_docs_e2e_contract.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:06:25.868184+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "493197080a53524f66fb41b67a954941ad0189f7588d8e5f62c184eaeea1f44e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/review_n17_docs_e2e_contract.contract.json SUMMARY=.ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:06:25.971009+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "2bd6ed05ecfc5ae494c262667a8bbf37b1dea50229b7a7149e63407e937b8a20",
+      "commandHash": "5fef9cbdfff087711f7711d6d883cbc2d1c2020acfa492ac71afab3ed4cc64c1",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "493197080a53524f66fb41b67a954941ad0189f7588d8e5f62c184eaeea1f44e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/review_n17_docs_e2e_contract.contract.json --summary .ai/work-items/active/review_n17_docs_e2e_contract.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/review_n17_docs_e2e_contract.summary.json CONTRACT=.ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-14T00:06:26.128948+00:00",
+      "exitCode": 0,
+      "durationMs": 105,
+      "outputDigest": "ff6f2714e41e6fe608d97ecb98a654d6ec9f517519b6d4c3b89bab139b9fe729",
+      "commandHash": "6edb10d770856b384d7dbb9d7f44672ffa2a75a8e68daa4c7d4d30fe2fb8387f",
+      "contractHash": "7c0ec2c756263a4bf0702ee7d2f4f85f19ac1f89aec95e185a107f7c7afe3c84",
+      "commitSha": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+      "executionContractPath": ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+      "worktreeDigest": "493197080a53524f66fb41b67a954941ad0189f7588d8e5f62c184eaeea1f44e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/review_n17_docs_e2e_contract.summary.json --contract .ai/work-items/active/review_n17_docs_e2e_contract.contract.json ai summary check passed: .ai/work-items/active/review_n17_docs_e2e_contract.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "The installer behavior and documentation changes are covered by executable tests; no undocumented public API is introduced."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The change uses existing installer boundaries and adds no cross-feature internal imports."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Documentation examples, installer routing, and release semver checks are covered by focused executable tests; public release publication remains a separate external action."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "release_publication",
+      "detail": "The documented routing is correct locally, but a public mirror still needs a published immutable release unit before anonymous distribution approval.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Verify the three language Quick Install examples remain executable and route the same configured repository.",
+      "Verify release semver downgrade rejection occurs before writes."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "7c0ec2c756263a4b",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Confirmed installer routing, status output, semver, and multilingual documentation scenarios before editing."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "7c0ec2c756263a4b",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Recorded after 57 focused tests passed; full lifecycle checks follow."
+    }
+  ],
+  "knownGaps": [
+    "The published release tag still requires an external immutable evidence-unit republish for anonymous distribution approval."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified."
+}

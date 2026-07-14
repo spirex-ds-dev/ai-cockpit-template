@@ -20,13 +20,14 @@ test "$TARGET_VERSION" != "$CURRENT_VERSION"
 INSTALLER="$(mktemp)"
 trap 'rm -f "$INSTALLER"' EXIT
 curl -fsSL "${AI_COCKPIT_TEMPLATE_RAW_BASE:?set AI_COCKPIT_TEMPLATE_RAW_BASE to the matching raw-content base}/$TARGET_VERSION/install.sh" -o "$INSTALLER"
+AI_COCKPIT_TEMPLATE_REPO="${AI_COCKPIT_TEMPLATE_REPO:?set AI_COCKPIT_TEMPLATE_REPO to the release source}" \
 AI_COCKPIT_TEMPLATE_REF="$TARGET_VERSION" \
   sh "$INSTALLER" --upgrade --stack rust
 ```
 
 Replace the example repository with the real release source for your installation. If you are upgrading a mirrored or private deployment, point the installer at that configured source instead of the public example.
 
-The installer rejects distribution or Contract-schema downgrades. Never set `TARGET_VERSION` lower than the version recorded in the installed `.ai/cockpit/version.json`.
+The installer rejects distribution, Contract-schema, or release semver downgrades. Never set `TARGET_VERSION` lower than the release semver recorded in the installed `.ai/cockpit/version.json`.
 
 By default, upgrade stops before writing if `.ai/work-items/active/` contains Work Item JSON. Finish and archive the active task first. `--upgrade-with-active` is an explicit high-risk override for recovery scenarios where changing governance semantics during a task is intentional.
 

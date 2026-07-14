@@ -99,13 +99,16 @@ Cockpit が更新される。
 ```sh
 ADOPTION_BASE="$(git rev-parse HEAD)"
 STACK="${STACK:-generic}" # generic、python、go、rust、typescript、java、android、kotlin、flutter、swift、ruby、php、csharp
-PUBLIC_REPOSITORY="${AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY:-https://github.com/<owner>/<repo>.git}"
-RAW_BASE="${AI_COCKPIT_TEMPLATE_RAW_BASE:-https://raw.githubusercontent.com/<owner>/<repo>}"
+: "${AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY:?このリリースの公開 Git remote を設定してください}"
+: "${AI_COCKPIT_TEMPLATE_RAW_BASE:?対応する raw-content base を設定してください}"
+PUBLIC_REPOSITORY="$AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY"
+RAW_BASE="$AI_COCKPIT_TEMPLATE_RAW_BASE"
 RELEASE_TAG="$(curl -fsSL "${RAW_BASE}/main/release.json" 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin)["releaseTag"])' 2>/dev/null || git ls-remote --tags --refs "$PUBLIC_REPOSITORY" 'v*' | python3 -c 'import re,sys; tags=[m.group(1) for line in sys.stdin for m in [re.search(r"refs/tags/(v\d+\.\d+\.\d+)$", line)] if m]; print(max(tags, key=lambda tag: tuple(map(int, tag[1:].split(".")))))')"
 INSTALLER="$(mktemp)"
 trap 'rm -f "$INSTALLER"' EXIT
 curl -fsSL "${RAW_BASE}/${RELEASE_TAG}/install.sh" -o "$INSTALLER"
-AI_COCKPIT_TEMPLATE_REF="$RELEASE_TAG" sh "$INSTALLER" --stack "$STACK" --update-makefile --create-adoption
+AI_COCKPIT_TEMPLATE_REPO="$PUBLIC_REPOSITORY" \
+  AI_COCKPIT_TEMPLATE_REF="$RELEASE_TAG" sh "$INSTALLER" --stack "$STACK" --update-makefile --create-adoption
 make ai-finish TASK=adopt_ai_cockpit
 git add .
 git commit -m "adopt AI Cockpit governance"

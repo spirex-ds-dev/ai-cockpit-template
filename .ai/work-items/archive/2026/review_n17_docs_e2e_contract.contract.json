@@ -1,0 +1,232 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n17_docs_e2e_contract",
+  "mode": "code",
+  "title": "对齐安装升级文档与真实行为",
+  "baseCommit": "c9db9e0251233944b9f36a4a8f4c5b5811757f4b",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "28d68e551368eb19bf0c9b23b4c9dd0b6fc54b499790896844b4bcba69772cad"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/review_n17_docs_e2e_contract.contract.json",
+    ".ai/work-items/active/review_n17_docs_e2e_contract.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**",
+    "install.sh",
+    "scripts/install_ai_cockpit.py",
+    ".ai/cockpit/version.json",
+    ".ai/cockpit/provenance.json",
+    "release.json",
+    "README.md",
+    "README.zh-CN.md",
+    "README.ja.md",
+    "docs/getting-started/installation.md",
+    "docs/reference/upgrade.md",
+    "tests/test_install_sh.py",
+    "tests/test_installer.py",
+    "tests/test_docs_metadata.py"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "install.sh",
+      "reason": "Remote installer currently defaults clone source independently from the public repository used by Quick Install."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Upgrade preflight compares schema integers but does not compare release semver."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Installer digest must be regenerated when the managed installer changes."
+    },
+    {
+      "path": "release.json",
+      "reason": "Release metadata must point to the regenerated provenance evidence digest."
+    },
+    {
+      "path": "README.md",
+      "reason": "English Quick Install contract and explicit public repository variables."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Chinese Quick Install uses placeholder defaults and omits installer repository propagation."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Japanese Quick Install uses placeholder defaults and omits installer repository propagation."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Installation docs describe status output and Quick Install behavior."
+    },
+    {
+      "path": "docs/reference/upgrade.md",
+      "reason": "Upgrade docs promise semver downgrade protection."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Existing installer upgrade behavior tests."
+    },
+    {
+      "path": "tests/test_install_sh.py",
+      "reason": "Remote installer shell contract tests."
+    },
+    {
+      "path": "docs/review-remediation-backlog.md",
+      "reason": "Defines documentation and executable end-to-end acceptance requirements."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "documentation_contract_drift",
+      "upgrade_safety",
+      "distribution_routing"
+    ],
+    "reason": "Users may install from the wrong repository or accept a lower release if documentation and implementation disagree; fixes must preserve backward-compatible local source behavior."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A custom public repository configured in Quick Install is propagated to the tagged installer source selection.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Upgrade rejects a lower release semver before writing while preserving existing distribution and schema downgrade guards.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "English, Chinese, and Japanese Quick Install examples expose equivalent executable variables and status semantics.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The reported mismatches are reproducible from local docs and installer behavior and can be closed with implementation and executable tests."
+  },
+  "preReviewWarnings": [
+    "Verify all three language quick-install examples pass the public repository through to the installer and that lower release semver is rejected before writes."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Quick Install passes the configured public repository through to the installer and supports custom mirrors.",
+    "No-active status documentation matches the actual check-ai-status output.",
+    "Upgrade rejects lower release semver before modifying the target.",
+    "English, Chinese, and Japanese Quick Install examples are executable and semantically consistent."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Documentation claims custom public repository routing, no-active status output, semver downgrade protection, and multilingual executable parity that the current installer and examples do not consistently implement.",
+    "constraints": [
+      "Preserve explicit local source and repository overrides for existing installations.",
+      "Reject unsafe upgrades before any target files are written.",
+      "Keep documentation examples free of machine-specific or private repository values."
+    ],
+    "rationale": "Treating documentation examples as executable contracts exposes routing and upgrade drift before users encounter it and makes the three language entry points operationally equivalent."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly requested the remediation loop to continue until all listed review blockers are completed."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

@@ -61,7 +61,14 @@ trap cleanup EXIT
 if [ -z "$SOURCE" ]; then
   TMPDIR_AI_COCKPIT=$(mktemp -d)
   SOURCE="$TMPDIR_AI_COCKPIT/source"
-  URL="https://github.com/$REPO.git"
+  case "$REPO" in
+    http://*|https://*|git@*)
+      URL="$REPO"
+      ;;
+    *)
+      URL="https://github.com/$REPO.git"
+      ;;
+  esac
   echo "Cloning AI Cockpit template from $URL at $REF"
   if ! command -v git >/dev/null 2>&1; then
     echo "ERROR: git is required for remote install." >&2

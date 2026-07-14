@@ -24,6 +24,24 @@ def test_repository_documentation_metadata_is_consistent():
     assert check_repository(ROOT) == []
 
 
+def test_quick_install_examples_match_installer_contract():
+    for name in ("README.md", "README.zh-CN.md", "README.ja.md"):
+        text = (ROOT / name).read_text(encoding="utf-8")
+        assert 'AI_COCKPIT_TEMPLATE_REPO="$PUBLIC_REPOSITORY"' in text
+        assert "AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY" in text
+        if name != "README.md":
+            assert "<owner>/<repo>" not in text
+
+    installation = (ROOT / "docs" / "getting-started" / "installation.md").read_text(
+        encoding="utf-8"
+    )
+    assert "Skipping status check (no active contract/summary provided)" in installation
+    assert "check-ai-status-consistency" in installation
+
+    upgrade = (ROOT / "docs" / "reference" / "upgrade.md").read_text(encoding="utf-8")
+    assert "release semver" in upgrade
+
+
 def test_check_rejects_supported_stack_drift(tmp_path):
     copy_documentation(tmp_path)
     readme = tmp_path / "README.md"

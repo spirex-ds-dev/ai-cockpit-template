@@ -743,26 +743,53 @@ class Installer:
 
         if target_version is not None:
             for key in ("distributionVersion", "contractSchema"):
-                if source_version[key] < target_version[key]:
+                source_value = source_version[key]
+                target_value = target_version[key]
+                if not isinstance(source_value, int) or not isinstance(target_value, int):
+                    raise ValueError(f"version metadata {key} must remain an integer")
+                if source_value < target_value:
                     print(
-                        f"ERROR: refusing {key} downgrade from {target_version[key]} "
-                        f"to {source_version[key]}",
+                        f"ERROR: refusing {key} downgrade from {target_value} to {source_value}",
+                        file=sys.stderr,
+                    )
+                    return False
+            source_release = source_version.get("releaseVersion")
+            target_release = target_version.get("releaseVersion")
+            if isinstance(source_release, str) and isinstance(target_release, str):
+                if self.release_semver(source_release) < self.release_semver(target_release):
+                    print(
+                        f"ERROR: refusing releaseVersion downgrade from {target_release} "
+                        f"to {source_release}",
                         file=sys.stderr,
                     )
                     return False
         return True
 
     @staticmethod
-    def load_version(path: Path) -> dict[str, int]:
+    def release_semver(value: str) -> tuple[int, int, int]:
+        match = re.fullmatch(r"v?(\d+)\.(\d+)\.(\d+)", value)
+        if not match:
+            raise ValueError(f"releaseVersion must be semantic version: {value!r}")
+        major, minor, patch = (int(part) for part in match.groups())
+        return major, minor, patch
+
+    @staticmethod
+    def load_version(path: Path) -> dict[str, int | str]:
         data = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(data, dict):
             raise ValueError(f"{path}: root must be a JSON object")
-        result: dict[str, int] = {}
+        result: dict[str, int | str] = {}
         for key in ("distributionVersion", "contractSchema"):
             value = data.get(key)
             if not isinstance(value, int) or isinstance(value, bool) or value < 1:
                 raise ValueError(f"{path}: {key} must be a positive integer")
             result[key] = value
+        release_version = data.get("releaseVersion")
+        if release_version is not None:
+            if not isinstance(release_version, str):
+                raise ValueError(f"{path}: releaseVersion must be a string")
+            Installer.release_semver(release_version)
+            result["releaseVersion"] = release_version
         return result
 
     def record(self, kind: str, path: Path, detail: str) -> None:

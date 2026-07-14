@@ -86,7 +86,7 @@ git commit -m "adopt AI Cockpit governance"
 make check-ai-pr AI_BASE_COMMIT='<pre-adoption-commit>'
 ```
 
-The installer-generated Work Item owns every file actually written or appended by installation. It keeps project quality configuration as an explicit follow-up rather than recording temporary stand-in commands as passed. `--create-adoption` fails before writing unless the repository has an initial commit, a clean worktree, and no active Work Item. `make check-ai-status` should report no active adoption Work Item before you move on.
+The installer-generated Work Item owns every file actually written or appended by installation. It keeps project quality configuration as an explicit follow-up rather than recording temporary stand-in commands as passed. `--create-adoption` fails before writing unless the repository has an initial commit, a clean worktree, and no active Work Item. When called without Contract and Summary arguments, `make check-ai-status` prints `Skipping status check (no active contract/summary provided)`. Use `make check-ai-status-consistency` to verify the generated no-active status before you move on.
 
 ### Local Calibration Checklist
 
@@ -170,7 +170,7 @@ make check-ai-status
 make check-ai-status-consistency
 ```
 
-If those commands succeed, the installation is operational rather than merely copied. `make check-ai-status` should show that no active adoption Work Item remains, and `make check-ai-status-consistency` should confirm the generated status matches the Work Item records.
+If those commands succeed, the installation is operational rather than merely copied. The no-active status is validated by `make check-ai-status-consistency`; `make check-ai-status` only validates an active Contract/Summary pair when those arguments are supplied.
 
 <!-- public-quality-target: ai-cockpit-quality -->
 

@@ -14,3 +14,5 @@ def test_remote_archive_url_supports_branch_tag_and_sha_refs():
         'EXPECTED_SHA256="${AI_COCKPIT_TEMPLATE_SHA256:-01edf23ddf7a6af55d8c3e0d6065ab61f391a799af496cd934e7aa390ce093b4}"'
         in script
     )
+    assert "http://*|https://*|git@*)" in script
+    assert 'URL="$REPO"' in script

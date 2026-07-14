@@ -688,6 +688,37 @@ def test_upgrade_rejects_distribution_downgrade_before_writing(tmp_path):
     assert not (target / ".ai" / "cockpit" / "upgrade-backups").exists()
 
 
+def test_upgrade_rejects_release_semver_downgrade_before_writing(tmp_path):
+    source = tmp_path / "source"
+    target = tmp_path / "target"
+    (source / ".ai" / "cockpit").mkdir(parents=True)
+    (target / ".ai" / "cockpit").mkdir(parents=True)
+    (source / ".ai" / "cockpit" / "version.json").write_text(
+        json.dumps({"distributionVersion": 2, "contractSchema": 2, "releaseVersion": "0.5.22"}),
+        encoding="utf-8",
+    )
+    target_version = target / ".ai" / "cockpit" / "version.json"
+    target_version.write_text(
+        json.dumps({"distributionVersion": 2, "contractSchema": 2, "releaseVersion": "0.5.23"}),
+        encoding="utf-8",
+    )
+
+    upgrade = Installer(
+        source=source,
+        target=target,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=False,
+        upgrade=True,
+    )
+
+    assert upgrade.install() == 2
+    assert json.loads(target_version.read_text(encoding="utf-8"))["releaseVersion"] == "0.5.23"
+    assert not (target / ".ai" / "cockpit" / "upgrade-backups").exists()
+
+
 def test_upgrade_rejects_malformed_source_version_before_writing(tmp_path):
     source = tmp_path / "source"
     target = tmp_path / "target"
