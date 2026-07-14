@@ -1,0 +1,214 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_v0_5_25",
+  "mode": "code",
+  "title": "发布 AI Cockpit v0.5.25",
+  "baseCommit": "39698ea3b455b24bdda4616901f6cd2bfdb0e6f4",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release_v0_5_25.contract.json",
+    ".ai/work-items/active/release_v0_5_25.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**",
+    "release.json",
+    "install.sh",
+    "docs/reference/distribution.md",
+    "tests/test_release_distribution.py",
+    "tests/test_supply_chain.py",
+    "tests/test_workflows.py",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json"
+  ],
+  "outOfScope": [
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "examples/**",
+    "scripts/**",
+    ".github/**",
+    "Makefile",
+    "requirements*.txt",
+    "src/**",
+    "src_go/**",
+    "src_rust/**",
+    "src_typescript/**",
+    "tags and GitHub Release publication before the release Work Item is verified"
+  ],
+  "sources": [
+    {
+      "path": "release.json",
+      "reason": "Canonical public release metadata and supply-chain evidence digests."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Default installer reference that must point to the new immutable release tag."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Release workflow requires an exact verified main SHA and matching release.json tag."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Public release distribution contract and historical-tag boundary."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository Work Item and verification requirements."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_metadata_drift",
+      "release_evidence_mismatch"
+    ],
+    "reason": "A new immutable release must keep canonical metadata, installer defaults, and exact-SHA release evidence aligned without rewriting historical evidence."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Release target, scope, evidence sources, and verification are explicit."
+  },
+  "preReviewWarnings": [
+    "Review that v0.5.25 is the only new release reference, v0.5.24 historical fixtures remain unchanged, and release evidence remains exact-SHA based."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "release.json has releaseTag exactly equal to v0.5.25 and preserves the existing publicContract, capabilities, and supplyChain evidence fields.",
+    "install.sh defaults and help text plus the release distribution documentation reference v0.5.25 consistently, while historical fixtures remain unchanged.",
+    "The exact source commit is origin/main at 39698ea3b455b24bdda4616901f6cd2bfdb0e6f4, and the repository passes the declared local quality and release-distribution checks before publication.",
+    "The release workflow can publish only a new immutable v0.5.25 tag after successful exact-SHA smoke and compatibility Actions runs."
+  ],
+  "guidelines": [
+    "Treat release.json as the canonical release version and keep the installer default synchronized with it.",
+    "Do not rewrite historical release tags, fixtures, or evidence records.",
+    "Treat GitHub Actions as the authoritative compatibility validation for the exact main commit."
+  ],
+  "intent": {
+    "problem": "The merged trust-positioning documentation is on main, but the canonical release metadata and installer default still identify v0.5.24.",
+    "constraints": [
+      "Release v0.5.25 from the merged main commit only after local governance and quality checks pass.",
+      "Keep the Work Item documentation-only changes and historical v0.5.24 evidence intact.",
+      "Do not publish the tag until the branch is merged and post-merge Actions are successful."
+    ],
+    "rationale": "A separate release Work Item makes the new version a complete, auditable metadata and exact-SHA publication unit."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "canonical release metadata and installer default identify v0.5.25",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "historical v0.5.24 evidence and fixtures remain unchanged",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "local release checks pass for the exact merged main source commit",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "post-merge Actions provide successful exact-SHA smoke and compatibility evidence before publication",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly confirmed the new-version release workflow; generated SBOM, provenance, and release-digest evidence are required for that release."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

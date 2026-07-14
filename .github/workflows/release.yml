@@ -71,3 +71,6 @@ jobs:
             --target "$SOURCE_COMMIT" \
             --title "$RELEASE_TAG" \
             --generate-notes
+
+      - name: Dispatch strict post-release smoke verification
+        run: gh workflow run smoke.yml --repo "$GITHUB_REPOSITORY" --ref main

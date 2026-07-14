@@ -93,6 +93,20 @@ def highest_semver_tag(refs: str) -> str:
     return max(tags, key=lambda tag: tuple(int(part) for part in tag[1:].split(".")))
 
 
+def is_next_patch_release(candidate: str, published: str) -> bool:
+    """Return whether *candidate* is exactly one patch after *published*."""
+    pattern = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
+    candidate_match = pattern.fullmatch(candidate)
+    published_match = pattern.fullmatch(published)
+    if not candidate_match or not published_match:
+        return False
+    candidate_parts = tuple(int(part) for part in candidate_match.groups())
+    published_parts = tuple(int(part) for part in published_match.groups())
+    return (
+        candidate_parts[:2] == published_parts[:2] and candidate_parts[2] == published_parts[2] + 1
+    )
+
+
 def file_digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -484,9 +498,22 @@ def main() -> int:
     supported = metadata["capabilities"]["sha256ArchiveVerification"]
     quality_target = metadata["publicContract"]["projectQualityTarget"]
     local_source = os.environ.get("AI_COCKPIT_TEMPLATE_SOURCE")
+    preparation_mode = os.environ.get("AI_RELEASE_PREPARATION") == "1"
     try:
         latest_tag = highest_semver_tag(list_remote_tags(PUBLIC_REPOSITORY))
         if tag != latest_tag:
+            if preparation_mode and is_next_patch_release(tag, latest_tag):
+                if supply_chain_issues(metadata):
+                    raise RuntimeError("release-preparation evidence does not match local metadata")
+                exercise_installer(
+                    (ROOT / "install.sh").read_bytes(),
+                    tag=tag,
+                    sha256_supported=supported,
+                )
+                print(
+                    f"release distribution check pending publication: {tag} follows public {latest_tag}"
+                )
+                return 0
             raise RuntimeError(
                 f"release.json points to {tag}, but highest public tag is {latest_tag}"
             )

@@ -11,6 +11,7 @@ from check_release_distribution import (
     exercise_installer,
     exercise_public_distribution,
     highest_semver_tag,
+    is_next_patch_release,
 )
 
 
@@ -211,11 +212,11 @@ def test_release_distribution_fails_closed_on_supply_chain_drift(monkeypatch, tm
 
 def test_main_rejects_tag_missing_evidence_even_when_worktree_has_it(monkeypatch, capsys):
     metadata = json.loads(release_distribution.RELEASE.read_text(encoding="utf-8"))
-    metadata["releaseTag"] = "v0.5.24"
+    metadata["releaseTag"] = "v0.5.25"
     monkeypatch.setattr(
         release_distribution,
         "list_remote_tags",
-        lambda _repository: "a refs/tags/v0.5.24\n",
+        lambda _repository: "a refs/tags/v0.5.25\n",
     )
     monkeypatch.setattr(
         release_distribution,
@@ -257,6 +258,13 @@ def test_public_repository_override_is_honored(monkeypatch):
     finally:
         monkeypatch.delenv("AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY", raising=False)
         importlib.reload(release_distribution)
+
+
+def test_release_preparation_accepts_only_next_patch_release():
+    assert is_next_patch_release("v0.5.25", "v0.5.24")
+    assert not is_next_patch_release("v0.6.0", "v0.5.24")
+    assert not is_next_patch_release("v0.5.27", "v0.5.24")
+    assert not is_next_patch_release("0.5.25", "v0.5.24")
 
 
 def test_list_remote_tags_runs_outside_repo_root(monkeypatch):

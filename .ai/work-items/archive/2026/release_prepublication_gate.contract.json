@@ -1,0 +1,208 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_prepublication_gate",
+  "mode": "code",
+  "title": "解除发布前公开 tag 检查的循环依赖",
+  "baseCommit": "31ef2ab9f8c1f0ec91c8df74367b5262264ac973",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release_prepublication_gate.contract.json",
+    ".ai/work-items/active/release_prepublication_gate.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**",
+    ".github/workflows/smoke.yml",
+    ".github/workflows/release.yml",
+    "scripts/check_release_distribution.py",
+    "tests/test_release_distribution.py",
+    "tests/test_workflows.py",
+    "docs/reference/distribution.md"
+  ],
+  "outOfScope": [
+    "release.json",
+    "install.sh",
+    "scripts/check_supply_chain.py",
+    "tests/** except tests/test_release_distribution.py and tests/test_workflows.py",
+    "product code and installer behavior"
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Current required smoke gate that fails before a new public tag exists."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Exact-SHA publication workflow that creates the tag after merge."
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Public release distribution checker and its current tag-precondition behavior."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Regression coverage for release distribution and tag validation."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Documented PR-first release sequence and public distribution contract."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository Work Item, verification, and no-bypass governance requirements."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_gate_cycle",
+      "workflow_regression"
+    ],
+    "reason": "The required smoke check currently demands a public tag before the PR that creates its release metadata can merge; the exception must remain narrow and preserve strict post-publication validation."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The release-preparation exception, exact next-version rule, and post-publication verification are explicit."
+  },
+  "preReviewWarnings": [
+    "Review that only an exact next patch release is allowed in preparation mode, normal public checks remain strict, and release publication dispatches a post-release smoke verification."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A release-preparation check accepts exactly the next patch tag when it is not yet public, while rejecting non-next or malformed tag mismatches.",
+    "Normal public distribution validation remains strict and still verifies the published tag metadata, evidence, installer behavior, and public contract.",
+    "Required smoke workflow runs use the narrow release-preparation mode only for release branches or the corresponding main push; the post-publication smoke run uses strict mode.",
+    "The release workflow dispatches a strict smoke verification after creating the exact-SHA GitHub Release, and documentation explains the two-phase sequence.",
+    "Regression tests, governance checks, and project quality checks pass without changing release metadata or installer behavior."
+  ],
+  "guidelines": [
+    "Do not bypass required checks; make the pre-publication state explicit and narrowly scoped.",
+    "Keep public tag, release evidence, and installer validation strict after publication.",
+    "Keep the release workflow exact-SHA based and do not create or rewrite tags from the PR workflow."
+  ],
+  "intent": {
+    "problem": "PR #16 cannot merge because smoke requires release.json to match the highest public tag, while v0.5.25 cannot become public until after the PR merges.",
+    "constraints": [
+      "Do not bypass branch protection or merge with a failing required check.",
+      "Do not weaken post-publication distribution verification.",
+      "Do not change release.json, installer behavior, or product code in this Work Item."
+    ],
+    "rationale": "An explicit two-phase release gate removes the circular dependency while preserving exact-SHA publication and strict public verification."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "the next patch release is accepted as pending only in explicit preparation mode",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "non-next or malformed release mismatches remain hard failures",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "published-tag validation remains strict outside preparation mode",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "release publication dispatches strict post-release smoke verification",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly accepted the recommendation to adjust the release gate workflow instead of bypassing required checks."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}

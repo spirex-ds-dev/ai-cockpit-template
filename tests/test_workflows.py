@@ -21,9 +21,11 @@ def test_release_documentation_requires_one_verified_commit():
     documentation = (ROOT / "docs" / "reference" / "distribution.md").read_text(encoding="utf-8")
 
     assert "Both `smoke` and `compatibility`" in documentation
-    assert "historical `v0.5.24` tag is immutable" in documentation
+    assert "historical release tag is immutable" in documentation
     assert "Maintainers dispatch `.github/workflows/release.yml`" in documentation
     assert "release.json.releaseTag" in documentation
+    assert "pending publication" in documentation
+    assert "strict smoke verification" in documentation
 
 
 def test_release_workflow_is_exact_sha_and_action_dependency_free():
@@ -34,4 +36,5 @@ def test_release_workflow_is_exact_sha_and_action_dependency_free():
     assert '[[ "$SOURCE_COMMIT" == "$GITHUB_SHA" ]]' in workflow
     assert "smoke.yml" in workflow and "compatibility.yml" in workflow
     assert "gh release create" in workflow
+    assert "gh workflow run smoke.yml" in workflow
     assert "actions/checkout" not in workflow
