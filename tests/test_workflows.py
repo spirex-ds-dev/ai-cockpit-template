@@ -40,3 +40,10 @@ def test_release_workflow_is_exact_sha_and_action_dependency_free():
     assert "gh release create" in workflow
     assert "gh workflow run smoke.yml" in workflow
     assert "actions/checkout" not in workflow
+
+
+def test_smoke_preparation_mode_is_event_based_and_dispatch_stays_strict():
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    assert "github.event_name == 'pull_request'" in workflow
+    assert "github.ref == 'refs/heads/main'" in workflow
+    assert "startsWith(github.head_ref" not in workflow
