@@ -56,11 +56,28 @@ jobs:
         run: |
           set -euo pipefail
           for workflow in smoke.yml compatibility.yml; do
-            count="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow "$workflow" --commit "$SOURCE_COMMIT" --status success --limit 20 --json databaseId --jq 'length')"
-            if [[ "$count" -lt 1 ]]; then
+            deadline=$((SECONDS + 900))
+            while :; do
+              runs="$(gh run list \
+                --repo "$GITHUB_REPOSITORY" \
+                --workflow "$workflow" \
+                --commit "$SOURCE_COMMIT" \
+                --limit 20 \
+                --json status,conclusion,databaseId)"
+              if jq -e 'any(.[]; .conclusion == "success")' <<<"$runs" >/dev/null; then
+                break
+              fi
+              if (( SECONDS >= deadline )); then
+                echo "timed out waiting for ${workflow} for ${SOURCE_COMMIT}" >&2
+                exit 1
+              fi
+              if jq -e 'any(.[]; .status != "completed")' <<<"$runs" >/dev/null || [[ "$(jq 'length' <<<"$runs")" -eq 0 ]]; then
+                sleep 15
+                continue
+              fi
               echo "no successful ${workflow} run found for ${SOURCE_COMMIT}" >&2
               exit 1
-            fi
+            done
           done
 
       - name: Create exact-SHA tag and GitHub Release
