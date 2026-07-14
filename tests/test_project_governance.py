@@ -137,6 +137,32 @@ def test_guard_calibration_fails_when_confirmed_path_is_missing(tmp_path):
     assert any("service/**" in issue for issue in calibration_issues(tmp_path, profile))
 
 
+def test_guard_calibration_reports_missing_generated_boundary(tmp_path):
+    shutil.copytree(ROOT / ".ai", tmp_path / ".ai")
+    profile, issues = load_profile(tmp_path / ".ai" / "project_profile.yaml", require_approval=True)
+    assert issues == []
+    profile["approvedBoundaries"]["generatedPaths"] = ["cache/**"]
+    assert any("generated path" in issue for issue in calibration_issues(tmp_path, profile))
+
+
+def test_guard_calibration_reports_missing_quality_check_id(tmp_path):
+    shutil.copytree(ROOT / ".ai", tmp_path / ".ai")
+    profile, issues = load_profile(tmp_path / ".ai" / "project_profile.yaml", require_approval=True)
+    assert issues == []
+    profile["reviewRequirements"] = ["quality"]
+    (tmp_path / ".ai" / "cockpit" / "checks.yaml").write_text("checks: {}\n", encoding="utf-8")
+    assert any(
+        "quality review requirement" in issue for issue in calibration_issues(tmp_path, profile)
+    )
+
+
+def test_guard_calibration_rejects_non_object_approved_boundaries(tmp_path):
+    shutil.copytree(ROOT / ".ai", tmp_path / ".ai")
+    assert calibration_issues(tmp_path, {"approvedBoundaries": []}) == [
+        "approvedBoundaries must be an object"
+    ]
+
+
 def test_repository_system_invariants_are_consistent():
     assert invariant_issues(ROOT) == []
 

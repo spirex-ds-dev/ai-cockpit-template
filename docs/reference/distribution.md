@@ -17,6 +17,16 @@ The documented quick-install path resolves public release metadata first and the
 
 SBOM and provenance release evidence must be generated with an explicit source commit (`--source-commit` or `SUPPLY_CHAIN_SOURCE_COMMIT`). The local release-tag fallback exists only for compatibility and never derives evidence identity from the current `HEAD`.
 
+## PR-first release sequence
+
+Changes enter `main` through a pull request. Both `smoke` and `compatibility` also run on `main` pushes, so the commit selected for release has fresh repository-level and cross-platform evidence. A fail-closed, manually dispatched `release` workflow is planned but is not yet present in this repository; until it exists, maintainers must perform the tag and release steps manually only after recording the exact successful commit evidence.
+
+The historical `v0.5.24` tag is immutable evidence and is not rewritten. A future release must be created from a commit that has completed the full required checks. Do not claim that a tag passed an automated release workflow until that workflow is implemented and its exact-SHA gate is green.
+
+## Archive evidence index
+
+`archive/index.json` is an additive discovery index maintained by `archive-work-item`. It records each Work Item's identity, archive sequence, relative Contract/Summary paths, and file hashes so tooling can discover historical evidence without parsing every Summary. The archived Contract and Summary remain authoritative; the index is disposable and may be rebuilt from them if needed.
+
 The development lock is generated from the committed `requirements-dev.in` input with `pip-compile --generate-hashes --allow-unsafe`. The SBOM reports workflow Action occurrences, all version-pinned lock entries, and the direct/transitive split recorded by pip-compile's `via` annotations. Every locked package must carry at least one SHA-256 artifact hash; CI installs with `pip install --require-hashes` so an unlisted artifact fails closed.
 
 ## Published Capabilities
