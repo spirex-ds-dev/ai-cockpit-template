@@ -11,6 +11,17 @@ def test_start_and_archive_use_clean_git_environment():
     assert all(not key.startswith("GIT_") for key in ai_common.clean_git_environment())
 
 
+def test_journey_policy_keeps_refactor_contract_boundaries():
+    acceptance, guidelines, out_of_scope, destructive = ai_start.journey_policy("refactor")
+
+    assert (
+        "Code structural changes are completed without changing functional behavior." in acceptance
+    )
+    assert "Zero functional changes allowed." in guidelines
+    assert "Adding new features" in out_of_scope
+    assert destructive["allowed"] is False
+
+
 def archive_contract(mode: str = "review") -> dict[str, object]:
     return {
         "contractVersion": 2,

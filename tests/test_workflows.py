@@ -22,5 +22,16 @@ def test_release_documentation_requires_one_verified_commit():
 
     assert "Both `smoke` and `compatibility`" in documentation
     assert "historical `v0.5.24` tag is immutable" in documentation
-    assert "workflow is planned but is not yet present" in documentation
-    assert "Do not claim that a tag passed an automated release workflow" in documentation
+    assert "Maintainers dispatch `.github/workflows/release.yml`" in documentation
+    assert "release.json.releaseTag" in documentation
+
+
+def test_release_workflow_is_exact_sha_and_action_dependency_free():
+    workflow = (ROOT / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")
+
+    assert "workflow_dispatch:" in workflow
+    assert "source_commit:" in workflow
+    assert '[[ "$SOURCE_COMMIT" == "$GITHUB_SHA" ]]' in workflow
+    assert "smoke.yml" in workflow and "compatibility.yml" in workflow
+    assert "gh release create" in workflow
+    assert "actions/checkout" not in workflow
