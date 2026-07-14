@@ -13,6 +13,8 @@ def test_compatibility_runs_on_main_pushes_and_pull_requests():
     assert "  compatibility-gate:" in workflow
     assert "needs:\n      - shellcheck" in workflow
     assert 'test "$result" = success' in workflow
+    assert workflow.count("fetch-depth: 0") == 5
+    assert "toolchain: stable" in workflow
 
 
 def test_release_documentation_requires_one_verified_commit():
