@@ -1,3 +1,6 @@
+import json
+import sys
+
 import ai_check_scenario_coverage
 
 
@@ -126,6 +129,36 @@ def test_unverified_low_risk_scenario_is_warning():
     assert findings[0].severity == "warning"
 
 
+def test_missing_medium_risk_coverage_without_hard_risk_is_warning():
+    findings = ai_check_scenario_coverage.detect(
+        {"riskAssessment": {"level": "medium", "riskTypes": ["refactor"]}},
+        {"scenarioCoverage": []},
+    )
+    assert findings[0].kind == "missing_scenario_coverage"
+    assert findings[0].severity == "warning"
+
+
+def test_unverified_scenario_with_explicit_risk_ack_is_warning():
+    findings = ai_check_scenario_coverage.detect(
+        {"riskAssessment": {"level": "high", "riskTypes": ["security"]}},
+        {
+            "scenarioCoverage": [
+                {
+                    "scenario": "security review",
+                    "required": True,
+                    "status": "unverified",
+                    "evidence": [],
+                }
+            ],
+            "reviewReadiness": {"status": "ready_with_risks"},
+            "residualRisks": [{"level": "medium", "detail": "accepted"}],
+            "unverifiedScenarios": ["security review"],
+        },
+    )
+    assert findings[0].kind == "required_scenario_unverified"
+    assert findings[0].severity == "warning"
+
+
 def test_scenario_helper_defaults_and_acknowledgement():
     assert ai_check_scenario_coverage.scenario_items(None) == []
     assert ai_check_scenario_coverage.risk_level({}) == "unknown"
@@ -137,3 +170,64 @@ def test_scenario_helper_defaults_and_acknowledgement():
         "followUps": ["verify later"],
     }
     assert ai_check_scenario_coverage.explicit_risk_ack(summary) is True
+
+
+def test_scenario_coverage_reports_missing_summary_and_invalid_required_entries():
+    assert (
+        ai_check_scenario_coverage.detect({"riskAssessment": {"level": "medium"}}, None)[0].kind
+        == "missing_summary"
+    )
+
+    findings = ai_check_scenario_coverage.detect(
+        {"riskAssessment": {"level": "high", "riskTypes": ["security"]}},
+        {
+            "scenarioCoverage": [
+                {"scenario": "not applicable", "required": True, "status": "not_applicable"},
+                {"scenario": "unknown", "required": True, "status": "unexpected"},
+            ]
+        },
+    )
+    assert any(item.kind == "missing_reason" for item in findings)
+    assert any(item.kind == "invalid_status" for item in findings)
+
+
+def test_scenario_coverage_warns_when_medium_non_hard_work_has_no_required_scenarios():
+    findings = ai_check_scenario_coverage.detect(
+        {"riskAssessment": {"level": "medium", "riskTypes": ["documentation"]}},
+        {
+            "scenarioCoverage": [
+                {
+                    "scenario": "optional",
+                    "required": False,
+                    "status": "verified",
+                    "evidence": ["test"],
+                }
+            ]
+        },
+    )
+    assert findings[0].severity == "warning"
+    assert findings[0].kind == "missing_required_scenarios"
+
+
+def test_scenario_coverage_main_handles_skip_and_success(tmp_path, monkeypatch):
+    monkeypatch.setattr(sys, "argv", ["ai_check_scenario_coverage"])
+    assert ai_check_scenario_coverage.main() == 0
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": "coverage", "riskAssessment": {"level": "low"}}),
+        encoding="utf-8",
+    )
+    summary_path.write_text(json.dumps({"scenarioCoverage": []}), encoding="utf-8")
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_check_scenario_coverage",
+            "--contract",
+            str(contract_path),
+            "--summary",
+            str(summary_path),
+        ],
+    )
+    assert ai_check_scenario_coverage.main() == 0
