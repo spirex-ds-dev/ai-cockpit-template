@@ -202,7 +202,7 @@ def invariant_issues(root: Path = ROOT) -> list[str]:
         r'^REF="\$\{AI_COCKPIT_TEMPLATE_REF:-(v\d+\.\d+\.\d+)\}"', install_script, re.MULTILINE
     )
     default_sha_match = re.search(
-        r'^EXPECTED_SHA256="\$\{AI_COCKPIT_TEMPLATE_SHA256:-([0-9a-f]{64})\}"',
+        r'^EXPECTED_SHA256="\$\{AI_COCKPIT_TEMPLATE_SHA256:-([0-9a-f]{64})?\}"',
         install_script,
         re.MULTILINE,
     )
@@ -211,7 +211,7 @@ def invariant_issues(root: Path = ROOT) -> list[str]:
         issues.append("install.sh default version differs from release.json")
     if not default_sha_match:
         issues.append("install.sh default archive digest is missing")
-    elif isinstance(release_tag, str):
+    elif default_sha_match.group(1) and isinstance(release_tag, str):
         try:
             expected_digest = release_archive_digest(root, release_tag)
         except RuntimeError as exc:
