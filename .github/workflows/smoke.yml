@@ -57,7 +57,7 @@ jobs:
           if [[ "${{ github.event_name }}" != "workflow_dispatch" ]]; then
             make check-ai-pr AI_BASE_COMMIT="$AI_BASE_COMMIT"
           else
-            make check-ai
+            make check-ai AI_BASE_COMMIT="$base"
           fi
 
       - name: Installer dry run

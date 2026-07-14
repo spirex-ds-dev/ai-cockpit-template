@@ -1,0 +1,179 @@
+{
+  "contractVersion": 2,
+  "workItemId": "review_n26_installer_smoke_base_propagation",
+  "mode": "code",
+  "title": "修复安装器 smoke 的 PR 基线传递",
+  "baseCommit": "8cf48967e35b103883399f6a095a436303796962",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/review_n26_installer_smoke_base_propagation.contract.json",
+    ".ai/work-items/active/review_n26_installer_smoke_base_propagation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".github/workflows/smoke.yml",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "install.sh",
+    "scripts/**",
+    "tests/**",
+    "release/**"
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "The failing installer smoke step invokes make check-ai after intentionally clearing the inherited baseline."
+    },
+    {
+      "path": "Makefile.ai",
+      "reason": "The installed no-active check-ai branch requires an explicit AI_BASE_COMMIT for its PR gate."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "The smoke flow verifies the installed template's PR ownership gate against the temporary repository base."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "ci_gate"
+    ],
+    "reason": "The change affects only the CI smoke invocation and must preserve environment isolation while supplying the temporary repository baseline."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The remote failure is reproducible, and the bounded fix is an explicit base argument in the smoke test."
+  },
+  "preReviewWarnings": [
+    "Review that AI_BASE_COMMIT remains unset for source checkout isolation but the temporary repository uses its own saved base SHA."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The installer smoke test passes the temporary repository's saved base SHA to make check-ai.",
+    "The smoke test continues to isolate the source checkout's AI_BASE_COMMIT before installation.",
+    "The installed template runs both local check-ai and PR check-ai successfully in the temporary repository.",
+    "The full local quality and AI governance gates pass."
+  ],
+  "guidelines": [
+    "Keep CI commands explicit about the repository whose baseline they consume.",
+    "Do not weaken or remove the installed template's PR ownership gate.",
+    "Keep the change limited to smoke-test baseline propagation."
+  ],
+  "intent": {
+    "problem": "The installer smoke test fails after successful installation because make check-ai runs without a baseline after AI_BASE_COMMIT was unset, so its no-active branch cannot complete the final PR gate.",
+    "constraints": [
+      "Preserve source checkout environment isolation.",
+      "Use the temporary repository's initial commit as the PR baseline."
+    ],
+    "rationale": "Passing the saved local base explicitly makes the test deterministic and validates the same installed-template PR workflow used by adopters."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "temporary repository check-ai with explicit local base",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "The smoke command passes AI_BASE_COMMIT=\"$base\" to make check-ai and then runs check-ai-pr with the same base."
+      ]
+    },
+    {
+      "scenario": "source checkout baseline isolation",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "The smoke subshell still unsets inherited AI_BASE_COMMIT before installing into the temporary repository."
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized continued remediation of the failing remote review gates."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
