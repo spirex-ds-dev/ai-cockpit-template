@@ -18,7 +18,7 @@ from typing import Any
 from cyclonedx.model import ExternalReference, ExternalReferenceType, HashAlgorithm, HashType, XsUri
 from cyclonedx.model.bom import Bom, BomMetaData
 from cyclonedx.model.component import Component, ComponentType
-from cyclonedx.model.tool import ToolRepository
+from cyclonedx.model.tool import Tool
 from cyclonedx.output.json import JsonV1Dot5
 from packageurl import PackageURL
 
@@ -264,15 +264,7 @@ def build_sbom(source_commit: str | None = None) -> dict[str, Any]:
         metadata=BomMetaData(
             component=app,
             timestamp=datetime(1970, 1, 1, tzinfo=timezone.utc),
-            tools=ToolRepository(
-                components=[
-                    Component(
-                        name="check_supply_chain",
-                        version=resolved_commit,
-                        type=ComponentType.APPLICATION,
-                    )
-                ]
-            ),
+            tools=[Tool(name="check_supply_chain", version=resolved_commit)],
         ),
     )
     direct_components = []
@@ -375,7 +367,9 @@ def map_vulnerabilities_to_sbom(payload: dict[str, Any], sbom: dict[str, Any]) -
             continue
         bom_ref = components.get((normalize_package_name(name), version))
         if not bom_ref:
-            raise ValueError(f"pip-audit dependency cannot be mapped to SBOM: {name}=={version}")
+            raise ValueError(
+                f"pip-audit dependency cannot be mapped to SBOM component: {name}=={version}"
+            )
         for vuln in vulns:
             if not isinstance(vuln, dict):
                 continue
