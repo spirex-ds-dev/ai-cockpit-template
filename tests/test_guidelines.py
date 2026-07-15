@@ -124,3 +124,39 @@ def test_guidelines_check_missing_evidence(tmp_path, monkeypatch, capsys):
     assert ai_check_guidelines.main() == 1
     captured = capsys.readouterr()
     assert "Empty compliance evidence for guideline" in captured.err
+
+
+def test_guidelines_check_rejects_missing_files_and_invalid_shapes(tmp_path, monkeypatch, capsys):
+    contract_file = tmp_path / "task.contract.json"
+    summary_file = tmp_path / "task.summary.json"
+
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_check_guidelines.py",
+            "--contract",
+            str(contract_file),
+            "--summary",
+            str(summary_file),
+        ],
+    )
+    assert ai_check_guidelines.main() == 1
+    assert "Contract file does not exist" in capsys.readouterr().err
+
+    contract_file.write_text("{", encoding="utf-8")
+    summary_file.write_text("{}", encoding="utf-8")
+    assert ai_check_guidelines.main() == 1
+    assert "Failed to load files" in capsys.readouterr().err
+
+    contract_file.write_text(
+        json.dumps({"workItemId": "task", "guidelines": "bad"}), encoding="utf-8"
+    )
+    summary_file.write_text(json.dumps({"guidelinesCompliance": []}), encoding="utf-8")
+    assert ai_check_guidelines.main() == 1
+    assert "Contract guidelines must be a list" in capsys.readouterr().err
+
+    contract_file.write_text(json.dumps({"workItemId": "task", "guidelines": []}), encoding="utf-8")
+    summary_file.write_text(json.dumps({"guidelinesCompliance": "bad"}), encoding="utf-8")
+    assert ai_check_guidelines.main() == 1
+    assert "Summary guidelinesCompliance must be a list" in capsys.readouterr().err
