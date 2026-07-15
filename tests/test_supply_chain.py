@@ -253,9 +253,9 @@ def test_supply_chain_accepts_explicit_source_commit(monkeypatch):
 def test_sbom_reports_generated_direct_transitive_and_hash_coverage(tmp_path, monkeypatch):
     lock = tmp_path / "requirements.lock"
     lock.write_text(
-        "demo==1.0 \\\n+    --hash=sha256:abc\n"
+        "demo==1.0 \\\n    --hash=sha256:abc\n"
         "    # via -r requirements-dev.in\n"
-        "transitive==2.0 \\\n+    --hash=sha256:def\n"
+        "transitive==2.0 \\\n    --hash=sha256:def\n"
         "    # via demo\n",
         encoding="utf-8",
     )
@@ -279,7 +279,7 @@ def test_sbom_reports_generated_direct_transitive_and_hash_coverage(tmp_path, mo
 def test_lock_semantics_fails_closed_when_a_package_has_no_hash(tmp_path):
     lock = tmp_path / "requirements.lock"
     lock.write_text(
-        "demo==1.0 \\\n+    --hash=sha256:abc\n"
+        "demo==1.0 \\\n    --hash=sha256:abc\n"
         "    # via -r requirements-dev.in\n"
         "missing-hash==2.0\n"
         "    # via demo\n",
@@ -328,7 +328,9 @@ def test_supply_chain_baselines_match_repository_state():
 def test_parse_requirements_lock_removes_continuation_and_preserves_hashes(tmp_path):
     lock = tmp_path / "requirements.lock"
     lock.write_text(
-        "demo-package==1.0.0 \\\n+    --hash=sha256:abc123 \\\n+    --hash=sha256:def456\n",
+        "demo-package==1.0.0 \\\n    --hash=sha256:abc123 \\\n    --hash=sha256:def456\n"
+        "    # via -r requirements-dev.in\n"
+        "    # via parent-package\n",
         encoding="utf-8",
     )
 
@@ -338,7 +340,7 @@ def test_parse_requirements_lock_removes_continuation_and_preserves_hashes(tmp_p
             "name": "demo-package",
             "version": "1.0.0",
             "hashes": ["abc123", "def456"],
-            "via": [],
+            "via": ["-r requirements-dev.in", "parent-package"],
         }
     ]
 
@@ -346,9 +348,9 @@ def test_parse_requirements_lock_removes_continuation_and_preserves_hashes(tmp_p
 def test_sbom_uses_cyclonedx_identity_and_dependency_metadata(tmp_path, monkeypatch):
     lock = tmp_path / "requirements.lock"
     lock.write_text(
-        "root-package==1.0.0 \\\n+    --hash=sha256:abc123\n"
+        "root-package==1.0.0 \\\n    --hash=sha256:abc123\n"
         "    # via -r requirements-dev.in\n"
-        "child-package==2.0.0 \\\n+    --hash=sha256:def456\n"
+        "child-package==2.0.0 \\\n    --hash=sha256:def456\n"
         "    # via root-package\n",
         encoding="utf-8",
     )
@@ -360,8 +362,9 @@ def test_sbom_uses_cyclonedx_identity_and_dependency_metadata(tmp_path, monkeypa
     assert sbom["specVersion"] == "1.5"
     assert sbom["serialNumber"].startswith("urn:uuid:")
     assert sbom["metadata"]["timestamp"]
-    assert sbom["metadata"]["tools"]["components"]
-    assert sbom["metadata"]["tools"]["components"][0]["name"] == "check_supply_chain"
+    assert sbom["metadata"]["tools"]
+    assert sbom["metadata"]["tools"][0]["name"] == "check_supply_chain"
+    assert sbom["metadata"]["tools"][0]["version"] == "source"
     components = {component["name"]: component for component in sbom["components"]}
     assert components["root-package"]["version"] == "1.0.0"
     assert components["root-package"]["purl"] == "pkg:pypi/root-package@1.0.0"
