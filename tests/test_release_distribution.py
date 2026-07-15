@@ -166,12 +166,11 @@ def test_release_network_commands_strip_ambient_git_auth(monkeypatch, tmp_path):
             assert key not in env
 
 
-def test_unreleased_worktree_drift_is_reported_against_historical_release_claims():
+def test_release_preparation_evidence_matches_local_metadata():
     metadata = json.loads(release_distribution.RELEASE.read_text(encoding="utf-8"))
     issues = release_distribution.supply_chain_issues(metadata)
 
-    assert any("supplyChain.sbomDigest differs" in issue for issue in issues)
-    assert any("supplyChain.provenanceDigest differs" in issue for issue in issues)
+    assert issues == []
 
 
 def test_release_distribution_fails_closed_on_supply_chain_drift(monkeypatch, tmp_path, capsys):
@@ -215,11 +214,11 @@ def test_release_distribution_fails_closed_on_supply_chain_drift(monkeypatch, tm
 
 def test_main_rejects_tag_missing_evidence_even_when_worktree_has_it(monkeypatch, capsys):
     metadata = json.loads(release_distribution.RELEASE.read_text(encoding="utf-8"))
-    metadata["releaseTag"] = "v0.5.26"
+    metadata["releaseTag"] = "v0.5.27"
     monkeypatch.setattr(
         release_distribution,
         "list_remote_tags",
-        lambda _repository: "a refs/tags/v0.5.26\n",
+        lambda _repository: "a refs/tags/v0.5.27\n",
     )
     monkeypatch.setattr(
         release_distribution,
