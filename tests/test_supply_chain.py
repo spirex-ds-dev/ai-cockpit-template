@@ -412,7 +412,7 @@ def test_vulnerability_mapping_fails_closed_for_unknown_component():
     try:
         check_supply_chain.map_vulnerabilities_to_sbom(payload, {"components": []})
     except ValueError as exc:
-        assert "unknown==9.9.9" in str(exc)
+        assert "cannot be mapped to SBOM component" in str(exc)
     else:
         raise AssertionError("unmapped vulnerability must fail closed")
 

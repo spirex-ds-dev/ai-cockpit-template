@@ -367,7 +367,9 @@ def map_vulnerabilities_to_sbom(payload: dict[str, Any], sbom: dict[str, Any]) -
             continue
         bom_ref = components.get((normalize_package_name(name), version))
         if not bom_ref:
-            raise ValueError(f"pip-audit dependency cannot be mapped to SBOM: {name}=={version}")
+            raise ValueError(
+                f"pip-audit dependency cannot be mapped to SBOM component: {name}=={version}"
+            )
         for vuln in vulns:
             if not isinstance(vuln, dict):
                 continue
