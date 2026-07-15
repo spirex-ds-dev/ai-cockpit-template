@@ -1,0 +1,449 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "refresh_ruby_setup_sbom",
+  "contractPath": ".ai/work-items/archive/2026/refresh_ruby_setup_sbom.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/refresh_ruby_setup_sbom.contract.json",
+      "reason": "Defines the approved SBOM-chain repair scope, sources, acceptance, and verification requirements."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/refresh_ruby_setup_sbom.summary.json",
+      "reason": "Records generated evidence changes, review boundaries, and verification results."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Existing Dependabot change updates ruby/setup-ruby from 1.317.0 to 1.318.0 and drives the generated evidence change."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Generated SBOM now records the pinned ruby/setup-ruby 1.318.0 commit."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Generated provenance now records the digest of the refreshed SBOM."
+    },
+    {
+      "path": ".ai/cockpit/release-digests.json",
+      "reason": "Generated release evidence now records the refreshed SBOM and provenance digests."
+    },
+    {
+      "path": "release.json",
+      "reason": "Release preparation metadata now records the exact byte-level digests of the refreshed SBOM and provenance."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated Cockpit status for the active repair Work Item."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index updated when the Work Item is archived."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+    ".github/workflows/compatibility.yml",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    "scripts/check_release_distribution.py",
+    "scripts/check_supply_chain.py",
+    "GitHub Actions run 29417591017 for PR #39",
+    "User approval dated 2026-07-15"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:18:50.258940+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "39d6091df9d35d1f25089b1ce812c412c29c62c8db57a8ec8540a192f1d71f2f",
+      "commandHash": "c0ea76258636b13fac41c59610331a4f182316e5a6972c2d63a543f476115864",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "d10fdcd802df33efcd4f69b57f161c6dc4d2c71c37a3fa004021198b565ac2bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/refresh_ruby_setup_sbom.contract.json work item contract check passed: .ai/work-items/active/refresh_ruby_setup_sbom.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:18:50.467194+00:00",
+      "exitCode": 0,
+      "durationMs": 127,
+      "outputDigest": "85ae2dfc76a408de1b36cd79e44a8f67829d211d31680332193c972780565ef7",
+      "commandHash": "8cfeaadb7302a1bc2657fd3a21a70e8c5bae7f6f6cb1f2ae6379456b044a3a02",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "d10fdcd802df33efcd4f69b57f161c6dc4d2c71c37a3fa004021198b565ac2bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/refresh_ruby_setup_sbom.contract.json scope guard passed: 5 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:18:50.707468+00:00",
+      "exitCode": 0,
+      "durationMs": 155,
+      "outputDigest": "4e57de60b0c16a4fac23a7fe0c21c37fe39ef017fd74415656f289bbd83f673f",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "d10fdcd802df33efcd4f69b57f161c6dc4d2c71c37a3fa004021198b565ac2bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/refresh_ruby_setup_sbom.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. guard check completed: 3 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/refresh_ruby_setup_sbom.contract.json SUMMARY=.ai/work-items/active/refresh_ruby_setup_sbom.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:18:51.159587+00:00",
+      "exitCode": 0,
+      "durationMs": 357,
+      "outputDigest": "9b89e119d7e3e696579323983cb3b5fb92a9ca9828047aa0a5e9a68541b2cae9",
+      "commandHash": "12c61f4b08daaf03aeb86d7157a736c058c9deb34bd6b4dfddd992d4924b146d",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "d10fdcd802df33efcd4f69b57f161c6dc4d2c71c37a3fa004021198b565ac2bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/refresh_ruby_setup_sbom.contract.json --summary .ai/work-items/active/refresh_ruby_setup_sbom.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `refresh_ruby_setup_sbom` - Contract Hash: `888a1b6a7669b77e` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count: `0` - Required Checks: `16` - R"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:18:51.390671+00:00",
+      "exitCode": 0,
+      "durationMs": 144,
+      "outputDigest": "c2f75d2fe42be414f1bb0f64919af629726deb1e770cea37020efffba66946b6",
+      "commandHash": "744c6e494ba6fcaf23c7c81ed1e6cea4aac56f41b6416bc3b2720a8655722780",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "d10fdcd802df33efcd4f69b57f161c6dc4d2c71c37a3fa004021198b565ac2bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/refresh_ruby_setup_sbom.summary.json review policy matched 4 path(s) [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json review focus recorded: 4 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:18:51.599055+00:00",
+      "exitCode": 0,
+      "durationMs": 127,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "d10fdcd802df33efcd4f69b57f161c6dc4d2c71c37a3fa004021198b565ac2bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:18:51.821603+00:00",
+      "exitCode": 0,
+      "durationMs": 133,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "d10fdcd802df33efcd4f69b57f161c6dc4d2c71c37a3fa004021198b565ac2bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/refresh_ruby_setup_sbom.contract.json SUMMARY=.ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:18:51.971105+00:00",
+      "exitCode": 0,
+      "durationMs": 59,
+      "outputDigest": "a61cc6296636103a1b2e774e399a76156bc4355ec96dbcb1451a3be2f7e6fd02",
+      "commandHash": "a0afb0216e6c9845ed1aea7fd85112573e43d84c0c5bd9c84515b52ebcbeb101",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "d10fdcd802df33efcd4f69b57f161c6dc4d2c71c37a3fa004021198b565ac2bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/refresh_ruby_setup_sbom.contract.json --summary .ai/work-items/active/refresh_ruby_setup_sbom.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/refresh_ruby_setup_sbom.contract.json SUMMARY=.ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:18:52.122288+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "102cc5b13622f897e44632d57010d80e9673d83b17c6eb0132872ae8748c7a5b",
+      "commandHash": "9d7b5eada52f7515d2071053c786da209513146a7d95433dd46db6c38db945c7",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "d10fdcd802df33efcd4f69b57f161c6dc4d2c71c37a3fa004021198b565ac2bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/refresh_ruby_setup_sbom.contract.json --summary .ai/work-items/active/refresh_ruby_setup_sbom.summary.json guidelines compliance check passed: 4 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:18:52.562299+00:00",
+      "exitCode": 0,
+      "durationMs": 345,
+      "outputDigest": "139dd1359210b12bef539dd9104016cc8df26bf8c849432427aa20a77b46741f",
+      "commandHash": "e762272ffa71de9fec1abbee4d9317a7705c25c2f1d9fc153efad518fb8a4d94",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "d10fdcd802df33efcd4f69b57f161c6dc4d2c71c37a3fa004021198b565ac2bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/refresh_ruby_setup_sbom.contract.json ## Diff Ownership Preview - active_owned: `5`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — cover"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:20:10.577439+00:00",
+      "exitCode": 0,
+      "durationMs": 77927,
+      "outputDigest": "f03ae53b8d845e308ed9fd772119fddcb072b482a1a484da5471dc834e91971f",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "d10fdcd802df33efcd4f69b57f161c6dc4d2c71c37a3fa004021198b565ac2bf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 94 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=80 ........................................................................ [ 15%] ........................................................................ [ 30%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/refresh_ruby_setup_sbom.contract.json SUMMARY=.ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:20:12.555806+00:00",
+      "exitCode": 0,
+      "durationMs": 359,
+      "outputDigest": "4376b47797a8b029702f6ea87d188d709e1db176695e1c24563e8c86f6639426",
+      "commandHash": "3e4c2156292f9a6dbc22f0e258955bb3ee3f3ea2cf533082668748971a1cdd37",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "745f12a1bf06eedfb3ff1652c7282d4d53d3fb33329f8fadc7cf985c9199b332",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/refresh_ruby_setup_sbom.contract.json --summary .ai/work-items/active/refresh_ruby_setup_sbom.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/refresh_ruby_setup_sbom.contract.json SUMMARY=.ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:20:12.962278+00:00",
+      "exitCode": 0,
+      "durationMs": 323,
+      "outputDigest": "d3e5603e982da4944057b5e309141fe642577bad68c75258430a576817f6ec63",
+      "commandHash": "2d5b04c8b6a1fc778dd6a04efa17487b7c3aac1b1b2e866d9326054da654c353",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "745f12a1bf06eedfb3ff1652c7282d4d53d3fb33329f8fadc7cf985c9199b332",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/refresh_ruby_setup_sbom.contract.json --summary .ai/work-items/active/refresh_ruby_setup_sbom.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:20:13.095972+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "745f12a1bf06eedfb3ff1652c7282d4d53d3fb33329f8fadc7cf985c9199b332",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/refresh_ruby_setup_sbom.contract.json SUMMARY=.ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:20:13.231165+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "cd3d8bc38d228e8759358a3d069ae0dbbb6c47535e9f6f4fbc333b0d6ca95abd",
+      "commandHash": "8d50de348d658efe5ed33eb24c84d962556e55a2529a6a3ded0b6f8f7454985b",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "745f12a1bf06eedfb3ff1652c7282d4d53d3fb33329f8fadc7cf985c9199b332",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/refresh_ruby_setup_sbom.contract.json --summary .ai/work-items/active/refresh_ruby_setup_sbom.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/refresh_ruby_setup_sbom.summary.json CONTRACT=.ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-15T14:20:13.467987+00:00",
+      "exitCode": 0,
+      "durationMs": 149,
+      "outputDigest": "f4589dfc1621a94d7f7ccb78b55956f5f462a1a81daca6f0a6a9f856bee22168",
+      "commandHash": "257a88da1839fde8a100253fd4a02a36bab6fda359b94ffa4f63e9e9b1a6e30c",
+      "contractHash": "888a1b6a7669b77e35a243b713489fc4796bec86418874794182895d4b60d374",
+      "commitSha": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+      "executionContractPath": ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+      "worktreeDigest": "745f12a1bf06eedfb3ff1652c7282d4d53d3fb33329f8fadc7cf985c9199b332",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/refresh_ruby_setup_sbom.summary.json --contract .ai/work-items/active/refresh_ruby_setup_sbom.contract.json ai summary check passed: .ai/work-items/active/refresh_ruby_setup_sbom.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Generate committed status or supply-chain evidence with repository commands; never hand-edit generated files.",
+      "compliant": true,
+      "evidence": "SBOM, provenance, and release digests were produced by scripts/check_supply_chain.py with --write and then validated without --write."
+    },
+    {
+      "guideline": "Keep the repair limited to evidence derived from the existing Dependabot workflow update.",
+      "compliant": true,
+      "evidence": "The product diff contains only the existing compatibility.yml bump and its three deterministic supply-chain evidence files."
+    },
+    {
+      "guideline": "Do not change dependency locks, generators, tests, runtime behavior, or unrelated workflow configuration.",
+      "compliant": true,
+      "evidence": "No scripts, tests, locks, runtime files, or additional workflow lines changed."
+    },
+    {
+      "guideline": "Do not bypass failing or pending GitHub branch-protection checks.",
+      "compliant": true,
+      "evidence": "PR #39 will be merged only after the updated branch reports all required checks passed."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "The repair is deterministic generated evidence for one pinned Action update; full repository and PR checks still gate merge."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/index.json"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    "Dependabot updated the workflow Action pin without refreshing committed SBOM evidence, so smoke and every Python compatibility lane failed.",
+    "The SBOM digest is transitively embedded in provenance and release-digests, requiring the complete generated evidence chain to be refreshed.",
+    "The full quality gate showed release.json also stores byte-level SBOM and provenance digests, so those two derived metadata fields required synchronization."
+  ],
+  "residualRisks": [],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "All required verification passed and no residual risk remains.",
+    "expectedReviewFocus": [
+      "Confirm the workflow diff remains the original ruby/setup-ruby pin update.",
+      "Confirm SBOM changes only the ruby/setup-ruby component pin and provenance/release files change only derived digests.",
+      "Confirm release.json changes only its SBOM and provenance digest fields.",
+      "Confirm all GitHub checks pass before merge."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [
+    "The user approved the focused PR #39 SBOM repair and requested merge followed by cleanup.",
+    "After completion, provide explicit development instructions."
+  ],
+  "userCorrectionSolidification": [
+    "The repair uses the repository generator and includes the full deterministic SBOM-to-provenance-to-release-digest chain.",
+    "Merge and cleanup remain conditional on passing required GitHub checks."
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "888a1b6a7669b77e",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10,
+      "detail": "Reconfirmed the expanded evidence chain, including release metadata digest synchronization, after the full quality gate exposed the transitive release invariant."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "888a1b6a7669b77e",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10,
+      "detail": "Confirmed deterministic generated diffs, synchronized release metadata, passing supply-chain validators and both targeted regression tests, and exact scope before rerunning the full finish gate."
+    }
+  ],
+  "knownGaps": [
+    "No generator, dependency lock, test, runtime, unrelated release claim, or unrelated workflow behavior is changed."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "The workflow Action inventory changes while committed supply-chain evidence remains stale.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "Original PR #39 GitHub Actions failure logs",
+        "Regenerated SBOM, provenance, and release-digests"
+      ]
+    },
+    {
+      "scenario": "The generated repair changes unrelated evidence or implementation files.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "Post-generation diff inspection",
+        "Contract scope and outOfScope declarations"
+      ]
+    }
+  ],
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "The complete deterministic evidence chain and its release metadata references now match the pinned workflow Action without changing generator or runtime behavior."
+  },
+  "overclaimPrevention": "Do not report PR #39 merged or cleaned until all GitHub checks pass and lifecycle closure succeeds.",
+  "archiveSequence": 62
+}
