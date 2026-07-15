@@ -173,6 +173,84 @@ def test_profile_strictly_separates_confirmation_and_blocking_unknowns():
     assert validate_profile(profile, require_approval=True) == []
 
 
+def test_profile_validation_reports_malformed_sections_and_confirmation_fields():
+    issues = validate_profile(
+        {
+            "version": 2,
+            "detectedFacts": [],
+            "suggestedBoundaries": [],
+            "approvedBoundaries": [],
+            "reviewRequirements": [""],
+            "unknowns": [""],
+            "evidence": [""],
+            "approval": {"reviewed": "maybe"},
+        },
+        require_approval=True,
+    )
+
+    assert "version must be 1" in issues
+    assert "detectedFacts must be an object" in issues
+    assert "suggestedBoundaries must be an object" in issues
+    assert "approvedBoundaries must be an object" in issues
+    assert "reviewRequirements must be a list of non-empty strings" in issues
+    assert "unknowns must be a list of non-empty strings" in issues
+    assert "evidence must be a list of non-empty strings" in issues
+    assert "approval.reviewed must be boolean" in issues
+
+
+def test_profile_validation_reports_missing_approval_boundaries_and_identity():
+    empty = {
+        "version": 1,
+        "detectedFacts": {
+            key: [] for key in ("languages", "frameworks", "buildSystems", "infrastructure")
+        },
+        "suggestedBoundaries": {
+            key: []
+            for key in (
+                "productionRoots",
+                "featureRoots",
+                "testRoots",
+                "generatedPaths",
+                "criticalPaths",
+            )
+        },
+        "approvedBoundaries": {
+            key: []
+            for key in (
+                "productionRoots",
+                "featureRoots",
+                "testRoots",
+                "generatedPaths",
+                "criticalPaths",
+            )
+        },
+        "reviewRequirements": [],
+        "unknowns": [],
+        "evidence": [],
+        "approval": {"reviewed": False, "reviewedBy": "", "reason": ""},
+    }
+
+    issues = validate_profile(empty, require_approval=True)
+
+    assert "approval.reviewed must be true for the confirmed Profile" in issues
+    assert "approval.reviewedBy is required for the confirmed Profile" in issues
+    assert "approval.reason is required for the confirmed Profile" in issues
+    assert "approvedBoundaries.productionRoots must not be empty" in issues
+    assert "approvedBoundaries.testRoots must not be empty" in issues
+
+
+def test_load_profile_reports_missing_and_non_object_files(tmp_path):
+    missing, missing_issues = load_profile(tmp_path / "missing.yaml", require_approval=False)
+    assert missing == {}
+    assert "Profile not found" in missing_issues[0]
+
+    invalid = tmp_path / "invalid.yaml"
+    invalid.write_text("[]", encoding="utf-8")
+    loaded, parse_issues = load_profile(invalid, require_approval=False)
+    assert loaded == {}
+    assert "failed to parse Profile" in parse_issues[0]
+
+
 def test_guard_calibration_fails_when_confirmed_path_is_missing(tmp_path):
     shutil.copytree(ROOT / ".ai", tmp_path / ".ai")
     profile, issues = load_profile(tmp_path / ".ai" / "project_profile.yaml", require_approval=True)
