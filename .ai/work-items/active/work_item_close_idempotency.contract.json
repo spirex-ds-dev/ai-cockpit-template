@@ -1,0 +1,209 @@
+{
+  "contractVersion": 2,
+  "workItemId": "work_item_close_idempotency",
+  "mode": "code",
+  "title": "Make Work Item closure tolerate platform-predeleted remote branches",
+  "baseCommit": "f46c0a148bca1ddd0a2d703668b2b497dceb28e4",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "scripts/ai_close_work_item.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/superpowers/specs/2026-07-16-work-item-close-idempotency-design.md",
+    "docs/superpowers/plans/2026-07-16-work-item-close-idempotency.md",
+    ".ai/work-items/active/work_item_close_idempotency.contract.json",
+    ".ai/work-items/active/work_item_close_idempotency.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "Makefile",
+    "templates/**",
+    "scripts/install_ai_cockpit.py",
+    "unrelated lifecycle or branch-management behavior"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Current remote branch deletion and postcondition verification implementation."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Existing closure behavior and failure-mode tests."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.md",
+      "reason": "Documented closure ordering and fail-closed semantics."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository-required Work Item, verification, and fail-closed workflow."
+    },
+    {
+      "path": "User-reported PR #40 and PR #39 closure evidence",
+      "reason": "Observed GitHub auto-delete race: remote branch was already gone when explicit deletion ran."
+    }
+  ],
+  "problemStatement": "After GitHub automatically deletes a merged PR branch, ai-close-work-item treats the redundant git push --delete failure as a lifecycle failure even when the remote branch is already absent and all closure postconditions can be verified.",
+  "scenarioCoverage": [
+    {
+      "scenario": "Remote branch is deleted by the platform before the explicit git push --delete step",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_remote_deletion_race_is_accepted_when_postcondition_is_absent"
+      ]
+    },
+    {
+      "scenario": "Remote deletion fails while the branch still exists",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_remote_deletion_failure_does_not_report_closed"
+      ]
+    },
+    {
+      "scenario": "Remote branch deletion succeeds normally",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_success_orders_synchronization_before_branch_deletion"
+      ]
+    },
+    {
+      "scenario": "Remote state cannot be verified",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_remote_deletion_failure_with_unverifiable_state_fails_closed"
+      ]
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "error_handling",
+      "verification"
+    ],
+    "reason": "The cleanup command must continue to fail closed for real deletion, authentication, network, and verification failures while accepting only an externally completed deletion confirmed by the remote postcondition."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The observed race, affected code path, acceptance criteria, and verification scenarios are explicit."
+  },
+  "preReviewWarnings": [
+    "Review that only a verified absent remote branch is accepted after a failed deletion command; do not weaken fail-closed handling for other failures."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "When platform-side auto-deletion causes git push --delete to return nonzero, closure succeeds only after fetch --prune and ls-remote confirm that the Work Item remote branch is absent.",
+    "A remote branch that still exists, an unverifiable remote state, or a non-race deletion failure continues to fail closed and never reports the Work Item as closed.",
+    "Existing successful deletion, base synchronization, clean worktree, and merged-PR checks retain their current ordering and behavior.",
+    "Regression tests cover both the accepted already-absent race and rejected remote deletion failures, and the lifecycle documentation states the idempotent postcondition rule."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "A merged PR may cause GitHub to delete its source branch before the local lifecycle command reaches the explicit remote deletion step. The current command then reports failure after it has already safely synchronized the base and removed the local branch, despite the desired remote postcondition being true.",
+    "constraints": [
+      "Preserve fail-closed behavior for any state that cannot be proven safe.",
+      "Do not add platform-specific assumptions beyond the existing GitHub PR verification.",
+      "Keep local base synchronization and final repository checks unchanged."
+    ],
+    "rationale": "Treat remote deletion as an idempotent state transition and use the authoritative remote-ref postcondition to distinguish an expected race from a real cleanup failure."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
