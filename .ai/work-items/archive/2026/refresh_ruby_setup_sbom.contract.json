@@ -1,0 +1,218 @@
+{
+  "contractVersion": 2,
+  "workItemId": "refresh_ruby_setup_sbom",
+  "mode": "code",
+  "title": "Refresh SBOM for ruby setup action",
+  "baseCommit": "091cddde3d88d84320c5abb302e6a0e512687bf2",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".github/workflows/compatibility.yml",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    ".ai/work-items/active/refresh_ruby_setup_sbom.contract.json",
+    ".ai/work-items/active/refresh_ruby_setup_sbom.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "scripts/**",
+    "tests/**",
+    "requirements-dev.in",
+    "requirements-dev.txt",
+    "requirements-dev.lock",
+    "docs/**",
+    "templates/**",
+    "Makefile"
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "PR #39 updates ruby/setup-ruby from 1.317.0 to 1.318.0 and therefore changes the workflow action inventory represented in the SBOM."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Committed generated supply-chain evidence currently reflects the previous workflow action version."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Generated provenance embeds the SBOM digest and must change when the deterministic SBOM changes."
+    },
+    {
+      "path": ".ai/cockpit/release-digests.json",
+      "reason": "Generated release digests embed both SBOM and provenance digests and complete the same deterministic evidence chain."
+    },
+    {
+      "path": "release.json",
+      "reason": "Release preparation metadata records byte-level SBOM and provenance digests and must remain consistent with regenerated evidence."
+    },
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "Provides the repository-supported deterministic SBOM generation and validation commands."
+    },
+    {
+      "path": "GitHub Actions run 29417591017 for PR #39",
+      "reason": "Every Python compatibility lane failed because .ai/cockpit/sbom.json differed from computed evidence."
+    },
+    {
+      "path": "User approval dated 2026-07-15",
+      "reason": "The user explicitly approved the SBOM-only CI repair, merge, and cleanup sequence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "generated_evidence_drift",
+      "ci_compatibility"
+    ],
+    "reason": "The change is a deterministic regeneration of committed SBOM evidence for one already-approved workflow Action update; runtime and generator behavior remain unchanged."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The CI logs identify deterministic SBOM drift, the repository supplies the generator, and the user approved the focused repair."
+  },
+  "preReviewWarnings": [
+    "Confirm the regenerated SBOM changes only the ruby/setup-ruby component version and that provenance/release changes are limited to derived digests.",
+    "Confirm no dependency lock, script, test, workflow content beyond the existing Dependabot update, provenance, or release evidence is modified.",
+    "Confirm PR #39 passes all required checks before merge."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The committed SBOM, provenance, and release digests are regenerated with repository-supported commands and match the workflow inventory containing ruby/setup-ruby 1.318.0.",
+    "Release preparation metadata records the exact byte-level digests of the regenerated SBOM and provenance.",
+    "All three supply-chain validation commands, the previously failing supply-chain baseline test, and release preparation evidence test pass.",
+    "The only product diff beyond the existing Dependabot workflow update is deterministic SBOM, provenance, release-digest, and release metadata evidence.",
+    "All required AI Cockpit and project quality checks pass before archive and push.",
+    "PR #39 is merged only after its required GitHub checks pass."
+  ],
+  "guidelines": [
+    "Generate committed status or supply-chain evidence with repository commands; never hand-edit generated files.",
+    "Keep the repair limited to evidence derived from the existing Dependabot workflow update.",
+    "Do not change dependency locks, generators, tests, runtime behavior, or unrelated workflow configuration.",
+    "Do not bypass failing or pending GitHub branch-protection checks."
+  ],
+  "intent": {
+    "problem": "PR #39 updates ruby/setup-ruby in compatibility.yml, but the committed SBOM still records the old workflow action inventory, causing deterministic supply-chain validation to fail in smoke and every Python platform lane.",
+    "constraints": [
+      "Use scripts/check_supply_chain.py to generate the SBOM, provenance, and release digests; do not hand-edit them.",
+      "Preserve the Dependabot workflow change exactly.",
+      "Do not change scripts, tests, dependency locks, documentation, templates, Makefile behavior, or release metadata other than the two derived supply-chain digest fields.",
+      "Merge only after all required PR checks pass.",
+      "Use latest origin/main as incorporated by merge commit 091cddde3d88d84320c5abb302e6a0e512687bf2."
+    ],
+    "rationale": "Regenerating the complete derived SBOM-to-provenance-to-release-digest chain and synchronizing its release metadata references restores the repository invariant with the smallest auditable change and keeps the dependency update fail-closed."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The workflow Action inventory changes while committed SBOM evidence remains stale.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "GitHub Actions run 29417591017",
+        "PR #39 workflow diff"
+      ]
+    },
+    {
+      "scenario": "The generated repair changes unrelated evidence or implementation files.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "Contract scope and outOfScope declarations",
+        "Post-generation diff inspection required by acceptance"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly approved fixing and merging PR #39, whose existing Dependabot change modifies .github/workflows/compatibility.yml."
+  },
+  "rollbackNote": "Revert the generated SBOM, provenance, and release-digest updates together with the ruby/setup-ruby workflow bump if PR #39 must be rolled back."
+}
