@@ -90,9 +90,11 @@ git commit -m "adopt AI Cockpit governance"
 make check-ai-pr AI_BASE_COMMIT='<pre-adoption-commit>'
 ```
 
+These commands are local checkpoints, not an unattended publish script. Stop after local finish/archive for human review. Commit only after explicit human approval, push only after a second explicit approval, and create the PR for manual review and merge. Do not enable automatic merge or automatic source-branch deletion. After a human has merged the PR, obtain explicit approval again before running `make ai-close-work-item TASK=adopt_ai_cockpit`; closure performs the verified base synchronization and local/remote branch cleanup.
+
 The installer-generated Work Item owns every file actually written or appended by installation. It keeps project quality configuration as an explicit follow-up rather than recording temporary stand-in commands as passed. `--create-adoption` fails before writing unless the repository has an initial commit, a clean worktree, and no active Work Item. When called without Contract and Summary arguments, `make check-ai-status` prints `Skipping status check (no active contract/summary provided)`. Use `make check-ai-status-consistency` to verify the generated no-active status before you move on.
 
-The adoption change is one adopter-project Work Item and one adopter-project PR. After merge, delete the installation branch locally and remotely.
+The adoption change is one adopter-project Work Item and one adopter-project PR. The installer never commits, pushes, merges, or deletes branches. Branch cleanup must happen only through the manually authorized `ai-close-work-item` step after PR merge.
 
 ### Local Calibration Checklist
 
@@ -154,6 +156,8 @@ git add .
 git commit -m "configure AI Cockpit for this project"
 make check-ai-pr AI_BASE_COMMIT="$CONFIG_BASE"
 ```
+
+Apply the same manual gates to the configuration PR: stop after local finish/archive, obtain approval for commit, obtain separate approval for push, merge the PR manually, then obtain approval before `make ai-close-work-item TASK=configure_ai_cockpit`.
 
 `cockpit-doctor` runs the existing environment checks and writes a read-only project-fact report to `target/ai_project_doctor_report.json`. `cockpit-calibrate` consumes that report and creates `.ai/project_profile.proposed.yaml`; it refuses to overwrite an existing proposal and never modifies Guard files. Human confirmation creates `.ai/project_profile.yaml` with explicit `approvedBoundaries` and approval metadata. Keep unresolved decisions in `unknowns`; entries prefixed with `blocking:` prevent readiness. For Android/Java, the main calibration question is not whether a preset exists, but whether the repo's module, flavor, and variant commands match the host Gradle wrapper.
 

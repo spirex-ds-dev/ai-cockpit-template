@@ -33,7 +33,9 @@ An adopter project keeps its own Git history and branch policy:
 2. Fetch it and create the work branch from its latest default-branch commit.
 3. Record `baseRemote`, `baseBranch`, and `baseCommit` in the Contract.
 4. Use a published release tag for installation or upgrade, not a moving template branch.
-5. Open one adopter-project PR, then delete the remote and local branch after merge.
+5. Finish and archive locally, then wait for human approval before commit and push.
+6. Open one adopter-project PR and require manual review and merge.
+7. After merge, wait for human approval before running `make ai-close-work-item TASK=<task>`; do not delete the remote or local branch directly.
 
 The remote does not have to be named `origin`, and the default branch does not have to be `main`.
 

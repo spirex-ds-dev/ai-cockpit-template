@@ -120,6 +120,8 @@ CONFIG_BASE="$(git rev-parse HEAD)"
 make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this project" MODE=code
 ```
 
+adopter project では、ローカルの finish/archive 後に `git commit` を実行する前に人の許可を取り、さらに `git push` の前にも別の許可を取ります。PR の準備はツールで行えても、merge は人が手動で実行します。手動 merge 後、`make ai-close-work-item TASK=<task>` の実行にも明示的な許可を必要とし、自動 merge と自動 branch 削除は有効にしません。この保守的な gate は導入・upgrade の adopter project にだけ適用し、template repository 自身の保守フローは変更しません。
+
 このコマンドは公開済みの `release.json` を優先し、メタデータ移行中にファイルが存在しない場合は、公開済みのセマンティックバージョンタグから最新のものを選びます。その後、解決したタグのインストーラーのみをダウンロードして実行します。公開版の機能はソースツリーより遅れる場合があるため、初回導入 PR を作成する前に[インストール手順](docs/getting-started/installation.md)を確認してください。
 リリース元の metadata や tagged installer が公開されていない場合、この quick install を匿名導入の前提として扱わないでください。`AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY` と `AI_COCKPIT_TEMPLATE_RAW_BASE` は release tag の解決と installer の取得にだけ使われ、installer 自体は `AI_COCKPIT_TEMPLATE_REPO` と `AI_COCKPIT_TEMPLATE_SOURCE` で clone / source の選択を行います。その場合はローカル clone か、明示的に設定した source を使ってください。
 
