@@ -16,6 +16,8 @@ Thresholds live in `.ai/guards/governance_complexity_policy.yaml`. A threshold c
 
 ## Lifecycle rules
 
+- Each pull request must contain one newly maintained Work Item archive pair; combine independent Work Items in separate pull requests.
+
 - Archived Contract and Summary files are immutable audit records.
 - Every archived Contract must have a paired Summary. The discovery index must not contain dangling or malformed Contract/Summary references; legacy records may remain outside the maintained index.
 - Pair completeness, index shape, and index path existence remain blocking failures.
