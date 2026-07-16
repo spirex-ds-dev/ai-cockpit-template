@@ -1,0 +1,414 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "release_workflow_dependency",
+  "contractPath": ".ai/work-items/archive/2026/release_workflow_dependency.contract.json",
+  "changedFiles": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Install the locked release evidence dependencies before running the source-bound generator."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release_workflow_dependency.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release_workflow_dependency.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    }
+  ],
+  "sourcesUsed": [
+    ".github/workflows/release.yml",
+    "requirements-dev.lock",
+    "scripts/check_supply_chain.py",
+    "scripts/check_system_invariants.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/release_workflow_dependency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:10:24.473303+00:00",
+      "exitCode": 0,
+      "durationMs": 76,
+      "outputDigest": "5bbbb156fa56d0dc433fdf3f7bb4e697bd303ed23ee503bed26c77532973fbfe",
+      "commandHash": "4cfdf709078b79b3b9bc368b771e43bf0ba6dc093a09c70625988bd8bcc0f21f",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "6c7852b1195887c91808cccbf5fe82e487d90b0a6998922e3ff1e9256032628e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/release_workflow_dependency.contract.json work item contract check passed: .ai/work-items/active/release_workflow_dependency.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/release_workflow_dependency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:10:24.597609+00:00",
+      "exitCode": 0,
+      "durationMs": 78,
+      "outputDigest": "b9b514045ed9d29fbe8f8e8010c03527d6651ac85b3b83dd1f648843920d11c3",
+      "commandHash": "e809988b7b36583afea3bc13e44c2f0044f0d77912ca40bbdf55556bfe5f8950",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "6c7852b1195887c91808cccbf5fe82e487d90b0a6998922e3ff1e9256032628e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/release_workflow_dependency.contract.json scope guard passed: 2 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:10:24.808512+00:00",
+      "exitCode": 0,
+      "durationMs": 132,
+      "outputDigest": "ba301c7e9db4ee2ab9f4314a2a76e3ebace10b1d61a87f6a5c6a7cedb1b044cd",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "6c7852b1195887c91808cccbf5fe82e487d90b0a6998922e3ff1e9256032628e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/release_workflow_dependency.contract.json [warning] restricted_write: .github/workflows/release.yml (.github/workflows/**) - CI workflow configuration. guard check completed: 1 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/release_workflow_dependency.contract.json SUMMARY=.ai/work-items/active/release_workflow_dependency.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:10:25.057677+00:00",
+      "exitCode": 0,
+      "durationMs": 194,
+      "outputDigest": "d2bc69dd4fb399da9182b41ba14426a07297801d60e439d05b4a9f02b954522a",
+      "commandHash": "02b6f230444588810e2e8c61478cbdaf9c3d34030d978a3d1ad6d099e6e4393d",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "6c7852b1195887c91808cccbf5fe82e487d90b0a6998922e3ff1e9256032628e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/release_workflow_dependency.contract.json --summary .ai/work-items/active/release_workflow_dependency.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `release_workflow_dependency` - Contract Hash: `6be8d0e3c1f81efe` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `3` - Unknown Count: `0` - Required Chec"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/release_workflow_dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:10:25.193568+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "8df09ecf1ac1464855e7bc2cbf526a2864b9c839840bfc4ad40def580f4c15c0",
+      "commandHash": "be286298054a1fc56b7de94579e854d0897daae60b4d4874cbc9421e10bd6d39",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "6c7852b1195887c91808cccbf5fe82e487d90b0a6998922e3ff1e9256032628e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/release_workflow_dependency.summary.json review policy matched 2 path(s) [review] .ai/cockpit/current_status.md [review] .github/workflows/release.yml review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:10:25.330853+00:00",
+      "exitCode": 0,
+      "durationMs": 88,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "6c7852b1195887c91808cccbf5fe82e487d90b0a6998922e3ff1e9256032628e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:10:25.490498+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "6c7852b1195887c91808cccbf5fe82e487d90b0a6998922e3ff1e9256032628e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/release_workflow_dependency.contract.json SUMMARY=.ai/work-items/active/release_workflow_dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:10:25.593954+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "5a8f512421c37c4913eee920bdc46ff187f5ac337897bb88229a09a56cf22d8a",
+      "commandHash": "913dc587718529d152042f708c2c509764bf38e99add8648fbee76850a139941",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "6c7852b1195887c91808cccbf5fe82e487d90b0a6998922e3ff1e9256032628e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/release_workflow_dependency.contract.json --summary .ai/work-items/active/release_workflow_dependency.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/release_workflow_dependency.contract.json SUMMARY=.ai/work-items/active/release_workflow_dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:10:25.689282+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "d76a2bfb659575f64c85c84e44494e4d4623749cd7222f81d6681462f49ac488",
+      "commandHash": "d8cd194b097ac35b36aa945f6849b94f5796e998c4265e89fe65539a5a942977",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "6c7852b1195887c91808cccbf5fe82e487d90b0a6998922e3ff1e9256032628e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/release_workflow_dependency.contract.json --summary .ai/work-items/active/release_workflow_dependency.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/release_workflow_dependency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:10:25.910624+00:00",
+      "exitCode": 0,
+      "durationMs": 176,
+      "outputDigest": "4f5cec13ad92fb705dec434e838ed4da6f7bd8a773899b3182ca691c6c9c8f63",
+      "commandHash": "cf74d994521972fd90d37fbf64cdb4735b41a3edd4fa036b7578b4a241da7368",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "6c7852b1195887c91808cccbf5fe82e487d90b0a6998922e3ff1e9256032628e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/release_workflow_dependency.contract.json ## Diff Ownership Preview - active_owned: `2`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.github/workflows/release.yml` — covered by Contract scope"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:11:59.755038+00:00",
+      "exitCode": 0,
+      "durationMs": 93791,
+      "outputDigest": "0bbc85606f9f705f8e0f5f8b655b50c0154484bdad6c151eb0cddb1e31283f0a",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "6c7852b1195887c91808cccbf5fe82e487d90b0a6998922e3ff1e9256032628e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 94 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=80 ........................................................................ [ 14%] ........................................................................ [ 28%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/release_workflow_dependency.contract.json SUMMARY=.ai/work-items/active/release_workflow_dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:12:01.444366+00:00",
+      "exitCode": 0,
+      "durationMs": 199,
+      "outputDigest": "4ecd27946310a8576d16c57dd6357b0a6419a0d11294d52f9ef85b47233ecabd",
+      "commandHash": "b944df423b36b66629dc11c2dca2017473d5ec0713b56cd88d6c9298d8543ee3",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "05ad233bfbd219a677318dca11d88b8b334a1d8c6aa0b2504f00327d591224b0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/release_workflow_dependency.contract.json --summary .ai/work-items/active/release_workflow_dependency.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/release_workflow_dependency.contract.json SUMMARY=.ai/work-items/active/release_workflow_dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:12:01.682843+00:00",
+      "exitCode": 0,
+      "durationMs": 195,
+      "outputDigest": "75cccd0f06cf869fb182bebc88c52c6fdad4944907649764e30375e90d1970e6",
+      "commandHash": "045b5f6d1f10b4b0f866afe5c3ce87204f95c248fefacccf227fed7146d3f397",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "05ad233bfbd219a677318dca11d88b8b334a1d8c6aa0b2504f00327d591224b0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/release_workflow_dependency.contract.json --summary .ai/work-items/active/release_workflow_dependency.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:12:01.767645+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "05ad233bfbd219a677318dca11d88b8b334a1d8c6aa0b2504f00327d591224b0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/release_workflow_dependency.contract.json SUMMARY=.ai/work-items/active/release_workflow_dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:12:01.860900+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "a4cf2d77888c41255ccec283fa24c7782246f5d5aa366b573accc9ca33d32a59",
+      "commandHash": "61e0fbdc387eaefc9bde46c3fd24bdfe569a3ba0fe5291ff3dce939e52785600",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "05ad233bfbd219a677318dca11d88b8b334a1d8c6aa0b2504f00327d591224b0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/release_workflow_dependency.contract.json --summary .ai/work-items/active/release_workflow_dependency.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/release_workflow_dependency.summary.json CONTRACT=.ai/work-items/active/release_workflow_dependency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-16T10:12:01.992519+00:00",
+      "exitCode": 0,
+      "durationMs": 91,
+      "outputDigest": "c8b8f54018ad5e26263509127e0ea8ece36959d1bb5013af5e13777e6df1023b",
+      "commandHash": "b633609a170b1558f9ee9b148e8fdfdc625ab93eb9c28a9556def630da32deee",
+      "contractHash": "6be8d0e3c1f81efedfe4dc19db7b8f7a99da757b75af5eaef9ea32a87bc91cd3",
+      "commitSha": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+      "executionContractPath": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_workflow_dependency.summary.json",
+      "worktreeDigest": "05ad233bfbd219a677318dca11d88b8b334a1d8c6aa0b2504f00327d591224b0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/release_workflow_dependency.summary.json --contract .ai/work-items/active/release_workflow_dependency.contract.json ai summary check passed: .ai/work-items/active/release_workflow_dependency.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Use the repository's locked dependency installation pattern for GitHub Actions.",
+      "compliant": true,
+      "evidence": "release.yml installs requirements-dev.lock with --require-hashes before release evidence generation; check-ai-system-invariants passed."
+    },
+    {
+      "guideline": "Keep the release workflow exact-SHA and tag-precondition gates unchanged.",
+      "compliant": true,
+      "evidence": "The remediation adds only the dependency installation step; identity, tag, smoke, compatibility, and evidence-subject gates remain unchanged."
+    },
+    {
+      "guideline": "Do not weaken or bypass release evidence verification.",
+      "compliant": true,
+      "evidence": "The existing source-bound evidence generation, subject verification, and exact-SHA release steps were not modified."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Initial skeleton; scope and acceptance still need task-specific review."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "release runner dependency installation",
+      "detail": "The release job now depends on successful installation from the existing hashed lock file; workflow checks and the release rerun provide evidence.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "locked dependency installation on a clean runner",
+      "preservation of exact-SHA and evidence-subject checks"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "6be8d0e3c1f81efe",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed the failing release run, scope, acceptance, constraints, and verification before editing the workflow."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "6be8d0e3c1f81efe",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 16,
+      "detail": "Ran the finish checkpoint after the workflow fix and reviewed the remaining external rerun evidence requirement."
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "clean release runner has the locked CycloneDX dependency before evidence generation",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "release.yml Install locked release evidence dependencies step",
+        "check-ai-system-invariants"
+      ]
+    },
+    {
+      "scenario": "exact-SHA identity, tag precondition, and evidence-subject checks remain unchanged",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "workflow diff inspection",
+        "failed run 29489284687 passed identity and exact-SHA smoke/compatibility gates"
+      ]
+    },
+    {
+      "scenario": "v0.5.28 is not published by the Work Item PR itself",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "gh release view v0.5.28 was not invoked until post-merge workflow rerun"
+      ]
+    }
+  ],
+  "knownGaps": [
+    "The previous release attempt failed before evidence generation; a rerun after merge must confirm the dependency fix on GitHub Actions."
+  ],
+  "overclaimPrevention": "Do not claim v0.5.28 publication until the post-merge exact-SHA release workflow succeeds.",
+  "archiveSequence": 85
+}

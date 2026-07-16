@@ -51,6 +51,10 @@ jobs:
           declared_tag="$(git show "${SOURCE_COMMIT}:release.json" | python3 -c 'import json, sys; print(json.load(sys.stdin)["releaseTag"])')"
           [[ "$declared_tag" == "$RELEASE_TAG" ]]
 
+      - name: Install locked release evidence dependencies
+        working-directory: ${{ github.workspace }}
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
+
       - name: Require successful exact-SHA smoke and compatibility runs
         shell: bash
         run: |
