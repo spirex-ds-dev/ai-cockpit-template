@@ -1,0 +1,171 @@
+{
+  "contractVersion": 2,
+  "workItemId": "conditional_go_remediation_plan",
+  "mode": "author_todo",
+  "title": "Conditional GO remediation cycle plan",
+  "baseCommit": "6776095ccde1ca97a2f45bc3e9c0b326ffb28d6d",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/conditional_go_remediation_plan.contract.json",
+    ".ai/work-items/active/conditional_go_remediation_plan.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**",
+    "docs/superpowers/plans/2026-07-17-conditional-go-remediation-cycle.md"
+  ],
+  "outOfScope": [
+    "Production code, workflows, tests, release metadata, and installer behavior",
+    "Creating or enabling platform branch-protection rules",
+    "Opening, approving, merging, or closing external pull requests"
+  ],
+  "sources": [
+    {
+      "path": "User-provided Conditional GO review attachment",
+      "reason": "User-provided Conditional GO review and unresolved P0/P1 findings."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Defines one Work Item, one branch, one PR and lifecycle closure."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi01_release_identity.contract.json",
+      "reason": "Existing completed release-identity baseline; prevents duplicate scope."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi02_compatibility.contract.json",
+      "reason": "Existing completed compatibility baseline; defines the incremental follow-up."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi03_adoption_branch.contract.json",
+      "reason": "Existing completed adoption-branch baseline; defines transactional follow-up."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi05_lockfile_source.contract.json",
+      "reason": "Existing completed lockfile-source baseline; defines regeneration-gate follow-up."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "plan_drift",
+      "lifecycle_order",
+      "external_authority"
+    ],
+    "reason": "The plan coordinates eight independent remediation Work Items while preserving the repository's one-active-Work-Item lifecycle. External platform approvals remain explicit human gates."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user requested a bounded execution plan; implementation and external authority actions are explicitly separated."
+  },
+  "preReviewWarnings": [
+    "Each child Work Item must stop for human confirmation when platform permissions, release publication, or external review evidence is unavailable."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A dated plan file lists all eight incremental remediation Work Items, their dependencies, exact repository areas, acceptance gates, and cycle transitions.",
+    "The plan preserves one active Work Item, one dedicated branch, one PR, and lifecycle closure before advancing.",
+    "The plan identifies external approval and release-publication steps as human-gated rather than silently automating them.",
+    "The plan defines a stop condition and restart condition for every child Work Item."
+  ],
+  "guidelines": [
+    "Do not combine independent remediation Work Items on one branch or PR.",
+    "Do not claim a Work Item is complete until its required checks, PR merge, and lifecycle closure are evidenced.",
+    "Do not infer platform approval, protected-branch state, or release publication from repository-controlled files."
+  ],
+  "intent": {
+    "problem": null,
+    "constraints": [],
+    "rationale": null
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
