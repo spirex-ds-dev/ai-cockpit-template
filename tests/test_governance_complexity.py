@@ -57,6 +57,8 @@ def test_report_passes_and_writes_metrics(tmp_path, monkeypatch):
     assert issues == []
     assert report["metrics"]["archiveContracts"] == 1
     assert report["metrics"]["archiveIndexEntries"] == 1
+    assert report["metrics"]["pythonFiles"] >= 1
+    assert report["metrics"]["guardFiles"] == 0
 
 
 def test_archive_totals_are_observational_above_former_threshold(tmp_path, monkeypatch):

@@ -1,0 +1,134 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-09",
+  "mode": "code",
+  "title": "Governance complexity metrics",
+  "baseCommit": "c245d567f9b11542d88c0a7d18da206ad41749fe",
+  "baselineDirtyPaths": [],
+  "scope": ["scripts/check_governance_complexity.py", "tests/test_governance_complexity.py", ".ai/work-items/active/wi-09.contract.json", ".ai/work-items/active/wi-09.summary.json", ".ai/cockpit/current_status.md", ".ai/work-items/archive/**"],
+  "outOfScope": ["Making observational metrics hard blocking without calibration evidence"],
+  "sources": [
+    {
+      "path": "scripts/check_governance_complexity.py",
+      "reason": "Add structural governance metrics to the report." 
+    },
+    {"path": "tests/test_governance_complexity.py", "reason": "Verify structural metric output."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["governance_complexity"],
+    "reason": "New metrics must remain observational until thresholds are calibrated by evidence."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Structural metrics are read-only observations with regression coverage."
+  },
+  "preReviewWarnings": [
+    "Review metric definitions and ensure thresholds remain calibrated separately."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The report includes Python, Markdown, governance-script, and guard-file counts.",
+    "Structural metrics are emitted without converting uncalibrated observations into blocking limits.",
+    "Regression tests verify the new metrics.",
+    "All Work Item and project checks pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {"problem": "Total line ceilings alone do not show where governance complexity is concentrated.", "constraints": ["Preserve current calibrated blocking thresholds."], "rationale": "Expose structural counts for review and future calibration without silently adding new blockers."},
+  "scenarioCoverage": [{"scenario": "Repository structural inventory", "required": true, "status": "verified", "evidence": ["test_report_passes_and_writes_metrics"]}, {"scenario": "Existing thresholds remain unchanged", "required": true, "status": "verified", "evidence": ["governance_complexity_policy.yaml"]}],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs."
+}
