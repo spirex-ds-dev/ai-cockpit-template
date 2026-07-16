@@ -454,6 +454,17 @@ def compare_or_write(path: Path, data: dict[str, Any], *, write: bool) -> list[s
     elif path == RELEASE_DIGESTS_BASELINE:
         current.pop("sourceCommit", None)
         expected.pop("sourceCommit", None)
+        # The committed candidate manifest is necessarily created before its
+        # immutable release commit exists.  SBOM/provenance identities (and
+        # their manifest hashes) therefore change with each candidate commit;
+        # those two baseline files are compared separately above.  Keep the
+        # manifest check focused on the stable release contract and exact
+        # hashes for the remaining artifacts.  release-assets performs the
+        # exact all-artifact check for the published tag.
+        for payload in (current, expected):
+            artifacts = payload.get("artifacts", {})
+            artifacts.pop(".ai/cockpit/sbom.json", None)
+            artifacts.pop(".ai/cockpit/provenance.json", None)
     if current != expected:
         return [f"{path.relative_to(ROOT)} differs from the computed supply-chain evidence"]
     return []
