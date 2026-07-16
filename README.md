@@ -123,6 +123,8 @@ CONFIG_BASE="$(git rev-parse HEAD)"
 make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this project" MODE=code
 ```
 
+For adopter repositories, stop after local finish/archive and obtain explicit human approval before `git commit`, then a separate approval before `git push`. PR creation may prepare review, but PR merge must be manual. After manual merge, obtain explicit approval before `make ai-close-work-item TASK=<task>`; do not enable automatic merge or branch deletion. This conservative gate applies to installation and upgrade in adopter projects only; the template repository keeps its own maintenance workflow.
+
 The command resolves a tagged installer from `release.json` when possible and falls back to the highest published semantic-version tag during the metadata rollout. It then downloads and executes only the resolved tagged installer.
 
 Review and extend the generated configuration Contract scope before changing Project Profile, Guard, quality-command, or CI files. Then calibrate the installed runtime before enabling blocking gates:

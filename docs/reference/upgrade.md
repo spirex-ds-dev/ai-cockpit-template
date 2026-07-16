@@ -11,7 +11,9 @@ keywords:
 
 # Upgrade
 
-Use `--upgrade` when the target repository already contains AI Cockpit files and you want the managed runtime, policy, and marker files replaced in a controlled way.
+Use `--upgrade` when the target repository already contains AI Cockpit files and you want the managed runtime, policy, and marker files replaced in a controlled way. Treat the upgrade as its own adopter-project Work Item and dedicated branch. Record the adopter remote/default branch/base commit and the target release tag before changing files.
+
+Upgrade is local preparation only. Review the Contract and upgrade diff first, then obtain separate human approval for commit and push. The upgrade PR must be reviewed and merged manually. After merge, obtain a final human approval before running `make ai-close-work-item TASK=<upgrade-task>`. Do not use automatic merge or automatic branch deletion. The installer itself never performs any of these external Git actions.
 
 ```sh
 CURRENT_VERSION="${CURRENT_VERSION:?set CURRENT_VERSION to the installed release tag}"

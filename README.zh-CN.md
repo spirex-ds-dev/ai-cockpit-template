@@ -120,6 +120,8 @@ CONFIG_BASE="$(git rev-parse HEAD)"
 make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this project" MODE=code
 ```
 
+对于对象工程，完成本地 finish/archive 后必须先人工允许 `git commit`，再单独人工允许 `git push`。PR 可以由工具准备，但合并必须人工完成。PR 手动合并后，还必须再次人工允许 `make ai-close-work-item TASK=<task>`；不得启用自动合并或自动删除分支。该保守门禁只适用于安装和升级的对象工程，模版工程自身维护流程保持不变。
+
 该命令优先读取公开的 `release.json`；在发布元数据尚未上线的过渡期，则从公开的语义化版本标签中选择最高版本。随后只下载并执行解析出的固定标签安装器。公开版本的能力可能落后于源码树；创建首次采用 PR 前请先阅读[安装文档](docs/getting-started/installation.md)。
 如果发布元数据或标签并非公开可访问，就不要把这条快速安装流程当成匿名安装路径。`AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY` 和 `AI_COCKPIT_TEMPLATE_RAW_BASE` 只用于解析 release tag 和获取安装器，而安装器本身仍会通过 `AI_COCKPIT_TEMPLATE_REPO` 和 `AI_COCKPIT_TEMPLATE_SOURCE` 选择 clone / source。此时应改用本地克隆或显式配置的源码来源。
 

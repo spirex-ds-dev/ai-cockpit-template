@@ -119,6 +119,17 @@ def clean_git_environment() -> dict[str, str]:
     return {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
 
 
+def run_git(target: Path, args: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(  # nosec B603 B607
+        ["git", *git_target_args(target), *args],
+        cwd=target,
+        text=True,
+        capture_output=True,
+        check=False,
+        env=clean_git_environment(),
+    )
+
+
 def git_records(output: str) -> list[str]:
     if "\0" in output:
         return [item for item in output.split("\0") if item]
@@ -520,6 +531,30 @@ class Installer:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+    def adopter_git_context(self) -> tuple[str | None, str | None]:
+        head = run_git(
+            self.target, ["symbolic-ref", "--quiet", "--short", "refs/remotes/origin/HEAD"]
+        )
+        ref = head.stdout.strip()
+        return (
+            ("origin", ref.removeprefix("origin/"))
+            if head.returncode == 0 and ref.startswith("origin/")
+            else (None, None)
+        )
+
+    def source_context(self) -> tuple[str, str]:
+        release_path = self.source / "release.json"
+        release_tag = os.environ.get("AI_COCKPIT_TEMPLATE_REF", "")
+        if not release_tag and release_path.is_file():
+            try:
+                release_tag = str(
+                    json.loads(release_path.read_text(encoding="utf-8")).get("releaseTag", "")
+                )
+            except (OSError, json.JSONDecodeError):
+                pass
+        source_repository = os.environ.get("AI_COCKPIT_TEMPLATE_REPO", "local source")
+        return release_tag or "unknown release reference", source_repository
+
     def create_adoption_records(self) -> None:
         contract_path, summary_path = self.adoption_paths()
         # Target worktree を明示する。--git-dir だけでは worktree 情報が
@@ -532,6 +567,8 @@ class Installer:
             cwd=self.target,
             env=clean_git_environment(),
         ).stdout.strip()
+        base_remote, base_branch = self.adopter_git_context()
+        source_release_tag, source_repository = self.source_context()
         contract_rel = contract_path.relative_to(self.target).as_posix()
         verification = [
             {"check": check, "required": True}
@@ -551,6 +588,12 @@ class Installer:
             "mode": "code",
             "title": "Adopt AI Cockpit governance",
             "baseCommit": base_commit,
+            **dict(
+                zip(
+                    ("baseRemote", "baseBranch", "sourceReleaseTag", "sourceRepository"),
+                    (base_remote, base_branch, source_release_tag, source_repository),
+                )
+            ),
             "baselineDirtyPaths": [],
             "adoptionBootstrapPaths": ["scripts/ai_*.py"],
             "scope": [
@@ -624,7 +667,12 @@ class Installer:
             "workItemId": "adopt_ai_cockpit",
             "contractPath": contract_rel,
             "changedFiles": [],
-            "sourcesUsed": [".ai/cockpit/adoption.md", "installer action log"],
+            "sourcesUsed": [
+                ".ai/cockpit/adoption.md",
+                "installer action log",
+                "adopter repository Git remote HEAD",
+                "release.json or AI_COCKPIT_TEMPLATE_REF",
+            ],
             "verification": [
                 {"check": item["check"], "result": "not_run"} for item in verification
             ],
@@ -1038,12 +1086,11 @@ class Installer:
         print("Next steps:")
         if self.create_adoption:
             print("  1. Run: make ai-finish TASK=adopt_ai_cockpit")
-            print("  2. Commit the installation and archived adoption evidence together.")
-            print("  3. In PR CI run: make check-ai-pr AI_BASE_COMMIT=<pre-adoption-commit>")
-            print("  4. Run: make ai-onboard  # or: make cockpit-doctor && make cockpit-calibrate")
             print(
-                "  5. Confirm .ai/project_profile.yaml, validate Guards, then run: make check-ai-adoption-ready"
+                "  2. HUMAN APPROVAL REQUIRED before commit and push; human review/merge PR; approve ai-close-work-item after merge."
             )
+            print("  3. In PR CI run: make check-ai-pr AI_BASE_COMMIT=<pre-adoption-commit>")
+            print("  4. Run: make ai-onboard; validate Guards; run make check-ai-adoption-ready")
             return
         if not self.has_initial_commit():
             print("  WARNING: ai-start requires a Git repository with at least one commit.")
