@@ -70,6 +70,10 @@ def line_count(paths: list[Path], suffix: str) -> int:
     return total
 
 
+def file_count(paths: list[Path], predicate: Any) -> int:
+    return sum(1 for path in paths if path.is_file() and predicate(path))
+
+
 def archive_files(root: Path, archive: Path, pattern: str) -> list[Path]:
     """Return archive files that can be part of the repository checkout."""
     if not archive.is_dir():
@@ -230,6 +234,12 @@ def build_report(root: Path, policy_path: Path) -> tuple[dict[str, Any], list[st
         "trackedFiles": len(files),
         "pythonLines": line_count(files, ".py"),
         "markdownLines": line_count(files, ".md"),
+        "pythonFiles": file_count(files, lambda path: path.suffix.lower() == ".py"),
+        "markdownFiles": file_count(files, lambda path: path.suffix.lower() == ".md"),
+        "governanceScripts": file_count(
+            files, lambda path: path.parent.name == "scripts" and path.name.startswith("ai_")
+        ),
+        "guardFiles": file_count(files, lambda path: ".ai/guards/" in path.as_posix()),
         **archive,
     }
     limits = load_policy(policy_path)
