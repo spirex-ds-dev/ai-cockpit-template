@@ -58,3 +58,11 @@ def test_smoke_preparation_mode_is_event_based_and_dispatch_stays_strict():
     assert "github.event_name == 'pull_request'" in workflow
     assert "github.ref == 'refs/heads/main'" in workflow
     assert "startsWith(github.head_ref" not in workflow
+
+
+def test_smoke_workflow_has_release_blocking_delegated_secret_scan():
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    assert "Delegated secret scanning (release-blocking)" in workflow
+    assert "github.com/zricethezav/gitleaks/v8@9c72c5f9f05200fdc06e3f1b16e9aaa89fbe9f75" in workflow
+    assert "fetch-depth: 0" in workflow
+    assert 'gitleaks" detect --source="$GITHUB_WORKSPACE"' in workflow

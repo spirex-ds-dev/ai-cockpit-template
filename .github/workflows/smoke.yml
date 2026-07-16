@@ -25,6 +25,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Delegated secret scanning (release-blocking)
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/gitleaks-bin"
+          GOBIN="$RUNNER_TEMP/gitleaks-bin" go install github.com/zricethezav/gitleaks/v8@9c72c5f9f05200fdc06e3f1b16e9aaa89fbe9f75
+          "$RUNNER_TEMP/gitleaks-bin/gitleaks" detect --source="$GITHUB_WORKSPACE" --log-opts="--all" --no-banner
+
       - name: Select governance diff baseline
         shell: bash
         run: |
