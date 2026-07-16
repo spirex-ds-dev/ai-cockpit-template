@@ -1,0 +1,182 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_workflow_dependency",
+  "mode": "code",
+  "title": "Install locked release evidence dependencies in workflow",
+  "baseCommit": "fe16fb8c06f1d83036a971beaaa6cd5927009e23",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".github/workflows/release.yml",
+    ".ai/work-items/active/release_workflow_dependency.contract.json",
+    ".ai/work-items/active/release_workflow_dependency.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "Changing release tag policy or release evidence contents",
+    "Changing application/runtime behavior",
+    "Publishing a release outside the exact-SHA release workflow"
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "The failing release job invokes the supply-chain evidence generator on a clean runner."
+    },
+    {
+      "path": "requirements-dev.lock",
+      "reason": "The locked development dependency set contains cyclonedx-python-lib required by the evidence generator."
+    },
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "The release job executes this evidence generator and imports CycloneDX libraries."
+    },
+    {
+      "path": "scripts/check_system_invariants.py",
+      "reason": "Repository invariants require workflow dependency installation to use the hashed lock file."
+    },
+    {
+      "path": ".ai/work-items/active/release_workflow_dependency.contract.json",
+      "reason": "Defines the bounded release workflow remediation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_integrity", "workflow_dependency"],
+    "reason": "A missing locked dependency prevents the final release evidence from being generated on GitHub Actions."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The failing release run provides concrete evidence and the fix is limited to installing the existing locked dependencies."
+  },
+  "preReviewWarnings": [
+    "Confirm the release job installs dependencies from the hashed lock file before running evidence generation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record checkpoints before and after the release workflow remediation."
+  },
+  "acceptance": [
+    "The release workflow installs dependencies from requirements-dev.lock with hash verification before invoking check_supply_chain.py.",
+    "The workflow remediation passes repository workflow invariants and local quality checks.",
+    "A release workflow rerun reaches source-bound evidence generation without ModuleNotFoundError."
+  ],
+  "guidelines": [
+    "Use the repository's locked dependency installation pattern for GitHub Actions.",
+    "Keep the release workflow exact-SHA and tag-precondition gates unchanged.",
+    "Do not weaken or bypass release evidence verification."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "clean release runner has the locked CycloneDX dependency before evidence generation",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "exact-SHA identity, tag precondition, and evidence-subject checks remain unchanged",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "v0.5.28 is not published by the Work Item PR itself",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "intent": {
+    "problem": "The exact-SHA release workflow reaches source-bound evidence generation on a clean runner without installing cyclonedx-python-lib, so publication fails before creating the tag or release.",
+    "constraints": ["Use requirements-dev.lock with hash verification.", "Keep v0.5.28 release publication last and exact-SHA bound.", "Do not alter release identity or evidence verification semantics."],
+    "rationale": "Installing the already-declared locked development dependencies in the release job makes the existing evidence generator runnable while preserving dependency integrity and release gates."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "Ray",
+    "reason": "User explicitly confirmed the remediation loop and required release publication last; the release workflow fix is necessary to complete that scoped task."
+  },
+  "rollbackNote": "Revert this workflow-only remediation; no release tag or GitHub Release is created by the Work Item PR itself."
+}
