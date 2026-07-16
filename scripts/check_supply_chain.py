@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 import hashlib
 import json
 import os
@@ -431,7 +432,29 @@ def compare_or_write(path: Path, data: dict[str, Any], *, write: bool) -> list[s
     if not path.exists():
         return [f"{path.relative_to(ROOT)} is missing"]
     current = json.loads(path.read_text(encoding="utf-8"))
-    if current != data:
+    expected = deepcopy(data)
+    # Candidate baselines are committed before the immutable release tag exists.
+    # Their volatile source identity is finalized in release-assets by release.yml;
+    # compare dependency/action evidence here while retaining exact identity checks
+    # for generated release assets.
+    if path == SBOM_BASELINE:
+        current.get("metadata", {}).get("component", {}).pop("version", None)
+        expected.get("metadata", {}).get("component", {}).pop("version", None)
+        for payload in (current, expected):
+            payload.pop("serialNumber", None)
+            tools = payload.get("metadata", {}).get("tools", [])
+            for tool in tools:
+                if tool.get("name") == "check_supply_chain":
+                    tool.pop("version", None)
+    elif path == PROVENANCE_BASELINE:
+        current.pop("commitSha", None)
+        expected.pop("commitSha", None)
+        current.pop("sbomDigest", None)
+        expected.pop("sbomDigest", None)
+    elif path == RELEASE_DIGESTS_BASELINE:
+        current.pop("sourceCommit", None)
+        expected.pop("sourceCommit", None)
+    if current != expected:
         return [f"{path.relative_to(ROOT)} differs from the computed supply-chain evidence"]
     return []
 
