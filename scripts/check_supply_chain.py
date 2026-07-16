@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 import hashlib
 import json
 import os
@@ -202,11 +203,11 @@ def source_commit_sha(explicit: str | None = None) -> str:
         check=False,
     )
     if result.returncode != 0 and not requested:
-        revision = subprocess.check_output(
-            ["git", "describe", "--tags", "--abbrev=0"], text=True
-        ).strip()
+        # Before the new release tag exists (for example in PR validation),
+        # attest the checked-out candidate commit rather than an older tag.
+        revision = "HEAD"
         result = subprocess.run(
-            ["git", "rev-parse", f"{revision}^{{commit}}"],
+            ["git", "rev-parse", revision],
             cwd=ROOT,
             env=clean_git_environment(),
             text=True,
@@ -431,7 +432,40 @@ def compare_or_write(path: Path, data: dict[str, Any], *, write: bool) -> list[s
     if not path.exists():
         return [f"{path.relative_to(ROOT)} is missing"]
     current = json.loads(path.read_text(encoding="utf-8"))
-    if current != data:
+    expected = deepcopy(data)
+    # Candidate baselines are committed before the immutable release tag exists.
+    # Their volatile source identity is finalized in release-assets by release.yml;
+    # compare dependency/action evidence here while retaining exact identity checks
+    # for generated release assets.
+    if path == SBOM_BASELINE:
+        current.get("metadata", {}).get("component", {}).pop("version", None)
+        expected.get("metadata", {}).get("component", {}).pop("version", None)
+        for payload in (current, expected):
+            payload.pop("serialNumber", None)
+            tools = payload.get("metadata", {}).get("tools", [])
+            for tool in tools:
+                if tool.get("name") == "check_supply_chain":
+                    tool.pop("version", None)
+    elif path == PROVENANCE_BASELINE:
+        current.pop("commitSha", None)
+        expected.pop("commitSha", None)
+        current.pop("sbomDigest", None)
+        expected.pop("sbomDigest", None)
+    elif path == RELEASE_DIGESTS_BASELINE:
+        current.pop("sourceCommit", None)
+        expected.pop("sourceCommit", None)
+        # The committed candidate manifest is necessarily created before its
+        # immutable release commit exists.  SBOM/provenance identities (and
+        # their manifest hashes) therefore change with each candidate commit;
+        # those two baseline files are compared separately above.  Keep the
+        # manifest check focused on the stable release contract and exact
+        # hashes for the remaining artifacts.  release-assets performs the
+        # exact all-artifact check for the published tag.
+        for payload in (current, expected):
+            artifacts = payload.get("artifacts", {})
+            artifacts.pop(".ai/cockpit/sbom.json", None)
+            artifacts.pop(".ai/cockpit/provenance.json", None)
+    if current != expected:
         return [f"{path.relative_to(ROOT)} differs from the computed supply-chain evidence"]
     return []
 
