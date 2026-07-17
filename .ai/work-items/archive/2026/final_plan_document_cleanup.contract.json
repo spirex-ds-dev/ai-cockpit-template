@@ -1,0 +1,55 @@
+{
+  "contractVersion": 2,
+  "workItemId": "final_plan_document_cleanup",
+  "mode": "code",
+  "title": "Close the Conditional GO remediation cycle and remove the execution plan",
+  "baseCommit": "4fdc342",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/final_plan_document_cleanup.contract.json",
+    ".ai/work-items/active/final_plan_document_cleanup.summary.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    "docs/superpowers/plans/2026-07-17-conditional-go-remediation-cycle.md"
+  ],
+  "outOfScope": [
+    "Changing any published release asset or immutable tag",
+    "Deleting archived Work Item evidence",
+    "Changing repository review or release policy"
+  ],
+  "sources": [
+    {"path": "docs/superpowers/plans/2026-07-17-conditional-go-remediation-cycle.md", "reason": "Task 11 acceptance and completion rule."},
+    {"path": ".ai/work-items/archive/2026/publish_next_version.summary.json", "reason": "Prior release evidence is preserved and referenced, not modified."},
+    {"path": "docs/reference/distribution.md", "reason": "Public release verification boundary."}
+  ],
+  "problemStatement": "The remediation cycle is complete and v0.5.30 is published, but the archived release summary still reflects prepublication status and the temporary execution plan remains in the product branch.",
+  "scenarioCoverage": [
+    {"scenario": "All preceding Work Items are archived, merged, and lifecycle-closed.", "required": true, "status": "verified", "evidence": [".ai/work-items/archive/index.json", "make ai-close-work-item for preceding Work Items"]},
+    {"scenario": "v0.5.30 is publicly published for the exact immutable source SHA and its assets pass the public checker.", "required": true, "status": "verified", "evidence": ["gh release view v0.5.30", "make check-release-distribution"]},
+    {"scenario": "The plan document is deleted while archived evidence remains available.", "required": true, "status": "unverified", "evidence": []}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["audit_evidence", "destructive_document_cleanup"], "reason": "This Work Item deletes a plan document but must preserve all archived audit evidence."},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The maintainer authorized the complete cycle and v0.5.30 publication."},
+  "preReviewWarnings": ["Do not delete archived Contracts, Summaries, or archive index entries."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record publication evidence before removing the temporary plan."},
+  "acceptance": [
+    "All ten preceding Work Items remain archived with merged PRs and lifecycle closure evidence.",
+    "The archived publish_next_version Summary records v0.5.30, its exact source SHA, release URL, asset digests, and public checker result.",
+    "The remediation plan Markdown is deleted and archived evidence paths remain indexed and readable."
+  ],
+  "guidelines": [
+    "Preserve immutable release evidence and historical Work Item records.",
+    "Do not claim trusted release status beyond the recorded platform evidence.",
+    "Run the repository quality and governance checks after cleanup."
+  ],
+  "intent": {"problem": "Close the serialized remediation cycle without losing audit evidence.", "constraints": ["Keep all archived evidence.", "Do not alter v0.5.30."], "rationale": "The plan is an execution artifact; the archived Work Item records and release evidence are the durable audit record."},
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": true, "requiresHumanApproval": true, "allowPatterns": ["docs/superpowers/plans/2026-07-17-conditional-go-remediation-cycle.md"], "approvalEvidence": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized deletion of the completed work document after all tasks finish."}},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized completion and deletion of the work document after all tasks finish."},
+  "rollbackNote": "The archived evidence is preserved; if the cleanup requires correction, restore the plan from the merged history rather than rewriting release evidence."
+}
