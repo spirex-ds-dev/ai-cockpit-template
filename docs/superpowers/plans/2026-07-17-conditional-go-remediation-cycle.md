@@ -72,7 +72,7 @@ git diff --exit-code origin/main
 - `release.json` explicitly selects `release-assets-v1` authority for public verification.
 - The checker fails closed when Tag candidate identities disagree, unless the authoritative Release Assets prove the identity.
 - Provenance commit, release tag, digest source commit, and Tag target must resolve to one exact source SHA.
-- Tests cover the `v0.5.29`-style contradictory candidate case and the enabled authority path.
+- Tests cover the `v0.5.30`-style contradictory candidate case and the enabled authority path.
 **Verification:** `pytest -q tests/test_release_distribution.py tests/test_workflows.py` plus the full cycle commands.
 **Stop condition:** pause if the public Release API or asset download cannot be read with available credentials; do not downgrade to candidate-only validation.
 ### Task 2: Public Release Asset Integrity Check

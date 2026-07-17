@@ -1,0 +1,62 @@
+{
+  "contractVersion": 2,
+  "workItemId": "publish_next_version",
+  "mode": "code",
+  "title": "Prepare and publish release v0.5.30",
+  "baseCommit": "7bc5d66",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/publish_next_version.contract.json",
+    ".ai/work-items/active/publish_next_version.summary.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/provenance.json",
+    "install.sh",
+    "docs/getting-started/installation.md",
+    "docs/superpowers/plans/2026-07-17-conditional-go-remediation-cycle.md",
+    "release.json"
+  ],
+  "outOfScope": [
+    "Changing release workflow semantics",
+    "Publishing any tag other than v0.5.30",
+    "Deleting immutable release evidence or historical Work Items"
+  ],
+  "sources": [
+    {"path": "docs/superpowers/plans/2026-07-17-conditional-go-remediation-cycle.md", "reason": "Task 10 acceptance and human gate."},
+    {"path": "release.json", "reason": "Current release identity v0.5.29 and supply-chain contract."},
+    {"path": ".github/workflows/release.yml", "reason": "Exact-SHA release workflow and publication gates."},
+    {"path": "docs/reference/distribution.md", "reason": "Documented release preparation and publication boundary."}
+  ],
+  "problemStatement": "Tasks 1–9 are complete, but the Conditional GO cycle still requires the explicitly approved next release v0.5.30 to be prepared, validated, and published from one immutable main SHA.",
+  "scenarioCoverage": [
+    {"scenario": "release.json declares exactly v0.5.30 and it is exactly one patch after the public v0.5.29 tag.", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "The candidate source passes quality, compatibility, release evidence, and public distribution checks before publication.", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "The GitHub release is published only for the verified immutable source SHA with matching assets.", "required": true, "status": "unverified", "evidence": []}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "high", "riskTypes": ["production_release", "immutable_artifact", "external_publication"], "reason": "This Work Item publishes an external immutable tag and GitHub Release."},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The maintainer explicitly approved target version v0.5.30 and production publication."},
+  "preReviewWarnings": ["Do not publish a tag other than v0.5.30.", "Use the exact merged main SHA and preserve the workflow's blocking gates."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record explicit version approval, immutable source identity, and publication evidence."},
+  "acceptance": [
+    "The next version is explicitly selected as v0.5.30 and recorded in release.json.",
+    "Quality, compatibility, exact-ref Smoke, Release Asset Authority, and public asset integrity checks pass.",
+    "The GitHub Release is published only for the verified immutable source SHA with matching release assets.",
+    "The final Summary records version, tag, source SHA, release URL, asset digests, Smoke run, and public checker result."
+  ],
+  "guidelines": [
+    "Keep release identity exact and never infer a version from a moving branch.",
+    "Treat the GitHub workflow as the publication authority and preserve its fail-closed gates.",
+    "Do not claim external trust beyond the evidence actually published."
+  ],
+  "intent": {"problem": "The Conditional GO cycle needs one verified next release after the completed remediation tasks.", "constraints": ["Publish only v0.5.30.", "Use one immutable main SHA.", "Honor the explicit maintainer approval."], "rationale": "An exact approved patch release closes the release gate while retaining source and asset traceability."},
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly confirmed production publication of v0.5.30."},
+  "rollbackNote": "Before publication, revert the candidate release.json change. After tag publication, do not rewrite the immutable tag; use a new corrective release if required."
+}
