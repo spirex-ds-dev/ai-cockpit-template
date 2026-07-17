@@ -29,5 +29,20 @@ def test_report_rejects_missing_path_and_invalid_classification():
     assert "entries[1] must contain a path" in issues
 
 
+def test_report_rejects_invalid_version_and_classification():
+    report = build_report([{"path": "x", "classification": "Template-owned"}])
+    report["reportVersion"] = 99
+    report["entries"].append({"path": "y", "classification": "Unknown"})
+    issues = validate_report(report)
+    assert "reportVersion is unsupported" in issues
+    assert "entries[1] has an invalid classification" in issues
+
+
+def test_ready_report_does_not_require_confirmation():
+    report = build_report([{"path": "x", "classification": "Template-owned"}])
+    assert report["status"] == "ready"
+    assert report["requiresHumanConfirmation"] is False
+
+
 def test_missing_report_is_not_treated_as_valid():
     assert validate_report(None) == ["report must be an object"]
