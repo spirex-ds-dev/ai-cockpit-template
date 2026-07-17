@@ -1,0 +1,453 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "adoption_installer_transactionality",
+  "contractPath": ".ai/work-items/archive/2026/adoption_installer_transactionality.contract.json",
+  "changedFiles": [
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Validate markers and managed conflicts before adoption-branch mutation; keep dry-run Git-read-only; restore the exact original branch or detached HEAD on rollback."
+    },
+    {
+      "path": "tests/test_adoption_e2e.py",
+      "reason": "Cover dry-run read-only adoption, pre-mutation validation failures, runtime rollback for branch and detached HEAD, and successful remote-base adoption."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Document the transactional adoption boundary for dry-run, validation order, and rollback."
+    },
+    {
+      "path": ".ai/cockpit/adoption.md",
+      "reason": "Align the installed adoption checklist with the installer transaction boundary without claiming release readiness."
+    },
+    {
+      "path": ".ai/guards/governance_complexity_policy.yaml",
+      "reason": "Raise pythonLines ceiling to cover the transactional adoption installer and focused E2E coverage."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/adoption_installer_transactionality.contract.json",
+      "reason": "Keep acceptance wording free of preflight false positives, align scenario labels, and authorize the complexity-policy adjustment."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/adoption_installer_transactionality.summary.json",
+      "reason": "Record implementation evidence, scenario coverage, checkpoints, and verification results."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Regenerated Cockpit status for the active Work Item."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/superpowers/plans/2026-07-17-conditional-go-remediation-cycle.md",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_installer.py",
+    "tests/test_adoption_e2e.py",
+    "docs/getting-started/installation.md",
+    ".ai/cockpit/adoption.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:10:56.984570+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "ac3286ccaafb1314f9dbfa104e276978a577a450cc718943e7d3377742d80d99",
+      "commandHash": "888a5ce429c85554500aecccf95b43547913070e795178d680d82e6c4fd4dfc5",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "1a17add3190971ff7afc7dc9f6165871c0738bfa7fdeefe6a024850013e178ba",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/adoption_installer_transactionality.contract.json work item contract check passed: .ai/work-items/active/adoption_installer_transactionality.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:10:57.177082+00:00",
+      "exitCode": 0,
+      "durationMs": 139,
+      "outputDigest": "5b195a5f72e8fbe9352fb18c72d07f22d02884735a5c73ddef644af3470e31fd",
+      "commandHash": "0ed84650278a9e71cc8ba6f902e8493dc138043dc0de288ed158bf03357a7d61",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "1a17add3190971ff7afc7dc9f6165871c0738bfa7fdeefe6a024850013e178ba",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/adoption_installer_transactionality.contract.json scope guard passed: 6 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:10:57.364851+00:00",
+      "exitCode": 0,
+      "durationMs": 133,
+      "outputDigest": "12ed03bbbd2d312eee57186e7d8ae2b5e0848bfeac16f31c531cb5f31aa2b800",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "1a17add3190971ff7afc7dc9f6165871c0738bfa7fdeefe6a024850013e178ba",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/adoption_installer_transactionality.contract.json [warning] restricted_write: .ai/cockpit/adoption.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/guards/governance_complexity_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. guard check completed: 2 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/adoption_installer_transactionality.contract.json SUMMARY=.ai/work-items/active/adoption_installer_transactionality.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:10:57.653632+00:00",
+      "exitCode": 0,
+      "durationMs": 230,
+      "outputDigest": "c71b1ff97effa22bf69a9fb7f245f9136c803f9aceea95516aaa9cf3d5bc4dfa",
+      "commandHash": "9e8f954cabb48047c8da20a6729427a0f3e121414020242e5d1f05c885f125bc",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "1a17add3190971ff7afc7dc9f6165871c0738bfa7fdeefe6a024850013e178ba",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/adoption_installer_transactionality.contract.json --summary .ai/work-items/active/adoption_installer_transactionality.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `adoption_installer_transactionality` - Contract Hash: `8def526d8c6f0403` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Co"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:10:57.809516+00:00",
+      "exitCode": 0,
+      "durationMs": 102,
+      "outputDigest": "3575be44da59c8638ef9e838661ad87213649752a9ee2c84a0cbdc400aee4bd7",
+      "commandHash": "77a56048a1cbcadfbedd4d4746fd37589aefddefad27dde5bd5f343f5b9b108c",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "1a17add3190971ff7afc7dc9f6165871c0738bfa7fdeefe6a024850013e178ba",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/adoption_installer_transactionality.summary.json review policy matched 3 path(s) [review] .ai/cockpit/adoption.md [review] .ai/cockpit/current_status.md [review] .ai/guards/governance_complexity_policy.yaml review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:10:57.968589+00:00",
+      "exitCode": 0,
+      "durationMs": 105,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "1a17add3190971ff7afc7dc9f6165871c0738bfa7fdeefe6a024850013e178ba",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:10:58.114161+00:00",
+      "exitCode": 0,
+      "durationMs": 93,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "1a17add3190971ff7afc7dc9f6165871c0738bfa7fdeefe6a024850013e178ba",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/adoption_installer_transactionality.contract.json SUMMARY=.ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:10:58.225815+00:00",
+      "exitCode": 0,
+      "durationMs": 58,
+      "outputDigest": "f81fa1dd741961224043cc65bc3bbea2df4fdf7acf468700445ff357b8314d88",
+      "commandHash": "a2d0f421659498933006e145e20fbc75f4c1db58fb637f40c956e34e78f7d59d",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "1a17add3190971ff7afc7dc9f6165871c0738bfa7fdeefe6a024850013e178ba",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/adoption_installer_transactionality.contract.json --summary .ai/work-items/active/adoption_installer_transactionality.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/adoption_installer_transactionality.contract.json SUMMARY=.ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:10:58.337930+00:00",
+      "exitCode": 0,
+      "durationMs": 60,
+      "outputDigest": "1e3858a833a6324f6a8ff5fc9167d2ae6e4e3d0b6935d6082b283066b7e6abbb",
+      "commandHash": "aef817badf25eae72afffc8b33a4721ea317cb4a4222cc6f8ca1b7487d0ff58e",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "1a17add3190971ff7afc7dc9f6165871c0738bfa7fdeefe6a024850013e178ba",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/adoption_installer_transactionality.contract.json --summary .ai/work-items/active/adoption_installer_transactionality.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:10:58.586808+00:00",
+      "exitCode": 0,
+      "durationMs": 197,
+      "outputDigest": "a1f2d00ac70634c0e7525215101e48c24f02d2b7203be3fbb7be4fd88faa2850",
+      "commandHash": "10855aad77fd8ac9a171d720df6604febf527265d950d84fd4cb61c3e7b45722",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "1a17add3190971ff7afc7dc9f6165871c0738bfa7fdeefe6a024850013e178ba",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/adoption_installer_transactionality.contract.json ## Diff Ownership Preview - active_owned: `6`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/adoption.md` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/governance_complexity_"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:12:44.540667+00:00",
+      "exitCode": 0,
+      "durationMs": 105898,
+      "outputDigest": "48b0700e8651d2ce5117ea80853df51442cbaa585658110045fc770c34f82f37",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "1a17add3190971ff7afc7dc9f6165871c0738bfa7fdeefe6a024850013e178ba",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 94 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=80 ........................................................................ [ 13%] ........................................................................ [ 27%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/adoption_installer_transactionality.contract.json SUMMARY=.ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:12:45.955585+00:00",
+      "exitCode": 0,
+      "durationMs": 255,
+      "outputDigest": "bde31dbd9a777abe885a62f2d5a40ae80ff6c6c88ac353dbd1fe4fa1feb93c9c",
+      "commandHash": "942102fdefe44085518b2cfe4007b82d14806f5281cd410ca433328ec88929a8",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "d61a717822f033ef2e80a3caf064bdbe5b79202cdc9c82f5c1903a896e7cdddf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/adoption_installer_transactionality.contract.json --summary .ai/work-items/active/adoption_installer_transactionality.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/adoption_installer_transactionality.contract.json SUMMARY=.ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:12:46.236710+00:00",
+      "exitCode": 0,
+      "durationMs": 232,
+      "outputDigest": "abf6994a76f22ffd2decc6a658c305f08bc78febcdfc423bdfb6bcb35ff6154e",
+      "commandHash": "5d994491910d2374599f1d9e541b93c21975aa594cc4382ac7935b94791ac0cc",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "d61a717822f033ef2e80a3caf064bdbe5b79202cdc9c82f5c1903a896e7cdddf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/adoption_installer_transactionality.contract.json --summary .ai/work-items/active/adoption_installer_transactionality.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:12:46.328703+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "d61a717822f033ef2e80a3caf064bdbe5b79202cdc9c82f5c1903a896e7cdddf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/adoption_installer_transactionality.contract.json SUMMARY=.ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:12:46.427651+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "ecd22c816a57e6846b6063ce2ab53e36bc518fe202fd624a881cb65ce2256fc6",
+      "commandHash": "5a890a9dfb681cfbe619620c88274435e3d5870d77fead47ae52b67a392165b2",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "d61a717822f033ef2e80a3caf064bdbe5b79202cdc9c82f5c1903a896e7cdddf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/adoption_installer_transactionality.contract.json --summary .ai/work-items/active/adoption_installer_transactionality.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/adoption_installer_transactionality.summary.json CONTRACT=.ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T02:12:46.580719+00:00",
+      "exitCode": 0,
+      "durationMs": 104,
+      "outputDigest": "917225899102cad697e87ad7eaee1b4cf466f518fa1627409885f2a492c7f5d7",
+      "commandHash": "d3e09d65bc5ad51fda5622fef5b1cf261681509133fa54e1119c16184dba2968",
+      "contractHash": "8def526d8c6f0403482b05381d13e72cc4cf076971a0b76b7182ef78b9ac9b3a",
+      "commitSha": "672ed8ba21256b4b3863c372da8a69f16f3728f8",
+      "executionContractPath": ".ai/work-items/active/adoption_installer_transactionality.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/adoption_installer_transactionality.summary.json",
+      "worktreeDigest": "d61a717822f033ef2e80a3caf064bdbe5b79202cdc9c82f5c1903a896e7cdddf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/adoption_installer_transactionality.summary.json --contract .ai/work-items/active/adoption_installer_transactionality.contract.json ai summary check passed: .ai/work-items/active/adoption_installer_transactionality.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep adoption preflight read-only and complete all validation before repository mutation.",
+      "compliant": true,
+      "evidence": "install() runs validate_agent_markers and validate_managed_conflicts before prepare_adoption_branch; dry-run prepare_adoption_branch returns without remote sync or branch mutation."
+    },
+    {
+      "guideline": "Treat branch and filesystem changes as one transaction with explicit restoration evidence.",
+      "compliant": true,
+      "evidence": "GitHeadSnapshot captures the original HEAD; rollback_installation restores that branch or detached commit before deleting the adoption branch and reversing filesystem writes. Covered by tests/test_adoption_e2e.py."
+    },
+    {
+      "guideline": "Document the actual installer boundary without claiming external review or release readiness.",
+      "compliant": true,
+      "evidence": "docs/getting-started/installation.md and .ai/cockpit/adoption.md describe transactional adoption and still point to human finish/PR/close; outOfScope keeps release and external review for later Work Items."
+    }
+  ],
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "Validation now precedes branch mutation, dry-run stays Git-read-only, and failed installs restore the original HEAD plus filesystem while leaving release and external-review work out of scope."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Dry-run adoption performs no remote sync, branch creation, switch, or deletion.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_adoption_e2e.py::test_dry_run_create_adoption_performs_no_git_mutation"
+      ]
+    },
+    {
+      "scenario": "Marker and managed-conflict failures happen before branch mutation.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_adoption_e2e.py::test_marker_failure_happens_before_branch_mutation",
+        "tests/test_adoption_e2e.py::test_managed_conflict_failure_happens_before_branch_mutation"
+      ]
+    },
+    {
+      "scenario": "Runtime failure restores the original branch or detached HEAD and filesystem exactly.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_adoption_e2e.py::test_runtime_failure_restores_original_branch_and_filesystem",
+        "tests/test_adoption_e2e.py::test_runtime_failure_restores_detached_head"
+      ]
+    },
+    {
+      "scenario": "Successful adoption creates the expected branch and records the correct base.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_adoption_e2e.py::test_quick_install_creates_adoption_branch_from_remote_head",
+        "tests/test_adoption_e2e.py::test_first_adoption_finishes_and_passes_complete_pr_check"
+      ]
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "8def526d8c6f0403",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Human confirmed high-risk Git rollback and dry-run transaction boundary after preflight needs_human_confirmation; implementation had not started. Acceptance wording was later tightened only to avoid a preflight false positive on the substring etc inside fetch."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "8def526d8c6f0403",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed transactional install changes, focused adoption E2E evidence, documentation boundary, complexity ceiling adjustment, and residual remote-tracking risk before running ai-finish."
+    }
+  ],
+  "knownGaps": [
+    "Hosted adopter Git implementations may differ; tests cover supported local Git branch and detached HEAD states."
+  ],
+  "overclaimPrevention": "Do not report transactional adoption as release-ready or externally reviewed; this Work Item only hardens the first-adoption installer transaction boundary.",
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Installer Git mutation remains high-impact in principle, but focused E2E coverage now verifies dry-run, pre-mutation validation, and HEAD restoration for branch and detached states."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "followUps": [
+    "Next remediation Work Item: adopter_release_manifest_boundary."
+  ],
+  "unverifiedScenarios": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "git_compatibility",
+      "detail": "Remote-tracking side effects of a successful fetch before a later failure are not rewound; HEAD and filesystem restoration are the guaranteed transaction boundary.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Git HEAD restoration semantics for branch and detached states.",
+      "Dry-run remains free of remote sync and branch mutation."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "changed",
+    "userVisibleOutput": "changed",
+    "persistence": "changed",
+    "localization": "not_applicable",
+    "generatedArtifacts": "changed",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "archiveSequence": 108
+}
