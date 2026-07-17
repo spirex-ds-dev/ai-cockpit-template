@@ -71,6 +71,7 @@ SCRIPT_NAMES = {
     "ai_preflight_review.py",
     "ai_trust_guards.py",
     "ai_trust_schema.py",
+    "ai_decision_protocol.py",
     "ai_start.py",
     "ai_start_receipt.py",
     "ai_project_profile.py",

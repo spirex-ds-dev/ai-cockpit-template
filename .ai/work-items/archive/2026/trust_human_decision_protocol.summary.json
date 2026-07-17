@@ -1,0 +1,411 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "trust_human_decision_protocol",
+  "contractPath": ".ai/work-items/archive/2026/trust_human_decision_protocol.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/trust_human_decision_protocol.contract.json",
+      "reason": "Defined the Task 3 decision protocol scope, intent, acceptance, scenarios, and verification boundaries."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/trust_human_decision_protocol.summary.json",
+      "reason": "Maintained lifecycle evidence for structured Decision Request and Evidence persistence."
+    },
+    {
+      "path": ".ai/decisions/**",
+      "reason": "Reserved the machine-readable persistence boundary for stable Human Decision Requests and Evidence."
+    },
+    {
+      "path": "scripts/ai_decision_protocol.py",
+      "reason": "Added stable decision IDs, schema validation, request persistence, and evidence persistence."
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "reason": "Persisted schema-valid Decision Requests during generated non-ready Preflight runs and recorded structured Evidence."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Included the decision protocol module in adopter installations."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Added the check-decision-protocol target and included it in quality."
+    },
+    {
+      "path": "tests/test_decision_protocol.py",
+      "reason": "Added stable-ID, persistence, invalid-option, and valid-evidence tests."
+    },
+    {
+      "path": "tests/test_preflight_review.py",
+      "reason": "Verified decision flow compatibility while the structured protocol is added."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/superpowers/plans/2026-07-18-ai-cockpit-trust-layer-work-item-loop.md",
+    ".ai/trust/schema/human_decision_request.schema.json",
+    ".ai/trust/schema/human_decision_evidence.schema.json",
+    "scripts/ai_preflight_review.py",
+    ".ai/glossary.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:49:30.171021+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "4bffcd26d6bff22d315eb287dc9fccc2cacc46ee30c6e698981af1f33e5da114",
+      "commandHash": "754c8fa7e86292de805674dfa9f249ea8a0a22e1ba236eddda57e0ee157e4827",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "181fc91ed1fe99ec8c98ab6a23cdc1949a104191019a157e48f91ff0a026e443",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/trust_human_decision_protocol.contract.json work item contract check passed: .ai/work-items/active/trust_human_decision_protocol.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:49:30.321107+00:00",
+      "exitCode": 0,
+      "durationMs": 98,
+      "outputDigest": "0b32486eec8e45eaa317e24f9f7681c75620f3a7b3b3ae0a680391901fd9c992",
+      "commandHash": "140ae5459c53885663f7f6eea1faaea1f534145aac56c703bbb2ee831ba1d805",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "181fc91ed1fe99ec8c98ab6a23cdc1949a104191019a157e48f91ff0a026e443",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/trust_human_decision_protocol.contract.json scope guard passed: 8 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:49:30.501383+00:00",
+      "exitCode": 0,
+      "durationMs": 130,
+      "outputDigest": "714561adb1ff1adb200a6f07c05b6cc965c1a2de91133dc8b1b3cd931acee5b5",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "181fc91ed1fe99ec8c98ab6a23cdc1949a104191019a157e48f91ff0a026e443",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/trust_human_decision_protocol.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/trust_human_decision_protocol.contract.json SUMMARY=.ai/work-items/active/trust_human_decision_protocol.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:49:30.744771+00:00",
+      "exitCode": 0,
+      "durationMs": 191,
+      "outputDigest": "0abd005f38ef9e27519e7a54545900bebebd5eb7b974d0cfe4521a1c97b403ce",
+      "commandHash": "4e043761612aa1feca16dcea41c507fe7e9192ad4aeb339de60b6252da3d4ceb",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "181fc91ed1fe99ec8c98ab6a23cdc1949a104191019a157e48f91ff0a026e443",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/trust_human_decision_protocol.contract.json --summary .ai/work-items/active/trust_human_decision_protocol.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `trust_human_decision_protocol` - Contract Hash: `0c708d1c8a60ec15` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Require"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:49:30.913977+00:00",
+      "exitCode": 0,
+      "durationMs": 110,
+      "outputDigest": "263cac149a51dc65924ee12a8cba200fc038b0d317a2c009ba291ab82f4e09ff",
+      "commandHash": "209b02b83dbd409cddf02b55dfb6fe17d952ed4b6d3256513a0a9dc97d2704c5",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "181fc91ed1fe99ec8c98ab6a23cdc1949a104191019a157e48f91ff0a026e443",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/trust_human_decision_protocol.summary.json review policy matched 5 path(s) [review] .ai/work-items/starts/trust_human_decision_protocol.json [review] scripts/ai_decision_protocol.py [review] .ai/cockpit/current_status.md [review] Makefile [review] scripts/ai_preflight_review.py review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:49:31.271641+00:00",
+      "exitCode": 0,
+      "durationMs": 122,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "181fc91ed1fe99ec8c98ab6a23cdc1949a104191019a157e48f91ff0a026e443",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:49:31.424027+00:00",
+      "exitCode": 0,
+      "durationMs": 100,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "181fc91ed1fe99ec8c98ab6a23cdc1949a104191019a157e48f91ff0a026e443",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/trust_human_decision_protocol.contract.json SUMMARY=.ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:49:31.543255+00:00",
+      "exitCode": 0,
+      "durationMs": 66,
+      "outputDigest": "c38a811a457e08434aa87d25d2500ca56f52fa96f8566955b96ebee3bad417d2",
+      "commandHash": "40480fca77bfe43672e78d2e3ba77ba4054cd1c9e99ddaaf4418716f04207400",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "181fc91ed1fe99ec8c98ab6a23cdc1949a104191019a157e48f91ff0a026e443",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/trust_human_decision_protocol.contract.json --summary .ai/work-items/active/trust_human_decision_protocol.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/trust_human_decision_protocol.contract.json SUMMARY=.ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:49:31.643418+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "f2099341934b159305c57f3c7493e786681e30a0e6d080e865cfbcd24357c6ec",
+      "commandHash": "e998efe35ddf37d9d644196d0fc4543a4e19582b1e6dce1208476a783669cef6",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "181fc91ed1fe99ec8c98ab6a23cdc1949a104191019a157e48f91ff0a026e443",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/trust_human_decision_protocol.contract.json --summary .ai/work-items/active/trust_human_decision_protocol.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:49:31.908401+00:00",
+      "exitCode": 0,
+      "durationMs": 212,
+      "outputDigest": "6ebc2cf2a2e64c7aa66780126b71ee83dd16f91b02d20d4300f7cda583c86fe4",
+      "commandHash": "2bd440751877116ea4cf8d1c1785d5d4f59e99590550b217cad315517264eeec",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "181fc91ed1fe99ec8c98ab6a23cdc1949a104191019a157e48f91ff0a026e443",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/trust_human_decision_protocol.contract.json ## Diff Ownership Preview - active_owned: `8`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/trust_human_decision_protocol.json` — covered by Contract scope - [active_owned] `Makefi"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:51:36.576066+00:00",
+      "exitCode": 0,
+      "durationMs": 124616,
+      "outputDigest": "70c3bb1f84e1009299b82b16ab652a43f24e63f0934de14e58d00e37ebd8aa8b",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "181fc91ed1fe99ec8c98ab6a23cdc1949a104191019a157e48f91ff0a026e443",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 103 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 11%] ........................................................................ [ 22%] ............................................................"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/trust_human_decision_protocol.contract.json SUMMARY=.ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:51:37.862457+00:00",
+      "exitCode": 0,
+      "durationMs": 226,
+      "outputDigest": "790610a1118e9a341a325adadfa2d59ad46d9c725230ec5105b7c125aeeb4eab",
+      "commandHash": "a1d5f80ec022925a307e771fcc5a068b54b41ea96ae0969c9408d216d6a8d7d1",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "4929383ab2b6ba9f7efd0f194524083d580617e03eea5c7367bbb0ec5a3e1bfc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/trust_human_decision_protocol.contract.json --summary .ai/work-items/active/trust_human_decision_protocol.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/trust_human_decision_protocol.contract.json SUMMARY=.ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:51:38.180876+00:00",
+      "exitCode": 0,
+      "durationMs": 269,
+      "outputDigest": "2d3487146efad6d4ccf4b87d5f1a1177a6b50df636bddd0378cb696361e1fdfb",
+      "commandHash": "500326d058b5bfa09cc816ad76779ff11a9c97a9c76b0ddcf1640ce57ce9e1d9",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "4929383ab2b6ba9f7efd0f194524083d580617e03eea5c7367bbb0ec5a3e1bfc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/trust_human_decision_protocol.contract.json --summary .ai/work-items/active/trust_human_decision_protocol.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:51:38.313318+00:00",
+      "exitCode": 0,
+      "durationMs": 62,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "4929383ab2b6ba9f7efd0f194524083d580617e03eea5c7367bbb0ec5a3e1bfc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/trust_human_decision_protocol.contract.json SUMMARY=.ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:51:38.428478+00:00",
+      "exitCode": 0,
+      "durationMs": 65,
+      "outputDigest": "4387e5cf1b30065e559287b27c1d48c6d90a224b2dca47d2a3e3e9c5b31ba5d1",
+      "commandHash": "59e4593342ac45de5cfaa676b29690ebdcae61600f85ebfeba95e1a56d17156b",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "4929383ab2b6ba9f7efd0f194524083d580617e03eea5c7367bbb0ec5a3e1bfc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/trust_human_decision_protocol.contract.json --summary .ai/work-items/active/trust_human_decision_protocol.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/trust_human_decision_protocol.summary.json CONTRACT=.ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T21:51:39.181045+00:00",
+      "exitCode": 0,
+      "durationMs": 93,
+      "outputDigest": "0996bd3ef3c41a5a36dddcbd20cad4319ab00942cb810643b42e87eeb9162a0e",
+      "commandHash": "cd2633511f5ebd1a3c626cfdc7b5833325182946220db0f020696a8209b819d4",
+      "contractHash": "0c708d1c8a60ec15751dee4c6a1c6c42d53d47788be9e292d92250ad595e4d41",
+      "commitSha": "4a741538f18e967d6554d81f929c6791097cade0",
+      "executionContractPath": ".ai/work-items/active/trust_human_decision_protocol.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/trust_human_decision_protocol.summary.json",
+      "worktreeDigest": "1dbb594cb2fdc2fbbc18013656aa6e20d661e1837034856a000ad7140c5b893c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/trust_human_decision_protocol.summary.json --contract .ai/work-items/active/trust_human_decision_protocol.contract.json ai summary check passed: .ai/work-items/active/trust_human_decision_protocol.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Decision records are machine-readable and schema validated.",
+      "compliant": true,
+      "evidence": "ai_decision_protocol validates both persisted Request and Evidence against the checked-in Trust schemas; 4 protocol tests pass."
+    },
+    {
+      "guideline": "Decision protocol code must not infer approval from chat text or stale evidence.",
+      "compliant": true,
+      "evidence": "record_evidence requires a persisted option ID and schema-valid structured fields; invalid-option tests pass."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The decision protocol is implemented as a standalone script module and is consumed only through its public persistence functions; no internal feature module imports were added."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Protocol persistence is local and schema-bound; later tasks will add critical-domain policy and broader presentation."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "A decision cannot itself resolve an ambiguous Contract; a fresh ready Preflight remains required before resumption.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Decision IDs and evidence remain bound to the current request.",
+      "Chat-only or stale evidence cannot resume execution."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "0c708d1c8a60ec15",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed the schema-bound decision identity, persistence boundary, and resume conditions before implementation."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "0c708d1c8a60ec15",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 16,
+      "detail": "Reviewed protocol tests, schema validation, mismatch rejection, and fresh Preflight behavior before finish."
+    }
+  ],
+  "knownGaps": [
+    "Critical-domain decision policy is explicitly deferred to Task 4."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 141
+}

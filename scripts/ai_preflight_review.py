@@ -23,6 +23,7 @@ from ai_common import (
 )
 from ai_readiness_policy import has_explicit_blocker
 from ai_trust_guards import trust_signals
+from ai_decision_protocol import persist_request, record_evidence as persist_decision_evidence
 from ai_upgrade_conflict_report import validate_report
 
 
@@ -97,6 +98,28 @@ def policy_hash(path: Path) -> str:
 
 def summary_path_for(contract_path: Path) -> Path:
     return contract_path.with_name(contract_path.name.replace(".contract.json", ".summary.json"))
+
+
+def project_root_for(path: Path) -> Path:
+    """Resolve the project root for a Contract or Summary path.
+
+    Tests and adopters may execute the installed scripts against a temporary
+    project, so protocol records must follow that project rather than the
+    repository containing this script.
+    """
+    resolved = path.resolve()
+    parts = resolved.parts
+    for marker in (".ai",):
+        if marker in parts:
+            index = parts.index(marker)
+            if index > 0:
+                return Path(*parts[:index])
+    return resolved.parent
+
+
+def decision_protocol_enabled(contract: dict[str, Any]) -> bool:
+    """Enable durable decision records only for Contracts declaring the boundary."""
+    return ".ai/decisions/**" in contract.get("scope", [])
 
 
 def load_decision_evidence(contract_path: Path) -> dict[str, Any] | None:
@@ -758,6 +781,18 @@ def record_decision_evidence(
     summary = load_json(summary_path)
     summary["decisionEvidence"] = evidence
     save_json(summary_path, summary)
+    protocol_root = project_root_for(summary_path)
+    protocol_request = persist_request(report, root=protocol_root)
+    if protocol_request is not None:
+        request_payload = load_json(protocol_request)
+        persist_decision_evidence(
+            request_payload,
+            selected_option=decision,
+            decision=decision,
+            decided_by=recorded_by,
+            rationale="Recorded through the structured Preflight decision protocol.",
+            root=protocol_root,
+        )
     return evidence
 
 
@@ -1223,6 +1258,8 @@ def main() -> int:
     output_path.write_text(
         json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
+    if decision_protocol_enabled(contract):
+        persist_request(report, root=project_root_for(contract_path))
     print(render_markdown(report), end="")
     print(f"preflight review generated: {output_path}")
     return 0

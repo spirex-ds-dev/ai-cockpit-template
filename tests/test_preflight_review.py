@@ -339,6 +339,21 @@ def test_ready_preflight_remains_ready_after_matching_evidence_is_present(tmp_pa
     assert report["decisionState"] == "human_decision_recorded"
 
 
+def test_non_ready_preflight_request_can_be_persisted_for_protocol(tmp_path):
+    import ai_decision_protocol
+
+    contract = tmp_path / "task.contract.json"
+    write_contract(contract, conservative_contract())
+    report = ai_preflight_review.derive_report(
+        conservative_contract(),
+        contract_path=contract,
+        policy_path=Path("/tmp/preflight_review_policy.yaml"),
+    )
+    path = ai_decision_protocol.persist_request(report, tmp_path)
+    assert path is not None
+    assert path.exists()
+
+
 def test_decision_evidence_helpers_fail_closed_on_malformed_inputs(tmp_path):
     contract = tmp_path / "task.contract.json"
     summary = tmp_path / "task.summary.json"
