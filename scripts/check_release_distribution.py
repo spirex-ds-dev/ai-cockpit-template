@@ -140,7 +140,9 @@ def candidate_release_issues(
     if not isinstance(published_tag, str) or not published_tag:
         issues.append("release.json releaseTag is missing")
     if isinstance(candidate_tag, str) and isinstance(published_tag, str):
-        if not is_next_patch_release(candidate_tag, published_tag):
+        if candidate_tag != published_tag and not is_next_patch_release(
+            candidate_tag, published_tag
+        ):
             issues.append(
                 f"next-release.json releaseTag {candidate_tag!r} is not the next patch after {published_tag!r}"
             )
