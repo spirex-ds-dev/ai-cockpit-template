@@ -15,6 +15,8 @@ Use `--upgrade` when the target repository already contains AI Cockpit files and
 
 Upgrade is local preparation only. Review the Contract and upgrade diff first, then obtain separate human approval for commit and push. The upgrade PR must be reviewed and merged manually. After merge, obtain a final human approval before running `make ai-close-work-item TASK=<upgrade-task>`. Do not use automatic merge or automatic branch deletion. The installer itself never performs any of these external Git actions.
 
+An upgrade now creates `upgrade_ai_cockpit` Contract and Summary records in the target repository. When the adopter has a discoverable remote default branch, it prepares `upgrade/ai-cockpit` (or `AI_COCKPIT_UPGRADE_BRANCH`) from that base; local-only repositories retain their existing behavior. The records capture source/target version metadata, managed-file changes, and the timestamped rollback backup root. The installer does not commit, push, open or merge a PR, or delete the review branch.
+
 ```sh
 CURRENT_VERSION="${CURRENT_VERSION:?set CURRENT_VERSION to the installed release tag}"
 TARGET_VERSION="${TARGET_VERSION:?set TARGET_VERSION to a newer release tag}"
