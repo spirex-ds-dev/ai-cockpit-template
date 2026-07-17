@@ -17,7 +17,7 @@ Install a fixed release of AI Cockpit into an existing repository. Start with th
 
 Installation is performed in the adopter repository, not in the template repository's working branch. The adopter repository keeps its own history and branch policy.
 
-The installation flow has five stages. With `--create-adoption`, the installer discovers the remote whose `HEAD` identifies the default branch, fetches it, and creates `adopt/ai-cockpit` from that latest remote base before writing files. The first governed Work Item walkthrough comes after adoption readiness:
+The installation flow has five stages. With `--create-adoption`, the installer first completes Agent Marker and managed-conflict validation while remaining on the current HEAD. Only after those checks pass does it discover the remote whose `HEAD` identifies the default branch, fetch it, and create `adopt/ai-cockpit` from that latest remote base before writing files. `--dry-run --create-adoption` stays read-only: it does not fetch, create a branch, switch, or delete references. If installation fails after branch or filesystem mutation, rollback restores the original branch or detached HEAD and removes the partial install. The first governed Work Item walkthrough comes after adoption readiness:
 
 1. Pre-flight: confirm the repository is a clean Git work tree with the required toolchain.
 2. Install: choose the stack preset and run the installer.
@@ -92,9 +92,9 @@ make check-ai-pr AI_BASE_COMMIT='<pre-adoption-commit>'
 
 These commands are local checkpoints, not an unattended publish script. Stop after local finish/archive for human review. Commit only after explicit human approval, push only after a second explicit approval, and create the PR for manual review and merge. Do not enable automatic merge or automatic source-branch deletion. After a human has merged the PR, obtain explicit approval again before running `make ai-close-work-item TASK=adopt_ai_cockpit`; closure performs the verified base synchronization and local/remote branch cleanup.
 
-The installer-generated Work Item owns every file actually written or appended by installation. It keeps project quality configuration as an explicit follow-up rather than recording temporary stand-in commands as passed. `--create-adoption` fails before writing unless the repository has an initial commit, a clean worktree, and no active Work Item. When called without Contract and Summary arguments, `make check-ai-status` prints `Skipping status check (no active contract/summary provided)`. Use `make check-ai-status-consistency` to verify the generated no-active status before you move on.
+The installer-generated Work Item owns every file actually written or appended by installation. It keeps project quality configuration as an explicit follow-up rather than recording temporary stand-in commands as passed. `--create-adoption` fails before writing unless the repository has an initial commit, a clean worktree, and no active Work Item. Marker and managed-conflict validation also complete before any adoption-branch mutation. When called without Contract and Summary arguments, `make check-ai-status` prints `Skipping status check (no active contract/summary provided)`. Use `make check-ai-status-consistency` to verify the generated no-active status before you move on.
 
-The adoption change is one adopter-project Work Item and one adopter-project PR. The installer creates the local adoption branch but never commits, pushes, merges, or deletes branches. Branch cleanup must happen only through the manually authorized `ai-close-work-item` step after PR merge.
+The adoption change is one adopter-project Work Item and one adopter-project PR. The installer creates the local adoption branch but never commits, pushes, merges, or deletes branches except when rolling back a failed installation transaction. Branch cleanup after a successful adoption must happen only through the manually authorized `ai-close-work-item` step after PR merge.
 
 ### Local Calibration Checklist
 

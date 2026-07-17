@@ -111,6 +111,18 @@ class Action:
     detail: str
 
 
+@dataclass(frozen=True)
+class GitHeadSnapshot:
+    """採用前の HEAD 状態。ブランチまたは detached HEAD を保持する。"""
+
+    commit: str
+    branch: str | None
+
+    @property
+    def detached(self) -> bool:
+        return self.branch is None
+
+
 def git_target_args(target: Path) -> list[str]:
     return [f"--git-dir={target / '.git'}", f"--work-tree={target}"]
 
@@ -224,6 +236,7 @@ class Installer:
         self.created_paths: set[Path] = set()
         self.preexisting_dirs: set[Path] = set()
         self.created_adoption_branch: str | None = None
+        self.original_git_head: GitHeadSnapshot | None = None
 
     def install(self) -> int:
         if not self.source.exists():
@@ -239,13 +252,14 @@ class Installer:
             return 2
         if self.create_adoption and not self.adoption_preflight():
             return 2
-        if self.create_adoption and not self.prepare_adoption_branch():
-            return 2
+        # ブランチ変更の前に marker / managed-conflict 検証を完了する。
         try:
             self.validate_agent_markers()
             self.validate_managed_conflicts()
         except (OSError, ValueError) as exc:
             print(f"ERROR: installation failed before writing: {exc}", file=sys.stderr)
+            return 2
+        if self.create_adoption and not self.prepare_adoption_branch():
             return 2
         if self.target.exists():
             self.preexisting_dirs = {
@@ -458,11 +472,57 @@ class Installer:
                 f"installed Makefile.ai validation failed: {make_result.stderr.strip()}"
             )
 
+    def capture_git_head(self) -> GitHeadSnapshot | None:
+        """現在の HEAD をブランチ名または detached commit として記録する。"""
+        commit = run_git(self.target, ["rev-parse", "--verify", "HEAD"])
+        if commit.returncode != 0:
+            return None
+        branch = run_git(self.target, ["symbolic-ref", "--quiet", "--short", "HEAD"])
+        if branch.returncode == 0 and branch.stdout.strip():
+            return GitHeadSnapshot(commit=commit.stdout.strip(), branch=branch.stdout.strip())
+        return GitHeadSnapshot(commit=commit.stdout.strip(), branch=None)
+
+    def restore_git_head(self, snapshot: GitHeadSnapshot) -> bool:
+        """記録した HEAD 状態へ非破壊的に戻す（reset は使わない）。"""
+        if snapshot.detached:
+            restored = run_git(self.target, ["switch", "--detach", snapshot.commit])
+        else:
+            branch = snapshot.branch
+            if not branch:
+                print(
+                    "ERROR: original Git HEAD snapshot is missing a branch name.",
+                    file=sys.stderr,
+                )
+                return False
+            restored = run_git(self.target, ["switch", branch])
+        if restored.returncode != 0:
+            print(
+                f"ERROR: failed to restore original Git HEAD: {restored.stderr.strip()}",
+                file=sys.stderr,
+            )
+            return False
+        return True
+
     def rollback_installation(self) -> None:
-        if self.created_adoption_branch:
-            run_git(self.target, ["switch", "--detach", "HEAD"])
-            run_git(self.target, ["branch", "-D", self.created_adoption_branch])
-            self.created_adoption_branch = None
+        created = self.created_adoption_branch
+        if created and self.original_git_head is not None:
+            # 作成ブランチ上にいる場合は先に元 HEAD へ戻してから削除する。
+            if self.restore_git_head(self.original_git_head):
+                deleted = run_git(self.target, ["branch", "-D", created])
+                if deleted.returncode != 0:
+                    print(
+                        f"ERROR: failed to delete adoption branch {created}: "
+                        f"{deleted.stderr.strip()}",
+                        file=sys.stderr,
+                    )
+                else:
+                    self.created_adoption_branch = None
+            else:
+                print(
+                    "ERROR: adoption branch was left in place because original HEAD "
+                    "could not be restored.",
+                    file=sys.stderr,
+                )
         for original, backup in reversed(list(self.backups.items())):
             original.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(backup, original)
@@ -534,7 +594,10 @@ class Installer:
         return active / "adopt_ai_cockpit.contract.json", active / "adopt_ai_cockpit.summary.json"
 
     def prepare_adoption_branch(self) -> bool:
-        """Anchor first adoption to the adopter's latest remote default branch."""
+        """最新の remote default branch から採用ブランチを作成する。
+
+        dry-run では fetch / ブランチ作成 / switch / 削除を行わない。
+        """
         remote, branch = self.adopter_git_context()
         if not remote or not branch:
             print(
@@ -546,6 +609,16 @@ class Installer:
         branch_name = os.environ.get("AI_COCKPIT_ADOPTION_BRANCH", "adopt/ai-cockpit")
         if not re.fullmatch(r"[A-Za-z0-9._/-]+", branch_name) or branch_name.startswith("/"):
             print("ERROR: AI_COCKPIT_ADOPTION_BRANCH is not a valid branch name.", file=sys.stderr)
+            return False
+        if self.dry_run:
+            print(
+                f"DRY-RUN: would create adoption branch {branch_name} from {remote}/{branch} "
+                "(no fetch, branch creation, switch, or deletion)"
+            )
+            return True
+        self.original_git_head = self.capture_git_head()
+        if self.original_git_head is None:
+            print("ERROR: failed to capture original Git HEAD before adoption.", file=sys.stderr)
             return False
         target_args = git_target_args(self.target)
         for args, message in (

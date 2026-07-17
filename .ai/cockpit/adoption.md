@@ -12,6 +12,8 @@ Installation deploys the governance runtime. It does not prove that project-spec
 
 AI Cockpit fits a **generic template plus local calibration** model: installation is feasible, but production readiness requires a separate `configure_ai_cockpit` Work Item after adoption.
 
+First adoption with `--create-adoption` is transactional: validation finishes before branch mutation, `--dry-run` performs no Git fetch or branch changes, and a failed install restores the original branch or detached HEAD together with the filesystem. Successful adoption still requires the human-approved finish, PR, and close flow below—it is not release or external-review readiness.
+
 The installed Cursor rule (`.cursor/rules/ai-cockpit.mdc`) defaults to `alwaysApply: false`. Enable **Always Apply** when you want Work Item governance on read-only investigation too.
 
 Before making AI Cockpit a required production gate, run the guided flow:
