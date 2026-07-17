@@ -1,0 +1,162 @@
+{
+  "contractVersion": 2,
+  "workItemId": "trust_baseline_backtrack_evidence",
+  "mode": "code",
+  "title": "Implement baseline and backtrack evidence",
+  "baseCommit": "4ae416d0d55dc4d5f5f901ca0c8b576a30ab8428",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/trust_baseline_backtrack_evidence.contract.json",
+    ".ai/work-items/active/trust_baseline_backtrack_evidence.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+    ,"scripts/ai_baseline_evidence.py"
+    ,"scripts/ai_check_backtrack.py"
+    ,".ai/cockpit/bandit_low_risk_baseline.json"
+    ,"scripts/install_ai_cockpit.py"
+    ,"Makefile"
+    ,"tests/test_baseline_evidence.py"
+    ,"tests/test_baseline_diff.py"
+  ],
+  "outOfScope": ["Cockpit presentation redesign", "Release publication", "External production operations"],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-18-ai-cockpit-trust-layer-work-item-loop.md",
+      "reason": "Defines baseline and backtrack evidence acceptance."
+    },
+    {"path": "scripts/ai_check_backtrack.py", "reason": "Existing deletion and protected-evidence backtrack guard."},
+    {"path": "scripts/ai_common.py", "reason": "Existing baseline commit and changed-path helpers."},
+    {"path": "tests/test_baseline_diff.py", "reason": "Existing baseline-diff behavior tests."}
+  ],
+  "unknowns": [
+    
+  ],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "baseline_evidence"
+    ],
+    "reason": "Baseline evidence must distinguish unavailable historical data from measured regression without inventing values."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User explicitly authorized the sequential Trust Layer execution plan."
+  },
+  "preReviewWarnings": [
+    "Missing baselines must be reported as unavailable; regressions must remain visible."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Baseline evidence captures commit and capture time with test, coverage, scenario, file-count, and protected-asset fields.",
+    "Absent historical baselines are reported as unavailable without invented values.",
+    "Comparisons expose file deletion and quality regression before completion.",
+    "Baseline fixture, regression, missing-baseline, and evidence-chain tests pass."
+  ],
+  "guidelines": [
+    "Baseline evidence must preserve unavailable values rather than inventing measurements.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The current backtrack guard detects deletions but does not capture a structured pre-change baseline or compare quality and protected-asset evidence with commit and capture-time provenance.",
+    "constraints": ["Never invent unavailable historical measurements.", "Keep evidence machine-readable and local.", "Surface deletion and quality regression before finish."],
+    "rationale": "A provenance-bound baseline makes regression and missing history explicit instead of allowing silent quality drift."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the sequential Trust Layer plan."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/trust_baseline_backtrack_evidence.json",
+    "baseCommit": "4ae416d0d55dc4d5f5f901ca0c8b576a30ab8428",
+    "initialScopeDigest": "f331d3c2c9bd7f0ea89f231c08594ecd5830580b2adb38d52ae4d608b9566749",
+    "contractSkeletonDigest": "bfb8d0997dd33eec38e04a012a7ab4c0170fd86818fb4b89b5e6457bb78baa23"
+  }
+}
