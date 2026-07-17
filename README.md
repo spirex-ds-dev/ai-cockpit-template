@@ -235,6 +235,8 @@ Prefer explicit `not provided` over inferred explanations.
 
 ## Trust Model
 
+The Trust Layer makes this operational: continue only when repository and delegated-tool evidence supports the change; otherwise stop, request a human decision, or choose a narrower safe alternative. Agent explanations and self-declared approvals help explain a decision but never substitute for independently verifiable evidence. See the [Trust Layer guide](docs/trust-layer.md) and run the offline [failure demo](docs/examples/trust-layer-demo.sh).
+
 - `ai-start` records `baseCommit` and fingerprints pre-existing dirty paths.
 - Guards inspect committed changes from `baseCommit...HEAD` plus staged, unstaged, and untracked changes. CI can set `AI_BASE_COMMIT` to the PR merge-base.
 - Contracts reference registered check IDs; they cannot supply executable command strings. Registered checks resolve through `.ai/cockpit/checks.yaml` to explicit Make targets.

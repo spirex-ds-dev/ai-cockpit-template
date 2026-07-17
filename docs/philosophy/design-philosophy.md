@@ -35,6 +35,8 @@ Every component exists because the collaboration itself requires it—not becaus
 
 Calibrated trust は、エージェントへの信頼を最大化することではありません。証拠が依存を支えるときは依存し、証拠が欠落、古い、矛盾、または不十分なときは、人が調査、介入、または停止を判断できるようにすることです。
 
+この原則は Trust Layer の fail-closed ルールになります。AI の流暢な説明は理解を助けますが、テスト結果、差分、承認イベント、またはその他の検証可能な記録の代わりにはなりません。判断できないときに停止できることが、信頼を増やすのではなく、信頼を較正します。
+
 ### Convergence over Creation
 
 The role of the architect is not to force a solution, but to remove unnecessary complexity until the essential structure becomes visible.

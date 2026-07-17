@@ -25,6 +25,8 @@ AI Cockpit governs evidence; it does not replace evidence-producing tools. SBOM 
 
 ガバナンスが制御の中心にあり、Intent、Contract、Implementation、Verification、Summary、Cockpit、Human Decision が delegation、description、discernment、diligence を実体化します。
 
+Trust Layer の境界は明確です。Cockpit は証拠の有無と矛盾を圧縮して判断を支援しますが、AI の説明や自己申告を証拠・認可として扱いません。重要な証拠が欠落、古い、範囲外、または矛盾している場合は fail closed し、Decision Request、追加証拠、再 Preflight の順で回復します。詳細は [Trust Layer guide](trust-layer.md) を参照してください。
+
 ## コンポーネントの依存関係とプロセスフロー
 
 AI Cockpit フレームワーク内における、タスクの開始から PR の検証にいたるまでのライフサイクルとデータ/コントロールのフローは以下の通りです。

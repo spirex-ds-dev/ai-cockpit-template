@@ -35,6 +35,7 @@ This page describes the stable documentation split for AI Cockpit. It keeps the 
 | [docs/getting-started/installation.md](../getting-started/installation.md) | Getting started | How do I install and adopt AI Cockpit? |
 | [docs/getting-started/first-work-item.md](../getting-started/first-work-item.md) | Getting started | How do I start the first governed task? |
 | [docs/philosophy/design-philosophy.md](../philosophy/design-philosophy.md) | Philosophy | Why does AI Cockpit exist, and how does it calibrate trust? |
+| [docs/trust-layer.md](../trust-layer.md) | Trust Layer | When does the system continue, stop, or ask a human to decide? |
 | [docs/architecture.md](../architecture.md) | Architecture | How does the governance evidence flow work? |
 | Reference pages | Reference | Where are field, policy, installation, distribution, and troubleshooting details? |
 | [docs/configuration.md](../configuration.md) | Configuration reference | Which stack presets and guard settings should I calibrate? |
@@ -54,6 +55,7 @@ This page describes the stable documentation split for AI Cockpit. It keeps the 
 - Keep `docs/getting-started/installation.md` focused on the adoption lifecycle and validation.
 - Keep `docs/getting-started/first-work-item.md` focused on the first governed task.
 - Keep Philosophy authoritative for why AI Cockpit exists and how calibrated trust, evidence, and responsibility boundaries shape the design.
+- Keep the Trust Layer guide authoritative for evidence semantics, fail-closed recovery, human decision records, and non-goals.
 - Keep Architecture authoritative for repository governance flow, component boundaries, and the Native/Delegated Evidence split.
 - Keep Reference pages authoritative for fields, policies, installation, distribution, and troubleshooting.
 - Move upgrade, distribution, and recovery details into their own reference pages.
