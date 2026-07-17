@@ -443,6 +443,17 @@ def test_upgrade_backs_up_policies_and_replaces_agent_marker_section(tmp_path):
     )
     assert result.returncode == 0
 
+    contract = tmp_path / ".ai" / "work-items" / "active" / "upgrade_ai_cockpit.contract.json"
+    summary = tmp_path / ".ai" / "work-items" / "active" / "upgrade_ai_cockpit.summary.json"
+    assert contract.is_file()
+    assert summary.is_file()
+    contract_data = json.loads(contract.read_text(encoding="utf-8"))
+    summary_data = json.loads(summary.read_text(encoding="utf-8"))
+    assert contract_data["workItemId"] == "upgrade_ai_cockpit"
+    assert "Automatic commit, push, PR, merge, or branch deletion" in contract_data["outOfScope"]
+    assert summary_data["rollbackEvidence"]["backupRoot"].startswith(".ai/cockpit/upgrade-backups/")
+    assert any(item["path"] == ".ai/cockpit/version.json" for item in summary_data["changedFiles"])
+
 
 @pytest.mark.parametrize("name", ["AGENTS.md", "GEMINI.md", "CLAUDE.md"])
 def test_upgrade_preserves_unmarked_agent_rules(tmp_path, name):
@@ -466,6 +477,50 @@ def test_upgrade_preserves_unmarked_agent_rules(tmp_path, name):
     assert "KEEP-ME" in upgraded
     assert "<!-- AI_COCKPIT_SECTION -->" in upgraded
     assert "<!-- /AI_COCKPIT_SECTION -->" in upgraded
+
+
+def test_upgrade_branch_preparation_is_review_only(tmp_path, monkeypatch):
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=True,
+        with_examples=False,
+        update_makefile=False,
+        upgrade=True,
+    )
+    monkeypatch.setattr(installer, "adopter_git_context", lambda: ("origin", "main"))
+    assert installer.prepare_upgrade_branch() is True
+    assert not (tmp_path / ".git").exists()
+    monkeypatch.setenv("AI_COCKPIT_UPGRADE_BRANCH", "/invalid")
+    assert installer.prepare_upgrade_branch() is False
+
+
+def test_upgrade_branch_preparation_uses_remote_default_branch(tmp_path, monkeypatch):
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=False,
+        upgrade=True,
+    )
+    monkeypatch.setattr(installer, "adopter_git_context", lambda: ("origin", "main"))
+    monkeypatch.setattr(
+        installer, "capture_git_head", lambda: installer_mod.GitHeadSnapshot("a" * 40, "main")
+    )
+
+    def fake_git(_target, args):
+        if args[:2] == ["show-ref", "--verify"] and "refs/heads/" in args[-1]:
+            return subprocess.CompletedProcess(args, 1, stdout="", stderr="")
+        return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(installer_mod, "run_git", fake_git)
+    assert installer.prepare_upgrade_branch() is True
+    assert installer.created_adoption_branch == "upgrade/ai-cockpit"
 
 
 def test_commented_makefile_include_does_not_suppress_active_include(tmp_path):

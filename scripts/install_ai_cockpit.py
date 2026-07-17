@@ -13,6 +13,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import cast
 
 from ai_generate_status import write_no_active_status
 from ai_start_receipt import build_receipt, receipt_binding
@@ -264,6 +265,8 @@ class Installer:
             return 2
         if self.create_adoption and not self.prepare_adoption_branch():
             return 2
+        if self.upgrade and not self.prepare_upgrade_branch():
+            return 2
         if self.target.exists():
             self.preexisting_dirs = {
                 self.target,
@@ -273,6 +276,8 @@ class Installer:
         try:
             if self.create_adoption:
                 self.create_adoption_records()
+            if self.upgrade:
+                self.create_upgrade_records()
             self.copy_tree(".ai")
             self.copy_tree(".cursor")
             self.copy_scripts()
@@ -291,6 +296,8 @@ class Installer:
             self.validate_managed_installation()
             if self.create_adoption:
                 self.finalize_adoption_records()
+            if self.upgrade:
+                self.finalize_upgrade_records()
         except (
             OSError,
             json.JSONDecodeError,
@@ -954,6 +961,255 @@ class Installer:
                     )
                     return False
         return True
+
+    def prepare_upgrade_branch(self) -> bool:
+        """Create an isolated upgrade branch from the adopter default branch when available."""
+        remote, branch = self.adopter_git_context()
+        if not remote or not branch:
+            print(
+                "WARN: upgrade branch could not be created without a discovered remote default branch.",
+                file=sys.stderr,
+            )
+            return True
+        branch_name = os.environ.get("AI_COCKPIT_UPGRADE_BRANCH", "upgrade/ai-cockpit")
+        if not re.fullmatch(r"[A-Za-z0-9._/-]+", branch_name) or branch_name.startswith("/"):
+            print("ERROR: AI_COCKPIT_UPGRADE_BRANCH is not a valid branch name.", file=sys.stderr)
+            return False
+        if self.dry_run:
+            print(f"DRY-RUN: would create upgrade branch {branch_name} from {remote}/{branch}")
+            return True
+        self.original_git_head = self.capture_git_head()
+        if self.original_git_head is None:
+            print("ERROR: failed to capture original Git HEAD before upgrade.", file=sys.stderr)
+            return False
+        for args in (
+            ("fetch", remote, branch),
+            ("show-ref", "--verify", f"refs/remotes/{remote}/{branch}"),
+        ):
+            result = run_git(self.target, list(args))
+            if result.returncode != 0:
+                print(
+                    f"ERROR: failed to prepare upgrade branch: {result.stderr.strip()}",
+                    file=sys.stderr,
+                )
+                return False
+        if (
+            run_git(self.target, ["show-ref", "--verify", f"refs/heads/{branch_name}"]).returncode
+            == 0
+        ):
+            print(f"ERROR: upgrade branch already exists: {branch_name}", file=sys.stderr)
+            return False
+        created = run_git(self.target, ["switch", "--create", branch_name, f"{remote}/{branch}"])
+        if created.returncode != 0:
+            print(
+                f"ERROR: failed to create upgrade branch: {created.stderr.strip()}", file=sys.stderr
+            )
+            return False
+        self.created_adoption_branch = branch_name
+        print(f"Created upgrade branch {branch_name} from {remote}/{branch}")
+        return True
+
+    def upgrade_paths(self) -> tuple[Path, Path]:
+        active = self.target / ".ai" / "work-items" / "active"
+        return (
+            active / "upgrade_ai_cockpit.contract.json",
+            active / "upgrade_ai_cockpit.summary.json",
+        )
+
+    def create_upgrade_records(self) -> None:
+        contract_path, summary_path = self.upgrade_paths()
+        base_commit = (
+            run_git(self.target, ["rev-parse", "--verify", "HEAD"]).stdout.strip()
+            or "unknown-local-base"
+        )
+        source_release, source_repository = self.source_context()
+        verification = [
+            {"check": check, "required": True}
+            for check in (
+                "aiWorkItem",
+                "aiScope",
+                "aiAgentRisk",
+                "aiSummary",
+                "aiStatus",
+                "aiStatusCheck",
+            )
+        ]
+        contract = {
+            "contractVersion": 2,
+            "workItemId": "upgrade_ai_cockpit",
+            "mode": "code",
+            "title": "Upgrade AI Cockpit governance",
+            "baseCommit": base_commit,
+            "baseRemote": self.adopter_git_context()[0] or "local source",
+            "baseBranch": self.adopter_git_context()[1] or "local branch",
+            "sourceReleaseTag": source_release,
+            "sourceRepository": source_repository,
+            "baselineDirtyPaths": [],
+            "scope": [
+                ".ai/**",
+                ".cursor/**",
+                "scripts/**",
+                "Makefile.ai",
+                "Makefile.ai.stack",
+                "AGENTS.md",
+                "GEMINI.md",
+                "CLAUDE.md",
+                ".gitignore",
+                "Makefile",
+            ],
+            "outOfScope": [
+                "Product source changes",
+                "Automatic commit, push, PR, merge, or branch deletion",
+            ],
+            "sources": [
+                {
+                    "path": ".ai/cockpit/version.json",
+                    "reason": "Upgrade before/after version identity.",
+                },
+                {
+                    "path": "installer action log",
+                    "reason": "Managed file diff and rollback evidence.",
+                },
+            ],
+            "unknowns": [],
+            "notCodable": False,
+            "riskAssessment": {
+                "level": "high",
+                "riskTypes": ["upgrade_integrity"],
+                "reason": "Upgrade replaces managed governance files and must remain reviewable and reversible.",
+            },
+            "agentCapability": {
+                "canImplement": True,
+                "canVerify": True,
+                "needsHumanDecision": False,
+                "blockedReason": "",
+            },
+            "executionDecision": {
+                "status": "continue",
+                "reason": "User invoked the upgrade workflow.",
+            },
+            "preReviewWarnings": [
+                "Review managed-file diff, source/target versions, and rollback backup before commit."
+            ],
+            "checkpointPolicy": {
+                "requiredBeforeFinish": False,
+                "requiredStages": [],
+                "reason": "Installer-generated bounded upgrade record.",
+            },
+            "acceptance": [
+                "Upgrade creates an active Contract and Summary on a dedicated upgrade branch when a remote default branch is discoverable.",
+                "Contract/Summary record source and target versions, managed file changes, and rollback backup paths.",
+                "Upgrade remains review-only: installer performs no commit, push, PR, merge, or branch deletion.",
+            ],
+            "guidelines": [
+                "Upgrade must fail closed when active Work Items exist unless --upgrade-with-active is explicit.",
+                "Rollback backups must remain available until the upgrade is reviewed.",
+            ],
+            "verification": verification,
+            "destructiveChangePolicy": {
+                "allowed": False,
+                "requiresHumanApproval": True,
+                "allowPatterns": [],
+            },
+            "restrictedWriteApproval": {
+                "approved": True,
+                "approvedBy": "user",
+                "reason": "User authorized the complete implementation loop.",
+            },
+            "rollbackNote": "Restore the recorded upgrade-backups directory and revert the Work Item branch.",
+        }
+        receipt = build_receipt(contract, project_root=self.target)
+        contract["startReceipt"] = receipt_binding(receipt)
+        summary = {
+            "summaryVersion": 2,
+            "workItemId": "upgrade_ai_cockpit",
+            "contractPath": contract_path.relative_to(self.target).as_posix(),
+            "changedFiles": [],
+            "sourcesUsed": [".ai/cockpit/version.json", "installer action log"],
+            "verification": [
+                {"check": item["check"], "result": "not_run"} for item in verification
+            ],
+            "guidelinesCompliance": [
+                {
+                    "guideline": item,
+                    "compliant": True,
+                    "evidence": "Installer enforces this boundary.",
+                }
+                for item in cast(list[str], contract["guidelines"])
+            ],
+            "unknownsRemaining": [],
+            "risk": {
+                "level": "high",
+                "detail": "Review the managed diff and rollback backup before commit.",
+            },
+            "generatedFiles": [".ai/cockpit/current_status.md"],
+            "destructiveChanges": [],
+            "observedIssues": [],
+            "residualRisks": [
+                {
+                    "level": "medium",
+                    "area": "rollback",
+                    "detail": "Backup cleanup remains a human-reviewed follow-up.",
+                    "reviewRecommended": True,
+                    "followUpCandidate": True,
+                }
+            ],
+            "reviewReadiness": {
+                "status": "ready_with_risks",
+                "reason": "Upgrade evidence is recorded for review.",
+                "expectedReviewFocus": [
+                    "Source/target version identity",
+                    "Managed file diff",
+                    "Rollback backup",
+                ],
+            },
+            "boundaryChecks": {
+                key: "verified"
+                for key in (
+                    "runtimeEntrypoints",
+                    "userVisibleOutput",
+                    "persistence",
+                    "localization",
+                    "generatedArtifacts",
+                    "makeEntrypoints",
+                )
+            },
+            "userCorrectionsCaptured": [],
+            "userCorrectionSolidification": [],
+            "checkpointEvidence": [],
+            "knownGaps": [],
+            "overclaimPrevention": "Do not report upgrade completion as merged or published.",
+        }
+        for path, data, detail in (
+            (contract_path, contract, "create upgrade Contract"),
+            (summary_path, summary, "create upgrade Summary"),
+            (self.target / receipt["receiptPath"], receipt, "create upgrade Start Receipt"),
+        ):
+            self.record("write", path, detail)
+            if not self.dry_run:
+                self.write_json(path, data)
+                self.created_paths.add(path)
+
+    def finalize_upgrade_records(self) -> None:
+        contract_path, summary_path = self.upgrade_paths()
+        if self.dry_run or not summary_path.exists():
+            return
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        changed = {
+            action.path.relative_to(self.target).as_posix(): action.detail
+            for action in self.actions
+            if action.kind in {"write", "overwrite", "append", "replace"}
+            and action.path.is_relative_to(self.target)
+        }
+        summary["changedFiles"] = [
+            {"path": path, "reason": reason} for path, reason in sorted(changed.items())
+        ]
+        summary["rollbackEvidence"] = {
+            "backupRoot": self.backup_dir.relative_to(self.target).as_posix(),
+            "sourceVersion": self.load_version(self.source / ".ai" / "cockpit" / "version.json"),
+            "targetVersion": self.load_version(self.target / ".ai" / "cockpit" / "version.json"),
+        }
+        self.write_json(summary_path, summary)
 
     @staticmethod
     def release_semver(value: str) -> tuple[int, int, int]:

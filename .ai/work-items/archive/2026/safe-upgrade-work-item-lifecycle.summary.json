@@ -1,0 +1,426 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "safe-upgrade-work-item-lifecycle",
+  "contractPath": ".ai/work-items/archive/2026/safe-upgrade-work-item-lifecycle.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/safe-upgrade-work-item-lifecycle.contract.json",
+      "reason": "Declared the governed upgrade lifecycle and rollback boundaries."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/safe-upgrade-work-item-lifecycle.summary.json",
+      "reason": "Records upgrade versions, managed diff, and rollback evidence."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Creates upgrade branch and Work Item records, and finalizes managed diff evidence."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Covers upgrade records and existing transaction behavior."
+    },
+    {
+      "path": "docs/reference/upgrade.md",
+      "reason": "Documents the governed upgrade lifecycle."
+    },
+    {
+      "path": ".ai/guards/governance_complexity_policy.yaml",
+      "reason": "Raises the calibrated Python line ceiling for the governed upgrade implementation."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_installer.py",
+    "docs/reference/upgrade.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:20:07.908613+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "9e071e8cbb7ff811509f37a947262ef669102efbeada012fa094b067430c2cef",
+      "commandHash": "628a883288001416e3ee57c43d74a4fd8ff66a85db1eca5d5ed0ea82384a8c4d",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "c28003f5d802be3ee9184bbbe7fb91b73e4cd66503f0fbac404c9eb8f8632c96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json work item contract check passed: .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:20:08.046090+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "89d1495703bec649400a1217959ec8a9613832f6b79589bd1004cbdb47fabd78",
+      "commandHash": "22920b5ab2dbaeb2ef89c49d52ed2cbc560d3db85b1e548e58913a1b5e1837bc",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "c28003f5d802be3ee9184bbbe7fb91b73e4cd66503f0fbac404c9eb8f8632c96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json scope guard passed: 6 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:20:08.205904+00:00",
+      "exitCode": 0,
+      "durationMs": 113,
+      "outputDigest": "799d7709569531d6990159a216acc697a5d4b7e33321b580b6002cc870a11a32",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "c28003f5d802be3ee9184bbbe7fb91b73e4cd66503f0fbac404c9eb8f8632c96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json [warning] restricted_write: .ai/guards/governance_complexity_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. guard check completed: 1 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json SUMMARY=.ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:20:08.449497+00:00",
+      "exitCode": 0,
+      "durationMs": 198,
+      "outputDigest": "0585527d7664f359ce99980ecdf269738874978c68b9e2b8e0139242ef59da3e",
+      "commandHash": "d94c57822723f1a179e5a35127ce1e5e94d7a23e61ce5964f8a10edb37afeb36",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "c28003f5d802be3ee9184bbbe7fb91b73e4cd66503f0fbac404c9eb8f8632c96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json --summary .ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `safe-upgrade-work-item-lifecycle` - Contract Hash: `6628663bd0997cd2` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `3` - Unknown Count: `0` "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:20:08.603418+00:00",
+      "exitCode": 0,
+      "durationMs": 103,
+      "outputDigest": "980ab51721bf55145f2a0d27f7e356f2a80914b3aaca3c8949e3892b75f6da48",
+      "commandHash": "e9ede9ea7c50c5507f80b668b8716e75879a2ae2ea08d1d70b5ef3d9c2ca89a4",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "c28003f5d802be3ee9184bbbe7fb91b73e4cd66503f0fbac404c9eb8f8632c96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/safe-upgrade-work-item-lifecycle.json [review] .ai/cockpit/current_status.md [review] .ai/guards/governance_complexity_policy.yaml review focus recorded: 4 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:20:08.746963+00:00",
+      "exitCode": 0,
+      "durationMs": 95,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "c28003f5d802be3ee9184bbbe7fb91b73e4cd66503f0fbac404c9eb8f8632c96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:20:08.887121+00:00",
+      "exitCode": 0,
+      "durationMs": 91,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "c28003f5d802be3ee9184bbbe7fb91b73e4cd66503f0fbac404c9eb8f8632c96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json SUMMARY=.ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:20:08.985280+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "c00fb41566bc2b02cadf3614ac2a80121b4e94dd7b1ef3190a7d170d3ea66ce3",
+      "commandHash": "d622fa6727e35438f4b0336e8eb6d465653f32eea430854dd667ad5caa88b911",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "c28003f5d802be3ee9184bbbe7fb91b73e4cd66503f0fbac404c9eb8f8632c96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json --summary .ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json SUMMARY=.ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:20:09.089779+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "c473420ad9f3734372d7a9539e46a16e8eb841ee541c3ff601bf6d57fef30330",
+      "commandHash": "dd61ca011161c1b2942742383da6d1f2a9969ceb88b458ef270810bfa95da1a4",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "c28003f5d802be3ee9184bbbe7fb91b73e4cd66503f0fbac404c9eb8f8632c96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json --summary .ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:20:09.318325+00:00",
+      "exitCode": 0,
+      "durationMs": 183,
+      "outputDigest": "012ebe833ef7a679dfbdb34a2530fc29ac70ea56f5b7d7cd7f21bf6c192877e1",
+      "commandHash": "94501e93df4c3bc2d9b9ecd71c24fd27485c08a2ef12e9186acab5b85acb3e59",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "c28003f5d802be3ee9184bbbe7fb91b73e4cd66503f0fbac404c9eb8f8632c96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json ## Diff Ownership Preview - active_owned: `6`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/governance_complexity_policy.yaml` — covered by Contract scope - [active_owned] `.ai/work-items/"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:21:57.676016+00:00",
+      "exitCode": 0,
+      "durationMs": 108297,
+      "outputDigest": "3da8482f92d89e4198e6ab74fb9bd43bf3022fc7613f630dff3453f5017467ae",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "c28003f5d802be3ee9184bbbe7fb91b73e4cd66503f0fbac404c9eb8f8632c96",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 95 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 11%] ........................................................................ [ 23%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json SUMMARY=.ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:21:58.956269+00:00",
+      "exitCode": 0,
+      "durationMs": 225,
+      "outputDigest": "aab603bcb9f6ac0fef9433d9249c42df940906074c156b5e34ce49f0ff26a3c4",
+      "commandHash": "6deb75c6ce8b5e307b0a8f5f381b94f08bc33ef7aee15372ac884290fb7dcce2",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "6635ed9ff7b3b53b45dbac22849faec10f746126b1839e1cd12cd1d608a6dc8d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json --summary .ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json SUMMARY=.ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:21:59.190157+00:00",
+      "exitCode": 0,
+      "durationMs": 191,
+      "outputDigest": "ac7c6166827c725752fc9f41cc931ee9140e43fdc203f06ef1541eb58e8e6852",
+      "commandHash": "ce6f171ef6c33ef5bb6a7280184931971a7cc3e8076bb3c2f5bf639dfb087319",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "6635ed9ff7b3b53b45dbac22849faec10f746126b1839e1cd12cd1d608a6dc8d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json --summary .ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:21:59.275496+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "6635ed9ff7b3b53b45dbac22849faec10f746126b1839e1cd12cd1d608a6dc8d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json SUMMARY=.ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:21:59.385314+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "7eaf86926663bc54c6526be5f31274a7b664bc8e9c5b521fd62a656ca49ed866",
+      "commandHash": "1c246c36c62be9d0acd069e4f4c6389edc5b8142486bd5e24dae249acab004f9",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "6635ed9ff7b3b53b45dbac22849faec10f746126b1839e1cd12cd1d608a6dc8d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json --summary .ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json CONTRACT=.ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-17T12:22:00.161023+00:00",
+      "exitCode": 0,
+      "durationMs": 87,
+      "outputDigest": "f91d51730016eb13545c6d08842696c5065623b92d10011a38373cb98151e713",
+      "commandHash": "b26eca5a51a36f9b50fe7d9673313bd06a8216a605dc16cd822922cc53292e2a",
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "commitSha": "5b8313804544785ec3aff492fe640671fa6e923d",
+      "executionContractPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json",
+      "worktreeDigest": "fef2b347e00dc57a6b47c34fc340673a5a5360ec4b0b79db8b89158cedc0e44d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json --contract .ai/work-items/active/safe-upgrade-work-item-lifecycle.contract.json ai summary check passed: .ai/work-items/active/safe-upgrade-work-item-lifecycle.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Upgrade must fail closed when active Work Items exist unless --upgrade-with-active is explicit.",
+      "compliant": true,
+      "evidence": "upgrade_preflight and existing active-work-item regression tests."
+    },
+    {
+      "guideline": "Rollback backups must remain available until the upgrade is reviewed.",
+      "compliant": true,
+      "evidence": "rollbackEvidence records the timestamped backup root in the upgrade Summary."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "Upgrade remains a review-gated local preparation; external commit, push, PR, merge, and branch cleanup remain human-controlled."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Initial skeleton; replace with actual residual risks before finishing.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Source/target versions",
+      "Managed file diff",
+      "Rollback backup root",
+      "No automatic external Git actions"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "6628663bd0997cd2ec0a6d29e9225b86ea925b1407d720edc70d20c8b3b2c217",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Active Work Item blocks upgrade by default",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_installer.py"
+      ]
+    },
+    {
+      "scenario": "Versions, managed diff, and rollback backup are recorded",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_installer.py",
+        "scripts/install_ai_cockpit.py"
+      ]
+    },
+    {
+      "scenario": "Installer leaves external Git review actions to humans",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/reference/upgrade.md"
+      ]
+    }
+  ],
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "Upgrade now creates reviewable Work Item records and rollback evidence while leaving commit, push, PR, merge, and branch cleanup outside the installer."
+  },
+  "knownGaps": [
+    "None."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 128
+}
