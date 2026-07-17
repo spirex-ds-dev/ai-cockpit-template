@@ -53,3 +53,11 @@ independent multi-maintainer review or enterprise-trusted governance.
 Template maintenance is different: this source repository may retain its
 generic placeholders when the explicit template-maintenance execution mode is
 used. That exemption must not be copied as an adoption configuration.
+### Review policy adapter
+
+The template ships a report-only `single_maintainer` adapter. Adopters must
+configure their own CODEOWNERS, dual-approval, or protected-environment policy
+in `.ai/guards/ai_review_policy.yaml`; the template does not claim that its
+own maintainer is an independent approval. Run `make check-ai-review-policy`
+to validate the adapter and record external approval evidence in the adopter's
+readiness review.

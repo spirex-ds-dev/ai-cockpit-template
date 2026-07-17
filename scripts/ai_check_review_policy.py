@@ -17,6 +17,7 @@ from ai_common import (
     load_json,
     non_empty_string,
     simple_yaml_lists,
+    simple_yaml_scalars,
 )
 from ai_observability import create_observability, elapsed_ms
 
@@ -31,6 +32,26 @@ def review_patterns() -> tuple[list[str], list[str]]:
         lists.get("requiredReviewChecklist.include", []),
         lists.get("requiredReviewChecklist.exclude", []),
     )
+
+
+def adapter_issues() -> list[str]:
+    scalars = simple_yaml_scalars(POLICY)
+    mode = scalars.get("adapter.mode", "")
+    source = scalars.get("adapter.source", "")
+    evidence = scalars.get("adapter.approvalEvidence", "")
+    protection = scalars.get("adapter.highRiskProtection", "")
+    if not any((mode, source, evidence, protection)):
+        return []
+    issues: list[str] = []
+    if mode not in {"single_maintainer", "codeowners", "dual_approval", "protected_environment"}:
+        issues.append("adapter.mode must identify a supported adopter policy")
+    if source != "adopter_owned":
+        issues.append("adapter.source must remain adopter_owned")
+    if evidence not in {"external", "repository", "workflow"}:
+        issues.append("adapter.approvalEvidence must identify external evidence")
+    if protection not in {"adopter_configured", "required", "not_applicable"}:
+        issues.append("adapter.highRiskProtection must identify adopter configuration")
+    return issues
 
 
 def review_focus(summary: dict[str, Any] | None) -> list[str]:
@@ -62,12 +83,16 @@ def main() -> int:
     start = time.time()
     try:
         include, exclude = review_patterns()
+        policy_issues = adapter_issues()
         paths = changed_paths()
         summary = load_json(Path(args.summary)) if args.summary else None
     except (OSError, json.JSONDecodeError, RuntimeError, ValueError) as exc:
         print(f"Failed to run review policy check: {exc}", file=sys.stderr)
         return 1
 
+    if policy_issues:
+        print("review policy adapter check failed: " + "; ".join(policy_issues), file=sys.stderr)
+        return 1
     matched = detect(paths, include=include, exclude=exclude)
     focus = review_focus(summary)
     status = (
@@ -81,6 +106,10 @@ def main() -> int:
         "reviewFocus": focus,
         "summaryPath": args.summary or "",
         "policyPath": POLICY.relative_to(PROJECT_ROOT).as_posix(),
+        "adapter": {
+            "status": "adopter_owned",
+            "mode": simple_yaml_scalars(POLICY).get("adapter.mode", ""),
+        },
     }
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

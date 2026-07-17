@@ -73,3 +73,7 @@ The template repository publishes a release; the adopter project consumes it and
 - record the release tag and source identity in the adopter Work Item.
 
 Platform-specific facts such as PR number, approval state, and merge queue state belong to the hosting platform adapter. Repository-local Contract evidence records the branch base and source release without pretending to prove platform identity.
+Review policy is adapter-driven: the template reports review focus, while the
+adopter owns the choice among single-maintainer, CODEOWNERS, dual approval, or
+protected environments. Review evidence must not be presented as an approval
+performed by the template repository.

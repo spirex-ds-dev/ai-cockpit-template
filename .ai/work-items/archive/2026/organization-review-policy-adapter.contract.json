@@ -1,0 +1,171 @@
+{
+  "contractVersion": 2,
+  "workItemId": "organization-review-policy-adapter",
+  "mode": "code",
+  "title": "organization-review-policy-adapter",
+  "baseCommit": "010b29c1c747e673c97437d0237388615893ee51",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/guards/ai_review_policy.yaml",
+    "scripts/ai_check_review_policy.py",
+    "scripts/ai_project_profile.py",
+    "tests/test_project_governance.py",
+    "tests/test_governance_compression.py",
+    "tests/test_adoption_ready.py",
+    "docs/getting-started/adopter-configuration.md",
+    "docs/reference/repository-workflow.md",
+    ".ai/work-items/active/organization-review-policy-adapter.contract.json",
+    ".ai/work-items/active/organization-review-policy-adapter.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": ["Enforcing a universal two-person approval policy in the template.", "Claiming adopter approval evidence as template review evidence."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-17-ai-cockpit-comprehensive-review.md",
+      "reason": "Defines Work Item 14 requirements."
+    },
+    {
+      "path": ".ai/guards/ai_review_policy.yaml",
+      "reason": "Current report-only review policy and adapter location."
+    },
+    {
+      "path": "scripts/ai_check_review_policy.py",
+      "reason": "Current review policy checker and report entrypoint."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+      "riskTypes": [
+      "policy_misrepresentation"
+    ],
+    "reason": "Review policy must remain adopter-owned and avoid false independent-approval claims."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the approved implementation loop."
+  },
+  "preReviewWarnings": [
+    "Verify adapter schema and truthful ownership of approval evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Review policy exposes adopter-owned adapter modes for single-maintainer, CODEOWNERS, dual approval, and protected environments.",
+    "Doctor/review checks reject unsupported adapter values and preserve the template's report-only single-maintainer claim.",
+    "Governance and adoption tests cover policy matrix and non-misrepresentation behavior.",
+    "Adopter configuration and repository workflow documentation explain the adapter."
+  ],
+  "guidelines": [
+    "New adapter fields and checks are documented.",
+    "Adopter approval evidence remains distinct from template review evidence."
+  ],
+  "intent": {
+    "problem": "The template needs configurable review policy modes without asserting that its own maintainer is an independent approval.",
+    "constraints": ["Keep the default single-maintainer mode report-only.", "Keep adopter policy and evidence adopter-owned."],
+    "rationale": "An explicit adapter lets adopters configure governance honestly while preserving a useful template default."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Template single-maintainer default", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "Adopter selects CODEOWNERS, dual approval, or protected environment", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "Unsupported adapter or template-as-approval claim", "required": true, "status": "unverified", "evidence": []}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized the full approved implementation loop, including review policy guard adapter updates."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/organization-review-policy-adapter.json",
+    "baseCommit": "010b29c1c747e673c97437d0237388615893ee51",
+    "initialScopeDigest": "a514269af06002af84fb3c6be0fc07df6930aa013aca2a35b253db0b1c32671d",
+    "contractSkeletonDigest": "0ad71b3e7189e238fef18cbc9d80a3917be0e96895f92422d2645dc596d86e9e"
+  }
+}

@@ -294,6 +294,12 @@ def test_guard_calibration_accepts_optional_boundary_lists(tmp_path):
     assert calibration_issues(tmp_path, profile) == []
 
 
+def test_review_policy_adapter_is_adopter_owned():
+    import ai_check_review_policy
+
+    assert ai_check_review_policy.adapter_issues() == []
+
+
 def test_guard_calibration_reports_missing_boundary_configuration(tmp_path):
     profile = {
         "approvedBoundaries": {
