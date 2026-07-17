@@ -1,0 +1,163 @@
+{
+  "contractVersion": 2,
+  "workItemId": "publish-v05131-finalization",
+  "mode": "code",
+  "title": "Publish v0.5.31 finalization metadata",
+  "baseCommit": "e16c4b020fdc247b61b8f99da11c08ccb6834ae9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/publish-v05131-finalization.contract.json",
+    ".ai/work-items/active/publish-v05131-finalization.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "release.json",
+    "next-release.json",
+    "install.sh",
+    "docs/**",
+    "scripts/check_release_distribution.py",
+    "scripts/check_supply_chain.py",
+    "tests/**",
+    ".ai/cockpit/**"
+  ],
+  "outOfScope": ["Changing release workflow semantics beyond pending-publication evidence handling."],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/publish-v05131-finalization.contract.json",
+      "reason": "Initial Work Item skeleton."
+    },
+    {
+      "path": "release.json",
+      "reason": "Release metadata is finalized by the parent publication change."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Candidate metadata is synchronized with the pending publication."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["release_evidence"],
+    "reason": "Metadata-only finalization; immutable publication remains gated by the release workflow."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the release finalization and continuous execution through Work Item 18."
+  },
+  "preReviewWarnings": [
+    "Confirm release metadata, candidate evidence, and pending-publication checks remain internally consistent."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Release and candidate metadata identify v0.5.31 consistently.",
+    "Supply-chain evidence and derived digests match the metadata.",
+    "The release-preparation distribution check passes before publication."
+  ],
+  "guidelines": [
+    "Preserve immutable release evidence and fail-closed publication gates.",
+    "Keep Work Item evidence complete and reviewable."
+  ],
+  "intent": {
+    "problem": "The final v0.5.31 metadata publication requires a governed Work Item record so CI can verify the release change.",
+    "constraints": ["Do not publish an immutable tag until PR checks pass.", "Keep the user-authorized continuous execution in scope."],
+    "rationale": "A dedicated archived record satisfies the repository's one Work Item per PR governance rule."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized execution through release and Work Item 18 cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/publish-v05131-finalization.json",
+    "baseCommit": "e16c4b020fdc247b61b8f99da11c08ccb6834ae9",
+    "initialScopeDigest": "4c0c7df1aead4e6ecd6903ff8b4f0e8d575cb3a9a2a98363cf355508e85c1487",
+    "contractSkeletonDigest": "43c6f609f651f09e34b9d7c0ffa1a52e326516535de5237235d0e32c2723846e"
+  }
+}
