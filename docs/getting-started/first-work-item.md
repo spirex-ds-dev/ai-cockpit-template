@@ -16,6 +16,8 @@ Use this page after installation and validation succeed. Complete the [Adopter C
 ## Start a Governed Task
 Each governed task uses one Work Item, one dedicated branch, and one pull or merge request. In this template repository, start from the latest `origin/main`. In an adopter project, start from the latest commit on that project's discovered remote default branch; do not assume the remote is `origin` or the branch is `main`. Record the chosen remote, branch, and base commit in the Contract.
 
+If Preflight reports missing evidence, ambiguous intent, scope expansion, a critical-domain operation, or a governance bypass, stop. Do not continue because an agent explanation sounds plausible. Record the decision request, choose a safe local alternative or provide independently verifiable evidence, then re-run Preflight before resuming.
+
 ```sh
 make ai-start TASK=example_change TITLE="Example change" MODE=code
 ```

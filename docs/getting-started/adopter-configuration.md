@@ -11,6 +11,10 @@ keywords:
 
 # Adopter Configuration
 
+## Trust Layer checklist
+
+Before relying on an agent, confirm that the adopter project has a protected review boundary, independently generated test/security evidence, and a documented recovery owner. Treat Contract approval fields as workflow records rather than trusted identity. If evidence is missing or contradictory, the expected behavior is a safe stop and a recorded human decision; never turn off a guard to make a task appear ready.
+
 AI Cockpit supplies governance mechanics, but it cannot choose the people,
 platform identities, or incident policy for an adopting repository. Complete
 this checklist after installation and before treating adoption readiness as a
