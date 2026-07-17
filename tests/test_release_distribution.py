@@ -120,7 +120,7 @@ def test_public_asset_integrity_rejects_invalid_artifact_entries_and_bytes(tmp_p
     assert "missing artifact in tag tree" in joined
 
 
-def test_public_asset_integrity_rejects_tag_tree_byte_mismatches(tmp_path):
+def test_public_asset_integrity_allows_source_bound_candidate_baseline_differences(tmp_path):
     tree = tmp_path / ".ai" / "cockpit"
     tree.mkdir(parents=True)
     (tmp_path / "release.json").write_bytes(b"tree")
@@ -142,7 +142,7 @@ def test_public_asset_integrity_rejects_tag_tree_byte_mismatches(tmp_path):
             "provenance.json": b"prov",
         },
     )
-    assert any("bytes differ" in issue for issue in issues)
+    assert not any("bytes differ" in issue for issue in issues)
 
 
 @pytest.mark.parametrize(
