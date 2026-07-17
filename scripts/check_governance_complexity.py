@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -242,6 +243,7 @@ def build_report(root: Path, policy_path: Path) -> tuple[dict[str, Any], list[st
         "guardFiles": file_count(files, lambda path: ".ai/guards/" in path.as_posix()),
         **archive,
     }
+    baseline = int(os.environ.get("AI_COMPLEXITY_BASELINE_PYTHON_LINES", metrics["pythonLines"]))
     limits = load_policy(policy_path)
     issues = list(archive_issues)
     issues.extend(
@@ -254,6 +256,7 @@ def build_report(root: Path, policy_path: Path) -> tuple[dict[str, Any], list[st
         "policy": str(policy_path.relative_to(root)),
         "metrics": metrics,
         "limits": limits,
+        "complexityDelta": {"pythonLines": metrics["pythonLines"] - baseline},
         "issues": issues,
     }, issues
 

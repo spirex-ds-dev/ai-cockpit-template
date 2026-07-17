@@ -9,6 +9,16 @@ import pytest
 import check_governance_complexity
 
 
+def test_complexity_report_records_increment(monkeypatch):
+    monkeypatch.setenv("AI_COMPLEXITY_BASELINE_PYTHON_LINES", "1")
+    report, issues = check_governance_complexity.build_report(
+        check_governance_complexity.ROOT,
+        check_governance_complexity.ROOT / ".ai" / "guards" / "governance_complexity_policy.yaml",
+    )
+    assert issues == []
+    assert report["complexityDelta"]["pythonLines"] > 0
+
+
 def policy(path: Path, **limits: int) -> None:
     values = {
         "trackedFiles": 100,
