@@ -445,6 +445,17 @@ def test_finish_evidence_redacts_and_replaces_existing_result(tmp_path, monkeypa
     )
 
 
+def test_finish_worktree_digest_is_stable_and_path_sensitive(tmp_path, monkeypatch):
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    (tmp_path / "a.txt").write_text("a", encoding="utf-8")
+    (tmp_path / "b.txt").write_text("b", encoding="utf-8")
+
+    both = ai_finish.worktree_digest(["b.txt", "a.txt", "a.txt"])
+
+    assert both == ai_finish.worktree_digest(["a.txt", "b.txt"])
+    assert both != ai_finish.worktree_digest(["a.txt"])
+
+
 def test_finish_record_result_requires_active_summary(tmp_path, monkeypatch):
     active = tmp_path / ".ai" / "work-items" / "active"
     archive = tmp_path / ".ai" / "work-items" / "archive" / "2026"
