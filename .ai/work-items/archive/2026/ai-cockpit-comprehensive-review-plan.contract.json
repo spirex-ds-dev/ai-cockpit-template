@@ -1,0 +1,190 @@
+{
+  "contractVersion": 2,
+  "workItemId": "ai-cockpit-comprehensive-review-plan",
+  "mode": "author_todo",
+  "title": "Create comprehensive AI Cockpit review implementation plan",
+  "baseCommit": "434ae69926faf694d7c67d756195f89f694ad6c6",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "docs/superpowers/plans/2026-07-17-ai-cockpit-comprehensive-review.md",
+    ".ai/work-items/active/ai-cockpit-comprehensive-review-plan.contract.json",
+    ".ai/work-items/active/ai-cockpit-comprehensive-review-plan.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "user-provided AI Cockpit comprehensive review",
+      "reason": "Defines the three review objects, conclusions, priorities, and proposed remediation items."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Defines the Work Item lifecycle, verification loop, and fail-closed rules."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines canonical governance terminology used by the plan."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Defines repository-specific Work Item, review, release, and closure requirements."
+    }
+  ],
+  "problemStatement": "The review identifies multiple independent governance gaps across the template repository, adopter upgrade lifecycle, and human-agent decision handoff; implementers need an ordered, auditable execution plan.",
+  "scenarioCoverage": [
+    {
+      "scenario": "Plan covers all three review objects and their boundaries",
+      "required": true,
+      "status": "verified",
+      "evidence": ["docs/superpowers/plans/2026-07-17-ai-cockpit-comprehensive-review.md"]
+    },
+    {
+      "scenario": "Plan enforces repeated Work Item lifecycle and fail-closed pause",
+      "required": true,
+      "status": "verified",
+      "evidence": ["docs/superpowers/plans/2026-07-17-ai-cockpit-comprehensive-review.md"]
+    },
+    {
+      "scenario": "Plan ends implementation with release and post-release cleanup",
+      "required": true,
+      "status": "verified",
+      "evidence": ["docs/superpowers/plans/2026-07-17-ai-cockpit-comprehensive-review.md"]
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "scope_sprawl",
+      "governance_evidence"
+    ],
+    "reason": "The review spans template maintenance, adopter upgrades, human-agent handoff, and release governance; the plan must preserve one independently verifiable Work Item per remediation item."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly confirmed the plan design, authorized the requested repository workflow actions, and requested execution."
+  },
+  "preReviewWarnings": [
+    "This Work Item creates a plan only; it does not implement the 17 remediation Work Items."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The plan records agreement with the review conclusions and separates template maintenance, adopter projects, and human-agent collaboration; evidence is the plan's 评审结论 section.",
+    "The plan lists the remediation Work Items in priority and dependency order, ending the implementation sequence with release of a new version; evidence is the plan's 工单总表 section.",
+    "The plan requires a repeatable loop for every Work Item, explicit authorized actions, fail-closed handling, and cleanup of the plan document only after all implementation Work Items are complete; evidence is the plan's 执行循环与授权 section.",
+    "The plan contains a final Work Item for publishing a new version and a subsequent cleanup Work Item for deleting the plan document after completion; evidence is the plan's 工单 17 and 工单 18 sections."
+  ],
+  "guidelines": [
+    "Keep the plan language-neutral and project-neutral where the template is intended for adopters.",
+    "Do not combine independent remediation Work Items on one branch or in one PR.",
+    "Do not claim two-person review or cryptographic release trust where it is not evidenced.",
+    "Do not delete the plan document until all implementation Work Items and the release Work Item are complete."
+  ],
+  "intent": {
+    "problem": "The review identifies multiple independent governance gaps across the template repository, adopter upgrade lifecycle, and human-agent decision handoff; implementers need an ordered, auditable execution plan.",
+    "constraints": [
+      "Work must remain one Work Item, one dedicated branch, and one PR per remediation item.",
+      "The release Work Item must be the final implementation item.",
+      "The plan document must be cleaned up only after all listed implementation items are complete.",
+      "The user's authorization covers the requested branch, commit, PR, merge, release, and cleanup workflow actions within this scope."
+    ],
+    "rationale": "A dependency-ordered loop makes the review actionable while preserving fail-closed evidence and the distinction between template truth, adopter calibration, and human decisions."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": [],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "user",
+      "reason": "The user explicitly authorized execution, final release, and post-completion plan-document cleanup."
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly confirmed the plan design and authorized execution, including the final release and post-completion plan-document cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore the plan document and its Work Item evidence; do not delete historical archived evidence."
+}
