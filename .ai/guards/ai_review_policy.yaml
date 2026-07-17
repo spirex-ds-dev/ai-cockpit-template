@@ -4,6 +4,14 @@
 
 version: 1
 
+# Adopters may replace this adapter with their own policy. The template's
+# single-maintainer mode is report-only and is not an independent approval.
+adapter:
+  mode: single_maintainer
+  source: adopter_owned
+  approvalEvidence: external
+  highRiskProtection: adopter_configured
+
 requiredReviewChecklist:
   stage: report_only
   reason: Governance, automation, command entrypoint, and CI changes should state expected review focus before completion.
