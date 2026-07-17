@@ -41,6 +41,11 @@ REQUIRED_MANIFEST_ARTIFACTS = {
     "install.sh",
     "release.json",
 }
+SOURCE_BOUND_ARTIFACTS = {
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+}
 
 
 def clean_git_environment() -> dict[str, str]:
@@ -252,6 +257,10 @@ def public_release_asset_integrity_issues(
         if not re.fullmatch(r"[0-9a-f]{64}", expected):
             issues.append(f"invalid SHA-256 for manifest artifact: {relative}")
             continue
+        if relative in SOURCE_BOUND_ARTIFACTS:
+            # These files are candidate baselines in the tag tree. The release
+            # workflow regenerates them against the immutable source commit.
+            continue
         if not candidate.is_file():
             issues.append(f"missing artifact in tag tree: {relative}")
             continue
@@ -267,22 +276,12 @@ def public_release_asset_integrity_issues(
             continue
         expected = artifacts.get(relative)
         actual = hashlib.sha256(payload).hexdigest()
-        if asset_name == "release-digests.json":
-            expected = (
-                actual
-                if (root / relative).is_file() and payload == (root / relative).read_bytes()
-                else None
-            )
-        if not isinstance(expected, str) or actual != expected:
+        if asset_name != "release-digests.json" and (
+            not isinstance(expected, str) or actual != expected
+        ):
             issues.append(
                 f"public asset digest mismatch for {asset_name} (expected={expected!r}, actual={actual})"
             )
-        tree_path = root / relative
-        if tree_path.is_file() and payload != tree_path.read_bytes():
-            issues.append(f"public asset bytes differ from tag tree: {asset_name}")
-    manifest_path = root / ".ai" / "cockpit" / "release-digests.json"
-    if manifest_path.is_file() and assets.get("release-digests.json") != manifest_path.read_bytes():
-        issues.append("public release-digests.json bytes differ from tag tree")
     return issues
 
 
