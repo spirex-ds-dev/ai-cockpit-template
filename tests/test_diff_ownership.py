@@ -20,6 +20,50 @@ def test_classify_active_archived_and_unowned_paths():
     assert ownership.classify("ci/a.yml", [active, archived], policy).state == "unowned"
 
 
+def test_start_receipt_binding_implicitly_owns_receipt_path():
+    owner = ownership.Owner(
+        "active",
+        "receipt",
+        contract(["scripts/ai_start.py"])
+        | {"startReceipt": {"path": ".ai/work-items/starts/receipt.json"}},
+        None,
+    )
+    assert ownership.covers(owner, ".ai/work-items/starts/receipt.json") == (True, False)
+
+
+def test_covers_requires_archived_summary_and_approval_is_explicit():
+    archived_without_summary = ownership.Owner(
+        "archived", "missing-summary", contract(["docs/**"]), None
+    )
+    assert ownership.covers(archived_without_summary, "docs/readme.md") == (False, False)
+    archived_missing_path = ownership.Owner(
+        "archived", "missing-path", contract(["docs/**"]), {"changedFiles": []}
+    )
+    assert ownership.covers(archived_missing_path, "docs/readme.md") == (False, False)
+    assert ownership.approved(
+        ownership.Owner("active", "approved", contract([], approved=True), None)
+    )
+    assert not ownership.approved(ownership.Owner("active", "unapproved", contract([]), None))
+
+
+def test_owners_discovers_active_contracts_without_pr_base(monkeypatch, tmp_path):
+    active_path = tmp_path / "task.contract.json"
+    active_path.write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(ownership, "ACTIVE_DIR", tmp_path)
+    monkeypatch.setattr(ownership, "ARCHIVE_DIR", tmp_path / "archive")
+    discovered = ownership.Owner("active", "task", contract(["docs/**"]), None)
+    monkeypatch.setattr(ownership, "load_pair", lambda _path, _kind: discovered)
+    owners = ownership.owners(active_contract=None, base="")
+    assert owners == [discovered]
+
+
+def test_owners_uses_active_contract_and_covers_exclusions():
+    active_contract = contract(["docs/**"], excluded=["docs/private/**"])
+    owners = ownership.owners(active_contract=active_contract, base="")
+    assert owners[0].kind == "active"
+    assert ownership.covers(owners[0], "docs/private/secret.md") == (False, True)
+
+
 def test_active_follow_up_overrides_archived_path_evidence():
     active = ownership.Owner("active", "follow-up", contract(["docs/**"]), None)
     archived = ownership.Owner(

@@ -40,6 +40,20 @@ def test_summary_validator_orchestrates_focused_validation_helpers(monkeypatch):
     ]
 
 
+def test_receipt_binding_exempts_receipt_from_changed_file_diff(monkeypatch):
+    summary = {"changedFiles": []}
+    contract = {
+        "scope": ["scripts/ai_start.py"],
+        "startReceipt": {"path": ".ai/work-items/starts/task.json"},
+    }
+    monkeypatch.setattr(
+        ai_check_summary,
+        "changed_paths",
+        lambda _contract: [".ai/work-items/starts/task.json"],
+    )
+    assert ai_check_summary.validate_changed_files_cover_diff(summary, contract) == []
+
+
 def test_passed_v2_evidence_requires_worktree_digest():
     item = ai_finish.evidence(
         "projectTest",

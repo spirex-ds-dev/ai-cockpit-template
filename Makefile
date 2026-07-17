@@ -22,11 +22,14 @@ AI_PYTHON = PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
 	ai-start ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy template-adoption-ready \
-	check-ai-scenario-coverage generate-ai-preflight-review check-ai-preflight-review ai-preflight \
+	check-ai-scenario-coverage check-ai-start-receipt generate-ai-preflight-review check-ai-preflight-review ai-preflight \
 	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge
 
 check-ai-diff-ownership:
 	$(AI_PYTHON) scripts/ai_check_diff_ownership.py $(if $(AI_BASE_COMMIT),--base $(AI_BASE_COMMIT),) $(if $(CONTRACT),--contract $(CONTRACT),)
+
+check-ai-start-receipt:
+	$(AI_PYTHON) scripts/ai_start_receipt.py --contract "$(CONTRACT)" $(if $(RECEIPT),--receipt "$(RECEIPT)",)
 
 ai-pre-merge:
 	@set -e; \

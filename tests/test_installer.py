@@ -39,6 +39,7 @@ def test_installed_distribution_contains_pr_and_approval_wiring(tmp_path):
 
     assert installer.install() == 0
     assert (tmp_path / "scripts" / "ai_check_pr.py").is_file()
+    assert (tmp_path / "scripts" / "ai_start_receipt.py").is_file()
     assert (tmp_path / ".ai" / "README.md").is_file()
     assert (tmp_path / "scripts" / "ai_doctor.py").is_file()
     assert (tmp_path / "scripts" / "ai_onboard.py").is_file()

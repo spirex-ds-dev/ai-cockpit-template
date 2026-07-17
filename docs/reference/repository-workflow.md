@@ -16,7 +16,7 @@ AI Cockpit uses one Work Item, one dedicated work branch, and one pull or merge 
 Template maintenance uses the template repository's protected default branch:
 
 ```text
-latest origin/main → Work Item branch → one PR → merge → cleanup
+latest origin/main → Work Item branch → ai-start + Start Receipt → one PR → merge → cleanup
 ```
 
 The complete closure order is:
@@ -35,6 +35,17 @@ CODEOWNER, stale-review dismissal, and conversation resolution. The
 `restrictedWriteApproval` Contract field records authorization to change
 governance files; it must never be treated as proof that a platform review was
 approved. Platform API evidence remains the source of truth for that boundary.
+
+## Work Item Start Receipt
+
+`make ai-start` creates a Git-tracked
+`.ai/work-items/starts/<work-item-id>.json` before implementation begins. The
+Receipt records the Work Item ID, Contract base commit, start timestamp, initial
+Scope digest, and Contract skeleton digest. The active Contract keeps a binding
+to those values. `make check-ai-start-receipt` and the Contract/PR checks fail
+closed for a missing, malformed, digest-mismatched, base-mismatched, or
+untracked Receipt. The Receipt proves creation-time lifecycle state only; it
+does not prove implementation success, review approval, or merge status.
 ## Adopter project
 An adopter project keeps its own Git history and branch policy:
 

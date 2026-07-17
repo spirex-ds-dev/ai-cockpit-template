@@ -1,14 +1,210 @@
 import json
+import runpy
 import sys
 import subprocess
 import fcntl
+import pytest
 import ai_archive_work_item
 import ai_common
+import ai_check_scope
 import ai_start
+import ai_start_receipt
+from ai_start_receipt import build_receipt
+from ai_start_receipt import current_branch
+from ai_start_receipt import receipt_path
+from ai_start_receipt import receipt_binding
+from ai_start_receipt import skeleton_digest
+from ai_start_receipt import scope_digest
+from ai_start_receipt import validate_receipt
 
 
 def test_start_and_archive_use_clean_git_environment():
     assert all(not key.startswith("GIT_") for key in ai_common.clean_git_environment())
+
+
+def test_start_receipt_binds_contract_and_rejects_tampering(tmp_path):
+    contract = {
+        "contractVersion": 2,
+        "workItemId": "receipt_task",
+        "mode": "code",
+        "title": "Receipt",
+        "baseCommit": "a" * 40,
+        "scope": ["src", "tests"],
+    }
+    receipt = build_receipt(contract, timestamp="2026-07-17T00:00:00+00:00")
+    contract["startReceipt"] = receipt_binding(receipt)
+    assert receipt["contractSkeletonDigest"] == skeleton_digest(contract)
+    assert validate_receipt(contract, receipt, project_root=tmp_path) == []
+
+    tampered = dict(receipt)
+    tampered["baseCommit"] = "b" * 40
+    assert "Start Receipt baseCommit does not match Contract" in validate_receipt(
+        contract, tampered, project_root=tmp_path
+    )
+
+
+def test_start_receipt_rejects_missing_binding_and_receipt():
+    contract = {
+        "contractVersion": 2,
+        "workItemId": "receipt_task",
+        "baseCommit": "a" * 40,
+        "scope": [],
+    }
+    assert validate_receipt(contract, None) == ["Start Receipt is missing"]
+    receipt = build_receipt(contract)
+    assert "Contract startReceipt binding is missing" in validate_receipt(contract, receipt)
+
+
+def test_start_receipt_rejects_malformed_fields_and_binding():
+    contract = {
+        "contractVersion": 2,
+        "workItemId": "receipt_task",
+        "mode": "code",
+        "title": "Receipt",
+        "baseCommit": "a" * 40,
+        "scope": [],
+    }
+    receipt = build_receipt(contract, timestamp="not-a-timestamp")
+    receipt.update(
+        {
+            "receiptVersion": 99,
+            "workItemId": "other",
+            "receiptPath": "wrong.json",
+            "baseCommit": "b" * 40,
+            "initialScopeDigest": "short",
+            "contractSkeletonDigest": "short",
+        }
+    )
+    contract["startReceipt"] = {"path": "wrong.json"}
+    issues = validate_receipt(contract, receipt)
+    assert len(issues) >= 7
+    assert "Start Receipt receiptVersion is unsupported" in issues
+    assert "Start Receipt startTimestamp is not ISO-8601" in issues
+    assert "Start Receipt initialScopeDigest must be a SHA-256 digest" in issues
+    assert "Start Receipt contractSkeletonDigest must be a SHA-256 digest" in issues
+
+
+def test_start_receipt_helpers_and_tracked_validation(monkeypatch, tmp_path):
+    contract = {
+        "contractVersion": 2,
+        "workItemId": "receipt_task",
+        "mode": "code",
+        "title": "Receipt",
+        "baseCommit": "a" * 40,
+        "scope": ["src"],
+    }
+    receipt = build_receipt(contract, timestamp="2026-07-17T00:00:00+00:00", project_root=tmp_path)
+    contract["startReceipt"] = receipt_binding(receipt)
+    assert len(scope_digest(contract["scope"])) == 64
+    assert receipt_path("receipt_task", project_root=tmp_path).name == "receipt_task.json"
+    assert isinstance(current_branch(project_root=tmp_path), str)
+
+    class Result:
+        returncode = 1
+
+    monkeypatch.setattr("ai_start_receipt.subprocess.run", lambda *args, **kwargs: Result())
+    assert "Start Receipt is not Git-tracked" in validate_receipt(
+        contract, receipt, project_root=tmp_path, require_tracked=True
+    )
+
+
+def test_start_receipt_cli_success_and_fail_closed_paths(monkeypatch, tmp_path):
+    contract_path = tmp_path / "contract.json"
+    receipt_file = tmp_path / "receipt.json"
+    contract_path.write_text(json.dumps({"workItemId": "receipt_task"}), encoding="utf-8")
+    receipt_file.write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(ai_start_receipt, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_start_receipt, "receipt_path", lambda _work_item_id: receipt_file)
+    monkeypatch.setattr(ai_start_receipt, "validate_receipt", lambda *args, **kwargs: [])
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["ai_start_receipt.py", "--contract", "contract.json", "--receipt", "receipt.json"],
+    )
+    assert ai_start_receipt.main() == 0
+
+    monkeypatch.setattr(ai_start_receipt, "validate_receipt", lambda *args, **kwargs: ["bad"])
+    assert ai_start_receipt.main() == 1
+
+    monkeypatch.setattr(sys, "argv", ["ai_start_receipt.py", "--contract", "missing.json"])
+    assert ai_start_receipt.main() == 1
+
+
+def test_start_receipt_rejects_invalid_contract_shapes_and_bad_file(monkeypatch, tmp_path):
+    for contract in (
+        {},
+        {"workItemId": "task", "scope": "bad", "baseCommit": "a" * 40},
+        {"workItemId": "task", "scope": [1], "baseCommit": ""},
+        {"workItemId": "task", "scope": [], "baseCommit": ""},
+    ):
+        with pytest.raises(ValueError):
+            build_receipt(contract, project_root=tmp_path)
+
+    contract_path = tmp_path / "contract.json"
+    receipt_file = tmp_path / "receipt.json"
+    contract_path.write_text(json.dumps({"workItemId": "task"}), encoding="utf-8")
+    receipt_file.write_text("not-json", encoding="utf-8")
+    monkeypatch.setattr(ai_start_receipt, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_start_receipt, "receipt_path", lambda _work_item_id: receipt_file)
+    monkeypatch.setattr(sys, "argv", ["ai_start_receipt.py", "--contract", "contract.json"])
+    assert ai_start_receipt.main() == 1
+
+    monkeypatch.setattr(sys, "argv", ["ai_start_receipt.py", "--contract", "missing.json"])
+    with pytest.raises(SystemExit):
+        runpy.run_path(ai_start_receipt.__file__, run_name="__main__")
+
+
+def test_scope_guard_adds_bound_receipt_path(monkeypatch):
+    class Observation:
+        def check_passed(self, **_kwargs):
+            return None
+
+        def check_failed(self, **_kwargs):
+            return None
+
+        def guard_violation(self, **_kwargs):
+            return None
+
+    contract = {
+        "workItemId": "receipt_task",
+        "scope": ["scripts/ai_start.py"],
+        "outOfScope": [],
+        "startReceipt": {"path": ".ai/work-items/starts/receipt_task.json"},
+    }
+    monkeypatch.setattr(ai_check_scope, "load_json", lambda _path: contract)
+    monkeypatch.setattr(
+        ai_check_scope,
+        "changed_paths",
+        lambda _contract: [".ai/work-items/starts/receipt_task.json"],
+    )
+    monkeypatch.setattr(ai_check_scope, "simple_yaml_lists", lambda _path: {})
+    monkeypatch.setattr(ai_check_scope, "create_observability", lambda **_kwargs: Observation())
+    monkeypatch.setattr(ai_check_scope, "elapsed_ms", lambda _start: 1)
+    monkeypatch.setattr(sys, "argv", ["ai_check_scope.py", "contract.json"])
+    assert ai_check_scope.main() == 0
+
+    contract["outOfScope"] = [".ai/work-items/starts/**"]
+    assert ai_check_scope.main() == 1
+
+    contract["outOfScope"] = []
+    contract["destructiveChangePolicy"] = {
+        "allowed": True,
+        "requiresHumanApproval": False,
+        "allowPatterns": [".ai/work-items/starts/**"],
+    }
+    monkeypatch.setattr(sys, "argv", ["ai_check_scope.py", "contract.json", "--verbose"])
+    assert ai_check_scope.main() == 0
+
+    contract["destructiveChangePolicy"]["allowPatterns"] = []
+    monkeypatch.setattr(sys, "argv", ["ai_check_scope.py", "contract.json", "--verbose"])
+    assert ai_check_scope.main() == 0
+
+
+def test_start_receipt_missing_fields_fails_closed():
+    contract = {"workItemId": "receipt_task", "baseCommit": "a" * 40, "scope": []}
+    issues = validate_receipt(contract, {})
+    assert "Start Receipt missing field: receiptVersion" in issues
+    assert "Start Receipt missing field: contractSkeletonDigest" in issues
 
 
 def test_journey_policy_keeps_refactor_contract_boundaries():
@@ -144,6 +340,9 @@ def test_ai_start_default_contains_agent_risk_gate(tmp_path, monkeypatch):
     assert contract["baseCommit"] == "a" * 40
     assert contract["checkpointPolicy"]["requiredStages"] == ["before_edit", "before_finish"]
     assert ".ai/cockpit/current_status.md" in contract["scope"]
+    receipt = tmp_path / ".ai" / "work-items" / "starts" / "sample.json"
+    assert receipt.exists()
+    assert json.loads(receipt.read_text(encoding="utf-8"))["workItemId"] == "sample"
 
 
 def test_ai_start_fails_closed_when_preflight_gate_blocks(tmp_path, monkeypatch):
