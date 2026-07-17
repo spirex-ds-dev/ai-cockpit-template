@@ -25,6 +25,9 @@ from ai_check_status_consistency import DEFAULT_STATUS, validate_status_consiste
 from ai_check_diff_ownership import format_preview, preview
 from ai_generate_status import write_active_status, write_no_active_status
 from ai_observability import create_observability
+from ai_start_receipt import build_receipt
+from ai_start_receipt import receipt_binding
+from ai_start_receipt import receipt_path
 
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
@@ -223,13 +226,37 @@ def persist_work_item(
     """Persist a new Work Item and roll back if active status generation fails."""
     status_path = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
     previous_status = status_path.read_bytes() if status_path.exists() else None
+    start_receipt_path = receipt_path(str(contract["workItemId"]), project_root=PROJECT_ROOT)
     save_json(contract_path, contract)
     save_json(summary_path, summary)
+    try:
+        start_receipt = build_receipt(contract, project_root=PROJECT_ROOT)
+        contract["startReceipt"] = receipt_binding(start_receipt)
+        changed_files = summary.get("changedFiles")
+        if isinstance(changed_files, list):
+            changed_files.append(
+                {
+                    "path": start_receipt["receiptPath"],
+                    "reason": "Immutable Work Item Start Receipt created before implementation.",
+                }
+            )
+        save_json(contract_path, contract)
+        save_json(start_receipt_path, start_receipt)
+    except (OSError, ValueError, KeyError) as exc:
+        contract_path.unlink(missing_ok=True)
+        summary_path.unlink(missing_ok=True)
+        start_receipt_path.unlink(missing_ok=True)
+        print(
+            f"ERROR: failed to create Start Receipt; Work Item creation rolled back: {exc}",
+            file=sys.stderr,
+        )
+        return False
     try:
         write_active_status(contract_path, summary_path)
     except (OSError, RuntimeError, ValueError) as exc:
         contract_path.unlink(missing_ok=True)
         summary_path.unlink(missing_ok=True)
+        start_receipt_path.unlink(missing_ok=True)
         if previous_status is None:
             status_path.unlink(missing_ok=True)
         else:
@@ -338,6 +365,7 @@ def main() -> int:
                 contract_rel,
                 summary_rel,
                 ".ai/cockpit/current_status.md",
+                ".ai/work-items/starts/**",
                 ".ai/work-items/archive/**",
             ],
             "outOfScope": out_of_scope_list,

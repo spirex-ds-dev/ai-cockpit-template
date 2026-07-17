@@ -508,7 +508,13 @@ def validate_changed_files_cover_diff(
 
     reported = changed_file_paths(summary)
     exempt = summary_exempt_patterns()
-    missing = [path for path in paths if path not in reported and not included(path, exempt)]
+    binding = contract.get("startReceipt") if isinstance(contract, dict) else None
+    receipt_path = binding.get("path") if isinstance(binding, dict) else None
+    missing = [
+        path
+        for path in paths
+        if path not in reported and path != receipt_path and not included(path, exempt)
+    ]
     if not missing:
         return []
     return [f"changedFiles is missing actual changed path: {path}" for path in missing]

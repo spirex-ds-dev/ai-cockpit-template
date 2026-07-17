@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from ai_generate_status import write_no_active_status
+from ai_start_receipt import build_receipt, receipt_binding
 
 STACKS = {
     "generic",
@@ -66,6 +67,7 @@ SCRIPT_NAMES = {
     "ai_observability.py",
     "ai_preflight_review.py",
     "ai_start.py",
+    "ai_start_receipt.py",
     "ai_project_profile.py",
     "ai_project_doctor.py",
     "ai_calibrate.py",
@@ -732,6 +734,7 @@ class Installer:
             "adoptionBootstrapPaths": ["scripts/ai_*.py"],
             "scope": [
                 ".ai/**",
+                ".ai/work-items/starts/**",
                 ".cursor/**",
                 "scripts/ai_*.py",
                 "Makefile.ai",
@@ -796,6 +799,9 @@ class Installer:
             },
             "rollbackNote": "Revert the adoption commit to remove AI Cockpit governance files.",
         }
+        receipt = build_receipt(contract, project_root=self.target)
+        contract["startReceipt"] = receipt_binding(receipt)
+        receipt_path = self.target / receipt["receiptPath"]
         summary = {
             "summaryVersion": 2,
             "workItemId": "adopt_ai_cockpit",
@@ -862,6 +868,7 @@ class Installer:
         for path, data, detail in (
             (contract_path, contract, "create adoption Contract"),
             (summary_path, summary, "create adoption Summary"),
+            (receipt_path, receipt, "create adoption Start Receipt"),
         ):
             self.record("write", path, detail)
             if not self.dry_run:

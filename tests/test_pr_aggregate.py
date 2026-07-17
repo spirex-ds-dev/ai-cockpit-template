@@ -3,6 +3,9 @@ import sys
 from pathlib import Path
 
 import ai_check_pr
+from ai_start_receipt import build_receipt
+from ai_start_receipt import receipt_binding
+from ai_start_receipt import validate_receipt
 import pytest
 
 
@@ -89,6 +92,24 @@ def fake_git_result(stdout="", returncode=0, stderr=""):
         (),
         {"returncode": returncode, "stdout": stdout, "stderr": stderr},
     )()
+
+
+def test_pr_receipt_binding_is_fail_closed():
+    contract = {
+        "contractVersion": 2,
+        "workItemId": "pr_receipt",
+        "mode": "code",
+        "title": "PR receipt",
+        "baseCommit": "a" * 40,
+        "scope": ["scripts/**"],
+    }
+    receipt = build_receipt(contract, timestamp="2026-07-17T00:00:00+00:00")
+    contract["startReceipt"] = receipt_binding(receipt)
+    assert validate_receipt(contract, receipt) == []
+    receipt["contractSkeletonDigest"] = "0" * 64
+    assert "Contract startReceipt binding does not match Receipt" in validate_receipt(
+        contract, receipt
+    )
 
 
 def test_aggregate_pr_covers_earlier_and_later_work_items(tmp_path, monkeypatch):

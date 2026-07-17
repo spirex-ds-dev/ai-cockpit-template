@@ -109,6 +109,9 @@ def owners(*, base: str = "", active_contract: dict[str, Any] | None = None) -> 
 def covers(owner: Owner, path: str) -> tuple[bool, bool]:
     scoped = included(path, string_list(owner.contract.get("scope")))
     excluded = included(path, string_list(owner.contract.get("outOfScope")))
+    binding = owner.contract.get("startReceipt")
+    if isinstance(binding, dict) and binding.get("path") == path:
+        scoped = True
     if not scoped or excluded:
         return False, excluded
     if owner.kind == "archived" and (

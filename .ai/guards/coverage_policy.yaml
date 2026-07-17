@@ -94,6 +94,7 @@ associations:
       - "scripts/ai_check_guards.py"
       - "scripts/ai_check_review_policy.py"
       - "scripts/ai_check_scope.py"
+      - "scripts/ai_check_summary.py"
       - "scripts/ai_observability.py"
       - "scripts/ai_project_profile.py"
     tests:
@@ -183,6 +184,17 @@ associations:
     tests:
       - "tests/test_start_and_archive.py"
       - "tests/test_finish_e2e.py"
+  startReceipt:
+    production:
+      - "scripts/ai_start_receipt.py"
+      - "scripts/install_ai_cockpit.py"
+      - "scripts/ai_check_diff_ownership.py"
+      - "scripts/ai_check_scope.py"
+      - "scripts/ai_check_summary.py"
+    tests:
+      - "tests/test_start_and_archive.py"
+      - "tests/test_pr_aggregate.py"
+      - "tests/test_installer.py"
   archiveWorkItem:
     production:
       - "scripts/ai_archive_work_item.py"

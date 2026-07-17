@@ -13,6 +13,7 @@ from typing import Any
 
 from ai_check_summary import changed_file_paths, validate_summary
 from ai_check_work_item import validate_contract
+from ai_start_receipt import validate_receipt
 from ai_common import (
     PROJECT_ROOT,
     changed_name_status,
@@ -279,6 +280,32 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         contract_rel = contract_path.relative_to(PROJECT_ROOT).as_posix()
         summary_rel = summary_path.relative_to(PROJECT_ROOT).as_posix()
         audit_paths.update({contract_rel, summary_rel})
+        receipt_binding = contract.get("startReceipt")
+        if isinstance(receipt_binding, dict) and isinstance(receipt_binding.get("path"), str):
+            receipt_rel = receipt_binding["path"]
+            receipt_file = PROJECT_ROOT / receipt_rel
+            audit_paths.add(receipt_rel)
+            if not receipt_file.exists():
+                issues.append(f"{contract_rel}: Start Receipt is missing: {receipt_rel}")
+            else:
+                try:
+                    receipt = load_json(receipt_file)
+                except (OSError, json.JSONDecodeError, ValueError) as exc:
+                    receipt = None
+                    issues.append(f"{contract_rel}: failed to load Start Receipt: {exc}")
+                issues.extend(
+                    f"{contract_rel}: {issue}"
+                    for issue in validate_receipt(
+                        contract,
+                        receipt,
+                        project_root=PROJECT_ROOT,
+                        require_tracked=False,
+                    )
+                )
+                base_blob = _git_blob_hash(base, receipt_rel)
+                current_blob = _worktree_blob_hash(receipt_rel)
+                if base_blob and base_blob != current_blob:
+                    issues.append(f"{contract_rel}: Start Receipt was modified after its base")
         if contract.get("contractVersion") != 2:
             issues.append(f"{contract_rel}: PR archive evidence requires contractVersion 2")
         issues.extend(f"{contract_rel}: {issue}" for issue in validate_contract(contract))

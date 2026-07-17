@@ -17,6 +17,7 @@ from ai_common import (
     validate_scenario_coverage,
 )
 from ai_observability import create_observability, elapsed_ms
+from ai_start_receipt import receipt_path, validate_receipt
 
 
 REQUIRED_FIELDS = (
@@ -53,6 +54,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "problemStatement",
     "scenarioCoverage",
     "archiveIndexRepair",
+    "startReceipt",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -358,6 +360,13 @@ def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str
                 scan_machine_paths(child, f"{location}[{index}]")
 
     scan_machine_paths(data, "contract")
+    if contract_path and ".ai/work-items/active/" in Path(contract_path).as_posix():
+        receipt_file = receipt_path(str(data.get("workItemId", "")))
+        try:
+            receipt = load_json(receipt_file)
+        except (OSError, json.JSONDecodeError, ValueError):
+            receipt = None
+        issues.extend(validate_receipt(data, receipt, require_tracked=False))
     return issues
 
 

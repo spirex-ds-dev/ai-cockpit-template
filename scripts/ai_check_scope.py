@@ -67,6 +67,9 @@ def main() -> int:
 
     obs = create_observability(work_item_id=contract.get("workItemId", ""))
     scope = string_list(contract, "scope")
+    receipt_binding = contract.get("startReceipt")
+    if isinstance(receipt_binding, dict) and isinstance(receipt_binding.get("path"), str):
+        scope.append(receipt_binding["path"])
     out_of_scope = string_list(contract, "outOfScope")
     policy_lists = simple_yaml_lists(SCOPE_POLICY)
     allow_patterns = policy_lists.get("allowAlways", [])
