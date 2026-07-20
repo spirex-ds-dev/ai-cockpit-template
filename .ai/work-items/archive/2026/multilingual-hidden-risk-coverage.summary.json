@@ -1,0 +1,411 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "multilingual-hidden-risk-coverage",
+  "contractPath": ".ai/work-items/archive/2026/multilingual-hidden-risk-coverage.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/multilingual-hidden-risk-coverage.contract.json",
+      "reason": "Defined multilingual and hidden-risk coverage scope."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/multilingual-hidden-risk-coverage.summary.json",
+      "reason": "Records implementation and verification evidence."
+    },
+    {
+      "path": ".ai/work-items/starts/multilingual-hidden-risk-coverage.json",
+      "reason": "Records the Work Item start receipt."
+    },
+    {
+      "path": "scripts/ai_trust_guards.py",
+      "reason": "Extends explicit unsupported-operation boundary terms across English, Chinese, and Japanese."
+    },
+    {
+      "path": "tests/test_trust_guards.py",
+      "reason": "Adds multilingual and hidden-risk fail-closed regression coverage."
+    },
+    {
+      "path": "docs/trust-layer.md",
+      "reason": "Documents coverage limits without claiming semantic completeness."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    }
+  ],
+  "sourcesUsed": [
+    "user-provided-review:pasted-text.txt",
+    "scripts/ai_trust_guards.py",
+    "tests/test_trust_guards.py",
+    "docs/trust-layer.md"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Chinese and Japanese unsupported operation phrases are blocked.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_trust_guards.py::test_multilingual_and_hidden_risk_phrases_are_fail_closed"
+      ]
+    },
+    {
+      "scenario": "Known hidden-risk paraphrases remain fail-closed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_trust_guards.py::test_multilingual_and_hidden_risk_phrases_are_fail_closed"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:29:00.269182+00:00",
+      "exitCode": 0,
+      "durationMs": 37,
+      "outputDigest": "56ffac28375f8dce894e018a3d1ce67f49241fb7fb318416269507c0df7c1665",
+      "commandHash": "4ba2ed8c94568103a4a5d53a1c6db732285888ccfdedac965ad0a4caf00786c4",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "2d29119b82d5695687574c697fead1fe5f3feae47554e52081d7fa89c0375469",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json work item contract check passed: .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:29:00.399472+00:00",
+      "exitCode": 0,
+      "durationMs": 84,
+      "outputDigest": "9ef0a9cf524227bdec87f141e6a14576b568376202a430979bb70c4820881d3e",
+      "commandHash": "863026418da778d28d1dc75c72440422869bb52c408d569426123032ad79d8ec",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "2d29119b82d5695687574c697fead1fe5f3feae47554e52081d7fa89c0375469",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json scope guard passed: 4 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:29:00.546042+00:00",
+      "exitCode": 0,
+      "durationMs": 104,
+      "outputDigest": "37b7b40333a01e2029e6c4f6271903f942cfaad50869cd9b162831fa861b27b4",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "2d29119b82d5695687574c697fead1fe5f3feae47554e52081d7fa89c0375469",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/multilingual-hidden-risk-coverage.contract.json SUMMARY=.ai/work-items/active/multilingual-hidden-risk-coverage.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:29:00.792324+00:00",
+      "exitCode": 0,
+      "durationMs": 190,
+      "outputDigest": "78194c86371a215ed543459c7753f8eb2702a8a40e09d606ba17e612c5604465",
+      "commandHash": "291ae6d66101e3ccc67668c9dc67e487f2035e1a99ac00459dc29c6342fca9ee",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "2d29119b82d5695687574c697fead1fe5f3feae47554e52081d7fa89c0375469",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json --summary .ai/work-items/active/multilingual-hidden-risk-coverage.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `multilingual-hidden-risk-coverage` - Contract Hash: `a00a5cc23d8f59b4` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `3` - Unknown Count: `"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:29:00.927226+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "0836eec6ad483a1dc2eb3b9bb89dcaa5878e039527c9f218a5a9d707e3aba56b",
+      "commandHash": "d69987a76517d236060e34d2a9ca2cfe397abdd9f5cd093334fde44c595bab2f",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "2d29119b82d5695687574c697fead1fe5f3feae47554e52081d7fa89c0375469",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/multilingual-hidden-risk-coverage.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/multilingual-hidden-risk-coverage.json [review] .ai/cockpit/current_status.md [review] scripts/ai_trust_guards.py review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:29:01.066676+00:00",
+      "exitCode": 0,
+      "durationMs": 94,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "2d29119b82d5695687574c697fead1fe5f3feae47554e52081d7fa89c0375469",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:29:01.217058+00:00",
+      "exitCode": 0,
+      "durationMs": 94,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "2d29119b82d5695687574c697fead1fe5f3feae47554e52081d7fa89c0375469",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/multilingual-hidden-risk-coverage.contract.json SUMMARY=.ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:29:01.326018+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "c06eb30b9ca2064587ccfa78ff4691936d05c58f03453fe97cda3d2ed6bb5c4c",
+      "commandHash": "41bd8927fb87f66cfee2c59b6c420fd1da139917e20a7e66cac1491862973100",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "2d29119b82d5695687574c697fead1fe5f3feae47554e52081d7fa89c0375469",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json --summary .ai/work-items/active/multilingual-hidden-risk-coverage.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/multilingual-hidden-risk-coverage.contract.json SUMMARY=.ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:29:01.413281+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "0a7585c3d3df0d41cf5578c82cefdf21dcad4c3498df26cba95074843af36214",
+      "commandHash": "05af41c4249a409100d100fc20cb6ebc2c952da43c913aeccfcb89033d1219d6",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "2d29119b82d5695687574c697fead1fe5f3feae47554e52081d7fa89c0375469",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json --summary .ai/work-items/active/multilingual-hidden-risk-coverage.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:29:01.644796+00:00",
+      "exitCode": 0,
+      "durationMs": 188,
+      "outputDigest": "514bf48295ba4cf53d4430063604b3a99d75894c7b19d38bf52d71d4164e12a6",
+      "commandHash": "fadebbe426376c575e65774cbb81bf99d73ba9908dacabe4a47bcd780d014c9a",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "2d29119b82d5695687574c697fead1fe5f3feae47554e52081d7fa89c0375469",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json ## Diff Ownership Preview - active_owned: `4`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/multilingual-hidden-risk-coverage.json` — covered by Contract scope - [active_owned]"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:31:02.399256+00:00",
+      "exitCode": 0,
+      "durationMs": 120704,
+      "outputDigest": "23dd0885116623c35795224013db9b3d94fdb094bcf736505fcc3f22fde9813e",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "2d29119b82d5695687574c697fead1fe5f3feae47554e52081d7fa89c0375469",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 108 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 10%] ........................................................................ [ 21%] ............................................................"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/multilingual-hidden-risk-coverage.contract.json SUMMARY=.ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:31:03.794725+00:00",
+      "exitCode": 0,
+      "durationMs": 384,
+      "outputDigest": "dbbb27eeba17f30a0144204f2f16c634b1177ea27d40fe26b1c7f1f547ee7ac4",
+      "commandHash": "7ce60d23f48eb1d37d19fbc751edffa2b2999c02b74e9cc6fad511a84c3998de",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "c75d5222936da271e474e646cd4b37f1f4933d525252039e6917f5b6bd9695fa",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json --summary .ai/work-items/active/multilingual-hidden-risk-coverage.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/multilingual-hidden-risk-coverage.contract.json SUMMARY=.ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:31:04.036291+00:00",
+      "exitCode": 0,
+      "durationMs": 198,
+      "outputDigest": "aa0c7da6e74500c0111bd481bca3c63c96196fa125754fd7f8fcd7101ab48afd",
+      "commandHash": "b7b0326476bd49d232bcc25c253f3ebef28120b5b7bae717da7734a271a6e2ef",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "c75d5222936da271e474e646cd4b37f1f4933d525252039e6917f5b6bd9695fa",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json --summary .ai/work-items/active/multilingual-hidden-risk-coverage.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:31:04.118712+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "c75d5222936da271e474e646cd4b37f1f4933d525252039e6917f5b6bd9695fa",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/multilingual-hidden-risk-coverage.contract.json SUMMARY=.ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:31:04.213313+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "3d43c19b1fbc447c40d81d01c502a20fb37c054998d6532e2de7ce99bb2d2f1d",
+      "commandHash": "057e748efab276a2515c1fb27848d9378d4b60ef38972643d16f80e593120182",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "c75d5222936da271e474e646cd4b37f1f4933d525252039e6917f5b6bd9695fa",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json --summary .ai/work-items/active/multilingual-hidden-risk-coverage.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/multilingual-hidden-risk-coverage.summary.json CONTRACT=.ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T14:31:04.975335+00:00",
+      "exitCode": 0,
+      "durationMs": 86,
+      "outputDigest": "455429acf80488647a3be043244526cc4d602854e82a5d379a0aa82d972613dd",
+      "commandHash": "de087b044fab85390c8760db2bbb61065b2e3d29054ffcd90f2e2871e4a1fe25",
+      "contractHash": "a00a5cc23d8f59b40508df1cb872c16516de745b9192aa14e73db48c304bdb98",
+      "commitSha": "56916145ae11ad949c61bc6c24844e4443d40427",
+      "executionContractPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+      "worktreeDigest": "1908ccd9ebb6a2e8e6fd97fa275a130679a43578492824fca9a8382860255331",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/multilingual-hidden-risk-coverage.summary.json --contract .ai/work-items/active/multilingual-hidden-risk-coverage.contract.json ai summary check passed: .ai/work-items/active/multilingual-hidden-risk-coverage.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Preserve machine-readable Trust Layer evidence.",
+      "compliant": true,
+      "evidence": "Contract, signal, and regression evidence remain structured."
+    },
+    {
+      "guideline": "Do not claim complete multilingual understanding.",
+      "compliant": true,
+      "evidence": "Documentation records explicit coverage limits."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Explicit phrase coverage is verified; semantic completeness remains out of scope."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Initial skeleton; replace with actual residual risks before finishing.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Coverage limits",
+      "Fail-closed behavior"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "detail": "Scope and coverage limits reviewed before implementation.",
+      "contractHash": "a00a5cc23d8f59b4",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "detail": "Multilingual fail-closed regression tests passed before finish validation.",
+      "contractHash": "a00a5cc23d8f59b4",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    }
+  ],
+  "knownGaps": [
+    "This vocabulary cannot establish complete multilingual or hidden-risk understanding."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 152
+}

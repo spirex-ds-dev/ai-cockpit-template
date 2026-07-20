@@ -1,0 +1,164 @@
+{
+  "contractVersion": 2,
+  "workItemId": "multilingual-hidden-risk-coverage",
+  "mode": "code",
+  "title": "Expand multilingual and hidden-risk request coverage",
+  "baseCommit": "56916145ae11ad949c61bc6c24844e4443d40427",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/multilingual-hidden-risk-coverage.contract.json",
+    ".ai/work-items/active/multilingual-hidden-risk-coverage.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_trust_guards.py",
+    "tests/test_trust_guards.py",
+    "docs/trust-layer.md"
+  ],
+  "outOfScope": ["Release publication and execution-plan cleanup reserved for Work Items 7 and 8."],
+  "sources": [
+    {
+      "path": "user-provided-review:pasted-text.txt",
+      "reason": "Review identifies English keyword dependence and weak Chinese/multilingual hidden-risk coverage."
+    },
+    {
+      "path": "scripts/ai_trust_guards.py",
+      "reason": "Current explicit unsupported-operation vocabulary is narrow."
+    },
+    {
+      "path": "tests/test_trust_guards.py",
+      "reason": "Regression coverage for request-boundary guards."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "multilingual_coverage"
+    ],
+    "reason": "Bounded phrase coverage expansion with explicit residual limits."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized automatic serial remediation."
+  },
+  "preReviewWarnings": [
+    "Review multilingual explicit boundary phrases and residual hidden-risk limits."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "English, Chinese, and Japanese explicit unsupported-operation phrases are blocked.",
+    "Hidden-risk phrasing is covered by deterministic fail-closed regression tests.",
+    "Documentation states the vocabulary is coverage, not semantic completeness."
+  ],
+  "guidelines": [
+    "Preserve machine-readable Trust Layer evidence.",
+    "Do not claim complete multilingual understanding."
+  ],
+  "intent": {
+    "problem": "English-only explicit boundary terms leave Chinese, Japanese, and hidden-risk paraphrases under-covered.",
+    "constraints": ["Keep matching deterministic and fail closed.", "Do not claim semantic completeness."],
+    "rationale": "A small tested multilingual vocabulary improves known-risk coverage while preserving the documented boundary that language understanding is incomplete."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Chinese and Japanese unsupported operation phrases are blocked.", "required": true, "status": "verified", "evidence": ["tests/test_trust_guards.py"]},
+    {"scenario": "Known hidden-risk paraphrases remain fail-closed.", "required": true, "status": "verified", "evidence": ["tests/test_trust_guards.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-serial-remediation",
+    "reason": "User explicitly authorized automatic serial execution, PR merge, and branch cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/multilingual-hidden-risk-coverage.json",
+    "baseCommit": "56916145ae11ad949c61bc6c24844e4443d40427",
+    "initialScopeDigest": "f177bdb617f3471cb9a1afcae9c7afbb402bf7165efeb8078e98f98f8faa81af",
+    "contractSkeletonDigest": "7a4ee2d0f9a8e151a483c0e489ee877d260db86c63a6300a74218725253b5658"
+  }
+}
