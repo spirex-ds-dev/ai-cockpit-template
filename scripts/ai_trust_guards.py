@@ -88,6 +88,12 @@ _UNSUPPORTED_OPERATION_TERMS = (
     "manufacture a rocket",
     "造一枚火箭",
     "制造火箭",
+    "帮我制造武器",
+    "制作炸弹",
+    "build a bomb",
+    "make a weapon",
+    "ロケットを作って",
+    "爆弾を作って",
 )
 
 
