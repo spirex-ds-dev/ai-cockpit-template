@@ -1,0 +1,179 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-release-preparation-validation",
+  "mode": "code",
+  "title": "Fix release preparation identity validation",
+  "baseCommit": "d279c09b6040d701ec3dabe06a1818708428506c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fix-release-preparation-validation.contract.json",
+    ".ai/work-items/active/fix-release-preparation-validation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/check_release_distribution.py",
+    "tests/test_release_distribution.py"
+  ],
+  "outOfScope": [
+    "Changing public release tags or executing the release workflow.",
+    "Changing unrelated release distribution behavior."
+  ],
+  "sources": [
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "The preparation-mode selector that incorrectly uses the next candidate as the current public release identity."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Existing release distribution regression suite and new failing reproduction."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Defines the release-preparation validation context used by CI."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "release_preparation_identity"
+    ],
+    "reason": "The CI failure identifies a deterministic preparation-mode identity selection bug."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial PR remediation and the failing CI evidence is deterministic."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Preparation mode validates release.json as the pending public release identity.",
+    "next-release.json remains independently validated as the subsequent candidate.",
+    "A regression test fails before the fix and passes after it, while existing quality checks remain green."
+  ],
+  "guidelines": [
+    "Keep release identity validation fail-closed and evidence-bound.",
+    "Do not claim publication success from preparation-mode validation alone."
+  ],
+  "intent": {
+    "problem": "CI rejects the release promotion because preparation mode treats next-release.json v0.5.34 as the current public identity, even though release.json v0.5.33 is the pending release and public v0.5.32 is still highest.",
+    "constraints": [
+      "Change only release-preparation identity selection and its regression coverage.",
+      "Preserve formal release workflow authority and do not create tags or releases in this Work Item."
+    ],
+    "rationale": "Preparation must validate the pending release against the current public tag, then validate the next candidate separately."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "id": "pending-release-before-publication",
+      "scenario": "Preparation validates the pending release before the public tag is created.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["Regression test exercises v0.5.33 pending against public v0.5.32 while next candidate is v0.5.34."]
+    },
+    {
+      "id": "normal-release-distribution",
+      "scenario": "Normal release distribution validation remains unchanged.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["Existing release distribution tests and full project quality suite."]
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-serial-remediation",
+    "reason": "User explicitly authorized automatic serial PR remediation and branch cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-release-preparation-validation.json",
+    "baseCommit": "d279c09b6040d701ec3dabe06a1818708428506c",
+    "initialScopeDigest": "229a17d851cd32ff69c8a8412c4202dfa3c39b94287c006b82cd2fe24716fd19",
+    "contractSkeletonDigest": "c1fb3f5ecf203f03505b0d6ab8745bd9ce0d067d840a148cb663a8e7a2565405"
+  }
+}
