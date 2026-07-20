@@ -1,0 +1,455 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "promote-release-metadata-20260721",
+  "contractPath": ".ai/work-items/archive/2026/promote-release-metadata-20260721.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/promote-release-metadata-20260721.contract.json",
+      "reason": "Defines the metadata promotion and release-workflow evidence scope."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/promote-release-metadata-20260721.summary.json",
+      "reason": "Records metadata promotion verification and workflow boundaries."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/promote-release-metadata.contract.json",
+      "reason": "Preserves the original promotion work item archive as append-only evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/promote-release-metadata.summary.json",
+      "reason": "Preserves the original promotion summary as append-only evidence."
+    },
+    {
+      "path": ".ai/work-items/starts/promote-release-metadata.json",
+      "reason": "Preserves the original work item start receipt."
+    },
+    {
+      "path": ".ai/work-items/starts/promote-release-metadata-20260721.json",
+      "reason": "Records the continuation work item start receipt."
+    },
+    {
+      "path": "release.json",
+      "reason": "Promotes the published release identity to v0.5.33."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Advances the next candidate to v0.5.34 based on v0.5.33."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Updates the documented published installer tag."
+    },
+    {
+      "path": "docs/releases/v0.5.33.md",
+      "reason": "Records the release notes for the promoted v0.5.33 identity."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Updates Quick Install to the promoted published tag."
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Keeps release-preparation validation bound to the pending published identity rather than the next candidate."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Regenerates provenance metadata for the promoted release identity."
+    },
+    {
+      "path": ".ai/cockpit/release-digests.json",
+      "reason": "Regenerates release digest metadata for the promoted release identity."
+    },
+    {
+      "path": "tests/test_install_sh.py",
+      "reason": "Aligns installer default-ref regression coverage with v0.5.33."
+    },
+    {
+      "path": "tests/test_install_script.py",
+      "reason": "Aligns remote installer default-ref regression coverage with v0.5.33."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Covers preparation validation when the next candidate is one patch beyond the pending release."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    }
+  ],
+  "sourcesUsed": [
+    "release.json",
+    "next-release.json",
+    ".github/workflows/release.yml"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Published and next-candidate metadata form a valid sequential pair.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "release.json",
+        "next-release.json"
+      ]
+    },
+    {
+      "scenario": "External publication remains conditional on the release workflow.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        ".github/workflows/release.yml"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:54:32.462414+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "faa185020742142bc84c17730a9db4f8a36eb46dc3e14e073de0a5cc2ac47bc6",
+      "commandHash": "3bc5362fc344a614988b268b32ee6acf05071cb89d557c99a50d99be13cb1c85",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "645fb60207b7cc26ad006c4f2a97cce62ee6617f4b579f3a8a81ef104fcd6171",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/promote-release-metadata-20260721.contract.json work item contract check passed: .ai/work-items/active/promote-release-metadata-20260721.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:54:32.603990+00:00",
+      "exitCode": 0,
+      "durationMs": 95,
+      "outputDigest": "4d6779c1032f8977577c05fbc64f912e90cc3d4c4c1b76b409fe60e2d2cd470c",
+      "commandHash": "3e88712f7c6d5dc48fa1faf8cf412b001be461ccb10719580b5b362f46f89222",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "645fb60207b7cc26ad006c4f2a97cce62ee6617f4b579f3a8a81ef104fcd6171",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/promote-release-metadata-20260721.contract.json scope guard passed: 17 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:54:32.764056+00:00",
+      "exitCode": 0,
+      "durationMs": 106,
+      "outputDigest": "0d9a39a23490413930bda20727f963760e3e7990710d30f759728d4455c43271",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "645fb60207b7cc26ad006c4f2a97cce62ee6617f4b579f3a8a81ef104fcd6171",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/promote-release-metadata-20260721.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. guard check completed: 2 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/promote-release-metadata-20260721.contract.json SUMMARY=.ai/work-items/active/promote-release-metadata-20260721.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:54:32.929028+00:00",
+      "exitCode": 0,
+      "durationMs": 118,
+      "outputDigest": "cb700b9ce070c3aabd17bdd0affc821814cba7603c24cdf83ec92a5d79b242b2",
+      "commandHash": "b518b2f0d7eef63a4945b470145614b30fc775b666c6cf9975bde2f9d7f7098c",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "645fb60207b7cc26ad006c4f2a97cce62ee6617f4b579f3a8a81ef104fcd6171",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/promote-release-metadata-20260721.contract.json --summary .ai/work-items/active/promote-release-metadata-20260721.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `promote-release-metadata-20260721` - Contract Hash: `108020e66dcd4f10` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `3` - Unknown Count: `"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:54:33.083764+00:00",
+      "exitCode": 0,
+      "durationMs": 95,
+      "outputDigest": "58e2faad8c7bc5b9b78c43120a8e9b0e4574eccf63b013f8a0f553514e50c0b5",
+      "commandHash": "64d282774a4c0481b36e7261b753aacc86063cfdcae329f1d5a0538009e915e4",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "645fb60207b7cc26ad006c4f2a97cce62ee6617f4b579f3a8a81ef104fcd6171",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/promote-release-metadata-20260721.summary.json review policy matched 7 path(s) [review] .ai/work-items/archive/2026/promote-release-metadata.contract.json [review] .ai/work-items/starts/promote-release-metadata-20260721.json [review] .ai/work-items/starts/promote-release-metadata.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/release-"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:54:33.223363+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "645fb60207b7cc26ad006c4f2a97cce62ee6617f4b579f3a8a81ef104fcd6171",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:54:33.382477+00:00",
+      "exitCode": 0,
+      "durationMs": 101,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "645fb60207b7cc26ad006c4f2a97cce62ee6617f4b579f3a8a81ef104fcd6171",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/promote-release-metadata-20260721.contract.json SUMMARY=.ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:54:33.494310+00:00",
+      "exitCode": 0,
+      "durationMs": 61,
+      "outputDigest": "21b05fd78f0d9d2cbf9f39db3023edf24851d04ac9bbf63480ab9bd1a366abe6",
+      "commandHash": "c5b221c91d8c20b58d6df4ccde6f7cca09ce22900e47ee622b9337b23d77c9a1",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "645fb60207b7cc26ad006c4f2a97cce62ee6617f4b579f3a8a81ef104fcd6171",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/promote-release-metadata-20260721.contract.json --summary .ai/work-items/active/promote-release-metadata-20260721.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/promote-release-metadata-20260721.contract.json SUMMARY=.ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:54:33.594361+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "f47ec28b295d12073acfdc846e31618dc4e66d5e1094a55919fbbbd11132c97d",
+      "commandHash": "2341e162c8805024e2f117d081b913b7d049aab9c113c36a4dbeac5a5deef912",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "645fb60207b7cc26ad006c4f2a97cce62ee6617f4b579f3a8a81ef104fcd6171",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/promote-release-metadata-20260721.contract.json --summary .ai/work-items/active/promote-release-metadata-20260721.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:54:33.763186+00:00",
+      "exitCode": 0,
+      "durationMs": 121,
+      "outputDigest": "a1d0093b65eb521bc4304bae48ba33b0c4d2fd08e6e686e6819dcda33ce5679c",
+      "commandHash": "24ddef6baed6982d3a35c4c2465f6d9199980349c393d0eb35478698e93be402",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "645fb60207b7cc26ad006c4f2a97cce62ee6617f4b579f3a8a81ef104fcd6171",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/promote-release-metadata-20260721.contract.json ## Diff Ownership Preview - active_owned: `14`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.js"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:56:43.926246+00:00",
+      "exitCode": 0,
+      "durationMs": 130083,
+      "outputDigest": "569d7083c4ab95785d92ac3b37a4462c3c2d2907877979f6a44851788a9c4267",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "645fb60207b7cc26ad006c4f2a97cce62ee6617f4b579f3a8a81ef104fcd6171",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 109 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 10%] ........................................................................ [ 21%] ............................................................"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/promote-release-metadata-20260721.contract.json SUMMARY=.ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:56:44.420380+00:00",
+      "exitCode": 0,
+      "durationMs": 164,
+      "outputDigest": "bd87666325014d42b5c72882e7fedef563008c4a494d44bb43d110f5c9f20ded",
+      "commandHash": "0119bda36010573aa1044a5b22bf4ec8ff0b6a52e2ad9bfd76c34a7ac6e8c38c",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "3e1aba19674a6afdcda9e44d15d121c556af0eeb89772032488adf3f4980b04d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/promote-release-metadata-20260721.contract.json --summary .ai/work-items/active/promote-release-metadata-20260721.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/promote-release-metadata-20260721.contract.json SUMMARY=.ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:56:44.626125+00:00",
+      "exitCode": 0,
+      "durationMs": 155,
+      "outputDigest": "c10c3e201605f7b0af754ed1f9651f5a52b97934094bb3765d9c34096f2f59bd",
+      "commandHash": "5c4db842e7676fe7d5f6434cd7454c0f0057a95ec2447c494f836d1a28d1945a",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "3e1aba19674a6afdcda9e44d15d121c556af0eeb89772032488adf3f4980b04d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/promote-release-metadata-20260721.contract.json --summary .ai/work-items/active/promote-release-metadata-20260721.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:56:44.724351+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "3e1aba19674a6afdcda9e44d15d121c556af0eeb89772032488adf3f4980b04d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/promote-release-metadata-20260721.contract.json SUMMARY=.ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:56:44.838450+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "633446cfdf1619694603b0f990395f09cf601e961275728ef6408205341fa865",
+      "commandHash": "ab2f0debb6c38c15b5bc20adc3e86db2b9d0bd491fe15e191f4f6e586c2007d4",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "3e1aba19674a6afdcda9e44d15d121c556af0eeb89772032488adf3f4980b04d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/promote-release-metadata-20260721.contract.json --summary .ai/work-items/active/promote-release-metadata-20260721.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/promote-release-metadata-20260721.summary.json CONTRACT=.ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-20T16:56:45.159311+00:00",
+      "exitCode": 0,
+      "durationMs": 219,
+      "outputDigest": "a4b849e6430318ec12aa76782ce1d653e99d7d3508b06530e4d12a6a3db9592b",
+      "commandHash": "205e723f33151d8b3cdc8594b67a252e54811cce26cc9582083472fb6a13d5ff",
+      "contractHash": "108020e66dcd4f1092a86d1aa922a5c175e2e0dbdb9abb291175a344f28ee6ae",
+      "commitSha": "b86fd034776ed9e6088fca5694217c402d04e915",
+      "executionContractPath": ".ai/work-items/active/promote-release-metadata-20260721.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/promote-release-metadata-20260721.summary.json",
+      "worktreeDigest": "3e1aba19674a6afdcda9e44d15d121c556af0eeb89772032488adf3f4980b04d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/promote-release-metadata-20260721.summary.json --contract .ai/work-items/active/promote-release-metadata-20260721.contract.json [ERROR] changedFiles is missing actual changed path: .ai/work-items/archive/2026/promote-release-metadata.contract.json [ERROR] changedFiles is missing actual changed path: .ai/work-items/archive/2026/promote-release-metadata.summary.json [ERROR] changedFiles is missing actual c"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Preserve release source identity evidence.",
+      "compliant": true,
+      "evidence": "Release metadata and workflow source identity remain explicit."
+    },
+    {
+      "guideline": "Do not claim publication success without workflow evidence.",
+      "compliant": true,
+      "evidence": "The Summary records publication as conditional on the release workflow."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Metadata promotion is bounded; final release evidence remains workflow-owned."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Initial skeleton; replace with actual residual risks before finishing.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Exact tag identity",
+      "No publication overclaim"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "contractHash": "108020e66dcd4f10",
+      "recorded": true,
+      "detail": "Before-edit checkpoint passed with no unknowns and continue execution decision.",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "contractHash": "108020e66dcd4f10",
+      "recorded": true,
+      "detail": "Before-finish checkpoint passed after project quality and governance verification.",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 16
+    }
+  ],
+  "knownGaps": [
+    "Final publication remains conditional on the merged-main release workflow."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 158
+}
