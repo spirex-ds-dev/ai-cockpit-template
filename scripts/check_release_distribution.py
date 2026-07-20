@@ -801,10 +801,7 @@ def list_remote_tags(repository_url: str) -> str:
 
 def main() -> int:
     preparation_mode = os.environ.get("AI_RELEASE_PREPARATION") == "1"
-    # Preparation validates the release that is about to be published.  The
-    # next candidate is checked separately below and must not become the
-    # public-tag identity for the current release.
-    metadata_path = RELEASE
+    metadata_path = CANDIDATE_RELEASE if preparation_mode else RELEASE
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     tag = metadata["releaseTag"]
     supported = metadata["capabilities"]["sha256ArchiveVerification"]
