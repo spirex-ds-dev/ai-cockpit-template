@@ -141,6 +141,25 @@ def intent_capability_signal(
         return _signal("Intent Capability", "Inconsistent", [str(exc)], [display_path(path)])
     mappings = payload.get("operationMappings")
     key = f"{operation['target']}.{operation['action']}"
+    policy = _OPERATION_POLICY.get(key)
+    if (
+        policy is None
+        or operation["environment"] not in policy["environments"]
+        or operation["effect"] not in policy["effects"]
+    ):
+        return _signal(
+            "Intent Capability",
+            "Inconsistent",
+            [f"requestedOperation combination is not allowed by policy: {key}"],
+            ["contract.requestedOperation"],
+        )
+    if operation["authorityRequired"] and not isinstance(contract.get("authorityEvidence"), dict):
+        return _signal(
+            "Intent Capability",
+            "Inconsistent",
+            ["authorityEvidence is required when authorityRequired is true"],
+            ["contract.requestedOperation", "contract.authorityEvidence"],
+        )
     required = mappings.get(key) if isinstance(mappings, dict) else None
     if not isinstance(required, list) or not required:
         return _signal(
@@ -195,6 +214,17 @@ _RAW_REQUEST_EXEMPTIONS = {
     "internal_governance",
 }
 _RAW_REQUEST_SOURCE_TYPES = {"human", "issue", "pr_comment", "system"}
+_OPERATION_POLICY = {
+    "repository_governance.modify": {
+        "environments": {"repository", "sandbox", "test"},
+        "effects": {"enforce", "document"},
+    },
+    "documentation.modify": {
+        "environments": {"repository", "sandbox", "test"},
+        "effects": {"document"},
+    },
+    "tests.modify": {"environments": {"repository", "sandbox", "test"}, "effects": {"test"}},
+}
 _RAW_REQUEST_EXEMPTION_FIELDS = {
     "exemption",
     "policyRef",

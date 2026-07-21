@@ -280,3 +280,35 @@ def test_unmapped_requested_operation_fails_closed():
     )
     result = ai_trust_guards.intent_capability_signal(value)
     assert result["value"] == "Inconsistent"
+
+
+def test_requested_operation_policy_rejects_unsafe_effect():
+    value = contract()
+    value.update(
+        {
+            "requestedOperation": {
+                "target": "documentation",
+                "action": "modify",
+                "environment": "production",
+                "effect": "enforce",
+                "authorityRequired": False,
+            }
+        }
+    )
+    assert ai_trust_guards.intent_capability_signal(value)["value"] == "Inconsistent"
+
+
+def test_requested_operation_requires_authority_evidence():
+    value = contract()
+    value.update(
+        {
+            "requestedOperation": {
+                "target": "repository_governance",
+                "action": "modify",
+                "environment": "repository",
+                "effect": "enforce",
+                "authorityRequired": True,
+            }
+        }
+    )
+    assert ai_trust_guards.intent_capability_signal(value)["value"] == "Inconsistent"
