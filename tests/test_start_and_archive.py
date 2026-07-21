@@ -539,6 +539,12 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     assert index["entries"][0]["summaryPath"].endswith("task.summary.json")
     assert len(index["entries"][0]["contractSha256"]) == 64
     assert len(index["entries"][0]["summarySha256"]) == 64
+    manifest = next(archive.glob("*/task.archive-manifest.json"))
+    manifest_data = json.loads(manifest.read_text(encoding="utf-8"))
+    assert manifest_data["format"] == "ai-cockpit-archive-manifest"
+    assert manifest_data["generatedStatusExcluded"] is True
+    assert len(index["entries"][0]["manifestSha256"]) == 64
+    assert index["entries"][0]["manifestPath"].endswith("task.archive-manifest.json")
 
 
 def test_archive_rolls_back_when_status_regeneration_fails(tmp_path, monkeypatch):

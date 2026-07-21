@@ -23,6 +23,56 @@ def test_next_archive_sequence_prefers_existing_index(tmp_path, monkeypatch):
     assert ai_archive_work_item._next_archive_sequence() == 42
 
 
+def test_archive_manifest_is_stable_and_excludes_generated_status(tmp_path, monkeypatch):
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    contract = tmp_path / "task.contract.json"
+    summary = tmp_path / "task.summary.json"
+    contract.write_text(json.dumps({"workItemId": "task", "baseCommit": "base"}), encoding="utf-8")
+    summary.write_text(
+        json.dumps({"workItemId": "task", "contractPath": "task.contract.json"}), encoding="utf-8"
+    )
+
+    manifest = ai_archive_work_item._archive_manifest(
+        contract_target=contract, summary_target=summary, archive_sequence=7
+    )
+
+    assert manifest["manifestVersion"] == 1
+    assert manifest["archiveSequence"] == 7
+    assert manifest["generatedStatusExcluded"] is True
+    assert "manifestSha256" not in manifest
+    assert (
+        manifest["contractSha256"]
+        == __import__("hashlib").sha256(contract.read_bytes()).hexdigest()
+    )
+    assert (
+        manifest["summarySha256"] == __import__("hashlib").sha256(summary.read_bytes()).hexdigest()
+    )
+
+
+def test_archive_entry_references_manifest_digest(tmp_path, monkeypatch):
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    target = tmp_path / ".ai" / "work-items" / "archive" / "2026"
+    target.mkdir(parents=True)
+    contract_path = target / "task.contract.json"
+    summary_path = target / "task.summary.json"
+    manifest_path = target / "task.archive-manifest.json"
+    contract_path.write_text(json.dumps({"workItemId": "task"}), encoding="utf-8")
+    summary_path.write_text(json.dumps({"workItemId": "task"}), encoding="utf-8")
+    manifest_path.write_text(
+        json.dumps({"format": "ai-cockpit-archive-manifest"}), encoding="utf-8"
+    )
+
+    entry = ai_archive_work_item._archive_entry(
+        contract_path=contract_path,
+        summary_path=summary_path,
+        target_dir=target,
+        archive_sequence=1,
+    )
+
+    assert entry["manifestPath"].endswith("task.archive-manifest.json")
+    assert len(entry["manifestSha256"]) == 64
+
+
 def test_is_ignored_matches_gitignore_archive_patterns(tmp_path, monkeypatch):
     (tmp_path / ".gitignore").write_text("local/*.json\n!local/kept.json\n", encoding="utf-8")
     local = tmp_path / "local"

@@ -62,3 +62,4 @@ Run the local failure-oriented demonstration:
 ```
 
 It is intentionally offline and harmless. Every unsafe scenario is blocked, and the final JSON report records `unsafeOperations: 0`.
+Archived Work Item evidence has an immutable root: `*.archive-manifest.json` is generated after the Contract and Summary are frozen and records their SHA-256 digests in a fixed, non-self-referential structure. The archive index may discover legacy Contract/Summary pairs without this manifest, but new archive entries reference the manifest digest. Generated `current_status.md` remains operational status and is excluded from this immutable chain.

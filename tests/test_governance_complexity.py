@@ -246,6 +246,18 @@ def test_archive_metrics_validates_index_coverage_identity_and_hashes(tmp_path):
     def digest(path: Path) -> str:
         return hashlib.sha256(path.read_bytes()).hexdigest()
 
+    manifest = archive / "work.archive-manifest.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "format": "ai-cockpit-archive-manifest",
+                "contractSha256": digest(contract),
+                "summarySha256": digest(summary),
+            }
+        ),
+        encoding="utf-8",
+    )
+
     (archive.parent / "index.json").write_text(
         json.dumps(
             {
@@ -258,6 +270,8 @@ def test_archive_metrics_validates_index_coverage_identity_and_hashes(tmp_path):
                         "summaryPath": rel_summary,
                         "contractSha256": digest(contract),
                         "summarySha256": digest(summary),
+                        "manifestPath": manifest.relative_to(tmp_path).as_posix(),
+                        "manifestSha256": digest(manifest),
                     }
                 ],
             }
