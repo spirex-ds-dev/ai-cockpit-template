@@ -46,6 +46,8 @@ Calibrated trust does not mean maximizing trust in an agent. It means enabling h
 
 It is **not** an Agent Runtime, **not** a Workflow Engine, and **not** a Security Sandbox.
 
+This boundary is canonical across the English, Chinese, and Japanese guides: repository-local records support review, but trusted identity, production isolation, enterprise audit/compliance, and provider-hosted release evidence remain external controls.
+
 Its philosophy is **Evidence over Self-Declaration**. Its mechanism is **Evidence Governance**: AI Cockpit creates governance records, evaluates delegated evidence, and compresses both into human decision state.
 
 It provides:

@@ -27,6 +27,8 @@ keywords:
 
 [English](README.md) | [中文](README.zh-CN.md)
 
+AI Cockpit の製品境界は Repository Governance Layer であり、Agent Runtime、Workflow Engine、Security Sandbox ではありません。リポジトリ内の記録はレビューを支えますが、信頼できる ID、production 隔離、企業監査・コンプライアンス、配布基盤の証拠は外部管理です。
+
 AI コーディングエージェントは、次のようなことを起こし得ます。
 
 - 無関係なファイルを書き換える
