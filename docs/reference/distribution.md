@@ -85,3 +85,6 @@ From a local clone:
 - You need the installed distribution behavior, not the adoption workflow.
 - You need a canonical place for installer options and integrity notes.
 - You are documenting release-specific distribution details for maintainers or integrators.
+## Next release candidate
+
+The candidate is bound to the latest `origin/main` commit recorded in `release-state.json`. Detached checkout, tag, provider workflow, SBOM, provenance, and digest evidence must all reference that same immutable source before promotion. Missing provider assets remain missing evidence; this release does not change the enterprise-security NO-GO boundary.
