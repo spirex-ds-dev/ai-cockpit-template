@@ -1,0 +1,383 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "delusion-test-gate",
+  "contractPath": ".ai/work-items/archive/2026/delusion-test-gate.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/delusion-test-gate.contract.json",
+      "reason": "Declares enforced Stop Demo regression scenarios and the known-risk boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/delusion-test-gate.summary.json",
+      "reason": "Records regression evidence and required lifecycle checks."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated active status."
+    },
+    {
+      "path": ".ai/work-items/starts/delusion-test-gate.json",
+      "reason": "Records governed start receipt."
+    },
+    {
+      "path": "tests/test_delusion_scenarios.py",
+      "reason": "Adds multilingual negative and safe-positive regression cases."
+    },
+    {
+      "path": "docs/trust-layer.md",
+      "reason": "Preserves known-risk coverage boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/delusion-test-gate.contract.json",
+    "tests/test_delusion_scenarios.py",
+    "docs/trust-layer.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/delusion-test-gate.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:56:32.604879+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "b57d53018482d588e45bd233ff6c09bf841439d86d41c5ebd0f7525c8fd5e72d",
+      "commandHash": "e6cd6600d7fa363e352ce85270a95c78377b262e203e4713879f4afae4555851",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "87416bd034bfa688153beae198dedcac94ac0f293d17a669ef99305bd8e4a21a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/delusion-test-gate.contract.json work item contract check passed: .ai/work-items/active/delusion-test-gate.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/delusion-test-gate.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:56:32.742551+00:00",
+      "exitCode": 0,
+      "durationMs": 93,
+      "outputDigest": "9ff969b4f84b6e9450060202a3b03cf0baa6f1c3f6e3632de9309b6d6c84059c",
+      "commandHash": "a541698312f6a28478c880eb401724780bcce2ead8efa8b3e40bc7c72bde791f",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "87416bd034bfa688153beae198dedcac94ac0f293d17a669ef99305bd8e4a21a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/delusion-test-gate.contract.json scope guard passed: 3 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:56:32.898275+00:00",
+      "exitCode": 0,
+      "durationMs": 108,
+      "outputDigest": "92ead34a9213d821b84c69deda639c1fccf0dfdcf14d142ce60a01ec812c74da",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "87416bd034bfa688153beae198dedcac94ac0f293d17a669ef99305bd8e4a21a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/delusion-test-gate.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/delusion-test-gate.contract.json SUMMARY=.ai/work-items/active/delusion-test-gate.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:56:33.128421+00:00",
+      "exitCode": 0,
+      "durationMs": 183,
+      "outputDigest": "d915fc6f2ea7584390c7bb786e84d50083d3da4d601975479185952fd4d36e8c",
+      "commandHash": "7cccd131c4c5adeaa265f8eab3615455be263beb89d2bd77d6cda20c33cd41bf",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "87416bd034bfa688153beae198dedcac94ac0f293d17a669ef99305bd8e4a21a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/delusion-test-gate.contract.json --summary .ai/work-items/active/delusion-test-gate.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `delusion-test-gate` - Contract Hash: `f7654fc96cf4ecfb` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Required Checks: `16` - Required Checks "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/delusion-test-gate.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:56:33.269919+00:00",
+      "exitCode": 0,
+      "durationMs": 91,
+      "outputDigest": "3eb0500bc1b8784ff2a4f461a2662915de7bc4f4db21bdd1d3517b524f87d17b",
+      "commandHash": "ff4f9c1bb236b6ec7d7cd2fe6291a7d5eedd8f8d7b71a4d69af19a76cb7bc39c",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "87416bd034bfa688153beae198dedcac94ac0f293d17a669ef99305bd8e4a21a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/delusion-test-gate.summary.json review policy matched 2 path(s) [review] .ai/work-items/starts/delusion-test-gate.json [review] .ai/cockpit/current_status.md review focus recorded: 1 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:56:33.410874+00:00",
+      "exitCode": 0,
+      "durationMs": 95,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "87416bd034bfa688153beae198dedcac94ac0f293d17a669ef99305bd8e4a21a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:56:33.542636+00:00",
+      "exitCode": 0,
+      "durationMs": 85,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "87416bd034bfa688153beae198dedcac94ac0f293d17a669ef99305bd8e4a21a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/delusion-test-gate.contract.json SUMMARY=.ai/work-items/active/delusion-test-gate.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:56:33.634092+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "ec5b0024f1bdd1ce7da78ac18bbae397d30b3863fb5d727ba67365eabf3c2c78",
+      "commandHash": "6f32add65c59f4212ac1d142045c46eea4af89204f66fa3a2fd529914ab364fe",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "87416bd034bfa688153beae198dedcac94ac0f293d17a669ef99305bd8e4a21a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/delusion-test-gate.contract.json --summary .ai/work-items/active/delusion-test-gate.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/delusion-test-gate.contract.json SUMMARY=.ai/work-items/active/delusion-test-gate.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:56:34.000075+00:00",
+      "exitCode": 0,
+      "durationMs": 89,
+      "outputDigest": "003f3095d6473170206f5ced3667c6c6cbf061dc437d0f840f9b399e795e3de6",
+      "commandHash": "dd25bff2f8425a18e61cc1b78ad53d457c60ad8394f6cb51214e3fc1a33eb57b",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "87416bd034bfa688153beae198dedcac94ac0f293d17a669ef99305bd8e4a21a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/delusion-test-gate.contract.json --summary .ai/work-items/active/delusion-test-gate.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/delusion-test-gate.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:56:34.237359+00:00",
+      "exitCode": 0,
+      "durationMs": 189,
+      "outputDigest": "3600dffa34945d41b14a271a5f5d08a3935d677c47ace03d6642ae0973b2563c",
+      "commandHash": "ee568ab09ffd7ee606d8de4a04e39fe2d02fb0d8016626556dd179708ebd769f",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "87416bd034bfa688153beae198dedcac94ac0f293d17a669ef99305bd8e4a21a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/delusion-test-gate.contract.json ## Diff Ownership Preview - active_owned: `3`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/delusion-test-gate.json` — covered by Contract scope - [active_owned] `tests/test_delusion_scenario"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:58:39.750011+00:00",
+      "exitCode": 0,
+      "durationMs": 125465,
+      "outputDigest": "9d93f3b9574ff70a31f94aedd64519f2d05effd051d117fb4f28908193fda553",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "87416bd034bfa688153beae198dedcac94ac0f293d17a669ef99305bd8e4a21a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 112 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 10%] ........................................................................ [ 20%] ............................................................"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/delusion-test-gate.contract.json SUMMARY=.ai/work-items/active/delusion-test-gate.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:58:41.187192+00:00",
+      "exitCode": 0,
+      "durationMs": 220,
+      "outputDigest": "a291ae82a1209cd1dfda69dbd8c07eff3bae946918d473b1ecba23d2d6c84963",
+      "commandHash": "23339190a3caa91a86e6e340ac1daadb7901489dc948ad273db94bdcc49d5899",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "1ab196c751fc825de1ead7d53f4881e9d912ee6dd252b0764e42297141c7c0f8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/delusion-test-gate.contract.json --summary .ai/work-items/active/delusion-test-gate.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/delusion-test-gate.contract.json SUMMARY=.ai/work-items/active/delusion-test-gate.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:58:41.433082+00:00",
+      "exitCode": 0,
+      "durationMs": 200,
+      "outputDigest": "31c1d491fda24189f9ded906f66223cff94048051faa82657ad179350b1d8e58",
+      "commandHash": "d5eb6e9c7edfacaf188e3e9f8760b48234aea39640e5e8bf67410aef625b8062",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "1ab196c751fc825de1ead7d53f4881e9d912ee6dd252b0764e42297141c7c0f8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/delusion-test-gate.contract.json --summary .ai/work-items/active/delusion-test-gate.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:58:41.518952+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "1ab196c751fc825de1ead7d53f4881e9d912ee6dd252b0764e42297141c7c0f8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/delusion-test-gate.contract.json SUMMARY=.ai/work-items/active/delusion-test-gate.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:58:41.630362+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "caa3d822a2412856c4d16d3f72feff68305ccfce3ae7643dce893884e3613389",
+      "commandHash": "33acbf23c9b9a60449f889756c6bf28c12f147ba53c9ddc7762b55da98800fdb",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "1ab196c751fc825de1ead7d53f4881e9d912ee6dd252b0764e42297141c7c0f8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/delusion-test-gate.contract.json --summary .ai/work-items/active/delusion-test-gate.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/delusion-test-gate.summary.json CONTRACT=.ai/work-items/active/delusion-test-gate.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T02:58:42.467915+00:00",
+      "exitCode": 0,
+      "durationMs": 87,
+      "outputDigest": "4560c0d17d895d8b0ba16af4798b31b3613a75da723dfe417c7e35fc8fb707f5",
+      "commandHash": "9255f2c96917bd24a7b1fdd88041fe6c8624bbd6f5df487adb5569ad1b986439",
+      "contractHash": "f7654fc96cf4ecfb9c66acafc0b02654dbdb5102529c5fb7ac47b6b9d8edbd47",
+      "commitSha": "d316127806b30f987eb48fed1c03cdce25abffad",
+      "executionContractPath": ".ai/work-items/active/delusion-test-gate.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/delusion-test-gate.summary.json",
+      "worktreeDigest": "ab2962c0ebc8a717ef9e8283c6653b7a30e992b89c75a8762fe050d396cca606",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/delusion-test-gate.summary.json --contract .ai/work-items/active/delusion-test-gate.contract.json ai summary check passed: .ai/work-items/active/delusion-test-gate.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "Regression scope and boundary are documented in the Contract and Trust Layer."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "Tests call existing Guard module APIs without new cross-feature imports."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Finite known-risk regression coverage is explicit and does not claim universal semantic detection."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "semantic boundary",
+      "detail": "Unknown hazardous meanings outside the declared vocabulary remain unverified by design.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Confirm blocking outcomes and explicit finite-coverage boundary."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "f7654fc96cf4ecfb",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "f7654fc96cf4ecfb",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 363
+}
