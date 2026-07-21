@@ -1,0 +1,165 @@
+{
+  "contractVersion": 2,
+  "workItemId": "delusion-test-gate",
+  "mode": "code",
+  "title": "delusion-test-gate",
+  "baseCommit": "d316127806b30f987eb48fed1c03cdce25abffad",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/delusion-test-gate.contract.json",
+    ".ai/work-items/active/delusion-test-gate.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "tests/test_delusion_scenarios.py",
+    ".ai/guards/governance_complexity_policy.yaml",
+    "docs/trust-layer.md"
+  ],
+  "outOfScope": ["Changing critical-domain policy semantics", "Claiming full multilingual semantic coverage", "Skipping CI or PR gates"],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-20-comprehensive-review-remediation.md",
+      "reason": "Work Item 11 required negative and positive scenario matrix."
+    },
+    {"path": "scripts/ai_trust_guards.py", "reason": "Existing known-risk intent guard boundary."},
+    {"path": "scripts/ai_critical_domain_guards.py", "reason": "Existing critical-domain fail-closed boundary."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "known_risk_regression"
+    ],
+    "reason": "Regression gate covers known Stop Demo variants while preserving explicit semantic coverage limits."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Known-risk negative and safe positive cases are declared with explicit evidence boundaries."
+  },
+  "preReviewWarnings": [
+    "Confirm every negative case remains blocking and every documented sandbox/test case remains allowed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Negative Stop Demo variants for rocket intent, always-success payment semantics, test deletion, checker bypass, and underspecified work remain blocked or not ready.",
+    "Safe payment documentation, sandbox mock, and login-error tests remain allowed.",
+    "Tests record status, reason, evidence, resume condition, and policy reference for each asserted outcome.",
+    "Trust Layer documentation preserves the known-risk coverage boundary."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Known Stop Demo scenarios can regress silently unless multilingual, euphemistic, and safe-positive variants are continuously asserted.",
+    "constraints": ["Keep fail-closed behavior for known dangerous requests.", "Do not infer universal semantic understanding from finite tests.", "Do not change policy semantics in this regression gate."],
+    "rationale": "A dedicated enforced regression suite makes the current safety boundary executable before documentation and release closure."
+  },
+  "rawUserRequest": "继续执行第 11 个工单：进行妄想测试，不通过的话继续修改，直到全量已知场景通过。",
+  "rawRequestSource": {"type": "human", "reference": "user-message:2026-07-21", "capturedAt": "2026-07-21", "digest": "sha256:user-authorized-review-remediation"},
+  "declaredIntent": {"summary": "Run enforced Stop Demo regression tests and preserve the known-risk boundary.", "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "validate_test", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "Rocket negative variants remain blocked", "required": true, "status": "verified", "evidence": ["tests/test_delusion_scenarios.py"]},
+    {"scenario": "Always-success payment and governance bypass variants remain blocked", "required": true, "status": "verified", "evidence": ["tests/test_delusion_scenarios.py"]},
+    {"scenario": "Safe documentation, sandbox mock, and login-error tests remain allowed", "required": true, "status": "verified", "evidence": ["tests/test_delusion_scenarios.py"]},
+    {"scenario": "Known-risk coverage is not presented as universal semantic understanding", "required": true, "status": "verified", "evidence": ["docs/trust-layer.md"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User authorization in execution request",
+    "reason": "User authorized continuous execution of the complete remediation plan."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/delusion-test-gate.json",
+    "baseCommit": "d316127806b30f987eb48fed1c03cdce25abffad",
+    "initialScopeDigest": "8634b99d9cb1030fadb6f16c51d27245cecf2ae3f44057f930f26d9d0b4eb633",
+    "contractSkeletonDigest": "e76888341b6e7f84cde1d688970049a772d85c0ca8d9386d6eb2629c28e28afa"
+  }
+}
