@@ -12,6 +12,8 @@ keywords:
 
 # 2026-07-20 最新评审整改执行计划（修订版）
 
+> **历史保留（2026-07-21）**：本计划的工单 1–14 已按独立 Contract、专用分支、PR、合并、归档、`ai-close-work-item` 和主分支同步流程完成。本文件仅作为审计历史保留，不再作为执行中的计划；后续工作必须创建新的独立计划和 Work Item。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 以 2026-07-20 最新 `main`、提交 `bd206fe` 为本轮评审基准，按优先级把 AI Cockpit 从“关键词/自我声明匹配”推进到“结构化意图 × 领域 × 操作 × 环境 × 证据”的可验证治理闭环，并逐单完成发布前收尾。
