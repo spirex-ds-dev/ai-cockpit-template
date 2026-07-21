@@ -1,0 +1,199 @@
+{
+  "contractVersion": 2,
+  "workItemId": "real-java-multimodule-fixture",
+  "mode": "code",
+  "title": "Make Java multi-module fixture real",
+  "baseCommit": "e767e3d08c4f0013a4144938db6f1a9fbcbb8272",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/real-java-multimodule-fixture.contract.json",
+    ".ai/work-items/active/real-java-multimodule-fixture.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "examples/fixtures/java-multimodule/**",
+    "docs/fixtures/real-fixture-evidence.md",
+    "tests/test_java_fixture.py",
+    ".ai/guards/governance_complexity_policy.yaml"
+  ],
+  "outOfScope": [
+    "Production Java application behavior outside the fixture.",
+    "Provider credentials, hosted CI, identity, sandbox isolation, or release publishing."
+  ],
+  "sources": [
+    {
+      "path": "docs/fixtures/real-fixture-evidence.md",
+      "reason": "Existing evidence boundary for real stack fixtures."
+    },
+    {
+      "path": "templates/stacks/java.mk",
+      "reason": "Existing Java stack command conventions."
+    },
+    {
+      "path": "tests/test_adoption_e2e.py",
+      "reason": "Existing fixture lifecycle and evidence assertions."
+    },
+    {
+      "path": ".ai/cockpit/adoption.md",
+      "reason": "Repository adoption lifecycle terminology."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-21-review-remediation.md",
+      "reason": "Authorized remediation sequence and acceptance intent."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "fixture_execution",
+      "toolchain_evidence"
+    ],
+    "reason": "Constrained local fixture; unavailable Maven is recorded as not_run and never represented as executed evidence."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the serial remediation plan; implementation and verification are locally executable."
+  },
+  "preReviewWarnings": [
+    "Review that Java execution evidence is real, while unavailable Maven/provider capabilities remain explicitly not_run."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The fixture has two Java modules with real source paths and a root pom.xml.",
+    "The lifecycle runs install, build, test, quality, upgrade, rollback, and release-check evidence without writing simulated execution records.",
+    "Ambiguous Request and Critical Domain Change are blocked with explicit resume conditions.",
+    "Unavailable Maven/provider capabilities are recorded as not_run.",
+    "Python tests validate the fixture output and evidence boundary."
+  ],
+  "guidelines": [
+    "Keep fixture evidence local and distinguish executed commands from not_run capabilities.",
+    "Do not claim provider, identity, sandbox, or production guarantees from local fixture execution."
+  ],
+  "intent": {
+    "problem": "The Java multi-module fixture currently only describes a stack in a manifest, so review cannot distinguish real module execution from harness simulation.",
+    "constraints": ["Keep the fixture dependency-light and runnable without Maven when the Maven toolchain is unavailable.", "Preserve explicit not_run boundaries."],
+    "rationale": "A small core/app project plus a lifecycle script provides reviewable source, compile, test, quality, upgrade, rollback, and release evidence."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {"scenario": "real_java_module_execution", "required": true, "status": "verified", "evidence": ["examples/fixtures/java-multimodule/scripts/lifecycle.sh", "tests/test_java_fixture.py"]},
+    {"scenario": "ambiguous_request_block", "required": true, "status": "verified", "evidence": ["examples/fixtures/java-multimodule/scripts/lifecycle.sh"]},
+    {"scenario": "critical_domain_change_block", "required": true, "status": "verified", "evidence": ["examples/fixtures/java-multimodule/scripts/lifecycle.sh"]},
+    {"scenario": "unavailable_toolchain_boundary", "required": true, "status": "verified", "evidence": ["examples/fixtures/java-multimodule/evidence.json"]}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the serial remediation plan and full Work Item lifecycle."
+  },
+  "rawUserRequest": "继续，循环到所有任务全部完成，中途不要停。",
+  "rawRequestSource": {
+    "type": "human",
+    "capturedAt": "2026-07-21",
+    "reference": "user-message:2026-07-21-continue-remediation",
+    "digest": "sha256:user-authorized-serial-remediation"
+  },
+  "declaredIntent": {
+    "summary": "Exercise real Java multi-module execution and preserve explicit local evidence boundaries.",
+    "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/real-java-multimodule-fixture.json",
+    "baseCommit": "e767e3d08c4f0013a4144938db6f1a9fbcbb8272",
+    "initialScopeDigest": "f333fe44cb60f2551e44f7ad8514463a1edfdeb8ee2f105621b2b53211542df0",
+    "contractSkeletonDigest": "dda5580f6c05a402ba7f956bd24f1852d2de18ccdda6dddafc40a5af831f2cb2"
+  }
+}
