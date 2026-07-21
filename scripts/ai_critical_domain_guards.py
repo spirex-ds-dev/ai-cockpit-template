@@ -22,6 +22,8 @@ _BYPASS_TERMS = (
     "ignore policy",
     "without approval",
     "suppress check",
+    "skip checker",
+    "delete all tests",
 )
 _PRODUCTION_TERMS = (
     "production operation",

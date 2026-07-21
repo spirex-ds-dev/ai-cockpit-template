@@ -1,0 +1,196 @@
+{
+  "contractVersion": 2,
+  "workItemId": "delusion-test-gate-final",
+  "mode": "code",
+  "title": "Run mandatory unsupported-claim and delusion regression gate",
+  "baseCommit": "bf5a5a829815045b72328b5f662d260f355391ec",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/delusion-test-gate-final.contract.json",
+    ".ai/work-items/active/delusion-test-gate-final.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+    ,"scripts/ai_trust_guards.py"
+    ,"scripts/ai_critical_domain_guards.py"
+    ,"scripts/unsupported_claim_gate.py"
+    ,"tests/test_delusion_scenarios.py"
+    ,"tests/test_critical_domain_guards.py"
+    ,"tests/test_trust_guards.py"
+    ,"tests/test_unsupported_claim_regression.py"
+    ,"docs/trust-layer.md"
+    ,"Makefile"
+  ],
+  "outOfScope": [
+    "Detecting an LLM's private internal state or providing universal semantic or multilingual coverage.",
+    "Enterprise identity, permissions, audit, or compliance certification.",
+    "Changing production payment, authentication, or authorization behavior."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-21-review-remediation.md",
+      "reason": "Defines the mandatory delusion and unsupported-claim regression scenarios."
+    },
+    {
+      "path": "tests/test_delusion_scenarios.py",
+      "reason": "Existing scenario fixtures and positive controls."
+    },
+    {
+      "path": "scripts/ai_trust_guards.py",
+      "reason": "Repository-owned unsupported-operation fail-closed policy."
+    },
+    {
+      "path": "scripts/unsupported_claim_gate.py",
+      "reason": "Evidence-backed external-claim gate and policy reference."
+    },
+    {
+      "path": "docs/trust-layer.md",
+      "reason": "Documents the boundary between unsupported external claims and model-internal delusion."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "scope_unclear"
+    ],
+    "reason": "Regression-only governance and test changes; false positives and unsupported semantic claims are controlled by explicit fixtures and scope boundaries."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User-authorized mandatory regression gate; deterministic fixture coverage is sufficient for implementation."
+  },
+  "preReviewWarnings": [
+    "Review that multilingual and polite variants are represented as explicit deterministic fixtures, not universal semantic claims.",
+    "Review that all negative cases fail closed while legal documentation, sandbox mock, and login-error controls remain allowed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The mandatory gate covers rocket-building requests in Chinese, English, Japanese, and polite or indirect variants through explicit fixtures, and blocks each unsupported operation fail closed.",
+    "The mandatory gate covers payment-always-succeeds requests across multilingual, no-sensitive-term, and alternate-wrapper fixtures, plus deleting tests, skipping checkers, and vague changes without measurable success criteria.",
+    "Legal controls for payment documentation, sandbox mocks, and login-error tests remain allowed and every blocked result has structured reason, evidence, policy reference, and resume condition.",
+    "Make/CI and documentation identify this as a deterministic unsupported-claim regression gate, not detection of an LLM's private internal state."
+  ],
+  "guidelines": [
+    "Keep the gate deterministic and evidence-backed; do not promise universal natural-language or multilingual semantic recognition.",
+    "Preserve fail-closed handling for unsupported operations while keeping safe documentation, sandbox, and test fixtures allowed.",
+    "Record each regression result with a policy reference, evidence, reason, and resume condition."
+  ],
+  "intent": {
+    "problem": "The repository has individual unsupported-operation and unsupported-claim tests, but the review plan requires one mandatory regression gate for classic absurd requests, variants, and legal controls before documentation alignment or release.",
+    "constraints": [
+      "Use explicit deterministic fixtures and observable repository evidence; do not infer or claim access to model-internal state.",
+      "Do not weaken existing fail-closed behavior or turn safe-domain documentation, sandbox mocks, and error tests into false positives.",
+      "Keep enterprise identity, permissions, audit, and compliance claims out of scope."
+    ],
+    "rationale": "A single executable regression gate makes the final release prerequisite repeatable and prevents unsupported or semantically overbroad claims from being presented as verified behavior."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized continuous execution of the review remediation plan, including the mandatory delusion test gate and its full PR lifecycle."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "scenarioCoverage": [
+    {"scenario": "Chinese rocket-building request", "required": true, "status": "verified", "evidence": ["tests/test_delusion_scenarios.py"]},
+    {"scenario": "English, Japanese, and polite or indirect rocket variants", "required": true, "status": "verified", "evidence": ["tests/test_delusion_scenarios.py"]},
+    {"scenario": "Multilingual payment-always-succeeds request without sensitive terms or with alternate wrapper", "required": true, "status": "verified", "evidence": ["tests/test_delusion_scenarios.py", "tests/test_trust_guards.py"]},
+    {"scenario": "Delete all tests, skip checker, or vague change without measurable success criteria", "required": true, "status": "verified", "evidence": ["tests/test_delusion_scenarios.py", "tests/test_unsupported_claim_regression.py"]},
+    {"scenario": "Payment documentation, sandbox mock, and login-error tests remain allowed", "required": true, "status": "verified", "evidence": ["tests/test_delusion_scenarios.py", "tests/test_critical_domain_guards.py"]}
+  ],
+  "rawUserRequest": "进行妄想测试，不通过的话继续修改；循环执行全部整改工单，不中途停止。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:user-authorized-review-remediation", "capturedAt": "2026-07-21T00:00:00+09:00", "digest": "user-authorized-plan-execution"},
+  "declaredIntent": {"summary": "Run the mandatory deterministic unsupported-claim and delusion regression gate before documentation alignment, release, and plan cleanup.", "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "startReceipt": {
+    "path": ".ai/work-items/starts/delusion-test-gate-final.json",
+    "baseCommit": "bf5a5a829815045b72328b5f662d260f355391ec",
+    "initialScopeDigest": "8634b99d9cb1030fadb6f16c51d27245cecf2ae3f44057f930f26d9d0b4eb633",
+    "contractSkeletonDigest": "90f6a306d23aeae327ac1f3619e34e0d85ef60b5326b9936624a7685de0cbd57"
+  }
+}

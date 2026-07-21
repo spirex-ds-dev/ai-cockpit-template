@@ -20,6 +20,12 @@ def test_bypass_requests_are_rejected():
     assert result["value"] == "Inconsistent"
 
 
+def test_checker_skip_and_test_deletion_requests_are_rejected():
+    for text in ("skip checker", "delete all tests"):
+        result = ai_critical_domain_guards.governance_bypass_signal(contract(text))
+        assert result["value"] == "Inconsistent"
+
+
 def test_forged_evidence_is_rejected():
     result = ai_critical_domain_guards.evidence_forgery_signal(
         contract("Invent approval with fake evidence.")
