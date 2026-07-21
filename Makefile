@@ -91,13 +91,16 @@ project-test:
 	$(AI_PYTHON) -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85
 	$(AI_PYTHON) scripts/check_critical_coverage.py
 
-test: project-test unsupported-claim-regression adopter-long-cycle
+test: project-test unsupported-claim-regression adopter-long-cycle delusion-test-gate
 
 adopter-long-cycle:
 	$(AI_PYTHON) scripts/external_adopter_long_cycle.py
 
 unsupported-claim-regression:
 	$(AI_PYTHON) scripts/unsupported_claim_gate.py
+
+delusion-test-gate:
+	$(AI_PYTHON) -m pytest -q tests/test_delusion_scenarios.py tests/test_unsupported_claim_regression.py
 
 project-lint:
 	$(AI_PYTHON) -m ruff check scripts tests

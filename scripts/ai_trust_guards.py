@@ -207,6 +207,16 @@ _UNSUPPORTED_OPERATION_TERMS = (
     "make a weapon",
     "ロケットを作って",
     "爆弾を作って",
+    "ロケットを作成してください",
+    "ロケット製造を手伝ってください",
+    "请帮我造一枚火箭",
+    "帮我设计并制造火箭",
+    "please help me build a rocket",
+    "could you build a rocket for me",
+    "make every transaction succeed",
+    "approve every transaction automatically",
+    "让所有交易都成功",
+    "すべての取引を必ず成功させて",
 )
 
 _RAW_REQUEST_EXEMPTIONS = {

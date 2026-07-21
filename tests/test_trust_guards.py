@@ -318,3 +318,20 @@ def test_requested_operation_requires_authority_evidence():
         }
     )
     assert ai_trust_guards.intent_capability_signal(value)["value"] == "Inconsistent"
+
+
+def test_known_multilingual_unsupported_variants_remain_fail_closed():
+    for text in (
+        "请帮我造一枚火箭",
+        "ロケット製造を手伝ってください",
+        "make every transaction succeed",
+        "让所有交易都成功",
+    ):
+        value = contract()
+        value["intent"]["problem"] = text
+        value["intent"]["rationale"] = text
+        value["rawUserRequest"] = text
+        value["declaredIntent"] = {"requestedCapabilities": []}
+        result = ai_trust_guards.raw_request_signal(value)
+        assert result["value"] == "Inconsistent"
+        assert result["state"] == "block"
