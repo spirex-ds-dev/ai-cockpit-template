@@ -1,0 +1,165 @@
+{
+  "contractVersion": 2,
+  "workItemId": "requested-operation-policy",
+  "mode": "code",
+  "title": "Connect requested operation to policy evaluation",
+  "baseCommit": "2028769325a93a2ea34c27821d66b3a45c0ff399",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/requested-operation-policy.contract.json",
+    ".ai/work-items/active/requested-operation-policy.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/guards/governance_complexity_policy.yaml",
+    "scripts/ai_trust_guards.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_critical_domain_guards.py",
+    "tests/test_trust_guards.py",
+    "tests/test_critical_domain_guards.py",
+    "docs/trust-layer.md"
+  ],
+  "outOfScope": ["Changing unrelated operation schemas", "Changing release publication behavior"],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-21-review-remediation.md",
+      "reason": "Defines Requested Operation policy evaluation acceptance."
+    },
+    {"path": "scripts/ai_trust_guards.py", "reason": "Current requested operation policy signal boundary."},
+    {"path": "scripts/ai_check_work_item.py", "reason": "Contract validation for requested operation fields."},
+    {"path": "scripts/ai_critical_domain_guards.py", "reason": "Critical-domain policy consumer."},
+    {"path": "tests/test_trust_guards.py", "reason": "Guard regression coverage."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["policy_binding", "fail_closed"],
+    "reason": "Makes existing requestedOperation fields a deterministic input to policy evaluation."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Policy mapping and rejection rules are deterministic and bounded."
+  },
+  "preReviewWarnings": [
+    "Verify missing fields, unsupported combinations, and missing authority fail closed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "requestedOperation fields are evaluated through repository policy mappings.",
+    "Invalid combinations and missing authority fail closed.",
+    "Guards and tests prove the policy decision and actual operation boundary.",
+    "Trust Layer documentation explains the policy evaluation chain."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "rawUserRequest": "执行评审整改计划工单 5：将 requestedOperation 接入 Policy Evaluation，继续循环执行直到全部工单完成。",
+  "rawRequestSource": {"type": "human", "reference": "user-message:2026-07-21-continue-remediation", "capturedAt": "2026-07-21", "digest": "sha256:user-authorized-serial-remediation"},
+  "declaredIntent": {"summary": "Evaluate requestedOperation through repository policy before authorizing capabilities or critical-domain actions.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "intent": {
+    "problem": "requestedOperation is declared in Contracts but is not consistently consumed as a policy decision input.",
+    "constraints": ["Preserve existing critical-domain fail-closed behavior.", "Do not authorize operations not present in repository policy mappings."],
+    "rationale": "Bind declared operation fields to one deterministic policy evaluation before capability and critical-domain decisions."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Supported repository governance operation", "required": true, "status": "verified", "evidence": ["tests/test_trust_guards.py"]},
+    {"scenario": "Missing requestedOperation field", "required": true, "status": "verified", "evidence": ["tests/test_trust_guards.py"]},
+    {"scenario": "Unsupported operation combination", "required": true, "status": "verified", "evidence": ["tests/test_trust_guards.py"]},
+    {"scenario": "Authority-required operation without authority", "required": true, "status": "verified", "evidence": ["tests/test_trust_guards.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user explicitly authorized the complete serial remediation plan, including policy and guard changes."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/requested-operation-policy.json",
+    "baseCommit": "2028769325a93a2ea34c27821d66b3a45c0ff399",
+    "initialScopeDigest": "712a3a4987ac01015cd0dceff762acb0dc17a42436f665b43d92537afd6c5725",
+    "contractSkeletonDigest": "ead425da282f9f687a506f07b75c9207ea4582908815e560f387705430523f23"
+  }
+}

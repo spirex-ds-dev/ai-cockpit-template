@@ -56,6 +56,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "rawRequestExemption",
     "declaredIntent",
     "requestedOperation",
+    "authorityEvidence",
     "problemStatement",
     "scenarioCoverage",
     "archiveIndexRepair",
