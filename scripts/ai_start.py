@@ -97,9 +97,11 @@ def active_work_item_paths() -> list[Path]:
     return sorted(path for path in ACTIVE_DIR.glob("*.json") if path.is_file())
 
 
-def configuration_gate_issue(task: str, *, root: Path = PROJECT_ROOT) -> str | None:
+def configuration_gate_issue(
+    task: str, *, root: Path = PROJECT_ROOT, mode: str = "code"
+) -> str | None:
     """Block ordinary Work Items after adoption until configuration is ready."""
-    if task == "configure_ai_cockpit":
+    if task == "configure_ai_cockpit" or mode != "code":
         return None
     evidence_path = root / ".ai" / "cockpit" / "adoption-runtime-verification.json"
     if not evidence_path.is_file():
@@ -309,7 +311,9 @@ def run_code_preflight(contract_path: Path, summary_path: Path, contract_rel: st
     return code
 
 
-def validate_start_state(task: str, *, force: bool) -> tuple[Path, Path, str] | None:
+def validate_start_state(
+    task: str, *, force: bool, mode: str = "code"
+) -> tuple[Path, Path, str] | None:
     """Validate lifecycle state and return target paths plus trusted base commit."""
     consistency_issues = refresh_stale_no_active_status(validate_status_consistency())
     if consistency_issues:
@@ -332,7 +336,7 @@ def validate_start_state(task: str, *, force: bool) -> tuple[Path, Path, str] | 
         )
         return None
 
-    gate_issue = configuration_gate_issue(task)
+    gate_issue = configuration_gate_issue(task, mode=mode)
     if gate_issue:
         print(gate_issue, file=sys.stderr)
         return None
@@ -369,7 +373,7 @@ def main() -> int:
         return 1
 
     try:
-        start_state = validate_start_state(task, force=args.force)
+        start_state = validate_start_state(task, force=args.force, mode=args.mode)
         if start_state is None:
             return 1
         contract_path, summary_path, base_commit = start_state

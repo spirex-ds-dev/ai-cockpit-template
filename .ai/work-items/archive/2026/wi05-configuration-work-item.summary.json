@@ -361,12 +361,18 @@
   },
   "generatedFiles": [],
   "destructiveChanges": [],
-  "observedIssues": [],
+  "observedIssues": [
+    {
+      "issue": "Remote template-smoke failed because its MODE=investigate probe was blocked by the configuration gate.",
+      "resolution": "Gate activation now applies only to MODE=code ordinary Work Items; investigation probes remain allowed.",
+      "evidence": ["GitHub Actions template-smoke for PR #177", "scripts/ai_start.py", "tests/test_configuration_gate.py"]
+    }
+  ],
   "residualRisks": [
     {
-      "level": "medium",
-      "area": "scope",
-      "detail": "Initial skeleton; replace with actual residual risks before finishing.",
+      "level": "low",
+      "area": "configuration_gate",
+      "detail": "The gate is intentionally limited to adopter evidence and MODE=code; project readiness remains owned by configure_ai_cockpit.",
       "reviewRecommended": true,
       "followUpCandidate": false
     }
