@@ -69,6 +69,36 @@ def test_success_criteria_are_complete_for_task():
     assert result["value"] == "Ready"
 
 
+def test_task_owned_success_criteria_is_preferred(tmp_path):
+    value = copy.deepcopy(contract())
+    value["workItemId"] = "task_owned"
+    task_path = tmp_path / "task_owned.success.json"
+    task_path.write_text(
+        '{"schemaVersion": 1, "workItemId": "task_owned", "criteria": '
+        '[{"id": "SC-TASK", "statement": "Task-owned criterion", '
+        '"evidenceHints": ["tests/test_trust_guards.py"]}]}',
+        encoding="utf-8",
+    )
+    result = ai_trust_guards.success_criteria_signal(value, tmp_path / "legacy.json")
+    assert result["value"] == "Ready"
+    assert result["sources"][0].endswith("task_owned.success.json")
+
+
+def test_legacy_success_criteria_fallback_is_preserved(tmp_path):
+    value = copy.deepcopy(contract())
+    value["workItemId"] = "historic_task"
+    legacy_path = tmp_path / "legacy.json"
+    legacy_path.write_text(
+        '{"schemaVersion": 1, "workItemId": "historic_task", "criteria": '
+        '[{"id": "SC-LEGACY", "statement": "Legacy criterion", '
+        '"evidenceHints": ["make test"]}]}',
+        encoding="utf-8",
+    )
+    result = ai_trust_guards.success_criteria_signal(value, legacy_path)
+    assert result["value"] == "Ready"
+    assert result["sources"][0].endswith("legacy.json")
+
+
 def test_unsupported_capability_is_reported(tmp_path):
     path = tmp_path / "capabilities.json"
     path.write_text(

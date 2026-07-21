@@ -1,0 +1,210 @@
+{
+  "contractVersion": 2,
+  "workItemId": "work-item-owned-success-criteria",
+  "mode": "code",
+  "title": "Move Success Criteria to Work Item ownership",
+  "baseCommit": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+    ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/work-item-owned-success-criteria.success.json",
+    "scripts/ai_trust_guards.py",
+    "scripts/ai_archive_work_item.py",
+    ".ai/guards/governance_complexity_policy.yaml",
+    "tests/test_trust_guards.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_start_and_archive.py",
+    "docs/trust-layer.md"
+  ],
+  "outOfScope": [
+    "Success to Acceptance to Check execution-record traceability",
+    "Changing unrelated project capability declarations",
+    "Release, fixture, and plan-cleanup work items"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-20-comprehensive-review-remediation.md",
+      "reason": "Work Item 5 ownership and compatibility acceptance."
+    },
+    {
+      "path": "scripts/ai_trust_guards.py",
+      "reason": "Current global Success Criteria resolution."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Current Contract/Summary archive lifecycle."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["migration_compatibility"],
+    "reason": "Active Work Items must resolve their own criteria while historic global declarations remain compatible."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Work Item-owned criteria, compatibility fallback, and archive evidence are specified."
+  },
+  "preReviewWarnings": [
+    "Verify active Work Items prefer their own criteria and archived criteria remain discoverable."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A Work Item-specific .success.json is preferred over the legacy global project declaration.",
+    "The global declaration remains a compatibility fallback for historic or unassigned Work Items.",
+    "Archiving a Work Item moves its success declaration with the Contract and Summary.",
+    "Tests and Trust Layer documentation cover active ownership, fallback, and archive behavior."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Success Criteria currently resolve from one project-global file, so concurrent Work Items cannot own, archive, or independently verify their criteria.",
+    "constraints": [
+      "Prefer Work Item-owned criteria without breaking historic global declarations.",
+      "Keep criteria schema validation strict and machine-readable.",
+      "Archive criteria together with Contract and Summary."
+    ],
+    "rationale": "Task-scoped criteria provide lifecycle isolation while an explicit fallback preserves compatibility for existing adopters."
+  },
+  "rawUserRequest": "继续执行第 5 个工单：将 Success Criteria 从全局路径迁移到 Work Item 归属范围，支持隔离、归档和兼容。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message:2026-07-21",
+    "capturedAt": "2026-07-21",
+    "digest": "sha256:user-authorized-review-remediation"
+  },
+  "declaredIntent": {
+    "summary": "Resolve and archive Success Criteria per Work Item with a legacy fallback.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Active Work Item has a valid task-owned success declaration",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_trust_guards.py::test_task_owned_success_criteria_is_preferred"]
+    },
+    {
+      "scenario": "Active Work Item has no task-owned declaration but legacy global criteria exist",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_trust_guards.py::test_legacy_success_criteria_fallback_is_preserved"]
+    },
+    {
+      "scenario": "Archiving an active Work Item with task-owned criteria",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_start_and_archive.py::test_archive_code_item_rewrites_summary_paths"]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the complete sequential remediation, including governance policy calibration."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/work-item-owned-success-criteria.json",
+    "baseCommit": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+    "initialScopeDigest": "e70a0d961d3f81251b50e72ab28529d5e3720cf4e56bb03325c6ae954b2f516a",
+    "contractSkeletonDigest": "e3293dd6426d11f6694142e3c10bb8d73410a0d53a89debe8d25e2b2c8b59faa"
+  }
+}

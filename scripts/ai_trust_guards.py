@@ -380,26 +380,36 @@ def constraint_conflict_signal(contract: dict[str, Any]) -> dict[str, Any]:
 def success_criteria_signal(
     contract: dict[str, Any], path: Path = SUCCESS_CRITERIA_PATH
 ) -> dict[str, Any]:
-    payload, issues = _load_json(path)
+    work_item_id = contract.get("workItemId")
+    if path == SUCCESS_CRITERIA_PATH and isinstance(work_item_id, str):
+        owned_path = PROJECT_ROOT / ".ai" / "work-items" / "active" / f"{work_item_id}.success.json"
+    else:
+        owned_path = (
+            path.parent / f"{work_item_id}.success.json" if isinstance(work_item_id, str) else path
+        )
+    criteria_path = owned_path if owned_path.is_file() else path
+    payload, issues = _load_json(criteria_path)
     if issues:
-        return _signal("Success Criteria", "Missing", issues, [display_path(path)])
+        return _signal("Success Criteria", "Missing", issues, [display_path(criteria_path)])
     if not isinstance(payload, dict):
         return _signal(
             "Success Criteria",
             "Inconsistent",
             ["declaration must be an object"],
-            [display_path(path)],
+            [display_path(criteria_path)],
         )
     try:
         validate_payload("success_criteria", payload)
     except ValidationError as exc:
-        return _signal("Success Criteria", "Inconsistent", [str(exc)], [display_path(path)])
+        return _signal(
+            "Success Criteria", "Inconsistent", [str(exc)], [display_path(criteria_path)]
+        )
     if payload["workItemId"] != contract.get("workItemId"):
         return _signal(
             "Success Criteria",
             "Not Applicable",
             [f"no project-owned criteria are assigned to {contract.get('workItemId', '')}"],
-            [display_path(path)],
+            [display_path(criteria_path)],
         )
     criteria = payload["criteria"]
     incomplete = [item["id"] for item in criteria if not item.get("evidenceHints")]
@@ -408,13 +418,13 @@ def success_criteria_signal(
             "Success Criteria",
             "Partial",
             [f"criteria lack evidence hints: {', '.join(incomplete)}"],
-            [display_path(path)],
+            [display_path(criteria_path)],
         )
     return _signal(
         "Success Criteria",
         "Ready",
         [f"{len(criteria)} criteria have statements and evidence hints"],
-        [display_path(path)],
+        [display_path(criteria_path)],
     )
 
 
