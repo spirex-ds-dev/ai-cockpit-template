@@ -1,0 +1,404 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "candidate-source-commit",
+  "contractPath": ".ai/work-items/archive/2026/candidate-source-commit.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/candidate-source-commit.contract.json",
+      "reason": "Defined the candidate source commit lifecycle, exact acceptance, scenarios, and verification boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/candidate-source-commit.summary.json",
+      "reason": "Records implementation and verification evidence for the Work Item."
+    },
+    {
+      "path": ".ai/work-items/starts/candidate-source-commit.json",
+      "reason": "Generated start receipt with the latest main base commit."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated cockpit status during the governed workflow."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Resolves sourceCommit from the freshly fetched default branch and treats explicit input as a fail-closed assertion."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Tests omitted, matching, and stale source input behavior while preserving exact-SHA release assertions."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Documents computed source identity and stale-input rejection in English."
+    },
+    {
+      "path": "docs/reference/distribution.ja.md",
+      "reason": "Documents computed source identity and stale-input rejection in Japanese."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/candidate-source-commit.contract.json",
+    ".github/workflows/release.yml",
+    "tests/test_workflows.py",
+    "release-state.json",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/candidate-source-commit.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:48:12.771142+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "15c033d61323ee32ecf1f078474e4d279d7ee2d1d237b674d5e2b6ae451bae6d",
+      "commandHash": "59810925d14d8e9c98af13e96777ca07a3002c1801c9ce6f39e83e1e534cf0a0",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "75ff295fbdc40c3251109ff3bba12cf6e6c09b0901ce15777b3680ba288473cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/candidate-source-commit.contract.json work item contract check passed: .ai/work-items/active/candidate-source-commit.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/candidate-source-commit.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:48:12.979337+00:00",
+      "exitCode": 0,
+      "durationMs": 99,
+      "outputDigest": "243e101b29b2ae52d09f859fb2e1d1c16932562f2eeaf24732a9aa9bb64b3673",
+      "commandHash": "13d09a9c72e36280f4cc13a276dbe7030750c7b2c2d0d52cbe24d50552293cf3",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "75ff295fbdc40c3251109ff3bba12cf6e6c09b0901ce15777b3680ba288473cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/candidate-source-commit.contract.json scope guard passed: 6 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:48:13.147100+00:00",
+      "exitCode": 0,
+      "durationMs": 115,
+      "outputDigest": "31739028d0a7e1ed1ab955dd46a932e3e6f4356dfc62676f7ab421af2190b902",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "75ff295fbdc40c3251109ff3bba12cf6e6c09b0901ce15777b3680ba288473cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/candidate-source-commit.contract.json [warning] restricted_write: .github/workflows/release.yml (.github/workflows/**) - CI workflow configuration. guard check completed: 1 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/candidate-source-commit.contract.json SUMMARY=.ai/work-items/active/candidate-source-commit.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:48:13.376578+00:00",
+      "exitCode": 0,
+      "durationMs": 174,
+      "outputDigest": "b7c5f80b6b8a443e28821e9cd037956058f122c120e464c4b10e59aff6ac3431",
+      "commandHash": "fbdc32a5f1c66a20325d09461fda55fbc9ce3573294e57f2afa48dd13b3ba12f",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "75ff295fbdc40c3251109ff3bba12cf6e6c09b0901ce15777b3680ba288473cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/candidate-source-commit.contract.json --summary .ai/work-items/active/candidate-source-commit.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `candidate-source-commit` - Contract Hash: `364081b3043f63b0` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Required Checks: `16` - R"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/candidate-source-commit.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:48:13.572380+00:00",
+      "exitCode": 0,
+      "durationMs": 148,
+      "outputDigest": "cc3abe55e59b34cd61af79a34342ae6ac85fe7b8a8a351453e05613fd1eaf10f",
+      "commandHash": "64c8f35171ba638c68a8958c9b8d9e6d33a6b2167762d622f82c328936955ba1",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "75ff295fbdc40c3251109ff3bba12cf6e6c09b0901ce15777b3680ba288473cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/candidate-source-commit.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/candidate-source-commit.json [review] .ai/cockpit/current_status.md [review] .github/workflows/release.yml review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:48:13.703209+00:00",
+      "exitCode": 0,
+      "durationMs": 85,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "75ff295fbdc40c3251109ff3bba12cf6e6c09b0901ce15777b3680ba288473cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:48:13.831779+00:00",
+      "exitCode": 0,
+      "durationMs": 82,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "75ff295fbdc40c3251109ff3bba12cf6e6c09b0901ce15777b3680ba288473cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/candidate-source-commit.contract.json SUMMARY=.ai/work-items/active/candidate-source-commit.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:48:13.944871+00:00",
+      "exitCode": 0,
+      "durationMs": 59,
+      "outputDigest": "30985e2f511a1a11676ebf9350a4a1d34fac7f064db40e150c67583500b3383c",
+      "commandHash": "b1cc1b337875e38a9c977d995bbf8fa6343d84b6851404f6c3086eedb0eca567",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "75ff295fbdc40c3251109ff3bba12cf6e6c09b0901ce15777b3680ba288473cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/candidate-source-commit.contract.json --summary .ai/work-items/active/candidate-source-commit.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/candidate-source-commit.contract.json SUMMARY=.ai/work-items/active/candidate-source-commit.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:48:14.041989+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "a7828d0d82fc3d0bd9df01c360069fac2205232b6d503bb36f33a3334e954523",
+      "commandHash": "e9dd279a7309b30243edb16b79f67bb850ef732738b323c19b03dc8a20d1947b",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "75ff295fbdc40c3251109ff3bba12cf6e6c09b0901ce15777b3680ba288473cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/candidate-source-commit.contract.json --summary .ai/work-items/active/candidate-source-commit.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/candidate-source-commit.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:48:14.263068+00:00",
+      "exitCode": 0,
+      "durationMs": 174,
+      "outputDigest": "49cb6130bac0ab76c396019f629a206916ccc59e61144d0da745ae2e24a89334",
+      "commandHash": "1fea707530024266c65001f377bf4faae82025e1be62f9b79f2297ba4dd8979d",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "75ff295fbdc40c3251109ff3bba12cf6e6c09b0901ce15777b3680ba288473cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/candidate-source-commit.contract.json ## Diff Ownership Preview - active_owned: `6`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/candidate-source-commit.json` — covered by Contract scope - [active_owned] `.github/workflows/"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:50:15.866822+00:00",
+      "exitCode": 0,
+      "durationMs": 121565,
+      "outputDigest": "d6582d21030f3487989957e93a675d1eb3d4d13214f157f82d286e81582e2e08",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "75ff295fbdc40c3251109ff3bba12cf6e6c09b0901ce15777b3680ba288473cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 114 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 10%] ........................................................................ [ 20%] ............................................................"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/candidate-source-commit.contract.json SUMMARY=.ai/work-items/active/candidate-source-commit.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:50:16.987612+00:00",
+      "exitCode": 0,
+      "durationMs": 208,
+      "outputDigest": "36562da85787f161906aefb561436ecdc32e751f8ed9130bd202e6a691a6a66a",
+      "commandHash": "643cbcc17934cadddde21db68163548913dec75714d1b976abe87318c3f08dc4",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "9008b59480925c6d6d86d774108294fc66c1fccb9b0865a8747aef1d9d3c04a9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/candidate-source-commit.contract.json --summary .ai/work-items/active/candidate-source-commit.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/candidate-source-commit.contract.json SUMMARY=.ai/work-items/active/candidate-source-commit.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:50:17.214754+00:00",
+      "exitCode": 0,
+      "durationMs": 185,
+      "outputDigest": "470f458d01749d84a235198bb2155056ea62d6f0a7cf98939f1286bbe97ae05b",
+      "commandHash": "40ebbc2301115bfd1767c44d797efce704edb78be1c69bbba21aced365e93b6f",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "9008b59480925c6d6d86d774108294fc66c1fccb9b0865a8747aef1d9d3c04a9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/candidate-source-commit.contract.json --summary .ai/work-items/active/candidate-source-commit.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:50:17.288725+00:00",
+      "exitCode": 0,
+      "durationMs": 38,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "9008b59480925c6d6d86d774108294fc66c1fccb9b0865a8747aef1d9d3c04a9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/candidate-source-commit.contract.json SUMMARY=.ai/work-items/active/candidate-source-commit.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:50:17.380307+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "d230fbd738d8fb4324c7f891c9b6207f83ed15c073278433387ecee108c7ea2e",
+      "commandHash": "f3e48c95a3baa5d98be5451c1f3de1381f5a10c23403ca4ffc1a383c205a80a3",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "9008b59480925c6d6d86d774108294fc66c1fccb9b0865a8747aef1d9d3c04a9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/candidate-source-commit.contract.json --summary .ai/work-items/active/candidate-source-commit.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/candidate-source-commit.summary.json CONTRACT=.ai/work-items/active/candidate-source-commit.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T04:50:18.246240+00:00",
+      "exitCode": 0,
+      "durationMs": 99,
+      "outputDigest": "39627457f7113285b4aa01780e594db47b960b087f63604efe057054609cb4eb",
+      "commandHash": "476bf17ce66fa6bd85c491b02a9ad13f9ee0bb1cdcd4ca108e3d573b10e712cb",
+      "contractHash": "364081b3043f63b0a56e370210dfe7994a47c45e3a797da72cfec3b0b22f742c",
+      "commitSha": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+      "executionContractPath": ".ai/work-items/active/candidate-source-commit.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/candidate-source-commit.summary.json",
+      "worktreeDigest": "c82acf979d678a2e1cdd74ceae9fbf850f79f956ed35cc49b5487aa27ccf2401",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/candidate-source-commit.summary.json --contract .ai/work-items/active/candidate-source-commit.contract.json ai summary check passed: .ai/work-items/active/candidate-source-commit.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "The release workflow behavior is documented in English and Japanese distribution references."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "Only workflow YAML, tests, and documentation changed; no internal feature imports were introduced."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Source selection remains exact-SHA and publication ordering is unchanged; the dispatch input can no longer select a stale commit."
+  },
+  "generatedFiles": [
+    ".ai/work-items/starts/candidate-source-commit.json",
+    ".ai/cockpit/current_status.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "release-operator-input",
+      "detail": "A caller may still provide a stale value, but the workflow rejects it before checkout and publication.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Confirm default branch resolution occurs before checkout.",
+      "Confirm explicit source input cannot override the resolved commit."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "updated_docs",
+    "persistence": "workflow_evidence",
+    "localization": "updated",
+    "generatedArtifacts": "release-source.json",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "364081b3043f63b0",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "recordedAt": "2026-07-21",
+      "evidence": "Preflight reached ready before implementation."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "364081b3043f63b0",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "recordedAt": "2026-07-21",
+      "evidence": "Targeted workflow and release tests passed; full finish checks remain pending."
+    }
+  ],
+  "knownGaps": [
+    "Provider asset generation and release publication remain out of scope and are covered by later Work Items."
+  ],
+  "overclaimPrevention": "Do not report the candidate lifecycle complete until ai-finish, PR checks, merge, and ai-close-work-item all pass.",
+  "archiveSequence": 369
+}

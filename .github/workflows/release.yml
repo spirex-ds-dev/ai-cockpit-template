@@ -9,7 +9,7 @@ on:
         type: string
       source_commit:
         description: "Verified main commit SHA to release"
-        required: true
+        required: false
         type: string
 
 permissions:
@@ -44,11 +44,18 @@ jobs:
             "refs/heads/${RELEASE_DEFAULT_BRANCH}:refs/remotes/origin/${RELEASE_DEFAULT_BRANCH}"
           DEFAULT_BRANCH_COMMIT="$(git rev-parse "refs/remotes/origin/${RELEASE_DEFAULT_BRANCH}^{commit}")"
           export DEFAULT_BRANCH_COMMIT
-          [[ "$SOURCE_COMMIT" == "$DEFAULT_BRANCH_COMMIT" ]]
+          requested_source_commit="$SOURCE_COMMIT"
+          SOURCE_COMMIT="$DEFAULT_BRANCH_COMMIT"
+          if [[ -n "$requested_source_commit" && "$requested_source_commit" != "$DEFAULT_BRANCH_COMMIT" ]]; then
+            echo "source_commit must equal the freshly resolved default branch commit" >&2
+            exit 1
+          fi
+          export SOURCE_COMMIT
           {
             echo "RELEASE_REMOTE=$RELEASE_REMOTE"
             echo "RELEASE_DEFAULT_BRANCH=$RELEASE_DEFAULT_BRANCH"
             echo "DEFAULT_BRANCH_COMMIT=$DEFAULT_BRANCH_COMMIT"
+            echo "SOURCE_COMMIT=$SOURCE_COMMIT"
           } >> "$GITHUB_ENV"
           git fetch --no-tags --quiet origin "${SOURCE_COMMIT}"
           git checkout --detach --quiet "${SOURCE_COMMIT}"
