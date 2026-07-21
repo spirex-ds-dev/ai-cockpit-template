@@ -1,0 +1,180 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi05-configuration-work-item",
+  "mode": "code",
+  "title": "Configuration Work Item",
+  "baseCommit": "c0ed933e29e104d0400a61a2550ec256a03bb280",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "scripts/ai_start.py",
+    "tests/test_configuration_gate.py",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/guards/governance_complexity_policy.yaml",
+    ".ai/cockpit/adoption.md",
+    ".ai/cockpit/adoption.ja.md",
+    ".ai/work-items/active/wi05-configuration-work-item.contract.json",
+    ".ai/work-items/active/wi05-configuration-work-item.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "Project Profile, Guard, quality command, or CI approval itself",
+    "Blocking the template-maintenance repository when no adopter Runtime Verification exists",
+    "Product source code"
+  ],
+  "sources": [
+    {
+      "path": ".ai/cockpit/adoption.md",
+      "reason": "Adoption requires Configure before governed development."
+    },
+    {"path": ".ai/cockpit/adoption.ja.md", "reason": "Japanese adoption lifecycle guidance."},
+    {"path": "scripts/ai_readiness_policy.py", "reason": "Existing readiness states and evidence fields."},
+    {"path": "scripts/ai_start.py", "reason": "Work Item creation entrypoint where the configuration gate belongs."},
+    {"path": "tests/test_adoption_ready.py", "reason": "Existing adoption/readiness behavior."},
+    {"path": "tests/test_project_governance_journey.py", "reason": "Existing adoption-to-configuration lifecycle behavior."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "configuration_gate"
+    ],
+    "reason": "The gate is a deterministic local check keyed only by adopter Runtime Verification and the reserved configure task."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the serial remediation plan and full lifecycle operations."
+  },
+  "preReviewWarnings": [
+    "Review adopter-only activation, configure-task exception, missing evidence, and fail-closed messages."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "An adopter with Runtime Verification evidence cannot start ordinary governed development before configure_ai_cockpit is complete.",
+    "configure_ai_cockpit remains startable, while repositories without adopter evidence and the template repository remain unaffected.",
+    "Focused tests cover missing, not_ready, ready, and configure-task exception states with fail-closed output."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features.",
+    "Configuration Required must fail closed when adopter evidence says readiness is not ready."
+  ],
+  "intent": {
+    "problem": "Adoption intentionally leaves project quality and readiness unconfigured, but ai-start currently allows ordinary Work Items to begin immediately; this bypasses the required configure_ai_cockpit stage.",
+    "constraints": [
+      "Activate the gate only when adopter Runtime Verification evidence exists.",
+      "Allow configure_ai_cockpit itself to start so the blocking state can be resolved.",
+      "Keep the template-maintenance repository and repositories without adoption evidence unaffected.",
+      "Use fail-closed, deterministic messages without inspecting or approving project boundaries."
+    ],
+    "rationale": "The reserved Configuration Work Item must be the explicit transition from installed adoption to governed development."
+  },
+  "rawUserRequest": "先走完当前文档的流程。用户已授权按计划逐工单执行，包含修改代码、测试、文档、PR、合并、ai-close-work-item、分支清理；妄想测试失败继续修改。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:user-authorized-plan-execution", "capturedAt": "2026-07-21", "digest": "sha256:user-authorized-serial-remediation"},
+  "declaredIntent": {"summary": "Enforce the adoption-to-configuration Work Item transition.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "missing Runtime Verification leaves template and non-adopter repositories unaffected", "required": true, "status": "verified", "evidence": ["tests/test_configuration_gate.py"]},
+    {"scenario": "adopter not_ready blocks ordinary Work Item start", "required": true, "status": "verified", "evidence": ["tests/test_configuration_gate.py"]},
+    {"scenario": "configure_ai_cockpit remains startable while adoption is not ready", "required": true, "status": "verified", "evidence": ["tests/test_configuration_gate.py"]},
+    {"scenario": "production-ready evidence permits ordinary Work Item start", "required": true, "status": "verified", "evidence": ["tests/test_configuration_gate.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-plan-execution",
+    "reason": "User explicitly authorized governance code, tests, documentation, PR, merge, archive, close, and branch cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi05-configuration-work-item.json",
+    "baseCommit": "c0ed933e29e104d0400a61a2550ec256a03bb280",
+    "initialScopeDigest": "87761749e40de402f5fb88719a8244fb7638a42b5dd220bbc6f33ec78ad20296",
+    "contractSkeletonDigest": "f7b869006595d0f1ba9046c64e2e13b629098297c8d5ad6bee35d0bbc039d6c5"
+  }
+}
