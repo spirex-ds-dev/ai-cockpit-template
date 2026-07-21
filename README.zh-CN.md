@@ -27,6 +27,8 @@ keywords:
 
 [English](README.md) | [日本語](README.ja.md)
 
+AI Cockpit 的产品边界是 Repository Governance Layer，而不是 Agent Runtime、Workflow Engine 或 Security Sandbox。仓库记录支持评审；可信身份、生产隔离、企业审计/合规和发布平台证据仍由外部控制提供。
+
 AI 编码代理可能会：
 
 - 重写无关文件
