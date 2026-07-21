@@ -1,0 +1,167 @@
+{
+  "contractVersion": 2,
+  "workItemId": "real-fixture-repository",
+  "mode": "code",
+  "title": "real-fixture-repository",
+  "baseCommit": "c86d123dc55b15791afaf40b83dba9ea7c048633",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/real-fixture-repository.contract.json",
+    ".ai/work-items/active/real-fixture-repository.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "examples/fixtures/**",
+    "scripts/fixture_harness.py",
+    "tests/test_fixture_harness.py",
+    "docs/fixtures/real-fixture-evidence.md"
+  ],
+  "outOfScope": ["Adding third-party dependencies", "Running external production operations", "Changing existing adopter examples"],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-20-comprehensive-review-remediation.md",
+      "reason": "Work Item 10 acceptance and required lifecycle scenarios."
+    },
+    {"path": "scripts/install_ai_cockpit.py", "reason": "Existing installation entrypoint exercised by the harness."},
+    {"path": "scripts/ai_upgrade.py", "reason": "Existing upgrade and rollback behavior exercised by the harness."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "fixture_reproducibility",
+      "cross_platform_tooling"
+    ],
+    "reason": "Use dependency-free fixture manifests and a deterministic harness; record unavailable toolchains and cross-agent conflict boundaries explicitly."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Fixture scenarios, deterministic evidence output, and unavailable-toolchain boundaries are declared."
+  },
+  "preReviewWarnings": [
+    "Verify each fixture records all eight lifecycle phases and does not claim unavailable platform execution."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Three real-stack fixture manifests (Python, TypeScript Web, Java multi-module) execute Install, Configure, Normal Work Item, Ambiguous Request, Critical Domain Change, Upgrade, Rollback, and Release Check through one deterministic harness.",
+    "The harness emits a reviewable evidence bundle containing status, reason, evidence, resume condition, policy reference, platform/toolchain notes, performance observations, and multi-agent conflict boundaries.",
+    "Tests verify all lifecycle phases, fail-closed ambiguous and critical-domain outcomes, upgrade/rollback transitions, and release-check evidence.",
+    "Fixture documentation distinguishes locally executed Python evidence from not-run external toolchain/platform boundaries."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The repository has stack examples but no repeatable system-level fixture experiment proving installation, normal governed work, risky requests, upgrade, rollback, and release checks together.",
+    "constraints": ["Keep fixtures dependency-free and deterministic.", "Do not claim Flutter or Java execution when toolchains are unavailable.", "Preserve fail-closed outcomes for ambiguous and critical-domain scenarios."],
+    "rationale": "A small real-stack fixture matrix and evidence bundle gives reviewers reproducible adoption-path evidence without conflating local simulation with platform coverage."
+  },
+  "rawUserRequest": "继续执行第 10 个工单：建立真实 Fixture Repository 系统级试验并输出可复核 evidence bundle。",
+  "rawRequestSource": {"type": "human", "reference": "user-message:2026-07-21", "capturedAt": "2026-07-21", "digest": "sha256:user-authorized-review-remediation"},
+  "declaredIntent": {"summary": "Exercise three real-stack fixture adoption paths through the governed lifecycle.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "validate_test", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "Python fixture completes all eight lifecycle phases", "required": true, "status": "verified", "evidence": ["tests/test_fixture_harness.py"]},
+    {"scenario": "TypeScript Web and Java multi-module fixtures are represented and boundaries recorded", "required": true, "status": "verified", "evidence": ["tests/test_fixture_harness.py", "docs/fixtures/real-fixture-evidence.md"]},
+    {"scenario": "Ambiguous and critical-domain fixture requests remain blocked", "required": true, "status": "verified", "evidence": ["tests/test_fixture_harness.py"]},
+    {"scenario": "Unavailable Flutter/Java toolchains are reported as not_run rather than claimed", "required": true, "status": "verified", "evidence": ["docs/fixtures/real-fixture-evidence.md"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/real-fixture-repository.json",
+    "baseCommit": "c86d123dc55b15791afaf40b83dba9ea7c048633",
+    "initialScopeDigest": "77081827366d3d07f07edfbf3d7273214b2f5eabab4b0db68d1a94646ed4c84c",
+    "contractSkeletonDigest": "8f123fa7f1bdee8e09acf27297c75abe23a38a1981d8a6bf014f14927d477257"
+  }
+}
