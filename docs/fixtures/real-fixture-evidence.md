@@ -12,8 +12,8 @@ keywords:
 
 The TypeScript Web fixture now executes local npm install/build/test/lint/format and lifecycle commands. Its evidence is limited to the checked-out fixture and local toolchain. Provider assets, trusted identity, sandbox isolation, immutable audit, and enterprise compliance remain `not_run`, not inferred from the local result.
 
-The dependency-free `scripts/fixture_harness.py` exercises the adoption lifecycle for Python, TypeScript Web, and Java multi-module fixture manifests. Every fixture records Install → Configure → Normal Work Item → Ambiguous Request → Critical Domain Change → Upgrade → Rollback → Release Check.
+The dependency-free `scripts/fixture_harness.py` exercises the adoption lifecycle for Python and fixture manifests. The Java multi-module fixture additionally runs real `javac`/`java` commands across its `core` and `app` modules; its lifecycle records Install → Configure → Normal Work Item → Ambiguous Request → Critical Domain Change → Upgrade → Rollback → Release Check.
 
 The ambiguous and critical-domain phases are expected `blocked` outcomes with a resume condition and policy reference. The harness output is a reviewable evidence bundle, but it is not proof of platform isolation, identity, authentication, immutable audit, enterprise compliance, or production safety.
 
-Python is locally executable through the repository's Python runtime. TypeScript Web and Java multi-module manifests preserve their real stack identity while the harness records that their external toolchains were not invoked. Flutter remains a documented future boundary for this experiment. Performance and multi-agent conflict measurements are explicitly `not_run` or `not_applicable`, never inferred.
+Python is locally executable through the repository's Python runtime. TypeScript Web is locally executable through npm. Java's Maven path is `not_run` when Maven is unavailable, while its dependency-free Java compiler/runtime path remains independently observable. Flutter remains a documented future boundary for this experiment. Performance and multi-agent conflict measurements are explicitly `not_run` or `not_applicable`, never inferred.
