@@ -14,7 +14,6 @@ keywords:
 **Goal:** 以 2026-07-21 最新 `main`、提交 `41b5f66` 为基准，把本轮评审发现的多重事实源、双重决策语义、可伪造证据占位符和不完整 Fixture 证据收敛为可审计的串行整改闭环。
 **Architecture:** 继续保持 AI Cockpit 是 Repository Governance Layer，而不是 Agent Runtime、Sandbox、身份系统或企业合规产品。整改顺序先处理发布真相和证据根，再处理 Guard 决策模型、操作声明与实际 Diff 的一致性，随后补齐真实技术栈执行证据、复杂度偿还和正式命名；最后执行妄想/无证据声明回归、文档对齐、发布和计划清理。每个 Work Item 都独立完成 Contract → 实现 → 验证 → Summary → `ai-finish` → PR → 合并 → `ai-close-work-item` → 分支清理 → 主分支同步，完成后才进入下一个。
 **Tech Stack:** Python、pytest、Make、JSON/YAML、Markdown、GitHub PR/Release、Work Item Contract v2。
-
 > **历史保留（2026-07-21）**：本计划工单 1–17 已按独立 Contract、专用分支、PR、合并、归档、`ai-close-work-item`、分支清理和主分支同步流程全部完成。PR #168 已合并，发布工作流已成功，上一版已发布；本文件仅作为审计历史保留，不再处于执行中。
 ## Global Constraints
 - 评审基准固定为 2026-07-21 的 `main` 提交 `41b5f66`；执行每个工单前重新获取远端默认分支最新提交，并在 Contract 记录 `baseRemote`、`baseBranch`、`baseCommit`。
