@@ -7,6 +7,7 @@ import contextlib
 import argparse
 import hashlib
 import fcntl
+import json
 import os
 import re
 import subprocess
@@ -25,6 +26,7 @@ from ai_check_status_consistency import DEFAULT_STATUS, validate_status_consiste
 from ai_check_diff_ownership import format_preview, preview
 from ai_generate_status import write_active_status, write_no_active_status
 from ai_observability import create_observability
+from ai_readiness_policy import readiness_state
 from ai_start_receipt import build_receipt
 from ai_start_receipt import receipt_binding
 from ai_start_receipt import receipt_path
@@ -93,6 +95,27 @@ def active_work_item_paths() -> list[Path]:
     if not ACTIVE_DIR.exists():
         return []
     return sorted(path for path in ACTIVE_DIR.glob("*.json") if path.is_file())
+
+
+def configuration_gate_issue(task: str, *, root: Path = PROJECT_ROOT) -> str | None:
+    """Block ordinary Work Items after adoption until configuration is ready."""
+    if task == "configure_ai_cockpit":
+        return None
+    evidence_path = root / ".ai" / "cockpit" / "adoption-runtime-verification.json"
+    if not evidence_path.is_file():
+        return None
+    try:
+        evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return "ERROR: Configuration Required; adoption Runtime Verification is unreadable."
+    if evidence.get("readiness") == "ready" and evidence.get("projectQualityState") == "configured":
+        return None
+    if readiness_state(root).get("productionReady") is True:
+        return None
+    return (
+        "ERROR: Configuration Required; finish configure_ai_cockpit and reach Adoption Ready "
+        "before starting ordinary governed development."
+    )
 
 
 def start_lock_path() -> Path:
@@ -307,6 +330,11 @@ def validate_start_state(task: str, *, force: bool) -> tuple[Path, Path, str] | 
             f"{active_items}. Finish or archive it before creating a new Work Item.",
             file=sys.stderr,
         )
+        return None
+
+    gate_issue = configuration_gate_issue(task)
+    if gate_issue:
+        print(gate_issue, file=sys.stderr)
         return None
 
     contract_path = ACTIVE_DIR / f"{task}.contract.json"
