@@ -55,7 +55,8 @@ make ai-onboard PHASE=3
 1. **Adopt → Configure:** `adopt_ai_cockpit` を単独コミットで完了し、続けて `configure_ai_cockpit` で Profile、Guard、品質コマンド、CI を適応する。
 2. `make cockpit-doctor` でプロジェクト事実、証拠、信頼度、候補境界、Guard 不一致、品質コマンド候補、Critical Domain シグナル、unknowns を記録する。確定 Profile で `blocking:` unknowns をすべて解消する。doctor は境界を自動承認しない。
 3. `make cockpit-calibrate` を実行する。提案 Profile の `projectSignals.qualityCommands` と `projectSignals.criticalDomains` を確認し、承認済みとみなさない。
-4. 明示的に確認した境界と承認メタデータで `.ai/project_profile.yaml` を作成する。
+4. Complexity の基線を Adoption、Active/既定ブランチ、Work Item base commit に分けて記録する。解決できない基線は `unavailable` と記録し、Allow とみなさない。
+5. 明示的に確認した境界と承認メタデータで `.ai/project_profile.yaml` を作成する。
 5. `make check-ai-project-profile` と `make check-ai-guard-calibration` で Profile と Guard を検証する。
 6. `Makefile.ai.stack` のプレースホルダを置き換え、`make ai-cockpit-quality` が成功することを確認する。
 7. Coverage パスをレビューする。レガシーまたは広いソースツリーでは、まず `reportOnly: true` と絞った include/exclude で開始し、境界が安定してから `adoptionReviewed: true` を設定する。

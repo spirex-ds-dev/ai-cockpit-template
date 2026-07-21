@@ -37,7 +37,8 @@ Or follow the local calibration checklist:
 1. **Adopt, then configure:** finish `adopt_ai_cockpit` in one commit, then start `configure_ai_cockpit` for Profile, Guard, quality commands, and CI.
 2. Run `make cockpit-doctor` to record project facts, evidence, confidence, candidate boundaries, Guard mismatches, quality-command candidates, critical-domain signals, and unknowns. Resolve every `blocking:` unknown in the confirmed Profile; doctor does not auto-approve boundaries.
 3. Run `make cockpit-calibrate`. Review the proposed Profile—including `projectSignals.qualityCommands` and `projectSignals.criticalDomains`—without treating suggestions as approvals.
-4. Create `.ai/project_profile.yaml` with explicitly confirmed boundaries and approval metadata.
+4. Record separate Adoption, Active/default-branch, and Work Item base commits for complexity. If a baseline cannot be resolved, record `unavailable`; never treat it as an allow result.
+5. Create `.ai/project_profile.yaml` with explicitly confirmed boundaries and approval metadata.
 5. Validate the Profile and existing Guards with `make check-ai-project-profile` and `make check-ai-guard-calibration`.
 6. Replace every placeholder in `Makefile.ai.stack` and confirm `make ai-cockpit-quality` passes.
 7. Review Coverage paths. For legacy or broad trees, start with `reportOnly: true` and narrowed include/exclude paths, then set `adoptionReviewed: true` when boundaries are stable.
