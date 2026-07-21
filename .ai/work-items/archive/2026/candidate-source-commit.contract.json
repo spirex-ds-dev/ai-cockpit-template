@@ -1,0 +1,64 @@
+{
+  "contractVersion": 2,
+  "workItemId": "candidate-source-commit",
+  "mode": "code",
+  "title": "Make candidate source commit lifecycle explicit",
+  "baseCommit": "6c152535a0193970c7df3cc633f5bc1f5e0bec44",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/candidate-source-commit.contract.json",
+    ".ai/work-items/active/candidate-source-commit.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".github/workflows/release.yml",
+    "tests/test_workflows.py",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md"
+  ],
+  "outOfScope": [
+    "Changing release tag creation, provider asset generation, or publication ordering",
+    "Changing release.json or next-release.json schemas",
+    "Publishing a release or moving an existing tag"
+  ],
+  "sources": [
+    {"path": "docs/superpowers/plans/2026-07-21-review-remediation.md", "reason": "Defines the Candidate Source Commit lifecycle problem and acceptance."},
+    {"path": ".github/workflows/release.yml", "reason": "Current workflow requires a manually supplied source_commit and compares it with the default branch tip."},
+    {"path": "tests/test_workflows.py", "reason": "Existing workflow contract tests define exact-SHA release behavior."},
+    {"path": "release-state.json", "reason": "Canonical candidate metadata contains the preparation source snapshot."},
+    {"path": "docs/reference/distribution.md", "reason": "Current English release identity and candidate documentation."},
+    {"path": "docs/reference/distribution.ja.md", "reason": "Current Japanese release identity and candidate documentation."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "low", "riskTypes": ["release_identity", "workflow_behavior"], "reason": "The workflow must never release a stale or caller-selected commit; the change is limited to source selection and its evidence."},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The requested lifecycle model is deterministic: compute the default branch commit at workflow start and treat an optional input only as an assertion."},
+  "preReviewWarnings": ["Review that the optional source_commit input cannot override the freshly resolved default branch commit."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record pre-edit and pre-finish evidence for source identity behavior."},
+  "acceptance": [
+    "Release workflow computes sourceCommit from the freshly resolved default branch when dispatch input is omitted.",
+    "A supplied source_commit is accepted only when it exactly equals the freshly resolved default branch commit; stale or mismatched values fail before checkout or publication.",
+    "The workflow writes the resolved commit, remote, default branch, and run identity to release-source.json, and tests assert those fields use the freshly resolved default branch commit.",
+    "English and Japanese distribution documentation describe the computed source identity, exact-SHA checks, and fail-closed behavior."
+  ],
+  "guidelines": ["New public APIs must be documented.", "Do not import internal modules from other features."],
+  "intent": {"problem": "A candidate sourceCommit recorded before its PR merges becomes stale as soon as the candidate PR itself changes main, creating a self-invalidating release candidate and ambiguous release identity.", "constraints": ["Preserve exact-SHA checkout, smoke, compatibility, evidence, tag, and release ordering.", "Do not publish, move, or delete tags.", "Do not allow a workflow caller to select a commit other than the current default branch tip."], "rationale": "Resolve the source at the start of the release workflow and retain the explicit input only as a fail-closed assertion, so the candidate cannot authorize its own stale commit."},
+  "rawUserRequest": "执行评审整改计划工单 2：解决 Candidate Source Commit 生命周期问题，继续循环执行直到全部工单完成。",
+  "rawRequestSource": {"type": "human", "reference": "user-message:2026-07-21-continue-remediation", "capturedAt": "2026-07-21", "digest": "sha256:user-authorized-serial-remediation"},
+  "declaredIntent": {"summary": "Resolve the release source commit from the current default branch at workflow start and reject stale explicit assertions.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "omitted source input", "required": true, "status": "verified", "evidence": ["tests/test_workflows.py"]},
+    {"scenario": "matching explicit source input", "required": true, "status": "verified", "evidence": ["tests/test_workflows.py"]},
+    {"scenario": "stale or mismatched explicit source input", "required": true, "status": "verified", "evidence": ["tests/test_workflows.py"]},
+    {"scenario": "publication after source resolution", "required": true, "status": "verified", "evidence": [".github/workflows/release.yml", "tests/test_workflows.py"]}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user explicitly authorized changes to workflow, tests, governance checks, and documentation in the execution plan."},
+  "rollbackNote": "Revert this Work Item commit and restore the required source_commit input behavior.",
+  "startReceipt": {"path": ".ai/work-items/starts/candidate-source-commit.json", "baseCommit": "6c152535a0193970c7df3cc633f5bc1f5e0bec44", "initialScopeDigest": "77773a3f839ba0af63ab85efe1ba4a1a25650008761be71fe322d782cf9101e4", "contractSkeletonDigest": "4235a724e44689c8f0287be5f36b1af09d1b8eafa7a895d67665bd1f5aca215e"}
+}

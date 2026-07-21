@@ -87,4 +87,4 @@ From a local clone:
 - You are documenting release-specific distribution details for maintainers or integrators.
 ## Next release candidate
 
-The candidate is bound to the latest `origin/main` commit recorded in `release-state.json`. Detached checkout, tag, provider workflow, SBOM, provenance, and digest evidence must all reference that same immutable source before promotion. Missing provider assets remain missing evidence; this release does not change the enterprise-security NO-GO boundary.
+The candidate records a preparation snapshot, but the release workflow resolves `SOURCE_COMMIT` from the freshly fetched default branch at dispatch time. An omitted `source_commit` input uses that resolved commit; a supplied value is only an assertion and must match it exactly. Detached checkout, tag, provider workflow, SBOM, provenance, and digest evidence must all reference that same immutable source before promotion. A stale or mismatched assertion fails closed before checkout or publication. Missing provider assets remain missing evidence; this release does not change the enterprise-security NO-GO boundary.

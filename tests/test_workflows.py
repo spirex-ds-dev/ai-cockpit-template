@@ -77,7 +77,15 @@ def test_release_workflow_is_exact_sha_and_action_dependency_free():
     assert "workflow_dispatch:" in workflow
     assert "source_commit:" in workflow
     assert "  actions: write" in workflow
-    assert '[[ "$SOURCE_COMMIT" == "$DEFAULT_BRANCH_COMMIT" ]]' in workflow
+    assert 'requested_source_commit="$SOURCE_COMMIT"' in workflow
+    assert (
+        "required: false"
+        in workflow.split("      source_commit:", 1)[1].split("        type: string", 1)[0]
+    )
+    assert 'requested_source_commit="$SOURCE_COMMIT"' in workflow
+    assert 'SOURCE_COMMIT="$DEFAULT_BRANCH_COMMIT"' in workflow
+    assert "source_commit must equal the freshly resolved default branch commit" in workflow
+    assert 'echo "SOURCE_COMMIT=$SOURCE_COMMIT"' in workflow
     assert "gh auth setup-git" in workflow
     assert 'git fetch --no-tags --quiet origin "${SOURCE_COMMIT}"' in workflow
     assert (
@@ -112,7 +120,7 @@ def test_release_workflow_is_exact_sha_and_action_dependency_free():
     assert "#provenance.json" in workflow
     assert "git ls-remote --symref origin HEAD" in workflow
     assert "refs/remotes/origin/${RELEASE_DEFAULT_BRANCH}" in workflow
-    assert '[[ "$SOURCE_COMMIT" == "$DEFAULT_BRANCH_COMMIT" ]]' in workflow
+    assert 'requested_source_commit="$SOURCE_COMMIT"' in workflow
     assert "release-source.json" in workflow
     assert "RELEASE_REMOTE" in workflow
     assert "RELEASE_DEFAULT_BRANCH" in workflow
