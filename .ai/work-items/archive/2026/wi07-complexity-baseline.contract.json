@@ -1,0 +1,197 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi07-complexity-baseline",
+  "mode": "code",
+  "title": "Complexity Baseline and Budget",
+  "baseCommit": "892a33f08e4c0e4bfb10513ec6a09b9a6f9e38f4",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "scripts/check_governance_complexity.py",
+    "scripts/ai_baseline_evidence.py",
+    "tests/test_governance_complexity.py",
+    "tests/test_baseline_evidence.py",
+    ".ai/guards/governance_complexity_policy.yaml",
+    ".ai/cockpit/adoption.md",
+    ".ai/cockpit/adoption.ja.md",
+    ".ai/work-items/active/wi07-complexity-baseline.contract.json",
+    ".ai/work-items/active/wi07-complexity-baseline.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "Changing product source or project-specific quality commands",
+    "Activating a new complexity budget without an explicit policy record",
+    "Treating unavailable baseline evidence as an allow decision or as proof of readiness"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-21-bootstrap-adoption-review-remediation.md",
+      "reason": "WI07 establishes Adoption, Active, and Work Item complexity baselines."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository Truth, Evidence Governance, and Work Item terminology."
+    },
+    {
+      "path": "scripts/check_governance_complexity.py",
+      "reason": "Current complexity measurements, deltas, and repayment enforcement."
+    },
+    {
+      "path": "scripts/ai_baseline_evidence.py",
+      "reason": "Existing provenance-bound baseline capture and comparison helpers."
+    },
+    {
+      "path": "tests/test_governance_complexity.py",
+      "reason": "Complexity policy and report behavior tests."
+    },
+    {
+      "path": "tests/test_baseline_evidence.py",
+      "reason": "Baseline provenance and regression tests."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "scope_unclear"
+    ],
+    "reason": "Baseline provenance can be incomplete in an adopter environment; unavailable evidence must remain explicit and non-allowing."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the serial remediation plan and complete Work Item lifecycle."
+  },
+  "preReviewWarnings": [
+    "Baseline identities and unavailable states must remain visible; budget increases require repayment ownership and due dates."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Complexity evidence records distinct Adoption, Active, and Work Item base commits with source identity and an explicit unavailable state when a commit cannot be resolved.",
+    "The complexity report compares current measurements against the selected baseline and classifies historical debt, Work Item-added change, and regression/deterioration without copying template limits as adopter policy.",
+    "A budget increase is accepted only with a repayment record containing metric, previous/current values, owner, due date, and remediation rationale.",
+    "Focused tests cover bound baseline selection, missing/unavailable evidence, historical versus Work Item deltas, regression detection, and repayment enforcement.",
+    "English and Japanese adoption documentation explains baseline provenance, unavailable evidence, and the human review boundary."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The template currently measures repository complexity and compares it to a mutable policy baseline, but an adopter needs provenance-bound Adoption, Active, and Work Item baselines to distinguish inherited history from changes introduced by the current Work Item and from deterioration.",
+    "constraints": [
+      "Use existing standard-library baseline evidence and Git identity helpers; do not infer an unavailable commit.",
+      "Keep historical debt, Work Item delta, and regression/deterioration as separate signals.",
+      "Do not copy template maximums into adopter policy or silently convert unavailable evidence into allow.",
+      "Budget increases must retain owner, due date, previous/current values, and repayment rationale.",
+      "Do not claim complexity evidence is a security, compliance, or production-readiness proof."
+    ],
+    "rationale": "Explicit baseline provenance makes complexity changes reviewable and prevents inherited template debt from being misattributed to the current Work Item."
+  },
+  "rawUserRequest": "先走完当前文档的流程。用户已授权按计划逐工单执行，包含修改代码、测试、文档、PR、合并、ai-close-work-item、分支清理；妄想测试失败继续修改。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:user-authorized-plan-execution", "capturedAt": "2026-07-21", "digest": "sha256:user-authorized-serial-remediation"},
+  "declaredIntent": {"summary": "Establish provenance-bound complexity baselines and separate historical, Work Item, and regression signals.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "three baseline identities bind to explicit commits or report unavailable", "required": true, "status": "verified", "evidence": ["tests/test_baseline_evidence.py", "tests/test_governance_complexity.py"]},
+    {"scenario": "historical debt is distinct from Work Item-added complexity", "required": true, "status": "verified", "evidence": ["tests/test_governance_complexity.py"]},
+    {"scenario": "regression/deterioration and budget increases fail closed without repayment evidence", "required": true, "status": "verified", "evidence": ["tests/test_governance_complexity.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-plan-execution",
+    "reason": "User explicitly authorized governance code, tests, documentation, PR, merge, archive, close, and branch cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi07-complexity-baseline.json",
+    "baseCommit": "892a33f08e4c0e4bfb10513ec6a09b9a6f9e38f4",
+    "initialScopeDigest": "7b49c3a8af523dbe3f029d67cd288dcb7b7220b339b4c633fd4ee1be0594e084",
+    "contractSkeletonDigest": "1d024fabbc3a7cd2cb0f607ee9197b6194af88646a77b4f63d595b13a560bcca"
+  }
+}

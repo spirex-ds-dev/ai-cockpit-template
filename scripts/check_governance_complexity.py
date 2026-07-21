@@ -404,6 +404,46 @@ def repayment_issues(
     return issues
 
 
+def resolve_baseline_commit(root: Path, revision: str) -> dict[str, str]:
+    """Resolve a baseline revision or preserve an explicit unavailable state."""
+    result = subprocess.run(
+        ["git", "rev-parse", revision], cwd=root, capture_output=True, text=True, check=False
+    )  # nosec B603 B607
+    if result.returncode == 0 and result.stdout.strip():
+        return {"status": "resolved", "commit": result.stdout.strip(), "source": revision}
+    return {"status": "unavailable", "reason": f"Cannot resolve baseline revision: {revision}"}
+
+
+def baseline_evidence(root: Path) -> dict[str, dict[str, str]]:
+    """Bind Adoption, Active, and Work Item baseline identities to repository facts."""
+    adoption_revision = os.environ.get("AI_COMPLEXITY_ADOPTION_BASE_COMMIT", "").strip()
+    if adoption_revision:
+        adoption = resolve_baseline_commit(root, adoption_revision)
+    else:
+        adoption = {
+            "status": "unavailable",
+            "reason": "Adoption baseline was not supplied by the adopter.",
+        }
+    active_revision = os.environ.get("AI_COMPLEXITY_ACTIVE_BASE_COMMIT", "origin/main").strip()
+    active = resolve_baseline_commit(root, active_revision)
+    work_item_revision = os.environ.get("AI_COMPLEXITY_WORK_ITEM_BASE_COMMIT", "").strip()
+    if not work_item_revision:
+        contract_path = root / ".ai" / "work-items" / "active"
+        contracts = sorted(contract_path.glob("*.contract.json")) if contract_path.is_dir() else []
+        if len(contracts) == 1:
+            try:
+                contract = json.loads(contracts[0].read_text(encoding="utf-8"))
+                work_item_revision = str(contract.get("baseCommit", "")).strip()
+            except (OSError, json.JSONDecodeError):
+                work_item_revision = ""
+    work_item = (
+        resolve_baseline_commit(root, work_item_revision)
+        if work_item_revision
+        else {"status": "unavailable", "reason": "No active Work Item base commit was supplied."}
+    )
+    return {"adoption": adoption, "active": active, "workItem": work_item}
+
+
 def build_report(root: Path, policy_path: Path) -> tuple[dict[str, Any], list[str]]:
     files = tracked_files(root)
     measured_files = complexity_files(root, files)
@@ -441,6 +481,21 @@ def build_report(root: Path, policy_path: Path) -> tuple[dict[str, Any], list[st
                 metric: limits[metric] - policy_baseline[metric]
                 for metric in limits
                 if metric in policy_baseline and limits[metric] > policy_baseline[metric]
+            },
+        },
+        "baselineEvidence": baseline_evidence(root),
+        "classification": {
+            "historicalDebt": {
+                "status": "unavailable",
+                "reason": "Historical metric snapshot is not available.",
+            },
+            "workItemDelta": {
+                "status": "unavailable",
+                "reason": "Work Item-start metric snapshot is not available.",
+            },
+            "deterioration": {
+                "status": "unavailable",
+                "reason": "A comparable prior metric snapshot is not available.",
             },
         },
         "issues": issues,

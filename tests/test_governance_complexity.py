@@ -36,6 +36,23 @@ def test_complexity_report_records_increment(monkeypatch):
     assert report["complexityDelta"]["pythonLines"] > 0
 
 
+def test_report_records_three_provenance_bound_baselines(monkeypatch):
+    monkeypatch.setenv("AI_COMPLEXITY_ACTIVE_BASE_COMMIT", "HEAD")
+    monkeypatch.setenv("AI_COMPLEXITY_WORK_ITEM_BASE_COMMIT", "HEAD")
+    monkeypatch.delenv("AI_COMPLEXITY_ADOPTION_BASE_COMMIT", raising=False)
+
+    report, issues = check_governance_complexity.build_report(
+        check_governance_complexity.ROOT,
+        check_governance_complexity.ROOT / ".ai" / "guards" / "governance_complexity_policy.yaml",
+    )
+
+    assert issues == []
+    assert report["baselineEvidence"]["adoption"]["status"] == "unavailable"
+    assert report["baselineEvidence"]["active"]["status"] == "resolved"
+    assert report["baselineEvidence"]["workItem"]["status"] == "resolved"
+    assert report["classification"]["historicalDebt"]["status"] == "unavailable"
+
+
 def policy(path: Path, **limits: int) -> None:
     values = {
         "trackedFiles": 100,
