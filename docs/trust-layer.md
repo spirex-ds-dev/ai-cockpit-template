@@ -35,6 +35,8 @@ When `rawUserRequest` is present, the Contract must also include portable `rawRe
 
 The Intent Guard also handles a small, explicit evidence boundary for underspecified requests. Generic improvement phrases, including the supported Chinese examples `随便改改` and `大概改一下`, produce a `Partial` signal when the Contract intent does not declare a concrete `target`, `expectedOutcome`, and `successEvidence`. The signal lists the missing categories so the request can be narrowed and re-run. Existing keyword ambiguity detection remains in force; this check does not claim broad semantic or multilingual classification.
 
+Success Criteria are Work Item-owned when an active Contract has a sibling `.ai/work-items/active/<task>.success.json`. Preflight validates and consumes that declaration first, so concurrent Work Items can isolate their criteria. The legacy `.ai/project/success_criteria.json` remains an explicit compatibility fallback for historic or unassigned Work Items. Archiving moves the task-owned declaration with the Contract and Summary, preserving lifecycle evidence without making the global file the only source.
+
 ## Human decisions and recovery
 
 A decision request should state the blocked condition, evidence, risk, available options, recommendation, and the condition for resuming. The human decision is a workflow record, not proof that the underlying check passed. After recovery, run Preflight and the project checks again, then archive the resulting Summary.

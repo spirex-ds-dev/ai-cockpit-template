@@ -4,6 +4,13 @@ from argparse import Namespace
 import ai_archive_work_item
 
 
+def test_archive_moves_task_owned_success_criteria_sibling(tmp_path):
+    contract = tmp_path / ".ai" / "work-items" / "active" / "task.contract.json"
+    assert ai_archive_work_item.owned_success_criteria_path(contract) == contract.with_name(
+        "task.success.json"
+    )
+
+
 def test_next_archive_sequence_prefers_existing_index(tmp_path, monkeypatch):
     archive = tmp_path / "archive"
     archive.mkdir()

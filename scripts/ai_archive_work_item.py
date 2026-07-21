@@ -32,6 +32,11 @@ ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 ARCHIVE_BASE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
 
 
+def owned_success_criteria_path(contract_path: Path) -> Path:
+    """Return the task-owned Success Criteria sibling for an active Contract."""
+    return contract_path.with_name(contract_path.name.replace(".contract.json", ".success.json"))
+
+
 def _archive_index_path() -> Path:
     return ARCHIVE_BASE_DIR / "index.json"
 
@@ -339,8 +344,10 @@ def main() -> int:
     mode = contract.get("mode")
     summary_path = ACTIVE_DIR / f"{file_basename}.summary.json"
     review_path = ACTIVE_DIR / f"{file_basename}.review.json"
+    success_path = owned_success_criteria_path(contract_path)
     has_summary = summary_path.exists()
     has_review = review_path.exists()
+    has_success = success_path.exists()
 
     if mode == "code" and not has_summary:
         print(
@@ -381,6 +388,8 @@ def main() -> int:
         files_to_move.append((summary_path, target_dir / summary_path.name))
     if has_review:
         files_to_move.append((review_path, target_dir / review_path.name))
+    if has_success:
+        files_to_move.append((success_path, target_dir / success_path.name))
     summary_tmp = target_dir / f"{summary_path.name}.tmp" if has_summary else None
 
     for _, target in files_to_move:
@@ -418,6 +427,10 @@ def main() -> int:
             if has_review:
                 replacements[review_path.relative_to(PROJECT_ROOT).as_posix()] = (
                     (target_dir / review_path.name).relative_to(PROJECT_ROOT).as_posix()
+                )
+            if has_success:
+                replacements[success_path.relative_to(PROJECT_ROOT).as_posix()] = (
+                    (target_dir / success_path.name).relative_to(PROJECT_ROOT).as_posix()
                 )
             summary = redact_machine_paths_in_data(load_json(target_dir / summary_path.name))
             summary["contractPath"] = archived_contract

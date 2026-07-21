@@ -1,0 +1,412 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "work-item-owned-success-criteria",
+  "contractPath": ".ai/work-items/archive/2026/work-item-owned-success-criteria.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/work-item-owned-success-criteria.contract.json",
+      "reason": "Defined task-owned Success Criteria and compatibility boundaries."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/work-item-owned-success-criteria.summary.json",
+      "reason": "Recorded implementation and verification evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/work-item-owned-success-criteria.success.json",
+      "reason": "Added Work Item-owned Success Criteria declaration."
+    },
+    {
+      "path": "scripts/ai_trust_guards.py",
+      "reason": "Prefer task-owned criteria with legacy fallback."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Archive task-owned criteria with Contract and Summary."
+    },
+    {
+      "path": ".ai/guards/governance_complexity_policy.yaml",
+      "reason": "Calibrated the Python line ceiling for the cumulative governed change."
+    },
+    {
+      "path": "tests/test_trust_guards.py",
+      "reason": "Test task-owned preference and legacy fallback."
+    },
+    {
+      "path": "tests/test_ai_archive_work_item.py",
+      "reason": "Test task-owned archive sibling resolution."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Test task-owned criteria are moved during code Work Item archival."
+    },
+    {
+      "path": "docs/trust-layer.md",
+      "reason": "Document ownership, fallback, and archive behavior."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+    "scripts/ai_trust_guards.py",
+    "scripts/ai_archive_work_item.py",
+    "tests/test_trust_guards.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_start_and_archive.py",
+    "docs/trust-layer.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:10:41.115503+00:00",
+      "exitCode": 0,
+      "durationMs": 35,
+      "outputDigest": "963925d189b3e06c21598fae4b7d2b943d7af2349dd3ffccb61ad8f427a2de57",
+      "commandHash": "8bdcae613230ff1ab6eb5176e122c4af5e461ccecd4094a8ce4da609d6c471a2",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "221c31bd326694bc1924d338ee8fbea7fbe80abd852726378413a295fb311a9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/work-item-owned-success-criteria.contract.json work item contract check passed: .ai/work-items/active/work-item-owned-success-criteria.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:10:41.228041+00:00",
+      "exitCode": 0,
+      "durationMs": 79,
+      "outputDigest": "f1b2d246285407637b42b8610a0aafb48f725f148f6b105d349ef3b90f172ce6",
+      "commandHash": "a34ad456e101cf78329e77e41edd439eee88e051989faabb8e8531a038017678",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "221c31bd326694bc1924d338ee8fbea7fbe80abd852726378413a295fb311a9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/work-item-owned-success-criteria.contract.json scope guard passed: 9 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:10:41.368465+00:00",
+      "exitCode": 0,
+      "durationMs": 91,
+      "outputDigest": "965699a9147b11f9aa035288236118d45203df56545cddeb97cb9c18b410d069",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "221c31bd326694bc1924d338ee8fbea7fbe80abd852726378413a295fb311a9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/work-item-owned-success-criteria.contract.json [warning] restricted_write: .ai/guards/governance_complexity_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. guard check completed: 1 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/work-item-owned-success-criteria.contract.json SUMMARY=.ai/work-items/active/work-item-owned-success-criteria.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:10:41.585810+00:00",
+      "exitCode": 0,
+      "durationMs": 176,
+      "outputDigest": "ff7ee9062af7fbfc1cc30ec20759fe0b7c5e3fcd3a3c081faf4d3f6972dab8b2",
+      "commandHash": "7cdd6bb973eb724831416daed6a2550276715aeeaa95a1a79e0ef0eaddaaecb0",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "221c31bd326694bc1924d338ee8fbea7fbe80abd852726378413a295fb311a9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/work-item-owned-success-criteria.contract.json --summary .ai/work-items/active/work-item-owned-success-criteria.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `work-item-owned-success-criteria` - Contract Hash: `75c8fd9d0fa07318` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:10:41.710517+00:00",
+      "exitCode": 0,
+      "durationMs": 80,
+      "outputDigest": "f98291326a582a32dea009c32a2d6ec4c6f459ce3907f533d8f90a4680517209",
+      "commandHash": "82e834a0982759fcb7fcf76aa62e2d0ac28e0eec8e27312428fa67820e1b7418",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "221c31bd326694bc1924d338ee8fbea7fbe80abd852726378413a295fb311a9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/work-item-owned-success-criteria.summary.json review policy matched 5 path(s) [review] .ai/work-items/starts/work-item-owned-success-criteria.json [review] .ai/cockpit/current_status.md [review] .ai/guards/governance_complexity_policy.yaml [review] scripts/ai_archive_work_item.py [review] scripts/ai_trust_guards.py review focus recorded: 2 item(s) report: target/ai_review_policy_report.js"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:10:41.819806+00:00",
+      "exitCode": 0,
+      "durationMs": 73,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "221c31bd326694bc1924d338ee8fbea7fbe80abd852726378413a295fb311a9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:10:41.929939+00:00",
+      "exitCode": 0,
+      "durationMs": 72,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "221c31bd326694bc1924d338ee8fbea7fbe80abd852726378413a295fb311a9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/work-item-owned-success-criteria.contract.json SUMMARY=.ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:10:42.023983+00:00",
+      "exitCode": 0,
+      "durationMs": 39,
+      "outputDigest": "cfe1ac18b989a6d13f5685bc71c406652634af4a853f0623e91220e23846e1e4",
+      "commandHash": "b057cab0e6fef75d99c1b3b93109a93684e94747d1ce9cf396f4345c82b741a8",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "221c31bd326694bc1924d338ee8fbea7fbe80abd852726378413a295fb311a9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/work-item-owned-success-criteria.contract.json --summary .ai/work-items/active/work-item-owned-success-criteria.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/work-item-owned-success-criteria.contract.json SUMMARY=.ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:10:42.107946+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "d1b07b19163ef42514edbde6aa85f309ebdad60654ec60bd5a0eb7cf23161f70",
+      "commandHash": "58c5529c64d7fa21bae4e12bf44b2d6f9fd2bcc0206b98d79148004f226e5073",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "221c31bd326694bc1924d338ee8fbea7fbe80abd852726378413a295fb311a9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/work-item-owned-success-criteria.contract.json --summary .ai/work-items/active/work-item-owned-success-criteria.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:10:42.307980+00:00",
+      "exitCode": 0,
+      "durationMs": 162,
+      "outputDigest": "6fbc0026c664f1c546ba5ae90a7d0f10cb04f5d58e4090aaa98e80e4a035d583",
+      "commandHash": "d2e5b8b302d52bc57696ad41d356f0acc6bb818025e34b91e9b09da880602b34",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "221c31bd326694bc1924d338ee8fbea7fbe80abd852726378413a295fb311a9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/work-item-owned-success-criteria.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/governance_complexity_policy.yaml` — covered by Contract scope - [active_owned] `.ai/work-items/"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:12:31.798128+00:00",
+      "exitCode": 0,
+      "durationMs": 109448,
+      "outputDigest": "aeb6a1d20f7ca1f85fa1fca84ec53e7a229d2dc4ac1019a44243a547ea2b160f",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "221c31bd326694bc1924d338ee8fbea7fbe80abd852726378413a295fb311a9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 109 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 10%] ........................................................................ [ 21%] ............................................................"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/work-item-owned-success-criteria.contract.json SUMMARY=.ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:12:33.068488+00:00",
+      "exitCode": 0,
+      "durationMs": 194,
+      "outputDigest": "488016cfe6cbfedcca7527cd7c5e7497df9bdc6299d84f91c906d31eeb58187e",
+      "commandHash": "a0d0ae5a5f164bfd2d14377e405e8d679abecc46ad24a688d5895791dfdde1e4",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "3bb64a41d040d4907b65766a5df910795db1d5993de080b9db32b4811392c714",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/work-item-owned-success-criteria.contract.json --summary .ai/work-items/active/work-item-owned-success-criteria.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/work-item-owned-success-criteria.contract.json SUMMARY=.ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:12:33.286181+00:00",
+      "exitCode": 0,
+      "durationMs": 180,
+      "outputDigest": "1bd25c620649121b2b913253bb0e5aef320b54438183e3ddd494ebffeaacfb01",
+      "commandHash": "0f17c20041b0de48aea3f99cff06086a91d16eae6ad16f234f7f9f8b348b8ff4",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "3bb64a41d040d4907b65766a5df910795db1d5993de080b9db32b4811392c714",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/work-item-owned-success-criteria.contract.json --summary .ai/work-items/active/work-item-owned-success-criteria.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:12:33.361583+00:00",
+      "exitCode": 0,
+      "durationMs": 37,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "3bb64a41d040d4907b65766a5df910795db1d5993de080b9db32b4811392c714",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/work-item-owned-success-criteria.contract.json SUMMARY=.ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:12:33.454040+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "b1565b794399d6ccdedc816061d8563386c8bd071f54f3e439590ce95449d1a3",
+      "commandHash": "55c3ac318c04a32def858b0d9d07b58c4b29f50938541ed00bbab39ee39e6ec6",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "3bb64a41d040d4907b65766a5df910795db1d5993de080b9db32b4811392c714",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/work-item-owned-success-criteria.contract.json --summary .ai/work-items/active/work-item-owned-success-criteria.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/work-item-owned-success-criteria.summary.json CONTRACT=.ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T01:12:34.105809+00:00",
+      "exitCode": 0,
+      "durationMs": 81,
+      "outputDigest": "b556877173c055689e8d83868d321a86072afaa2f44ffa2dc77c142408fe0cfd",
+      "commandHash": "77e92ae6e368e87ef390f1b92bf23be19c0bf7a51f1d2eb2c7e1b7c087b65ec8",
+      "contractHash": "75c8fd9d0fa0731861c6646ae814bdae433f24573b7e3e52d174a056d1239346",
+      "commitSha": "22bfe0c19bc6938da6a560823ebb4bbf4bc6db39",
+      "executionContractPath": ".ai/work-items/active/work-item-owned-success-criteria.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/work-item-owned-success-criteria.summary.json",
+      "worktreeDigest": "b8a4fed5505a6ad5985f3304bf2b192620921776e379d37f171722532c5ee7f3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/work-item-owned-success-criteria.summary.json --contract .ai/work-items/active/work-item-owned-success-criteria.contract.json ai summary check passed: .ai/work-items/active/work-item-owned-success-criteria.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "Task-owned criteria resolution is documented in docs/trust-layer.md and covered by focused tests."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The change reuses the existing Trust Layer and archive modules without adding cross-feature internal imports."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "The global declaration remains for compatibility and must not be treated as the active task's only source when a sibling exists."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "compatibility",
+      "detail": "Historic Work Items continue using the global fallback until they receive task-owned criteria.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Verify task-owned criteria take precedence over the global declaration.",
+      "Verify archive lifecycle preserves the task-owned success file."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "75c8fd9d0fa07318",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "evidence": "Preflight was ready and the ownership, fallback, and archive scenarios were recorded before implementation."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "75c8fd9d0fa07318",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3,
+      "evidence": "Pre-finish checkpoint recorded before final governed verification."
+    }
+  ],
+  "knownGaps": [
+    "The legacy global declaration remains a compatibility fallback by design."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 357
+}

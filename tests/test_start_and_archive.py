@@ -487,9 +487,26 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     contract = active / "task.contract.json"
     summary = active / "task.summary.json"
     review = active / "task.review.json"
+    success = active / "task.success.json"
     contract.write_text(json.dumps(archive_contract("code")), encoding="utf-8")
     summary.write_text(json.dumps(archive_summary()), encoding="utf-8")
     review.write_text(json.dumps({"workItemId": "task", "result": "ok"}), encoding="utf-8")
+    success.write_text(
+        json.dumps(
+            {
+                "schemaVersion": 1,
+                "workItemId": "task",
+                "criteria": [
+                    {
+                        "id": "SC-TASK",
+                        "statement": "Archived with the Work Item.",
+                        "evidenceHints": ["tests/test_start_and_archive.py"],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
     monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_archive_work_item, "ARCHIVE_BASE_DIR", archive)
     monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
@@ -508,6 +525,7 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
 
     assert ai_archive_work_item.main() == 0
     archived_summary = next(archive.glob("*/task.summary.json"))
+    assert next(archive.glob("*/task.success.json")).exists()
     data = json.loads(archived_summary.read_text(encoding="utf-8"))
     assert data["archiveSequence"] == 1
     assert "/active/" not in data["contractPath"]

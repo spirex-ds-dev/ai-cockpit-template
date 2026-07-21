@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "workItemId": "work-item-owned-success-criteria",
+  "criteria": [
+    {
+      "id": "SC-005-01",
+      "statement": "Preflight resolves a valid Work Item-owned Success Criteria declaration before the legacy global fallback.",
+      "evidenceHints": [
+        "tests/test_trust_guards.py::test_task_owned_success_criteria_is_preferred"
+      ]
+    },
+    {
+      "id": "SC-005-02",
+      "statement": "Historic Work Items without a task-owned declaration continue to resolve the compatible global declaration.",
+      "evidenceHints": [
+        "tests/test_trust_guards.py::test_legacy_success_criteria_fallback_is_preserved"
+      ]
+    },
+    {
+      "id": "SC-005-03",
+      "statement": "Archiving a Work Item archives its task-owned Success Criteria sibling with the Contract and Summary.",
+      "evidenceHints": [
+        "tests/test_start_and_archive.py::test_archive_code_item_rewrites_summary_paths"
+      ]
+    }
+  ]
+}
