@@ -213,12 +213,32 @@ def test_code_work_item_allows_registered_raw_request_exemption():
             "contractVersion": 2,
             "mode": "code",
             "scope": [".ai/work-items/active/task.contract.json"],
-            "rawRequestExemption": "dependency_upgrade",
+            "rawRequestExemption": {
+                "exemption": "dependency_upgrade",
+                "policyRef": "raw-request-exemptions.v1",
+                "triggerRef": "scheduled-maintenance",
+                "applicability": ["repository"],
+                "approvedBy": "user",
+            },
         }
     )
     result = ai_trust_guards.raw_request_signal(value)
     assert result["value"] == "Not Applicable"
     assert "dependency_upgrade" in " ".join(result["evidence"])
+
+
+def test_free_text_raw_request_exemption_fails_closed():
+    value = contract()
+    value.update(
+        {
+            "contractVersion": 2,
+            "mode": "code",
+            "scope": [".ai/work-items/active/task.contract.json"],
+            "rawRequestExemption": "dependency_upgrade",
+        }
+    )
+    result = ai_trust_guards.raw_request_signal(value)
+    assert result["value"] == "Inconsistent"
 
 
 def test_intent_capability_uses_requested_operation_mapping():

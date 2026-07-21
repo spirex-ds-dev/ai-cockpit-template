@@ -36,7 +36,13 @@ def prepare_work_item(root: Path, task: str, changed: list[str], *, extra_checks
                 *changed,
             ],
             "outOfScope": [],
-            "rawRequestExemption": "internal_governance",
+            "rawRequestExemption": {
+                "exemption": "internal_governance",
+                "policyRef": "raw-request-exemptions.v1",
+                "triggerRef": "adoption-configuration",
+                "applicability": ["repository"],
+                "approvedBy": "test-user",
+            },
             "requestedOperation": {
                 "target": "repository_governance",
                 "action": "modify",

@@ -1,0 +1,162 @@
+{
+  "contractVersion": 2,
+  "workItemId": "raw-request-exemption",
+  "mode": "code",
+  "title": "Structure raw request exemption controls",
+  "baseCommit": "447d912deef7b35adf1523c6bfe180e0be51253b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/raw-request-exemption.contract.json",
+    ".ai/work-items/active/raw-request-exemption.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/policies/raw-request-exemptions.yaml",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_trust_guards.py",
+    "tests/test_trust_guards.py",
+    "tests/test_project_governance_journey.py",
+    "docs/trust-layer.md"
+  ],
+  "outOfScope": ["Changing unrelated Contract fields", "Adding provider-specific exemptions", "Changing publication or tag behavior"],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-21-review-remediation.md",
+      "reason": "Defines the P0 structured exemption requirement."
+    },
+    {"path": "scripts/ai_check_work_item.py", "reason": "Current raw request exemption validation accepts a free-form scalar."},
+    {"path": "scripts/ai_trust_guards.py", "reason": "Current trust guard authorizes registered exemption strings."},
+    {"path": "tests/test_trust_guards.py", "reason": "Existing exemption behavior and fail-closed regression coverage."},
+    {"path": "docs/trust-layer.md", "reason": "Documents the current exemption boundary."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["governance_bypass", "fail_closed"],
+    "reason": "Tightens a governance authorization boundary while preserving supported maintenance exemptions."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The exemption schema and fail-closed rules are deterministic and bounded."
+  },
+  "preReviewWarnings": ["Verify unknown, unsupported, high-risk, and missing-source exemptions fail closed."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "rawRequestExemption is a structured enum/policy/trigger record, not free text.",
+    "Exemption applicability and approval evidence are validated; high-risk work cannot be exempted.",
+    "Unknown, unsupported, missing-source, and malformed exemptions fail closed.",
+    "Tests and English documentation cover supported and rejected exemption scenarios."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "rawUserRequest": "执行评审整改计划工单 4：将 rawRequestExemption 改为结构化、可审计且 fail-closed 的授权记录，继续循环执行直到全部工单完成。",
+  "rawRequestSource": {"type": "human", "reference": "user-message:2026-07-21-continue-remediation", "capturedAt": "2026-07-21", "digest": "sha256:user-authorized-serial-remediation"},
+  "declaredIntent": {"summary": "Prevent free-text raw request exemption bypasses with bounded policy and trigger evidence.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "intent": {
+    "problem": "rawRequestExemption currently accepts a scalar string, leaving a free-text bypass path around raw request evidence.",
+    "constraints": ["Preserve the four already registered maintenance categories only when structured evidence is complete.", "Do not weaken fail-closed behavior or add high-risk exemptions.", "Keep policy portable and free of personal paths or secrets."],
+    "rationale": "Make exemption authority explicit, reviewable, and bounded by policy and trigger evidence."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Supported structured exemption", "required": true, "status": "verified", "evidence": ["tests/test_trust_guards.py"]},
+    {"scenario": "Unknown or free-text exemption", "required": true, "status": "verified", "evidence": ["tests/test_trust_guards.py"]},
+    {"scenario": "High-risk exemption", "required": true, "status": "verified", "evidence": ["tests/test_trust_guards.py"]},
+    {"scenario": "Missing policy or trigger evidence", "required": true, "status": "verified", "evidence": ["tests/test_trust_guards.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user explicitly authorized the complete serial remediation plan, including governance policy, guards, tests, and documentation changes."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/raw-request-exemption.json",
+    "baseCommit": "447d912deef7b35adf1523c6bfe180e0be51253b",
+    "initialScopeDigest": "b03f940637059751e3846fa5a132d519cb3a83bf2ecec394bdb45c36968a456f",
+    "contractSkeletonDigest": "313176649ac2abbb2e57af1d6d8cd850724095a4d82383030e9dafa7abb7be5b"
+  }
+}
