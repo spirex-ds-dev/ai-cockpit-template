@@ -189,6 +189,39 @@ def archive_metrics(root: Path) -> tuple[dict[str, int], list[str]]:
                     issues.append(f"archive index workItemId mismatch for {index_contract_path}")
                 if not legacy_entry and summary.get("workItemId") != work_item_id:
                     issues.append(f"archive Summary workItemId mismatch for {index_summary_path}")
+                manifest_path = entry.get("manifestPath")
+                manifest_digest = entry.get("manifestSha256")
+                if manifest_path is not None or manifest_digest is not None:
+                    manifest_file = root / str(manifest_path)
+                    if not isinstance(manifest_path, str) or not manifest_file.is_file():
+                        issues.append(f"archive manifest is missing for {index_contract_path}")
+                    elif hashlib.sha256(manifest_file.read_bytes()).hexdigest() != manifest_digest:
+                        issues.append(f"archive manifestSha256 mismatch for {index_contract_path}")
+                    else:
+                        manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+                        if (
+                            not isinstance(manifest, dict)
+                            or manifest.get("format") != "ai-cockpit-archive-manifest"
+                        ):
+                            issues.append(
+                                f"archive manifest has invalid format for {index_contract_path}"
+                            )
+                        if (
+                            not isinstance(manifest, dict)
+                            or manifest.get("contractSha256")
+                            != hashlib.sha256(contract_file.read_bytes()).hexdigest()
+                        ):
+                            issues.append(
+                                f"archive manifest Contract digest mismatch for {index_contract_path}"
+                            )
+                        if (
+                            not isinstance(manifest, dict)
+                            or manifest.get("summarySha256")
+                            != hashlib.sha256(summary_file.read_bytes()).hexdigest()
+                        ):
+                            issues.append(
+                                f"archive manifest Summary digest mismatch for {index_summary_path}"
+                            )
             except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
                 issues.append(f"archive pair cannot be loaded for index validation: {exc}")
 

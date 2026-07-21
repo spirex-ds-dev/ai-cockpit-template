@@ -164,7 +164,30 @@ def _archive_entry(
         summary_target = target_dir / summary_path.name
         entry["summaryPath"] = summary_target.relative_to(PROJECT_ROOT).as_posix()
         entry["summarySha256"] = hashlib.sha256(summary_target.read_bytes()).hexdigest()
+    manifest_target = target_dir / contract_path.name.replace(
+        ".contract.json", ".archive-manifest.json"
+    )
+    if manifest_target.is_file():
+        entry["manifestPath"] = manifest_target.relative_to(PROJECT_ROOT).as_posix()
+        entry["manifestSha256"] = hashlib.sha256(manifest_target.read_bytes()).hexdigest()
     return entry
+
+
+def _archive_manifest(
+    *, contract_target: Path, summary_target: Path, archive_sequence: int
+) -> dict[str, object]:
+    """Build the immutable root after Contract and Summary are frozen."""
+    return {
+        "format": "ai-cockpit-archive-manifest",
+        "manifestVersion": 1,
+        "workItemId": load_json(contract_target).get("workItemId"),
+        "archiveSequence": archive_sequence,
+        "contractPath": contract_target.relative_to(PROJECT_ROOT).as_posix(),
+        "summaryPath": summary_target.relative_to(PROJECT_ROOT).as_posix(),
+        "contractSha256": hashlib.sha256(contract_target.read_bytes()).hexdigest(),
+        "summarySha256": hashlib.sha256(summary_target.read_bytes()).hexdigest(),
+        "generatedStatusExcluded": True,
+    }
 
 
 def _archive_sequence_key(item: object) -> int:
@@ -391,6 +414,9 @@ def main() -> int:
     if has_success:
         files_to_move.append((success_path, target_dir / success_path.name))
     summary_tmp = target_dir / f"{summary_path.name}.tmp" if has_summary else None
+    manifest_target = target_dir / contract_path.name.replace(
+        ".contract.json", ".archive-manifest.json"
+    )
 
     for _, target in files_to_move:
         if target.exists():
@@ -398,6 +424,12 @@ def main() -> int:
                 f"ERROR: Target already exists: {target.relative_to(PROJECT_ROOT)}", file=sys.stderr
             )
             return 1
+    if manifest_target.exists():
+        print(
+            f"ERROR: Target already exists: {manifest_target.relative_to(PROJECT_ROOT)}",
+            file=sys.stderr,
+        )
+        return 1
 
     if args.dry_run:
         print("Dry run: files that would be archived:")
@@ -464,10 +496,24 @@ def main() -> int:
                             "reason": "Generated archive discovery index.",
                         }
                     )
+                manifest_rel = manifest_target.relative_to(PROJECT_ROOT).as_posix()
+                if manifest_rel not in existing:
+                    changed.append(
+                        {"path": manifest_rel, "reason": "Immutable archive evidence root."}
+                    )
             summary_target = target_dir / summary_path.name
             assert summary_tmp is not None
             save_json(summary_tmp, summary)
             summary_tmp.replace(summary_target)
+
+            save_json(
+                manifest_target,
+                _archive_manifest(
+                    contract_target=target_dir / contract_path.name,
+                    summary_target=summary_target,
+                    archive_sequence=archive_sequence,
+                ),
+            )
 
         index = _load_archive_index()
         entries = index.get("entries")
@@ -494,6 +540,7 @@ def main() -> int:
     except Exception as exc:
         if summary_tmp and summary_tmp.exists():
             summary_tmp.unlink()
+        manifest_target.unlink(missing_ok=True)
         if index_backup is None:
             index_path.unlink(missing_ok=True)
         else:
