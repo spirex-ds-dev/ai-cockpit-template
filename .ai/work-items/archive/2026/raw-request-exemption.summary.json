@@ -1,0 +1,398 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "raw-request-exemption",
+  "contractPath": ".ai/work-items/archive/2026/raw-request-exemption.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/raw-request-exemption.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/raw-request-exemption.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": ".ai/policies/raw-request-exemptions.yaml",
+      "reason": "Defines the canonical structured exemption policy."
+    },
+    {
+      "path": "docs/trust-layer.md",
+      "reason": "Documents structured exemption and fail-closed rules."
+    },
+    {
+      "path": "scripts/ai_check_work_item.py",
+      "reason": "Validates structured exemptions and rejects free text."
+    },
+    {
+      "path": "scripts/ai_trust_guards.py",
+      "reason": "Trust guard consumes structured exemption evidence."
+    },
+    {
+      "path": "tests/test_trust_guards.py",
+      "reason": "Covers structured and free-text exemption behavior."
+    },
+    {
+      "path": "tests/test_project_governance_journey.py",
+      "reason": "Updates adoption journey fixture to structured exemption evidence."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/raw-request-exemption.contract.json"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/raw-request-exemption.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:09:05.950039+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "b572329843208c1d564f89e7931da96cccb843c9afa897c0f9d9c2b7b1849c08",
+      "commandHash": "bf1bebdd6235c96cafa9902b0c1bcf1062f664fbd0f5c7c5066defb5a45a3cf5",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "033ac4ab9ded8b1771dc2e2ad60b8f3b54ccbbb98bf64e56a0572c247387fd56",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/raw-request-exemption.contract.json work item contract check passed: .ai/work-items/active/raw-request-exemption.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/raw-request-exemption.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:09:06.081055+00:00",
+      "exitCode": 0,
+      "durationMs": 87,
+      "outputDigest": "08a4ac90137a5ac5a15611ce12b8bf623d576c192d16cf1ffb19270eaef7a18d",
+      "commandHash": "b842ce0616d05c8a20c0825bfda36717622ce5ac409fd5d01802ada87fb71d02",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "033ac4ab9ded8b1771dc2e2ad60b8f3b54ccbbb98bf64e56a0572c247387fd56",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/raw-request-exemption.contract.json scope guard passed: 8 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:09:06.294241+00:00",
+      "exitCode": 0,
+      "durationMs": 161,
+      "outputDigest": "43ed94cf398aac3fadbd1368691ab724b2403ea560080286cfad6d93a9a7f2f9",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "033ac4ab9ded8b1771dc2e2ad60b8f3b54ccbbb98bf64e56a0572c247387fd56",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/raw-request-exemption.contract.json [warning] restricted_write: .ai/policies/raw-request-exemptions.yaml (.ai/**) - AI governance configuration. guard check completed: 1 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/raw-request-exemption.contract.json SUMMARY=.ai/work-items/active/raw-request-exemption.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:09:06.522685+00:00",
+      "exitCode": 0,
+      "durationMs": 181,
+      "outputDigest": "e7535eeab902051139c284a395f2f00b8f79115a30ea62912d70f28d8d28e812",
+      "commandHash": "abcd5d8f64b0dd8c5753556bdc067c6d928d0c00c736379814a2e42c14259de1",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "033ac4ab9ded8b1771dc2e2ad60b8f3b54ccbbb98bf64e56a0572c247387fd56",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/raw-request-exemption.contract.json --summary .ai/work-items/active/raw-request-exemption.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `raw-request-exemption` - Contract Hash: `8813400669cf7c21` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Required Checks: `16` - Require"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/raw-request-exemption.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:09:06.661789+00:00",
+      "exitCode": 0,
+      "durationMs": 94,
+      "outputDigest": "24e5180b76ca5fa74294c8b5dc3e41f072f17f651dbbfdb98cb534c4e255ce47",
+      "commandHash": "cfb2c13992343d46f845fb28d4b87b80aacd4d8dc2ceb4370f1b3aafa2408391",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "033ac4ab9ded8b1771dc2e2ad60b8f3b54ccbbb98bf64e56a0572c247387fd56",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/raw-request-exemption.summary.json review policy matched 5 path(s) [review] .ai/policies/raw-request-exemptions.yaml [review] .ai/work-items/starts/raw-request-exemption.json [review] .ai/cockpit/current_status.md [review] scripts/ai_check_work_item.py [review] scripts/ai_trust_guards.py review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:09:06.833778+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "033ac4ab9ded8b1771dc2e2ad60b8f3b54ccbbb98bf64e56a0572c247387fd56",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:09:06.979458+00:00",
+      "exitCode": 0,
+      "durationMs": 94,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "033ac4ab9ded8b1771dc2e2ad60b8f3b54ccbbb98bf64e56a0572c247387fd56",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/raw-request-exemption.contract.json SUMMARY=.ai/work-items/active/raw-request-exemption.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:09:07.081017+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "4eeee1eb1f63ad2ef2a4e05532acd416f36274f3b6b59fd5410dc0598e2b2515",
+      "commandHash": "a8cebb7cc8289b20b8a74c39095572ee2a9b53140f72be149c8afd069a99ce90",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "033ac4ab9ded8b1771dc2e2ad60b8f3b54ccbbb98bf64e56a0572c247387fd56",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/raw-request-exemption.contract.json --summary .ai/work-items/active/raw-request-exemption.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/raw-request-exemption.contract.json SUMMARY=.ai/work-items/active/raw-request-exemption.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:09:07.168246+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "5b2c73b66997bbdf9ce8e19ba84b4df45bfd34e6e6aa6a93070899ab9af7469d",
+      "commandHash": "932e415996c2b3915bafadaf1bc0c687fb736ade262ec1bf8243b0b97bef70f8",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "033ac4ab9ded8b1771dc2e2ad60b8f3b54ccbbb98bf64e56a0572c247387fd56",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/raw-request-exemption.contract.json --summary .ai/work-items/active/raw-request-exemption.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/raw-request-exemption.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:09:07.395851+00:00",
+      "exitCode": 0,
+      "durationMs": 183,
+      "outputDigest": "6fff954dc130f235c9bd153352421d15aad47c816ebf055b3701ce513ea796b5",
+      "commandHash": "b297a4e0138cf35d9caf4a31a9ff00acd70e6b01fb7f345f48c2f599f3294434",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "033ac4ab9ded8b1771dc2e2ad60b8f3b54ccbbb98bf64e56a0572c247387fd56",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/raw-request-exemption.contract.json ## Diff Ownership Preview - active_owned: `8`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/policies/raw-request-exemptions.yaml` — covered by Contract scope - [active_owned] `.ai/work-items/starts/raw-requ"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:11:19.809918+00:00",
+      "exitCode": 0,
+      "durationMs": 132364,
+      "outputDigest": "226fb4862099eb50dc60131f7386096660dc992bd6eacd908d4808d445da3aca",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "033ac4ab9ded8b1771dc2e2ad60b8f3b54ccbbb98bf64e56a0572c247387fd56",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 114 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 10%] ........................................................................ [ 20%] ............................................................"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/raw-request-exemption.contract.json SUMMARY=.ai/work-items/active/raw-request-exemption.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:11:21.138675+00:00",
+      "exitCode": 0,
+      "durationMs": 220,
+      "outputDigest": "3a87f4b50066198e016e59757644dad37ff7bb1deb15f3f79938eb29f13080d9",
+      "commandHash": "5b5964e524ca1965e3174eab2a6f4e99fa07c9b04bdd00c66df1ab3c83b09c01",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "35ee7a2edaff2accc4eb9a586c71ee44f7641f24d47bfcab32630eb282bb4695",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/raw-request-exemption.contract.json --summary .ai/work-items/active/raw-request-exemption.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/raw-request-exemption.contract.json SUMMARY=.ai/work-items/active/raw-request-exemption.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:11:21.411100+00:00",
+      "exitCode": 0,
+      "durationMs": 227,
+      "outputDigest": "bc0ef7e4711c8b999a8c2f682309d26db2e5ab3b25dd0ea0104bbeadca3db69c",
+      "commandHash": "3363e0094937ab460a2aa15195e3a4aa4a3b01c21c48ce81b7de8836239e954f",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "35ee7a2edaff2accc4eb9a586c71ee44f7641f24d47bfcab32630eb282bb4695",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/raw-request-exemption.contract.json --summary .ai/work-items/active/raw-request-exemption.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:11:21.501493+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "35ee7a2edaff2accc4eb9a586c71ee44f7641f24d47bfcab32630eb282bb4695",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/raw-request-exemption.contract.json SUMMARY=.ai/work-items/active/raw-request-exemption.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:11:21.603942+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "684d058769043416d699af452dbc190885b04a71f77fa1b6ac595d3437fe497d",
+      "commandHash": "05122801d8553696e0eafc607a52f2ab146680069dce776679609d958126b975",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "35ee7a2edaff2accc4eb9a586c71ee44f7641f24d47bfcab32630eb282bb4695",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/raw-request-exemption.contract.json --summary .ai/work-items/active/raw-request-exemption.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/raw-request-exemption.summary.json CONTRACT=.ai/work-items/active/raw-request-exemption.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-21T06:11:22.599570+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "0282c8517badb8eb4be97d1d0457b3e9bd9c0ef3a1aff54d34d269305a22f3e9",
+      "commandHash": "e0d8ee735852eb01eac444c9a4d72950e05d9f8ff27738c87feff079b398ad7b",
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "commitSha": "447d912deef7b35adf1523c6bfe180e0be51253b",
+      "executionContractPath": ".ai/work-items/active/raw-request-exemption.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/raw-request-exemption.summary.json",
+      "worktreeDigest": "fc3a04683bcc94f10c542cf4ee20c3765f292469b03100a96be71106a417318a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/raw-request-exemption.summary.json --contract .ai/work-items/active/raw-request-exemption.contract.json ai summary check passed: .ai/work-items/active/raw-request-exemption.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "The structured exemption policy is documented in docs/trust-layer.md."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The implementation uses existing trust-layer modules without cross-feature imports."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Structured exemption validation is bounded to the Trust Layer and fails closed."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Initial skeleton; replace with actual residual risks before finishing.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Verify structured exemption fields and policy reference.",
+      "Verify free-text and high-risk exemptions fail closed."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15,
+      "recordedAt": "2026-07-21",
+      "evidence": "Preflight reached ready before implementation."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "8813400669cf7c21e8bf006d892947c285d6338a12c5e9c3b164eb11ea86b5a4",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15,
+      "recordedAt": "2026-07-21",
+      "evidence": "Full local quality checks passed through the finish pipeline."
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 371
+}

@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from ai_trust_schema import ValidationError, validate_payload
 from ai_critical_domain_guards import critical_domain_signals
@@ -195,6 +195,24 @@ _RAW_REQUEST_EXEMPTIONS = {
     "internal_governance",
 }
 _RAW_REQUEST_SOURCE_TYPES = {"human", "issue", "pr_comment", "system"}
+_RAW_REQUEST_EXEMPTION_FIELDS = {
+    "exemption",
+    "policyRef",
+    "triggerRef",
+    "applicability",
+    "approvedBy",
+}
+
+
+def _structured_exemption(value: Any) -> bool:
+    return (
+        isinstance(value, dict)
+        and value.get("exemption") in _RAW_REQUEST_EXEMPTIONS
+        and not (_RAW_REQUEST_EXEMPTION_FIELDS - set(value))
+        and value.get("policyRef") == "raw-request-exemptions.v1"
+        and isinstance(value.get("approvedBy"), str)
+        and bool(value["approvedBy"].strip())
+    )
 
 
 def _requires_raw_request(contract: dict[str, Any]) -> bool:
@@ -225,18 +243,19 @@ def raw_request_signal(contract: dict[str, Any], path: Path = CAPABILITIES_PATH)
     raw = contract.get("rawUserRequest")
     if raw is None:
         exemption = contract.get("rawRequestExemption")
-        if _requires_raw_request(contract) and exemption not in _RAW_REQUEST_EXEMPTIONS:
+        if _requires_raw_request(contract) and not _structured_exemption(exemption):
             return _signal(
                 "Raw Request",
                 "Inconsistent",
                 ["rawUserRequest is required for MODE=code Work Items"],
                 ["contract.rawUserRequest", "contract.rawRequestExemption"],
             )
-        if exemption in _RAW_REQUEST_EXEMPTIONS:
+        if _structured_exemption(exemption):
+            exemption_name = cast(dict[str, Any], exemption)["exemption"]
             return _signal(
                 "Raw Request",
                 "Not Applicable",
-                [f"rawUserRequest is exempted for {exemption}"],
+                [f"rawUserRequest is exempted for {exemption_name}"],
                 ["contract.rawRequestExemption"],
             )
         return _signal(

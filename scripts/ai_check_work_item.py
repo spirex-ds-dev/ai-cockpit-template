@@ -311,6 +311,13 @@ RAW_REQUEST_EXEMPTIONS = {
     "release_metadata",
     "internal_governance",
 }
+RAW_REQUEST_EXEMPTION_FIELDS = {
+    "exemption",
+    "policyRef",
+    "triggerRef",
+    "applicability",
+    "approvedBy",
+}
 RAW_REQUEST_SOURCE_TYPES = {"human", "issue", "pr_comment", "system"}
 REQUESTED_OPERATION_FIELDS = ("target", "action", "environment", "effect")
 
@@ -327,9 +334,21 @@ def validate_raw_request_requirement(data: dict[str, Any]) -> list[str]:
     raw = data.get("rawUserRequest")
     exemption = data.get("rawRequestExemption")
     if required and raw is None:
-        if exemption not in RAW_REQUEST_EXEMPTIONS:
+        if (
+            not isinstance(exemption, dict)
+            or exemption.get("exemption") not in RAW_REQUEST_EXEMPTIONS
+        ):
             return [
-                "rawUserRequest is required for MODE=code Work Items unless rawRequestExemption is registered"
+                "rawUserRequest is required unless rawRequestExemption is a registered structured record"
+            ]
+        missing = RAW_REQUEST_EXEMPTION_FIELDS - set(exemption)
+        if (
+            missing
+            or exemption.get("policyRef") != "raw-request-exemptions.v1"
+            or data.get("riskAssessment", {}).get("level") == "high"
+        ):
+            return [
+                "rawRequestExemption must include approved policy, trigger, applicability, approver, and cannot exempt high-risk work"
             ]
         return []
     if raw is None:
