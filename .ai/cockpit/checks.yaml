@@ -48,6 +48,14 @@ checks:
     commandTemplate: make check-ai-contract CONTRACT={contractPath}
     purpose: Validate the required Work Item Contract fields.
 
+  aiSerialOrder:
+    commandTemplate: make check-ai-serial-order CONTRACT={contractPath}
+    purpose: Block successor Work Items until predecessor lifecycle closure is complete.
+
+  aiBudgetImpact:
+    commandTemplate: make check-ai-budget-impact CONTRACT={contractPath}
+    purpose: Check governance complexity budget and require repayment evidence for overruns.
+
   aiScope:
     commandTemplate: make check-ai-scope CONTRACT={contractPath}
     purpose: Verify the actual diff is covered by scope and not covered by outOfScope.

@@ -58,6 +58,8 @@ SCRIPT_NAMES = {
     "ai_check_status_consistency.py",
     "ai_check_summary.py",
     "ai_check_work_item.py",
+    "ai_check_serial_order.py",
+    "ai_check_budget_impact.py",
     "ai_common.py",
     "ai_baseline_evidence.py",
     "ai_critical_domain_guards.py",

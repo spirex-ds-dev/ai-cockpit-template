@@ -83,3 +83,50 @@ def test_code_work_item_requires_requested_operation():
     )
     issues = ai_check_work_item.validate_contract(contract)
     assert any("requestedOperation" in issue for issue in issues)
+
+
+def test_v2_code_work_item_rejects_skeleton_placeholders():
+    contract = valid_contract()
+    contract.update(
+        {
+            "contractVersion": 2,
+            "baseCommit": "1234567890abcdef",
+            "scope": [".ai/work-items/active/task.contract.json"],
+            "verification": [{"check": "quality", "required": True}],
+            "rawUserRequest": "Harden governance.",
+            "rawRequestSource": {
+                "type": "human",
+                "reference": "test:placeholder",
+                "capturedAt": "2026-07-22",
+                "digest": "sha256:test",
+            },
+            "declaredIntent": {
+                "summary": "Harden governance.",
+                "requestedCapabilities": ["ai_governance"],
+            },
+            "requestedOperation": {
+                "target": "repository_governance",
+                "action": "modify",
+                "environment": "repository",
+                "effect": "enforce",
+                "authorityRequired": False,
+            },
+            "intent": {
+                "problem": "Initial skeleton; replace this.",
+                "constraints": ["Replace with task-specific constraints."],
+                "rationale": "Initial skeleton; replace with rationale.",
+            },
+            "acceptance": ["The new feature is implemented according to requirements."],
+            "sources": [{"path": "spec", "reason": "Initial Work Item skeleton."}],
+            "scenarioCoverage": [
+                {
+                    "scenario": "Replace this scenario.",
+                    "required": True,
+                    "status": "verified",
+                    "evidence": ["spec"],
+                }
+            ],
+        }
+    )
+    issues = ai_check_work_item.validate_contract(contract)
+    assert any("placeholder" in issue for issue in issues)
