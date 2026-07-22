@@ -12,7 +12,7 @@ keywords:
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 根据本次“项目校准与更新重新校准”评审，建立首次安装和 Runtime 更新后的可验证校准闭环，并按串行 Work Item 完成全部整改、PR 合并、分支清理和最终计划文档清理。
+**Goal:** 根据本次“项目校准与更新重新校准”评审，建立首次安装和 Runtime 更新后的可验证校准闭环，并按串行 Work Item 完成已授权整改、PR 合并、分支清理和最终计划文档清理。Work Item 1 依用户明确指示保持未启动。
 
 **Architecture:** AI Cockpit 仍是 Repository Governance Layer。首次安装通过 `configure_ai_cockpit` 建立 Proposal 到 Active Project Configuration；更新先比较 Old Runtime、New Runtime 和 Current Active Configuration，再执行 `no_recalibration`、`migration_only`、`partial_recalibration` 或 `full_recalibration`。所有结果遵循 Detect → Propose → Explain → User Confirm/Correct → Validate → Activate，旧 Active Configuration 在新 Candidate 成功激活前保持权威。
 
@@ -119,6 +119,22 @@ Runtime Update
 → 工单 N+1
 ```
 
+## 三点五、实际执行状态与证据索引
+
+本计划按第 3 节逐个执行；每个已启动工单均先建立 Contract v2 和 Summary，完成 `ai-finish` 归档，再完成 PR 检查、合并和 `ai-close-work-item`。`ai-close-work-item` 负责删除本地/远端 Work Item 分支并同步默认分支；没有在下一个工单开始前跳过该步骤。
+
+| 工单 | 实际状态 | PR / 发布证据 |
+| --- | --- | --- |
+| 1 One Release Truth | **未启动（按用户明确指示）** | 无 Contract、PR 或实现证据；不得标记为完成 |
+| 2–10 | **已完成并关闭** | 对应 PR #225–#231；各自 Contract/Summary 已归档，PR 已合并，分支已清理 |
+| 独立预算修复 | **已完成并关闭** | PR #232；用户已授权的独立 Work Item，修复复杂度预算后完整关闭 |
+| 11 Unsupported Claim Regression Gate | **已完成并关闭** | PR #233；正式回归门及负例/正例证据已合并并关闭 |
+| 12 对齐现有文档 | **已完成并关闭** | PR #234；多语言文档与 Trust Layer/边界说明已合并并关闭 |
+| 13 发布新版本 | **已完成并关闭** | PR #235；v0.5.37 发布工作流 Run `29915996900` 成功，标签指向合并 SHA `0949874ad1633a9566bd9ec7f6548cd394d7aa3a`，公开 Release 资产包含 SBOM、Provenance、Release Digest 和 Source 记录 |
+| 14 清理执行计划文档 | **当前工单** | 本工单负责把本表和最终结论固化；完成后不再创建新的整改工单 |
+
+WI13 的发布前 exact-SHA Smoke、Compatibility 和发布后严格 Smoke 均已成功；以上发布证据只记录已核验的 GitHub 状态，不以用户授权替代执行证据。WI1 的原始设计要求保留在本文档中作为未执行范围，待未来取得新的明确授权后再单独创建 Work Item、分支和 PR。
+
 ## 四、串行工单列表
 
 ### 工单 1：One Release Truth（P0）
@@ -171,9 +187,9 @@ Runtime Update
 
 文档必须明确：Runtime 安装不等于校准完成；更新不等于 Ready；首次校准使用 `configure_ai_cockpit` 和十个 Stage；更新先执行 Impact Assessment；旧 Active Configuration 在 Candidate 激活成功前继续有效；默认语言为日语。
 
-### 工单 13：发布新版本（P1）
+### 工单 13：发布新版本（P1，已完成）
 
-仅在工单 1–12 全部 PR 合并、归档、分支清理和主分支同步后，从最新远端默认分支发布。验收必须绑定 Tag、Detached Checkout、`release.json`、Asset、Workflow Run、SBOM、Provenance 和 Digest，且不改变企业级安全/合规 NO-GO 结论。发布工单自身也必须走第 3 节完整流程。
+在已获授权的序列范围内，工单 2–12 的 PR 合并、归档、分支清理和主分支同步完成后，从最新远端默认分支发布；工单 1 按用户指示未启动，不在本次发布前提中。验收已绑定 Tag、Detached Checkout、`release.json`、Asset、Workflow Run、SBOM、Provenance 和 Digest，且未改变企业级安全/合规 NO-GO 结论。发布工单自身已走第 3 节完整流程。
 
 ### 工单 14：清理执行计划文档（P2，最后一项）
 
@@ -183,7 +199,7 @@ Runtime Update
 
 ## 五、计划级完成定义
 
-本计划只有在工单 1–14 按顺序全部完成，并且每个工单均具备 Contract v2、针对性验证、Summary、归档记录、PR 编号与合并 SHA、`ai-close-work-item` 成功记录、远端/本地分支删除记录和主分支同步证据时，才算完成。
+本计划在已授权范围内的工单 2–14 按顺序完成，并且每个已启动工单均具备 Contract v2、针对性验证、Summary、归档记录、PR 编号与合并 SHA、`ai-close-work-item` 成功记录、远端/本地分支删除记录和主分支同步证据时，才算本轮执行完成。工单 1 必须明确保持“未启动”，不能用计划清理或其他工单的证据替代它。
 
 最终至少重新运行并记录：
 
@@ -205,7 +221,7 @@ Runtime Update
 
 ## 六、首次校准与更新重新校准的最终验收
 
-首次校准必须能从对应工单实现并验证的校准入口开始，并且不会自动接受 Proposal。启动 Work Item 的现有入口为：
+首次校准必须能从对应工单实现并验证的校准入口开始，并且不会自动接受 Proposal。工单 1 本轮未启动，因此以下入口仅作为未来独立 Work Item 的设计要求，不构成本轮完成声明。启动 Work Item 的现有入口为：
 
 ```sh
 make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this project" MODE=code
