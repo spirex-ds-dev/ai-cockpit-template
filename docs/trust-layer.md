@@ -13,6 +13,8 @@ keywords:
 
 AI Cockpit's Trust Layer answers one operational question: **does the available evidence support continuing, or must the agent stop?** It governs repository changes; it does not grant an agent authority to deploy, approve itself, or replace security and quality tools.
 
+The coverage claim is deliberately bounded: the gates classify a finite vocabulary of deterministic known-risk cases using external repository evidence. They do not provide universal semantic risk classification, agent self-control, runtime isolation, trusted identity, immutable audit, or enterprise compliance evidence.
+
 The formal regression entrypoint is the **Unsupported Claim Regression Gate** (`make unsupported-claim-regression`), complemented by the mandatory known-scenario gate (`make delusion-test-gate`). Together they block claims with missing evidence, `not_run` or failed checks described as passed, inference presented as fact, nonexistent files, unsupported approval claims, simulation presented as real execution, and the explicitly enumerated rocket, transaction-success, checker-bypass, test-deletion, and underspecified-work fixtures. A claim backed by an existing structured evidence file may pass. The gate is part of the repository quality target used by Work Item Finish and CI/release quality paths, so a negative regression cannot be merged as green. These gates evaluate external repository claims and a finite deterministic fixture vocabulary; they do not detect an LLM's internal state or provide universal semantic coverage. “Delusion” remains a compatibility label for this known-scenario regression target.
 
 ## What is evidence?

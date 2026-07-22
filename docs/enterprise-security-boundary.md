@@ -22,3 +22,5 @@ AI Cockpit provides repository governance evidence: scoped Work Items, determini
 | Compliance certification | Not provided by the template | Applicable legal, regulatory, contractual assessment |
 
 The template therefore remains conditional for adoption and is not a substitute for enterprise security or compliance controls. No claim here establishes runtime isolation, trusted identity, cryptographic proof, or certification.
+
+The deterministic checks cover only the finite, externally evidenced known-risk vocabulary implemented by the repository. They are not a universal semantic-risk classifier and do not turn governance records into Sandbox, identity, immutable-audit, or enterprise-compliance guarantees.

@@ -11,6 +11,8 @@ keywords:
 
 # Upgrade
 
+An upgrade is a repository change, not a Ready signal. Run Impact Assessment before recalibration, keep the old Active Configuration until Candidate activation succeeds, and preserve it when activation fails. Runtime installation alone never proves calibration completion.
+
 Use `--upgrade` when the target repository already contains AI Cockpit files and you want the managed runtime, policy, and marker files replaced in a controlled way. Treat the upgrade as its own adopter-project Work Item and dedicated branch. Record the adopter remote/default branch/base commit and the target release tag before changing files.
 
 Upgrade is local preparation only. Review the Contract and upgrade diff first, then obtain separate human approval for commit and push. The upgrade PR must be reviewed and merged manually. After merge, obtain a final human approval before running `make ai-close-work-item TASK=<upgrade-task>`. Do not use automatic merge or automatic branch deletion. The installer itself never performs any of these external Git actions.

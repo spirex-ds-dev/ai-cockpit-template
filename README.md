@@ -40,6 +40,8 @@ AI-generated changes should not be accepted without bounded, independently enfor
 
 Calibrated trust does not mean maximizing trust in an agent. It means enabling humans to rely on the agent when evidence supports reliance and to intervene when evidence is missing, stale, contradictory, or insufficient.
 
+AI Cockpit is a repository governance layer, not an agent runtime or security sandbox. Its deterministic gates cover declared, externally reviewable known-risk cases; they do not classify every semantic danger or prove agent intent. Runtime installation is not calibration completion: first calibration uses `configure_ai_cockpit` and its ten stages, while updates require Impact Assessment before `recalibrate_ai_cockpit`. The default documentation language is Japanese, and an existing Active Configuration remains effective until a new Candidate activates successfully.
+
 ## What is AI Cockpit?
 
 **AI Cockpit is a Repository Governance Layer for AI-assisted Software Development.** This is the concrete product boundary through which its mission is delivered.

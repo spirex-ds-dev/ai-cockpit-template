@@ -27,6 +27,8 @@ AI Cockpit governs evidence; it does not replace evidence-producing tools. SBOM 
 
 Trust Layer の境界は明確です。Cockpit は証拠の有無と矛盾を圧縮して判断を支援しますが、AI の説明や自己申告を証拠・認可として扱いません。重要な証拠が欠落、古い、範囲外、または矛盾している場合は fail closed し、Decision Request、追加証拠、再 Preflight の順で回復します。詳細は [Trust Layer guide](trust-layer.md) を参照してください。
 
+このアーキテクチャが提供するのは、宣言された既知リスクに対する決定的な証拠評価です。意味的リスク全般、Agent の自律性、安全な Sandbox、信頼できる ID、不可変監査、企業コンプライアンスを提供または証明するものではありません。Runtime のインストール後も校正は別工程であり、更新は Impact Assessment と Candidate 有効化を経て初めて Ready になります。
+
 ## コンポーネントの依存関係とプロセスフロー
 
 AI Cockpit フレームワーク内における、タスクの開始から PR の検証にいたるまでのライフサイクルとデータ/コントロールのフローは以下の通りです。
