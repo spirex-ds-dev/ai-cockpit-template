@@ -1,0 +1,163 @@
+{
+  "contractVersion": 2,
+  "workItemId": "installed-lifecycle-e2e",
+  "mode": "code",
+  "title": "Cross Version and Cross Stack E2E",
+  "baseCommit": "613f3187717c5eaf9255a7a392ab064c1744ac76",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "tests/test_installed_lifecycle_e2e.py",
+    "scripts/installed_lifecycle_e2e.py",
+    "docs/reference/installed-lifecycle.md",
+    ".ai/guards/governance_complexity_policy.yaml",
+    ".ai/work-items/active/installed-lifecycle-e2e.contract.json",
+    ".ai/work-items/active/installed-lifecycle-e2e.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": ["external provider execution", "release publication", "claiming unavailable toolchains ran"],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-22-installed-lifecycle-review-remediation.md",
+      "reason": "Cross-version and cross-stack E2E requirements."
+    },
+    {"path": "scripts/cross_stack_long_cycle.py", "reason": "Existing lifecycle fixture harness."},
+    {"path": "scripts/external_adopter_long_cycle.py", "reason": "Existing adopter evidence classification."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "real_execution_evidence"
+    ],
+    "reason": "E2E evidence must distinguish real local execution, external not_run, and simulation." 
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the complete serial remediation plan, including governance changes."
+  },
+  "preReviewWarnings": ["Unavailable npm/Maven/toolchain lanes must be recorded as not_run, not simulated as executed."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A real Python fixture executes Install through Update, Rollback, Disable/Enable, and Uninstall lifecycle phases.",
+    "Evidence distinguishes local real execution, external not_run, and simulation for TypeScript and Java lanes.",
+    "Cross-version Manifest, Schema, Rollback, and Uninstall evidence is traceable.",
+    "E2E tests and evidence classification pass without overclaiming unavailable toolchains."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Lifecycle confidence requires executable fixture evidence rather than manifest-only simulation, while unavailable external toolchains must remain honestly unrun.",
+    "constraints": ["At least one Python fixture runs locally end to end.", "Other stacks may be not_run when toolchains are unavailable.", "Evidence bundles label real, external-not-run, and simulated results separately."],
+    "rationale": "A traceable evidence classification keeps cross-stack coverage honest and repeatable."
+  },
+  "rawUserRequest": "走完当前文档的流程；按计划逐个工单执行完整生命周期，包括 PR、合并、清理分支，直到全部工单完成。用户已授权所需确认范围。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:user-authorized-serial-lifecycle-execution", "capturedAt": "2026-07-22T00:00:00+09:00", "digest": "sha256:user-authorized-serial-lifecycle-execution"},
+  "declaredIntent": {"summary": "Add executable cross-version lifecycle E2E evidence with honest toolchain classification.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "Python lifecycle fixture executes real lifecycle phases.", "required": true, "status": "verified", "evidence": ["tests/test_installed_lifecycle_e2e.py"], "reason": "Focused fixture test."},
+    {"scenario": "Unavailable stacks are classified not_run.", "required": true, "status": "verified", "evidence": ["tests/test_installed_lifecycle_e2e.py"], "reason": "Evidence classification test."},
+    {"scenario": "Cross-version evidence binds manifest/schema/rollback/uninstall results.", "required": true, "status": "verified", "evidence": ["tests/test_installed_lifecycle_e2e.py"], "reason": "Traceability test."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the complete serial remediation plan, including governance policy changes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/installed-lifecycle-e2e.json",
+    "baseCommit": "613f3187717c5eaf9255a7a392ab064c1744ac76",
+    "initialScopeDigest": "d0aeb2129f2fc841255ade3673378bf02571dd57063b2c92fdea859d1755a90e",
+    "contractSkeletonDigest": "aabd3ca34f010b26b3316f13b640ba42f8a379e8e121d74cb8f1e5f32f5fe429"
+  }
+}
