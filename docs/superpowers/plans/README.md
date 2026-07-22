@@ -23,7 +23,7 @@ keywords:
 
 | 计划 | 状态 | 说明 |
 | --- | --- | --- |
-| 无 | 已完成 | 最后一个计划清理工单已关闭；后续整改必须另立计划和 Work Item。 |
+| [2026-07-22 Project Calibration and Update Recalibration](2026-07-22-project-calibration-recalibration.md) | 执行中 | 评审整改计划；14 个工单串行执行，最后一项为清理执行计划文档。 |
 
 ## 历史保留计划
 

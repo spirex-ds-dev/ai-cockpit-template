@@ -1,0 +1,194 @@
+{
+  "contractVersion": 2,
+  "workItemId": "project-calibration-recalibration-plan",
+  "mode": "author_todo",
+  "title": "Revise execution plan for project calibration and update recalibration review",
+  "baseCommit": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "docs/superpowers/plans/2026-07-22-project-calibration-recalibration.md",
+    "docs/superpowers/plans/README.md",
+    ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+    ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/decisions/**",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "user-provided review material: pasted-text.txt",
+      "reason": "User-provided review material defining project calibration and update recalibration requirements."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-21-review-remediation.md",
+      "reason": "Previous serial remediation plan and its 14-work-item sequence."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Canonical governance terminology and repository boundaries."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Required Work Item lifecycle and closure rules."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "scope_unclear"
+    ],
+    "reason": "The change creates a review-backed execution plan only; it does not implement runtime behavior. The primary risk is omitting a review requirement or weakening the mandated Work Item lifecycle."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized preparation of the revised execution plan and explicitly required the final cleanup work item."
+  },
+  "preReviewWarnings": [
+    "Verify that the review summary, authorized actions, 14-work-item sequence, full PR/branch-cleanup loop, and final plan cleanup are explicit."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Review material is converted into a complete serial execution plan",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/superpowers/plans/2026-07-22-project-calibration-recalibration.md"
+      ]
+    },
+    {
+      "scenario": "The final Work Item is explicitly plan-document cleanup",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/superpowers/plans/2026-07-22-project-calibration-recalibration.md:168"
+      ]
+    },
+    {
+      "scenario": "Runtime implementation and PR execution outcomes",
+      "required": false,
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This Work Item authors the execution plan; runtime changes and their PR evidence belong to the listed future Work Items."
+    }
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The revised plan records the review conclusion, calibrated scope, residual risks, and explicitly authorized actions in sections 一、评审收查与总结 and 二、已经得到的授权.",
+    "The plan lists all 14 work items in serial order and ends with 清理执行计划文档.",
+    "The plan requires every work item to complete Contract → verification → Summary → ai-finish → PR → merge → ai-close-work-item → branch cleanup → base synchronization before the next work item starts.",
+    "The plan explicitly requires initial calibration, update impact assessment, preserved confirmations, candidate activation, drift revalidation, and fail-closed readiness in sections 一、评审收查与总结、三、每个工单的强制完整流程、五、计划级完成定义 and 六、首次校准与更新重新校准的最终验收."
+  ],
+  "guidelines": [
+    "Keep the plan auditable and repository/project neutral where the review material does not provide implementation facts.",
+    "Do not present user authorization or proposal text as execution evidence; actual PR, merge, release, digest, and branch-cleanup evidence must be recorded when the work items execute."
+  ],
+  "intent": {
+    "problem": "The received project-calibration review contains a broad specification but the repository needs one auditable execution plan that turns it into ordered Work Items and prevents lifecycle shortcuts.",
+    "constraints": [
+      "Keep the review conclusion and product boundary accurate.",
+      "Require a complete PR, merge, ai-close-work-item, branch cleanup, and base synchronization loop for every Work Item.",
+      "Make plan cleanup the final Work Item and preserve historical evidence."
+    ],
+    "rationale": "A single serial plan makes the review actionable while preserving evidence boundaries and ensuring the next Work Item starts only after the previous one is fully closed."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-execution",
+    "reason": "User explicitly authorized the complete Work Item lifecycle and its required governance decision evidence."
+  },
+  "rollbackNote": "Revert the plan document and this Work Item's governance records together; do not delete historical plans or evidence without a separate authorized cleanup Work Item.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/project-calibration-recalibration-plan.json",
+    "baseCommit": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+    "initialScopeDigest": "5f832da444f8f3cb1d408ddcb4936454f3e5be960305934dc1a8dfaa50bb2682",
+    "contractSkeletonDigest": "d19b7f5a7e69b5592b076e1091c9bd64721344e4eb18dc90664290acac3d9a75"
+  }
+}

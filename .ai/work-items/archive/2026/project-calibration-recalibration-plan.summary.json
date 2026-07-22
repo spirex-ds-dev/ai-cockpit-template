@@ -1,0 +1,424 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "project-calibration-recalibration-plan",
+  "contractPath": ".ai/work-items/archive/2026/project-calibration-recalibration-plan.contract.json",
+  "changedFiles": [
+    {
+      "path": "docs/superpowers/plans/2026-07-22-project-calibration-recalibration.md",
+      "reason": "Added the review summary, authorization boundary, calibration/recalibration requirements, 14 serial Work Items, complete PR/branch-cleanup loop, and final plan-cleanup Work Item."
+    },
+    {
+      "path": "docs/superpowers/plans/README.md",
+      "reason": "Registered the new plan as the current execution plan."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/project-calibration-recalibration-plan.contract.json",
+      "reason": "Scoped the plan document and recorded review sources, constraints, acceptance, and authorized workflow."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/project-calibration-recalibration-plan.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": ".ai/decisions/HDR-6f8a83a6621c185b-1a2cb6ad.evidence.json",
+      "reason": "Recorded the user-authorized Preflight decision evidence for this Work Item."
+    },
+    {
+      "path": ".ai/decisions/HDR-6f8a83a6621c185b-1a2cb6ad.request.json",
+      "reason": "Recorded the Preflight human decision request consumed by this Work Item."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/project-calibration-recalibration-plan.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "user-provided review material: pasted-text.txt",
+    "docs/superpowers/plans/2026-07-21-review-remediation.md",
+    ".ai/glossary.md",
+    ".ai/cockpit/README.md",
+    ".ai/work-items/active/project-calibration-recalibration-plan.contract.json"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Review material is converted into a complete serial execution plan",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/superpowers/plans/2026-07-22-project-calibration-recalibration.md"
+      ]
+    },
+    {
+      "scenario": "The final Work Item is explicitly plan-document cleanup",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/superpowers/plans/2026-07-22-project-calibration-recalibration.md:168"
+      ]
+    },
+    {
+      "scenario": "Runtime implementation and PR execution outcomes",
+      "required": false,
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This Work Item authors the execution plan; runtime changes and their PR evidence belong to the listed future Work Items."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:21:08.337000+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "788a7e78404ca82781a3f4cfde9312772323cdf86d56439b2324dae32bafbb1c",
+      "commandHash": "8bad15b9e31bca708c0eaf228ab7b8f63c0d4a6ded02a16f9edc8c8c08e8cfb7",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "03557195492cc57d80b452a43664ade2e29208020e1ed4cbd42f404279ad2058",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/project-calibration-recalibration-plan.contract.json work item contract check passed: .ai/work-items/active/project-calibration-recalibration-plan.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:21:08.601054+00:00",
+      "exitCode": 0,
+      "durationMs": 181,
+      "outputDigest": "81540b568abc1f384a673f45d2ede07edba39e8aef7a4e70c409a65fd0b0b076",
+      "commandHash": "51b2aecdec8822c9cda15fc6e85fdc14b38c6cf3fff45c18d219a681c6785256",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "03557195492cc57d80b452a43664ade2e29208020e1ed4cbd42f404279ad2058",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/project-calibration-recalibration-plan.contract.json scope guard passed: 6 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:21:08.894028+00:00",
+      "exitCode": 0,
+      "durationMs": 220,
+      "outputDigest": "e976369c0bea8571daae8e97beb45fc5d18ac7782d72e7698fb42c5794d82eb1",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "03557195492cc57d80b452a43664ade2e29208020e1ed4cbd42f404279ad2058",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/project-calibration-recalibration-plan.contract.json [warning] restricted_write: .ai/decisions/HDR-6f8a83a6621c185b-1a2cb6ad.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-6f8a83a6621c185b-1a2cb6ad.request.json (.ai/**) - AI governance configuration. guard check completed: 2 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/project-calibration-recalibration-plan.contract.json SUMMARY=.ai/work-items/active/project-calibration-recalibration-plan.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:21:09.359058+00:00",
+      "exitCode": 0,
+      "durationMs": 363,
+      "outputDigest": "7479534773ea20b7914447d149d6d7bb940a475f1d99624057dfab8169521f3c",
+      "commandHash": "af14fbec64704186016e5330ac5b4c833addc0f778f424095b89231cb3ef2907",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "03557195492cc57d80b452a43664ade2e29208020e1ed4cbd42f404279ad2058",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/project-calibration-recalibration-plan.contract.json --summary .ai/work-items/active/project-calibration-recalibration-plan.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `project-calibration-recalibration-plan` - Contract Hash: `627ffdd2da26615d` - Mode: `author_todo` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:21:09.559283+00:00",
+      "exitCode": 0,
+      "durationMs": 117,
+      "outputDigest": "9836f6e90edd238feadfaa64a037aac16ccd740efbc9a0472fc17446b07fd8cd",
+      "commandHash": "04ed029488f2bc67986221fe2fca6d9ae34c349816e0e431e8ab70ebc3d0c7b7",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "03557195492cc57d80b452a43664ade2e29208020e1ed4cbd42f404279ad2058",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/project-calibration-recalibration-plan.summary.json review policy matched 4 path(s) [review] .ai/decisions/HDR-6f8a83a6621c185b-1a2cb6ad.evidence.json [review] .ai/decisions/HDR-6f8a83a6621c185b-1a2cb6ad.request.json [review] .ai/work-items/starts/project-calibration-recalibration-plan.json [review] .ai/cockpit/current_status.md review focus recorded: 3 item(s) report: target/ai_review_po"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:21:09.835399+00:00",
+      "exitCode": 0,
+      "durationMs": 162,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "03557195492cc57d80b452a43664ade2e29208020e1ed4cbd42f404279ad2058",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:21:10.114867+00:00",
+      "exitCode": 0,
+      "durationMs": 161,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "03557195492cc57d80b452a43664ade2e29208020e1ed4cbd42f404279ad2058",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/project-calibration-recalibration-plan.contract.json SUMMARY=.ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:21:10.289273+00:00",
+      "exitCode": 0,
+      "durationMs": 61,
+      "outputDigest": "ad85750115048f03c65f75b7014bc50e77bb20549c029b42dd8cfb535b8cb64b",
+      "commandHash": "bb7ac9b06ee018eb6e9d7ca82a8b586efda9ad540bb44d65a6a3fed8f67701e8",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "03557195492cc57d80b452a43664ade2e29208020e1ed4cbd42f404279ad2058",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/project-calibration-recalibration-plan.contract.json --summary .ai/work-items/active/project-calibration-recalibration-plan.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/project-calibration-recalibration-plan.contract.json SUMMARY=.ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:21:10.544332+00:00",
+      "exitCode": 0,
+      "durationMs": 66,
+      "outputDigest": "df1e5524c30167dab105953a9f651b5218cf6aa103a66524eca68ef4b21fb39c",
+      "commandHash": "e243ad78b2a7a3651b929eea65379d65db6cb7f3dae8fa3ef8bff204e98c275e",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "03557195492cc57d80b452a43664ade2e29208020e1ed4cbd42f404279ad2058",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/project-calibration-recalibration-plan.contract.json --summary .ai/work-items/active/project-calibration-recalibration-plan.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:21:10.789394+00:00",
+      "exitCode": 0,
+      "durationMs": 195,
+      "outputDigest": "b72d2190929cf286eaea41aaf54b069c00f775694693ea1def02ebcbee1de663",
+      "commandHash": "8219be0e19f31fed945007cc71f41bf87cbb27a269b65b28dbc0eee43ddc8e93",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "03557195492cc57d80b452a43664ade2e29208020e1ed4cbd42f404279ad2058",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/project-calibration-recalibration-plan.contract.json ## Diff Ownership Preview - active_owned: `6`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-6f8a83a6621c185b-1a2cb6ad.evidence.json` — covered by Contract scope - [active_owne"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:25:12.159887+00:00",
+      "exitCode": 0,
+      "durationMs": 241312,
+      "outputDigest": "d4b28b5ef580a4d1af6e439839485f3be3e0b29f475b86a81c12bcbb2d4d192a",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "03557195492cc57d80b452a43664ade2e29208020e1ed4cbd42f404279ad2058",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 159 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 8%] ........................................................................ [ 17%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/project-calibration-recalibration-plan.contract.json SUMMARY=.ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:25:13.780215+00:00",
+      "exitCode": 0,
+      "durationMs": 388,
+      "outputDigest": "af2c1db6ad5cd7ed1fcf770d5fdad47e1845b1fdb29330c78e2c13518ad2e6f4",
+      "commandHash": "4de724bc9f5d36a6ce99c3c3342d4d1d473d8c599e672c6569cdadcf8460bd6b",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "2f7a7ba0283c68a7ef30c6cd44fffd2ad8b4009534940ad8acb0777454a3e903",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/project-calibration-recalibration-plan.contract.json --summary .ai/work-items/active/project-calibration-recalibration-plan.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/project-calibration-recalibration-plan.contract.json SUMMARY=.ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:25:14.075765+00:00",
+      "exitCode": 0,
+      "durationMs": 245,
+      "outputDigest": "f4cff43fb5083cfedb299fa2fa0017e71de2ec278b22d4997be423409688e7a7",
+      "commandHash": "7d8b0a547d305da7180d749cc4ff781e53fb7c5bfd8a14683d566bdb89e82c5c",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "2f7a7ba0283c68a7ef30c6cd44fffd2ad8b4009534940ad8acb0777454a3e903",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/project-calibration-recalibration-plan.contract.json --summary .ai/work-items/active/project-calibration-recalibration-plan.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:25:14.163548+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "2f7a7ba0283c68a7ef30c6cd44fffd2ad8b4009534940ad8acb0777454a3e903",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/project-calibration-recalibration-plan.contract.json SUMMARY=.ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:25:14.469232+00:00",
+      "exitCode": 0,
+      "durationMs": 222,
+      "outputDigest": "aebf037a38bcf0bc02ccc6549933413b571d317af6c965c541d30d2cdba90b6c",
+      "commandHash": "2eee970ddfb3cacb2680fca07c97b2fcdce40442be5e1874fd546a1dd018236a",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "2f7a7ba0283c68a7ef30c6cd44fffd2ad8b4009534940ad8acb0777454a3e903",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/project-calibration-recalibration-plan.contract.json --summary .ai/work-items/active/project-calibration-recalibration-plan.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/project-calibration-recalibration-plan.summary.json CONTRACT=.ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T04:25:15.712546+00:00",
+      "exitCode": 0,
+      "durationMs": 168,
+      "outputDigest": "8b17516c488d7a2847f2ab81cd2b270bdbbf3b5f171f228c9a9a0e18e251d6e1",
+      "commandHash": "9f68833161ace3d46b4baf58df5bf7116fed7f7c766a9778ba8f3edb321bba6e",
+      "contractHash": "627ffdd2da26615d2ae5564ffde623b97523d9cf00677897226c8fe71b8a1b72",
+      "commitSha": "4ba14ba47c934047355a9f538f2d8a2fafa2c776",
+      "executionContractPath": ".ai/work-items/active/project-calibration-recalibration-plan.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/project-calibration-recalibration-plan.summary.json",
+      "worktreeDigest": "93003cf45dd755023ff3427042cf782ef7b9b13a279c4f5b23235b07dd2c0684",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/project-calibration-recalibration-plan.summary.json --contract .ai/work-items/active/project-calibration-recalibration-plan.contract.json ai summary check passed: .ai/work-items/active/project-calibration-recalibration-plan.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep the plan auditable and repository/project neutral where the review material does not provide implementation facts.",
+      "compliant": true,
+      "evidence": "The plan separates review conclusions from future execution evidence and does not invent PR, release, digest, or tool results."
+    },
+    {
+      "guideline": "Do not present user authorization or proposal text as execution evidence; actual PR, merge, release, digest, and branch-cleanup evidence must be recorded when the work items execute.",
+      "compliant": true,
+      "evidence": "The authorization section explicitly preserves this boundary and the plan requires evidence at every Work Item closure."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The plan is complete as a planning artifact; implementation outcomes, PRs, releases, and cleanup evidence remain future Work Item outputs."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Initial skeleton; replace with actual residual risks before finishing.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Verify that all 14 Work Items remain serial and that the final item is plan-document cleanup.",
+      "Verify that user authorization is not substituted for future PR, merge, release, digest, or branch-cleanup evidence.",
+      "Scope and verification sufficiency."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "627ffdd2da26615d",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Reviewed the plan scope, acceptance, unknowns, and required verification before editing the execution plan."
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "627ffdd2da26615d",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0,
+      "detail": "Verified the final plan structure, documentation metadata, status consistency, and diff ownership; execution records remain pending until ai-finish."
+    }
+  ],
+  "knownGaps": [
+    "The individual Work Item PR numbers, merge SHAs, release evidence, and branch-cleanup results cannot be known until execution."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 429
+}
