@@ -144,6 +144,8 @@ Also replace skeleton unknowns, capability, execution decision, acceptance, and 
 
 Do not treat `make ai-onboard` as an unattended acceptance step. The generated proposal and the stack calibration both require human review, especially `target/ai_project_doctor_report.json`, `.ai/project_profile.proposed.yaml`, `Makefile.ai.stack`, and any `blocking:` unknowns that the calibration step surfaces. The ten-stage Session records evidence but does not claim enterprise security, sandboxing, identity, or compliance.
 
+Bootstrap Adoption is explicitly separate from normal development: records use `lifecycleType: bootstrap_adoption` and `creationMode: bootstrap_installer`, and remain `readiness: not_claimed`. The Wizard supports Detect, Propose, Select/Input, Review, Confirm, Write, Back, Cancel, Resume, and drift revalidation. A Write transition requires explicit human confirmation; Bootstrap does not create a standard development Work Item or claim Ready.
+
 Then calibrate the runtime before starting normal development:
 
 ```sh

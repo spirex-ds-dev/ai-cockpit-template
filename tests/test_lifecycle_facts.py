@@ -9,6 +9,9 @@ from ai_lifecycle_facts import lifecycle_facts
 def test_lifecycle_facts_reports_bootstrap_without_claiming_readiness(tmp_path: Path) -> None:
     facts = lifecycle_facts(tmp_path)
     assert facts["state"] == "bootstrap"
+    assert facts["lifecycleType"] == "bootstrap_adoption"
+    assert facts["creationMode"] == "bootstrap_installer"
+    assert facts["readiness"] == "not_claimed"
     assert facts["readiness"] == "not_claimed"
     assert facts["enterpriseAssurance"] == "not_claimed"
     assert "provider_assets" in facts["notRun"]

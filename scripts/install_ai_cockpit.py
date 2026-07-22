@@ -38,6 +38,9 @@ STACKS = {
     "csharp",
 }
 SCRIPT_NAMES = {
+    "bootstrap_repository.py",
+    "bootstrap_wizard.py",
+    "bootstrap_write_boundary.py",
     "ai_adoption_evidence.py",
     "ai_doctor.py",
     "ai_check_adoption_ready.py",
@@ -809,6 +812,7 @@ class Installer:
                 ".ai/work-items/starts/**",
                 ".cursor/**",
                 "scripts/ai_*.py",
+                "scripts/bootstrap_*.py",
                 "Makefile.ai",
                 "Makefile.ai.stack",
                 "AGENTS.md",

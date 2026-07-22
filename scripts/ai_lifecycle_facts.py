@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 from ai_onboard import lifecycle_state
+from bootstrap_wizard import BOOTSTRAP_CREATION_MODE, BOOTSTRAP_LIFECYCLE
 
 
 def lifecycle_facts(root: Path) -> dict[str, object]:
@@ -22,6 +23,8 @@ def lifecycle_facts(root: Path) -> dict[str, object]:
     return {
         "schemaVersion": 1,
         "state": state,
+        "lifecycleType": BOOTSTRAP_LIFECYCLE if state == "bootstrap" else None,
+        "creationMode": BOOTSTRAP_CREATION_MODE if state == "bootstrap" else None,
         "profile": {
             "confirmed": (ai_dir / "project_profile.yaml").is_file(),
             "proposed": (ai_dir / "project_profile.proposed.yaml").is_file(),

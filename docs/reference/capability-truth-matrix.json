@@ -46,11 +46,10 @@
     },
     {
       "id": "bootstrap_wizard_lifecycle",
-      "status": "planned",
-      "claim": "Interactive Bootstrap lifecycle states and schema are not represented as a completed capability in the current Runtime.",
-      "evidence": ["scripts/bootstrap_wizard.py", "docs/getting-started/installation.md"],
-      "verification": ["tests/test_bootstrap_wizard.py"],
-      "missingEvidence": "Existing wizard helpers do not yet prove the planned Bootstrap lifecycle schema and readiness boundary."
+      "status": "implemented",
+      "claim": "Bootstrap Adoption has an explicit resumable lifecycle schema, confirmation-gated write phase, and a fail-closed not_claimed readiness boundary.",
+      "evidence": ["scripts/bootstrap_wizard.py", "scripts/ai_lifecycle_facts.py", "docs/getting-started/installation.md"],
+      "verification": ["tests/test_bootstrap_wizard.py", "tests/test_lifecycle_facts.py", "tests/test_bootstrap_write_boundary.py"]
     },
     {
       "id": "ownership_manifest_and_managed_regions",
