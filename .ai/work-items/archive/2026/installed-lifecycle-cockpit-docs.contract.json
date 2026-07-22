@@ -1,0 +1,165 @@
+{
+  "contractVersion": 2,
+  "workItemId": "installed-lifecycle-cockpit-docs",
+  "mode": "code",
+  "title": "Cockpit CLI Summary Documentation Alignment",
+  "baseCommit": "ff3af9a6864a14670ff09f9f955b3224cc375d50",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "docs/reference/installed-lifecycle.md",
+    "docs/README.md",
+    ".ai/cockpit/current_status.md",
+    "scripts/ai_generate_status.py",
+    "tests/test_docs_metadata.py",
+    ".ai/guards/governance_complexity_policy.yaml",
+    ".ai/work-items/active/installed-lifecycle-cockpit-docs.contract.json",
+    ".ai/work-items/active/installed-lifecycle-cockpit-docs.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": ["new runtime lifecycle behavior", "release publication", "fixture execution"],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-22-installed-lifecycle-review-remediation.md",
+      "reason": "Cockpit, CLI, Summary, and documentation alignment requirements."
+    },
+    {"path": "scripts/ai_generate_status.py", "reason": "Canonical status generation source."},
+    {"path": "docs/reference/installed-lifecycle.md", "reason": "Lifecycle user-facing terminology and commands."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "fact_source_alignment"
+    ],
+    "reason": "Status, Summary, CLI help, and lifecycle docs must share one fact vocabulary and record not_run evidence." 
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the complete serial remediation plan, including governance changes."
+  },
+  "preReviewWarnings": ["Generated Cockpit Status remains authoritative; docs must not claim execution evidence that is not recorded."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Cockpit Status exposes version, runtime state, conflicts, rollback, disable, and uninstall fields from the lifecycle fact source.",
+    "Summary and docs record upgrade id, manifest hash, counts, migration, snapshot, decisions, verification, and residual risk.",
+    "CLI/docs terminology is consistent and unrun tools are represented as not_run.",
+    "Metadata and link/terminology tests pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Users and reviewers need one consistent lifecycle state across generated status, CLI help, Summary, and multilingual documentation.",
+    "constraints": ["Generated status must be produced by command, not hand-edited.", "Docs must distinguish proposal, confirmed execution, blocked, partial, and not_run evidence.", "No new runtime behavior is introduced."],
+    "rationale": "Fact-source alignment prevents user-visible status from overstating lifecycle execution."
+  },
+  "rawUserRequest": "走完当前文档的流程；按计划逐个工单执行完整生命周期，包括 PR、合并、清理分支，直到全部工单完成。用户已授权所需确认范围。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:user-authorized-serial-lifecycle-execution", "capturedAt": "2026-07-22T00:00:00+09:00", "digest": "sha256:user-authorized-serial-lifecycle-execution"},
+  "declaredIntent": {"summary": "Align generated Cockpit status, CLI terminology, Summary evidence, and lifecycle documentation.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "Generated status and Summary share lifecycle facts.", "required": true, "status": "verified", "evidence": ["tests/test_docs_metadata.py"], "reason": "Focused metadata/status tests."},
+    {"scenario": "CLI/docs distinguish not_run and completed evidence.", "required": true, "status": "verified", "evidence": ["docs/reference/installed-lifecycle.md"], "reason": "Documentation evidence."},
+    {"scenario": "Lifecycle commands and states are terminology-consistent.", "required": true, "status": "verified", "evidence": ["docs/reference/installed-lifecycle.md"], "reason": "Reference documentation evidence."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the complete serial remediation plan, including governance policy changes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/installed-lifecycle-cockpit-docs.json",
+    "baseCommit": "ff3af9a6864a14670ff09f9f955b3224cc375d50",
+    "initialScopeDigest": "7b5ec8b755ca43469719ac7fb4cb5ce6f2bfdabcb9106ea3b97f8293b55565ef",
+    "contractSkeletonDigest": "790362e6e4048a9952b93eb4d8564ce20b07e4dd1329f9c50bfb4638e789a7a6"
+  }
+}
