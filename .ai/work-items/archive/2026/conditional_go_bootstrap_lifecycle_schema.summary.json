@@ -1,0 +1,418 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "conditional_go_bootstrap_lifecycle_schema",
+  "contractPath": ".ai/work-items/archive/2026/conditional_go_bootstrap_lifecycle_schema.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": "scripts/bootstrap_wizard.py",
+      "reason": "Added explicit Bootstrap lifecycle constants, Write phase, serializable schema, and readiness validation."
+    },
+    {
+      "path": "scripts/ai_lifecycle_facts.py",
+      "reason": "Exposed Bootstrap lifecycleType and creationMode while keeping readiness not_claimed."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Installed the Bootstrap runtime modules and added their generated adoption Contract scope."
+    },
+    {
+      "path": "tests/test_bootstrap_wizard.py",
+      "reason": "Covered schema, confirmation-gated Write, and readiness fail-closed regressions."
+    },
+    {
+      "path": "tests/test_lifecycle_facts.py",
+      "reason": "Covered Bootstrap lifecycle facts and not_claimed readiness."
+    },
+    {
+      "path": "tests/test_capability_truth_matrix.py",
+      "reason": "Aligned capability truth expectations with the implemented Bootstrap lifecycle."
+    },
+    {
+      "path": "docs/installation.md",
+      "reason": "Documented Bootstrap Adoption lifecycle, schema, confirmation, and readiness boundary."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Documented Wizard transitions and explicit non-ready Bootstrap boundary."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Changed Bootstrap capability from planned to implemented with evidence paths."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.md",
+      "reason": "Aligned matrix narrative with implemented Bootstrap capability."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/conditional_go_bootstrap_lifecycle_schema.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+    "scripts/bootstrap_wizard.py",
+    "scripts/ai_lifecycle_facts.py",
+    "tests/test_bootstrap_wizard.py",
+    "docs/reference/capability-truth-matrix.json"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:01:29.200730+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "0b2fd05b58ffa107626bceb7bdaf62f0a01de0e3827e6a9fc0038f6519ab427f",
+      "commandHash": "9f70117d530be540449105c24b30f01d551d2f1bf530fc3ab4a0bf5c5cf12a0d",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "108bcbff205c472daad868127a852519f4dcc5e07d7ccd2bff6b8b3924ea1372",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json work item contract check passed: .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:01:29.368271+00:00",
+      "exitCode": 0,
+      "durationMs": 111,
+      "outputDigest": "35c5f9ce25835dcc5348a2c44921f50f49401b5c4e95c52e7280eab38cdcf31d",
+      "commandHash": "7cad33cb3e5be735fba68ee6b0bbf675756df40428be2b9776d31fbe6cc84467",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "108bcbff205c472daad868127a852519f4dcc5e07d7ccd2bff6b8b3924ea1372",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json scope guard passed: 12 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:01:29.567774+00:00",
+      "exitCode": 0,
+      "durationMs": 139,
+      "outputDigest": "063f734d32fd81730192d47d2b1c2d4bb1e4aac7c0e7db578a695323e3d55a62",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "108bcbff205c472daad868127a852519f4dcc5e07d7ccd2bff6b8b3924ea1372",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json SUMMARY=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:01:29.846635+00:00",
+      "exitCode": 0,
+      "durationMs": 224,
+      "outputDigest": "69249c21ffeeafe5bf7379640176fe59821e35936b5d7934f3cee5dac29d2a71",
+      "commandHash": "9544cd7e90a8441563294d767c3a2931bae18c037a5e4119a9aa8c0dbc3bce41",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "108bcbff205c472daad868127a852519f4dcc5e07d7ccd2bff6b8b3924ea1372",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json --summary .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `conditional_go_bootstrap_lifecycle_schema` - Contract Hash: `5165a679a18247a9` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:01:30.007188+00:00",
+      "exitCode": 0,
+      "durationMs": 112,
+      "outputDigest": "19c8a70ffd258fd512f6693291551487e8d8fb9f353a775970fda24ab574f77f",
+      "commandHash": "af64d414772a011950778eb348ea1cffc65c9e4720b50930adc4d7da64320d85",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "108bcbff205c472daad868127a852519f4dcc5e07d7ccd2bff6b8b3924ea1372",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/conditional_go_bootstrap_lifecycle_schema.json [review] .ai/cockpit/current_status.md [review] scripts/ai_lifecycle_facts.py review focus recorded: 1 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:01:30.153157+00:00",
+      "exitCode": 0,
+      "durationMs": 97,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "108bcbff205c472daad868127a852519f4dcc5e07d7ccd2bff6b8b3924ea1372",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:01:30.300756+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "108bcbff205c472daad868127a852519f4dcc5e07d7ccd2bff6b8b3924ea1372",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json SUMMARY=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:01:30.642249+00:00",
+      "exitCode": 0,
+      "durationMs": 272,
+      "outputDigest": "c666ede5263459df5cc446dc4b056959df677ccb958009d89df4bca336907e9c",
+      "commandHash": "26605b066953d22f8665d7d50a9bbb562abbf2feb5db85c83a103565086481ff",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "108bcbff205c472daad868127a852519f4dcc5e07d7ccd2bff6b8b3924ea1372",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json --summary .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json SUMMARY=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:01:30.761765+00:00",
+      "exitCode": 0,
+      "durationMs": 61,
+      "outputDigest": "b98cba5cfc751cbf7407bfb96b123266acc31b0f26770efe54a738bcfeeaebb7",
+      "commandHash": "45e48aa12e1806649bfa9579767ce970d39459328c5a8be52abec10b03615db2",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "108bcbff205c472daad868127a852519f4dcc5e07d7ccd2bff6b8b3924ea1372",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json --summary .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:01:31.030504+00:00",
+      "exitCode": 0,
+      "durationMs": 215,
+      "outputDigest": "92cce34a0e43977383e6a51dff9a56021d413098eb5988e09dee2679b1e4e407",
+      "commandHash": "a0fdd9a758fa006561faec968b063a3ad922ae286d09b2134492a0c71ee9d4a7",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "108bcbff205c472daad868127a852519f4dcc5e07d7ccd2bff6b8b3924ea1372",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json ## Diff Ownership Preview - active_owned: `12`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/conditional_go_bootstrap_lifecycle_schema.json` — covered by Contract scope"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:04:57.239444+00:00",
+      "exitCode": 0,
+      "durationMs": 206128,
+      "outputDigest": "3495c900afdd9ee7534a250752f3878432ecd9eac58f44240bb8380538bfdba0",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "108bcbff205c472daad868127a852519f4dcc5e07d7ccd2bff6b8b3924ea1372",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 170 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 8%] ........................................................................ [ 16%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json SUMMARY=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:04:58.595502+00:00",
+      "exitCode": 0,
+      "durationMs": 220,
+      "outputDigest": "b293af1928048ad90ce26b90a97c74809c7dae2f4d7aa01618680da5086f2a30",
+      "commandHash": "dacd3a48663800dd02c104f212328e48cc6fa157be21c8b6912063fe59940284",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "0307849d173288ef90e355188548006dfe59f54afead36f543a48e2f1a1f3f4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json --summary .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json SUMMARY=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:04:58.865337+00:00",
+      "exitCode": 0,
+      "durationMs": 220,
+      "outputDigest": "9472dccef97e4a47ffbb4a10af6803b8fde6a36764a74c34ab149a239692efb1",
+      "commandHash": "5002f8a2fa18ed4c68aea206e16430406dfcac6e54a534b1d1b9f993c7800996",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "0307849d173288ef90e355188548006dfe59f54afead36f543a48e2f1a1f3f4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json --summary .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:04:58.960547+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "0307849d173288ef90e355188548006dfe59f54afead36f543a48e2f1a1f3f4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json SUMMARY=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:04:59.086870+00:00",
+      "exitCode": 0,
+      "durationMs": 68,
+      "outputDigest": "d45fac786da4cd0af3998aa789d281e7c2eccdd986107b425e525984ffb6f413",
+      "commandHash": "7f6cd1859f4410ad9e358decfdf30f70d841f7eacb38b499e51f587caa20e8d2",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "0307849d173288ef90e355188548006dfe59f54afead36f543a48e2f1a1f3f4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json --summary .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json CONTRACT=.ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-22T20:04:59.905604+00:00",
+      "exitCode": 0,
+      "durationMs": 102,
+      "outputDigest": "278f0306ff01602ed47528255ff27f02234ce2587c98085d0cad5ec4ed237ed4",
+      "commandHash": "a47abcded2038ad545515ae477878ee165a3e6f48ea92823e8d60d4b3a9bc99f",
+      "contractHash": "5165a679a18247a9a8a2f4081c06dd10be5414d230ce50100f6f4b5420b4018d",
+      "commitSha": "c0aeb53d3a47e23e437c699f5f329b5b714e38b4",
+      "executionContractPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json",
+      "worktreeDigest": "d8f1f8ad87bd732266efc50b86068611f46ef97c2c7d36661d98ecc04e448f69",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json --contract .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.contract.json ai summary check passed: .ai/work-items/active/conditional_go_bootstrap_lifecycle_schema.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Bootstrap state and schema changes must preserve the not-ready boundary.",
+      "compliant": true,
+      "evidence": "validate_bootstrap_record and lifecycle_facts require readiness=not_claimed; targeted lifecycle tests pass."
+    },
+    {
+      "guideline": "Write transitions require explicit confirmation and drift validation.",
+      "compliant": true,
+      "evidence": "Session Write is reachable only from CONFIRMED and bootstrap_write_boundary tests preserve confirmation/drift checks."
+    },
+    {
+      "guideline": "Keep WI8 ownership/lifecycle implementation out of this Work Item.",
+      "compliant": true,
+      "evidence": "Diff is limited to Bootstrap schema, lifecycle facts, tests, capability truth, and installation documentation."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "In-memory, confirmation-gated lifecycle contract; provider persistence and full installed lifecycle remain explicitly deferred."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "All required verification passed and no residual risk remains.",
+    "expectedReviewFocus": [
+      "Confirm lifecycle schema names and readiness boundary."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "contractHash": "5165a679a18247a9",
+      "result": "passed",
+      "recorded": true,
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "contractHash": "5165a679a18247a9",
+      "result": "passed",
+      "recorded": true,
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    }
+  ],
+  "knownGaps": [
+    "Provider-specific persistence and ownership manifest integration remain WI8 scope."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 466
+}
