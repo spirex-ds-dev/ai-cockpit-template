@@ -1,0 +1,192 @@
+{
+  "contractVersion": 2,
+  "workItemId": "project-calibration-release-budget-final-final",
+  "mode": "code",
+  "title": "Finalize total archive budget before release truth PR",
+  "rawUserRequest": "授权创建一个独立的预算修复 Work Item/PR；继续当前流程，但不要启动工单 1。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:user-authorized-budget-repair", "capturedAt": "2026-07-22", "digest": "sha256:user-authorized-budget-repair"},
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Pre-calibrate cumulative archiveGrowth governance budget before the authorized budget and release-truth lifecycle closures.",
+    "requestedCapabilities": ["ai_governance", "software_design"]
+  },
+  "baseCommit": "4de6292035b47b0b2ae8432e3585468755b29200",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/guards/governance_complexity_policy.yaml",
+    ".ai/work-items/active/project-calibration-release-budget-final-final.contract.json",
+    ".ai/work-items/active/project-calibration-release-budget-final-final.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "工单 1 实现和执行计划内容",
+    "任何生产行为或发布流程变更"
+  ],
+  "sources": [
+    {
+      "path": ".ai/guards/governance_complexity_policy.yaml",
+      "reason": "Current archiveGrowth budget and repayment records."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Current main already contains cumulative archiveGrowth 432."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/217",
+      "reason": "Original budget PR adds one archived lifecycle record after rebase."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/218",
+      "reason": "Final budget PR evidence confirms the cumulative-budget failure mode."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["governance_budget"],
+    "reason": "This changes only the governance archiveGrowth ceiling and records its authorized repayment."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized an independent budget repair before resuming the release-truth Work Item."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "max.archiveGrowth is 436, covering current main archiveGrowth 431 plus this archive, the original budget PR archive, Work Item 1, and the next serial archive margin.",
+    "The policy contains an explicit authorized repayment record and no Work Item 1, plan, production, or release behavior changes.",
+    "All required AI governance checks and project quality checks pass before archive and PR."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Current main has cumulative archiveGrowth 431. This Work Item, the original budget PR, and the next serial Work Items each require lifecycle archives, so the ceiling must be pre-calibrated to 436.",
+    "constraints": [
+      "Change only .ai/guards/governance_complexity_policy.yaml and generated lifecycle evidence.",
+      "Do not start or modify Work Item 1 implementation.",
+      "Preserve existing archived evidence and use the full PR and ai-close-work-item lifecycle."
+    ],
+    "rationale": "Precomputing the complete near-term archive sequence prevents another budget-remediation loop while preserving fail-closed governance checks."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Cumulative archive budget includes this repair, the original budget PR, and Work Item 1.",
+      "required": true,
+      "status": "verified",
+      "evidence": [".ai/guards/governance_complexity_policy.yaml", ".ai/work-items/archive/index.json"]
+    },
+    {
+      "scenario": "Budget repair changes governance configuration only and does not start Work Item 1.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["git diff -- .ai/guards/governance_complexity_policy.yaml"]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized creation of an independent budget repair Work Item/PR."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/project-calibration-release-budget-final-final.json",
+    "baseCommit": "4de6292035b47b0b2ae8432e3585468755b29200",
+    "initialScopeDigest": "8deec6d035caef54652243a94b9c6be4808313695ad7799bed36a8697eda2bb8",
+    "contractSkeletonDigest": "1af899c02cf414b01b14b76bdf763db7484c9b4a3f36c66981e397711281581c"
+  }
+}
