@@ -11,6 +11,8 @@ keywords:
 
 # Installation
 
+Installing the Runtime copies governance entrypoints; it does not complete calibration. Run `configure_ai_cockpit` through its ten stages, review the proposed profile, and activate only the confirmed configuration. The default documentation language is Japanese.
+
 Install a fixed release of AI Cockpit into an existing repository. Start with the Quick Install entry in [README.md](../../README.md), then use this guide to confirm the repository is ready for adoption.
 
 Quick Install consumes the published `release.json` only. Release preparation may maintain a separate `next-release.json` candidate record, but that file is never used to choose the public installer tag; candidate testing must pass an explicit ref.
