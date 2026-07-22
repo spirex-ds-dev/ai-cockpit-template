@@ -61,6 +61,8 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "scenarioCoverage",
     "archiveIndexRepair",
     "startReceipt",
+    "predecessorWorkItem",
+    "budgetImpact",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -306,6 +308,39 @@ def validate_intent(data: dict[str, Any]) -> list[str]:
     return issues
 
 
+PLACEHOLDER_MARKERS = (
+    "initial skeleton",
+    "replace this",
+    "replace with",
+    "not verified",
+    "new feature",
+    "user documentation",
+)
+
+
+def validate_semantic_placeholders(data: dict[str, Any]) -> list[str]:
+    """Reject generic starter text in active v2 code Contracts."""
+    if data.get("contractVersion") != 2 or data.get("mode") != "code":
+        return []
+    issues: list[str] = []
+
+    def scan(value: Any, location: str) -> None:
+        if isinstance(value, str):
+            lowered = value.casefold()
+            if any(marker in lowered for marker in PLACEHOLDER_MARKERS):
+                issues.append(f"placeholder content remains in {location}")
+        elif isinstance(value, dict):
+            for key, child in value.items():
+                scan(child, f"{location}.{key}")
+        elif isinstance(value, list):
+            for index, child in enumerate(value):
+                scan(child, f"{location}[{index}]")
+
+    for field in ("intent", "sources", "acceptance", "scenarioCoverage"):
+        scan(data.get(field), field)
+    return issues
+
+
 RAW_REQUEST_EXEMPTIONS = {
     "system_maintenance",
     "dependency_upgrade",
@@ -438,6 +473,7 @@ def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str
     issues.extend(validate_optional_readiness(data))
     issues.extend(validate_baseline_and_approvals(data))
     issues.extend(validate_intent(data))
+    issues.extend(validate_semantic_placeholders(data))
     issues.extend(validate_raw_request_requirement(data))
     issues.extend(validate_requested_operation(data))
     if "problemStatement" in data and not non_empty_string(data.get("problemStatement")):

@@ -10,6 +10,7 @@ TITLE ?=
 MODE ?= investigate
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 AI_PYTHON = PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
+AI_PREFLIGHT_VALIDATE_CONTRACT ?= true
 
 .PHONY: help \
 	test project-format-check project-test project-lint diff-check quality \
@@ -24,7 +25,8 @@ AI_PYTHON = PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy template-adoption-ready \
 	check-ai-scenario-coverage check-ai-start-receipt generate-ai-preflight-review check-ai-preflight-review ai-preflight \
-	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge
+	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge \
+	check-ai-serial-order check-ai-budget-impact
 
 check-ai-diff-ownership:
 	$(AI_PYTHON) scripts/ai_check_diff_ownership.py $(if $(AI_BASE_COMMIT),--base $(AI_BASE_COMMIT),) $(if $(CONTRACT),--contract $(CONTRACT),)
@@ -48,6 +50,8 @@ help:
 	@printf '%s\n' '  make check-ai-adoption-ready'
 	@printf '%s\n' '  make template-adoption-ready  # explicit template-maintenance readiness mode'
 	@printf '%s\n' '  make check-ai-contract CONTRACT=<contract.json>'
+	@printf '%s\n' '  make check-ai-serial-order CONTRACT=<contract.json>'
+	@printf '%s\n' '  make check-ai-budget-impact CONTRACT=<contract.json>'
 	@printf '%s\n' '  make check-ai-scope CONTRACT=<contract.json>'
 	@printf '%s\n' '  make check-ai-guards'
 	@printf '%s\n' '  make check-ai-agent-risk CONTRACT=<contract.json> SUMMARY=<summary.json>'
@@ -234,6 +238,12 @@ template-adoption-ready:
 check-ai-contract check-ai-work-item:
 	$(AI_PYTHON) scripts/ai_check_work_item.py $(CONTRACT)
 
+check-ai-serial-order:
+	$(AI_PYTHON) scripts/ai_check_serial_order.py --contract "$(CONTRACT)"
+
+check-ai-budget-impact:
+	$(AI_PYTHON) scripts/ai_check_budget_impact.py --contract "$(CONTRACT)"
+
 check-ai-scope:
 	$(AI_PYTHON) scripts/ai_check_scope.py $(CONTRACT)
 
@@ -258,6 +268,9 @@ check-ai-scenario-coverage:
 ai-preflight:
 	$(AI_PYTHON) scripts/ai_preflight_review.py $(if $(CONTRACT),--contract $(CONTRACT))
 	$(AI_PYTHON) scripts/ai_preflight_review.py --check $(if $(CONTRACT),--contract $(CONTRACT))
+	@if [ "$(AI_PREFLIGHT_VALIDATE_CONTRACT)" = "true" ]; then $(AI_PYTHON) scripts/ai_check_work_item.py $(CONTRACT); fi
+	$(shell command -v make) check-ai-serial-order CONTRACT="$(CONTRACT)"
+	$(shell command -v make) check-ai-budget-impact CONTRACT="$(CONTRACT)"
 
 generate-ai-preflight-review:
 	$(AI_PYTHON) scripts/ai_preflight_review.py $(if $(CONTRACT),--contract $(CONTRACT))
@@ -295,6 +308,8 @@ ai-close-work-item:
 check-ai:
 	@if [ -n "$(CONTRACT)" ]; then \
 		"$${MAKE:-make}" check-ai-contract CONTRACT="$(CONTRACT)" && \
+		"$${MAKE:-make}" check-ai-serial-order CONTRACT="$(CONTRACT)" && \
+		"$${MAKE:-make}" check-ai-budget-impact CONTRACT="$(CONTRACT)" && \
 		"$${MAKE:-make}" check-ai-scope CONTRACT="$(CONTRACT)" && \
 		"$${MAKE:-make}" check-ai-guards CONTRACT="$(CONTRACT)" && \
 		"$${MAKE:-make}" check-ai-agent-risk CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \

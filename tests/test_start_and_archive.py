@@ -22,6 +22,30 @@ def test_start_and_archive_use_clean_git_environment():
     assert all(not key.startswith("GIT_") for key in ai_common.clean_git_environment())
 
 
+def test_start_preflight_can_skip_contract_validation_for_new_skeleton(monkeypatch):
+    observed = {}
+
+    class Result:
+        returncode = 0
+        stdout = ""
+        stderr = ""
+
+    def fake_run(command, **_kwargs):
+        observed["command"] = command
+        return Result()
+
+    monkeypatch.setattr(ai_start.subprocess, "run", fake_run)
+    assert (
+        ai_start.run_make(
+            "ai-preflight",
+            contract=".ai/work-items/active/example.contract.json",
+            variables=["AI_PREFLIGHT_VALIDATE_CONTRACT=false"],
+        )[0]
+        == 0
+    )
+    assert observed["command"][-1] == "AI_PREFLIGHT_VALIDATE_CONTRACT=false"
+
+
 def test_start_receipt_binds_contract_and_rejects_tampering(tmp_path):
     contract = {
         "contractVersion": 2,

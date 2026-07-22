@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+"""Check governance complexity budget and require repayment evidence on overrun."""
+
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+from typing import Any
+
+from ai_common import load_json, parse_yaml
+
+
+def validate_budget_impact(
+    contract: dict[str, Any], metrics: dict[str, Any], policy: dict[str, Any]
+) -> list[str]:
+    limits = policy.get("max", {}) if isinstance(policy, dict) else {}
+    impact = contract.get("budgetImpact")
+    issues: list[str] = []
+    for metric, limit in limits.items():
+        actual = metrics.get(metric)
+        if not isinstance(actual, (int, float)) or not isinstance(limit, (int, float)):
+            continue
+        if actual <= limit:
+            continue
+        if (
+            isinstance(impact, dict)
+            and impact.get("approved") is True
+            and impact.get("repaymentWorkItem")
+            and impact.get("repaymentRecords")
+        ):
+            continue
+        issues.append(f"{metric} exceeds policy max: {actual} > {limit}")
+        if not isinstance(impact, dict) or not impact.get("repaymentWorkItem"):
+            issues.append(f"{metric} overrun requires budgetImpact.repaymentWorkItem")
+        if not isinstance(impact, dict) or not impact.get("repaymentRecords"):
+            issues.append(f"{metric} overrun requires budgetImpact.repaymentRecords")
+    return issues
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--contract", required=True)
+    parser.add_argument("--report", default="target/governance_complexity_report.json")
+    parser.add_argument("--policy", default=".ai/guards/governance_complexity_policy.yaml")
+    args = parser.parse_args()
+    try:
+        contract = load_json(Path(args.contract))
+        report_path = Path(args.report)
+        metrics = load_json(report_path) if report_path.exists() else {}
+        policy = parse_yaml(Path(args.policy))
+    except (OSError, ValueError) as exc:
+        print(f"budget impact check failed: {exc}", file=sys.stderr)
+        return 1
+    issues = validate_budget_impact(contract, metrics, policy)
+    if issues:
+        for issue in issues:
+            print(f"[ERROR] {issue}", file=sys.stderr)
+        return 1
+    print("budget impact check passed")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

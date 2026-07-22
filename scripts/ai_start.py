@@ -150,10 +150,13 @@ def acquire_start_lock() -> Iterator[None]:
             lock_path.unlink(missing_ok=True)
 
 
-def run_make(target: str, *, contract: str | None = None) -> tuple[int, str]:
+def run_make(
+    target: str, *, contract: str | None = None, variables: list[str] | None = None
+) -> tuple[int, str]:
     command = ["make", target]
     if contract:
         command.append(f"CONTRACT={contract}")
+    command.extend(variables or [])
     try:
         result = subprocess.run(
             command,
@@ -297,7 +300,9 @@ def persist_work_item(
 
 def run_code_preflight(contract_path: Path, summary_path: Path, contract_rel: str) -> int:
     """Run code-mode preflight and refresh status with its result."""
-    code, output = run_make("ai-preflight", contract=contract_rel)
+    code, output = run_make(
+        "ai-preflight", contract=contract_rel, variables=["AI_PREFLIGHT_VALIDATE_CONTRACT=false"]
+    )
     if output.strip():
         print(output.rstrip())
     try:
