@@ -23,6 +23,7 @@ keywords:
 
 | 计划 | 状态 | 说明 |
 | --- | --- | --- |
+| [2026-07-22 Conditional GO 全面评审整改](2026-07-22-conditional-go-review-remediation.md) | 执行中 | 基于 Conditional GO 评审；11 个工单严格串行执行，工单 1 先完成本计划文档，最后一项为清理执行计划文档。 |
 | [2026-07-22 Project Calibration and Update Recalibration](2026-07-22-project-calibration-recalibration.md) | 执行中 | 评审整改计划；14 个工单串行执行，最后一项为清理执行计划文档。 |
 
 ## 历史保留计划

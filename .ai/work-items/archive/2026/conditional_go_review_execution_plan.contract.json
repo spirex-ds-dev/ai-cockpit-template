@@ -1,0 +1,220 @@
+{
+  "contractVersion": 2,
+  "workItemId": "conditional_go_review_execution_plan",
+  "mode": "code",
+  "title": "Create Conditional GO review remediation execution plan",
+  "baseCommit": "b8a7c36e62070a8be135bc9d8f1bdda114c1fb4a",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "查收评审，总结，工单列表（列表最后加上：清理执行计划文档），做成修改执行计划的文档。计划里明确写清楚，每个工单要走完整的流程（包括PR，清理分支），然后循环执行下一个工单，直到全部工单完整为止。需要跟我确认的，写清楚，已经得到我的授权。先完成完整的计划文档工单，包括PR，清理。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-request-2026-07-22",
+    "capturedAt": "2026-07-22",
+    "digest": "sha256:conversation-user-request-2026-07-22"
+  },
+  "declaredIntent": {
+    "summary": "Create the authoritative Conditional GO review remediation plan and enforce its serial Work Item lifecycle.",
+    "requestedCapabilities": ["ai_governance", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "documentation",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "document",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/conditional_go_review_execution_plan.contract.json",
+    ".ai/work-items/active/conditional_go_review_execution_plan.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/superpowers/plans/2026-07-22-conditional-go-review-remediation.md",
+    "docs/superpowers/plans/README.md"
+  ],
+  "outOfScope": [
+    "Production implementation of the review remediation Work Items listed in the plan",
+    "Release publication during this plan-document Work Item",
+    "Deletion of existing plans, tests, Contracts, Summaries, review evidence, or release evidence"
+  ],
+  "sources": [
+    {
+      "path": "user-provided-review:conditional-go-2026-07-22",
+      "reason": "User-provided Conditional GO review findings and recommended remediation Work Items."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository-required Work Item lifecycle, PR, archive, cleanup, and finish criteria."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Canonical Contract, Preflight, finish, PR, and closure workflow."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Canonical AI Cockpit terminology and architecture boundaries."
+    },
+    {
+      "path": "docs/superpowers/plans/README.md",
+      "reason": "Execution plan index and retention policy."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "documentation_truth",
+      "serial_execution_boundary"
+    ],
+    "reason": "This Work Item changes only the auditable execution plan and its index. The main risks are misstating current capability and allowing later Work Items to bypass the required PR/merge/closure sequence."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized creation of the complete plan and its subsequent Work Item lifecycle, including PR, merge, archive, branch cleanup, and iteration to the next item."
+  },
+  "preReviewWarnings": [
+    "Reviewers must confirm that the plan distinguishes current implemented capability from planned capability and that no later Work Item can start before PR merge, ai-close-work-item, branch cleanup, and base synchronization."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The plan records the Conditional GO review conclusion, strengths, P0/P1/P2 findings, and the current-versus-planned capability boundary.",
+    "The plan contains an ordered Work Item list covering every review finding, with the final item explicitly named 清理执行计划文档.",
+    "The plan explicitly requires every Work Item to complete Contract, Preflight, implementation, verification, Summary, ai-finish, PR, merge, ai-close-work-item, local/remote branch cleanup, and base synchronization before the next Work Item starts.",
+    "The plan records that the user's authorization for code, tests, docs, PRs, merges, archive, release-related work, and branch cleanup has already been obtained, while requiring actual evidence for PR, merge, release, and cleanup outcomes.",
+    "The plan index identifies this document as the current execution plan and preserves prior plans as historical evidence without deleting them."
+  ],
+  "guidelines": [
+    "Keep the plan language accurate about implemented, template-only, adopter-installed, and planned capabilities.",
+    "Do not delete historical Contracts, Summaries, review evidence, release evidence, or still-referenced plans."
+  ],
+  "intent": {
+    "problem": "The review rates the repository Conditional GO because README and design descriptions lead the installed adopter runtime in several areas, especially calibration, update lifecycle, quick-install integrity, bootstrap interaction, ownership, and CI evidence. The next engineering cycle needs one authoritative execution plan that preserves the review truth and prevents serial Work Items from being started or declared complete out of order.",
+    "constraints": [
+      "Keep AI Cockpit within the Repository Governance Layer boundary.",
+      "Separate current implemented capability from template-only, adopter-installed, and planned capability.",
+      "Use one Work Item, one dedicated branch, and one PR per item; do not begin the next item before merge, archive, closure, branch cleanup, and base synchronization.",
+      "Treat the user's approval as a workflow instruction, not as evidence that a PR, test, release, or branch cleanup actually happened."
+    ],
+    "rationale": "A review-grounded plan makes the Conditional GO decision actionable, gives each finding an independently reviewable boundary, and turns the requested PR/cleanup loop into an explicit fail-closed execution protocol."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The first Work Item produces and indexes one complete review remediation plan without implementing later production changes.",
+      "required": false,
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This documentation Work Item defines the later runtime verification; it does not execute those later runtime paths."
+    },
+    {
+      "scenario": "The plan covers every P0, P1, and P2 review finding and ends its ordered list with 清理执行计划文档.",
+      "required": false,
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "The plan records the verification method; the child Work Items own the runtime scenario evidence."
+    },
+    {
+      "scenario": "A later Work Item cannot start until the previous item has a merged PR, archived evidence, ai-close-work-item success, branch cleanup, and synchronized base.",
+      "required": false,
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This Work Item documents the lifecycle protocol; each child Work Item must produce the actual closure evidence."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly approved creating the complete plan Work Item and documented that later Work Items may include PR, merge, archive, and branch cleanup steps."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/conditional_go_review_execution_plan.json",
+    "baseCommit": "b8a7c36e62070a8be135bc9d8f1bdda114c1fb4a",
+    "initialScopeDigest": "f5f4288a9eb5e0629734a650d48aec19235fed438d3918fa9eb02c558cff955c",
+    "contractSkeletonDigest": "f4c51247e744750fc249aa7742ffc920ad6a6e593ee26b2be6cf1bdd31f52991"
+  }
+}
