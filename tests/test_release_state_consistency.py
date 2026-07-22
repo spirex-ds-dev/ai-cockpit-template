@@ -128,3 +128,15 @@ def test_noncanonical_state_record_is_rejected(tmp_path):
 
     assert any("canonical marker" in issue for issue in issues)
     assert any("projections" in issue for issue in issues)
+
+
+def test_projections_do_not_author_the_canonical_state_machine(tmp_path):
+    write_metadata(tmp_path)
+    published = json.loads((tmp_path / "release.json").read_text(encoding="utf-8"))
+    candidate = json.loads((tmp_path / "next-release.json").read_text(encoding="utf-8"))
+
+    assert "state" not in published
+    assert "evidenceStatus" not in published
+    assert "state" not in candidate
+    assert "evidenceStatus" not in candidate
+    assert check_release_state_consistency.check_repository(tmp_path) == []
