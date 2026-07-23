@@ -1,0 +1,63 @@
+{
+  "contractVersion": 2,
+  "workItemId": "lockfile_python_path",
+  "mode": "code",
+  "title": "Fix lockfile reproducibility Python executable resolution",
+  "rawUserRequest": "发布前置检查在默认的 bare PYTHON=python3 环境中失败：Makefile 用 $(abspath $(PYTHON)) 将可执行文件名误解析为工作树内的伪路径，导致锁文件可复现性检查在昂贵 CI/PR 阶段才暴露。按根因方针，先把 Python 可执行文件解析固化为事前可验证的流程门禁；预算和格式检查并入本工单，不单独创建预算工单，不发布版本。",
+  "rawRequestSource": {"type": "human", "reference": "user-request-2026-07-23-release-preflight-root-cause", "capturedAt": "2026-07-24", "digest": "user-authorized-root-process-correction"},
+  "declaredIntent": {"summary": "让锁文件可复现性检查在默认 Python 名称、虚拟环境路径和显式绝对路径下都调用真实解释器，并在 PR 前暴露路径配置错误。", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "baseCommit": "ae6eae9331dabd4b1481b17db4ed2f809a60bf84",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "Makefile",
+    "tests/test_makefile.py",
+    ".ai/guards/governance_complexity_policy.yaml",
+    ".ai/work-items/active/lockfile_python_path.contract.json",
+    ".ai/work-items/active/lockfile_python_path.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": ["Release tag/provider publication", "Adopter projects and installed runtime repositories", "Changing lockfile contents or weakening reproducibility checks"],
+  "sources": [
+    {"path": "Makefile", "reason": "The lockfile reproducibility recipe resolves bare PYTHON names with abspath and creates a nonexistent worktree-relative path."},
+    {"path": "tests/test_makefile.py", "reason": "Existing Makefile tests cover Python selection but not executable resolution for the lockfile recipe."},
+    {"path": ".ai/guards/governance_complexity_policy.yaml", "reason": "The functional Work Item archive growth must be measured and gated in the same correction."},
+    {"path": ".ai/cockpit/README.md", "reason": "Defines mandatory preflight, format, budget, PR, and closure ordering."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "low", "riskTypes": ["reproducibility_gate"], "reason": "The change affects only interpreter resolution for an existing lockfile gate; it must preserve exact regenerated output and fail closed on missing executables."},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "User authorized root process correction before retrying publication; no external release action is in scope."},
+  "preReviewWarnings": ["Verify bare executable names, virtual-environment paths, explicit absolute paths, and unchanged lockfile bytes."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record checkpoints before implementation and finish to prevent release-process drift."},
+  "acceptance": [
+    "The lockfile reproducibility recipe resolves bare PYTHON names through the installed executable path.",
+    "Existing virtual-environment and explicit-path overrides continue to work.",
+    "Regression tests fail for the old worktree-relative path and pass for the corrected resolution.",
+    "Project formatting, governance complexity, budget, and all required AI gates pass before PR creation.",
+    "The Work Item completes archive, PR, merge, ai-close-work-item, branch cleanup, and default sync."
+  ],
+  "guidelines": [
+    "Budget and formatting checks are hard preflight gates; do not create a budget-only Work Item.",
+    "Keep the lockfile gate fail-closed and do not weaken exact reproducibility comparison.",
+    "Do not modify adopter projects or publish a release from this Work Item."
+  ],
+  "intent": {"problem": "The release preflight chain exposed a real Makefile bug only after entering the expensive gate sequence: $(abspath $(PYTHON)) turns bare python3 into a nonexistent path under the temporary directory.", "constraints": ["Preserve PYTHON selection semantics for .venv and explicit overrides.", "Keep the committed lockfile unchanged unless regeneration proves an actual dependency difference.", "Treat format and budget checks as before-PR blockers."], "rationale": "Resolve the configured interpreter once to a real executable path before changing directory, so the gate is deterministic across local and CI environments."},
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiSerialOrder", "required": true}, {"check": "aiBudgetImpact", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized root process correction before retrying release publication."},
+  "rollbackNote": "Revert this Work Item diff and restore the original Makefile recipe and regression tests.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 504, "pythonLines": 39509}, "approved": true, "repaymentWorkItem": "lockfile_python_path", "repaymentRecords": [".ai/guards/governance_complexity_policy.yaml"], "reason": "Include the single functional lockfile process-correction archive and measured regression coverage growth in this Work Item; do not create a separate budget Work Item."},
+  "scenarioCoverage": [
+    {"scenario": "Bare PYTHON=python3 resolves a real executable for lockfile reproducibility", "required": false, "status": "unverified", "evidence": []},
+    {"scenario": ".venv/bin/python and explicit absolute paths remain supported", "required": false, "status": "unverified", "evidence": []},
+    {"scenario": "Release publication remains out of scope until this Work Item closes", "required": true, "status": "verified", "evidence": [".ai/work-items/active/lockfile_python_path.contract.json"]}
+  ],
+  "predecessorWorkItem": {"workItemId": "release_v0539_candidate_final", "status": "closed", "pr": {"number": 291, "merged": true, "mergeCommit": "ae6eae9331dabd4b1481b17db4ed2f809a60bf84"}, "closure": {"succeeded": true, "localBranchDeleted": true, "remoteBranchDeleted": true, "baseSynchronized": true, "evidence": ".ai/work-items/archive/2026/release_v0539_candidate_final.archive-manifest.json"}},
+  "startReceipt": {"path": ".ai/work-items/starts/lockfile_python_path.json", "baseCommit": "ae6eae9331dabd4b1481b17db4ed2f809a60bf84", "initialScopeDigest": "e2a5f4952544df56372d97eb0ed15418ca571a7c410f5115cab0f6cae31e925c", "contractSkeletonDigest": "a91c5e74c826bd74079e676e82ea6ef2cdd2be05dca26d132c65588dd85eeb1f"}
+}
