@@ -11,6 +11,7 @@ from scripts.check_release_preflight import _load_object
 from scripts.check_release_preflight import canonical_archive_sha
 from scripts.check_release_preflight import resolve_source_commit
 from scripts.check_release_preflight import validate_release_preflight
+from scripts.check_release_preflight import validate_release_identity
 
 
 def _fixture(**overrides):
@@ -90,6 +91,54 @@ def test_release_preflight_accepts_matching_digest_source_commit():
     assert validate_release_preflight(**_fixture(release_digests={"sourceCommit": "HEAD"})) == []
 
 
+def _identity_fixture(**overrides):
+    values = {
+        "release": {"releaseTag": "v0.5.39"},
+        "freeze": {
+            "sourceCommit": "a" * 40,
+            "tagTarget": "a" * 40,
+            "metadataCommit": "b" * 40,
+            "releaseTag": "v0.5.39",
+        },
+        "release_digests": {
+            "sourceCommit": "a" * 40,
+            "tagTarget": "a" * 40,
+            "metadataCommit": "b" * 40,
+            "releaseTag": "v0.5.39",
+        },
+        "source_commit": "a" * 40,
+        "tag_target": "a" * 40,
+        "metadata_commit": "b" * 40,
+    }
+    values.update(overrides)
+    return values
+
+
+def test_release_preflight_rejects_symbolic_or_stale_source_identity():
+    issues = validate_release_identity(
+        **_identity_fixture(release_digests={"sourceCommit": "HEAD"})
+    )
+    assert any("sourceCommit" in issue and "concrete" in issue for issue in issues)
+
+
+def test_release_preflight_rejects_metadata_commit_drift():
+    issues = validate_release_identity(
+        **_identity_fixture(
+            freeze={
+                "sourceCommit": "a" * 40,
+                "tagTarget": "a" * 40,
+                "metadataCommit": "c" * 40,
+                "releaseTag": "v0.5.39",
+            }
+        )
+    )
+    assert any("metadataCommit" in issue for issue in issues)
+
+
+def test_release_preflight_accepts_source_bound_finalized_candidate():
+    assert validate_release_identity(**_identity_fixture()) == []
+
+
 def test_canonical_archive_builder_returns_sha256_for_repository():
     digest = canonical_archive_sha(Path.cwd(), "HEAD")
     assert len(digest) == 64
@@ -167,10 +216,20 @@ def test_finalize_release_freeze_writes_post_close_lifecycle_evidence(monkeypatc
     monkeypatch.setattr(finalizer, "canonical_source_tree", lambda _root, _commit: "tree")
     monkeypatch.setattr(finalizer, "canonical_archive_sha", lambda _root, _commit: "archive")
 
-    assert finalizer.main() == 0
+    assert (
+        finalizer.main(
+            source_commit="a" * 40,
+            tag_target="a" * 40,
+            metadata_commit="b" * 40,
+        )
+        == 0
+    )
     freeze = json.loads((tmp_path / ".ai" / "cockpit" / "release-freeze.json").read_text())
     assert freeze["lifecycle"]["state"] == "closed_and_synchronized"
     assert freeze["lifecycle"]["command"] == "make ai-close-work-item"
+    assert freeze["sourceCommit"] == "a" * 40
+    assert freeze["tagTarget"] == "a" * 40
+    assert freeze["metadataCommit"] == "b" * 40
     assert (
         json.loads((tmp_path / "release.json").read_text())["releaseArchive"]["sha256"] == "archive"
     )
@@ -182,7 +241,9 @@ def test_finalize_release_freeze_writes_post_close_lifecycle_evidence(monkeypatc
     release_digests = json.loads(
         (tmp_path / ".ai" / "cockpit" / "release-digests.json").read_text()
     )
-    assert release_digests["sourceCommit"] == "HEAD"
+    assert release_digests["sourceCommit"] == "a" * 40
+    assert release_digests["tagTarget"] == "a" * 40
+    assert release_digests["metadataCommit"] == "b" * 40
     assert (
         release_digests["artifacts"]["release.json"]
         == hashlib.sha256((tmp_path / "release.json").read_bytes()).hexdigest()
@@ -314,23 +375,29 @@ def test_main_accepts_frozen_candidate(tmp_path, monkeypatch, capsys):
     (tmp_path / ".ai" / "guards").mkdir(parents=True)
     (tmp_path / ".ai" / "work-items" / "active").mkdir(parents=True)
     (tmp_path / ".ai" / "work-items" / "archive").mkdir(parents=True)
-    (tmp_path / "release.json").write_text('{"releaseArchive":{"sha256":"abc"}}', encoding="utf-8")
+    (tmp_path / "release.json").write_text(
+        '{"releaseTag":"v0.5.39","releaseArchive":{"sha256":"abc"}}', encoding="utf-8"
+    )
     (tmp_path / ".ai" / "cockpit" / "release-freeze.json").write_text(
         '{"state":"frozen","sourceTree":"tree","archiveSha256":"abc",'
+        '"sourceCommit":"' + "a" * 40 + '","tagTarget":"' + "a" * 40 + '",'
+        '"metadataCommit":"' + "b" * 40 + '","releaseTag":"v0.5.39",'
         '"lifecycle":{"state":"closed_and_synchronized",'
         '"command":"make ai-close-work-item","baseCommit":"tree",'
         '"worktreeClean":true}}',
         encoding="utf-8",
     )
     (tmp_path / ".ai" / "cockpit" / "release-digests.json").write_text(
-        '{"sourceCommit":"HEAD"}', encoding="utf-8"
+        '{"sourceCommit":"' + "a" * 40 + '","tagTarget":"' + "a" * 40 + '",'
+        '"metadataCommit":"' + "b" * 40 + '","releaseTag":"v0.5.39"}',
+        encoding="utf-8",
     )
     (tmp_path / ".ai" / "guards" / "governance_complexity_policy.yaml").write_text(
         "archiveGrowth: 10\n", encoding="utf-8"
     )
     monkeypatch.setattr(preflight, "canonical_archive_sha", lambda root, commit: "abc")
     monkeypatch.setattr(preflight, "canonical_source_tree", lambda root, commit: "tree")
-    monkeypatch.setattr(preflight, "resolve_source_commit", lambda root, ref: "commit")
+    monkeypatch.setattr(preflight, "resolve_source_commit", lambda root, ref: "a" * 40)
     monkeypatch.setattr(
         "sys.argv",
         ["check_release_preflight", "--root", str(tmp_path), "--source-commit", "HEAD"],

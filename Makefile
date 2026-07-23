@@ -142,15 +142,24 @@ check-release-preflight:
 	$(AI_PYTHON) scripts/check_release_preflight.py --root .
 
 finalize-release-freeze:
-	$(AI_PYTHON) scripts/finalize_release_freeze.py
+	$(AI_PYTHON) scripts/finalize_release_freeze.py \
+		$(if $(SOURCE_COMMIT),--source-commit "$(SOURCE_COMMIT)",) \
+		$(if $(TAG_TARGET),--tag-target "$(TAG_TARGET)",) \
+		$(if $(METADATA_COMMIT),--metadata-commit "$(METADATA_COMMIT)",)
 
 finalize-release-freeze-candidate:
 	test -n "$(CANDIDATE_TASK)"
-	$(AI_PYTHON) scripts/finalize_release_freeze.py --candidate-task "$(CANDIDATE_TASK)"
+	$(AI_PYTHON) scripts/finalize_release_freeze.py --candidate-task "$(CANDIDATE_TASK)" \
+		$(if $(SOURCE_COMMIT),--source-commit "$(SOURCE_COMMIT)",) \
+		$(if $(TAG_TARGET),--tag-target "$(TAG_TARGET)",) \
+		$(if $(METADATA_COMMIT),--metadata-commit "$(METADATA_COMMIT)",)
 
 finalize-release-freeze-premerge:
 	test -n "$(TASK)"
-	$(AI_PYTHON) scripts/finalize_release_freeze.py --premerge-task "$(TASK)"
+	$(AI_PYTHON) scripts/finalize_release_freeze.py --premerge-task "$(TASK)" \
+		$(if $(SOURCE_COMMIT),--source-commit "$(SOURCE_COMMIT)",) \
+		$(if $(TAG_TARGET),--tag-target "$(TAG_TARGET)",) \
+		$(if $(METADATA_COMMIT),--metadata-commit "$(METADATA_COMMIT)",)
 
 check-ci-release-evidence:
 	test -n "$(CI_RELEASE_EVIDENCE)"

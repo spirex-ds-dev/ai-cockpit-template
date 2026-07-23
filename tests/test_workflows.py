@@ -134,6 +134,15 @@ def test_release_workflow_is_exact_sha_and_action_dependency_free():
     assert "GITHUB_RUN_ID" in workflow
 
 
+def test_release_workflow_binds_one_source_identity_before_provider_checks():
+    workflow = (ROOT / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")
+    assert '--arg tagTarget "$SOURCE_COMMIT"' in workflow
+    assert '--arg metadataCommit "$SOURCE_COMMIT"' in workflow
+    assert workflow.index("make check-release-preflight") < workflow.index(
+        "Install locked release evidence dependencies"
+    )
+
+
 def test_release_workflow_publishes_provider_bundle_digest_in_source_evidence():
     workflow = (ROOT / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")
     bind = workflow.index("Bind the generated evidence bundle digest")
