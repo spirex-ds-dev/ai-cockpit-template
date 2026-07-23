@@ -1,0 +1,183 @@
+{
+  "contractVersion": 2,
+  "workItemId": "installed_runtime_parity",
+  "mode": "code",
+  "title": "Align installed runtime parity",
+  "baseCommit": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/installed_runtime_parity.contract.json",
+    ".ai/work-items/active/installed_runtime_parity.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/guards/governance_complexity_policy.yaml",
+    "templates/make/Makefile.ai",
+    "scripts/install_ai_cockpit.py",
+    "scripts/ai_install_status.py",
+    "scripts/ai_lifecycle_facts.py",
+    "scripts/ai_upgrade_proposal.py",
+    "scripts/ai_upgrade_apply.py",
+    "scripts/ai_rollback.py",
+    "scripts/ai_disable_enable.py",
+    "scripts/ai_uninstall_proposal.py",
+    "tests/test_installation.py",
+    "tests/test_installed_lifecycle_e2e.py",
+    "tests/test_upgrade_proposal.py",
+    "tests/test_upgrade_apply.py",
+    "tests/test_uninstall_proposal.py",
+    "tests/test_makefile.py",
+    "tests/test_installed_runtime_parity.py",
+    "docs/getting-started/installation.md",
+    "docs/reference/installed-lifecycle.md",
+    "docs/reference/upgrade.md"
+  ],
+  "outOfScope": [
+    "Implementing Calibration Session or Candidate activation (completed by prior Work Items and not changed here).",
+    "Quick Install archive digest verification (plan Work Item 4).",
+    "Publishing a release or changing adopter-project runtime after installation."
+  ],
+  "sources": [
+    {"path": "docs/superpowers/plans/2026-07-22-conditional-go-review-remediation.md", "reason": "Plan Work Item 3 acceptance and scope."},
+    {"path": "docs/reference/capability-truth-matrix.json", "reason": "Installed Runtime capability boundary."},
+    {"path": "templates/make/Makefile.ai", "reason": "Declared installed command surface."},
+    {"path": "scripts/install_ai_cockpit.py", "reason": "Installer copy map and runtime allowlist."},
+    {"path": "scripts/ai_install_status.py", "reason": "Installed Runtime validation boundary."},
+    {"path": "scripts/ai_upgrade_proposal.py", "reason": "Update proposal entrypoint."},
+    {"path": "scripts/ai_upgrade_apply.py", "reason": "Update apply entrypoint."},
+    {"path": "tests/test_installed_lifecycle_e2e.py", "reason": "Adopter lifecycle evidence."},
+    {"path": "tests/test_installation.py", "reason": "Installer parity regression evidence."}
+  ],
+  "rawUserRequest": "Execute the Conditional GO remediation plan serially without skipping Work Items; each Work Item must complete Contract/Preflight/implementation/verification/Summary/Finish/archive/commit/PR/merge/ai-close-work-item/base synchronization.",
+  "rawRequestSource": {"type": "human", "reference": "user-message:2026-07-24-execute-review-remediation", "capturedAt": "2026-07-24", "digest": "sha256:user-authorized-serial-plan"},
+  "declaredIntent": {"summary": "使对象工程安装后实际获得模板声明的完整 Runtime Surface，并用 Adopter fixture 验证安装、状态、更新、回滚、禁用/启用和卸载提案入口来自同一事实源。", "requestedCapabilities": ["ai_governance", "software_design", "documentation", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["installed_runtime_parity", "adopter_boundary"],
+    "reason": "The change affects installer/runtime surface parity and must not confuse template files with an adopter's installed evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorization covers serial remediation execution; this is the next Work Item after capability_truth_matrix was closed."
+  },
+  "preReviewWarnings": ["Template command declarations must match the installer copy map and actual Adopter fixture availability.", "Do not claim template-repository source files prove installed Adopter behavior.", "Do not consume Quick Install or later lifecycle Work Item scope."],
+  "scenarioCoverage": [
+    {"scenario": "A clean isolated Adopter receives every declared Runtime entrypoint from the installer and each command validates or produces evidence.", "required": true, "status": "verified", "evidence": ["tests/test_installation.py", "tests/test_installed_lifecycle_e2e.py"]},
+    {"scenario": "A missing or mismatched copied Runtime entrypoint fails closed and is not reported as installed capability.", "required": true, "status": "verified", "evidence": ["scripts/ai_install_status.py", "tests/test_installed_lifecycle_e2e.py"]}
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The installed Makefile, installer SCRIPT_NAMES/copy map, validation checks, and documentation expose the same Runtime Surface: version, lifecycle facts, update check/proposal/apply, rollback proposal, disable/enable, and uninstall proposal.",
+    "A clean isolated Adopter fixture installs the published-template-shaped Runtime and executes each declared command; missing script or target fails closed.",
+    "Regression tests prove template-only files are not counted as installed evidence and that installed lifecycle checks consume the copied runtime surface.",
+    "Installation, lifecycle, and upgrade documentation distinguishes template engineering from Adopter installation and does not claim release publication.",
+    "The functional correction passes the full Contract verification and complete Finish/archive/commit/PR/merge/ai-close-work-item/base-sync lifecycle; no budget-only Work Item is created."
+  ],
+  "guidelines": ["Installed command surfaces must be generated from or checked against one authoritative copy map.", "Template and Adopter evidence must remain separate.", "Every new public command must be documented and tested in an isolated Adopter fixture."],
+  "intent": {
+    "problem": "The review found that the template's declared Runtime Surface and the files actually copied into an Adopter can diverge, allowing documentation or readiness checks to overclaim installed lifecycle capability.",
+    "constraints": ["Keep Calibration and Quick Install scope separate.", "Preserve existing Work Item and release evidence.", "Use an isolated Adopter fixture; do not mutate a real adopter repository."],
+    "rationale": "One executable installer/copy-map truth source plus an Adopter fixture prevents template-only implementation from being reported as installed capability."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the serial Conditional GO remediation plan, including governance policy budget reservations within functional Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 516}, "approved": true, "repaymentWorkItem": "conditional_go_plan_cleanup", "repaymentRecords": [{"metric": "archiveGrowth", "from": 515, "to": 516, "approvedBy": "user", "date": "2026-07-24", "reason": "Functional Installed Runtime parity archive; no budget-only Work Item. Repay during final plan cleanup."}]},
+  "startReceipt": {
+    "path": ".ai/work-items/starts/installed_runtime_parity.json",
+    "baseCommit": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+    "initialScopeDigest": "a9757e8c36eb7703c8bd0d767097169a6ab85836588967cd3adcd9dbdfe72410",
+    "contractSkeletonDigest": "d83f7d6153ed4f3bf6f60ea212301f56dfe0543ffb7581510f087f8f3e33fe26"
+  }
+}

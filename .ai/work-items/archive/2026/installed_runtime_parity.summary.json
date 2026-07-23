@@ -1,0 +1,406 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "installed_runtime_parity",
+  "contractPath": ".ai/work-items/archive/2026/installed_runtime_parity.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/installed_runtime_parity.contract.json",
+      "reason": "Defines installed Runtime parity scope, Adopter evidence boundary, budget reservation, and lifecycle acceptance."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/installed_runtime_parity.summary.json",
+      "reason": "Records parity implementation and verification evidence."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Adds one authoritative Runtime target surface and fail-closed installed Makefile target validation."
+    },
+    {
+      "path": "tests/test_installed_runtime_parity.py",
+      "reason": "Verifies the authoritative target surface, installer copy map, and isolated Adopter runtime commands."
+    },
+    {
+      "path": ".ai/guards/governance_complexity_policy.yaml",
+      "reason": "Reserves one bounded immutable archive record for this functional parity Work Item."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/installed_runtime_parity.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/installed_runtime_parity.contract.json",
+    "docs/superpowers/plans/2026-07-22-conditional-go-review-remediation.md",
+    "templates/make/Makefile.ai",
+    "scripts/ai_installer_catalog.json",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_installed_lifecycle_e2e.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/installed_runtime_parity.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:05:48.353572+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "8834f0c167e6423e2b164c0cd74ac420ec34cf51d6ad1dec161bde0d602a7dcb",
+      "commandHash": "5f4d5385674e4945151114292215618bcaadd95eb61b6e8d1c1dcabea18c1817",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "d93c06af41547fe47bd46834a51d265d17b375474a204405bb5c0f2772256f36",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_work_item.py .ai/work-items/active/installed_runtime_parity.contract.json work item contract check passed: .ai/work-items/active/installed_runtime_parity.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/installed_runtime_parity.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:05:48.558265+00:00",
+      "exitCode": 0,
+      "durationMs": 124,
+      "outputDigest": "f58afc031cac0d7515fbf7cb64d09f70c2717c8fb837f314bc4ec11797e529ba",
+      "commandHash": "14db74a9293fd00a0e9b3f074bb473e83da958363efb7d9e02688b3b75982c38",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "d93c06af41547fe47bd46834a51d265d17b375474a204405bb5c0f2772256f36",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scope.py .ai/work-items/active/installed_runtime_parity.contract.json scope guard passed: 5 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:05:48.783045+00:00",
+      "exitCode": 0,
+      "durationMs": 134,
+      "outputDigest": "0fd88697ee02136c98a2db664a1562ac115c714ee0a74284966b55c3e52a140e",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "d93c06af41547fe47bd46834a51d265d17b375474a204405bb5c0f2772256f36",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guards.py --contract .ai/work-items/active/installed_runtime_parity.contract.json [warning] restricted_write: .ai/guards/governance_complexity_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. guard check completed: 1 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/installed_runtime_parity.contract.json SUMMARY=.ai/work-items/active/installed_runtime_parity.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:05:49.175192+00:00",
+      "exitCode": 0,
+      "durationMs": 302,
+      "outputDigest": "b5e66735562a6be0f9f8afbbb461b2474dc46e0d096164f9ee45e60db84981fb",
+      "commandHash": "761f1b6f9f2583983e11259fef5d34d4510313105b0801bce0e6f06f01b61055",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "d93c06af41547fe47bd46834a51d265d17b375474a204405bb5c0f2772256f36",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_checkpoint.py --contract .ai/work-items/active/installed_runtime_parity.contract.json --summary .ai/work-items/active/installed_runtime_parity.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `installed_runtime_parity` - Contract Hash: `54eac4e9e609ff42` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `0` - Required Checks: `16` - Require"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/installed_runtime_parity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:05:49.380336+00:00",
+      "exitCode": 0,
+      "durationMs": 124,
+      "outputDigest": "d052f2ffbabaa434f16c3adaf6a5ac48a6c76e43036e12b541696795cd8be456",
+      "commandHash": "1f1135c50acf298c20eea58171ef33c48551542d79a753ed477a0c8fed5eccc2",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "d93c06af41547fe47bd46834a51d265d17b375474a204405bb5c0f2772256f36",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_review_policy.py --summary .ai/work-items/active/installed_runtime_parity.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/installed_runtime_parity.json [review] .ai/cockpit/current_status.md [review] .ai/guards/governance_complexity_policy.yaml review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:05:49.574129+00:00",
+      "exitCode": 0,
+      "durationMs": 117,
+      "outputDigest": "7129fb431d5d59c569f22fa9d6ff9b30876753d23ac690d93f14eed56841f07c",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "d93c06af41547fe47bd46834a51d265d17b375474a204405bb5c0f2772256f36",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:05:49.768687+00:00",
+      "exitCode": 0,
+      "durationMs": 116,
+      "outputDigest": "a2e66935f0b5b56e7ea492a898b6ab49413746bdde21a6663eaa1d889cb54e56",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "d93c06af41547fe47bd46834a51d265d17b375474a204405bb5c0f2772256f36",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/installed_runtime_parity.contract.json SUMMARY=.ai/work-items/active/installed_runtime_parity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:05:50.129739+00:00",
+      "exitCode": 0,
+      "durationMs": 265,
+      "outputDigest": "61a1d95ce97283918606abbe4f3711c29de1ae4abeb869b4e8bffdc5b1251a1a",
+      "commandHash": "5530ff8235347ee070653a5f4e93a187adc606d989b3315e3241109fcddc699b",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "d93c06af41547fe47bd46834a51d265d17b375474a204405bb5c0f2772256f36",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/installed_runtime_parity.contract.json --summary .ai/work-items/active/installed_runtime_parity.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/installed_runtime_parity.contract.json SUMMARY=.ai/work-items/active/installed_runtime_parity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:05:50.252766+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "3c131d84e3769214fcdf22c938a26d190b86c1626e8aca29f05ea9eddf2ce9be",
+      "commandHash": "0662da2ec54f6ebfa648044cc64c73daae3b5d0bb8ae92be8cdc8bd8e4c52f88",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "d93c06af41547fe47bd46834a51d265d17b375474a204405bb5c0f2772256f36",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guidelines.py --contract .ai/work-items/active/installed_runtime_parity.contract.json --summary .ai/work-items/active/installed_runtime_parity.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/installed_runtime_parity.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:05:50.669537+00:00",
+      "exitCode": 0,
+      "durationMs": 337,
+      "outputDigest": "c3a1e39bd6dfd26a9a2497a21a02a0a03683d34d93945b3140cb5c95c371cb3e",
+      "commandHash": "14395d842bbd18d66731469375ed7c55644a51f3d67cb8fc2b6c4d2fb5a48a13",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "d93c06af41547fe47bd46834a51d265d17b375474a204405bb5c0f2772256f36",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/installed_runtime_parity.contract.json ## Diff Ownership Preview - active_owned: `5`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/governance_complexity_policy.yaml` — covered by Contract scope - [active_owned] `.ai/work-items/starts/installed_"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:09:50.146282+00:00",
+      "exitCode": 0,
+      "durationMs": 239394,
+      "outputDigest": "92527fd2b6acc50005d3fcba10be228c15176e5b8d889925b5af1beb347df2ce",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "d93c06af41547fe47bd46834a51d265d17b375474a204405bb5c0f2772256f36",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 -m ruff format --check scripts tests 181 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 7%] ........................................................................ [ 15%] ........................................................................ [ 23%]"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/installed_runtime_parity.contract.json SUMMARY=.ai/work-items/active/installed_runtime_parity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:09:51.885635+00:00",
+      "exitCode": 0,
+      "durationMs": 280,
+      "outputDigest": "a3c37d862eecb9faa7eba7440a545c357a4f6e741e16e4c9f11a975f32773ded",
+      "commandHash": "a1cff8aa28c9889dd3a4a45d62eeee5bbcc6701e2468ab4e83bd3ff3b97445fe",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "5714e2c19bad9d41b8a3035888d9f85e59163bc0547464eca69e1bce388c9610",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_generate_status.py .ai/work-items/active/installed_runtime_parity.contract.json --summary .ai/work-items/active/installed_runtime_parity.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/installed_runtime_parity.contract.json SUMMARY=.ai/work-items/active/installed_runtime_parity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:09:52.537316+00:00",
+      "exitCode": 0,
+      "durationMs": 573,
+      "outputDigest": "d2cede5d097460f36b838585abbac238df73fecf1054820e9bca81c07b2895bb",
+      "commandHash": "340e599d5873bd398e2a302ce9027bbb96a4be8975decf0bf7cc7c60908b9c2b",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "5714e2c19bad9d41b8a3035888d9f85e59163bc0547464eca69e1bce388c9610",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/installed_runtime_parity.contract.json --summary .ai/work-items/active/installed_runtime_parity.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:09:52.660562+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "1156c9e1bf158b3423d353f4c44540bca1436905785abef51a57014ed23ad1e4",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "5714e2c19bad9d41b8a3035888d9f85e59163bc0547464eca69e1bce388c9610",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/installed_runtime_parity.contract.json SUMMARY=.ai/work-items/active/installed_runtime_parity.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:09:52.787376+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "cbc2f912aba223fda11fb49cb7e52995beee20ebeae5017e3ae8b29d85561ff2",
+      "commandHash": "6082e199db3365502df9f7678ea5d2d606a4d7d8ef2f52f1d82bf14ef6ee2644",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "5714e2c19bad9d41b8a3035888d9f85e59163bc0547464eca69e1bce388c9610",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_agent_risk.py --contract .ai/work-items/active/installed_runtime_parity.contract.json --summary .ai/work-items/active/installed_runtime_parity.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/installed_runtime_parity.summary.json CONTRACT=.ai/work-items/active/installed_runtime_parity.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T22:09:53.775067+00:00",
+      "exitCode": 0,
+      "durationMs": 121,
+      "outputDigest": "251830639b445873c776b434cf633456a4d1bd1b75120f3b0516d219d073a5ab",
+      "commandHash": "db036618677fddbf40b41b788314f1761dbf4f62b7bae9e2f72bd9eb26a087b3",
+      "contractHash": "54eac4e9e609ff42ec6a021b324c6f35f70f2fdf5c852865962e520f39702d68",
+      "commitSha": "f32ea757c1459a94ff54978b3a825c8f465d6845",
+      "executionContractPath": ".ai/work-items/active/installed_runtime_parity.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/installed_runtime_parity.summary.json",
+      "worktreeDigest": "dbe2a3708f0c169232bbd8f33f1790082c562f57379a8148bd8b9bd7d23ed71f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_summary.py .ai/work-items/active/installed_runtime_parity.summary.json --contract .ai/work-items/active/installed_runtime_parity.contract.json ai summary check passed: .ai/work-items/active/installed_runtime_parity.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Installed command surfaces must be generated from or checked against one authoritative copy map.",
+      "compliant": true,
+      "evidence": "RUNTIME_TARGETS is the authoritative tuple and installer validation checks every installed Makefile target against it."
+    },
+    {
+      "guideline": "Template and Adopter evidence must remain separate.",
+      "compliant": true,
+      "evidence": "The isolated Adopter fixture installs copied scripts and executes version/lifecycle commands; template source presence alone is not used as evidence."
+    },
+    {
+      "guideline": "Every new public command must be documented and tested in an isolated Adopter fixture.",
+      "compliant": true,
+      "evidence": "Existing Makefile.ai target declarations and tests/test_installed_runtime_parity.py cover the installed Runtime surface."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Adopter command execution is verified locally; provider release evidence remains outside this Work Item."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Initial skeleton; replace with actual residual risks before finishing.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Template versus Adopter runtime evidence",
+      "Authoritative target/copy-map parity",
+      "Fail-closed missing target behavior"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [
+    "Do not confuse template engineering with installed Adopter capability.",
+    "Fix process and budget issues inside the functional Work Item; do not create a budget-only Work Item."
+  ],
+  "userCorrectionSolidification": [
+    "Preflight blocks the empty Contract before implementation.",
+    "Installer validation now fails closed when a declared Runtime target is missing."
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "54eac4e9e609ff42",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "54eac4e9e609ff42",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "Quick Install archive digest verification remains a later Work Item.",
+    "External provider release evidence is not claimed by this parity check."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 515
+}
