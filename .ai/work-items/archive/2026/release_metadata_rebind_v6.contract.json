@@ -1,0 +1,135 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_metadata_rebind_v6",
+  "mode": "code",
+  "title": "release metadata rebind v6",
+  "baseCommit": "7afec48032feb171c1d894d276c360c4c3025e89",
+  "baselineDirtyPaths": [],
+  "scope": ["release.json", ".ai/cockpit/release-freeze.json", ".ai/cockpit/release-digests.json", ".ai/work-items/active/release_metadata_rebind_v6.contract.json", ".ai/work-items/active/release_metadata_rebind_v6.summary.json", ".ai/cockpit/current_status.md", ".ai/work-items/starts/**", ".ai/work-items/archive/**"],
+  "outOfScope": ["source code, tests, CI, and governance policy changes", "publishing, tagging, and provider release operations", "adopter project files or installation outputs", "original plan Work Items"],
+  "sources": [
+    {"path": "docs/superpowers/plans/2026-07-22-conditional-go-review-remediation.md", "reason": "Release sequencing and required Work Item lifecycle."},
+    {"path": ".ai/work-items/archive/2026/release_metadata_rebind_v6_budget.archive-manifest.json", "reason": "Closed predecessor and bounded archive budget window."},
+    {"path": "scripts/finalize_release_freeze.py", "reason": "Canonical release metadata finalizer."},
+    {"path": "scripts/check_release_preflight.py", "reason": "Release preflight verification."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["release_metadata_integrity"],
+    "reason": "Regenerate and verify only the canonical release metadata after the predecessor process correction is closed."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the complete lifecycle and release only after this metadata Work Item closes."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": ["The three canonical release metadata files are regenerated from the merged default branch and remain mutually consistent.", "Release preflight, supply-chain evidence, and source-bound identity checks pass without changing adopter files.", "The complete Finish Gate, PR, merge, ai-close-work-item, branch cleanup, and default-base synchronization evidence is recorded before publication."],
+  "guidelines": ["Use the canonical finalizer output; do not hand-edit release metadata.", "Do not publish or tag until this Work Item is archived, merged, and closed."],
+  "intent": {
+    "problem": "The release metadata candidate must be rebound to the newest default branch only after the bounded budget/process correction has closed.",
+    "constraints": ["This is the template repository, not an adopter project.", "The predecessor release_metadata_rebind_v6_budget is closed at PR #284 before this Work Item starts.", "Publishing and tagging are out of scope until after this Work Item closes."],
+    "rationale": "Keep release identity generation as a separate, reviewable metadata Work Item while eliminating the unnecessary separate budget Work Item pattern."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized the final release metadata Work Item and publication sequence after full lifecycle closure."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 497}},
+  "scenarioCoverage": [{"scenario": "metadata files are generated from the newest default-base commit", "required": true, "status": "verified", "evidence": ["release.json", ".ai/cockpit/release-freeze.json", ".ai/cockpit/release-digests.json"]}, {"scenario": "adopter project and publication remain out of scope", "required": true, "status": "verified", "evidence": ["release_metadata_rebind_v6.contract.json"]}],
+  "rawUserRequest": "预算流程问题先根治；预算工单不单独拆分；完成最终元数据工单的完整 Contract/Preflight/PR/合并/ai-close-work-item 后再发布。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:single-bounded-budget-window", "capturedAt": "2026-07-23", "digest": "sha256:user-authorized-final-metadata-after-budget-window"},
+  "declaredIntent": {"summary": "Regenerate final release metadata after the merged bounded budget-window correction.", "requestedCapabilities": ["ai_governance", "software_design"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "predecessorWorkItem": {"workItemId": "release_metadata_rebind_v6_budget", "status": "closed", "pr": {"number": 284, "merged": true, "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/284", "mergeCommit": "7afec48032feb171c1d894d276c360c4c3025e89"}, "closure": {"succeeded": true, "localBranchDeleted": true, "remoteBranchDeleted": true, "baseSynchronized": true, "evidence": ".ai/work-items/archive/2026/release_metadata_rebind_v6_budget.archive-manifest.json"}},
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release_metadata_rebind_v6.json",
+    "baseCommit": "7afec48032feb171c1d894d276c360c4c3025e89",
+    "initialScopeDigest": "2e581c7a589358615f62e9c8ef4e3e3242d6d3496caaeb9eec746f5d32e90c0e",
+    "contractSkeletonDigest": "e33b6f8461139a3aa21f0768570d525d4f35010ab52600a225331d22f14d8b7f"
+  }
+}
