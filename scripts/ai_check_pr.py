@@ -308,6 +308,15 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
                     issues.append(f"{contract_rel}: Start Receipt was modified after its base")
         if contract.get("contractVersion") != 2:
             issues.append(f"{contract_rel}: PR archive evidence requires contractVersion 2")
+        elif (
+            isinstance(summary.get("archiveSequence"), int)
+            and summary.get("archiveSequence", 0) >= NEW_WORK_ITEM_SEQUENCE
+            and contract.get("baseCommit") != base
+        ):
+            issues.append(
+                f"{contract_rel}: Contract baseCommit must equal the PR merge-base {base}; "
+                "do not derive a Work Item branch from another unmerged Work Item branch"
+            )
         issues.extend(f"{contract_rel}: {issue}" for issue in validate_contract(contract))
         legacy_archive = is_legacy_archive(contract, summary)
         issues.extend(

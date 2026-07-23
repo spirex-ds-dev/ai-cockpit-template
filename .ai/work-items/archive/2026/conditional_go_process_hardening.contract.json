@@ -1,0 +1,212 @@
+{
+  "contractVersion": 2,
+  "workItemId": "conditional_go_process_hardening",
+  "mode": "code",
+  "title": "Harden AI Cockpit and release preflight gates before final publication",
+  "baseCommit": "17515abcf0bffd3cfd28dead31bde790952e1c90",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/conditional_go_process_hardening.contract.json",
+    ".ai/work-items/active/conditional_go_process_hardening.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    ".ai/guards/governance_complexity_policy.yaml",
+    "Makefile",
+    ".gitattributes",
+    ".github/workflows/release.yml",
+    "scripts/ai_check_pr.py",
+    "scripts/check_release_preflight.py",
+    "tests/test_release_preflight.py",
+    "tests/test_pr_aggregate.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "skill:ai-cockpit/SKILL.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+    ,".ai/decisions/**"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "skill:ai-cockpit/SKILL.md",
+      "reason": "The local skill is the procedural entry point that must carry the hard preflight rules."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-22-conditional-go-review-remediation.md",
+      "reason": "The plan defines serial Work Item lifecycle and release completion requirements."
+    },
+    {
+      "path": "gh pr 267, gh pr 268, gh pr 269",
+      "reason": "Actual PR failures demonstrated cross-branch Work Item mixing, archive mutation after digest binding, and required-check timing."
+    }
+  ],
+  "rawUserRequest": "将本轮暴露的流程问题固化到 ai-cockpit skill，并增加硬性的事前检查，尽量在下一步实施、PR 和 CI 之前阻断问题；修改完成后再进行版本发布确认。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-23-process-hardening-before-release",
+    "capturedAt": "2026-07-23T14:10:00+09:00",
+    "digest": "process-hardening-before-release"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Turn the observed lifecycle, PR ownership, archive freeze, and release readiness failures into fail-closed preflight checks and skill instructions.",
+    "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "process_integrity"
+    ],
+    "reason": "Initial skeleton; replace with task-specific implementation and review risks."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The requested hardening has concrete failure evidence and a bounded implementation scope."
+  },
+  "preReviewWarnings": [
+    "Review fail-closed behavior for wrong base, multiple Work Items, active Work Items, and digest drift."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The ai-cockpit skill explicitly requires lifecycle, PR ownership, archive freeze, and release preflight gates before implementation or publication.",
+    "A repository check fails closed when the release source tree is not frozen, archive digest is stale, or active Work Items remain.",
+    "A repository check fails closed when a PR contains more than one newly maintained Work Item or is based on a non-default Work Item branch.",
+    "Unit tests cover passing and failing preflight scenarios, and the Work Item completes the full lifecycle."
+  ],
+  "guidelines": [
+    "Fail closed before expensive CI/PR work when deterministic local evidence is insufficient.",
+    "Keep the skill instructions and executable repository checks behaviorally aligned."
+  ],
+  "intent": {
+    "problem": "The current process allowed release digest binding before the final archive tree, allowed a PR derived from another unmerged Work Item, and relied on late CI to reveal archive budget drift.",
+    "constraints": [
+      "Do not weaken existing gates or accept chat-only evidence.",
+      "Keep checks deterministic and runnable before PR creation where possible.",
+      "Do not publish or modify release metadata in this Work Item."
+    ],
+    "rationale": "The observed failures are procedural and should be blocked at the earliest deterministic boundary, before repeated CI and PR cycles."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "clean release candidate tree",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_release_preflight.py::test_release_preflight_accepts_frozen_source_bound_candidate"]
+    },
+    {
+      "scenario": "stale digest or active Work Item",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_release_preflight.py::test_release_preflight_blocks_active_work_item_and_stale_digest"]
+    },
+    {
+      "scenario": "PR with two Work Items or wrong base",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_pr_aggregate.py", "scripts/ai_check_pr.py baseCommit guard"]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized hardening the skill and pre-release gates before publication."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/conditional_go_process_hardening.json",
+    "baseCommit": "17515abcf0bffd3cfd28dead31bde790952e1c90",
+    "initialScopeDigest": "a430eb81d74e36214281e387ce072a671a87c04b1fa2655c775bc684b3821230",
+    "contractSkeletonDigest": "1e1cc96a3876ec8eaaffd785eb0f5820c2ce689df67b295a6472d5d199e22226"
+  }
+}
