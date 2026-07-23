@@ -101,9 +101,13 @@ jobs:
           published = json.loads(subprocess.check_output(["git", "show", sys.argv[2]], text=True))
           assert candidate["releaseState"] == "candidate"
           assert candidate["published"] is False
-          assert candidate["basedOnReleaseTag"] == published["releaseTag"]
+            assert candidate["basedOnReleaseTag"] == published["releaseTag"]
           PY
           fi
+
+      - name: Fail closed on release freeze and source-bound archive
+        working-directory: ${{ github.workspace }}
+        run: make check-release-preflight
 
       - name: Install locked release evidence dependencies
         working-directory: ${{ github.workspace }}

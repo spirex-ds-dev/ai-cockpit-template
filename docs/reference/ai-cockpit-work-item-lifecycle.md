@@ -37,3 +37,37 @@ Do not report a candidate as published. `check-release-distribution` remains the
 ## Closure rule
 
 Only after the PR is merged and the Work Item is archived may `make ai-close-work-item TASK=<task>` run. The command owns branch deletion and must fail closed on any lifecycle mismatch. After closure, verify the local base equals the remote base and only then begin the next serial Work Item.
+## Preflight hard gates before PR and release
+
+Before creating a PR, run `make check-ai-pr AI_BASE_COMMIT=<latest-default-branch-sha>`.
+This gate first runs the project formatter and, when the governance script and policy
+are installed, the governance complexity/budget check; only then does it validate PR
+ownership. This catches formatting drift and budget overflow before remote CI.
+The PR must contain exactly one newly maintained Work Item and must be based on the
+latest remote default branch; a branch derived from another unmerged Work Item is
+invalid even when its tests pass.
+
+Before release evidence is generated, run `make check-release-preflight`. It fails
+closed when any active Work Item remains, the archive budget is exceeded, the
+release-freeze marker is absent or not source-bound, or the regenerated archive
+digest differs from `release.json`. Create `.ai/cockpit/release-freeze.json` only
+after all Work Items have been archived, merged, closed, and the default branch has
+been synchronized. The marker is `export-ignore` and must contain:
+
+```json
+{
+  "state": "frozen",
+  "sourceTree": "<exact-default-branch-tree-sha>",
+  "archiveSha256": "<regenerated-canonical-archive-sha256>"
+}
+```
+
+After the marker and release metadata are bound, no new Work Item may be archived
+until publication is complete. If any check fails, return to the candidate phase
+and regenerate the source-bound evidence.
+
+Template and adopter boundary: template-maintenance branches use the template
+repository's `project-format-check` and governance policy from the latest template
+default branch. An installed adopter uses its own configured formatter, remote
+default branch, base commit, and governance policy; it must not copy the template's
+absolute line or archive budgets.

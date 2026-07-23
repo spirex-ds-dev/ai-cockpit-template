@@ -153,6 +153,30 @@ def test_pr_rejects_multiple_newly_maintained_work_items(tmp_path, monkeypatch):
     assert any("exactly one newly maintained Work Item" in issue for issue in issues)
 
 
+def test_pr_rejects_work_item_based_on_different_merge_base(tmp_path, monkeypatch):
+    pair = write_pair(tmp_path, "wrong_base", ["src/wrong.py"], ["src/wrong.py"])
+    summary_path = pair.with_name(pair.name.replace(".contract", ".summary"))
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary["archiveSequence"] = 75
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    patch_changes(
+        monkeypatch,
+        [
+            "src/wrong.py",
+            ".ai/work-items/archive/2026/wrong_base.contract.json",
+            ".ai/work-items/archive/2026/wrong_base.summary.json",
+        ],
+    )
+
+    issues = ai_check_pr.validate_pr_bundle("b" * 40, [pair])
+
+    assert any("baseCommit must equal the PR merge-base" in issue for issue in issues)
+
+
 def test_aggregate_pr_reports_missing_summary_and_invalid_json(tmp_path, monkeypatch):
     archive = tmp_path / ".ai" / "work-items" / "archive" / "2026"
     archive.mkdir(parents=True)

@@ -18,7 +18,7 @@ AI_PREFLIGHT_VALIDATE_CONTRACT ?= true
 	check-docs-metadata check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
 	check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning \
-	check-release-distribution check-release-state-consistency check-ci-release-evidence \
+	check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence \
 	check-lockfile-reproducibility \
 	check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence \
 	ai-start ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
@@ -133,6 +133,9 @@ check-release-distribution:
 
 check-release-state-consistency:
 	$(AI_PYTHON) scripts/check_release_state_consistency.py --root .
+
+check-release-preflight:
+	$(AI_PYTHON) scripts/check_release_preflight.py --root .
 
 check-ci-release-evidence:
 	test -n "$(CI_RELEASE_EVIDENCE)"
@@ -359,7 +362,12 @@ check-ai:
 	fi
 
 check-ai-pr:
-	$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
+	@set -e; \
+		$(shell command -v make) project-format-check; \
+		if test -f scripts/check_governance_complexity.py && test -f .ai/guards/governance_complexity_policy.yaml; then \
+			$(AI_PYTHON) scripts/check_governance_complexity.py; \
+		fi; \
+		$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
 
 ai-finish:
 	$(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)"
