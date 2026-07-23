@@ -28,6 +28,14 @@ def test_compatibility_runs_lockfile_reproducibility_on_clean_runner():
     assert "make check-lockfile-reproducibility" in lockfile
 
 
+def test_lockfile_input_pin_matches_python_310_compatible_lock_output():
+    requirements = (ROOT / "requirements-dev.in").read_text(encoding="utf-8")
+    lockfile = (ROOT / "requirements-dev.lock").read_text(encoding="utf-8")
+    assert "stevedore==5.8.0" in requirements
+    assert "stevedore==5.8.0" in lockfile
+    assert "stevedore==5.9.0" not in requirements
+
+
 def test_compatibility_separates_blocking_baseline_from_latest_probes():
     workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
     gate = workflow.split("  compatibility-gate:", 1)[1].split("  compatibility-latest:", 1)[0]
