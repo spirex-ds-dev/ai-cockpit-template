@@ -73,9 +73,7 @@ def test_main_accepts_frozen_candidate(tmp_path, monkeypatch, capsys):
     (tmp_path / ".ai" / "guards").mkdir(parents=True)
     (tmp_path / ".ai" / "work-items" / "active").mkdir(parents=True)
     (tmp_path / ".ai" / "work-items" / "archive").mkdir(parents=True)
-    (tmp_path / "release.json").write_text(
-        '{"releaseArchive":{"sha256":"abc"}}', encoding="utf-8"
-    )
+    (tmp_path / "release.json").write_text('{"releaseArchive":{"sha256":"abc"}}', encoding="utf-8")
     (tmp_path / ".ai" / "cockpit" / "release-freeze.json").write_text(
         '{"state":"frozen","sourceTree":"tree","archiveSha256":"abc"}',
         encoding="utf-8",
