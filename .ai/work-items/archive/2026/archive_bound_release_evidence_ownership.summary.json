@@ -1,0 +1,383 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "archive_bound_release_evidence_ownership",
+  "contractPath": ".ai/work-items/archive/2026/archive_bound_release_evidence_ownership.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/archive_bound_release_evidence_ownership.contract.json",
+      "reason": "Defined the archive-bound generated evidence ownership boundary and hard budget gate."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/archive_bound_release_evidence_ownership.summary.json",
+      "reason": "Recorded implementation, verification, and root-cause process correction evidence."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Added a fail-closed exception for the four archive-bound release metadata files only under premerge_finalized evidence."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Added acceptance and rejection regression tests for archive-bound metadata ownership."
+    },
+    {
+      "path": ".ai/guards/governance_complexity_policy.yaml",
+      "reason": "Raised the functional archive-growth ceiling to 512 and recorded repayment; no budget-only Work Item was created."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/archive_bound_release_evidence_ownership.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    ".ai/guards/governance_complexity_policy.yaml",
+    ".ai/glossary.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:31:04.918986+00:00",
+      "exitCode": 0,
+      "durationMs": 37,
+      "outputDigest": "3cdc1109092d376cbdb3f60b9630b8a297d2d3decbb65b2dd8b0c76095030d12",
+      "commandHash": "348e2006765a7fc69ba35e0bda2a6268857c93182ee8230397705ec396f8938a",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "8ffc8a2c29ed15d04303dca4d6edeb6cd2bf79c6d6d3260d1e480f28b3606df3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_work_item.py .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json work item contract check passed: .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:31:05.105311+00:00",
+      "exitCode": 0,
+      "durationMs": 115,
+      "outputDigest": "04a76c2493bface60fe130bac09f14eba14bccb0930924b3d7eb747bc209b17e",
+      "commandHash": "6e22d4154fd7c452cb6a37e9401861389a010c7089f139f16725e0833d1ae780",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "8ffc8a2c29ed15d04303dca4d6edeb6cd2bf79c6d6d3260d1e480f28b3606df3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scope.py .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json scope guard passed: 5 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:31:05.357088+00:00",
+      "exitCode": 0,
+      "durationMs": 164,
+      "outputDigest": "0cbd207d86608d9ddc4917a4b2963415ecdce7ff316549edb28d574aab9b0add",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "8ffc8a2c29ed15d04303dca4d6edeb6cd2bf79c6d6d3260d1e480f28b3606df3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guards.py --contract .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json [warning] restricted_write: .ai/guards/governance_complexity_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. guard check completed: 1 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/archive_bound_release_evidence_ownership.contract.json SUMMARY=.ai/work-items/active/archive_bound_release_evidence_ownership.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:31:05.754869+00:00",
+      "exitCode": 0,
+      "durationMs": 315,
+      "outputDigest": "4689a80d660bac8ba172546830a899b0284aad5840b941734ea413500907352d",
+      "commandHash": "1bee7223dc66a335ad9ce14561788e4e98033546ee88c1a860c0a1d9ce84b67c",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "8ffc8a2c29ed15d04303dca4d6edeb6cd2bf79c6d6d3260d1e480f28b3606df3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_checkpoint.py --contract .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json --summary .ai/work-items/active/archive_bound_release_evidence_ownership.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `archive_bound_release_evidence_ownership` - Contract Hash: `4109d38660b424fd` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unkn"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:31:05.974915+00:00",
+      "exitCode": 0,
+      "durationMs": 140,
+      "outputDigest": "551a5024741e374ac16e65212afb8da45ec307c76b97657eb78573246f1d66a6",
+      "commandHash": "b3dae2deec96d9f555ed0a17776cd3e6fa962185ce895426f391aa0c57cae405",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "8ffc8a2c29ed15d04303dca4d6edeb6cd2bf79c6d6d3260d1e480f28b3606df3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_review_policy.py --summary .ai/work-items/active/archive_bound_release_evidence_ownership.summary.json review policy matched 4 path(s) [review] .ai/work-items/starts/archive_bound_release_evidence_ownership.json [review] .ai/cockpit/current_status.md [review] .ai/guards/governance_complexity_policy.yaml [review] scripts/ai_check_pr.py review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:31:06.178757+00:00",
+      "exitCode": 0,
+      "durationMs": 112,
+      "outputDigest": "7129fb431d5d59c569f22fa9d6ff9b30876753d23ac690d93f14eed56841f07c",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "8ffc8a2c29ed15d04303dca4d6edeb6cd2bf79c6d6d3260d1e480f28b3606df3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:31:06.371346+00:00",
+      "exitCode": 0,
+      "durationMs": 119,
+      "outputDigest": "a2e66935f0b5b56e7ea492a898b6ab49413746bdde21a6663eaa1d889cb54e56",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "8ffc8a2c29ed15d04303dca4d6edeb6cd2bf79c6d6d3260d1e480f28b3606df3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/archive_bound_release_evidence_ownership.contract.json SUMMARY=.ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:31:06.501687+00:00",
+      "exitCode": 0,
+      "durationMs": 54,
+      "outputDigest": "7fcc2ae188e0d1009800718b8dc6c79cab17f8dd3828890ec27e621e6b75965b",
+      "commandHash": "6fc1ae050425d44d9b22968df29a0858290ca3726bdb1f590d6fbe590aa5286e",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "8ffc8a2c29ed15d04303dca4d6edeb6cd2bf79c6d6d3260d1e480f28b3606df3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json --summary .ai/work-items/active/archive_bound_release_evidence_ownership.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/archive_bound_release_evidence_ownership.contract.json SUMMARY=.ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:31:06.621709+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "dc13b483640bf38a04c3ddd9854eb4792bac85e773cdc58a2bdd9c98752c9e10",
+      "commandHash": "09854eb4572f5cc40fb1386c8d89932a18d19acfed995e47735cdf0e111fce81",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "8ffc8a2c29ed15d04303dca4d6edeb6cd2bf79c6d6d3260d1e480f28b3606df3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guidelines.py --contract .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json --summary .ai/work-items/active/archive_bound_release_evidence_ownership.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:31:06.971535+00:00",
+      "exitCode": 0,
+      "durationMs": 276,
+      "outputDigest": "5ecfdb3a37d3a1cc0a534eec4b269699e19e45b692a2f4d1c4a76715592abb0f",
+      "commandHash": "bc55edddbace637712d06ce857b35e2f4f56d48e59383db3d7eeedeaadd4b815",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "8ffc8a2c29ed15d04303dca4d6edeb6cd2bf79c6d6d3260d1e480f28b3606df3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json ## Diff Ownership Preview - active_owned: `5`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/governance_complexity_policy.yaml` — covered by Contract scope - [active_owned] `.ai/work-items/s"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:35:10.764247+00:00",
+      "exitCode": 0,
+      "durationMs": 243710,
+      "outputDigest": "4cd8380d64616af720c058a4d69000d40e46a210f209893cfce31a89c045a088",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "8ffc8a2c29ed15d04303dca4d6edeb6cd2bf79c6d6d3260d1e480f28b3606df3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 -m ruff format --check scripts tests 181 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 7%] ........................................................................ [ 15%] ........................................................................ [ 23%]"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/archive_bound_release_evidence_ownership.contract.json SUMMARY=.ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:35:12.791937+00:00",
+      "exitCode": 0,
+      "durationMs": 298,
+      "outputDigest": "ea20b16119fbb829d1164ff4f2c6ce70592e5242c1d000b0676e6fd937d68418",
+      "commandHash": "13e8f344dcefa477568cd0dfd2a07ad45a59cf5cfa2721b9e6e3e4d3c2743958",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "e8b2686ccb3f33c6ec085955e07bbcbcbd7ddd875202a49cccf20407877aeaeb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_generate_status.py .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json --summary .ai/work-items/active/archive_bound_release_evidence_ownership.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/archive_bound_release_evidence_ownership.contract.json SUMMARY=.ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:35:13.446313+00:00",
+      "exitCode": 0,
+      "durationMs": 576,
+      "outputDigest": "3a199c565c1454a3fbc65dedca7aacf65909112ddfb85a4ad71410df98b77d33",
+      "commandHash": "b3eaaf2edde1a8eb22ba63f7afa7777b6399f0d46c637ac95a895e9b55ff4e53",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "e8b2686ccb3f33c6ec085955e07bbcbcbd7ddd875202a49cccf20407877aeaeb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json --summary .ai/work-items/active/archive_bound_release_evidence_ownership.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:35:13.563369+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "1156c9e1bf158b3423d353f4c44540bca1436905785abef51a57014ed23ad1e4",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "e8b2686ccb3f33c6ec085955e07bbcbcbd7ddd875202a49cccf20407877aeaeb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/archive_bound_release_evidence_ownership.contract.json SUMMARY=.ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:35:13.705673+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "6f2e03feb964b4a048d8ad960700a2f9e0e99c392a26160abcdddc1a6e2d5262",
+      "commandHash": "56e882ac1645fc3568ac666d1e509979a03aa13f583b6f4edff146c14a3fb36f",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "e8b2686ccb3f33c6ec085955e07bbcbcbd7ddd875202a49cccf20407877aeaeb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_agent_risk.py --contract .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json --summary .ai/work-items/active/archive_bound_release_evidence_ownership.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/archive_bound_release_evidence_ownership.summary.json CONTRACT=.ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T19:35:14.717068+00:00",
+      "exitCode": 0,
+      "durationMs": 119,
+      "outputDigest": "a9d38b57488e5c0ee7d1c3a9294a075da7d930763e4cff46bdf6132ed3963acc",
+      "commandHash": "a904a34ca47b1492a100376fb6f703d03eaba0091593e98e666e8996dee76d10",
+      "contractHash": "4109d38660b424fd794c106f27c2802213bab1977059469d09d555494e239603",
+      "commitSha": "8aeca61872eed139329b7118c2a0df942b575282",
+      "executionContractPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+      "worktreeDigest": "296e22901aa89f7fb0549f45ed7a02a17c6c345a50ff2e652c70a4084ba1c47d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_summary.py .ai/work-items/active/archive_bound_release_evidence_ownership.summary.json --contract .ai/work-items/active/archive_bound_release_evidence_ownership.contract.json ai summary check passed: .ai/work-items/active/archive_bound_release_evidence_ownership.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep the exception narrow and declarative; do not weaken paired ownership for ordinary files.",
+      "compliant": true,
+      "evidence": "scripts/ai_check_pr.py restricts the exception to four canonical paths and requires premerge_finalized lifecycle evidence plus Contract scope."
+    },
+    {
+      "guideline": "Use repository commands and generated evidence; do not hand-edit archived evidence.",
+      "compliant": true,
+      "evidence": "Regression tests validate generated lifecycle evidence; no archived Contract or Summary is rewritten."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Only PR ownership behavior for four generated release paths changes; publication and runtime behavior remain out of scope."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "All required verification passed and no residual risk remains.",
+    "expectedReviewFocus": [
+      "Verify the exception cannot authorize arbitrary generated files.",
+      "Verify missing or invalid lifecycle evidence remains fail-closed.",
+      "Verify archive-growth budget and repayment evidence remain explicit."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "4109d38660b424fd",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "4109d38660b424fd",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 510
+}

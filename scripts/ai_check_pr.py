@@ -41,6 +41,14 @@ WORKTREE_DIGEST_INTRODUCED_AT = "63ec6fcd3c8f945b379966d43457e44ccaeba258"
 # through the timestamp fallback and are never rewritten in place.
 ARCHIVE_SEQUENCE_INTRODUCED_AT = "f0b7caa9fdc8fa0bc25cf8c099fc2cef5f0c61b7"
 NEW_WORK_ITEM_SEQUENCE = 74
+ARCHIVE_BOUND_RELEASE_METADATA = frozenset(
+    {
+        ".ai/cockpit/release-digests.json",
+        ".ai/cockpit/release-freeze.json",
+        "release-state.json",
+        "release.json",
+    }
+)
 
 
 def _git_blob_hash(revision: str, path: str) -> str:
@@ -398,6 +406,30 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
             for _contract_path, _contract, summary, _rank in archive_entries
         )
 
+    def is_archive_bound_release_metadata(path: str) -> bool:
+        """Accept post-archive release metadata only for an explicit pre-merge freeze."""
+        if path not in ARCHIVE_BOUND_RELEASE_METADATA:
+            return False
+        freeze_path = PROJECT_ROOT / ".ai" / "cockpit" / "release-freeze.json"
+        if not freeze_path.is_file():
+            return False
+        freeze = load_json(freeze_path)
+        if (
+            not isinstance(freeze, dict)
+            or freeze.get("lifecycle", {}).get("state") != "premerge_finalized"
+        ):
+            return False
+        return any(
+            included(
+                path, [pattern for pattern in contract.get("scope", []) if isinstance(pattern, str)]
+            )
+            and not included(
+                path,
+                [pattern for pattern in contract.get("outOfScope", []) if isinstance(pattern, str)],
+            )
+            for _contract_path, contract, _summary, _rank in archive_entries
+        )
+
     for path in all_paths:
         if path in audit_paths or included(path, exempt) or path in no_op_restore_paths:
             continue
@@ -414,7 +446,7 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
             and path in changed_file_paths(entry[2])
         ]
         if not owners:
-            if is_archived_generated_evidence(path):
+            if is_archived_generated_evidence(path) or is_archive_bound_release_metadata(path):
                 continue
             issues.append(
                 f"complete PR diff path lacks paired ownership (same Contract scope and Summary changedFiles): {path}"

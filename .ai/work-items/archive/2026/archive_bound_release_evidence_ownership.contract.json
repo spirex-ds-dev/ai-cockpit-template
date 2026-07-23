@@ -1,0 +1,231 @@
+{
+  "contractVersion": 2,
+  "workItemId": "archive_bound_release_evidence_ownership",
+  "mode": "code",
+  "title": "Govern archive-bound release metadata ownership in PR checks",
+  "baseCommit": "8aeca61872eed139329b7118c2a0df942b575282",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+    ".ai/work-items/active/archive_bound_release_evidence_ownership.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    ".ai/guards/governance_complexity_policy.yaml"
+  ],
+  "outOfScope": [
+    "release publication and provider assets",
+    "adopter projects and runtime behavior",
+    "unrelated PR ownership exemptions"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "PR ownership gate that must recognize controlled archive-bound generated metadata."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Regression coverage for accepted and rejected archive-bound generated evidence."
+    },
+    {
+      "path": ".ai/guards/governance_complexity_policy.yaml",
+      "reason": "Functional Work Item archive-growth budget and repayment record."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository governance terminology and lifecycle boundaries."
+    },
+    {
+      "path": ".ai/work-items/active/archive_bound_release_evidence_ownership.contract.json",
+      "reason": "Authoritative task boundary and acceptance contract."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "governance_process"
+    ],
+    "reason": "Narrows a PR ownership exception to four generated release files and a premerge lifecycle marker; no publication or runtime behavior changes."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized root-cause process correction before resuming release publication."
+  },
+  "preReviewWarnings": [
+    "Verify the exception is fail-closed, limited to archive-bound release metadata, and cannot authorize arbitrary unlisted generated files."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "PR ownership accepts the four archive-bound release metadata files only when the archived Contract covers them and release-freeze lifecycle state is premerge_finalized.",
+    "The same paths remain rejected when the lifecycle marker is absent or invalid.",
+    "Regression tests cover both the accepted premerge path and fail-closed rejection path.",
+    "No generic or arbitrary generated-file exemption is introduced."
+  ],
+  "guidelines": [
+    "Keep the exception narrow and declarative; do not weaken paired ownership for ordinary files.",
+    "Use repository commands and generated evidence; do not hand-edit archived evidence."
+  ],
+  "intent": {
+    "problem": "The corrected release workflow finalizes freeze metadata after Work Item archive creation so the archive is included in the source-bound digest. The archived Summary is immutable and therefore cannot list those four generated release files, while the PR gate currently requires every changed path to appear in both Contract scope and Summary changedFiles.",
+    "constraints": [
+      "Preserve paired ownership for ordinary files.",
+      "Permit only the four canonical release metadata paths.",
+      "Require archived Contract scope and an explicit premerge_finalized lifecycle marker.",
+      "Do not publish a release in this Work Item."
+    ],
+    "rationale": "Fix the ownership model at the PR gate so the archive-bound finalization order is enforceable without mutating immutable Summary evidence or bypassing review."
+  },
+  "rawUserRequest": "当发现 CI 或 PR 暴露流程问题时，停止发布，优先从根本上改善流程；不要单独创建预算预留工单。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message:2026-07-24-root-cause-process-improvement",
+    "capturedAt": "2026-07-24",
+    "digest": "sha256:user-authorized-process-correction"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Correct the PR ownership gate for the archive-bound release-freeze lifecycle before continuing publication.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Archive-bound release metadata is changed with a premerge_finalized freeze and covered by the archived Contract.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_aggregate_pr_accepts_archive_bound_release_metadata"
+      ]
+    },
+    {
+      "scenario": "The same metadata path is rejected when the premerge lifecycle marker is absent.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_aggregate_pr_rejects_archive_bound_metadata_without_premerge_marker"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized root-cause governance-process correction before release publication."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 511,
+      "approved": true,
+      "repaymentWorkItem": "conditional_go_plan_cleanup"
+    },
+    "repaymentRecords": [
+      {
+        "metric": "archiveGrowth",
+        "from": 511,
+        "to": 511,
+        "approvedBy": "user",
+        "date": "2026-07-24",
+        "reason": "Functional PR ownership correction required for archive-bound release metadata; no separate budget-only Work Item. Repay during conditional_go_plan_cleanup after preserving immutable evidence."
+      }
+    ]
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/archive_bound_release_evidence_ownership.json",
+    "baseCommit": "8aeca61872eed139329b7118c2a0df942b575282",
+    "initialScopeDigest": "d5340f2bedab68e92b0d69ad0f330c9c8ecf1535cc8c6988873436700345a7ae",
+    "contractSkeletonDigest": "38994aa663864648719f7ad2e2ca2eb1eb49a64de57a2f6d33f403b51990c75b"
+  }
+}
