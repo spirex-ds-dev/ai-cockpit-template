@@ -61,10 +61,12 @@ jobs:
           git checkout --detach --quiet "${SOURCE_COMMIT}"
           jq -n \
             --arg sourceCommit "$SOURCE_COMMIT" \
+            --arg tagTarget "$SOURCE_COMMIT" \
+            --arg metadataCommit "$SOURCE_COMMIT" \
             --arg remote "$RELEASE_REMOTE" \
             --arg defaultBranch "$RELEASE_DEFAULT_BRANCH" \
             --arg runId "$GITHUB_RUN_ID" \
-            '{format:"ai-cockpit-release-source",version:1,sourceCommit:$sourceCommit,remote:$remote,defaultBranch:$defaultBranch,runId:$runId}' \
+            '{format:"ai-cockpit-release-source",version:1,sourceCommit:$sourceCommit,tagTarget:$tagTarget,metadataCommit:$metadataCommit,remote:$remote,defaultBranch:$defaultBranch,runId:$runId}' \
             > "$RUNNER_TEMP/release-source.json"
 
       - name: Validate release identity and tag preconditions

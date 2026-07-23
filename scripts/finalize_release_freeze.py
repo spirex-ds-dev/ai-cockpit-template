@@ -17,7 +17,13 @@ def _fail(message: str) -> int:
     return 1
 
 
-def main(candidate_task: str | None = None, premerge_task: str | None = None) -> int:
+def main(
+    candidate_task: str | None = None,
+    premerge_task: str | None = None,
+    source_commit: str | None = None,
+    tag_target: str | None = None,
+    metadata_commit: str | None = None,
+) -> int:
     if candidate_task is not None and premerge_task is not None:
         return _fail("candidate and pre-merge modes are mutually exclusive")
     root = PROJECT_ROOT
@@ -77,9 +83,12 @@ def main(candidate_task: str | None = None, premerge_task: str | None = None) ->
     ):
         return _fail("Cockpit Status is not no_active_work_item")
 
-    source_commit = head.stdout.strip()
-    source_tree = canonical_source_tree(root, source_commit)
-    archive_sha = canonical_archive_sha(root, source_commit)
+    resolved_head = head.stdout.strip()
+    source_identity = source_commit or resolved_head
+    tag_identity = tag_target or source_identity
+    metadata_identity = metadata_commit or source_identity
+    source_tree = canonical_source_tree(root, source_identity)
+    archive_sha = canonical_archive_sha(root, source_identity)
     freeze_path = root / ".ai" / "cockpit" / "release-freeze.json"
     release_digests_path = root / ".ai" / "cockpit" / "release-digests.json"
     release_path = root / "release.json"
@@ -99,6 +108,10 @@ def main(candidate_task: str | None = None, premerge_task: str | None = None) ->
     freeze.update(
         {
             "state": "frozen",
+            "sourceCommit": source_identity,
+            "tagTarget": tag_identity,
+            "metadataCommit": metadata_identity,
+            "releaseTag": release.get("releaseTag"),
             "sourceTree": source_tree,
             "archiveSha256": archive_sha,
             "lifecycle": {
@@ -143,7 +156,9 @@ def main(candidate_task: str | None = None, premerge_task: str | None = None) ->
     # The manifest is committed after this command runs.  Persisting the
     # symbolic ref keeps it valid when that metadata commit changes HEAD;
     # preflight resolves it and still compares canonical commit identities.
-    release_digests["sourceCommit"] = "HEAD"
+    release_digests["sourceCommit"] = source_identity
+    release_digests["tagTarget"] = tag_identity
+    release_digests["metadataCommit"] = metadata_identity
     release_digests["releaseTag"] = release.get("releaseTag")
     release_digests.setdefault("artifacts", {})["release.json"] = sha256_text(
         release_path.read_text(encoding="utf-8")
@@ -159,5 +174,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--candidate-task", default=None)
     parser.add_argument("--premerge-task", default=None)
+    parser.add_argument("--source-commit", default=None)
+    parser.add_argument("--tag-target", default=None)
+    parser.add_argument("--metadata-commit", default=None)
     args = parser.parse_args()
-    raise SystemExit(main(candidate_task=args.candidate_task, premerge_task=args.premerge_task))
+    raise SystemExit(
+        main(
+            candidate_task=args.candidate_task,
+            premerge_task=args.premerge_task,
+            source_commit=args.source_commit,
+            tag_target=args.tag_target,
+            metadata_commit=args.metadata_commit,
+        )
+    )

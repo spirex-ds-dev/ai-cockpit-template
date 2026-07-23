@@ -7,6 +7,7 @@ import argparse
 import gzip
 import hashlib
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -15,6 +16,44 @@ from typing import Any
 
 class ReleasePreflightError(ValueError):
     """Raised when a release candidate is not frozen and source-bound."""
+
+
+def validate_release_identity(
+    *,
+    release: dict[str, Any],
+    freeze: dict[str, Any],
+    release_digests: dict[str, Any],
+    source_commit: str,
+    tag_target: str,
+    metadata_commit: str,
+) -> list[str]:
+    """Validate the immutable release identity tuple before expensive checks."""
+    issues: list[str] = []
+    concrete = re.compile(r"^[0-9a-f]{40}$")
+    identity = {
+        "sourceCommit": source_commit,
+        "tagTarget": tag_target,
+        "metadataCommit": metadata_commit,
+    }
+    for name, value in identity.items():
+        if not isinstance(value, str) or not concrete.fullmatch(value):
+            issues.append(f"{name} must be a concrete 40-character lowercase SHA")
+    if source_commit != tag_target:
+        issues.append("sourceCommit and tagTarget must identify the same commit")
+    for name, value in identity.items():
+        if freeze.get(name) != value:
+            issues.append(f"freeze {name} does not match the release identity tuple")
+        digest_value = release_digests.get(name)
+        if not isinstance(digest_value, str) or not concrete.fullmatch(digest_value):
+            issues.append(f"release-digests {name} must be a concrete 40-character lowercase SHA")
+        elif digest_value != value:
+            issues.append(f"release-digests {name} does not match the release identity tuple")
+    release_tag = release.get("releaseTag")
+    if not isinstance(release_tag, str) or freeze.get("releaseTag") != release_tag:
+        issues.append("releaseTag must match between release.json and release-freeze.json")
+    if release_digests.get("releaseTag") != release_tag:
+        issues.append("release-digests releaseTag does not match release.json")
+    return issues
 
 
 def resolve_source_commit(root: Path, source_ref: str) -> str:
@@ -197,6 +236,16 @@ def main() -> int:
         active_work_items=active,
         archive_count=archive_count,
         archive_max=archive_max,
+    )
+    issues.extend(
+        validate_release_identity(
+            release=release,
+            freeze=freeze,
+            release_digests=comparable_digests,
+            source_commit=source_commit,
+            tag_target=comparable_digests.get("tagTarget", ""),
+            metadata_commit=comparable_digests.get("metadataCommit", ""),
+        )
     )
     if issues:
         print("release preflight blocked:", file=sys.stderr)

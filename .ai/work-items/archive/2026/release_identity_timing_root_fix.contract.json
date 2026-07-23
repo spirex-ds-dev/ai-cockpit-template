@@ -1,0 +1,97 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_identity_timing_root_fix",
+  "mode": "code",
+  "title": "Consolidate release identity and freeze timing",
+  "baseCommit": "c15d78f09104b6d32383bd02c6bc4ba6dd826721",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".github/workflows/release.yml",
+    ".ai/work-items/active/release_identity_timing_root_fix.contract.json",
+    ".ai/work-items/active/release_identity_timing_root_fix.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".ai/guards/governance_complexity_policy.yaml",
+    "scripts/finalize_release_freeze.py",
+    "scripts/check_release_preflight.py",
+    "tests/test_release_preflight.py",
+    "tests/test_workflows.py",
+    "tests/test_release_state_consistency.py",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "Makefile"
+  ],
+  "outOfScope": [
+    "Creating or publishing a Git tag or provider release",
+    "Changing the public release archive format or installer behavior",
+    "Implementing unrelated plan Work Items 2 through 11"
+  ],
+  "sources": [
+    {"path": ".github/workflows/release.yml", "reason": "Provider workflow source resolution and publication ordering."},
+    {"path": "scripts/finalize_release_freeze.py", "reason": "Freeze finalizer currently writes metadata that can change HEAD and uses symbolic HEAD evidence."},
+    {"path": "scripts/check_release_preflight.py", "reason": "Release preflight must enforce one immutable source commit and one lifecycle timing model."},
+    {"path": "tests/test_release_preflight.py", "reason": "Regression coverage for stale source, archive, lifecycle, and candidate/published identity failures."},
+    {"path": "tests/test_release_state_consistency.py", "reason": "Canonical state and projection identity constraints."},
+    {"path": "docs/reference/distribution.md", "reason": "English release procedure and evidence semantics."},
+    {"path": "docs/reference/distribution.ja.md", "reason": "Japanese release procedure and evidence semantics."},
+    {"path": "Makefile", "reason": "Release finalization entry points and their ordering."},
+    {"path": ".ai/guards/governance_complexity_policy.yaml", "reason": "Functional correction budget and hard archive-growth gate."},
+    {"path": "docs/superpowers/plans/2026-07-22-conditional-go-review-remediation.md", "reason": "User-authorized serial remediation plan and publication stop rule."}
+  ],
+  "rawUserRequest": "修复发布流程的根因：统一发布身份和冻结时序；发现流程缺陷时停止发布、优先改流程；预算、格式、Contract、Summary 问题纳入当前功能工单；完成当前工单的完整 Contract/Preflight/Finish/archive/commit/PR/merge/ai-close/base-sync 流程后再继续。",
+  "rawRequestSource": {"type": "human", "reference": "user-message:2026-07-24-root-cause-process-improvement", "capturedAt": "2026-07-24", "digest": "sha256:user-authorized-process-correction"},
+  "declaredIntent": {"summary": "在不发布版本的前提下，消除 release sourceCommit、tag target、metadata commit、candidate/published projection 和 freeze finalization 之间的多重权威与自引用，使昂贵发布检查前能一次性验证完整身份链。", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["release_identity", "release_timing", "governance_process"],
+    "reason": "The correction changes release gating and provider workflow ordering; it must remain fail closed and must not publish in this Work Item.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user explicitly authorized root-cause workflow correction and serial execution; publication remains out of scope."},
+  "preReviewWarnings": [
+    "Do not use HEAD as a mutable release evidence identity after metadata writes.",
+    "Do not mix candidate-prepared, premerge-finalized, and post-close-finalized states in one release attempt.",
+    "Run low-cost identity, format, budget, Contract, Summary, and release preflight checks before provider CI or publication."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "A candidate freeze retains one explicit source commit while generated metadata changes do not retarget it.", "required": true, "status": "verified", "evidence": ["tests/test_release_preflight.py"]},
+    {"scenario": "The workflow resolves the merged default-branch source once, verifies projections, then tags and publishes without a second mutable freeze.", "required": true, "status": "verified", "evidence": [".github/workflows/release.yml", "tests/test_release_preflight.py"]}
+  ],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record checkpoints before implementation and Finish to prevent lifecycle drift."},
+  "acceptance": [
+    "One explicit release identity tuple (sourceCommit, tagTarget, metadataCommit, releaseTag) is recorded and validated; mutable HEAD and self-referential metadata are rejected.",
+    "Release preflight rejects stale or symbolic source evidence, mismatched freeze/archive/projection digests, mixed lifecycle timing, and candidate/published identity conflicts before expensive provider checks.",
+    "The release workflow and Make targets expose one ordered sequence: merge and synchronize default branch, resolve source once, run low-cost preflight, generate source-bound evidence, then tag/provider release; this Work Item never publishes.",
+    "Regression tests cover source identity drift, archive/metadata commit drift, candidate versus published projections, and the accepted source-bound finalized candidate path.",
+    "English and Japanese distribution documentation describe the same state machine and distinguish candidate evidence, published evidence, and immutable source identity.",
+    "Budget, formatting, Contract, Summary, checkpoint, and status gates are part of this functional correction; no separate budget-only Work Item is created."
+  ],
+  "guidelines": [
+    "Release metadata must have one canonical source of truth and explicit projection semantics.",
+    "Low-cost fail-closed checks must run before expensive provider CI or publication.",
+    "Template workflow rules must distinguish the template repository from adopter repositories.",
+    "Generated evidence must be committed before PR validation and must not be hand-edited after generation."
+  ],
+  "intent": {
+    "problem": "The release attempt repeatedly discovered adjacent process defects after expensive tests and PR cycles: source identity moved between HEAD, metadata commits, freeze archives, and provider release; candidate and published projections were conflated; and finalization occurred at incompatible lifecycle points.",
+    "constraints": ["Do not publish a version or create a tag in this Work Item.", "Preserve immutable historical evidence.", "Keep candidate and published evidence separate and source-bound.", "Distinguish template and adopter repository boundaries."],
+    "rationale": "A single explicit identity tuple and one freeze-to-publish sequence prevents self-referential metadata and stops low-value full CI/PR loops before they begin."
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized root-cause process correction in release gates, CI, governance policy, and documentation."},
+  "rollbackNote": "Revert this Work Item diff and restore the prior release gates and documentation; immutable archived evidence is not rewritten.",
+  "budgetImpact": {
+    "expectedMetrics": {"archiveGrowth": 514, "approved": true, "repaymentWorkItem": "conditional_go_plan_cleanup"},
+    "repaymentRecords": [{"metric": "archiveGrowth", "from": 513, "to": 514, "approvedBy": "user", "date": "2026-07-24", "reason": "Consolidated functional release-identity/timing root correction; no budget-only Work Item. Repay during final plan cleanup after evidence is preserved."}]
+  },
+  "startReceipt": {"path": ".ai/work-items/starts/release_identity_timing_root_fix.json", "baseCommit": "c15d78f09104b6d32383bd02c6bc4ba6dd826721", "initialScopeDigest": "0d6a9038e6967554528d0fd77557ad608a6b0152397b90fa840ad720e7e697e0", "contractSkeletonDigest": "d21b6612fc32a7d005ea0e80c9b36e5d5ed011e6e79db763770bb83290ff2717"}
+}
