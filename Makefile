@@ -362,7 +362,12 @@ check-ai:
 	fi
 
 check-ai-pr:
-	$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
+	@set -e; \
+		$(shell command -v make) project-format-check; \
+		if test -f scripts/check_governance_complexity.py && test -f .ai/guards/governance_complexity_policy.yaml; then \
+			$(AI_PYTHON) scripts/check_governance_complexity.py; \
+		fi; \
+		$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
 
 ai-finish:
 	$(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)"
