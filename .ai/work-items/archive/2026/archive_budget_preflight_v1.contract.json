@@ -1,0 +1,175 @@
+{
+  "contractVersion": 2,
+  "workItemId": "archive_budget_preflight_v1",
+  "mode": "code",
+  "title": "block archive growth without pre-reserved budget",
+  "rawUserRequest": "以后遇到 CI/PR/发布门禁阻断，只要判断流程可以改善，就停止发布，优先改善流程；预算上限不足也必须在事前检查中拦截。",
+  "rawRequestSource": {"type":"human","reference":"user-request-2026-07-23-process-root-cause-budget-preflight","capturedAt":"2026-07-23","digest":"archive-growth-preflight"},
+  "declaredIntent": {"summary":"让 Work Item 归档前计算归档后 archiveGrowth，并要求 Contract 在同一工单中显式声明预期值；缺失或超限时 fail closed。","requestedCapabilities":["ai_governance","software_design","test_automation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "baseCommit": "05cf82778b2441ac77e670c846920cffc5fa625c",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "3a27b7b32af90993121c262a4eba88755cad57b2f17005b9373a37f317c6fd49"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/archive_budget_preflight_v1.contract.json",
+    ".ai/work-items/active/archive_budget_preflight_v1.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/guards/governance_complexity_policy.yaml",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_start.py",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_project_governance_journey.py",
+    "tests/test_start_and_archive.py"
+  ],
+  "outOfScope": ["Adopter or installed runtime repositories","Starting or reordering planned Work Items","Changing release publication workflow logic","Deleting prior immutable evidence"],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/archive_budget_preflight_v1.contract.json",
+      "reason": "Defines the archive-growth preflight correction."
+    },
+    {"path":"scripts/ai_archive_work_item.py","reason":"Archive boundary where projected growth must be checked before mutation."},
+    {"path":"tests/test_ai_archive_work_item.py","reason":"Regression evidence for missing and valid archive reservations."},
+    {"path":"scripts/ai_start.py","reason":"Generate projected archive-growth evidence at Work Item start."},
+    {"path":"scripts/install_ai_cockpit.py","reason":"Generate projected archive-growth evidence for adopter bootstrap."},
+    {"path":"tests/test_finish_e2e.py","reason":"Migrate finish lifecycle fixtures to explicit archive reservations."},
+    {"path":"tests/test_project_governance_journey.py","reason":"Migrate governance journey fixtures to explicit archive reservations."},
+    {"path":"tests/test_start_and_archive.py","reason":"Migrate archive fixtures to explicit archive reservations."},
+    {"path":".ai/guards/governance_complexity_policy.yaml","reason":"Bounded reservation for this corrective Work Item archive."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["governance_gate"],
+    "reason": "Fail-closed validation is added at archive mutation boundary with focused regression tests."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized root-cause process correction before release continuation."
+  },
+  "preReviewWarnings": [
+    "Verify archive mutation is never performed before projected budget validation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Archive growth is projected before mutation and fails closed without an explicit same-Work-Item reservation.",
+    "Focused regression tests cover missing, stale, and valid archive-growth reservations.",
+    "The full Contract/Preflight/PR/merge/ai-close-work-item lifecycle passes without starting or reordering planned Work Items."
+  ],
+  "guidelines": [
+    "Governance budget gates fail closed before irreversible archive mutation.",
+    "Budget reservations are explicit, bounded, and tied to the current Work Item.",
+    "Formatting and budget checks pass before PR."
+  ],
+  "intent": {
+    "problem": "ai-finish can archive a Work Item and only then reveal that archiveGrowth exceeds the configured ceiling, forcing late process repair.",
+    "constraints": ["Preserve existing immutable evidence.","Do not change release publication workflow logic.","Keep archive mutation atomic and rollback-safe."],
+    "rationale": "The irreversible step must validate its projected complexity cost before moving files, so budget failures cannot occur after archive mutation."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized root-cause process corrections when CI/PR/release gates expose workflow defects."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {"expectedMetrics":{"archiveGrowth":488},"approved":true,"repaymentWorkItem":"archive_budget_preflight_v1","repaymentRecords":[".ai/guards/governance_complexity_policy.yaml"]},
+  "startReceipt": {
+    "path": ".ai/work-items/starts/archive_budget_preflight_v1.json",
+    "baseCommit": "05cf82778b2441ac77e670c846920cffc5fa625c",
+    "initialScopeDigest": "8bf115fca209bfdfcab280943f72fd79731d8a6053347592c00be1643b9f5bf6",
+    "contractSkeletonDigest": "3b2ed2f89cc6ac911d28cb34cde1c5c787311d79b6212a13746a07e0f91da116"
+  }
+}

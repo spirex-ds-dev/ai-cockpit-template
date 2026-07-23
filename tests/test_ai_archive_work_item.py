@@ -4,6 +4,43 @@ from argparse import Namespace
 import ai_archive_work_item
 
 
+def test_archive_growth_requires_projected_same_work_item_reservation():
+    contract = {"workItemId": "task"}
+    issues = ai_archive_work_item.validate_archive_growth_reservation(
+        contract, 487, {"max": {"archiveGrowth": 488}}
+    )
+    assert any("reservation is required" in issue for issue in issues)
+
+
+def test_archive_growth_reservation_accepts_projected_count_and_repayment():
+    contract = {
+        "workItemId": "task",
+        "budgetImpact": {
+            "expectedMetrics": {"archiveGrowth": 488},
+            "approved": True,
+            "repaymentWorkItem": "task",
+            "repaymentRecords": [".ai/guards/governance_complexity_policy.yaml"],
+        },
+    }
+    assert (
+        ai_archive_work_item.validate_archive_growth_reservation(
+            contract, 487, {"max": {"archiveGrowth": 488}}
+        )
+        == []
+    )
+
+
+def test_archive_growth_reservation_rejects_stale_projection():
+    contract = {
+        "workItemId": "task",
+        "budgetImpact": {"expectedMetrics": {"archiveGrowth": 487}},
+    }
+    issues = ai_archive_work_item.validate_archive_growth_reservation(
+        contract, 487, {"max": {"archiveGrowth": 488}}
+    )
+    assert any("reservation is stale" in issue for issue in issues)
+
+
 def test_archive_moves_task_owned_success_criteria_sibling(tmp_path):
     contract = tmp_path / ".ai" / "work-items" / "active" / "task.contract.json"
     assert ai_archive_work_item.owned_success_criteria_path(contract) == contract.with_name(
@@ -217,7 +254,19 @@ def test_main_dry_run_validates_summary_and_current_digest(tmp_path, monkeypatch
     contract_path = active / "task.contract.json"
     summary_path = active / "task.summary.json"
     contract_path.write_text(
-        '{"workItemId": "task", "mode": "code", "scope": ["src/app.py"]}',
+        json.dumps(
+            {
+                "workItemId": "task",
+                "mode": "code",
+                "scope": ["src/app.py"],
+                "budgetImpact": {
+                    "expectedMetrics": {"archiveGrowth": 1},
+                    "approved": True,
+                    "repaymentWorkItem": "task",
+                    "repaymentRecords": ["policy"],
+                },
+            }
+        ),
         encoding="utf-8",
     )
 

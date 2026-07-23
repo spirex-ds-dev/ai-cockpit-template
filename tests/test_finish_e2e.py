@@ -116,6 +116,17 @@ def prepare_work_item(tmp_path: Path, *, archive_collision: bool = False):
             }
         )
 
+    contract["budgetImpact"] = {
+        "expectedMetrics": {
+            "archiveGrowth": len(
+                list((tmp_path / ".ai" / "work-items" / "archive").rglob("*.contract.json"))
+            )
+            + 1
+        }
+    }
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    contract_hash = hashlib.sha256(contract_path.read_bytes()).hexdigest()[:16]
+
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     guidelines_compliance = [
         {"guideline": g, "compliant": True, "evidence": "Verified E2E."}
