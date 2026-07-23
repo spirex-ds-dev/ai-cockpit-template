@@ -8,7 +8,10 @@
   "scope": [
     "requirements-dev.in",
     "requirements-dev.lock",
+    "Makefile",
+    ".github/workflows/compatibility.yml",
     "tests/test_workflows.py",
+    "tests/test_makefile.py",
     ".ai/guards/governance_complexity_policy.yaml",
     ".ai/work-items/active/lockfile_input_compatibility.contract.json",
     ".ai/work-items/active/lockfile_input_compatibility.summary.json",
@@ -16,14 +19,17 @@
     ".ai/work-items/starts/**",
     ".ai/work-items/archive/**"
   ],
-  "outOfScope": ["Unrelated dependency upgrades or lockfile tool behavior changes.", "Release publication, tags, provider assets, and adopter-project installation."],
+  "outOfScope": ["Unrelated dependency upgrades or unrelated lockfile tool behavior changes.", "Release publication, tags, provider assets, and adopter-project installation."],
   "sources": [
     {
       "path": "requirements-dev.in",
       "reason": "The exact stevedore pin is not installable on the supported Python 3.10 lockfile lane."
     },
     {"path": "requirements-dev.lock", "reason": "Committed lock output currently records the Python 3.10-compatible stevedore version."},
+    {"path": "Makefile", "reason": "The reproducibility gate must compare semantic lock output rather than environment-specific pip-tools comment grouping."},
+    {"path": ".github/workflows/compatibility.yml", "reason": "The provider lane must use the same pinned pip-tools compiler as the canonical lockfile process."},
     {"path": "tests/test_workflows.py", "reason": "Regression coverage must keep input and lock output aligned for the supported baseline."},
+    {"path": "tests/test_makefile.py", "reason": "Regression coverage must keep lockfile normalization and executable resolution as hard preflight behavior."},
     {"path": "PR #294 job 89271030797", "reason": "Provider evidence shows stevedore==5.9.0 cannot be resolved on Python 3.10."}
   ],
   "unknowns": [],
@@ -54,7 +60,7 @@
     ],
     "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
   },
-  "acceptance": ["The Python 3.10 lockfile reproducibility lane passes after the stevedore pin correction."],
+  "acceptance": ["The Python 3.10 lockfile reproducibility lane passes after the stevedore pin correction, using a pinned pip-tools compiler and semantic lockfile normalization."],
   "guidelines": [],
   "intent": {
     "problem": "The dependency input requests stevedore==5.9.0 while the supported Python 3.10 reproducibility lane cannot install that release; the committed lock output remains at 5.8.0.",
@@ -146,7 +152,7 @@
   "budgetImpact": {
     "expectedMetrics": {
       "archiveGrowth": 507,
-      "pythonLines": 39520
+    "pythonLines": 39533
     }
   },
   "startReceipt": {
