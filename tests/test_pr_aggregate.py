@@ -269,6 +269,60 @@ def test_aggregate_pr_rejects_unclaimed_generated_archive_index(tmp_path, monkey
     assert any("lacks paired ownership" in issue and archive_index in issue for issue in issues)
 
 
+def test_aggregate_pr_accepts_archive_bound_release_metadata(tmp_path, monkeypatch):
+    release_paths = [
+        ".ai/cockpit/release-digests.json",
+        ".ai/cockpit/release-freeze.json",
+        "release-state.json",
+        "release.json",
+    ]
+    pair = write_pair(
+        tmp_path, "archive_bound", release_paths, [".ai/work-items/archive/index.json"]
+    )
+    freeze = tmp_path / ".ai" / "cockpit" / "release-freeze.json"
+    freeze.parent.mkdir(parents=True, exist_ok=True)
+    freeze.write_text(json.dumps({"lifecycle": {"state": "premerge_finalized"}}), encoding="utf-8")
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    patch_changes(
+        monkeypatch,
+        release_paths
+        + [
+            pair.relative_to(tmp_path).as_posix(),
+            str(pair.relative_to(tmp_path)).replace(".contract", ".summary"),
+        ],
+    )
+
+    assert ai_check_pr.validate_pr_bundle("a" * 40, [pair]) == []
+
+
+def test_aggregate_pr_rejects_archive_bound_metadata_without_premerge_marker(tmp_path, monkeypatch):
+    path = "release.json"
+    pair = write_pair(
+        tmp_path,
+        "archive_bound_missing_marker",
+        [path],
+        [".ai/work-items/archive/index.json"],
+    )
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    patch_changes(
+        monkeypatch,
+        [
+            path,
+            pair.relative_to(tmp_path).as_posix(),
+            str(pair.relative_to(tmp_path)).replace(".contract", ".summary"),
+        ],
+    )
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [pair])
+    assert any("lacks paired ownership" in issue and path in issue for issue in issues)
+
+
 def test_aggregate_pr_rejects_uncovered_earlier_path(tmp_path, monkeypatch):
     closing = write_pair(tmp_path, "closing", ["src/closing.py"], ["src/closing.py"])
     policy = tmp_path / "scope.yaml"
