@@ -7,7 +7,7 @@ import install_ai_cockpit
 import ai_disable_enable
 import ai_rollback
 import ai_uninstall_proposal
-from install_ai_cockpit import Installer, SCRIPT_NAMES
+from install_ai_cockpit import Installer, RUNTIME_TARGETS, SCRIPT_NAMES
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +20,7 @@ RUNTIME_SCRIPTS = {
     "ai_disable_enable.py",
     "ai_uninstall_proposal.py",
 }
-RUNTIME_TARGETS = (
+EXPECTED_RUNTIME_TARGETS = (
     "ai-cockpit-version",
     "ai-lifecycle-facts",
     "ai-cockpit-update-check",
@@ -38,6 +38,10 @@ def test_installer_copy_map_contains_every_runtime_script():
     assert all((ROOT / "scripts" / name).is_file() for name in RUNTIME_SCRIPTS)
 
 
+def test_installer_runtime_targets_are_one_authoritative_surface():
+    assert RUNTIME_TARGETS == EXPECTED_RUNTIME_TARGETS
+
+
 def test_installed_adopter_contains_runtime_scripts_and_targets(tmp_path):
     target = tmp_path / "adopter"
     installer = Installer(
@@ -52,9 +56,9 @@ def test_installed_adopter_contains_runtime_scripts_and_targets(tmp_path):
     assert installer.install() == 0
     assert all((target / "scripts" / name).is_file() for name in RUNTIME_SCRIPTS)
     makefile = (target / "Makefile.ai").read_text(encoding="utf-8")
-    assert all(f"{name}:" in makefile for name in RUNTIME_TARGETS)
+    assert all(f"{name}:" in makefile for name in EXPECTED_RUNTIME_TARGETS)
     result = subprocess.run(
-        ["make", "-f", "Makefile.ai", "-n", *RUNTIME_TARGETS],
+        ["make", "-f", "Makefile.ai", "-n", *EXPECTED_RUNTIME_TARGETS],
         cwd=target,
         text=True,
         capture_output=True,

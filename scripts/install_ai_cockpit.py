@@ -34,6 +34,17 @@ CATALOG_PATH = Path(__file__).with_name(CATALOG_NAME)
 _CATALOG = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
 STACKS = frozenset(_CATALOG["stacks"])
 SCRIPT_NAMES = frozenset(_CATALOG["scripts"])
+RUNTIME_TARGETS = (
+    "ai-cockpit-version",
+    "ai-lifecycle-facts",
+    "ai-cockpit-update-check",
+    "ai-cockpit-update-propose",
+    "ai-cockpit-update-apply",
+    "ai-cockpit-rollback-propose",
+    "ai-cockpit-disable",
+    "ai-cockpit-enable",
+    "ai-cockpit-uninstall-propose",
+)
 
 RUNTIME_SURFACE_SCRIPTS = frozenset(
     {
@@ -458,6 +469,17 @@ class Installer:
         if make_result.returncode != 0:
             raise ValueError(
                 f"installed Makefile.ai validation failed: {make_result.stderr.strip()}"
+            )
+        make_targets = {
+            match.group(1)
+            for line in (self.target / "Makefile.ai").read_text(encoding="utf-8").splitlines()
+            if (match := re.match(r"^([^:=\s]+):(?!=)", line))
+        }
+        missing_targets = sorted(set(RUNTIME_TARGETS) - make_targets)
+        if missing_targets:
+            raise ValueError(
+                "installed Makefile.ai is missing Runtime Surface target(s): "
+                + ", ".join(missing_targets)
             )
 
     def capture_git_head(self) -> GitHeadSnapshot | None:
