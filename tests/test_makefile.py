@@ -1,6 +1,7 @@
 import subprocess
 import os
 import re
+import shutil
 from pathlib import Path
 
 
@@ -95,7 +96,7 @@ def test_project_governance_make_targets_are_public():
 
 def test_lockfile_reproducibility_uses_python_module_invocation():
     result = subprocess.run(
-        ["make", "-n", "check-lockfile-reproducibility"],
+        ["make", "-n", "check-lockfile-reproducibility", "PYTHON=python3"],
         text=True,
         capture_output=True,
         check=False,
@@ -104,6 +105,10 @@ def test_lockfile_reproducibility_uses_python_module_invocation():
     assert result.returncode == 0, result.stdout + result.stderr
     assert "-m piptools compile" in result.stdout
     assert "$(dir $(abspath $(PYTHON)))pip-compile" not in result.stdout
+    resolved = shutil.which("python3")
+    assert resolved is not None
+    assert f'"{resolved}" -m piptools compile' in result.stdout
+    assert f'"{ROOT}/python3" -m piptools compile' not in result.stdout
 
 
 def test_make_prefers_project_venv_and_allows_explicit_python_override(tmp_path):
