@@ -1,0 +1,156 @@
+{
+  "contractVersion": 2,
+  "workItemId": "conditional_go_release_budget_reserve",
+  "mode": "code",
+  "title": "conditional go release budget reserve",
+  "baseCommit": "59e2af54c51ea6d7c0893990daf72175b3e10cd4",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue the current document Work Item workflow; complete the plan-document lifecycle only and do not start any plan implementation Work Item.",
+  "rawRequestSource": {"type":"human","reference":"user-request:continue-current-document-work-item","capturedAt":"2026-07-23","digest":"sha256:continue-current-document-work-item"},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "declaredIntent": {"summary":"Reserve bounded archive-growth headroom for the remaining document-work-item closure sequence.","requestedCapabilities":["ai_governance","documentation","test_automation"]},
+  "scenarioCoverage": [{"scenario":"archiveGrowth=480 remains within the bounded ceiling","required":true,"riskDomain":"governance_budget","status":"verified","evidence":[".ai/guards/governance_complexity_policy.yaml"]}],
+  "scope": [
+    ".ai/work-items/active/conditional_go_release_budget_reserve.contract.json",
+    ".ai/work-items/active/conditional_go_release_budget_reserve.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/guards/governance_complexity_policy.yaml",
+    "release.json",
+    "release-state.json",
+    ".ai/cockpit/release-digests.json"
+  ],
+  "outOfScope": ["Release publication","Plan implementation Work Items"],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/conditional_go_release_budget_reserve.contract.json",
+      "reason": "Archive-growth reservation evidence."
+    },
+    {"path":".ai/guards/governance_complexity_policy.yaml","reason":"Current ceiling and repayment ledger."},
+    {"path":".ai/work-items/archive/index.json","reason":"Current immutable archive count."},
+    {"path":".ai/glossary.md","reason":"Repository governance terminology."},
+    {"path":"AGENTS.md","reason":"Lifecycle and immutable evidence rules."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "governance_budget"
+    ],
+    "reason": "Bounded policy-only archive headroom reservation."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized completion of the full release plan and publication."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": ["archiveGrowth ceiling is raised to 480 with repayment evidence","PR diff contains no modified or deleted existing archive evidence path","Finish Gate, PR checks, merge, closure, and default-branch synchronization complete"],
+  "guidelines": [
+    "Do not rewrite or delete immutable archives.",
+    "Budget changes must be bounded and repayable."
+  ],
+  "intent": {
+    "problem": "The next document Work Item closures add immutable records; reserve bounded headroom so governance checks remain truthful.",
+    "constraints": ["Do not publish before lifecycle closure.","Do not start plan implementation Work Items."],
+    "rationale": "A single bounded reservation prevents repeated ceiling churn while preserving evidence."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized completion of the full release plan and publication."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/conditional_go_release_budget_reserve.json",
+    "baseCommit": "59e2af54c51ea6d7c0893990daf72175b3e10cd4",
+    "initialScopeDigest": "92647b1fc1c23a04be03d473f4f1bf2dd5cec943eb48cfb0d271c28c4d99ffd0",
+    "contractSkeletonDigest": "b2284b105af34ab29596fb12382bc930b8a4e3d1899172d288ec5336eefc603c"
+  }
+}
