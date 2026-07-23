@@ -39,7 +39,15 @@ Do not report a candidate as published. `check-release-distribution` remains the
 Only after the PR is merged and the Work Item is archived may `make ai-close-work-item TASK=<task>` run. The command owns branch deletion and must fail closed on any lifecycle mismatch. After closure, verify the local base equals the remote base and only then begin the next serial Work Item.
 ## Preflight hard gates before PR and release
 
-Before creating a PR, run `make check-ai-pr AI_BASE_COMMIT=<latest-default-branch-sha>`.
+After `make ai-finish TASK=<task>` archives the Work Item, commit the complete
+Work Item bundle, then run `make check-ai-pr AI_BASE_COMMIT=<latest-default-branch-sha>`.
+Do not run the aggregate PR check against an uncommitted archive or generated
+release evidence. The required local order is:
+
+```text
+ai-finish/archive → commit complete bundle → check-ai-pr → push → PR
+```
+
 This gate first runs the project formatter and, when the governance script and policy
 are installed, the governance complexity/budget check; only then does it validate PR
 ownership. This catches formatting drift and budget overflow before remote CI.

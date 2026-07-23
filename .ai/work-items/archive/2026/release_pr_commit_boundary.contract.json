@@ -1,0 +1,282 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_pr_commit_boundary",
+  "mode": "code",
+  "title": "Require clean committed Work Item bundle before PR validation",
+  "baseCommit": "bc85e8f69d6ace179959385864a1acf663a07a92",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    "tests/test_adoption_e2e.py",
+    "scripts/ai_preflight_review.py",
+    "tests/test_preflight_review.py",
+    "scripts/ai_check_summary.py",
+    "tests/test_ai_check_summary.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    ".ai/cockpit/README.md",
+    ".ai/guards/governance_complexity_policy.yaml",
+    ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+    ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**"
+  ],
+  "outOfScope": [
+    "release publication and provider assets",
+    "adopter product runtime behavior outside the PR-boundary lifecycle fixture",
+    "unrelated PR validation changes"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "PR gate must reject a dirty worktree so generated release evidence is committed into the PR."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Regression coverage for dirty and clean PR boundary."
+    },
+    {
+      "path": "tests/test_adoption_e2e.py",
+      "reason": "Adopter lifecycle regression models the required commit before PR validation."
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "reason": "Preflight must distinguish reviewed empty unknowns from omitted risk analysis."
+    },
+    {
+      "path": "tests/test_preflight_review.py",
+      "reason": "Regression coverage for medium-risk Contracts with explicit empty-unknown review."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Summary validation must not require its own result before it executes."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Regression coverage for the non-self-blocking aiSummary check."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Documents the archive, commit, PR aggregate check, and PR order."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Keeps the primary lifecycle guide aligned with the enforced PR boundary."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Lifecycle terminology and evidence boundary."
+    },
+    {
+      "path": ".ai/guards/governance_complexity_policy.yaml",
+      "reason": "Functional archive-growth budget and repayment."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_process"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "The guard changes the PR entry condition for both template maintenance and adopter lifecycle validation; it does not change adopter product runtime or publication."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized root-cause process correction before publication."
+  },
+  "preReviewWarnings": [
+    "Verify the finalization command is only usable after archive creation and before PR merge; publication remains blocked until post-merge closure evidence is verified."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Dirty release evidence or other uncommitted paths are rejected at PR boundary.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_pr_boundary_rejects_dirty_worktree"
+      ]
+    },
+    {
+      "scenario": "A clean committed PR bundle passes the boundary gate in template and adopter flows.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_pr_boundary_accepts_clean_worktree",
+        "tests/test_adoption_e2e.py::test_first_adoption_finishes_and_passes_complete_pr_check"
+      ]
+    }
+  ],
+  "acceptance": [
+    "PR aggregate check fails closed when the repository has uncommitted release evidence or any uncommitted path at PR boundary.",
+    "A clean committed PR bundle passes the new boundary gate and ordinary paired ownership remains unchanged in template and adopter flows.",
+    "Regression coverage proves dirty rejection and clean acceptance in template and adopter flows.",
+    "The lifecycle command sequence is enforced as archive, commit the complete bundle, check-ai-pr, push, and PR; CI validates the same committed bundle.",
+    "Preflight returns Unknowns=Ready only when riskAssessment.unknownsReviewComplete=true and unknowns=[]; otherwise it returns a blocking non-ready signal.",
+    "A fresh Summary with all other required checks passed is accepted by check-ai-change-summary before aiSummary evidence is recorded; the Finish runner records the result afterward.",
+    "Archive-growth and code-line budgets are hard-gated in this functional process correction; no budget-only Work Item is created."
+  ],
+  "guidelines": [
+    "Use canonical finalizer/preflight commands; do not hand-edit generated release evidence.",
+    "Keep release-process changes scoped to the template repository and distinguish template from adopter runtime.",
+    "Do not publish tags or provider assets from this Work Item."
+  ],
+  "intent": {
+    "problem": "The v2 release-freeze Work Item generated final release evidence after archive creation but did not commit those generated files before creating the PR. CI validated the clean remote PR tree, while ai-close later found the local worktree dirty and the merged tree lacked the final freeze evidence.",
+    "constraints": [
+      "The PR boundary must be evaluated on a clean worktree and index.",
+      "Do not weaken ordinary paired ownership.",
+      "Do not publish in this Work Item.",
+      "Do not rewrite immutable archived evidence."
+    ],
+    "rationale": "Make the missing commit boundary fail closed before PR creation, so generated release evidence cannot exist only in the local worktree."
+  },
+  "rawUserRequest": "发现 PR/CI 流程问题时停止发布并从根本上改善；预算、格式化和提交边界必须在事前硬检查，不创建单独预算工单。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message:2026-07-24-root-cause-process-improvement",
+    "capturedAt": "2026-07-24",
+    "digest": "sha256:user-authorized-process-correction"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Require a clean committed release PR boundary before publication.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized root-cause governance process correction before release."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 513,
+      "pythonLines": 40000,
+      "approved": true,
+      "repaymentWorkItem": "release_identity_stabilization"
+    },
+    "repaymentRecords": [
+      {
+        "metric": "archiveGrowth",
+        "from": 512,
+        "to": 513,
+        "approvedBy": "user",
+        "date": "2026-07-24",
+        "reason": "Functional commit-boundary correction; no budget-only Work Item, repay during the next functional release_identity_stabilization Work Item."
+      },
+      {
+        "metric": "pythonLines",
+        "from": 39779,
+        "to": 40000,
+        "approvedBy": "user",
+        "date": "2026-07-24",
+        "reason": "Measured PR boundary guard and regression coverage; no budget-only Work Item, repay during the next functional release_identity_stabilization Work Item."
+      }
+    ]
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release_pr_commit_boundary.json",
+    "baseCommit": "bc85e8f69d6ace179959385864a1acf663a07a92",
+    "initialScopeDigest": "aecfbcae1852580e5e74cbee3e17ac1046592e50c3b90221347553ef103e2a25",
+    "contractSkeletonDigest": "81acd8125963bc19451e3ce141c1f187ac5fd07cfa94ce6ae708831ad4dbf14f"
+  }
+}

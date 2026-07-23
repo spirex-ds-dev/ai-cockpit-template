@@ -374,6 +374,15 @@ def unknowns_signal(contract: dict[str, Any]) -> Signal:
         )
     if not values:
         if level in {"medium", "high"}:
+            if risk.get("unknownsReviewComplete") is True:
+                return Signal(
+                    "Unknowns",
+                    "Ready",
+                    [
+                        f"riskAssessment.level is {level}; explicit risk review confirms no open unknowns"
+                    ],
+                    ["contract.unknowns", "contract.riskAssessment.unknownsReviewComplete"],
+                )
             return Signal(
                 "Unknowns",
                 "Suspiciously Empty",

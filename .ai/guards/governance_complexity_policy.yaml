@@ -5,7 +5,7 @@ proposal:
   confirmedBy: governance-maintainers
   reason: Existing template policy is explicitly confirmed; adopter policies must remain proposed until human review.
 max:
-  pythonLines: 39850
+  pythonLines: 40000
   markdownLines: 9550
   functionComplexity: 50
   schemaCount: 10
@@ -13,11 +13,14 @@ max:
   repeatedProtocolFields: 50
   dependencyCycles: 0
   installAllowlistEntries: 20
-  archiveGrowth: 512
+  archiveGrowth: 513
   generatedEvidenceRatio: 1.0
 baseline:
   pythonLines: 32000
 repaymentRecords:
+  - release_pr_commit_boundary|pythonLines|39779|40000|user|2026-07-24|Include the measured clean PR-boundary guard and regression coverage in this functional Work Item; do not create a separate budget-only Work Item, and repay during release_identity_stabilization.
+  - release_pr_commit_boundary|pythonLines|32000|40000|user|2026-07-24|Record the cumulative executable governance ceiling after the clean PR-boundary correction; repay measured growth during release_identity_stabilization without rewriting lifecycle evidence.
+  - release_pr_commit_boundary|archiveGrowth|512|513|user|2026-07-24|Include the functional PR commit-boundary correction archive in this Work Item; do not create a separate budget-only Work Item, and repay during release_identity_stabilization.
   - release_freeze_premerge_v2|pythonLines|39700|39850|user|2026-07-24|Include the latest-base archive-bound release-freeze correction and regression coverage in the same functional Work Item; do not create a separate budget-only Work Item, and repay during conditional_go_plan_cleanup after preserving immutable evidence.
   - release_freeze_premerge_v2|pythonLines|32000|39850|user|2026-07-24|Record the cumulative executable governance ceiling after the latest-base archive-bound release-freeze correction; repay measured growth during conditional_go_plan_cleanup without rewriting lifecycle evidence.
   - release_freeze_premerge_v2|archiveGrowth|511|512|user|2026-07-24|Include the latest-base archive-bound release-freeze archive in the same functional Work Item; do not create a separate budget-only Work Item, and repay during conditional_go_plan_cleanup after preserving immutable evidence.

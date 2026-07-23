@@ -644,6 +644,12 @@ def test_preflight_signals_cover_missing_overlap_broad_and_partial_states():
         == "Ready"
     )
     assert (
+        ai_preflight_review.unknowns_signal(
+            {"unknowns": [], "riskAssessment": {"level": "medium", "unknownsReviewComplete": True}}
+        ).value
+        == "Ready"
+    )
+    assert (
         ai_preflight_review.acceptance_signal(
             {
                 "acceptance": [

@@ -86,6 +86,20 @@ def patch_changes(monkeypatch, paths, *, statuses=None):
     )
 
 
+def test_pr_boundary_rejects_dirty_worktree(monkeypatch):
+    monkeypatch.setattr(ai_check_pr, "run_git", lambda _args: fake_git_result(" M release.json\n"))
+
+    assert ai_check_pr.validate_pr_boundary() == [
+        "PR boundary requires a clean committed worktree; commit generated release evidence before creating the PR"
+    ]
+
+
+def test_pr_boundary_accepts_clean_worktree(monkeypatch):
+    monkeypatch.setattr(ai_check_pr, "run_git", lambda _args: fake_git_result())
+
+    assert ai_check_pr.validate_pr_boundary() == []
+
+
 def fake_git_result(stdout="", returncode=0, stderr=""):
     return type(
         "Result",
