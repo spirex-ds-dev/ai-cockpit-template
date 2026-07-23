@@ -1,0 +1,177 @@
+{
+  "contractVersion": 2,
+  "workItemId": "conditional_go_archive_budget_repayment",
+  "mode": "code",
+  "title": "Repay the archive growth budget for the release archive repair Work Item",
+  "baseCommit": "041102ec25b5fd4a86067c2229533178213b8cae",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/conditional_go_archive_budget_repayment.contract.json",
+    ".ai/work-items/active/conditional_go_archive_budget_repayment.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/guards/governance_complexity_policy.yaml",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": ".ai/guards/governance_complexity_policy.yaml",
+      "reason": "The required template-smoke check reports archiveGrowth=481 exceeds configured maximum 480."
+    },
+    {
+      "path": "gh run 29978936911",
+      "reason": "Required template-smoke failed only because the immutable archive count exceeded the reserved budget by one."
+    }
+  ],
+  "rawUserRequest": "修复发布归档 PR 暴露的 archiveGrowth=481 超过预算 480 问题，按完整 Work Item、PR、合并、ai-close-work-item 和默认分支同步流程完成；保留已有生命周期记录。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-23-archive-growth-gate",
+    "capturedAt": "2026-07-23T13:20:00+09:00",
+    "digest": "template-smoke-29978936911-archive-growth-481"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Repay the one-record archive growth reservation required by the merged release archive repair Work Item.",
+    "requestedCapabilities": ["ai_governance"]
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "archive_budget_repayment"
+    ],
+    "reason": "Initial skeleton; replace with task-specific implementation and review risks."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The failing CI evidence identifies one bounded policy value to repay."
+  },
+  "preReviewWarnings": [
+    "Confirm the new archiveGrowth maximum equals the observed immutable archive count and no records are removed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "archiveGrowth maximum is raised from 480 to 481 with an explicit repayment record.",
+    "The governance complexity check reports no budget violation at archiveGrowth 481.",
+    "No existing archive or lifecycle record is removed or rewritten."
+  ],
+  "guidelines": [
+    "Preserve immutable Work Item lifecycle evidence.",
+    "Record bounded archive budget repayment in the governance policy."
+  ],
+  "intent": {
+    "problem": "The required template-smoke check failed because the newly archived release archive repair Work Item increased archiveGrowth to 481 while the reserved maximum remained 480.",
+    "constraints": [
+      "Change only the governance complexity budget policy and this Work Item evidence.",
+      "Do not delete or rewrite existing archive records.",
+      "Keep the increase bounded to the observed one-record growth."
+    ],
+    "rationale": "The policy must reflect the immutable evidence already present; a one-record explicit repayment preserves the fail-closed guard without hiding growth."
+  },
+  "scenarioCoverage": [],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized completion of the current plan and its required governance budget repayment."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "startReceipt": {
+    "path": ".ai/work-items/starts/conditional_go_archive_budget_repayment.json",
+    "baseCommit": "041102ec25b5fd4a86067c2229533178213b8cae",
+    "initialScopeDigest": "4d0b09a14e2aed94c862792a303384922aabbda2ac0b02b393623ea884347034",
+    "contractSkeletonDigest": "c78b1ffe2b00e973f841f2edf02a3799f6a946be52b081ebb9cb74d48a84964e"
+  }
+}
