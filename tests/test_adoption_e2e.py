@@ -96,6 +96,10 @@ def test_first_adoption_finishes_and_passes_complete_pr_check(tmp_path):
         f"PYTHON={sys.executable}",
     )
     assert finish.returncode == 0, finish.stdout + finish.stderr
+    # Model the actual PR boundary: archived Work Item evidence must be committed
+    # before aggregate PR validation, including in an adopter repository.
+    assert run(tmp_path, "git", "add", "-A").returncode == 0
+    assert run(tmp_path, "git", "commit", "-qm", "archive adoption Work Item").returncode == 0
     pr_check = run(
         tmp_path,
         "make",

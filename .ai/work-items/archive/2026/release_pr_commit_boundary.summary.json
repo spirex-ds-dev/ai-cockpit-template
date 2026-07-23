@@ -1,0 +1,479 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "release_pr_commit_boundary",
+  "contractPath": ".ai/work-items/archive/2026/release_pr_commit_boundary.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/release_pr_commit_boundary.contract.json",
+      "reason": "Defined the clean committed PR boundary and hard budget gate."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release_pr_commit_boundary.summary.json",
+      "reason": "Recorded implementation and root-cause process correction evidence."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Added a fail-closed clean-worktree boundary before aggregate PR validation."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Added dirty rejection and clean acceptance regression tests."
+    },
+    {
+      "path": "tests/test_adoption_e2e.py",
+      "reason": "Updated adopter lifecycle regression to commit the archived bundle before PR validation."
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "reason": "Added explicit reviewed-empty-unknowns handling for bounded medium-risk Contracts."
+    },
+    {
+      "path": "tests/test_preflight_review.py",
+      "reason": "Added regression coverage for the reviewed-empty-unknowns preflight path."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Removed the self-referential aiSummary prerequisite from Summary validation."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Added regression coverage for fresh Summary validation."
+    },
+    {
+      "path": ".ai/guards/governance_complexity_policy.yaml",
+      "reason": "Raised measured code/archive ceilings and recorded repayment; no budget-only Work Item."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Recorded the enforced archive-to-commit-to-PR-check sequence."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Aligned the primary lifecycle guide with the committed PR boundary."
+    },
+    {
+      "path": ".ai/decisions/HDR-5f5663c2bb942e56-9d98180e.request.json",
+      "reason": "Preserved the first blocked Preflight request as immutable evidence of the corrected Contract gap."
+    },
+    {
+      "path": ".ai/decisions/HDR-7781ee43e67dc7c8-5efe0c43.request.json",
+      "reason": "Preserved the second blocked Preflight request as evidence before acceptance criteria were tightened."
+    },
+    {
+      "path": ".ai/decisions/HDR-9e15a04e28d58c75-f2c70410.request.json",
+      "reason": "Preserved the final blocked Preflight request before the Contract became ready."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release_pr_commit_boundary.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    "tests/test_adoption_e2e.py",
+    "scripts/ai_preflight_review.py",
+    "tests/test_preflight_review.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    ".ai/cockpit/README.md",
+    ".ai/guards/governance_complexity_policy.yaml",
+    ".ai/glossary.md"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Dirty release evidence or other uncommitted paths are rejected at PR boundary.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_pr_boundary_rejects_dirty_worktree"
+      ]
+    },
+    {
+      "scenario": "A clean committed PR bundle passes the boundary gate in template and adopter flows.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_pr_boundary_accepts_clean_worktree",
+        "tests/test_adoption_e2e.py::test_first_adoption_finishes_and_passes_complete_pr_check"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:46:13.302592+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "4de8583f6eee8c75b2ef96cfe2246855b087719066bede7670fed664f61daa28",
+      "commandHash": "528460cc4c51934e193d7e1d5e5f4ca7dcf37807cc01df163225949b9cfe4bb0",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "44823e1f42da994a3c34e37a5c8e586a4147f8bca274777bd4dd6dce098c30cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_work_item.py .ai/work-items/active/release_pr_commit_boundary.contract.json work item contract check passed: .ai/work-items/active/release_pr_commit_boundary.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:46:13.512018+00:00",
+      "exitCode": 0,
+      "durationMs": 123,
+      "outputDigest": "85fa335f413e8d2cd2cba05f63804d0820d8834a53ab743bf93346fad6404ca5",
+      "commandHash": "59596f31d751ad8e91b8975a51a5c40ac6ef79d88cc645e5ec574f0db69e098a",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "44823e1f42da994a3c34e37a5c8e586a4147f8bca274777bd4dd6dce098c30cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scope.py .ai/work-items/active/release_pr_commit_boundary.contract.json scope guard passed: 15 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:46:13.808079+00:00",
+      "exitCode": 0,
+      "durationMs": 178,
+      "outputDigest": "0d9329b8f8c8523b87d59e8179c0053ed296b18fb1ae781479520ce8ca8127c2",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "44823e1f42da994a3c34e37a5c8e586a4147f8bca274777bd4dd6dce098c30cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guards.py --contract .ai/work-items/active/release_pr_commit_boundary.contract.json [warning] restricted_write: .ai/decisions/HDR-5f5663c2bb942e56-9d98180e.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-7781ee43e67dc7c8-5efe0c43.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-9e15a04e28d58c75-f2c70410.request.json (.ai/**) - AI governance confi"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/release_pr_commit_boundary.contract.json SUMMARY=.ai/work-items/active/release_pr_commit_boundary.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:46:14.201728+00:00",
+      "exitCode": 0,
+      "durationMs": 300,
+      "outputDigest": "676fd6ed42f2cb971029d5c6217f7570312a456ea43f98ce35444d9afe846c5a",
+      "commandHash": "381df95308d6cd30c2a93f995c4212f086ee09d8f10f9076b982989770e25dba",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "44823e1f42da994a3c34e37a5c8e586a4147f8bca274777bd4dd6dce098c30cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_checkpoint.py --contract .ai/work-items/active/release_pr_commit_boundary.contract.json --summary .ai/work-items/active/release_pr_commit_boundary.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `release_pr_commit_boundary` - Contract Hash: `477b78c3678af3e6` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `7` - Unknown Count: `0` - Required Checks: `16` - R"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:46:14.463662+00:00",
+      "exitCode": 0,
+      "durationMs": 157,
+      "outputDigest": "5a10b4f5c3671eed0f1686a2e464d67d377f46d8996cfaae2471d8381cdd8cfa",
+      "commandHash": "fe141646f6237ba803a68d06d231becbbe23dd98338e87f8bfaae243af6bff38",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "44823e1f42da994a3c34e37a5c8e586a4147f8bca274777bd4dd6dce098c30cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_review_policy.py --summary .ai/work-items/active/release_pr_commit_boundary.summary.json review policy matched 10 path(s) [review] .ai/decisions/HDR-5f5663c2bb942e56-9d98180e.request.json [review] .ai/decisions/HDR-7781ee43e67dc7c8-5efe0c43.request.json [review] .ai/decisions/HDR-9e15a04e28d58c75-f2c70410.request.json [review] .ai/work-items/starts/release_pr_commit_boundary.json [review] .ai/cockpit/README.md [review] .ai/cockpit/current_status"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:46:14.671651+00:00",
+      "exitCode": 0,
+      "durationMs": 121,
+      "outputDigest": "7129fb431d5d59c569f22fa9d6ff9b30876753d23ac690d93f14eed56841f07c",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "44823e1f42da994a3c34e37a5c8e586a4147f8bca274777bd4dd6dce098c30cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:46:14.878817+00:00",
+      "exitCode": 0,
+      "durationMs": 121,
+      "outputDigest": "a2e66935f0b5b56e7ea492a898b6ab49413746bdde21a6663eaa1d889cb54e56",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "44823e1f42da994a3c34e37a5c8e586a4147f8bca274777bd4dd6dce098c30cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/release_pr_commit_boundary.contract.json SUMMARY=.ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:46:15.007896+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "2b4f167615887d07bd61fdb29dbee0d82c8bac7d34db14f8eeb9eab912edc5ea",
+      "commandHash": "71c8b7101c80e16b0865f04e7162b44328a021f68515bcd3c486341261e61c71",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "44823e1f42da994a3c34e37a5c8e586a4147f8bca274777bd4dd6dce098c30cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/release_pr_commit_boundary.contract.json --summary .ai/work-items/active/release_pr_commit_boundary.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/release_pr_commit_boundary.contract.json SUMMARY=.ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:46:15.172274+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "f63c46665e2f228c2aabf7f96fc4a35fa514a70fded8a95d199701cbbcd65c0c",
+      "commandHash": "d29366d96569044b56c765fedc5cbeeb1d7f9b26ccad1d54f765f56a34897110",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "44823e1f42da994a3c34e37a5c8e586a4147f8bca274777bd4dd6dce098c30cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guidelines.py --contract .ai/work-items/active/release_pr_commit_boundary.contract.json --summary .ai/work-items/active/release_pr_commit_boundary.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:46:15.524091+00:00",
+      "exitCode": 0,
+      "durationMs": 273,
+      "outputDigest": "5e37fcaabd1bfbd51231fe16bc301de8636ae2d7eac58ec5fdba104bf7a3677a",
+      "commandHash": "94e9fe6027bd44a9137738185b504b2dc09f4b7ee92c4cf2ed76814a15af6640",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "44823e1f42da994a3c34e37a5c8e586a4147f8bca274777bd4dd6dce098c30cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/release_pr_commit_boundary.contract.json ## Diff Ownership Preview - active_owned: `15`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/README.md` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-5f5663c2bb942e56-9d98180e.request."
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:50:25.053300+00:00",
+      "exitCode": 0,
+      "durationMs": 249412,
+      "outputDigest": "795bb677fa575c42ffb82dd6436b891d51c9838bc69e8c2746d33b8830cbbf68",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "44823e1f42da994a3c34e37a5c8e586a4147f8bca274777bd4dd6dce098c30cf",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 -m ruff format --check scripts tests 181 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 7%] ........................................................................ [ 15%] ........................................................................ [ 23%]"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/release_pr_commit_boundary.contract.json SUMMARY=.ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:50:26.892484+00:00",
+      "exitCode": 0,
+      "durationMs": 276,
+      "outputDigest": "e45dbec4094301f9ccb57e9a42a903024c3acac6de4ca350734ba4e3cfba9b06",
+      "commandHash": "3ddd6aa3cf6836aa5d61aefcd572d67db0fd437a68b49a9b8f7d913705a35d85",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "9c69f2078639fc528a761bc491a0eb54c7486947068b5c11a42247e87c804a9b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_generate_status.py .ai/work-items/active/release_pr_commit_boundary.contract.json --summary .ai/work-items/active/release_pr_commit_boundary.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/release_pr_commit_boundary.contract.json SUMMARY=.ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:50:27.309592+00:00",
+      "exitCode": 0,
+      "durationMs": 337,
+      "outputDigest": "b1e568c44a6817c418a6b901122430f3491531f5a234038abfae47d637e37082",
+      "commandHash": "0ac5d93eafee371ab92fe50cab002ca9cb0d8fb8efd2ccdcaafe76c9a1cc9e9a",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "9c69f2078639fc528a761bc491a0eb54c7486947068b5c11a42247e87c804a9b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/release_pr_commit_boundary.contract.json --summary .ai/work-items/active/release_pr_commit_boundary.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:50:27.430088+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "1156c9e1bf158b3423d353f4c44540bca1436905785abef51a57014ed23ad1e4",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "9c69f2078639fc528a761bc491a0eb54c7486947068b5c11a42247e87c804a9b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/release_pr_commit_boundary.contract.json SUMMARY=.ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:50:27.759071+00:00",
+      "exitCode": 0,
+      "durationMs": 231,
+      "outputDigest": "a1edc7cf8088a460501c8d12265d179a6632354adcb7b166896b81efb728a4ad",
+      "commandHash": "9c75841f6e93a9df68c30897a8b8a71c29b36e0598033935c7112dda58ae6569",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "9c69f2078639fc528a761bc491a0eb54c7486947068b5c11a42247e87c804a9b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_agent_risk.py --contract .ai/work-items/active/release_pr_commit_boundary.contract.json --summary .ai/work-items/active/release_pr_commit_boundary.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/release_pr_commit_boundary.summary.json CONTRACT=.ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-23T20:50:28.792836+00:00",
+      "exitCode": 0,
+      "durationMs": 115,
+      "outputDigest": "d1ecb41b27179da004e21f56667e27708101fcfd69021954387b182e73fe7a61",
+      "commandHash": "63e28ea44a917c718bae6497971848d9198651301e55b2eaa57221bbc9c818ee",
+      "contractHash": "477b78c3678af3e6384dfbe4526403f82652b536795a8e795dcde61161b985a3",
+      "commitSha": "bc85e8f69d6ace179959385864a1acf663a07a92",
+      "executionContractPath": ".ai/work-items/active/release_pr_commit_boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release_pr_commit_boundary.summary.json",
+      "worktreeDigest": "9458a1377abaca179256bee9aea43c878f080eb12c89e4574b329f8b747ab15e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_summary.py .ai/work-items/active/release_pr_commit_boundary.summary.json --contract .ai/work-items/active/release_pr_commit_boundary.contract.json ai summary check passed: .ai/work-items/active/release_pr_commit_boundary.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep the PR boundary fail-closed and preserve ordinary paired ownership.",
+      "compliant": true,
+      "evidence": "scripts/ai_check_pr.py rejects any dirty worktree before aggregate ownership validation."
+    },
+    {
+      "guideline": "Do not create a budget-only Work Item; record measured growth with repayment in the functional Contract.",
+      "compliant": true,
+      "evidence": "Contract and governance complexity policy record archive/code growth and conditional repayment."
+    },
+    {
+      "guideline": "Use canonical finalizer/preflight commands; do not hand-edit generated release evidence.",
+      "compliant": true,
+      "evidence": "This Work Item changes the PR boundary only; release evidence remains generated by canonical finalizer and preflight commands in the later release Work Item."
+    },
+    {
+      "guideline": "Keep release-process changes scoped to the template repository and distinguish template from adopter runtime.",
+      "compliant": true,
+      "evidence": "Contract scope contains only template governance scripts, tests, and guard policy; adopter runtime and release provider assets are explicitly out of scope."
+    },
+    {
+      "guideline": "Do not publish tags or provider assets from this Work Item.",
+      "compliant": true,
+      "evidence": "No tag, release, or provider operation is performed; publication is explicitly deferred to the final release Work Item."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Global PR-boundary behavior changes for template and adopter lifecycle validation; product runtime and publication remain out of scope."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    "The first full quality run exposed an adopter E2E test using the old pre-commit PR-check order; the test was updated in this same Work Item.",
+    "The previous summary referenced stale test names and a completed cleanup Work Item as budget repayment; both were corrected in this same Work Item.",
+    "Preflight generated three blocked decision request records before the Contract became ready; they are retained and explicitly owned by this Summary."
+  ],
+  "residualRisks": [],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "All required verification passed and no residual risk remains.",
+    "expectedReviewFocus": [
+      "Verify dirty release evidence cannot enter a PR only from the local worktree.",
+      "Verify clean committed PR bundles retain ordinary paired ownership.",
+      "Verify format, budget, and CI gates remain hard fail-closed."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [
+    "预算、格式、Contract、Summary 不完整时，先在当前功能工单内修正；不要为这些局部问题另开工单。",
+    "发现流程性问题时停止发布，先做集中根因复盘和流程修正；不要逐个 CI 症状递归开工单。",
+    "必须区分 template 工程与 adopter 对象工程。"
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "当前功能工单内闭环修正其自身预算、格式、Contract、Summary 和测试证据问题。",
+      "solidifiedIn": "release_pr_commit_boundary Contract acceptance, budgetImpact, tests/test_adoption_e2e.py, and Summary observedIssues"
+    },
+    {
+      "correction": "PR 边界固定为 archive → commit → check-ai-pr → push/PR。",
+      "solidifiedIn": "scripts/ai_check_pr.py, docs/reference/ai-cockpit-work-item-lifecycle.md, and .ai/cockpit/README.md"
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "477b78c3678af3e6",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "477b78c3678af3e6",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 512
+}

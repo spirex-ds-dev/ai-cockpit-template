@@ -407,8 +407,18 @@ def _validate_required_verification(
             for item in summary.get("verification", [])
             if isinstance(item, dict)
         }
-        missing = [command for command in required if command not in status]
-        non_passed = [command for command in required if status.get(command) != "passed"]
+        # aiSummary is the check currently being executed. Requiring its prior
+        # result would make a fresh Summary impossible to validate; ai_finish
+        # records the passing evidence immediately after this validator returns.
+        self_check = "aiSummary"
+        missing = [
+            command for command in required if command != self_check and command not in status
+        ]
+        non_passed = [
+            command
+            for command in required
+            if command != self_check and status.get(command) != "passed"
+        ]
         if missing:
             issues.append(f"Summary is missing required verification: {', '.join(missing)}")
         if non_passed:

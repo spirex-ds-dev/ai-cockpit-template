@@ -476,6 +476,18 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def validate_pr_boundary() -> list[str]:
+    """Require the PR candidate to be fully committed before aggregate validation."""
+    status = run_git(["status", "--porcelain", "--untracked-files=all"])
+    if status.returncode != 0:
+        return ["PR boundary cannot determine worktree cleanliness"]
+    if status.stdout.strip():
+        return [
+            "PR boundary requires a clean committed worktree; commit generated release evidence before creating the PR"
+        ]
+    return []
+
+
 def main() -> int:
     args = parse_args()
     if not args.base:
@@ -484,7 +496,7 @@ def main() -> int:
     contract_paths = [Path(path).resolve() for path in args.contracts] or archived_contract_paths(
         args.base
     )
-    issues = validate_pr_bundle(args.base, contract_paths)
+    issues = validate_pr_boundary() + validate_pr_bundle(args.base, contract_paths)
     if issues:
         for issue in issues:
             print(f"[ERROR] {issue}", file=sys.stderr)

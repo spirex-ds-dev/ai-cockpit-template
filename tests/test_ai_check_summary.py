@@ -40,6 +40,18 @@ def test_summary_validator_orchestrates_focused_validation_helpers(monkeypatch):
     ]
 
 
+def test_required_verification_does_not_self_block_ai_summary():
+    contract = {
+        "verification": [
+            {"check": "aiSummary", "required": True},
+            {"check": "aiWorkItem", "required": True},
+        ]
+    }
+    summary = {"verification": [{"check": "aiWorkItem", "result": "passed"}]}
+
+    assert ai_check_summary._validate_required_verification(summary, contract) == []
+
+
 def test_receipt_binding_exempts_receipt_from_changed_file_diff(monkeypatch):
     summary = {"changedFiles": []}
     contract = {
