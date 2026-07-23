@@ -61,6 +61,12 @@ def default_verification() -> list[dict[str, object]]:
     return [{"check": check, "required": True} for check in DEFAULT_VERIFICATION_CHECKS]
 
 
+def projected_archive_growth() -> int:
+    """Return the archive count after this newly started Work Item closes."""
+    archive_dir = PROJECT_ROOT / ".ai" / "work-items" / "archive"
+    return len(list(archive_dir.rglob("*.contract.json"))) + 1
+
+
 def slug(value: str) -> str:
     normalized = re.sub(r"[^a-zA-Z0-9_-]+", "_", value.strip().lower()).strip("_")
     if not normalized:
@@ -453,6 +459,7 @@ def main() -> int:
                 "reason": "Set only when a human explicitly approves restricted governance paths.",
             },
             "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+            "budgetImpact": {"expectedMetrics": {"archiveGrowth": projected_archive_growth()}},
         }
         summary = {
             "summaryVersion": 2,

@@ -94,6 +94,14 @@ def prepare_work_item(root: Path, task: str, changed: list[str], *, extra_checks
                 "approvedBy": "journey fixture owner",
                 "reason": "Explicit fixture calibration.",
             },
+            "budgetImpact": {
+                "expectedMetrics": {
+                    "archiveGrowth": len(
+                        list((root / ".ai" / "work-items" / "archive").rglob("*.contract.json"))
+                    )
+                    + 1
+                }
+            },
         }
     )
     existing = {item["check"] for item in contract["verification"]}

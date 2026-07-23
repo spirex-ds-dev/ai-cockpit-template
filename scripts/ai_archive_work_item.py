@@ -11,6 +11,7 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 from ai_check_summary import validate_summary
 from ai_check_work_item import validate_contract
@@ -21,6 +22,7 @@ from ai_common import (
     load_json,
     non_empty_string,
     path_fingerprint,
+    parse_yaml,
     redact_machine_paths_in_data,
     save_json,
     verification_key,
@@ -142,6 +144,49 @@ def _next_archive_sequence() -> int:
         if isinstance(value, int) and not isinstance(value, bool):
             highest = max(highest, value)
     return highest + 1
+
+
+def validate_archive_growth_reservation(
+    contract: dict[str, Any], current_count: int, policy: dict[str, Any]
+) -> list[str]:
+    """Fail closed before archive mutation unless projected growth is reserved."""
+    projected = current_count + 1
+    limits = policy.get("max", {}) if isinstance(policy, dict) else {}
+    limit = limits.get("archiveGrowth")
+    impact = contract.get("budgetImpact")
+    expected_metrics = impact.get("expectedMetrics") if isinstance(impact, dict) else None
+    expected = expected_metrics.get("archiveGrowth") if isinstance(expected_metrics, dict) else None
+    issues: list[str] = []
+    if not isinstance(expected, int) or isinstance(expected, bool):
+        issues.append(
+            "archiveGrowth reservation is required: budgetImpact.expectedMetrics.archiveGrowth "
+            f"must equal projected archive count {projected}"
+        )
+    elif expected != projected:
+        issues.append(
+            "archiveGrowth reservation is stale: "
+            f"expected {expected}, projected archive count is {projected}"
+        )
+    if isinstance(limit, int) and projected > limit:
+        issues.append(f"projected archiveGrowth={projected} exceeds configured maximum {limit}")
+    if isinstance(expected, int) and isinstance(limit, int) and expected > limit:
+        if not isinstance(impact, dict) or impact.get("approved") is not True:
+            issues.append("archiveGrowth reservation requires budgetImpact.approved=true")
+        if not isinstance(impact, dict) or not impact.get("repaymentWorkItem"):
+            issues.append("archiveGrowth reservation requires repaymentWorkItem")
+        if not isinstance(impact, dict) or not impact.get("repaymentRecords"):
+            issues.append("archiveGrowth reservation requires repaymentRecords")
+    return issues
+
+
+def _archive_growth_issues(contract: dict[str, Any]) -> list[str]:
+    policy_path = PROJECT_ROOT / ".ai" / "guards" / "governance_complexity_policy.yaml"
+    try:
+        policy = parse_yaml(policy_path)
+    except (OSError, ValueError) as exc:
+        return [f"cannot read archiveGrowth policy before mutation: {exc}"]
+    current_count = len(list(ARCHIVE_BASE_DIR.rglob("*.contract.json")))
+    return validate_archive_growth_reservation(contract, current_count, policy)
 
 
 def _archive_entry(
@@ -408,6 +453,15 @@ def main() -> int:
                 file=sys.stderr,
             )
             return 1
+
+    archive_growth_issues = _archive_growth_issues(contract)
+    if archive_growth_issues:
+        for issue in archive_growth_issues:
+            print(f"[ERROR] {issue}", file=sys.stderr)
+        print(
+            "ERROR: archive mutation blocked before budget reservation is valid.", file=sys.stderr
+        )
+        return 1
 
     target_dir = ARCHIVE_BASE_DIR / str(datetime.now().year)
     files_to_move: list[tuple[Path, Path]] = [(contract_path, target_dir / contract_path.name)]

@@ -281,6 +281,7 @@ def archive_contract(mode: str = "review") -> dict[str, object]:
             "allowPatterns": [],
         },
         "rollbackNote": "revert",
+        "budgetImpact": {"expectedMetrics": {"archiveGrowth": 1}},
     }
 
 

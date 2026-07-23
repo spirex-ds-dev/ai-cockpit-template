@@ -702,6 +702,9 @@ class Installer:
             )
         ]
         adoption_guidelines = ["Do not claim project quality checks are configured by adoption."]
+        archive_growth = (
+            len(list((self.target / ".ai" / "work-items" / "archive").rglob("*.contract.json"))) + 1
+        )
         contract = {
             "contractVersion": 2,
             "workItemId": "adopt_ai_cockpit",
@@ -811,6 +814,7 @@ class Installer:
                 "reason": "The user explicitly invoked --create-adoption to introduce governance files.",
             },
             "rollbackNote": "Revert the adoption commit to remove AI Cockpit governance files.",
+            "budgetImpact": {"expectedMetrics": {"archiveGrowth": archive_growth}},
         }
         receipt = build_receipt(contract, project_root=self.target)
         contract["startReceipt"] = receipt_binding(receipt)
