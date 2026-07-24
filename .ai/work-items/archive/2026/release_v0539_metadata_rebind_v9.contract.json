@@ -1,0 +1,177 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release_v0539_metadata_rebind_v9",
+  "mode": "code",
+  "title": "Rebind v0.5.39 candidate evidence after source parity correction",
+  "rawUserRequest": "好，请继续。重新生成 v0.5.39 候选证据，走完整 Contract/Preflight/PR/合并/ai-close-work-item 流程；不要绕过门禁或重复旧 PR。",
+  "rawRequestSource": {"type":"human","reference":"user-message:2026-07-24","capturedAt":"2026-07-24","digest":"sha256:user-authorized-v0539-rebind-after-process-fix"},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "baseCommit": "05207a18c9ad4cf06708eb7ef6c79e3dab0a07a4",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release_v0539_metadata_rebind_v9.contract.json",
+    ".ai/work-items/active/release_v0539_metadata_rebind_v9.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/release-freeze.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    "release-state.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "Creating or pushing tag v0.5.39",
+    "Creating or editing a GitHub Release",
+    "Changing release workflow, release gates, archive policy, or adopter behavior",
+    "Rewriting archived Work Item evidence"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/release_v0539_metadata_rebind_v9.contract.json",
+      "reason": "Defines the bounded v0.5.39 candidate metadata and premerge evidence lifecycle."
+    },
+    {"path":"release.json","reason":"Candidate release identity must remain v0.5.39."},
+    {"path":"release-state.json","reason":"Canonical candidate state and projection digests must be consistent."},
+    {"path":".ai/cockpit/release-freeze.json","reason":"Premerge finalizer regenerates source-bound freeze evidence."},
+    {"path":".ai/cockpit/release-digests.json","reason":"Premerge finalizer regenerates candidate artifact identities."},
+    {"path":"scripts/finalize_release_freeze.py","reason":"Corrected finalizer now binds premerge archive evidence to controlled source identity."},
+    {"path":"scripts/check_release_preflight.py","reason":"Release preflight is the final candidate gate."},
+    {"path":".ai/work-items/archive/2026/release_preflight_merged_source_parity_v1.contract.json","reason":"Merged process correction evidence is the predecessor boundary."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["release_metadata_identity"],
+    "reason": "Only candidate metadata and generated freeze evidence are rebound; publication remains out of scope."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The stale candidate evidence is a bounded release metadata correction after the source-parity process fix."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "release.json remains v0.5.39 and release-state/next-release projections remain consistent.",
+    "After archive, finalize-release-freeze-premerge regenerates source-bound freeze and digest evidence using the corrected finalizer.",
+    "Release state consistency, source-bound preflight, full AI/project quality, and PR ownership checks pass.",
+    "No tag, GitHub Release, adopter change, workflow change, or archived evidence rewrite is included."
+  ],
+  "guidelines": [
+    "Release metadata changes stay within this Contract scope.",
+    "Generated freeze and digest evidence is produced only by supported finalizer commands.",
+    "Publication remains delegated to the protected release workflow after this lifecycle closes."
+  ],
+  "intent": {
+    "problem": "The v0.5.39 candidate still contains freeze and archive digests from before the merged-source parity correction, so current release preflight rejects it.",
+    "constraints": ["Use latest origin/main and one dedicated branch.","Archive before premerge finalization.","Do not publish or manually edit generated evidence."],
+    "rationale": "Rebinding the candidate after the process correction creates one auditable source-bound release snapshot without repeating the obsolete PR."
+  },
+  "declaredIntent": {"summary":"Rebuild the v0.5.39 candidate evidence after the source-parity process correction.","requestedCapabilities":["ai_governance","software_design"]},
+  "scenarioCoverage": [
+    {"scenario":"v0.5.39 metadata and candidate projections remain consistent","required":false,"status":"unverified","evidence":[],"reason":"Verified by release state consistency after metadata preparation."},
+    {"scenario":"premerge freeze matches the corrected canonical source identity","required":false,"status":"unverified","evidence":[],"reason":"Verified by controlled-source preflight after finalization."},
+    {"scenario":"publication remains outside candidate preparation","required":true,"status":"verified","evidence":["Contract outOfScope"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized continuing the v0.5.39 release after process correction."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 534
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release_v0539_metadata_rebind_v9.json",
+    "baseCommit": "05207a18c9ad4cf06708eb7ef6c79e3dab0a07a4",
+    "initialScopeDigest": "966719b725598150a3de752fd62afbd5cf4377269f7b2cd95c1e5a95a84f46e8",
+    "contractSkeletonDigest": "5ef6dc650eb8ff5cd6aaf235fcea149710d27e44d0ff24900ab97ad1875f48b0"
+  }
+}
