@@ -154,8 +154,11 @@ jobs:
                 mv "$RUNNER_TEMP/ci-workflow-runs.next.json" "$RUNNER_TEMP/ci-workflow-runs.json"
                 break
               fi
+              WAIT_DIAGNOSTIC="workflow=$workflow source_commit=$SOURCE_COMMIT elapsed_seconds=$SECONDS timeout window=900 dependent_run_ids=$(jq -r '[.[].databaseId] | join(",")' <<<"$runs")"
+              echo "dependent run IDs: $(jq -r '[.[].databaseId] | join(",")' <<<"$runs")"
+              echo "::notice title=Release wait status::$WAIT_DIAGNOSTIC"
               if (( SECONDS >= deadline )); then
-                echo "timed out waiting for ${workflow} for ${SOURCE_COMMIT}" >&2
+                echo "timed out waiting for ${workflow} for ${SOURCE_COMMIT}; $WAIT_DIAGNOSTIC" >&2
                 exit 1
               fi
               if jq -e 'any(.[]; .status != "completed")' <<<"$runs" >/dev/null || [[ "$(jq 'length' <<<"$runs")" -eq 0 ]]; then
@@ -262,8 +265,11 @@ jobs:
               --json databaseId \
               --jq '.[0].databaseId // empty')"
             if [[ -n "$run_id" ]]; then break; fi
+            WAIT_DIAGNOSTIC="workflow=smoke.yml source_commit=$SOURCE_COMMIT elapsed_seconds=$SECONDS timeout window=120 dependent_run_ids=${run_id:-none}"
+            echo "dependent run IDs: ${run_id:-none}"
+            echo "::notice title=Strict smoke wait status::$WAIT_DIAGNOSTIC"
             if (( SECONDS >= deadline )); then
-              echo "timed out waiting for source smoke dispatch" >&2
+              echo "timed out waiting for source smoke dispatch; $WAIT_DIAGNOSTIC" >&2
               exit 1
             fi
             sleep 5

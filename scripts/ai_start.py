@@ -13,6 +13,7 @@ import re
 import subprocess
 import sys
 import tempfile
+from datetime import datetime
 from pathlib import Path
 from typing import Iterator
 from ai_common import (
@@ -101,6 +102,27 @@ def active_work_item_paths() -> list[Path]:
     if not ACTIVE_DIR.exists():
         return []
     return sorted(path for path in ACTIVE_DIR.glob("*.json") if path.is_file())
+
+
+def existing_work_item_ids() -> set[str]:
+    """Return active and archived Work Item IDs before creating a new skeleton."""
+    paths = list(ACTIVE_DIR.glob("*.contract.json"))
+    paths.extend((PROJECT_ROOT / ".ai" / "work-items" / "archive").rglob("*.contract.json"))
+    return {path.name.removesuffix(".contract.json") for path in paths}
+
+
+def next_available_task_id(task: str, occupied_ids: set[str], *, date: str | None = None) -> str:
+    """Choose a deterministic collision-free ID without overwriting history."""
+    if task not in occupied_ids:
+        return task
+    stamp = date or datetime.now().strftime("%Y%m%d")
+    candidate = f"{task}-{stamp}"
+    if candidate not in occupied_ids:
+        return candidate
+    suffix = 2
+    while f"{candidate}-{suffix}" in occupied_ids:
+        suffix += 1
+    return f"{candidate}-{suffix}"
 
 
 def configuration_gate_issue(
@@ -384,6 +406,15 @@ def main() -> int:
         return 1
 
     try:
+        active_paths = active_work_item_paths()
+        if not active_paths:
+            resolved_task = next_available_task_id(task, existing_work_item_ids())
+            if resolved_task != task:
+                print(
+                    f"NOTICE: Work Item ID {task!r} already exists in history; using {resolved_task!r}.",
+                    file=sys.stderr,
+                )
+                task = resolved_task
         start_state = validate_start_state(task, force=args.force, mode=args.mode)
         if start_state is None:
             return 1

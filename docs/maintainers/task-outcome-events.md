@@ -24,4 +24,6 @@ When generation or validation fails, raw Evidence remains available and the proc
 
 Before accepting an Outcome change, verify the Work Item binding, Contract/Summary/Verification digests, base/head commits, PR binding, and archive manifest. Check that each finding and risk has evidence, every stop has a reason and resume decision, accepted residual risk is visible, and avoided impact is conditional. Keep secrets and personal paths out of events. Do not treat event counts as performance targets.
 
+Publication evidence is a separate provider-bound input to the deterministic outcome generator. When available, bind the release URL, tag target SHA, workflow run ID, asset digest, and Quick Install result; do not infer publication from a local candidate state or user authorization. Risk level and authority approval are likewise separate evidence fields.
+
 The Project Profile controls default language and generated locale views. It does not change JSON keys or authorize an unreviewed fallback. Cockpit Status receives only a short status/link/count projection; a PR receives only the approved sanitized summary.

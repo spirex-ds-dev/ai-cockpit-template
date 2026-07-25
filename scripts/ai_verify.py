@@ -5,12 +5,48 @@ from __future__ import annotations
 import argparse
 import json
 from dataclasses import asdict
+from collections.abc import Mapping
 
 from ai_check_registry import CheckerRegistry, CheckResult
 from ai_verification_context import build_context
 
 STAGES = ("task", "pr", "release")
 MODES = ("legacy", "unified", "compare")
+
+
+def verification_scope(
+    stage: str, changed_paths: list[str], *, full: bool = False
+) -> dict[str, object]:
+    """Describe whether a run is focused on the change or a complete stage gate."""
+    if stage not in STAGES:
+        raise ValueError(f"unsupported verification stage: {stage}")
+    return {
+        "mode": "full" if full or stage in {"pr", "release"} else "focused",
+        "stage": stage,
+        "paths": [] if full or stage in {"pr", "release"} else sorted(set(changed_paths)),
+    }
+
+
+def risk_and_authority(contract: Mapping[str, object]) -> dict[str, object]:
+    """Keep evidence-derived risk classification separate from user authorization."""
+    risk = contract.get("riskAssessment")
+    risk_map = risk if isinstance(risk, Mapping) else {}
+    approval = contract.get("restrictedWriteApproval")
+    approval_map = approval if isinstance(approval, Mapping) else {}
+    risk_types = risk_map.get("riskTypes", [])
+    requested_operation = contract.get("requestedOperation")
+    requested_operation_map = (
+        requested_operation if isinstance(requested_operation, Mapping) else {}
+    )
+    return {
+        "riskLevel": risk_map.get("level", "unknown"),
+        "riskTypes": list(risk_types) if isinstance(risk_types, (list, tuple)) else [],
+        "authority": {
+            "required": bool(requested_operation_map.get("authorityRequired") is True),
+            "approved": approval_map.get("approved") is True,
+            "approvedBy": approval_map.get("approvedBy", ""),
+        },
+    }
 
 
 def evaluate_trend(
@@ -71,23 +107,36 @@ def main() -> int:
     parser.add_argument("--summary", required=True)
     parser.add_argument("--stage", choices=STAGES, default="task")
     parser.add_argument("--mode", choices=MODES, default="unified")
+    parser.add_argument("--scope", choices=("focused", "full"), default=None)
     args = parser.parse_args()
     context = build_context(args.root, args.contract, args.summary)
     registry = CheckerRegistry()
     results = run_verification(context, registry, mode=args.mode)
+    scope = verification_scope(
+        args.stage,
+        list(context.changed_paths),
+        full=args.scope == "full",
+    )
+    risk_authority = risk_and_authority(context.contract)
     if args.mode == "unified":
         results = {
             args.stage: [asdict(result) for result in results["results"][args.stage]],
             "mode": args.mode,
+            "verificationScope": scope,
+            "riskAndAuthority": risk_authority,
         }
     elif args.mode == "legacy":
         results["results"] = [asdict(result) for result in results["results"]]
+        results["verificationScope"] = scope
+        results["riskAndAuthority"] = risk_authority
     else:
         results["legacy"]["results"] = [asdict(result) for result in results["legacy"]["results"]]
         results["unified"]["results"] = {
             stage: [asdict(result) for result in values]
             for stage, values in results["unified"]["results"].items()
         }
+        results["verificationScope"] = scope
+        results["riskAndAuthority"] = risk_authority
     print(json.dumps(results, ensure_ascii=False, indent=2))
     return 0
 

@@ -52,6 +52,27 @@ def test_empty_evidence_has_all_sections_and_none_markdown() -> None:
     assert "## Residual Risks\nNone" in markdown
 
 
+def test_publication_evidence_is_bound_into_final_outcome_evidence():
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        evidence={
+            "publication": {
+                "releaseUrl": "https://example.test/releases/v1.0.0",
+                "tag": "v1.0.0",
+                "targetSha": "2" * 40,
+                "workflowRunId": "123",
+                "assetDigest": "a" * 64,
+                "quickInstall": "passed",
+            }
+        },
+    )
+    publication = outcome["sections"]["evidence"][0]
+    assert publication["source"] == "release-workflow"
+    assert publication["subject"] == "v1.0.0"
+    assert publication["digest"] == "a" * 64
+
+
 def test_findings_are_deduplicated_but_post_fix_recurrence_is_new() -> None:
     base = {
         "findingFingerprint": "fingerprint-1",

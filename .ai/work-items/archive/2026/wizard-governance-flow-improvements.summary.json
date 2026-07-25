@@ -1,0 +1,446 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wizard-governance-flow-improvements",
+  "contractPath": ".ai/work-items/archive/2026/wizard-governance-flow-improvements.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/wizard-governance-flow-improvements.contract.json",
+      "reason": "Defines the six improvement boundaries and evidence requirements."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wizard-governance-flow-improvements.summary.json",
+      "reason": "Records implementation, verification, issue, and review evidence."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Adds collision-free active/archive Work Item ID selection."
+    },
+    {
+      "path": "scripts/ai_issue_log.py",
+      "reason": "Adds deterministic grouped issue overview rendering."
+    },
+    {
+      "path": "scripts/ai_verify.py",
+      "reason": "Adds focused/full scope output and separate risk/authority evidence."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "Binds provider publication evidence into final outcome evidence."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Adds explicit focused and full verification commands."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Adds source-bound release wait diagnostics without weakening fail-closed gates."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-wizard-work-item-issue-log.md",
+      "reason": "Appends WI13-WI23 coverage and six corrective issue records."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Documents focused/full verification and release wait diagnostics."
+    },
+    {
+      "path": "docs/maintainers/task-outcome-events.md",
+      "reason": "Documents provider publication evidence and risk/authority separation."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Tests archive collision resolution."
+    },
+    {
+      "path": "tests/test_issue_log.py",
+      "reason": "Tests issue overview grouping and rendering."
+    },
+    {
+      "path": "tests/test_lightweight_verification.py",
+      "reason": "Tests focused/full scopes and risk/authority separation."
+    },
+    {
+      "path": "tests/test_task_outcome_generator.py",
+      "reason": "Tests publication evidence binding."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Tests release wait diagnostics."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wizard-governance-flow-improvements.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/superpowers/plans/2026-07-25-interactive-wizard-work-item-issue-log.md",
+    "scripts/ai_start.py",
+    "scripts/ai_issue_log.py",
+    "scripts/ai_verify.py",
+    "scripts/ai_generate_task_outcome.py",
+    ".github/workflows/release.yml",
+    "Makefile"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:08:16.435170+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "494222f89399984e7c3da395b12084c1ed484c43677c2849eba9ca55be7cae6b",
+      "commandHash": "53b00773034c3028dfa9191225fb80afec84edb6339f8cf773cb614136a8b6ce",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "bf44935bcdcb215d15925e71f75c2ca016fa01940ad28b8577d974221773ae23",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wizard-governance-flow-improvements.contract.json work item contract check passed: .ai/work-items/active/wizard-governance-flow-improvements.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:08:16.569373+00:00",
+      "exitCode": 0,
+      "durationMs": 90,
+      "outputDigest": "2331dfbb553c9c6524c47d8cb55aa97cdef942bc58987317b72211b4a3963042",
+      "commandHash": "d5af8e33a486010a291aa95be5c921dce70f89631d1189df2203d82240367db3",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "bf44935bcdcb215d15925e71f75c2ca016fa01940ad28b8577d974221773ae23",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wizard-governance-flow-improvements.contract.json scope guard passed: 16 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:08:16.743813+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "3e77cde2b30df98093b904ad1ea0de5a0e7a4f5d25b42286b8f9097731a1503c",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "bf44935bcdcb215d15925e71f75c2ca016fa01940ad28b8577d974221773ae23",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wizard-governance-flow-improvements.contract.json [warning] restricted_write: .github/workflows/release.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 2 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/wizard-governance-flow-improvements.contract.json SUMMARY=.ai/work-items/active/wizard-governance-flow-improvements.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:08:16.975898+00:00",
+      "exitCode": 0,
+      "durationMs": 175,
+      "outputDigest": "ad2b99a84c8aae456a9825ccb74c01923446f8ac731625c65c7f43b1c68d41c0",
+      "commandHash": "1e66842dd9e3d023dd8db6dcf4df22591eafee5893ee16699e2606601415052c",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "bf44935bcdcb215d15925e71f75c2ca016fa01940ad28b8577d974221773ae23",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/wizard-governance-flow-improvements.contract.json --summary .ai/work-items/active/wizard-governance-flow-improvements.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wizard-governance-flow-improvements` - Contract Hash: `505b3ba93ac3f258` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `7` - Unknown Co"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:08:17.163015+00:00",
+      "exitCode": 0,
+      "durationMs": 118,
+      "outputDigest": "7d49763072c39b3d8af401c4c227549139616570513fd08021e03ffea475580d",
+      "commandHash": "7873e3c804b71b522e6f63283ce2b935186b07a380eb5e212066773964e2ab47",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "bf44935bcdcb215d15925e71f75c2ca016fa01940ad28b8577d974221773ae23",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wizard-governance-flow-improvements.summary.json review policy matched 8 path(s) [review] .ai/work-items/starts/wizard-governance-flow-improvements.json [review] .ai/cockpit/current_status.md [review] .github/workflows/release.yml [review] Makefile [review] scripts/ai_generate_task_outcome.py [review] scripts/ai_issue_log.py [review] scripts/ai_start.py [review] scripts/ai_verify.py revie"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:08:17.311999+00:00",
+      "exitCode": 0,
+      "durationMs": 103,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "bf44935bcdcb215d15925e71f75c2ca016fa01940ad28b8577d974221773ae23",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:08:17.470647+00:00",
+      "exitCode": 0,
+      "durationMs": 107,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "bf44935bcdcb215d15925e71f75c2ca016fa01940ad28b8577d974221773ae23",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/wizard-governance-flow-improvements.contract.json SUMMARY=.ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:08:17.585416+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "4976fe70454d16b0bcea63e026b58d8421f211fae6d8d40a9d8a43cf124e3100",
+      "commandHash": "79a45f30fa82f06ae7055639b9df06153cd912e468cd9bbc9d58dbbaafc26caa",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "bf44935bcdcb215d15925e71f75c2ca016fa01940ad28b8577d974221773ae23",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wizard-governance-flow-improvements.contract.json --summary .ai/work-items/active/wizard-governance-flow-improvements.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/wizard-governance-flow-improvements.contract.json SUMMARY=.ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:08:17.689565+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "a8e3974400cf15d15baa0d15562b3c119c9c1a578aa3714b96fb5bd422d3ccac",
+      "commandHash": "91b5f7de0f6b47da8e6bce6d9637f65b3d7efd21b549789614ac075c4464e049",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "bf44935bcdcb215d15925e71f75c2ca016fa01940ad28b8577d974221773ae23",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wizard-governance-flow-improvements.contract.json --summary .ai/work-items/active/wizard-governance-flow-improvements.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:08:17.935562+00:00",
+      "exitCode": 0,
+      "durationMs": 195,
+      "outputDigest": "a088db2f89b55ca8de2f97b244969d503a89702d6d30544f4e65d031343d31fd",
+      "commandHash": "574bace32cefcf9d1f8b2b30ce72391d95893e262fb125f95a108b61eecac03f",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "bf44935bcdcb215d15925e71f75c2ca016fa01940ad28b8577d974221773ae23",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wizard-governance-flow-improvements.contract.json ## Diff Ownership Preview - active_owned: `16`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/wizard-governance-flow-improvements.json` — covered by Contract scope - [active_o"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:12:16.666580+00:00",
+      "exitCode": 0,
+      "durationMs": 238672,
+      "outputDigest": "6a813a8da1bfd51b73ba739b3483fb0bde5df56a1e89496a9968fb232c9ccb98",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "bf44935bcdcb215d15925e71f75c2ca016fa01940ad28b8577d974221773ae23",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 217 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 6%] ........................................................................ [ 13%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/wizard-governance-flow-improvements.contract.json SUMMARY=.ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:12:18.067958+00:00",
+      "exitCode": 0,
+      "durationMs": 203,
+      "outputDigest": "7dd3e7347a13190cd66e6bee9877844009ec85a02339b6b9affb8f8aba375fd9",
+      "commandHash": "7a2a8b5d0969ca0cc45cffeb418e57e246146ca227ebb8153438d98d651b9eed",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "54e4aba2d9deff006f0b735763bb4643da50760daad1e6a4ad85c47bf3f5d9a7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wizard-governance-flow-improvements.contract.json --summary .ai/work-items/active/wizard-governance-flow-improvements.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/wizard-governance-flow-improvements.contract.json SUMMARY=.ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:12:18.315596+00:00",
+      "exitCode": 0,
+      "durationMs": 194,
+      "outputDigest": "e498c77162cd12d1ee3ac3625073653ffc5845feb9cc04e6990b1ab24ff9577f",
+      "commandHash": "695aba12a26cdb5bd5dfae6e35aabf3696d508623ef23198a924adf2d0e55ed4",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "54e4aba2d9deff006f0b735763bb4643da50760daad1e6a4ad85c47bf3f5d9a7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wizard-governance-flow-improvements.contract.json --summary .ai/work-items/active/wizard-governance-flow-improvements.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:12:18.411783+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "54e4aba2d9deff006f0b735763bb4643da50760daad1e6a4ad85c47bf3f5d9a7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/wizard-governance-flow-improvements.contract.json SUMMARY=.ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:12:18.516573+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "896ce840182030ea5537d9fff08cf782dc2f9dde29d734cf28492a94d6e7c1bd",
+      "commandHash": "e492da2fd58ebe64f05f6073c394629dd22b9f51473002abeed3306b808bf30c",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "54e4aba2d9deff006f0b735763bb4643da50760daad1e6a4ad85c47bf3f5d9a7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wizard-governance-flow-improvements.contract.json --summary .ai/work-items/active/wizard-governance-flow-improvements.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/wizard-governance-flow-improvements.summary.json CONTRACT=.ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T09:12:19.261712+00:00",
+      "exitCode": 0,
+      "durationMs": 91,
+      "outputDigest": "4feb55bc235ecccbe676a7e4f033eab138b4b0a63ebed44b5202782922b17314",
+      "commandHash": "fe38f374be320b9df12df8bb23cbda9b68b3a04bede7306628a00ed8541691b3",
+      "contractHash": "505b3ba93ac3f258a18dae6d3e787e1a0a95f4ff2af5149aaf532c52b3013d97",
+      "commitSha": "5f220688b5a1fd1d935d9f03d993a1a7184c293e",
+      "executionContractPath": ".ai/work-items/active/wizard-governance-flow-improvements.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-governance-flow-improvements.summary.json",
+      "worktreeDigest": "13b50914942d454878cb6755916e98ad35d6d4f4f5611e3deb69e4571e5b34ea",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wizard-governance-flow-improvements.summary.json --contract .ai/work-items/active/wizard-governance-flow-improvements.contract.json ai summary check passed: .ai/work-items/active/wizard-governance-flow-improvements.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep hard release and quality gates fail-closed; optimization must not weaken required proof.",
+      "compliant": true,
+      "evidence": "Release wait diagnostics only add notices; exact-SHA selection, timeout failure, and full PR/release gates remain unchanged."
+    },
+    {
+      "guideline": "Preserve append-only issue and outcome evidence; later records may resolve but never rewrite historical findings.",
+      "compliant": true,
+      "evidence": "Issue log adds an append-only section and deterministic overview helper."
+    },
+    {
+      "guideline": "Keep provider credentials, machine-specific paths, and secrets out of repository evidence.",
+      "compliant": true,
+      "evidence": "Publication binding accepts public URL/SHA/digest/run fields and tests contain no credentials or local paths."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Deterministic repository workflow changes; user authorization is recorded separately and does not alter evidence-derived risk classification."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    "IW-20260725-007 through IW-20260725-012 are appended to the issue log and resolved by this Work Item."
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "provider-evidence",
+      "detail": "Provider publication fields are bound when supplied by the release workflow; local unit tests do not replace an actual provider run.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Confirm ai-start collision selection does not mutate or overwrite historical archive records.",
+      "Confirm release wait diagnostics remain informational and exact-SHA selection remains fail-closed.",
+      "Confirm publication evidence is only reported from provider-bound fields, never inferred from authorization."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "505b3ba93ac3f258",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "505b3ba93ac3f258",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "No provider release is executed by this corrective Work Item; the publication binding is verified through schema and generator tests and will be exercised by the next real release workflow."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified; provider publication remains a separate workflow claim.",
+  "archiveSequence": 571
+}

@@ -222,6 +222,14 @@ def test_release_workflow_generates_and_verifies_correlation_record():
     )
 
 
+def test_release_workflow_wait_has_source_bound_diagnostics_and_timeout_context():
+    workflow = (ROOT / ".github" / "workflows" / "release.yml").read_text(encoding="utf-8")
+    assert "SOURCE_COMMIT" in workflow
+    assert "WAIT_DIAGNOSTIC" in workflow
+    assert "dependent run IDs" in workflow
+    assert "timeout window" in workflow
+
+
 def test_smoke_preparation_mode_is_event_based_and_dispatch_stays_strict():
     workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
     assert "github.event_name == 'pull_request'" in workflow
