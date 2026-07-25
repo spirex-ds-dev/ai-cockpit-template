@@ -1,0 +1,197 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-alignment-20260726",
+  "mode": "code",
+  "title": "Documentation Alignment",
+  "baseCommit": "1927a20d223297c24162d048620da79ddc865e5d",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+    ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/getting-started/**",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/features/task-outcome-report-self-check.md",
+    "scripts/check_docs_metadata.py",
+    "tests/test_docs_metadata.py",
+    "scripts/check_system_invariants.py",
+    "tests/test_system_invariants.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Release publication, version tag mutation, and Japanese capability assessment reserved for WI-16/WI-17.",
+    "Changing executable behavior unrelated to documentation and documentation checks.",
+    "Deleting historical documents; only add explicit historical-context markers if needed."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-10 scope, acceptance, and required verification."
+    },
+    {"path": "scripts/check_docs_metadata.py", "reason": "Existing executable documentation consistency checks."},
+    {"path": "tests/test_docs_metadata.py", "reason": "Documentation metadata and multilingual consistency tests."},
+    {"path": "README.md", "reason": "English public adoption and capability guidance."},
+    {"path": "README.ja.md", "reason": "Japanese public adoption and capability guidance."},
+    {"path": "README.zh-CN.md", "reason": "Chinese public adoption and capability guidance."},
+    {"path": "docs/getting-started/installation.md", "reason": "English installation workflow."},
+    {"path": "docs/getting-started/installation.ja.md", "reason": "Japanese installation workflow."},
+    {"path": "docs/getting-started/installation.md", "reason": "Chinese/English installation alignment source."},
+    {"path": "AGENTS.md", "reason": "Repository documentation and lifecycle rules."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "scope_unclear"
+    ],
+    "reason": "Documentation drift can create unsafe commands or unsupported capability/release claims; executable consistency checks must fail closed. Open questions were reviewed: adopter/provider execution and release evidence remain explicitly out of scope for WI-10 and are handed to WI-11/WI-16/WI-17; historical documents outside this scope remain for WI-13/WI-18.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial execution; WI-10 is bounded to documentation and executable alignment checks."
+  },
+  "preReviewWarnings": [
+    "Review command evidence labels, multilingual parity, capability/release claims, history markers, and documentation-to-Make/path consistency."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "English, Japanese, and Chinese README/getting-started documentation shares aligned product boundaries, installation commands, version/capability semantics, and safety limitations.",
+    "Documentation commands and Make targets are labeled with syntax_tested, fixture_executed, hosted_executed, adopter_required, or illustrative_only evidence status.",
+    "Executable documentation checks cover metadata, links/commands, version, release, capability, and multilingual consistency without deleting historical evidence.",
+    "Historical documents are explicitly marked as historical or lower-context material and cannot silently override current guidance.",
+    "Focused documentation checks, full quality, governance checks, and documentation alignment evidence pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Documentation is distributed across English, Japanese, Chinese, installation, release, capability, and historical files; drift can turn illustrative or fixture evidence into misleading adoption or release claims.",
+    "constraints": [
+      "Keep documentation claims bound to executable or explicitly external evidence.",
+      "Preserve repository product boundaries and do not claim publication or Japanese capability before WI-16/WI-17.",
+      "Do not delete historical records; mark context and precedence instead.",
+      "Prefer executable checks over manual prose assertions."
+    ],
+    "rationale": "Synchronized multilingual guidance with explicit evidence labels makes adoption decisions safer and prevents stale instructions from outranking current repository truth."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "test", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Align multilingual documentation, command evidence labels, release/version/capability claims, and historical context with executable repository evidence.", "requestedCapabilities": ["ai_governance", "documentation"]},
+  "rawUserRequest": "Execute the approved AI Cockpit comprehensive remediation plan serially. For WI-10, complete documentation alignment through Contract, implementation, verification, Summary/document alignment, PR, merge, closure, and branch cleanup.",
+  "rawRequestSource": {"type": "human", "reference": "user-request: AI Cockpit comprehensive remediation instruction and continuation authorization", "capturedAt": "2026-07-26", "digest": "sha256:documentation-alignment-20260726-request"},
+  "scenarioCoverage": [
+    {"scenario": "English, Japanese, and Chinese current documentation uses aligned installation, boundary, version, and capability semantics.", "required": true, "status": "verified", "evidence": ["README.md", "README.ja.md", "README.zh-CN.md", "docs/getting-started/installation.md", "docs/getting-started/installation.ja.md", "tests/test_docs_metadata.py"]},
+    {"scenario": "Documented commands have explicit evidence-status labels and executable checks reject drift or unsupported claims.", "required": true, "status": "verified", "evidence": ["docs/getting-started/30-second-start.md", "docs/getting-started/standard-adoption-guide.md", "docs/getting-started/security-release-verification.md", "scripts/check_docs_metadata.py", "tests/test_docs_metadata.py"]},
+    {"scenario": "Historical documents are marked as lower-context material and are not silently treated as current instructions.", "required": true, "status": "verified", "evidence": ["README.md", "README.ja.md", "README.zh-CN.md", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "scripts/check_system_invariants.py", "tests/test_system_invariants.py"]}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized serial execution of the complete remediation plan, including documentation changes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 594
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-alignment-20260726.json",
+    "baseCommit": "1927a20d223297c24162d048620da79ddc865e5d",
+    "initialScopeDigest": "5b86e8cf0d5446d47458142225f6a23f3847fdae05884a22cda204490949a065",
+    "contractSkeletonDigest": "d699c728c5d5125874e5dba89dedb19d38aadee897d153076bb51c154b62c3a4"
+  }
+}

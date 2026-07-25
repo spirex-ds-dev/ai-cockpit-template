@@ -25,6 +25,8 @@ keywords:
 
 # AI Cockpit
 
+現行の導入案内は、[30 秒で開始](docs/getting-started/30-second-start.md)、[標準導入ガイド](docs/getting-started/standard-adoption-guide.md)、[セキュリティとリリース検証](docs/getting-started/security-release-verification.md)の三層です。履歴計画とアーカイブ記録は現在の手順ではなく、証拠のコンテキストとして扱います。
+
 [English](README.md) | [中文](README.zh-CN.md)
 
 AI Cockpit の製品境界は Repository Governance Layer であり、Agent Runtime、Workflow Engine、Security Sandbox ではありません。リポジトリ内の記録はレビューを支えますが、信頼できる ID、production 隔離、企業監査・コンプライアンス、配布基盤の証拠は外部管理です。

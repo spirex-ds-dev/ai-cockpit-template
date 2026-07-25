@@ -199,6 +199,10 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 **必须验证：** docs metadata/link/command/version/capability/multilingual checks。完成后逐项记录本计划与所有已完成 Work Item 文档的对齐结果。
 
+**WI-10 当前实现边界：** 新增 `docs/getting-started/30-second-start.md`、`standard-adoption-guide.md` 和 `security-release-verification.md`，并在三语 README 中提供入口；文档明确证据标签、安装/采用边界、发布证据约束和历史内容优先级。`scripts/check_docs_metadata.py`、`scripts/check_system_invariants.py` 及其测试验证 metadata、系统不变量和多语言/历史语义；本工单不执行发布，也不提前声明 WI-16 日语能力评估通过。
+
+**WI-10 流程问题记录：** `WI-10-ISSUE-001`：请求的短任务 ID `documentation-alignment` 已存在历史记录，`make ai-start` fail-closed 地分配实际 ID `documentation-alignment-20260726`，避免复用历史 Contract/分支；后续 PR、归档、关闭均使用该实际 ID。`WI-10-ISSUE-002`：初始 Contract 骨架触发 `not_ready`；已补全 scope、outOfScope、sources、acceptance、verification、intent、原始请求和 scenario coverage，并在用户已授权的串行执行范围内继续；完成最终 Contract 后必须重新运行 preflight 与 checkpoint，不复用旧证据。
+
 ### WI-11：Enterprise Governance Boundary
 
 **范围：** 明确可声明的 repository-local evidence、SDLC 控制支持和审计准备能力；明确禁止 SOC 2、ISO 27001、完整注入防御、身份不可抵赖、生产权限隔离、无漏洞、完整 SLSA 等无外部证据声明；建立 adopter checklist。

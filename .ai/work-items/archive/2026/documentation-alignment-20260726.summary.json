@@ -1,0 +1,472 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "documentation-alignment-20260726",
+  "contractPath": ".ai/work-items/archive/2026/documentation-alignment-20260726.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/documentation-alignment-20260726.contract.json",
+      "reason": "Bound the documentation scope, evidence labels, multilingual acceptance, reviewed unknowns, and WI-16/WI-17 boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/documentation-alignment-20260726.summary.json",
+      "reason": "Captured implementation, verification, process issues, residual risks, and documentation alignment."
+    },
+    {
+      "path": "README.md",
+      "reason": "Added current getting-started, adoption, and security/release verification entry points and historical-context precedence."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Added Japanese entry points with aligned installation, evidence, and release-boundary semantics."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Added Chinese entry points with aligned installation, evidence, and release-boundary semantics."
+    },
+    {
+      "path": "docs/getting-started/30-second-start.md",
+      "reason": "Added a syntax-tested orientation with explicit adopter-required and illustrative boundaries."
+    },
+    {
+      "path": "docs/getting-started/standard-adoption-guide.md",
+      "reason": "Added evidence-status labels and adoption limitations."
+    },
+    {
+      "path": "docs/getting-started/security-release-verification.md",
+      "reason": "Added source-bound security/release verification guidance without making a release claim."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Aligned WI-10 boundary and recorded task-ID/preflight process issues."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/documentation-alignment-20260726.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/getting-started/installation.md",
+    "docs/getting-started/installation.ja.md",
+    "docs/getting-started/30-second-start.md",
+    "docs/getting-started/standard-adoption-guide.md",
+    "docs/getting-started/security-release-verification.md",
+    "scripts/check_docs_metadata.py",
+    "tests/test_docs_metadata.py",
+    "scripts/check_system_invariants.py",
+    "tests/test_system_invariants.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T20:55:18.376866+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "c0aa146b2bd71f473c46ff0ce5dc71341fe187d8b9bee57fb7ef39e71d968f1c",
+      "commandHash": "7c5427ee054c2baebc7a73d52df987dad4f8a8cd4c88c58e53bfc967170fd4e7",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "d436788eee3e74523761f42c3c8326c24a44f70d06d348bbbe9d90882c077efd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/documentation-alignment-20260726.contract.json work item contract check passed: .ai/work-items/active/documentation-alignment-20260726.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T20:55:18.537844+00:00",
+      "exitCode": 0,
+      "durationMs": 112,
+      "outputDigest": "310b176de0f8c27d06cfd7aba2003ae653e7f697343a3eca59c9139a28d4a953",
+      "commandHash": "1c95963c21a4d3dc723ad0c6277d4d39ad54a7df857b2bd8c208c93ad89dee5a",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "d436788eee3e74523761f42c3c8326c24a44f70d06d348bbbe9d90882c077efd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/documentation-alignment-20260726.contract.json scope guard passed: 9 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T20:55:18.701260+00:00",
+      "exitCode": 0,
+      "durationMs": 111,
+      "outputDigest": "6bd8bbdc7609fc3f393663151c3d8435f3e15e21367231a013933548a9329dd5",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "d436788eee3e74523761f42c3c8326c24a44f70d06d348bbbe9d90882c077efd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/documentation-alignment-20260726.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/documentation-alignment-20260726.contract.json SUMMARY=.ai/work-items/active/documentation-alignment-20260726.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T20:55:18.933066+00:00",
+      "exitCode": 0,
+      "durationMs": 180,
+      "outputDigest": "5477c52ed6fbcd5283d0bf58e384de506d9964840d0a1444bb9df466f8e0b678",
+      "commandHash": "308ddd476473eedd830dd79d752f18b33342cc5411618c9c20deb0e29d627c1e",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "d436788eee3e74523761f42c3c8326c24a44f70d06d348bbbe9d90882c077efd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/documentation-alignment-20260726.contract.json --summary .ai/work-items/active/documentation-alignment-20260726.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `documentation-alignment-20260726` - Contract Hash: `873dd13ba8e64c8f` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `0` "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T20:55:19.095531+00:00",
+      "exitCode": 0,
+      "durationMs": 104,
+      "outputDigest": "138e4654ae624cd4b8d8497f021cb358296f9befd908e1361ce1a80e8469e007",
+      "commandHash": "4ec920d0af9b995f3481789de056aebddcc488c50f87fa1d56fb973344cf00bd",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "d436788eee3e74523761f42c3c8326c24a44f70d06d348bbbe9d90882c077efd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/documentation-alignment-20260726.summary.json review policy matched 2 path(s) [review] .ai/work-items/starts/documentation-alignment-20260726.json [review] .ai/cockpit/current_status.md review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T20:55:19.228346+00:00",
+      "exitCode": 0,
+      "durationMs": 84,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "d436788eee3e74523761f42c3c8326c24a44f70d06d348bbbe9d90882c077efd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T20:55:19.583277+00:00",
+      "exitCode": 0,
+      "durationMs": 123,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "d436788eee3e74523761f42c3c8326c24a44f70d06d348bbbe9d90882c077efd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/documentation-alignment-20260726.contract.json SUMMARY=.ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T20:55:19.691544+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "3a80fb621902d269a917efa281ee364c42a1ffb3273daf8dabc99a8ce68485a5",
+      "commandHash": "e11d65e69e9447aa2ad63b44aae1c93e50b519d9c95598250c4175ca83be54eb",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "d436788eee3e74523761f42c3c8326c24a44f70d06d348bbbe9d90882c077efd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/documentation-alignment-20260726.contract.json --summary .ai/work-items/active/documentation-alignment-20260726.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/documentation-alignment-20260726.contract.json SUMMARY=.ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T20:55:19.786878+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "ad44c4976d4c80ce4760e6590b56e00403272a05e4347cbe480978e5cc6671f5",
+      "commandHash": "3e026700bf3c378c39b910e06b4cbb0cd8cbf1285fd7fc283473142815b81b0b",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "d436788eee3e74523761f42c3c8326c24a44f70d06d348bbbe9d90882c077efd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/documentation-alignment-20260726.contract.json --summary .ai/work-items/active/documentation-alignment-20260726.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T20:55:20.016280+00:00",
+      "exitCode": 0,
+      "durationMs": 177,
+      "outputDigest": "2806c920dec774e63ea847931f7fd24ebedbf4f88c0166210d0d45d48dad72f3",
+      "commandHash": "45c1603720944b971e5b56cc2ecf415914495dbc096ac2af779d8364dea81a5b",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "d436788eee3e74523761f42c3c8326c24a44f70d06d348bbbe9d90882c077efd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/documentation-alignment-20260726.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/documentation-alignment-20260726.json` — covered by Contract scope - [active_owned] `"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:01:51.309423+00:00",
+      "exitCode": 0,
+      "durationMs": 391235,
+      "outputDigest": "a3eee894146124f96bd3a2f19cae1819c9e3a8873bc8dc670adfa908d2acac5c",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "d436788eee3e74523761f42c3c8326c24a44f70d06d348bbbe9d90882c077efd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 229 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 6%] ........................................................................ [ 12%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/documentation-alignment-20260726.contract.json SUMMARY=.ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:01:52.797132+00:00",
+      "exitCode": 0,
+      "durationMs": 183,
+      "outputDigest": "17b82097995580e1f72eab85ff6b15f210702aa2179066c589cf59b47b149736",
+      "commandHash": "877393567c8818352c1a85bb6d3a0dd7f64ae8257622cf02b350ad7c126a6e60",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "69fe43d8f8c702afe7ed88559a26cbac293a11bdc705bf51e3a7ac5d9a0db157",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/documentation-alignment-20260726.contract.json --summary .ai/work-items/active/documentation-alignment-20260726.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/documentation-alignment-20260726.contract.json SUMMARY=.ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:01:53.046060+00:00",
+      "exitCode": 0,
+      "durationMs": 201,
+      "outputDigest": "0d77ef843167aed66398cf1f9a37c893aea6ffbc5137c09e5b089e345c4c8f06",
+      "commandHash": "a6ff6c3772bf459b7ac0072fe71a036f182f2ffe50487c529a4c39b64dc324b2",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "69fe43d8f8c702afe7ed88559a26cbac293a11bdc705bf51e3a7ac5d9a0db157",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/documentation-alignment-20260726.contract.json --summary .ai/work-items/active/documentation-alignment-20260726.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:01:53.135517+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "69fe43d8f8c702afe7ed88559a26cbac293a11bdc705bf51e3a7ac5d9a0db157",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/documentation-alignment-20260726.contract.json SUMMARY=.ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:01:53.234336+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "d829cc18418abbaf0ec2ed4056baacaeb95b39168af526b7e33cb3b54c4120c9",
+      "commandHash": "be840644dad15451a567655e8c26d85db37713bbe8332f6a00828eef06e999b5",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "69fe43d8f8c702afe7ed88559a26cbac293a11bdc705bf51e3a7ac5d9a0db157",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/documentation-alignment-20260726.contract.json --summary .ai/work-items/active/documentation-alignment-20260726.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/documentation-alignment-20260726.summary.json CONTRACT=.ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:01:54.215164+00:00",
+      "exitCode": 0,
+      "durationMs": 88,
+      "outputDigest": "a98c8dd423112df1c50b30c01c436cdbaf940fb3b68d135fe11280a92f6109bb",
+      "commandHash": "d49ca32a2afb347e39b7a8f0e2445c46f70f60bf3ad1ee9804cfb6a4ee1a6ce1",
+      "contractHash": "873dd13ba8e64c8f2d45b3903b657187794cc02757839b3553dbd01798faed1f",
+      "commitSha": "1927a20d223297c24162d048620da79ddc865e5d",
+      "executionContractPath": ".ai/work-items/active/documentation-alignment-20260726.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/documentation-alignment-20260726.summary.json",
+      "worktreeDigest": "465abdfde88d25851adb77c0cdf8fe3ff4d996b36ec5c1446e8bbda056909525",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/documentation-alignment-20260726.summary.json --contract .ai/work-items/active/documentation-alignment-20260726.contract.json ai summary check passed: .ai/work-items/active/documentation-alignment-20260726.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "WI-10 adds documentation only and introduces no public API; documentation metadata and system invariant checks passed."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "WI-10 changes Markdown and documentation checks only; no feature-module imports were added."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Adopter/provider execution, release evidence, and complete historical indexing remain explicitly handed to later Work Items; WI-10 verified repository-local documentation alignment only."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "WI-10-ISSUE-001",
+      "category": "process",
+      "severity": "low",
+      "status": "resolved",
+      "fact": "The requested short task ID already existed in history.",
+      "evidence": "make ai-start assigned documentation-alignment-20260726 and created a dedicated branch/Contract.",
+      "resolution": "Used the unique actual Work Item ID for all subsequent lifecycle records."
+    },
+    {
+      "issueId": "WI-10-ISSUE-002",
+      "category": "process",
+      "severity": "medium",
+      "status": "resolved",
+      "fact": "The initial Contract skeleton was blocked by preflight.",
+      "evidence": "Preflight reported not_ready until scope, intent, reviewed unknowns, acceptance, verification, and scenario evidence were completed.",
+      "resolution": "Completed the Contract, documented reviewed handoffs, refreshed checkpoints, and reran preflight successfully."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "External adopter/provider execution and release identity are not proven by this repository-only Work Item and remain release-blocking until later evidence exists.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Confirm English/Japanese/Chinese entry points preserve the same product boundary and evidence labels.",
+      "Confirm no WI-10 document claims Japanese capability assessment or publication before WI-16/WI-17.",
+      "Confirm historical material is lower-context and later WI-13/WI-18 indexing remains required."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "scenarioCoverage": [
+    {
+      "scenario": "English, Japanese, and Chinese current documentation uses aligned installation, boundary, version, and capability semantics.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "README.md",
+        "README.ja.md",
+        "README.zh-CN.md",
+        "tests/test_docs_metadata.py"
+      ]
+    },
+    {
+      "scenario": "Documented commands have explicit evidence-status labels and executable checks reject drift or unsupported claims.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/getting-started/30-second-start.md",
+        "docs/getting-started/standard-adoption-guide.md",
+        "docs/getting-started/security-release-verification.md",
+        "scripts/check_docs_metadata.py"
+      ]
+    },
+    {
+      "scenario": "Historical documents are marked as lower-context material and are not silently treated as current instructions.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "README.md",
+        "README.ja.md",
+        "README.zh-CN.md",
+        "tests/test_system_invariants.py"
+      ]
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "873dd13ba8e64c8f",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "873dd13ba8e64c8f",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "Replace this before finishing the Work Item."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 582
+}
