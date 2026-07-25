@@ -25,6 +25,8 @@ keywords:
 
 # AI Cockpit
 
+当前采用指南分为[30 秒开始](docs/getting-started/30-second-start.md)、[标准采用指南](docs/getting-started/standard-adoption-guide.md)和[安全与发布验证](docs/getting-started/security-release-verification.md)三层。历史计划和归档记录属于证据上下文，不是当前操作指示。
+
 [English](README.md) | [日本語](README.ja.md)
 
 AI Cockpit 的产品边界是 Repository Governance Layer，而不是 Agent Runtime、Workflow Engine 或 Security Sandbox。仓库记录支持评审；可信身份、生产隔离、企业审计/合规和发布平台证据仍由外部控制提供。
