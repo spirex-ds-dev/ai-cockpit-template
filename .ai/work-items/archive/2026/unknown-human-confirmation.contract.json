@@ -1,0 +1,172 @@
+{
+  "contractVersion": 2,
+  "workItemId": "unknown-human-confirmation",
+  "mode": "code",
+  "title": "Unknown and Human Confirmation",
+  "rawUserRequest": "继续执行全面整改计划的 WI-02：建立 Unknown 四态模型、未知评估、人工确认类型/过期/输出规范，并完成完整 PR、合并、关闭、分支清理和文档对齐流程。",
+  "rawRequestSource": {"type": "human", "reference": "user-request: AI Cockpit comprehensive remediation instruction and continuation authorization", "capturedAt": "2026-07-25", "digest": "sha256:unknown-human-confirmation-request"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "test", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Represent unknowns and human confirmations as explicit, scoped, expiring evidence instead of silently converting uncertainty into readiness.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "baseCommit": "420e659dbc433aafc33f6db5db442ef797927f6a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/unknown-human-confirmation.contract.json",
+    ".ai/work-items/active/unknown-human-confirmation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/schemas/unknown_assessment.schema.json",
+    "scripts/ai_unknown_confirmation.py",
+    "tests/test_unknown_confirmation.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": ["Canonical evidence foundation changes (WI-01)", "Installer/source transaction changes (WI-03)", "Task Outcome and full Status/PR integration (WI-09 and later)", "Release publishing (WI-16)", "Historical plan/archive deletion (WI-17)"],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Defines WI-02 unknown states, confirmation boundaries and required documentation alignment."
+    },
+    {"path": ".ai/glossary.md", "reason": "Repository terminology for evidence, uncertainty and readiness."},
+    {"path": ".ai/trust/schema/human_decision_request.schema.json", "reason": "Existing human decision request contract."},
+    {"path": ".ai/trust/schema/human_decision_evidence.schema.json", "reason": "Existing approval evidence contract and expiry conventions."},
+    {"path": ".ai/work-items/active/unknown-human-confirmation.contract.json", "reason": "Bounded WI-02 implementation and verification Contract."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["uncertainty_suppression", "confirmation_expiry", "scope_confusion"],
+    "reason": "Unknowns and confirmations are safety boundaries; the implementation must preserve explicit uncertainty and reject expired or mis-scoped confirmations."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "WI-01 is merged and closed; the user authorized serial execution and WI-02 has a bounded schema/validator/test scope."
+  },
+  "preReviewWarnings": [
+    "Review four-state unknown semantics, confirmation role/scope/expiry binding, fail-closed stop output, and no silent Not Applicable conversion."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Unknown assessment distinguishes knownUnknowns, unresolvedQuestions, assumptions, examinedAreas, unexaminedAreas and evidenceGaps without silently collapsing uncertainty.",
+    "Confirmation records distinguish Reviewer, Owner, Security and Release roles and bind object, scope, digest, expiry and decision; stale or mismatched confirmation fails closed.",
+    "needs_human_confirmation output contains problem, reason, known/unknown evidence, options, recommendation, consequences, question and STOP default action; Critical approval rejects an OK-only response.",
+    "Focused unknown/confirmation negative tests and all required AI/project verification checks pass before PR creation.",
+    "The plan WI-02 section lists schema, validator, fail-closed rules and later integration boundary."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "A missing answer, unexamined area or expired confirmation can be misreported as Not Applicable or ready. WI-02 turns uncertainty and human decisions into explicit, scoped, expiring records.",
+    "constraints": ["Keep unknown assessment and human confirmation machine-readable and deterministic.", "Never infer a decision from free-form OK, old scope, expired digest or an incorrect actor.", "Keep full Task Outcome/Status/PR consumer integration for later Work Items."],
+    "rationale": "Explicit unknown and confirmation states prevent unsupported readiness claims and make the handoff to a human auditable."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Unknown assessment preserves known, unresolved, assumed, examined, unexamined and evidence-gap distinctions", "required": false, "status": "unverified", "evidence": ["tests/test_unknown_confirmation.py"]},
+    {"scenario": "Role, scope, digest or expiry mismatch blocks confirmation", "required": false, "status": "unverified", "evidence": ["tests/test_unknown_confirmation.py"]},
+    {"scenario": "needs_human_confirmation includes structured stop-default output and rejects OK-only critical approval", "required": false, "status": "unverified", "evidence": ["tests/test_unknown_confirmation.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized full serial execution; approval is limited to the WI-02 unknown assessment schema under .ai/schemas."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 586
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/unknown-human-confirmation.json",
+    "baseCommit": "420e659dbc433aafc33f6db5db442ef797927f6a",
+    "initialScopeDigest": "b207f9182232bddad9f365e8897afec3ac38370b191d67d6618aa7a27958d621",
+    "contractSkeletonDigest": "d668739b13b33ae8e3825d66c6074667218e9e2b75238f299e57b07b3796b62e"
+  }
+}
