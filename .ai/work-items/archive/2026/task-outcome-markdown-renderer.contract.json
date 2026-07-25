@@ -1,0 +1,181 @@
+{
+  "contractVersion": 2,
+  "workItemId": "task-outcome-markdown-renderer",
+  "mode": "code",
+  "title": "Render validated Task Outcome as human-readable Markdown",
+  "rawUserRequest": "Implement the derived Task Outcome Markdown renderer from the execution plan. Render all required sections, preserve empty sections as None, keep language-neutral English keys/structure, avoid scores and unsupported claims, and never alter machine JSON or raw evidence. Execute this Work Item serially through its own PR and lifecycle closure.",
+  "rawRequestSource": {"type": "human", "reference": "user-request:serial-plan-execution-2026-07-25", "capturedAt": "2026-07-25", "digest": "sha256:interactive-installation-calibration-wizard-plan"},
+  "declaredIntent": {"summary": "Render validated Task Outcome JSON into deterministic human-readable Markdown.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "baseCommit": "6e38b3f34edd77d44de2f1e30ba41ef23fe4aa32",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/task-outcome-markdown-renderer.contract.json",
+    ".ai/work-items/active/task-outcome-markdown-renderer.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_render_task_outcome.py",
+    "tests/test_task_outcome_markdown_renderer.py",
+    ".ai/guards/coverage_policy.yaml"
+  ],
+  "outOfScope": ["Outcome derivation and validation; owned by WI15/WI16.", "Multilingual resources, ai-finish/archive/lifecycle integration, PR summaries, and release publication."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+      "reason": "Plan Extension defines the derived Markdown report sections and None behavior."
+    },
+    {
+      "path": ".ai/schemas/task_outcome.schema.json",
+      "reason": "Machine Outcome sections and item shapes."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "Existing derived rendering conventions."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository terminology and boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "presentation_integrity",
+      "claim_visibility"
+    ],
+    "reason": "The renderer is a deterministic presentation boundary and must preserve all sections, empty-state visibility, and anti-exaggeration wording."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Renderer scope, sources, acceptance, scenarios, and serial authorization are explicit."
+  },
+  "preReviewWarnings": [
+    "Replace with task-specific review focus, or clear when no special review focus remains."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Renderer produces deterministic Markdown for every required Outcome section and writes no machine JSON or raw Evidence.",
+    "Empty arrays render exactly as None, structured items remain readable, and status/task identity are visible.",
+    "Renderer preserves conditional Avoided Impact, residual risks, human decisions, and evidence references without adding scores or unsupported quantification.",
+    "Focused tests cover complete, empty, structured, deterministic, and anti-exaggeration output."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Complete outcome renders all required sections and structured items.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_markdown_renderer.py"]},
+    {"scenario": "Empty outcome renders every empty section as None.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_markdown_renderer.py"]},
+    {"scenario": "Conditional avoided impact, residual risks, human decisions, and evidence remain visible without unsupported claims.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_markdown_renderer.py"]},
+    {"scenario": "Repeated rendering is byte-for-byte deterministic and does not mutate input.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_markdown_renderer.py"]}
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Consumers need a human-readable Task Outcome report without losing empty-state visibility, residual-risk disclosure, conditional avoided impact, or evidence references.",
+    "constraints": ["Markdown is derived from JSON and never becomes machine truth.", "Do not add unsupported scores, quantification, or claims.", "Keep multilingual generation and lifecycle integration for later Work Items."],
+    "rationale": "A standalone deterministic renderer lets later integrations reuse one presentation boundary while keeping machine JSON authoritative."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized serial execution and in-scope governance updates for every Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 576
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/task-outcome-markdown-renderer.json",
+    "baseCommit": "6e38b3f34edd77d44de2f1e30ba41ef23fe4aa32",
+    "initialScopeDigest": "766a85c11e7d22276379ecaa9748003d8f34d62a5eac237545e61f2950547ed3",
+    "contractSkeletonDigest": "22a87cc0da0bed80d9d298a891a22ee17a5e809b7826fe573ba007795c4be601"
+  }
+}
