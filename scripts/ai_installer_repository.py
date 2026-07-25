@@ -20,7 +20,7 @@ def clean_git_environment() -> dict[str, str]:
 
 def run_git(target: Path, args: list[str]) -> subprocess.CompletedProcess[str]:
     return subprocess.run(  # nosec B603 B607
-        ["git", *git_target_args(target), *args],
+        ["git", "-c", "maintenance.auto=false", *git_target_args(target), *args],
         cwd=target,
         text=True,
         capture_output=True,
