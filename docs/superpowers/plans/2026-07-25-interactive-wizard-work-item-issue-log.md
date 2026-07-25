@@ -95,3 +95,31 @@ Work Item `wizard-final-verification-and-user-report` must append a complete ove
 - remaining known gaps and recommended follow-up.
 
 After Work Item `clean-interactive-wizard-execution-plan-documents` closes, this document is the review entry point for the user. The plan does not require a `needs_human_confirmation` final state; the issue overview remains the authoritative human review artifact.
+
+## Final issue overview (WI12 inventory and WI11 report)
+
+The following records are the completion overview for the serial run. The two original issue records remain unchanged above; later records preserve the resolution evidence discovered during implementation and final verification.
+
+### Resolved
+
+- `IW-20260725-001` (`interactive-wizard-plan-amendment`, verification, warning): plan Markdown metadata/quality-budget failure. Contained by adding metadata and bounded budget evidence; resolved by the passing rerun recorded in the issue-log record and archived Summary.
+- `IW-20260725-002` (`interactive-wizard-work-item-issue-log`, verification, warning): validator quality, secret-fixture, and coverage failures. Contained by non-secret fixture construction, bounded budget evidence, and branch tests; resolved by the passing quality rerun in the archived Summary.
+- `IW-20260725-003` (`interactive-calibration-wizard`, CI, warning): macOS Git maintenance lock could make repository tests appear to mutate `.git`. Contained with `GIT_OPTIONAL_LOCKS=0` and `maintenance.auto=false` in the repository Git boundary; resolved by WI7 CI rerun and archived PR evidence.
+- `IW-20260725-004` (`wizard-documentation-and-truth-evidence`, verification, warning): release-state published metadata digest drifted from `release.json`. Contained by stopping before claim; resolved through `finalize-release-freeze-premerge` and prescribed release/SBOM/provenance checks, recorded in the WI10 Summary and PR #349.
+- `IW-20260725-005` (`wizard-documentation-and-truth-evidence`, CI, warning): macOS Python 3.11 read-only repository-facts regression observed a transient Git maintenance lock. Contained by inspecting the failed job log; resolved by making the regression compare project files while asserting README preservation, followed by green PR #349 CI.
+- `IW-20260725-006` (`wizard-documentation-and-truth-evidence`, verification, warning): full coverage briefly measured below the 85% hard threshold. Contained by stopping the PR gate; resolved with command-loop coverage tests and a subsequent quality pass.
+
+### Accepted residual risks
+
+- External Xcode project/workspace, CocoaPods, adopter-specific Gradle variant/JDK, and instrumented mobile test execution were not run. The fixture matrix is static scenario evidence only; WI11 records this as a Known Gap and the documentation does not claim those external executions.
+- Governance complexity and archive-growth checks emit bounded warnings because the serial plan intentionally adds evidence records. These warnings are policy-visible and do not bypass hard gates.
+
+### Blocked
+
+- None. No required Work Item remains blocked; WI0–WI11 each has merged PR, archived evidence, branch cleanup, and synchronized-base closure evidence.
+
+### Closure references
+
+- WI10: PR #349, merged and closed; final CI and release evidence are recorded in `.ai/work-items/archive/2026/wizard-documentation-and-truth-evidence.summary.json`.
+- WI11: PR #350, merged and closed; final report is `.ai/work-items/archive/2026/wizard-final-verification-and-user-report.summary.json`.
+- WI12 inventory: canonical plan retained, issue log retained, no superseded duplicate removed; index decision is recorded in `docs/superpowers/plans/README.md`.
