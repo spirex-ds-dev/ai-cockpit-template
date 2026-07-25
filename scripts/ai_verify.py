@@ -9,6 +9,7 @@ from collections.abc import Mapping
 
 from ai_check_registry import CheckerRegistry, CheckResult
 from ai_verification_context import build_context
+from ai_verification_policy import select_policy
 
 STAGES = ("task", "pr", "release")
 MODES = ("legacy", "unified", "compare")
@@ -118,17 +119,26 @@ def main() -> int:
         full=args.scope == "full",
     )
     risk_authority = risk_and_authority(context.contract)
+    policy = select_policy(
+        args.stage,
+        list(context.changed_paths),
+        requested=context.contract.get("verificationPolicy")
+        if isinstance(context.contract.get("verificationPolicy"), str)
+        else None,
+    )
     if args.mode == "unified":
         results = {
             args.stage: [asdict(result) for result in results["results"][args.stage]],
             "mode": args.mode,
             "verificationScope": scope,
             "riskAndAuthority": risk_authority,
+            "policy": policy,
         }
     elif args.mode == "legacy":
         results["results"] = [asdict(result) for result in results["results"]]
         results["verificationScope"] = scope
         results["riskAndAuthority"] = risk_authority
+        results["policy"] = policy
     else:
         results["legacy"]["results"] = [asdict(result) for result in results["legacy"]["results"]]
         results["unified"]["results"] = {
@@ -137,6 +147,7 @@ def main() -> int:
         }
         results["verificationScope"] = scope
         results["riskAndAuthority"] = risk_authority
+        results["policy"] = policy
     print(json.dumps(results, ensure_ascii=False, indent=2))
     return 0
 

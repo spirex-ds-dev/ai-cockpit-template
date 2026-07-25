@@ -1,0 +1,247 @@
+{
+  "contractVersion": 2,
+  "workItemId": "verification-efficiency-escalation",
+  "mode": "code",
+  "title": "Verification efficiency and escalation",
+  "baseCommit": "149b6161913d67596a9979abbafd61ce7e200cda",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+    ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_verify.py",
+    "scripts/ai_verification_policy.py",
+    "scripts/ai_impact_classifier.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/ai_verification_context.py",
+    "scripts/ai_check_registry.py",
+    "scripts/ai_impact_classifier.py",
+    "tests/test_lightweight_verification.py",
+    "tests/test_verification_evidence.py",
+    "tests/test_verification_policy.py",
+    ".ai/cockpit/checks.yaml",
+    ".ai/guards/coverage_policy.yaml",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "docs/reference/lightweight-verification-and-soft-gates.md",
+    "docs/maintainers/adding-or-classifying-a-check.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "External CI provider configuration or credentials.",
+    "Release publication, package installation, and user-facing Japanese assessment reserved for WI-16/WI-17.",
+    "Changing the meaning of existing hard security or governance gates without explicit evidence and review."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-08 scope, acceptance, and required verification."
+    },
+    {
+      "path": "scripts/ai_verify.py",
+      "reason": "Current Task/PR/Release verification primitives and scope behavior."
+    },
+    {
+      "path": "scripts/ai_verification_context.py",
+      "reason": "Current immutable single-read verification context."
+    },
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "reason": "Canonical check catalog and gate definitions."
+    },
+    {
+      "path": "tests/test_lightweight_verification.py",
+      "reason": "Existing verification policy and context regression coverage."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository-required Work Item and lifecycle workflow."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "scope_unclear"
+    ],
+    "reason": "Verification policy changes can accidentally weaken hard gates or cause stale cache reuse; fail closed on ambiguity and preserve existing hard checks.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial Work Item execution; implementation is bounded to verification orchestration and evidence policy."
+  },
+  "preReviewWarnings": [
+    "Review cache key completeness, invalidation, DAG ordering, escalation monotonicity, release Full Gate, and preservation of hard security gates."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Light, Standard, and Strict policies deterministically select focused or full verification, with Standard PR and Strict/Release always Full.",
+    "Cache keys include base, diff, command, tool, dependency, environment, and configuration digests; any changed input invalidates the cache.",
+    "Verification checks form an explicit DAG with deterministic ordering, deduplication, and fail-closed handling of unknown dependencies.",
+    "Deletion, CI/security/release changes, scope violations, unknown or injection signals, and test changes after failure automatically escalate and never downgrade.",
+    "Focused tests, full quality, governance checks, and verification documentation/check catalog/Make target alignment pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Verification currently exposes useful primitives but does not yet provide one auditable policy for cost-efficient focused checks, content-addressed reuse, dependency ordering, and automatic escalation when risk increases.",
+    "constraints": [
+      "Preserve existing hard gates and fail closed on ambiguity.",
+      "Keep verification deterministic and evidence-backed; cache reuse must never hide changed inputs.",
+      "Do not claim external Provider execution or release publication in this Work Item.",
+      "Keep Japanese/user-facing release evaluation out of scope until WI-16."
+    ],
+    "rationale": "A single explicit policy and evidence model should reduce redundant verification without allowing efficiency shortcuts to weaken security, release, or governance decisions."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "test",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Formalize deterministic Light/Standard/Strict verification selection, content-addressed cache invalidation, DAG ordering, and monotonic escalation without weakening hard gates.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "rawUserRequest": "Execute the approved AI Cockpit comprehensive remediation plan serially. For WI-08, formalize verification efficiency and escalation; complete each Work Item through Contract, implementation, verification, Summary/document alignment, PR, merge, closure, and branch cleanup.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request: AI Cockpit comprehensive remediation instruction and continuation authorization",
+    "capturedAt": "2026-07-26",
+    "digest": "sha256:verification-efficiency-escalation-request"
+  },
+  "scenarioCoverage": [
+    {
+      "id": "cache-integrity",
+      "riskDomain": "verification",
+      "scenario": "The same complete input set reuses a cache entry, while any base/diff/command/tool/dependency/environment/config change invalidates it.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_verification_policy.py"]
+    },
+    {
+      "id": "escalation-monotonicity",
+      "riskDomain": "security",
+      "scenario": "Deletion, CI/security/release changes, unknown or injection signals, scope violation, and test-after-failure cause escalation and never downgrade.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_verification_policy.py"]
+    },
+    {
+      "id": "release-full-gate",
+      "riskDomain": "release",
+      "scenario": "Strict and Release verification always execute the Full Gate with explicit DAG ordering and no unsafe cache shortcut.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_verification_policy.py", "Makefile"]
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized serial execution of the complete remediation plan, including verification policy and documentation changes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 592
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/verification-efficiency-escalation.json",
+    "baseCommit": "149b6161913d67596a9979abbafd61ce7e200cda",
+    "initialScopeDigest": "1eeef2092169278a737b7e5a21af25d1a3c74a70e00707eeb9b51b29ba0e2a2f",
+    "contractSkeletonDigest": "2be66732cb41bc2d029d1ec071e799816b28598facb068b8d10371a1e038910f"
+  }
+}

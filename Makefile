@@ -250,6 +250,9 @@ ai-verify-focused:
 ai-verify-full:
 	$(AI_PYTHON) scripts/ai_verify.py --root . --contract "$(CONTRACT)" --summary "$(SUMMARY)" --stage "$(or $(STAGE),release)" --mode unified --scope full
 
+ai-verify-policy:
+	PYTHONPATH=scripts $(AI_PYTHON) -c 'from ai_verification_policy import order_checks; print(order_checks({"scope": [], "tests": ["scope"], "trust": ["scope"]}))'
+
 ai-cockpit-quality: quality
 
 ai-start:
