@@ -37,7 +37,7 @@ keywords:
 
 ## 一、每个 Work Item 的强制完整流程
 
-以下流程适用于 WI-01 至 WI-17，不得因为任务“只是文档”“只是测试”或“只是发布”而跳过。每项必须在其 Contract 和 Summary 中留下证据。
+以下流程适用于 WI-01 至 WI-18，不得因为任务“只是文档”“只是测试”或“只是发布”而跳过。每项必须在其 Contract 和 Summary 中留下证据。
 
 ### 1. 启动与边界
 
@@ -84,10 +84,11 @@ keywords:
 | WI-13 | deprecated-archive-hygiene | Deprecated Asset Registry、过期代码/命令/文档检查、Archive 分区/索引/digest/保留策略 | registry、引用检查、archive evidence retention 测试 |
 | WI-14 | cockpit-human-signal-compression | Cockpit 默认关键结论、Green/Yellow/Red 语义、证据解释/下一步 | status rendering、evidence drill-down、无评分/无自我表彰检查 |
 | WI-15 | full-remediation-acceptance | 汇总完成标准，跑全量功能/安全/可用性/效率/文档/质量验收，形成问题总览 | full verification、known-gap review、最终用户复核前 issue overview |
-| WI-16 | publish-new-version | 严格发布门禁、source/tag/asset/digest/SBOM/provenance、安装/升级/回滚验证并发布新版本 | merge/close 后的发布证据、版本/URL/checksum/provider evidence |
-| WI-17 | clean-execution-plan-documents | 最后清理过期执行计划，保留历史标记和 archive-backed 索引，完成计划对齐 | cleanup inventory、历史隔离检查、最终 clean plan 与用户复核材料 |
+| WI-16 | japanese-capability-assessment | 发布前全面日语处理能力评估、对象工程日语场景矩阵、问题对应整改与ブロッキング | 日语 corpus/文档/交互/安装/错误恢复评估、问题总览和全部对应 corrective Work Item 证据 |
+| WI-17 | publish-new-version | 严格发布门禁、source/tag/asset/digest/SBOM/provenance、安装/升级/回滚验证并发布新版本 | merge/close 后的发布证据、版本/URL/checksum/provider evidence |
+| WI-18 | clean-execution-plan-documents | 最后清理过期执行计划，保留历史标记和 archive-backed 索引，完成计划对齐 | cleanup inventory、历史隔离检查、最终 clean plan 与用户复核材料 |
 
-WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是唯一允许实际发布新版本的工单，且必须在 WI-15 关闭后执行。WI-17 必须最后执行；它不得删除当前计划、最终问题总览或任何仍被 Contract/Archive/Release evidence 引用的记录。
+WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 WI-17 发布前的强制日语能力门禁；若发现问题，必须先完成对应 corrective Work Item 的完整 PR/merge/close/分支清理流程。WI-17 是唯一允许实际发布新版本的工单，且必须在 WI-16 及其所有 corrective Work Item 关闭后执行。WI-18 必须最后执行；它不得删除当前计划、最终问题总览或任何仍被 Contract/Archive/Release evidence 引用的记录。
 
 ## 三、各 Work Item 的执行边界与验收要求
 
@@ -124,6 +125,8 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 **WI-03 当前实现边界：** Source Mode 分类与事务原语位于 `scripts/ai_installer_transaction.py`，安装器接入位于 `scripts/install_ai_cockpit.py`；Source Mode、write-plan、锁、路径穿越和未知 source 负例位于 `tests/test_installer_transaction.py`，现有安装事实/计划/边界测试继续作为回归套件。WI-03 不承担 WI-04 的对象工程校准、生产就绪或发布身份声明；dirty local source 必须保持为本地模式，不得冒充已验证 release。
 
 **WI-04 当前实现边界：** `scripts/ai_calibration_inventory.py` 为每项校准证据输出受限的 `evidenceKind`（`fixture`、`hosted`、`adopter_execution`、`not_verified`），默认和缺失外部证据保持 `not_verified`；库存校验拒绝未知类型，静态/fixture 证据不得提升为 adopter/hosted 或生产就绪声明。相关边界由 `tests/test_calibration_inventory.py` 与校准/采纳回归测试验证；本工单不伪造外部对象工程、CI 身份或真实 adopter 执行证据。
+
+**WI-05 当前实现边界：** `scripts/ai_input_trust.py` 提供本地、确定性的 source/trust/authority 记录、注入指示器分类和高风险操作 fail-closed 重新评估；`tests/test_input_trust.py` 与 `tests/test_input_trust_corpus.py` 覆盖中文、日文、英文及混合输入，另含隐藏 HTML、Base64、Unicode、嵌套引用、CI/tool/generated 输入。`docs/security-boundaries.md` 明确该分类器不是完整注入检测器、身份验证器或 provider/repository 控制替代品；本工单不承担 WI-06 的 Capability Truth Matrix，也不执行外部写入、push、merge、release 或权限变更。
 
 ### WI-04：Adoption, Calibration and Adopter Evidence
 
@@ -203,7 +206,7 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **验收：** 任何删除都有范围、理由、替代、证据和恢复路径；必须保留的 Contract/Summary/Event/Manifest/Release evidence 不被清理；目标工程治理 artifact 增长边界有证据。
 
-**必须验证：** 引用图、过期检查、archive integrity/digest/retention 测试。完成后对齐文档索引和历史标记；不得提前做 WI-17 的计划文档清理。
+**必须验证：** 引用图、过期检查、archive integrity/digest/retention 测试。完成后对齐文档索引和历史标记；不得提前做 WI-18 的计划文档清理。
 
 ### WI-14：Cockpit Human Signal Compression
 
@@ -221,7 +224,17 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **必须验证：** 全量 Make/pytest/安全/文档/对象工程/发布 preflight；问题总览必须由证据生成。关闭并完成文档对齐后才允许 WI-16。
 
-### WI-16：Publish New Version
+### WI-16：Comprehensive Japanese Capability Assessment
+
+**范围：** 在任何发布准备或发布动作前，全面评估 AI Cockpit 对日语的处理能力。覆盖日语输入理解、敬语/普通体、技术术语、混合中日英、Markdown/HTML/日志/tool output、Prompt Injection、Unknown/人工确认、安装/校准/Work Item/错误恢复、CLI/Status/PR/文档输出，以及日文工程师可读性和可操作性。评估对象工程的日语 README、Issue、CI annotation、路径/文件名、错误消息和回滚指示。
+
+**验收：** 建立日语能力矩阵，每项必须绑定 source evidence、test evidence、command evidence、limitations 和 digest；正例、负例、荒诞例、注入例、未知/人工确认和恢复例均有结果。关键门禁、停止原因、风险、下一步和人工问题不得因日语输入而丢失、误译、升级权限或变成“通过”。任何缺失、错误、歧义、未评估、stale 或仅凭英语测试推断的日语能力均为ブロッキング信号，不得进入 WI-17。
+
+**必须验证：** 独立日语 corpus、日语对象工程 fixture/可执行场景、日语安装/校准/升级/回滚/卸载文档、CLI/Status/PR parity、日语 prompt injection 与 Unicode/编码/路径测试；对每个 finding 建立对应 corrective Work Item，并逐项完成其 PR、merge、`make ai-close-work-item`、分支清理和 base 同步。若评估通过，仍必须记录明确的 limitations 和未支持范围；不得把“能翻译”或“测试通过”声明成完整日语能力。
+
+**强制顺序：** WI-15 关闭 → WI-16 日语评估 → （若有问题）corrective Work Item 串行完成并重新评估 → WI-16 关闭 → WI-17 发布新版本。任何日语评估问题、对应 corrective Work Item 未关闭或重新评估证据不一致，均停止发布准备。
+
+### WI-17：Publish New Version
 
 **范围：** 这是唯一实际发布新版本的 Work Item。Contract 必须明确 release identity、source commit/ref、tag、asset、distribution、release note、SBOM、provenance、vulnerability/secret、installer lifecycle、Public Install、兼容性和人工发布授权。
 
@@ -229,11 +242,11 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **强制顺序：** merge → `make ai-close-work-item` → local/remote default-base sync → `make finalize-release-freeze` → `make check-release-preflight` → release dependency/SBOM/provenance/tag/provider publish。发布后记录真实版本、URL、commit、assets、checksums 和 evidence，再完成本工单自己的 PR/merge/close（若发布动作属于合并后阶段，Contract 必须明确并重新绑定 source evidence）。不得把 candidate、historical、published 混为一谈。
 
-### WI-17：Clean Execution Plan Documents（最终工单）
+### WI-18：Clean Execution Plan Documents（最终工单）
 
 **范围：** 盘点旧执行计划、重复计划、已完成计划、过期命令/版本/路径引用；仅清理已确认不再承担当前指令的执行计划文档，统一加入 `Historical Record / Not Current Product Documentation / Do Not Use As Runtime Instruction`，保留 archive-backed 索引、状态、来源和替代文档。
 
-**验收：** 当前主计划、WI-15 最终问题总览、WI-16 发布证据、所有 active/archived Contract/Summary/Event/Manifest 仍可追溯；无文档引用已删除命令或过期版本；清理 diff 有 inventory、理由、替代、digest 和恢复路径；多语言/README/索引对齐通过。
+**验收：** 当前主计划、WI-15 最终问题总览、WI-16 日语评估证据、WI-17 发布证据、所有 active/archived Contract/Summary/Event/Manifest 仍可追溯；无文档引用已删除命令或过期版本；清理 diff 有 inventory、理由、替代、digest 和恢复路径；多语言/README/索引对齐通过。
 
 **强制顺序：** 这是最后一个整改 Work Item。完成其 PR、merge、`make ai-close-work-item`、本地/远端分支清理和默认分支同步后，生成最终对齐报告，提交给用户确认；此前不得宣称“全面整改完成”。
 
@@ -260,7 +273,7 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 - 相关 README、指南、架构、命令示例、Make target、版本/ref/path、环境变量和 Capability claim 是否与代码和测试一致。
 - `README.md`、`README.ja.md`、`README.zh-CN.md` 的 North Star、产品边界、安全限制、人工确认、安装/校准、支持范围和版本语义是否同步。
 - 新增限制、未知、未验证场景、剩余风险和人工决策是否被文档诚实表达。
-- 历史内容是否已标记为历史；若未到 WI-17，不得删除历史执行计划。
+- 历史内容是否已标记为历史；若未到 WI-18，不得删除历史执行计划。
 
 检查失败时，当前 Work Item 不得报告 ready/closed；先完成文档对齐、重新验证，再进入 PR 或关闭阶段。
 
@@ -274,7 +287,7 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 - 文档/代码对齐、企业治理边界、代码质量、过期资产、治理证据压缩：WI-10 至 WI-14。
 - Canonical Evidence 与事实源统一：WI-01，并贯穿全部工单。
 - 五个实施阶段：WI-01/WI-02 为事实源与边界；WI-03/WI-07 为安全与流程；WI-04 为对象工程验证；WI-08/WI-13 为效率与干净化；WI-09/WI-10/WI-14 为信任结果展示。
-- 结束项：WI-15 全面验收，WI-16 发布新版本，WI-17 清理执行计划文档。
+- 结束项：WI-15 全面验收，WI-16 日语能力评估，WI-17 发布新版本，WI-18 清理执行计划文档。
 
 ### 计划质量检查
 
@@ -287,13 +300,17 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 ### 当前执行状态
 
-用户已明确授权继续执行当前计划的全部工单，并要求遇到流程问题时先记录、修正流程再继续。因此本计划不在计划文档完成后停留；当前计划工单的 PR、合并、归档、关闭、分支清理和 base 同步完成后，按 WI-01 至 WI-17 串行执行，直到全部工单完成。
+用户已明确授权继续执行当前计划的全部工单，并要求遇到流程问题时先记录、修正流程再继续。因此本计划不在计划文档完成后停留；当前计划工单的 PR、合并、归档、关闭、分支清理和 base 同步完成后，按 WI-01 至 WI-18 串行执行，直到全部工单完成。
 
 ### 本计划工单已发现的问题
 
 - `PLAN-001`（流程/记录，低）：初始 Contract 使用了本机绝对路径，Summary 仍是骨架。已在本计划工单内改为可移植的用户请求来源标识，并补齐 Summary；Contract、范围、文档 metadata、Status 和一致性检查随后通过。
-- `PLAN-002`（质量/发布证据，待后续工单处理）：本计划工单运行 `make quality` 时，pytest 1058 passed、coverage 85.04%、ruff/mypy/bandit/文档/系统不变量等检查通过，但 `check-release-evidence` 的 release supply-chain 检查发现 1 个问题，导致 `make quality` 退出码 2。该问题属于发布证据域，应在 WI-16 或其明确的前置 corrective Work Item 中按流程处理；本计划不绕过或修复它。
+- `PLAN-002`（质量/发布证据，待后续工单处理）：本计划工单运行 `make quality` 时，pytest 1058 passed、coverage 85.04%、ruff/mypy/bandit/文档/系统不变量等检查通过，但 `check-release-evidence` 的 release supply-chain 检查发现 1 个问题，导致 `make quality` 退出码 2。该问题属于发布证据域，应在 WI-17 或其明确的前置 corrective Work Item 中按流程处理；本计划不绕过或修复它。
 - 现有 governance complexity 与 archive growth 仅报告 warning（当前 archive growth 超过 policy warning 阈值），不在本计划工单中擅自抬高阈值；应由后续相关 Work Item 按预算/偿还规则处理。
-- `PLAN-003`（流程/发布证据边界）：诊断 `check_supply_chain.py release` 时发现 `--write` 可以直接改写 `.ai/cockpit/release-digests.json` 并使检查通过，但该文件属于发布证据，不能在计划文档工单中更新。诊断性改写已恢复；后续必须由 WI-16 或明确的 corrective Work Item 按 source-bound 发布流程生成。
+- `PLAN-003`（流程/发布证据边界）：诊断 `check_supply_chain.py release` 时发现 `--write` 可以直接改写 `.ai/cockpit/release-digests.json` 并使检查通过，但该文件属于发布证据，不能在计划文档工单中更新。诊断性改写已恢复；后续必须由 WI-17 或明确的 corrective Work Item 按 source-bound 发布流程生成。
 - `PLAN-004`（流程/候选发布证据校验，高）：PR 的 Python 兼容矩阵在所有平台重复失败，根因是候选 `release-digests.json` 的 `origin/main` 身份被按已发布标签提交进行严格比较。已在当前计划 PR 中修正候选基线校验：候选阶段只校验稳定发布契约和非身份制品，发布阶段由 `release-assets` 做精确 source-bound 校验，并补充回归测试；该修正完成后才允许合并当前 PR。
 - `WI-01-ISSUE-004`（外部 CI 调度，待恢复）：WI-01 PR #365 的 compatibility 与 smoke run 在创建任何 job 前被 GitHub 标记为 “This run likely failed because of a workflow file issue”；PR diff 未包含 `.github/workflows/**`，且 rerun 后仍复现。已在 PR 记录并保留 run 证据；不得把无 job 失败误报成代码验证通过，必须恢复出可审计的 required checks 后再合并。
+- `WI-05-ISSUE-004`（用户纠正/coverage，低）：用户指出安装对象工程的工程师多数使用日语，原 WI-05 边界虽覆盖 bilingual/mixed-language，但未明确日语。已在 PR #369 合并前暂停关闭动作，补充日文直接、隐藏 HTML、嵌套引用 corpus 与日文检测指示器，并将计划、安全边界文档和验证范围对齐；补丁完成后必须重新 finish 与 required CI。
+- `PLAN-005`（用户纠正/流程门禁，高）：用户要求在发布新版本前插入全面日语能力评估，且日语为必需能力；任何问题必须对应 corrective Work Item 并在重新评估通过前保持ブロッキング。已将原 WI-16/WI-17 顺延为 WI-17/WI-18，新增 WI-16 Japanese Capability Assessment，并更新发布与最终清理的强制顺序；现有 PR/finish 必须先完成本计划对齐再继续。
+- `WI-05-ISSUE-005`（流程/证据归属，高）：尝试以独立追加 JSON 记录 WI-05 的日语计划补正时，PR 归属门禁拒绝了该非 Contract/Summary 配对文件。该追加文件已从当前 PR 移除，计划正文保留完整问题记录；后续必须建立独立 corrective process Work Item，补充并验证“追加式 correction evidence”的归属规则后，才能使用该证据格式，不得改写已归档 WI-05 Contract/Summary。
+- `WI-05-ISSUE-006`（流程/CI，待恢复）：最新 PR 提交的 `template-smoke` job 自 2026-07-25T16:41Z 起停留在 `Run repository quality gates`，其余步骤未启动，远超同类运行时长且无可用最终日志。已取消僵死 run；必须重新触发完整 CI 并取得新的可审计结论后，才能合并 WI-05，不得把取消或旧 run 当作通过。
