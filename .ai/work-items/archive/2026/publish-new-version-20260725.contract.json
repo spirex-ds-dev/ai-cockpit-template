@@ -1,0 +1,195 @@
+{
+  "contractVersion": 2,
+  "workItemId": "publish-new-version-20260725",
+  "mode": "code",
+  "title": "Publish new version with strict final release verification",
+  "baseCommit": "5dc9eadc5ac2a4b0ab700bda14bb486c23716832",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Execute every Work Item in the dated plan serially without stopping; the user has authorized the final new-version publication and all required repository/provider actions.",
+  "rawRequestSource": {"type": "human", "reference": "user-request:serial-plan-execution-2026-07-25", "capturedAt": "2026-07-25", "digest": "sha256:interactive-installation-calibration-wizard-plan"},
+  "declaredIntent": {"summary": "Prepare and publish the next immutable AI Cockpit release v0.5.42 from the merged default-branch commit after Work Items 0 through 22 are closed, preserving fail-closed identity, asset, distribution, and evidence gates.", "requestedCapabilities": ["ai_governance", "documentation", "software_design"]},
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/publish-new-version-20260725.contract.json",
+    ".ai/work-items/active/publish-new-version-20260725.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+    ,"release.json"
+    ,"next-release.json"
+    ,"release-state.json"
+    ,".ai/cockpit/release-freeze.json"
+    ,".ai/cockpit/release-digests.json"
+    ,".ai/cockpit/current_status.md"
+    ,"docs/releases/v0.5.42.md"
+    ,"docs/getting-started/installation.md"
+    ,"docs/getting-started/installation.ja.md"
+    ,"docs/reference/distribution.md"
+    ,"install.sh"
+    ,".ai/cockpit/provenance.json"
+  ],
+  "outOfScope": [
+    "Changing release workflow security controls or evidence schemas",
+    "Moving, deleting, or rewriting any existing immutable release tag",
+    "Claiming publication or public install success without provider-bound evidence"
+  ],
+  "sources": [
+    {"path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md", "reason": "Final Work Item requires strict publication and post-publication verification."},
+    {"path": "release.json", "reason": "Published installer contract and target release identity."},
+    {"path": "next-release.json", "reason": "Unpublished next-candidate projection and sequential release binding."},
+    {"path": "release-state.json", "reason": "Canonical release state machine and evidence status."},
+    {"path": ".github/workflows/release.yml", "reason": "Fail-closed exact-source publication workflow and provider evidence authority."},
+    {"path": "docs/reference/distribution.md", "reason": "Distribution, identity, asset, and public-install boundaries."},
+    {"path": "docs/releases/v0.5.41.md", "reason": "Previous release note and release-note boundary reference."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["release_identity", "external_publication", "supply_chain"],
+    "reason": "Publication is irreversible at the tag and provider boundary; every identity, asset, CI, supply-chain, installer, and public-distribution gate must pass before mutation."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized serial execution including actual final publication; fail-closed gates remain mandatory."
+  },
+  "preReviewWarnings": [
+    "Verify exact merged source SHA, v0.5.42 tag, archive and installer digests, lockfile, SBOM, provenance, secrets/vulnerabilities, CI, compatibility, public install, update/rollback/disable-enable/uninstall evidence, and provider release assets."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "release.json identifies v0.5.42 as the next public release and its archive asset contract.",
+    "next-release.json identifies exactly v0.5.43 as an unpublished candidate based on v0.5.42.",
+    "release-state.json remains the canonical state record with consistent published/candidate projections and evidence status.",
+    "Release notes document v0.5.42 scope and do not claim enterprise certification or unsupported assurance.",
+    "Pre-merge freeze metadata binds source, tag target, metadata commit, canonical archive, and installer digest without using a moving HEAD identity.",
+    "Strict release preflight, identity/source/tag/asset binding, reproducible archive, lockfile, SBOM, provenance, secret/vulnerability, installer lifecycle, compatibility, ecosystem, and CI evidence gates pass.",
+    "The release workflow publishes v0.5.42 only after exact merged-main SHA verification and provider-bound evidence; any failure leaves the tag and publication unchanged.",
+    "Post-publication verification records the immutable tag, release URL, asset identities, public install, update, rollback, disable-enable, uninstall proposal, and residual risks.",
+    "Final issue overview and Task Outcome self-check explicitly cover Work Items 0 through 23 and distinguish verified evidence from remaining user review.",
+    "The Work Item completes archive, PR merge, ai-close-work-item, branch cleanup, and synchronized clean main without claiming completion before publication evidence exists."
+  ],
+  "guidelines": [
+    "Preserve immutable release identity and fail-closed publication gates.",
+    "Do not claim publication, public installation, or security assurance without provider-bound evidence.",
+    "Keep final release evidence and user-review status explicit and separate."
+  ],
+  "intent": {
+    "problem": "The completed serial plan requires one immutable new release whose source identity, release assets, supply-chain evidence, installer behavior, and public distribution are independently verifiable.",
+    "constraints": ["Prepare v0.5.42 from the freshly resolved merged default-branch commit.", "Use the existing release workflow as the external evidence authority.", "Do not move or rewrite existing tags; fail closed on any unknown, mismatch, missing human decision, or verifier error.", "Retain explicit user-review and residual-risk boundaries after closure."],
+    "rationale": "A dedicated final Work Item can prepare candidate metadata through a PR, then invoke the existing exact-source provider workflow only after merge and verify the published artifacts before recording final evidence."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Published v0.5.42 and unpublished v0.5.43 candidate metadata are sequential and internally consistent.", "required": true, "status": "verified", "evidence": ["release.json", "next-release.json", "release-state.json"]},
+    {"scenario": "The release workflow binds the exact merged default-branch SHA to tag, assets, CI, and provider evidence.", "required": true, "status": "verified", "evidence": [".github/workflows/release.yml", "scripts/check_release_preflight.py"]},
+    {"scenario": "A failed or unknown release gate leaves immutable tag and publication state unchanged.", "required": true, "status": "verified", "evidence": [".github/workflows/release.yml", "docs/reference/distribution.md"]},
+    {"scenario": "Post-publication public install and lifecycle checks consume the published immutable release evidence.", "required": true, "status": "verified", "evidence": ["scripts/verify_quick_install_release.py", "docs/reference/distribution.md"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-serial-execution",
+    "reason": "The user explicitly authorized all permissions and requested uninterrupted execution through actual final publication, PR merge, provider release workflow, and branch cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 582
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/publish-new-version-20260725.json",
+    "baseCommit": "5dc9eadc5ac2a4b0ab700bda14bb486c23716832",
+    "initialScopeDigest": "2ff19c2121524b438c1c8acd5b5404873f48574cdcaa3fdf26e4ad5fedb78f4f",
+    "contractSkeletonDigest": "b7d7714ebdbb0dee6798549b7564953c58ffcc8c93acd5a1b06de60e8ce110d3"
+  }
+}
