@@ -152,6 +152,8 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 **必须验证：** 指示中的标准荒诞案例、每类幻觉负例和 Capability claim 文档引用检查。完成后对齐产品边界和能力声明。
 
+**WI-06 当前实现边界：** `scripts/ai_capability_truth.py` 提供离线、确定性的 Capability Truth 行证据绑定、digest/stale 降级和 L1-L4 荒诞案例安全评估；`tests/test_absurd_capability_truth.py` 与 `tests/test_capability_truth_matrix.py` 覆盖能力、证据、完成、语义、世界事实、权限边界、不可用 API/工具链和恢复替代路径。该边界不声明通用幻觉防御、真实生产操作或对象工程已完成。
+
 ### WI-07：Work Item State Machine and Recovery
 
 **范围：** 固化 `created → preflight_ready → implementation_active → verification_pending → finish_ready → archived → pushed → pr_open → merged → close_authorized → closed` 及 paused/blocked/cancelled/rollback/stale；为每个转移记录前置、证据、事件、角色、恢复性和可逆性；实现并发和崩溃恢复。
@@ -314,3 +316,5 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 - `PLAN-005`（用户纠正/流程门禁，高）：用户要求在发布新版本前插入全面日语能力评估，且日语为必需能力；任何问题必须对应 corrective Work Item 并在重新评估通过前保持ブロッキング。已将原 WI-16/WI-17 顺延为 WI-17/WI-18，新增 WI-16 Japanese Capability Assessment，并更新发布与最终清理的强制顺序；现有 PR/finish 必须先完成本计划对齐再继续。
 - `WI-05-ISSUE-005`（流程/证据归属，高）：尝试以独立追加 JSON 记录 WI-05 的日语计划补正时，PR 归属门禁拒绝了该非 Contract/Summary 配对文件。该追加文件已从当前 PR 移除，计划正文保留完整问题记录；后续必须建立独立 corrective process Work Item，补充并验证“追加式 correction evidence”的归属规则后，才能使用该证据格式，不得改写已归档 WI-05 Contract/Summary。
 - `WI-05-ISSUE-006`（流程/CI，待恢复）：最新 PR 提交的 `template-smoke` job 自 2026-07-25T16:41Z 起停留在 `Run repository quality gates`，其余步骤未启动，远超同类运行时长且无可用最终日志。已取消僵死 run；必须重新触发完整 CI 并取得新的可审计结论后，才能合并 WI-05，不得把取消或旧 run 当作通过。
+- `WI-06-ISSUE-001`（流程/命令一致性，低）：AI Cockpit skill 文档曾列出一个当前 Makefile 不存在的旧 ownership alias；实际归属门禁为 `make check-ai-diff-ownership`。已记录并使用实际目标完成检查，后续应在流程文档对齐工单中统一命令名称，不因别名缺失绕过归属检查。
+- `WI-06-ISSUE-002`（流程/coverage guard，低）：coverage guard 初始没有为新 `scripts/ai_capability_truth.py` 配置对应测试关联，导致已有 `tests/test_absurd_capability_truth.py` 被误报为缺少测试差异。已补充 `capabilityTruth` association 并通过 guard；该规则变更必须随本工单的完整 PR/归档流程审查。

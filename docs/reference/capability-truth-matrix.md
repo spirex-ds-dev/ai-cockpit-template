@@ -29,6 +29,12 @@ The matrix deliberately records the remaining gaps around verified Quick Install
 
 For exact row-level evidence, status vocabulary, and missing-evidence reasons, use the JSON source rather than inferring status from prose.
 
+## Evidence binding
+
+Every capability row is bound to `sourceEvidence`, `testEvidence`, `commandEvidence`, `limitations`, and a deterministic `digest`. A changed or mismatched digest is `evidence_stale`; it cannot support an implemented or release claim until the row is regenerated and re-verified. A passing test, source-tree presence, or template installation alone is not proof that an adopter has the capability.
+
+The WI-06 absurd corpus is intentionally negative and offline. L1 structural, L2 behavioral, L3 adversarial, and L4 recovery cases for unsupported world facts, forged evidence, impossible completion, unavailable APIs/toolchains, secrets, protected-branch writes, and production operations return `blocked`/`not_ready` with an explicit safe alternative. These cases demonstrate the repository boundary; they do not claim general hallucination prevention.
+
 ## Wizard boundary
 
 The Installation Wizard is an implemented template entrypoint with an explicit confirmation-gated write boundary. The Calibration Wizard is an implemented presentation adapter over the persisted ten-stage Session; adopter execution, project-owned approval, and external toolchain results remain separate evidence. Fixture coverage for Swift, Kotlin/Android, and mixed monorepos demonstrates scenario modeling, not proof that every adopter's Xcode, Gradle, CocoaPods, JDK, or instrumented commands run successfully.

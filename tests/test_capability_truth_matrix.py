@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from check_docs_metadata import capability_claim_errors
+from ai_capability_truth import validate_matrix
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,6 +28,11 @@ def test_matrix_uses_closed_status_vocabulary_and_evidence_fields() -> None:
         assert capability["id"]
         assert capability["claim"]
         assert capability["evidence"]
+        assert capability["sourceEvidence"]
+        assert capability["testEvidence"]
+        assert capability["commandEvidence"]
+        assert capability["limitations"]
+        assert capability["digest"].startswith("sha256:")
         if capability["status"] == "planned":
             assert capability.get("missingEvidence")
 
@@ -52,3 +58,7 @@ def test_matrix_document_points_to_machine_readable_source_and_plan() -> None:
 
 def test_documentation_claims_are_checked_against_the_matrix() -> None:
     assert capability_claim_errors(ROOT) == []
+
+
+def test_machine_matrix_evidence_binding_is_valid() -> None:
+    assert validate_matrix(MATRIX_PATH) == []

@@ -7,77 +7,132 @@
       "status": "implemented",
       "claim": "Contract, Preflight, verification, Summary, archive, PR, close, and base-sync governance exists in this repository.",
       "evidence": [".ai/cockpit/README.md", "scripts/ai_start.py", "scripts/ai_finish.py", "scripts/ai_close_work_item.py", "Makefile"],
-      "verification": ["tests/test_start_and_archive.py", "tests/test_finish_e2e.py"]
+      "verification": ["tests/test_start_and_archive.py", "tests/test_finish_e2e.py"],
+      "sourceEvidence": [".ai/cockpit/README.md", "scripts/ai_start.py", "scripts/ai_finish.py", "scripts/ai_close_work_item.py", "Makefile"],
+      "testEvidence": ["tests/test_start_and_archive.py", "tests/test_finish_e2e.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "Repository evidence describes this template; it does not prove an adopter executed the lifecycle.",
+      "digest": "sha256:f69a7eae9235a8a405f839436d05b8314cb2ec23b5a8f46750d9e49f5cabbd46"
     },
     {
       "id": "project_calibration_profile_proposal",
       "status": "template_only",
       "claim": "The template can inspect project facts and create a profile proposal; it does not prove completed adopter calibration.",
       "evidence": ["scripts/ai_project_doctor.py", "scripts/ai_calibrate.py", "docs/getting-started/installation.md"],
-      "verification": ["tests/test_project_governance.py", "tests/test_ai_onboard.py"]
+      "verification": ["tests/test_project_governance.py", "tests/test_ai_onboard.py"],
+      "sourceEvidence": ["scripts/ai_project_doctor.py", "scripts/ai_calibrate.py", "docs/getting-started/installation.md"],
+      "testEvidence": ["tests/test_project_governance.py", "tests/test_ai_onboard.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "Template evidence does not prove completed adopter calibration.",
+      "digest": "sha256:7a15ce940e834e8e5ce6fd9ff209a7fed5aae2d192f1c12eea355880f112d61b"
     },
     {
       "id": "installed_runtime_entrypoints",
       "status": "adopter_installed",
       "claim": "An adopter receives the governed entrypoints when the installer completes; installed availability must be checked in the adopter repository.",
       "evidence": ["scripts/install_ai_cockpit.py", "templates/make/Makefile.ai", "scripts/ai_install_facts.py"],
-      "verification": ["tests/test_installation.py", "tests/test_installed_lifecycle_e2e.py"]
+      "verification": ["tests/test_installation.py", "tests/test_installed_lifecycle_e2e.py"],
+      "sourceEvidence": ["scripts/install_ai_cockpit.py", "templates/make/Makefile.ai", "scripts/ai_install_facts.py"],
+      "testEvidence": ["tests/test_installation.py", "tests/test_installed_lifecycle_e2e.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "Installed capability must be verified in the adopter repository.",
+      "digest": "sha256:bf058cf860f86a1f16b4b7c56ca0c46a1da791dbfcf678743af295f31d651ea5"
     },
     {
       "id": "ten_stage_calibration_session",
       "status": "implemented",
       "claim": "The Runtime provides an adopter-executable, Japanese-default ten-stage calibration Session with pause/resume, review, checks, evidence, and fail-closed Candidate activation.",
       "evidence": ["scripts/ai_calibrate.py", "templates/make/Makefile.ai", "docs/reference/calibration-session.md", "docs/getting-started/installation.md"],
-      "verification": ["tests/test_calibration_session.py", "tests/test_project_governance_journey.py"]
+      "verification": ["tests/test_calibration_session.py", "tests/test_project_governance_journey.py"],
+      "sourceEvidence": ["scripts/ai_calibrate.py", "templates/make/Makefile.ai", "docs/reference/calibration-session.md", "docs/getting-started/installation.md"],
+      "testEvidence": ["tests/test_calibration_session.py", "tests/test_project_governance_journey.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "Template execution evidence does not prove an adopter completed calibration or approval.",
+      "digest": "sha256:4d436c511e0cc41ebcf8d91eff2a53c3098e76df4bf58d06363297e840cdb437"
     },
     {
       "id": "interactive_installation_wizard",
       "status": "implemented",
       "claim": "The template provides a confirmation-gated Installation Wizard for repository detection, New Adoption, Upgrade, Dry Run, and mobile or mixed-stack planning; it does not commit, push, create a PR, or merge.",
       "evidence": ["install.sh", "scripts/ai_install_wizard.py", "scripts/ai_install_plan.py", "docs/getting-started/installation.md"],
-      "verification": ["tests/test_install_wizard.py", "tests/test_install_plan.py", "tests/test_wizard_fixtures.py"]
+      "verification": ["tests/test_install_wizard.py", "tests/test_install_plan.py", "tests/test_wizard_fixtures.py"],
+      "sourceEvidence": ["install.sh", "scripts/ai_install_wizard.py", "scripts/ai_install_plan.py", "docs/getting-started/installation.md"],
+      "testEvidence": ["tests/test_install_wizard.py", "tests/test_install_plan.py", "tests/test_wizard_fixtures.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "The wizard does not itself commit, push, create a PR, or merge.",
+      "digest": "sha256:d6d05c4e64d30b57edaac42383af6e62f996cd070465f6d17a7cb932db4f5051"
     },
     {
       "id": "interactive_calibration_wizard",
       "status": "implemented",
       "claim": "The template provides a resumable Calibration Wizard adapter over the ten-stage persisted Session with blocking Unknown and stale evidence, separate human confirmations, and atomic Candidate activation; adopter execution remains required.",
       "evidence": ["scripts/ai_calibration_wizard.py", "scripts/ai_calibrate.py", "docs/reference/calibration-session.md"],
-      "verification": ["tests/test_calibration_wizard.py", "tests/test_calibration_session.py"]
+      "verification": ["tests/test_calibration_wizard.py", "tests/test_calibration_session.py"],
+      "sourceEvidence": ["scripts/ai_calibration_wizard.py", "scripts/ai_calibrate.py", "docs/reference/calibration-session.md"],
+      "testEvidence": ["tests/test_calibration_wizard.py", "tests/test_calibration_session.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "Adopter toolchain execution and project-owned approval remain separate evidence.",
+      "digest": "sha256:bdc991f473cdfd88a2f8ba05a3400a2190f95155dd0fd3975d0adf6d5eefc53c"
     },
     {
       "id": "calibration_inventory_status_matrix",
       "status": "implemented",
       "claim": "Calibration and readiness consumers share a conservative ten-boundary Inventory with explicit status, provenance, confirmation, staleAt, owner, and blocking reason fields.",
       "evidence": ["scripts/ai_calibration_inventory.py", "scripts/ai_readiness_policy.py", "scripts/ai_generate_status.py", "docs/reference/calibration-inventory.md"],
-      "verification": ["tests/test_calibration_inventory.py", "tests/test_readiness_policy.py"]
+      "verification": ["tests/test_calibration_inventory.py", "tests/test_readiness_policy.py"],
+      "sourceEvidence": ["scripts/ai_calibration_inventory.py", "scripts/ai_readiness_policy.py", "scripts/ai_generate_status.py", "docs/reference/calibration-inventory.md"],
+      "testEvidence": ["tests/test_calibration_inventory.py", "tests/test_readiness_policy.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "Inventory status is evidence compression, not external project execution proof.",
+      "digest": "sha256:0d3797d2e1171c22b1e54d7284a07641cd3f4b49eefb0060593d7cc0edfdc22f"
     },
     {
       "id": "candidate_activation_and_active_preservation",
       "status": "implemented",
       "claim": "Calibration Candidate activation is atomic and preserves the previous Active configuration when activation fails.",
       "evidence": ["scripts/ai_calibrate.py", "docs/reference/calibration-session.md"],
-      "verification": ["tests/test_calibration_session.py"]
+      "verification": ["tests/test_calibration_session.py"],
+      "sourceEvidence": ["scripts/ai_calibrate.py", "docs/reference/calibration-session.md"],
+      "testEvidence": ["tests/test_calibration_session.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "Atomic activation evidence does not prove a particular adopter activated a Candidate.",
+      "digest": "sha256:1599dbbf329b7e7a33d6d48cf9c57b3dbb55bacc620b445f46ff86e1aaef46de"
     },
     {
       "id": "bootstrap_wizard_lifecycle",
       "status": "implemented",
       "claim": "Bootstrap Adoption has an explicit resumable lifecycle schema, confirmation-gated write phase, and a fail-closed not_claimed readiness boundary.",
       "evidence": ["scripts/bootstrap_wizard.py", "scripts/ai_lifecycle_facts.py", "docs/getting-started/installation.md"],
-      "verification": ["tests/test_bootstrap_wizard.py", "tests/test_lifecycle_facts.py", "tests/test_bootstrap_write_boundary.py"]
+      "verification": ["tests/test_bootstrap_wizard.py", "tests/test_lifecycle_facts.py", "tests/test_bootstrap_write_boundary.py"],
+      "sourceEvidence": ["scripts/bootstrap_wizard.py", "scripts/ai_lifecycle_facts.py", "docs/getting-started/installation.md"],
+      "testEvidence": ["tests/test_bootstrap_wizard.py", "tests/test_lifecycle_facts.py", "tests/test_bootstrap_write_boundary.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "Bootstrap evidence remains template-local until an adopter records installation facts.",
+      "digest": "sha256:f0b21288c602433adae94272edfb267f27cb84975397ef6534ad48534f914c40"
     },
     {
       "id": "ownership_manifest_and_managed_regions",
       "status": "adopter_installed",
       "claim": "An adopter receives a bound per-file ownership manifest with installed/current digests, project modification facts, managed-region evidence, and rollback baseline consumed by the installed lifecycle.",
       "evidence": ["scripts/ai_ownership.py", "scripts/ai_install_facts.py", "scripts/ai_install_status.py", "docs/reference/installed-lifecycle.md"],
-      "verification": ["tests/test_ownership.py", "tests/test_install_facts.py", "tests/test_installed_lifecycle_e2e.py"]
+      "verification": ["tests/test_ownership.py", "tests/test_install_facts.py", "tests/test_installed_lifecycle_e2e.py"],
+      "sourceEvidence": ["scripts/ai_ownership.py", "scripts/ai_install_facts.py", "scripts/ai_install_status.py", "docs/reference/installed-lifecycle.md"],
+      "testEvidence": ["tests/test_ownership.py", "tests/test_install_facts.py", "tests/test_installed_lifecycle_e2e.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "Adopter-installed status requires evidence from the target repository.",
+      "digest": "sha256:3bb78c4815a06bdede450f4f815f1c587980e310dba24482ab75b43e8025263f"
     },
     {
       "id": "governed_update_and_uninstall",
       "status": "adopter_installed",
       "claim": "Installed update proposal/apply and preserve-evidence uninstall boundaries expose standard Work Item, snapshot, migration, recalibration, PR handoff, rollback, detached-uninstaller, purge-export, and receipt evidence.",
       "evidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_uninstall_proposal.py", "docs/reference/installed-lifecycle.md"],
-      "verification": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_uninstall_proposal.py", "tests/test_detached_uninstaller.py", "tests/test_purge.py", "tests/test_installed_lifecycle_e2e.py"]
+      "verification": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_uninstall_proposal.py", "tests/test_detached_uninstaller.py", "tests/test_purge.py", "tests/test_installed_lifecycle_e2e.py"],
+      "sourceEvidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_uninstall_proposal.py", "docs/reference/installed-lifecycle.md"],
+      "testEvidence": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_uninstall_proposal.py", "tests/test_detached_uninstaller.py", "tests/test_purge.py", "tests/test_installed_lifecycle_e2e.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "Installed lifecycle claims require target-repository receipts and do not prove a completed external operation.",
+      "digest": "sha256:74309dc59c1f68f99cca67f52fc420fa39b2109d4ee32ddf7c4b18563eb8e3e3"
     },
     {
       "id": "quick_install_release_archive_digest",
@@ -85,6 +140,11 @@
       "claim": "Quick Install does not yet default to independently verified Release Archive SHA256 evidence.",
       "evidence": ["README.md", "docs/getting-started/installation.md", "release.json"],
       "verification": [],
+      "sourceEvidence": ["README.md", "docs/getting-started/installation.md", "release.json"],
+      "testEvidence": ["tests/test_quick_install_release.py"],
+      "commandEvidence": ["make check-release-preflight"],
+      "limitations": "A source-bound release archive digest check and clean/anonymous install output are not yet recorded.",
+      "digest": "sha256:4133a9e380a8dcc9d1f2e1eb6bbb7a2c1ed80c6dbca6794c2bf2e14e0d0aa1bd",
       "missingEvidence": "A source-bound release archive digest check and clean/anonymous install output are not yet recorded."
     },
     {
@@ -92,14 +152,24 @@
       "status": "implemented",
       "claim": "Release and PR claims require independently bound provider Workflow Run, Head SHA, Required Job Names, Conclusions, failure reasons, and artifact evidence before being called verified.",
       "evidence": ["scripts/check_ci_release_evidence.sh", "scripts/check_release_state_consistency.py", ".github/workflows/smoke.yml", ".github/workflows/release.yml", "docs/reference/ci-release-evidence.md"],
-      "verification": ["tests/test_ci_release_evidence.py", "tests/test_release_state_consistency.py", "tests/test_workflows.py"]
+      "verification": ["tests/test_ci_release_evidence.py", "tests/test_release_state_consistency.py", "tests/test_workflows.py"],
+      "sourceEvidence": ["scripts/check_ci_release_evidence.sh", "scripts/check_release_state_consistency.py", ".github/workflows/smoke.yml", ".github/workflows/release.yml", "docs/reference/ci-release-evidence.md"],
+      "testEvidence": ["tests/test_ci_release_evidence.py", "tests/test_release_state_consistency.py", "tests/test_workflows.py"],
+      "commandEvidence": ["make check-release-preflight"],
+      "limitations": "Provider evidence is required for a specific run; repository workflow presence alone is not a published release.",
+      "digest": "sha256:067ec38c415455ccd2f3b0af665731ae12249296c9d94bbadb7666929e360553"
     },
     {
       "id": "enterprise_security_assurance",
       "status": "template_only",
       "claim": "Enterprise identity, authorization, isolation, immutable audit, and compliance assurance remain outside AI Cockpit evidence.",
       "evidence": ["docs/enterprise-security-boundary.md"],
-      "verification": ["tests/test_project_governance.py"]
+      "verification": ["tests/test_project_governance.py"],
+      "sourceEvidence": ["docs/enterprise-security-boundary.md"],
+      "testEvidence": ["tests/test_project_governance.py"],
+      "commandEvidence": ["make quality"],
+      "limitations": "Enterprise identity, isolation, immutable audit, and compliance assurance remain outside this repository evidence.",
+      "digest": "sha256:6de5b428e4dc3e8a0ebe1a433fa021be6aecde6519506f03189d47559c145ef9"
     }
   ]
 }
