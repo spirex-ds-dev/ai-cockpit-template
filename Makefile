@@ -31,6 +31,7 @@ AI_PREFLIGHT_VALIDATE_CONTRACT ?= true
 	check-ai-scenario-coverage check-ai-start-receipt generate-ai-preflight-review check-ai-preflight-review ai-preflight \
 	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
+	check-ai-task-outcome \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
 	ai-cockpit-uninstall-propose
 
@@ -356,6 +357,10 @@ check-ai-status:
 
 check-ai-status-consistency:
 	$(AI_PYTHON) scripts/ai_check_status_consistency.py
+
+check-ai-task-outcome:
+	@test -n "$(OUTCOME)" || (echo 'OUTCOME=<outcome.json> is required'; exit 2)
+	$(AI_PYTHON) -c "import json, pathlib, sys; sys.path.insert(0, 'scripts'); from ai_check_task_outcome import validate_outcome; outcome=json.loads(pathlib.Path('$(OUTCOME)').read_text()); report=validate_outcome(outcome, pathlib.Path('$(MARKDOWN)').read_text() if '$(MARKDOWN)' else None); print('task outcome valid' if report.valid else '\\n'.join(f'{e.code}: {e.message}' for e in report.errors)); raise SystemExit(0 if report.valid else 1)"
 
 repair-ai-status:
 	$(AI_PYTHON) scripts/ai_check_status_consistency.py --repair

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import subprocess
 import sys
 import time
@@ -263,6 +264,101 @@ def verification_priority(item: dict[str, Any]) -> int:
     return 10
 
 
+def finish_execution_priority(item: dict[str, Any]) -> int:
+    """Order ai-finish's self-referential gates around Outcome integration."""
+    check_id = verification_key(item)
+    if check_id == "aiSummary":
+        return 20
+    return verification_priority(item) + 10
+
+
+def _outcome_paths(task: str) -> tuple[Path, Path]:
+    root = ACTIVE_DIR / task
+    return root.with_suffix(".outcome.json"), root.with_suffix(".outcome.md")
+
+
+def _record_outcome_state(summary_path: Path, state: dict[str, Any]) -> None:
+    summary = load_json(summary_path)
+    summary["taskOutcome"] = state
+    save_json(summary_path, summary)
+
+
+def run_task_outcome_pipeline(task: str, summary_path: Path) -> tuple[bool, str]:
+    """Run the optional evidence-backed Outcome pipeline before Status.
+
+    A Summary opts in by declaring ``taskOutcomeInput``. The input is never
+    rewritten, so generator or validator failures retain the raw Evidence.
+    """
+    summary = load_json(summary_path)
+    input_value = summary.get("taskOutcomeInput")
+    if not isinstance(input_value, str) or not input_value:
+        return True, "Outcome integration not requested: no taskOutcomeInput"
+    input_path = PROJECT_ROOT / input_value
+    json_path, markdown_path = _outcome_paths(task)
+    if not input_path.exists():
+        message = f"raw Evidence input does not exist: {input_value}"
+        _record_outcome_state(
+            summary_path, {"status": "failed", "rawEvidencePath": input_value, "error": message}
+        )
+        return False, message
+
+    python = sys.executable
+    commands = [
+        [
+            python,
+            "scripts/ai_generate_task_outcome.py",
+            input_value,
+            str(json_path.relative_to(PROJECT_ROOT)),
+            str(markdown_path.relative_to(PROJECT_ROOT)),
+        ],
+        [
+            python,
+            "-c",
+            "from pathlib import Path; import sys; sys.path.insert(0, 'scripts'); from ai_check_task_outcome import validate_outcome; import json; outcome=json.loads(Path(sys.argv[1]).read_text()); report=validate_outcome(outcome, expected_task_id=sys.argv[3]); print('valid' if report.valid else '\\n'.join(f'{e.code}: {e.message}' for e in report.errors)); raise SystemExit(0 if report.valid else 1)",
+            str(json_path.relative_to(PROJECT_ROOT)),
+            str(markdown_path.relative_to(PROJECT_ROOT)),
+            task,
+        ],
+        [
+            python,
+            "scripts/ai_render_task_outcome.py",
+            str(json_path.relative_to(PROJECT_ROOT)),
+            str(markdown_path.relative_to(PROJECT_ROOT)),
+        ],
+        [
+            python,
+            "-c",
+            "from pathlib import Path; import sys; sys.path.insert(0, 'scripts'); from ai_check_task_outcome import validate_outcome; import json; outcome=json.loads(Path(sys.argv[1]).read_text()); report=validate_outcome(outcome, Path(sys.argv[2]).read_text(), expected_task_id=sys.argv[3]); print('valid' if report.valid else '\\n'.join(f'{e.code}: {e.message}' for e in report.errors)); raise SystemExit(0 if report.valid else 1)",
+            str(json_path.relative_to(PROJECT_ROOT)),
+            str(markdown_path.relative_to(PROJECT_ROOT)),
+            task,
+        ],
+    ]
+    for command in commands:
+        code, _, output = run(command)
+        if code != 0:
+            message = " ".join((output or "Outcome pipeline command failed").split())[:500]
+            _record_outcome_state(
+                summary_path,
+                {"status": "failed", "rawEvidencePath": input_value, "error": message},
+            )
+            return False, message
+    outcome = json.loads(json_path.read_text(encoding="utf-8"))
+    sections = outcome.get("sections", {})
+    evidence_count = len(sections.get("evidence", [])) if isinstance(sections, dict) else 0
+    _record_outcome_state(
+        summary_path,
+        {
+            "status": outcome.get("status", "unknown"),
+            "jsonPath": json_path.relative_to(PROJECT_ROOT).as_posix(),
+            "markdownPath": markdown_path.relative_to(PROJECT_ROOT).as_posix(),
+            "rawEvidencePath": input_value,
+            "evidenceCount": evidence_count,
+        },
+    )
+    return True, "Outcome pipeline passed"
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run AI Work Item finish checks.")
     parser.add_argument("--task", required=True)
@@ -355,6 +451,13 @@ def run_declared_checks(
                     worktree_digest=current_digest,
                 ),
             )
+        if check_id == "aiStatus":
+            outcome_ok, outcome_message = run_task_outcome_pipeline(
+                contract_data["workItemId"], summary_path
+            )
+            if not outcome_ok:
+                print(f"ERROR: Task Outcome integration failed: {outcome_message}", file=sys.stderr)
+                return 1
         code, duration, output = run(command)
         current_digest = worktree_digest(changed_paths(contract_data))
         record_result(
@@ -430,7 +533,10 @@ def main() -> int:
     obs = create_observability(work_item_id=args.task)
     total_start = time.time()
     declared_items = [item for item in declared if isinstance(item, dict)]
-    declared_items.sort(key=verification_priority)
+    summary_requests_outcome = isinstance(load_json(summary_path).get("taskOutcomeInput"), str)
+    declared_items.sort(
+        key=finish_execution_priority if summary_requests_outcome else verification_priority
+    )
     ownership = preview(contract=contract_data)
     print("\n".join(format_preview(ownership)))
     ownership_failures = [

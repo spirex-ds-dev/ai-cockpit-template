@@ -1,0 +1,194 @@
+{
+  "contractVersion": 2,
+  "workItemId": "task-outcome-ai-finish-integration",
+  "mode": "code",
+  "title": "Integrate Task Outcome generation validation rendering and Cockpit link into ai-finish",
+  "rawUserRequest": "Implement the Task Outcome ai-finish integration from the execution plan: enforce Final Verification, Summary generation/validation, Outcome generation/validation, Markdown derivation, Cockpit Status generation, and a short Outcome link/count summary in the correct order. Preserve raw Evidence on failure and fail closed. Execute serially through this Work Item PR and closure.",
+  "rawRequestSource": {"type": "human", "reference": "user-request:serial-plan-execution-2026-07-25", "capturedAt": "2026-07-25", "digest": "sha256:interactive-installation-calibration-wizard-plan"},
+  "declaredIntent": {"summary": "Integrate Task Outcome generation, validation, rendering, and Cockpit link presentation into ai-finish.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "baseCommit": "80f9b101da5e40e2349b51edbc3cb1c68def5a88",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/task-outcome-ai-finish-integration.contract.json",
+    ".ai/work-items/active/task-outcome-ai-finish-integration.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_finish.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_governance_compression.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "Makefile",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/work-items/active/*.outcome.json",
+    ".ai/work-items/active/*.outcome.md"
+  ],
+  "outOfScope": ["Generator, validator, standalone renderer, archive lifecycle, PR summary, multilingual, documentation, release publication, and historical evidence changes."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+      "reason": "Plan Extension defines ai-finish order and failure preservation."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Existing final verification and archive orchestration boundary."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "WI15 generator contract."
+    },
+    {
+      "path": "scripts/ai_check_task_outcome.py",
+      "reason": "WI16 validator contract."
+    },
+    {
+      "path": "scripts/ai_render_task_outcome.py",
+      "reason": "WI17 Markdown renderer contract."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository terminology and boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "lifecycle_order",
+      "fail_closed"
+    ],
+    "reason": "ai-finish is a governance-critical orchestration boundary; order and raw-evidence preservation must remain fail closed."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Integration scope, order, failure behavior, evidence sources, and serial authorization are explicit."
+  },
+  "preReviewWarnings": [
+    "Review the strict finish ordering and verify that Cockpit Status contains only Outcome link/count metadata."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ai-finish runs final verification, Summary generation/validation, Outcome generation/validation, Markdown derivation, Cockpit Status, and presentation in the declared order.",
+    "Outcome validation failure preserves raw Evidence, prevents success/archival claims, and reports a structured failure.",
+    "Cockpit Status remains short and includes only an Outcome link/count summary; full Outcome content is not copied into status.",
+    "Focused tests cover ordering, command failure, raw-evidence preservation, link/count summary, and no duplicate state transitions."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Successful finish executes all Outcome steps in order and records a short Cockpit link/count summary.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_ai_finish_integration.py"]},
+    {"scenario": "Generator or validator failure stops finish and preserves raw Evidence.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_ai_finish_integration.py"]},
+    {"scenario": "Status output does not copy the full report or manufacture scores.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_ai_finish_integration.py"]},
+    {"scenario": "Existing finish/archive behavior remains compatible when Outcome integration is disabled or no evidence is present.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_ai_finish_integration.py"]}
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The Task Outcome artifacts exist but are not yet part of the governed finish path, so later integrations could archive or present a task without validated Outcome evidence.",
+    "constraints": ["Keep final verification first and fail closed on Outcome generation/validation errors.", "Preserve raw Evidence and existing ai-finish lifecycle semantics.", "Keep Cockpit Status concise and link to Outcome rather than copying it."],
+    "rationale": "Integrating at the existing finish orchestration boundary gives one auditable order and prevents later presentation or archive steps from bypassing validation."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized completion of the serial plan, including required governance entrypoint changes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 577
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/task-outcome-ai-finish-integration.json",
+    "baseCommit": "80f9b101da5e40e2349b51edbc3cb1c68def5a88",
+    "initialScopeDigest": "db685e979c94e96ae211aad331a74b39d620d4e2d65423e0bcbdb217bbfefabc",
+    "contractSkeletonDigest": "9d9d3eb0d2b61915d73e6239cbb8d55da6251b7c09a6304958a26450a0cbf277"
+  }
+}

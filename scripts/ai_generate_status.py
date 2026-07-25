@@ -278,6 +278,7 @@ def write_active_status(
         preflight_review=preflight_review,
         ownership_counts=ownership_counts,
         calibration_inventory=calibration_inventory,
+        task_outcome=(summary.get("taskOutcome") if isinstance(summary, dict) else None),
     )
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(status_text, encoding="utf-8")
