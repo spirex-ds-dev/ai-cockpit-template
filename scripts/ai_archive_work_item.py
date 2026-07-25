@@ -40,6 +40,16 @@ def owned_success_criteria_path(contract_path: Path) -> Path:
     return contract_path.with_name(contract_path.name.replace(".contract.json", ".success.json"))
 
 
+def outcome_artifact_paths(contract_path: Path) -> list[Path]:
+    """Return optional active Outcome and event siblings for one Work Item."""
+    stem = contract_path.name.replace(".contract.json", "")
+    return [
+        contract_path.with_name(f"{stem}.outcome.json"),
+        contract_path.with_name(f"{stem}.outcome.md"),
+        contract_path.with_name(f"{stem}.events.jsonl"),
+    ]
+
+
 def _archive_index_path() -> Path:
     return ARCHIVE_BASE_DIR / "index.json"
 
@@ -268,10 +278,14 @@ def _archive_entry(
 
 
 def _archive_manifest(
-    *, contract_target: Path, summary_target: Path, archive_sequence: int
+    *,
+    contract_target: Path,
+    summary_target: Path,
+    archive_sequence: int,
+    outcome_targets: list[Path] | None = None,
 ) -> dict[str, object]:
     """Build the immutable root after Contract and Summary are frozen."""
-    return {
+    manifest = {
         "format": "ai-cockpit-archive-manifest",
         "manifestVersion": 1,
         "workItemId": load_json(contract_target).get("workItemId"),
@@ -282,6 +296,15 @@ def _archive_manifest(
         "summarySha256": hashlib.sha256(summary_target.read_bytes()).hexdigest(),
         "generatedStatusExcluded": True,
     }
+    if outcome_targets:
+        manifest["outcomeArtifacts"] = [
+            {
+                "path": target.relative_to(PROJECT_ROOT).as_posix(),
+                "sha256": hashlib.sha256(target.read_bytes()).hexdigest(),
+            }
+            for target in outcome_targets
+        ]
+    return manifest
 
 
 def _archive_sequence_key(item: object) -> int:
@@ -465,6 +488,7 @@ def main() -> int:
     has_summary = summary_path.exists()
     has_review = review_path.exists()
     has_success = success_path.exists()
+    outcome_paths = [path for path in outcome_artifact_paths(contract_path) if path.exists()]
 
     if mode == "code" and not has_summary:
         print(
@@ -520,6 +544,7 @@ def main() -> int:
         files_to_move.append((review_path, target_dir / review_path.name))
     if has_success:
         files_to_move.append((success_path, target_dir / success_path.name))
+    files_to_move.extend((path, target_dir / path.name) for path in outcome_paths)
     summary_tmp = target_dir / f"{summary_path.name}.tmp" if has_summary else None
     manifest_target = target_dir / contract_path.name.replace(
         ".contract.json", ".archive-manifest.json"
@@ -571,6 +596,10 @@ def main() -> int:
                 replacements[success_path.relative_to(PROJECT_ROOT).as_posix()] = (
                     (target_dir / success_path.name).relative_to(PROJECT_ROOT).as_posix()
                 )
+            for path in outcome_paths:
+                replacements[path.relative_to(PROJECT_ROOT).as_posix()] = (
+                    (target_dir / path.name).relative_to(PROJECT_ROOT).as_posix()
+                )
             summary = redact_machine_paths_in_data(load_json(target_dir / summary_path.name))
             summary["contractPath"] = archived_contract
             summary["archiveSequence"] = archive_sequence
@@ -619,6 +648,7 @@ def main() -> int:
                     contract_target=target_dir / contract_path.name,
                     summary_target=summary_target,
                     archive_sequence=archive_sequence,
+                    outcome_targets=[target_dir / path.name for path in outcome_paths],
                 ),
             )
 
