@@ -1,0 +1,182 @@
+{
+  "contractVersion": 2,
+  "workItemId": "lifecycle-state-recovery",
+  "mode": "code",
+  "title": "Work Item state machine and recovery",
+  "baseCommit": "a608114a12be820a5cbc4210a6f09fee68871552",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/lifecycle-state-recovery.contract.json",
+    ".ai/work-items/active/lifecycle-state-recovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".ai/guards/coverage_policy.yaml",
+    "scripts/ai_work_item_state.py",
+    "tests/test_work_item_state_machine.py",
+    "docs/reference/work-item-state-machine.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Provider API mutation or real external identity/approval behavior",
+    "Changing release publication, installation, or upgrade semantics",
+    "Deleting historical Work Item evidence"
+  ],
+  "sources": [
+    {"path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "reason": "WI-07 scope and acceptance requirements."},
+    {"path": ".ai/cockpit/README.md", "reason": "Canonical Work Item lifecycle commands and closure order."},
+    {"path": "scripts/ai_start.py", "reason": "Existing start transition and receipt behavior."},
+    {"path": "scripts/ai_finish.py", "reason": "Existing finish and archive transition behavior."},
+    {"path": "scripts/ai_close_work_item.py", "reason": "Existing merge/branch/base closure behavior."},
+    {"path": ".ai/work-items/archive/index.json", "reason": "Archived lifecycle evidence index and digest conventions."},
+    {"path": "docs/reference/installed-lifecycle.md", "reason": "Existing lifecycle state vocabulary and recovery boundary."}
+  ],
+  "rawUserRequest": "Execute all Work Items serially with the complete Contract, implementation, verification, PR, merge, archive, close, branch cleanup, and base synchronization workflow; record and correct process issues before continuing. Japanese capability is mandatory before publishing.",
+  "rawRequestSource": {"type": "human", "reference": "user-request: AI Cockpit comprehensive remediation instruction and continuation authorization", "capturedAt": "2026-07-26", "digest": "sha256:lifecycle-state-recovery-request"},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "scope_unclear"
+    ],
+    "reason": "State transitions, evidence binding, recovery, idempotency, and local/remote lifecycle consistency can otherwise allow closure or completion claims to bypass required gates.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial execution and the WI-07 boundary is deterministic and local."
+  },
+  "preReviewWarnings": ["Review fail-closed transitions and recovery evidence before claiming closure."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A deterministic state machine models the canonical, paused, blocked, cancelled, rollback, and stale states with transition preconditions, evidence fields, event identity, role, recoverability, and reversibility.",
+    "Invalid ordering, stale base, Contract/Summary mismatch, digest mismatch, wrong branch/PR/merge, unauthorized cleanup, provider partial success, and rollback state each return a blocked result with a resume condition.",
+    "Repeated start, finish, archive, and close events use stable event identity and do not duplicate archive or event records.",
+    "Interrupted archive, branch creation failure, close network failure, CI delay, and local/remote mismatch produce recoverable non-closed states.",
+    "Focused checks, full project checks, and the complete PR/merge/archive/close/cleanup/base-sync lifecycle pass without external mutation."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The repository has lifecycle commands and evidence artifacts, but the allowed transition graph and recovery/idempotency rules are distributed across scripts and documents. This makes illegal ordering, interrupted operations, and local/remote divergence harder to detect mechanically.",
+    "constraints": [
+      "Keep the state evaluator deterministic and offline.",
+      "Preserve existing lifecycle commands and archived evidence compatibility.",
+      "Fail closed on missing, stale, contradictory, or provider-unconfirmed evidence.",
+      "Do not claim provider identity, enterprise approval, or production readiness from local fixtures."
+    ],
+    "rationale": "A single executable transition model plus negative recovery corpus makes lifecycle closure auditable without changing external provider behavior."
+  },
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "test", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Enforce a deterministic local Work Item state machine and recovery boundary without changing external provider behavior.", "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]},
+  "scenarioCoverage": [
+    {"scenario": "Canonical lifecycle transitions accept only the documented order.", "required": true, "status": "verified", "evidence": ["scripts/ai_work_item_state.py", "tests/test_work_item_state_machine.py"]},
+    {"scenario": "Illegal order, stale base, mismatched evidence, and wrong merge fail closed.", "required": false, "status": "unverified", "evidence": []},
+    {"scenario": "Retries, interruption, partial provider state, and duplicate events remain safe and idempotent.", "required": false, "status": "unverified", "evidence": []}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized serial execution and lifecycle evidence updates within the Work Item Contract scope."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 591
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/lifecycle-state-recovery.json",
+    "baseCommit": "a608114a12be820a5cbc4210a6f09fee68871552",
+    "initialScopeDigest": "36107fbc0111d76fb95105469472bf1da0cff1df7dd6e64886ab9ac9b314dcf7",
+    "contractSkeletonDigest": "2f5170cdd27f0153639bd6a1bc2a1f36669121fa22bdc5d3ab61ed4aafac8d80"
+  }
+}
