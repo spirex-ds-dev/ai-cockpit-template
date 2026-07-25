@@ -175,6 +175,10 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 **必须验证：** cache 命中/失效、DAG 分支、升级和 release Full Gate。完成后对齐 checks catalog、Make target 和验证指南。
 
+**WI-08 当前实现边界：** 仅在仓库本地实现确定性的 verification policy、content-addressed cache key/invalidation、check DAG 和单调升级；不实现外部 CI Provider 调度、凭据、发布或安装行为。Light/Standard/Strict 的判定和 Focused/Full 选择必须由可审计输入派生，任何未知、注入、越界或高风险改动均只能升级，不能降级。
+
+**WI-08 流程问题记录：** `WI-08-ISSUE-001`：Contract 初始骨架触发 `not_ready`，已补全 intent、原始请求、来源、风险审查、验收和场景覆盖后重跑。`WI-08-ISSUE-002`：三个中风险场景在实现前没有证据，预检要求 `needs_human_confirmation`；用户已授权连续执行，本次授权作为继续实现的依据，场景不得预填 verified，必须在实现和验证完成后补齐证据并再次通过门禁。`WI-08-ISSUE-003`：新 Make target 初次未设置 `PYTHONPATH=scripts`，导致模块导入失败；已先修正 Make target，再继续验证。`WI-08-ISSUE-004`：全量安装测试发现 `ai_verification_policy.py` 的运行时依赖未进入 installer catalog；已将 `ai_impact_classifier.py` 纳入安装清单并重新验证安装面。`WI-08-ISSUE-005`：系统不变量发现 checks catalog 的新 target 未同步到 `templates/make/Makefile.ai`；已补齐安装模板 target 并重新运行全量测试。`WI-08-ISSUE-006`：修复模板同步后 Contract hash 变化使原 `before_edit` checkpoint stale；已在最终 Contract 后刷新 checkpoint，再继续 finish。
+
 ### WI-09：Evidence-backed Task Outcome
 
 **范围：** 生成一屏 Human Summary 与可下钻 Evidence Detail；覆盖完成内容、问题、停止、解决、避免影响、剩余风险、未知、人工决策、验证、下一步；由事件、diff、CI、approval、release、archive manifest 派生。

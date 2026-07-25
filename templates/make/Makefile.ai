@@ -101,6 +101,9 @@ ai-cockpit-diff-check:
 
 ai-cockpit-quality: ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check
 
+ai-verify-policy:
+	PYTHONPATH=scripts $(AI_PYTHON) -c 'from ai_verification_policy import order_checks; print(order_checks({"scope": [], "tests": ["scope"], "trust": ["scope"]}))'
+
 unsupported-claim-regression:
 	$(AI_PYTHON) scripts/unsupported_claim_gate.py
 

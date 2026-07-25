@@ -1,0 +1,492 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "verification-efficiency-escalation",
+  "contractPath": ".ai/work-items/archive/2026/verification-efficiency-escalation.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/verification-efficiency-escalation.contract.json",
+      "reason": "Completed the WI-08 Contract with scope, policy boundary, acceptance, scenarios, and verification evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/verification-efficiency-escalation.summary.json",
+      "reason": "Recorded WI-08 implementation, verification, issues, and review evidence."
+    },
+    {
+      "path": "scripts/ai_verification_policy.py",
+      "reason": "Added deterministic policy selection, cache keying, DAG ordering, and escalation."
+    },
+    {
+      "path": "scripts/ai_impact_classifier.py",
+      "reason": "Installed runtime dependency used by the verification policy."
+    },
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "Included the policy runtime dependency in adopter installations."
+    },
+    {
+      "path": "scripts/ai_verify.py",
+      "reason": "Included policy output in verification results."
+    },
+    {
+      "path": "tests/test_verification_policy.py",
+      "reason": "Covered policy, cache invalidation, DAG failures, and escalation."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Added the verification policy check target."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Kept the installed Makefile target aligned with the check catalog."
+    },
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "reason": "Registered the verification policy check."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Associated the new production policy module with its tests."
+    },
+    {
+      "path": "docs/reference/lightweight-verification-and-soft-gates.md",
+      "reason": "Documented levels, cache integrity, DAG, and escalation."
+    },
+    {
+      "path": "docs/maintainers/adding-or-classifying-a-check.md",
+      "reason": "Documented DAG and cache requirements for maintainers."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Recorded WI-08 boundary and process issues."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/verification-efficiency-escalation.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+    "scripts/ai_verification_policy.py",
+    "tests/test_verification_policy.py",
+    "Makefile",
+    ".ai/cockpit/checks.yaml",
+    "docs/reference/lightweight-verification-and-soft-gates.md"
+  ],
+  "scenarioCoverage": [
+    {
+      "id": "cache-integrity",
+      "scenario": "Complete cache inputs reuse only identical content and invalidate on change.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_verification_policy.py"
+      ]
+    },
+    {
+      "id": "escalation-monotonicity",
+      "scenario": "High-risk, unknown, injection, and test-after-failure signals never downgrade verification.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_verification_policy.py",
+        "scripts/ai_verification_policy.py"
+      ]
+    },
+    {
+      "id": "release-full-gate",
+      "scenario": "Release policy selects Full verification and the DAG remains deterministic.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_verification_policy.py",
+        "Makefile"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:38:20.225788+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "c0d14ec93265820e5ac69e8be8c85e5d3b8a0c63b9883b054cd8cf4f8dadddf2",
+      "commandHash": "e859a761bf2f85067187b8004dff21d12958639f38ba048e7c7ae6dae7894c8b",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "df791629facad22875eaa665f23aa27d0b0f2eaf422daee66c654fe999ce5bac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/verification-efficiency-escalation.contract.json work item contract check passed: .ai/work-items/active/verification-efficiency-escalation.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:38:20.370525+00:00",
+      "exitCode": 0,
+      "durationMs": 95,
+      "outputDigest": "0af1ad2d4b6e3ab719d8f031dc8b47d1283d24177ee4e6d5dbdb7df936bc9bf1",
+      "commandHash": "003b9ddff213a1a0d9ec580776eb8e76ec87851c8c374abe01bf06a37366baf9",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "df791629facad22875eaa665f23aa27d0b0f2eaf422daee66c654fe999ce5bac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/verification-efficiency-escalation.contract.json scope guard passed: 13 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:38:20.556508+00:00",
+      "exitCode": 0,
+      "durationMs": 136,
+      "outputDigest": "df90617bcfee0d1c55935bd8b691a2f830288c777f05aca731d275f68ce81bf8",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "df791629facad22875eaa665f23aa27d0b0f2eaf422daee66c654fe999ce5bac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/verification-efficiency-escalation.contract.json [warning] restricted_write: .ai/cockpit/checks.yaml (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/guards/coverage_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoin"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/verification-efficiency-escalation.contract.json SUMMARY=.ai/work-items/active/verification-efficiency-escalation.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:38:20.792036+00:00",
+      "exitCode": 0,
+      "durationMs": 184,
+      "outputDigest": "4d45cfb574c8dd9cec7e9b6020b4695997e89b2df6e17cdd05dd84a3eb63e038",
+      "commandHash": "6038087cf34c5f7e38ccefb71075e8019ca3fc1e80acb92934eeeb744e764d29",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "df791629facad22875eaa665f23aa27d0b0f2eaf422daee66c654fe999ce5bac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/verification-efficiency-escalation.contract.json --summary .ai/work-items/active/verification-efficiency-escalation.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `verification-efficiency-escalation` - Contract Hash: `676d9b0b7d1f9c72` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:38:20.941076+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "a8a6af6437f04071adc1a9b3a04259cc0e4662df089591c431c47517ef7d377b",
+      "commandHash": "77c3a5eba6d123a6b841c30a7d4ea83435efb3e7b19fd6cead46a3b150bdf6db",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "df791629facad22875eaa665f23aa27d0b0f2eaf422daee66c654fe999ce5bac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/verification-efficiency-escalation.summary.json review policy matched 8 path(s) [review] .ai/work-items/starts/verification-efficiency-escalation.json [review] .ai/cockpit/checks.yaml [review] .ai/cockpit/current_status.md [review] .ai/guards/coverage_policy.yaml [review] Makefile [review] scripts/ai_verification_policy.py [review] scripts/ai_verify.py [review] templates/make/Makefile.ai "
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:38:21.092741+00:00",
+      "exitCode": 0,
+      "durationMs": 101,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "df791629facad22875eaa665f23aa27d0b0f2eaf422daee66c654fe999ce5bac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:38:21.230716+00:00",
+      "exitCode": 0,
+      "durationMs": 90,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "df791629facad22875eaa665f23aa27d0b0f2eaf422daee66c654fe999ce5bac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/verification-efficiency-escalation.contract.json SUMMARY=.ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:38:21.332849+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "8094e4a19e6833fe2a865e26ff180f4124f65221e7075d76dd6cae4ba386e239",
+      "commandHash": "82d7d74d73530cc165b571b57aafd2779264d54003619b22e0768f9c31be6b94",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "df791629facad22875eaa665f23aa27d0b0f2eaf422daee66c654fe999ce5bac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/verification-efficiency-escalation.contract.json --summary .ai/work-items/active/verification-efficiency-escalation.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/verification-efficiency-escalation.contract.json SUMMARY=.ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:38:21.436163+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "8784bb811c0c14b67c55b19345737812acb2ff706a4f51dbec0910e0a2184f55",
+      "commandHash": "15cb36dc96a58f641c55cddd514bb71b623f7db4c776ec8e99c0bfcd8b34de60",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "df791629facad22875eaa665f23aa27d0b0f2eaf422daee66c654fe999ce5bac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/verification-efficiency-escalation.contract.json --summary .ai/work-items/active/verification-efficiency-escalation.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:38:21.672773+00:00",
+      "exitCode": 0,
+      "durationMs": 177,
+      "outputDigest": "cc9672c5cba7862411f942a68871f6bd66d63db3bfdf01f19b0e707ddf9344f2",
+      "commandHash": "b2cb45d3d22a02bffbe9623d1920fdf2f2b9bf7c145328857c8a8c81b84e3150",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "df791629facad22875eaa665f23aa27d0b0f2eaf422daee66c654fe999ce5bac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/verification-efficiency-escalation.contract.json ## Diff Ownership Preview - active_owned: `13`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/checks.yaml` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/coverage_policy.yaml` "
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:44:38.593349+00:00",
+      "exitCode": 0,
+      "durationMs": 376871,
+      "outputDigest": "b8636b0aa02269d3f1e01134bf7d1b41d3e6014fb5f87a59566607b7f69c53f1",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "df791629facad22875eaa665f23aa27d0b0f2eaf422daee66c654fe999ce5bac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 229 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 6%] ........................................................................ [ 12%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/verification-efficiency-escalation.contract.json SUMMARY=.ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:44:40.079903+00:00",
+      "exitCode": 0,
+      "durationMs": 192,
+      "outputDigest": "109fe7ea2003c1bc8e5319ba7a2240b5ae88bcfb7fe5e0bf6cb4d353572cdff8",
+      "commandHash": "19066030fe1af71f00cfb538c40661f29ce686796142a275786aae28b26abc73",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "f81002ca4299af23bbdbd557874e06f2ad5868a6cf576d37d97d4583548d6a9f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/verification-efficiency-escalation.contract.json --summary .ai/work-items/active/verification-efficiency-escalation.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/verification-efficiency-escalation.contract.json SUMMARY=.ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:44:40.315278+00:00",
+      "exitCode": 0,
+      "durationMs": 188,
+      "outputDigest": "586532e5b94ae51bbffefddd76466e29c1a38ec88b167492a41827d4ed67ee3d",
+      "commandHash": "c13f7582d8b2e26ff289c1f39ea4077007e4d110d9b17399d020f10b202f0e9d",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "f81002ca4299af23bbdbd557874e06f2ad5868a6cf576d37d97d4583548d6a9f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/verification-efficiency-escalation.contract.json --summary .ai/work-items/active/verification-efficiency-escalation.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:44:40.409570+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "f81002ca4299af23bbdbd557874e06f2ad5868a6cf576d37d97d4583548d6a9f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/verification-efficiency-escalation.contract.json SUMMARY=.ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:44:40.501559+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "53d3bef517277fc6ea7492e2c1f5c4d55961bd110c6a60d1687ed7abd602dc9d",
+      "commandHash": "9580aa3e257aa4c5d2831699f8d4f6ea200ce370ee68d73782adc71fff6f9147",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "f81002ca4299af23bbdbd557874e06f2ad5868a6cf576d37d97d4583548d6a9f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/verification-efficiency-escalation.contract.json --summary .ai/work-items/active/verification-efficiency-escalation.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/verification-efficiency-escalation.summary.json CONTRACT=.ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T19:44:41.218186+00:00",
+      "exitCode": 0,
+      "durationMs": 88,
+      "outputDigest": "c7bd2ab1de0229e40fdcbac825011c9cab559bcbca10241082abf5caa7011985",
+      "commandHash": "a0c92ed7cae341bd5353d6cd374eb8d9963f6af82bb3edcecc42ee9e72db9fbc",
+      "contractHash": "676d9b0b7d1f9c726d88df3c8a5c281f0b201b1c31bf49a6c5c78e30a0165c01",
+      "commitSha": "149b6161913d67596a9979abbafd61ce7e200cda",
+      "executionContractPath": ".ai/work-items/active/verification-efficiency-escalation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/verification-efficiency-escalation.summary.json",
+      "worktreeDigest": "5aa07de0f9db6e6fa8d3b202143e4feb96abb2c6bd641be7642ab8a6e0cc4ef8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/verification-efficiency-escalation.summary.json --contract .ai/work-items/active/verification-efficiency-escalation.contract.json ai summary check passed: .ai/work-items/active/verification-efficiency-escalation.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "Public policy functions have docstrings and are documented in docs/reference/lightweight-verification-and-soft-gates.md."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The policy module imports only the declared repository path classifier dependency; focused tests passed."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Policy changes must remain monotonic and cache keys must bind every verification input; external Provider behavior remains out of scope."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "id": "WI-08-ISSUE-001",
+      "severity": "process",
+      "detail": "Initial Contract skeleton was not ready; completed Contract evidence before implementation."
+    },
+    {
+      "id": "WI-08-ISSUE-002",
+      "severity": "process",
+      "detail": "Preflight required confirmation because medium-risk scenarios had no pre-implementation evidence; user authorization was recorded and evidence was added after implementation."
+    },
+    {
+      "id": "WI-08-ISSUE-003",
+      "severity": "integration",
+      "detail": "Initial Make target omitted PYTHONPATH=scripts; corrected before continuing verification."
+    },
+    {
+      "id": "WI-08-ISSUE-004",
+      "severity": "integration",
+      "detail": "Full installer tests found ai_impact_classifier.py missing from the runtime catalog; added it before retrying."
+    },
+    {
+      "id": "WI-08-ISSUE-005",
+      "severity": "integration",
+      "detail": "System invariants found the new check target missing from templates/make/Makefile.ai; synchronized the installed template target."
+    },
+    {
+      "id": "WI-08-ISSUE-006",
+      "severity": "process",
+      "detail": "Template synchronization changed the Contract hash and made the earlier before_edit checkpoint stale; refreshed the checkpoint after the final Contract."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "External CI/provider scheduling and release execution remain separate evidence boundaries; local policy cannot prove those external actions.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Review monotonic Light/Standard/Strict selection and ensure high-risk domains cannot downgrade.",
+      "Review cache key completeness and fail-closed missing-input behavior.",
+      "Review DAG cycle/unknown dependency rejection and separation from external CI/provider evidence."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "676d9b0b7d1f9c72",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "676d9b0b7d1f9c72",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "External CI provider execution, release publication, and adopter environment evidence are not implemented by this local policy Work Item."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 580
+}
