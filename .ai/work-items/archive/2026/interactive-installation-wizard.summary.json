@@ -1,0 +1,437 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "interactive-installation-wizard",
+  "contractPath": ".ai/work-items/archive/2026/interactive-installation-wizard.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/interactive-installation-wizard.contract.json",
+      "reason": "Defined the bounded eight-step scope, risks, acceptance, scenarios, and verification."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/interactive-installation-wizard.summary.json",
+      "reason": "Recorded implementation, verification, and review evidence."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated governed cockpit status."
+    },
+    {
+      "path": ".ai/work-items/starts/interactive-installation-wizard.json",
+      "reason": "Recorded the Work Item start receipt."
+    },
+    {
+      "path": "scripts/ai_install_plan.py",
+      "reason": "Added the immutable eight-step operator plan model."
+    },
+    {
+      "path": "scripts/ai_installer_repository.py",
+      "reason": "Disabled optional Git locks during read-only fact collection to prevent transient maintenance-lock mutations."
+    },
+    {
+      "path": "scripts/ai_install_wizard.py",
+      "reason": "Added read-only-until-confirmed wizard orchestration and Installer delegation."
+    },
+    {
+      "path": "tests/test_install_plan.py",
+      "reason": "Tested fixed ordering and required plan fields."
+    },
+    {
+      "path": "tests/test_install_wizard.py",
+      "reason": "Tested cancellation, Dry Run read-only behavior, and post-confirmation delegation."
+    },
+    {
+      "path": "docs/architecture/interactive-installation-wizard.md",
+      "reason": "Described the public eight-step flow and write boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/interactive-installation-wizard.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/interactive-installation-wizard.contract.json",
+    "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+    "scripts/install_ai_cockpit.py",
+    "scripts/ai_installer_detection.py",
+    "scripts/ai_wizard_io.py",
+    ".ai/glossary.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/interactive-installation-wizard.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-24T23:58:56.746673+00:00",
+      "exitCode": 0,
+      "durationMs": 38,
+      "outputDigest": "5fa7d5a4d01426d67967f1957524a96cc5d2106f793b88973693d5e258d9d3c2",
+      "commandHash": "13e685e3432b3ef23c66f0d29897fae72cd62c2b656a47775cdc84d431c48012",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/interactive-installation-wizard.contract.json work item contract check passed: .ai/work-items/active/interactive-installation-wizard.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/interactive-installation-wizard.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-24T23:58:56.903903+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "d89cf499ac4ca492a4e1972956dd1eb81ac2131a90f2961b45a9b818fdb2267f",
+      "commandHash": "d63d8b185eaf15fd77ef3e4a21eac202232a65948f76f87ac6cb1468d7755d83",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/interactive-installation-wizard.contract.json scope guard passed: 7 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-24T23:58:57.112606+00:00",
+      "exitCode": 0,
+      "durationMs": 157,
+      "outputDigest": "98f1493357a959e27d083fd416143eb7dc6a2fc92138f43d11827c0de3322a7f",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/interactive-installation-wizard.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/interactive-installation-wizard.contract.json SUMMARY=.ai/work-items/active/interactive-installation-wizard.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-24T23:58:57.335077+00:00",
+      "exitCode": 0,
+      "durationMs": 172,
+      "outputDigest": "90cd741b708e5776d313d4a6b9e23da151e2d32720f4f9c3ee5805ded30579da",
+      "commandHash": "cd0330fe7334154b0d9de2ed442f2bd53faa20d50a8652fedab767181ac4fcb0",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/interactive-installation-wizard.contract.json --summary .ai/work-items/active/interactive-installation-wizard.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `interactive-installation-wizard` - Contract Hash: `32d20d00ddb52a08` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `0` - R"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/interactive-installation-wizard.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-24T23:58:57.504706+00:00",
+      "exitCode": 0,
+      "durationMs": 111,
+      "outputDigest": "49234d279e32802c05a42695dc8473b78cfeacd0b5e7407cb3ca645d8f452ab0",
+      "commandHash": "68aab31d9ab4523e75e7ccd101410b9834cf7c97ad189740dbe1f34da92ce4e9",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/interactive-installation-wizard.summary.json review policy matched 4 path(s) [review] .ai/work-items/starts/interactive-installation-wizard.json [review] scripts/ai_install_plan.py [review] scripts/ai_install_wizard.py [review] .ai/cockpit/current_status.md review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-24T23:58:57.639123+00:00",
+      "exitCode": 0,
+      "durationMs": 88,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-24T23:58:57.773292+00:00",
+      "exitCode": 0,
+      "durationMs": 86,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/interactive-installation-wizard.contract.json SUMMARY=.ai/work-items/active/interactive-installation-wizard.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-24T23:58:57.872531+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "0158fac8f5cac9c153363aebaeb7f2ae6457bb70e88137ddc8e9c6e641161895",
+      "commandHash": "8ebaa017259b4fe7164f17069c4bc424a832e5907b8f41fd955fbb7b23c97794",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/interactive-installation-wizard.contract.json --summary .ai/work-items/active/interactive-installation-wizard.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/interactive-installation-wizard.contract.json SUMMARY=.ai/work-items/active/interactive-installation-wizard.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-24T23:58:57.968387+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "af901ca851a91b81130e4f5ddcf7553b137df213f0b3c3948d6a8ca3bc0403d7",
+      "commandHash": "607d0d8592feafdd9dd4b8a69ea7b1d7d3276eef712470e0bd77f9a58f226a0c",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/interactive-installation-wizard.contract.json --summary .ai/work-items/active/interactive-installation-wizard.summary.json guidelines compliance check passed: 4 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/interactive-installation-wizard.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-24T23:58:58.198214+00:00",
+      "exitCode": 0,
+      "durationMs": 183,
+      "outputDigest": "0b36593a3d6c954ddfa74f48726cb2762a2019a6a361676365e1568dd7979e6d",
+      "commandHash": "33afeba0f649bf86d5834a21f30ca1d268e9ad061d2e55a9b7b1997fe4dd91c1",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/interactive-installation-wizard.contract.json ## Diff Ownership Preview - active_owned: `7`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/interactive-installation-wizard.json` — covered by Contract scope - [active_owned] `do"
+    },
+    {
+      "check": "projectTest",
+      "command": "make ai-cockpit-project-test",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T00:02:29.606907+00:00",
+      "exitCode": 0,
+      "durationMs": 211337,
+      "outputDigest": "83326f56c6d4872c22fa7626d53fba216d8530ef750874c21e3835d6cb8a8020",
+      "commandHash": "8634277deefb65606289f1d42db04ac71d89bf8079a95116f4dbdc9e290aad92",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 7%] ........................................................................ [ 14%] ........................................................................ [ 22%] ........................................................................ [ 29%] .........................."
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T00:06:51.253530+00:00",
+      "exitCode": 0,
+      "durationMs": 261593,
+      "outputDigest": "7163df91fb2d08742753072a8f873d4aba4931ab5a611bd8042dccd713127eb6",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "58b1c7cf265c765d82ae58db6108f6ba84b487865a68faeac59b95c0623e8ae2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 199 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 7%] ........................................................................ [ 14%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/interactive-installation-wizard.contract.json SUMMARY=.ai/work-items/active/interactive-installation-wizard.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T00:06:52.538985+00:00",
+      "exitCode": 0,
+      "durationMs": 213,
+      "outputDigest": "026718352d72a6ddac81a98adf132d784c3d78d541d4997de2a9c79c41ea5e0d",
+      "commandHash": "c817b723ac3826ca729862245571bb91515ec8ee38b711b5b4bdb2b54f32784b",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "80a7c09af4ffb32a6e14065d47cb6a663a257c3e34347ede2940fa4f6909e9b9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/interactive-installation-wizard.contract.json --summary .ai/work-items/active/interactive-installation-wizard.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/interactive-installation-wizard.contract.json SUMMARY=.ai/work-items/active/interactive-installation-wizard.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T00:06:52.760959+00:00",
+      "exitCode": 0,
+      "durationMs": 177,
+      "outputDigest": "1073b046ecfa3ceaea41b74d26140a7352decbbcda5902a2af70e0ca64d11618",
+      "commandHash": "8403e287de684d15ce5408fbb47652fd1d45a0ea02e2f7e7330d329ffe2cd814",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "80a7c09af4ffb32a6e14065d47cb6a663a257c3e34347ede2940fa4f6909e9b9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/interactive-installation-wizard.contract.json --summary .ai/work-items/active/interactive-installation-wizard.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T00:06:52.852729+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "80a7c09af4ffb32a6e14065d47cb6a663a257c3e34347ede2940fa4f6909e9b9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/interactive-installation-wizard.contract.json SUMMARY=.ai/work-items/active/interactive-installation-wizard.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T00:06:53.166740+00:00",
+      "exitCode": 0,
+      "durationMs": 242,
+      "outputDigest": "c2c8c1e27a4647080b851da78acdca5dbccad8a628ca5d2134c17f3d267674e2",
+      "commandHash": "8c58575a34fa3d005f568f6cb8e7f4e560b2d353b969d3eb19a14fb40b4ebee4",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "80a7c09af4ffb32a6e14065d47cb6a663a257c3e34347ede2940fa4f6909e9b9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/interactive-installation-wizard.contract.json --summary .ai/work-items/active/interactive-installation-wizard.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/interactive-installation-wizard.summary.json CONTRACT=.ai/work-items/active/interactive-installation-wizard.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T00:06:53.878115+00:00",
+      "exitCode": 0,
+      "durationMs": 88,
+      "outputDigest": "959c7fca1bcdbe456875adb884e7ed2be66bf5f48cb7992b058ef233e83aff76",
+      "commandHash": "fc5276bb4ab270571f5c9c0ad4435bf2f93b7564db08237ad23c817ed1145d80",
+      "contractHash": "3bd8ab883f81dda968c8c1939fba39ccdf5ac04949313bb1efb30796daddc6e7",
+      "commitSha": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+      "executionContractPath": ".ai/work-items/active/interactive-installation-wizard.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/interactive-installation-wizard.summary.json",
+      "worktreeDigest": "c35896cd88ed9120a31ed77042c1be19dd4b711e9a5ba19069640f5edc443621",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/interactive-installation-wizard.summary.json --contract .ai/work-items/active/interactive-installation-wizard.contract.json ai summary check passed: .ai/work-items/active/interactive-installation-wizard.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Reuse the existing installer transaction after confirmation; do not duplicate transaction, branch, rollback, or Work Item creation logic.",
+      "compliant": true,
+      "evidence": "ai_install_wizard._default_installer_factory constructs install_ai_cockpit.Installer; tests/test_install_wizard.py verifies delegation."
+    },
+    {
+      "guideline": "Do not write to the target repository before explicit final confirmation; transient recovery may use only a system temp directory.",
+      "compliant": true,
+      "evidence": "run_wizard renders detection and the complete plan before confirm; cancellation and Dry Run tests assert an empty target."
+    },
+    {
+      "guideline": "Use standard-library APIs and injectable argument lists so scripted and non-TTY tests are deterministic.",
+      "compliant": true,
+      "evidence": "The implementation uses standard-library dataclasses/Path and injects input_fn, output, is_tty, and installer_factory; focused tests pass."
+    },
+    {
+      "guideline": "Document public APIs and keep the wizard limited to this Work Item's eight-step orchestration.",
+      "compliant": true,
+      "evidence": "Public functions/classes have docstrings and docs/architecture/interactive-installation-wizard.md records the eight-step boundary."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The existing Installer remains the transaction owner; future entrypoint routing and calibration behavior are explicitly out of scope."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Repository-specific stack signals may be incomplete for unusual project layouts; the wizard reports detected signals and stops on readiness blockers.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "no target writes before confirmation",
+      "exact eight-step ordering",
+      "delegation to existing Installer"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "wizard CLI entry point added; entrypoint routing is out of scope",
+    "userVisibleOutput": "eight-step accessible text output and explicit write boundary",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "32d20d00ddb52a08",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 17,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "32d20d00ddb52a08",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 17,
+      "requiredChecksPassed": 8
+    }
+  ],
+  "knownGaps": [
+    "The plan deliberately leaves install.sh routing and calibration behavior to later Work Items."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 552
+}
