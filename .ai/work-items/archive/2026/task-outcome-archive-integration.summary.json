@@ -1,0 +1,393 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "task-outcome-archive-integration",
+  "contractPath": ".ai/work-items/archive/2026/task-outcome-archive-integration.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/task-outcome-archive-integration.contract.json",
+      "reason": "Declared the transactional active/archive Outcome lifecycle boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/task-outcome-archive-integration.summary.json",
+      "reason": "Records archive integration implementation and verification evidence."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Moves optional Outcome JSON, Markdown, and append-only event artifacts atomically and binds them in the archive manifest."
+    },
+    {
+      "path": "tests/test_ai_archive_work_item.py",
+      "reason": "Covers stable artifact naming and manifest digest binding."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Covers complete archive moves, Summary path rewriting, manifest evidence, and compatibility behavior."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/task-outcome-archive-integration.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_generate_task_outcome.py",
+    "scripts/ai_render_task_outcome.py",
+    "scripts/ai_task_event_log.py",
+    "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+    ".ai/glossary.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T05:58:37.873548+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "417000a35edb5d753ce32a2569c1b28ca543f7f749a8b318215e0535e429f77d",
+      "commandHash": "5c26a40f40e80f647386d28f23bc5304dabd4d33e11e3a39a03d66ef0a966674",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6f6615338740b6ab9568cd01e4426034da5745d836130c6dc661009a98f0e1af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/task-outcome-archive-integration.contract.json work item contract check passed: .ai/work-items/active/task-outcome-archive-integration.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T05:58:38.021894+00:00",
+      "exitCode": 0,
+      "durationMs": 97,
+      "outputDigest": "8267d4ca06ca4ad5b42a935bf18eb28970e3a0cd77c240ae9c98b9fc20a8084f",
+      "commandHash": "b654244f542f78d891cde991d62c46005157ac567ed6372747cba528ce904ed8",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6f6615338740b6ab9568cd01e4426034da5745d836130c6dc661009a98f0e1af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/task-outcome-archive-integration.contract.json scope guard passed: 5 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T05:58:38.180135+00:00",
+      "exitCode": 0,
+      "durationMs": 106,
+      "outputDigest": "6bd64be1cf8b5a4f359712bec6c9147cc4e87e8d2df7118e2bd727d07c6c8702",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6f6615338740b6ab9568cd01e4426034da5745d836130c6dc661009a98f0e1af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/task-outcome-archive-integration.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/task-outcome-archive-integration.contract.json SUMMARY=.ai/work-items/active/task-outcome-archive-integration.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T05:58:38.600507+00:00",
+      "exitCode": 0,
+      "durationMs": 179,
+      "outputDigest": "d36d2b66e5c2e71b7e106e5b7906e5528cb05dc8e312d2b20ef0daf5243f7eb3",
+      "commandHash": "42c5767db432dc20e8c0c55100dcc933309314f63cc523618101b6001f5a19c8",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6f6615338740b6ab9568cd01e4426034da5745d836130c6dc661009a98f0e1af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/task-outcome-archive-integration.contract.json --summary .ai/work-items/active/task-outcome-archive-integration.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `task-outcome-archive-integration` - Contract Hash: `9956605a40235129` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T05:58:38.765290+00:00",
+      "exitCode": 0,
+      "durationMs": 106,
+      "outputDigest": "afe5329bccd8c21c26b831f068b9f0c0824514eb47f022450b27ee4b5d6eda7d",
+      "commandHash": "ef933d53122cc949a817869670808b8f4287cebf3ef806d3f2ad91fc75324118",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6f6615338740b6ab9568cd01e4426034da5745d836130c6dc661009a98f0e1af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/task-outcome-archive-integration.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/task-outcome-archive-integration.json [review] .ai/cockpit/current_status.md [review] scripts/ai_archive_work_item.py review focus recorded: 1 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T05:58:38.905413+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6f6615338740b6ab9568cd01e4426034da5745d836130c6dc661009a98f0e1af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T05:58:39.191057+00:00",
+      "exitCode": 0,
+      "durationMs": 105,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6f6615338740b6ab9568cd01e4426034da5745d836130c6dc661009a98f0e1af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/task-outcome-archive-integration.contract.json SUMMARY=.ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T05:58:39.295624+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "abf302038a7514f145614b2bdae8a97163fce526ee71a1d94804288b5e71a677",
+      "commandHash": "231b0f18350da240ba617341624bf912558a83beb0de82fadd64d0b6578834e9",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6f6615338740b6ab9568cd01e4426034da5745d836130c6dc661009a98f0e1af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/task-outcome-archive-integration.contract.json --summary .ai/work-items/active/task-outcome-archive-integration.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/task-outcome-archive-integration.contract.json SUMMARY=.ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T05:58:39.400871+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "0d3a5e5cf9947f1eb36c151c5022c22bfd11b96e53e6e33219d0146600763956",
+      "commandHash": "325aa0a32bad095ea33a8996fe7c64eb591ad08a02bd88465fc92407a61877f0",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6f6615338740b6ab9568cd01e4426034da5745d836130c6dc661009a98f0e1af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/task-outcome-archive-integration.contract.json --summary .ai/work-items/active/task-outcome-archive-integration.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T05:58:39.654324+00:00",
+      "exitCode": 0,
+      "durationMs": 200,
+      "outputDigest": "456fec76f31e1a25e162f47525dca32559426cf5cc4071e68f75033c5dfb354d",
+      "commandHash": "8c188adedb563af142e1d5a6af0a2ada643bf27089909106fdf9f113f28b2cf8",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6f6615338740b6ab9568cd01e4426034da5745d836130c6dc661009a98f0e1af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/task-outcome-archive-integration.contract.json ## Diff Ownership Preview - active_owned: `5`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/task-outcome-archive-integration.json` — covered by Contract scope - [active_owned] `"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T06:02:56.317841+00:00",
+      "exitCode": 0,
+      "durationMs": 256601,
+      "outputDigest": "15cf42565c300fafa06b6432e6cf26fd9ea30d04bd116ea2cdd093e58d810d3d",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6f6615338740b6ab9568cd01e4426034da5745d836130c6dc661009a98f0e1af",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 213 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 6%] ........................................................................ [ 13%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/task-outcome-archive-integration.contract.json SUMMARY=.ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T06:02:57.746648+00:00",
+      "exitCode": 0,
+      "durationMs": 182,
+      "outputDigest": "09e80fc16f830602f0a2798169d9c0241db9f22a81d752a945e47b5a76072dd2",
+      "commandHash": "f2ee759746b013954dedefb197f4c50770cb9f34b8c73bf81e7efba0dcfe840d",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6a0562eea6c2c6f14d9acc3ce3f750775bc80c8b6303a5c57baaee69ba40cc02",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/task-outcome-archive-integration.contract.json --summary .ai/work-items/active/task-outcome-archive-integration.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/task-outcome-archive-integration.contract.json SUMMARY=.ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T06:02:57.984852+00:00",
+      "exitCode": 0,
+      "durationMs": 189,
+      "outputDigest": "9892eb9f4cadec55adddc4383b15e38d6f79a0dd4de5137a3df6a8de258f8b49",
+      "commandHash": "00d8ceb8cb9243e616d4587fb51b5bb17c95594b6e54a9843ae7695e178119b9",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6a0562eea6c2c6f14d9acc3ce3f750775bc80c8b6303a5c57baaee69ba40cc02",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/task-outcome-archive-integration.contract.json --summary .ai/work-items/active/task-outcome-archive-integration.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T06:02:58.071024+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6a0562eea6c2c6f14d9acc3ce3f750775bc80c8b6303a5c57baaee69ba40cc02",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/task-outcome-archive-integration.contract.json SUMMARY=.ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T06:02:58.388240+00:00",
+      "exitCode": 0,
+      "durationMs": 78,
+      "outputDigest": "3e6247144954a7d5654e5b899b8849162d957642993e4ff46fca20307e4d5ef1",
+      "commandHash": "3c0c6dcf5e03801eea993a82b6d5af683b6c7e197f196e47719d1ce79bf8c7f5",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "6a0562eea6c2c6f14d9acc3ce3f750775bc80c8b6303a5c57baaee69ba40cc02",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/task-outcome-archive-integration.contract.json --summary .ai/work-items/active/task-outcome-archive-integration.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/task-outcome-archive-integration.summary.json CONTRACT=.ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T06:02:59.285398+00:00",
+      "exitCode": 0,
+      "durationMs": 87,
+      "outputDigest": "62b000697143831614ad69aad8ed9fe5442b0963cb93118825eefdc0b14efd11",
+      "commandHash": "154747b162e2b64cea35a26d262968644eb61062cf027739c8434bd1926f295c",
+      "contractHash": "9956605a4023512948e7180c20e9c5d6e4660587cde56c9da5a9e2d5ad8ae166",
+      "commitSha": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+      "executionContractPath": ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+      "worktreeDigest": "ddf5e6c447637201d850bba0d69cdde150327c0ee5a9b0e67185033899cc84c2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/task-outcome-archive-integration.summary.json --contract .ai/work-items/active/task-outcome-archive-integration.contract.json ai summary check passed: .ai/work-items/active/task-outcome-archive-integration.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "outcome_artifact_paths has a docstring and archive behavior is covered by focused tests."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The archive module uses file paths and stable data boundaries; it does not import generator or validator internals."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Optional Outcome artifacts now share the existing transactional archive and rollback boundary."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "provenance",
+      "detail": "Archive binds artifact paths and digests when artifacts exist; it does not reconstruct missing Outcome evidence.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Verify atomic movement and manifest binding of Outcome/event artifacts."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "9956605a40235129",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "9956605a40235129",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "Archived Work Items without active Outcome artifacts remain valid legacy pairs and do not gain manufactured reports."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 566
+}

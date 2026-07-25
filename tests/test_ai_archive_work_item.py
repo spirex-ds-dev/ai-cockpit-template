@@ -91,6 +91,15 @@ def test_archive_moves_task_owned_success_criteria_sibling(tmp_path):
     )
 
 
+def test_outcome_artifact_paths_are_stable_and_ordered(tmp_path):
+    contract = tmp_path / "task.contract.json"
+    assert [path.name for path in ai_archive_work_item.outcome_artifact_paths(contract)] == [
+        "task.outcome.json",
+        "task.outcome.md",
+        "task.events.jsonl",
+    ]
+
+
 def test_next_archive_sequence_prefers_existing_index(tmp_path, monkeypatch):
     archive = tmp_path / "archive"
     archive.mkdir()
@@ -127,6 +136,24 @@ def test_archive_manifest_is_stable_and_excludes_generated_status(tmp_path, monk
     assert (
         manifest["summarySha256"] == __import__("hashlib").sha256(summary.read_bytes()).hexdigest()
     )
+
+
+def test_archive_manifest_binds_outcome_artifact_digests(tmp_path, monkeypatch):
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    contract = tmp_path / "task.contract.json"
+    summary = tmp_path / "task.summary.json"
+    outcome = tmp_path / "task.outcome.json"
+    contract.write_text(json.dumps({"workItemId": "task"}), encoding="utf-8")
+    summary.write_text(json.dumps({"workItemId": "task"}), encoding="utf-8")
+    outcome.write_text("{}\n", encoding="utf-8")
+    manifest = ai_archive_work_item._archive_manifest(
+        contract_target=contract,
+        summary_target=summary,
+        archive_sequence=8,
+        outcome_targets=[outcome],
+    )
+    assert manifest["outcomeArtifacts"][0]["path"] == "task.outcome.json"
+    assert len(manifest["outcomeArtifacts"][0]["sha256"]) == 64
 
 
 def test_current_worktree_digest_excludes_self_referential_summary(monkeypatch):

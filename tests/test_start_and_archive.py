@@ -513,6 +513,9 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     summary = active / "task.summary.json"
     review = active / "task.review.json"
     success = active / "task.success.json"
+    outcome = active / "task.outcome.json"
+    markdown = active / "task.outcome.md"
+    events = active / "task.events.jsonl"
     contract.write_text(json.dumps(archive_contract("code")), encoding="utf-8")
     summary.write_text(json.dumps(archive_summary()), encoding="utf-8")
     review.write_text(json.dumps({"workItemId": "task", "result": "ok"}), encoding="utf-8")
@@ -532,6 +535,9 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
         ),
         encoding="utf-8",
     )
+    outcome.write_text('{"workItemId":"task"}\n', encoding="utf-8")
+    markdown.write_text("# Task Outcome: task\n", encoding="utf-8")
+    events.write_text('{"eventType":"completed"}\n', encoding="utf-8")
     monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_archive_work_item, "ARCHIVE_BASE_DIR", archive)
     monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
@@ -551,6 +557,12 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     assert ai_archive_work_item.main() == 0
     archived_summary = next(archive.glob("*/task.summary.json"))
     assert next(archive.glob("*/task.success.json")).exists()
+    assert (
+        next(archive.glob("*/task.outcome.json")).read_text(encoding="utf-8")
+        == '{"workItemId":"task"}\n'
+    )
+    assert next(archive.glob("*/task.outcome.md")).exists()
+    assert next(archive.glob("*/task.events.jsonl")).exists()
     data = json.loads(archived_summary.read_text(encoding="utf-8"))
     assert data["archiveSequence"] == 1
     assert "/active/" not in data["contractPath"]
@@ -559,6 +571,7 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
         for item in data["changedFiles"]
     )
     assert any(item["path"].endswith("task.review.json") for item in data["changedFiles"])
+    assert any(item["path"].endswith("task.outcome.json") for item in data["changedFiles"])
     assert any(item["path"] == ".ai/cockpit/current_status.md" for item in data["changedFiles"])
     index = json.loads((archive / "index.json").read_text(encoding="utf-8"))
     assert index["entries"][0]["summaryPath"].endswith("task.summary.json")
@@ -568,6 +581,11 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     manifest_data = json.loads(manifest.read_text(encoding="utf-8"))
     assert manifest_data["format"] == "ai-cockpit-archive-manifest"
     assert manifest_data["generatedStatusExcluded"] is True
+    assert {item["path"].split("/")[-1] for item in manifest_data["outcomeArtifacts"]} == {
+        "task.outcome.json",
+        "task.outcome.md",
+        "task.events.jsonl",
+    }
     assert len(index["entries"][0]["manifestSha256"]) == 64
     assert index["entries"][0]["manifestPath"].endswith("task.archive-manifest.json")
 

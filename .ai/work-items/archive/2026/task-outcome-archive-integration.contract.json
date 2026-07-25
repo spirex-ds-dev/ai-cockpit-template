@@ -1,0 +1,165 @@
+{
+  "contractVersion": 2,
+  "workItemId": "task-outcome-archive-integration",
+  "mode": "code",
+  "title": "Integrate Task Outcome active and archive lifecycle",
+  "rawUserRequest": "Implement Work Item 19 from the execution plan: make Task Outcome JSON, Markdown, and append-only event artifacts participate in active/archive lifecycle moves, path rewriting, manifest integrity, rollback, and archive discovery without copying full Outcome content into Cockpit Status.",
+  "rawRequestSource": {"type": "human", "reference": "user-request:serial-plan-execution-2026-07-25", "capturedAt": "2026-07-25", "digest": "sha256:interactive-installation-calibration-wizard-plan"},
+  "declaredIntent": {"summary": "Integrate Task Outcome artifacts into active/archive lifecycle handling.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "baseCommit": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/task-outcome-archive-integration.contract.json",
+    ".ai/work-items/active/task-outcome-archive-integration.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_archive_work_item.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_start_and_archive.py"
+  ],
+  "outOfScope": ["Outcome generator, validator, renderer, ai-finish ordering, PR summary, multilingual rendering, documentation, release publication, and historical archive rewrites."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+      "reason": "Plan defines active/archive Outcome artifact locations and reconstruction boundary."
+    },
+    {"path": "scripts/ai_archive_work_item.py", "reason": "Existing transactional archive move, manifest, index, and rollback implementation."},
+    {"path": "scripts/ai_generate_task_outcome.py", "reason": "Defines active Outcome artifact naming and derived Markdown relationship."},
+    {"path": "scripts/ai_render_task_outcome.py", "reason": "Defines Markdown as a derived artifact."},
+    {"path": "scripts/ai_task_event_log.py", "reason": "Defines append-only event artifact naming and preservation boundary."},
+    {"path": ".ai/glossary.md", "reason": "Repository archive and evidence terminology."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["lifecycle_order", "evidence_integrity"],
+    "reason": "The change is bounded to transactional archive moves and must preserve Outcome evidence and rollback semantics."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Artifact paths, transaction boundary, rollback behavior, and verification scope are explicit."
+  },
+  "preReviewWarnings": [
+    "Review that Outcome and event artifacts move atomically, are bound in archive evidence, and restore on failure."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Archive moves existing active Outcome JSON, derived Markdown, and append-only event log artifacts to matching archive paths in the same transaction as Contract and Summary.",
+    "Archive Summary path rewriting and immutable manifest/index evidence include moved Outcome and event artifacts without changing generated no-active Status semantics.",
+    "Any collision, status regeneration, manifest, or index failure rolls back all moved Outcome and lifecycle artifacts and restores active Status.",
+    "Focused tests cover complete artifact moves, empty/no-artifact compatibility, path and digest evidence, rollback, and archive discovery."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "WI18 can produce active Task Outcome artifacts, but archive currently moves only Contract/Summary siblings, leaving report and event evidence detached from the immutable Work Item record.",
+    "constraints": ["Keep archive mutation transactional and fail closed.", "Do not rewrite historical archives or copy full Outcome content into Cockpit Status.", "Preserve append-only event files byte-for-byte while moving them."],
+    "rationale": "Extending the existing archive transaction gives Outcome evidence the same lifecycle and rollback guarantees as Contract and Summary."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "No restricted governance policy path is expected to change."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 578
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/task-outcome-archive-integration.json",
+    "baseCommit": "e532fb29bb3ecb7ee1e1da2378742db798b5c38e",
+    "initialScopeDigest": "31bedc2e924188a9c0a96ac27fae627b583071ee13570145a69c81678120df3b",
+    "contractSkeletonDigest": "b111e370966cb1455270f9b22671b4cff4f40608ba314523ff74dcb22427241d"
+  }
+}
