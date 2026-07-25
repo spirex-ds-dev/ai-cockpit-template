@@ -277,9 +277,9 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 - 用户已经授权：本次计划文档的收查、确认、总结、工单拆解、PR/清理流程设计、问题记录机制和文档对齐机制。
 - 用户尚未授权：开始 WI-01 及之后的整改实现、创建后续实现分支/PR、发布版本、清理历史计划。以上动作必须等待用户对本计划内容的确认和后续指示。
 
-### 当前停点
+### 当前执行状态
 
-本 Work Item 只完成：读取指示、读取仓库治理规则、盘点现有计划/starts、建立计划 Contract、编写本主执行计划。下一步需要用户确认本计划的工单拆分、顺序、授权边界和全生命周期要求；在收到确认及继续指示前，停止，不执行 WI-01。
+用户已明确授权继续执行当前计划的全部工单，并要求遇到流程问题时先记录、修正流程再继续。因此本计划不在计划文档完成后停留；当前计划工单的 PR、合并、归档、关闭、分支清理和 base 同步完成后，按 WI-01 至 WI-17 串行执行，直到全部工单完成。
 
 ### 本计划工单已发现的问题
 
@@ -287,3 +287,4 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 - `PLAN-002`（质量/发布证据，待后续工单处理）：本计划工单运行 `make quality` 时，pytest 1058 passed、coverage 85.04%、ruff/mypy/bandit/文档/系统不变量等检查通过，但 `check-release-evidence` 的 release supply-chain 检查发现 1 个问题，导致 `make quality` 退出码 2。该问题属于发布证据域，应在 WI-16 或其明确的前置 corrective Work Item 中按流程处理；本计划不绕过或修复它。
 - 现有 governance complexity 与 archive growth 仅报告 warning（当前 archive growth 超过 policy warning 阈值），不在本计划工单中擅自抬高阈值；应由后续相关 Work Item 按预算/偿还规则处理。
 - `PLAN-003`（流程/发布证据边界）：诊断 `check_supply_chain.py release` 时发现 `--write` 可以直接改写 `.ai/cockpit/release-digests.json` 并使检查通过，但该文件属于发布证据，不能在计划文档工单中更新。诊断性改写已恢复；后续必须由 WI-16 或明确的 corrective Work Item 按 source-bound 发布流程生成。
+- `PLAN-004`（流程/候选发布证据校验，高）：PR 的 Python 兼容矩阵在所有平台重复失败，根因是候选 `release-digests.json` 的 `origin/main` 身份被按已发布标签提交进行严格比较。已在当前计划 PR 中修正候选基线校验：候选阶段只校验稳定发布契约和非身份制品，发布阶段由 `release-assets` 做精确 source-bound 校验，并补充回归测试；该修正完成后才允许合并当前 PR。

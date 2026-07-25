@@ -11,10 +11,12 @@
     ".ai/cockpit/current_status.md",
     ".ai/work-items/starts/ai-cockpit-comprehensive-remediation-plan.json",
     "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "scripts/check_supply_chain.py",
+    "tests/test_supply_chain.py",
     ".ai/work-items/archive/2026/ai-cockpit-comprehensive-remediation-plan.archive-manifest.json"
   ],
   "outOfScope": [
-    "所有整改工单的生产代码、测试、CI、发布资产和产品文档实现",
+    "除本工单发现的候选发布证据校验流程纠偏外，所有整改工单的生产代码、测试、CI、发布资产和产品文档实现",
     "创建或合并本计划列出的后续工单 PR",
     "发布新版本或删除历史计划/归档证据"
   ],
@@ -92,11 +94,12 @@
     "The plan ends with the Work Item for publishing a new version followed by the Work Item for cleaning execution-plan documents.",
     "Every listed Work Item has a complete lifecycle: latest base, dedicated branch, Contract, preflight, implementation, verification, ai-finish/archive, push, PR, merge, ai-close-work-item, branch cleanup, base synchronization, and documentation alignment.",
     "The plan requires issue recording, process-first correction, evidence-backed acceptance, and a stop after plan authoring for user confirmation.",
+    "The candidate release-evidence comparison process is corrected with regression coverage when the plan PR exposes its pre-existing identity-boundary defect.",
     "Required AI Cockpit checks and document validation are run for this plan Work Item."
   ],
   "guidelines": [
-    "Do not execute any remediation Work Item before the user confirms this plan.",
-    "Do not claim implementation, PR merge, release, or cleanup completion from this plan-authoring Work Item.",
+    "Do not execute a remediation Work Item before the user confirms this plan; the user has now explicitly authorized full serial execution.",
+    "Do not claim remediation implementation, release, or cleanup completion from this plan Work Item; the candidate release-evidence process correction is limited to removing a PR-blocking false failure and its regression test.",
     "Preserve historical evidence; execution-plan cleanup is a separately authorized final Work Item."
   ],
   "intent": {

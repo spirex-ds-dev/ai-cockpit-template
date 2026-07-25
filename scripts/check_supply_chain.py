@@ -539,10 +539,17 @@ def compare_or_write(path: Path, data: dict[str, Any], *, write: bool) -> list[s
         current.pop("sbomDigest", None)
         expected.pop("sbomDigest", None)
     elif path == RELEASE_DIGESTS_BASELINE:
+        # The committed manifest is a candidate baseline. Its source identity
+        # is intentionally symbolic (for example origin/main) until the
+        # immutable release finalizer binds the tag and metadata to one
+        # concrete commit. Candidate CI must therefore validate the stable
+        # release contract and artifact inputs here; release-assets performs
+        # the exact identity and generated-artifact check after publication.
         current.pop("sourceCommit", None)
-        for field in ("tagTarget", "metadataCommit"):
-            current[field] = resolve_candidate_identity(current.get(field))
         expected.pop("sourceCommit", None)
+        for payload in (current, expected):
+            payload.pop("tagTarget", None)
+            payload.pop("metadataCommit", None)
         # The committed candidate manifest is necessarily created before its
         # immutable release commit exists.  SBOM/provenance identities (and
         # their manifest hashes) therefore change with each candidate commit;
