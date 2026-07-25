@@ -219,6 +219,10 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 **范围：** 在不扩大产品边界的前提下拆分大型脚本到 domain/lifecycle/evidence/policy/installation/calibration/reporting/providers/rendering/cli；CLI 只保留解析、服务调用、输出和退出码；强化 Ruff/mypy/subprocess/path/encoding/symlink/temp-file 规则；补齐测试层次。
 
+**当前执行边界：** 本工单先交付可执行的质量架构检查器、危险输入负例回归、测试层次矩阵和 checks catalog 对齐；不把一次性重写全部大型脚本误记为已完成，后续模块化仍需以证据驱动的独立工单承接。
+
+**流程问题记录：** WI-12 初始合同补全后，预检对“尚未实现的必需场景”只提供 `needs_human_confirmation`，且选项没有“已获授权、先实现再闭合场景证据”的路径。用户已明确授权继续；已记录该问题并保留预检/决策证据，随后在不绕过其他治理检查的前提下继续本工单，完成后将场景状态更新为真实验证结果。
+
 **验收：** 领域模块边界清晰、类型/静态检查通过、危险 shell 与可变默认值受控；Unit、Schema、State Machine、Property、Transaction、Installer Integration、Adopter Fixture、Hosted Smoke、Security Regression、Prompt Injection、Absurd、Release、Documentation 测试均按适用性落地；负例优先。
 
 **必须验证：** focused/full 项目检查、覆盖率/安全/安装/发布回归；完成后对齐架构文档、checks catalog 与测试矩阵。

@@ -24,6 +24,7 @@ AI_PREFLIGHT_VALIDATE_CONTRACT ?= true
 	check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning \
 	check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence \
 	check-lockfile-reproducibility \
+	check-quality-architecture \
 	check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence \
 	ai-start ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	ai-verify-focused ai-verify-full \
@@ -100,6 +101,9 @@ help:
 project-format-check:
 	$(AI_PYTHON) -m ruff format --check scripts tests
 	git diff --check
+
+check-quality-architecture:
+	$(AI_PYTHON) scripts/ai_quality_architecture.py
 
 project-test:
 	$(AI_PYTHON) -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85
