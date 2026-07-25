@@ -121,6 +121,8 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **必须验证：** 指示中的真实安装矩阵、dry-run mutation snapshot、权限/换行、interrupt/rollback/lock/symlink/path traversal 测试。完成后对齐安装与校准文档。
 
+**WI-03 当前实现边界：** Source Mode 分类与事务原语位于 `scripts/ai_installer_transaction.py`，安装器接入位于 `scripts/install_ai_cockpit.py`；Source Mode、write-plan、锁、路径穿越和未知 source 负例位于 `tests/test_installer_transaction.py`，现有安装事实/计划/边界测试继续作为回归套件。WI-03 不承担 WI-04 的对象工程校准、生产就绪或发布身份声明；dirty local source 必须保持为本地模式，不得冒充已验证 release。
+
 ### WI-04：Adoption, Calibration and Adopter Evidence
 
 **范围：** 保持 Runtime Installation → Adoption → Project Calibration → Pilot Work Item → Gate Promotion；改造问卷、默认值条件、Unknown 分类和 Not Applicable 理由；建立 Python/TypeScript/Node/Flutter/Android/Swift/Xcode/CocoaPods、GitHub/GitLab、非标准 remote/branch、detached/shallow/dirty、macOS/Linux/WSL 的证据矩阵。

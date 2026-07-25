@@ -27,7 +27,13 @@ from ai_installer_detection import InstallationDetection, collect_installation_d
 from ai_installer_evidence import action_counts
 from ai_installer_ownership import is_project_owned
 from ai_installer_repository import clean_git_environment, git_records, git_target_args, run_git
-from ai_installer_transaction import TransactionAction
+from ai_installer_transaction import (
+    InstallerLock,
+    SourceMode,
+    TransactionAction,
+    WritePlan,
+    classify_source,
+)
 from ai_installer_upgrade import release_semver as installer_release_semver
 
 CATALOG_NAME = "ai_installer_catalog.json"
@@ -211,10 +217,19 @@ class Installer:
         self.original_git_head: GitHeadSnapshot | None = None
         self.upgrade_conflicts: list[dict[str, str]] = []
         self.upgrade_conflict_report: dict[str, object] | None = None
+        self.source_classification = classify_source(self.source)
+        self.write_plan = WritePlan([])
+        self.lock = InstallerLock(self.target / ".ai" / "cockpit" / ".install.lock")
 
     def install(self) -> int:
         if not self.source.exists():
             print(f"ERROR: source template does not exist: {self.source}", file=sys.stderr)
+            return 2
+        if self.source_classification.mode is SourceMode.UNKNOWN_SOURCE:
+            print(
+                "ERROR: refusing unknown installer source: " + self.source_classification.reason,
+                file=sys.stderr,
+            )
             return 2
         if self.stack not in STACKS:
             print(
@@ -250,6 +265,12 @@ class Installer:
             return 2
         if self.upgrade and not self.prepare_upgrade_branch():
             return 2
+        if not self.dry_run:
+            try:
+                self.lock.acquire()
+            except RuntimeError as exc:
+                print(f"ERROR: installation failed before writing: {exc}", file=sys.stderr)
+                return 2
         if self.target.exists():
             self.preexisting_dirs = {
                 self.target,
@@ -298,9 +319,11 @@ class Installer:
                         json.dumps(self.upgrade_conflict_report, indent=2) + "\n",
                         encoding="utf-8",
                     )
+                self.lock.release()
             print(f"ERROR: installation failed: {exc}", file=sys.stderr)
             return 2
 
+        self.lock.release()
         self.print_summary()
         return 0
 
@@ -1329,6 +1352,8 @@ class Installer:
         return result
 
     def record(self, kind: str, path: Path, detail: str) -> None:
+        self.write_plan.add(Action(kind, path, detail))
+        self.write_plan.validate(self.target)
         self.actions.append(Action(kind, path, detail))
         print(
             f"{kind}: {path.relative_to(self.target) if path.is_relative_to(self.target) else path} - {detail}"
@@ -1504,6 +1529,8 @@ class Installer:
             relative = path.relative_to(self.target)
         except ValueError as exc:
             raise RuntimeError(f"refusing destination outside target: {path}") from exc
+        if path.is_absolute() and any(component == ".." for component in relative.parts):
+            raise RuntimeError(f"refusing destination path traversal: {path}")
         current = self.target
         for component in relative.parts:
             current /= component
