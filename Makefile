@@ -212,6 +212,9 @@ cockpit-doctor:
 cockpit-calibrate:
 	$(AI_PYTHON) scripts/ai_calibrate.py generate --root .
 
+cockpit-calibration-wizard:
+	$(AI_PYTHON) scripts/ai_calibration_wizard.py --root . $(ARGS)
+
 cockpit-calibration-inventory:
 	$(AI_PYTHON) scripts/ai_calibration_inventory.py --root . $(ARGS)
 
