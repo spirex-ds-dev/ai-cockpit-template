@@ -154,6 +154,11 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 **WI-06 当前实现边界：** `scripts/ai_capability_truth.py` 提供离线、确定性的 Capability Truth 行证据绑定、digest/stale 降级和 L1-L4 荒诞案例安全评估；`tests/test_absurd_capability_truth.py` 与 `tests/test_capability_truth_matrix.py` 覆盖能力、证据、完成、语义、世界事实、权限边界、不可用 API/工具链和恢复替代路径。该边界不声明通用幻觉防御、真实生产操作或对象工程已完成。
 
+**WI-07 当前实现边界：** `scripts/ai_work_item_state.py` 提供离线、确定性的 canonical transition、证据 digest 门禁、稳定事件 ID、幂等 no-op 和 paused/stale recovery；`tests/test_work_item_state_machine.py` 覆盖非法顺序、缺失/过期/矛盾/远端不一致证据、重复事件、中断恢复和状态未知。该边界不实现 Provider 身份/审批、外部 API 变更或发布/安装行为。
+
+**WI-07 流程问题记录：** `WI-07-ISSUE-001`：coverage policy 初次插入位置/缩进错误，导致新生产脚本未被测试关联；已先修正 association 并通过 coverage guard。`WI-07-ISSUE-002`：新参考文档初次缺少仓库要求的 author 元数据；已补齐并通过文档元数据检查。两项均已解决后才继续工单。
+追加记录：`WI-07-ISSUE-003`：ai-start 后仍在 main，ai-finish 正确阻止；已创建专用 `codex/lifecycle-state-recovery` 分支后继续。`WI-07-ISSUE-004`：Contract 最终化晚于 before_edit checkpoint，导致 Agent Risk stale；已在最终 Contract 后刷新 checkpoint 再继续。
+
 ### WI-07：Work Item State Machine and Recovery
 
 **范围：** 固化 `created → preflight_ready → implementation_active → verification_pending → finish_ready → archived → pushed → pr_open → merged → close_authorized → closed` 及 paused/blocked/cancelled/rollback/stale；为每个转移记录前置、证据、事件、角色、恢复性和可逆性；实现并发和崩溃恢复。
