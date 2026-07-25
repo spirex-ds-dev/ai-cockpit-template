@@ -14,6 +14,13 @@ keywords:
 
 Use this page when installation or adoption fails and you need a direct recovery path.
 
+## Wizard recovery
+
+- If the Installation Wizard detects a dirty worktree, missing remote/default branch, or a managed conflict, stop and resolve that repository condition before confirming. Dry Run is safe for inspecting the plan.
+- If the Calibration Wizard shows `Unknown` or `stale`, do not confirm around it. Record the missing fact, revalidate the affected stage, and rerun the self-check or simulation.
+- If input ends with EOF or Ctrl+C, resume with `make cockpit-calibration-wizard`; the persisted Session is not treated as activated. A failed activation preserves the previous Active configuration.
+- If a mobile command is unavailable, verify the repository's own Gradle Wrapper/Xcode/CocoaPods setup and JDK requirement. The template does not install or switch external toolchains.
+
 ## Common Failures
 
 - `./gradlew` fails before any AI Cockpit check runs: first identify the project type. For a Java project, use the JDK required by its Gradle Wrapper; Java compatibility CI uses 21. For Android, use the JDK required by the Wrapper/AGP combination; the Android smoke uses 17. Then verify `./gradlew` itself before debugging Cockpit commands. AI Cockpit does not install or switch JDK versions.

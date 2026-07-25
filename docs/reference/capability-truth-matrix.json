@@ -31,6 +31,20 @@
       "verification": ["tests/test_calibration_session.py", "tests/test_project_governance_journey.py"]
     },
     {
+      "id": "interactive_installation_wizard",
+      "status": "implemented",
+      "claim": "The template provides a confirmation-gated Installation Wizard for repository detection, New Adoption, Upgrade, Dry Run, and mobile or mixed-stack planning; it does not commit, push, create a PR, or merge.",
+      "evidence": ["install.sh", "scripts/ai_install_wizard.py", "scripts/ai_install_plan.py", "docs/getting-started/installation.md"],
+      "verification": ["tests/test_install_wizard.py", "tests/test_install_plan.py", "tests/test_wizard_fixtures.py"]
+    },
+    {
+      "id": "interactive_calibration_wizard",
+      "status": "implemented",
+      "claim": "The template provides a resumable Calibration Wizard adapter over the ten-stage persisted Session with blocking Unknown and stale evidence, separate human confirmations, and atomic Candidate activation; adopter execution remains required.",
+      "evidence": ["scripts/ai_calibration_wizard.py", "scripts/ai_calibrate.py", "docs/reference/calibration-session.md"],
+      "verification": ["tests/test_calibration_wizard.py", "tests/test_calibration_session.py"]
+    },
+    {
       "id": "calibration_inventory_status_matrix",
       "status": "implemented",
       "claim": "Calibration and readiness consumers share a conservative ten-boundary Inventory with explicit status, provenance, confirmation, staleAt, owner, and blocking reason fields.",

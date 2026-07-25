@@ -15,6 +15,17 @@ Installing the Runtime copies governance entrypoints; it does not complete calib
 
 Install a fixed release of AI Cockpit into an existing repository. Start with the Quick Install entry in [README.md](../../README.md), then use this guide to confirm the repository is ready for adoption.
 
+## Choose an entrypoint
+
+For a guided first install, run `./install.sh` in a terminal or use `./install.sh --interactive`. The wizard is read-only through plan review and asks for explicit confirmation before its write boundary. It supports New Adoption, Upgrade, and Dry Run; it does not commit, push, create a PR, or merge. For automation or scripted maintenance, keep using the explicit installer options. A no-argument non-TTY invocation exits without waiting for input.
+
+The installation wizard and calibration wizard are separate boundaries:
+
+1. `./install.sh --interactive` installs or proposes the Runtime and records the adoption plan.
+2. `make cockpit-calibration-wizard` runs the persisted ten-stage calibration session after installation.
+
+The calibration wizard can pause and resume, requires reasons for Not Applicable answers, blocks unresolved Unknown or stale evidence, and requires separate Reviewer and Owner confirmations before activation. The UI locale is selected independently of the target project's documentation language.
+
 Quick Install consumes the published `release.json` only. Release preparation may maintain a separate `next-release.json` candidate record, but that file is never used to choose the public installer tag; candidate testing must pass an explicit ref.
 
 For a remote install, the tagged `release.json` is the trust root: the installer verifies the tag target, source commit, installer digest, and the exact downloadable release-archive asset and SHA256 before applying changes. Missing or mismatched archive evidence fails closed. `AI_COCKPIT_TEMPLATE_SHA256` is an additional assertion, but it cannot replace the published metadata; local or explicitly configured source installs are an intentional non-public path.
@@ -101,6 +112,10 @@ make check-ai-pr AI_BASE_COMMIT='<pre-adoption-commit>'
 These commands are local checkpoints, not an unattended publish script. Stop after local finish/archive for human review. Commit only after explicit human approval, push only after a second explicit approval, and create the PR for manual review and merge. Do not enable automatic merge or automatic source-branch deletion. After a human has merged the PR, obtain explicit approval again before running `make ai-close-work-item TASK=adopt_ai_cockpit`; closure performs the verified base synchronization and local/remote branch cleanup.
 
 The installer-generated Work Item owns every file actually written or appended by installation. It keeps project quality configuration as an explicit follow-up rather than recording temporary stand-in commands as passed. `--create-adoption` fails before writing unless the repository has an initial commit, a clean worktree, and no active Work Item. Marker and managed-conflict validation also complete before any adoption-branch mutation. When called without Contract and Summary arguments, `make check-ai-status` prints `Skipping status check (no active contract/summary provided)`. Use `make check-ai-status-consistency` to verify the generated no-active status before you move on.
+
+### Mobile and mixed repositories
+
+Choose `swift` only when Swift Package Manager is the verified project shape. Xcode project/workspace and CocoaPods layouts are detected as distinct scenarios and require adopter Project Calibration. For Android, the preset is a starting point: calibrate module, flavor, variant, JDK, unit-test, and instrumented-test commands against the repository's Gradle Wrapper. A mixed mobile monorepo should use `generic` until those boundaries are explicit. The repository's fixtures document these choices; they do not replace external toolchain execution.
 
 The adoption change is one adopter-project Work Item and one adopter-project PR. The installer creates the local adoption branch but never commits, pushes, merges, or deletes branches except when rolling back a failed installation transaction. Branch cleanup after a successful adoption must happen only through the manually authorized `ai-close-work-item` step after PR merge.
 

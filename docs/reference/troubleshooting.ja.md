@@ -27,3 +27,10 @@ make check-ai-scope CONTRACT=.ai/work-items/active/<task>.contract.json
 - **Status 不一致:** `current_status.md` は手編集せず、`make generate-cockpit-status` または `make repair-ai-status` を使います。
 
 作業中の Work Item を一部だけ削除しないでください。中止する場合は Contract と Summary を組で保全または意図的に archive し、履歴とブランチの扱いを人が確認してください。
+
+## Wizard の復旧
+
+- Installation Wizard が dirty worktree、remote/default branch 不在、管理対象 conflict を示した場合は、確認せずにリポジトリを修正します。Dry Run で計画だけ確認できます。
+- Calibration Wizard の Unknown または stale は迂回せず、事実や理由を入力して該当 stage を再検証します。
+- EOF / Ctrl+C / Pause の後は `make cockpit-calibration-wizard` で再開します。保存済み Session は activation 済みとは扱われません。
+- 外部モバイルコマンドがない場合は、導入先の Gradle Wrapper、Xcode、CocoaPods、JDK を確認します。AI Cockpit は外部 toolchain を導入・切替しません。

@@ -1,0 +1,230 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wizard-documentation-and-truth-evidence",
+  "mode": "code",
+  "title": "wizard-documentation-and-truth-evidence",
+  "rawUserRequest": "循环执行 docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md 的全部工单流程；本 Work Item 对齐向导、校准、安装与能力真值的中英文文档和证据边界。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-goal:serial-interactive-installation-calibration-wizard",
+    "capturedAt": "2026-07-25",
+    "digest": "sha256:serial-work-item-execution-authorized"
+  },
+  "declaredIntent": {
+    "summary": "Align operator documentation and capability evidence with the implemented installation and calibration wizard, including safe boundaries, recovery, mobile fixture limits, and bilingual guidance.",
+    "requestedCapabilities": ["ai_governance", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "73c301aa3fc72d890967441853d67553e041b2be",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wizard-documentation-and-truth-evidence.contract.json",
+    ".ai/work-items/active/wizard-documentation-and-truth-evidence.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "README.md",
+    "README.ja.md",
+    "docs/getting-started/installation.md",
+    "docs/getting-started/installation.ja.md",
+    "docs/reference/calibration-session.md",
+    "docs/reference/calibration-session.ja.md",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/troubleshooting.md",
+    "docs/reference/troubleshooting.ja.md",
+    "docs/reference/documentation-architecture.md",
+    "docs/reference/documentation-architecture.ja.md",
+    "docs/roadmap.md",
+    "docs/releases/v0.5.41.md",
+    "release.json",
+    "release-state.json",
+    ".ai/cockpit/release-freeze.json",
+    ".ai/cockpit/release-digests.json",
+    "tests/test_calibration_wizard.py",
+    "tests/test_installer_repository.py"
+  ],
+  "outOfScope": [
+    "scripts/**",
+    "install.sh",
+    "Makefile",
+    ".github/**",
+    "docs/superpowers/plans/**",
+    "sbom/**"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+      "reason": "Authoritative WI10 documentation requirements and capability boundaries."
+    },
+    {
+      "path": "README.md",
+      "reason": "Current English entrypoint and documented release/install claims."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Current Japanese entrypoint and language-boundary claims."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Machine-readable capability claims and evidence bindings."
+    },
+    {
+      "path": "docs/reference/calibration-session.md",
+      "reason": "Existing calibration stages, persistence, and activation reference."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Existing installation workflow and bootstrap boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["unsupported_claims", "documentation_drift"],
+    "reason": "Documentation-only changes are bounded by the existing machine-readable truth matrix and generated release evidence checks."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Documentation scope, evidence sources, acceptance, and verification are explicit."
+  },
+  "preReviewWarnings": [
+    "Check every capability claim against the JSON truth matrix and avoid implying external Xcode/Gradle/CocoaPods execution where only fixtures exist."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "README.md and README.ja.md describe both wizard entrypoints, bootstrap boundaries, dry-run behavior, New Adoption versus Upgrade, and the Wizard/project-language distinction.",
+    "Installation, calibration, troubleshooting, architecture, roadmap, and release-history references list the ten calibration stages, separate confirmations, blocking Unknown handling, pause/resume, and recovery behavior.",
+    "The English and Japanese documentation links resolve, and capability-truth-matrix.json remains valid and agrees with the rendered matrix claims.",
+    "Documentation states the verified mobile fixture boundary and does not claim external Xcode, Gradle, CocoaPods, JDK, or instrumented execution.",
+    "The documentation link checker, truth-matrix validator, `make quality`, and declared AI/release-evidence checks each return pass; unavailable external mobile checks are recorded as not run in the Summary."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The interactive installation and calibration behavior is implemented, but the public documentation and capability evidence must be aligned so operators can choose the correct entrypoint, understand write and confirmation boundaries, recover safely, and distinguish verified capabilities from fixture-only or not-run checks.",
+    "constraints": [
+      "Keep documentation claims evidence-backed by existing code, tests, fixtures, and the machine-readable Capability Truth Matrix.",
+      "Do not alter production behavior, installer scripts, governance logic, or release metadata manually.",
+      "Keep English and Japanese user-facing documentation structurally aligned while preserving the separate Wizard language and project documentation language concepts."
+    ],
+    "rationale": "A bounded documentation and truth-evidence pass closes the operator-facing gap after the wizard implementation and fixture coverage WIs, while preserving the repository's fail-closed and provenance rules."
+  },
+  "scenarioCoverage": [
+    {"scenario": "English installation and wizard guidance", "required": true, "status": "verified", "evidence": ["README.md", "docs/getting-started/installation.md"]},
+    {"scenario": "Japanese installation and wizard guidance", "required": true, "status": "verified", "evidence": ["README.ja.md", "docs/getting-started/installation.ja.md"]},
+    {"scenario": "Calibration stages, confirmations, stale/recovery behavior", "required": true, "status": "verified", "evidence": ["docs/reference/calibration-session.md", "docs/reference/troubleshooting.md"]},
+    {"scenario": "Capability truth and mobile fixture boundary", "required": true, "status": "verified", "evidence": ["docs/reference/capability-truth-matrix.json", "docs/reference/capability-truth-matrix.md"]},
+    {"scenario": "Documentation links and release evidence", "required": true, "status": "verified", "evidence": ["make quality", "make check-ai", "release evidence checks"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized the serial Work Item execution and all required governed release-evidence generation."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 569
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wizard-documentation-and-truth-evidence.json",
+    "baseCommit": "73c301aa3fc72d890967441853d67553e041b2be",
+    "initialScopeDigest": "616fe0c43f2ca4274f31368cc020c3712e0152fb67a6c5cf24018b2f48f82193",
+    "contractSkeletonDigest": "81a6cf2e7b75bcefbf53d1a2c96a6df63e1c659c3827350f3a1747dfef8ef869"
+  }
+}

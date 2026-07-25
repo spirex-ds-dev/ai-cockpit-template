@@ -141,6 +141,36 @@ def test_interrupt_and_quit_pause_safely(tmp_path: Path):
     assert resumed.session.data["state"] == "paused"
 
 
+def test_command_loop_covers_checks_navigation_and_safe_pause(tmp_path: Path):
+    current = wizard(tmp_path)
+    current.load_or_start("commands")
+    current.answer(CALIBRATION_STAGES[0], "Y", answer_type="yes_no")
+    commands = iter(["check", "review", "back", "unknown", "pause"])
+    output: list[str] = []
+
+    def input_fn(_: str) -> str:
+        return next(commands)
+
+    assert current.run(input_fn=input_fn, output_fn=output.append) == 0
+    assert current.session.data["state"] == "paused"
+    assert any('"status": "blocked"' in item for item in output)
+    assert any("Unknown command" in item for item in output)
+    assert any("no activation performed" in item for item in output)
+
+
+def test_command_loop_answers_current_stage(tmp_path: Path):
+    current = wizard(tmp_path)
+    current.load_or_start("answer-command")
+    inputs = iter(["answer", "Y", "pause"])
+
+    def input_fn(_: str) -> str:
+        return next(inputs)
+
+    assert current.run(input_fn=input_fn, output_fn=lambda _: None) == 0
+    assert current.session.data["stages"][0]["checklist"]["answer"] == "Y"
+    assert current.session.data["state"] == "paused"
+
+
 def test_secret_values_are_redacted(tmp_path: Path):
     current = wizard(tmp_path)
     current.load_or_start("secrets")

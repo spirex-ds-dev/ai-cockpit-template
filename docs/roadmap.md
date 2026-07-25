@@ -16,6 +16,10 @@ AI Cockpit enables calibrated trust between humans and AI agents through evidenc
 
 Roadmap evolution may add, consolidate, replace, or remove concepts when doing so preserves governance guarantees while reducing cognitive cost.
 
+## 2026-07 Wizard delivery boundary
+
+The Interactive Installation and Calibration Wizard work establishes the documented operator path: installation is confirmation-gated and separate from calibration; calibration is a persisted ten-stage session with stale/recovery blocking and separate Reviewer/Owner confirmation. Fixture matrices cover representative Swift, Kotlin/Android, and mixed-monorepo shapes. They do not turn external Xcode, Gradle, CocoaPods, JDK, or instrumented execution into template claims; those remain adopter-calibrated evidence.
+
 ---
 
 ## Core Positioning

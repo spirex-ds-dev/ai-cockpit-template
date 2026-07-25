@@ -42,6 +42,14 @@ Calibrated trust does not mean maximizing trust in an agent. It means enabling h
 
 AI Cockpit is a repository governance layer, not an agent runtime or security sandbox. Its deterministic gates cover declared, externally reviewable known-risk cases; they do not classify every semantic danger or prove agent intent. Runtime installation is not calibration completion: the current `configure_ai_cockpit` flow produces and validates a Project Profile proposal, while the resumable ten-stage session and Candidate activation are implemented Runtime capabilities that still require adopter execution and human confirmation. Updates require Impact Assessment before recalibration. See the [Capability Truth Matrix](docs/reference/capability-truth-matrix.md) for evidence boundaries.
 
+## Interactive entrypoints
+
+Use `./install.sh` with a TTY and no arguments, or pass `--interactive`, for the eight-step Installation Wizard. It detects the target repository, presents New Adoption, Upgrade, and Dry Run choices, shows the complete write plan, and waits for explicit confirmation before writing. Non-interactive no-argument use fails closed; explicit legacy flags keep their deterministic behavior. The wizard never commits, pushes, opens a PR, or merges.
+
+After installation, run `make cockpit-calibration-wizard` for the resumable ten-stage Calibration Wizard. It reuses the persisted Calibration Session, supports Back/Pause/Resume and stale revalidation, blocks on Unknown or stale evidence, and requires separate Reviewer and Owner confirmations before atomic Candidate activation. Wizard UI language is independent from the adopted project's documentation language; Japanese is the default UI locale.
+
+The mobile examples are evidence fixtures and documented scenarios. Hosted verification currently covers a minimal Swift Package and Android smoke paths; Xcode projects/workspaces, CocoaPods, project-specific Gradle variants, host JDK selection, and instrumented execution require adopter calibration and are not implied by the wizard.
+
 ## What is AI Cockpit?
 
 **AI Cockpit is a Repository Governance Layer for AI-assisted Software Development.** This is the concrete product boundary through which its mission is delivered.
