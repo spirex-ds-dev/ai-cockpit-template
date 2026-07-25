@@ -1,0 +1,197 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wizard-recovery-and-blocking-ux",
+  "mode": "code",
+  "title": "wizard-recovery-and-blocking-ux",
+  "rawUserRequest": "循环执行 docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md 的全部工单流程；本 Work Item 完善校准向导的恢复、阻断与安全退出体验。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-goal:serial-interactive-installation-calibration-wizard",
+    "capturedAt": "2026-07-25",
+    "digest": "sha256:serial-work-item-execution-authorized"
+  },
+  "declaredIntent": {
+    "summary": "Harden calibration wizard recovery and blocking UX without weakening authoritative state or activation safety.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+    ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_calibration_wizard.py",
+    "scripts/ai_calibrate.py",
+    "tests/test_calibration_wizard.py",
+    "tests/test_calibration_session.py"
+  ],
+  "outOfScope": [
+    "Duplicating CalibrationSession state transitions or Candidate Activation implementation in the UI adapter",
+    "Installation wizard behavior and installer transaction semantics",
+    "New product-specific policy decisions or secret persistence",
+    "Release publication and unrelated documentation changes"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+      "reason": "Defines blocking Unknown, stale revalidation, recovery, validation, and secret-safety requirements."
+    },
+    {"path": ".ai/glossary.md", "reason": "Defines blocking, stale evidence, and safe handoff terminology."},
+    {"path": "scripts/ai_calibration_wizard.py", "reason": "Current adapter boundary and terminal recovery behavior."},
+    {"path": "scripts/ai_calibrate.py", "reason": "Authoritative session validation, stale dependency, pause/resume, and atomic activation behavior."},
+    {"path": "tests/test_calibration_wizard.py", "reason": "Existing adapter regression coverage extended by this Work Item."},
+    {"path": "tests/test_calibration_session.py", "reason": "Regression evidence for fail-closed session transitions and active preservation."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+      "riskTypes": ["blocking_bypass", "stale_evidence", "secret_exposure"],
+    "reason": "Recovery UX must fail closed on blocking Unknown/stale state and must not expose or persist secret values."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized serial execution; this bounded UX hardening delegates state and activation invariants to existing authoritative modules."
+  },
+  "preReviewWarnings": [
+    "Review that blocking Unknown/stale state prevents confirmation, recovery is resumable, identifiers are validated, and secrets never enter output or persisted state."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Blocking Unknown, stale sessions, invalid identifiers, EOF/Ctrl+C, and partial failures are explicit and fail closed without claiming activation.",
+    "N/A requires a reason; safe Pause/Resume and Quit preserve the session without activation.",
+    "User-controlled identifiers and subprocess arguments are validated, and secret values are neither displayed nor persisted.",
+    "Deterministic tests cover recovery, blocking, stale revalidation, invalid input, interruption, and activation-failure preservation."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Blocking Unknown prevents review confirmation and activation", "required": true, "status": "verified", "evidence": ["tests/test_calibration_wizard.py::test_blocking_unknown_fails_closed"]},
+    {"scenario": "Stale session is visible and requires revalidation before activation", "required": true, "status": "verified", "evidence": ["tests/test_calibration_wizard.py::test_stale_session_requires_revalidation"]},
+    {"scenario": "Invalid input, EOF/Ctrl+C, and safe Quit preserve resumable state", "required": true, "status": "verified", "evidence": ["tests/test_calibration_wizard.py::test_interrupt_and_quit_pause_safely"]},
+    {"scenario": "Secret-like values are not rendered or persisted by the wizard", "required": true, "status": "verified", "evidence": ["tests/test_calibration_wizard.py::test_secret_values_are_redacted"]},
+    {"scenario": "Activation failure reports incomplete state and preserves original Active Configuration", "required": true, "status": "verified", "evidence": ["tests/test_calibration_wizard.py::test_activation_failure_preserves_active"]}
+  ],
+  "intent": {
+    "problem": "The calibration wizard currently presents recovery and blocking concepts but does not consistently prevent confirmation after blocking Unknown/stale evidence, validate user-controlled input, or preserve a clear safe handoff on interruption and partial failure.",
+    "constraints": [
+      "Keep CalibrationSession as the only authority for persisted transitions and Candidate Activation.",
+      "Never claim activation after failure, and never overwrite the original Active Configuration on failed activation.",
+      "Do not display or persist secrets; validate identifiers and arguments before use.",
+      "Keep recovery local, deterministic, resumable, and compatible with Python 3.10+."
+    ],
+    "rationale": "A small recovery layer around the existing adapter can make blocking and safety semantics explicit without duplicating the session state machine."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 567
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wizard-recovery-and-blocking-ux.json",
+    "baseCommit": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+    "initialScopeDigest": "2ced99bd9a643604661b96668ee30d90061ed5465dbbc7229f3ec339c87c4223",
+    "contractSkeletonDigest": "6af71c04c6c1817814a7271fd65e4824deb10ef3a16f8364172fb3af438210d1"
+  }
+}

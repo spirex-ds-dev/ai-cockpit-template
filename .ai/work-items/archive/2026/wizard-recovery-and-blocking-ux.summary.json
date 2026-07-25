@@ -1,0 +1,388 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wizard-recovery-and-blocking-ux",
+  "contractPath": ".ai/work-items/archive/2026/wizard-recovery-and-blocking-ux.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/wizard-recovery-and-blocking-ux.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wizard-recovery-and-blocking-ux.summary.json",
+      "reason": "Records recovery, blocking, secret-safety, and fail-closed verification evidence."
+    },
+    {
+      "path": "scripts/ai_calibration_wizard.py",
+      "reason": "Adds blocking Unknown/stale guards, safe recovery, identifier validation, and secret redaction."
+    },
+    {
+      "path": "scripts/ai_calibrate.py",
+      "reason": "Adds the authoritative persisted revalidation transition for stale stages."
+    },
+    {
+      "path": "tests/test_calibration_wizard.py",
+      "reason": "Covers blocking, stale revalidation, interruption, secret redaction, and activation failure."
+    },
+    {
+      "path": "tests/test_calibration_session.py",
+      "reason": "Provides direct regression coverage for the authoritative revalidation transition."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated cockpit status for this Work Item."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wizard-recovery-and-blocking-ux.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+    "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+    ".ai/glossary.md",
+    "scripts/ai_calibration_wizard.py",
+    "scripts/ai_calibrate.py",
+    "tests/test_calibration_wizard.py",
+    "tests/test_calibration_session.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:19:48.066424+00:00",
+      "exitCode": 0,
+      "durationMs": 39,
+      "outputDigest": "517a23a8a6289be66644b9888f4c043eba930f49bf9f2263d367e39d7ff48f8d",
+      "commandHash": "e903c04947c14190a5c2c55cbcd8845fd2231cff13228f35b5ed70a6c38c6d35",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "68287c9c7c94ec7be58b32deda9c7677face222fa74059a988c3068f2a6b9550",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json work item contract check passed: .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:19:48.373149+00:00",
+      "exitCode": 0,
+      "durationMs": 242,
+      "outputDigest": "0c23576265ae782a26f92af0ecdbb0b5f8fd20c797e94a91b96ebc27558a67ea",
+      "commandHash": "cb19306927bb44b1414cb35af4e16a5062432fc3bd7185f88bdde7e3d1cd89da",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "68287c9c7c94ec7be58b32deda9c7677face222fa74059a988c3068f2a6b9550",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json scope guard passed: 6 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:19:48.528018+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "123efeb11d6d987d9e18b71287be5fdb35a5725cd27f641775e4b0085d0781f1",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "68287c9c7c94ec7be58b32deda9c7677face222fa74059a988c3068f2a6b9550",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json SUMMARY=.ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:19:48.749150+00:00",
+      "exitCode": 0,
+      "durationMs": 172,
+      "outputDigest": "f552b3c168c503b2f912c82bb6e4b40bcf77efa5201b34b231ee2637b52c57b7",
+      "commandHash": "c95e3c17895ffa033aa730871a1c0b75cc72c1229b6c88028e665af5c3710563",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "68287c9c7c94ec7be58b32deda9c7677face222fa74059a988c3068f2a6b9550",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json --summary .ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wizard-recovery-and-blocking-ux` - Contract Hash: `8061d6f9f57155c0` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - R"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:19:49.117448+00:00",
+      "exitCode": 0,
+      "durationMs": 287,
+      "outputDigest": "809b474673c346394d3978ac33102d041c23550033d40d7755c8789985807135",
+      "commandHash": "fa7b37014a4464802d18d102ae216f5252054fd1d8032c16c6ccb73932170b11",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "68287c9c7c94ec7be58b32deda9c7677face222fa74059a988c3068f2a6b9550",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json review policy matched 4 path(s) [review] .ai/work-items/starts/wizard-recovery-and-blocking-ux.json [review] .ai/cockpit/current_status.md [review] scripts/ai_calibrate.py [review] scripts/ai_calibration_wizard.py review focus recorded: 2 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:19:49.275686+00:00",
+      "exitCode": 0,
+      "durationMs": 107,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "68287c9c7c94ec7be58b32deda9c7677face222fa74059a988c3068f2a6b9550",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:19:49.404395+00:00",
+      "exitCode": 0,
+      "durationMs": 79,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "68287c9c7c94ec7be58b32deda9c7677face222fa74059a988c3068f2a6b9550",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json SUMMARY=.ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:19:49.527398+00:00",
+      "exitCode": 0,
+      "durationMs": 74,
+      "outputDigest": "b4904c719af54414e008f8c8dcd8638658491507f6d1fae3bc91f4b4a258743e",
+      "commandHash": "42c72bbd74e5609c54df399010724854254e36f452cbc7c737458366035a9197",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "68287c9c7c94ec7be58b32deda9c7677face222fa74059a988c3068f2a6b9550",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json --summary .ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json SUMMARY=.ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:19:49.629976+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "c20d917b417b315a560d6f33af8880dabd23f9fb2accf4a131974d6ffa2b6fdd",
+      "commandHash": "4c7bab5286f9920e5ab569826b99e41f4cf9da486fa7afb7e96994645cf6fcf4",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "68287c9c7c94ec7be58b32deda9c7677face222fa74059a988c3068f2a6b9550",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json --summary .ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:19:49.865039+00:00",
+      "exitCode": 0,
+      "durationMs": 188,
+      "outputDigest": "ca08ef8e76a11c801c8c1a8ddacd21fa46149b918acc7fb19bc27ec48251dcae",
+      "commandHash": "be5041e97a6712fb693f03639d075f5a7e330ceab7062b4cc346d4ee9920e842",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "68287c9c7c94ec7be58b32deda9c7677face222fa74059a988c3068f2a6b9550",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json ## Diff Ownership Preview - active_owned: `6`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/wizard-recovery-and-blocking-ux.json` — covered by Contract scope - [active_owned] `sc"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:23:58.950327+00:00",
+      "exitCode": 0,
+      "durationMs": 249029,
+      "outputDigest": "bfdef3c3e32db381c8cd7fbf60e138727113bdf9d2360fd07443add46af8bbec",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "68287c9c7c94ec7be58b32deda9c7677face222fa74059a988c3068f2a6b9550",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 202 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 7%] ........................................................................ [ 14%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json SUMMARY=.ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:24:00.232944+00:00",
+      "exitCode": 0,
+      "durationMs": 214,
+      "outputDigest": "c15c94d68294779111a79d25a5d64ec075d42bd4962bf2e932d84d009575acc8",
+      "commandHash": "a3bb956c8f491508e0f2db431fb0881b1354c579d7b5dc3203de5829ba3bd3b1",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "df81d8482193d9e46d8d6b5af08dbf9e4e70df181afe4597f6bb85e782aa329b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json --summary .ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json SUMMARY=.ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:24:00.454766+00:00",
+      "exitCode": 0,
+      "durationMs": 178,
+      "outputDigest": "99c8f70dc97fd623b049183a41d816b56c2467430dc425dced81302c5c088dbf",
+      "commandHash": "7fd9eab01db03ef71bb030518c98458bea13eb7d85c31f08bddec242d9c11ae0",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "df81d8482193d9e46d8d6b5af08dbf9e4e70df181afe4597f6bb85e782aa329b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json --summary .ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:24:00.542022+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "df81d8482193d9e46d8d6b5af08dbf9e4e70df181afe4597f6bb85e782aa329b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json SUMMARY=.ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:24:00.646782+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "506e8773118c481ff6f3c94f03192f3b46f8d3dcea791ad86f56560aad9ed3b5",
+      "commandHash": "479613e71ac1935c186c475192a32b87c5da62f868a454b00d7c76fcefc43682",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "df81d8482193d9e46d8d6b5af08dbf9e4e70df181afe4597f6bb85e782aa329b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json --summary .ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json CONTRACT=.ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:24:01.360590+00:00",
+      "exitCode": 0,
+      "durationMs": 108,
+      "outputDigest": "a6281e8af8385d2dca3d0327490241ad82ef08318d60d519bcc6711b88c189c7",
+      "commandHash": "a40d6af4376d7fdfe031b08c80fd8aae061355036686e7726a51387c03ce18e0",
+      "contractHash": "8061d6f9f57155c082a27fdd7a3660463676abfe56feed28b91759bb3c3bc03b",
+      "commitSha": "f1a6fc6a8dd3ca5fef0b4418aef1e9c939ce74a9",
+      "executionContractPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json",
+      "worktreeDigest": "278c85185ddc704e1d75409e340ef88b9431519c8fa1646f03e2c9b127a749f2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json --contract .ai/work-items/active/wizard-recovery-and-blocking-ux.contract.json ai summary check passed: .ai/work-items/active/wizard-recovery-and-blocking-ux.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "Public recovery methods and CLI behavior are documented by docstrings/help text and focused tests."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The wizard delegates persistence, revalidation, self-check, confirmation, and activation to authoritative calibration modules."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Local deterministic recovery adapter; no external production operation or secret storage is introduced."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "All required verification passed and no residual risk remains.",
+    "expectedReviewFocus": [
+      "Confirm blocking Unknown/stale evidence cannot reach activation.",
+      "Confirm interruption, identifier validation, and redaction preserve safe resumability."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified",
+    "userVisibleOutput": "verified",
+    "persistence": "verified",
+    "localization": "not_applicable",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "8061d6f9f57155c0",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 6
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "8061d6f9f57155c0",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 6
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Report completion only after ai-finish, project quality checks, and PR/CI evidence pass.",
+  "archiveSequence": 555
+}

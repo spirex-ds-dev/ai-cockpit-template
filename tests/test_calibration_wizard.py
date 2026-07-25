@@ -99,3 +99,68 @@ def test_doctor_and_proposal_are_reused_as_evidence(tmp_path: Path):
     proposal = current.prepare_proposal()
     assert proposal == tmp_path / ".ai/project_profile.proposed.yaml"
     assert proposal.is_file()
+
+
+def test_blocking_unknown_fails_closed(tmp_path: Path):
+    current = wizard(tmp_path)
+    current.load_or_start("blocking")
+    current.answer(CALIBRATION_STAGES[0], "unknown", answer_type="unknown")
+    assert current.blocking_unknowns() == [CALIBRATION_STAGES[0]]
+    assert current.full_self_check()["status"] == "blocked"
+    with pytest.raises(CalibrationError, match="blocking Unknown"):
+        current.activate()
+
+
+def test_stale_session_requires_revalidation(tmp_path: Path):
+    current = wizard(tmp_path)
+    current.load_or_start("stale")
+    current.answer(CALIBRATION_STAGES[0], "Y", answer_type="yes_no")
+    current.answer(CALIBRATION_STAGES[1], "Python")
+    current.answer(CALIBRATION_STAGES[2], "src")
+    current.back()
+    current.answer(CALIBRATION_STAGES[1], "TypeScript")
+    assert current.session.data["staleStages"]
+    with pytest.raises(CalibrationError, match="revalidation"):
+        current.activate()
+    current.revalidate()
+    assert current.session.data["staleStages"] == []
+    assert current.session.data["currentStage"] == CALIBRATION_STAGES[2]
+
+
+def test_interrupt_and_quit_pause_safely(tmp_path: Path):
+    current = wizard(tmp_path)
+    current.load_or_start("interrupt")
+
+    def eof(_: str) -> str:
+        raise EOFError
+
+    assert current.run(input_fn=eof, output_fn=lambda _: None) == 0
+    assert current.session.data["state"] == "paused"
+    resumed = wizard(tmp_path)
+    resumed.load_or_start()
+    assert resumed.session.data["state"] == "paused"
+
+
+def test_secret_values_are_redacted(tmp_path: Path):
+    current = wizard(tmp_path)
+    current.load_or_start("secrets")
+    current.answer(CALIBRATION_STAGES[0], "token=super-secret", answer_type="alternative_input")
+    raw = current.session_path.read_text(encoding="utf-8")
+    assert "super-secret" not in raw
+    assert "[REDACTED]" in raw
+    assert "super-secret" not in current.render()
+
+
+def test_activation_failure_preserves_active(tmp_path: Path):
+    current = wizard(tmp_path)
+    current.load_or_start("failure")
+    current.active_path.parent.mkdir(parents=True, exist_ok=True)
+    current.active_path.write_text('{"original": true}\n', encoding="utf-8")
+    complete(current)
+    current.full_self_check()
+    current.governance_simulation()
+    current.confirm("reviewer")
+    current.confirm("owner")
+    with pytest.raises(CalibrationError, match="failed closed"):
+        current.activate(fail=True)
+    assert json.loads(current.active_path.read_text(encoding="utf-8")) == {"original": True}

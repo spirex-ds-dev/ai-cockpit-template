@@ -59,6 +59,19 @@ def test_pause_resume_back_review_and_stale_dependency_preserve_evidence():
     assert session.review()["status"] == "blocked"
 
 
+def test_revalidate_returns_stale_stages_to_the_session_queue():
+    session = CalibrationSession.start("revalidate")
+    session.answer(CALIBRATION_STAGES[0], "Y", answer_type="yes_no")
+    session.answer(CALIBRATION_STAGES[1], "Python")
+    session.answer(CALIBRATION_STAGES[2], "src")
+    session.back()
+    session.answer(CALIBRATION_STAGES[1], "TypeScript")
+    assert session.data["staleStages"]
+    session.revalidate()
+    assert session.data["staleStages"] == []
+    assert session.data["currentStage"] == CALIBRATION_STAGES[2]
+
+
 def test_checks_confirmations_and_atomic_activation(tmp_path: Path):
     active = tmp_path / "active.json"
     active.write_text('{"old": true}\n', encoding="utf-8")
