@@ -1,0 +1,470 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "enterprise-boundary",
+  "contractPath": ".ai/work-items/archive/2026/enterprise-boundary.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/enterprise-boundary.contract.json",
+      "reason": "Bound enterprise control vocabulary, external-control boundary, scope, and WI-16/WI-17 limitations."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/enterprise-boundary.summary.json",
+      "reason": "Captured WI-11 implementation, verification, process issues, risks, and documentation alignment."
+    },
+    {
+      "path": "docs/reference/enterprise-control-matrix.json",
+      "reason": "Added six-state machine-readable control matrix covering required external categories."
+    },
+    {
+      "path": "docs/reference/enterprise-control-checklist.md",
+      "reason": "Added adopter-facing external-control checklist and unsupported-claim boundary."
+    },
+    {
+      "path": "docs/enterprise-security-boundary.md",
+      "reason": "Linked canonical boundary to the matrix and checklist."
+    },
+    {
+      "path": "README.md",
+      "reason": "Added English enterprise-boundary and WI-16 gate entry point."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Added Japanese enterprise-boundary and WI-16 gate wording."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Added Chinese enterprise-boundary and WI-16 gate wording."
+    },
+    {
+      "path": "tests/test_enterprise_control_matrix.py",
+      "reason": "Added status, control coverage, multilingual boundary, and overclaim regression tests."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Recorded WI-11 boundary and preflight/scope process issues."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/enterprise-boundary.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/enterprise-boundary.contract.json",
+    "docs/reference/enterprise-control-matrix.json",
+    "docs/reference/enterprise-control-checklist.md",
+    "docs/enterprise-security-boundary.md",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "tests/test_enterprise_control_matrix.py",
+    "tests/test_project_governance.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/enterprise-boundary.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:28:00.640751+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "ff5dded101723dccbb0c70717b4e6fedd4b8917ffab1d5130ba7ebb27b895822",
+      "commandHash": "172687e607c48df88bb1ed538929c6f56af418efd95f04c93f89324f116e6821",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "2975fa46b3cba85c35c41576208ad19b427ed7791d25f6e0fd8a3deea9feaa4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/enterprise-boundary.contract.json work item contract check passed: .ai/work-items/active/enterprise-boundary.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/enterprise-boundary.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:28:00.976498+00:00",
+      "exitCode": 0,
+      "durationMs": 263,
+      "outputDigest": "613998d90cb2919fda0c9614d74b50eb2e4583f87994b3ebabfaaf6c9ac4184f",
+      "commandHash": "698a46549e3ea7121d148c7cc840728193a43ce88de425a7b2698e25023d9480",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "2975fa46b3cba85c35c41576208ad19b427ed7791d25f6e0fd8a3deea9feaa4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/enterprise-boundary.contract.json scope guard passed: 10 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:28:01.158563+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "cdc95cdabb6608c4f73f9db8a41758821c1ab10f4c87b1681450eb3955ceda22",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "2975fa46b3cba85c35c41576208ad19b427ed7791d25f6e0fd8a3deea9feaa4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/enterprise-boundary.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/enterprise-boundary.contract.json SUMMARY=.ai/work-items/active/enterprise-boundary.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:28:01.370419+00:00",
+      "exitCode": 0,
+      "durationMs": 166,
+      "outputDigest": "53370396c0fce79424d7e745a5b77d4ef315f6f6f8061c9a6d7a5eda50240a3e",
+      "commandHash": "de1e0e08fc1c5fc184b2847b9a376eb6c728b37a1106fd924ba034c92234ac67",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "2975fa46b3cba85c35c41576208ad19b427ed7791d25f6e0fd8a3deea9feaa4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/enterprise-boundary.contract.json --summary .ai/work-items/active/enterprise-boundary.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `enterprise-boundary` - Contract Hash: `9f9061673e7f9ed7` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Required Checks: `16` - Required Chec"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/enterprise-boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:28:01.536506+00:00",
+      "exitCode": 0,
+      "durationMs": 111,
+      "outputDigest": "0ef4cec8829bb389bcbd31bd1c1f676ceed264de52eb74d2c8c27f708d94684b",
+      "commandHash": "b228ac922892452005c34ad0dfa2bf8f2a0bc1ef50362c47316ee9ca40e497f2",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "2975fa46b3cba85c35c41576208ad19b427ed7791d25f6e0fd8a3deea9feaa4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/enterprise-boundary.summary.json review policy matched 2 path(s) [review] .ai/work-items/starts/enterprise-boundary.json [review] .ai/cockpit/current_status.md review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:28:01.672839+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "2975fa46b3cba85c35c41576208ad19b427ed7791d25f6e0fd8a3deea9feaa4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:28:02.027642+00:00",
+      "exitCode": 0,
+      "durationMs": 124,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "2975fa46b3cba85c35c41576208ad19b427ed7791d25f6e0fd8a3deea9feaa4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/enterprise-boundary.contract.json SUMMARY=.ai/work-items/active/enterprise-boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:28:02.134344+00:00",
+      "exitCode": 0,
+      "durationMs": 58,
+      "outputDigest": "6e1b04911f53b6844dcde9ecca5fd6f8339ceba2676b38ecf7616c73bd472541",
+      "commandHash": "4543b6fc77186bce73a2298cc2466476c87a9c2c3dcf2b37832a8edbeac61a21",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "2975fa46b3cba85c35c41576208ad19b427ed7791d25f6e0fd8a3deea9feaa4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/enterprise-boundary.contract.json --summary .ai/work-items/active/enterprise-boundary.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/enterprise-boundary.contract.json SUMMARY=.ai/work-items/active/enterprise-boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:28:02.231900+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "84f4c7508a51543c836dd54500eeb032f033190363bed8ac78e9b6162313e292",
+      "commandHash": "5b4ee25c6adb5cb1ca6bcaa4d9b6323e7d0dbd658587ba984393c1e774b51ae5",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "2975fa46b3cba85c35c41576208ad19b427ed7791d25f6e0fd8a3deea9feaa4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/enterprise-boundary.contract.json --summary .ai/work-items/active/enterprise-boundary.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/enterprise-boundary.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:28:02.461714+00:00",
+      "exitCode": 0,
+      "durationMs": 183,
+      "outputDigest": "60010b3c9cdd6737170ceeb8037cc511b4cd5d88ac4504f14a2944be2a629d17",
+      "commandHash": "eebfc1f32c1edd27f30056536674b12414feba781617626f8ca6062f94184409",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "2975fa46b3cba85c35c41576208ad19b427ed7791d25f6e0fd8a3deea9feaa4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/enterprise-boundary.contract.json ## Diff Ownership Preview - active_owned: `10`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/enterprise-boundary.json` — covered by Contract scope - [active_owned] `README.ja.md` — covered b"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:34:39.311084+00:00",
+      "exitCode": 0,
+      "durationMs": 396800,
+      "outputDigest": "6061b6513fa8c6f2c87a5c30939a0e5d7ed97313e77673b36df39a30071574a8",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "2975fa46b3cba85c35c41576208ad19b427ed7791d25f6e0fd8a3deea9feaa4f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 230 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 6%] ........................................................................ [ 12%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/enterprise-boundary.contract.json SUMMARY=.ai/work-items/active/enterprise-boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:34:40.647655+00:00",
+      "exitCode": 0,
+      "durationMs": 214,
+      "outputDigest": "24873d2809ef66c2f9a5c5471bddc4359c356e98750a4421e208ba79f4cbf92b",
+      "commandHash": "02a9af531f2c0c8c5097a5cf720b38f2ddb6d835dc61bf04b9f4abf9cc50058e",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "5b628c8106136b76c381f6747cfbb89c4dc3dbe17ec525e88b0fb0ed98240d34",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/enterprise-boundary.contract.json --summary .ai/work-items/active/enterprise-boundary.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/enterprise-boundary.contract.json SUMMARY=.ai/work-items/active/enterprise-boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:34:40.887919+00:00",
+      "exitCode": 0,
+      "durationMs": 192,
+      "outputDigest": "889fe8113aa3761bc46a4698262b4e78853437071dd2df0b2f297beaf1d4ebc3",
+      "commandHash": "42525c552effaac27a968e1ec785e61435c015fdc5dbf33acc20ae453bee5ce9",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "5b628c8106136b76c381f6747cfbb89c4dc3dbe17ec525e88b0fb0ed98240d34",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/enterprise-boundary.contract.json --summary .ai/work-items/active/enterprise-boundary.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:34:40.976289+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "5b628c8106136b76c381f6747cfbb89c4dc3dbe17ec525e88b0fb0ed98240d34",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/enterprise-boundary.contract.json SUMMARY=.ai/work-items/active/enterprise-boundary.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:34:41.078346+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "268e0dedfb21ee5944432042de05edc0ba74819acf030bd732a6f1ac99d45bab",
+      "commandHash": "5364980de76dc28c898b9e926d6b27b1928c3efe4ee4b6e8db0954f3be85537a",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "5b628c8106136b76c381f6747cfbb89c4dc3dbe17ec525e88b0fb0ed98240d34",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/enterprise-boundary.contract.json --summary .ai/work-items/active/enterprise-boundary.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/enterprise-boundary.summary.json CONTRACT=.ai/work-items/active/enterprise-boundary.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T21:34:41.805339+00:00",
+      "exitCode": 0,
+      "durationMs": 86,
+      "outputDigest": "a68a08a0a126b5ed708724020a2fc013c9b4b8cf4f505931f48db6c5d65cc293",
+      "commandHash": "00f1a2719775e635772e1cb11d539db0a53ad0389fdea60c7a8caced14a1fe4c",
+      "contractHash": "9f9061673e7f9ed7b9c4ccbd0e1b40868fe43edf36ccc92563a11840844cc6f9",
+      "commitSha": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+      "executionContractPath": ".ai/work-items/active/enterprise-boundary.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/enterprise-boundary.summary.json",
+      "worktreeDigest": "addd1ebbb3a7f502ee95c86d827279075fb39d8adeb1e8eb185846aefbd0f8d7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/enterprise-boundary.summary.json --contract .ai/work-items/active/enterprise-boundary.contract.json ai summary check passed: .ai/work-items/active/enterprise-boundary.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "No public API was added; the new public documentation is covered by metadata and focused tests."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "WI-11 adds JSON/Markdown docs and tests only; no internal feature imports were added."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "External adopter/provider/legal controls remain unverified by design; WI-11 verifies only repository-local boundary and handoff semantics."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "WI-11-ISSUE-001",
+      "category": "process",
+      "severity": "medium",
+      "status": "resolved",
+      "fact": "Initial Contract skeleton was blocked by preflight.",
+      "evidence": "ai-start reported missing intent/raw request, weak sources, broad acceptance, and missing scenario coverage.",
+      "resolution": "Completed the Contract and reran preflight successfully."
+    },
+    {
+      "issueId": "WI-11-ISSUE-002",
+      "category": "process",
+      "severity": "low",
+      "status": "resolved",
+      "fact": "Three README changes were initially outside Contract scope.",
+      "evidence": "before_finish checkpoint diff ownership marked README.md, README.ja.md, and README.zh-CN.md unowned.",
+      "resolution": "Added all three paths to scope and sources, then refreshed both checkpoints."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Adopter/provider identity, compliance, sandbox, legal, and production controls require independent external evidence and remain release/adoption blockers when unknown.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Check every control status and external handoff.",
+      "Confirm the three localized README boundaries do not imply WI-16 or publication completion.",
+      "Confirm unsupported enterprise claims remain blocked."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "scenarioCoverage": [
+    {
+      "scenario": "The enterprise control matrix uses the six allowed statuses and covers all required adopter/external control categories.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/reference/enterprise-control-matrix.json",
+        "tests/test_enterprise_control_matrix.py"
+      ]
+    },
+    {
+      "scenario": "Boundary documentation rejects unsupported assurance claims and distinguishes repository evidence from external controls in English, Japanese, and Chinese entry points.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/enterprise-security-boundary.md",
+        "docs/reference/enterprise-control-checklist.md",
+        "README.md",
+        "README.ja.md",
+        "README.zh-CN.md",
+        "tests/test_enterprise_control_matrix.py"
+      ]
+    },
+    {
+      "scenario": "Unknown or invalid control status and overclaim regression inputs fail closed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_enterprise_control_matrix.py",
+        "tests/test_project_governance.py"
+      ]
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "9f9061673e7f9ed7",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "9f9061673e7f9ed7",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "External adopter/provider control verification is intentionally not performed in this repository Work Item; WI-11 records the handoff and fail-closed status vocabulary."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 583
+}

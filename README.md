@@ -60,6 +60,8 @@ It is **not** an Agent Runtime, **not** a Workflow Engine, and **not** a Securit
 
 This boundary is canonical across the English, Chinese, and Japanese guides: repository-local records support review, but trusted identity, production isolation, enterprise audit/compliance, and provider-hosted release evidence remain external controls.
 
+See the [enterprise control checklist](docs/reference/enterprise-control-checklist.md) and its [machine-readable status matrix](docs/reference/enterprise-control-matrix.json). These do not claim external verification; the mandatory Japanese capability gate remains WI-16 before publication.
+
 Its philosophy is **Evidence over Self-Declaration**. Its mechanism is **Evidence Governance**: AI Cockpit creates governance records, evaluates delegated evidence, and compresses both into human decision state.
 
 It provides:

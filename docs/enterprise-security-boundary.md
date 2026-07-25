@@ -11,6 +11,8 @@ keywords:
 
 # Enterprise Security and Compliance Boundary
 
+The machine-readable control vocabulary and adopter handoff checklist are maintained in [`docs/reference/enterprise-control-matrix.json`](reference/enterprise-control-matrix.json) and [`docs/reference/enterprise-control-checklist.md`](reference/enterprise-control-checklist.md). A control marked `unknown` is never treated as verified or not applicable.
+
 AI Cockpit provides repository governance evidence: scoped Work Items, deterministic checks, test and supply-chain reports, decision records, and lifecycle closure. These records support review; they are not enterprise security certification.
 
 | Concern | AI Cockpit evidence | Required external control |

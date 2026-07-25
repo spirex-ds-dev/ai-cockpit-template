@@ -211,6 +211,10 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 **必须验证：** 过度合规声明回归、状态合法性、外部控制缺失时的黄色/红色信号。完成后对齐安全、发布和采用文档。
 
+**WI-11 当前实现边界：** `docs/reference/enterprise-control-matrix.json` 固化六种控制状态和 17 类企业/采用方控制；`docs/reference/enterprise-control-checklist.md` 与 `docs/enterprise-security-boundary.md` 明确 repository-local evidence 与外部控制的边界；三语 README 仅提供同语义入口。`tests/test_enterprise_control_matrix.py` 覆盖状态词汇、控制覆盖、过度声明和 WI-16 发布前日语门禁；本工单不配置或验证采用方 IdP、Branch Protection、合规认证、生产隔离或发布身份。
+
+**WI-11 流程问题记录：** `WI-11-ISSUE-001`：初始 Contract 骨架被 `ai-start` 的 `not_ready` 门禁阻止，原因包括缺少 intent/raw request、范围/来源过弱、场景覆盖缺失和通用验收项；已先补全 Contract 与用户授权下的真实边界，再继续实现，不复用骨架证据。
+
 ### WI-12：Code Quality and Test Architecture
 
 **范围：** 在不扩大产品边界的前提下拆分大型脚本到 domain/lifecycle/evidence/policy/installation/calibration/reporting/providers/rendering/cli；CLI 只保留解析、服务调用、输出和退出码；强化 Ruff/mypy/subprocess/path/encoding/symlink/temp-file 规则；补齐测试层次。

@@ -1,0 +1,210 @@
+{
+  "contractVersion": 2,
+  "workItemId": "enterprise-boundary",
+  "mode": "code",
+  "title": "Enterprise Governance Boundary",
+  "baseCommit": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/enterprise-boundary.contract.json",
+    ".ai/work-items/active/enterprise-boundary.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/enterprise-security-boundary.md",
+    "docs/reference/enterprise-control-matrix.json",
+    "docs/reference/enterprise-control-checklist.md",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "tests/test_enterprise_control_matrix.py",
+    "tests/test_project_governance.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Configuring or verifying an adopter's identity provider, branch protection, SSO, legal/compliance program, production sandbox, or provider account.",
+    "Claiming SOC 2, ISO 27001, SLSA, immutable audit, complete prompt-injection defense, or production readiness from repository-local evidence.",
+    "Publishing a release or changing release identity; release publication remains WI-17."
+  ],
+  "sources": [
+    {
+      "path": "docs/enterprise-security-boundary.md",
+      "reason": "Canonical repository-local versus external enterprise boundary source."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Existing capability truth and enterprise assurance limitation."
+    },
+    {
+      "path": "tests/test_project_governance.py",
+      "reason": "Existing governance and overclaim regression coverage."
+    },
+    {
+      "path": "docs/reference/enterprise-control-matrix.json",
+      "reason": "New machine-readable control status vocabulary and boundary matrix."
+    },
+    {
+      "path": "docs/reference/enterprise-control-checklist.md",
+      "reason": "Adopter-facing checklist distinguishing local evidence from external controls."
+    },
+    {
+      "path": "tests/test_enterprise_control_matrix.py",
+      "reason": "Executable status-vocabulary, required-control, and unsupported-claim regression checks."
+    },
+    {"path": "README.md", "reason": "English product boundary and WI-16 publication gate entry point."},
+    {"path": "README.ja.md", "reason": "Japanese product boundary and WI-16 publication gate entry point."},
+    {"path": "README.zh-CN.md", "reason": "Chinese product boundary and WI-16 publication gate entry point."},
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-11 boundary and process issue record."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "scope_unclear"
+    ],
+    "reason": "Enterprise controls are external and adopter-specific; WI-11 can verify only the repository boundary, status vocabulary, and overclaim prevention.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial execution; WI-11 is bounded to repository-local enterprise boundary evidence and external-control handoff."
+  },
+  "preReviewWarnings": [
+    "Review every control status, forbidden assurance claim, external-control handoff, and multilingual boundary statement; do not treat fixture or repository evidence as adopter verification."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Repository documentation clearly separates repository-local evidence, SDLC support, and external enterprise controls, and explicitly rejects unsupported SOC 2, ISO 27001, SLSA, identity, immutable-audit, sandbox, complete-injection-defense, and production-readiness claims.",
+    "The machine-readable enterprise control matrix uses only external_control_required, configured, verified, not_configured, not_applicable, or unknown and covers identity, authorization, review, branch protection, separation of duties, signed commits/tags, release immutability, least privilege, secrets, audit retention, data classification/transfer, incident response, legal hold, SBOM, provenance, and vulnerability/dependency controls.",
+    "Adopter checklist and English/Japanese/Chinese boundary references distinguish repository evidence from adopter-required evidence without claiming external verification; regression tests reject unknown statuses and overclaims.",
+    "Focused governance/documentation tests, full quality, required AI checks, and status/document alignment pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "AI Cockpit records strong repository-local governance evidence, but adopters could misread those records as enterprise identity, compliance, sandbox, immutable-audit, or production-control verification.",
+    "constraints": [
+      "Use explicit status vocabulary and fail closed on unknown control states.",
+      "Keep adopter/provider/legal controls external and do not invent evidence.",
+      "Preserve the Japanese gate: WI-11 may align Japanese boundary wording but cannot declare WI-16 capability assessment passed.",
+      "Do not publish or mutate release identity in this Work Item."
+    ],
+    "rationale": "A machine-readable boundary and adopter checklist make unsupported enterprise claims difficult to express while preserving useful repository governance evidence."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "test", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Define repository-local versus external enterprise control boundaries and prevent unsupported compliance/security claims.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+  "rawUserRequest": "Execute WI-11 Enterprise Governance Boundary as part of the approved AI Cockpit remediation plan, including its complete Contract, implementation, verification, Summary/document alignment, PR, merge, close, and branch cleanup lifecycle.",
+  "rawRequestSource": {"type": "human", "reference": "user-request: approved serial AI Cockpit remediation execution", "capturedAt": "2026-07-26", "digest": "sha256:enterprise-boundary-20260726-request"},
+  "scenarioCoverage": [
+    {"scenario": "The enterprise control matrix uses the six allowed statuses and covers all required adopter/external control categories.", "required": true, "status": "verified", "evidence": ["docs/reference/enterprise-control-matrix.json", "tests/test_enterprise_control_matrix.py"]},
+    {"scenario": "Boundary documentation rejects unsupported assurance claims and distinguishes repository evidence from external controls in English, Japanese, and Chinese entry points.", "required": true, "status": "verified", "evidence": ["docs/enterprise-security-boundary.md", "docs/reference/enterprise-control-checklist.md", "README.md", "README.ja.md", "README.zh-CN.md", "tests/test_enterprise_control_matrix.py"]},
+    {"scenario": "Unknown or invalid control status and overclaim regression inputs fail closed.", "required": true, "status": "verified", "evidence": ["tests/test_enterprise_control_matrix.py", "tests/test_project_governance.py"]}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized serial execution of the complete remediation plan, including governance documentation and test changes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 595
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/enterprise-boundary.json",
+    "baseCommit": "9fb3c34034bfd38bfbf9dde77f19a1e938cc9d60",
+    "initialScopeDigest": "f1c9f67b8f8a1ae7ce98514b26f54262a14d92328f4462b31e468260413427aa",
+    "contractSkeletonDigest": "ea35dd8ade1d7448e84c90d683db60b662c7fb7dcdfe0eee2a3c05b10e74b81d"
+  }
+}
