@@ -1,0 +1,250 @@
+{
+  "contractVersion": 2,
+  "workItemId": "interactive-calibration-wizard",
+  "mode": "code",
+  "title": "interactive-calibration-wizard",
+  "rawUserRequest": "循环执行 docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md 的全部工单流程；本 Work Item 实现校准向导核心流程并完成完整治理生命周期。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-goal:serial-interactive-installation-calibration-wizard",
+    "capturedAt": "2026-07-25",
+    "digest": "sha256:serial-work-item-execution-authorized"
+  },
+  "declaredIntent": {
+    "summary": "Implement the bounded interactive calibration wizard adapter over existing authoritative calibration capabilities.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "ec10d58a9f8a044c4add859569801db94f871674",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/interactive-calibration-wizard.contract.json",
+    ".ai/work-items/active/interactive-calibration-wizard.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_calibration_wizard.py",
+    "Makefile",
+    "tests/test_calibration_wizard.py",
+    "scripts/ai_installer_repository.py",
+    "tests/test_installer_repository.py"
+  ],
+  "outOfScope": [
+    "Installation wizard behavior and entrypoint routing",
+    "Changing CalibrationSession state transitions or Candidate Activation semantics",
+    "New recovery/error UX beyond the core wizard adapter",
+    "Release publication and unrelated governance refactors"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+      "reason": "Defines the ten-stage calibration wizard scope and verification requirements."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines calibration, Candidate Activation, and Active Configuration terminology."
+    },
+    {
+      "path": "scripts/ai_project_doctor.py",
+      "reason": "Authoritative project readiness facts reused by the adapter."
+    },
+    {
+      "path": "scripts/ai_calibration_session.py",
+      "reason": "Authoritative persisted session state transitions reused by the adapter."
+    },
+    {
+      "path": "scripts/ai_calibration_inventory.py",
+      "reason": "Existing calibration boundary inventory and stage-related facts."
+    },
+    {
+      "path": "scripts/ai_check_guard_calibration.py",
+      "reason": "Existing guard validation used by self-check and simulation."
+    },
+    {
+      "path": "tests/test_calibration_session.py",
+      "reason": "Regression evidence for session persistence and transitions."
+    },
+    {
+      "path": "tests/test_project_governance.py",
+      "reason": "Regression evidence for proposal and calibration validation behavior."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "session_integration",
+      "activation_safety",
+      "interactive_state_recovery"
+    ],
+    "reason": "The adapter is local and deterministic; it coordinates persisted calibration state and activation confirmations while delegating authoritative transitions to existing modules."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized serial execution and the bounded adapter can be implemented with existing authoritative calibration modules."
+  },
+  "preReviewWarnings": [
+    "Confirm fixed stage order, persisted resume semantics, separate confirmations, and fail-safe activation delegation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A direct calibration wizard entrypoint and Make target render exactly ten ordered stages and reuse authoritative doctor, proposal, session, self-check, simulation, and activation paths.",
+    "Y/N/Input/Unknown/N/A responses are represented without duplicating session transitions; N/A requires a reason and Unknown remains visible.",
+    "Back, Pause/Resume, stage self-check, full self-check, governance simulation, final review, and separate Reviewer/Owner confirmations are covered by deterministic tests.",
+    "Candidate Activation is invoked only after both confirmations and preserves the original Active Configuration when the delegated activation fails."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Fresh calibration session renders the fixed ten stages in order",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_calibration_wizard.py::test_fixed_stage_order"]
+    },
+    {
+      "scenario": "Paused session resumes at the persisted stage without losing answers",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_calibration_wizard.py::test_pause_and_resume_preserves_session"]
+    },
+    {
+      "scenario": "Back navigates without duplicating authoritative session transitions",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_calibration_wizard.py::test_back_navigation"]
+    },
+    {
+      "scenario": "Self-check and governance simulation reuse existing validation paths",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_calibration_wizard.py::test_self_check_and_simulation"]
+    },
+    {
+      "scenario": "Activation requires separate Reviewer and Owner confirmations and preserves Active on failure",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_calibration_wizard.py::test_separate_confirmations_and_activation_failure"]
+    }
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Operators need a resumable, human-centered calibration flow over the existing Project Doctor, Proposal, CalibrationSession, self-check, simulation, and activation capabilities. A new adapter must expose the fixed ten-stage journey without creating a second source of truth for persisted state or activation.",
+    "constraints": [
+      "Keep the fixed ten-stage order and standard-library/runtime compatibility.",
+      "Reuse existing authoritative session transitions and Candidate Activation logic; do not duplicate them.",
+      "Do not activate or mutate Active Configuration before explicit separate Reviewer and Owner confirmations.",
+      "Keep Unknown explicit, require a reason for N/A, and make Pause/Resume deterministic and safe."
+    ],
+    "rationale": "A thin adapter provides the requested interactive journey while preserving the repository's existing calibration invariants and failure behavior."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized the complete serial Work Item execution; Makefile entrypoint is within this Work Item scope."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 566
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/interactive-calibration-wizard.json",
+    "baseCommit": "ec10d58a9f8a044c4add859569801db94f871674",
+    "initialScopeDigest": "a89d9141eac48f22cace59cf0d544b3651a6ed3a994b59d0d6efe5c15da94b76",
+    "contractSkeletonDigest": "8f81dff03c8abd9e4b1f791e066239ffd1bbd7f40087d3448ff4ec1547fc4f59"
+  }
+}
