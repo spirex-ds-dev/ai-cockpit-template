@@ -102,3 +102,17 @@ def test_valid_conditional_claim_and_matching_residual_risk_pass() -> None:
         candidate, render_markdown(candidate), expected_task_id="task-outcome-validator"
     )
     assert report.valid, report.errors
+
+
+def test_duplicate_event_ids_and_invalid_severity_fail_closed() -> None:
+    candidate = outcome()
+    candidate["sections"]["risks"] = [
+        {"title": "Risk", "state": "unresolved", "severity": "urgent"}
+    ]
+    report = validate_outcome(
+        candidate,
+        events=[{"eventId": "evt-1"}, {"eventId": "evt-1"}],
+        expected_task_id="task-outcome-validator",
+    )
+    assert not report.valid
+    assert {error.code for error in report.errors} >= {"event_identity", "severity"}

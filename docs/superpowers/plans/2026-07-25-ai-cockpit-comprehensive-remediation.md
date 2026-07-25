@@ -187,6 +187,10 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 **必须验证：** 空/最小/完整报告、五种最终状态、invalid binding/status/severity、dedupe/recurrence、所有 stop outcome、multilingual、privacy、no-score 和 unsupported claim 负例。完成后对齐报告文档与 PR 摘要。
 
+**WI-09 当前实现边界：** 仅实现本地、确定性的 Task Outcome 证据聚合与派生视图；机器 JSON 是事实源，Markdown/PR/Status 是派生视图；不实现外部 Provider 身份、CI API、审批或发布变更，日语能力的发布前综合评估仍由 WI-16 负责。
+
+**WI-09 流程问题记录：** `WI-09-ISSUE-001`：Contract 初始骨架触发 `not_ready`，已补全 intent、原始请求、来源、验收和风险审查。`WI-09-ISSUE-002`：三个中风险场景在实现前没有证据，预检要求 `needs_human_confirmation`；用户已授权连续执行，继续实现但不预填 verified，必须在测试完成后补齐场景证据并重新通过门禁。`WI-09-ISSUE-003`：验证器原先未拒绝重复 eventId 和非法 severity；已先补充 fail-closed 校验及负例测试，再将场景证据标记为 verified。`WI-09-ISSUE-004`：新增负例测试初次未纳入 Contract scope，finish 的 Scope Guard 已阻止继续；已补充 scope 后重跑。`WI-09-ISSUE-005`：Scope 补全后旧 before_edit checkpoint hash stale，Agent Risk 正确阻止 finish；已在最终 Contract 后刷新 checkpoint，再继续 finish。
+
 ### WI-10：Documentation Alignment
 
 **范围：** 安装文档拆为“30 秒开始”“标准采用指南”“安全与发布验证”；为命令标注 `syntax_tested`、`fixture_executed`、`hosted_executed`、`adopter_required`、`illustrative_only`；建立 release/version/ref/path/command/Make/capability 多语言检查和历史文档隔离标记。
