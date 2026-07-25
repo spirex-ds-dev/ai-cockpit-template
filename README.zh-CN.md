@@ -25,6 +25,8 @@ keywords:
 
 # AI Cockpit
 
+企业控制边界请参阅[企业控制清单](docs/reference/enterprise-control-checklist.md)和[机器可读状态矩阵](docs/reference/enterprise-control-matrix.json)。仓库内证据不等于外部控制已验证；发布前必须完成 WI-16 日语能力评估。
+
 当前采用指南分为[30 秒开始](docs/getting-started/30-second-start.md)、[标准采用指南](docs/getting-started/standard-adoption-guide.md)和[安全与发布验证](docs/getting-started/security-release-verification.md)三层。历史计划和归档记录属于证据上下文，不是当前操作指示。
 
 [English](README.md) | [日本語](README.ja.md)
