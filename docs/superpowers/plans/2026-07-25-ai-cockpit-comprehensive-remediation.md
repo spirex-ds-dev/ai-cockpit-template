@@ -231,6 +231,10 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 **范围：** 建立 Deprecated Asset Registry，记录 id/path/type/replacement/deprecatedSince/plannedRemoval/reason/currentReferences/runtimeUsed/migrationRequired；检查无引用模块、旧命令、旧 Make target、过期日期、失效 capability evidence、重复 schema/事实字段、未标历史文档；规划 archive 年度分区、索引、digest、压缩、外部导出和保留策略。
 
+**当前执行边界：** 本工单先交付注册表、引用/过期/受保护证据检查器和恢复边界文档；不删除任何归档证据，不提前清理执行计划文档，不把“注册表通过”声明为已经完成清理。
+
+**流程问题记录：** 与 WI-12 相同，预检在必需场景尚未实现时仅提供 `needs_human_confirmation`，没有“用户已授权、先实现再闭合场景证据”的继续选项。已保留结构化决策证据并按用户授权继续；完成后仅以真实测试结果更新场景状态。
+
 **验收：** 任何删除都有范围、理由、替代、证据和恢复路径；必须保留的 Contract/Summary/Event/Manifest/Release evidence 不被清理；目标工程治理 artifact 增长边界有证据。
 
 **必须验证：** 引用图、过期检查、archive integrity/digest/retention 测试。完成后对齐文档索引和历史标记；不得提前做 WI-18 的计划文档清理。

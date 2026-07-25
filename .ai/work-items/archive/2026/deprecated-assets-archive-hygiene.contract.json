@@ -1,0 +1,212 @@
+{
+  "contractVersion": 2,
+  "workItemId": "deprecated-assets-archive-hygiene",
+  "mode": "code",
+  "title": "Deprecated Assets and Archive Hygiene",
+  "baseCommit": "de1d18d44c9fa233492892431f61ba55008cfe9d",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/deprecated-assets-archive-hygiene.contract.json",
+    ".ai/work-items/active/deprecated-assets-archive-hygiene.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    "docs/reference/deprecated-assets-registry.json",
+    "docs/reference/deprecated-assets.md",
+    "scripts/check_deprecated_assets.py",
+    "tests/test_deprecated_assets.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "Makefile"
+  ],
+  "outOfScope": [
+    "Deleting any asset, archived Contract, Summary, Event, Manifest, or release evidence.",
+    "Cleaning the execution plan documents reserved for WI-18.",
+    "Provider, adopter, production, Japanese capability, and release publication changes.",
+    "Rewriting unrelated scripts or changing runtime behavior without registry evidence."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-13 scope, acceptance, and prohibition on premature WI-18 cleanup."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Archive index and preserved evidence inventory."
+    },
+    {
+      "path": ".ai/work-items/archive/2026",
+      "reason": "Archived Contract/Summary pairs and manifest-backed lifecycle evidence."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Current archive, lifecycle, and governance check entry points."
+    },
+    {
+      "path": "scripts",
+      "reason": "Repository script inventory for registry reference validation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["archive_integrity", "accidental_deletion", "stale_reference"],
+    "reason": "Registry and validation changes must preserve immutable evidence and fail closed on incomplete deprecation records.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial execution; this Work Item is bounded to registry, validation, and documentation evidence without deletion."
+  },
+  "preReviewWarnings": [
+    "Review that registry completeness does not authorize deletion.",
+    "Review archive integrity and recovery paths before any future cleanup Work Item."
+  ],
+  "intent": {
+    "problem": "The repository has accumulated historical assets and archive evidence, but deprecation intent, replacement, retention, and recovery boundaries are not represented by one executable registry.",
+    "constraints": [
+      "Do not delete or rewrite archived evidence.",
+      "Do not perform WI-18 plan-document cleanup early.",
+      "Use deterministic local checks and preserve external-control boundaries."
+    ],
+    "rationale": "A registry and fail-closed validator make future cleanup reviewable while preserving the evidence required for lifecycle audit."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "rawUserRequest": "Execute the approved AI Cockpit comprehensive remediation plan serially. For WI-13, establish deprecated asset and archive hygiene evidence without deleting protected records, complete the full Work Item/PR/merge/close workflow, record issues, and align documentation before WI-14.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:serial-plan-execution-2026-07-25",
+    "capturedAt": "2026-07-26",
+    "digest": "sha256:wi13-deprecated-assets-archive-hygiene-plan"
+  },
+  "declaredIntent": {
+    "summary": "Create executable deprecated-asset registry and archive-preservation boundaries without deletion.",
+    "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]
+  },
+  "scenarioCoverage": [
+    {"scenario": "Complete registry entries pass deterministic validation.", "required": true, "status": "verified", "evidence": ["tests/test_deprecated_assets.py::test_repository_registry_is_valid", "make check-deprecated-assets"], "reason": "Positive schema test."},
+    {"scenario": "Incomplete or stale registry entries fail closed.", "required": true, "status": "verified", "evidence": ["tests/test_deprecated_assets.py::test_missing_required_field_fails_closed", "tests/test_deprecated_assets.py::test_stale_planned_removal_requires_runtime_false"], "reason": "Negative regression test."},
+    {"scenario": "Protected archive evidence is never classified as deletable.", "required": true, "status": "verified", "evidence": ["tests/test_deprecated_assets.py::test_protected_archive_path_cannot_be_deletable", "docs/reference/deprecated-assets.md"], "reason": "Archive boundary test."}
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A Deprecated Asset Registry records id, path, type, replacement, deprecatedSince, plannedRemoval, reason, currentReferences, runtimeUsed, and migrationRequired.",
+    "A deterministic checker fails closed on missing fields, invalid dates, missing replacements, stale planned removal dates, and references to protected archive evidence.",
+    "Negative and positive tests cover registry schema, reference integrity, protected evidence, and recovery/deletion boundary semantics.",
+    "Deprecated asset documentation and the checks catalog explain that this Work Item records and validates candidates; it does not delete protected evidence or perform WI-18 plan cleanup."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features.",
+    "Preserve immutable Contract/Summary/Event/Manifest/release evidence and fail closed before deletion.",
+    "Do not claim archive cleanup merely from registry validation."
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User",
+    "reason": "Explicit user authorization to execute the approved remediation plan and update governed registry/evidence paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 597
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/deprecated-assets-archive-hygiene.json",
+    "baseCommit": "de1d18d44c9fa233492892431f61ba55008cfe9d",
+    "initialScopeDigest": "f457e9edc6396f11f5395a0e27e1cb394b35619dbada1b80f3a3ada355b5ea92",
+    "contractSkeletonDigest": "44030214b8eb0281117acaadea42b2ea6a5c24aaa8a351f53f1b42e819415bfe"
+  }
+}
