@@ -43,6 +43,7 @@ class InjectionOutcome(str, Enum):
 _INJECTION_PATTERNS = (
     r"administrator\s+approved",
     r"忽略策略|伪造管理员批准|跳过审查",
+    r"管理者.{0,12}(?:承認|許可)|審査.{0,12}(?:無視|スキップ)|(?:秘密|トークン).{0,12}(?:表示|公開)",
     r"override\s+(?:approval|guard|policy)",
     r"(?:skip|bypass|disable)\s+(?:review|guard|policy)",
     r"(?:print|expose|reveal)\s+(?:the\s+)?(?:secret|token|key)",

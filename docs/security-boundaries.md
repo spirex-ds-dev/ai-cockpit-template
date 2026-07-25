@@ -16,7 +16,7 @@ The input-trust classifier treats content and execution authority as separate fa
 
 `human` input is a trusted request candidate and has `human_request` authority for review, but it is not automatic approval for a high-risk operation. `repository`, `issue`, `web`, `log`, `dependency`, `tool`, and `generated` input is untrusted content with `none` instruction authority. All source records state whether instructions may be present and retain external metadata separately from the content classification.
 
-The local implementation is deterministic and fail-closed. It reports `detected`, `contained`, `blocked`, `human_confirmation_required`, `not_detected`, or `out_of_scope`. Detection indicators include direct and mixed-language requests, hidden HTML, encoded content, Unicode directionality, nested quotes, CI annotations, and forged approval or override language.
+The local implementation is deterministic and fail-closed. It reports `detected`, `contained`, `blocked`, `human_confirmation_required`, `not_detected`, or `out_of_scope`. Detection indicators include direct and mixed Chinese/Japanese/English requests, hidden HTML, encoded content, Unicode directionality, nested quotes, CI annotations, and forged approval or override language.
 
 ## High-risk operations
 
