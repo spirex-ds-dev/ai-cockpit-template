@@ -22,3 +22,5 @@ This matrix records which lifecycle claims have executable evidence. It is a gov
 | Lifecycle | Branch, PR, merge, close, and cleanup | `make ai-close-work-item TASK=...` | Requires provider merge evidence and synchronized base |
 
 The matrix must be updated when a lifecycle claim changes. Missing evidence is a gap to record, not a reason to infer stability from a successful template-only run.
+
+Each row must identify the evidence kind (`fixture`, `hosted`, `adopter_execution`, or `not_verified`). Template fixtures and static presence checks cannot be promoted into hosted or adopter evidence.

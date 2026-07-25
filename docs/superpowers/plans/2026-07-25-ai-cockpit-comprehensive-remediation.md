@@ -123,6 +123,8 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **WI-03 当前实现边界：** Source Mode 分类与事务原语位于 `scripts/ai_installer_transaction.py`，安装器接入位于 `scripts/install_ai_cockpit.py`；Source Mode、write-plan、锁、路径穿越和未知 source 负例位于 `tests/test_installer_transaction.py`，现有安装事实/计划/边界测试继续作为回归套件。WI-03 不承担 WI-04 的对象工程校准、生产就绪或发布身份声明；dirty local source 必须保持为本地模式，不得冒充已验证 release。
 
+**WI-04 当前实现边界：** `scripts/ai_calibration_inventory.py` 为每项校准证据输出受限的 `evidenceKind`（`fixture`、`hosted`、`adopter_execution`、`not_verified`），默认和缺失外部证据保持 `not_verified`；库存校验拒绝未知类型，静态/fixture 证据不得提升为 adopter/hosted 或生产就绪声明。相关边界由 `tests/test_calibration_inventory.py` 与校准/采纳回归测试验证；本工单不伪造外部对象工程、CI 身份或真实 adopter 执行证据。
+
 ### WI-04：Adoption, Calibration and Adopter Evidence
 
 **范围：** 保持 Runtime Installation → Adoption → Project Calibration → Pilot Work Item → Gate Promotion；改造问卷、默认值条件、Unknown 分类和 Not Applicable 理由；建立 Python/TypeScript/Node/Flutter/Android/Swift/Xcode/CocoaPods、GitHub/GitLab、非标准 remote/branch、detached/shallow/dirty、macOS/Linux/WSL 的证据矩阵。

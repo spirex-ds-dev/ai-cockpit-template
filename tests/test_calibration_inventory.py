@@ -2,6 +2,8 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+import pytest
+
 from ai_calibration_inventory import (
     INVENTORY_KEYS,
     STATUS_VALUES,
@@ -21,6 +23,7 @@ def test_inventory_has_one_explicit_entry_for_each_calibration_boundary(tmp_path
         assert item["status"] in STATUS_VALUES
         assert item["source"]
         assert item["confirmation"] in {"none", "static", "command", "human", "external"}
+        assert item["evidenceKind"] == "not_verified"
         assert isinstance(item["evidence"], list)
         assert "staleAt" in item
         assert item["owner"]
@@ -40,12 +43,14 @@ def test_inventory_distinguishes_command_evidence_from_static_configuration(tmp_
             "status": "complete",
             "source": "make ai-cockpit-quality",
             "confirmation": "command",
+            "evidenceKind": "adopter_execution",
             "evidence": ["target/quality-run.json"],
         },
         "ci": {
             "status": "complete",
             "source": "workflow run 42",
             "confirmation": "external",
+            "evidenceKind": "hosted",
             "evidence": ["run=42", "headSha=abc123"],
         },
     }
@@ -54,9 +59,26 @@ def test_inventory_distinguishes_command_evidence_from_static_configuration(tmp_
 
     assert inventory["items"]["quality"]["status"] == "complete"
     assert inventory["items"]["quality"]["confirmation"] == "command"
+    assert inventory["items"]["quality"]["evidenceKind"] == "adopter_execution"
     assert inventory["items"]["ci"]["status"] == "complete"
     assert inventory["items"]["ci"]["confirmation"] == "external"
+    assert inventory["items"]["ci"]["evidenceKind"] == "hosted"
     assert inventory["items"]["coverage"]["confirmation"] != "command"
+
+
+def test_inventory_rejects_unknown_evidence_kind(tmp_path: Path):
+    with pytest.raises(ValueError, match="evidenceKind"):
+        build_inventory(
+            tmp_path,
+            command_evidence={
+                "quality": {
+                    "status": "complete",
+                    "source": "make quality",
+                    "confirmation": "command",
+                    "evidenceKind": "production",
+                }
+            },
+        )
 
 
 def test_inventory_marks_missing_and_stale_evidence_fail_closed(tmp_path: Path):

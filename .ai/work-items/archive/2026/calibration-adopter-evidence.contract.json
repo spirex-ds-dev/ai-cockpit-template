@@ -1,0 +1,178 @@
+{
+  "contractVersion": 2,
+  "workItemId": "calibration-adopter-evidence",
+  "mode": "code",
+  "title": "Adoption Calibration and Adopter Evidence",
+  "rawUserRequest": "继续执行全面整改计划的 WI-04：分离 Runtime Installation、Adoption、Project Calibration、Pilot Work Item、Gate Promotion，建立 fixture/hosted/adopter/not verified 证据矩阵，校正问卷默认值与 Unknown 分类，并完成完整 PR、合并、关闭、分支清理和文档对齐流程。",
+  "rawRequestSource": {"type": "human", "reference": "user-request: AI Cockpit comprehensive remediation instruction and continuation authorization", "capturedAt": "2026-07-25", "digest": "sha256:calibration-adopter-evidence-request"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "test", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Make adoption and calibration evidence explicit, typed and fail-closed without turning template or fixture presence into adopter readiness.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "baseCommit": "ac058eb27b4a8975eee3631cbf4d37ffbef2aa04",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/calibration-adopter-evidence.contract.json",
+    ".ai/work-items/active/calibration-adopter-evidence.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_calibration_inventory.py",
+    "scripts/ai_check_adoption_ready.py",
+    "tests/test_calibration_inventory.py",
+    "tests/test_calibration_session.py",
+    "tests/test_adoption_e2e.py",
+    "docs/reference/calibration-inventory.md",
+    "docs/reference/calibration-session.md",
+    "docs/template-adopter-stability-matrix.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": ["Installer source/transaction behavior (WI-03)", "Prompt injection and absurd-test corpus (WI-05/WI-06)", "Formal Work Item state and Task Outcome integration (WI-07/WI-09)", "Release publishing (WI-16)", "Historical plan cleanup (WI-17)"],
+  "sources": [
+    {"path": "scripts/ai_calibration_inventory.py", "reason": "Canonical shared calibration inventory and evidence status model."},
+    {"path": "scripts/ai_check_adoption_ready.py", "reason": "Adoption readiness boundary that consumes explicit evidence."},
+    {"path": "tests/test_calibration_inventory.py", "reason": "Inventory status, stale and evidence-kind regression tests."},
+    {"path": "tests/test_calibration_session.py", "reason": "Calibration session fail-closed and activation boundary tests."},
+    {"path": "tests/test_adoption_e2e.py", "reason": "Minimal adopter fixture lifecycle evidence boundary."},
+    {"path": "docs/reference/calibration-inventory.md", "reason": "Inventory evidence-kind contract."},
+    {"path": "docs/reference/calibration-session.md", "reason": "Calibration/adoption separation and adopter execution limits."},
+    {"path": "docs/template-adopter-stability-matrix.md", "reason": "Fixture/hosted/adopter/not-verified matrix documentation."},
+    {"path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "reason": "WI-04 implementation boundary and downstream evidence claim alignment."},
+    {"path": ".ai/work-items/active/calibration-adopter-evidence.contract.json", "reason": "Bound WI-04 implementation and verification scope."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["evidence_misclassification", "adopter_boundary", "stale_evidence"],
+    "reason": "Adoption and calibration claims can be overstated when fixture, hosted, adopter execution and not-verified evidence are conflated or stale."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "WI-03 is merged and closed; user authorized serial execution and WI-04 is bounded to calibration/adopter evidence."
+  },
+  "preReviewWarnings": [
+    "Fixture/hosted/adopter/not-verified evidence kinds, defaults, stale handling, and production-readiness non-claims must be reviewed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Runtime Installation, Adoption, Project Calibration, Pilot Work Item and Gate Promotion remain distinct lifecycle states; installation alone cannot imply calibration or production readiness.",
+    "Every calibration/adopter evidence item declares exactly one evidenceKind: fixture, hosted, adopter_execution, or not_verified; defaults and Unknown/Not Applicable reasons are explicit.",
+    "Stale, missing, contradictory or static-only evidence remains non-ready; fixture evidence cannot be used as adopter or hosted evidence.",
+    "Inventory, readiness, calibration session and adopter fixture tests pass, and documentation plus full AI/project checks pass before PR creation.",
+    "The remediation plan records WI-04 implementation paths, evidence matrix, and downstream claim boundary."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The current repository has calibration and adoption machinery, but evidence provenance can be read too broadly: static templates or deterministic fixtures can be mistaken for hosted or adopter execution, and installation can be confused with calibration or production readiness.",
+    "constraints": ["Preserve existing calibration session state and fail-closed activation.", "Do not claim external provider, identity, object-project or production evidence from local fixtures.", "Keep Unknown and Not Applicable distinct and require reasons where applicable."],
+    "rationale": "A typed evidence-kind boundary lets the inventory and readiness output compress conclusions without overstating what was actually executed or reviewed."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Static template or fixture evidence is not reported as adopter execution or production readiness", "required": false, "status": "unverified", "evidence": ["tests/test_calibration_inventory.py", "tests/test_adoption_e2e.py"]},
+    {"scenario": "Hosted, adopter execution, fixture and not-verified evidence kinds remain distinguishable", "required": false, "status": "unverified", "evidence": ["tests/test_calibration_inventory.py", "docs/template-adopter-stability-matrix.md"]},
+    {"scenario": "Stale, missing, Unknown and Not Applicable evidence fail closed with reasons", "required": false, "status": "unverified", "evidence": ["tests/test_calibration_inventory.py", "tests/test_calibration_session.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 588
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/calibration-adopter-evidence.json",
+    "baseCommit": "ac058eb27b4a8975eee3631cbf4d37ffbef2aa04",
+    "initialScopeDigest": "e51d445c6afef06b1e3f93c53352ad804bcd59629a033e574cd2e4a43b4a17c3",
+    "contractSkeletonDigest": "2cb841acb8c53751877a9c53d177ccb4f49d80ae3ba750b63cf4f0b508a5e3c6"
+  }
+}
