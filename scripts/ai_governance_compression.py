@@ -668,7 +668,9 @@ def render_active_status(
     preflight_review: dict[str, Any] | None = None,
     ownership_counts: dict[str, int] | None = None,
     calibration_inventory: dict[str, Any] | None = None,
+    task_outcome: dict[str, Any] | None = None,
 ) -> str:
+    """Render compressed governance signals and optional Outcome link metadata."""
     timestamp = generated_at or datetime.now(timezone.utc).isoformat()
     lines = [
         "---",
@@ -773,6 +775,15 @@ def render_active_status(
             lines.append(f"- {EVIDENCE_LABELS.get(key, key)}: `{entries[0]}`")
         else:
             lines.append(f"- {EVIDENCE_LABELS.get(key, key)}: `{'; '.join(entries)}`")
+
+    if isinstance(task_outcome, dict):
+        lines.extend(["", "## Task Outcome", ""])
+        outcome_path = task_outcome.get("markdownPath", "")
+        outcome_count = task_outcome.get("evidenceCount", 0)
+        outcome_status = task_outcome.get("status", "unknown")
+        lines.append(f"- Status: `{outcome_status}`")
+        lines.append(f"- Report: `{outcome_path}`")
+        lines.append(f"- Evidence Count: `{outcome_count}`")
 
     if isinstance(calibration_inventory, dict):
         lines.extend(["", "## Calibration Inventory", ""])
