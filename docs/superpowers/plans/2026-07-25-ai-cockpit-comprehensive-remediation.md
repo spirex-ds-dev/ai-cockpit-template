@@ -125,6 +125,8 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **WI-04 当前实现边界：** `scripts/ai_calibration_inventory.py` 为每项校准证据输出受限的 `evidenceKind`（`fixture`、`hosted`、`adopter_execution`、`not_verified`），默认和缺失外部证据保持 `not_verified`；库存校验拒绝未知类型，静态/fixture 证据不得提升为 adopter/hosted 或生产就绪声明。相关边界由 `tests/test_calibration_inventory.py` 与校准/采纳回归测试验证；本工单不伪造外部对象工程、CI 身份或真实 adopter 执行证据。
 
+**WI-05 当前实现边界：** `scripts/ai_input_trust.py` 提供本地、确定性的 source/trust/authority 记录、注入指示器分类和高风险操作 fail-closed 重新评估；`tests/test_input_trust.py` 与 `tests/test_input_trust_corpus.py` 覆盖中英文、隐藏 HTML、Base64、Unicode、嵌套引用、CI/tool/generated 输入。`docs/security-boundaries.md` 明确该分类器不是完整注入检测器、身份验证器或 provider/repository 控制替代品；本工单不承担 WI-06 的 Capability Truth Matrix，也不执行外部写入、push、merge、release 或权限变更。
+
 ### WI-04：Adoption, Calibration and Adopter Evidence
 
 **范围：** 保持 Runtime Installation → Adoption → Project Calibration → Pilot Work Item → Gate Promotion；改造问卷、默认值条件、Unknown 分类和 Not Applicable 理由；建立 Python/TypeScript/Node/Flutter/Android/Swift/Xcode/CocoaPods、GitHub/GitLab、非标准 remote/branch、detached/shallow/dirty、macOS/Linux/WSL 的证据矩阵。
