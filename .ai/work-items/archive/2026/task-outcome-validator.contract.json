@@ -1,0 +1,187 @@
+{
+  "contractVersion": 2,
+  "workItemId": "task-outcome-validator",
+  "mode": "code",
+  "title": "Validate Task Outcome schema bindings provenance privacy and claims",
+  "rawUserRequest": "Implement the Task Outcome validator described by the execution plan: validate JSON Schema, bindings, provenance, event relationships, privacy, JSON/Markdown parity, conditional avoided-impact claims, no-score rules, and residual-risk visibility. Execute this Work Item serially through its own PR and lifecycle closure.",
+  "rawRequestSource": {"type": "human", "reference": "user-request:serial-plan-execution-2026-07-25", "capturedAt": "2026-07-25", "digest": "sha256:interactive-installation-calibration-wizard-plan"},
+  "declaredIntent": {"summary": "Validate generated Task Outcome artifacts against schema, evidence bindings, privacy and claim policies.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "baseCommit": "ccaa0c155650993ece72a288642b43f3f147af77",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/task-outcome-validator.contract.json",
+    ".ai/work-items/active/task-outcome-validator.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_check_task_outcome.py",
+    "tests/test_task_outcome_validator.py",
+    ".ai/guards/coverage_policy.yaml"
+  ],
+  "outOfScope": ["Generator derivation rules and event recording; owned by WI14/WI15.", "Standalone Markdown rendering, lifecycle integration, PR summaries, multilingual output, and release publication."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+      "reason": "Plan Extension defines validator responsibilities and claim restrictions."
+    },
+    {
+      "path": ".ai/schemas/task_outcome.schema.json",
+      "reason": "WI13 machine-output schema."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "WI15 generator output and Markdown parity source."
+    },
+    {
+      "path": "scripts/ai_task_event_log.py",
+      "reason": "WI14 append-only event relationships and privacy conventions."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository terminology and boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "evidence_integrity",
+      "privacy",
+      "claim_validation"
+    ],
+    "reason": "The validator is a fail-closed evidence gate over generated artifacts and must reject privacy leaks, invalid bindings, unsupported claims, and hidden residual risks."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Validator scope, evidence sources, acceptance, scenarios, and serial authorization are explicit."
+  },
+  "preReviewWarnings": [
+    "Replace with task-specific review focus, or clear when no special review focus remains."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The validator checks the WI13 schema, required bindings, commit/PR provenance, and task identity without mutating raw Evidence.",
+    "The validator rejects malformed JSON, privacy-sensitive fields, broken event relationships, JSON/Markdown parity failures, unconditional Avoided Impact, scores, unsupported quantification, and hidden accepted/unresolved residual risks.",
+    "Validation is fail closed and returns structured reasons suitable for later ai-finish integration; valid empty reports and all five statuses pass.",
+    "Focused tests cover valid/invalid schema, bindings, provenance, privacy, event relationships, parity, conditional claims, no-score rules, residual risks, and deterministic failures."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Valid complete and empty outcome reports pass validation.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_validator.py"]},
+    {"scenario": "Invalid schema, task binding, digest, commit, PR, or status fails closed.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_validator.py"]},
+    {"scenario": "Privacy-sensitive keys, malformed events, and broken correction relationships fail closed.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_validator.py"]},
+    {"scenario": "Markdown parity, conditional Avoided Impact, no-score/no-quantification, and residual-risk visibility are enforced.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_validator.py"]},
+    {"scenario": "All five final statuses and evidence-backed human decisions validate.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_validator.py"]}
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Generated Task Outcome artifacts need a fail-closed validator so later lifecycle and presentation steps cannot promote malformed, privacy-sensitive, provenance-free, or exaggerated claims.",
+    "constraints": ["Validate without rewriting raw Evidence.", "Keep generator, renderer, lifecycle, and release responsibilities in their later Work Items.", "Treat residual risks and human decisions as visible evidence, never as hidden metadata."],
+    "rationale": "A dedicated validator makes the generated report safe to consume and gives ai-finish a deterministic gate before presentation or archival integration."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized serial execution and in-scope governance updates for every Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 575
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/task-outcome-validator.json",
+    "baseCommit": "ccaa0c155650993ece72a288642b43f3f147af77",
+    "initialScopeDigest": "2ae637e82b969f77b8248a508fb553f34f7b6a1ccce9a08e5612d7f7d1a173ed",
+    "contractSkeletonDigest": "dcfe49a5c30ff952650668761a66766d8b34d63f03cf5650bbb7965d6ac28495"
+  }
+}
