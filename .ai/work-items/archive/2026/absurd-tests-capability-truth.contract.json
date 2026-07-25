@@ -1,0 +1,211 @@
+{
+  "contractVersion": 2,
+  "workItemId": "absurd-tests-capability-truth",
+  "mode": "code",
+  "title": "Absurd tests and Capability Truth Matrix",
+  "baseCommit": "8027bdf798db0dfb4ce5704c912fe1d94bab7cf9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/absurd-tests-capability-truth.contract.json",
+    ".ai/work-items/active/absurd-tests-capability-truth.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/decisions/**",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/guards/coverage_policy.yaml",
+    "scripts/ai_capability_truth.py",
+    "tests/test_absurd_capability_truth.py",
+    "tests/test_capability_truth_matrix.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Runtime installation, calibration, upgrade, rollback, or release publication",
+    "External provider mutation or real-world operation",
+    "Claiming complete model hallucination or prompt-injection prevention"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-06 scope, absurd-test levels, negative cases, and Capability Truth acceptance."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Existing machine-readable public capability source of truth to validate and bind."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.md",
+      "reason": "Existing human-readable capability boundary and status vocabulary."
+    },
+    {
+      "path": "tests/test_capability_truth_matrix.py",
+      "reason": "Existing capability matrix regression boundary."
+    },
+    {
+      "path": ".ai/project/capabilities.json",
+      "reason": "Repository-declared capability and non-capability boundary."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Existing public capability claim consistency gate."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/input-trust-prompt-injection.archive-manifest.json",
+      "reason": "Predecessor WI-05 closure evidence and serial-order boundary."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Coverage guard association policy for the new production script and its tests."
+    }
+  ],
+  "rawUserRequest": "继续执行全面整改计划的 WI-06：建立荒诞测试 L1-L4、覆盖能力/证据/完成/语义/世界事实/授权幻觉，并把公开能力绑定到可验证的 Capability Truth evidence；完成完整 PR、合并、关闭、分支清理和文档对齐流程。",
+  "rawRequestSource": {"type": "human", "reference": "user-request: AI Cockpit comprehensive remediation instruction and continuation authorization", "capturedAt": "2026-07-26", "digest": "sha256:absurd-tests-capability-truth-request"},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "capability_claims",
+      "negative_test_boundary",
+      "evidence_staleness"
+    ],
+    "reason": "The Work Item changes capability evidence validation and negative-test claims, but does not mutate runtime or external systems.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "WI-05 is closed with merged PR, archived evidence, cleaned branches, and synchronized main; user authorized serial execution."
+  },
+  "predecessorWorkItem": {"workItemId": "input-trust-prompt-injection", "status": "closed", "pr": {"number": 369, "merged": true, "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/369", "mergeCommit": "8027bdf798db0dfb4ce5704c912fe1d94bab7cf9"}, "closure": {"succeeded": true, "localBranchDeleted": true, "remoteBranchDeleted": true, "baseSynchronized": true, "evidence": ".ai/work-items/archive/2026/input-trust-prompt-injection.archive-manifest.json"}},
+  "preReviewWarnings": [
+    "Negative absurd cases prove fail-closed boundary behavior, not general intelligence or complete hallucination prevention.",
+    "Capability status must degrade when any bound source, test, command, limitation, or digest evidence is missing or stale."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "L1 structural, L2 behavioral, L3 adversarial, and L4 recovery absurd-test cases cover capability, evidence, completion, semantic, world-fact, and authority hallucination classes.",
+    "Rocket launch, production-data deletion, CI bypass release, forged approval/test, secret access, nonexistent API, no-adopter install, unavailable network facts, unauthorized push, and unavailable Xcode/Android instrumentation cases return a blocked result with an explicit safeAlternative such as local dry-run, evidence request, or permission review.",
+    "Capability Truth rows bind status to sourceEvidence, testEvidence, commandEvidence, limitations, and a deterministic digest; missing, changed, stale, or contradictory evidence yields evidence_stale/not_ready and cannot support a release claim.",
+    "Negative tests prove that passing tests or template presence is not itself an adopter capability claim, and documentation claim checks remain aligned with the machine-readable matrix.",
+    "Focused absurd/capability tests, full AI/project checks, and the required complete PR/merge/ai-close-work-item/branch-cleanup/base-sync lifecycle pass; no external mutation or release publication occurs."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The repository has capability truth documentation and regression checks, but it lacks a dedicated, executable negative corpus proving that absurd requests, unsupported world facts, forged evidence, and unavailable adopter environments remain fail-closed rather than becoming capability claims.",
+    "constraints": ["Keep tests deterministic and offline.", "Preserve the four existing matrix statuses and template/adopter boundary.", "Do not implement runtime installation, calibration, release, or external identity/approval behavior.", "Do not claim complete hallucination or prompt-injection prevention from negative tests."],
+    "rationale": "An executable absurd-test corpus and evidence-binding validator make the difference between repository evidence, template material, adopter evidence, and planned work mechanically reviewable."
+  },
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "test", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Enforce fail-closed absurd-test and capability-evidence boundaries without changing runtime or release behavior.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "scenarioCoverage": [
+    {"scenario": "The existing Capability Truth matrix uses the closed status vocabulary and documentation claim gate remains aligned before WI-06 changes.", "required": true, "status": "verified", "evidence": ["docs/reference/capability-truth-matrix.json", "tests/test_capability_truth_matrix.py", "scripts/check_docs_metadata.py"]},
+    {"scenario": "L1-L4 absurd cases are represented with deterministic class, expected decision, safe alternative, and evidence fields.", "required": false, "status": "unverified", "evidence": ["tests/test_absurd_capability_truth.py"]},
+    {"scenario": "Missing, stale, contradictory, or digest-mismatched capability evidence cannot remain an implemented claim.", "required": false, "status": "unverified", "evidence": ["scripts/ai_capability_truth.py", "tests/test_absurd_capability_truth.py"]},
+    {"scenario": "Capability Truth documentation and public claim scanning remain aligned in English, Japanese, and Chinese boundaries after implementation.", "required": false, "status": "unverified", "evidence": ["docs/reference/capability-truth-matrix.json", "docs/reference/capability-truth-matrix.md", "tests/test_capability_truth_matrix.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized serial execution of the remediation plan; preflight decision evidence is required for this Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 590
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/absurd-tests-capability-truth.json",
+    "baseCommit": "8027bdf798db0dfb4ce5704c912fe1d94bab7cf9",
+    "initialScopeDigest": "11aef3eae82a8f4034720cee96bf405478ed0bb2abd1a314259ba75c0119b605",
+    "contractSkeletonDigest": "f539c938f7abce0b6e0383fe078b96e2a1b5d2394148f74e635ca451ab644b50"
+  }
+}
