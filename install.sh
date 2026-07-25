@@ -31,6 +31,9 @@ Common options passed through to the Python installer:
   --create-adoption
   --with-examples
   --update-makefile
+
+Interactive options:
+  --interactive                 Run the guided wizard.
 USAGE
 }
 
@@ -42,6 +45,23 @@ for arg in "$@"; do
       ;;
   esac
 done
+
+# A no-argument TTY is the guided path. Automation without explicit options
+# fails closed before cloning or touching the target repository.
+if [ "$#" -eq 0 ]; then
+  if [ -t 0 ]; then
+    INTERACTIVE=1
+  else
+    echo "ERROR: no-argument install requires a TTY or explicit installer options." >&2
+    exit 2
+  fi
+else
+  INTERACTIVE=0
+  if [ "$1" = "--interactive" ]; then
+    INTERACTIVE=1
+    shift
+  fi
+fi
 
 if SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" 2>/dev/null && pwd); then
   :
@@ -95,6 +115,10 @@ if [ -z "$SOURCE" ]; then
   else
     python3 "$SOURCE/scripts/verify_quick_install_release.py" --root "$SOURCE" --ref "$REF"
   fi
+fi
+
+if [ "$INTERACTIVE" -eq 1 ]; then
+  exec python3 "$SOURCE/scripts/ai_install_wizard.py"
 fi
 
 exec python3 "$SOURCE/scripts/install_ai_cockpit.py" --source "$SOURCE" --target "." "$@"
