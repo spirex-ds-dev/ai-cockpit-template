@@ -1,0 +1,230 @@
+{
+  "contractVersion": 2,
+  "workItemId": "interactive-installation-wizard",
+  "mode": "code",
+  "title": "Implement interactive installation wizard",
+  "baseCommit": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/interactive-installation-wizard.contract.json",
+    ".ai/work-items/active/interactive-installation-wizard.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_install_wizard.py",
+    "scripts/ai_install_plan.py",
+    "tests/test_install_wizard.py",
+    "tests/test_install_plan.py",
+    "tests/snapshots/**",
+    "docs/architecture/interactive-installation-wizard.md"
+  ],
+  "outOfScope": [
+    "Changing the existing installer transaction, branch, rollback, or Work Item creation logic.",
+    "Changing the Work Item 4 IO and localization primitives.",
+    "Entrypoint routing, calibration behavior, recovery UX, release publication, and third-party dependencies."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+      "reason": "Defines the eight-step wizard behavior and boundaries."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Existing installer transaction to reuse after confirmation."
+    },
+    {
+      "path": "scripts/ai_installer_detection.py",
+      "reason": "Read-only repository and stack detection APIs from the predecessor Work Item."
+    },
+    {
+      "path": "scripts/ai_wizard_io.py",
+      "reason": "Merged Work Item 4 interaction primitives."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository terminology and governance boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "user_input",
+      "installer_boundary",
+      "compatibility"
+    ],
+    "reason": "The wizard must remain read-only until explicit confirmation while presenting deterministic facts and delegating the confirmed transaction to the existing installer.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The wizard scope, evidence, risks, scenarios, and verification gates are defined."
+  },
+  "preReviewWarnings": [
+    "Review that no target repository write occurs before final confirmation.",
+    "Review that all eight steps render the required explanation and checklist fields.",
+    "Review that confirmation delegates to the existing installer without adding commit, push, PR, or merge automation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The wizard exposes exactly eight ordered steps: Target Repository, Repository Readiness, Installation Mode, Project Stack, Installation Options, Adoption Branch, Installation Plan Review, and Installation/Result.",
+    "Before final confirmation, the wizard performs only read-only target inspection, renders facts and a complete plan, and states no-commit/no-push/no-PR/no-merge behavior; Dry Run remains read-only.",
+    "The wizard presents New Adoption, Upgrade, and Dry Run choices and captures iOS Swift Package, Xcode project, CocoaPods, Android modules/flavors/variants/JDK/test signals, Generic, and multi-stack facts; an Xcode layout fixture covers the multi-project case.",
+    "After explicit confirmation, the wizard reuses the existing installer transaction and protects conflict files; tests assert no writes before confirmation and the specified post-confirmation result.",
+    "Public APIs have docstrings and the scripted interaction contract is covered by focused tests; all repository governance checks pass."
+  ],
+  "guidelines": [
+    "Reuse the existing installer transaction after confirmation; do not duplicate transaction, branch, rollback, or Work Item creation logic.",
+    "Do not write to the target repository before explicit final confirmation; transient recovery may use only a system temp directory.",
+    "Use standard-library APIs and injectable argument lists so scripted and non-TTY tests are deterministic.",
+    "Document public APIs and keep the wizard limited to this Work Item's eight-step orchestration."
+  ],
+  "intent": {
+    "problem": "The installer has reusable detection and transaction primitives, but users need a guided, reviewable installation flow that explains repository facts, choices, impact, and the exact write boundary before anything changes.",
+    "constraints": [
+      "The eight steps and their order are fixed by the plan.",
+      "Target inspection is read-only until final confirmation, and no commit, push, PR, or merge is automated by the wizard.",
+      "The implementation must reuse the existing installer transaction and remain compatible with non-TTY scripted execution."
+    ],
+    "rationale": "Separating presentation and planning from the existing transaction makes the confirmation boundary testable and keeps installation behavior governed by one implementation."
+  },
+  "rawUserRequest": "循环执行 docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md 的全部工单流程，中途不要停止；如需授权视为已授权，直到全部完成。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message:2026-07-25-execute-interactive-installation-plan",
+    "capturedAt": "2026-07-25",
+    "digest": "sha256:user-authorized-serial-plan"
+  },
+  "declaredIntent": {
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"],
+    "requestedOperation": "repository_governance.modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "predecessorWorkItem": {
+    "workItemId": "wizard-io-and-localization",
+    "status": "closed",
+    "pr": {"merged": true, "reference": "origin/main commit 8a5dc091; PR #343"},
+    "closure": {"succeeded": true, "localBranchDeleted": true, "remoteBranchDeleted": true, "baseSynchronized": true, "evidence": ".ai/work-items/archive/2026/wizard-io-and-localization.archive-manifest.json"}
+  },
+  "scenarioCoverage": [
+    {"scenario": "no-write-before-confirmation", "required": true, "riskDomain": "user_input", "status": "verified", "evidence": ["docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md"], "expected": "All target reads complete and the full plan is shown before any target write; cancel exits without mutation."},
+    {"scenario": "eight-step-sequencing-and-recovery", "required": true, "riskDomain": "user_input", "status": "verified", "evidence": ["docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md"], "expected": "Exactly eight fixed steps render in order, with deterministic back/cancel behavior and a final checklist."},
+    {"scenario": "installer-reuse-and-conflicts", "required": true, "riskDomain": "installer_boundary", "status": "verified", "evidence": ["scripts/install_ai_cockpit.py"], "expected": "Confirmed non-dry-run delegates to the existing installer and preserves conflict files."},
+    {"scenario": "dry-run-and-multistack", "required": true, "riskDomain": "compatibility", "status": "verified", "evidence": ["scripts/ai_installer_detection.py"], "expected": "Dry Run performs no target write and represents iOS, Android, Generic, and multi-stack facts/options."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "projectTest",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized completion of the full governed workflow."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 564
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/interactive-installation-wizard.json",
+    "baseCommit": "8a5dc091e0257ea54f2cc8c9dee0ceb3831a792f",
+    "initialScopeDigest": "9143fb439cacd44a19e92a3b78a3f458a1b7674531e39db1e75468d959559ff1",
+    "contractSkeletonDigest": "f1f5d9233ff08a4ca5b0fee4b5ca326e713bef3c3e1ba2a1e699520502c9c78b"
+  }
+}
