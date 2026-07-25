@@ -111,6 +111,8 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **必须验证：** 缺证据、配置变化后旧批准、错误角色、过期批准、未回答和缩小范围恢复测试。完成后对齐所有人工确认文档和输出。
 
+**WI-02 当前实现边界：** Unknown assessment schema 位于 `.ai/schemas/unknown_assessment.schema.json`，验证与 `needs_human_confirmation` STOP 默认输出入口位于 `scripts/ai_unknown_confirmation.py`，回归测试位于 `tests/test_unknown_confirmation.py`。WI-02 只建立未知/人工确认的结构化边界；完整 Task Outcome、Cockpit Status、PR 和发布消费仍由后续工单完成。
+
 ### WI-03：Source Mode and Transactional Installation
 
 **范围：** 明示 `RELEASE_VERIFIED`、`LOCAL_CLEAN_COMMIT`、`LOCAL_DIRTY_WORKTREE`、`CUSTOM_SOURCE`、`PRIVATE_MIRROR`、`UNKNOWN_SOURCE`；写入前完成 repository/commit/tree/active WI/remote/default branch/source/marker/symlink/traversal/ownership/write-plan 检查；实现事务、锁、恢复和回滚；使 dry-run 真正只读。
