@@ -46,6 +46,17 @@ def test_start_preflight_can_skip_contract_validation_for_new_skeleton(monkeypat
     assert observed["command"][-1] == "AI_PREFLIGHT_VALIDATE_CONTRACT=false"
 
 
+def test_next_available_task_id_resolves_archive_collision_before_creation():
+    assert (
+        ai_start.next_available_task_id(
+            "publish-new-version",
+            {"publish-new-version", "publish-new-version-20260725"},
+            date="20260725",
+        )
+        == "publish-new-version-20260725-2"
+    )
+
+
 def test_start_receipt_binds_contract_and_rejects_tampering(tmp_path):
     contract = {
         "contractVersion": 2,

@@ -26,6 +26,7 @@ AI_PREFLIGHT_VALIDATE_CONTRACT ?= true
 	check-lockfile-reproducibility \
 	check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence \
 	ai-start ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
+	ai-verify-focused ai-verify-full \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy template-adoption-ready \
 	check-ai-scenario-coverage check-ai-start-receipt generate-ai-preflight-review check-ai-preflight-review ai-preflight \
@@ -68,6 +69,8 @@ help:
 	@printf '%s\n' '  make check-ai-coverage-guard'
 	@printf '%s\n' '  make check-ai-scenario-coverage'
 	@printf '%s\n' '  make ai-preflight'
+	@printf '%s\n' '  make ai-verify-focused CONTRACT=<contract.json> SUMMARY=<summary.json>'
+	@printf '%s\n' '  make ai-verify-full CONTRACT=<contract.json> SUMMARY=<summary.json> [STAGE=pr|release]'
 	@printf '%s\n' '  make generate-ai-preflight-review'
 	@printf '%s\n' '  make check-ai-preflight-review'
 	@printf '%s\n' '  make check-ai-change-summary SUMMARY=<summary.json> CONTRACT=<contract.json>'
@@ -240,6 +243,12 @@ ai-cockpit-diff-check: diff-check
 
 ai-verify:
 	$(AI_PYTHON) scripts/ai_verify.py --root . --contract "$(CONTRACT)" --summary "$(SUMMARY)" --stage "$(or $(STAGE),task)" --mode "$(or $(MODE),unified)"
+
+ai-verify-focused:
+	$(AI_PYTHON) scripts/ai_verify.py --root . --contract "$(CONTRACT)" --summary "$(SUMMARY)" --stage "$(or $(STAGE),task)" --mode unified --scope focused
+
+ai-verify-full:
+	$(AI_PYTHON) scripts/ai_verify.py --root . --contract "$(CONTRACT)" --summary "$(SUMMARY)" --stage "$(or $(STAGE),release)" --mode unified --scope full
 
 ai-cockpit-quality: quality
 

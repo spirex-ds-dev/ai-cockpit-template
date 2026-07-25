@@ -104,6 +104,32 @@ def validate_transition(previous: dict[str, Any], current: dict[str, Any]) -> li
     return issues
 
 
+def build_issue_overview(records: list[dict[str, Any]]) -> dict[str, list[str]]:
+    """Group append-only records into a stable reviewer-facing status inventory."""
+    overview: dict[str, list[str]] = {status: [] for status in sorted(STATUSES)}
+    for record in records:
+        issues = validate_issue_record(record)
+        if issues:
+            raise ValueError("invalid issue record: " + "; ".join(issues))
+        overview[record["status"]].append(record["issueId"])
+    for issue_ids in overview.values():
+        issue_ids.sort()
+    return overview
+
+
+def render_issue_overview(records: list[dict[str, Any]]) -> str:
+    """Render a deterministic append-only status overview for review documents."""
+    overview = build_issue_overview(records)
+    lines = ["## Generated issue overview", ""]
+    for status in sorted(overview):
+        lines.append(f"### {status}")
+        lines.append("")
+        values = overview[status]
+        lines.extend(f"- `{issue_id}`" for issue_id in values) if values else lines.append("- None")
+        lines.append("")
+    return "\n".join(lines)
+
+
 def _load(path: Path) -> dict[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):

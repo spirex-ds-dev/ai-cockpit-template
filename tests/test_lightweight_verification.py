@@ -4,7 +4,12 @@ import pytest
 
 from ai_check_registry import CheckerRegistry, CheckResult
 from ai_impact_classifier import classify_path
-from ai_verify import evaluate_trend, run_verification, verify_stage
+from ai_verify import (
+    evaluate_trend,
+    run_verification,
+    verification_scope,
+    verify_stage,
+)
 from ai_verification_context import build_context
 
 
@@ -107,3 +112,27 @@ def test_legacy_unified_and_compare_modes_are_explicit():
     assert legacy["mode"] == "legacy"
     assert unified["mode"] == "unified"
     assert set(compare) == {"mode", "legacy", "unified"}
+
+
+def test_verification_scope_distinguishes_focused_task_from_full_release_gate():
+    focused = verification_scope("task", ["scripts/ai_start.py", "tests/test_start_and_archive.py"])
+    full = verification_scope("release", ["scripts/ai_start.py"])
+    assert focused == {
+        "mode": "focused",
+        "stage": "task",
+        "paths": ["scripts/ai_start.py", "tests/test_start_and_archive.py"],
+    }
+    assert full == {"mode": "full", "stage": "release", "paths": []}
+
+
+def test_authorization_does_not_change_evidence_derived_risk_level():
+    from ai_verify import risk_and_authority
+
+    result = risk_and_authority(
+        {
+            "riskAssessment": {"level": "medium", "riskTypes": ["release_evidence"]},
+            "restrictedWriteApproval": {"approved": True, "approvedBy": "user"},
+        }
+    )
+    assert result["riskLevel"] == "medium"
+    assert result["authority"]["approved"] is True

@@ -156,6 +156,17 @@ def generate_outcome(
         evidence.get("evidence"), "structured-evidence"
     )
     all_evidence.extend(_evidence_refs(evidence.get("sources"), "structured-evidence"))
+    publication = evidence.get("publication")
+    if isinstance(publication, dict):
+        tag = _safe_text(publication.get("tag"), "published-release")
+        digest = publication.get("assetDigest")
+        ref = {
+            "source": "release-workflow",
+            "subject": tag,
+        }
+        if isinstance(digest, str) and re.fullmatch(r"[a-f0-9]{64}", digest):
+            ref["digest"] = digest
+        all_evidence.append(ref)
 
     for event in ordered:
         event_type = event.get("eventType")

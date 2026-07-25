@@ -73,3 +73,20 @@ def test_cli_accepts_valid_record_and_rejects_invalid_record(tmp_path, monkeypat
     assert ai_issue_log.main() == 0
     record_path.write_text("[]", encoding="utf-8")
     assert ai_issue_log.main() == 2
+
+
+def test_issue_overview_groups_later_records_without_rewriting_history() -> None:
+    first = valid_record()
+    first["issueId"] = "IW-20260725-013"
+    first["status"] = "resolved"
+    first["resolution"] = "Recorded in the later verification run."
+    second = valid_record()
+    second["issueId"] = "IW-20260725-014"
+    second["status"] = "accepted_residual_risk"
+    overview = ai_issue_log.build_issue_overview([first, second])
+    assert overview["resolved"] == ["IW-20260725-013"]
+    assert overview["accepted_residual_risk"] == ["IW-20260725-014"]
+    assert overview["blocked"] == []
+    rendered = ai_issue_log.render_issue_overview([first, second])
+    assert "## Generated issue overview" in rendered
+    assert "`IW-20260725-013`" in rendered
