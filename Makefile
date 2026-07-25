@@ -367,6 +367,12 @@ render-task-outcome-pr:
 	@test -n "$(PROFILE)" || (echo 'PROFILE=<project_profile.yaml> is required'; exit 2)
 	$(AI_PYTHON) scripts/ai_render_task_outcome_pr.py "$(OUTCOME)" "$(PROFILE)" $(if $(OUTPUT),--output "$(OUTPUT)")
 
+render-task-outcome-multilingual:
+	@test -n "$(OUTCOME)" || (echo 'OUTCOME=<outcome.json> is required'; exit 2)
+	@test -n "$(PROFILE)" || (echo 'PROFILE=<project_profile.yaml> is required'; exit 2)
+	@test -n "$(OUTPUT_DIR)" || (echo 'OUTPUT_DIR=<directory> is required'; exit 2)
+	$(AI_PYTHON) scripts/ai_render_task_outcome_multilingual.py "$(OUTCOME)" "$(PROFILE)" "$(OUTPUT_DIR)"
+
 repair-ai-status:
 	$(AI_PYTHON) scripts/ai_check_status_consistency.py --repair
 

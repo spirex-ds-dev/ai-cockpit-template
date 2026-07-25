@@ -1,0 +1,170 @@
+{
+  "contractVersion": 2,
+  "workItemId": "task-outcome-multilingual",
+  "mode": "code",
+  "rawUserRequest": "继续执行 Task Outcome 扩展：实现由 Project Profile 控制的 ja/en/zh-CN Markdown 渲染与文件生成策略，并完成本工单的测试、PR、合并、ai-close-work-item 与分支清理。",
+  "rawRequestSource": {"type": "human", "reference": "user-goal:serial-interactive-installation-calibration-wizard", "capturedAt": "2026-07-25", "digest": "sha256:serial-work-item-execution-authorized"},
+  "declaredIntent": {"summary": "Render one Task Outcome fact source into approved Japanese, English, and Simplified Chinese Markdown views without silently falling back or changing machine-truth JSON.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "title": "Add Project Profile controlled multilingual Task Outcome rendering",
+  "baseCommit": "077cf78934b8e82fa13573032c535c269bbb0cd2",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/task-outcome-multilingual.contract.json",
+    ".ai/work-items/active/task-outcome-multilingual.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_render_task_outcome_multilingual.py",
+    "tests/test_task_outcome_multilingual.py",
+    "Makefile",
+    ".ai/guards/coverage_policy.yaml"
+  ],
+  "outOfScope": ["Changing Task Outcome JSON schema or machine-truth keys", "Translating arbitrary evidence prose or inventing localized facts", "Project Profile validation schema redesign"],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+      "reason": "Task Outcome extension requires Project Profile controlled default language and generated locale views."
+    },
+    {"path": ".ai/project_profile.yaml", "reason": "Project Profile is the reporting policy source."},
+    {"path": "scripts/ai_render_task_outcome.py", "reason": "Existing full Outcome renderer is the fact-source boundary."},
+    {"path": ".ai/glossary.md", "reason": "Terminology and evidence-governance boundaries."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["localization", "user_visible_output", "evidence_integrity"],
+    "reason": "Locale selection changes user-visible derived artifacts; invalid or missing policy must fail closed rather than silently falling back."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Bounded rendering and policy integration with explicit locale validation."
+  },
+  "preReviewWarnings": [
+    "Review default-language precedence, exact locale validation, no-fallback behavior, and one-source-of-facts preservation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Project Profile reporting.defaultLanguage accepts ja, en, or zh-CN and is validated fail closed.",
+    "Configured locales control exactly which outcome.<locale>.md files are generated.",
+    "All locale views use one Outcome JSON fact source and keep JSON keys English.",
+    "No locale silently falls back to another locale; deterministic tests cover default, aliases, invalid policy, and empty sections."
+  ],
+  "guidelines": [
+    "Locale rendering is a derived view and must not mutate machine truth.",
+    "Do not silently fall back to another language for user-visible content.",
+    "Use the existing Outcome renderer and preserve English JSON keys."
+  ],
+  "intent": {
+    "problem": "WI20 provides a sanitized PR presentation, but Task Outcome needs Project Profile controlled Japanese, English, and Simplified Chinese Markdown views.",
+    "constraints": ["defaultLanguage and generated locale set come from Project Profile reporting policy", "invalid locale policy fails closed", "one machine-truth JSON source is maintained"],
+    "rationale": "Centralized locale policy makes language selection auditable and prevents user-visible fallback or duplicated facts."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized serial completion; the Make entrypoint is required to expose the controlled renderer."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "scenarioCoverage": [
+    {"scenario": "localization", "required": true, "status": "verified", "evidence": ["focused multilingual renderer tests"]},
+    {"scenario": "user_visible_output", "required": true, "status": "verified", "evidence": ["locale file generation tests"]},
+    {"scenario": "evidence_integrity", "required": true, "status": "verified", "evidence": ["single-source and no-fallback tests"]}
+  ],
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 580
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/task-outcome-multilingual.json",
+    "baseCommit": "077cf78934b8e82fa13573032c535c269bbb0cd2",
+    "initialScopeDigest": "6f5eed3b3aad8b4dffe296385ffce4357eaefb17032b22bce1e3908ec886bc65",
+    "contractSkeletonDigest": "96882ad188a64c073ef8043627319eab159b32a576782cf85838f0900a8d4dba"
+  }
+}
