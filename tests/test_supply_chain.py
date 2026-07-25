@@ -24,6 +24,53 @@ def test_supply_chain_failure_log_does_not_include_issue_details(monkeypatch, ca
     assert "supply-chain check failed: 1 issue(s)" in captured.err
 
 
+def test_candidate_release_manifest_ignores_volatile_identity(monkeypatch, tmp_path):
+    manifest = tmp_path / "release-digests.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "format": "ai-cockpit-release-digests",
+                "version": 1,
+                "sourceCommit": "origin/main",
+                "tagTarget": "origin/main",
+                "metadataCommit": "origin/main",
+                "releaseTag": "v0.5.42",
+                "artifacts": {
+                    "requirements-dev.lock": "lock",
+                    "install.sh": "installer",
+                    "release.json": "release",
+                    ".ai/cockpit/sbom.json": "candidate-sbom",
+                    ".ai/cockpit/provenance.json": "candidate-provenance",
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(check_supply_chain, "RELEASE_DIGESTS_BASELINE", manifest)
+
+    issues = check_supply_chain.compare_or_write(
+        manifest,
+        {
+            "format": "ai-cockpit-release-digests",
+            "version": 1,
+            "sourceCommit": "tag-commit",
+            "tagTarget": "tag-commit",
+            "metadataCommit": "tag-commit",
+            "releaseTag": "v0.5.42",
+            "artifacts": {
+                "requirements-dev.lock": "lock",
+                "install.sh": "installer",
+                "release.json": "release",
+                ".ai/cockpit/sbom.json": "computed-sbom",
+                ".ai/cockpit/provenance.json": "computed-provenance",
+            },
+        },
+        write=False,
+    )
+
+    assert issues == []
+
+
 def test_secret_scanning_detects_github_token(tmp_path, monkeypatch):
     repo = tmp_path / "repo"
     repo.mkdir()
