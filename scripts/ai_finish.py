@@ -389,6 +389,7 @@ def run_declared_checks(
 ) -> int:
     """Run declared checks and persist transactional verification evidence."""
     transactional_markers_written = False
+    outcome_requested = isinstance(load_json(summary_path).get("taskOutcomeInput"), str)
     for item in declared_items:
         check_id = verification_key(item)
         if not check_id or "command" in item:
@@ -413,7 +414,15 @@ def run_declared_checks(
             print(f"ERROR: {exc}", file=sys.stderr)
             return 2
         obs.check_started(check_id=check_id, command=cmd_str)
-        if not transactional_markers_written and verification_priority(item) >= 20:
+        # Outcome-enabled Summaries run aiSummary before Status. Pre-writing
+        # pending markers for later self-referential checks would make aiSummary
+        # reject its own Summary as incomplete; stabilization records them after
+        # their real execution.
+        if (
+            not outcome_requested
+            and not transactional_markers_written
+            and verification_priority(item) >= 20
+        ):
             current_digest = worktree_digest(changed_paths(contract_data))
             for candidate in declared_items:
                 if verification_priority(candidate) >= 20:

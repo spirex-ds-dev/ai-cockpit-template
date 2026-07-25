@@ -63,6 +63,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "userCorrectionsCaptured",
     "intentAlignment",
     "decisionEvidence",
+    "taskOutcomeInput",
 }
 RESULTS = {"passed", "failed", "not_run"}
 RISK_LEVELS = {"low", "medium", "high"}

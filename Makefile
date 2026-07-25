@@ -362,6 +362,11 @@ check-ai-task-outcome:
 	@test -n "$(OUTCOME)" || (echo 'OUTCOME=<outcome.json> is required'; exit 2)
 	$(AI_PYTHON) -c "import json, pathlib, sys; sys.path.insert(0, 'scripts'); from ai_check_task_outcome import validate_outcome; outcome=json.loads(pathlib.Path('$(OUTCOME)').read_text()); report=validate_outcome(outcome, pathlib.Path('$(MARKDOWN)').read_text() if '$(MARKDOWN)' else None); print('task outcome valid' if report.valid else '\\n'.join(f'{e.code}: {e.message}' for e in report.errors)); raise SystemExit(0 if report.valid else 1)"
 
+render-task-outcome-pr:
+	@test -n "$(OUTCOME)" || (echo 'OUTCOME=<outcome.json> is required'; exit 2)
+	@test -n "$(PROFILE)" || (echo 'PROFILE=<project_profile.yaml> is required'; exit 2)
+	$(AI_PYTHON) scripts/ai_render_task_outcome_pr.py "$(OUTCOME)" "$(PROFILE)" $(if $(OUTPUT),--output "$(OUTPUT)")
+
 repair-ai-status:
 	$(AI_PYTHON) scripts/ai_check_status_consistency.py --repair
 
