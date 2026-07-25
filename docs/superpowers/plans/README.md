@@ -41,6 +41,11 @@ keywords:
 - [2026-07-22 Project Calibration and Update Recalibration](2026-07-22-project-calibration-recalibration.md) — 已完成并压缩为 archive-backed closure index。
 - [2026-07-22 Installed Lifecycle Management 评审整改](2026-07-22-installed-lifecycle-review-remediation.md) — 工单 1–16 已完成并压缩为 archive-backed closure index。
 - [2026-07-22 AI Cockpit Governance Hardening](2026-07-22-ai-cockpit-governance-hardening.md) — 已完成并压缩为 archive-backed closure index。
+- [2026-07-25 Interactive Installation and Calibration Wizard](2026-07-25-interactive-installation-calibration-wizard.md) — WI0–WI11 已完成并关闭；WI12 盘点确认无重复执行计划可删除，canonical plan 与 append-only issue log 保留，完成事实见 [archive index](../../../.ai/work-items/archive/index.json) 与 [WI11 final report](../../../.ai/work-items/archive/2026/wizard-final-verification-and-user-report.summary.json)。
+
+## Retention decision for the Interactive Wizard plan
+
+The read-only WI12 inventory found one canonical execution plan and one append-only issue log. No superseded duplicate execution-plan document was identified, so no plan document is removed. The canonical plan remains the implementation and audit narrative; the issue log remains the user-review entry point; Work Item Contracts, Summaries, manifests, and archive index entries are immutable evidence and are retained.
 
 相邻的 `../specs/` 属于独立设计证据。计划压缩或删除必须由 Contract
 声明 scope，先完成引用扫描，并在 Summary 记录权威 archive 与 Git 恢复路径。

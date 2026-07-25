@@ -11,6 +11,8 @@ keywords:
 
 # Interactive Installation and Calibration Wizard Implementation Plan
 
+> **Lifecycle status (2026-07-25):** WI0–WI11 completed, merged, archived, and closed. WI12 is the controlled historical-document cleanup; the canonical plan remains retained for audit and the final verification report is [archive-backed](../../../.ai/work-items/archive/2026/wizard-final-verification-and-user-report.summary.json).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` or `superpowers:executing-plans` to implement this plan task-by-task. Every task is a separate Work Item and must complete its PR and lifecycle closure before the next task starts.
 
 **Goal:** Add a human-centered, multilingual Installation Wizard and Calibration Wizard while preserving the existing deterministic installer, `CalibrationSession`, governance gates, and human control points.
