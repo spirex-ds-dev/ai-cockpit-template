@@ -1,0 +1,411 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wizard-tests-and-fixtures",
+  "contractPath": ".ai/work-items/archive/2026/wizard-tests-and-fixtures.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/wizard-tests-and-fixtures.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wizard-tests-and-fixtures.summary.json",
+      "reason": "Records fixture matrix, snapshot, focused, and complete-suite evidence."
+    },
+    {
+      "path": "tests/test_wizard_fixtures.py",
+      "reason": "Covers iOS, Android, monorepo, upgrade, calibration recovery, and snapshot shapes."
+    },
+    {
+      "path": "tests/fixtures/wizard/ios.json",
+      "reason": "Static iOS Package/Project/Workspace/CocoaPods fixture matrix."
+    },
+    {
+      "path": "tests/fixtures/wizard/android.json",
+      "reason": "Static Android application/module/flavor/JDK/test fixture matrix."
+    },
+    {
+      "path": "tests/fixtures/wizard/monorepo.json",
+      "reason": "Static mobile/generic monorepo, dirty worktree, and upgrade fixtures."
+    },
+    {
+      "path": "tests/snapshots/wizard/swift.json",
+      "reason": "Stable Swift facts/plan/checklist/result snapshot."
+    },
+    {
+      "path": "tests/snapshots/wizard/kotlin.json",
+      "reason": "Stable Kotlin facts/plan/checklist/result snapshot."
+    },
+    {
+      "path": "tests/snapshots/wizard/mixed.json",
+      "reason": "Stable mixed-language facts/plan/checklist/result snapshot."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated cockpit status for this Work Item."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wizard-tests-and-fixtures.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+    "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+    ".ai/glossary.md",
+    "scripts/fixture_harness.py",
+    "tests/test_wizard_fixtures.py",
+    "tests/fixtures/wizard",
+    "tests/snapshots/wizard"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:32:52.932334+00:00",
+      "exitCode": 0,
+      "durationMs": 39,
+      "outputDigest": "9a57c546c0ecd75dbe77aa908c0616043a8deaef6858bf68a12b123fa78a3276",
+      "commandHash": "15d4c9d026db8b8fc7cc2e39884e55353f7449a5600fc0452823cd5d608a8b50",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "686d05845aada4a6d25f8cbc57d417f37bf83c18f7b402625569fa097c342cc0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wizard-tests-and-fixtures.contract.json work item contract check passed: .ai/work-items/active/wizard-tests-and-fixtures.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:32:53.090307+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "0551107d4eb47ea4f9dfbf7f0665333fdf21f6ee3e29bc934d4265c77e7bb05d",
+      "commandHash": "81afb840ff8c2b2c11e0d9538a821d370ab5d3813fe9837f8e8474833366afb4",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "686d05845aada4a6d25f8cbc57d417f37bf83c18f7b402625569fa097c342cc0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wizard-tests-and-fixtures.contract.json scope guard passed: 9 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:32:53.266356+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "f83373e0fa6c3f6b4409dd0eb70fea93741ce419baead2224b17c63b51ec3081",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "686d05845aada4a6d25f8cbc57d417f37bf83c18f7b402625569fa097c342cc0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wizard-tests-and-fixtures.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/wizard-tests-and-fixtures.contract.json SUMMARY=.ai/work-items/active/wizard-tests-and-fixtures.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:32:53.489749+00:00",
+      "exitCode": 0,
+      "durationMs": 178,
+      "outputDigest": "213292e23dc3b64e258a6e1bb7b511a5f121a5cc6d513beecee6cbada3cdbfd3",
+      "commandHash": "71829072bcc5a130e9ea46b7494a042a262cc84a6529de17df969964c1ed74dd",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "686d05845aada4a6d25f8cbc57d417f37bf83c18f7b402625569fa097c342cc0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/wizard-tests-and-fixtures.contract.json --summary .ai/work-items/active/wizard-tests-and-fixtures.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wizard-tests-and-fixtures` - Contract Hash: `97eb2ce38e6dc1a6` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `4` - Unknown Count: `0` - Required Checks: `1"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:32:53.649523+00:00",
+      "exitCode": 0,
+      "durationMs": 106,
+      "outputDigest": "39e0692a62af952aa2929d9abeaed6bcba3caafc4898f9b57eb04a4cf7e78341",
+      "commandHash": "e8b4711677fef89df24bb237675eb3767e60ff0aa0ff2a5428d5d0f5c9caa206",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "686d05845aada4a6d25f8cbc57d417f37bf83c18f7b402625569fa097c342cc0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wizard-tests-and-fixtures.summary.json review policy matched 2 path(s) [review] .ai/work-items/starts/wizard-tests-and-fixtures.json [review] .ai/cockpit/current_status.md review focus recorded: 1 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:32:53.816129+00:00",
+      "exitCode": 0,
+      "durationMs": 117,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "686d05845aada4a6d25f8cbc57d417f37bf83c18f7b402625569fa097c342cc0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:32:53.987609+00:00",
+      "exitCode": 0,
+      "durationMs": 119,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "686d05845aada4a6d25f8cbc57d417f37bf83c18f7b402625569fa097c342cc0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/wizard-tests-and-fixtures.contract.json SUMMARY=.ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:32:54.107165+00:00",
+      "exitCode": 0,
+      "durationMs": 71,
+      "outputDigest": "5e6f75a51aac7afe7fb2d775105d81ca217be45d8fa5dc521dd5858306463e96",
+      "commandHash": "faf3a6117511b0da25982ed5bb176800e711d7202c710f430b4bdb60648f11bc",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "686d05845aada4a6d25f8cbc57d417f37bf83c18f7b402625569fa097c342cc0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wizard-tests-and-fixtures.contract.json --summary .ai/work-items/active/wizard-tests-and-fixtures.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/wizard-tests-and-fixtures.contract.json SUMMARY=.ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:32:54.209230+00:00",
+      "exitCode": 0,
+      "durationMs": 54,
+      "outputDigest": "da95108caa227ddf93d5ffb0a7139988b4e5799e7cc5a0999335e25212d17da2",
+      "commandHash": "993c29df22b2edf877b29d0fb72130e2a7138077cbd09b4789c0e3c436f56fed",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "686d05845aada4a6d25f8cbc57d417f37bf83c18f7b402625569fa097c342cc0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wizard-tests-and-fixtures.contract.json --summary .ai/work-items/active/wizard-tests-and-fixtures.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:32:54.438192+00:00",
+      "exitCode": 0,
+      "durationMs": 184,
+      "outputDigest": "25e7aa6a5a2d5ebb9cfb42ccc48de5208e22b05ef82603a0c4480d513fa32d0a",
+      "commandHash": "1eb47e295693d06144c61a1fe96f5ec4ec15c8fc69b2182bf12b0542938e2a6e",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "686d05845aada4a6d25f8cbc57d417f37bf83c18f7b402625569fa097c342cc0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wizard-tests-and-fixtures.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/wizard-tests-and-fixtures.json` — covered by Contract scope - [active_owned] `tests/fixtures"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:37:05.373500+00:00",
+      "exitCode": 0,
+      "durationMs": 250881,
+      "outputDigest": "5133be61e6d1242b13a8977cebe86e3eb8b43572b526fd57b5f4270cfac1801d",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "686d05845aada4a6d25f8cbc57d417f37bf83c18f7b402625569fa097c342cc0",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 203 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 7%] ........................................................................ [ 14%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/wizard-tests-and-fixtures.contract.json SUMMARY=.ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:37:06.747637+00:00",
+      "exitCode": 0,
+      "durationMs": 417,
+      "outputDigest": "188146dfa4b957aa824aa5faec66fb9ee52ef4ccdb072732718fd13058bb5284",
+      "commandHash": "80db9be37c16a8e48b0e2ba8ab8ec244c80fd2c409bfcf21ffc1d5acbfe72d09",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "4f848acdaa511c4d3bea913e3c99f4dee0c4c71d450fe33ab5b82239f29042c9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wizard-tests-and-fixtures.contract.json --summary .ai/work-items/active/wizard-tests-and-fixtures.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/wizard-tests-and-fixtures.contract.json SUMMARY=.ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:37:06.977981+00:00",
+      "exitCode": 0,
+      "durationMs": 184,
+      "outputDigest": "38c0b90e15ba6fa345d4e656b4c4432c445d2ab479026eb944614c263d937bc4",
+      "commandHash": "e08d7769468e6214dd5269e789bce375584f2ec3f22fa54b183b9033379e7f52",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "4f848acdaa511c4d3bea913e3c99f4dee0c4c71d450fe33ab5b82239f29042c9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wizard-tests-and-fixtures.contract.json --summary .ai/work-items/active/wizard-tests-and-fixtures.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:37:07.073187+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "4f848acdaa511c4d3bea913e3c99f4dee0c4c71d450fe33ab5b82239f29042c9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/wizard-tests-and-fixtures.contract.json SUMMARY=.ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:37:07.185864+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "cf225cbd16b03a3ac2c672d33310ed744e913d879fa19702ea5ff348f001ef60",
+      "commandHash": "26594cb62d7f86bafda81e71567d2a168d9941aaf97dc04d7518c34ba7a73d65",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "4f848acdaa511c4d3bea913e3c99f4dee0c4c71d450fe33ab5b82239f29042c9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wizard-tests-and-fixtures.contract.json --summary .ai/work-items/active/wizard-tests-and-fixtures.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/wizard-tests-and-fixtures.summary.json CONTRACT=.ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T01:37:08.076299+00:00",
+      "exitCode": 0,
+      "durationMs": 87,
+      "outputDigest": "99edbf0969fb05fe05f1063b2c89d165848ca61bd5e6e5318144f75347d1ab40",
+      "commandHash": "6408f6a07b6f458c550cae54217aed74c92917b3c1ae0bd6df6b0281643bb658",
+      "contractHash": "97eb2ce38e6dc1a6cca65807673fd61738d2b56ccff8ab96c284cd1b9ee0365e",
+      "commitSha": "701889ffc36433e7c731521c15f1e9d422245df9",
+      "executionContractPath": ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+      "worktreeDigest": "c989ac74ae3bd9afdd94e1c9ea36b31d64b6538d8524ea2349da277add4d215b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wizard-tests-and-fixtures.summary.json --contract .ai/work-items/active/wizard-tests-and-fixtures.contract.json ai summary check passed: .ai/work-items/active/wizard-tests-and-fixtures.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "Fixture and snapshot test APIs are documented by test names and stable JSON schemas; Ruff and project checks cover them."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "This Work Item adds only test/fixture/snapshot files and does not import or modify production feature internals."
+    }
+  ],
+  "unknownsRemaining": [
+    "External Xcode/Gradle/CocoaPods/JDK execution is not available in the local fixture run and must remain explicitly not claimed."
+  ],
+  "risk": {
+    "level": "low",
+    "detail": "Static fixture evidence is deterministic; external mobile toolchain execution remains an explicit known limitation."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "external_toolchains",
+      "detail": "Fixtures prove static signals only; external mobile SDK execution was not run.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "not_ready",
+    "reason": "Required verification or known-unknown evidence is incomplete.",
+    "expectedReviewFocus": [
+      "Confirm unavailable mobile toolchains are not overstated as executed."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "verified",
+    "persistence": "verified",
+    "localization": "not_applicable",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "97eb2ce38e6dc1a6",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "97eb2ce38e6dc1a6",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "External Xcode, Gradle, CocoaPods, JDK, and instrumented test execution was not run; static fixture coverage is reported only as fixture evidence."
+  ],
+  "overclaimPrevention": "Report fixture coverage separately from unavailable external toolchain execution; do not claim the latter passed.",
+  "archiveSequence": 556
+}

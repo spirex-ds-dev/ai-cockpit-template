@@ -1,0 +1,195 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wizard-tests-and-fixtures",
+  "mode": "code",
+  "title": "wizard-tests-and-fixtures",
+  "rawUserRequest": "循环执行 docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md 的全部工单流程；本 Work Item 补齐向导测试、集成 fixtures 和快照证据。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-goal:serial-interactive-installation-calibration-wizard",
+    "capturedAt": "2026-07-25",
+    "digest": "sha256:serial-work-item-execution-authorized"
+  },
+  "declaredIntent": {
+    "summary": "Expand deterministic wizard scenario coverage with representative mobile, monorepo, upgrade, recovery, and snapshot fixtures.",
+    "requestedCapabilities": ["ai_governance", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "701889ffc36433e7c731521c15f1e9d422245df9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wizard-tests-and-fixtures.contract.json",
+    ".ai/work-items/active/wizard-tests-and-fixtures.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "tests/test_wizard_fixtures.py",
+    "tests/fixtures/wizard/**",
+    "tests/snapshots/wizard/**"
+  ],
+  "outOfScope": [
+    "Changing production wizard or CalibrationSession behavior",
+    "Changing installer transaction, branch, rollback, or Work Item lifecycle semantics",
+    "Adding external SDKs or requiring unavailable mobile toolchains",
+    "Release publication and documentation expansion"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+      "reason": "Defines required iOS, Android, monorepo, upgrade, recovery, and snapshot scenarios."
+    },
+    {"path": ".ai/glossary.md", "reason": "Defines fixture evidence and verification terminology."},
+    {"path": "scripts/fixture_harness.py", "reason": "Existing deterministic fixture harness boundary."},
+    {"path": "tests/test_calibration_wizard.py", "reason": "Existing wizard behavior contract extended by fixture scenarios."},
+    {"path": "tests/test_install_wizard.py", "reason": "Existing installation wizard scenario patterns and dry-run evidence."},
+    {"path": "tests/test_upgrade_proposal.py", "reason": "Existing upgrade scenario regression patterns."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+      "riskTypes": ["coverage_completeness", "fixture_fidelity"],
+    "reason": "Fixtures must represent requested stacks and lifecycle states without overstating unavailable external toolchain execution."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized serial execution; deterministic local fixtures can cover the requested evidence without requiring external mobile SDKs."
+  },
+  "preReviewWarnings": [
+    "Review that fixture claims distinguish static shape evidence from unavailable external toolchain execution and that snapshots remain deterministic."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Representative fixtures cover iOS Package/Project/Xcode-container/CocoaPods, Android application/multi-module/flavor/variant/JDK/test signals, generic mixed monorepo, dirty worktree, and Upgrade.",
+    "Scenario tests assert installation dry run/New Adoption/Upgrade, calibration resume/stale state, and activation failure as named test cases without invoking external mobile toolchains.",
+    "Snapshots cover three languages and representative facts, plan, checklist, and result output with stable ordering.",
+    "Focused fixture/snapshot tests and the complete project suite run with Python version and unavailable external checks recorded in the Summary."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "iOS Swift Package dry-run and Xcode Workspace New Adoption fixtures", "required": true, "status": "verified", "evidence": ["tests/test_wizard_fixtures.py::test_ios_fixture_matrix"]},
+    {"scenario": "Android application, multi-module, flavor/variant/JDK/unit/instrumented test fixtures", "required": true, "status": "verified", "evidence": ["tests/test_wizard_fixtures.py::test_android_fixture_matrix"]},
+    {"scenario": "Mobile monorepo, generic mixed monorepo, dirty worktree, and existing-runtime Upgrade", "required": true, "status": "verified", "evidence": ["tests/test_wizard_fixtures.py::test_monorepo_and_upgrade_fixtures"]},
+    {"scenario": "Calibration resume/stale session and activation failure fixture flows", "required": true, "status": "verified", "evidence": ["tests/test_wizard_fixtures.py::test_calibration_recovery_fixtures"]},
+    {"scenario": "Deterministic snapshots for three languages and facts/plan/checklist/result", "required": true, "status": "verified", "evidence": ["tests/test_wizard_fixtures.py::test_snapshot_shapes"]}
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The wizard behavior has focused unit coverage but lacks a stable fixture matrix and snapshots proving representative iOS, Android, generic, monorepo, upgrade, recovery, and result scenarios.",
+    "constraints": [
+      "Keep fixtures local, small, deterministic, and free of secrets or machine-specific paths.",
+      "Do not claim Xcode, Gradle, CocoaPods, JDK, or instrumented execution when the external toolchain is unavailable; test static signals and record limitations.",
+      "Do not change production wizard/session behavior in this Work Item."
+    ],
+    "rationale": "A fixture matrix makes the requested scenario coverage reviewable and repeatable while isolating external toolchain availability from repository-owned evidence."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 568
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wizard-tests-and-fixtures.json",
+    "baseCommit": "701889ffc36433e7c731521c15f1e9d422245df9",
+    "initialScopeDigest": "22f986f52d1230a4c2b949d76d659bfcf8ad425aa1e2899894a4fb107052f3ea",
+    "contractSkeletonDigest": "4fc23ab99fa0e577c3579c74d5921d09ee1bb3fc097ed957fc4321f05269b3ea"
+  }
+}
