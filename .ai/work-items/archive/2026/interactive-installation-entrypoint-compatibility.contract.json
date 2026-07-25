@@ -1,0 +1,194 @@
+{
+  "contractVersion": 2,
+  "workItemId": "interactive-installation-entrypoint-compatibility",
+  "mode": "code",
+  "title": "Route installation entrypoint to interactive wizard",
+  "baseCommit": "ecae20b6bc6914ce550867bfdc8d89cbaf01a737",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/interactive-installation-entrypoint-compatibility.contract.json",
+    ".ai/work-items/active/interactive-installation-entrypoint-compatibility.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "install.sh",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_install_entrypoint.py",
+    "tests/test_installer_cli.py",
+    "release.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json"
+  ],
+  "outOfScope": [
+    "Changing wizard step content or calibration behavior.",
+    "Changing installer transaction, branch, rollback, or Work Item creation semantics.",
+    "Adding auto-commit, push, PR, merge, third-party dependencies, or release publication."
+  ],
+  "sources": [
+    {
+      "path": "install.sh",
+      "reason": "Current shell entrypoint and legacy option boundary."
+    },
+    {
+      "path": "scripts/ai_install_wizard.py",
+      "reason": "Interactive wizard entrypoint contract."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Existing deterministic CLI parser and installer behavior."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository terminology and boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "routing_compatibility",
+      "non_tty_safety",
+      "cli_regression"
+    ],
+    "reason": "Entry routing must preserve explicit legacy flags while preventing a no-argument non-TTY process from waiting for input.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Routing scope, compatibility scenarios, and verification are defined."
+  },
+  "preReviewWarnings": [
+    "Preserve explicit legacy CLI flags and fail closed for no-argument non-TTY execution.",
+    "Ensure no routing path adds commit, push, PR, or merge behavior."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "No-argument TTY and --interactive route to the wizard; no-argument non-TTY exits non-zero without waiting.",
+    "Explicit installer options continue to invoke the deterministic legacy parser with existing output and dry-run semantics.",
+    "Shell syntax, ShellCheck, TTY/non-TTY integration, legacy CLI, and explicit dry-run tests pass without commit/push/PR/merge automation.",
+    "The routing boundary is covered by tests and a concise public behavior comment."
+  ],
+  "guidelines": [
+    "Keep install.sh routing thin and delegate wizard behavior to ai_install_wizard.py.",
+    "Preserve the existing deterministic installer flags and output semantics.",
+    "No-argument non-TTY execution must fail closed without blocking for input.",
+    "Do not add commit, push, PR, or merge automation."
+  ],
+  "intent": {
+    "problem": "The installer now has an interactive wizard, but the shell entrypoint must route interactive invocations without changing explicit legacy CLI behavior or blocking in non-TTY automation.",
+    "constraints": ["No-argument TTY routes to the wizard; --interactive always routes to the wizard.", "Explicit installer options retain their existing parser and output behavior.", "No-argument non-TTY exits fail closed without waiting; no lifecycle automation is added."],
+    "rationale": "A small entrypoint compatibility layer makes the new wizard discoverable while keeping deterministic automation and existing integrations stable."
+  },
+  "rawUserRequest": "继续循环执行计划中的全部工单流程，不要停止；当前执行 interactive-installation-entrypoint-compatibility，保持旧 CLI 兼容并完成验证、PR、合并和闭环。",
+  "rawRequestSource": {"type": "human", "reference": "user-goal:2026-07-25-serial-installation-wizard-plan", "capturedAt": "2026-07-25", "digest": "sha256:user-authorized-serial-plan"},
+  "declaredIntent": {"summary": "Route interactive installation entrypoints while preserving deterministic legacy CLI behavior.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "predecessorWorkItem": {"workItemId": "interactive-installation-wizard", "status": "closed", "pr": {"merged": true, "reference": "origin/main commit ecae20b6; PR #344"}, "closure": {"succeeded": true, "localBranchDeleted": true, "remoteBranchDeleted": true, "baseSynchronized": true, "evidence": ".ai/work-items/archive/2026/interactive-installation-wizard.archive-manifest.json"}},
+  "scenarioCoverage": [
+    {"scenario": "no-argument TTY", "required": true, "riskDomain": "routing_compatibility", "status": "verified", "evidence": ["docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md"]},
+    {"scenario": "--interactive and explicit legacy flags", "required": true, "riskDomain": "cli_regression", "status": "verified", "evidence": ["scripts/install_ai_cockpit.py"]},
+    {"scenario": "no-argument non-TTY and dry-run", "required": true, "riskDomain": "non_tty_safety", "status": "verified", "evidence": ["docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized completion of the full governed workflow."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 565
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/interactive-installation-entrypoint-compatibility.json",
+    "baseCommit": "ecae20b6bc6914ce550867bfdc8d89cbaf01a737",
+    "initialScopeDigest": "c2474bce4854513e6e8a2ba134235d4f818b17999cb45357c6ee45547415dbc5",
+    "contractSkeletonDigest": "f22c58b16dafe371ba81e95a4be63a546200c70d1c9a24d6cb8654da4f89ca11"
+  }
+}
