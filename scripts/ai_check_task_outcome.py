@@ -14,6 +14,7 @@ STATUSES = {
     "blocked",
     "cancelled",
 }
+SEVERITIES = {"informational", "low", "medium", "high", "critical"}
 SECTIONS = {
     "outcomeSummary",
     "taskOverview",
@@ -141,14 +142,28 @@ def _validate_sections(sections: Any, errors: list[ValidationError]) -> None:
 
 
 def _validate_events(events: Sequence[Mapping[str, Any]], errors: list[ValidationError]) -> None:
-    ids = {event.get("eventId") for event in events if isinstance(event, Mapping)}
+    ids: set[Any] = set()
     for event in events:
         if not isinstance(event, Mapping):
             _error(errors, "event_relationship", "event must be an object")
             continue
+        event_id = event.get("eventId")
+        if event_id in ids:
+            _error(errors, "event_identity", f"duplicate eventId: {event_id}")
+        ids.add(event_id)
         for relation in ("correctsEventId", "supersedesEventId"):
             if relation in event and event[relation] not in ids:
                 _error(errors, "event_relationship", f"{relation} references missing event")
+
+
+def _validate_severities(sections: Mapping[str, Any], errors: list[ValidationError]) -> None:
+    for section in ("findings", "risks", "residualRisks"):
+        values = sections.get(section, [])
+        if not isinstance(values, list):
+            continue
+        for index, item in enumerate(values):
+            if isinstance(item, Mapping) and item.get("severity") not in SEVERITIES:
+                _error(errors, "severity", f"{section}[{index}].severity is invalid")
 
 
 def _validate_claims(sections: Mapping[str, Any], errors: list[ValidationError]) -> None:
@@ -234,6 +249,7 @@ def validate_outcome(
     _validate_sections(outcome.get("sections"), errors)
     if isinstance(outcome.get("sections"), dict):
         _validate_claims(outcome["sections"], errors)
+        _validate_severities(outcome["sections"], errors)
         _validate_markdown(markdown, outcome["sections"], errors)
     _validate_events(events, errors)
     _walk(outcome, errors)
