@@ -1,0 +1,208 @@
+{
+  "contractVersion": 2,
+  "workItemId": "canonical-evidence-foundation",
+  "mode": "code",
+  "title": "Canonical Evidence Foundation",
+  "rawUserRequest": "继续执行全面整改计划的 WI-01：建立 Canonical Evidence/Event 模型、事实源绑定和声明与证据校验基础。每个工单必须完成完整 PR、合并、关闭、分支清理和文档对齐流程；遇到流程问题先记录并修正。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request: AI Cockpit comprehensive remediation instruction and continuation authorization",
+    "capturedAt": "2026-07-25",
+    "digest": "sha256:canonical-evidence-foundation-request"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Create a single validated evidence/event boundary from which Summary, Outcome, Status, PR and release claims can be derived.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "baseCommit": "5b0d33dd11effac95ecc336b939a95ee01bd8007",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/canonical-evidence-foundation.contract.json",
+    ".ai/work-items/active/canonical-evidence-foundation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/schemas/canonical_evidence.schema.json",
+    "scripts/ai_canonical_evidence.py",
+    "tests/test_canonical_evidence.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Unknown/human confirmation state model (WI-02)",
+    "Installer transaction/source mode implementation (WI-03)",
+    "Task Outcome rendering and full Cockpit/PR integration (WI-09 and later)",
+    "Release asset generation or publishing (WI-16)",
+    "Deleting historical plans or archive evidence (WI-17)"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Defines WI-01 scope, canonical evidence acceptance and required post-work documentation alignment."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines evidence, event, claim, and derivation terminology."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Defines fail-closed Work Item and evidence lifecycle boundaries."
+    },
+    {
+      "path": ".ai/trust/schema/baseline_evidence.schema.json",
+      "reason": "Existing structured evidence schema and digest conventions."
+    },
+    {
+      "path": "scripts/ai_task_event_log.py",
+      "reason": "Existing append-only event recording conventions."
+    },
+    {
+      "path": ".ai/work-items/active/canonical-evidence-foundation.contract.json",
+      "reason": "This Contract defines the bounded implementation and verification unit."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["evidence_integrity", "schema_compatibility", "derivation_consistency"],
+    "reason": "The boundary must reject missing, stale, conflicting and digest-mismatched evidence without rewriting historical records; later Work Items consume this contract."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User explicitly authorized serial execution after the plan Work Item was merged and closed; WI-01 has a bounded evidence/schema/test scope."
+  },
+  "preReviewWarnings": [
+    "Review canonical-source uniqueness, digest binding, stale/conflicting evidence, event ordering, privacy-safe facts, and derivation parity."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Canonical evidence/event schema binds each fact to an evidence ID, source, captured time, digest, subject and status; missing source or digest is rejected.",
+    "Evidence validation fails closed for missing, stale, conflicting, duplicate-source or digest-mismatched records and rejects claims without supporting evidence.",
+    "A deterministic JSON-to-Markdown derivation produces the same output from the same canonical payload and preserves event relationships without duplicate facts.",
+    "Focused schema/digest/event/derivation negative tests pass; required AI checks and `make quality` pass before the PR is opened.",
+    "The plan WI-01 section and glossary list the schema path, validator entry point, fail-closed rules and WI-02-or-later integration boundary used by this Work Item."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The repository has many structured evidence files and event records, but later outputs can still duplicate facts or claim readiness without one verifiable source binding. WI-01 establishes the canonical boundary that later unknown, installer, outcome and release work can consume.",
+    "constraints": ["Use JSON as the canonical machine representation and derive human-readable Markdown from it.", "Do not rewrite historical event records or treat generated Markdown/PR/Status as independent sources of truth.", "Use standard-library-only implementation and preserve fail-closed behavior for missing, stale, conflicting or digest-mismatched evidence."],
+    "rationale": "A small explicit schema and validator makes evidence identity and derivation testable before adding the later state, installer and reporting layers."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Valid canonical evidence with source, captured time and digest validates and renders deterministically", "required": false, "status": "unverified", "evidence": ["tests/test_canonical_evidence.py"]},
+    {"scenario": "Missing source, digest mismatch, stale evidence and unsupported claim fail closed", "required": false, "status": "unverified", "evidence": ["tests/test_canonical_evidence.py"]},
+    {"scenario": "Duplicate or conflicting facts are rejected rather than silently merged", "required": false, "status": "unverified", "evidence": ["tests/test_canonical_evidence.py"]},
+    {"scenario": "The same canonical JSON deterministically derives equivalent Markdown and event relationships", "required": false, "status": "unverified", "evidence": ["tests/test_canonical_evidence.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized full serial execution; approval is limited to the WI-01 canonical evidence schema path under .ai/schemas."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 585
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/canonical-evidence-foundation.json",
+    "baseCommit": "5b0d33dd11effac95ecc336b939a95ee01bd8007",
+    "initialScopeDigest": "e3ed7bc36136f619f721cdb0dd995c75a2eddb1697974030244419a1fa41cb19",
+    "contractSkeletonDigest": "1d30ebe881742b7785c6c8da95365212a07e33e14db0eeb8abc9e2f524cacce0"
+  }
+}

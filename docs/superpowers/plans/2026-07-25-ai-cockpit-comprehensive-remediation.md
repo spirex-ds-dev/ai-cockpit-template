@@ -101,6 +101,8 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **必须验证：** schema、digest、事件关系、重复/冲突/过期负例、Summary/Outcome/Status/PR parity。完成后重新核对本计划的“事实源唯一”约束。
 
+**WI-01 当前实现边界：** Canonical Evidence 的机器契约位于 `.ai/trust/schema/canonical_evidence.schema.json`，验证与稳定 JSON→Markdown 派生入口位于 `scripts/ai_canonical_evidence.py`，回归测试位于 `tests/test_canonical_evidence.py`。WI-01 只建立事实源、digest、事件引用、声明支持关系和派生基础；Unknown/人工确认、安装事务、Task Outcome/PR/Status 完整接入分别由后续工单实现。
+
 ### WI-02：Unknown and Human Confirmation
 
 **范围：** 将 `unknowns` 扩展为 `knownUnknowns`、`unresolvedQuestions`、`assumptions`、`examinedAreas`、`unexaminedAreas`、`evidenceGaps` 与 `unknownAssessment`；分离 Reviewer/Owner/Security/Release Confirmation，并绑定对象、范围、digest、时间、角色、结果和过期。
@@ -288,3 +290,4 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 - 现有 governance complexity 与 archive growth 仅报告 warning（当前 archive growth 超过 policy warning 阈值），不在本计划工单中擅自抬高阈值；应由后续相关 Work Item 按预算/偿还规则处理。
 - `PLAN-003`（流程/发布证据边界）：诊断 `check_supply_chain.py release` 时发现 `--write` 可以直接改写 `.ai/cockpit/release-digests.json` 并使检查通过，但该文件属于发布证据，不能在计划文档工单中更新。诊断性改写已恢复；后续必须由 WI-16 或明确的 corrective Work Item 按 source-bound 发布流程生成。
 - `PLAN-004`（流程/候选发布证据校验，高）：PR 的 Python 兼容矩阵在所有平台重复失败，根因是候选 `release-digests.json` 的 `origin/main` 身份被按已发布标签提交进行严格比较。已在当前计划 PR 中修正候选基线校验：候选阶段只校验稳定发布契约和非身份制品，发布阶段由 `release-assets` 做精确 source-bound 校验，并补充回归测试；该修正完成后才允许合并当前 PR。
+- `WI-01-ISSUE-004`（外部 CI 调度，待恢复）：WI-01 PR #365 的 compatibility 与 smoke run 在创建任何 job 前被 GitHub 标记为 “This run likely failed because of a workflow file issue”；PR diff 未包含 `.github/workflows/**`，且 rerun 后仍复现。已在 PR 记录并保留 run 证据；不得把无 job 失败误报成代码验证通过，必须恢复出可审计的 required checks 后再合并。
