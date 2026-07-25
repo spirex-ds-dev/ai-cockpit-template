@@ -23,6 +23,8 @@ keywords:
 | 設定 | [設定](../configuration.ja.md) |
 | アーキテクチャ | [アーキテクチャ](../architecture.ja.md) |
 | 障害対応 | [トラブルシューティング](troubleshooting.ja.md) |
+| 校正 | [Calibration Session](calibration-session.md) |
+| 能力の証拠 | [Capability Truth Matrix](capability-truth-matrix.md) |
 | Cockpit Status | [Cockpit Status の読み方](how-to-read-cockpit-status.ja.md) |
 | 配布 | [配布](distribution.ja.md) |
 | アップグレード | [アップグレード](upgrade.ja.md) |
@@ -31,3 +33,5 @@ keywords:
 | 複雑度 | [ガバナンス複雑度](governance-complexity.ja.md) |
 
 各日本語ページは、コマンド名、JSON フィールド名、製品名、標準規格名を除き、日本語の説明を主とします。完全な詳細が必要な場合は、対応する英語リファレンスへ進んでください。
+
+対話型導入は Installation Wizard の境界としてインストールページで説明し、10 段階の校正、確認、stale、activation は Calibration Session リファレンスで説明します。能力の現在値は、README やリリースノートではなく machine-readable な Truth Matrix を確認します。

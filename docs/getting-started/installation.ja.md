@@ -14,6 +14,12 @@ keywords:
 
 AI Cockpit は、既存リポジトリへ公開済みリリースを導入します。まず [日本語 README](../../README.ja.md) のクイックインストールを実行し、その後このページで導入状態を確認してください。詳細な英語手順は [Installation](installation.md) を参照してください。
 
+## 対話型エントリポイント
+
+TTY で `./install.sh` を引数なしで実行するか `./install.sh --interactive` を指定すると、8 段階の Installation Wizard が起動します。New Adoption、Upgrade、Dry Run を選び、完全な計画を確認するまで対象リポジトリへ書き込みません。明示的な確認後も commit、push、PR、merge は行いません。自動化では既存の明示的な CLI オプションを使い、非 TTY の引数なし実行は待機せず fail closed になります。
+
+インストール後の校正は `make cockpit-calibration-wizard` で開始します。10 段階の Session を保存し、Pause / Resume、Back、stale 再検証を行います。Unknown は確認を阻止し、Not Applicable には理由が必要です。Candidate 有効化には Reviewer と Owner の別々の確認が必要で、Wizard の表示言語はプロジェクト文書の言語とは独立しています。
+
 ## 導入の流れ
 
 1. **事前確認:** Git の作業ツリーが clean で、初回コミット、Python 3.10 以上、GNU Make が利用できることを確認します。
@@ -44,3 +50,5 @@ make check-ai-status-consistency
 ```
 
 導入は実行系の配置で完了します。Project Profile、Guard、品質コマンド、CI の本番適合は、別の `configure_ai_cockpit` Work Item で人が確認します。設定後は [最初の Work Item](first-work-item.ja.md) に進んでください。
+
+Android の module / flavor / variant、JDK、unit test、instrumented test は導入先の Gradle Wrapper に合わせて校正します。Xcode project/workspace と CocoaPods は Swift Package の検証結果から推論できません。混在 monorepo は境界を確定するまで `generic` を選び、fixture の存在を外部ツールチェーン実行の証拠とみなさないでください。

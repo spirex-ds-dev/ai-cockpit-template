@@ -28,3 +28,7 @@ Documentation may claim a capability as current only when the corresponding matr
 The matrix deliberately records the remaining gaps around verified Quick Install archive digests. Bootstrap lifecycle, ten-stage calibration, Candidate activation, shared Calibration Inventory, and independent CI/Release Evidence are implemented; remaining gaps are addressed by later Work Items in the [Conditional GO remediation plan](../superpowers/plans/2026-07-22-conditional-go-review-remediation.md).
 
 For exact row-level evidence, status vocabulary, and missing-evidence reasons, use the JSON source rather than inferring status from prose.
+
+## Wizard boundary
+
+The Installation Wizard is an implemented template entrypoint with an explicit confirmation-gated write boundary. The Calibration Wizard is an implemented presentation adapter over the persisted ten-stage Session; adopter execution, project-owned approval, and external toolchain results remain separate evidence. Fixture coverage for Swift, Kotlin/Android, and mixed monorepos demonstrates scenario modeling, not proof that every adopter's Xcode, Gradle, CocoaPods, JDK, or instrumented commands run successfully.

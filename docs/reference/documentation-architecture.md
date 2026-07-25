@@ -42,6 +42,8 @@ This page describes the stable documentation split for AI Cockpit. It keeps the 
 | [docs/reference/upgrade.md](upgrade.md) | Upgrade guide | How do I move an existing installation forward? |
 | [docs/reference/distribution.md](distribution.md) | Distribution reference | What installer options and published integrity capabilities exist? |
 | [docs/reference/troubleshooting.md](troubleshooting.md) | Recovery guide | What failed, and how do I recover? |
+| [docs/reference/calibration-session.md](calibration-session.md) | Calibration reference | How do the ten stages, confirmations, stale checks, and activation boundary work? |
+| [docs/reference/capability-truth-matrix.md](capability-truth-matrix.md) | Truth evidence | Which claims are implemented, template-only, adopter-installed, or planned? |
 | [docs/installation.md](../installation.md) | Compatibility entry | Where do old installation links land now? |
 | [docs/upgrade.md](../upgrade.md) | Compatibility entry | Where do old upgrade links land now? |
 | [docs/distribution.md](../distribution.md) | Compatibility entry | Where do old distribution links land now? |
@@ -71,5 +73,7 @@ This page describes the stable documentation split for AI Cockpit. It keeps the 
 4. Use [docs/configuration.md](../configuration.md) when you need stack or guard calibration detail.
 5. Use [docs/reference/upgrade.md](upgrade.md), [docs/reference/distribution.md](distribution.md), and [docs/reference/troubleshooting.md](troubleshooting.md) as reference pages.
 6. Use [docs/philosophy/design-philosophy.md](../philosophy/design-philosophy.md) for the design rationale.
+
+For the interactive flow, link Installation to the Installation Wizard first, then link the Calibration Session reference for the separate ten-stage boundary. Do not use the README or a release note as a substitute for the machine-readable truth matrix.
 
 This page is the navigation map for the documentation system. It explains how the documentation is organized so future edits can stay in the right layer.

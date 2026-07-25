@@ -44,6 +44,14 @@ Calibrated trust（調整された信頼）とは、エージェントへの信�
 
 Runtime のインストールは校正の完了を意味しません。現在の `configure_ai_cockpit` は主に Project Profile の提案を生成・検証します。中断・再開できる 10 Stage セッションと Candidate 有効化は実装済みの Runtime 能力ですが、導入先での実行と人による確認が必要です。更新時は Impact Assessment を先に実行します。証拠の境界は [Capability Truth Matrix](docs/reference/capability-truth-matrix.md) を参照してください。
 
+## 対話型エントリポイント
+
+TTY で引数なしの `./install.sh` を実行するか `--interactive` を指定すると、8 段階の Installation Wizard が起動します。対象リポジトリ、New Adoption / Upgrade / Dry Run、書き込み計画を表示し、明示的な確認まで書き込みません。非対話の引数なし実行は fail closed になり、既存の明示的な CLI オプションの動作は変わりません。Wizard は commit、push、PR 作成、merge を行いません。
+
+インストール後は `make cockpit-calibration-wizard` で再開可能な 10 段階の Calibration Wizard を実行します。永続化された Calibration Session を再利用し、Back / Pause / Resume と stale 再検証に対応します。Unknown または stale な証拠がある場合は停止し、Candidate 有効化には Reviewer と Owner の別々の確認が必要です。Wizard の表示言語と導入先プロジェクトの文書言語は独立しており、既定の Wizard 言語は日本語です。
+
+モバイル例は証拠 fixture とシナリオです。ホステッド検証は最小 Swift Package と Android smoke path が中心で、Xcode project/workspace、CocoaPods、導入先固有の Gradle variant、ホスト JDK の選択、instrumented test 実行を Wizard が保証するものではありません。これらは導入先で校正してください。
+
 ## AI Cockpit とは
 
 **AI Cockpit は AI アシスト型ソフトウェア開発のためのリポジトリガバナンスレイヤーです。** これは使命を実現するための具体的な製品境界です。
