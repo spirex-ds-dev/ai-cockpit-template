@@ -313,3 +313,4 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 - `WI-05-ISSUE-004`（用户纠正/coverage，低）：用户指出安装对象工程的工程师多数使用日语，原 WI-05 边界虽覆盖 bilingual/mixed-language，但未明确日语。已在 PR #369 合并前暂停关闭动作，补充日文直接、隐藏 HTML、嵌套引用 corpus 与日文检测指示器，并将计划、安全边界文档和验证范围对齐；补丁完成后必须重新 finish 与 required CI。
 - `PLAN-005`（用户纠正/流程门禁，高）：用户要求在发布新版本前插入全面日语能力评估，且日语为必需能力；任何问题必须对应 corrective Work Item 并在重新评估通过前保持ブロッキング。已将原 WI-16/WI-17 顺延为 WI-17/WI-18，新增 WI-16 Japanese Capability Assessment，并更新发布与最终清理的强制顺序；现有 PR/finish 必须先完成本计划对齐再继续。
 - `WI-05-ISSUE-005`（流程/证据归属，高）：尝试以独立追加 JSON 记录 WI-05 的日语计划补正时，PR 归属门禁拒绝了该非 Contract/Summary 配对文件。该追加文件已从当前 PR 移除，计划正文保留完整问题记录；后续必须建立独立 corrective process Work Item，补充并验证“追加式 correction evidence”的归属规则后，才能使用该证据格式，不得改写已归档 WI-05 Contract/Summary。
+- `WI-05-ISSUE-006`（流程/CI，待恢复）：最新 PR 提交的 `template-smoke` job 自 2026-07-25T16:41Z 起停留在 `Run repository quality gates`，其余步骤未启动，远超同类运行时长且无可用最终日志。已取消僵死 run；必须重新触发完整 CI 并取得新的可审计结论后，才能合并 WI-05，不得把取消或旧 run 当作通过。
