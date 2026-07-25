@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any, Callable
@@ -33,6 +34,10 @@ ANSWER_PROMPTS = {
     "unknown": "Unknown",
     "not_applicable": "N/A (reason required)",
 }
+IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$")
+SECRET_VALUE = re.compile(
+    r"(?i)(api[_-]?key|token|secret|password|passwd|private[_-]?key)\s*[:=]\s*[^\s,;]+"
+)
 
 
 class CalibrationWizard:
@@ -45,6 +50,8 @@ class CalibrationWizard:
         self.session: CalibrationSession | None = None
 
     def load_or_start(self, session_id: str = "calibration-1") -> CalibrationSession:
+        if not IDENTIFIER.fullmatch(session_id):
+            raise CalibrationError("session_id contains invalid characters")
         if self.session_path.is_file():
             self.session = load_session(self.session_path)
         else:
@@ -80,7 +87,37 @@ class CalibrationWizard:
     ) -> None:
         if self.session is None:
             raise CalibrationError("wizard session has not been loaded")
-        self.session.answer(stage, answer, answer_type=answer_type, reason=reason)
+        self._validate_stage(stage)
+        self.session.answer(
+            stage,
+            self._redact(answer),
+            answer_type=answer_type,
+            reason=self._redact(reason),
+        )
+        self.persist()
+
+    @staticmethod
+    def _redact(value: str) -> str:
+        return SECRET_VALUE.sub(lambda match: f"{match.group(1)}=[REDACTED]", value)
+
+    @staticmethod
+    def _validate_stage(stage: str) -> None:
+        if stage not in STAGES:
+            raise CalibrationError("invalid calibration stage identifier")
+
+    def blocking_unknowns(self) -> list[str]:
+        if self.session is None:
+            raise CalibrationError("wizard session has not been loaded")
+        return [
+            stage["id"]
+            for stage in self.session.data["stages"]
+            if stage.get("checklist", {}).get("answerType") == "unknown"
+        ]
+
+    def revalidate(self) -> None:
+        if self.session is None:
+            raise CalibrationError("wizard session has not been loaded")
+        self.session.revalidate()
         self.persist()
 
     def back(self) -> None:
@@ -105,15 +142,31 @@ class CalibrationWizard:
         return self._checked("stage_self_check")
 
     def full_self_check(self) -> dict[str, Any]:
-        return self._checked("full_self_check")
+        result = self._checked("full_self_check")
+        return self._apply_blocking_guard(result)
 
     def governance_simulation(self) -> dict[str, Any]:
-        return self._checked("governance_simulation")
+        result = self._checked("governance_simulation")
+        return self._apply_blocking_guard(result)
+
+    def _apply_blocking_guard(self, result: dict[str, Any]) -> dict[str, Any]:
+        if self.session is None:
+            raise CalibrationError("wizard session has not been loaded")
+        blockers = self.blocking_unknowns() + list(self.session.data.get("staleStages", []))
+        if blockers:
+            result = {**result, "status": "blocked", "blockingStages": sorted(set(blockers))}
+            self.session.data.setdefault("checks", {})[result["evidence"]["kind"]] = result
+            self.persist()
+        return result
 
     def review(self) -> dict[str, Any]:
         if self.session is None:
             raise CalibrationError("wizard session has not been loaded")
         result = self.session.review()
+        blockers = self.blocking_unknowns() + list(self.session.data.get("staleStages", []))
+        if blockers:
+            result = {**result, "status": "blocked", "blockingStages": sorted(set(blockers))}
+            self.session.data["review"] = result
         self.persist()
         return result
 
@@ -133,6 +186,15 @@ class CalibrationWizard:
     def activate(self, *, fail: bool = False) -> None:
         if self.session is None:
             raise CalibrationError("wizard session has not been loaded")
+        if self.blocking_unknowns() or self.session.data.get("staleStages"):
+            raise CalibrationError("blocking Unknown or stale evidence requires revalidation")
+        if self.session.data.get("checks", {}).get("full_self_check", {}).get("status") != "passed":
+            raise CalibrationError("full self-check must pass before activation")
+        if (
+            self.session.data.get("checks", {}).get("governance_simulation", {}).get("status")
+            != "passed"
+        ):
+            raise CalibrationError("governance simulation must pass before activation")
         self.session.activate(active_path=self.active_path, fail=fail)
         self.persist()
 

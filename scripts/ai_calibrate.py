@@ -184,6 +184,21 @@ class CalibrationSession:
         self.data["state"] = "in_progress"
         self.data["events"].append(_evidence("resumed", "Session resumed."))
 
+    def revalidate(self) -> None:
+        """Return stale downstream stages to the authoritative session queue."""
+        self._require_live()
+        stale = list(self.data.get("staleStages", []))
+        if not stale:
+            raise CalibrationError("session has no stale stages to revalidate")
+        for stage in self.data["stages"]:
+            if stage["id"] in stale:
+                stage["status"] = "pending"
+        first = next(stage for stage in self.data["stages"] if stage["id"] in stale)
+        first["status"] = "current"
+        self.data["currentStage"] = first["id"]
+        self.data["staleStages"] = []
+        self.data["events"].append(_evidence("revalidated", first["id"]))
+
     def _check(self, name: str, passed: bool, detail: str) -> dict[str, Any]:
         result = {
             "status": "passed" if passed else "blocked",
