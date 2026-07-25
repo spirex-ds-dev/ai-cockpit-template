@@ -27,11 +27,14 @@ Each item records:
 - `status`: exactly one of `complete`, `warning`, `incomplete`, `unknown`, or `not_applicable`.
 - `source`: the authoritative file, command, run, or evidence reference.
 - `confirmation`: `none`, `static`, `command`, `human`, or `external`.
+- `evidenceKind`: `fixture`, `hosted`, `adopter_execution`, or `not_verified`; this records the evidence boundary.
 - `evidence`: concrete evidence references; an empty list is not a passing result.
 - `staleAt`: an ISO timestamp or `null`; expired evidence cannot remain `complete`.
 - `owner`: the project or person responsible for the evidence.
 - `blockingReason`: why a reviewer must investigate, confirm, or stop.
 
 `readiness_state()` exposes the same object as `calibrationInventory`, while retaining compatibility fields for existing callers. Generated `current_status.md` renders the same statuses and provenance. A static `warning` or `not_applicable` result is deliberately different from a command-confirmed `complete` result; adopter readiness and production claims require the relevant runtime and external evidence separately.
+
+The default `not_verified` value is fail-closed. Fixture or static evidence cannot be promoted into hosted or adopter-execution evidence, and cannot by itself assert production readiness.
 
 The matrix is repository evidence, not an identity system, approval system, immutable audit ledger, sandbox, or enterprise assurance claim.

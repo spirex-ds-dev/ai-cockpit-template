@@ -22,6 +22,7 @@ STATUS_VALUES = (
     "not_applicable",
 )
 CONFIRMATION_VALUES = {"none", "static", "command", "human", "external"}
+EVIDENCE_KIND_VALUES = ("fixture", "hosted", "adopter_execution", "not_verified")
 INVENTORY_KEYS = (
     "profile",
     "guards",
@@ -70,12 +71,14 @@ def _entry(
     stale_at: str | None = None,
     owner: str = "repository",
     blocking_reason: str | None = None,
+    evidence_kind: str = "not_verified",
 ) -> dict[str, Any]:
     return {
         "key": key,
         "status": status,
         "source": source,
         "confirmation": confirmation,
+        "evidenceKind": evidence_kind,
         "evidence": list(evidence or []),
         "staleAt": stale_at,
         "owner": owner,
@@ -327,6 +330,7 @@ def _apply_override(item: dict[str, Any], override: Any, *, now: datetime) -> di
         raise ValueError(f"command evidence for {item['key']} must be an object")
     status = override.get("status")
     confirmation = override.get("confirmation")
+    evidence_kind = override.get("evidenceKind", "not_verified")
     source = override.get("source")
     evidence = override.get("evidence", [])
     if status not in STATUS_VALUES:
@@ -334,6 +338,10 @@ def _apply_override(item: dict[str, Any], override: Any, *, now: datetime) -> di
     if confirmation not in CONFIRMATION_VALUES:
         raise ValueError(
             f"command evidence for {item['key']} has unsupported confirmation: {confirmation}"
+        )
+    if evidence_kind not in EVIDENCE_KIND_VALUES:
+        raise ValueError(
+            f"command evidence for {item['key']} has unsupported evidenceKind: {evidence_kind}"
         )
     if not isinstance(source, str) or not source.strip():
         raise ValueError(f"command evidence for {item['key']} requires source")
@@ -349,6 +357,7 @@ def _apply_override(item: dict[str, Any], override: Any, *, now: datetime) -> di
         status,
         source=source,
         confirmation=confirmation,
+        evidence_kind=evidence_kind,
         evidence=evidence,
         stale_at=stale_at,
         owner=str(override.get("owner") or item["owner"]),
@@ -412,6 +421,8 @@ def validate_inventory(data: Any) -> list[str]:
             issues.append(f"inventory item {key}.source is required")
         if item.get("confirmation") not in CONFIRMATION_VALUES:
             issues.append(f"inventory item {key}.confirmation is unsupported")
+        if item.get("evidenceKind") not in EVIDENCE_KIND_VALUES:
+            issues.append(f"inventory item {key}.evidenceKind is unsupported")
         if not isinstance(item.get("evidence"), list):
             issues.append(f"inventory item {key}.evidence must be a list")
         if not isinstance(item.get("owner"), str) or not item["owner"]:
