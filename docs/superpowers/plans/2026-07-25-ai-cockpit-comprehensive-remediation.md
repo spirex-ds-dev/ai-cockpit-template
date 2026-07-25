@@ -101,6 +101,8 @@ WI-01 至 WI-15 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **必须验证：** schema、digest、事件关系、重复/冲突/过期负例、Summary/Outcome/Status/PR parity。完成后重新核对本计划的“事实源唯一”约束。
 
+**WI-01 当前实现边界：** Canonical Evidence 的机器契约位于 `.ai/trust/schema/canonical_evidence.schema.json`，验证与稳定 JSON→Markdown 派生入口位于 `scripts/ai_canonical_evidence.py`，回归测试位于 `tests/test_canonical_evidence.py`。WI-01 只建立事实源、digest、事件引用、声明支持关系和派生基础；Unknown/人工确认、安装事务、Task Outcome/PR/Status 完整接入分别由后续工单实现。
+
 ### WI-02：Unknown and Human Confirmation
 
 **范围：** 将 `unknowns` 扩展为 `knownUnknowns`、`unresolvedQuestions`、`assumptions`、`examinedAreas`、`unexaminedAreas`、`evidenceGaps` 与 `unknownAssessment`；分离 Reviewer/Owner/Security/Release Confirmation，并绑定对象、范围、digest、时间、角色、结果和过期。
