@@ -24,12 +24,21 @@ def test_read_repository_facts_is_read_only_and_captures_adoption_signals(tmp_pa
         "-m",
         "initial",
     )
-    before = sorted(path.relative_to(tmp_path).as_posix() for path in tmp_path.rglob("*"))
+    before = sorted(
+        path.relative_to(tmp_path).as_posix()
+        for path in tmp_path.rglob("*")
+        if ".git" not in path.relative_to(tmp_path).parts
+    )
 
     facts = read_repository_facts(tmp_path)
 
-    after = sorted(path.relative_to(tmp_path).as_posix() for path in tmp_path.rglob("*"))
+    after = sorted(
+        path.relative_to(tmp_path).as_posix()
+        for path in tmp_path.rglob("*")
+        if ".git" not in path.relative_to(tmp_path).parts
+    )
     assert before == after
+    assert (tmp_path / "README.md").read_text(encoding="utf-8") == "project\n"
     assert facts.branch == "main"
     assert facts.clean is True
     assert facts.active_work_items == ()
