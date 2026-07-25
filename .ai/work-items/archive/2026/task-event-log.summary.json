@@ -1,0 +1,393 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "task-event-log",
+  "contractPath": ".ai/work-items/archive/2026/task-event-log.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/task-event-log.contract.json",
+      "reason": "Contract governing append-only Task Outcome event evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/task-event-log.summary.json",
+      "reason": "Summary for the Task Outcome event-log Work Item."
+    },
+    {
+      "path": "scripts/ai_task_event_log.py",
+      "reason": "Added validated append-only JSONL event writing, fingerprinting, reconstruction, and correction/supersession checks."
+    },
+    {
+      "path": "tests/test_task_event_log.py",
+      "reason": "Added event append, recurrence, correction, malformed-input, and privacy-boundary tests."
+    },
+    {
+      "path": ".ai/work-items/active/task-event-log.events.jsonl",
+      "reason": "Bounded event evidence stream for this Work Item."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/task-event-log.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/task-event-log.contract.json",
+    "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+    ".ai/schemas/task_outcome.schema.json",
+    "scripts/ai_issue_log.py",
+    "tests/test_issue_log.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/task-event-log.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T03:55:19.848768+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "4ffcb6152416e64ad8f564029fc039db4b612a6cc0abd65efb59aaceb0588f1b",
+      "commandHash": "e8ad72969a19d284028fd1c95f88cbe1d5ac3c6f8056a4ac85fb21773298dfae",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "02c6d13bad365aaa228fc870472a4ebb81600b60c16f6502b58cd1b5d199a993",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/task-event-log.contract.json work item contract check passed: .ai/work-items/active/task-event-log.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/task-event-log.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T03:55:19.977235+00:00",
+      "exitCode": 0,
+      "durationMs": 82,
+      "outputDigest": "af60c10ae3d1492b72a65fc7fab722499cdba5f604520023c4811583335b2554",
+      "commandHash": "1d1c830b5b0762d937dc14db285ce54a6466e0d94f595b36c085c975c5613e7f",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "02c6d13bad365aaa228fc870472a4ebb81600b60c16f6502b58cd1b5d199a993",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/task-event-log.contract.json scope guard passed: 4 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T03:55:20.126132+00:00",
+      "exitCode": 0,
+      "durationMs": 106,
+      "outputDigest": "5093c3cfc2e08e3b848485acfd3ab45039921f7ba6068ab350e5fcaa7ed735bc",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "02c6d13bad365aaa228fc870472a4ebb81600b60c16f6502b58cd1b5d199a993",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/task-event-log.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/task-event-log.contract.json SUMMARY=.ai/work-items/active/task-event-log.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T03:55:20.372736+00:00",
+      "exitCode": 0,
+      "durationMs": 180,
+      "outputDigest": "a0b9ebf83f1958e2b98985b8f897afcf433598a7e8dd850f486a63296707bbcc",
+      "commandHash": "6e2a95cbe9e4bba1e60667d38a4da9e2c68ca6538a4b09abae68f991d3946c39",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "02c6d13bad365aaa228fc870472a4ebb81600b60c16f6502b58cd1b5d199a993",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/task-event-log.contract.json --summary .ai/work-items/active/task-event-log.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `task-event-log` - Contract Hash: `653883fca366b0f3` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `0` - Required Checks: `16` - Required Checks Passed: `3` "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/task-event-log.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T03:55:20.515362+00:00",
+      "exitCode": 0,
+      "durationMs": 93,
+      "outputDigest": "ceb92ace05da3ffda26d012587f51383ddd98f137478f219ab7261de97670cb6",
+      "commandHash": "b3f5aa2ac1f0dba3743ff34aaa9d782916dfb23c29c3976863b4b7b6331f9b42",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "02c6d13bad365aaa228fc870472a4ebb81600b60c16f6502b58cd1b5d199a993",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/task-event-log.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/task-event-log.json [review] scripts/ai_task_event_log.py [review] .ai/cockpit/current_status.md review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T03:55:20.646185+00:00",
+      "exitCode": 0,
+      "durationMs": 85,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "02c6d13bad365aaa228fc870472a4ebb81600b60c16f6502b58cd1b5d199a993",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T03:55:20.775764+00:00",
+      "exitCode": 0,
+      "durationMs": 85,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "02c6d13bad365aaa228fc870472a4ebb81600b60c16f6502b58cd1b5d199a993",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/task-event-log.contract.json SUMMARY=.ai/work-items/active/task-event-log.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T03:55:20.867602+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "fa7c55e090c2063574fd3b9598788ef5b8c876735333c77a81871422ee03cc25",
+      "commandHash": "3da96c069941baff6408c31fb488f0cb9bf5b46beeccc03830ec3b285fd684c9",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "02c6d13bad365aaa228fc870472a4ebb81600b60c16f6502b58cd1b5d199a993",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/task-event-log.contract.json --summary .ai/work-items/active/task-event-log.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/task-event-log.contract.json SUMMARY=.ai/work-items/active/task-event-log.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T03:55:20.960124+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "ba48f46f670e9a142f5bbf00f28e0fb98d287f961bf29a61dd4c441c5081ae56",
+      "commandHash": "e829fa5e284c0912f31edf94cd3ea5f0185b17082b3032f6e0a570c1f2b04473",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "02c6d13bad365aaa228fc870472a4ebb81600b60c16f6502b58cd1b5d199a993",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/task-event-log.contract.json --summary .ai/work-items/active/task-event-log.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/task-event-log.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T03:55:21.186374+00:00",
+      "exitCode": 0,
+      "durationMs": 175,
+      "outputDigest": "fa9a2509fc42793af9ceaf931fe4e4f1d9f8bcd0f3c80e34164a2f74a407a21b",
+      "commandHash": "552fbd01e7cc31db8dac95c847a9f24cae46c0c07b01a1c6d20e1d86f6a808b6",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "02c6d13bad365aaa228fc870472a4ebb81600b60c16f6502b58cd1b5d199a993",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/task-event-log.contract.json ## Diff Ownership Preview - active_owned: `4`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/task-event-log.json` — covered by Contract scope - [active_owned] `scripts/ai_task_event_log.py` — cove"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T04:00:03.156321+00:00",
+      "exitCode": 0,
+      "durationMs": 281923,
+      "outputDigest": "40bbe04c96ed6bbafb7a4e030e40a4bfb10e121260202c43a186a1f41b1c5e4e",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "02c6d13bad365aaa228fc870472a4ebb81600b60c16f6502b58cd1b5d199a993",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests 206 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 ........................................................................ [ 7%] ........................................................................ [ 14%] ............................................................."
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/task-event-log.contract.json SUMMARY=.ai/work-items/active/task-event-log.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T04:00:04.513335+00:00",
+      "exitCode": 0,
+      "durationMs": 195,
+      "outputDigest": "76653beb7f4258cc86c5f8a45bfa1edc886dc1fe0f40b7abf46518436eca636c",
+      "commandHash": "d61a25ee7c14db891ace0785cc56dadc513a93832394f38cf5c20f52ae87caa2",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "d1617c97040f078d91a73d7b446a343f7a550ca355b7e2b680fc7f51376a00f2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/task-event-log.contract.json --summary .ai/work-items/active/task-event-log.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/task-event-log.contract.json SUMMARY=.ai/work-items/active/task-event-log.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T04:00:04.753779+00:00",
+      "exitCode": 0,
+      "durationMs": 196,
+      "outputDigest": "d44a8971c635c01d379eda9cea9814b1b9976acd1081e58f1584c57c5553127b",
+      "commandHash": "bbc76d4ed7df00e3eeedba836afdbcb2f60dd4a9ab7ca99abc4dbe1bcc207462",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "d1617c97040f078d91a73d7b446a343f7a550ca355b7e2b680fc7f51376a00f2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/task-event-log.contract.json --summary .ai/work-items/active/task-event-log.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T04:00:04.841273+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "d1617c97040f078d91a73d7b446a343f7a550ca355b7e2b680fc7f51376a00f2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/task-event-log.contract.json SUMMARY=.ai/work-items/active/task-event-log.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T04:00:04.936860+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "8b2dc3261b6409ef4f7c2f48870c02311424448c208f8e338296bb4278fe523a",
+      "commandHash": "c5d5606e545ae916b6fce8dace3930267721ec9719b05997142c3a909ac41091",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "d1617c97040f078d91a73d7b446a343f7a550ca355b7e2b680fc7f51376a00f2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/task-event-log.contract.json --summary .ai/work-items/active/task-event-log.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/task-event-log.summary.json CONTRACT=.ai/work-items/active/task-event-log.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-25T04:00:05.616051+00:00",
+      "exitCode": 0,
+      "durationMs": 82,
+      "outputDigest": "63364c136b910fa2aea5f4c0d77e6986e888d9289ca9418a8b5f62d732b4181e",
+      "commandHash": "1499af198578f8c7d603a9fc680db29121f0f71f20aac07dc4be9d14ca9cfe52",
+      "contractHash": "653883fca366b0f3089a150ad6638f36226d0a1c859342d365ad7663249e3801",
+      "commitSha": "a4593b5c728ff58e3f67098596ef5010f7b55a44",
+      "executionContractPath": ".ai/work-items/active/task-event-log.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/task-event-log.summary.json",
+      "worktreeDigest": "221f6d88a4035b2d4a036721335b8461150b5616b0eb5596da8bb594d82ae185",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/task-event-log.summary.json --contract .ai/work-items/active/task-event-log.contract.json ai summary check passed: .ai/work-items/active/task-event-log.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "The event writer and its behavior are documented in module docstrings and tests; no public package API is added."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The standard-library event writer is standalone and imports no internal feature modules."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "Later generator/validator Work Items must consume corrections and supersessions without collapsing historical records."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "A future consumer could misinterpret corrected events if it ignores explicit relationship fields; WI15/WI16 own that integration.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Append-only and privacy behavior",
+      "Correction/supersession reconstruction",
+      "Fingerprint recurrence semantics"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "653883fca366b0f3",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "653883fca366b0f3",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "Outcome generator and validator consumption is deferred to WI15 and WI16."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 561
+}
