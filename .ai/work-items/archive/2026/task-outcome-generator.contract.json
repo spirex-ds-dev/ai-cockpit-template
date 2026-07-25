@@ -1,0 +1,213 @@
+{
+  "contractVersion": 2,
+  "workItemId": "task-outcome-generator",
+  "mode": "code",
+  "title": "Evidence-derived Task Outcome JSON generator",
+  "rawUserRequest": "Implement the evidence-derived Task Outcome JSON generator described by the execution plan, including deterministic JSON and Markdown generation inputs, finding deduplication, resolution links, recurrence handling, prevention, conditional avoided impact, residual risks, five final statuses, and empty-section visibility. Execute this Work Item serially through its own PR and lifecycle closure.",
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:serial-plan-execution-2026-07-25",
+    "capturedAt": "2026-07-25",
+    "digest": "sha256:interactive-installation-calibration-wizard-plan"
+  },
+  "baseCommit": "6a1059d5d9e0d3ea266cd9798df6a1be37cea276",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/task-outcome-generator.contract.json",
+    ".ai/work-items/active/task-outcome-generator.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/*.outcome.json",
+    ".ai/work-items/active/*.outcome.md",
+    "scripts/ai_generate_task_outcome.py",
+    "tests/test_task_outcome_generator.py",
+    ".ai/guards/coverage_policy.yaml"
+  ],
+  "outOfScope": [
+    "Schema validation and provenance/privacy claim validation; owned by task-outcome-validator.",
+    "Standalone Markdown rendering and multilingual locale resources; owned by later Work Items.",
+    "ai-finish, archive, PR-summary, Cockpit integration, release publication, and existing historical evidence edits."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-interactive-installation-calibration-wizard.md",
+      "reason": "Plan Extension: AI Cockpit Task Outcome Report defines source evidence, report sections, statuses, findings, resolutions, prevention, avoided impact, and residual risks."
+    },
+    {
+      "path": ".ai/schemas/task_outcome.schema.json",
+      "reason": "WI13 schema is the output binding contract; this Work Item generates data accepted by it without owning validation."
+    },
+    {
+      "path": "scripts/ai_task_event_log.py",
+      "reason": "WI14 event log reader and fingerprint conventions are the append-only lifecycle evidence input."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository terminology and architectural boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "evidence_integrity",
+      "privacy",
+      "derived_claims"
+    ],
+    "reason": "The generator derives an auditable report from structured evidence; it must avoid unsupported claims, preserve residual risks, and keep raw evidence separate from derived presentation."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The scope, evidence sources, acceptance criteria, scenario coverage, and verification checks are explicit; serial Work Item execution is authorized by the user."
+  },
+  "preReviewWarnings": [
+    "Review that all derived avoided-impact language remains conditional and evidence-linked.",
+    "Review that privacy filtering and residual-risk visibility are preserved without claiming schema validation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The generator reads Contract, Summary, Verification, Guards/Risks, Checkpoints, Human Confirmations, Stop/Resume, changed files, tests, reviews, commit/PR binding, archive manifest, and WI14 events as structured evidence inputs.",
+    "Generated JSON contains the required Outcome Summary, Task Overview, Delivered Changes, Findings, Risks, Warnings, Interventions, Forced Stops, Resolutions, Recurrence Prevention, Avoided Impact, Residual Risks, Human Decisions, and Evidence sections; empty collections remain visible as None in Markdown.",
+    "Findings are deduplicated by the WI14 fingerprint, post-fix recurrence remains a new finding, resolutions link Problem to Action to Verification to Result, and prevention/avoided-impact/residual-risk derivation is evidence-backed and non-quantifying.",
+    "The five final statuses are emitted without inventing scores, hours, money, percentages, or unsupported impact claims.",
+    "Focused generator tests cover complete, empty, duplicate/recurrence, resolution, stop, prevention, avoided-impact, residual-risk, status, privacy, and deterministic-output scenarios."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Complete evidence produces deterministic JSON and derived Markdown with all sections.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_generator.py"]},
+    {"scenario": "No findings/events produces valid empty arrays and visible None sections.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_generator.py"]},
+    {"scenario": "Duplicate fingerprint is coalesced while post-fix recurrence is retained as a new finding.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_generator.py", "scripts/ai_task_event_log.py"]},
+    {"scenario": "Resolution and prevention events link to prior evidence and preserve verification/result details.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_generator.py"]},
+    {"scenario": "Forced stop and human decision evidence produce the correct status and remain distinct from agent decisions.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_generator.py"]},
+    {"scenario": "Avoided impact is emitted only with evidence and conditional language; unsupported claims are omitted.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_generator.py"]},
+    {"scenario": "Sensitive-looking fields are excluded from derived output while residual risks remain visible.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_generator.py"]},
+    {"scenario": "All five final statuses round-trip deterministically and unsupported score/quantification fields are not generated.", "required": true, "status": "verified", "evidence": ["tests/test_task_outcome_generator.py"]}
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The Task Outcome Report needs a deterministic machine-readable generator that turns structured Work Item evidence and append-only lifecycle events into an auditable outcome without inventing performance claims or hiding unresolved risk.",
+    "constraints": [
+      "Keep Cockpit Status as a short execution-continuation view and keep Outcome as the value/evidence view.",
+      "Use the WI13 schema and WI14 event/fingerprint conventions as inputs; do not own validation, archive, PR, release, or multilingual integration in this Work Item.",
+      "Preserve human decisions as distinct from agent decisions, use conditional language for avoided impact, and never generate scores or unsupported quantification.",
+      "Do not edit historical evidence; generated artifacts are derived from current structured evidence."
+    ],
+    "rationale": "A pure evidence-to-outcome transformation establishes one deterministic source for later validation, rendering, lifecycle, and presentation integrations while keeping claims bounded by evidence."
+  },
+  "declaredIntent": {
+    "summary": "Generate evidence-derived Task Outcome JSON and its directly derived Markdown representation.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized the serial execution and all required in-scope governance updates for every Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 574
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/task-outcome-generator.json",
+    "baseCommit": "6a1059d5d9e0d3ea266cd9798df6a1be37cea276",
+    "initialScopeDigest": "ab4330f97b145b89807882197aaf9c81ab0190b9f6a74dc3c0afb3fb11b45d84",
+    "contractSkeletonDigest": "44b879d494cbc8590ca2adb5297d456cb3c2063cffc2dad69ebab402f480c158"
+  }
+}
