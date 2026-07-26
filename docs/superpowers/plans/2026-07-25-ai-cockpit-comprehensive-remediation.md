@@ -325,6 +325,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-002`（工单收口并发，中）：同一工单同时启动多个 `ai-finish` 会竞争写 Summary 和观测记录，造成临时的 Summary/Guidelines 失败；已停止重复进程并改为单实例收口，后续流程要求同一工单只允许一个收口进程。
 `RFE-ISSUE-003`（CI流程/超时，高）：PR #385 的 smoke job 在 `Run repository quality gates` 长时间运行，后续所有门禁无法启动；首次运行被取消并重跑后仍需观察质量门完成。已建立 corrective Work Item `smoke-quality-timeout`，将 job 超时从 90 分钟收紧到 30 分钟并增加 workflow 回归覆盖；超时必须 fail-closed，不得跳过后续检查。
 `RFE-ISSUE-004`（质量流程/墙钟时间，中）：PR #386 的 smoke job 中 `make quality` 约 20 分钟才完成；`project-test` 已执行全量 pytest，而独立 pytest gate 仍串行运行，且质量图缺少并行调度。已建立 corrective Work Item `quality-gate-deduplication`：保留所有 specialized gate，改为 bounded parallel gate graph；不得降低覆盖率或删除 adopter 定制 `project-test` 下仍必要的显式门禁。
+`RFE-ISSUE-005`（工单收口/分支生命周期，高）：PR #387 合并时错误请求 provider-side `--delete-branch`，先于 `make ai-close-work-item` 删除了可识别的工作分支，导致首次关闭 fail-closed。已从已合并提交恢复可识别分支并重新执行标准关闭；从下一工单起，合并命令不得请求 provider-side branch deletion，必须先在工作分支运行 `make ai-close-work-item`，再由关闭命令删除本地/远端分支并同步默认分支。该问题已记录，后续执行按该纠偏流程继续。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
@@ -380,7 +381,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 - 所有后续工单均有串行 predecessor、PR、archive、close、分支清理和 base 同步要求。
 - 任何流程问题都有先纠偏、再恢复的明确路径。
 - 用户已经授权：本次计划文档的收查、确认、总结、工单拆解、PR/清理流程设计、问题记录机制和文档对齐机制。
-- 用户尚未授权：开始 WI-01 及之后的整改实现、创建后续实现分支/PR、发布版本、清理历史计划。以上动作必须等待用户对本计划内容的确认和后续指示。
+- 用户已授权：按本计划连续执行后续整改工单、创建专用分支/PR、完成合并/归档/关闭/分支清理/base 同步，并在发布前执行日语能力评估与 Trust Layer 对齐；不得绕过门禁。发布新版本和最终清理计划文档仍分别受 WI-18/WI-19 的专用验收与发布边界约束。
 
 ### 当前执行状态
 
