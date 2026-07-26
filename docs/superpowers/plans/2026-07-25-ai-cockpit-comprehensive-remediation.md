@@ -356,6 +356,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-033`（工单执行/会话边界，中）：上一 turn 的 `ai-finish` 进程跨 turn 残留，与当前重试并行运行；进程树证实为两个独立 ai-finish parent 和 pytest child。已停止旧进程树，保留当前运行，并要求后续 turn 交接前确认进程树已清理。
 `RFE-ISSUE-034`（工单证据/Checkpoint，中）：完整质量门通过后，`ai-finish` 的 Agent Risk 检查发现最终 Contract 对齐后原 `before_edit` checkpoint hash 已过期，按要求阻止收口。已停止归档，须针对最终 Contract 刷新 `before_edit`/`before_finish` checkpoint 后重试。
 `RFE-ISSUE-035`（工单证据/流程，低）：第二次收口的 Summary 校验拒绝了自定义 verification 名称 `focused release and workflow tests` 及非标准结果 `passed: 46 passed`；verification 必须使用注册检查项和 `passed`/`failed`/`not_run`。已删除未注册项，聚焦测试证据保留在执行记录和测试文件范围内，再重跑收口。
+`RFE-ISSUE-036`（PR流程/参数，中）：归档后首次执行 `make check-ai-pr TASK=runtime-freeze-remote-discovery` 时，命令因未提供 `--base` 或 `AI_BASE_COMMIT` 按要求 fail-closed；已确认实际 base 为 `origin/main` 的 merge-base `bd65c610f59924fc0a817fbb606f87ad74ab0fb6`，后续显式传入该 base 重跑。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
