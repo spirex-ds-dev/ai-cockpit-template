@@ -328,6 +328,13 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-005`（工单收口/分支生命周期，高）：PR #387 合并时错误请求 provider-side `--delete-branch`，先于 `make ai-close-work-item` 删除了可识别的工作分支，导致首次关闭 fail-closed。已从已合并提交恢复可识别分支并重新执行标准关闭；从下一工单起，合并命令不得请求 provider-side branch deletion，必须先在工作分支运行 `make ai-close-work-item`，再由关闭命令删除本地/远端分支并同步默认分支。该问题已记录，后续执行按该纠偏流程继续。
 `RFE-ISSUE-006`（分支同步/证据对齐，中）：更新仍开放的 PR #385 到最新 `origin/main` 时，生成状态、archive index 和执行计划发生冲突；已停止自动合并，以 `origin/main` 为权威解决冲突，并确认 PR #385 相对最新 main 只保留发布冻结证据。已建立 corrective Work Item `record-release-freeze-merge-conflict`；后续开放 PR 必须先同步最新远端 base，再执行 PR 检查和合并。
 `RFE-ISSUE-007`（CI/归档索引/发布门禁，高）：PR #385 更新后，Ubuntu 3.14 与 macOS 3.11 的 `make quality` 因 authoritative Contract/Summary pair 未登记到 archive index 而失败，覆盖率随失败测试降至 84.97%/84.99%，低于 85% 门槛；macOS 3.14 另出现 Homebrew tap trust 环境失败。已停止发布，修正 archiveSequence、Summary/Manifest digest 和 archive index manifest binding；修正后的 PR 必须重新通过全部检查，Homebrew 问题需在重跑中确认是否为环境性失败。
+`RFE-ISSUE-008`（发布证据/来源绑定，高）：WI-18 corrective PR #385 合并并同步 `origin/main` 后，`make check-release-preflight` 发现既有 release-freeze、release-digests、release-state 和 release metadata 仍绑定合并前 source commit/source tree，无法证明 provider 将消费的候选身份与冻结证据一致。已停止发布，建立 corrective Work Item `rebind-release-freeze-evidence`；在该工单完成重新生成、PR、合并、关闭和主分支同步前，不得触发 provider publication。
+`RFE-ISSUE-009`（工单初始化/发布证据生成顺序，中）：`finalize-release-freeze-premerge` 要求生成前工作树干净，而 corrective Work Item 的 Contract、计划记录和 start receipt 在启动预检后尚未形成提交，首次生成被 fail-closed 拦截。已将顺序明确为“先完成并提交 Contract/启动证据与问题记录，再在干净工单分支运行 premerge freeze finalization”；不得通过忽略未提交工单证据绕过该门禁。
+`RFE-ISSUE-010`（工单证据对齐，中）：`ai-finish` 发现 corrective Contract 已声明 4 个场景，但 Summary 尚未同步 `scenarioCoverage`，因此场景门禁 fail-closed。已停止收口，补齐 Summary 的真实场景状态后再重跑全部收口检查。
+`RFE-ISSUE-011`（工单证据/Guidelines，中）：Summary 初始把“专用分支与完整 PR 生命周期”标为 `compliant:false`，导致 guideline 门禁停止，即使当前流程已在专用分支且完整生命周期尚未结束。已将当前分支、Contract 和后续生命周期要求记录为合规证据，最终 PR/merge/close 仍须由后续门禁证明。
+`RFE-ISSUE-012`（checkpoint，中）：完整质量门通过后，Agent Risk 发现最终 Contract 缺少 `before_edit` checkpoint；原因是初始 `ai-start` 在 skeleton 预检阶段停止，之后 Contract 被补全但未按最终 hash 刷新 checkpoint。已停止归档，先为最终 Contract 写入 before_edit checkpoint，再重新执行 finish。
+`RFE-ISSUE-013`（Summary/证据格式，中）：质量与 Agent Risk 通过后，Summary 校验拒绝了非法 `reviewReadiness.status=in_progress`，并发现预检 decision 文件未列入 `changedFiles`。已改用允许的 readiness 状态并补齐 changedFiles 归属，再重跑最终稳定化。
+`RFE-ISSUE-014`（归档证据/路径配对，中）：归档后独立运行 archived Summary 校验时，原 `changedFiles` 仍只列 active Contract/Summary 路径，未覆盖 archive Contract/Summary/Manifest/Index；已补齐归档路径配对并重新计算 Archive Manifest/Index digest。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
