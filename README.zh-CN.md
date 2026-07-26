@@ -48,6 +48,10 @@ Calibrated trust（校准信任）不意味着最大化对 agent 的信任，而
 
 Runtime 安装不等于校准完成。当前 `configure_ai_cockpit` 主要生成和校验 Project Profile 提案；可暂停恢复的十 Stage 会话与 Candidate 激活已经是实现的 Runtime 能力，但仍需要在对象工程中执行并经人工确认。更新必须先执行 Impact Assessment，再根据结果重新校准。详见 [Capability Truth Matrix](docs/reference/capability-truth-matrix.md)；门禁覆盖的是可声明、可复核的 deterministic known-risk cases，不是所有 semantic risk，也不判断 Agent 的内部状态。
 
+## Why AI Cockpit exists
+
+AI Cockpit 不是业务技能或 Agent Runtime，而是 Human-Agent Trust Layer：使用可复核证据判断智能体何时可以继续、何时必须由人类决策、何时必须停止治理路径。阅读[Human-Agent Trust Layer](docs/trust-layer.zh-CN.md)。
+
 ## 什么是 AI Cockpit？
 
 **AI Cockpit 是面向 AI 辅助软件开发的代码仓库治理层。** 这是实现上述使命的具体产品边界。

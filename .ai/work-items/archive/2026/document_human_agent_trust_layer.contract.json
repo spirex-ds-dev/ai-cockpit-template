@@ -1,0 +1,113 @@
+{
+  "contractVersion": 2,
+  "workItemId": "document_human_agent_trust_layer",
+  "mode": "code",
+  "title": "Add the authoritative multilingual Human-Agent Trust Layer document",
+  "rawUserRequest": "Execute the approved AI Cockpit remediation plan serially. Before publishing a new version, add the authoritative multilingual Human-Agent Trust Layer work item: upgrade docs/trust-layer.md into a complete English Why/What/How authority, add complete Chinese and Japanese equivalents, preserve implemented gates and evidence, update Documentation Architecture and short README entries, add cross-links and multilingual consistency checks, then complete the full PR/merge/close/branch-cleanup lifecycle.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user authorization: AI Cockpit comprehensive remediation continuation and mandatory pre-release Human-Agent Trust Layer alignment",
+    "capturedAt": "2026-07-26",
+    "digest": "sha256:human-agent-trust-layer-document-request"
+  },
+  "declaredIntent": {
+    "summary": "Make the Human-Agent Trust Layer the authoritative, semantically aligned Why/What/How explanation in English, Chinese, and Japanese without deleting current implementation evidence or implying capabilities that the Capability Truth Matrix does not prove.",
+    "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "a4f1dcf25e300d578942125f5b0bd9345e6afcb8",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/document_human_agent_trust_layer.contract.json",
+    ".ai/work-items/active/document_human_agent_trust_layer.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/decisions/**",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/trust-layer.md",
+    "docs/trust-layer.zh-CN.md",
+    "docs/trust-layer.ja.md",
+    "docs/reference/documentation-architecture.md",
+    "README.md",
+    "README.zh-CN.md",
+    "README.ja.md",
+    "Makefile",
+    "scripts/check_trust_layer_docs.py",
+    "tests/test_trust_layer_docs.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "New runtime security sandbox, signing implementation, Branch Protection automation, SBOM generator, or enterprise compliance control",
+    "Changing current capability statuses without new implementation evidence",
+    "Publishing a version or modifying external provider/release state",
+    "Deleting existing Trust Layer implementation details or rewriting archived Work Item evidence"
+  ],
+  "sources": [
+    {"path": "docs/trust-layer.md", "reason": "Existing Trust Layer implementation evidence and required details to preserve."},
+    {"path": "docs/reference/documentation-architecture.md", "reason": "Current documentation roles and authority boundaries to update."},
+    {"path": "docs/reference/capability-truth-matrix.md", "reason": "Only current capability status source; prevents claims from being inferred from concepts."},
+    {"path": "README.md", "reason": "English product boundary and documentation entry path."},
+    {"path": "README.zh-CN.md", "reason": "Chinese product boundary and documentation entry path."},
+    {"path": "README.ja.md", "reason": "Japanese engineer product boundary and documentation entry path."},
+    {"path": ".ai/work-items/archive/2026/japanese-capability-assessment.summary.json", "reason": "Closed mandatory Japanese pre-release assessment and its explicit non-claim boundary."},
+    {"path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "reason": "WI-17 scope, sequence, acceptance and full lifecycle requirement."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["governance", "user_visible_output", "language_coverage", "unsupported_claim"],
+    "reason": "A multilingual concept document can drift across languages or turn intended controls into unsupported capability claims; current implementation evidence must remain intact and every release boundary must stay explicit.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "User explicitly authorized serial execution of the complete remediation plan and specifically required this pre-release Trust Layer work item."},
+  "preReviewWarnings": [
+    "Three language documents must have identical section structure and complete semantic coverage; translations must not be summaries.",
+    "Preserve Unsupported Claim Regression Gate, delusion-test-gate, Guard Signal Envelope, Preflight enforced profile, Raw Request Binding, Requested Operation, Capability Mapping, Human Decision and Recovery, and Archive Manifest.",
+    "Do not claim AI Cockpit is a SKILL, Agent Runtime, Security Sandbox, identity provider, isolation boundary, immutable audit system, or independent enterprise-compliance guarantee."
+  ],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Multilingual governance claims and evidence boundaries require checkpoints before edits and finish."},
+  "acceptance": [
+    "English, Chinese, and Japanese Trust Layer documents are complete, use the same Why/What/How structure, and preserve all required implementation details.",
+    "The documents define Repository Governance Layer boundaries, seven governance layers, trusted-chain evidence, SBOM versus Provenance, Delegated Domain Evidence, Human Decision and Recovery, and Capability Truth Matrix authority without unsupported claims.",
+    "Documentation Architecture registers Trust Layer as the Why/What/How authority and distinguishes Design Philosophy, Architecture, Security and Release Verification, Capability Truth Matrix, and Enterprise Control Checklist.",
+    "The three README files contain only short same-language Trust Layer entry points and required cross-links are valid.",
+    "A deterministic documentation checker verifies file existence, equal section IDs/title counts, README entries, architecture registration, valid internal links, and all core boundary sentences in all three languages.",
+    "The plan, Contract, Summary, Task Outcome, Cockpit Status, PR summary, and WI-16 Japanese limitation remain aligned; no release is performed by this Work Item."
+  ],
+  "guidelines": [
+    "Complete Chinese and Japanese documents must be semantically equivalent to the English authority, not summaries.",
+    "Evidence over self-declaration: concepts cannot upgrade Capability Truth Matrix statuses.",
+    "Keep Repository Governance Layer, SKILL, Agent Runtime, Security Sandbox, identity, isolation, immutability, and enterprise compliance boundaries explicit.",
+    "Japanese-speaking engineers are a required audience; preserve WI-16's bounded governance evidence and general-fluency non-claim.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The current Trust Layer concept must become the single authoritative explanation of why AI Cockpit exists, what it governs, and how evidence, fail-closed control, trusted chains, supply-chain evidence, and human decisions work together. Without complete, structurally aligned Chinese and Japanese versions, the three language surfaces can drift and misstate the boundary for Japanese-speaking engineers before release.",
+    "constraints": ["Use the existing trust-layer.md as the English authority and retain its implemented gates, commands, and archive evidence details.", "Keep all three languages complete rather than summarized, with matching structure and meaning.", "Use Capability Truth Matrix as the only current capability-status authority; do not implement external controls or publish a release.", "All discovered process or documentation findings must be recorded and corrected before this Work Item can close."],
+    "rationale": "A single structured multilingual authority reduces semantic drift while keeping conceptual claims explicitly subordinate to machine-readable implementation evidence and external-control boundaries."
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "User", "reason": "User authorized the complete serial remediation plan, including this Trust Layer Work Item and its full PR/merge/close lifecycle."},
+  "rollbackNote": "Revert this Work Item diff and restore the prior Trust Layer documents while retaining immutable archived evidence.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 720}},
+  "startReceipt": {"path": ".ai/work-items/starts/document_human_agent_trust_layer.json", "baseCommit": "a4f1dcf25e300d578942125f5b0bd9345e6afcb8", "initialScopeDigest": "ba40c247cbb5c7036cd040a432ba74b42649a546be1aad8e15217bee60065942", "contractSkeletonDigest": "533cae1dd25ed231aef48cf924054a0522e3562dc6b8ecd2ff1095b4d4f540c7"},
+  "predecessorWorkItem": {"workItemId": "japanese-capability-assessment", "status": "closed", "pr": {"number": 380, "merged": true, "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/380", "mergeCommit": "a4f1dcf25e300d578942125f5b0bd9345e6afcb8"}, "closure": {"succeeded": true, "localBranchDeleted": true, "remoteBranchDeleted": true, "baseSynchronized": true, "evidence": ".ai/work-items/archive/2026/japanese-capability-assessment.archive-manifest.json"}},
+  "scenarioCoverage": [
+    {"scenario": "All three Trust Layer documents exist and expose the same Why/What/How section structure", "required": true, "status": "verified", "evidence": ["scripts/check_trust_layer_docs.py", "tests/test_trust_layer_docs.py"], "reason": "The consistency checker and focused tests passed."},
+    {"scenario": "Required implementation details and seven governance layers are preserved with identical semantic coverage", "required": true, "status": "verified", "evidence": ["docs/trust-layer.md", "docs/trust-layer.zh-CN.md", "docs/trust-layer.ja.md", "tests/test_trust_layer_docs.py"], "reason": "The required terms and complete Why/What/How sections are present in all languages."},
+    {"scenario": "Boundary claims reject SKILL/Agent Runtime/Security Sandbox/independent enterprise compliance interpretations", "required": true, "status": "verified", "evidence": ["scripts/check_trust_layer_docs.py", "tests/test_trust_layer_docs.py", "docs/reference/capability-truth-matrix.md"], "reason": "The three-language core-boundary corpus passed."},
+    {"scenario": "README entries, architecture role registration, cross-links, and internal links are aligned in all languages", "required": true, "status": "verified", "evidence": ["README.md", "README.zh-CN.md", "README.ja.md", "docs/reference/documentation-architecture.md", "tests/test_trust_layer_docs.py"], "reason": "README, architecture, and internal-link checks passed."},
+    {"scenario": "Japanese Trust Layer wording preserves the WI-16 bounded governance evidence and general-fluency non-claim", "required": true, "status": "verified", "evidence": [".ai/work-items/archive/2026/japanese-capability-assessment.summary.json", "docs/trust-layer.ja.md", "tests/test_trust_layer_docs.py"], "reason": "The Japanese document preserves the bounded governance claim and explicit general-fluency non-claim."}
+  ]
+}

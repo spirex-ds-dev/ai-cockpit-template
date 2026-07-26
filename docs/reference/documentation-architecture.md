@@ -35,7 +35,7 @@ This page describes the stable documentation split for AI Cockpit. It keeps the 
 | [docs/getting-started/installation.md](../getting-started/installation.md) | Getting started | How do I install and adopt AI Cockpit? |
 | [docs/getting-started/first-work-item.md](../getting-started/first-work-item.md) | Getting started | How do I start the first governed task? |
 | [docs/philosophy/design-philosophy.md](../philosophy/design-philosophy.md) | Philosophy | Why does AI Cockpit exist, and how does it calibrate trust? |
-| [docs/trust-layer.md](../trust-layer.md) | Trust Layer | When does the system continue, stop, or ask a human to decide? |
+| [docs/trust-layer.md](../trust-layer.md) | Human-Agent Trust Layer | Why AI Cockpit is needed, what the Human-Agent Trust Layer governs, and how evidence, fail-closed control, trusted chains, supply-chain evidence, and human decisions work together. |
 | [docs/architecture.md](../architecture.md) | Architecture | How does the governance evidence flow work? |
 | Reference pages | Reference | Where are field, policy, installation, distribution, and troubleshooting details? |
 | [docs/configuration.md](../configuration.md) | Configuration reference | Which stack presets and guard settings should I calibrate? |
@@ -50,6 +50,15 @@ This page describes the stable documentation split for AI Cockpit. It keeps the 
 | [docs/troubleshooting.md](../troubleshooting.md) | Compatibility entry | Where do old troubleshooting links land now? |
 | [docs/design-philosophy.md](../design-philosophy.md) | Compatibility entry | Where do old philosophy links land now? |
 
+The Human-Agent Trust Layer is the authoritative Why / What / How explanation. Its complete translations are [中文](../trust-layer.zh-CN.md) and [日本語](../trust-layer.ja.md). The roles remain separate:
+
+- Trust Layer: why AI Cockpit exists, what it governs, and how evidence, fail-closed control, trusted chains, supply-chain evidence, and human decisions work together.
+- Design Philosophy: the North Star and design principles.
+- Architecture: components and data flow.
+- Security and Release Verification: release-level external evidence requirements.
+- Capability Truth Matrix: current implementation status; capability must not be inferred from concepts.
+- Enterprise Control Checklist: adopter and external-control responsibilities.
+
 ## Split Rules
 
 - Keep the README short enough that a reader can reach the installer in one glance.
@@ -57,7 +66,7 @@ This page describes the stable documentation split for AI Cockpit. It keeps the 
 - Keep `docs/getting-started/installation.md` focused on the adoption lifecycle and validation.
 - Keep `docs/getting-started/first-work-item.md` focused on the first governed task.
 - Keep Philosophy authoritative for why AI Cockpit exists and how calibrated trust, evidence, and responsibility boundaries shape the design.
-- Keep the Trust Layer guide authoritative for evidence semantics, fail-closed recovery, human decision records, and non-goals.
+- Keep the Human-Agent Trust Layer authoritative for Why / What / How, evidence semantics, fail-closed recovery, human decision records, trusted chains, supply-chain evidence, and non-goals.
 - Keep Architecture authoritative for repository governance flow, component boundaries, and the Native/Delegated Evidence split.
 - Keep Reference pages authoritative for fields, policies, installation, distribution, and troubleshooting.
 - Move upgrade, distribution, and recovery details into their own reference pages.

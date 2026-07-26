@@ -44,6 +44,10 @@ Calibrated trust does not mean maximizing trust in an agent. It means enabling h
 
 AI Cockpit is a repository governance layer, not an agent runtime or security sandbox. Its deterministic gates cover declared, externally reviewable known-risk cases; they do not classify every semantic danger or prove agent intent. Runtime installation is not calibration completion: the current `configure_ai_cockpit` flow produces and validates a Project Profile proposal, while the resumable ten-stage session and Candidate activation are implemented Runtime capabilities that still require adopter execution and human confirmation. Updates require Impact Assessment before recalibration. See the [Capability Truth Matrix](docs/reference/capability-truth-matrix.md) for evidence boundaries.
 
+## Why AI Cockpit exists
+
+AI Cockpit is not a business skill or an agent runtime. It is a Human-Agent Trust Layer that uses reviewable evidence to determine when an agent may continue, when a human must decide, and when the governed path must stop. Read [Human-Agent Trust Layer](docs/trust-layer.md).
+
 ## Interactive entrypoints
 
 Use `./install.sh` with a TTY and no arguments, or pass `--interactive`, for the eight-step Installation Wizard. It detects the target repository, presents New Adoption, Upgrade, and Dry Run choices, shows the complete write plan, and waits for explicit confirmation before writing. Non-interactive no-argument use fails closed; explicit legacy flags keep their deterministic behavior. The wizard never commits, pushes, opens a PR, or merges.
