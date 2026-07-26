@@ -335,6 +335,12 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-012`（checkpoint，中）：完整质量门通过后，Agent Risk 发现最终 Contract 缺少 `before_edit` checkpoint；原因是初始 `ai-start` 在 skeleton 预检阶段停止，之后 Contract 被补全但未按最终 hash 刷新 checkpoint。已停止归档，先为最终 Contract 写入 before_edit checkpoint，再重新执行 finish。
 `RFE-ISSUE-013`（Summary/证据格式，中）：质量与 Agent Risk 通过后，Summary 校验拒绝了非法 `reviewReadiness.status=in_progress`，并发现预检 decision 文件未列入 `changedFiles`。已改用允许的 readiness 状态并补齐 changedFiles 归属，再重跑最终稳定化。
 `RFE-ISSUE-014`（归档证据/路径配对，中）：归档后独立运行 archived Summary 校验时，原 `changedFiles` 仍只列 active Contract/Summary 路径，未覆盖 archive Contract/Summary/Manifest/Index；已补齐归档路径配对并重新计算 Archive Manifest/Index digest。
+`RFE-ISSUE-015`（发布证据/来源绑定，高）：PR #390 合并并由 `ai-close-work-item` 同步主分支后，`make check-release-preflight` 仍发现 release freeze、release digests、release state 和归档/安装器摘要绑定的是合并前 source identity；同时要求在 archive/close 后重新 finalize freeze。已停止 provider publication，禁止无工单直接改写发布证据；建立 corrective Work Item `finalize-release-freeze-after-rebind`，先记录本问题、在最新同步主分支上重新生成并完成完整 PR/merge/close/分支清理，再重跑发布预检。
+`RFE-ISSUE-016`（工单初始化/流程，中）：为处理 `RFE-ISSUE-015` 首次执行 `make ai-start TASK=finalize-release-freeze-after-rebind MODE=code` 时，自动生成的 Contract skeleton 因缺少发布专用 intent、raw request、sources、scenario coverage 和受限写入授权而按预期 `not_ready` 停止。已补全 Contract 后再重跑预检；不得通过跳过 Contract 完成或直接生成发布证据。
+`RFE-ISSUE-017`（工单分支生命周期，高）：建立 `finalize-release-freeze-after-rebind` 的 Contract/启动证据时，初始提交误落在本地 `main`；该提交未推送、未进入 PR。已立即将提交保留到专用 corrective 分支，恢复本地 `main` 与 `origin/main` 一致，并规定后续只在专用分支继续；不能把“Contract 已建立”误报为完整工单生命周期完成。
+`RFE-ISSUE-018`（工单证据对齐，中）：`ai-finish` 在完整质量门之前发现 corrective Contract 已声明 4 个 scenario coverage，但 active Summary 未同步该字段，因此场景覆盖检查 fail-closed。已停止收口，补齐 Summary 的场景状态和实际 changedFiles 归属后再重跑；不得用 Contract 单独替代 Summary 证据。
+`RFE-ISSUE-019`（工单证据格式，中）：全量质量门通过后，`ai-finish` 的 Summary 校验拒绝了 `reviewReadiness.status=in_review`，因为合法状态仅包括 `blocked`、`not_ready`、`ready`、`ready_with_risks`。已停止归档，改用 `ready_with_risks` 并保留发布预检尚未在关闭后重跑的残余风险。
+`RFE-ISSUE-020`（PR边界/发布证据，中）：`ai-finish` 归档后，最终状态稳定化重新生成了 `.ai/cockpit/release-digests.json` 与 `release-freeze.json`，而首次 `make check-ai-pr` 发现这两个生成文件仍未提交，按要求阻止 PR 边界检查。已停止 PR 创建，先提交归档后最终生成的 source-bound evidence，再重新执行 PR 检查。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
