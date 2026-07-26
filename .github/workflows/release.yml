@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           cd "$GITHUB_WORKSPACE"
-          make finalize-release-freeze-runtime RUNTIME_SOURCE_COMMIT="$SOURCE_COMMIT"
+          make finalize-release-freeze-runtime RUNTIME_SOURCE_COMMIT="$SOURCE_COMMIT" RUNTIME_DEFAULT_BRANCH="$RELEASE_DEFAULT_BRANCH"
 
       - name: Validate committed source release preflight before projection
         shell: bash

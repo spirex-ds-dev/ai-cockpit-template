@@ -346,6 +346,17 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-023`（工单契约/流程，中）：runtime corrective Contract 初稿在 declared intent 中使用了仓库 capability registry 未登记的 `release_engineering`，preflight 按预期拒绝 raw request。已改为已登记的 `ai_governance` 与 `test_automation` capability 后重跑；不得以未登记能力绕过 capability guard。
 `RFE-ISSUE-024`（provider发布/依赖边界，高）：provider run `30206296217` 在新增 runtime freeze 步骤失败，原因是 `scripts/finalize_release_freeze.py` 导入 `check_supply_chain.py`，而该模块在依赖安装前需要未安装的 `cyclonedx`；未创建 tag、asset 或 Release。已停止重试，建立 corrective Work Item `runtime-freeze-bootstrap-dependency`，移除不必要的重型 import 并保留 SHA-256 结果不变。
 `RFE-ISSUE-025`（工单初始化/流程，中）：为处理 `RFE-ISSUE-024` 首次 `make ai-start TASK=runtime-freeze-bootstrap-dependency MODE=code` 的 skeleton 因缺少依赖边界 intent、raw request、sources、scenario coverage 和授权而按预期 `not_ready` 停止。已补全 Contract 后重跑；不得绕过 Contract 直接修复 provider bootstrap。
+`RFE-ISSUE-026`（provider发布/运行时证据，高）：provider run `30207515891` 在 exact-source checkout 的 runtime freeze 阶段失败，原因是 `finalize_release_freeze.py` 仍要求远程默认分支 HEAD 唯一可发现；该 checkout 中远程 HEAD 不可唯一发现，但 workflow 已解析并持有受控的 `RELEASE_DEFAULT_BRANCH=main`。未创建 tag、asset 或 Release。已停止发布，建立 corrective Work Item `runtime-freeze-remote-discovery`，要求将 workflow 输入显式传入并保持 exact source、clean worktree、preflight-before-projection 和 fail-closed 校验。
+`RFE-ISSUE-027`（工单初始化/流程，中）：为处理 `RFE-ISSUE-026` 首次 `make ai-start TASK=runtime-freeze-remote-discovery MODE=code` 的 skeleton 因缺少具体 intent、raw request、sources、scenario coverage 和受限写入授权而按预期 `not_ready` 停止。已记录并补全 Contract；必须通过新的 preflight/checkpoint 后才能修改运行时发布代码。
+`RFE-ISSUE-028`（工单契约/流程，中）：补全 `runtime-freeze-remote-discovery` Contract 后，新的 `make ai-preflight` 又按预期拒绝了不完整 schema：缺少顶层 `rawUserRequest`，`requestedOperation` 未提供 target/action/environment/effect/authorityRequired，高风险工单的 `unknowns` 为空，且 scenario 状态使用了不被门禁接受的 `planned`。已停止实现，修正为仓库支持的 Contract v2 字段和 `unverified` 状态后重新执行 preflight。
+`RFE-ISSUE-029`（工单证据/流程，中）：`ai-finish` 收口阶段发现 active Summary 未同步 Contract 的 scenarioCoverage，高风险场景检查按要求 fail-closed。已停止归档，补齐四个场景及其状态/证据后重新执行完整 `ai-finish`。
+`RFE-ISSUE-030`（工单证据/流程，低）：补齐 scenarioCoverage 后，`ai-finish` 的 guideline 检查发现 Summary 中一条 guideline 与 Contract 文本不完全一致（缺少 `the`），按严格证据匹配规则停止归档。已修正 Summary 原文并重新执行收口。
+`RFE-ISSUE-031`（工单执行/并发流程，中）：两次无输出的 `ai-finish` 重试实际仍在后台运行，造成两个并行全量 pytest 质量进程，存在 target/Summary 证据竞争。已停止重复进程；后续必须确认无残留 `ai-finish`/pytest 后串行重试，不能把并行过程中的结果当作完整收口证据。
+`RFE-ISSUE-032`（工单执行/检查脚本，低）：残留进程检查命令使用 `rg` 搜索自身命令文本，误报存在 ai-finish/pytest；随后用不自匹配的 `pgrep` 复核为空，未启动质量门。已记录并改用 bracket pattern 检查。
+`RFE-ISSUE-033`（工单执行/会话边界，中）：上一 turn 的 `ai-finish` 进程跨 turn 残留，与当前重试并行运行；进程树证实为两个独立 ai-finish parent 和 pytest child。已停止旧进程树，保留当前运行，并要求后续 turn 交接前确认进程树已清理。
+`RFE-ISSUE-034`（工单证据/Checkpoint，中）：完整质量门通过后，`ai-finish` 的 Agent Risk 检查发现最终 Contract 对齐后原 `before_edit` checkpoint hash 已过期，按要求阻止收口。已停止归档，须针对最终 Contract 刷新 `before_edit`/`before_finish` checkpoint 后重试。
+`RFE-ISSUE-035`（工单证据/流程，低）：第二次收口的 Summary 校验拒绝了自定义 verification 名称 `focused release and workflow tests` 及非标准结果 `passed: 46 passed`；verification 必须使用注册检查项和 `passed`/`failed`/`not_run`。已删除未注册项，聚焦测试证据保留在执行记录和测试文件范围内，再重跑收口。
+`RFE-ISSUE-036`（PR流程/参数，中）：归档后首次执行 `make check-ai-pr TASK=runtime-freeze-remote-discovery` 时，命令因未提供 `--base` 或 `AI_BASE_COMMIT` 按要求 fail-closed；已确认实际 base 为 `origin/main` 的 merge-base `bd65c610f59924fc0a817fbb606f87ad74ab0fb6`，后续显式传入该 base 重跑。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
