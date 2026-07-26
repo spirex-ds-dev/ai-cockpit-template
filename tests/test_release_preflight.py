@@ -483,13 +483,21 @@ def test_finalize_release_freeze_runtime_mode_binds_exact_detached_source(monkey
         remote_head="default",
     )
 
-    assert finalizer.main(runtime_source_commit="runtime") == 0
+    assert finalizer.main(runtime_source_commit="runtime", runtime_default_branch="main") == 0
     assert materialized == [("tree", "runtime"), ("archive", "runtime")]
     freeze = json.loads((tmp_path / ".ai" / "cockpit" / "release-freeze.json").read_text())
     assert freeze["sourceCommit"] == "runtime"
     assert freeze["tagTarget"] == "runtime"
     assert freeze["metadataCommit"] == "runtime"
     assert freeze["lifecycle"]["state"] == "closed_and_synchronized"
+    assert freeze["lifecycle"]["defaultBranch"] == "main"
+
+
+def test_finalize_release_freeze_runtime_requires_controlled_default_branch(monkeypatch, tmp_path):
+    _configure_finalizer(monkeypatch, tmp_path, branch="", head="runtime")
+
+    assert finalizer.main(runtime_source_commit="runtime") == 1
+    assert finalizer.main(runtime_source_commit="runtime", runtime_default_branch="../main") == 1
 
 
 def test_finalize_release_freeze_imports_without_optional_supply_chain_packages():

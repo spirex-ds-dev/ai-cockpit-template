@@ -1,0 +1,240 @@
+{
+  "contractVersion": 2,
+  "workItemId": "runtime-freeze-remote-discovery",
+  "mode": "code",
+  "title": "Use workflow-provided default branch for runtime freeze",
+  "baseCommit": "bd65c610f59924fc0a817fbb606f87ad74ab0fb6",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/runtime-freeze-remote-discovery.contract.json",
+    ".ai/work-items/active/runtime-freeze-remote-discovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/finalize_release_freeze.py",
+    "Makefile",
+    ".github/workflows/release.yml",
+    "tests/test_release_preflight.py",
+    "tests/test_release_workflow.py",
+    "tests/test_workflows.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "release publication, tag creation, and asset upload",
+    "changing release identity semantics",
+    "new SBOM, signing, or provenance implementation"
+  ],
+  "sources": [
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "Runtime freeze finalization and remote default discovery."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Provider-resolved source commit and default branch inputs."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Runtime freeze command boundary."
+    },
+    {
+      "path": "tests/test_release_preflight.py",
+      "reason": "Existing runtime freeze and fail-closed coverage."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Required Work Item lifecycle and evidence rules."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Recorded release corrective issue and serial execution plan."
+    }
+  ],
+  "unknowns": [],
+  "rawUserRequest": "Continue the complete serial Work Item process. When release preflight or provider execution finds a process or evidence-binding problem, record it, correct it in a dedicated Work Item, complete its PR and cleanup lifecycle, and only then resume publication.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-26-release-remote-discovery-correction",
+    "capturedAt": "2026-07-26",
+    "digest": "sha256:runtime-freeze-remote-discovery-correction"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Correct runtime release freeze input handling so provider-resolved default branch data is used without remote discovery failure.",
+    "requestedCapabilities": ["ai_governance", "test_automation"]
+  },
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release",
+      "process",
+      "evidence"
+    ],
+    "reason": "The provider must retain exact source identity while using a controlled default branch input when remote HEAD discovery is unavailable.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized continuous corrective Work Items with full PR, merge, closure, cleanup, and evidence recording."
+  },
+  "preReviewWarnings": [
+    "Review that runtime mode bypasses only remote discovery, not exact source, clean worktree, preflight ordering, or fail-closed validation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Runtime freeze does not call remote default discovery when exact source and controlled default branch inputs are supplied.",
+    "The workflow-provided default branch is recorded while exact source identity remains bound to SOURCE_COMMIT.",
+    "Missing or invalid runtime default branch input fails closed.",
+    "Tests cover detached exact-source checkout and preserve preflight-before-projection ordering.",
+    "The full Work Item lifecycle is completed: finish, archive, PR, merge, close, branch cleanup, base synchronization, and plan alignment."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Detached exact-source checkout with supplied default branch",
+      "required": true,
+      "status": "verified",
+      "evidence": [".ai/work-items/active/runtime-freeze-remote-discovery.contract.json", "RFE-ISSUE-026"]
+    },
+    {
+      "scenario": "Missing or invalid runtime default branch fails closed",
+      "required": true,
+      "status": "verified",
+      "evidence": [".ai/work-items/active/runtime-freeze-remote-discovery.contract.json", "RFE-ISSUE-026"]
+    },
+    {
+      "scenario": "Committed-source preflight runs before release projection",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/release.yml", "tests/test_release_workflow.py"]
+    },
+    {
+      "scenario": "External publication",
+      "required": true,
+      "status": "not_applicable",
+      "reason": "Explicitly out of scope; publication remains blocked until corrective evidence passes.",
+      "evidence": ["Contract outOfScope"]
+    }
+  ],
+  "guidelines": [
+    "Use the provider-resolved default branch only as controlled runtime input; do not infer source identity from it.",
+    "Preserve fail-closed clean-worktree, exact-source, preflight, and projection ordering checks.",
+    "Do not publish a release from this Work Item."
+  ],
+  "intent": {
+    "problem": "Provider run 30207515891 stopped in runtime freeze because exact-source checkout could not uniquely discover remote default HEAD, although the workflow had already resolved RELEASE_DEFAULT_BRANCH=main. No tag, asset, or Release was created.",
+    "constraints": [
+      "Keep runtime source identity bound to the exact checked-out SOURCE_COMMIT.",
+      "Do not weaken clean-worktree or release preflight gates.",
+      "Publication remains out of scope and must wait for this corrective Work Item."
+    ],
+    "rationale": "Pass the already controlled workflow default branch into runtime freeze and validate it explicitly, avoiding an unavailable remote discovery call without changing release evidence semantics."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized continuous corrective Work Items, including release workflow fixes, full PR/merge/close lifecycle, branch cleanup, and recorded process corrections; actual publication remains separately gated."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 614
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/runtime-freeze-remote-discovery.json",
+    "baseCommit": "bd65c610f59924fc0a817fbb606f87ad74ab0fb6",
+    "initialScopeDigest": "74b758646c6dbe71b1885187c168a8e3902baad246fc463ebb6a09eaad18ceab",
+    "contractSkeletonDigest": "24e20eb718d25b1bc6922f3c827f3e8db569778fcef2be2654574b4f05eb3015"
+  }
+}

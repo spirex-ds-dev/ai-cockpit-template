@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import argparse
 import hashlib
+import re
 import sys
 
 from ai_common import PROJECT_ROOT, discover_remote_default_candidates, included, run_git
@@ -26,6 +27,7 @@ def main(
     candidate_task: str | None = None,
     premerge_task: str | None = None,
     runtime_source_commit: str | None = None,
+    runtime_default_branch: str | None = None,
     source_commit: str | None = None,
     tag_target: str | None = None,
     metadata_commit: str | None = None,
@@ -33,10 +35,18 @@ def main(
     if sum(mode is not None for mode in (candidate_task, premerge_task, runtime_source_commit)) > 1:
         return _fail("candidate, pre-merge, and runtime modes are mutually exclusive")
     root = PROJECT_ROOT
-    candidates = discover_remote_default_candidates(run_git)
-    if len(candidates) != 1:
-        return _fail("remote default branch is not uniquely discoverable")
-    remote, branch = candidates[0]
+    if runtime_source_commit is not None:
+        remote = "origin"
+        branch = runtime_default_branch or ""
+        if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._/-]*", branch):
+            return _fail("runtime mode requires a valid controlled default branch")
+        if any(part in {".", ".."} for part in branch.split("/")):
+            return _fail("runtime mode requires a valid controlled default branch")
+    else:
+        candidates = discover_remote_default_candidates(run_git)
+        if len(candidates) != 1:
+            return _fail("remote default branch is not uniquely discoverable")
+        remote, branch = candidates[0]
     current = run_git(["branch", "--show-current"])
     current_branch = current.stdout.strip() if current.returncode == 0 else ""
     if (
@@ -258,6 +268,7 @@ if __name__ == "__main__":
     parser.add_argument("--candidate-task", default=None)
     parser.add_argument("--premerge-task", default=None)
     parser.add_argument("--runtime-source-commit", default=None)
+    parser.add_argument("--runtime-default-branch", default=None)
     parser.add_argument("--source-commit", default=None)
     parser.add_argument("--tag-target", default=None)
     parser.add_argument("--metadata-commit", default=None)
@@ -267,6 +278,7 @@ if __name__ == "__main__":
             candidate_task=args.candidate_task,
             premerge_task=args.premerge_task,
             runtime_source_commit=args.runtime_source_commit,
+            runtime_default_branch=args.runtime_default_branch,
             source_commit=args.source_commit,
             tag_target=args.tag_target,
             metadata_commit=args.metadata_commit,

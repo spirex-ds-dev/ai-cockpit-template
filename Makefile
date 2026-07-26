@@ -172,7 +172,9 @@ finalize-release-freeze-candidate:
 
 finalize-release-freeze-runtime:
 	test -n "$(RUNTIME_SOURCE_COMMIT)"
-	$(AI_PYTHON) scripts/finalize_release_freeze.py --runtime-source-commit "$(RUNTIME_SOURCE_COMMIT)"
+	test -n "$(RUNTIME_DEFAULT_BRANCH)"
+	$(AI_PYTHON) scripts/finalize_release_freeze.py --runtime-source-commit "$(RUNTIME_SOURCE_COMMIT)" \
+		--runtime-default-branch "$(RUNTIME_DEFAULT_BRANCH)"
 
 finalize-release-freeze-premerge:
 	test -n "$(TASK)"
