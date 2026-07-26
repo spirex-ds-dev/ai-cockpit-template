@@ -11,7 +11,17 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def run(cwd: Path, *command: str, env=None) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(command, cwd=cwd, env=env, text=True, capture_output=True, check=False)
+    child_env = dict(os.environ if env is None else env)
+    child_env = {
+        key: value
+        for key, value in child_env.items()
+        if not key.startswith("COV_CORE_")
+        and not key.startswith("COVERAGE_")
+        and key not in {"MAKEFLAGS", "MAKEOVERRIDES", "MFLAGS", "MAKELEVEL"}
+    }
+    return subprocess.run(
+        command, cwd=cwd, env=child_env, text=True, capture_output=True, check=False
+    )
 
 
 def prepare_work_item(root: Path, task: str, changed: list[str], *, extra_checks=()) -> None:

@@ -1,0 +1,247 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-metadata-promotion",
+  "mode": "code",
+  "title": "Promote release candidate metadata",
+  "baseCommit": "b5fd89e6df1a2645139cd3282e073c06a3f46a2f",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "50c252f3a9c0e8f829a1fa7458837674c90a377125fb81985e6a98bb2d73d75b"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/release-metadata-promotion.contract.json",
+    ".ai/work-items/active/release-metadata-promotion.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    "scripts/ai_common.py",
+    "scripts/ai_finish.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_project_governance_journey.py",
+    ".ai/cockpit/release-freeze.json",
+    ".ai/cockpit/release-digests.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Publishing a tag or public release asset",
+    "Changing signing, branch protection, SBOM/provenance generators, or runtime security",
+    "Deleting historical release or Work Item evidence"
+  ],
+  "sources": [
+    {
+      "path": "release.json",
+      "reason": "Published v0.5.42 projection that must remain historical while the workflow creates a temporary v0.5.43 runtime projection."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Candidate release projection v0.5.43 and previous-release relationship."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Canonical release lifecycle and metadata digest state."
+    },
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "Authoritative source/archive/installer binding generator."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Provider workflow must validate the candidate and create a source-bound runtime projection without mutating committed published metadata."
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "Finish subprocesses must not inherit outer pytest coverage instrumentation."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Explicitly propagates project quality variables into nested make checks so ordinary Makefile assignments cannot erase test-requested values."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Regression coverage for Git and coverage environment isolation in nested finish flows."
+    },
+    {
+      "path": "tests/test_project_governance_journey.py",
+      "reason": "Keeps the repository governance journey isolated from outer coverage instrumentation."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-18 process issue and corrective Work Item record."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Required Contract, verification, PR, archive, branch-cleanup, and base-sync lifecycle."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["release_identity", "metadata_projection", "source_binding"],
+    "reason": "Incorrect promotion could make a provider release identify the wrong version or source; metadata must be derived from the candidate and exact synchronized main commit.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial corrective Work Items and required process defects to be corrected before the release proceeds."
+  },
+  "preReviewWarnings": [
+    "Verify candidate-to-published projection, exact source/archive/installer digests, previous-release relationship, and that no provider publication occurs in this corrective Work Item."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Committed release.json remains the published v0.5.42 projection; next-release.json remains the v0.5.43 candidate authority.",
+    "The release workflow validates next-release.json and creates a temporary source-bound v0.5.43 release.json projection with internally consistent archive and installer digests.",
+    "release-state.json and release-digests.json distinguish the new candidate/published projection from historical v0.5.42 and preserve previousRelease semantics.",
+    "The workflow projection regression test and check-release-preflight pass on the exact synchronized main source without publishing a tag or asset in this corrective Work Item.",
+    "The complete corrective lifecycle passes: Contract, preflight, verification, Summary, PR, CI, merge, ai-close-work-item, branch cleanup, and origin/main synchronization."
+  ],
+  "guidelines": [
+    "Release metadata must be source-bound and machine-readable.",
+    "Candidate, historical, and published release states must not be conflated.",
+    "This corrective Work Item must not publish externally."
+  ],
+  "intent": {
+    "problem": "WI-18's provider workflow requires release.json.releaseTag to equal the requested tag, but the merged release Work Item left release.json at v0.5.42 while next-release.json declares v0.5.43. Publication must stop until the candidate projection is promoted through a governed corrective Work Item.",
+    "constraints": [
+      "Use the latest synchronized origin/main as the base.",
+      "Promote only from next-release.json and preserve v0.5.42 historical identity.",
+      "Do not create an immutable tag or public release asset in this corrective Work Item.",
+      "Run the full PR/merge/close/branch-cleanup lifecycle before the final release flow resumes."
+    ],
+    "rationale": "The release workflow must consume one coherent source-bound published projection; correcting the projection before provider publication prevents a version identity mismatch."
+  },
+  "rawUserRequest": "继续执行用户已授权的全面整改计划。WI-18 发布前发现 release.json 仍是 v0.5.42、next-release.json 才是 v0.5.43，导致 provider release workflow 会 fail closed。请先修复这个流程/元数据投影问题，完成独立 corrective Work Item 的完整 Contract、验证、PR、CI、合并、关闭、清理分支和同步 main 生命周期；不得绕过发布门禁或在 corrective Work Item 中直接发布。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-26-release-metadata-process-correction",
+    "capturedAt": "2026-07-26",
+    "digest": "sha256:release-metadata-correction-authorized"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Promote the release candidate projection into coherent source-bound release metadata without external publication.",
+    "requestedCapabilities": ["ai_governance"]
+  },
+  "scenarioCoverage": [
+    {"scenario": "Candidate v0.5.43 and published v0.5.42 metadata are distinct and previousRelease is preserved.", "required": true, "status": "verified", "evidence": ["next-release.json", "release.json", "release-state.json"]},
+    {"scenario": "Release archive, installer, and metadata digests are regenerated for the exact synchronized main source.", "required": true, "status": "verified", "evidence": ["scripts/finalize_release_freeze.py", "scripts/check_release_preflight.py"]},
+    {"scenario": "The provider workflow creates a temporary candidate projection without mutating committed published release.json.", "required": true, "status": "verified", "evidence": [".github/workflows/release.yml", "tests/test_release_workflow.py"]},
+    {"scenario": "A corrective change cannot publish a tag or public asset.", "required": true, "status": "verified", "evidence": [".github/workflows/release.yml", "Contract outOfScope"]}
+  ],
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized corrective process Work Items before release; external publication remains explicitly out of scope here."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 603
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-metadata-promotion.json",
+    "baseCommit": "b5fd89e6df1a2645139cd3282e073c06a3f46a2f",
+    "initialScopeDigest": "fcfaf8c0bf4151030ec95968db7a5399bfa53aeb3121150fe8f23a53e0c9c28c",
+    "contractSkeletonDigest": "acdb763c4e9ddd14eccddd8b749645f3b3aa66e688f1fc152cb2852d48df8ac1"
+  }
+}

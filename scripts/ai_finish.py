@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import subprocess
 import sys
 import time
@@ -79,6 +80,11 @@ def task_paths(task: str) -> tuple[str, str]:
 
 
 def run(command: list[str], *, extra_env: dict[str, str] | None = None) -> tuple[int, int, str]:
+    command = list(command)
+    if command and command[0] == "make":
+        for name in ("PROJECT_FORMAT_CHECK", "PROJECT_TEST", "PROJECT_LINT"):
+            if name in os.environ and not any(item.startswith(f"{name}=") for item in command):
+                command.append(f"{name}={os.environ[name]}")
     print("$ " + " ".join(command))
     start = time.time()
     environment = clean_git_environment()

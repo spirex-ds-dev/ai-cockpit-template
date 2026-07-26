@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -14,11 +15,41 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_finish_git_environment_helper_excludes_git_overrides():
     environment = ai_common.clean_git_environment()
     assert all(not key.startswith("GIT_") for key in environment)
+    assert all(not key.startswith("COV_CORE_") for key in environment)
+    assert all(not key.startswith("COVERAGE_") for key in environment)
+    assert all(key not in {"MFLAGS", "MAKELEVEL"} for key in environment)
+
+
+def test_finish_git_environment_helper_filters_nested_work_item_overrides(monkeypatch):
+    monkeypatch.setenv("MAKEOVERRIDES", "CONTRACT=outer SUMMARY=outer PROJECT_TEST=false")
+
+    environment = ai_common.clean_git_environment()
+
+    assert environment["MAKEOVERRIDES"] == "PROJECT_TEST=false"
     assert environment["PYTHONDONTWRITEBYTECODE"] == "1"
 
 
 def run(root: Path, *args: str, env=None):
-    return subprocess.run(args, cwd=root, text=True, capture_output=True, env=env, check=False)
+    child_env = dict(os.environ if env is None else env)
+    child_env = {
+        key: value
+        for key, value in child_env.items()
+        if not key.startswith("COV_CORE_")
+        and not key.startswith("COVERAGE_")
+        and key not in {"MAKEFLAGS", "MAKEOVERRIDES", "MFLAGS", "MAKELEVEL"}
+    }
+    explicit_make_vars = [
+        argument
+        for argument in args
+        if argument.startswith(
+            ("PROJECT_TEST=", "PROJECT_FORMAT_CHECK=", "PROJECT_LINT=", "PYTHON=")
+        )
+    ]
+    if explicit_make_vars:
+        child_env["MAKEFLAGS"] = " -- " + " ".join(explicit_make_vars)
+    return subprocess.run(
+        args, cwd=root, text=True, capture_output=True, env=child_env, check=False
+    )
 
 
 def prepare_work_item(tmp_path: Path, *, archive_collision: bool = False):
