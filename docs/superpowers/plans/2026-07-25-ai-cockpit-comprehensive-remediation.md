@@ -324,6 +324,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-001`（发布证据/来源绑定，高）：`finalize-release-freeze` 在 post-close 阶段仅修改本地工作树，未进入 `origin/main`；provider exact-source checkout 因而无法看到 freeze/digests，不能通过 release preflight。已建立 corrective Work Item `commit-release-freeze-evidence`，将生成证据纳入 Contract、PR、merge、close 和基线同步。
 `RFE-ISSUE-002`（工单收口并发，中）：同一工单同时启动多个 `ai-finish` 会竞争写 Summary 和观测记录，造成临时的 Summary/Guidelines 失败；已停止重复进程并改为单实例收口，后续流程要求同一工单只允许一个收口进程。
 `RFE-ISSUE-003`（CI流程/超时，高）：PR #385 的 smoke job 在 `Run repository quality gates` 长时间运行，后续所有门禁无法启动；首次运行被取消并重跑后仍需观察质量门完成。已建立 corrective Work Item `smoke-quality-timeout`，将 job 超时从 90 分钟收紧到 30 分钟并增加 workflow 回归覆盖；超时必须 fail-closed，不得跳过后续检查。
+`RFE-ISSUE-004`（质量流程/墙钟时间，中）：PR #386 的 smoke job 中 `make quality` 约 20 分钟才完成；`project-test` 已执行全量 pytest，而独立 pytest gate 仍串行运行，且质量图缺少并行调度。已建立 corrective Work Item `quality-gate-deduplication`：保留所有 specialized gate，改为 bounded parallel gate graph；不得降低覆盖率或删除 adopter 定制 `project-test` 下仍必要的显式门禁。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
