@@ -338,6 +338,8 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-015`（发布证据/来源绑定，高）：PR #390 合并并由 `ai-close-work-item` 同步主分支后，`make check-release-preflight` 仍发现 release freeze、release digests、release state 和归档/安装器摘要绑定的是合并前 source identity；同时要求在 archive/close 后重新 finalize freeze。已停止 provider publication，禁止无工单直接改写发布证据；建立 corrective Work Item `finalize-release-freeze-after-rebind`，先记录本问题、在最新同步主分支上重新生成并完成完整 PR/merge/close/分支清理，再重跑发布预检。
 `RFE-ISSUE-016`（工单初始化/流程，中）：为处理 `RFE-ISSUE-015` 首次执行 `make ai-start TASK=finalize-release-freeze-after-rebind MODE=code` 时，自动生成的 Contract skeleton 因缺少发布专用 intent、raw request、sources、scenario coverage 和受限写入授权而按预期 `not_ready` 停止。已补全 Contract 后再重跑预检；不得通过跳过 Contract 完成或直接生成发布证据。
 `RFE-ISSUE-017`（工单分支生命周期，高）：建立 `finalize-release-freeze-after-rebind` 的 Contract/启动证据时，初始提交误落在本地 `main`；该提交未推送、未进入 PR。已立即将提交保留到专用 corrective 分支，恢复本地 `main` 与 `origin/main` 一致，并规定后续只在专用分支继续；不能把“Contract 已建立”误报为完整工单生命周期完成。
+`RFE-ISSUE-018`（工单证据对齐，中）：`ai-finish` 在完整质量门之前发现 corrective Contract 已声明 4 个 scenario coverage，但 active Summary 未同步该字段，因此场景覆盖检查 fail-closed。已停止收口，补齐 Summary 的场景状态和实际 changedFiles 归属后再重跑；不得用 Contract 单独替代 Summary 证据。
+`RFE-ISSUE-019`（工单证据格式，中）：全量质量门通过后，`ai-finish` 的 Summary 校验拒绝了 `reviewReadiness.status=in_review`，因为合法状态仅包括 `blocked`、`not_ready`、`ready`、`ready_with_risks`。已停止归档，改用 `ready_with_risks` 并保留发布预检尚未在关闭后重跑的残余风险。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
