@@ -5,7 +5,7 @@
   "changedFiles": [
     {
       "path": ".ai/work-items/active/finalize-release-freeze-after-rebind.contract.json",
-      "reason": "Created the Work Item Contract skeleton."
+      "reason": "Created and finalized the Work Item Contract on the dedicated corrective branch after preflight review."
     },
     {
       "path": ".ai/work-items/active/finalize-release-freeze-after-rebind.summary.json",
@@ -13,7 +13,9 @@
     }
   ],
   "sourcesUsed": [
-    ".ai/work-items/active/finalize-release-freeze-after-rebind.contract.json"
+    ".ai/work-items/active/finalize-release-freeze-after-rebind.contract.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    ".ai/work-items/starts/finalize-release-freeze-after-rebind.json"
   ],
   "verification": [
     {
@@ -83,38 +85,63 @@
   ],
   "guidelinesCompliance": [
     {
-      "guideline": "New public APIs must be documented.",
-      "compliant": false,
-      "evidence": "Not verified."
+      "guideline": "Release evidence must be source-bound and machine-readable.",
+      "compliant": true,
+      "evidence": "Contract and finalize_release_freeze.py require source-bound release evidence."
     },
     {
-      "guideline": "Do not import internal modules from other features.",
-      "compliant": false,
-      "evidence": "Not verified."
+      "guideline": "Do not conflate candidate, historical, and published release states.",
+      "compliant": true,
+      "evidence": "Contract keeps external publication out of scope and preserves historical metadata."
+    },
+    {
+      "guideline": "Do not create a tag or public asset in this corrective Work Item.",
+      "compliant": true,
+      "evidence": "No tag or public asset operation is in scope."
+    },
+    {
+      "guideline": "Every Work Item must use a dedicated branch and complete PR lifecycle.",
+      "compliant": true,
+      "evidence": "The initial local-main commit was preserved on the dedicated branch and the local main pointer was restored before implementation continues."
     }
   ],
-  "unknownsRemaining": [
-    "Replace this before finishing the Work Item."
-  ],
+  "unknownsRemaining": [],
   "risk": {
-    "level": "medium",
-    "detail": "Initial skeleton; scope and acceptance still need task-specific review."
+    "level": "high",
+    "detail": "Committed release evidence must be regenerated from the exact synchronized main source identity before publication."
   },
   "generatedFiles": [],
   "destructiveChanges": [],
-  "observedIssues": [],
+  "observedIssues": [
+    {
+      "issueId": "RFE-ISSUE-016",
+      "category": "process",
+      "severity": "medium",
+      "fact": "Initial ai-start skeleton was not_ready because release-specific Contract evidence was missing.",
+      "resolution": "Completed the Contract and reran preflight successfully.",
+      "status": "resolved_pending_lifecycle"
+    },
+    {
+      "issueId": "RFE-ISSUE-017",
+      "category": "process",
+      "severity": "high",
+      "fact": "Initial Contract/start evidence commit was made on local main before a dedicated branch existed.",
+      "resolution": "Preserved the commit on the dedicated corrective branch and restored local main to origin/main before continuing.",
+      "status": "resolved_pending_lifecycle"
+    }
+  ],
   "residualRisks": [
     {
       "level": "medium",
       "area": "scope",
-      "detail": "Initial skeleton; replace with actual residual risks before finishing.",
+      "detail": "Release publication remains blocked until regenerated evidence passes final preflight.",
       "reviewRecommended": true,
       "followUpCandidate": false
     }
   ],
   "reviewReadiness": {
-    "status": "not_ready",
-    "reason": "Initial skeleton; required checks have not run.",
+    "status": "in_review",
+    "reason": "Contract preflight is ready; implementation and full lifecycle verification remain.",
     "expectedReviewFocus": []
   },
   "boundaryChecks": {
@@ -139,7 +166,7 @@
     }
   ],
   "knownGaps": [
-    "Replace this before finishing the Work Item."
+    "Final source-bound release evidence has not yet been regenerated or verified."
   ],
   "overclaimPrevention": "Do not report completion for checks or behavior that were not verified."
 }

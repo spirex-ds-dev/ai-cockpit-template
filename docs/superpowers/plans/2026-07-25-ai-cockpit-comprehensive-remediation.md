@@ -337,6 +337,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-014`（归档证据/路径配对，中）：归档后独立运行 archived Summary 校验时，原 `changedFiles` 仍只列 active Contract/Summary 路径，未覆盖 archive Contract/Summary/Manifest/Index；已补齐归档路径配对并重新计算 Archive Manifest/Index digest。
 `RFE-ISSUE-015`（发布证据/来源绑定，高）：PR #390 合并并由 `ai-close-work-item` 同步主分支后，`make check-release-preflight` 仍发现 release freeze、release digests、release state 和归档/安装器摘要绑定的是合并前 source identity；同时要求在 archive/close 后重新 finalize freeze。已停止 provider publication，禁止无工单直接改写发布证据；建立 corrective Work Item `finalize-release-freeze-after-rebind`，先记录本问题、在最新同步主分支上重新生成并完成完整 PR/merge/close/分支清理，再重跑发布预检。
 `RFE-ISSUE-016`（工单初始化/流程，中）：为处理 `RFE-ISSUE-015` 首次执行 `make ai-start TASK=finalize-release-freeze-after-rebind MODE=code` 时，自动生成的 Contract skeleton 因缺少发布专用 intent、raw request、sources、scenario coverage 和受限写入授权而按预期 `not_ready` 停止。已补全 Contract 后再重跑预检；不得通过跳过 Contract 完成或直接生成发布证据。
+`RFE-ISSUE-017`（工单分支生命周期，高）：建立 `finalize-release-freeze-after-rebind` 的 Contract/启动证据时，初始提交误落在本地 `main`；该提交未推送、未进入 PR。已立即将提交保留到专用 corrective 分支，恢复本地 `main` 与 `origin/main` 一致，并规定后续只在专用分支继续；不能把“Contract 已建立”误报为完整工单生命周期完成。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
