@@ -492,6 +492,22 @@ def test_finalize_release_freeze_runtime_mode_binds_exact_detached_source(monkey
     assert freeze["lifecycle"]["state"] == "closed_and_synchronized"
 
 
+def test_finalize_release_freeze_imports_without_optional_supply_chain_packages():
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-S",
+            "-c",
+            "import finalize_release_freeze; assert finalize_release_freeze.sha256_text('x')",
+        ],
+        check=False,
+        capture_output=True,
+        env={**os.environ, "PYTHONPATH": str(Path(__file__).resolve().parents[1] / "scripts")},
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+
+
 def test_finalize_release_freeze_fails_closed_on_malformed_release_state(monkeypatch, tmp_path):
     _configure_finalizer(monkeypatch, tmp_path, release_state="[]\n")
     assert finalizer.main() == 1

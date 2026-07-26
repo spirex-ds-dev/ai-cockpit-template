@@ -344,6 +344,8 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-021`（发布流程/来源绑定，高）：WI-18 corrective PR #391 关闭后，主分支上的普通 `make finalize-release-freeze` 与本地 `make check-release-preflight` 可以通过，但生成的 freeze evidence 只存在本地未提交工作树；provider workflow 从远端 exact source checkout 开始，无法消费该证据。若把它直接提交，提交本身又会改变被记录的 source commit，形成自引用循环。已停止 provider publication，建立 corrective Work Item `runtime-release-freeze-evidence`，将 runtime freeze materialization 放入 exact-source provider 运行中，并保持 committed-source preflight 在 runtime release projection 之前。
 `RFE-ISSUE-022`（工单初始化/流程，中）：建立 `runtime-release-freeze-evidence` 时，首次 `make ai-start ... MODE=code` 的 skeleton 因缺少 runtime 发布 intent、raw request、sources、scenario coverage 和受限写入授权而按预期 `not_ready` 停止。已补全 Contract 后重跑；不得跳过此门禁直接修改发布 workflow。
 `RFE-ISSUE-023`（工单契约/流程，中）：runtime corrective Contract 初稿在 declared intent 中使用了仓库 capability registry 未登记的 `release_engineering`，preflight 按预期拒绝 raw request。已改为已登记的 `ai_governance` 与 `test_automation` capability 后重跑；不得以未登记能力绕过 capability guard。
+`RFE-ISSUE-024`（provider发布/依赖边界，高）：provider run `30206296217` 在新增 runtime freeze 步骤失败，原因是 `scripts/finalize_release_freeze.py` 导入 `check_supply_chain.py`，而该模块在依赖安装前需要未安装的 `cyclonedx`；未创建 tag、asset 或 Release。已停止重试，建立 corrective Work Item `runtime-freeze-bootstrap-dependency`，移除不必要的重型 import 并保留 SHA-256 结果不变。
+`RFE-ISSUE-025`（工单初始化/流程，中）：为处理 `RFE-ISSUE-024` 首次 `make ai-start TASK=runtime-freeze-bootstrap-dependency MODE=code` 的 skeleton 因缺少依赖边界 intent、raw request、sources、scenario coverage 和授权而按预期 `not_ready` 停止。已补全 Contract 后重跑；不得绕过 Contract 直接修复 provider bootstrap。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
