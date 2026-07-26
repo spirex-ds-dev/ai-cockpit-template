@@ -10,7 +10,11 @@ import sys
 
 from ai_common import PROJECT_ROOT, discover_remote_default_candidates, included, run_git
 from release_archive import canonical_archive_sha, canonical_source_tree
-from check_supply_chain import sha256_text
+
+
+def sha256_text(text: str) -> str:
+    """Hash release metadata without importing optional supply-chain dependencies."""
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
 def _fail(message: str) -> int:

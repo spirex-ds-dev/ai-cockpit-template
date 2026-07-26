@@ -1,0 +1,219 @@
+{
+  "contractVersion": 2,
+  "workItemId": "runtime-freeze-bootstrap-dependency",
+  "mode": "code",
+  "title": "Remove runtime freeze bootstrap dependency",
+  "baseCommit": "82e48f597ea7be474205018f96cda14ea1968741",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+    ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/finalize_release_freeze.py",
+    "tests/test_release_preflight.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Changing provider publication order",
+    "Publishing a tag or public asset",
+    "Changing SBOM, provenance, signing, or release identity semantics"
+  ],
+  "sources": [
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "Runtime freeze entrypoint that imported an unavailable optional dependency."
+    },
+    {
+      "path": "tests/test_release_preflight.py",
+      "reason": "Regression coverage for runtime freeze bootstrap behavior."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records provider failure and corrective action."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release",
+      "process",
+      "dependency"
+    ],
+    "reason": "The provider release path must run runtime freeze before dependency installation and must fail closed without an accidental optional import.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial corrective Work Items; publication remains out of scope."
+  },
+  "preReviewWarnings": [
+    "Verify runtime freeze imports only dependencies available before provider dependency installation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Runtime freeze can start in a clean exact-source checkout before optional supply-chain dependencies are installed.",
+    "The unnecessary check_supply_chain import is removed without changing digest output.",
+    "Regression coverage proves runtime freeze bootstrap succeeds without cyclonedx/packageurl imports.",
+    "The provider failure and corrective action are recorded in the execution plan and Summary.",
+    "The complete Contract, quality, Summary, PR, CI, merge, ai-close-work-item, branch cleanup, and main synchronization lifecycle passes."
+  ],
+  "guidelines": [
+    "Bootstrap release commands must depend only on libraries available at their execution stage.",
+    "Preserve source-bound SHA-256 output exactly.",
+    "Do not create a tag or public asset in this corrective Work Item.",
+    "Every Work Item must use a dedicated branch and complete PR lifecycle."
+  ],
+  "intent": {
+    "problem": "Provider run 30206296217 stopped before preflight because finalize_release_freeze imported check_supply_chain, which requires cyclonedx before the workflow installs dependencies.",
+    "constraints": [
+      "Keep runtime freeze before dependency installation and release projection.",
+      "Use only standard-library functionality for the small text digest helper.",
+      "Do not publish externally in this corrective Work Item."
+    ],
+    "rationale": "Removing the unnecessary heavy import makes the bootstrap boundary deterministic while preserving the same SHA-256 evidence values."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Make runtime release freeze generation independent of optional supply-chain dependencies.",
+    "requestedCapabilities": ["ai_governance", "test_automation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "runtime freeze starts before optional dependency installation",
+      "required": true,
+      "status": "verified",
+      "evidence": ["scripts/finalize_release_freeze.py", "tests/test_release_preflight.py"]
+    },
+    {
+      "scenario": "SHA-256 digest output remains source-bound",
+      "required": true,
+      "status": "verified",
+      "evidence": ["scripts/finalize_release_freeze.py", "tests/test_release_preflight.py"]
+    },
+    {
+      "scenario": "provider failure blocks publication",
+      "required": true,
+      "status": "not_applicable",
+      "reason": "Publication is out of scope; provider failure evidence is recorded from run 30206296217.",
+      "evidence": ["Contract outOfScope"]
+    }
+  ],
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-26-runtime-freeze-bootstrap",
+    "capturedAt": "2026-07-26",
+    "digest": "sha256:runtime-freeze-bootstrap-correction"
+  },
+  "rawUserRequest": "Continue the complete serial Work Item process. When release preflight or provider execution finds a process or evidence-binding problem, record it, correct it in a dedicated Work Item, complete its PR and cleanup lifecycle, and only then resume publication.",
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized continuous execution of corrective Work Items with full PR, merge, close, branch cleanup, and base synchronization; publication remains separately gated."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 613
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/runtime-freeze-bootstrap-dependency.json",
+    "baseCommit": "82e48f597ea7be474205018f96cda14ea1968741",
+    "initialScopeDigest": "afac29fa1c0a307d3f6d8bb875ce1f991bb54ad1e0150bc36752682aa138c990",
+    "contractSkeletonDigest": "62a01acfca2a1f97133271e55d1daebc5aedbdfa24d1938d9855430c3f5342b1"
+  }
+}
