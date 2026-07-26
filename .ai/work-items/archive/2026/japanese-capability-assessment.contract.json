@@ -1,0 +1,102 @@
+{
+  "contractVersion": 2,
+  "workItemId": "japanese-capability-assessment",
+  "mode": "code",
+  "title": "Comprehensive Japanese capability assessment",
+  "rawUserRequest": "Execute the approved AI Cockpit remediation plan serially. Before publishing a new version, perform a comprehensive Japanese capability assessment. Japanese capability is mandatory; every finding requires a corresponding corrective Work Item and remains blocking until corrected and re-evaluated.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user authorization: AI Cockpit comprehensive remediation continuation and mandatory Japanese release gate",
+    "capturedAt": "2026-07-26",
+    "digest": "sha256:japanese-capability-assessment-request"
+  },
+  "declaredIntent": {
+    "summary": "Measure the repository-governance paths that Japanese-speaking engineers depend on, expose unsupported claims, and keep release blocked for every unresolved Japanese handling gap.",
+    "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "34dda235277a3a269e3e2877efec2f780609dfd1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/japanese-capability-assessment.contract.json",
+    ".ai/work-items/active/japanese-capability-assessment.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/decisions/**",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_japanese_capability.py",
+    "tests/test_japanese_capability.py",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Claiming general model fluency or provider-specific Japanese quality from deterministic repository tests",
+    "Changing runtime security, identity, isolation, signing, branch protection, or enterprise compliance",
+    "Publishing a release or changing Capability Truth statuses without new evidence",
+    "Implementing the WI-17 multilingual Human-Agent Trust Layer documents",
+    "Deleting or rewriting archived Work Item evidence"
+  ],
+  "sources": [
+    {"path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "reason": "WI-16 mandatory Japanese gate, scope, sequence, and corrective Work Item rule."},
+    {"path": "scripts/ai_input_trust.py", "reason": "Deterministic source/trust/authority and Japanese injection boundary."},
+    {"path": "tests/test_input_trust.py", "reason": "Existing source and high-risk re-evaluation behavior."},
+    {"path": "tests/test_input_trust_corpus.py", "reason": "Existing Japanese, mixed-language, hidden HTML, Base64, Unicode, and nested-quote corpus."},
+    {"path": "README.ja.md", "reason": "Japanese engineer entry path and product boundary."},
+    {"path": "docs/reference/capability-truth-matrix.md", "reason": "Only source of current capability status."},
+    {"path": ".ai/work-items/archive/2026/full-remediation-acceptance.summary.json", "reason": "Closed predecessor baseline and known open release/documentation evidence."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["release", "governance", "user_visible_output", "language_coverage"],
+    "reason": "A false Japanese pass could expose Japanese-speaking engineers to untranslated or incorrectly classified stop conditions before release.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "User explicitly authorized serial execution and made Japanese capability a mandatory pre-release gate."},
+  "preReviewWarnings": [
+    "Deterministic local tests prove only the bounded repository behavior they execute; they must not be reported as general Japanese model fluency.",
+    "Any failed, ambiguous, unverified, stale, or English-only inferred Japanese scenario is blocking and requires a corrective Work Item before this Work Item can close."
+  ],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "High-risk language coverage and release gating require checkpoints before edits and finish."},
+  "acceptance": [
+    "A deterministic Japanese capability matrix covers input handling, technical/mixed language, injection, unknown/human confirmation, stop/recovery semantics, repository documents, and output parity.",
+    "Every matrix result includes source evidence, test or command evidence, limitations, and a reproducible digest.",
+    "Japanese injection and high-risk operation tests remain fail-closed and do not promote untrusted content to authority.",
+    "Any missing or unsupported Japanese capability within the declared repository-governance scope is recorded as blocking and receives a named corrective Work Item; no unresolved finding is hidden by a pass label.",
+    "The Japanese assessment report and the remediation plan are aligned, and limitations explicitly exclude unproved general model fluency."
+  ],
+  "guidelines": [
+    "Japanese-speaking engineers are a required audience; do not infer Japanese capability from English-only tests.",
+    "Evidence over self-declaration: every result is bound to a source and executable evidence.",
+    "Keep release, identity, isolation, and enterprise compliance claims outside this local assessment unless delegated evidence exists.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The repository already has Japanese documentation and Japanese prompt-injection examples, but release readiness requires a consolidated assessment of whether Japanese engineers receive the same safe, actionable, and fail-closed governance behavior across the supported paths.",
+    "constraints": ["Use deterministic local evidence only for repository behavior.", "Keep unresolved general-language capability limitations visible.", "Do not publish or alter external release evidence in this Work Item."],
+    "rationale": "A bounded, reproducible matrix can distinguish tested Japanese governance behavior from unproven general language ability and make every release blocker actionable."
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "User", "reason": "User authorized the complete serial remediation plan and explicitly required the Japanese release gate."},
+  "rollbackNote": "Revert this Work Item diff and restore the prior assessment/report while retaining the immutable archived evidence.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 700}},
+  "startReceipt": {"path": ".ai/work-items/starts/japanese-capability-assessment.json", "baseCommit": "34dda235277a3a269e3e2877efec2f780609dfd1", "initialScopeDigest": "40143100b21592a4554b05e95577ef5534724b058f6087845f100c12315392cc", "contractSkeletonDigest": "7573e0537f6b52e04710628ae0f9ed02dfcb46831085af8124449c08a89b0b9e"},
+  "predecessorWorkItem": {"workItemId": "full-remediation-acceptance", "status": "closed", "pr": {"number": 379, "merged": true, "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/379", "mergeCommit": "34dda235277a3a269e3e2877efec2f780609dfd1"}, "closure": {"succeeded": true, "localBranchDeleted": true, "remoteBranchDeleted": true, "baseSynchronized": true, "evidence": ".ai/work-items/archive/2026/full-remediation-acceptance.archive-manifest.json"}},
+  "scenarioCoverage": [
+    {"scenario": "Japanese and mixed-language repository/tool input remains untrusted and injection indicators are classified", "required": true, "status": "verified", "evidence": ["scripts/ai_japanese_capability.py", "tests/test_japanese_capability.py", "tests/test_input_trust_corpus.py"], "reason": "The deterministic Japanese corpus assessment passed."},
+    {"scenario": "Japanese human request and high-risk operation return the same fail-closed human-decision boundary", "required": true, "status": "verified", "evidence": ["scripts/ai_japanese_capability.py", "tests/test_japanese_capability.py", "tests/test_input_trust.py"], "reason": "The focused Japanese assessment passed and kept release confirmation required."},
+    {"scenario": "Japanese documentation and release-facing governance terms are discoverable and actionable", "required": true, "status": "verified", "evidence": ["scripts/ai_japanese_capability.py", "tests/test_japanese_capability.py", "docs/reference/japanese-capability-assessment.md"], "reason": "The role-specific Japanese documentation smoke matrix passed."},
+    {"scenario": "General Japanese agent fluency is proven for object-engineer interactions", "required": true, "status": "not_applicable", "evidence": ["docs/reference/japanese-capability-assessment.md"], "reason": "General provider/model fluency is outside this repository-governance assessment; it is explicitly recorded as a non-claim and is not used as release evidence."}
+  ]
+}

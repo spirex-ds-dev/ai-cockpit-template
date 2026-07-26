@@ -274,6 +274,10 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **强制顺序：** WI-15 关闭 → WI-16 日语评估 → （若有问题）corrective Work Item 串行完成并重新评估 → WI-16 关闭 → WI-17 Trust Layer 对齐 → WI-18 发布新版本。任何日语评估问题、对应 corrective Work Item 未关闭、Trust Layer 声明与证据不一致，均停止发布准备。
 
+**WI-16 当前执行结果：** `scripts/ai_japanese_capability.py` 与 `tests/test_japanese_capability.py` 已证明日语/混合输入的确定性不信任分类、高风险操作人工确认边界，以及安装、校准、Work Item、状态、恢复、升级和发布文档的按职责可操作入口；报告位于 `docs/reference/japanese-capability-assessment.md`。通用 provider/model fluency 不属于本仓库治理层的可证明能力，已作为明确的 non-claim 记录，不被误写成通过或发布证据；当前 WI-16 的发布门禁只接受仓库内有证据的日语治理路径。
+
+**WI-16 流程问题记录：** `WI-16-ISSUE-001`：初始文档检查器要求每份文档都包含同一组通用词，错误地把按职责编写的文档判为缺失；已先修正评估流程为每份文档使用职责对应的日语行动术语，再重新生成报告并通过聚焦测试。`WI-16-ISSUE-002`：初始评估把无法由仓库本地证据证明的通用模型 fluency 当成 required 场景；已修正流程边界为“仓库治理路径必须有日语证据，通用模型 fluency 只能作为明确 non-claim”，并在报告与 Contract 中保留限制，未将其声明为能力或发布证据。`WI-16-ISSUE-003`：首次 `ai-finish` 因新增脚本未通过项目 formatter 检查而停止；已运行项目 formatter，重新执行全量质量门禁并以 1147 tests、85.06% coverage 通过后才 archive。
+
 ### WI-17：Add the Authoritative Multilingual Human-Agent Trust Layer Document
 
 **Task:** `document_human_agent_trust_layer`
@@ -376,6 +380,9 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 - `PLAN-005`（用户纠正/流程门禁，高）：用户要求在发布新版本前插入全面日语能力评估，且日语为必需能力；任何问题必须对应 corrective Work Item 并在重新评估通过前保持ブロッキング。已将原 WI-16/WI-17 顺延为 WI-17/WI-18，新增 WI-16 Japanese Capability Assessment，并更新发布与最终清理的强制顺序；现有 PR/finish 必须先完成本计划对齐再继续。
 - `PLAN-006`（用户新增/发布前门禁，高）：用户要求在发布版本前插入一个对应《Human-Agent Trust Layer》的工单。已新增 WI-17 Human-Agent Trust Layer Alignment，并将发布顺延为 WI-18、最终计划文档清理顺延为 WI-19；WI-17 必须完成证据治理、责任边界、供应链证据和人类决策压缩对齐，任何对应问题必须先完成 corrective Work Item 后才能进入 WI-18。
 - `PLAN-007`（用户补充/文档一致性，高）：用户明确 WI-17 的任务为 `document_human_agent_trust_layer`：升级现有 `docs/trust-layer.md` 为英文权威完整文档，新增完整中文/日文版本，保留现有 Gate/命令/Archive Manifest 实现细节，补齐 Documentation Architecture、三语 README 短入口、交叉链接和轻量一致性检查；不得通过概念文档删除实现证据或从理念反推 Capability Truth。
+- `WI-16-ISSUE-001`（评估流程，中）：初始日语文档 smoke criterion 对所有文档强制同一组通用词，产生职责不匹配的误报；已改为按文档职责绑定行动术语并重跑聚焦测试。
+- `WI-16-ISSUE-002`（评估边界/证据，高）：当前仓库只能证明确定性的日语治理路径，不能证明通用对象工程师日语交互能力；已把后者固化为 non-claim，避免从本地测试反推通用能力。该限制仍需在 WI-17 Trust Layer 和 WI-18 发布证据中保持一致，不得删除。
+- `WI-16-ISSUE-003`（流程/质量，中）：新增评估脚本首次未通过 formatter 门禁；已先格式化，再重新执行完整 `ai-finish`，最终 1147 tests、coverage 85.06% 及其余质量门禁通过后才归档。
 - `WI-05-ISSUE-005`（流程/证据归属，高）：尝试以独立追加 JSON 记录 WI-05 的日语计划补正时，PR 归属门禁拒绝了该非 Contract/Summary 配对文件。该追加文件已从当前 PR 移除，计划正文保留完整问题记录；后续必须建立独立 corrective process Work Item，补充并验证“追加式 correction evidence”的归属规则后，才能使用该证据格式，不得改写已归档 WI-05 Contract/Summary。
 - `WI-05-ISSUE-006`（流程/CI，待恢复）：最新 PR 提交的 `template-smoke` job 自 2026-07-25T16:41Z 起停留在 `Run repository quality gates`，其余步骤未启动，远超同类运行时长且无可用最终日志。已取消僵死 run；必须重新触发完整 CI 并取得新的可审计结论后，才能合并 WI-05，不得把取消或旧 run 当作通过。
 - `WI-06-ISSUE-001`（流程/命令一致性，低）：AI Cockpit skill 文档曾列出一个当前 Makefile 不存在的旧 ownership alias；实际归属门禁为 `make check-ai-diff-ownership`。已记录并使用实际目标完成检查，后续应在流程文档对齐工单中统一命令名称，不因别名缺失绕过归属检查。
