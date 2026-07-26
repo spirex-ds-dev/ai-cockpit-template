@@ -1,0 +1,247 @@
+{
+  "contractVersion": 2,
+  "workItemId": "runtime-release-freeze-evidence",
+  "mode": "code",
+  "title": "Generate source-bound runtime release freeze evidence",
+  "baseCommit": "9d341ff23cb2c807d86f0e274cce13e1049f40d4",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/runtime-release-freeze-evidence.contract.json",
+    ".ai/work-items/active/runtime-release-freeze-evidence.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".github/workflows/release.yml",
+    "scripts/finalize_release_freeze.py",
+    "scripts/check_release_preflight.py",
+    "tests/test_release_preflight.py",
+    "tests/test_release_workflow.py",
+    "tests/test_workflows.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Publishing a tag or public asset",
+    "Changing release identity semantics beyond runtime freeze materialization",
+    "Changing signing, SBOM, or provenance generation",
+    "Changing the seven-app governance model"
+  ],
+  "sources": [
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "Authoritative release freeze generator requiring a runtime exact-source mode."
+    },
+    {
+      "path": "scripts/check_release_preflight.py",
+      "reason": "Authoritative fail-closed preflight verifier."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Exact-source provider workflow that must materialize runtime freeze evidence before preflight."
+    },
+    {
+      "path": "tests/test_release_preflight.py",
+      "reason": "Regression coverage for freeze generation and preflight identity binding."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Regression coverage for release workflow ordering and source binding."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Workflow contract and ordering assertions."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records the post-close source identity process issue and corrective action."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release",
+      "evidence",
+      "process"
+    ],
+    "reason": "Release provider exact-source checkout currently cannot consume post-close freeze evidence without a self-referential commit cycle; runtime materialization must remain fail-closed and source-bound.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial corrective Work Items; external publication remains out of scope."
+  },
+  "preReviewWarnings": [
+    "Prove runtime freeze generation uses the exact checked-out source commit, runs before release preflight and before release projection, and cannot silently replace committed evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The release workflow can generate source-bound runtime freeze evidence from its exact detached source checkout without requiring a synchronized local branch.",
+    "Runtime freeze generation occurs before committed-source release preflight and before runtime release projection.",
+    "The workflow never publishes a tag or public asset when runtime freeze generation or preflight fails.",
+    "Regression tests prove exact source identity, detached checkout behavior, ordering, and fail-closed behavior.",
+    "The complete Contract, quality, Summary, PR, CI, merge, ai-close-work-item, branch cleanup, and main synchronization lifecycle passes."
+  ],
+  "guidelines": [
+    "Runtime release evidence must be generated from the exact immutable source commit.",
+    "Committed-source preflight must remain before runtime release projection.",
+    "Do not create a tag or public asset in this corrective Work Item.",
+    "Every Work Item must use a dedicated branch and complete PR lifecycle."
+  ],
+  "intent": {
+    "problem": "After WI-18 closure, local post-close freeze and preflight passed, but the provider workflow checks an exact detached source checkout and cannot consume uncommitted local freeze evidence. Committing that evidence changes the source commit it records, creating a self-referential identity cycle.",
+    "constraints": [
+      "Preserve committed-source preflight before runtime release projection.",
+      "Generate runtime freeze evidence only from the exact checked-out source commit.",
+      "Do not publish a tag or public asset in this corrective Work Item.",
+      "Keep historical and candidate metadata boundaries explicit and machine-readable."
+    ],
+    "rationale": "A controlled runtime freeze materialization removes the impossible post-merge self-reference while giving the provider a reproducible source-bound evidence set before publication."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Generate and validate source-bound runtime release freeze evidence in the provider exact-source checkout.",
+    "requestedCapabilities": ["ai_governance", "test_automation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "exact detached source checkout runtime freeze",
+      "required": true,
+      "status": "verified",
+      "evidence": ["scripts/finalize_release_freeze.py", "tests/test_release_preflight.py"]
+    },
+    {
+      "scenario": "preflight before runtime release projection",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/release.yml", "tests/test_release_workflow.py"]
+    },
+    {
+      "scenario": "freeze or preflight failure blocks publication",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/release.yml", "tests/test_workflows.py"]
+    },
+    {
+      "scenario": "external publication",
+      "required": true,
+      "status": "not_applicable",
+      "reason": "Explicitly out of scope for this corrective Work Item.",
+      "evidence": ["Contract outOfScope"]
+    }
+  ],
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-26-runtime-release-freeze-correction",
+    "capturedAt": "2026-07-26",
+    "digest": "sha256:runtime-release-freeze-evidence-correction"
+  },
+  "rawUserRequest": "Continue the complete serial Work Item process. When release preflight finds a process or evidence-binding problem, record it, correct it in a dedicated Work Item, complete its PR and cleanup lifecycle, and only then resume publication.",
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized continuous execution of corrective Work Items with full PR, merge, close, branch cleanup, and base synchronization; publication remains separately gated."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 612
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/runtime-release-freeze-evidence.json",
+    "baseCommit": "9d341ff23cb2c807d86f0e274cce13e1049f40d4",
+    "initialScopeDigest": "4efa28c5db2dfb3f7b3aaa9a15fc811f5f57bfda5319aad0a7ec7a9781f8be91",
+    "contractSkeletonDigest": "f833554fc50dfaf899531ec63337c5c63e39cbc3d850a6045e19f65c19529ea3"
+  }
+}
