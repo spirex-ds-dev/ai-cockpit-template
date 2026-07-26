@@ -375,6 +375,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-052`（预检流程/用户授权，中）：补全 Contract 后，预检正确降级为 `needs_human_confirmation`，并已记录用户授权的结构化 Decision Evidence（选项 B：仅继续候选准备）；但 `ai-preflight --check` 将 `human_decision_recorded` 仍视为 blocked，没有“用户已授权、先实现再以真实证据闭合场景”的继续路径。该问题与 WI-08/WI-09 已记录的授权路径缺口同类；本工单保留该 fail-closed 证据，严格限制为候选 metadata/evidence 准备，不执行外部发布或绕过其他门禁。
 `RFE-ISSUE-053`（发布候选 progression，高）：候选校验只允许 `next-release.json` 紧跟历史 `release.json` v0.5.42，因而拒绝跨过已确认无效公开 v0.5.43 的纠正版本 v0.5.44。已停止候选证据生成，扩展当前 corrective Work Item scope；流程必须允许候选紧跟已 quarantine 的最高公开 tag，同时保留 `basedOnReleaseTag`、历史元数据和 post-publication 公共安装门禁，修复后重新验证。
 `RFE-ISSUE-054`（工单执行顺序，低）：candidate finalizer 在候选 Contract/metadata/validator 变更尚未提交时按要求 fail closed，提示 worktree must be clean。已记录并调整顺序为：先提交候选准备变更，再运行 finalizer 生成 source-bound freeze/digest，最后提交生成证据。
+`RFE-ISSUE-055`（工单契约/ownership，低）：candidate finalizer 进一步发现 Contract 未声明其会更新的 `release.json` 生成路径，按要求停止而未写入证据。已补充 `release.json` 到 Contract scope，保持历史 v0.5.42 身份不变后重跑。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
