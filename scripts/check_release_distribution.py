@@ -130,7 +130,10 @@ def is_next_patch_release(candidate: str, published: str) -> bool:
 
 
 def candidate_release_issues(
-    candidate: dict[str, object], published: dict[str, object]
+    candidate: dict[str, object],
+    published: dict[str, object],
+    *,
+    accepted_previous_tags: set[str] | None = None,
 ) -> list[str]:
     """Validate candidate metadata without treating it as the public release contract."""
     issues: list[str] = []
@@ -141,11 +144,12 @@ def candidate_release_issues(
     if not isinstance(published_tag, str) or not published_tag:
         issues.append("release.json releaseTag is missing")
     if isinstance(candidate_tag, str) and isinstance(published_tag, str):
-        if candidate_tag != published_tag and not is_next_patch_release(
-            candidate_tag, published_tag
+        accepted_previous = {published_tag, *(accepted_previous_tags or set())}
+        if candidate_tag != published_tag and not any(
+            is_next_patch_release(candidate_tag, previous) for previous in accepted_previous
         ):
             issues.append(
-                f"next-release.json releaseTag {candidate_tag!r} is not the next patch after {published_tag!r}"
+                f"next-release.json releaseTag {candidate_tag!r} is not the next patch after any accepted previous release {sorted(accepted_previous)!r}"
             )
     if candidate.get("releaseState") != "candidate":
         issues.append("next-release.json releaseState must be 'candidate'")
@@ -840,7 +844,7 @@ def inspect_tagged_release(
             # historical repository projection. Use the candidate metadata as
             # the claim source, then bind its archive fields to downloaded
             # public assets below.
-            candidate_path = ROOT / "next-release.json"
+            candidate_path = CANDIDATE_RELEASE
             if not candidate_path.is_file():
                 raise RuntimeError(f"{tag}: candidate release metadata is missing")
             metadata = json.loads(candidate_path.read_text(encoding="utf-8"))
@@ -998,14 +1002,18 @@ def main() -> int:
     local_source = os.environ.get("AI_COCKPIT_TEMPLATE_SOURCE")
     try:
         published = json.loads(RELEASE.read_text(encoding="utf-8"))
+        latest_tag = highest_semver_tag(list_remote_tags(PUBLIC_REPOSITORY))
         if preparation_mode:
             if not CANDIDATE_RELEASE.is_file():
                 raise RuntimeError("next-release.json is required in release preparation mode")
             candidate = json.loads(CANDIDATE_RELEASE.read_text(encoding="utf-8"))
-            candidate_issues = candidate_release_issues(candidate, published)
+            candidate_issues = candidate_release_issues(
+                candidate,
+                published,
+                accepted_previous_tags={latest_tag},
+            )
             if candidate_issues:
                 raise RuntimeError("candidate metadata is invalid: " + "; ".join(candidate_issues))
-        latest_tag = highest_semver_tag(list_remote_tags(PUBLIC_REPOSITORY))
         if post_publication_mode:
             # After publication, release.json intentionally remains the
             # historical repository projection. The immutable public tag and

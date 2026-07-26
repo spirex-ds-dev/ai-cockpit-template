@@ -52,11 +52,27 @@ def test_candidate_release_is_next_patch_and_separate_from_published_metadata():
         (release_distribution.ROOT / "next-release.json").read_text(encoding="utf-8")
     )
 
-    assert candidate_release_issues(candidate, published) == []
+    assert candidate_release_issues(candidate, published, accepted_previous_tags={"v0.5.43"}) == []
     assert candidate["releaseTag"] == published["releaseTag"] or candidate["releaseTag"].startswith(
         "v"
     )
     assert candidate["published"] is False
+
+
+def test_candidate_release_accepts_next_patch_after_quarantined_public_tag():
+    published = {"releaseTag": "v0.5.42", "releaseEvidenceAuthority": "release-assets-v1"}
+    candidate = {
+        "releaseTag": "v0.5.44",
+        "releaseState": "candidate",
+        "published": False,
+        "basedOnReleaseTag": "v0.5.42",
+        "releaseEvidenceAuthority": "release-assets-v1",
+        "publicContract": {},
+        "capabilities": {},
+        "supplyChain": {},
+    }
+
+    assert candidate_release_issues(candidate, published, accepted_previous_tags={"v0.5.43"}) == []
 
 
 def test_preparation_mode_validates_published_identity_before_next_candidate(monkeypatch, tmp_path):
@@ -150,6 +166,7 @@ def test_post_publication_inspection_binds_public_metadata_and_archive(monkeypat
         json.dumps(
             {
                 "releaseTag": "v0.5.43",
+                "releaseEvidenceAuthority": "release-assets-v1",
                 "publicContract": {"projectQualityTarget": "quality"},
                 "capabilities": {"sha256ArchiveVerification": {"supported": True}},
             }

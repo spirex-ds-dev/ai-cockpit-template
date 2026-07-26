@@ -371,6 +371,10 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-048`（PR边界/证据顺序，低）：本 corrective Work Item 首次执行 `make check-ai-pr` 时，归档 Contract/Summary/Manifest、Decision Evidence、start receipt、status 和 archive index 仍未提交；PR 边界按要求拒绝不洁工作树。已记录并按规范先提交本工单全部生成证据，再重新执行 PR 检查。
 `RFE-ISSUE-049`（CI/发布准备边界，中）：PR #397 的 `template-smoke` 使用 `AI_RELEASE_PREPARATION=1` 时，检查器错误地将历史 `release.json` v0.5.42 与公开最高 tag v0.5.43 比较，未使用合法的 `next-release.json` 候选 tag，因而在发布修复 PR 上错误失败。已停止合并，先修正准备模式以候选 tag 判断 next-patch，并增加历史 projection/公开 candidate 回归测试；修正后必须重新通过完整 PR CI，不能把该失败当作 v0.5.43 有效发布证据。
 `RFE-ISSUE-050`（归档证据完整性，中）：PR #397 的新一轮完整质量门发现，补充 RFE-ISSUE-049 到已归档 Summary 后，仅更新了 Archive Manifest digest，遗漏同步 `.ai/work-items/archive/index.json` 的 Summary/Manifest digest；同时修复代码未先运行项目 formatter。质量门 fail-closed 阻止合并，已先同步三处归档 digest 并格式化相关 Python 文件，再重新验证。
+`RFE-ISSUE-051`（工单初始化/预检，中）：建立 `publish-corrected-release-20260727` 时，`ai-start` 按预期以 `not_ready` 停止，原因是初始 Contract skeleton 缺少候选 v0.5.44 的 intent、rawUserRequest、发布元数据来源、验收、风险场景和授权边界。已停止修改 release metadata，先补全 Contract 和用户已授予的“连续执行但不绕过门禁”授权，必须重新通过 preflight/checkpoint 后才能继续。
+`RFE-ISSUE-052`（预检流程/用户授权，中）：补全 Contract 后，预检正确降级为 `needs_human_confirmation`，并已记录用户授权的结构化 Decision Evidence（选项 B：仅继续候选准备）；但 `ai-preflight --check` 将 `human_decision_recorded` 仍视为 blocked，没有“用户已授权、先实现再以真实证据闭合场景”的继续路径。该问题与 WI-08/WI-09 已记录的授权路径缺口同类；本工单保留该 fail-closed 证据，严格限制为候选 metadata/evidence 准备，不执行外部发布或绕过其他门禁。
+`RFE-ISSUE-053`（发布候选 progression，高）：候选校验只允许 `next-release.json` 紧跟历史 `release.json` v0.5.42，因而拒绝跨过已确认无效公开 v0.5.43 的纠正版本 v0.5.44。已停止候选证据生成，扩展当前 corrective Work Item scope；流程必须允许候选紧跟已 quarantine 的最高公开 tag，同时保留 `basedOnReleaseTag`、历史元数据和 post-publication 公共安装门禁，修复后重新验证。
+`RFE-ISSUE-054`（工单执行顺序，低）：candidate finalizer 在候选 Contract/metadata/validator 变更尚未提交时按要求 fail closed，提示 worktree must be clean。已记录并调整顺序为：先提交候选准备变更，再运行 finalizer 生成 source-bound freeze/digest，最后提交生成证据。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
