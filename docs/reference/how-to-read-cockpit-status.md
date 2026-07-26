@@ -21,16 +21,34 @@ If you are about to start implementation, read the latest Preflight Review first
 Start with these fields in order:
 
 1. `Preflight Review` if present in the active Work Item workflow
-2. `Recommendation`
-3. `Decision Drivers`
-4. `Governance Signals`
-5. `Evidence`
-6. `Scenario Coverage` if present in the signals list
+2. `Key Conclusion` (Color, Conclusion, Evidence Basis, and Next Action)
+3. `Recommendation`
+4. `Decision Drivers`
+5. `Governance Signals`
+6. `Evidence`
+7. `Scenario Coverage` if present in the signals list
 
 `Preflight Review` derives implementation readiness from Contract evidence. It is advisory by default and should be shown before coding starts.
 
 `Recommendation` gives the decision state. `Decision Drivers` explains why that state was chosen.
 `Governance Signals` show the compressed judgment, and `Evidence` points back to the repository truth.
+
+## Key Conclusion and Color Semantics
+
+`Key Conclusion` is a deterministic summary of the canonical recommendation. The
+colors are semantic review signals, not scores, confidence levels, quality ratings,
+or claims that the agent performed well:
+
+| Color | Meaning | Required next action |
+| --- | --- | --- |
+| `Green` | Evidence is sufficient for human review. | Review evidence and make the human commit or merge decision. |
+| `Yellow` | Review may continue only with recorded residual risks understood. | Read Residual Risk and Decision Drivers before deciding. |
+| `Red` | Evidence is incomplete/ambiguous or a hard blocker exists. | Investigate or stop until the blocker is resolved. |
+
+`Evidence Basis` names the generated sections derived from Contract, Summary, and
+verification evidence. It is a drill-down pointer, not a second source of truth.
+`Next Action` is procedural guidance and does not authorize a merge, release, or
+external operation.
 
 ## What the Preflight Review Means
 

@@ -15,11 +15,12 @@ keywords:
 ## 読む順序
 
 1. active Work Item に表示される `Preflight Review`
-2. `Recommendation`
-3. `Decision Drivers`
-4. `Governance Signals`
-5. `Evidence`
-6. Signals に表示される場合は `Scenario Coverage`
+2. `Key Conclusion`（Color、Conclusion、Evidence Basis、Next Action）
+3. `Recommendation`
+4. `Decision Drivers`
+5. `Governance Signals`
+6. `Evidence`
+7. Signals に表示される場合は `Scenario Coverage`
 
 Preflight Review は Contract の証拠から実装準備度を導出します。既定では advisory ですが、コーディング開始前に表示します。
 
@@ -32,6 +33,18 @@ Preflight Review は Contract の証拠から実装準備度を導出します�
 | `not_ready` | 実装を支える証拠が不足しているため、不足が解消されるまで停止する。 |
 
 このレビューは AI の自信を示すものではありません。`intent`、`unknowns`、`sources`、`acceptance`、`scope`、`outOfScope`、`riskAssessment`、`scenarioCoverage`、`verification` などの既存 Contract 証拠から生成されます。
+
+## Key Conclusion と色の意味
+
+`Key Conclusion` は canonical recommendation から決定的に導出される短い結論です。色はスコア、信頼度、品質評価、またはエージェントの自己評価ではありません。
+
+| 色 | 意味 | 必要な次の行動 |
+| --- | --- | --- |
+| `Green` | レビューに十分な証拠がある。 | Evidence を確認し、人間が commit または merge を判断する。 |
+| `Yellow` | 記録された残存リスクを理解したうえでのみレビューを続けられる。 | 判断前に Residual Risk と Decision Drivers を読む。 |
+| `Red` | 証拠が不足・曖昧、または hard blocker がある。 | blocker が解消されるまで調査または停止する。 |
+
+`Evidence Basis` は Contract、Summary、検証結果から派生した表示セクションへのドリルダウン用ポインターです。別の事実源ではありません。`Next Action` は手順上の案内であり、merge、release、外部操作を自動承認しません。
 
 `notCodable: true`、`executionDecision.status` が `block` / `defer` / `needs_human_decision`、または `agentCapability` が実装・検証不可や人間判断を示す場合は、直ちに `not_ready` になります。
 

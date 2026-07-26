@@ -119,6 +119,53 @@ def test_status_orchestration_preserves_review_evidence_and_drivers():
     assert model["evidence"]["verification"] == ["quality: passed"]
 
 
+@pytest.mark.parametrize(
+    ("recommendation", "color", "next_action"),
+    [
+        ("ready_for_review", "Green", "human commit or merge decision"),
+        ("ready_with_risks", "Yellow", "Residual Risk"),
+        ("needs_investigation", "Red", "Decision Drivers"),
+        ("blocked", "Red", "Stop"),
+    ],
+)
+def test_human_signal_has_semantics_without_score_or_self_praise(
+    recommendation, color, next_action
+):
+    model = ai_governance_compression.derive_governance_status(
+        complete_contract(), complete_summary()
+    )
+    model["recommendation"] = recommendation
+
+    signal = ai_governance_compression.human_signal(model)
+
+    assert signal["color"] == color
+    assert next_action in signal["nextAction"]
+    assert "score" not in str(signal).lower()
+    assert "confidence" not in str(signal).lower()
+    assert "congrat" not in str(signal).lower()
+
+
+def test_active_status_places_key_conclusion_before_detailed_signals():
+    model = ai_governance_compression.derive_governance_status(
+        complete_contract(), complete_summary()
+    )
+
+    rendered = ai_governance_compression.render_active_status(
+        model,
+        work_item_id="task",
+        mode="code",
+        contract_path="contract.json",
+        summary_path="summary.json",
+    )
+
+    assert "## Key Conclusion" in rendered
+    assert "- Color: `Green`" in rendered
+    assert "- Evidence Basis: `Contract; Summary; Verification" in rendered
+    assert rendered.index("## Key Conclusion") < rendered.index("## Governance Signals")
+    assert "score" not in rendered.lower()
+    assert "confidence" not in rendered.lower()
+
+
 def test_active_status_renders_human_decision_request():
     model = ai_governance_compression.derive_governance_status(
         complete_contract(), complete_summary()

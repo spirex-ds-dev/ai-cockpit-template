@@ -62,6 +62,60 @@ VALID_SIGNAL_VALUES = {
     "Residual Risk": {"low", "medium", "high", "unknown"},
 }
 
+HUMAN_SIGNAL_COLORS = {
+    "ready_for_review": "Green",
+    "ready_with_risks": "Yellow",
+    "needs_investigation": "Red",
+    "blocked": "Red",
+}
+
+
+def human_signal(model: dict[str, Any]) -> dict[str, Any]:
+    """Return a short, evidence-derived reviewer conclusion.
+
+    This is deliberately a semantic color, not a score or confidence estimate.
+    The recommendation remains the canonical decision value; this view only
+    makes its meaning and next action easier to find.
+    """
+    recommendation = model.get("recommendation", "needs_investigation")
+    color = HUMAN_SIGNAL_COLORS.get(recommendation, "Red")
+    conclusions = {
+        "ready_for_review": "Evidence is sufficient for human review.",
+        "ready_with_risks": "Review may continue only with the recorded residual risks understood.",
+        "needs_investigation": "Evidence is incomplete or ambiguous; investigate before proceeding.",
+        "blocked": "A hard blocker prevents progression; stop until it is resolved.",
+    }
+    next_actions = {
+        "ready_for_review": "Review the evidence and make the human commit or merge decision.",
+        "ready_with_risks": "Read Residual Risk and Decision Drivers, then explicitly decide whether to proceed.",
+        "needs_investigation": "Resolve the Decision Drivers and rerun the required checks.",
+        "blocked": "Stop; resolve the blocker and regenerate the evidence-backed status.",
+    }
+    evidence = model.get("evidence", {})
+    evidence_keys = [
+        EVIDENCE_LABELS.get(key, key)
+        for key in (
+            "contract",
+            "summary",
+            "verification",
+            "scenarioCoverage",
+            "intentAlignment",
+            "guidelines",
+            "checkpoints",
+            "residualRisk",
+            "reviewReadiness",
+        )
+        if isinstance(evidence, dict) and evidence.get(key)
+    ]
+    return {
+        "color": color,
+        "recommendation": recommendation,
+        "conclusion": conclusions.get(recommendation, conclusions["needs_investigation"]),
+        "evidenceBasis": evidence_keys,
+        "nextAction": next_actions.get(recommendation, next_actions["needs_investigation"]),
+    }
+
+
 EVIDENCE_LABELS = {
     "contract": "Contract",
     "summary": "Summary",
@@ -672,6 +726,7 @@ def render_active_status(
 ) -> str:
     """Render compressed governance signals and optional Outcome link metadata."""
     timestamp = generated_at or datetime.now(timezone.utc).isoformat()
+    signal = human_signal(model)
     lines = [
         "---",
         "title: AI Cockpit Current Status",
@@ -689,6 +744,13 @@ def render_active_status(
         f"- Recommendation: `{model['recommendation']}`",
         f"- Contract Path: `{contract_path}`",
         f"- Summary Path: `{summary_path}`",
+        "",
+        "## Key Conclusion",
+        "",
+        f"- Color: `{signal['color']}`",
+        f"- Conclusion: {signal['conclusion']}",
+        f"- Evidence Basis: `{'; '.join(signal['evidenceBasis']) or 'none'}`",
+        f"- Next Action: {signal['nextAction']}",
         "",
         "## Governance Signals",
         "",
