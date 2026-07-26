@@ -106,6 +106,13 @@ jobs:
           PY
           fi
 
+      - name: Validate committed source release preflight before projection
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE"
+          make check-release-preflight RELEASE_PREFLIGHT_SOURCE_COMMIT="$SOURCE_COMMIT"
+
       - name: Create source-bound runtime release projection
         shell: bash
         run: |
@@ -160,7 +167,6 @@ jobs:
           echo "release preflight boundary: head=$(git rev-parse HEAD^{commit}) source=$SOURCE_COMMIT"
           attributes_sha="$(git show "${SOURCE_COMMIT}:.gitattributes" | sha256sum | cut -d' ' -f1)"
           echo "release preflight attributes=$attributes_sha"
-          make check-release-preflight RELEASE_PREFLIGHT_SOURCE_COMMIT="$SOURCE_COMMIT"
 
       - name: Install locked release evidence dependencies
         working-directory: ${{ github.workspace }}

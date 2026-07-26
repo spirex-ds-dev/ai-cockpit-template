@@ -27,3 +27,16 @@ def test_published_projection_is_not_promoted_in_repository():
     assert published["releaseTag"] == "v0.5.42"
     assert candidate["releaseTag"] == "v0.5.43"
     assert candidate["published"] is False
+
+
+def test_release_preflight_runs_before_runtime_projection():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    preflight = workflow.index(
+        "name: Validate committed source release preflight before projection"
+    )
+    projection = workflow.index("name: Create source-bound runtime release projection")
+    assert preflight < projection
+    assert (
+        'make check-release-preflight RELEASE_PREFLIGHT_SOURCE_COMMIT="$SOURCE_COMMIT"'
+        in workflow[preflight:projection]
+    )

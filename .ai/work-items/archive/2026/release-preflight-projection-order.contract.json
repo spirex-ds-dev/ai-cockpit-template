@@ -1,0 +1,186 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-preflight-projection-order",
+  "mode": "code",
+  "title": "Run release preflight before runtime projection",
+  "baseCommit": "729f18f40baac0f07f18231c41797d727158f147",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "bc82686719b014007bae98e60d5c975b283e3e35382bb476a81eb9db5005718d"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/release-preflight-projection-order.contract.json",
+    ".ai/work-items/active/release-preflight-projection-order.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": ["Publishing a tag or asset", "Changing release identity contracts", "Changing security sandbox or signing implementation"],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Provider order currently runs preflight after replacing release.json with the runtime projection."
+    },
+    {
+      "path": "scripts/check_release_preflight.py",
+      "reason": "Preflight validates committed historical/candidate relationship."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Regression coverage for projection and preflight order."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Required Work Item and PR lifecycle."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Record provider process issue and corrective action."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release", "workflow", "evidence"],
+    "reason": "Release ordering can permit or block publication.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial corrective Work Items and requires process defects to be corrected before release proceeds."
+  },
+  "preReviewWarnings": [
+    "Do not create a tag or public release in this corrective Work Item."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Committed-source release preflight runs before the runtime release.json projection.",
+    "The runtime projection is used only by subsequent archive/evidence/tag steps and does not invalidate preflight.",
+    "Regression tests prove the order and preserve fail-closed behavior.",
+    "The provider publication run is not executed by this corrective Work Item.",
+    "The complete Contract, verification, Summary, PR, CI, merge, ai-close-work-item, branch cleanup, and main synchronization lifecycle passes."
+  ],
+  "guidelines": [
+    "Release metadata must be source-bound and machine-readable.",
+    "Candidate, historical, and published release states must not be conflated.",
+    "This corrective Work Item must not publish externally."
+  ],
+  "intent": {
+    "problem": "The provider workflow creates a runtime release.json projection and then runs preflight against it, causing historical/candidate relationship checks to fail.",
+    "constraints": ["Use latest origin/main as base", "Do not publish externally", "Keep committed published metadata historical"],
+    "rationale": "Preflight must validate the source contract before runtime projection while later release steps consume the projection."
+  },
+  "rawUserRequest": "Continue serial Work Items; record and correct workflow problems before resuming release.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-26-release-preflight-order", "capturedAt": "2026-07-26", "digest": "sha256:release-preflight-order-correction"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Correct release workflow preflight ordering without publishing.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+  "scenarioCoverage": [{"scenario": "preflight before projection", "required": true, "status": "verified", "evidence": ["tests/test_release_workflow.py"]}, {"scenario": "projection after preflight", "required": true, "status": "verified", "evidence": ["tests/test_release_workflow.py"]}, {"scenario": "identity mismatch fail closed", "required": true, "status": "verified", "evidence": [".github/workflows/release.yml"]}, {"scenario": "external publication", "required": true, "status": "not_applicable", "reason": "Explicitly out of scope for this corrective Work Item.", "evidence": ["Contract outOfScope"]}],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized corrective process Work Items; publication remains out of scope."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 604
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-preflight-projection-order.json",
+    "baseCommit": "729f18f40baac0f07f18231c41797d727158f147",
+    "initialScopeDigest": "028bf12899fad5555e637f0476024509603672cf44c28e930cd6dde2c70db6b0",
+    "contractSkeletonDigest": "021eaa3f53c0f2c14889235fe261f98f0bf9be5a6402c47795e7afeba9adaa60"
+  }
+}

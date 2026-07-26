@@ -320,6 +320,8 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **release-metadata-promotion corrective Work Item 流程问题记录：** `RMP-ISSUE-001`（发布门禁，高）：provider workflow 正确阻止了 committed `release.json` 与请求版本不一致的发布；改为从 `next-release.json` 创建 source-bound 的运行时投影，保留已发布 v0.5.42 历史文件。`RMP-ISSUE-002`（流程/归属，高）：在 Contract 外执行 release freeze 会产生无 active Work Item 所有权的生成证据；已恢复并要求先在 corrective Work Item 内生成、再走 PR/merge/close。`RMP-ISSUE-003`（设计/契约，高）：直接提交 v0.5.43 到 `release.json` 破坏历史发布投影并导致既有测试失败；已撤回直接提升方案，改用 workflow runtime projection 并增加回归测试。`RMP-ISSUE-004`（流程/子进程，中）：嵌套 `ai-finish` 测试受外层 coverage/Git/Make 变量污染，导致单独运行通过而收口失败；已隔离环境、清理 Make override，并由 `ai_finish.py` 显式传递项目质量变量，之后全量质量门通过。`RMP-ISSUE-005`（证据/Checkpoint，中）：Contract 在实现过程中补充范围后，历史 `before_edit` checkpoint hash 失配，`aiAgentRisk` 正确停止；已刷新最终 Contract 对应 checkpoint 后重跑通过。`RMP-ISSUE-006`（PR ownership，中）：归档后 PR diff 同时包含 active Contract/Summary 删除与 archive 文件新增，归档 Summary 仅保留 archive 路径导致 complete-diff ownership 无法配对；已在归档 Summary 保留 active source path 并更新 Archive Manifest digest，待 PR 检查确认。`
 
+`RPP-ISSUE-001`（发布流程/顺序，高）：首次重试 provider 发布时，workflow 在创建 runtime `release.json` projection 后才执行 `check-release-preflight`，导致 preflight 把 candidate v0.5.43 当作 committed published metadata 并 fail closed；未创建 tag 或 asset。已建立 corrective Work Item `release-preflight-projection-order`，将 committed-source preflight 前置到 projection，并增加顺序回归测试；修复完成前不得再次触发发布。
+
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
 **范围：** 盘点旧执行计划、重复计划、已完成计划、过期命令/版本/路径引用；仅清理已确认不再承担当前指令的执行计划文档，统一加入 `Historical Record / Not Current Product Documentation / Do Not Use As Runtime Instruction`，保留 archive-backed 索引、状态、来源和替代文档。
