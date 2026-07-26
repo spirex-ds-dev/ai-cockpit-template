@@ -1,0 +1,220 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-smoke-dependency-timeout",
+  "mode": "code",
+  "title": "Align release dependency wait with quality timeout",
+  "baseCommit": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+    ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    "tests/test_workflows.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "release publication, tag creation, and asset upload",
+    "changing smoke or compatibility test contents",
+    "removing exact-source dependency validation"
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Release workflow dependency wait and timeout behavior."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Smoke quality job timeout defines the dependent run upper bound."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Compatibility quality job timeout and source-bound dependent run."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Release workflow ordering and wait policy regression coverage."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Workflow contract and timeout consistency tests."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Required full Work Item lifecycle and fail-closed rules."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-18 release process issue record and serial corrective order."
+    }
+  ],
+  "unknowns": [],
+  "rawUserRequest": "Continue the complete serial Work Item process. When release preflight or provider execution finds a process or evidence-binding problem, record it, correct it in a dedicated Work Item, complete its PR and cleanup lifecycle, and only then resume publication.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-27-release-smoke-dependency-timeout",
+    "capturedAt": "2026-07-27",
+    "digest": "sha256:release-smoke-dependency-timeout-correction"
+  },
+  "declaredIntent": {
+    "summary": "Prevent release publication from timing out while waiting for source-bound smoke quality that is allowed to run up to the configured quality timeout.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release",
+      "process",
+      "evidence"
+    ],
+    "reason": "An undersized dependency wait can abort a valid source-bound release; an oversized or weakened wait could hide stale or unrelated CI evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial corrective Work Items with complete PR, merge, close, cleanup, and recorded process issues; publication remains separately gated."
+  },
+  "preReviewWarnings": [
+    "The wait must remain source-bound, fail closed, bounded, and aligned with smoke/compatibility timeout policy; do not remove dependent workflow validation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Release dependency wait is at least the configured smoke/compatibility quality timeout and remains bounded.",
+    "The wait still selects successful runs only for the exact SOURCE_COMMIT and fails closed on timeout or failure.",
+    "Tests verify the wait duration, source-bound filtering, and timeout failure behavior.",
+    "The execution plan records RFE-ISSUE-038 and RFE-ISSUE-039 and remains aligned.",
+    "The full Work Item lifecycle is completed: finish, archive, PR, merge, close, branch cleanup, base synchronization, and plan alignment."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Exact-source smoke and compatibility complete within bounded wait", "required": true, "status": "verified", "evidence": [".github/workflows/release.yml", "tests/test_release_workflow.py"]},
+    {"scenario": "Dependent quality takes longer than the old 900-second window but remains within configured job timeout", "required": true, "status": "verified", "evidence": [".github/workflows/smoke.yml", ".github/workflows/compatibility.yml", "RFE-ISSUE-038"]},
+    {"scenario": "No successful exact-source dependent run before deadline fails closed", "required": true, "status": "verified", "evidence": [".github/workflows/release.yml", "tests/test_release_workflow.py"]},
+    {"scenario": "External publication", "required": true, "status": "not_applicable", "reason": "Explicitly out of scope; publication remains blocked until this corrective Work Item closes.", "evidence": ["Contract outOfScope"]}
+  ],
+  "guidelines": [
+    "Use one explicit bounded timeout aligned with dependent workflow timeout policy.",
+    "Preserve exact SOURCE_COMMIT filtering and fail-closed timeout behavior.",
+    "Do not publish a release from this Work Item."
+  ],
+  "intent": {
+    "problem": "Release run 30209749886 aborted after 900 seconds while waiting for the exact-source smoke run, even though the dependent quality job is allowed to run for 30 minutes; compatibility had succeeded and no tag or Release was created.",
+    "constraints": [
+      "Keep smoke and compatibility selection bound to the exact SOURCE_COMMIT.",
+      "Keep the wait bounded and fail closed when no successful dependent run exists.",
+      "Do not publish from this corrective Work Item."
+    ],
+    "rationale": "Align the release dependency wait with the configured dependent quality timeout, preserving source filtering and explicit failure rather than allowing a valid dependent run to outlive the release gate."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized continuous corrective Work Items with full PR/merge/close/cleanup lifecycle; publication remains separately gated."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 615
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-smoke-dependency-timeout.json",
+    "baseCommit": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+    "initialScopeDigest": "c203336af81124764d41837a1aa6f5e4a25b20139d0e9a34caac9971c72dc186",
+    "contractSkeletonDigest": "aa7ca9daefd2a164025626c9b51ed0c731d49a1d92b7e1dd20b8a400da6d6882"
+  }
+}

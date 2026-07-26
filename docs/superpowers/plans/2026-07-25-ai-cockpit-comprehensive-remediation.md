@@ -357,6 +357,11 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-034`（工单证据/Checkpoint，中）：完整质量门通过后，`ai-finish` 的 Agent Risk 检查发现最终 Contract 对齐后原 `before_edit` checkpoint hash 已过期，按要求阻止收口。已停止归档，须针对最终 Contract 刷新 `before_edit`/`before_finish` checkpoint 后重试。
 `RFE-ISSUE-035`（工单证据/流程，低）：第二次收口的 Summary 校验拒绝了自定义 verification 名称 `focused release and workflow tests` 及非标准结果 `passed: 46 passed`；verification 必须使用注册检查项和 `passed`/`failed`/`not_run`。已删除未注册项，聚焦测试证据保留在执行记录和测试文件范围内，再重跑收口。
 `RFE-ISSUE-036`（PR流程/参数，中）：归档后首次执行 `make check-ai-pr TASK=runtime-freeze-remote-discovery` 时，命令因未提供 `--base` 或 `AI_BASE_COMMIT` 按要求 fail-closed；已确认实际 base 为 `origin/main` 的 merge-base `bd65c610f59924fc0a817fbb606f87ad74ab0fb6`，后续显式传入该 base 重跑。
+`RFE-ISSUE-037`（PR流程/证据，中）：显式提供 base 后，PR 边界仍拒绝未提交的计划问题记录；已将 RFE-ISSUE-036 提交到同一 Work Item 分支，再次通过 `check-ai-pr`。
+`RFE-ISSUE-038`（provider发布/依赖等待，高）：发布 run `30209749886` 在 exact-source freeze、preflight、projection、lockfile 等步骤全部通过后，因等待同一 source `bf2d930f…` 的 smoke run 超过 900 秒而 fail-closed；compatibility 已成功，smoke 仍在执行。未创建 tag、Draft Release 或资产。根因是 release 依赖等待窗口短于允许运行 30 分钟的质量 job；已停止发布，建立 corrective Work Item `release-smoke-dependency-timeout`。
+`RFE-ISSUE-039`（工单初始化/流程，中）：建立 `release-smoke-dependency-timeout` 时，首次 `make ai-start ... MODE=code` 的 skeleton 因缺少 intent、raw request、sources、scenario coverage、具体验收和授权而按预期 `not_ready` 停止。已补全 Contract，必须重新通过 preflight/checkpoint 后才能修改 release workflow。
+`RFE-ISSUE-040`（工单契约/流程，低）：补全 `release-smoke-dependency-timeout` 的 `declaredIntent` 后，preflight 仍按要求拒绝 Contract，因为顶层 `intent.problem/constraints/rationale` 仍为 skeleton 空值。已补齐三项实质 intent，再重新执行 preflight/checkpoint。
+`RFE-ISSUE-041`（工单收尾/流程，低）：`make ai-finish TASK=release-smoke-dependency-timeout` 首次在场景覆盖检查失败，因为重写 Summary 时遗漏了 `scenarioCoverage` 字段。已补齐与 Contract 一致的四个场景，需重新执行 finish。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 

@@ -102,7 +102,13 @@ def test_release_workflow_is_exact_sha_and_action_dependency_free():
         'git fetch --no-tags --quiet origin "refs/tags/${RELEASE_TAG}:refs/tags/${RELEASE_TAG}"'
     ) < workflow.index('git rev-parse "$RELEASE_TAG^{commit}"')
     assert "smoke.yml" in workflow and "compatibility.yml" in workflow
-    assert "deadline=$((SECONDS + 900))" in workflow
+    assert "timeout-minutes: 70" in workflow
+    assert "RELEASE_DEPENDENCY_TIMEOUT_SECONDS: 1800" in workflow
+    assert 'dependency_timeout="${RELEASE_DEPENDENCY_TIMEOUT_SECONDS:-}"' in workflow
+    assert '[[ "$dependency_timeout" =~ ^[0-9]+$ && "$dependency_timeout" -ge 1800 ]]' in workflow
+    assert "deadline=$((SECONDS + dependency_timeout))" in workflow
+    assert "timeout window=$dependency_timeout" in workflow
+    assert "deadline=$((SECONDS + 900))" not in workflow
     assert 'any(.[]; .conclusion == "success")' in workflow
     assert 'any(.[]; .status != "completed")' in workflow
     assert "timed out waiting for ${workflow}" in workflow

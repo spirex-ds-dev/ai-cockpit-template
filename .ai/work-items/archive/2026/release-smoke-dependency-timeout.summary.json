@@ -1,0 +1,457 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "release-smoke-dependency-timeout",
+  "contractPath": ".ai/work-items/archive/2026/release-smoke-dependency-timeout.contract.json",
+  "changedFiles": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Aligned the source-bound smoke and compatibility wait with the 30-minute dependent quality timeout and extended the enclosing release job budget."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Added regression assertions for the bounded 1800-second wait, enclosing job budget, exact-source behavior, and removal of the old 900-second wait."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-smoke-dependency-timeout.contract.json",
+      "reason": "Work Item Contract and evidence boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-smoke-dependency-timeout.summary.json",
+      "reason": "AI Change Summary and verification handoff."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated Work Item status evidence."
+    },
+    {
+      "path": ".ai/work-items/starts/release-smoke-dependency-timeout.json",
+      "reason": "Work Item start receipt."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Recorded release timeout and corrective-process issues."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-smoke-dependency-timeout.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".github/workflows/release.yml",
+    ".github/workflows/smoke.yml",
+    ".github/workflows/compatibility.yml",
+    "tests/test_release_workflow.py",
+    "tests/test_workflows.py",
+    "AGENTS.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Exact-source smoke and compatibility complete within bounded wait",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        ".github/workflows/release.yml",
+        "tests/test_workflows.py"
+      ]
+    },
+    {
+      "scenario": "Dependent quality takes longer than the old 900-second window but remains within configured job timeout",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        ".github/workflows/smoke.yml",
+        ".github/workflows/compatibility.yml",
+        "RFE-ISSUE-038"
+      ]
+    },
+    {
+      "scenario": "No successful exact-source dependent run before deadline fails closed",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        ".github/workflows/release.yml",
+        "tests/test_workflows.py"
+      ]
+    },
+    {
+      "scenario": "External publication",
+      "required": true,
+      "status": "not_applicable",
+      "reason": "Explicitly out of scope; publication remains blocked until this corrective Work Item closes.",
+      "evidence": [
+        "Contract outOfScope"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:29:54.007637+00:00",
+      "exitCode": 0,
+      "durationMs": 39,
+      "outputDigest": "9b82c54b3bc5c0525dc9993e8540f91d25959c486d6bfeb5661271141b7d73b0",
+      "commandHash": "f19e666d22f4ab3834644749806c164ca972d1e55e19104ecc7f78941c0609c5",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "0ce1834df93d74094ca0a43b7b0e35ad58c0a42609bbcf8fe34a7566a9e91069",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/release-smoke-dependency-timeout.contract.json work item contract check passed: .ai/work-items/active/release-smoke-dependency-timeout.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:29:54.303612+00:00",
+      "exitCode": 0,
+      "durationMs": 234,
+      "outputDigest": "cb363337ad3650fac5c6a2d04e418473ff6af0f7dbe16484f43bd0a4969f4283",
+      "commandHash": "4a5c6372db6add0e32000f63b2f0a48cbc194facb79b3002402ce08427c5d0a2",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "0ce1834df93d74094ca0a43b7b0e35ad58c0a42609bbcf8fe34a7566a9e91069",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/release-smoke-dependency-timeout.contract.json scope guard passed: 5 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:29:54.481964+00:00",
+      "exitCode": 0,
+      "durationMs": 129,
+      "outputDigest": "dd39bc70d6d35bb7fd3c659aae2834db5d874e0276b13c046989b922adf86a73",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "0ce1834df93d74094ca0a43b7b0e35ad58c0a42609bbcf8fe34a7566a9e91069",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/release-smoke-dependency-timeout.contract.json [warning] restricted_write: .github/workflows/release.yml (.github/workflows/**) - CI workflow configuration. guard check completed: 1 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/release-smoke-dependency-timeout.contract.json SUMMARY=.ai/work-items/active/release-smoke-dependency-timeout.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:29:54.734899+00:00",
+      "exitCode": 0,
+      "durationMs": 181,
+      "outputDigest": "7d2b20c028e33842537280a26063cb487c54560050c9b5a0b8666b3b13af83d1",
+      "commandHash": "d15e97ee9951dd547906c65170621c104c2c81599c04e1a1942750008f6214e0",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "0ce1834df93d74094ca0a43b7b0e35ad58c0a42609bbcf8fe34a7566a9e91069",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/release-smoke-dependency-timeout.contract.json --summary .ai/work-items/active/release-smoke-dependency-timeout.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `release-smoke-dependency-timeout` - Contract Hash: `3d62689e4d9936fd` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `0` "
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:29:54.874404+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "9c6cb5f1dead136ff7d89b97c340404feda9a5fcbcdade551ad33a5a45305925",
+      "commandHash": "788fafc6400e74339a02791444e6e159968103ac29ec2ff55947e9e18bc83789",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "0ce1834df93d74094ca0a43b7b0e35ad58c0a42609bbcf8fe34a7566a9e91069",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/release-smoke-dependency-timeout.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/release-smoke-dependency-timeout.json [review] .ai/cockpit/current_status.md [review] .github/workflows/release.yml review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:29:55.012697+00:00",
+      "exitCode": 0,
+      "durationMs": 90,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "0ce1834df93d74094ca0a43b7b0e35ad58c0a42609bbcf8fe34a7566a9e91069",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:29:55.144986+00:00",
+      "exitCode": 0,
+      "durationMs": 85,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "0ce1834df93d74094ca0a43b7b0e35ad58c0a42609bbcf8fe34a7566a9e91069",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/release-smoke-dependency-timeout.contract.json SUMMARY=.ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:29:55.236929+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "056f8ef9e36e4b6a69612192b632b1444b9ee27d9d3bd501a5dc50d2460372cf",
+      "commandHash": "573c5adbdd062ae6736f2e7a03e5d2d79aaac3cca617f2c0545833dcb74be0db",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "0ce1834df93d74094ca0a43b7b0e35ad58c0a42609bbcf8fe34a7566a9e91069",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/release-smoke-dependency-timeout.contract.json --summary .ai/work-items/active/release-smoke-dependency-timeout.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/release-smoke-dependency-timeout.contract.json SUMMARY=.ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:29:55.339124+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "fc87292ee5b43e88e638b4fd2f6a992852d93caa182264edc7d5650c35f1abf3",
+      "commandHash": "6be9e036dcd44a3ceb6214909cc72898fcf5dacd4e4c63d8451fdb007a8aeaff",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "0ce1834df93d74094ca0a43b7b0e35ad58c0a42609bbcf8fe34a7566a9e91069",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/release-smoke-dependency-timeout.contract.json --summary .ai/work-items/active/release-smoke-dependency-timeout.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:29:55.587477+00:00",
+      "exitCode": 0,
+      "durationMs": 200,
+      "outputDigest": "c3187caaf2816fc04244ff338d5969f79d13c3330473e07c8885a43f979bbacb",
+      "commandHash": "b1657c960b736b2fc039568071cb7d2b1902cea793a9529f9d22313f07f17006",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "0ce1834df93d74094ca0a43b7b0e35ad58c0a42609bbcf8fe34a7566a9e91069",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/release-smoke-dependency-timeout.contract.json ## Diff Ownership Preview - active_owned: `5`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/release-smoke-dependency-timeout.json` — covered by Contract scope - [active_owned] `"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:36:17.676181+00:00",
+      "exitCode": 0,
+      "durationMs": 382019,
+      "outputDigest": "694991bb11bd8890861ef66d91e4390b3781af3a240f1aa6e01600857a52de74",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "0ce1834df93d74094ca0a43b7b0e35ad58c0a42609bbcf8fe34a7566a9e91069",
+      "outputSummary": "make --no-print-directory --jobs=2 quality-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 239 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/unsupported_claim_gate.py { \"gate\": \"Unsupported Claim Regression Gate\", \"policyReference\": \"unsupported-claim-evidence-"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/release-smoke-dependency-timeout.contract.json SUMMARY=.ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:36:18.957595+00:00",
+      "exitCode": 0,
+      "durationMs": 239,
+      "outputDigest": "a9e7913d1e0dfedacccfe88c8fd6bd6792159c02c3081101bc9bf28b5e72b4b6",
+      "commandHash": "c8e252a20933e3747cf1df54df9250cab0e0e58e6332ad7b069c089ffbfb745c",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "797b6322c3770a08a799d5e6be0ba753a683acaed01faf3cd27cdaf5c73215ff",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/release-smoke-dependency-timeout.contract.json --summary .ai/work-items/active/release-smoke-dependency-timeout.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/release-smoke-dependency-timeout.contract.json SUMMARY=.ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:36:19.187121+00:00",
+      "exitCode": 0,
+      "durationMs": 184,
+      "outputDigest": "56ba4817fa6a74f69f32a44fbe4cf947de5c4179df5fb4d92e0ece25aede2a57",
+      "commandHash": "de1e73e4c2c75c5f8cb485b30e61c7f67f8a2a94aa6d24aa11a547cb2f73b59b",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "797b6322c3770a08a799d5e6be0ba753a683acaed01faf3cd27cdaf5c73215ff",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/release-smoke-dependency-timeout.contract.json --summary .ai/work-items/active/release-smoke-dependency-timeout.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:36:19.280360+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "797b6322c3770a08a799d5e6be0ba753a683acaed01faf3cd27cdaf5c73215ff",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/release-smoke-dependency-timeout.contract.json SUMMARY=.ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:36:19.374082+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "4d6341245861dc883272427f3fe4edb05641b3bb2905b7c2f59b598c7a899fe1",
+      "commandHash": "72864015a5b56991135538b12a5fa300cffc46e75dac531f9b4a7cbae488c8f0",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "797b6322c3770a08a799d5e6be0ba753a683acaed01faf3cd27cdaf5c73215ff",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/release-smoke-dependency-timeout.contract.json --summary .ai/work-items/active/release-smoke-dependency-timeout.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/release-smoke-dependency-timeout.summary.json CONTRACT=.ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T16:36:20.379655+00:00",
+      "exitCode": 0,
+      "durationMs": 89,
+      "outputDigest": "819d07e33a1433ab5cb0a9a5c1bbd002d50e43d52ed34489372f8ed9fef06d41",
+      "commandHash": "b1156c06c9cd55b0dd756400b09c54d670c7277beb1ed0edf0002f9307e7a1a6",
+      "contractHash": "3d62689e4d9936fd7782b0367a9916be4a23b649f881a693e6cd55f8f414b2fa",
+      "commitSha": "bf2d930ff27bacf21640801547e0fad258a3b1eb",
+      "executionContractPath": ".ai/work-items/active/release-smoke-dependency-timeout.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/release-smoke-dependency-timeout.summary.json",
+      "worktreeDigest": "cfef063e2ac8e0b8b1740b6d891d250f8897b30dbae90582d0892413249335c8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/release-smoke-dependency-timeout.summary.json --contract .ai/work-items/active/release-smoke-dependency-timeout.contract.json ai summary check passed: .ai/work-items/active/release-smoke-dependency-timeout.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Use one explicit bounded timeout aligned with dependent workflow timeout policy.",
+      "compliant": true,
+      "evidence": "RELEASE_DEPENDENCY_TIMEOUT_SECONDS is fixed at 1800 seconds and the release job is budgeted for sequential dependent waits."
+    },
+    {
+      "guideline": "Preserve exact SOURCE_COMMIT filtering and fail-closed timeout behavior.",
+      "compliant": true,
+      "evidence": "gh run list remains filtered by --commit \"$SOURCE_COMMIT\"; invalid configuration, timeout, and absent successful runs exit non-zero."
+    },
+    {
+      "guideline": "Do not publish a release from this Work Item.",
+      "compliant": true,
+      "evidence": "This Work Item changes only the wait policy and tests; no tag, Release, or asset operation was executed."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "Release publication remains externally gated; the bounded wait is longer but still fail-closed and exact-source bound."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "id": "RFE-ISSUE-038",
+      "detail": "Release run 30209749886 timed out after 900 seconds while exact-source smoke was still running; no tag, draft Release, or assets were created."
+    },
+    {
+      "id": "RFE-ISSUE-039",
+      "detail": "Initial corrective Work Item skeleton was rejected by preflight because required contract evidence was incomplete; the contract was completed before implementation."
+    },
+    {
+      "id": "RFE-ISSUE-040",
+      "detail": "After declaredIntent was added, preflight still rejected empty top-level intent fields; problem, constraints, and rationale were then completed."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "high",
+      "area": "release",
+      "detail": "Publication has not been retried after this corrective Work Item; the provider run must prove tag, Release, assets, and evidence integrity.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "bounded timeout alignment",
+      "exact-source filtering",
+      "fail-closed publication boundary"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "3d62689e4d9936fd",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "3d62689e4d9936fd",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "Full ai-finish verification and provider publication rerun are pending.",
+    "The final release evidence must be recorded after this Work Item is merged and closed."
+  ],
+  "overclaimPrevention": "Focused tests passing does not constitute release publication success; only provider evidence after the corrective PR lifecycle can establish that outcome.",
+  "archiveSequence": 603
+}

@@ -19,11 +19,12 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 70
     env:
       GH_TOKEN: ${{ github.token }}
       RELEASE_TAG: ${{ inputs.tag }}
       SOURCE_COMMIT: ${{ inputs.source_commit }}
+      RELEASE_DEPENDENCY_TIMEOUT_SECONDS: 1800
     steps:
       - name: Initialize exact source checkout
         shell: bash
@@ -192,8 +193,10 @@ jobs:
         run: |
           set -euo pipefail
           printf '[]\n' > "$RUNNER_TEMP/ci-workflow-runs.json"
+          dependency_timeout="${RELEASE_DEPENDENCY_TIMEOUT_SECONDS:-}"
+          [[ "$dependency_timeout" =~ ^[0-9]+$ && "$dependency_timeout" -ge 1800 ]]
           for workflow in smoke.yml compatibility.yml; do
-            deadline=$((SECONDS + 900))
+            deadline=$((SECONDS + dependency_timeout))
             while :; do
               runs="$(gh run list \
                 --repo "$GITHUB_REPOSITORY" \
@@ -212,7 +215,7 @@ jobs:
                 mv "$RUNNER_TEMP/ci-workflow-runs.next.json" "$RUNNER_TEMP/ci-workflow-runs.json"
                 break
               fi
-              WAIT_DIAGNOSTIC="workflow=$workflow source_commit=$SOURCE_COMMIT elapsed_seconds=$SECONDS timeout window=900 dependent_run_ids=$(jq -r '[.[].databaseId] | join(",")' <<<"$runs")"
+              WAIT_DIAGNOSTIC="workflow=$workflow source_commit=$SOURCE_COMMIT elapsed_seconds=$SECONDS timeout window=$dependency_timeout dependent_run_ids=$(jq -r '[.[].databaseId] | join(",")' <<<"$runs")"
               echo "dependent run IDs: $(jq -r '[.[].databaseId] | join(",")' <<<"$runs")"
               echo "::notice title=Release wait status::$WAIT_DIAGNOSTIC"
               if (( SECONDS >= deadline )); then
