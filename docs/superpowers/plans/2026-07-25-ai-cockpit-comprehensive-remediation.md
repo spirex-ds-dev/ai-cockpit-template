@@ -376,6 +376,11 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-053`（发布候选 progression，高）：候选校验只允许 `next-release.json` 紧跟历史 `release.json` v0.5.42，因而拒绝跨过已确认无效公开 v0.5.43 的纠正版本 v0.5.44。已停止候选证据生成，扩展当前 corrective Work Item scope；流程必须允许候选紧跟已 quarantine 的最高公开 tag，同时保留 `basedOnReleaseTag`、历史元数据和 post-publication 公共安装门禁，修复后重新验证。
 `RFE-ISSUE-054`（工单执行顺序，低）：candidate finalizer 在候选 Contract/metadata/validator 变更尚未提交时按要求 fail closed，提示 worktree must be clean。已记录并调整顺序为：先提交候选准备变更，再运行 finalizer 生成 source-bound freeze/digest，最后提交生成证据。
 `RFE-ISSUE-055`（工单契约/ownership，低）：candidate finalizer 进一步发现 Contract 未声明其会更新的 `release.json` 生成路径，按要求停止而未写入证据。已补充 `release.json` 到 Contract scope，保持历史 v0.5.42 身份不变后重跑。
+`RFE-ISSUE-056`（发布 preflight 顺序，中）：candidate freeze 生成后，在 active Work Item 尚未 archive/merge/close 时执行 `check-release-preflight`，按要求拒绝 active Work Item 和未完成 post-close lifecycle。已保留 fail-closed 结果；candidate Work Item 先完成 finish/PR/merge/close，之后再执行 WI-18 的 post-close finalizer/preflight。
+`RFE-ISSUE-057`（质量门/版本事实，中）：candidate promotion 后，distribution 文档与 release workflow 回归测试仍硬编码已 quarantine 的 v0.5.43，导致完整质量门拒绝。已改为验证历史 projection、未发布 candidate 与 `basedOnReleaseTag` 的结构性不变量，并在文档中描述历史版本与纠正候选的关系，不绑定当前候选号。
+`RFE-ISSUE-058`（工单 ownership，低）：`ai-finish` 发现上述两个已修改路径未真正写入当前 Contract scope，按要求停止归档。已补齐 Contract 与 Summary 的路径归属，未绕过 ownership 门禁。
+`RFE-ISSUE-059`（Checkpoint/Contract 一致性，中）：补齐 scope 后，全量质量门虽通过，但 `check-ai-agent-risk` 发现历史 `before_edit` checkpoint 的 Contract hash 和 unknownCount 已过期。已停止归档，先刷新与最终 Contract 对齐的 checkpoint，再重新执行 finish。
+`RFE-ISSUE-060`（Summary/生成证据 ownership，低）：全量质量门和 AI risk 通过后，`check-ai-change-summary` 拒绝 Summary 仅用 `.ai/decisions/**` 表示 4 个实际生成的 request/evidence 文件。已停止归档，改为逐个列出实际路径后重试。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
