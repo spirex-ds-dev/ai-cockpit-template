@@ -17,7 +17,9 @@ concurrency:
 jobs:
   template-smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    # Keep the quality gate bounded; timeout is fail-closed and prevents an
+    # ambiguous PR state from waiting indefinitely for later required gates.
+    timeout-minutes: 30
 
     steps:
       - name: Checkout

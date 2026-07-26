@@ -321,8 +321,11 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 **release-metadata-promotion corrective Work Item 流程问题记录：** `RMP-ISSUE-001`（发布门禁，高）：provider workflow 正确阻止了 committed `release.json` 与请求版本不一致的发布；改为从 `next-release.json` 创建 source-bound 的运行时投影，保留已发布 v0.5.42 历史文件。`RMP-ISSUE-002`（流程/归属，高）：在 Contract 外执行 release freeze 会产生无 active Work Item 所有权的生成证据；已恢复并要求先在 corrective Work Item 内生成、再走 PR/merge/close。`RMP-ISSUE-003`（设计/契约，高）：直接提交 v0.5.43 到 `release.json` 破坏历史发布投影并导致既有测试失败；已撤回直接提升方案，改用 workflow runtime projection 并增加回归测试。`RMP-ISSUE-004`（流程/子进程，中）：嵌套 `ai-finish` 测试受外层 coverage/Git/Make 变量污染，导致单独运行通过而收口失败；已隔离环境、清理 Make override，并由 `ai_finish.py` 显式传递项目质量变量，之后全量质量门通过。`RMP-ISSUE-005`（证据/Checkpoint，中）：Contract 在实现过程中补充范围后，历史 `before_edit` checkpoint hash 失配，`aiAgentRisk` 正确停止；已刷新最终 Contract 对应 checkpoint 后重跑通过。`RMP-ISSUE-006`（PR ownership，中）：归档后 PR diff 同时包含 active Contract/Summary 删除与 archive 文件新增，归档 Summary 仅保留 archive 路径导致 complete-diff ownership 无法配对；已在归档 Summary 保留 active source path 并更新 Archive Manifest digest，待 PR 检查确认。`
 
 `RPP-ISSUE-001`（发布流程/顺序，高）：首次重试 provider 发布时，workflow 在创建 runtime `release.json` projection 后才执行 `check-release-preflight`，导致 preflight 把 candidate v0.5.43 当作 committed published metadata 并 fail closed；未创建 tag 或 asset。已建立 corrective Work Item `release-preflight-projection-order`，将 committed-source preflight 前置到 projection，并增加顺序回归测试；修复完成前不得再次触发发布。
-`RFE-ISSUE-001`（发布证据/来源绑定，高）：`finalize-release-freeze` 在 post-close 阶段仅修改本地工作树，未进入 `origin/main`；provider exact-source checkout 因而无法看到 freeze/digests，不能通过 release preflight。已建立 corrective Work Item `commit-release-freeze-evidence`，将生成证据纳入 Contract、PR、merge、close 和基线同步；完成前不得再次触发发布。
+`RFE-ISSUE-001`（发布证据/来源绑定，高）：`finalize-release-freeze` 在 post-close 阶段仅修改本地工作树，未进入 `origin/main`；provider exact-source checkout 因而无法看到 freeze/digests，不能通过 release preflight。已建立 corrective Work Item `commit-release-freeze-evidence`，将生成证据纳入 Contract、PR、merge、close 和基线同步。
 `RFE-ISSUE-002`（工单收口并发，中）：同一工单同时启动多个 `ai-finish` 会竞争写 Summary 和观测记录，造成临时的 Summary/Guidelines 失败；已停止重复进程并改为单实例收口，后续流程要求同一工单只允许一个收口进程。
+`RFE-ISSUE-003`（CI流程/超时，高）：PR #385 的 smoke job 在 `Run repository quality gates` 长时间运行，后续所有门禁无法启动；首次运行被取消并重跑后仍需观察质量门完成。已建立 corrective Work Item `smoke-quality-timeout`，将 job 超时从 90 分钟收紧到 30 分钟并增加 workflow 回归覆盖；超时必须 fail-closed，不得跳过后续检查。
+`RFE-ISSUE-004`（质量流程/墙钟时间，中）：PR #386 的 smoke job 中 `make quality` 约 20 分钟才完成；`project-test` 已执行全量 pytest，而独立 pytest gate 仍串行运行，且质量图缺少并行调度。已建立 corrective Work Item `quality-gate-deduplication`：保留所有 specialized gate，改为 bounded parallel gate graph；不得降低覆盖率或删除 adopter 定制 `project-test` 下仍必要的显式门禁。
+`RFE-ISSUE-005`（工单收口/分支生命周期，高）：PR #387 合并时错误请求 provider-side `--delete-branch`，先于 `make ai-close-work-item` 删除了可识别的工作分支，导致首次关闭 fail-closed。已从已合并提交恢复可识别分支并重新执行标准关闭；从下一工单起，合并命令不得请求 provider-side branch deletion，必须先在工作分支运行 `make ai-close-work-item`，再由关闭命令删除本地/远端分支并同步默认分支。该问题已记录，后续执行按该纠偏流程继续。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
@@ -378,7 +381,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 - 所有后续工单均有串行 predecessor、PR、archive、close、分支清理和 base 同步要求。
 - 任何流程问题都有先纠偏、再恢复的明确路径。
 - 用户已经授权：本次计划文档的收查、确认、总结、工单拆解、PR/清理流程设计、问题记录机制和文档对齐机制。
-- 用户尚未授权：开始 WI-01 及之后的整改实现、创建后续实现分支/PR、发布版本、清理历史计划。以上动作必须等待用户对本计划内容的确认和后续指示。
+- 用户已授权：按本计划连续执行后续整改工单、创建专用分支/PR、完成合并/归档/关闭/分支清理/base 同步，并在发布前执行日语能力评估与 Trust Layer 对齐；不得绕过门禁。发布新版本和最终清理计划文档仍分别受 WI-18/WI-19 的专用验收与发布边界约束。
 
 ### 当前执行状态
 
