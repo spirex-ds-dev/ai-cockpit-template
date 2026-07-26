@@ -369,6 +369,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-046`（工单收口/ownership，低）：`release-distribution-post-publish-20260727` 新增 `tests/test_quick_install_release.py` 回归测试后，首次 `ai-finish` 发现该文件未在 Contract scope 中，按要求停止归档。已补齐 scope ownership，重新执行收口。
 `RFE-ISSUE-047`（供应链/发布元数据耦合，中）：为让 Quick Install 使用公开 metadata asset，初步修改 `install.sh` 后，既有 v0.5.42 `release.json.installerDigest` 与供应链 provenance 立即失配，导致发布准备测试 fail closed。已撤回 installer 修改，不改写历史 metadata；改为在现有 verifier 中自动推导公开 metadata asset URL，保留 installer digest 基线不变。
 `RFE-ISSUE-048`（PR边界/证据顺序，低）：本 corrective Work Item 首次执行 `make check-ai-pr` 时，归档 Contract/Summary/Manifest、Decision Evidence、start receipt、status 和 archive index 仍未提交；PR 边界按要求拒绝不洁工作树。已记录并按规范先提交本工单全部生成证据，再重新执行 PR 检查。
+`RFE-ISSUE-049`（CI/发布准备边界，中）：PR #397 的 `template-smoke` 使用 `AI_RELEASE_PREPARATION=1` 时，检查器错误地将历史 `release.json` v0.5.42 与公开最高 tag v0.5.43 比较，未使用合法的 `next-release.json` 候选 tag，因而在发布修复 PR 上错误失败。已停止合并，先修正准备模式以候选 tag 判断 next-patch，并增加历史 projection/公开 candidate 回归测试；修正后必须重新通过完整 PR CI，不能把该失败当作 v0.5.43 有效发布证据。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 

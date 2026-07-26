@@ -1030,7 +1030,21 @@ def main() -> int:
             print(f"post-publication release distribution check passed: {tag}")
             return 0
         if tag != latest_tag:
-            if preparation_mode and is_next_patch_release(tag, latest_tag):
+            candidate_tag = candidate.get("releaseTag") if preparation_mode else None
+            preparation_tag = None
+            if preparation_mode and isinstance(candidate_tag, str) and is_next_patch_release(
+                candidate_tag, latest_tag
+            ):
+                preparation_tag = candidate_tag
+            elif preparation_mode and candidate_tag == latest_tag:
+                # A release may already exist while a follow-up PR still runs
+                # the repository-wide smoke contract.  This is only a
+                # preparation baseline; post-publication verification remains
+                # authoritative for the public release.
+                preparation_tag = candidate_tag
+            elif preparation_mode and is_next_patch_release(tag, latest_tag):
+                preparation_tag = tag
+            if preparation_tag is not None:
                 if supply_chain_issues(metadata):
                     raise RuntimeError("release-preparation evidence does not match local metadata")
                 exercise_installer(
@@ -1039,7 +1053,7 @@ def main() -> int:
                     sha256_supported=supported,
                 )
                 print(
-                    f"release distribution check pending publication: {tag} follows public {latest_tag}"
+                    f"release distribution check pending publication: {preparation_tag} follows public {latest_tag}"
                 )
                 return 0
             raise RuntimeError(

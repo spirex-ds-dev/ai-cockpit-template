@@ -83,6 +83,30 @@ def test_preparation_mode_validates_published_identity_before_next_candidate(mon
     assert release_distribution.main() == 0
 
 
+def test_preparation_mode_accepts_historical_projection_with_public_candidate(monkeypatch, tmp_path):
+    published = json.loads((release_distribution.ROOT / "release.json").read_text(encoding="utf-8"))
+    candidate = json.loads(
+        (release_distribution.ROOT / "next-release.json").read_text(encoding="utf-8")
+    )
+    published["releaseTag"] = "v0.5.42"
+    candidate["releaseTag"] = "v0.5.43"
+    candidate["basedOnReleaseTag"] = "v0.5.42"
+    release_path = tmp_path / "release.json"
+    candidate_path = tmp_path / "next-release.json"
+    release_path.write_text(json.dumps(published), encoding="utf-8")
+    candidate_path.write_text(json.dumps(candidate), encoding="utf-8")
+    monkeypatch.setattr(release_distribution, "RELEASE", release_path)
+    monkeypatch.setattr(release_distribution, "CANDIDATE_RELEASE", candidate_path)
+    monkeypatch.setattr(
+        release_distribution, "list_remote_tags", lambda _repository: "a refs/tags/v0.5.43\n"
+    )
+    monkeypatch.setattr(release_distribution, "supply_chain_issues", lambda _metadata: [])
+    monkeypatch.setattr(release_distribution, "exercise_installer", lambda *args, **kwargs: None)
+    monkeypatch.setenv("AI_RELEASE_PREPARATION", "1")
+
+    assert release_distribution.main() == 0
+
+
 def test_post_publication_mode_uses_latest_tag_as_authoritative(monkeypatch, tmp_path):
     historical = {"releaseTag": "v0.5.42", "publicContract": {"projectQualityTarget": "quality"}}
     release_path = tmp_path / "release.json"

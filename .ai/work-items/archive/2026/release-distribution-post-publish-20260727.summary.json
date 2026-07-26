@@ -394,6 +394,13 @@
       "category": "ownership",
       "detail": "New Quick Install regression test was initially outside Contract scope.",
       "resolution": "Added tests/test_quick_install_release.py to scope."
+    },
+    {
+      "id": "RFE-ISSUE-049",
+      "severity": "medium",
+      "category": "CI/release preparation boundary",
+      "detail": "PR #397 template-smoke rejected a valid preparation baseline because it compared historical release.json v0.5.42 with public v0.5.43 instead of using the candidate release tag.",
+      "resolution": "Preparation mode now accepts the explicit historical-projection and public-candidate boundaries, with regression tests; full PR CI must be rerun."
     }
   ],
   "residualRisks": [
