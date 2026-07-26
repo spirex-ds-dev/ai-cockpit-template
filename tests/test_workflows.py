@@ -244,3 +244,10 @@ def test_smoke_workflow_has_release_blocking_delegated_secret_scan():
     assert "github.com/zricethezav/gitleaks/v8@9c72c5f9f05200fdc06e3f1b16e9aaa89fbe9f75" in workflow
     assert "fetch-depth: 0" in workflow
     assert 'gitleaks" detect --source="$GITHUB_WORKSPACE"' in workflow
+
+
+def test_smoke_workflow_quality_gate_has_fail_closed_timeout():
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    assert "timeout-minutes: 30" in workflow
+    assert "Run repository quality gates" in workflow
+    assert workflow.index("timeout-minutes: 30") < workflow.index("Run repository quality gates")

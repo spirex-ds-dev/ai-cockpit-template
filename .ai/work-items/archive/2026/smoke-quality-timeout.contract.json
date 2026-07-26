@@ -1,0 +1,186 @@
+{
+  "contractVersion": 2,
+  "workItemId": "smoke-quality-timeout",
+  "mode": "code",
+  "title": "Bound smoke quality gates with fail-closed timeout",
+  "baseCommit": "1e1a0cc7c0ce8647d307cf30fce671fa2298e0fa",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/smoke-quality-timeout.contract.json",
+    ".ai/work-items/active/smoke-quality-timeout.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".github/workflows/smoke.yml",
+    "tests/test_workflows.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Changing repository quality gates",
+    "Reducing or skipping required checks",
+    "Publishing a tag or release asset"
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "The smoke workflow runs make quality without a bounded job timeout and has stalled at that step."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Defines the repository quality gate command invoked by smoke."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Workflow regression tests provide deterministic coverage for the timeout contract."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Requires corrective workflow Work Items and complete PR lifecycle."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records the observed CI process issue and corrective action."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+      "riskTypes": ["ci", "release_gate", "workflow"],
+      "reason": "A timeout must fail closed without weakening required quality gates or allowing a false green result.",
+      "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized corrective Work Items; fix the stalled CI control before returning to PR #385."
+  },
+  "preReviewWarnings": [
+    "Timeout must be fail-closed, documented, and covered by workflow validation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The smoke job has an explicit bounded timeout that fails the job rather than skipping checks.",
+    "The timeout and its fail-closed intent are covered by a deterministic workflow test or validation.",
+    "The observed stalled smoke process is recorded in the remediation plan.",
+    "The complete Contract, verification, Summary, PR, CI, merge, close, branch cleanup, and main synchronization lifecycle passes."
+  ],
+  "guidelines": [
+    "Do not weaken, skip, or reorder repository quality gates.",
+    "Workflow changes must remain reviewable and fail closed."
+  ],
+  "intent": {
+    "problem": "The required smoke workflow run for PR #385 stalled for many hours in make quality, leaving all later gates pending and preventing the governed Work Item lifecycle from closing.",
+    "constraints": [
+      "Do not skip or weaken any quality gate.",
+      "A timeout must fail closed and expose diagnostics.",
+      "Keep publication and release assets out of scope."
+    ],
+    "rationale": "A bounded CI job prevents indefinite ambiguous state while preserving the rule that incomplete quality verification cannot be reported as passed."
+  },
+  "rawUserRequest": "If a process problem is found during a Work Item, record it and fix the process before continuing; continue the complete governed workflow without silently bypassing CI.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-26-smoke-ci-stall", "capturedAt": "2026-07-26", "digest": "sha256:smoke-ci-stall-correction"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Bound the smoke workflow's repository quality step with a fail-closed timeout and preserve all downstream gates.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+  "scenarioCoverage": [
+    {"scenario": "quality gate completes within configured timeout", "required": true, "status": "verified", "evidence": [".github/workflows/smoke.yml"]},
+    {"scenario": "quality gate exceeds timeout and job fails closed", "required": true, "status": "verified", "evidence": [".github/workflows/smoke.yml"]},
+    {"scenario": "external publication", "required": true, "status": "not_applicable", "reason": "Explicitly out of scope.", "evidence": ["Contract outOfScope"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User authorized process correction before continuing the complete Work Item workflow."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 605
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/smoke-quality-timeout.json",
+    "baseCommit": "1e1a0cc7c0ce8647d307cf30fce671fa2298e0fa",
+    "initialScopeDigest": "272e0defeff6ed67434d54e68ca3cb58a977504406e4e063261209779f78b354",
+    "contractSkeletonDigest": "f591de62a3b2a286bbce7d089d9549bcc6268e75b04cfe7e02ca23ff27953844"
+  }
+}
