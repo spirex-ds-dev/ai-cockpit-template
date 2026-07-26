@@ -1,0 +1,228 @@
+{
+  "contractVersion": 2,
+    "workItemId": "cockpit-human-signal-compression",
+    "mode": "code",
+    "title": "Cockpit human signal compression",
+    "rawUserRequest": "Execute the approved AI Cockpit remediation plan serially. For WI-14, compress the default Cockpit human signal into a clear evidence-derived conclusion with Green/Yellow/Red semantics, evidence explanation, and next action, without score or self-praise; then complete the full PR/merge/close/branch-cleanup lifecycle before WI-15.",
+    "rawRequestSource": {"type": "human", "reference": "user authorization: AI Cockpit comprehensive remediation continuation", "capturedAt": "2026-07-26", "digest": "sha256:cockpit-human-signal-compression-request"},
+    "declaredIntent": {"summary": "Reduce reviewer search cost while preserving evidence-derived, fail-closed Cockpit decisions.", "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]},
+    "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "baseCommit": "f21e7337c7df5516419c357a50268ec4d6e63623",
+  "baselineDirtyPaths": [],
+    "scope": [
+        ".ai/work-items/active/cockpit-human-signal-compression.contract.json",
+        ".ai/work-items/active/cockpit-human-signal-compression.summary.json",
+        ".ai/cockpit/current_status.md",
+        ".ai/decisions/**",
+        ".ai/work-items/starts/**",
+        ".ai/work-items/archive/**",
+        "scripts/ai_governance_compression.py",
+        "scripts/ai_generate_status.py",
+        "tests/test_governance_compression.py",
+        "tests/test_guards_and_status.py",
+        "docs/reference/how-to-read-cockpit-status.md",
+        "docs/reference/how-to-read-cockpit-status.ja.md",
+        "docs/reference/how-to-read-cockpit-status.zh-CN.md",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+    ],
+    "outOfScope": [
+        "Changing the underlying Contract/Summary evidence model",
+        "Adding numerical scores, confidence claims, self-praise, or model quality ratings",
+        "External provider, repository, release, installer, or Japanese capability assessment",
+        "Deleting or rewriting archived evidence or executing WI-19 cleanup",
+        "Changing the Work Item lifecycle, merge, or close gates"
+    ],
+    "sources": [
+        {
+            "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+            "reason": "WI-14 scope, serial order, and required human-signal outcomes."
+        },
+        {
+            "path": "scripts/ai_governance_compression.py",
+            "reason": "Canonical status model and current compressed rendering boundary."
+        },
+        {
+            "path": "scripts/ai_generate_status.py",
+            "reason": "Generated current_status.md entrypoint and ownership reconciliation."
+        },
+        {
+            "path": "docs/reference/how-to-read-cockpit-status.md",
+            "reason": "Reviewer interpretation contract for recommendation, signals, and evidence."
+        },
+        {
+            "path": ".ai/work-items/archive/2026/deprecated-assets-archive-hygiene.summary.json",
+            "reason": "Predecessor WI-13 closure evidence."
+        }
+    ],
+    "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+        "riskTypes": [
+            "governance",
+            "user_visible_output"
+        ],
+        "reason": "The generated status is reviewer-facing; incorrect compression could hide evidence or next actions.",
+        "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+        "canImplement": true,
+        "canVerify": true,
+        "needsHumanDecision": false,
+        "blockedReason": ""
+  },
+  "executionDecision": {
+        "status": "continue",
+        "reason": "User authorized serial execution of the approved remediation plan; WI-13 is closed."
+  },
+    "preReviewWarnings": [
+        "Reviewers must confirm the default conclusion is evidence-derived and that no score, confidence, or self-congratulation is introduced."
+    ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+    "acceptance": [
+        "Generated active status presents one evidence-derived Key Conclusion before detailed signals, with explicit Green/Yellow/Red semantics and no numerical score.",
+        "Generated status provides a bounded evidence drill-down that identifies the canonical source and a concrete next action without claiming that local evidence proves external, production, or Japanese capability.",
+        "Recommendation, conclusion, and next action fail closed for blocked, incomplete, unknown, or unresolved evidence; tests cover clean, risky, and blocked cases.",
+        "English, Japanese, and Chinese reviewer guides describe the same semantics and preserve the generated-file/no-self-praise boundary.",
+        "WI-13 predecessor closure is recorded and the execution plan is aligned after implementation."
+    ],
+    "guidelines": [
+        "New public APIs must be documented.",
+        "Do not import internal modules from other features.",
+        "Status conclusions must be derived from canonical evidence and must not use numerical scoring or self-congratulatory language.",
+        "Localized reviewer guidance must preserve equivalent Green/Yellow/Red semantics and evidence boundaries."
+    ],
+  "intent": {
+        "problem": "Reviewers currently need to scan recommendation, signals, evidence, and decision drivers separately to determine what matters now; status must compress that judgment without hiding why it was reached.",
+        "constraints": [
+            "Keep ai_governance_compression.py as the canonical pure derivation boundary.",
+            "Do not mutate evidence, add a confidence score, or imply agent success from the rendering.",
+            "Keep current_status.md generated and align English, Japanese, and Chinese reviewer documentation."
+        ],
+        "rationale": "A short conclusion plus evidence drill-down and next action reduces reviewer search cost while retaining fail-closed governance semantics."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+    "restrictedWriteApproval": {
+        "approved": true,
+        "approvedBy": "User",
+        "reason": "User authorized execution of the approved serial remediation plan, including governance documentation and status changes."
+  },
+    "rollbackNote": "Revert this Work Item diff and restore the prior generated status renderer and reviewer guidance.",
+  "budgetImpact": {
+    "expectedMetrics": {
+        "archiveGrowth": 600
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/cockpit-human-signal-compression.json",
+    "baseCommit": "f21e7337c7df5516419c357a50268ec4d6e63623",
+    "initialScopeDigest": "1194e5174aa71512ff343750bbd7ea493ff50553abb809ee8a66b63ff60126a9",
+    "contractSkeletonDigest": "b48ce3311072c607fa9e88c13fdd79de6e253f8b8f925a2d069f462b23eb97b6"
+    },
+    "predecessorWorkItem": {
+        "workItemId": "deprecated-assets-archive-hygiene",
+        "status": "closed",
+        "pr": {"number": 377, "merged": true, "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/377", "mergeCommit": "f21e7337c7df5516419c357a50268ec4d6e63623"},
+        "closure": {"succeeded": true, "localBranchDeleted": true, "remoteBranchDeleted": true, "baseSynchronized": true, "evidence": ".ai/work-items/archive/2026/deprecated-assets-archive-hygiene.archive-manifest.json"}
+    },
+    "scenarioCoverage": [
+        {
+            "scenario": "clean evidence renders a concise conclusion and evidence drill-down",
+            "required": true,
+            "status": "verified",
+            "evidence": ["tests/test_governance_compression.py", "make generate-cockpit-status", "make check-ai-status"],
+            "reason": "Focused renderer tests and generated status output passed."
+        },
+        {
+            "scenario": "medium residual risk renders Yellow semantics and an explicit next action",
+            "required": true,
+            "status": "verified",
+            "evidence": ["tests/test_governance_compression.py::test_human_signal_has_semantics_without_score_or_self_praise"],
+            "reason": "Focused semantic color and next-action tests passed."
+        },
+        {
+            "scenario": "blocked or incomplete evidence renders Red semantics and stops progression",
+            "required": true,
+            "status": "verified",
+            "evidence": ["tests/test_governance_compression.py::test_human_signal_has_semantics_without_score_or_self_praise", "tests/test_governance_compression.py::test_missing_required_verification_needs_investigation"],
+            "reason": "Blocked/incomplete renderer tests passed with Red semantics and conservative next actions."
+        }
+    ]
+}

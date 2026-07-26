@@ -37,7 +37,7 @@ keywords:
 
 ## 一、每个 Work Item 的强制完整流程
 
-以下流程适用于 WI-01 至 WI-18，不得因为任务“只是文档”“只是测试”或“只是发布”而跳过。每项必须在其 Contract 和 Summary 中留下证据。
+以下流程适用于 WI-01 至 WI-19，不得因为任务“只是文档”“只是测试”或“只是发布”而跳过。每项必须在其 Contract 和 Summary 中留下证据。
 
 ### 1. 启动与边界
 
@@ -85,10 +85,11 @@ keywords:
 | WI-14 | cockpit-human-signal-compression | Cockpit 默认关键结论、Green/Yellow/Red 语义、证据解释/下一步 | status rendering、evidence drill-down、无评分/无自我表彰检查 |
 | WI-15 | full-remediation-acceptance | 汇总完成标准，跑全量功能/安全/可用性/效率/文档/质量验收，形成问题总览 | full verification、known-gap review、最终用户复核前 issue overview |
 | WI-16 | japanese-capability-assessment | 发布前全面日语处理能力评估、对象工程日语场景矩阵、问题对应整改与ブロッキング | 日语 corpus/文档/交互/安装/错误恢复评估、问题总览和全部对应 corrective Work Item 证据 |
-| WI-17 | publish-new-version | 严格发布门禁、source/tag/asset/digest/SBOM/provenance、安装/升级/回滚验证并发布新版本 | merge/close 后的发布证据、版本/URL/checksum/provider evidence |
-| WI-18 | clean-execution-plan-documents | 最后清理过期执行计划，保留历史标记和 archive-backed 索引，完成计划对齐 | cleanup inventory、历史隔离检查、最终 clean plan 与用户复核材料 |
+| WI-17 | document_human_agent_trust_layer | 将现有 Trust Layer 升级为 Why/What/How 的英文权威版，并建立完整中文/日文版本、三语 README 入口、架构交叉链接和一致性检查 | 三语完整文档、现有 Gate/命令/Archive Manifest 保留、native/delegated evidence 映射、链接/章节/边界一致性检查 |
+| WI-18 | publish-new-version | 严格发布门禁、source/tag/asset/digest/SBOM/provenance、安装/升级/回滚验证并发布新版本 | merge/close 后的发布证据、版本/URL/checksum/provider evidence |
+| WI-19 | clean-execution-plan-documents | 最后清理过期执行计划，保留历史标记和 archive-backed 索引，完成计划对齐 | cleanup inventory、历史隔离检查、最终 clean plan 与用户复核材料 |
 
-WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 WI-17 发布前的强制日语能力门禁；若发现问题，必须先完成对应 corrective Work Item 的完整 PR/merge/close/分支清理流程。WI-17 是唯一允许实际发布新版本的工单，且必须在 WI-16 及其所有 corrective Work Item 关闭后执行。WI-18 必须最后执行；它不得删除当前计划、最终问题总览或任何仍被 Contract/Archive/Release evidence 引用的记录。
+WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是发布前的强制日语能力门禁；若发现问题，必须先完成对应 corrective Work Item 的完整 PR/merge/close/分支清理流程。WI-17 是发布前的 Human-Agent Trust Layer 对齐门禁，必须确认文档声明、证据模型、责任边界和供应链证据边界与实际能力一致。WI-18 是唯一允许实际发布新版本的工单，且必须在 WI-16 及其所有 corrective Work Item、WI-17 全部关闭后执行。WI-19 必须最后执行；它不得删除当前计划、最终问题总览或任何仍被 Contract/Archive/Release evidence 引用的记录。
 
 ## 三、各 Work Item 的执行边界与验收要求
 
@@ -237,11 +238,15 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 **验收：** 任何删除都有范围、理由、替代、证据和恢复路径；必须保留的 Contract/Summary/Event/Manifest/Release evidence 不被清理；目标工程治理 artifact 增长边界有证据。
 
-**必须验证：** 引用图、过期检查、archive integrity/digest/retention 测试。完成后对齐文档索引和历史标记；不得提前做 WI-18 的计划文档清理。
+**必须验证：** 引用图、过期检查、archive integrity/digest/retention 测试。完成后对齐文档索引和历史标记；不得提前做 WI-19 的计划文档清理。
 
 ### WI-14：Cockpit Human Signal Compression
 
 **范围：** 默认只显示 State、Trust Signal、What changed、Problems found、Stop reason、Unknowns、Human decision、Next action；定义 Green/Yellow/Red 语义并提供 Why/Show evidence/Show missing evidence/Show next action。
+
+**当前执行边界：** `scripts/ai_governance_compression.py` 在生成状态中增加 evidence-derived `Key Conclusion`，明确 Green/Yellow/Red 语义、Evidence Basis 和 Next Action；不引入分数、置信度、自我表彰或第二事实源。英文、日文、中文审查指南同步说明颜色和证据边界。
+
+**流程问题记录：** 启动时空白 skeleton 按门禁返回 `not_ready`；Contract 补齐后，严格预检因 3 个场景待实测返回 `needs_human_confirmation`。已依据用户既有授权记录结构化决策，继续实现；场景状态只在真实测试完成后更新。
 
 **验收：** Green 只表示证据充分可继续，不表示绝对安全；Yellow 暴露未知/警告/人工确认；Red 表示证据缺失/冲突/权限不足/不可接受风险/非法流程；所有信号可解释，不以颜色、分数或数量代替证据。
 
@@ -263,9 +268,31 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 **必须验证：** 独立日语 corpus、日语对象工程 fixture/可执行场景、日语安装/校准/升级/回滚/卸载文档、CLI/Status/PR parity、日语 prompt injection 与 Unicode/编码/路径测试；对每个 finding 建立对应 corrective Work Item，并逐项完成其 PR、merge、`make ai-close-work-item`、分支清理和 base 同步。若评估通过，仍必须记录明确的 limitations 和未支持范围；不得把“能翻译”或“测试通过”声明成完整日语能力。
 
-**强制顺序：** WI-15 关闭 → WI-16 日语评估 → （若有问题）corrective Work Item 串行完成并重新评估 → WI-16 关闭 → WI-17 发布新版本。任何日语评估问题、对应 corrective Work Item 未关闭或重新评估证据不一致，均停止发布准备。
+**强制顺序：** WI-15 关闭 → WI-16 日语评估 → （若有问题）corrective Work Item 串行完成并重新评估 → WI-16 关闭 → WI-17 Trust Layer 对齐 → WI-18 发布新版本。任何日语评估问题、对应 corrective Work Item 未关闭、Trust Layer 声明与证据不一致，均停止发布准备。
 
-### WI-17：Publish New Version
+### WI-17：Add the Authoritative Multilingual Human-Agent Trust Layer Document
+
+**Task:** `document_human_agent_trust_layer`
+
+**Intent：** 说明 AI Cockpit 为什么存在、治理什么，以及证据控制、fail-closed、人工交还、完整可信链和软件供应链证据如何共同建立 Calibrated Human-Agent Trust。现有 `docs/trust-layer.md` 升级为英文权威版本，不新增第四份概念文档。
+
+**范围：**
+- `docs/trust-layer.md`：英文权威完整版本；
+- `docs/trust-layer.zh-CN.md`：中文完整翻译；
+- `docs/trust-layer.ja.md`：日文完整翻译；
+- `docs/reference/documentation-architecture.md`：登记 Trust Layer 的 Why/What/How 权威角色，并区分 Design Philosophy、Architecture、Security and Release Verification、Capability Truth Matrix；
+- `README.md`、`README.zh-CN.md`、`README.ja.md`：只增加短入口，不复制正文，分别链接对应语言版本；
+- 轻量文档一致性检查：三语文件存在、章节 ID/标题数量一致、三语入口存在、架构已登记、内部链接有效、核心边界句未丢失。
+
+**必须保留的现有实现细节：** `Unsupported Claim Regression Gate`、`delusion-test-gate`、`Guard Signal Envelope`、Preflight enforced profile、Raw Request Binding、Requested Operation、Capability Mapping、Human Decision and Recovery、Archive Manifest；可置于 How 后的 `Current Implementation`、`Deterministic Coverage`、`Machine-Readable Evidence`、`Commands and Demonstration` 章节，不得为了概念整洁删除已实现证据。
+
+**验收：** 文档统一使用 Why / What / How 结构，三语语义完整一致；明确 AI Cockpit 是 Repository Governance Layer，不是 SKILL、Agent Runtime 或 Security Sandbox；说明七个治理层：执行边界、控制权返还、已知风险防护、完整可信链、软件供应链证据、人类决策压缩、归档与恢复。完整可信链包含 SHA-256、Git History、Digital Signature、Branch Protection、Hosted CI/External Audit Evidence、Human Approval；说明 SBOM 与 Provenance 的区别，并明确 SBOM 是 Delegated Domain Evidence。不得声称 AI Cockpit 单独实现身份、隔离、不可篡改审计或企业合规；Capability Truth Matrix 仍是当前能力状态的唯一事实源。
+
+**必须验证：** 三语 Trust Layer 文档、README 短入口、Documentation Architecture 登记、内部链接、章节一致性、关键边界句、Native/Delegated evidence 映射；责任边界、Evidence over Self-Declaration、停止/恢复、供应链和企业合规过度声明负例；与 Capability Truth Matrix、Cockpit Status、WI-16 日语评估和 WI-18 发布门禁一致。任何发现的能力/流程/文档问题必须建立对应 corrective Work Item，完成完整 PR/merge/close/分支清理后重新验证。
+
+**强制顺序：** WI-16 及其 corrective Work Item 全部关闭 → `document_human_agent_trust_layer`（WI-17）及其 corrective Work Item 全部关闭 → WI-18 发布新版本。WI-17 不执行实际发布，不把文档对齐当作外部控制或合规认证证据。
+
+### WI-18：Publish New Version
 
 **范围：** 这是唯一实际发布新版本的 Work Item。Contract 必须明确 release identity、source commit/ref、tag、asset、distribution、release note、SBOM、provenance、vulnerability/secret、installer lifecycle、Public Install、兼容性和人工发布授权。
 
@@ -273,11 +300,11 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 **强制顺序：** merge → `make ai-close-work-item` → local/remote default-base sync → `make finalize-release-freeze` → `make check-release-preflight` → release dependency/SBOM/provenance/tag/provider publish。发布后记录真实版本、URL、commit、assets、checksums 和 evidence，再完成本工单自己的 PR/merge/close（若发布动作属于合并后阶段，Contract 必须明确并重新绑定 source evidence）。不得把 candidate、historical、published 混为一谈。
 
-### WI-18：Clean Execution Plan Documents（最终工单）
+### WI-19：Clean Execution Plan Documents（最终工单）
 
 **范围：** 盘点旧执行计划、重复计划、已完成计划、过期命令/版本/路径引用；仅清理已确认不再承担当前指令的执行计划文档，统一加入 `Historical Record / Not Current Product Documentation / Do Not Use As Runtime Instruction`，保留 archive-backed 索引、状态、来源和替代文档。
 
-**验收：** 当前主计划、WI-15 最终问题总览、WI-16 日语评估证据、WI-17 发布证据、所有 active/archived Contract/Summary/Event/Manifest 仍可追溯；无文档引用已删除命令或过期版本；清理 diff 有 inventory、理由、替代、digest 和恢复路径；多语言/README/索引对齐通过。
+**验收：** 当前主计划、WI-15 最终问题总览、WI-16 日语评估证据、WI-17 Trust Layer 对齐证据、WI-18 发布证据、所有 active/archived Contract/Summary/Event/Manifest 仍可追溯；无文档引用已删除命令或过期版本；清理 diff 有 inventory、理由、替代、digest 和恢复路径；多语言/README/索引对齐通过。
 
 **强制顺序：** 这是最后一个整改 Work Item。完成其 PR、merge、`make ai-close-work-item`、本地/远端分支清理和默认分支同步后，生成最终对齐报告，提交给用户确认；此前不得宣称“全面整改完成”。
 
@@ -304,7 +331,7 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 - 相关 README、指南、架构、命令示例、Make target、版本/ref/path、环境变量和 Capability claim 是否与代码和测试一致。
 - `README.md`、`README.ja.md`、`README.zh-CN.md` 的 North Star、产品边界、安全限制、人工确认、安装/校准、支持范围和版本语义是否同步。
 - 新增限制、未知、未验证场景、剩余风险和人工决策是否被文档诚实表达。
-- 历史内容是否已标记为历史；若未到 WI-18，不得删除历史执行计划。
+- 历史内容是否已标记为历史；若未到 WI-19，不得删除历史执行计划。
 
 检查失败时，当前 Work Item 不得报告 ready/closed；先完成文档对齐、重新验证，再进入 PR 或关闭阶段。
 
@@ -318,7 +345,7 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 - 文档/代码对齐、企业治理边界、代码质量、过期资产、治理证据压缩：WI-10 至 WI-14。
 - Canonical Evidence 与事实源统一：WI-01，并贯穿全部工单。
 - 五个实施阶段：WI-01/WI-02 为事实源与边界；WI-03/WI-07 为安全与流程；WI-04 为对象工程验证；WI-08/WI-13 为效率与干净化；WI-09/WI-10/WI-14 为信任结果展示。
-- 结束项：WI-15 全面验收，WI-16 日语能力评估，WI-17 发布新版本，WI-18 清理执行计划文档。
+- 结束项：WI-15 全面验收，WI-16 日语能力评估，WI-17 Human-Agent Trust Layer 对齐，WI-18 发布新版本，WI-19 清理执行计划文档。
 
 ### 计划质量检查
 
@@ -331,7 +358,7 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 
 ### 当前执行状态
 
-用户已明确授权继续执行当前计划的全部工单，并要求遇到流程问题时先记录、修正流程再继续。因此本计划不在计划文档完成后停留；当前计划工单的 PR、合并、归档、关闭、分支清理和 base 同步完成后，按 WI-01 至 WI-18 串行执行，直到全部工单完成。
+用户已明确授权继续执行当前计划的全部工单，并要求遇到流程问题时先记录、修正流程再继续。因此本计划不在计划文档完成后停留；当前计划工单的 PR、合并、归档、关闭、分支清理和 base 同步完成后，按 WI-01 至 WI-19 串行执行，直到全部工单完成。
 
 ### 本计划工单已发现的问题
 
@@ -343,6 +370,8 @@ WI-01 至 WI-16 只完成整改能力和验收，不发布新版本。WI-16 是 
 - `WI-01-ISSUE-004`（外部 CI 调度，待恢复）：WI-01 PR #365 的 compatibility 与 smoke run 在创建任何 job 前被 GitHub 标记为 “This run likely failed because of a workflow file issue”；PR diff 未包含 `.github/workflows/**`，且 rerun 后仍复现。已在 PR 记录并保留 run 证据；不得把无 job 失败误报成代码验证通过，必须恢复出可审计的 required checks 后再合并。
 - `WI-05-ISSUE-004`（用户纠正/coverage，低）：用户指出安装对象工程的工程师多数使用日语，原 WI-05 边界虽覆盖 bilingual/mixed-language，但未明确日语。已在 PR #369 合并前暂停关闭动作，补充日文直接、隐藏 HTML、嵌套引用 corpus 与日文检测指示器，并将计划、安全边界文档和验证范围对齐；补丁完成后必须重新 finish 与 required CI。
 - `PLAN-005`（用户纠正/流程门禁，高）：用户要求在发布新版本前插入全面日语能力评估，且日语为必需能力；任何问题必须对应 corrective Work Item 并在重新评估通过前保持ブロッキング。已将原 WI-16/WI-17 顺延为 WI-17/WI-18，新增 WI-16 Japanese Capability Assessment，并更新发布与最终清理的强制顺序；现有 PR/finish 必须先完成本计划对齐再继续。
+- `PLAN-006`（用户新增/发布前门禁，高）：用户要求在发布版本前插入一个对应《Human-Agent Trust Layer》的工单。已新增 WI-17 Human-Agent Trust Layer Alignment，并将发布顺延为 WI-18、最终计划文档清理顺延为 WI-19；WI-17 必须完成证据治理、责任边界、供应链证据和人类决策压缩对齐，任何对应问题必须先完成 corrective Work Item 后才能进入 WI-18。
+- `PLAN-007`（用户补充/文档一致性，高）：用户明确 WI-17 的任务为 `document_human_agent_trust_layer`：升级现有 `docs/trust-layer.md` 为英文权威完整文档，新增完整中文/日文版本，保留现有 Gate/命令/Archive Manifest 实现细节，补齐 Documentation Architecture、三语 README 短入口、交叉链接和轻量一致性检查；不得通过概念文档删除实现证据或从理念反推 Capability Truth。
 - `WI-05-ISSUE-005`（流程/证据归属，高）：尝试以独立追加 JSON 记录 WI-05 的日语计划补正时，PR 归属门禁拒绝了该非 Contract/Summary 配对文件。该追加文件已从当前 PR 移除，计划正文保留完整问题记录；后续必须建立独立 corrective process Work Item，补充并验证“追加式 correction evidence”的归属规则后，才能使用该证据格式，不得改写已归档 WI-05 Contract/Summary。
 - `WI-05-ISSUE-006`（流程/CI，待恢复）：最新 PR 提交的 `template-smoke` job 自 2026-07-25T16:41Z 起停留在 `Run repository quality gates`，其余步骤未启动，远超同类运行时长且无可用最终日志。已取消僵死 run；必须重新触发完整 CI 并取得新的可审计结论后，才能合并 WI-05，不得把取消或旧 run 当作通过。
 - `WI-06-ISSUE-001`（流程/命令一致性，低）：AI Cockpit skill 文档曾列出一个当前 Makefile 不存在的旧 ownership alias；实际归属门禁为 `make check-ai-diff-ownership`。已记录并使用实际目标完成检查，后续应在流程文档对齐工单中统一命令名称，不因别名缺失绕过归属检查。
