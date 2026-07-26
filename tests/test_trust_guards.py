@@ -316,6 +316,32 @@ def test_intent_capability_uses_requested_operation_mapping():
     assert ".ai/policies/requested-operation.yaml" in result["sources"]
 
 
+def test_public_release_operation_is_explicitly_mapped_and_requires_authority():
+    value = contract()
+    value.update(
+        {
+            "contractVersion": 2,
+            "mode": "code",
+            "scope": [".ai/work-items/active/task.contract.json"],
+            "requestedOperation": {
+                "target": "repository_release",
+                "action": "publish",
+                "environment": "public_provider",
+                "effect": "create_immutable_release_tag_and_public_assets",
+                "authorityRequired": True,
+            },
+            "authorityEvidence": {
+                "type": "user_authorization",
+                "authorizedBy": "test",
+                "reference": "test:release-authority",
+            },
+        }
+    )
+    result = ai_trust_guards.intent_capability_signal(value)
+    assert result["value"] == "Ready"
+    assert "repository_release.publish" in " ".join(result["evidence"])
+
+
 def test_unmapped_requested_operation_fails_closed():
     value = contract()
     value.update(
