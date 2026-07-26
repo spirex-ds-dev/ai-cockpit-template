@@ -17,7 +17,7 @@ PYTHON_EXECUTABLE = $(if $(findstring /,$(PYTHON)),$(abspath $(PYTHON)),$(shell 
 AI_PREFLIGHT_VALIDATE_CONTRACT ?= true
 
 .PHONY: help \
-	test project-format-check project-test project-lint diff-check quality \
+	test project-format-check project-test project-lint diff-check quality quality-gates \
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
 check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
@@ -242,7 +242,14 @@ check-ai-project-profile:
 check-ai-guard-calibration: check-ai-project-profile
 	$(AI_PYTHON) scripts/ai_check_guard_calibration.py --root .
 
-quality: project-format-check project-test unsupported-claim-regression adopter-long-cycle project-lint diff-check check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning check-dependency-vulnerabilities check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence
+QUALITY_GATES := project-format-check project-test unsupported-claim-regression adopter-long-cycle project-lint diff-check check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning check-dependency-vulnerabilities check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence
+
+# Keep every gate explicit, but run independent gates with bounded parallelism.
+# Adopter projects may customize project-test, so specialized gates remain in the graph.
+quality:
+	+make --no-print-directory --jobs=2 quality-gates
+
+quality-gates: $(QUALITY_GATES)
 
 ai-cockpit-project-format-check: project-format-check
 

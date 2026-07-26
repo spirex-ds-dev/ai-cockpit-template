@@ -69,6 +69,25 @@ def test_project_test_uses_stricter_coverage_floor():
     assert "--cov-fail-under=85" in result.stdout
 
 
+def test_quality_uses_bounded_parallel_gate_graph_without_removing_specialized_gates():
+    result = subprocess.run(
+        ["make", "-n", "quality"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "--jobs=2 quality-gates" in result.stdout
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    assert "quality-gates:" in makefile
+    assert "check-trust-guards" in makefile
+    assert "check-critical-domain-guards" in makefile
+    assert "check-decision-protocol" in makefile
+    assert "check-baseline-evidence" in makefile
+    assert "--cov-fail-under=85" in result.stdout
+
+
 def test_project_governance_make_targets_are_public():
     result = subprocess.run(
         [

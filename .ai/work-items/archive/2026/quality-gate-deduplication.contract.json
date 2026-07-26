@@ -1,0 +1,200 @@
+{
+  "contractVersion": 2,
+  "workItemId": "quality-gate-deduplication",
+  "mode": "code",
+  "title": "Reduce duplicate and serial quality gate work",
+  "baseCommit": "284585b6108432b486e2914c0c1feb63f379b008",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/quality-gate-deduplication.contract.json",
+    ".ai/work-items/active/quality-gate-deduplication.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "Makefile",
+    "tests/test_makefile.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Removing any required quality gate",
+    "Lowering coverage or security thresholds",
+    "Changing release publication behavior"
+  ],
+  "sources": [
+    {
+      "path": "Makefile",
+      "reason": "The quality target currently runs duplicate pytest subsets and serializes independent gates."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Regression coverage for quality gate composition and parallel execution."
+    },
+    {
+      "path": "tests/test_trust_guards.py",
+      "reason": "These tests are already included by project-test's full pytest collection."
+    },
+    {
+      "path": "tests/test_critical_domain_guards.py",
+      "reason": "These tests are already included by project-test's full pytest collection."
+    },
+    {
+      "path": "tests/test_decision_protocol.py",
+      "reason": "These tests are already included by project-test's full pytest collection."
+    },
+    {
+      "path": "tests/test_baseline_evidence.py",
+      "reason": "These tests are already included by project-test's full pytest collection."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Governed Work Item and verification lifecycle requirements."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records the quality gate process issue and corrective action."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+      "riskTypes": ["quality", "ci", "coverage"],
+      "reason": "Parallelizing and removing duplicate invocations must preserve every gate and its evidence.",
+      "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized improving make quality while preserving all required checks."
+  },
+  "preReviewWarnings": [
+    "Review gate coverage, duplicate pytest removal, and parallel execution safety."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "make quality retains every required non-duplicate gate and runs independent gates in parallel.",
+    "All specialized pytest gates remain explicit because adopter projects may customize project-test.",
+    "Regression tests prove the quality target composition, bounded parallelism, and coverage floor.",
+    "The quality process issue is recorded in the remediation plan.",
+    "The complete Contract, verification, Summary, PR, CI, merge, close, branch cleanup, and main synchronization lifecycle passes."
+  ],
+  "guidelines": [
+    "Do not remove required gates or lower verification thresholds.",
+    "Prefer deterministic, reviewable build graph changes over hidden test shortcuts."
+  ],
+  "intent": {
+    "problem": "make quality runs the full pytest collection and then repeats several pytest subsets serially, making CI wall-clock time unnecessarily high.",
+    "constraints": [
+      "Keep all security, release, governance, and quality gates.",
+      "Do not lower coverage or alter test semantics.",
+      "Avoid parallel writes to the same evidence artifact."
+    ],
+    "rationale": "Bounded parallelism reduces wall-clock time while specialized gates remain explicit for adopters whose project-test target is customized; no evidence gate is weakened."
+  },
+  "rawUserRequest": "make quality appears too heavy; improve it while preserving the complete governed workflow and recording any process issue.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-26-quality-heavy", "capturedAt": "2026-07-26", "digest": "sha256:quality-heavy-correction"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Reduce duplicate and serial make quality work without reducing any required gate or evidence.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+  "scenarioCoverage": [
+    {"scenario": "all required quality gates remain in quality graph", "required": true, "status": "verified", "evidence": ["Makefile", "tests/test_makefile.py"]},
+    {"scenario": "specialized pytest gates remain explicit for customized adopters", "required": true, "status": "verified", "evidence": ["Makefile", "tests/test_makefile.py"]},
+    {"scenario": "coverage floor remains 85 percent", "required": true, "status": "verified", "evidence": ["Makefile", "tests/test_makefile.py"]},
+    {"scenario": "external publication", "required": true, "status": "not_applicable", "reason": "Explicitly out of scope.", "evidence": ["Contract outOfScope"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User authorized process improvement before continuing release remediation."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 606
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/quality-gate-deduplication.json",
+    "baseCommit": "284585b6108432b486e2914c0c1feb63f379b008",
+    "initialScopeDigest": "5db0a3dff91f96a92ae915271cdeed8b21bede3cdf1b2f48b9b6ccabab548c39",
+    "contractSkeletonDigest": "f58618614d6b037ac518a26dd34aedc207c2f6108008e30494cb14aed50e93c2"
+  }
+}

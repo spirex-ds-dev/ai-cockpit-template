@@ -1,0 +1,438 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "quality-gate-deduplication",
+  "contractPath": ".ai/work-items/archive/2026/quality-gate-deduplication.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/quality-gate-deduplication.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/quality-gate-deduplication.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Run the complete quality gate graph with bounded parallelism."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Verify parallel quality graph and explicit specialized gates."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Record RFE-ISSUE-004 and corrective action."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/quality-gate-deduplication.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/quality-gate-deduplication.contract.json",
+    "Makefile",
+    "tests/test_makefile.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "AGENTS.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/quality-gate-deduplication.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:18:21.377057+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "20beaa639f60ac9f08981cc970e91a11a1a83d6fcbe65c8f12140a1a70f9e0ab",
+      "commandHash": "6c26ed9b15f91f919cf07aeda2a32c9cdef987e3b31457990d12865db9ea5678",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "190ae548e9e2996c92d464cf15c3dbe8fa5442e274ec983d856c804909952773",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/quality-gate-deduplication.contract.json work item contract check passed: .ai/work-items/active/quality-gate-deduplication.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/quality-gate-deduplication.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:18:21.514427+00:00",
+      "exitCode": 0,
+      "durationMs": 91,
+      "outputDigest": "d533b73073fcb8decc1565bfc68d23013f2a3f8a87688610332a3597293c657e",
+      "commandHash": "4fb9e86d87e71f5e4c4e9e4e87a2f63513f63dedf10664844e7f8891d87bbbcd",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "190ae548e9e2996c92d464cf15c3dbe8fa5442e274ec983d856c804909952773",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/quality-gate-deduplication.contract.json scope guard passed: 5 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:18:21.690595+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "1ef88ab04e8ad47cf08a42761d32247cd97de192998590fcb9a521c414ac8d20",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "190ae548e9e2996c92d464cf15c3dbe8fa5442e274ec983d856c804909952773",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/quality-gate-deduplication.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/quality-gate-deduplication.contract.json SUMMARY=.ai/work-items/active/quality-gate-deduplication.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:18:21.914693+00:00",
+      "exitCode": 0,
+      "durationMs": 175,
+      "outputDigest": "4749f0a608dc6b6edfb70b8437f49b5169515cbb7e64ba878ee4875a35ed48d9",
+      "commandHash": "1c7825ea6ee8bf63b0d4fa5f3e803ce7b8e63e5a7aa745b38786ae1ca1ad1cef",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "190ae548e9e2996c92d464cf15c3dbe8fa5442e274ec983d856c804909952773",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/quality-gate-deduplication.contract.json --summary .ai/work-items/active/quality-gate-deduplication.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `quality-gate-deduplication` - Contract Hash: `e32487c3e375c927` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `0` - Required Checks:"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/quality-gate-deduplication.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:18:22.090340+00:00",
+      "exitCode": 0,
+      "durationMs": 111,
+      "outputDigest": "922d0d26e8781d6dcd0d5df625b22518380b88311c56a85c461f0edd33d2ac8a",
+      "commandHash": "a9bd7c87a716cc189f856b29993e440feca15a779654007765cb7913637c10d5",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "190ae548e9e2996c92d464cf15c3dbe8fa5442e274ec983d856c804909952773",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/quality-gate-deduplication.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/quality-gate-deduplication.json [review] .ai/cockpit/current_status.md [review] Makefile review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:18:22.248481+00:00",
+      "exitCode": 0,
+      "durationMs": 101,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "190ae548e9e2996c92d464cf15c3dbe8fa5442e274ec983d856c804909952773",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:18:22.399527+00:00",
+      "exitCode": 0,
+      "durationMs": 99,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "190ae548e9e2996c92d464cf15c3dbe8fa5442e274ec983d856c804909952773",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/quality-gate-deduplication.contract.json SUMMARY=.ai/work-items/active/quality-gate-deduplication.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:18:22.499968+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "571fae02cb3ba19b7869d8b498e3a2d985d2823d47b5bc65afbc1da29bafb9a6",
+      "commandHash": "24395a936014e7e680981806d82aeecc7639004147340964b69667e65e539685",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "190ae548e9e2996c92d464cf15c3dbe8fa5442e274ec983d856c804909952773",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/quality-gate-deduplication.contract.json --summary .ai/work-items/active/quality-gate-deduplication.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/quality-gate-deduplication.contract.json SUMMARY=.ai/work-items/active/quality-gate-deduplication.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:18:22.711930+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "c5dacb36d2df38342b86efb6a1227ade1d0fb471eb24b6fcfb99207c58f40d10",
+      "commandHash": "c7d4b555a99d5bdff95b83451eaf506f3b47afc1e8127d04cf865377561ac8ed",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "190ae548e9e2996c92d464cf15c3dbe8fa5442e274ec983d856c804909952773",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/quality-gate-deduplication.contract.json --summary .ai/work-items/active/quality-gate-deduplication.summary.json guidelines compliance check passed: 2 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/quality-gate-deduplication.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:18:22.937698+00:00",
+      "exitCode": 0,
+      "durationMs": 180,
+      "outputDigest": "92d78bff393acf0c86282b737af57cc4c406a3bfba2da418d430b6365664d0d6",
+      "commandHash": "40d298e388a34efe59f19b4e5c9c819ab4133198edf492e1d8f4244c9a64a2b5",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "190ae548e9e2996c92d464cf15c3dbe8fa5442e274ec983d856c804909952773",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/quality-gate-deduplication.contract.json ## Diff Ownership Preview - active_owned: `5`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/quality-gate-deduplication.json` — covered by Contract scope - [active_owned] `Makefile` — "
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:24:38.216831+00:00",
+      "exitCode": 0,
+      "durationMs": 375207,
+      "outputDigest": "c303320eace81fad85823211a4216365b57f1c5c50367a5d78b306a6e0b4fc2a",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "190ae548e9e2996c92d464cf15c3dbe8fa5442e274ec983d856c804909952773",
+      "outputSummary": "make --no-print-directory --jobs=2 quality-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 239 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/unsupported_claim_gate.py { \"gate\": \"Unsupported Claim Regression Gate\", \"policyReference\": \"unsupported-claim-evidence-"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/quality-gate-deduplication.contract.json SUMMARY=.ai/work-items/active/quality-gate-deduplication.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:24:39.514415+00:00",
+      "exitCode": 0,
+      "durationMs": 245,
+      "outputDigest": "fa089dad377c653df394423c51bb06726a3f46e7bfbada5c74ba4e73432bb185",
+      "commandHash": "e7d368aa92a43517c6b0969ed96fc5aa464967fcdb0176db24e15fd2c6362cd7",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "7f6da989aa7f7b33f789c4c1fcafe4dd34510a201a003c91381f23ecc2add6e5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/quality-gate-deduplication.contract.json --summary .ai/work-items/active/quality-gate-deduplication.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/quality-gate-deduplication.contract.json SUMMARY=.ai/work-items/active/quality-gate-deduplication.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:24:39.745188+00:00",
+      "exitCode": 0,
+      "durationMs": 186,
+      "outputDigest": "36615697f37afaeadda1f7319463a14709b861227fa4dec5c17971411e3bd71a",
+      "commandHash": "1b2e708d8f196fe5e059f0394a545167a220cbb29d0d5b4d10c6d5cdbf1e4be5",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "7f6da989aa7f7b33f789c4c1fcafe4dd34510a201a003c91381f23ecc2add6e5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/quality-gate-deduplication.contract.json --summary .ai/work-items/active/quality-gate-deduplication.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:24:39.860399+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "7f6da989aa7f7b33f789c4c1fcafe4dd34510a201a003c91381f23ecc2add6e5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/quality-gate-deduplication.contract.json SUMMARY=.ai/work-items/active/quality-gate-deduplication.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:24:39.977460+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "21ba1d047973ed769f9c9d847145e012d1cc24828d4e6f8d9e87429058658ae1",
+      "commandHash": "54cffce4b4aaea4da79dddd6a180bcfd88f238ca5d9a149ff00b1f85be53a981",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "7f6da989aa7f7b33f789c4c1fcafe4dd34510a201a003c91381f23ecc2add6e5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/quality-gate-deduplication.contract.json --summary .ai/work-items/active/quality-gate-deduplication.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/quality-gate-deduplication.summary.json CONTRACT=.ai/work-items/active/quality-gate-deduplication.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T10:24:40.924240+00:00",
+      "exitCode": 0,
+      "durationMs": 91,
+      "outputDigest": "1fa4cf68068d8160aed78f652b9b366b108194ec4702eb933d014033d005ed18",
+      "commandHash": "9cddf6d97021d35cd721401a9acf42c764b2c8cc4106504c90dd429fa9ec80a7",
+      "contractHash": "e32487c3e375c92715d40ff27d660679eaf9adab2a9bbdb40ebcec6c1fd301a8",
+      "commitSha": "284585b6108432b486e2914c0c1feb63f379b008",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deduplication.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deduplication.summary.json",
+      "worktreeDigest": "b109eeb2253336fb5160ae71c11f2c8537df8b7d6737e9abf2f9100aa81808ad",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/quality-gate-deduplication.summary.json --contract .ai/work-items/active/quality-gate-deduplication.contract.json ai summary check passed: .ai/work-items/active/quality-gate-deduplication.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Do not remove required gates or lower verification thresholds.",
+      "compliant": true,
+      "evidence": "All existing quality prerequisites remain in QUALITY_GATES and the coverage floor is unchanged."
+    },
+    {
+      "guideline": "Prefer deterministic, reviewable build graph changes over hidden test shortcuts.",
+      "compliant": true,
+      "evidence": "The Makefile exposes a named quality-gates graph and tests assert its explicit gate composition."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Parallel gates may contend for shared target artifacts; full quality and CI smoke verification must confirm safety."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "id": "RFE-ISSUE-004",
+      "category": "process",
+      "severity": "medium",
+      "summary": "make quality took about 20 minutes in smoke while independent gates were serialized.",
+      "resolution": "Preserve all gates in a named graph and execute it with bounded two-job parallelism.",
+      "status": "open"
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "all required quality gates remain in quality graph",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "Makefile",
+        "tests/test_makefile.py"
+      ]
+    },
+    {
+      "scenario": "specialized pytest gates remain explicit for customized adopters",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "Makefile",
+        "tests/test_makefile.py"
+      ]
+    },
+    {
+      "scenario": "coverage floor remains 85 percent",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "Makefile",
+        "tests/test_makefile.py"
+      ]
+    },
+    {
+      "scenario": "external publication",
+      "required": true,
+      "status": "not_applicable",
+      "reason": "Explicitly out of scope.",
+      "evidence": [
+        "Contract outOfScope"
+      ]
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Parallel execution must remain safe for target artifacts and preserve adopter project-test semantics.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "No gate removal",
+      "Parallel artifact safety",
+      "Coverage floor"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "e32487c3e375c927",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "e32487c3e375c927",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 594
+}
