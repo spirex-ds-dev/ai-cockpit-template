@@ -1,0 +1,164 @@
+{
+  "contractVersion": 2,
+  "workItemId": "record-quality-gate-latency",
+  "mode": "investigate",
+  "title": "Record repeated full quality gate latency",
+  "baseCommit": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/record-quality-gate-latency.contract.json",
+    ".ai/work-items/active/record-quality-gate-latency.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "changing Makefile quality targets",
+    "changing CI workflow gate composition or required checks",
+    "weakening or bypassing release, smoke, compatibility, or AI governance gates"
+  ],
+  "sources": [
+    {"path": "Makefile", "reason": "Authoritative quality target and gate graph observed during the completed corrective PR."},
+    {"path": ".github/workflows/compatibility.yml", "reason": "Compatibility workflow timing and repeated make quality invocation."},
+    {"path": ".github/workflows/smoke.yml", "reason": "Template smoke workflow timing and repeated make quality invocation."},
+    {"path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "reason": "Execution plan issue log and follow-up boundary."},
+    {"path": "AGENTS.md", "reason": "Required Work Item lifecycle and fail-closed process."}
+  ],
+  "unknowns": [],
+  "rawUserRequest": "Record process problems found during every Work Item and let the user review improvement proposals after the current plan is complete; do not weaken gates while recording latency.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:quality-gate-latency-observation", "capturedAt": "2026-07-27", "digest": "sha256:quality-gate-latency-observation"},
+  "declaredIntent": {"summary": "Record the measured latency caused by repeated full make quality executions in PR CI without changing current release gates.", "requestedCapabilities": ["ai_governance", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["process", "release"], "reason": "Recording latency must not be mistaken for evidence that a gate can be removed or weakened.", "unknownsReviewComplete": true},
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous Work Item execution and requested issue recording; no gate behavior is being changed."
+  },
+  "preReviewWarnings": [
+    "Preserve all current required gates; record observed duration as a follow-up candidate only."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The plan records measured PR #395 compatibility and template-smoke durations and identifies repeated full make quality as the observed cause.",
+    "The record explicitly states that no quality or release gate was weakened and that optimization is deferred for user review after the plan completes.",
+    "The Work Item completes the full finish, archive, PR, merge, close, branch cleanup, and base synchronization lifecycle."
+  ],
+  "guidelines": [
+    "Preserve current required gates and fail-closed release behavior.",
+    "Record evidence rather than infer a gate reduction from timing alone.",
+    "Defer optimization changes until the user reviews the completed plan."
+  ],
+  "intent": {
+    "problem": "PR #395 compatibility took 13m41s with six platform jobs repeatedly running make quality, and template-smoke took 21m45s with another full make quality run before later smoke checks.",
+    "constraints": ["Do not change current quality, smoke, compatibility, release, or AI governance gates.", "Record measured evidence and defer optimization choice until the user reviews the completed plan."],
+    "rationale": "The observation should be traceable and reviewable without turning a performance concern into an unverified reduction of release assurance."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Measured compatibility and smoke durations are recorded in the plan", "required": true, "status": "verified", "evidence": ["PR #395 CI run 30210830175", "PR #395 smoke run 30210830169"]},
+    {"scenario": "Current quality and release gates remain unchanged", "required": true, "status": "verified", "evidence": ["Makefile", ".github/workflows/compatibility.yml", ".github/workflows/smoke.yml"]},
+    {"scenario": "Actual optimization implementation", "required": true, "status": "not_applicable", "reason": "Explicitly out of scope; user review follows plan completion.", "evidence": ["Contract outOfScope"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 616
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/record-quality-gate-latency.json",
+    "baseCommit": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+    "initialScopeDigest": "aa39be287bc61e140c512d667cff56bb55dfc04551dc0449ee29eaa01568bd99",
+    "contractSkeletonDigest": "bac110d8c4efe40f1b3e70197e3cc186fa73110e20c3ba4472aa43bedc095cee"
+  }
+}

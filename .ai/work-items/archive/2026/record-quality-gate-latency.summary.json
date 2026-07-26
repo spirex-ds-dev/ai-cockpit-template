@@ -1,0 +1,429 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "record-quality-gate-latency",
+  "contractPath": ".ai/work-items/archive/2026/record-quality-gate-latency.contract.json",
+  "changedFiles": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Recorded RFE-ISSUE-042 with provider CI timing evidence and deferred optimization boundary, plus RFE-ISSUE-043 contract process issue."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/record-quality-gate-latency.contract.json",
+      "reason": "Task-specific evidence boundary and acceptance contract."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/record-quality-gate-latency.summary.json",
+      "reason": "AI Change Summary and lifecycle handoff."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated Work Item status evidence."
+    },
+    {
+      "path": ".ai/work-items/starts/record-quality-gate-latency.json",
+      "reason": "Work Item start receipt."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/record-quality-gate-latency.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "Makefile",
+    ".github/workflows/compatibility.yml",
+    ".github/workflows/smoke.yml",
+    "AGENTS.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/record-quality-gate-latency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:02:34.467149+00:00",
+      "exitCode": 0,
+      "durationMs": 38,
+      "outputDigest": "04ca4578d05979f944909aec0090d4a94fdcb9efb251331ca08dddd197ca34da",
+      "commandHash": "cb2cb7c887e3953ef8d1074d19daf9cca7fb4232587b72578ffbc5985d795b08",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "bfae0c6f7a5ba2e9bf9d82dfe7d85e7ae167e5dedf5194f111cee0242d356324",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/record-quality-gate-latency.contract.json work item contract check passed: .ai/work-items/active/record-quality-gate-latency.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/record-quality-gate-latency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:02:34.644091+00:00",
+      "exitCode": 0,
+      "durationMs": 111,
+      "outputDigest": "9a340e61f8c401c1f0ccff737d372a91fe1fb21820367d4dfc1fd15c63ee8cef",
+      "commandHash": "8965b47faca4e08bc9cc2a25bb76ef19404c00f82478d4aac8ca93242dc827d8",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "bfae0c6f7a5ba2e9bf9d82dfe7d85e7ae167e5dedf5194f111cee0242d356324",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/record-quality-gate-latency.contract.json scope guard passed: 3 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:02:34.825020+00:00",
+      "exitCode": 0,
+      "durationMs": 132,
+      "outputDigest": "fe0f475e1c8f813c8b00611166bd15ab70a033d5fc5b8841da69a2ac5e5d9ee6",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "bfae0c6f7a5ba2e9bf9d82dfe7d85e7ae167e5dedf5194f111cee0242d356324",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/record-quality-gate-latency.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/record-quality-gate-latency.contract.json SUMMARY=.ai/work-items/active/record-quality-gate-latency.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:02:35.053116+00:00",
+      "exitCode": 0,
+      "durationMs": 174,
+      "outputDigest": "5adc39f6d0d5bab9363ea0e4f195461ddb857cb6f060b03de6b25c0120e5af83",
+      "commandHash": "d1e2494a8aab1aa2c784c4b6bc6ad5c690099f9d9ec705121ac66ea69c83ab8b",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "bfae0c6f7a5ba2e9bf9d82dfe7d85e7ae167e5dedf5194f111cee0242d356324",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/record-quality-gate-latency.contract.json --summary .ai/work-items/active/record-quality-gate-latency.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `record-quality-gate-latency` - Contract Hash: `6b8a7df796c837d3` - Mode: `investigate` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `3` - Unknown Count: `0` - Requir"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/record-quality-gate-latency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:02:35.232036+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "b0f0fc703293d0a815368e03eca8ae9e6aa882332ff364e3d21facf5e3aec423",
+      "commandHash": "752108a4519e135847e1ad7998a00560da0122d2e31bbe2152c58bbb442b434f",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "bfae0c6f7a5ba2e9bf9d82dfe7d85e7ae167e5dedf5194f111cee0242d356324",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/record-quality-gate-latency.summary.json review policy matched 2 path(s) [review] .ai/work-items/starts/record-quality-gate-latency.json [review] .ai/cockpit/current_status.md review focus recorded: 3 item(s) report: target/ai_review_policy_report.json"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:02:35.396480+00:00",
+      "exitCode": 0,
+      "durationMs": 114,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "bfae0c6f7a5ba2e9bf9d82dfe7d85e7ae167e5dedf5194f111cee0242d356324",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:02:35.617385+00:00",
+      "exitCode": 0,
+      "durationMs": 168,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "bfae0c6f7a5ba2e9bf9d82dfe7d85e7ae167e5dedf5194f111cee0242d356324",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/record-quality-gate-latency.contract.json SUMMARY=.ai/work-items/active/record-quality-gate-latency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:02:35.749881+00:00",
+      "exitCode": 0,
+      "durationMs": 76,
+      "outputDigest": "36826259eb4d9a85df34e76314dfa9662fd8f1ab206bb778105908a55ce71ee7",
+      "commandHash": "324aa31e5dec6ace38eead42921a2bd65e0313b17fdc2d98bfb7c44d13468a68",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "bfae0c6f7a5ba2e9bf9d82dfe7d85e7ae167e5dedf5194f111cee0242d356324",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/record-quality-gate-latency.contract.json --summary .ai/work-items/active/record-quality-gate-latency.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/record-quality-gate-latency.contract.json SUMMARY=.ai/work-items/active/record-quality-gate-latency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:02:35.854009+00:00",
+      "exitCode": 0,
+      "durationMs": 58,
+      "outputDigest": "66f06243be414f03bbcbe137d1adfe83a6b3560c8cba3104dc7318f5f5316dd3",
+      "commandHash": "014b1fb4753ec3e1866b8f46845104a13f77c0f989f675c1e55634e05e23de3c",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "bfae0c6f7a5ba2e9bf9d82dfe7d85e7ae167e5dedf5194f111cee0242d356324",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/record-quality-gate-latency.contract.json --summary .ai/work-items/active/record-quality-gate-latency.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/record-quality-gate-latency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:02:36.108452+00:00",
+      "exitCode": 0,
+      "durationMs": 203,
+      "outputDigest": "b45306e36a865c206e86bacc77c274c83998793aad4a86cb5ff5ec12d66c83e0",
+      "commandHash": "7744bdaa57266c42f36290e895a000571286c0c1fe7a772ab2f9c32d87bdcd92",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "bfae0c6f7a5ba2e9bf9d82dfe7d85e7ae167e5dedf5194f111cee0242d356324",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/record-quality-gate-latency.contract.json ## Diff Ownership Preview - active_owned: `3`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/record-quality-gate-latency.json` — covered by Contract scope - [active_owned] `docs/super"
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:09:10.700961+00:00",
+      "exitCode": 0,
+      "durationMs": 394517,
+      "outputDigest": "bd8f586d1c584fd63d42bd9b3909f5f0adc8a7047bd7f87252360a13ca88a8fd",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "bfae0c6f7a5ba2e9bf9d82dfe7d85e7ae167e5dedf5194f111cee0242d356324",
+      "outputSummary": "make --no-print-directory --jobs=2 quality-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 239 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/unsupported_claim_gate.py { \"gate\": \"Unsupported Claim Regression Gate\", \"policyReference\": \"unsupported-claim-evidence-"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/record-quality-gate-latency.contract.json SUMMARY=.ai/work-items/active/record-quality-gate-latency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:09:12.226854+00:00",
+      "exitCode": 0,
+      "durationMs": 194,
+      "outputDigest": "d29981f67f014202b1a0a56c789d02f7608f77798b98b4a2b073c678444263df",
+      "commandHash": "25bbbdb1911e1004fab1fb97efef7ea4281658194cd3c55eabf2976642af97db",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "9b3561b95c16b17bcc3284a8557bc50b0a8bc3dcbe6d454ae47f09b4ffbb7869",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/record-quality-gate-latency.contract.json --summary .ai/work-items/active/record-quality-gate-latency.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/record-quality-gate-latency.contract.json SUMMARY=.ai/work-items/active/record-quality-gate-latency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:09:12.492186+00:00",
+      "exitCode": 0,
+      "durationMs": 207,
+      "outputDigest": "f6eb9d2a29feff2cc41f037645cfb6acb076dbcdeb789fb20d7f3861d120bb43",
+      "commandHash": "4d03d1895fa36d85b8b0d4ccfa35047d7893654fe9f438932d0ca6ae4c153a12",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "9b3561b95c16b17bcc3284a8557bc50b0a8bc3dcbe6d454ae47f09b4ffbb7869",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/record-quality-gate-latency.contract.json --summary .ai/work-items/active/record-quality-gate-latency.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:09:12.595328+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "9b3561b95c16b17bcc3284a8557bc50b0a8bc3dcbe6d454ae47f09b4ffbb7869",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/record-quality-gate-latency.contract.json SUMMARY=.ai/work-items/active/record-quality-gate-latency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:09:12.693305+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "fb349e3bdb227bbd69aa49089106a7ab43ef77eb7748dc6e9cf810b59e5b26dc",
+      "commandHash": "929c078ab2dc480fa7a529a89adff9ce98e142e452d416d2ddc94623992a51e5",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "9b3561b95c16b17bcc3284a8557bc50b0a8bc3dcbe6d454ae47f09b4ffbb7869",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/record-quality-gate-latency.contract.json --summary .ai/work-items/active/record-quality-gate-latency.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/record-quality-gate-latency.summary.json CONTRACT=.ai/work-items/active/record-quality-gate-latency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T17:09:13.446766+00:00",
+      "exitCode": 0,
+      "durationMs": 88,
+      "outputDigest": "83700a4fd24a3d17c83a250f634a3d721fe826ca302dba87ab6f13095615e2aa",
+      "commandHash": "158621b7e63fc8e07923455d7d3dc99383b08da2edc342ea224b22e38dab2e5a",
+      "contractHash": "6b8a7df796c837d330c152207ad6f79c40390b7ce864a21fc9408aa506598dc6",
+      "commitSha": "bc433d6ecc7e80f24c4ef0bc5caca3d95ed89fbe",
+      "executionContractPath": ".ai/work-items/active/record-quality-gate-latency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/record-quality-gate-latency.summary.json",
+      "worktreeDigest": "376316a889380dbe012a202850861c57b38bcfc809409eccf7edcf2e37048b95",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/record-quality-gate-latency.summary.json --contract .ai/work-items/active/record-quality-gate-latency.contract.json ai summary check passed: .ai/work-items/active/record-quality-gate-latency.summary.json"
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Measured compatibility and smoke durations are recorded in the plan",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "PR #395 CI run 30210830175",
+        "PR #395 smoke run 30210830169"
+      ]
+    },
+    {
+      "scenario": "Current quality and release gates remain unchanged",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "Makefile",
+        ".github/workflows/compatibility.yml",
+        ".github/workflows/smoke.yml"
+      ]
+    },
+    {
+      "scenario": "Actual optimization implementation",
+      "required": true,
+      "status": "not_applicable",
+      "reason": "Explicitly out of scope; user review follows plan completion.",
+      "evidence": [
+        "Contract outOfScope"
+      ]
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Preserve current required gates and fail-closed release behavior.",
+      "compliant": true,
+      "evidence": "This Work Item changes only the execution plan and Work Item evidence; Makefile and workflow gates are untouched."
+    },
+    {
+      "guideline": "Record evidence rather than infer a gate reduction from timing alone.",
+      "compliant": true,
+      "evidence": "RFE-ISSUE-042 records provider run IDs, measured durations, and the observation without claiming a gate can be removed."
+    },
+    {
+      "guideline": "Defer optimization changes until the user reviews the completed plan.",
+      "compliant": true,
+      "evidence": "Optimization is explicitly out of scope and marked as a follow-up candidate."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The timing observation is evidence for review, not evidence that any release assurance can be reduced."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "id": "RFE-ISSUE-043",
+      "detail": "Initial preflight rejected an unregistered requestedOperation effect=record; contract was aligned to the repository_governance.modify/enforce policy mapping before execution."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "process",
+      "detail": "An optimization design has not been selected; it remains for the user's post-plan review.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "accuracy of run IDs and durations",
+      "no gate weakening",
+      "deferred optimization boundary"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "6b8a7df796c837d3",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "6b8a7df796c837d3",
+      "acceptanceCount": 3,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "Full finish, PR, merge, close, and base synchronization are pending."
+  ],
+  "overclaimPrevention": "This Work Item records latency only; it does not claim that any quality or release gate is unnecessary.",
+  "archiveSequence": 604
+}
