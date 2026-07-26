@@ -1,0 +1,448 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "runtime-freeze-bootstrap-dependency",
+  "contractPath": ".ai/work-items/archive/2026/runtime-freeze-bootstrap-dependency.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/runtime-freeze-bootstrap-dependency.contract.json",
+      "reason": "Created and finalized the dependency-boundary corrective Contract."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/runtime-freeze-bootstrap-dependency.summary.json",
+      "reason": "Tracks provider failure evidence, bootstrap fix, and lifecycle verification."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated cockpit status and lifecycle evidence."
+    },
+    {
+      "path": ".ai/work-items/starts/runtime-freeze-bootstrap-dependency.json",
+      "reason": "Records the Work Item start receipt."
+    },
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "Removes the unnecessary optional supply-chain import from runtime freeze bootstrap."
+    },
+    {
+      "path": "tests/test_release_preflight.py",
+      "reason": "Verifies standard-library digest helper behavior and runtime freeze regression coverage."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records RFE-ISSUE-024 and RFE-ISSUE-025."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/runtime-freeze-bootstrap-dependency.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+    "scripts/finalize_release_freeze.py",
+    "tests/test_release_preflight.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:36:43.170134+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "3b758c320b5a748a79b24abb004e7bed554acbe3856f042bb10b399a953d92fe",
+      "commandHash": "72cebe1b12753218bb4c34c56ed839e5d998eb8b54f831eb120716e5fa960ddc",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "dc9e69216e34af5ca402396ea0ff5fdc260149ae2284ee543809dd11f22dc500",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json work item contract check passed: .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:36:43.513277+00:00",
+      "exitCode": 0,
+      "durationMs": 270,
+      "outputDigest": "15c5c24994171fd2c3decc542975e0b7dc7c1d633a8d89e20c6d79bdafdec582",
+      "commandHash": "59ebf3f72005ea21f6f391ca4aeec9b87fc10f329a1bc2d63ffe00fa4b665210",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "e0f4673c9d4e66f88a9ff6be5c576bbc2402b0308318b9f2bd62304278bc847d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json scope guard passed: 7 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:36:43.731719+00:00",
+      "exitCode": 0,
+      "durationMs": 164,
+      "outputDigest": "fa79bc47b9322a6659b4862c1ef945a21036edeb753311293b842725fe8d6cb1",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "c0be5b6b82e4e151bf4b58785e43b1b60c2c7c324e06bfaeea78d462c6ee24e4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json SUMMARY=.ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:36:44.002822+00:00",
+      "exitCode": 0,
+      "durationMs": 203,
+      "outputDigest": "914e3542af30f81aa12e6f51296a85deab8fc061f282a4001ef2757cb1ca0e58",
+      "commandHash": "7f3bbcebddecfc391d85ad852e1db5228665fc5896767f2fec8233cbca76d6e4",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "18cff59221648bd69b3ad641fb62c67a16666bc313ddf5ac7f542257adf7b8e1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json --summary .ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `runtime-freeze-bootstrap-dependency` - Contract Hash: `1d7149d761865c06` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Co"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:36:44.165050+00:00",
+      "exitCode": 0,
+      "durationMs": 117,
+      "outputDigest": "42f8fede34ef72e4c0b3c25318272b6cd694adf1a1c8a33b621f719a20e68684",
+      "commandHash": "a0202c782ccf631327a7d9cb6d23d3ac92bf5e192160ce30989cdb6c7367c211",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "298da8708697c70fdf67b8acb2e9a8cb0fe859443ad9a11fae757543d53c5593",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json review policy matched 3 path(s) [review] .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json [review] .ai/work-items/starts/runtime-freeze-bootstrap-dependency.json [review] .ai/cockpit/current_status.md [warning] review policy matched paths, but Summary reviewReadiness.expectedReviewFocus is empty report: target/ai_revi"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:36:44.323513+00:00",
+      "exitCode": 0,
+      "durationMs": 108,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "a45e8e4cb00a6cc61277f2b7bee3f8b368df3e392e7779230576dffc32e54196",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:36:44.487401+00:00",
+      "exitCode": 0,
+      "durationMs": 114,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "7fe1c8c34556767cc778510a3ffcd17eec3deefcb8cde2d0333002bbdabda190",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json SUMMARY=.ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:36:44.601797+00:00",
+      "exitCode": 0,
+      "durationMs": 61,
+      "outputDigest": "75822bdbd4c6f4b8b48e46231c901fe90860175753decd9d548b1c9f5ede7151",
+      "commandHash": "4fcf34e58a7aae988d36b26e47bdf5300f772c886c74d1ffb56135398de74204",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "dad73ba2da63fe6587e754ce0c262a7b2638a1e8a868308a619dbc0c96d05cc4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json --summary .ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json SUMMARY=.ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:36:44.713117+00:00",
+      "exitCode": 0,
+      "durationMs": 60,
+      "outputDigest": "6ae6963607df493808bb9edd1754543b679d17a07954ad7c87232269147475ac",
+      "commandHash": "c86a4540a4ccdd1e740c560392fcf6b5847e45b14794e73f49669922a2807538",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "78570eb079f5faea5262c0978bcfe6baf325aa5c6973fb1c107f4eea93baa660",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json --summary .ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json guidelines compliance check passed: 4 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:36:44.967533+00:00",
+      "exitCode": 0,
+      "durationMs": 203,
+      "outputDigest": "ae71789cfc2811adc3134d5fa5d21d92de8312b42f0ca0cb16cf0701eda9ded1",
+      "commandHash": "f2b1379743b2a9577d7cbb632019687656b4c95cbce59f51acaab5ba1a7a7997",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "c500ff75f00d45ef282e1e3e41cb5bcb5d74aa03f9236ea766c6011c4b93428e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json ## Diff Ownership Preview - active_owned: `7`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json` — covered by Contract scope - ["
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:43:09.348353+00:00",
+      "exitCode": 0,
+      "durationMs": 384303,
+      "outputDigest": "2550b373af881f403d30a905ba9faf3f5625575890431f7e8dc728637e8c459d",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "a48201e53ce3be03e7d4caf832822627d353ed1cb84d99468e823ec2d5d62e78",
+      "outputSummary": "make --no-print-directory --jobs=2 quality-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 239 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/unsupported_claim_gate.py { \"gate\": \"Unsupported Claim Regression Gate\", \"policyReference\": \"unsupported-claim-evidence-"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json SUMMARY=.ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:43:10.841385+00:00",
+      "exitCode": 0,
+      "durationMs": 192,
+      "outputDigest": "f7c0682d3cc583934d1a1b63eb4f6252a0b1bff6d66234dae16eca4751f4273f",
+      "commandHash": "e5c6b8810be64b4601ae0fa4323492f110e7202e86fe4e19d0a0d81327c9fb14",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "754d27096efbe96f4b6586a5fe7eea7ccaac15b4e2f81904d86699829bb7c65f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json --summary .ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json SUMMARY=.ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:43:11.136154+00:00",
+      "exitCode": 0,
+      "durationMs": 214,
+      "outputDigest": "a65eb7402a7cd74a3c595bb4283f20c4256335fc17483382c98a9633a687e806",
+      "commandHash": "13f74704989f3d24d7b25a98fbece64b97c5caf02a193accb1973126a443ca63",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "59e7a4144444127e20c7584bb9325873e933e83e322de3a9de9ad22aeb05938d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json --summary .ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:43:11.223800+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "00ab1ad60e5ba63d92a6681c2201d1405285c5c97ef12ca58d03c749d0b934a2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json SUMMARY=.ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:43:11.324910+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "6286c4077e47cb16c6f806caf320834b80a41cee8cca2da1b440ea32092c0ba5",
+      "commandHash": "53a69028b223500069e88ea6dee19a84507d92ab1fc5ab5ecf114fe02e24c25d",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "759ebc6a8cc7ebd329fbf7e19b87f126d1abb7ed19e817d035ce6f7dedb894ea",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json --summary .ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json CONTRACT=.ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T14:43:12.050733+00:00",
+      "exitCode": 0,
+      "durationMs": 95,
+      "outputDigest": "7c21be28a17e4eee9f8cc95df44e5ff8335e987055018150167990481a76f0ff",
+      "commandHash": "b0184d3835e10c4e5645baf5bd5e6fe749540fc737b422f646130cbd8caa76b8",
+      "contractHash": "1d7149d761865c06edfd02665604f676be019a7f27f51b374c9d8cab32d32d5c",
+      "commitSha": "71c18c6e65e8fd5084569ef6b6dbd97814f9b074",
+      "executionContractPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json",
+      "worktreeDigest": "cdb1259533026bd17c4e5c5141e67b079764aec810990ae3bf2923e7d9816f9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json --contract .ai/work-items/active/runtime-freeze-bootstrap-dependency.contract.json ai summary check passed: .ai/work-items/active/runtime-freeze-bootstrap-dependency.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Bootstrap release commands must depend only on libraries available at their execution stage.",
+      "compliant": true,
+      "evidence": "Runtime freeze now uses the standard-library hashlib helper and does not import check_supply_chain.py."
+    },
+    {
+      "guideline": "Preserve source-bound SHA-256 output exactly.",
+      "compliant": true,
+      "evidence": "The local helper uses UTF-8 SHA-256, matching the removed helper implementation."
+    },
+    {
+      "guideline": "Do not create a tag or public asset in this corrective Work Item.",
+      "compliant": true,
+      "evidence": "No publication operation is in scope."
+    },
+    {
+      "guideline": "Every Work Item must use a dedicated branch and complete PR lifecycle.",
+      "compliant": true,
+      "evidence": "Implementation is on a dedicated corrective branch with full lifecycle required."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "Provider publication remains blocked until the bootstrap fix passes CI and a release retry reaches preflight."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "RFE-ISSUE-024",
+      "category": "dependency",
+      "severity": "high",
+      "fact": "Provider run 30206296217 failed before preflight because runtime freeze imported unavailable cyclonedx through check_supply_chain.py.",
+      "resolution": "Replace the heavy import with a local standard-library SHA-256 helper and verify output parity.",
+      "status": "resolved_pending_lifecycle"
+    },
+    {
+      "issueId": "RFE-ISSUE-025",
+      "category": "process",
+      "severity": "medium",
+      "fact": "Initial corrective skeleton was not_ready because dependency-boundary Contract evidence was missing.",
+      "resolution": "Completed the Contract and reran preflight successfully.",
+      "status": "resolved_pending_lifecycle"
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "high",
+      "area": "release",
+      "detail": "A provider retry is blocked until runtime freeze starts successfully before dependency installation.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": []
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "1d7149d761865c06",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "1d7149d761865c06",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "Provider retry and full lifecycle verification remain pending."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "runtime freeze starts before optional dependency installation",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "scripts/finalize_release_freeze.py",
+        "tests/test_release_preflight.py"
+      ]
+    },
+    {
+      "scenario": "SHA-256 digest output remains source-bound",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "scripts/finalize_release_freeze.py",
+        "tests/test_release_preflight.py"
+      ]
+    },
+    {
+      "scenario": "provider failure blocks publication",
+      "required": true,
+      "status": "not_applicable",
+      "reason": "Publication is out of scope; provider failure evidence is recorded from run 30206296217.",
+      "evidence": [
+        "Contract outOfScope"
+      ]
+    }
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 601
+}
