@@ -115,6 +115,15 @@ project-test:
 	$(AI_PYTHON) scripts/check_critical_coverage.py
 	bash tests/test_ci_release_evidence.sh
 
+# Compatibility jobs validate the interpreter/platform matrix without repeating
+# the release-blocking full quality graph owned by template-smoke.
+compatibility-test:
+	$(AI_PYTHON) -m pytest -q --no-cov \
+		tests/test_input_trust.py \
+		tests/test_input_trust_corpus.py \
+		tests/test_workflows.py \
+		tests/test_ci_quality_orchestration.py
+
 test: project-test unsupported-claim-regression adopter-long-cycle delusion-test-gate
 
 adopter-long-cycle:
