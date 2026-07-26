@@ -401,6 +401,13 @@
       "category": "CI/release preparation boundary",
       "detail": "PR #397 template-smoke rejected a valid preparation baseline because it compared historical release.json v0.5.42 with public v0.5.43 instead of using the candidate release tag.",
       "resolution": "Preparation mode now accepts the explicit historical-projection and public-candidate boundaries, with regression tests; full PR CI must be rerun."
+    },
+    {
+      "id": "RFE-ISSUE-050",
+      "severity": "medium",
+      "category": "archive evidence integrity",
+      "detail": "After RFE-ISSUE-049 was added to the archived Summary, Archive Index digest entries were not updated and the changed Python files were not formatted before CI.",
+      "resolution": "Synchronized Summary, Archive Manifest, and Archive Index digests, formatted both Python files, and reran focused verification."
     }
   ],
   "residualRisks": [

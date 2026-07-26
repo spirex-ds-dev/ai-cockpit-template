@@ -83,7 +83,9 @@ def test_preparation_mode_validates_published_identity_before_next_candidate(mon
     assert release_distribution.main() == 0
 
 
-def test_preparation_mode_accepts_historical_projection_with_public_candidate(monkeypatch, tmp_path):
+def test_preparation_mode_accepts_historical_projection_with_public_candidate(
+    monkeypatch, tmp_path
+):
     published = json.loads((release_distribution.ROOT / "release.json").read_text(encoding="utf-8"))
     candidate = json.loads(
         (release_distribution.ROOT / "next-release.json").read_text(encoding="utf-8")

@@ -1032,8 +1032,10 @@ def main() -> int:
         if tag != latest_tag:
             candidate_tag = candidate.get("releaseTag") if preparation_mode else None
             preparation_tag = None
-            if preparation_mode and isinstance(candidate_tag, str) and is_next_patch_release(
-                candidate_tag, latest_tag
+            if (
+                preparation_mode
+                and isinstance(candidate_tag, str)
+                and is_next_patch_release(candidate_tag, latest_tag)
             ):
                 preparation_tag = candidate_tag
             elif preparation_mode and candidate_tag == latest_tag:
