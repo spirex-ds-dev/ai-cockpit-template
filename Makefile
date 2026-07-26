@@ -19,7 +19,7 @@ AI_PREFLIGHT_VALIDATE_CONTRACT ?= true
 .PHONY: help \
 	test project-format-check project-test project-lint diff-check quality \
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
-	check-docs-metadata check-governance-complexity \
+check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
 	check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning \
 	check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence \
@@ -140,6 +140,9 @@ diff-check:
 
 check-docs-metadata:
 	$(AI_PYTHON) scripts/check_docs_metadata.py
+
+check-trust-layer-docs:
+	$(AI_PYTHON) scripts/check_trust_layer_docs.py
 
 check-governance-complexity:
 	$(AI_PYTHON) scripts/check_governance_complexity.py

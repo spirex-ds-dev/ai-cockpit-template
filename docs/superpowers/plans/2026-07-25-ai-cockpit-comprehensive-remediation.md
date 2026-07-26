@@ -300,6 +300,10 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **强制顺序：** WI-16 及其 corrective Work Item 全部关闭 → `document_human_agent_trust_layer`（WI-17）及其 corrective Work Item 全部关闭 → WI-18 发布新版本。WI-17 不执行实际发布，不把文档对齐当作外部控制或合规认证证据。
 
+**WI-17 当前执行结果：** 已将 `docs/trust-layer.md` 升级为完整英文权威版，新增结构和语义对齐的 `docs/trust-layer.zh-CN.md` 与 `docs/trust-layer.ja.md`；保留现有 Gate、Guard Signal Envelope、Preflight、Raw Request Binding、Requested Operation、Capability Mapping、Human Decision and Recovery、Archive Manifest 等实现证据。已更新 Documentation Architecture 与三语 README 短入口，新增 `scripts/check_trust_layer_docs.py`、`tests/test_trust_layer_docs.py` 以及 `make check-trust-layer-docs`，验证三语文件、章节 ID/标题数量、入口、架构登记、内部链接和核心边界句。`make ai-finish TASK=document_human_agent_trust_layer` 已通过并归档：1148 tests、85.03% coverage，文档/系统不变量、Ruff、mypy、Bandit、供应链、Trust schema、Status、Summary 和 Agent Risk 均通过；当前仅剩 PR/CI/merge/close 生命周期。
+
+**WI-17 流程问题记录：** `WI-17-ISSUE-001`（流程/预检，低）：初始 Contract 未把真实 scope、sources、scenario coverage 和 raw request 写入，`ai-start` 正确以 `not_ready` 停止；已补全 Contract，并以用户已授权的结构化决策记录继续，未把实现前场景误记为已验证。`WI-17-ISSUE-002`（流程/归属，低）：结构化预检决策文件最初不在 Contract scope，before-edit checkpoint 将其标为 unowned；已将 `.ai/decisions/**` 纳入 scope 并刷新 checkpoint。`WI-17-ISSUE-003`（检查器缺陷，低）：内部链接检查器初始只接受文件，把 README 中合法的目录入口 `examples/` 判为 broken link；已允许合法目录目标并重新通过检查。`WI-17-ISSUE-004`（证据状态，待对齐）：在 Contract 细化期间旧预检决策证据出现 stale hash；保留为流程历史，最终 Summary 必须明确该决策仅代表实现授权，不得作为任何实现验证结果，并在 finish 前保证所有场景均为真实 verified 或明确 not_applicable。`WI-17-ISSUE-005`（流程/归属，低）：首次 `ai-finish` 发现新增 `Makefile` target 未纳入 Contract scope，Scope Guard 正确停止；已补充 scope 后重跑。`WI-17-ISSUE-006`（质量/文档，低）：全量测试发现日文文档使用项目禁止的置信度术语，且新增检查器初始覆盖不足；已改用项目规定的日语术语、补充 missing-file 分支测试，并通过相关回归。`WI-17-ISSUE-007`（流程/checkpoint，中）：全量质量通过后，Agent Risk 发现 `before_edit` checkpoint 因 Contract 在实现期间最终化而 stale；已先以最终 Contract 刷新 `before_edit`，再继续 finish，不复用旧 checkpoint。
+
 ### WI-18：Publish New Version
 
 **范围：** 这是唯一实际发布新版本的 Work Item。Contract 必须明确 release identity、source commit/ref、tag、asset、distribution、release note、SBOM、provenance、vulnerability/secret、installer lifecycle、Public Install、兼容性和人工发布授权。
