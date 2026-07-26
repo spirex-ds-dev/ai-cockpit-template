@@ -170,6 +170,10 @@ finalize-release-freeze-candidate:
 		$(if $(TAG_TARGET),--tag-target "$(TAG_TARGET)",) \
 		$(if $(METADATA_COMMIT),--metadata-commit "$(METADATA_COMMIT)",)
 
+finalize-release-freeze-runtime:
+	test -n "$(RUNTIME_SOURCE_COMMIT)"
+	$(AI_PYTHON) scripts/finalize_release_freeze.py --runtime-source-commit "$(RUNTIME_SOURCE_COMMIT)"
+
 finalize-release-freeze-premerge:
 	test -n "$(TASK)"
 	$(AI_PYTHON) scripts/finalize_release_freeze.py --premerge-task "$(TASK)" \

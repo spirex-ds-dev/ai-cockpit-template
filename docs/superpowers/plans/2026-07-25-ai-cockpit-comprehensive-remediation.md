@@ -341,6 +341,9 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-018`（工单证据对齐，中）：`ai-finish` 在完整质量门之前发现 corrective Contract 已声明 4 个 scenario coverage，但 active Summary 未同步该字段，因此场景覆盖检查 fail-closed。已停止收口，补齐 Summary 的场景状态和实际 changedFiles 归属后再重跑；不得用 Contract 单独替代 Summary 证据。
 `RFE-ISSUE-019`（工单证据格式，中）：全量质量门通过后，`ai-finish` 的 Summary 校验拒绝了 `reviewReadiness.status=in_review`，因为合法状态仅包括 `blocked`、`not_ready`、`ready`、`ready_with_risks`。已停止归档，改用 `ready_with_risks` 并保留发布预检尚未在关闭后重跑的残余风险。
 `RFE-ISSUE-020`（PR边界/发布证据，中）：`ai-finish` 归档后，最终状态稳定化重新生成了 `.ai/cockpit/release-digests.json` 与 `release-freeze.json`，而首次 `make check-ai-pr` 发现这两个生成文件仍未提交，按要求阻止 PR 边界检查。已停止 PR 创建，先提交归档后最终生成的 source-bound evidence，再重新执行 PR 检查。
+`RFE-ISSUE-021`（发布流程/来源绑定，高）：WI-18 corrective PR #391 关闭后，主分支上的普通 `make finalize-release-freeze` 与本地 `make check-release-preflight` 可以通过，但生成的 freeze evidence 只存在本地未提交工作树；provider workflow 从远端 exact source checkout 开始，无法消费该证据。若把它直接提交，提交本身又会改变被记录的 source commit，形成自引用循环。已停止 provider publication，建立 corrective Work Item `runtime-release-freeze-evidence`，将 runtime freeze materialization 放入 exact-source provider 运行中，并保持 committed-source preflight 在 runtime release projection 之前。
+`RFE-ISSUE-022`（工单初始化/流程，中）：建立 `runtime-release-freeze-evidence` 时，首次 `make ai-start ... MODE=code` 的 skeleton 因缺少 runtime 发布 intent、raw request、sources、scenario coverage 和受限写入授权而按预期 `not_ready` 停止。已补全 Contract 后重跑；不得跳过此门禁直接修改发布 workflow。
+`RFE-ISSUE-023`（工单契约/流程，中）：runtime corrective Contract 初稿在 declared intent 中使用了仓库 capability registry 未登记的 `release_engineering`，preflight 按预期拒绝 raw request。已改为已登记的 `ai_governance` 与 `test_automation` capability 后重跑；不得以未登记能力绕过 capability guard。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
