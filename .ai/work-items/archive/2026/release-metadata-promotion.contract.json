@@ -20,19 +20,25 @@
     "release.json",
     "next-release.json",
     "release-state.json",
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    "scripts/ai_common.py",
+    "scripts/ai_finish.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_project_governance_journey.py",
     ".ai/cockpit/release-freeze.json",
     ".ai/cockpit/release-digests.json",
     "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
   ],
   "outOfScope": [
     "Publishing a tag or public release asset",
-    "Changing release workflow implementation, signing, branch protection, SBOM/provenance generators, or runtime security",
+    "Changing signing, branch protection, SBOM/provenance generators, or runtime security",
     "Deleting historical release or Work Item evidence"
   ],
   "sources": [
     {
       "path": "release.json",
-      "reason": "Current published release projection that must be promoted to the next source-bound release identity."
+      "reason": "Published v0.5.42 projection that must remain historical while the workflow creates a temporary v0.5.43 runtime projection."
     },
     {
       "path": "next-release.json",
@@ -48,7 +54,23 @@
     },
     {
       "path": ".github/workflows/release.yml",
-      "reason": "Provider workflow requires release.json.releaseTag to equal the requested immutable tag."
+      "reason": "Provider workflow must validate the candidate and create a source-bound runtime projection without mutating committed published metadata."
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "Finish subprocesses must not inherit outer pytest coverage instrumentation."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Explicitly propagates project quality variables into nested make checks so ordinary Makefile assignments cannot erase test-requested values."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Regression coverage for Git and coverage environment isolation in nested finish flows."
+    },
+    {
+      "path": "tests/test_project_governance_journey.py",
+      "reason": "Keeps the repository governance journey isolated from outer coverage instrumentation."
     },
     {
       "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
@@ -89,10 +111,10 @@
     "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
   },
   "acceptance": [
-    "release.json is promoted from the v0.5.42 published projection to the v0.5.43 source-bound release projection using next-release.json as the candidate authority.",
-    "release.json releaseArchive assetName, URL, SHA-256, installerDigest, capability status, and supply-chain fields are source-bound and internally consistent.",
+    "Committed release.json remains the published v0.5.42 projection; next-release.json remains the v0.5.43 candidate authority.",
+    "The release workflow validates next-release.json and creates a temporary source-bound v0.5.43 release.json projection with internally consistent archive and installer digests.",
     "release-state.json and release-digests.json distinguish the new candidate/published projection from historical v0.5.42 and preserve previousRelease semantics.",
-    "finalize-release-freeze and check-release-preflight pass on the exact synchronized main source without publishing a tag or asset in this corrective Work Item.",
+    "The workflow projection regression test and check-release-preflight pass on the exact synchronized main source without publishing a tag or asset in this corrective Work Item.",
     "The complete corrective lifecycle passes: Contract, preflight, verification, Summary, PR, CI, merge, ai-close-work-item, branch cleanup, and origin/main synchronization."
   ],
   "guidelines": [
@@ -121,7 +143,7 @@
     "target": "repository_governance",
     "action": "modify",
     "environment": "repository",
-    "effect": "document",
+    "effect": "enforce",
     "authorityRequired": false
   },
   "declaredIntent": {
@@ -131,6 +153,7 @@
   "scenarioCoverage": [
     {"scenario": "Candidate v0.5.43 and published v0.5.42 metadata are distinct and previousRelease is preserved.", "required": true, "status": "verified", "evidence": ["next-release.json", "release.json", "release-state.json"]},
     {"scenario": "Release archive, installer, and metadata digests are regenerated for the exact synchronized main source.", "required": true, "status": "verified", "evidence": ["scripts/finalize_release_freeze.py", "scripts/check_release_preflight.py"]},
+    {"scenario": "The provider workflow creates a temporary candidate projection without mutating committed published release.json.", "required": true, "status": "verified", "evidence": [".github/workflows/release.yml", "tests/test_release_workflow.py"]},
     {"scenario": "A corrective change cannot publish a tag or public asset.", "required": true, "status": "verified", "evidence": [".github/workflows/release.yml", "Contract outOfScope"]}
   ],
   "restrictedWriteApproval": {

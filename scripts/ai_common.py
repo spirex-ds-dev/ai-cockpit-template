@@ -18,13 +18,44 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 CHECKS_PATH = PROJECT_ROOT / ".ai" / "cockpit" / "checks.yaml"
 SCENARIO_COVERAGE_STATUSES = {"verified", "unverified", "not_applicable"}
 GIT_ENV_PREFIX = "GIT_"
+MAKE_OVERRIDE_BLOCKLIST = {
+    "AI_BASE_COMMIT",
+    "CONTRACT",
+    "SUMMARY",
+    "TASK",
+    "TITLE",
+    "MODE",
+}
+
+
+def _clean_make_overrides(value: str) -> str:
+    """Keep project command overrides while dropping nested Work Item context."""
+    kept: list[str] = []
+    for token in shlex.split(value):
+        name = token.split("=", 1)[0]
+        if name not in MAKE_OVERRIDE_BLOCKLIST:
+            kept.append(token)
+    return " ".join(kept)
 
 
 def clean_git_environment() -> dict[str, str]:
-    """Return the process environment without ambient Git repository overrides."""
+    """Return a subprocess environment without ambient Git or coverage overrides."""
     environment = {
-        key: value for key, value in os.environ.items() if not key.startswith(GIT_ENV_PREFIX)
+        key: value
+        for key, value in os.environ.items()
+        if not key.startswith(GIT_ENV_PREFIX)
+        and not key.startswith("COV_CORE_")
+        and not key.startswith("COVERAGE_")
+        and key not in {"MFLAGS", "MAKELEVEL"}
     }
+    if "MAKEFLAGS" in os.environ:
+        flags = _clean_make_overrides(os.environ["MAKEFLAGS"])
+        if flags:
+            environment["MAKEFLAGS"] = flags
+    if "MAKEOVERRIDES" in os.environ:
+        overrides = _clean_make_overrides(os.environ["MAKEOVERRIDES"])
+        if overrides:
+            environment["MAKEOVERRIDES"] = overrides
     environment["PYTHONDONTWRITEBYTECODE"] = "1"
     return environment
 
