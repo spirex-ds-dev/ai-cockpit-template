@@ -392,6 +392,7 @@ def _configure_finalizer(
             ("status", "--porcelain", "--untracked-files=all"): "",
             ("rev-parse", "HEAD"): f"{head}\n",
             ("rev-parse", "origin/main"): f"{remote_head}\n",
+            ("rev-parse", "runtime^{commit}"): "runtime\n",
         }
         return SimpleNamespace(returncode=0, stdout=outputs.get(tuple(args), ""), stderr="")
 
@@ -471,6 +472,24 @@ def test_finalize_release_freeze_writes_post_close_lifecycle_evidence(monkeypatc
         "release.json": hashlib.sha256((tmp_path / "release.json").read_bytes()).hexdigest(),
         "install.sh": hashlib.sha256((tmp_path / "install.sh").read_bytes()).hexdigest(),
     }
+
+
+def test_finalize_release_freeze_runtime_mode_binds_exact_detached_source(monkeypatch, tmp_path):
+    materialized = _configure_finalizer(
+        monkeypatch,
+        tmp_path,
+        branch="",
+        head="runtime",
+        remote_head="default",
+    )
+
+    assert finalizer.main(runtime_source_commit="runtime") == 0
+    assert materialized == [("tree", "runtime"), ("archive", "runtime")]
+    freeze = json.loads((tmp_path / ".ai" / "cockpit" / "release-freeze.json").read_text())
+    assert freeze["sourceCommit"] == "runtime"
+    assert freeze["tagTarget"] == "runtime"
+    assert freeze["metadataCommit"] == "runtime"
+    assert freeze["lifecycle"]["state"] == "closed_and_synchronized"
 
 
 def test_finalize_release_freeze_fails_closed_on_malformed_release_state(monkeypatch, tmp_path):

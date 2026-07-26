@@ -106,6 +106,13 @@ jobs:
           PY
           fi
 
+      - name: Materialize exact-source runtime release freeze
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE"
+          make finalize-release-freeze-runtime RUNTIME_SOURCE_COMMIT="$SOURCE_COMMIT"
+
       - name: Validate committed source release preflight before projection
         shell: bash
         run: |

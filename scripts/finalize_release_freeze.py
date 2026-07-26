@@ -21,12 +21,13 @@ def _fail(message: str) -> int:
 def main(
     candidate_task: str | None = None,
     premerge_task: str | None = None,
+    runtime_source_commit: str | None = None,
     source_commit: str | None = None,
     tag_target: str | None = None,
     metadata_commit: str | None = None,
 ) -> int:
-    if candidate_task is not None and premerge_task is not None:
-        return _fail("candidate and pre-merge modes are mutually exclusive")
+    if sum(mode is not None for mode in (candidate_task, premerge_task, runtime_source_commit)) > 1:
+        return _fail("candidate, pre-merge, and runtime modes are mutually exclusive")
     root = PROJECT_ROOT
     candidates = discover_remote_default_candidates(run_git)
     if len(candidates) != 1:
@@ -34,12 +35,27 @@ def main(
     remote, branch = candidates[0]
     current = run_git(["branch", "--show-current"])
     current_branch = current.stdout.strip() if current.returncode == 0 else ""
-    if candidate_task is None and premerge_task is None and current_branch != branch:
+    if (
+        candidate_task is None
+        and premerge_task is None
+        and runtime_source_commit is None
+        and current_branch != branch
+    ):
         return _fail(f"must run on synchronized default branch {branch}")
     if (candidate_task is not None or premerge_task is not None) and (
         not current_branch or current_branch == branch
     ):
         return _fail(f"candidate mode must run on a dedicated Work Item branch, not {branch}")
+    if runtime_source_commit is not None:
+        resolved_runtime = run_git(["rev-parse", f"{runtime_source_commit}^{{commit}}"])
+        if resolved_runtime.returncode != 0 or not resolved_runtime.stdout.strip():
+            return _fail(f"runtime source identity cannot be resolved: {runtime_source_commit}")
+        runtime_head = run_git(["rev-parse", "HEAD"])
+        if (
+            runtime_head.returncode != 0
+            or runtime_head.stdout.strip() != resolved_runtime.stdout.strip()
+        ):
+            return _fail("runtime mode must run from the exact checked-out source commit")
     status = run_git(["status", "--porcelain", "--untracked-files=all"])
     if status.returncode != 0 or status.stdout.strip():
         return _fail("worktree must be clean before freeze finalization")
@@ -48,6 +64,7 @@ def main(
     if (
         candidate_task is None
         and premerge_task is None
+        and runtime_source_commit is None
         and (
             head.returncode != 0
             or remote_head.returncode != 0
@@ -59,7 +76,12 @@ def main(
         path.name.removesuffix(".contract.json")
         for path in (root / ".ai" / "work-items" / "active").glob("*.contract.json")
     )
-    if candidate_task is None and premerge_task is None and active:
+    if (
+        candidate_task is None
+        and premerge_task is None
+        and runtime_source_commit is None
+        and active
+    ):
         return _fail(f"active Work Items remain: {', '.join(active)}")
     if candidate_task is not None and active != [candidate_task]:
         return _fail(
@@ -109,13 +131,16 @@ def main(
                 f"Contract scope: {', '.join(missing)}"
             )
     status_path = root / ".ai" / "cockpit" / "current_status.md"
-    if candidate_task is None and "- State: `no_active_work_item`" not in status_path.read_text(
-        encoding="utf-8"
+    if (
+        candidate_task is None
+        and premerge_task is None
+        and runtime_source_commit is None
+        and "- State: `no_active_work_item`" not in status_path.read_text(encoding="utf-8")
     ):
         return _fail("Cockpit Status is not no_active_work_item")
 
     resolved_head = head.stdout.strip()
-    source_identity = source_commit or resolved_head
+    source_identity = runtime_source_commit or source_commit or resolved_head
     tag_identity = tag_target or source_identity
     metadata_identity = metadata_commit or source_identity
     if premerge_task is not None:
@@ -220,7 +245,7 @@ def main(
     release_digests_path.write_text(
         json.dumps(release_digests, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    print(f"release freeze finalized: source={source_commit} archive={archive_sha}")
+    print(f"release freeze finalized: source={source_identity} archive={archive_sha}")
     return 0
 
 
@@ -228,6 +253,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--candidate-task", default=None)
     parser.add_argument("--premerge-task", default=None)
+    parser.add_argument("--runtime-source-commit", default=None)
     parser.add_argument("--source-commit", default=None)
     parser.add_argument("--tag-target", default=None)
     parser.add_argument("--metadata-commit", default=None)
@@ -236,6 +262,7 @@ if __name__ == "__main__":
         main(
             candidate_task=args.candidate_task,
             premerge_task=args.premerge_task,
+            runtime_source_commit=args.runtime_source_commit,
             source_commit=args.source_commit,
             tag_target=args.tag_target,
             metadata_commit=args.metadata_commit,
