@@ -1,0 +1,263 @@
+{
+  "contractVersion": 2,
+  "workItemId": "publish-valid-release-20260727",
+  "mode": "code",
+  "title": "Authorize and prepare valid v0.5.44 release execution",
+  "baseCommit": "2d59e6e58fde9885d3c6ea4ef282b90afb4e7ad4",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/publish-valid-release-20260727.contract.json",
+    ".ai/work-items/active/publish-valid-release-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".ai/cockpit/release-freeze.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/ci-release-evidence.json",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Modifying, deleting, or republishing immutable public tag v0.5.43.",
+    "Changing release workflow, installer, signing, SBOM, provenance, or branch-protection implementation.",
+    "Publishing any tag or Release other than v0.5.44 after every declared gate passes.",
+    "Claiming enterprise compliance, a security sandbox, or validity for v0.5.43."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-18, RFE-ISSUE-045, RFE-ISSUE-062, and RFE-ISSUE-069 define the valid corrective-release and process boundaries."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/publish-corrected-release-20260727.summary.json",
+      "reason": "Closed predecessor proves the v0.5.44 candidate was prepared, reviewed, merged, and synchronized."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-distribution-post-publish-20260727.summary.json",
+      "reason": "Records the immutable invalid-v0.5.43 boundary and public post-publication verification requirements."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Provider workflow creates the source-bound Tag, public Release assets, SBOM, provenance, and post-Tag installer verification."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Defines historical, candidate, immutable Tag, and public asset evidence boundaries."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Declares the v0.5.44 candidate to be published from the exact synchronized main source."
+    }
+  ],
+  "rawUserRequest": "Continue the current AI Cockpit remediation plan serially without stopping. Record every process issue in the plan, complete every Work Item through Contract, verification, PR, merge, ai-close-work-item, branch cleanup, and main synchronization, and then publish the corrected valid release after all gates pass.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-authorized-thread:continuous-remediation-and-valid-v0.5.44-release",
+    "capturedAt": "2026-07-27",
+    "digest": "sha256:user-authorized-serial-remediation-valid-release"
+  },
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "declaredIntent": {
+    "summary": "Publish one valid, source-bound corrective v0.5.44 release only after the exact synchronized main source passes every required governance, supply-chain, CI, and public-install verification gate.",
+    "requestedCapabilities": [
+      "ai_governance"
+    ]
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "user-authorized-thread:continuous-remediation-and-valid-v0.5.44-release",
+    "scope": "Publish one v0.5.44 corrective public release only after all mandatory gates pass; no gate bypass or immutable v0.5.43 mutation is authorized."
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "external_publication",
+      "source_identity",
+      "supply_chain_evidence",
+      "irreversible_tag_and_asset"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "Publication creates a public immutable Tag and Release assets. Source identity, candidate evidence, CI, SBOM, provenance, installer, and post-publication checks must all be exact and fail closed."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized continuous remediation and release publication, while requiring every release gate and complete Work Item lifecycle to remain fail closed."
+  },
+  "preReviewWarnings": [
+    "Do not publish stale, candidate, historical, or conflicting identity. Record exact source SHA, tag, Release URL, assets, checksums, SBOM, provenance, CI run IDs, installer result, and user authorization."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "WI-16 Japanese assessment, WI-17 multilingual Trust Layer, CI orchestration, and v0.5.44 candidate predecessors are merged and closed before publication.",
+    "Release preflight passes against the exact synchronized origin/main source commit after release freeze finalization; no candidate, historical, or stale evidence is used as published proof.",
+    "The Contract records the user-approved, exact v0.5.44 external operation and the required no-active-worktree execution order without allowing a gate bypass or v0.5.43 mutation.",
+    "The Work Item verifies all pre-publication repository gates that can run before finalization, records every process issue, and completes archive, PR, CI, merge, ai-close-work-item, branch deletion, and origin/main synchronization.",
+    "After this Work Item closes, provider publication and public verification are executed only from clean synchronized main and immediately recorded in a dedicated post-publication verification Work Item."
+  ],
+  "guidelines": [
+    "Release claims must be backed by source-bound evidence rather than self-declaration.",
+    "Do not publish when any required release gate is missing, stale, contradictory, or unverifiable.",
+    "Preserve the distinction between SBOM delegated domain evidence and AI Cockpit governance evidence.",
+    "Keep release identity and evidence machine-readable and reproducible."
+  ],
+  "intent": {
+    "problem": "v0.5.43 is public but invalid because its immutable Tag metadata declares historical v0.5.42 and Quick Install fails closed. The repaired release workflow and source-bound v0.5.44 candidate are now merged. Release finalization can only run from clean synchronized main with no active Work Item, so the approved publication record and repository preflight evidence must close before that external operation.",
+    "constraints": [
+      "Use only the synchronized origin/main commit as the v0.5.44 source.",
+      "Never modify, delete, republish, or claim validity for v0.5.43.",
+      "Run release freeze, preflight, provider release, and public post-publication verification in their prescribed order.",
+      "Do not bypass CI, SBOM, provenance, sensitive-material scanning, compatibility, installer, or human approval evidence."
+    ],
+    "rationale": "A subsequent patch release is the only safe correction for an immutable invalid public Tag. Closing the approved-preparation Work Item before finalization preserves reviewable human approval while respecting the repository's clean-main release boundary; public evidence remains a separate post-publication record."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized thread request",
+    "reason": "The user explicitly authorized continuous remediation and publication after all gates pass; no gate bypass, historical Tag mutation, or unverified release claim is authorized."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 609
+    }
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "stale, candidate, historical, or conflicting release identity",
+      "expected": "Preflight fails closed and no Tag or public asset is created.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["scripts/check_release_preflight.py", "tests/test_release_preflight.py"]
+    },
+    {
+      "scenario": "predecessor closure or source-bound release evidence is absent",
+      "expected": "Publication stops before provider invocation.",
+      "required": true,
+      "status": "verified",
+      "evidence": [".ai/work-items/archive/2026/publish-corrected-release-20260727.summary.json", "make check-release-preflight"]
+    },
+    {
+      "scenario": "provider Tag or public assets disagree with v0.5.44 source identity",
+      "expected": "Post-publication verification fails closed and WI-18 remains incomplete.",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/release.yml", "make check-release-distribution-post-publish"]
+    },
+    {
+      "scenario": "all deterministic and public evidence checks pass",
+      "expected": "v0.5.44 is recorded as the valid corrective public release and this Work Item proceeds to PR closure.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["release.json", "next-release.json", "release-state.json"]
+    },
+    {
+      "scenario": "a workflow or process defect occurs during publication",
+      "expected": "Record the issue, correct the process in a separate scoped Work Item when needed, and do not continue on stale evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["AGENTS.md", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"]
+    }
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/publish-valid-release-20260727.json",
+    "baseCommit": "2d59e6e58fde9885d3c6ea4ef282b90afb4e7ad4",
+    "initialScopeDigest": "e3a984b38cb814bc1ab54b2c614843a05c7bf88df176e7f20c2e05332ad54f45",
+    "contractSkeletonDigest": "a7cbb47a30ab2e863fe6bc12baa5714cf6a771ee83540c5a936383f80259141e"
+  }
+}
