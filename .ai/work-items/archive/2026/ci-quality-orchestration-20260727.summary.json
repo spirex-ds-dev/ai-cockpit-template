@@ -1,0 +1,463 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "ci-quality-orchestration-20260727",
+  "contractPath": ".ai/work-items/archive/2026/ci-quality-orchestration-20260727.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/ci-quality-orchestration-20260727.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ci-quality-orchestration-20260727.summary.json",
+      "reason": "Records implementation evidence, verification results, and process issues."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated Cockpit status for the active CI process Work Item."
+    },
+    {
+      "path": ".ai/work-items/starts/**",
+      "reason": "Records the Work Item start receipt."
+    },
+    {
+      "path": ".ai/decisions/**",
+      "reason": "Records the structured user authorization and preflight decision evidence."
+    },
+    {
+      "path": ".ai/decisions/HDR-f2d6c1e1e7a30a17-ebb0425e.evidence.json",
+      "reason": "Records the bounded CI process continuation decision."
+    },
+    {
+      "path": ".ai/decisions/HDR-f2d6c1e1e7a30a17-ebb0425e.request.json",
+      "reason": "Records the preflight request for bounded CI process continuation."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Replaces repeated full quality execution with the compatibility smoke command while preserving the matrix."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Remains the single authoritative full quality owner and release-blocking evidence job."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Adds the explicit lightweight compatibility-test entrypoint."
+    },
+    {
+      "path": "tests/test_ci_quality_orchestration.py",
+      "reason": "Regression coverage for matrix ownership, full-quality uniqueness, and compatibility command scope."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records RFE-ISSUE-062 through RFE-ISSUE-066 and the root-cause evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ci-quality-orchestration-20260727.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".github/workflows/compatibility.yml",
+    ".github/workflows/smoke.yml",
+    "Makefile",
+    "tests/test_ci_quality_orchestration.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:33:28.014535+00:00",
+      "exitCode": 0,
+      "durationMs": 39,
+      "outputDigest": "53b0cec2d9780452e0b78fd307321791336d9f2647efa2c09666baa23210cfef",
+      "commandHash": "b739c72c6f0ab6aad829162d00167dfd39fe1c4979e25d786ba40b81c3c18d5f",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "1e45a7a5bc8a0ecdfac7cd560b3f88867229052772422850b93bc1f99ee2206c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/ci-quality-orchestration-20260727.contract.json work item contract check passed: .ai/work-items/active/ci-quality-orchestration-20260727.contract.json"
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:33:28.155775+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "32060131952215956fcbdb5aef9f364dd94ced7ec0e460570db04ec6e0c288a0",
+      "commandHash": "a13d99665574be0fd2911495d192202cb365b19f508a5c0b49f34fad594a7574",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "1e45a7a5bc8a0ecdfac7cd560b3f88867229052772422850b93bc1f99ee2206c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/ci-quality-orchestration-20260727.contract.json scope guard passed: 8 changed path(s) covered"
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:33:28.338551+00:00",
+      "exitCode": 0,
+      "durationMs": 136,
+      "outputDigest": "9d8d27a990c7aebe97454b2bea47b57697a2df7ad662a454cbdb3c65c0205d51",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "1e45a7a5bc8a0ecdfac7cd560b3f88867229052772422850b93bc1f99ee2206c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/ci-quality-orchestration-20260727.contract.json [warning] restricted_write: .ai/decisions/HDR-f2d6c1e1e7a30a17-ebb0425e.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-f2d6c1e1e7a30a17-ebb0425e.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/compatibility.yml (.github/workflows/**) - CI workfl"
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/ci-quality-orchestration-20260727.contract.json SUMMARY=.ai/work-items/active/ci-quality-orchestration-20260727.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:33:28.552274+00:00",
+      "exitCode": 0,
+      "durationMs": 164,
+      "outputDigest": "2cd4884633f7c8c3c96fe76809e12aff3bff984535684a448732439069038191",
+      "commandHash": "f15328b5fbe1f631d2a28dc4b47fb099a5341cd7c3cd4d2cc0d18bc3c8ba9970",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "1e45a7a5bc8a0ecdfac7cd560b3f88867229052772422850b93bc1f99ee2206c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/ci-quality-orchestration-20260727.contract.json --summary .ai/work-items/active/ci-quality-orchestration-20260727.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `ci-quality-orchestration-20260727` - Contract Hash: `500893663c3df8fa` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `5` - Unknown Count: `"
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:33:28.725739+00:00",
+      "exitCode": 0,
+      "durationMs": 114,
+      "outputDigest": "dbd1878dda3979a06e0962067e4bbc8415769d1630f3f4b86eef8575c6fa228b",
+      "commandHash": "33d5c7554535e256819796099a35f8d64ae3b4655c12f9e0770cf0b2d42ca34d",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "1e45a7a5bc8a0ecdfac7cd560b3f88867229052772422850b93bc1f99ee2206c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/ci-quality-orchestration-20260727.summary.json review policy matched 6 path(s) [review] .ai/decisions/HDR-f2d6c1e1e7a30a17-ebb0425e.evidence.json [review] .ai/decisions/HDR-f2d6c1e1e7a30a17-ebb0425e.request.json [review] .ai/work-items/starts/ci-quality-orchestration-20260727.json [review] .ai/cockpit/current_status.md [review] .github/workflows/compatibility.yml [review] Makefile [warnin"
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:33:28.861743+00:00",
+      "exitCode": 0,
+      "durationMs": 95,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "1e45a7a5bc8a0ecdfac7cd560b3f88867229052772422850b93bc1f99ee2206c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json"
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:33:29.008907+00:00",
+      "exitCode": 0,
+      "durationMs": 100,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "1e45a7a5bc8a0ecdfac7cd560b3f88867229052772422850b93bc1f99ee2206c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json"
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/ci-quality-orchestration-20260727.contract.json SUMMARY=.ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:33:29.291621+00:00",
+      "exitCode": 0,
+      "durationMs": 74,
+      "outputDigest": "fc0cf0e0de11f351724366f5ab52d97cf32379140db32bf9c9d61b1b6c6497d6",
+      "commandHash": "4ce379c62240f3f58241c4420e465e8058058f9a375521c0b1a0799dab94823e",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "1e45a7a5bc8a0ecdfac7cd560b3f88867229052772422850b93bc1f99ee2206c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/ci-quality-orchestration-20260727.contract.json --summary .ai/work-items/active/ci-quality-orchestration-20260727.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json"
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/ci-quality-orchestration-20260727.contract.json SUMMARY=.ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:33:29.385162+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "b1906ef99a3689ebc383b16f3f9f7ea0226a631a91f596294094e487c1e89eb9",
+      "commandHash": "99fd3c2b7f04de8fe5a020a13409b4a8e553cc2f284b11ea8a8e0bde3819b019",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "1e45a7a5bc8a0ecdfac7cd560b3f88867229052772422850b93bc1f99ee2206c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/ci-quality-orchestration-20260727.contract.json --summary .ai/work-items/active/ci-quality-orchestration-20260727.summary.json guidelines compliance check passed: 3 guideline(s) verified"
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:33:29.623145+00:00",
+      "exitCode": 0,
+      "durationMs": 189,
+      "outputDigest": "f527bd50ee9ba82561458f9eccb362bb78cf2fa06b01a71534446f02d92a3417",
+      "commandHash": "2a8aaf9b5aebcc59b70bafb2cd0903a503c50c6b4a1f5be2e38e7ea5a9b36b34",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "1e45a7a5bc8a0ecdfac7cd560b3f88867229052772422850b93bc1f99ee2206c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/ci-quality-orchestration-20260727.contract.json ## Diff Ownership Preview - active_owned: `8`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-f2d6c1e1e7a30a17-ebb0425e.evidence.json` — covered by Contract scope - [active_owned] `."
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:39:45.721499+00:00",
+      "exitCode": 0,
+      "durationMs": 376026,
+      "outputDigest": "3c17a62afa5542f29b3348cd603b78da399869c73df9145626cbf00d7df67449",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "1e45a7a5bc8a0ecdfac7cd560b3f88867229052772422850b93bc1f99ee2206c",
+      "outputSummary": "make --no-print-directory --jobs=2 quality-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85 240 files already formatted git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/unsupported_claim_gate.py { \"gate\": \"Unsupported Claim Regression Gate\", \"policyReference\": \"unsupported-claim-evidence-"
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/ci-quality-orchestration-20260727.contract.json SUMMARY=.ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:39:47.293111+00:00",
+      "exitCode": 0,
+      "durationMs": 180,
+      "outputDigest": "c3e6673d47cc45b97f13dafd021c971546d3cc19755b7dcdff20f65644504102",
+      "commandHash": "80432c1705cfa55c60a0bb9685279348b23c9818ff3fdd1a8ee5dd848c932875",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "ee6fb97d1eee391f5048f222d7f102231aaa306e2eda4418f223edc2f86f6fe3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/ci-quality-orchestration-20260727.contract.json --summary .ai/work-items/active/ci-quality-orchestration-20260727.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/ci-quality-orchestration-20260727.contract.json SUMMARY=.ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:39:47.537812+00:00",
+      "exitCode": 0,
+      "durationMs": 196,
+      "outputDigest": "a1d0e1d7a46ef94fd13668e49298d340d4b0b24564e998f3a434893f4a672101",
+      "commandHash": "3f8c95367f10429266d8781ed318f517b3cce5d9bd4ad8132e9d02aa46d33e22",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "ee6fb97d1eee391f5048f222d7f102231aaa306e2eda4418f223edc2f86f6fe3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/ci-quality-orchestration-20260727.contract.json --summary .ai/work-items/active/ci-quality-orchestration-20260727.summary.json cockpit status check passed: .ai/cockpit/current_status.md"
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:39:47.630290+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "ee6fb97d1eee391f5048f222d7f102231aaa306e2eda4418f223edc2f86f6fe3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed"
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/ci-quality-orchestration-20260727.contract.json SUMMARY=.ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:39:47.824019+00:00",
+      "exitCode": 0,
+      "durationMs": 59,
+      "outputDigest": "f29ab9b401251d802ceca4af1ecafa415c07f68ab14bccd0ac14421f511c5b10",
+      "commandHash": "dfe256b2ff26d5e79d2df0f98e080b577076ba1f4f8c561c4507b77c5d0b53b5",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "ee6fb97d1eee391f5048f222d7f102231aaa306e2eda4418f223edc2f86f6fe3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/ci-quality-orchestration-20260727.contract.json --summary .ai/work-items/active/ci-quality-orchestration-20260727.summary.json agent risk check passed report: target/ai_agent_risk_report.json"
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/ci-quality-orchestration-20260727.summary.json CONTRACT=.ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-26T21:39:48.580098+00:00",
+      "exitCode": 0,
+      "durationMs": 97,
+      "outputDigest": "32714e620126ce7af314885aad2f51bf03de631241ff3a62f451dd65771fa7e2",
+      "commandHash": "636386253edd048f3b57f6d829bb92979be6025baf21e3cda19b6dc19f2d4a3e",
+      "contractHash": "500893663c3df8fa066428366f758079e4d2863d7464346ac9659c1c6e854e47",
+      "commitSha": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+      "executionContractPath": ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+      "worktreeDigest": "326b4ccef29ad8ad3e84e14675188d231d7bd20298e6761491086107d51bb2fd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/ci-quality-orchestration-20260727.summary.json --contract .ai/work-items/active/ci-quality-orchestration-20260727.contract.json ai summary check passed: .ai/work-items/active/ci-quality-orchestration-20260727.summary.json"
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep the full quality gate explicit and authoritative in one required CI job.",
+      "compliant": true,
+      "evidence": ".github/workflows/smoke.yml owns the only make quality invocation."
+    },
+    {
+      "guideline": "Do not reduce the OS/Python compatibility matrix.",
+      "compliant": true,
+      "evidence": ".github/workflows/compatibility.yml retains both OS values and all three Python versions."
+    },
+    {
+      "guideline": "Keep required CI failures fail closed and preserve evidence-producing steps.",
+      "compliant": true,
+      "evidence": "Required compatibility and smoke jobs remain required workflow jobs with explicit timeouts."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Initial skeleton; scope and acceptance still need task-specific review."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "id": "RFE-ISSUE-063",
+      "severity": "medium",
+      "category": "Work Item initialization/preflight",
+      "detail": "The initial CI process Work Item skeleton lacked task intent, raw request, scenario coverage, and concrete acceptance.",
+      "resolution": "Stopped at ai-start not_ready, completed the Contract, and reran preflight evidence checks."
+    },
+    {
+      "id": "RFE-ISSUE-064",
+      "severity": "medium",
+      "category": "Contract evidence schema",
+      "detail": "Preflight rejected incomplete rawRequestSource fields, missing medium-risk unknowns review, and pending scenario states.",
+      "resolution": "Added complete human request evidence, explicit unknowns review, and unverified initial scenario states."
+    },
+    {
+      "id": "RFE-ISSUE-065",
+      "severity": "medium",
+      "category": "preflight authorization flow",
+      "detail": "After structured user authorization, ai-preflight --check still treated human_decision_recorded as blocked.",
+      "resolution": "Retained Decision Evidence and continued only within the explicitly bounded CI scope, with scenarios closed by real verification."
+    },
+    {
+      "id": "RFE-ISSUE-066",
+      "severity": "medium",
+      "category": "CI compatibility matrix design",
+      "detail": "A no-coverage command over the entire tests directory remained slow, proving the bottleneck was repeated test breadth rather than coverage alone.",
+      "resolution": "Reduced the matrix command to a 35-test trust/workflow compatibility smoke set; the full suite remains in the single full-quality owner."
+    },
+    {
+      "id": "RFE-ISSUE-067",
+      "severity": "medium",
+      "category": "quality gate/format",
+      "detail": "The full test and coverage stages passed, but project-format-check rejected the new compatibility orchestration test file because it was not Ruff formatted.",
+      "resolution": "Stopped finish closure and formatted the new test file before retrying the complete quality gate."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "The compatibility smoke set is intentionally narrower than the full quality graph; the smoke job remains the required owner of full tests, coverage, lint, and release evidence.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": []
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "500893663c3df8fa",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "500893663c3df8fa",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    }
+  ],
+  "knownGaps": [
+    "Provider-side CI execution is verified only after the PR workflow runs on all six matrix combinations and template-smoke."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "decisionEvidence": {
+    "decisionId": "HD-f2d6c1e1e7a3",
+    "decision": "B",
+    "workItemId": "ci-quality-orchestration-20260727",
+    "contractHash": "f2d6c1e1e7a30a17",
+    "preflightHash": "ebb0425e8b2ce0bc",
+    "recordedAt": "2026-07-26T21:13:16.431061+00:00",
+    "recordedBy": "user-authorized thread"
+  },
+  "archiveSequence": 606
+}

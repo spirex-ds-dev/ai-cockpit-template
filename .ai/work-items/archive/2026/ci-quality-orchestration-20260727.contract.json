@@ -1,0 +1,231 @@
+{
+  "contractVersion": 2,
+  "workItemId": "ci-quality-orchestration-20260727",
+  "mode": "code",
+  "title": "Bound CI quality orchestration and reduce repeated full gates",
+  "baseCommit": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/ci-quality-orchestration-20260727.contract.json",
+    ".ai/work-items/active/ci-quality-orchestration-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".github/workflows/compatibility.yml",
+    ".github/workflows/smoke.yml",
+    "Makefile",
+    "tests/test_ci_quality_orchestration.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Changing the required full quality gate definitions",
+    "Removing any Python version or operating-system from compatibility coverage",
+    "Changing release publication semantics or provider workflows",
+    "Disabling required checks or weakening failure behavior"
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Current Python matrix repeats the full make quality gate in every environment."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Current authoritative smoke job runs the full quality gate and release checks."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Defines the full quality graph and the compatibility test entrypoint."
+    },
+    {
+      "path": "tests/test_ci_quality_orchestration.py",
+      "reason": "Regression tests will enforce one full quality owner and a lightweight matrix command."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records RFE-ISSUE-062 and the release-blocking CI process boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["ci_governance", "verification_coverage"],
+    "reason": "Changing required CI orchestration can create false-green or false-red release evidence if the full gate loses its single authoritative owner.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized continuous execution and explicitly requires process issues to be recorded and fixed before proceeding."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Exactly one workflow job remains the authoritative owner of the full make quality gate for a PR.",
+    "All six existing Python/OS compatibility combinations remain present and run a declared lightweight compatibility test command instead of make quality.",
+    "Compatibility and smoke jobs retain explicit bounded timeouts and fail-closed behavior; no required check is removed or made advisory.",
+    "Regression tests prove the orchestration boundary, and the plan records RFE-ISSUE-062 plus any new execution issues.",
+    "The Work Item completes the full Contract, verification, PR, merge, ai-close-work-item, branch cleanup, and base synchronization lifecycle."
+  ],
+  "guidelines": [
+    "Keep the full quality gate explicit and authoritative in one required CI job.",
+    "Do not reduce the OS/Python compatibility matrix.",
+    "Keep required CI failures fail closed and preserve evidence-producing steps."
+  ],
+  "intent": {
+    "problem": "The release PR repeats the full make quality graph in six Python platform jobs and again in template-smoke. Each job spends minutes running the same 1166-test/coverage/lint graph, while the workflow provides no stage-level observability; this reproduces the prior multi-day release wait symptom.",
+    "constraints": [
+      "Keep one authoritative full quality gate for release-blocking evidence.",
+      "Preserve all six Python/OS matrix combinations and required checks.",
+      "Do not weaken tests, coverage, release evidence, or failure semantics.",
+      "Do not publish, merge, or alter release metadata in this Work Item."
+    ],
+    "rationale": "Compatibility jobs should test interpreter/platform compatibility, while the full repository quality graph should run once. Separating these responsibilities removes redundant work without reducing coverage and makes a stalled required check attributable to one bounded owner."
+  },
+  "rawUserRequest": "Continue the current AI Cockpit remediation plan without stopping. When a process problem is found, record it in the plan, fix the process before continuing, and complete every Work Item through its full PR, merge, close, branch cleanup, and base synchronization lifecycle.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-authorized-thread-20260727",
+    "capturedAt": "2026-07-27T06:10:00+09:00",
+    "digest": "sha256:ci-quality-orchestration-user-request-20260727",
+    "summary": "User confirmed that process issues must be recorded and fixed while the full plan continues."
+  },
+  "declaredIntent": {
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"],
+    "requestedOutcome": "Bound release-blocking CI quality orchestration so full quality runs once and compatibility coverage remains explicit and fast."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "all six Python/OS matrix combinations remain declared",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/compatibility.yml"]
+    },
+    {
+      "scenario": "full make quality has one authoritative required owner",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/smoke.yml", ".github/workflows/compatibility.yml"]
+    },
+    {
+      "scenario": "a compatibility failure remains visible and fail closed",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_ci_quality_orchestration.py"]
+    },
+    {
+      "scenario": "a full quality gate timeout cannot leave an unbounded required check",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/compatibility.yml", ".github/workflows/smoke.yml"]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized thread",
+    "reason": "User authorized continuous execution and explicitly required fixing the discovered CI process problem before release work continues; approval is limited to the declared CI workflow/Makefile scope."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 618
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/ci-quality-orchestration-20260727.json",
+    "baseCommit": "de35168647c6c3765fc8832f2ff04c6f8f5891f4",
+    "initialScopeDigest": "db4d2e240b09192c72895c938357b761a33da6df57f81b59aa50119b03061252",
+    "contractSkeletonDigest": "2773cd1399f193ae1525ef74857926ca0a903287266bf4fb9ada5dd83c7c6ed1"
+  }
+}

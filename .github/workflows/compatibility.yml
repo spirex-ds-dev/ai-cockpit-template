@@ -33,7 +33,7 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         python: ["3.10", "3.11", "3.14"]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -42,7 +42,8 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - run: python -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
-      - run: make quality
+      - name: Run Python compatibility tests
+        run: make compatibility-test
 
   lockfile-reproducibility:
     runs-on: ubuntu-latest
