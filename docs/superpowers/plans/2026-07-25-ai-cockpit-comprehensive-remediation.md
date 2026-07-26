@@ -382,6 +382,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-059`（Checkpoint/Contract 一致性，中）：补齐 scope 后，全量质量门虽通过，但 `check-ai-agent-risk` 发现历史 `before_edit` checkpoint 的 Contract hash 和 unknownCount 已过期。已停止归档，先刷新与最终 Contract 对齐的 checkpoint，再重新执行 finish。
 `RFE-ISSUE-060`（Summary/生成证据 ownership，低）：全量质量门和 AI risk 通过后，`check-ai-change-summary` 拒绝 Summary 仅用 `.ai/decisions/**` 表示 4 个实际生成的 request/evidence 文件。已停止归档，改为逐个列出实际路径后重试。
 `RFE-ISSUE-061`（PR 检查命令用法，低）：首次调用 `make check-ai-pr ... --base <sha>` 被 make 当作未知选项拒绝；已确认该目标通过 `AI_BASE_COMMIT=<sha>` 变量接收基线，后续按 Makefile 接口重跑。
+`RFE-ISSUE-062`（CI 质量门编排，高）：PR #398 的 6 个 Python platform matrix job 以及 template-smoke 都执行完整 `make quality`；GitHub Actions API 显示所有未完成 job 的当前步骤均为 `Run make quality`。本地单次全量质量门约 6.5 分钟，重复执行造成发布反馈极慢，且缺少阶段级超时/心跳，无法解释或阻止上一轮长达两天的等待。当前候选 PR 暂不合并；先建立独立 CI 流程 Work Item，将全量门禁收敛为单次权威执行，平台矩阵改为轻量兼容性测试，并保留 job/step timeout 与失败证据。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
