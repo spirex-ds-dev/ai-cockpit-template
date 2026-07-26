@@ -368,6 +368,14 @@
       "summary": "Concurrent ai-finish invocations wrote the same Summary and caused transient validation failures.",
       "resolution": "Stop duplicate finish processes and enforce one finish invocation per Work Item before retrying.",
       "status": "resolved"
+    },
+    {
+      "id": "RFE-ISSUE-007",
+      "category": "release",
+      "severity": "high",
+      "summary": "PR #385 CI failed closed because the authoritative Contract/Summary pair for this Work Item was absent from the archive index; coverage consequently measured 84.97%/84.99%, below the 85% floor. A separate macOS 3.14 matrix job also encountered a Homebrew tap trust failure.",
+      "resolution": "Rebound archiveSequence and Summary digest, rebuilt the archive index with manifest binding, and recorded the provider-environment failure separately for rerun observation. Release remains paused until the corrected PR checks pass.",
+      "status": "resolved_pending_rerun"
     }
   ],
   "residualRisks": [
@@ -425,5 +433,5 @@
       "requiredChecksPassed": 16
     }
   ],
-  "archiveSequence": 593
+  "archiveSequence": 597
 }
