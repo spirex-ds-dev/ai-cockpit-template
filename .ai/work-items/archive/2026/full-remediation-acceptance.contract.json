@@ -1,0 +1,200 @@
+{
+  "contractVersion": 2,
+  "workItemId": "full-remediation-acceptance",
+    "mode": "code",
+    "title": "Full remediation acceptance",
+    "rawUserRequest": "Continue the approved serial remediation plan with WI-15 full remediation acceptance. Run the complete functional, security, usability, efficiency, documentation, governance, quality, and release-preflight evidence review for WI-01 through WI-14; produce an evidence-backed issue overview and known-gap baseline, then complete the full PR/merge/close lifecycle before WI-16 Japanese capability assessment.",
+    "rawRequestSource": {"type": "human", "reference": "user authorization: AI Cockpit comprehensive remediation continuation", "capturedAt": "2026-07-26", "digest": "sha256:full-remediation-acceptance-request"},
+    "declaredIntent": {"summary": "Establish a complete evidence-backed acceptance baseline and issue overview before the mandatory Japanese assessment.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+    "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "baseCommit": "84e8d1171c2f04d6e129404ef2c38ee4ec7aeccd",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/full-remediation-acceptance.contract.json",
+        ".ai/work-items/active/full-remediation-acceptance.summary.json",
+        ".ai/cockpit/current_status.md",
+        ".ai/decisions/**",
+        ".ai/work-items/starts/**",
+        ".ai/work-items/archive/**",
+        "docs/reference/full-remediation-acceptance.md",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+    ],
+    "outOfScope": [
+        "Implementing new runtime, installer, security sandbox, signing, SBOM, or provider capabilities",
+        "Publishing a new version or creating a release tag",
+        "Performing the WI-16 Japanese capability assessment",
+        "Deleting, rewriting, or cleaning historical plan/archive evidence reserved for WI-19",
+        "Changing capability status without fresh implementation evidence"
+    ],
+  "sources": [
+    {
+            "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+            "reason": "WI-15 scope, acceptance boundary, and predecessor order."
+        },
+        {
+            "path": "docs/reference/capability-truth-matrix.json",
+            "reason": "Current capability status is evidence-bound and must not be inferred from this acceptance run."
+        },
+        {
+            "path": "docs/reference/checks-catalog.md",
+            "reason": "Required governance and project verification command inventory."
+        },
+        {
+            "path": ".ai/work-items/archive/2026/cockpit-human-signal-compression.summary.json",
+            "reason": "Predecessor WI-14 closure and residual risk evidence."
+        }
+    ],
+    "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+            "acceptance",
+            "evidence_staleness",
+            "release_gate_boundary"
+        ],
+        "reason": "The Work Item aggregates many independent checks; missing or stale evidence must remain visible and must not become release readiness.",
+        "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+        "canImplement": true,
+        "canVerify": true,
+        "needsHumanDecision": false,
+        "blockedReason": ""
+  },
+  "executionDecision": {
+        "status": "continue",
+        "reason": "User authorized serial execution of the approved remediation plan; WI-14 is closed."
+  },
+  "preReviewWarnings": [
+        "Do not convert a passing local suite into production, adopter, Japanese, or release readiness; preserve every unknown and external evidence gap."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+    "acceptance": [
+        "All required WI-01 through WI-14 governance and project verification commands are executed or explicitly recorded as not run with reasons.",
+        "A complete issue overview distinguishes passed evidence, warnings, blockers, known gaps, external evidence gaps, and residual risks.",
+        "The acceptance report does not claim WI-16 Japanese capability, WI-17 Trust Layer documentation completion, WI-18 publication, or enterprise compliance.",
+        "The acceptance report and execution plan are aligned and provide the verified baseline for WI-16."
+  ],
+    "guidelines": [
+        "New public APIs must be documented.",
+        "Do not import internal modules from other features.",
+        "Evidence over self-declaration: every acceptance conclusion cites a command or immutable archived evidence.",
+        "Do not silently downgrade not_run, unknown, stale, or contradictory evidence to passed."
+  ],
+  "intent": {
+        "problem": "The remediation now spans fourteen closed Work Items with different evidence boundaries; without one full acceptance pass, later Japanese assessment and release work could confuse local checks, external evidence, capability truth, and unresolved risks.",
+        "constraints": [
+            "Run verification without changing production, provider, release, or capability claims.",
+            "Use existing commands and archived Work Item evidence as sources of truth.",
+            "Keep Japanese assessment, Trust Layer document upgrade, publication, and plan cleanup in their later Work Items."
+        ],
+        "rationale": "A bounded acceptance baseline makes the next mandatory Japanese gate evidence-driven and prevents unresolved issues from disappearing between Work Items."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+    "restrictedWriteApproval": {
+        "approved": true,
+        "approvedBy": "User",
+        "reason": "User authorized the complete serial remediation plan, including verification, issue documentation, PRs, closure, and later Japanese/release gates."
+    },
+    "rollbackNote": "Revert the acceptance report and related generated status/evidence changes; do not alter predecessor archives.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 601
+    }
+  },
+  "predecessorWorkItem": {
+    "workItemId": "cockpit-human-signal-compression",
+    "status": "closed",
+    "pr": {"number": 378, "merged": true, "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/378", "mergeCommit": "84e8d1171c2f04d6e129404ef2c38ee4ec7aeccd"},
+    "closure": {"succeeded": true, "localBranchDeleted": true, "remoteBranchDeleted": true, "baseSynchronized": true, "evidence": ".ai/work-items/archive/2026/cockpit-human-signal-compression.archive-manifest.json"}
+  },
+  "scenarioCoverage": [
+    {"scenario": "all required governance and project checks for WI-01 through WI-14", "required": true, "status": "verified", "evidence": ["make quality", "make check-ai-serial-order TASK=full-remediation-acceptance", "make check-ai-budget-impact TASK=full-remediation-acceptance"], "reason": "Full local acceptance commands passed."},
+    {"scenario": "issue overview preserves unknown, stale, external, and capability boundaries", "required": true, "status": "verified", "evidence": ["docs/reference/full-remediation-acceptance.md", "docs/reference/capability-truth-matrix.json", "make quality"], "reason": "Report review preserves the boundaries."},
+    {"scenario": "acceptance baseline does not imply Japanese capability or release readiness", "required": true, "status": "verified", "evidence": ["docs/reference/full-remediation-acceptance.md", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"], "reason": "Report and plan explicitly keep later gates open."}
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/full-remediation-acceptance.json",
+    "baseCommit": "84e8d1171c2f04d6e129404ef2c38ee4ec7aeccd",
+    "initialScopeDigest": "15c9f70faf98f6d42c4215ce916ab638cc30206d2a72c03067fedda329bf2e8a",
+    "contractSkeletonDigest": "ffcda8872153a41cbbca1aee4e6f605b28969d782dced69b90d5f4c8f51a7308"
+  }
+}
