@@ -362,6 +362,8 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-039`（工单初始化/流程，中）：建立 `release-smoke-dependency-timeout` 时，首次 `make ai-start ... MODE=code` 的 skeleton 因缺少 intent、raw request、sources、scenario coverage、具体验收和授权而按预期 `not_ready` 停止。已补全 Contract，必须重新通过 preflight/checkpoint 后才能修改 release workflow。
 `RFE-ISSUE-040`（工单契约/流程，低）：补全 `release-smoke-dependency-timeout` 的 `declaredIntent` 后，preflight 仍按要求拒绝 Contract，因为顶层 `intent.problem/constraints/rationale` 仍为 skeleton 空值。已补齐三项实质 intent，再重新执行 preflight/checkpoint。
 `RFE-ISSUE-041`（工单收尾/流程，低）：`make ai-finish TASK=release-smoke-dependency-timeout` 首次在场景覆盖检查失败，因为重写 Summary 时遗漏了 `scenarioCoverage` 字段。已补齐与 Contract 一致的四个场景，需重新执行 finish。
+`RFE-ISSUE-042`（CI效率/流程，中）：PR #395 的 compatibility 工作流包含 6 个 Python 平台任务，均重复执行完整 `make quality`，最长约 13 分 41 秒；template-smoke 又重复执行完整 `make quality`，总耗时约 21 分 45 秒。当前无失败且所有门禁均通过，因此本次不削弱或绕过门禁；已建立 `record-quality-gate-latency` 记录工单，将优化方案留给本计划完成后的统一评估。
+`RFE-ISSUE-043`（工单契约/流程，低）：`record-quality-gate-latency` 首次 preflight 拒绝了未登记的 `requestedOperation.effect=record` 组合；已按既有策略改为允许的 repository governance modify/enforce 组合，并重新执行 preflight。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
