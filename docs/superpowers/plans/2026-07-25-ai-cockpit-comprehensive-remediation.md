@@ -335,6 +335,8 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-012`（checkpoint，中）：完整质量门通过后，Agent Risk 发现最终 Contract 缺少 `before_edit` checkpoint；原因是初始 `ai-start` 在 skeleton 预检阶段停止，之后 Contract 被补全但未按最终 hash 刷新 checkpoint。已停止归档，先为最终 Contract 写入 before_edit checkpoint，再重新执行 finish。
 `RFE-ISSUE-013`（Summary/证据格式，中）：质量与 Agent Risk 通过后，Summary 校验拒绝了非法 `reviewReadiness.status=in_progress`，并发现预检 decision 文件未列入 `changedFiles`。已改用允许的 readiness 状态并补齐 changedFiles 归属，再重跑最终稳定化。
 `RFE-ISSUE-014`（归档证据/路径配对，中）：归档后独立运行 archived Summary 校验时，原 `changedFiles` 仍只列 active Contract/Summary 路径，未覆盖 archive Contract/Summary/Manifest/Index；已补齐归档路径配对并重新计算 Archive Manifest/Index digest。
+`RFE-ISSUE-015`（发布证据/来源绑定，高）：PR #390 合并并由 `ai-close-work-item` 同步主分支后，`make check-release-preflight` 仍发现 release freeze、release digests、release state 和归档/安装器摘要绑定的是合并前 source identity；同时要求在 archive/close 后重新 finalize freeze。已停止 provider publication，禁止无工单直接改写发布证据；建立 corrective Work Item `finalize-release-freeze-after-rebind`，先记录本问题、在最新同步主分支上重新生成并完成完整 PR/merge/close/分支清理，再重跑发布预检。
+`RFE-ISSUE-016`（工单初始化/流程，中）：为处理 `RFE-ISSUE-015` 首次执行 `make ai-start TASK=finalize-release-freeze-after-rebind MODE=code` 时，自动生成的 Contract skeleton 因缺少发布专用 intent、raw request、sources、scenario coverage 和受限写入授权而按预期 `not_ready` 停止。已补全 Contract 后再重跑预检；不得通过跳过 Contract 完成或直接生成发布证据。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
