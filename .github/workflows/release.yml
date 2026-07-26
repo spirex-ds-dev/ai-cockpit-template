@@ -353,6 +353,7 @@ jobs:
             "$RUNNER_TEMP/release-evidence/release-digests.json#release-digests.json" \
             "$RUNNER_TEMP/release-evidence/ci-release-evidence.json#ci-release-evidence.json" \
             "$RUNNER_TEMP/release-source.json#release-source.json" \
+            "$RUNNER_TEMP/release-projection.json#release.json" \
             "$RUNNER_TEMP/release-evidence/$(jq -r '.releaseArchive.assetName' release.json)#$(jq -r '.releaseArchive.assetName' release.json)"
 
       - name: Verify Draft tag target and release asset subjects
@@ -388,6 +389,10 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --pattern "$archive_name" \
             --dir "$download_dir"
+          gh release download "$RELEASE_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern release.json \
+            --dir "$download_dir"
           verified_archive="$download_dir/$archive_name"
           test "$(sha256sum "$verified_archive" | cut -d' ' -f1)" = \
             "$(jq -r '.releaseArchive.sha256' release.json)"
@@ -397,6 +402,7 @@ jobs:
           python3 scripts/verify_quick_install_release.py \
             --root "$GITHUB_WORKSPACE" \
             --ref "$RELEASE_TAG" \
+            --metadata-url "file://$download_dir/release.json" \
             --asset-url "$verified_archive_url"
 
       - name: Publish verified Draft Release

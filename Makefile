@@ -150,6 +150,9 @@ check-governance-complexity:
 check-release-distribution:
 	$(AI_PYTHON) scripts/check_release_distribution.py
 
+check-release-distribution-post-publish:
+	AI_RELEASE_POST_PUBLISH=1 $(AI_PYTHON) scripts/check_release_distribution.py
+
 check-release-state-consistency:
 	$(AI_PYTHON) scripts/check_release_state_consistency.py --root .
 

@@ -364,6 +364,11 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-041`（工单收尾/流程，低）：`make ai-finish TASK=release-smoke-dependency-timeout` 首次在场景覆盖检查失败，因为重写 Summary 时遗漏了 `scenarioCoverage` 字段。已补齐与 Contract 一致的四个场景，需重新执行 finish。
 `RFE-ISSUE-042`（CI效率/流程，中）：PR #395 的 compatibility 工作流包含 6 个 Python 平台任务，均重复执行完整 `make quality`，最长约 13 分 41 秒；template-smoke 又重复执行完整 `make quality`，总耗时约 21 分 45 秒。当前无失败且所有门禁均通过，因此本次不削弱或绕过门禁；已建立 `record-quality-gate-latency` 记录工单，将优化方案留给本计划完成后的统一评估。
 `RFE-ISSUE-043`（工单契约/流程，低）：`record-quality-gate-latency` 首次 preflight 拒绝了未登记的 `requestedOperation.effect=record` 组合；已按既有策略改为允许的 repository governance modify/enforce 组合，并重新执行 preflight。
+`RFE-ISSUE-044`（发布后验证/边界，高）：v0.5.43 已成功公开发布后，`make check-release-distribution` 仍读取仓库历史 `release.json` v0.5.42，并因最高公开 Tag 为 v0.5.43 而 fail closed；这暴露了发布前候选验证与发布后公开验证共用入口、却没有区分权威来源的流程缺口。已停止将该失败误报为发布失败，建立 corrective Work Item `release-distribution-post-publish-20260727`；新增显式 post-publication 验证入口，以公开 Tag/Release 资产为权威，同时保留 source/tag/asset/checksum/SBOM/provenance/installer 门禁。修复完成并重新验证前，WI-18 发布后证据不得声明完整。
+`RFE-ISSUE-045`（发布/安装器一致性，高）：真实 `make check-release-distribution-post-publish` 进一步验证发现，v0.5.43 公开 Tag 的 `release.json` 仍声明 v0.5.42，Quick Install 因 `release tag mismatch` fail closed；发布前 workflow 使用运行时工作树 projection 验证，未验证创建后的不可变 Tag 树和公开安装路径，导致无效 Release 仍被公开。不得修改既有 v0.5.43 Tag；必须先修正发布流程，使运行时 release projection 作为公开 Release metadata asset 绑定并让安装器在 Tag metadata 与 ref 不一致时验证该 asset，同时增加“创建 Tag 后再验证公开安装器”的门禁。修正后需通过独立 corrective Work Item 的完整 PR/merge/close/分支清理流程，并发布新的有效版本后才能关闭 WI-18。
+`RFE-ISSUE-046`（工单收口/ownership，低）：`release-distribution-post-publish-20260727` 新增 `tests/test_quick_install_release.py` 回归测试后，首次 `ai-finish` 发现该文件未在 Contract scope 中，按要求停止归档。已补齐 scope ownership，重新执行收口。
+`RFE-ISSUE-047`（供应链/发布元数据耦合，中）：为让 Quick Install 使用公开 metadata asset，初步修改 `install.sh` 后，既有 v0.5.42 `release.json.installerDigest` 与供应链 provenance 立即失配，导致发布准备测试 fail closed。已撤回 installer 修改，不改写历史 metadata；改为在现有 verifier 中自动推导公开 metadata asset URL，保留 installer digest 基线不变。
+`RFE-ISSUE-048`（PR边界/证据顺序，低）：本 corrective Work Item 首次执行 `make check-ai-pr` 时，归档 Contract/Summary/Manifest、Decision Evidence、start receipt、status 和 archive index 仍未提交；PR 边界按要求拒绝不洁工作树。已记录并按规范先提交本工单全部生成证据，再重新执行 PR 检查。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 

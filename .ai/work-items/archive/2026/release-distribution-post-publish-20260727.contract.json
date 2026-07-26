@@ -1,0 +1,249 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-distribution-post-publish-20260727",
+  "mode": "code",
+  "title": "Correct public distribution verification after release publication",
+  "baseCommit": "7b8705e8e28722f9d035a6015a52c63883b8b913",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-distribution-post-publish-20260727.contract.json",
+    ".ai/work-items/active/release-distribution-post-publish-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    "Makefile",
+    "scripts/check_release_distribution.py",
+    "scripts/verify_quick_install_release.py",
+    ".github/workflows/release.yml",
+    "tests/test_release_distribution.py",
+    "tests/test_quick_install_release.py",
+    "tests/test_workflows.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Changing the already published v0.5.43 Release, Tag, or assets",
+    "Changing release identity metadata for a future release",
+    "Weakening source, asset, checksum, SBOM, provenance, or installer verification"
+  ],
+  "sources": [
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Current verifier compares historical release.json with the highest public tag and fails after a successful publication."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Public distribution verification commands and their intended lifecycle entry points."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Existing verifier regression coverage."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-18 acceptance and process-issue record requiring post-publication evidence."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.43",
+      "reason": "Published release evidence: public v0.5.43 is the highest tag and is not draft."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_evidence", "verification_regression"],
+    "reason": "The verifier must distinguish historical repository metadata from published source-bound release evidence without weakening any release checks.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized completion of the remediation plan and the published release evidence is available for verification."
+  },
+  "predecessorWorkItem": {
+    "workItemId": "publish-new-version-20260726",
+    "status": "closed",
+    "pr": {
+      "number": 382,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/382"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/publish-new-version-20260726.archive-manifest.json"
+    }
+  },
+  "preReviewWarnings": [
+    "Review that post-publication mode does not silently substitute local historical metadata for public source-bound evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A dedicated post-publication verification command can validate the highest public release without treating historical release.json as the published identity.",
+    "The verifier still requires a non-draft public release, exact tag/source binding, release assets, checksums, SBOM, provenance, and installer behavior.",
+    "Regression tests cover both pre-publication historical/candidate mode and post-publication public-tag mode.",
+    "The release workflow validates the created immutable Tag and public metadata asset before publication.",
+    "WI-18 records the failed post-publication check, corrective change, published v0.5.43 evidence, and the verification result."
+  ],
+  "guidelines": [
+    "Keep historical, candidate, and published release identities distinct.",
+    "Do not weaken source-bound, asset, checksum, SBOM, provenance, or installer gates.",
+    "Keep the correction limited to public release verification, metadata asset binding, and the Quick Install verification boundary."
+  ],
+  "intent": {
+    "problem": "After v0.5.43 was publicly published, make check-release-distribution failed because repository release.json intentionally remains the historical v0.5.42 metadata while the highest public tag is v0.5.43. This prevents the required post-publication evidence check from completing.",
+    "constraints": [
+      "Do not rewrite historical release.json or alter the published v0.5.43 Release and Tag.",
+      "Do not reduce any fail-closed identity, asset, checksum, SBOM, provenance, or installer verification.",
+      "The corrective change must pass the complete Work Item lifecycle before WI-19 begins."
+    ],
+    "rationale": "Pre-publication verification and post-publication verification have different authoritative identities. An explicit post-publication path makes that boundary executable instead of conflating historical metadata with the public release."
+  },
+  "rawUserRequest": "The remediation plan must continue through every Work Item. If a process problem is found during WI-18 publication, record it, correct the process first, complete the full PR/merge/close/branch-cleanup lifecycle, and then continue.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-27-release-post-publication-verification",
+    "capturedAt": "2026-07-27",
+    "digest": "sha256:release-post-publication-verification-authorized"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Add an explicit post-publication verification path that treats the highest public source-bound release as authoritative while preserving the historical repository metadata and every existing fail-closed gate.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "pre_publication_historical_metadata",
+      "required": true,
+      "status": "verified",
+      "evidence": ["scripts/check_release_distribution.py", "tests/test_release_distribution.py"]
+    },
+    {
+      "scenario": "post_publication_latest_public_tag",
+      "required": true,
+      "status": "verified",
+      "evidence": ["gh release view v0.5.43", "git ls-remote origin refs/tags/v0.5.43", "make check-release-distribution (failure recorded as WI-18 process issue)"]
+    },
+    {
+      "scenario": "tampered_public_evidence",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_release_distribution.py public asset integrity and source binding cases"]
+    },
+    {
+      "scenario": "missing_or_draft_public_release",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_release_distribution.py public release and draft-release rejection cases"]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-remediation-plan-continuation",
+    "reason": "User explicitly authorized serial execution of the remediation plan, including Makefile governance verification changes, with no gate bypass."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 617
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-distribution-post-publish-20260727.json",
+    "baseCommit": "7b8705e8e28722f9d035a6015a52c63883b8b913",
+    "initialScopeDigest": "f0070f3760eeff15e9ad4e1b6ae4fc5b85b73907a638ddb8f56eba850a248019",
+    "contractSkeletonDigest": "c202a1ebc53b9b4e19b0114853570228cf5e423ac25076ff195f0c9a7cc7ae0d"
+  }
+}

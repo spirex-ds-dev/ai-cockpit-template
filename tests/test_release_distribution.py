@@ -1,6 +1,7 @@
 import importlib
 import os
 import json
+import shutil
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -80,6 +81,91 @@ def test_preparation_mode_validates_published_identity_before_next_candidate(mon
     monkeypatch.setenv("AI_RELEASE_PREPARATION", "1")
 
     assert release_distribution.main() == 0
+
+
+def test_post_publication_mode_uses_latest_tag_as_authoritative(monkeypatch, tmp_path):
+    historical = {"releaseTag": "v0.5.42", "publicContract": {"projectQualityTarget": "quality"}}
+    release_path = tmp_path / "release.json"
+    release_path.write_text(json.dumps(historical), encoding="utf-8")
+    monkeypatch.setattr(release_distribution, "RELEASE", release_path)
+    monkeypatch.setattr(
+        release_distribution,
+        "list_remote_tags",
+        lambda _repository: "a refs/tags/v0.5.43\n",
+    )
+    monkeypatch.setattr(
+        release_distribution,
+        "inspect_tagged_release",
+        lambda tag, **_: (
+            {"releaseTag": tag, "publicContract": {"projectQualityTarget": "quality"}},
+            b"#!/bin/sh\nexit 0\n",
+            [],
+        ),
+    )
+    monkeypatch.setattr(
+        release_distribution, "archive_verification_supported", lambda _metadata: True
+    )
+    monkeypatch.setattr(release_distribution, "exercise_installer", lambda *args, **kwargs: None)
+    monkeypatch.setattr(
+        release_distribution, "exercise_public_distribution", lambda *args, **kwargs: None
+    )
+    monkeypatch.setenv("AI_RELEASE_POST_PUBLISH", "1")
+
+    assert release_distribution.main() == 0
+
+
+def test_post_publication_inspection_binds_public_metadata_and_archive(monkeypatch, tmp_path):
+    source = tmp_path / "tag-tree"
+    source.mkdir()
+    (source / "release.json").write_text('{"releaseTag":"v0.5.42"}', encoding="utf-8")
+    (source / "install.sh").write_bytes(b"#!/bin/sh\nexit 0\n")
+    candidate = tmp_path / "next-release.json"
+    candidate.write_text(
+        json.dumps(
+            {
+                "releaseTag": "v0.5.43",
+                "publicContract": {"projectQualityTarget": "quality"},
+                "capabilities": {"sha256ArchiveVerification": {"supported": True}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(release_distribution, "CANDIDATE_RELEASE", candidate)
+
+    def fake_run(command, *, cwd, env=None):
+        if "clone" in command:
+            shutil.copytree(source, Path(command[-1]))
+            return SimpleNamespace(returncode=0, stdout="", stderr="")
+        if "rev-parse" in command:
+            return SimpleNamespace(returncode=0, stdout="a" * 40, stderr="")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    projected = json.dumps({"releaseTag": "v0.5.43"}).encode()
+    monkeypatch.setattr(release_distribution, "run_command", fake_run)
+    monkeypatch.setattr(
+        release_distribution,
+        "fetch_published_release_assets",
+        lambda _tag, extra_asset_names=None: {
+            "provenance.json": b"{}",
+            "release-digests.json": b"{}",
+            "sbom.json": b"{}",
+            "v0.5.43.tar.gz": b"archive",
+            "release.json": projected,
+        },
+    )
+    monkeypatch.setattr(release_distribution, "release_asset_identity_issues", lambda **_: [])
+    monkeypatch.setattr(
+        release_distribution, "public_release_asset_integrity_issues", lambda **_: []
+    )
+    monkeypatch.setattr(release_distribution, "release_archive_issues", lambda *args, **kwargs: [])
+
+    metadata, installer, issues = release_distribution.inspect_tagged_release(
+        "v0.5.43", allow_historical_metadata=True
+    )
+    assert metadata["releaseTag"] == "v0.5.43"
+    assert metadata["releaseArchive"]["assetName"] == "v0.5.43.tar.gz"
+    assert installer == b"#!/bin/sh\nexit 0\n"
+    assert issues == []
 
 
 def test_remote_default_branch_candidates_require_explicit_remote_head():

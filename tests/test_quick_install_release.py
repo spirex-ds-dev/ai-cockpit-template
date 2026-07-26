@@ -62,9 +62,25 @@ def test_quick_install_release_contract_fails_closed(monkeypatch, tmp_path, chan
     change(metadata)
     metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
     monkeypatch.setattr(verifier, "run_git", lambda *_args: SOURCE_COMMIT)
+    monkeypatch.setenv("AI_COCKPIT_TEMPLATE_REPO", "invalid-repository")
 
     with pytest.raises(verifier.ReleaseVerificationError, match=expected):
         verifier.verify_release(root, ref="v1.2.3")
+
+
+def test_quick_install_can_use_published_metadata_when_tag_tree_is_historical(
+    monkeypatch, tmp_path
+):
+    root, _archive = make_contract(tmp_path)
+    metadata = json.loads((root / "release.json").read_text(encoding="utf-8"))
+    metadata["releaseTag"] = "v1.2.4"
+    monkeypatch.setattr(verifier, "run_git", lambda *_args: SOURCE_COMMIT)
+    monkeypatch.setattr(verifier, "load_release_metadata_url", lambda _url: metadata)
+
+    evidence = verifier.verify_release(
+        root, ref="v1.2.4", metadata_url="https://example.invalid/release.json"
+    )
+    assert evidence["releaseTag"] == "v1.2.4"
 
 
 def test_unverified_capability_fails_closed_before_download(monkeypatch, tmp_path):
