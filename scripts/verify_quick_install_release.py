@@ -60,6 +60,18 @@ def load_release_metadata(root: Path) -> dict[str, Any]:
     return value
 
 
+def load_release_metadata_url(url: str) -> dict[str, Any]:
+    request = urllib.request.Request(url, headers={"User-Agent": "ai-cockpit-quick-install"})
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:  # nosec B310
+            value = json.loads(response.read().decode("utf-8"))
+    except (OSError, urllib.error.URLError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ReleaseVerificationError(f"release metadata asset is unavailable: {exc}") from exc
+    if not isinstance(value, dict):
+        raise ReleaseVerificationError("release metadata asset must contain an object")
+    return value
+
+
 def declared_archive(metadata: dict[str, Any]) -> tuple[dict[str, Any], bool]:
     capabilities = metadata.get("capabilities")
     capability = (
@@ -87,13 +99,28 @@ def verify_release(
     ref: str,
     asset_url: str | None = None,
     expected_archive_sha256: str | None = None,
+    metadata_url: str | None = None,
     timeout: int = 30,
 ) -> dict[str, str]:
     metadata = load_release_metadata(root)
     if metadata.get("releaseTag") != ref:
-        raise ReleaseVerificationError(
-            f"release tag mismatch (expected={ref!r}, declared={metadata.get('releaseTag')!r})"
-        )
+        if not metadata_url:
+            repository = os.environ.get(
+                "AI_COCKPIT_TEMPLATE_REPO", "spirex-ds-dev/ai-cockpit-template"
+            )
+            if re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repository):
+                metadata_url = (
+                    f"https://github.com/{repository}/releases/download/{ref}/release.json"
+                )
+        if not metadata_url:
+            raise ReleaseVerificationError(
+                f"release tag mismatch (expected={ref!r}, declared={metadata.get('releaseTag')!r})"
+            )
+        metadata = load_release_metadata_url(metadata_url)
+        if metadata.get("releaseTag") != ref:
+            raise ReleaseVerificationError(
+                f"release metadata tag mismatch (expected={ref!r}, declared={metadata.get('releaseTag')!r})"
+            )
     try:
         tag_commit = run_git(root, "rev-parse", f"refs/tags/{ref}^{{commit}}")
     except ReleaseVerificationError as exc:
@@ -163,6 +190,7 @@ def main() -> int:
     parser.add_argument("--ref", required=True)
     parser.add_argument("--asset-url")
     parser.add_argument("--expected-archive-sha256")
+    parser.add_argument("--metadata-url")
     args = parser.parse_args()
     try:
         evidence = verify_release(
@@ -170,6 +198,7 @@ def main() -> int:
             ref=args.ref,
             asset_url=args.asset_url,
             expected_archive_sha256=args.expected_archive_sha256,
+            metadata_url=args.metadata_url,
         )
     except ReleaseVerificationError as exc:
         print(f"ERROR: Quick Install release verification failed: {exc}", file=sys.stderr)

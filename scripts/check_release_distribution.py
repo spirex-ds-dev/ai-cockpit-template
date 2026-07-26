@@ -357,6 +357,7 @@ def public_release_asset_integrity_issues(
     tag_target: str,
     tag_root: Path,
     assets: dict[str, bytes],
+    source_bound_artifacts: set[str] | None = None,
 ) -> list[str]:
     """Validate downloaded release evidence against the immutable tag tree.
 
@@ -403,6 +404,7 @@ def public_release_asset_integrity_issues(
         issues.append(f"release-digests.json is missing artifact entry: {relative}")
 
     root = tag_root.resolve()
+    source_bound = source_bound_artifacts or SOURCE_BOUND_ARTIFACTS
     for relative, expected in artifacts.items():
         if not isinstance(relative, str) or not isinstance(expected, str):
             issues.append("release-digests.json contains a non-string artifact entry")
@@ -414,7 +416,7 @@ def public_release_asset_integrity_issues(
         if not re.fullmatch(r"[0-9a-f]{64}", expected):
             issues.append(f"invalid SHA-256 for manifest artifact: {relative}")
             continue
-        if relative in SOURCE_BOUND_ARTIFACTS:
+        if relative in source_bound:
             # These files are candidate baselines in the tag tree. The release
             # workflow regenerates them against the immutable source commit.
             continue
@@ -631,6 +633,7 @@ def exercise_public_distribution(
     tag: str,
     quality_target: str,
     source_path: str | None = None,
+    metadata_url: str | None = None,
 ) -> None:
     """Install the real tagged distribution and exercise its documented adoption contract."""
     if not re.fullmatch(r"[A-Za-z0-9_.][A-Za-z0-9_.-]*", quality_target):
@@ -684,6 +687,8 @@ def exercise_public_distribution(
         install_env["AI_COCKPIT_TEMPLATE_REF"] = tag
         if source_path:
             install_env["AI_COCKPIT_TEMPLATE_SOURCE"] = source_path
+        if metadata_url:
+            install_env["AI_COCKPIT_TEMPLATE_RELEASE_METADATA_URL"] = metadata_url
         installed = run_command(
             [str(installer), "--stack", "generic", "--update-makefile", "--create-adoption"],
             cwd=project,
@@ -792,7 +797,9 @@ def exercise_public_distribution(
             raise RuntimeError(f"{tag}: configuration Work Item pair is missing")
 
 
-def inspect_tagged_release(tag: str) -> tuple[dict[str, object], bytes, list[str]]:
+def inspect_tagged_release(
+    tag: str, *, allow_historical_metadata: bool = False
+) -> tuple[dict[str, object], bytes, list[str]]:
     """Read release metadata, evidence, and installer exclusively from *tag*."""
     with tempfile.TemporaryDirectory(prefix="ai-cockpit-public-release-clone-") as raw:
         clone_dir = Path(raw) / "repo"
@@ -824,11 +831,30 @@ def inspect_tagged_release(tag: str) -> tuple[dict[str, object], bytes, list[str
         if not isinstance(metadata, dict):
             raise RuntimeError(f"{tag}: release.json must contain an object")
         if metadata.get("releaseTag") != tag:
-            raise RuntimeError(f"{tag}: tag release.json declares {metadata.get('releaseTag')!r}")
+            if not allow_historical_metadata:
+                raise RuntimeError(
+                    f"{tag}: tag release.json declares {metadata.get('releaseTag')!r}"
+                )
+            # The release workflow publishes a source-bound release projection
+            # in the Release assets while the immutable Tag tree retains the
+            # historical repository projection. Use the candidate metadata as
+            # the claim source, then bind its archive fields to downloaded
+            # public assets below.
+            candidate_path = ROOT / "next-release.json"
+            if not candidate_path.is_file():
+                raise RuntimeError(f"{tag}: candidate release metadata is missing")
+            metadata = json.loads(candidate_path.read_text(encoding="utf-8"))
+            if metadata.get("releaseTag") != tag:
+                raise RuntimeError(
+                    f"{tag}: candidate release metadata declares {metadata.get('releaseTag')!r}"
+                )
         installer = clone_dir / "install.sh"
         if not installer.is_file():
             raise RuntimeError(f"{tag}: cloned release is missing install.sh")
-        issues = supply_chain_issues(metadata, root=clone_dir)
+        # In post-publication mode, source-bound supply-chain artifacts are
+        # authoritative from the public Release assets, not the historical
+        # candidate files retained in the immutable Tag tree.
+        issues = [] if allow_historical_metadata else supply_chain_issues(metadata, root=clone_dir)
         if metadata.get("releaseEvidenceAuthority") == "release-assets-v1":
             tag_target = run_command(
                 ["git", "rev-parse", "HEAD"], cwd=clone_dir, env=clone_git_environment()
@@ -839,6 +865,9 @@ def inspect_tagged_release(tag: str) -> tuple[dict[str, object], bytes, list[str
                 archive_metadata.get("assetName"), str
             ):
                 extra_assets.add(archive_metadata["assetName"])
+            elif allow_historical_metadata:
+                extra_assets.add(f"{tag}.tar.gz")
+                extra_assets.add("release.json")
             try:
                 assets = fetch_published_release_assets(tag, extra_asset_names=extra_assets)
                 provenance = json.loads(assets["provenance.json"].decode("utf-8"))
@@ -846,6 +875,43 @@ def inspect_tagged_release(tag: str) -> tuple[dict[str, object], bytes, list[str
             except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
                 issues.append(f"published release asset inspection failed: {exc}")
             else:
+                if allow_historical_metadata:
+                    metadata_asset = assets.get("release.json")
+                    if metadata_asset is None:
+                        issues.append(f"{tag}: published release metadata asset is missing")
+                    else:
+                        try:
+                            published_metadata = json.loads(metadata_asset.decode("utf-8"))
+                        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+                            issues.append(
+                                f"{tag}: published release metadata asset is invalid: {exc}"
+                            )
+                        else:
+                            if (
+                                not isinstance(published_metadata, dict)
+                                or published_metadata.get("releaseTag") != tag
+                            ):
+                                issues.append(
+                                    f"{tag}: published release metadata asset tag mismatch"
+                                )
+                            else:
+                                metadata = published_metadata
+                    archive_payload = assets.get(f"{tag}.tar.gz")
+                    if archive_payload is None:
+                        issues.append(f"{tag}: published archive asset is missing")
+                    else:
+                        metadata["releaseArchive"] = {
+                            "assetName": f"{tag}.tar.gz",
+                            "sourceCommit": tag_target,
+                            "sha256": hashlib.sha256(archive_payload).hexdigest(),
+                            "url": f"https://github.com/{CANONICAL_REPOSITORY}/releases/download/{tag}/{tag}.tar.gz",
+                        }
+                        capabilities = metadata.get("capabilities")
+                        if isinstance(capabilities, dict):
+                            archive_capability = capabilities.get("sha256ArchiveVerification")
+                            if isinstance(archive_capability, dict):
+                                archive_capability["verified"] = True
+                                archive_capability["status"] = "verified"
                 issues.extend(
                     release_asset_identity_issues(
                         tag=tag,
@@ -860,6 +926,11 @@ def inspect_tagged_release(tag: str) -> tuple[dict[str, object], bytes, list[str
                         tag_target=tag_target,
                         tag_root=clone_dir,
                         assets=assets,
+                        source_bound_artifacts=(
+                            SOURCE_BOUND_ARTIFACTS | {"release.json"}
+                            if allow_historical_metadata
+                            else None
+                        ),
                     )
                 )
                 issues.extend(
@@ -915,6 +986,7 @@ def list_remote_tags(repository_url: str) -> str:
 
 def main() -> int:
     preparation_mode = os.environ.get("AI_RELEASE_PREPARATION") == "1"
+    post_publication_mode = os.environ.get("AI_RELEASE_POST_PUBLISH") == "1"
     # Preparation validates the release that is about to be published.  The
     # next candidate is checked separately below and must not become the
     # public-tag identity for the current release.
@@ -934,8 +1006,47 @@ def main() -> int:
             if candidate_issues:
                 raise RuntimeError("candidate metadata is invalid: " + "; ".join(candidate_issues))
         latest_tag = highest_semver_tag(list_remote_tags(PUBLIC_REPOSITORY))
+        if post_publication_mode:
+            # After publication, release.json intentionally remains the
+            # historical repository projection. The immutable public tag and
+            # its release assets are authoritative for this verification path.
+            tag = latest_tag
+            metadata, script, issues = inspect_tagged_release(tag, allow_historical_metadata=True)
+            supported = archive_verification_supported(metadata)
+            if issues:
+                raise RuntimeError(f"{tag}: tag release evidence is invalid: {'; '.join(issues)}")
+            public_contract = metadata.get("publicContract")
+            if not isinstance(public_contract, dict) or not isinstance(
+                public_contract.get("projectQualityTarget"), str
+            ):
+                raise RuntimeError(f"{tag}: published public quality target is missing")
+            exercise_installer(script, tag=tag, sha256_supported=supported)
+            exercise_public_distribution(
+                script,
+                tag=tag,
+                quality_target=public_contract["projectQualityTarget"],
+                metadata_url=f"https://github.com/{CANONICAL_REPOSITORY}/releases/download/{tag}/release.json",
+            )
+            print(f"post-publication release distribution check passed: {tag}")
+            return 0
         if tag != latest_tag:
-            if preparation_mode and is_next_patch_release(tag, latest_tag):
+            candidate_tag = candidate.get("releaseTag") if preparation_mode else None
+            preparation_tag = None
+            if (
+                preparation_mode
+                and isinstance(candidate_tag, str)
+                and is_next_patch_release(candidate_tag, latest_tag)
+            ):
+                preparation_tag = candidate_tag
+            elif preparation_mode and candidate_tag == latest_tag:
+                # A release may already exist while a follow-up PR still runs
+                # the repository-wide smoke contract.  This is only a
+                # preparation baseline; post-publication verification remains
+                # authoritative for the public release.
+                preparation_tag = candidate_tag
+            elif preparation_mode and is_next_patch_release(tag, latest_tag):
+                preparation_tag = tag
+            if preparation_tag is not None:
                 if supply_chain_issues(metadata):
                     raise RuntimeError("release-preparation evidence does not match local metadata")
                 exercise_installer(
@@ -944,7 +1055,7 @@ def main() -> int:
                     sha256_supported=supported,
                 )
                 print(
-                    f"release distribution check pending publication: {tag} follows public {latest_tag}"
+                    f"release distribution check pending publication: {preparation_tag} follows public {latest_tag}"
                 )
                 return 0
             raise RuntimeError(
