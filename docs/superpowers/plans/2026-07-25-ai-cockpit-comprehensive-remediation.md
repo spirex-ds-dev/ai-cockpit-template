@@ -327,6 +327,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-004`（质量流程/墙钟时间，中）：PR #386 的 smoke job 中 `make quality` 约 20 分钟才完成；`project-test` 已执行全量 pytest，而独立 pytest gate 仍串行运行，且质量图缺少并行调度。已建立 corrective Work Item `quality-gate-deduplication`：保留所有 specialized gate，改为 bounded parallel gate graph；不得降低覆盖率或删除 adopter 定制 `project-test` 下仍必要的显式门禁。
 `RFE-ISSUE-005`（工单收口/分支生命周期，高）：PR #387 合并时错误请求 provider-side `--delete-branch`，先于 `make ai-close-work-item` 删除了可识别的工作分支，导致首次关闭 fail-closed。已从已合并提交恢复可识别分支并重新执行标准关闭；从下一工单起，合并命令不得请求 provider-side branch deletion，必须先在工作分支运行 `make ai-close-work-item`，再由关闭命令删除本地/远端分支并同步默认分支。该问题已记录，后续执行按该纠偏流程继续。
 `RFE-ISSUE-006`（分支同步/证据对齐，中）：更新仍开放的 PR #385 到最新 `origin/main` 时，生成状态、archive index 和执行计划发生冲突；已停止自动合并，以 `origin/main` 为权威解决冲突，并确认 PR #385 相对最新 main 只保留发布冻结证据。已建立 corrective Work Item `record-release-freeze-merge-conflict`；后续开放 PR 必须先同步最新远端 base，再执行 PR 检查和合并。
+`RFE-ISSUE-007`（CI/归档索引/发布门禁，高）：PR #385 更新后，Ubuntu 3.14 与 macOS 3.11 的 `make quality` 因 authoritative Contract/Summary pair 未登记到 archive index 而失败，覆盖率随失败测试降至 84.97%/84.99%，低于 85% 门槛；macOS 3.14 另出现 Homebrew tap trust 环境失败。已停止发布，修正 archiveSequence、Summary/Manifest digest 和 archive index manifest binding；修正后的 PR 必须重新通过全部检查，Homebrew 问题需在重跑中确认是否为环境性失败。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
