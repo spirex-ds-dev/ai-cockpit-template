@@ -381,6 +381,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-058`（工单 ownership，低）：`ai-finish` 发现上述两个已修改路径未真正写入当前 Contract scope，按要求停止归档。已补齐 Contract 与 Summary 的路径归属，未绕过 ownership 门禁。
 `RFE-ISSUE-059`（Checkpoint/Contract 一致性，中）：补齐 scope 后，全量质量门虽通过，但 `check-ai-agent-risk` 发现历史 `before_edit` checkpoint 的 Contract hash 和 unknownCount 已过期。已停止归档，先刷新与最终 Contract 对齐的 checkpoint，再重新执行 finish。
 `RFE-ISSUE-060`（Summary/生成证据 ownership，低）：全量质量门和 AI risk 通过后，`check-ai-change-summary` 拒绝 Summary 仅用 `.ai/decisions/**` 表示 4 个实际生成的 request/evidence 文件。已停止归档，改为逐个列出实际路径后重试。
+`RFE-ISSUE-061`（PR 检查命令用法，低）：首次调用 `make check-ai-pr ... --base <sha>` 被 make 当作未知选项拒绝；已确认该目标通过 `AI_BASE_COMMIT=<sha>` 变量接收基线，后续按 Makefile 接口重跑。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
