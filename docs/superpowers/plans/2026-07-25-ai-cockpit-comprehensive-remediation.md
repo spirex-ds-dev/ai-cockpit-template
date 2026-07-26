@@ -312,6 +312,12 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **强制顺序：** merge → `make ai-close-work-item` → local/remote default-base sync → `make finalize-release-freeze` → `make check-release-preflight` → release dependency/SBOM/provenance/tag/provider publish。发布后记录真实版本、URL、commit、assets、checksums 和 evidence，再完成本工单自己的 PR/merge/close（若发布动作属于合并后阶段，Contract 必须明确并重新绑定 source evidence）。不得把 candidate、historical、published 混为一谈。
 
+**WI-18 当前执行结果（发布前阶段）：** 已从 WI-17 合并关闭并同步后的 `origin/main` 建立专用分支；首次 `ai-start` 按流程以 `not_ready` 停止。已补全发布 Contract，声明 source/tag/asset/evidence 绑定、WI-16/WI-17 前置门、SBOM/Provenance/扫描/安装器/兼容性/人类授权边界；新增 `repository_release.publish` 的 authority-required policy mapping 与回归测试。`make ai-finish TASK=publish-new-version-20260726` 已通过并归档 Contract/Summary，完整质量门包含全量 pytest、Ruff、mypy、Bandit、供应链、Trust、Status、Summary 和 Agent Risk。
+
+**WI-18 流程问题记录：** `WI-18-ISSUE-001`（流程/预检，低）：初始 Contract skeleton 缺少发布专用 intent、raw request、sources、acceptance 和 scenario coverage，`ai-start` 正确停止；已补全后重跑。`WI-18-ISSUE-002`（流程/策略，高）：requested-operation policy 没有定义用户已授权的公开发布操作，preflight 正确拒绝 `repository_release.publish`；已先加入 authority-required 的 policy/capability mapping 和回归测试，再继续。`WI-18-ISSUE-003`（流程/授权，高）：高风险发布需要把用户授权和 restricted-write approval 绑定到当前 Contract；已明确授权范围为“所有门通过后发布一次”，不授权任何门禁绕过。`WI-18-ISSUE-004`（Summary/证据，低）：首次 `ai-finish` 发现新增 release guidelines 未写入 Summary；已完成 Summary 对齐。`WI-18-ISSUE-005`（checkpoint，中）：Contract 最终化后旧 before-edit checkpoint stale，Agent Risk 正确停止；已刷新最终 Contract 的 checkpoint 后重跑通过。
+
+**WI-18 发布后置证据待填：** 尚未执行 release freeze、release preflight 或 provider publication；这些动作必须在本工单 PR 合并、`ai-close-work-item`、分支清理和 `origin/main` 同步之后，按本节强制顺序执行。发布后必须将真实版本、URL、source commit、tag、assets、checksums、SBOM、Provenance、CI/provider run IDs 和验证结果重新绑定到发布证据；在此之前不得声明新版本已发布。
+
 ### WI-19：Clean Execution Plan Documents（最终工单）
 
 **范围：** 盘点旧执行计划、重复计划、已完成计划、过期命令/版本/路径引用；仅清理已确认不再承担当前指令的执行计划文档，统一加入 `Historical Record / Not Current Product Documentation / Do Not Use As Runtime Instruction`，保留 archive-backed 索引、状态、来源和替代文档。

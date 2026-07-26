@@ -26,3 +26,9 @@ operations:
     effects:
       - test
     authorityRequired: false
+  repository_release.publish:
+    environments:
+      - public_provider
+    effects:
+      - create_immutable_release_tag_and_public_assets
+    authorityRequired: true
