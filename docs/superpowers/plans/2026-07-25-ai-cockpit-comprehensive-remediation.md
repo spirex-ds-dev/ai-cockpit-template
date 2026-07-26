@@ -256,6 +256,10 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **范围：** 汇总前 14 项证据，执行完成标准的功能、安全、可用性、效率、文档和质量验收；生成初始完整问题总览、已解决/未解决/接受风险、Known Gaps、剩余人审项目。
 
+**当前执行边界：** `docs/reference/full-remediation-acceptance.md` 记录本地全量验收结果、问题总览和 WI-16 前置基线；不执行日语能力评估、不发布版本、不升级 Capability Truth、不声称 adopter/provider/enterprise readiness。
+
+**流程问题记录：** 严格预检在三项全量场景尚未实测时返回 `needs_human_confirmation`；已记录用户授权的结构化决策，执行真实验收后仅按命令证据更新场景状态。
+
 **验收：** 安装、校准、Work Item、Finish、Archive、PR、Close 通过；非法状态、未知/人工确认、Source Mode、注入、Task Outcome、dry-run、回滚、并发、对象工程矩阵、文档多语言、Capability evidence 和全量质量检查均有结果；任何 unknown、stale、required check 失败或 source/release mismatch 都停止发布准备。
 
 **必须验证：** 全量 Make/pytest/安全/文档/对象工程/发布 preflight；问题总览必须由证据生成。关闭并完成文档对齐后才允许 WI-16。
