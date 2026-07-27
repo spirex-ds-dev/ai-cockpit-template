@@ -36,6 +36,18 @@ def test_problem_statement_is_optional_but_must_not_be_empty():
     assert "problemStatement must be a non-empty string" in issues
 
 
+def test_contract_schema_accepts_resume_writer_field_and_rejects_unrelated_unknowns():
+    contract = valid_contract()
+    contract["resumeHistory"] = []
+
+    issues = ai_check_work_item.validate_contract(contract)
+
+    assert "unknown field: resumeHistory" not in issues
+
+    contract["unexpectedField"] = True
+    assert "unknown field: unexpectedField" in ai_check_work_item.validate_contract(contract)
+
+
 def test_v2_code_work_item_requires_sourced_raw_request():
     contract = valid_contract()
     contract.update(

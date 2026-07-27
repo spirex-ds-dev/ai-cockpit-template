@@ -133,6 +133,15 @@
       "implementationEvidence": [".github/workflows/smoke.yml", "docs/superpowers/plans/2026-07-28-documentation-alignment-hosted-recovery.md", "docs/reference/ai-cockpit-work-item-lifecycle.md"],
       "acceptanceEvidence": ["tests/test_workflows.py", "tests/test_ai_check_summary.py", "tests/test_start_and_archive.py"],
       "verificationCommands": ["make ai-preflight", "make check-instruction-traceability", "make ai-finish TASK=documentation-alignment-hosted-recovery-20260728", "make ai-close-work-item TASK=documentation-alignment-hosted-recovery-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-015",
+      "summary": "Keep the governed resume writer and canonical Contract reader schema aligned so generated resumeHistory is accepted while unrelated fields and invalid lineage remain fail closed.",
+      "planWorkItems": ["WI-20", "resume-history-contract-schema-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/resume-history-contract-schema-20260728.contract.json"],
+      "implementationEvidence": ["scripts/ai_check_work_item.py", "docs/superpowers/plans/2026-07-28-resume-history-contract-schema.md"],
+      "acceptanceEvidence": ["tests/test_ai_check_work_item.py", "tests/test_start_and_archive.py"],
+      "verificationCommands": ["make ai-preflight", "make check-ai-contract", "make check-instruction-traceability", "make ai-finish TASK=resume-history-contract-schema-20260728", "make ai-close-work-item TASK=resume-history-contract-schema-20260728"]
     }
   ]
 }

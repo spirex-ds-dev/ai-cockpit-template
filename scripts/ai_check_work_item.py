@@ -62,6 +62,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "archiveIndexRepair",
     "startReceipt",
     "predecessorWorkItem",
+    "resumeHistory",
     "budgetImpact",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
