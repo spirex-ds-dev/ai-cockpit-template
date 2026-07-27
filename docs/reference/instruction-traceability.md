@@ -17,6 +17,16 @@ deliverable must either appear in implementation evidence or carry an
 explicit no-change rationale. A no-change rationale records a gap; it does
 not make the Work Item complete or unblock release.
 
+Archived evidence is resolved deterministically when an older manifest still
+refers to an `active/` Contract or Summary path. The checker also validates
+the SHA-256 bindings in `archive/index.json` and each Archive Manifest, so a
+post-finish edit cannot silently leave stale discovery evidence.
+
+Hosted performance evidence uses the registered `hostedPerformanceEvidence`
+Summary shape. Each scenario must declare `pass`, `not_run`, or `fail`, with a
+reason for non-passing scenarios and a comparison rule that prevents an
+unmeasured performance claim. Unknown ad-hoc Summary fields remain invalid.
+
 Run:
 
 ```sh

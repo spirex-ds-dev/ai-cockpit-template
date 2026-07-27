@@ -1,0 +1,202 @@
+{
+  "contractVersion": 2,
+  "workItemId": "process-evidence-release-preflight-20260727",
+  "mode": "code",
+  "title": "Fix instruction traceability, hosted evidence schema, and archive path integrity",
+  "baseCommit": "6408947754bb14600c463588f4150de42261e385",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/process-evidence-release-preflight-20260727.contract.json",
+    ".ai/work-items/active/process-evidence-release-preflight-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_check_summary.py",
+    "scripts/check_instruction_traceability.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/check_ci_release_evidence.sh",
+    ".github/workflows/smoke.yml",
+    "Makefile",
+    "tests/test_ai_check_summary.py",
+    "tests/test_instruction_traceability.py",
+    "tests/test_ci_release_evidence.sh",
+    "tests/test_ci_quality_orchestration.py",
+    "docs/reference/instruction-traceability.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Implementing the WI-10 installation-document content itself",
+    "Changing release.json, next-release.json, release-state.json, or public release identity",
+    "Creating tags, GitHub Releases, or publishing provider assets",
+    "Weakening required quality, release, SBOM, provenance, or CI evidence gates"
+  ],
+  "sources": [
+    {"path": "AGENTS.md", "reason": "Repository workflow requires one Work Item lifecycle, fail-closed evidence, and process-root-cause review."},
+    {"path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "reason": "Records RFE-ISSUE-091 through RFE-ISSUE-095 and the required serial order."},
+    {"path": "docs/reference/remediation-instruction-traceability.json", "reason": "Defines the bidirectional instruction-to-plan-to-implementation-to-acceptance manifest that currently exposed the WI-21 archive-path failure."},
+    {"path": "scripts/ai_check_summary.py", "reason": "Current Summary schema rejected the needed hosted evidence structure."},
+    {"path": "scripts/check_instruction_traceability.py", "reason": "Current checker does not resolve archived Contract paths after finish."},
+    {"path": "scripts/ai_archive_work_item.py", "reason": "Archive operation is the source of Contract/Summary/Manifest/index path and digest transitions."},
+    {"path": "scripts/check_ci_release_evidence.sh", "reason": "PR #408 failure exposed incomplete dependent-job evidence and misleading diagnostics."},
+    {"path": ".github/workflows/smoke.yml", "reason": "PR #408 entered release-preparation mode from source-bound evidence file changes and emitted incomplete failure evidence."},
+    {"path": "tests/test_ai_check_summary.py", "reason": "Regression coverage for registered hosted evidence schema."},
+    {"path": "tests/test_instruction_traceability.py", "reason": "Regression coverage for named-path mapping and archive path resolution."},
+    {"path": "tests/test_ci_release_evidence.sh", "reason": "Regression coverage for required dependent-job evidence."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["ci", "release", "security"],
+    "reason": "The changes harden fail-closed evidence and release-preparation boundaries; incorrect binding could either block valid work or allow an unverified release path.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized continuous serial execution; implementation remains bounded to the recorded process failures and cannot publish."
+  },
+  "preReviewWarnings": [
+    "Verify that ordinary governance/evidence maintenance changes do not silently enter release-preparation mode.",
+    "Verify that failed and skipped dependent CI jobs are represented without weakening required-job validation.",
+    "Verify that named paths are never accepted without implementation evidence or explicit no-change rationale."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Every user-named required path is mechanically required to have implementation evidence or an explicit no-change rationale, and the WI-10 installation.md omission remains release-blocking.",
+    "A2: Summary schema formally registers structured hosted evidence with scenario, status, reason, source, and comparison-boundary fields; unknown ad-hoc fields remain rejected.",
+    "A3: Archive completion updates or resolves traceability paths and synchronizes Contract, Summary, Archive Manifest, and archive index digests; stale paths fail closed.",
+    "A4: Release-preparation scope is controlled by explicit Work Item/event intent and does not trigger candidate validation for ordinary evidence-maintenance changes; release Work Items still fail closed.",
+    "A5: CI evidence records all required jobs including skipped/dependent jobs and reports missing-job versus head-binding failures distinctly; regression tests cover the PR #408 failure.",
+    "A6: All changes pass the full AI/project verification and complete this corrective Work Item's PR, merge, archive, close, and branch-cleanup lifecycle without publishing a release."
+  ],
+  "guidelines": [
+    "Preserve fail-closed behavior; do not solve evidence failures by weakening validation.",
+    "Keep release identity and public publication out of this corrective Work Item.",
+    "Add regression coverage before changing each process boundary."
+  ],
+  "intent": {
+    "problem": "WI-21 and the prior WI-10 audit demonstrated that the repository can pass local implementation checks while still losing a user-named file mapping, lacking a registered machine-readable hosted-evidence shape, or retaining stale active/archive traceability and digest references. PR #408 then showed that source-bound evidence maintenance can accidentally trigger release-candidate validation and produce structurally incomplete failure evidence.",
+    "constraints": [
+      "Fix the process at the schema/checker/archive/workflow boundaries; do not hand-edit evidence to bypass validators.",
+      "Keep WI-10 content implementation and version publication for later ordered Work Items.",
+      "Preserve explicit no-change rationale as a release-blocking state when a named path remains unmodified.",
+      "Use the existing Contract, Summary, archive Manifest, archive index, and CI evidence formats unless this Work Item formally extends and tests them."
+    ],
+    "rationale": "A single corrective process Work Item can make the discovered omission classes mechanically visible before another implementation Work Item is started, preventing the same drift from recurring in WI-10 and later release work."
+  },
+  "rawUserRequest": "结束当前性能工单后，先补漏洞：强制把用户点名文件映射成实现/无变更理由；Summary schema 覆盖 hosted 证据结构；归档后自动重写或解析 traceability 路径，避免继续补遗漏时再次遗漏。每个工单仍须记录流程问题并完成完整 PR、合并、归档、关闭和分支清理流程。",
+  "rawRequestSource": {"type": "human", "reference": "user-instruction-process-root-cause-corrections-20260727", "capturedAt": "2026-07-27", "digest": "sha256:process-evidence-release-preflight-authorized", "summary": "User explicitly required these three process vulnerabilities to be fixed before continuing to WI-10 or release."},
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {"summary": "Make the three discovered evidence and release-preflight omission classes mechanically detectable before WI-10 or release work continues.", "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]},
+  "scenarioCoverage": [
+    {"scenario": "A user-named path is absent from implementation evidence.", "expected": "The traceability check fails unless an explicit no-change rationale is recorded.", "required": true, "status": "verified", "evidence": ["docs/reference/remediation-instruction-traceability.json", "scripts/check_instruction_traceability.py"]},
+    {"scenario": "A Summary uses an unregistered hosted evidence field or omits required hosted fields.", "expected": "The Summary schema rejects unknown or incomplete evidence.", "required": true, "status": "verified", "evidence": ["scripts/ai_check_summary.py", ".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.summary.json"]},
+    {"scenario": "A Work Item is archived and active paths become archive paths.", "expected": "Traceability and digest checks resolve the final paths and reject stale references.", "required": true, "status": "verified", "evidence": ["scripts/ai_archive_work_item.py", ".ai/work-items/archive/index.json"]},
+    {"scenario": "A governance/evidence PR changes source-bound release files without explicit release intent.", "expected": "Release preparation remains off; explicit release Work Items remain strict.", "required": true, "status": "verified", "evidence": [".github/workflows/smoke.yml", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"]},
+    {"scenario": "A required CI job is skipped because an upstream job failed.", "expected": "Failure evidence lists the skipped job and validator reports the correct missing-job cause.", "required": true, "status": "verified", "evidence": ["scripts/check_ci_release_evidence.sh", "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30261020073/job/89960666163"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized continuous execution and requested these process fixes before proceeding to WI-10 and release."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 626
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/process-evidence-release-preflight-20260727.json",
+    "baseCommit": "6408947754bb14600c463588f4150de42261e385",
+    "initialScopeDigest": "37b2cb2b80d655a000c1bf99fd7cb74ba3b0a016fb7cc1427552238ca644e011",
+    "contractSkeletonDigest": "a07e096b69ec2ec2b299705adb33b41e408cfe55973d7fcd4df36465a7693e86"
+  }
+}

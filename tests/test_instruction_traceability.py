@@ -5,7 +5,12 @@ import json
 import sys
 from pathlib import Path
 
-from check_instruction_traceability import _path, main, validate_manifest
+from check_instruction_traceability import (
+    _path,
+    _validate_archive_integrity,
+    main,
+    validate_manifest,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -100,3 +105,72 @@ def test_cli_fails_when_manifest_cannot_be_read(tmp_path: Path, monkeypatch) -> 
         ],
     )
     assert main() == 1
+
+
+def test_archive_index_digest_drift_fails_closed(tmp_path: Path):
+    archive = tmp_path / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True)
+    contract = archive / "task.contract.json"
+    summary = archive / "task.summary.json"
+    manifest = archive / "task.archive-manifest.json"
+    contract.write_text("{}\n", encoding="utf-8")
+    summary.write_text("{}\n", encoding="utf-8")
+    manifest.write_text(
+        json.dumps(
+            {
+                "contractPath": ".ai/work-items/archive/2026/task.contract.json",
+                "summaryPath": ".ai/work-items/archive/2026/task.summary.json",
+                "contractSha256": "bad",
+                "summarySha256": "bad",
+            }
+        ),
+        encoding="utf-8",
+    )
+    (tmp_path / ".ai/work-items/archive/index.json").write_text(
+        json.dumps(
+            {
+                "entries": [
+                    {
+                        "contractPath": ".ai/work-items/archive/2026/task.contract.json",
+                        "contractSha256": "bad",
+                        "summaryPath": ".ai/work-items/archive/2026/task.summary.json",
+                        "summarySha256": "bad",
+                        "manifestPath": ".ai/work-items/archive/2026/task.archive-manifest.json",
+                        "manifestSha256": "bad",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    errors = _validate_archive_integrity(tmp_path)
+    assert any("digest mismatch" in error for error in errors)
+
+
+def test_archived_contract_path_resolves_when_manifest_keeps_active_reference(tmp_path: Path):
+    archive = tmp_path / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True)
+    (archive / "example.contract.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "plan.md").write_text("WI-1", encoding="utf-8")
+    (archive / "example.summary.json").write_text("{}", encoding="utf-8")
+    assert (
+        validate_manifest(
+            {
+                "schemaVersion": 1,
+                "planPath": "plan.md",
+                "instructions": [
+                    {
+                        "id": "I1",
+                        "summary": "x",
+                        "planWorkItems": ["WI-1"],
+                        "contractPaths": [".ai/work-items/active/example.contract.json"],
+                        "implementationEvidence": [".ai/work-items/active/example.contract.json"],
+                        "acceptanceEvidence": [".ai/work-items/active/example.summary.json"],
+                        "verificationCommands": ["make check"],
+                    }
+                ],
+            },
+            tmp_path,
+        )
+        == []
+    )

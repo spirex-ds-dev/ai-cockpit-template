@@ -47,7 +47,7 @@ jq -e '
     (all($run.jobs[]; (.name | type == "string" and length > 0) and (.conclusion | IN("success", "failure", "cancelled", "skipped")))) and
     (all($run.requiredJobNames[]; . as $required | any($run.jobs[]; .name == $required)))
   )
-' --arg headSha "$(jq -r '.headSha' "$evidence_path")" "$evidence_path" >/dev/null || fail "workflow run evidence is not bound to the top-level head"
+' --arg headSha "$(jq -r '.headSha' "$evidence_path")" "$evidence_path" >/dev/null || fail "workflow run evidence is missing a required job or is not bound to the top-level head"
 
 jq -e '
   . as $e |

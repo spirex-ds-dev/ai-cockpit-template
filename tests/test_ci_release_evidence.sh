@@ -21,6 +21,12 @@ for mutation in missing-run stale-head failed-without-reason pr-body; do
     exit 1
   fi
 done
+bad_required_jobs="$tmp/bad-required-jobs.json"
+jq '.requiredJobNames += ["installation-smoke"]' "$valid" > "$bad_required_jobs"
+if bash "$root/scripts/check_ci_release_evidence.sh" "$bad_required_jobs" "$head"; then
+  echo 'incomplete required-job evidence unexpectedly passed' >&2
+  exit 1
+fi
 mkdir "$tmp/release"
 jq -n '{releaseTag:"v0.5.33"}' > "$tmp/release/release.json"
 jq -n '{releaseTag:"v0.5.34",releaseState:"candidate",published:false,basedOnReleaseTag:"v0.5.33"}' > "$tmp/release/next-release.json"

@@ -70,6 +70,15 @@
       "implementationEvidence": ["Makefile", "scripts/run_quality_gate.py", "scripts/summarize_quality_gates.py", "scripts/determine_quality_scope.py", "docs/operations/quality-gates.md"],
       "acceptanceEvidence": ["tests/test_quality_gate_architecture.py", "tests/test_quality_scope.py", "tests/test_quality_telemetry.py"],
       "verificationCommands": ["make check-instruction-traceability", "make ai-finish TASK=quality-gate-performance-architecture-20260727", "make ai-close-work-item TASK=quality-gate-performance-architecture-20260727"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-009",
+      "summary": "Fix the three WI-21 process vulnerabilities before resuming WI-10: named-path mapping, registered hosted evidence, archive path/digest integrity, explicit release intent, and complete CI failure evidence.",
+      "planWorkItems": ["WI-21", "WI-10"],
+      "contractPaths": [".ai/work-items/active/process-evidence-release-preflight-20260727.contract.json"],
+      "implementationEvidence": ["scripts/ai_check_summary.py", "scripts/check_instruction_traceability.py", "scripts/ai_archive_work_item.py", "scripts/check_ci_release_evidence.sh", ".github/workflows/smoke.yml"],
+      "acceptanceEvidence": ["tests/test_ai_check_summary.py", "tests/test_instruction_traceability.py", "tests/test_ci_release_evidence.sh"],
+      "verificationCommands": ["make check-instruction-traceability", "make ai-finish TASK=process-evidence-release-preflight-20260727", "make ai-close-work-item TASK=process-evidence-release-preflight-20260727"]
     }
   ]
 }

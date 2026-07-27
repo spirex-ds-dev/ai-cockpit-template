@@ -149,6 +149,62 @@ def test_passed_v2_evidence_requires_worktree_digest():
     assert "verification[0].worktreeDigest is required for passed result" in issues
 
 
+def test_hosted_performance_evidence_requires_registered_structured_shape():
+    summary = {
+        "hostedPerformanceEvidence": {
+            "schemaVersion": 1,
+            "status": "not_run",
+            "baselineWorkItem": "wi-20",
+            "comparisonRule": "No improvement claim without comparable source-bound runs.",
+            "scenarios": [
+                {
+                    "scenario": "pull_request_quality_gate",
+                    "status": "not_run",
+                    "reason": "No comparable hosted run.",
+                    "evidence": [],
+                }
+            ],
+        }
+    }
+    assert ai_check_summary.validate_hosted_performance_evidence(summary) == []
+
+
+def test_hosted_performance_evidence_rejects_missing_not_run_reason():
+    summary = {
+        "hostedPerformanceEvidence": {
+            "schemaVersion": 1,
+            "status": "not_run",
+            "baselineWorkItem": "wi-20",
+            "comparisonRule": "No improvement claim without comparable source-bound runs.",
+            "scenarios": [
+                {"scenario": "pull_request_quality_gate", "status": "not_run", "evidence": []}
+            ],
+        }
+    }
+    assert "hostedPerformanceEvidence.scenarios[0].reason is required" in (
+        ai_check_summary.validate_hosted_performance_evidence(summary)
+    )
+
+
+def test_hosted_performance_evidence_rejects_invalid_root_and_scenarios():
+    assert ai_check_summary.validate_hosted_performance_evidence(
+        {"hostedPerformanceEvidence": "legacy prose"}
+    ) == ["hostedPerformanceEvidence must be an object"]
+    issues = ai_check_summary.validate_hosted_performance_evidence(
+        {
+            "hostedPerformanceEvidence": {
+                "schemaVersion": 2,
+                "status": "wrong",
+                "baselineWorkItem": "",
+                "comparisonRule": "",
+                "scenarios": "not-a-list",
+            }
+        }
+    )
+    assert "hostedPerformanceEvidence.schemaVersion must be 1" in issues
+    assert "hostedPerformanceEvidence.scenarios must be a non-empty list" in issues
+
+
 def test_legacy_archive_summary_without_v2_fields_remains_readable():
     item = ai_finish.evidence(
         "projectTest",

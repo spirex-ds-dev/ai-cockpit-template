@@ -64,6 +64,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "intentAlignment",
     "decisionEvidence",
     "taskOutcomeInput",
+    "hostedPerformanceEvidence",
 }
 RESULTS = {"passed", "failed", "not_run"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -398,6 +399,45 @@ def _validate_summary_metadata(summary: dict[str, Any]) -> list[str]:
     return issues
 
 
+def validate_hosted_performance_evidence(summary: dict[str, Any]) -> list[str]:
+    """Validate the registered, structured hosted performance evidence shape."""
+    value = summary.get("hostedPerformanceEvidence")
+    if value is None:
+        return []
+    issues: list[str] = []
+    if not isinstance(value, dict):
+        return ["hostedPerformanceEvidence must be an object"]
+    if value.get("schemaVersion") != 1:
+        issues.append("hostedPerformanceEvidence.schemaVersion must be 1")
+    if not non_empty_string(value.get("baselineWorkItem")):
+        issues.append("hostedPerformanceEvidence.baselineWorkItem is required")
+    if not non_empty_string(value.get("comparisonRule")):
+        issues.append("hostedPerformanceEvidence.comparisonRule is required")
+    if value.get("status") not in {"not_run", "partial", "complete"}:
+        issues.append("hostedPerformanceEvidence.status must be not_run, partial, or complete")
+    scenarios = value.get("scenarios")
+    if not isinstance(scenarios, list) or not scenarios:
+        issues.append("hostedPerformanceEvidence.scenarios must be a non-empty list")
+        return issues
+    for index, scenario in enumerate(scenarios):
+        prefix = f"hostedPerformanceEvidence.scenarios[{index}]"
+        if not isinstance(scenario, dict):
+            issues.append(f"{prefix} must be an object")
+            continue
+        if not non_empty_string(scenario.get("scenario")):
+            issues.append(f"{prefix}.scenario is required")
+        if scenario.get("status") not in {"pass", "not_run", "fail"}:
+            issues.append(f"{prefix}.status must be pass, not_run, or fail")
+        if scenario.get("status") in {"not_run", "fail"} and not non_empty_string(
+            scenario.get("reason")
+        ):
+            issues.append(f"{prefix}.reason is required")
+        evidence = scenario.get("evidence")
+        if not isinstance(evidence, list) or any(not non_empty_string(item) for item in evidence):
+            issues.append(f"{prefix}.evidence must be a list of strings")
+    return issues
+
+
 def _validate_required_verification(
     summary: dict[str, Any], contract: dict[str, Any] | None
 ) -> list[str]:
@@ -463,6 +503,7 @@ def validate_summary(
         )
     )
     issues.extend(_validate_summary_metadata(summary))
+    issues.extend(validate_hosted_performance_evidence(summary))
     issues.extend(
         validate_residual_risk_semantics(
             summary, legacy_archive=legacy_archive, summary_path=summary_path
