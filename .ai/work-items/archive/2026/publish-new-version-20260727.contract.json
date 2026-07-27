@@ -1,0 +1,287 @@
+{
+  "contractVersion": 2,
+  "workItemId": "publish-new-version-20260727",
+  "mode": "code",
+  "title": "Prepare release gate; defer publication until corrective Work Items close",
+  "baseCommit": "2edda7171ed3b76850766e70c027a04073073939",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/publish-new-version-20260727.contract.json",
+    ".ai/work-items/active/publish-new-version-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".ai/cockpit/release-freeze.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/ci-release-evidence.json",
+    ".ai/policies/requested-operation.yaml",
+    ".ai/project/capabilities.json",
+    ".github/workflows/release.yml",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Changing runtime security boundaries or implementing a security sandbox",
+    "Changing release workflow policy, branch protection, signing infrastructure, or SBOM/provenance generators",
+    "Creating a public provider tag, release, or asset; publication belongs to a later dedicated WI-18 Work Item",
+    "Publishing before every release, Japanese, Trust Layer, CI, supply-chain, installer, compatibility, and human-authorization gate passes",
+    "Deleting historical Work Item evidence or execution plans"
+  ],
+  "sources": [
+    {
+      "path": "release.json",
+      "reason": "Published release identity and current public archive contract."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Candidate release identity and delegated supply-chain evidence projection."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Canonical release lifecycle state and source identity."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Authoritative provider release and evidence sequence."
+    },
+    {
+      "path": "scripts/check_release_preflight.py",
+      "reason": "Fail-closed release identity and lifecycle preflight."
+    },
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "Source-bound release freeze finalization."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "User-authorized serial Work Item order and release blockers."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Mandatory pre-release Japanese capability gate."
+    },
+    {
+      "path": "docs/trust-layer.md",
+      "reason": "Mandatory pre-release Human-Agent Trust Layer gate."
+    },
+    {
+      "path": ".ai/policies/requested-operation.yaml",
+      "reason": "Authorized public release operation policy."
+    },
+    {
+      "path": ".ai/project/capabilities.json",
+      "reason": "Governance capability mapping for release operation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "external_publication",
+      "source_identity",
+      "supply_chain_evidence",
+      "irreversible_tag_and_asset"
+    ],
+    "reason": "Public immutable tags and assets must be bound to one exact source commit and all delegated evidence before publication.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial execution and one release after every mandatory gate passes; no gate bypass is authorized."
+  },
+  "preReviewWarnings": [
+    "Do not publish a stale, candidate, historical, or conflicting identity; record exact source, tag, assets, checksums, URLs, run IDs, and authorization."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "WI-16 Japanese capability assessment and WI-17 Human-Agent Trust Layer are verified as merged and closed predecessors.",
+    "The release preparation records the observed release identity conflict, stale candidate evidence, and exact fail-closed distribution/preflight results without mutating provider state.",
+    "The preparation boundary explicitly separates candidate preparation from provider publication and records that publication is deferred until WI-20 omissions, outstanding process issues, and RFE-ISSUE-082 are resolved.",
+    "Relevant local release-state consistency checks pass, while any public distribution mismatch remains recorded as an unresolved release blocker rather than being hidden.",
+    "No provider release, immutable tag, or public asset is created by this preparation Work Item.",
+    "The complete Contract, preflight, implementation, verification, Summary, PR, CI, merge, ai-close, branch-cleanup, and main-sync lifecycle succeeds.",
+    "Every process issue is recorded in the plan; workflow defects are corrected and affected gates rerun before publication continues."
+  ],
+  "guidelines": [
+    "Release claims must be backed by source-bound evidence rather than self-declaration.",
+    "Do not publish when any required gate is missing, stale, contradictory, or unverifiable.",
+    "Preserve the distinction between delegated SBOM/Provenance evidence and AI Cockpit governance evidence.",
+    "Keep release identity and evidence machine-readable and reproducible."
+  ],
+  "intent": {
+    "problem": "The remediation sequence requires one real new version publication after the Japanese and Human-Agent Trust Layer gates, but release truth must remain bound to one exact source commit and must not be inferred from candidate or historical metadata.",
+    "constraints": [
+      "Use the latest synchronized origin/main after all predecessor Work Items are closed.",
+      "Fail closed on release preflight, CI, supply-chain, installer, compatibility, and human-decision gates.",
+      "Do not claim enterprise compliance, sandboxing, signing, identity, or isolation without evidence.",
+      "Do not delete historical evidence or execution plans."
+    ],
+    "rationale": "A real release validates that governance, Japanese, documentation, installer, and supply-chain evidence remain aligned at publication time."
+  },
+  "rawUserRequest": "继续执行已授权的 AI Cockpit 全面整改计划。WI-18 必须在全面日语评估和 Human-Agent Trust Layer 工单完成并关闭后发布新版本；发布前必须走 release freeze、release preflight、PR/CI、SBOM、provenance、漏洞/secret 检查、安装器与兼容性验证、版本/标签/资产/校验和/证据记录及人类授权。每个工单必须完成完整 PR、合并、归档、清理分支和同步 main 的生命周期；遇到流程问题要记录，流程问题先修流程再继续。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-27-authorized-serial-remediation-release",
+    "capturedAt": "2026-07-27",
+    "digest": "sha256:user-authorized-serial-plan-release"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "document",
+    "authorityRequired": false
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-07-27-authorized-serial-remediation-release",
+    "scope": "Continue serial Work Item execution and prepare release evidence, while deferring all public publication until the five-stage order is complete; no gate bypass authorized."
+  },
+  "declaredIntent": {
+    "summary": "Prepare and record the source-bound release gate state only; defer the next public release to a later dedicated WI-18 Work Item.",
+    "requestedCapabilities": ["ai_governance"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A stale, candidate, historical, or conflicting release identity is detected.",
+      "expected": "Release preparation fails closed for publication and no tag or public asset is created.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["scripts/check_release_preflight.py", "tests/test_release_preflight.py"]
+    },
+    {
+      "scenario": "A mandatory Japanese or Trust Layer predecessor is not merged and closed.",
+      "expected": "The Work Item stops before publication and records missing predecessor evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": [".ai/work-items/archive/2026/japanese-capability-assessment.summary.json", ".ai/work-items/archive/2026/document_human_agent_trust_layer.summary.json"]
+    },
+    {
+      "scenario": "Archive, installer, SBOM, provenance, vulnerability/secret, hosted CI, compatibility, or digest evidence is missing or source-mismatched.",
+      "expected": "The relevant gate fails closed and publication does not proceed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/release.yml", "scripts/check_release_preflight.py", "tests/test_release_preflight.py"]
+    },
+    {
+      "scenario": "All deterministic preparation gates pass but corrective Work Items remain open.",
+      "expected": "Preparation records the release blocker and defers provider publication; no external release operation is executed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/release.yml", "release.json", "next-release.json"]
+    },
+    {
+      "scenario": "A workflow/process defect is found during release preparation.",
+      "expected": "Record it, correct the workflow or stop, rerun affected gates, and never continue on stale evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["AGENTS.md", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized serial remediation, release publication, and correction of workflow defects before continuing; no gate bypass is authorized."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 625
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/publish-new-version-20260727.json",
+    "baseCommit": "2edda7171ed3b76850766e70c027a04073073939",
+    "initialScopeDigest": "e088da9229d0f18faebac6128719345987249b440ac9909d1802aed6035cdd81",
+    "contractSkeletonDigest": "3c12a65a94288f9df7bad6c0c7bcb33cbd8bd5473a431cdd3be26fec271baaaa"
+  }
+}

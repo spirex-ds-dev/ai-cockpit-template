@@ -89,8 +89,21 @@ keywords:
 | WI-18 | publish-new-version | 严格发布门禁、source/tag/asset/digest/SBOM/provenance、安装/升级/回滚验证并发布新版本 | merge/close 后的发布证据、版本/URL/checksum/provider evidence |
 | WI-19 | clean-execution-plan-documents | 最后清理过期执行计划，保留历史标记和 archive-backed 索引，完成计划对齐 | cleanup inventory、历史隔离检查、最终 clean plan 与用户复核材料 |
 | WI-20 | quality-gate-performance-architecture-20260727 | 在不降低可信度的前提下优化 `make quality` 与 GitHub Actions：去重、Fast/Full/Release 分层、计时证据、安全并行和安装/Release 职责拆分 | Gate timing/summary、调用图去重、Workflow ownership、scope/cache/并行测试、五类场景性能证据 |
+| WI-21 | quality-gate-performance-completion-20260727 | 完成 WI-20 尚未闭合的 Workflow Job 拆分、逐门禁计时和 hosted 前后性能证据 | 独立 Job ownership、逐门禁 timing/log/digest、五类 hosted before/after evidence、三语文档和双向追踪 |
 
-WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。`quality-gate-performance-architecture-20260727` 是在当前追踪工单关闭后插入的流程/质量优化工单，必须先完成其完整 PR/merge/close/分支清理流程，再继续剩余发布阻塞整改。WI-16 是发布前的强制日语能力门禁；若发现问题，必须先完成对应 corrective Work Item 的完整 PR/merge/close/分支清理流程。WI-17 是发布前的 Human-Agent Trust Layer 对齐门禁，必须确认文档声明、证据模型、责任边界和供应链证据边界与实际能力一致。WI-18 是唯一允许实际发布新版本的工单，且必须在 WI-16 及其所有 corrective Work Item、WI-17、WI-20 全部关闭后执行。WI-19 必须最后执行；它不得删除当前计划、最终问题总览或任何仍被 Contract/Archive/Release evidence 引用的记录。
+严格执行以下五阶段顺序：
+
+1. 性能优化：完成 WI-20；
+2. 处理 WI-20 遗漏：完成 WI-21；
+3. 处理已发现但尚未解决的流程问题：逐项建立并完成 corrective Work Item；
+4. 处理发布阶段发现的 `RFE-ISSUE-082`：完成对应修复、PR/merge/close/分支清理和重新验证；
+5. 发布新版本：仅在前四阶段全部完成、双向追踪和文档对齐验收通过后执行 WI-18。
+
+WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。`quality-gate-performance-architecture-20260727` 是性能优化阶段，`quality-gate-performance-completion-20260727` 专门处理 WI-20 已明确的遗漏；两者必须分别完成完整 Contract→实现→验收→PR→merge→archive→`ai-close-work-item`→分支清理→main 同步生命周期。已发现但尚未解决的流程问题不得与性能工单或发布工单混做，必须先记录并建立独立 corrective Work Item。WI-16 是发布前的强制日语能力门禁；若发现问题，必须先完成对应 corrective Work Item 的完整生命周期。WI-17 是发布前的 Human-Agent Trust Layer 对齐门禁。WI-18 是唯一允许实际发布新版本的工单，且必须在前四阶段、WI-16/WI-17 及其 corrective Work Item 全部关闭后执行。WI-19 必须最后执行；它不得删除当前计划、最终问题总览或任何仍被 Contract/Archive/Release evidence 引用的记录。
+
+WI-21 是 WI-20 的 corrective process/quality Work Item，必须在 WI-18 发布前完成。WI-20 已交付去重、Fast/Full/Release 入口、组级 telemetry 和 fail-closed 约束，但其 Summary 明确保留了三项未闭合证据：Workflow 尚未拆成独立 Job、尚无五类 hosted before/after 测量、计时尚未覆盖每个 Make gate。不得把这些 Known Gap 直接当作发布前已完成；WI-21 必须分别补齐实现和证据，或以结构化、可审计的 not-run 原因经用户最终复核后才能决定是否继续。
+
+当前已启动的 `publish-new-version-20260727` 只作为发布准备占位工单处理，不执行 provider publication；它完成后必须先关闭，再按上述五阶段顺序启动 WI-21 和后续 corrective Work Item。实际发布必须使用新的、单独的 WI-18 发布 Contract。
 
 ## 三、各 Work Item 的执行边界与验收要求
 
@@ -375,6 +388,8 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。`quality-g
 `RFE-ISSUE-081`（工单依赖/质量门，高）：独立发布预检范围工单从当前 `origin/main` 执行完整质量时，在 434987ms 后暴露了尚未合并的 #402 mypy 修复，说明该流程修复不能先于 #402 独立合并。已将预检范围修复回填到 #402 的既有 workflow/测试范围，避免拆出无法通过基线质量门的依赖环。
 `RFE-ISSUE-082`（发布预检语义，高）：按 diff 关闭候选模式后，普通 PR 仍因 `release.json v0.5.42` 与远端 Draft tag v0.5.44 的公共身份不一致而失败；普通 PR 不应执行发布合同检查本身。现仅对发布文件 PR 执行合同检查，普通 PR 显式记录“不适用”后进入质量门。
 `RFE-ISSUE-083`（文档质量门，中）：远端全量测试在 20 分 20 秒完成、覆盖率 85.02%，但新增 RFE-080 行使用了文档检查禁止的中文术语，触发日语风格门并造成 3 个失败。已改用符合现有术语规则的中文措辞，必须重新通过文档元数据和系统不变量检查。
+`RFE-ISSUE-084`（工单分支/流程，中）：发布准备工单初始在 `main` 上启动，`ai-finish` 按规则拒绝在仓库基线分支归档。已停止收口并转移到专用 Work Item 分支；后续所有工单在启动后必须先确认当前分支不是默认基线，再进入实现/finish。
+`RFE-ISSUE-085`（操作策略/流程，低）：为拆分“发布准备”和“外部发布”而临时声明 `repository_release_preparation.validate_and_record`，但现有策略没有该操作，preflight 正确拒绝。已改用既有 `repository_governance.modify`/`document` 记录准备状态，外部发布保持 out-of-scope；若未来需要新操作类型，必须另立 corrective Work Item 修改策略、映射和测试。
 `RFE-ISSUE-063`（工单初始化/预检，中）：CI 流程修复工单的 `ai-start` skeleton 缺少任务意图、原始请求、场景覆盖和具体验收，按要求停止在 `not_ready`。已补全 Contract，才允许进入实现。
 `RFE-ISSUE-064`（工单证据结构，中）：补全 Contract 后，preflight 又拒绝不完整的 `rawRequestSource`、中风险 unknowns review 和 `pending` 场景状态。已改为完整人类请求证据、显式 unknowns review 和 `unverified` 初始场景状态，继续保持门禁有效。
 `RFE-ISSUE-065`（预检授权路径，中）：CI 工单记录用户授权的选项 B 后，`ai-preflight --check` 仍将 `human_decision_recorded` 视为 blocked，没有“授权后先实现、再以真实证据闭合场景”的继续路径。已保留 Decision Evidence，严格限制为已确认的 CI 编排范围，继续以 checkpoint 和后续真实验证闭合场景，不提前伪造 verified 状态。
@@ -504,3 +519,4 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。`quality-g
 - `RFE-ISSUE-078`（流程/checkpoint，中）：WI-20 在最后补入 Bandit baseline 和测试 scope 后，`ai-finish` 正确拒绝复用旧 `before_edit` checkpoint。已刷新最终 Contract 的 checkpoint；后续任何 Contract scope/acceptance/source 变更都必须刷新 checkpoint 后再收口。
 - `RFE-ISSUE-079`（流程/Summary，中）：WI-20 的实现反向检查发现 `tests/test_makefile.py` 和 `tests/test_project_governance.py` 已修改但未进入 Summary.changedFiles，`check-ai-change-summary` 正确 fail-closed。已补齐两项文件及原因；后续必须在每次测试/验证修订后重新执行 changedFiles 反向核对。
 - `RFE-ISSUE-080`（流程/归档追踪，中）：WI-20 完成 `ai-finish` 后，反向追踪清单仍引用已不存在的 active Contract，clean-checkout 的 `make check-instruction-traceability` 因路径失效而 fail closed。根因是归档动作没有自动更新当前 Work Item 的追踪路径；已将 WI-20 记录切换到 archive Contract 并重新验证，后续必须把“归档后追踪路径更新”纳入统一生命周期门禁，不能依赖手工记忆。
+- `RFE-ISSUE-082`（发布流程/事实源，高）：进入发布工单的只读盘点时发现仓库 `release.json` 与公共 v0.5.44 资产仍分别声明 v0.5.42/v0.5.44，且旧候选、freeze、release-digests 绑定了不同 source/tree/archive；公共 v0.5.44 的 release projection 还与其 Tag 下的 `release.json` 声明不一致。已暂停发布，先将本地 published projection 对齐公共 v0.5.44、candidate 推进为 v0.5.45，并要求在 WI-20 遗漏及所有新发现流程问题修复、重新验证和完整生命周期关闭前不得发布。
