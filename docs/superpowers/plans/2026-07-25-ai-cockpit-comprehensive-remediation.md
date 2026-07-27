@@ -451,6 +451,7 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 `RFE-ISSUE-113`（日语流程文档漂移，中）：corrective 文档反查发现英文运行说明与实际策略均为默认 enforced，但日文 `.ai/cockpit/README.ja.md` 仍称默认 advisory，且遗漏 `human_decision_recorded` 停止状态。已在 corrective 内对齐日文说明，明确 enforced/advisory 边界以及 Planned Scenario Verification 只授权实现、不构成完成证据，并同步英文说明与两份 glossary。
 `RFE-ISSUE-114`（收口/格式门禁，低）：corrective 首次 `ai-finish` 在 `quality-fast` 的 `project-format-check` 即停止，四个 Python 变更未符合 Ruff formatter；长测试尚未启动。已运行项目 formatter、重新通过 80 项聚焦回归，并刷新当前 Contract 对应的 checkpoint 后重跑完整 finish，不复用失败运行。
 `RFE-ISSUE-115`（临时 worktree/Make 变量传播，中）：corrective 第二次 `ai-finish` 以命令行 `AI_PYTHON=<absolute-python>` 启动，GNU Make 将该 command-line override 通过递归 Make 传播到全量测试，导致唯一失败 `test_nested_make_keeps_bytecode_suppression_when_ai_python_is_in_environment` 观察不到 Makefile 应构造的 `PYTHONDONTWRITEBYTECODE=1`；其余 1217 项通过且 coverage 85.02%。这不是产品逻辑失败，而是错误的 worktree 调用接口。后续改用 `PYTHON=<absolute-python>`，由 Makefile 统一派生 `AI_PYTHON`，并重新运行完整 finish；临时 worktree 流程不得再以命令行覆盖内部 `AI_PYTHON`。
+`RFE-ISSUE-116`（归档后状态诊断/流程，中）：PR #412 对应 corrective 完成 `ai-finish` 与归档后、提交归档证据前，`check-ai-status-consistency` 把尚未提交的同任务 start receipt 视为 live no-active change；生成器按设计记录 0 个 transient changes，因此检查失败并建议 `repair-ai-status`，但 repair 会重复同一结果。已确认唯一 live path 为该 start receipt。前置 corrective `no-active-archive-status-diagnostic-20260728` 仅在当前 change set 同时包含同任务 archived Contract、Summary、有效 manifest 和 index 更新时，将 receipt 归入同一 archive transaction；孤立、历史-only、不完整、manifest 不匹配及无关变更继续 fail closed，并以 archive 前提交/提交后场景回归。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 

@@ -97,6 +97,15 @@
       "implementationEvidence": ["scripts/ai_common.py", "scripts/ai_preflight_review.py", "scripts/ai_start.py", ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md"],
       "acceptanceEvidence": ["tests/test_preflight_review.py", "tests/test_scenario_coverage_gate.py", "tests/test_start_and_archive.py"],
       "verificationCommands": ["make ai-preflight", "make check-instruction-traceability", "make ai-finish TASK=preflight-planned-scenario-transition-20260728", "make ai-close-work-item TASK=preflight-planned-scenario-transition-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-011",
+      "summary": "Fix the post-archive, pre-commit no-active diagnostic so only a manifest-bound current archive transaction owns its matching start receipt; every unrelated change remains fail closed.",
+      "planWorkItems": ["WI-20", "no-active-archive-status-diagnostic-20260728"],
+      "contractPaths": [".ai/work-items/active/no-active-archive-status-diagnostic-20260728.contract.json"],
+      "implementationEvidence": ["scripts/ai_check_status_consistency.py", ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md"],
+      "acceptanceEvidence": ["tests/test_core_gates.py"],
+      "verificationCommands": ["make ai-preflight", "make check-ai-status-consistency", "make check-instruction-traceability", "make ai-finish TASK=no-active-archive-status-diagnostic-20260728", "make ai-close-work-item TASK=no-active-archive-status-diagnostic-20260728"]
     }
   ]
 }

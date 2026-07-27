@@ -311,6 +311,165 @@ def test_status_consistency_ignores_uncommitted_archive_evidence(tmp_path, monke
     assert ai_check_status_consistency.validate_status_consistency(status) == []
 
 
+def _archive_bundle_paths(task: str = "task") -> dict[str, str]:
+    archive = f".ai/work-items/archive/2026/{task}"
+    return {
+        "contract": f"{archive}.contract.json",
+        "summary": f"{archive}.summary.json",
+        "manifest": f"{archive}.archive-manifest.json",
+        "index": ".ai/work-items/archive/index.json",
+        "receipt": f".ai/work-items/starts/{task}.json",
+    }
+
+
+def _stub_changed_paths(monkeypatch, changed: list[str]) -> None:
+    def fake_run(command, **kwargs):
+        if command[:3] == ["git", "rev-parse", "--verify"]:
+            return SimpleNamespace(returncode=0, stdout="head\n")
+        if command[:3] == ["git", "diff", "--name-only"]:
+            return SimpleNamespace(returncode=0, stdout="")
+        if command[:3] == ["git", "ls-files", "--others"]:
+            return SimpleNamespace(returncode=0, stdout="\n".join(changed))
+        return SimpleNamespace(returncode=0, stdout="")
+
+    monkeypatch.setattr(ai_check_status_consistency.subprocess, "run", fake_run)
+
+
+def _write_archive_manifest(root, paths: dict[str, str], **overrides) -> None:
+    manifest = {
+        "format": "ai-cockpit-archive-manifest",
+        "manifestVersion": 1,
+        "workItemId": "task",
+        "contractPath": paths["contract"],
+        "summaryPath": paths["summary"],
+        **overrides,
+    }
+    target = root / paths["manifest"]
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(manifest), encoding="utf-8")
+
+
+def test_status_consistency_accepts_transaction_owned_archive_start_receipt(tmp_path, monkeypatch):
+    paths = _archive_bundle_paths()
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text(
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n",
+        encoding="utf-8",
+    )
+    _write_archive_manifest(tmp_path, paths)
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    _stub_changed_paths(monkeypatch, list(paths.values()))
+
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == []
+    assert ai_check_status_consistency.validate_status_consistency(status) == []
+    assert ai_check_status_consistency.repair_status(status) == 0
+
+
+@pytest.mark.parametrize(
+    ("missing_key", "manifest_overrides"),
+    [
+        ("summary", {}),
+        ("index", {}),
+        ("contract", {}),
+        ("manifest", {}),
+        (None, {"workItemId": "other"}),
+        (None, {"contractPath": ".ai/work-items/archive/2026/other.contract.json"}),
+        (None, {"summaryPath": ".ai/work-items/archive/2026/other.summary.json"}),
+        (None, {"format": "unsupported"}),
+    ],
+)
+def test_status_consistency_rejects_unowned_archive_start_receipt(
+    tmp_path, monkeypatch, missing_key, manifest_overrides
+):
+    paths = _archive_bundle_paths()
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text(
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n",
+        encoding="utf-8",
+    )
+    _write_archive_manifest(tmp_path, paths, **manifest_overrides)
+    changed = [path for key, path in paths.items() if key != missing_key]
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    _stub_changed_paths(monkeypatch, changed)
+
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == [paths["receipt"]]
+    assert ai_check_status_consistency.validate_status_consistency(status)
+
+
+def test_status_consistency_rejects_receipt_paired_only_with_historical_archive(
+    tmp_path, monkeypatch
+):
+    paths = _archive_bundle_paths()
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text(
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n",
+        encoding="utf-8",
+    )
+    _write_archive_manifest(tmp_path, paths)
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    _stub_changed_paths(monkeypatch, [paths["receipt"]])
+
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == [paths["receipt"]]
+
+
+def test_status_consistency_rejects_malformed_changed_archive_manifest(tmp_path, monkeypatch):
+    paths = _archive_bundle_paths()
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text(
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n",
+        encoding="utf-8",
+    )
+    manifest = tmp_path / paths["manifest"]
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text("{", encoding="utf-8")
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    _stub_changed_paths(monkeypatch, list(paths.values()))
+
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == [paths["receipt"]]
+
+
+def test_status_consistency_accepts_clean_post_commit_no_active_state(tmp_path, monkeypatch):
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text(
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    _stub_changed_paths(monkeypatch, [])
+
+    assert ai_check_status_consistency.validate_status_consistency(status) == []
+
+
 def test_checkpoint_main_reports_required_state(tmp_path, monkeypatch, capsys):
     contract = tmp_path / "task.contract.json"
     summary = tmp_path / "task.summary.json"
