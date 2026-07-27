@@ -8,6 +8,7 @@ import hashlib
 import json
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -39,6 +40,7 @@ REQUIRED_FIELDS = (
     "generatedFiles",
     "destructiveChanges",
     "observedIssues",
+    "documentationAlignment",
 )
 ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "archiveSequence",
@@ -65,6 +67,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "decisionEvidence",
     "taskOutcomeInput",
     "hostedPerformanceEvidence",
+    "documentationAlignment",
 }
 RESULTS = {"passed", "failed", "not_run"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -76,6 +79,15 @@ RESIDUAL_RISK_PLACEHOLDER_MARKERS = (
     "replace this",
     "replace with actual residual risks",
 )
+DOCUMENTATION_ALIGNMENT_AREAS = (
+    "plan",
+    "contractSummaryEvidence",
+    "documentationCommandsCapability",
+    "multilingualSemantics",
+    "limitationsUnknownsHistory",
+)
+DOCUMENTATION_ALIGNMENT_ROOT_FIELDS = {"schemaVersion", "status", "checkedAt", "checks"}
+DOCUMENTATION_ALIGNMENT_CHECK_FIELDS = {"area", "status", "evidence", "reason"}
 
 
 def intent_alignment_is_compat_evidence_key(key: str) -> bool:
@@ -98,6 +110,107 @@ def changed_file_paths(summary: dict[str, Any]) -> set[str]:
     }
 
 
+def documentation_alignment_skeleton() -> dict[str, Any]:
+    """Return the canonical not-yet-reviewed documentation alignment record."""
+    return {
+        "schemaVersion": 1,
+        "status": "not_checked",
+        "checkedAt": None,
+        "checks": [
+            {
+                "area": area,
+                "status": "not_checked",
+                "evidence": [],
+                "reason": "Complete this alignment check before finishing the Work Item.",
+            }
+            for area in DOCUMENTATION_ALIGNMENT_AREAS
+        ],
+    }
+
+
+def complete_generated_documentation_alignment(
+    changed_files: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Derive bounded installer alignment from its final declared write set."""
+    paths = sorted(
+        {
+            str(item["path"])
+            for item in changed_files
+            if isinstance(item, dict) and non_empty_string(item.get("path"))
+        }
+    )
+    usable = [
+        path
+        for path in paths
+        if path != ".ai/cockpit/current_status.md" and not path.endswith(".summary.json")
+    ]
+    anchor = next(
+        (path for path in usable if path.endswith(".contract.json")),
+        usable[0] if usable else "",
+    )
+    documentation = [path for path in paths if _documentation_surface(path)]
+    multilingual = [
+        path
+        for path in documentation
+        if path.endswith(".ja.md")
+        or path.endswith(".zh-CN.md")
+        or "/ja/" in path
+        or "/zh-CN/" in path
+    ]
+
+    def check(
+        area: str,
+        evidence: list[str],
+        reason: str,
+        *,
+        applicable: bool = True,
+    ) -> dict[str, Any]:
+        return {
+            "area": area,
+            "status": "aligned" if applicable else "not_applicable",
+            "evidence": evidence if applicable else [],
+            "reason": reason,
+        }
+
+    return {
+        "schemaVersion": 1,
+        "status": "aligned",
+        "checkedAt": datetime.now(timezone.utc).isoformat(),
+        "checks": [
+            check(
+                "plan",
+                [],
+                "The bounded installer record has no remediation-plan scope.",
+                applicable=False,
+            ),
+            check(
+                "contractSummaryEvidence",
+                [anchor] if anchor else [],
+                "The generated Contract is declared in the final installer write set.",
+                applicable=bool(anchor),
+            ),
+            check(
+                "documentationCommandsCapability",
+                documentation,
+                "Every installer-written documentation and command surface is enumerated.",
+                applicable=bool(documentation),
+            ),
+            check(
+                "multilingualSemantics",
+                multilingual,
+                "Installer-written Japanese or Chinese surfaces remain explicit for review.",
+                applicable=bool(multilingual),
+            ),
+            check(
+                "limitationsUnknownsHistory",
+                [anchor] if anchor else [],
+                "The generated Contract retains adoption or upgrade boundaries and follow-ups.",
+                applicable=bool(anchor),
+            ),
+        ],
+    }
+
+
 def summary_exempt_patterns() -> list[str]:
     policy_lists = simple_yaml_lists(SCOPE_POLICY)
     return policy_lists.get("allowAlways", [])
@@ -112,7 +225,12 @@ def _validate_summary_structure(
     legacy_archive: bool,
 ) -> list[str]:
     issues: list[str] = []
+    documentation_alignment_required = contract is None or contract.get("contractVersion") == 2
     for key in REQUIRED_FIELDS:
+        if key == "documentationAlignment" and (
+            legacy_archive or not documentation_alignment_required
+        ):
+            continue
         if key not in summary:
             issues.append(f"missing field: {key}")
 
@@ -438,6 +556,136 @@ def validate_hosted_performance_evidence(summary: dict[str, Any]) -> list[str]:
     return issues
 
 
+def _offset_aware_iso_timestamp(value: Any) -> bool:
+    if not non_empty_string(value):
+        return False
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    return parsed.tzinfo is not None and parsed.utcoffset() is not None
+
+
+def _documentation_surface(path: str) -> bool:
+    if path == ".ai/cockpit/current_status.md" or path.startswith(".ai/work-items/"):
+        return False
+    name = Path(path).name
+    return (
+        path.endswith(".md")
+        or name == "Makefile"
+        or name.endswith(".mk")
+        or path.startswith("templates/make/")
+    )
+
+
+def _valid_repository_evidence_path(path: str) -> str | None:
+    if "://" in path:
+        return "must be a repository-relative path, not a URL"
+    candidate = Path(path)
+    if candidate.is_absolute() or path.startswith("~") or "\\" in path:
+        return "must be repository-relative"
+    if not path or any(part in {"", ".", ".."} for part in candidate.parts):
+        return "must be a normalized repository-relative path"
+    if not (PROJECT_ROOT / candidate).exists():
+        return "does not exist"
+    return None
+
+
+def validate_documentation_alignment(
+    summary: dict[str, Any], *, legacy_archive: bool = False, required: bool = True
+) -> list[str]:
+    """Validate source-bound close-out alignment without rewriting old archives."""
+    value = summary.get("documentationAlignment")
+    if value is None:
+        return [] if legacy_archive or not required else ["documentationAlignment is required"]
+    if not isinstance(value, dict):
+        return ["documentationAlignment must be an object"]
+
+    issues: list[str] = []
+    unknown_root = set(value) - DOCUMENTATION_ALIGNMENT_ROOT_FIELDS
+    missing_root = DOCUMENTATION_ALIGNMENT_ROOT_FIELDS - set(value)
+    for key in sorted(unknown_root):
+        issues.append(f"documentationAlignment.{key} is not a recognized field")
+    for key in sorted(missing_root):
+        issues.append(f"documentationAlignment.{key} is required")
+    if value.get("schemaVersion") != 1:
+        issues.append("documentationAlignment.schemaVersion must be 1")
+    if value.get("status") != "aligned":
+        issues.append("documentationAlignment.status must be aligned before finish")
+    if not _offset_aware_iso_timestamp(value.get("checkedAt")):
+        issues.append("documentationAlignment.checkedAt must be an offset-aware ISO-8601 timestamp")
+
+    checks = value.get("checks")
+    if not isinstance(checks, list):
+        issues.append("documentationAlignment.checks must be a list")
+        return issues
+
+    declared_paths = changed_file_paths(summary)
+    sources = summary.get("sourcesUsed")
+    if isinstance(sources, list):
+        declared_paths.update(item for item in sources if non_empty_string(item))
+
+    seen_areas: set[str] = set()
+    aligned_evidence: set[str] = set()
+    for index, check in enumerate(checks):
+        prefix = f"documentationAlignment.checks[{index}]"
+        if not isinstance(check, dict):
+            issues.append(f"{prefix} must be an object")
+            continue
+        for key in sorted(set(check) - DOCUMENTATION_ALIGNMENT_CHECK_FIELDS):
+            issues.append(f"{prefix}.{key} is not a recognized field")
+        for key in sorted(DOCUMENTATION_ALIGNMENT_CHECK_FIELDS - set(check)):
+            issues.append(f"{prefix}.{key} is required")
+
+        area = check.get("area")
+        if area not in DOCUMENTATION_ALIGNMENT_AREAS:
+            issues.append(f"{prefix}.area must be one of {sorted(DOCUMENTATION_ALIGNMENT_AREAS)}")
+        elif area in seen_areas:
+            issues.append(f"{prefix}.area is a duplicate area: {area}")
+        else:
+            seen_areas.add(area)
+
+        status = check.get("status")
+        if status not in {"aligned", "not_applicable"}:
+            issues.append(f"{prefix}.status must be aligned or not_applicable")
+        if not non_empty_string(check.get("reason")):
+            issues.append(f"{prefix}.reason is required")
+        evidence = check.get("evidence")
+        if not isinstance(evidence, list) or any(not non_empty_string(item) for item in evidence):
+            issues.append(f"{prefix}.evidence must be a list of repository-relative paths")
+            continue
+        if len(evidence) != len(set(evidence)):
+            issues.append(f"{prefix}.evidence must not contain duplicate paths")
+        if status == "aligned" and not evidence:
+            issues.append(f"{prefix}.evidence must not be empty when aligned")
+        if status == "not_applicable" and evidence:
+            issues.append(f"{prefix}.evidence must be empty when not_applicable")
+        for path in evidence:
+            aligned_evidence.add(path)
+            path_issue = _valid_repository_evidence_path(path)
+            if path_issue:
+                issues.append(f"{prefix}.evidence path {path!r} {path_issue}")
+            elif path not in declared_paths:
+                issues.append(
+                    f"{prefix}.evidence path {path!r} is not declared in "
+                    "changedFiles or sourcesUsed"
+                )
+
+    for area in DOCUMENTATION_ALIGNMENT_AREAS:
+        if area not in seen_areas:
+            issues.append(f"documentationAlignment.checks is missing required area: {area}")
+
+    documentation_surfaces = {
+        path for path in changed_file_paths(summary) if _documentation_surface(path)
+    }
+    for path in sorted(documentation_surfaces - aligned_evidence):
+        issues.append(
+            "documentationAlignment evidence is missing changed "
+            f"documentation/command surface: {path}"
+        )
+    return issues
+
+
 def _validate_required_verification(
     summary: dict[str, Any], contract: dict[str, Any] | None
 ) -> list[str]:
@@ -504,6 +752,13 @@ def validate_summary(
     )
     issues.extend(_validate_summary_metadata(summary))
     issues.extend(validate_hosted_performance_evidence(summary))
+    issues.extend(
+        validate_documentation_alignment(
+            summary,
+            legacy_archive=legacy_archive,
+            required=contract is None or contract.get("contractVersion") == 2,
+        )
+    )
     issues.extend(
         validate_residual_risk_semantics(
             summary, legacy_archive=legacy_archive, summary_path=summary_path

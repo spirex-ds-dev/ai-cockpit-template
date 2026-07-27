@@ -259,3 +259,19 @@ def test_smoke_workflow_quality_gate_has_fail_closed_timeout():
     assert workflow.index("timeout-minutes: 30") < workflow.index("Run repository quality gates")
     assert "timeout-minutes: 25" in workflow
     assert "quality heartbeat" in workflow
+
+
+def test_smoke_quality_failure_publishes_detailed_gate_logs():
+    workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+
+    assert "Publish failed quality gate logs" in workflow
+    assert "target/quality/timing/*.json" in workflow
+    assert "target/quality/logs" in workflow
+    assert "failure log:" in workflow
+    assert "if: failure()" in workflow
+    assert workflow.index("Run repository quality gates") < workflow.index(
+        "Publish failed quality gate logs"
+    )
+    assert workflow.index("Publish failed quality gate logs") < workflow.index(
+        "Publish quality timing summary"
+    )

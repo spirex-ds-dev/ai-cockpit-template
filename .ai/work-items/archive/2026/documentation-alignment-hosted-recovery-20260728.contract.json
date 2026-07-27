@@ -1,0 +1,284 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-alignment-hosted-recovery-20260728",
+  "mode": "code",
+  "title": "documentation-alignment-hosted-recovery-20260728",
+  "baseCommit": "57cf84c50692f6caacedc7f27c8bbc3d36f0c181",
+  "rawUserRequest": "继续按完整 Work Item 流程执行，不要在无确认事项时停止；遇到流程问题记录并先修正流程。PR #415 两次同 SHA Hosted CI 均在 project-test 约 22 分 45 秒失败，详细日志被 runner teardown 丢失。建立 replacement corrective，保留前序归档不变，根治 hosted 诊断和覆盖率边界后重新交付 documentationAlignment。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-continuous-plan-and-process-correction",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-replacement-recovery-and-continuous-execution"
+  },
+  "declaredIntent": {
+    "summary": "Recover the immutable documentation-alignment Work Item through the governed adjacent-pair exception, make hosted project-test failures diagnosable, and restore a reliable coverage margin.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-alignment-hosted-recovery-20260728.contract.json",
+    ".ai/work-items/active/documentation-alignment-hosted-recovery-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".github/workflows/smoke.yml",
+    "tests/test_workflows.py",
+    "tests/test_ai_check_summary.py",
+    "tests/test_start_and_archive.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-28-documentation-alignment-hosted-recovery.md",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": [
+    "Editing the immutable archived Contract, Summary, or Manifest from documentation-alignment-summary-schema-20260728",
+    "Merging or reopening superseded PR #415",
+    "Weakening the 85 percent coverage floor, project-test failure semantics, or required hosted jobs",
+    "General performance sharding, installer payload reduction, or timing-session redesign owned by the paused performance Work Item",
+    "Any release candidate, tag, release identity, or publication change"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/documentation-alignment-summary-schema-20260728.contract.json",
+      "reason": "Immutable predecessor Contract required by the adjacent recovery-pair rule."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/documentation-alignment-summary-schema-20260728.summary.json",
+      "reason": "Preserves the predecessor implementation and local verification evidence."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Hosted quality wrapper currently discards the detailed project-test log after runner teardown."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30302291885",
+      "reason": "Attempts 1 and 2 fail deterministically in project-test after 22m43s and 22m47s on head 971f7198."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "The predecessor regression used its active Contract as a hidden filesystem fixture, which exists before Finish but disappears from a hosted post-archive clean checkout."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "hosted_only_failure",
+      "coverage_threshold",
+      "ci_observability",
+      "immutable_recovery"
+    ],
+    "reason": "Two identical hosted failures establish a deterministic Linux-only boundary, but the exact pytest tail was discarded. Recovery must improve diagnosis without mutating predecessor evidence or weakening gates.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous execution and process correction; the repository provides a narrow adjacent recovery-pair mechanism for this exact post-archive failure."
+  },
+  "preReviewWarnings": [
+    "Confirm predecessor archiveSequence 620 remains byte-for-byte immutable and recovery archives as sequence 621.",
+    "Confirm failed project-test output is printed or retained before the quality step exits.",
+    "Confirm new focused tests raise coverage above the floor with meaningful branch coverage rather than excluding production lines.",
+    "Confirm PR #415 remains closed and the replacement PR is accepted only as one documented recovery pair.",
+    "Confirm release and paused general performance implementation remain out of scope."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: A clean post-archive checkout reproduces the predecessor failure as an active-Contract fixture dependency; the corrected test binds durable archive evidence and the clean-checkout suite passes.",
+    "A2: On any hosted quality failure, smoke.yml emits the failing gate log and quality timing evidence before teardown; a static workflow regression prevents returning to heartbeat-only diagnosis.",
+    "A3: Focused tests cover generated alignment empty, fallback, multilingual, and archive path-rewrite branches, raising full-suite coverage to a stable margin above 85 percent without lowering or excluding the floor.",
+    "A4: The inherited documentationAlignment implementation and archive-reference behavior remain unchanged and all predecessor focused/adopter/journey regressions pass.",
+    "A5: The recovery Contract cites the predecessor archive, binds its own Start Receipt and human restricted-write authorization, receives archiveSequence 621, and aggregate PR validation accepts exactly the adjacent recovery pair.",
+    "A6: The comprehensive plan, lifecycle reference, traceability record, Contract, Summary, tests, and CI evidence are bidirectionally aligned; PR #415 and both failed attempts remain explicit historical evidence.",
+    "A7: Full local quality, archive, committed PR checks, replacement Hosted CI including template/installation/release/ci-evidence, merge, ai-close-work-item, branch deletion, and synchronized main complete before performance resumes."
+  ],
+  "guidelines": [
+    "Never rewrite superseded archived evidence; recover through one documented adjacent pair.",
+    "A failed quality run must retain the exact failing gate output instead of only a heartbeat or wrapper error.",
+    "Increase coverage through behaviorally relevant tests; do not lower thresholds, omit files, or add blanket exclusions.",
+    "Keep this corrective limited to reliable redelivery and diagnosis; general performance optimization remains a successor Work Item."
+  ],
+  "intent": {
+    "problem": "The documentationAlignment implementation passed local full quality twice but PR #415 failed twice at the end of hosted project-test. The generated-alignment regression depended on the predecessor active Contract existing, so it passed before Finish and failed after archival in a clean checkout. run_quality_gate.py also cached the detailed output into a runner-local file while smoke.yml published only a timing table, preventing direct diagnosis from Actions. The implementation sat at only 85.03 percent local coverage, so focused branch coverage also needed a stable margin.",
+    "constraints": [
+      "Preserve predecessor archive evidence and closed PR #415 exactly.",
+      "Use the repository's adjacent recovery-pair exception; do not bypass the one-Work-Item PR rule.",
+      "Do not weaken project-test, coverage, CI evidence, or hosted required-job semantics.",
+      "Do not absorb general performance architecture or release work.",
+      "Obtain clean Linux evidence before claiming the root cause."
+    ],
+    "rationale": "A fresh recovery Work Item can add missing diagnostic retention and meaningful branch coverage while keeping the predecessor audit record immutable. Linux reproduction plus repeated hosted verification distinguishes a real fix from another blind rerun."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Hosted post-archive project-test fails after a long run.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_workflows.py::test_smoke_quality_failure_publishes_detailed_gate_logs",
+        "post-archive clean-checkout project-test transcript"
+      ],
+      "expected": "The exact failing pytest/coverage tail and gate timing remain visible after process exit.",
+      "verificationPlan": "Reproduce from the archived predecessor commit, remove the active-file fixture dependency, rerun in a clean checkout, and add a workflow regression for failure-log publication."
+    },
+    {
+      "scenario": "Generated documentationAlignment has no usable anchor or documentation surface.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_check_summary.py::test_generated_documentation_alignment_handles_empty_and_multilingual_write_sets"
+      ],
+      "expected": "Domains become explicit not_applicable records and all helper branches are covered.",
+      "verificationPlan": "Add focused empty/fallback/multilingual tests without changing production semantics."
+    },
+    {
+      "scenario": "Archive alignment evidence contains nested paths plus immutable execution evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_rewrite_archived_path_references_preserves_non_path_scalars",
+        "tests/test_start_and_archive.py::test_archive_code_item_rewrites_summary_paths"
+      ],
+      "expected": "Only documentationAlignment exact paths are rewritten; execution commands and paths remain unchanged.",
+      "verificationPlan": "Extend archive helper regression over mapping/list/string/scalar values and the lifecycle E2E."
+    },
+    {
+      "scenario": "The replacement PR contains predecessor and recovery archive pairs.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_pr_accepts_one_documented_adjacent_recovery_pair",
+        "make check-ai-pr"
+      ],
+      "expected": "Aggregate validation accepts only a human-authorized, source-linked, consecutive recovery pair.",
+      "verificationPlan": "Run committed check-ai-pr from origin/main and inspect pair sequences and source binding."
+    },
+    {
+      "scenario": "Hosted rerun succeeds only in top-level template-smoke.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "GitHub replacement PR required checks",
+        "terminal ci-evidence artifact"
+      ],
+      "expected": "No merge occurs until installation-smoke, release-evidence, ci-evidence, compatibility, and CodeQL all reach valid success.",
+      "verificationPlan": "Wait for every replacement PR check and inspect terminal aggregate evidence."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "Ray",
+    "reason": "The user explicitly authorized continuous corrective execution, PR replacement, and process fixes without another confirmation when no new authority is required."
+  },
+  "rollbackNote": "Close the replacement PR without merge and retain both archived pairs and failed run evidence; never amend predecessor archive sequence 620.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 621
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-alignment-hosted-recovery-20260728.json",
+    "baseCommit": "57cf84c50692f6caacedc7f27c8bbc3d36f0c181",
+    "initialScopeDigest": "6f157d731ceb35b054462976f1f27a47468802a3e0a276e2b60a7a7f7ee93311",
+    "contractSkeletonDigest": "0e4629a239cdbb5e53fe1b54c18bb3f5fcbba5aa549739c161f3e62b56d92d60"
+  }
+}

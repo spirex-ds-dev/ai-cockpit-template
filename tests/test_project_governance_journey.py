@@ -8,6 +8,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+import ai_check_summary  # noqa: E402
 
 
 def run(cwd: Path, *command: str, env=None) -> subprocess.CompletedProcess[str]:
@@ -182,6 +185,9 @@ def prepare_work_item(root: Path, task: str, changed: list[str], *, extra_checks
     for check in extra_checks:
         if not any(item.get("check") == check for item in summary["verification"]):
             summary["verification"].append({"check": check, "result": "not_run"})
+    summary["documentationAlignment"] = ai_check_summary.complete_generated_documentation_alignment(
+        summary["changedFiles"]
+    )
     summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
 
 

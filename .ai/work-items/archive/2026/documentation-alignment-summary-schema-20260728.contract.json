@@ -1,0 +1,330 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-alignment-summary-schema-20260728",
+  "mode": "code",
+  "title": "documentation-alignment-summary-schema-20260728",
+  "baseCommit": "7cb94d0952f390134b79b662f141543813d00837",
+  "rawUserRequest": "RFE-ISSUE-118：全面整改计划要求每个 Work Item 在 Summary 中记录结构化 documentationAlignment，但当前 Summary 校验器会把该字段判为 unknown。请按“指示—计划—实现—验收”双向追踪机制修复，完整走完独立 Contract、测试、质量、归档、PR、Hosted CI、合并、ai-close-work-item 和分支清理流程；流程问题继续记录，计划全部完成后统一确认。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-documentation-alignment-corrective",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-bidirectional-traceability-and-continuous-plan-execution"
+  },
+  "declaredIntent": {
+    "summary": "Make per-Work-Item documentation alignment a required, source-bound, bidirectionally traceable Summary record without rewriting historical archives.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-alignment-summary-schema-20260728.contract.json",
+    ".ai/work-items/active/documentation-alignment-summary-schema-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".ai/work-items/_templates/work_item_summary.example.json",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_start.py",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_ai_check_summary.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_installer.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_project_governance_journey.py",
+    "tests/test_contract_examples.py",
+    "docs/contract-fields.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/specs/2026-07-28-documentation-alignment-summary-schema-design.md",
+    "docs/superpowers/plans/2026-07-28-documentation-alignment-summary-schema.md",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": [
+    "Rewriting archived Summary evidence to backfill the new field",
+    "Treating documentation alignment as proof of runtime capability, provider controls, or enterprise compliance",
+    "Weakening changed-file, scope, instruction-traceability, or archive validation",
+    "Resuming the paused deep-performance Work Item in this corrective",
+    "Changing release identity, release workflows, candidate versions, tags, or publication state"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Section five requires every Work Item to record documentationAlignment and RFE-ISSUE-118 records the schema contradiction."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "The canonical Summary validator currently rejects documentationAlignment because it is not an allowed or validated field."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "New Work Item Summary skeletons must expose the required alignment record before implementation."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Installed and upgraded adopter repositories receive independently generated Summary skeletons that must remain schema-compatible."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Lifecycle closure must rewrite documentation-alignment evidence from active artifact paths to their archived locations without mutating immutable execution evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/work-item-resume-receipt-lineage-20260728.archive-manifest.json",
+      "reason": "The closed RFE-117 predecessor recorded RFE-ISSUE-118 and supplies the serial lifecycle evidence for this corrective."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_change",
+      "summary_schema",
+      "archive_compatibility",
+      "traceability"
+    ],
+    "reason": "Making the field optional would preserve the omission; making it retroactively mandatory for immutable archives would break history. The validator must require complete alignment evidence for current V2 Work Items while retaining explicit legacy-archive compatibility.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the bidirectional traceability mechanism and continuous execution of corrective Work Items without another confirmation."
+  },
+  "preReviewWarnings": [
+    "Confirm every new active V2 Summary must contain all five documentation-alignment domains before finish.",
+    "Confirm historical archived Summaries remain readable without mutation or backfill.",
+    "Confirm evidence paths are repository-relative, exist, and are declared in changedFiles or sourcesUsed.",
+    "Confirm changed documentation/command surfaces are reverse-mapped into documentationAlignment evidence.",
+    "Confirm starter, installer, example, validator, documentation, and tests use one shape."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Current contractVersion 2 Summaries require documentationAlignment with schemaVersion, root status, checkedAt, and exactly five named alignment domains.",
+    "A2: Finish fails closed unless root status is aligned and every domain is aligned or explicitly not_applicable with a concrete reason; not_checked, misaligned, missing, duplicate, or unknown domains are rejected.",
+    "A3: Every aligned evidence entry is a non-empty repository-relative path that exists and is declared by Summary changedFiles or sourcesUsed; machine-specific paths, URLs, missing files, and undeclared evidence fail closed.",
+    "A4: Every changed documentation or command surface is reverse-mapped into documentationAlignment evidence so a named README, guide, Makefile, or template command file cannot be silently omitted.",
+    "A5: Existing archived Summaries without documentationAlignment remain readable through explicit legacy-archive compatibility and are never rewritten.",
+    "A6: ai-start, adopter install/upgrade generators, and the checked Summary example initialize the same not_checked skeleton; bounded installer finalization deterministically closes its own final write set before Finish, and archive transition rewrites alignment evidence to durable archived paths.",
+    "A7: Field semantics, lifecycle timing, limitations, and archive compatibility appear in the authoritative lifecycle references, and RFE-ISSUE-118 is bidirectionally traced from instruction to plan, implementation, negative tests, and acceptance.",
+    "A8: This corrective completes checkpoints, full quality, archive, PR, Hosted CI, merge, ai-close-work-item, branch deletion, and synchronized main before the performance Work Item resumes."
+  ],
+  "guidelines": [
+    "Use one canonical documentationAlignment validator for active, finish, archive, and PR Summary checks.",
+    "Alignment evidence reports repository facts; it must not become a second capability or verification truth source.",
+    "Require bidirectional declaration between alignment evidence and changedFiles or sourcesUsed.",
+    "Preserve immutable historical archives through explicit compatibility rather than backfill.",
+    "Keep starter, installer, example, documentation, and tests structurally synchronized."
+  ],
+  "intent": {
+    "problem": "The execution plan requires every Work Item to confirm that plans, canonical evidence, documentation/commands/capability claims, multilingual semantics, and limitations/history remain aligned. The current Summary schema has no documentationAlignment field and rejects attempts to record it. As a result, collaborators can perform the check only in prose scattered across other fields, so the required evidence is neither mechanically complete nor resistant to omission.",
+    "constraints": [
+      "Do not weaken unknown-field rejection or accept unstructured prose.",
+      "Do not rewrite immutable archived Summaries.",
+      "Do not allow URLs, absolute paths, missing paths, or undeclared paths to masquerade as repository alignment evidence.",
+      "Do not infer implemented capability from documentation alignment.",
+      "Keep the schema usable by template-maintenance and adopter-generated Work Items.",
+      "Do not resume performance work or modify release state in this corrective."
+    ],
+    "rationale": "A fixed five-domain record with reverse path binding makes the plan's close-out requirement executable. Requiring it for current V2 Work Items prevents future omission, while an explicit legacy-archive exception preserves historical evidence integrity."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A new Work Item reaches finish with all five documentation-alignment domains and source-bound evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_check_summary.py::test_documentation_alignment_accepts_complete_source_bound_record"
+      ],
+      "expected": "The canonical Summary validator accepts the aligned record and the lifecycle can continue.",
+      "verificationPlan": "Add a focused positive fixture with all domains, repository-relative declared evidence, and an offset-aware checkedAt timestamp."
+    },
+    {
+      "scenario": "A Summary omits documentationAlignment or leaves any required domain not_checked, misaligned, duplicated, or absent.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_check_summary.py::test_documentation_alignment_requires_complete_aligned_domain_set",
+        "tests/test_ai_check_summary.py::test_documentation_alignment_is_required_for_active_v2_but_not_legacy_archive"
+      ],
+      "expected": "The Summary gate reports the exact missing or incomplete invariant and finish remains blocked.",
+      "verificationPlan": "Add parameterized negative tests for root status and required-domain completeness."
+    },
+    {
+      "scenario": "Alignment evidence is an absolute path, URL, missing path, or a path not declared by changedFiles or sourcesUsed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_check_summary.py::test_documentation_alignment_rejects_untrusted_evidence_paths"
+      ],
+      "expected": "The Summary gate rejects the evidence with a distinct path or declaration diagnostic.",
+      "verificationPlan": "Use temporary repository fixtures and parameterized invalid evidence values."
+    },
+    {
+      "scenario": "A README, documentation file, Makefile, or installed command template changes without appearing in alignment evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_check_summary.py::test_documentation_alignment_reverse_maps_changed_documentation_surfaces"
+      ],
+      "expected": "Reverse mapping fails closed and identifies the omitted documentation/command surface.",
+      "verificationPlan": "Patch changedFiles fixtures with representative surfaces and prove each must be cited by the appropriate alignment record."
+    },
+    {
+      "scenario": "A historical archived Summary predating the new field is validated without mutation.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_check_summary.py::test_documentation_alignment_is_required_for_active_v2_but_not_legacy_archive",
+        "tests/test_ai_check_summary.py::test_legacy_archive_summary_without_v2_fields_remains_readable"
+      ],
+      "expected": "Legacy archive mode accepts the absent field while current active V2 mode rejects it.",
+      "verificationPlan": "Extend archive compatibility tests with the same Summary under legacy and active validation modes."
+    },
+    {
+      "scenario": "Template and adopter workflows generate a new Summary skeleton.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_ai_start_default_contains_agent_risk_gate",
+        "tests/test_start_and_archive.py::test_archive_code_item_rewrites_summary_paths",
+        "tests/test_installer.py::test_create_adoption_ignores_ambient_git_dir_and_work_tree",
+        "tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section",
+        "tests/test_project_governance_journey.py::test_documented_project_governance_journey_and_upgrade_rollback",
+        "tests/test_contract_examples.py::test_static_examples_match_ai_start_defaults"
+      ],
+      "expected": "ai-start, installation/upgrade output, and the checked example expose an identical five-domain not_checked shape; archive transition preserves durable alignment references.",
+      "verificationPlan": "Extend start, installer, finish, archive, and contract-example tests to compare the initial shape, prove installer finalization aligns its declared write set before Finish, and prove active artifact references are rewritten on archive."
+    }
+  ],
+  "predecessorWorkItem": {
+    "workItemId": "work-item-resume-receipt-lineage-20260728",
+    "status": "closed",
+    "pr": {
+      "number": 414,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/414",
+      "mergeCommit": "7cb94d0952f390134b79b662f141543813d00837"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/work-item-resume-receipt-lineage-20260728.archive-manifest.json"
+    }
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 621
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-alignment-summary-schema-20260728.json",
+    "baseCommit": "7cb94d0952f390134b79b662f141543813d00837",
+    "initialScopeDigest": "670497d29e9284a1bcde377116a4aef1e6117e87330b14d8d42a3913c1108c74",
+    "contractSkeletonDigest": "63758f678905ba6e17cec52d53c4a90097f7aa6eb79c1939ba707998747f2fa1"
+  }
+}

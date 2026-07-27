@@ -33,7 +33,7 @@
           "noChangeRationale": "WI-10 audit found that the existing installation.md was not modified; this is an explicit release-blocking gap for a corrective WI-10 follow-up, not a claim of completion."
         }
       ],
-      "verificationCommands": ["make check-doc-links", "make check-docs-metadata", "make check-remediation-plan-completion"]
+      "verificationCommands": ["make check-ai-system-invariants", "make check-docs-metadata", "make check-remediation-plan-completion"]
     },
     {
       "id": "PLAN-DIRECTIVE-004",
@@ -51,7 +51,7 @@
       "contractPaths": [".ai/work-items/archive/2026/document_human_agent_trust_layer.contract.json", ".ai/work-items/archive/2026/publish-new-version.contract.json"],
       "implementationEvidence": ["docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
       "acceptanceEvidence": [".ai/work-items/archive/2026/document_human_agent_trust_layer.summary.json"],
-      "verificationCommands": ["make check-doc-links", "make check-multilingual-docs"]
+      "verificationCommands": ["make check-trust-layer-docs", "make check-multilingual-docs"]
     },
     {
       "id": "PLAN-DIRECTIVE-006",
@@ -115,6 +115,24 @@
       "implementationEvidence": ["scripts/ai_resume_work_item.py", "scripts/ai_start_receipt.py", "scripts/ai_check_pr.py", "Makefile", ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md"],
       "acceptanceEvidence": ["tests/test_start_and_archive.py", "tests/test_pr_aggregate.py"],
       "verificationCommands": ["make ai-preflight", "make check-ai-start-receipt", "make check-instruction-traceability", "make ai-finish TASK=work-item-resume-receipt-lineage-20260728", "make ai-close-work-item TASK=work-item-resume-receipt-lineage-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-013",
+      "summary": "Require every current v2 Work Item to record source-bound, five-domain documentation alignment with reverse coverage of changed documentation and command surfaces while preserving immutable legacy archives.",
+      "planWorkItems": ["WI-10", "WI-20", "documentation-alignment-summary-schema-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/documentation-alignment-summary-schema-20260728.contract.json"],
+      "implementationEvidence": ["scripts/ai_check_summary.py", "scripts/ai_archive_work_item.py", "scripts/ai_start.py", "scripts/install_ai_cockpit.py", ".ai/work-items/_templates/work_item_summary.example.json", "docs/contract-fields.md", "docs/reference/ai-cockpit-work-item-lifecycle.md"],
+      "acceptanceEvidence": ["tests/test_ai_check_summary.py", "tests/test_start_and_archive.py", "tests/test_installer.py", "tests/test_finish_e2e.py", "tests/test_project_governance_journey.py", "tests/test_contract_examples.py"],
+      "verificationCommands": ["make ai-preflight", "make check-ai-change-summary", "make check-instruction-traceability", "make ai-finish TASK=documentation-alignment-summary-schema-20260728", "make ai-close-work-item TASK=documentation-alignment-summary-schema-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-014",
+      "summary": "Recover the immutable documentation-alignment delivery through one governed adjacent pair, preserve exact hosted failure logs, and restore a stable coverage margin before resuming performance or release work.",
+      "planWorkItems": ["WI-10", "WI-20", "documentation-alignment-hosted-recovery-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/documentation-alignment-hosted-recovery-20260728.contract.json"],
+      "implementationEvidence": [".github/workflows/smoke.yml", "docs/superpowers/plans/2026-07-28-documentation-alignment-hosted-recovery.md", "docs/reference/ai-cockpit-work-item-lifecycle.md"],
+      "acceptanceEvidence": ["tests/test_workflows.py", "tests/test_ai_check_summary.py", "tests/test_start_and_archive.py"],
+      "verificationCommands": ["make ai-preflight", "make check-instruction-traceability", "make ai-finish TASK=documentation-alignment-hosted-recovery-20260728", "make ai-close-work-item TASK=documentation-alignment-hosted-recovery-20260728"]
     }
   ]
 }

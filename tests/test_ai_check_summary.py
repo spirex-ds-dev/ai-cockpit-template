@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 
 import ai_check_summary
 import ai_finish
@@ -8,6 +9,39 @@ from ai_common import PROJECT_ROOT
 ARCHIVE_SUMMARY = (
     PROJECT_ROOT / ".ai" / "work-items" / "archive" / "2026" / "realign_ai_cockpit_v2.summary.json"
 )
+ALIGNMENT_AREAS = {
+    "plan",
+    "contractSummaryEvidence",
+    "documentationCommandsCapability",
+    "multilingualSemantics",
+    "limitationsUnknownsHistory",
+}
+
+
+def aligned_documentation_summary(
+    *,
+    evidence: str = "docs/contract-fields.md",
+    changed_files: list[dict[str, str]] | None = None,
+) -> dict:
+    changed = changed_files or [{"path": evidence, "reason": "fixture"}]
+    return {
+        "changedFiles": changed,
+        "sourcesUsed": [evidence],
+        "documentationAlignment": {
+            "schemaVersion": 1,
+            "status": "aligned",
+            "checkedAt": "2026-07-28T04:00:00+09:00",
+            "checks": [
+                {
+                    "area": area,
+                    "status": "aligned",
+                    "evidence": [evidence],
+                    "reason": f"{area} is aligned in the fixture.",
+                }
+                for area in sorted(ALIGNMENT_AREAS)
+            ],
+        },
+    }
 
 
 def test_summary_validator_orchestrates_focused_validation_helpers(monkeypatch):
@@ -31,13 +65,206 @@ def test_summary_validator_orchestrates_focused_validation_helpers(monkeypatch):
         "_validate_required_verification",
         lambda *_args, **_kwargs: ["required"],
     )
+    monkeypatch.setattr(
+        ai_check_summary,
+        "validate_documentation_alignment",
+        lambda *_args, **_kwargs: ["documentation"],
+    )
 
     assert ai_check_summary.validate_summary({}, None) == [
         "structure",
         "verification",
         "metadata",
+        "documentation",
         "required",
     ]
+
+
+def test_documentation_alignment_accepts_complete_source_bound_record():
+    summary = aligned_documentation_summary()
+
+    assert ai_check_summary.validate_documentation_alignment(summary) == []
+
+
+def test_generated_documentation_alignment_completes_bounded_installer_record():
+    changed = [
+        {
+            "path": ".ai/work-items/archive/2026/documentation-alignment-summary-schema-20260728.contract.json",
+            "reason": "durable contract fixture",
+        },
+        {"path": "docs/contract-fields.md", "reason": "Japanese field guide"},
+        {
+            "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+            "reason": "English lifecycle guide",
+        },
+    ]
+    summary = {
+        "changedFiles": changed,
+        "sourcesUsed": [],
+        "documentationAlignment": ai_check_summary.complete_generated_documentation_alignment(
+            changed
+        ),
+    }
+
+    assert summary["documentationAlignment"]["status"] == "aligned"
+    assert ai_check_summary.validate_documentation_alignment(summary) == []
+
+
+def test_generated_documentation_alignment_handles_empty_and_multilingual_write_sets():
+    empty = ai_check_summary.complete_generated_documentation_alignment([])
+    empty_checks = {item["area"]: item for item in empty["checks"]}
+
+    assert empty["status"] == "aligned"
+    assert empty_checks["contractSummaryEvidence"]["status"] == "not_applicable"
+    assert empty_checks["documentationCommandsCapability"]["status"] == "not_applicable"
+    assert empty_checks["multilingualSemantics"]["status"] == "not_applicable"
+    assert empty_checks["limitationsUnknownsHistory"]["status"] == "not_applicable"
+
+    changed = [
+        {"path": "docs/guide.ja.md", "reason": "Japanese guide"},
+        {"path": "docs/guide.zh-CN.md", "reason": "Chinese guide"},
+    ]
+    multilingual = ai_check_summary.complete_generated_documentation_alignment(changed)
+    checks = {item["area"]: item for item in multilingual["checks"]}
+
+    assert checks["contractSummaryEvidence"]["evidence"] == ["docs/guide.ja.md"]
+    assert checks["documentationCommandsCapability"]["evidence"] == [
+        "docs/guide.ja.md",
+        "docs/guide.zh-CN.md",
+    ]
+    assert checks["multilingualSemantics"]["evidence"] == [
+        "docs/guide.ja.md",
+        "docs/guide.zh-CN.md",
+    ]
+    assert checks["limitationsUnknownsHistory"]["evidence"] == ["docs/guide.ja.md"]
+
+
+def test_documentation_alignment_requires_complete_aligned_domain_set():
+    summary = aligned_documentation_summary()
+    alignment = summary["documentationAlignment"]
+    alignment["status"] = "not_checked"
+    alignment["checkedAt"] = None
+    alignment["checks"][0]["status"] = "misaligned"
+    alignment["checks"].pop()
+    alignment["checks"].append(deepcopy(alignment["checks"][0]))
+
+    issues = ai_check_summary.validate_documentation_alignment(summary)
+
+    assert "documentationAlignment.status must be aligned before finish" in issues
+    assert "documentationAlignment.checkedAt must be an offset-aware ISO-8601 timestamp" in issues
+    assert any("duplicate area" in issue for issue in issues)
+    assert any("missing required area" in issue for issue in issues)
+    assert any("status must be aligned or not_applicable" in issue for issue in issues)
+
+
+def test_documentation_alignment_reports_malformed_nested_structure():
+    assert ai_check_summary.changed_file_paths({"changedFiles": "invalid"}) == set()
+    assert ai_check_summary.validate_documentation_alignment(
+        {"documentationAlignment": "invalid"}
+    ) == ["documentationAlignment must be an object"]
+
+    summary = {
+        "changedFiles": [],
+        "sourcesUsed": [],
+        "documentationAlignment": {
+            "schemaVersion": 1,
+            "status": "aligned",
+            "checkedAt": "not-a-timestamp",
+            "checks": [
+                "invalid",
+                {
+                    "area": "unknown",
+                    "status": "aligned",
+                    "evidence": [],
+                    "extra": True,
+                },
+                {
+                    "area": "plan",
+                    "status": "not_applicable",
+                    "evidence": ["docs/contract-fields.md", "docs/contract-fields.md"],
+                    "reason": "",
+                },
+                {
+                    "area": "contractSummaryEvidence",
+                    "status": "aligned",
+                    "evidence": "invalid",
+                    "reason": "invalid evidence shape",
+                },
+            ],
+        },
+    }
+
+    issues = ai_check_summary.validate_documentation_alignment(summary)
+
+    assert any("checkedAt must be an offset-aware" in issue for issue in issues)
+    assert any("checks[0] must be an object" in issue for issue in issues)
+    assert any(".extra is not a recognized field" in issue for issue in issues)
+    assert any(".reason is required" in issue for issue in issues)
+    assert any(".area must be one of" in issue for issue in issues)
+    assert any("must not contain duplicate paths" in issue for issue in issues)
+    assert any("must be empty when not_applicable" in issue for issue in issues)
+    assert any("evidence must be a list" in issue for issue in issues)
+
+    non_list = deepcopy(summary)
+    non_list["documentationAlignment"]["checks"] = "invalid"
+    assert any(
+        "documentationAlignment.checks must be a list" in issue
+        for issue in ai_check_summary.validate_documentation_alignment(non_list)
+    )
+
+
+def test_documentation_alignment_rejects_untrusted_evidence_paths():
+    summary = aligned_documentation_summary()
+    evidence = summary["documentationAlignment"]["checks"][0]["evidence"]
+
+    for invalid, expected in (
+        ("/tmp/private.md", "must be repository-relative"),
+        ("https://example.invalid/evidence", "must be a repository-relative path, not a URL"),
+        ("docs/does-not-exist.md", "does not exist"),
+        ("docs/trust-layer.md", "is not declared in changedFiles or sourcesUsed"),
+    ):
+        evidence[0] = invalid
+        issues = ai_check_summary.validate_documentation_alignment(summary)
+        assert any(expected in issue for issue in issues), (invalid, issues)
+
+
+def test_documentation_alignment_reverse_maps_changed_documentation_surfaces():
+    summary = aligned_documentation_summary(
+        evidence="scripts/ai_check_summary.py",
+        changed_files=[
+            {"path": "scripts/ai_check_summary.py", "reason": "validator"},
+            {"path": "docs/contract-fields.md", "reason": "field semantics"},
+            {"path": "Makefile", "reason": "command surface"},
+        ],
+    )
+    summary["sourcesUsed"].extend(["docs/contract-fields.md", "Makefile"])
+
+    issues = ai_check_summary.validate_documentation_alignment(summary)
+
+    assert (
+        "documentationAlignment evidence is missing changed documentation/command surface: "
+        "docs/contract-fields.md"
+    ) in issues
+    assert (
+        "documentationAlignment evidence is missing changed documentation/command surface: Makefile"
+    ) in issues
+
+
+def test_documentation_alignment_is_required_for_active_v2_but_not_legacy_archive():
+    summary = aligned_documentation_summary()
+    summary.pop("documentationAlignment")
+
+    active_issues = ai_check_summary._validate_summary_structure(
+        summary,
+        {"contractVersion": 2},
+        contract_path="",
+        summary_path="",
+        legacy_archive=False,
+    )
+    archive_issues = ai_check_summary.validate_documentation_alignment(summary, legacy_archive=True)
+
+    assert "missing field: documentationAlignment" in active_issues
+    assert archive_issues == []
 
 
 def test_summary_residual_risk_rejects_generated_skeleton_text():
@@ -323,7 +550,12 @@ def test_scenario_coverage_validator_accepts_valid_payload():
         },
         "knownGaps": [],
         "overclaimPrevention": "fixture",
+        "documentationAlignment": aligned_documentation_summary(
+            evidence="scripts/ai_check_summary.py",
+            changed_files=[{"path": "src/app.py", "reason": "fixture"}],
+        )["documentationAlignment"],
     }
+    summary["sourcesUsed"].append("scripts/ai_check_summary.py")
 
     assert (
         ai_check_summary.validate_summary(summary, {"workItemId": "task", "contractVersion": 2})

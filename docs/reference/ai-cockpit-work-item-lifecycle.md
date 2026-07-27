@@ -70,6 +70,27 @@ post-archive fixes require a fresh Work Item and replacement PR. The order is:
 independent review → ai-finish/archive → commit bundle → check-ai-pr → push → PR
 ```
 
+Before the `before_finish` checkpoint, complete the current v2 Summary's
+`documentationAlignment` record. It must cover the plan,
+Contract/Summary evidence relationship, documentation/commands/capability
+language, multilingual semantics, and limitations/unknowns/history. Every
+aligned evidence path must exist in the repository and also be declared by
+`changedFiles` or `sourcesUsed`; changed documentation and command surfaces
+must be recoverable in the opposite direction from that evidence. An
+unreviewed, incomplete, misaligned, machine-local, missing, or undeclared
+record blocks Finish.
+
+Documentation alignment is a close-out evidence map, not a capability claim or
+a replacement for tests, hosted evidence, provider controls, or the Capability
+Truth Matrix. Historical archived Summaries that predate the field remain
+immutable and readable; they are not backfilled.
+
+During the current Work Item's archive transaction, exact active artifact paths
+in `documentationAlignment` are migrated to their durable archive locations.
+Execution-time evidence such as recorded commands and `executionContractPath`
+remains unchanged because it describes the actual check context rather than a
+current resolvable documentation reference.
+
 This gate first runs the project formatter and, when the governance script and policy
 are installed, the governance complexity/budget check; only then does it validate PR
 ownership. This catches formatting drift and budget overflow before remote CI.
@@ -82,6 +103,13 @@ cause review for missing preflight gates, wrong ordering, late formatter or budg
 checks, template/adopter boundary errors, and source-bound evidence design. If the
 failure is preventable in the workflow, open and complete a corrective Work Item
 that adds an executable fail-closed gate before resuming the original operation.
+
+Hosted quality failures must preserve their diagnostic payload before runner
+teardown. A workflow that buffers individual Gate output may keep heartbeat
+notices for liveness, but on failure it must also emit every non-passing Gate's
+durable log. If the wrapper exits before per-Gate timing is written, it must emit
+the wrapper log as the fallback. Timing metadata without the exact failing output
+is not sufficient evidence for root-cause analysis.
 
 Before release evidence is generated, run
 `make finalize-release-freeze-premerge TASK=<task>` on the dedicated Work Item

@@ -43,6 +43,14 @@ def test_static_examples_match_ai_start_defaults():
         item["stage"] for item in summary["checkpointEvidence"]
     ] == ai_start.DEFAULT_CHECKPOINT_STAGES
     assert summary["intentAlignment"] == {}
+    assert summary["documentationAlignment"]["status"] == "not_checked"
+    assert {item["area"] for item in summary["documentationAlignment"]["checks"]} == {
+        "plan",
+        "contractSummaryEvidence",
+        "documentationCommandsCapability",
+        "multilingualSemantics",
+        "limitationsUnknownsHistory",
+    }
 
 
 def test_example_contract_contains_all_agent_risk_hard_gates():
