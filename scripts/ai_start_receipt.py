@@ -14,6 +14,21 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 RECEIPTS_DIR = PROJECT_ROOT / ".ai" / "work-items" / "starts"
 RECEIPT_SCHEMA_VERSION = 1
 RECEIPT_PREFIX = ".ai/work-items/starts/"
+RESUME_SCHEMA_VERSION = 1
+RESUME_REQUIRED_FIELDS = (
+    "resumeVersion",
+    "fromBaseCommit",
+    "toBaseCommit",
+    "baseRemote",
+    "baseBranch",
+    "workBranch",
+    "recordedAt",
+    "priorContractDigest",
+    "predecessorWorkItemId",
+    "predecessorMergeCommit",
+    "predecessorManifestPath",
+    "predecessorClosure",
+)
 
 
 def receipt_path(work_item_id: str, *, project_root: Path = PROJECT_ROOT) -> Path:
@@ -85,12 +100,235 @@ def receipt_binding(receipt: dict[str, Any]) -> dict[str, str]:
     }
 
 
+def _is_digest(value: Any) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(character in "0123456789abcdef" for character in value)
+    )
+
+
+def _closed_snapshot_issues(value: Any, location: str) -> list[str]:
+    if not isinstance(value, dict):
+        return [f"{location} must be an evidence object"]
+    issues: list[str] = []
+    for field in (
+        "statusClosed",
+        "prMerged",
+        "closureSucceeded",
+        "localBranchDeleted",
+        "remoteBranchDeleted",
+        "baseSynchronized",
+    ):
+        if value.get(field) is not True:
+            issues.append(f"{location}.{field} must be true")
+    return issues
+
+
+def predecessor_closure_snapshot(predecessor: dict[str, Any]) -> dict[str, bool]:
+    closure = predecessor.get("closure")
+    pr = predecessor.get("pr")
+    return {
+        "statusClosed": predecessor.get("status") == "closed",
+        "prMerged": isinstance(pr, dict) and pr.get("merged") is True,
+        "closureSucceeded": isinstance(closure, dict) and closure.get("succeeded") is True,
+        "localBranchDeleted": (
+            isinstance(closure, dict) and closure.get("localBranchDeleted") is True
+        ),
+        "remoteBranchDeleted": (
+            isinstance(closure, dict) and closure.get("remoteBranchDeleted") is True
+        ),
+        "baseSynchronized": (isinstance(closure, dict) and closure.get("baseSynchronized") is True),
+    }
+
+
+def validate_resume_history_structure(contract: dict[str, Any], receipt_base: str) -> list[str]:
+    """Validate the append-only transition shape without consulting the repository."""
+    contract_base = contract.get("baseCommit")
+    history = contract.get("resumeHistory")
+    if receipt_base == contract_base and history is None:
+        return []
+    if not isinstance(history, list) or not history:
+        return ["resumeHistory is required when Start Receipt and Contract baseCommit differ"]
+
+    issues: list[str] = []
+    expected_from = receipt_base
+    for index, transition in enumerate(history):
+        location = f"resumeHistory[{index}]"
+        if not isinstance(transition, dict):
+            issues.append(f"{location} must be an evidence object")
+            continue
+        for field in RESUME_REQUIRED_FIELDS:
+            if field not in transition:
+                issues.append(f"{location} missing field: {field}")
+        if any(field not in transition for field in RESUME_REQUIRED_FIELDS):
+            continue
+        if transition.get("resumeVersion") != RESUME_SCHEMA_VERSION:
+            issues.append(f"{location}.resumeVersion is unsupported")
+        for field in (
+            "fromBaseCommit",
+            "toBaseCommit",
+            "baseRemote",
+            "baseBranch",
+            "workBranch",
+            "predecessorWorkItemId",
+            "predecessorMergeCommit",
+            "predecessorManifestPath",
+        ):
+            if not isinstance(transition.get(field), str) or not transition[field].strip():
+                issues.append(f"{location}.{field} must be a non-empty string")
+        if transition.get("fromBaseCommit") != expected_from:
+            origin = (
+                "the immutable Start Receipt"
+                if index == 0
+                else f"resumeHistory[{index - 1}].toBaseCommit"
+            )
+            issues.append(f"{location}.fromBaseCommit does not continue from {origin}")
+        if transition.get("toBaseCommit") == transition.get("fromBaseCommit"):
+            issues.append(f"{location}.toBaseCommit must advance the baseline")
+        if transition.get("predecessorMergeCommit") != transition.get("toBaseCommit"):
+            issues.append(f"{location}.predecessorMergeCommit must equal toBaseCommit")
+        if transition.get("workBranch") == transition.get("baseBranch"):
+            issues.append(f"{location}.workBranch must be a dedicated non-base branch")
+        try:
+            datetime.fromisoformat(str(transition.get("recordedAt")))
+        except ValueError:
+            issues.append(f"{location}.recordedAt is not ISO-8601")
+        if not _is_digest(transition.get("priorContractDigest")):
+            issues.append(f"{location}.priorContractDigest must be a SHA-256 digest")
+        manifest_path = str(transition.get("predecessorManifestPath", ""))
+        manifest = Path(manifest_path)
+        if (
+            manifest.is_absolute()
+            or ".." in manifest.parts
+            or not manifest_path.startswith(".ai/work-items/archive/")
+            or not manifest_path.endswith(".archive-manifest.json")
+        ):
+            issues.append(f"{location}.predecessorManifestPath is not a canonical archive path")
+        issues.extend(
+            _closed_snapshot_issues(
+                transition.get("predecessorClosure"), f"{location}.predecessorClosure"
+            )
+        )
+        expected_from = str(transition.get("toBaseCommit", ""))
+
+    if history and isinstance(history[-1], dict):
+        final_target = history[-1].get("toBaseCommit")
+        if final_target != contract_base:
+            issues.append("resumeHistory final toBaseCommit does not match Contract baseCommit")
+    return issues
+
+
+def _git_is_ancestor(project_root: Path, ancestor: str, descendant: str) -> bool:
+    result = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", ancestor, descendant],
+        cwd=project_root,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    return result.returncode == 0
+
+
+def _manifest_issues(transition: dict[str, Any], *, project_root: Path, location: str) -> list[str]:
+    relative = str(transition["predecessorManifestPath"])
+    manifest_path = project_root / relative
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return [f"{location}: predecessor archive manifest is missing: {relative}"]
+    except (OSError, json.JSONDecodeError, ValueError) as exc:
+        return [f"{location}: predecessor archive manifest is invalid: {exc}"]
+    issues: list[str] = []
+    if manifest.get("format") != "ai-cockpit-archive-manifest":
+        issues.append(f"{location}: predecessor archive manifest format is unsupported")
+    if manifest.get("manifestVersion") != 1:
+        issues.append(f"{location}: predecessor archive manifest version is unsupported")
+    if manifest.get("workItemId") != transition.get("predecessorWorkItemId"):
+        issues.append(f"{location}: predecessor archive manifest Work Item does not match")
+    for kind in ("contract", "summary"):
+        path_key = f"{kind}Path"
+        digest_key = f"{kind}Sha256"
+        bound_path = manifest.get(path_key)
+        if not isinstance(bound_path, str) or not bound_path:
+            issues.append(f"{location}: predecessor manifest {path_key} is missing")
+            continue
+        evidence_path = project_root / bound_path
+        try:
+            actual_digest = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
+        except OSError:
+            issues.append(f"{location}: predecessor manifest {path_key} does not exist")
+            continue
+        if manifest.get(digest_key) != actual_digest:
+            issues.append(f"{location}: predecessor manifest {digest_key} does not match")
+    return issues
+
+
+def _latest_predecessor_issues(contract: dict[str, Any], transition: dict[str, Any]) -> list[str]:
+    predecessor = contract.get("predecessorWorkItem")
+    if not isinstance(predecessor, dict):
+        return ["predecessorWorkItem must be an evidence object for the latest resume"]
+    issues: list[str] = []
+    snapshot = predecessor_closure_snapshot(predecessor)
+    issues.extend(_closed_snapshot_issues(snapshot, "predecessorWorkItem"))
+    if predecessor.get("workItemId") != transition.get("predecessorWorkItemId"):
+        issues.append("predecessor Work Item must equal the latest resume transition")
+    pr = predecessor.get("pr")
+    merge_commit = pr.get("mergeCommit") if isinstance(pr, dict) else None
+    if merge_commit != transition.get("predecessorMergeCommit"):
+        issues.append("predecessor merge commit must equal resume target")
+    closure = predecessor.get("closure")
+    evidence = closure.get("evidence") if isinstance(closure, dict) else None
+    if evidence != transition.get("predecessorManifestPath"):
+        issues.append("predecessor closure evidence must equal resume manifest path")
+    if snapshot != transition.get("predecessorClosure"):
+        issues.append("predecessor closure snapshot does not match Contract evidence")
+    return issues
+
+
+def validate_resume_history(
+    contract: dict[str, Any],
+    receipt: dict[str, Any],
+    *,
+    project_root: Path = PROJECT_ROOT,
+    require_latest_predecessor: bool = True,
+) -> list[str]:
+    """Validate resume structure, Git ancestry, archive evidence, and latest closure."""
+    receipt_base = str(receipt.get("baseCommit", ""))
+    issues = validate_resume_history_structure(contract, receipt_base)
+    history = contract.get("resumeHistory")
+    if issues or not isinstance(history, list) or not history:
+        return issues
+    for index, transition in enumerate(history):
+        if not isinstance(transition, dict):
+            continue
+        location = f"resumeHistory[{index}]"
+        if not _git_is_ancestor(
+            project_root,
+            str(transition.get("fromBaseCommit", "")),
+            str(transition.get("toBaseCommit", "")),
+        ):
+            issues.append(f"{location}: fromBaseCommit is not an ancestor of toBaseCommit")
+        receipt_branch = receipt.get("baseBranch")
+        if (
+            isinstance(receipt_branch, str)
+            and receipt_branch
+            and transition.get("workBranch") != receipt_branch
+        ):
+            issues.append(f"{location}: workBranch does not match immutable Start Receipt")
+        issues.extend(_manifest_issues(transition, project_root=project_root, location=location))
+    if require_latest_predecessor and isinstance(history[-1], dict):
+        issues.extend(_latest_predecessor_issues(contract, history[-1]))
+    return issues
+
+
 def validate_receipt(
     contract: dict[str, Any],
     receipt: dict[str, Any] | None,
     *,
     project_root: Path = PROJECT_ROOT,
     require_tracked: bool = False,
+    require_latest_predecessor: bool = True,
 ) -> list[str]:
     """Return fail-closed issues for a receipt and its Contract binding."""
     issues: list[str] = []
@@ -119,7 +357,24 @@ def validate_receipt(
     if receipt.get("receiptPath") != expected_path:
         issues.append("Start Receipt receiptPath is not the canonical repository-relative path")
     if receipt.get("baseCommit") != contract.get("baseCommit"):
-        issues.append("Start Receipt baseCommit does not match Contract")
+        resume_issues = validate_resume_history(
+            contract,
+            receipt,
+            project_root=project_root,
+            require_latest_predecessor=require_latest_predecessor,
+        )
+        if resume_issues:
+            issues.append("Start Receipt baseCommit does not match Contract")
+            issues.extend(resume_issues)
+    elif contract.get("resumeHistory") is not None:
+        issues.extend(
+            validate_resume_history(
+                contract,
+                receipt,
+                project_root=project_root,
+                require_latest_predecessor=require_latest_predecessor,
+            )
+        )
     try:
         datetime.fromisoformat(str(receipt["startTimestamp"]))
     except ValueError:

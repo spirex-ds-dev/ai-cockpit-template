@@ -32,6 +32,15 @@ schema or archive rules must use the recorded commit or explicit schema fields,
 never a mutable archive-count threshold. `archiveSequence` is ordering
 metadata; strict archive integrity is enabled by the row's own digest pair.
 
+通常は `baseCommit` と Start Receipt の開始時 baseline は同一です。process
+corrective の完了後に停止中の Work Item を rebase して再開する場合だけ、
+`make ai-resume-work-item` が検証済みの `resumeHistory` transition を追加して
+Contract の現在 baseline を進めます。Start Receipt の baseline は不変です。
+`resumeHistory` は開始 baseline から現在の `baseCommit` まで連続し、各 transition
+は remote/default branch、専用 Work Item branch、Git ancestry、完了済み
+predecessor、merge commit、archive manifest に拘束されます。手動の
+`baseCommit` または `resumeHistory` 編集は有効な移行証拠ではありません。
+
 ### 1.2 変更追跡と範囲
 
 - **`baselineDirtyPaths`**: `array[object]`

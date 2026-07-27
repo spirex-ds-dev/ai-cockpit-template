@@ -106,6 +106,15 @@
       "implementationEvidence": ["scripts/ai_check_status_consistency.py", ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md"],
       "acceptanceEvidence": ["tests/test_core_gates.py"],
       "verificationCommands": ["make ai-preflight", "make check-ai-status-consistency", "make check-instruction-traceability", "make ai-finish TASK=no-active-archive-status-diagnostic-20260728", "make ai-close-work-item TASK=no-active-archive-status-diagnostic-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-012",
+      "summary": "Preserve the immutable Start Receipt while allowing a paused Work Item to advance its baseline only through generated, append-only, predecessor-closure-bound resume lineage.",
+      "planWorkItems": ["WI-20", "work-item-resume-receipt-lineage-20260728"],
+      "contractPaths": [".ai/work-items/active/work-item-resume-receipt-lineage-20260728.contract.json"],
+      "implementationEvidence": ["scripts/ai_resume_work_item.py", "scripts/ai_start_receipt.py", "scripts/ai_check_pr.py", "Makefile", ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md"],
+      "acceptanceEvidence": ["tests/test_start_and_archive.py", "tests/test_pr_aggregate.py"],
+      "verificationCommands": ["make ai-preflight", "make check-ai-start-receipt", "make check-instruction-traceability", "make ai-finish TASK=work-item-resume-receipt-lineage-20260728", "make ai-close-work-item TASK=work-item-resume-receipt-lineage-20260728"]
     }
   ]
 }

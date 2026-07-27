@@ -47,6 +47,15 @@ closed for a missing, malformed, digest-mismatched, base-mismatched, or
 untracked Receipt. The Receipt proves creation-time lifecycle state only; it
 does not prove implementation success, review approval, or merge status.
 
+If a mandatory corrective Work Item closes while another Work Item is paused,
+rebase the paused dedicated branch and use `make ai-resume-work-item
+CONTRACT=<active-contract> BASE_REMOTE=<remote>
+BASE_BRANCH=<default-branch>`. A valid append-only `resumeHistory` explains the
+new Contract baseline while the original Receipt remains unchanged. Manual
+Receipt, baseline, or history edits are rejected; the command requires the
+exact predecessor merge, complete closure, archive manifest and digest
+bindings, Git ancestry, and the original dedicated branch.
+
 `make ai-lifecycle-facts` is the machine-readable source for repository lifecycle state. Consumers should use its `state`, active Work Item counts, and explicit `notRun` fields instead of re-deriving lifecycle facts. It does not claim readiness or enterprise assurance.
 ## Adopter project
 An adopter project keeps its own Git history and branch policy:

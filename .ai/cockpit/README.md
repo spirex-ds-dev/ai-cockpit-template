@@ -92,6 +92,25 @@ Use `make ai-close-work-item TASK=<task>` after the Work Item is archived and it
 
 The required order is: latest remote base, dedicated Work Item branch, implementation, `ai-finish`/archive, push, PR, PR merge, then `ai-close-work-item`. Do not merge the feature branch into local `main` before the PR, and do not delete the Work Item branch before closure; otherwise local `main` can diverge from `origin/main` or the merged branch identity can be lost before ownership verification.
 
+If a paused Work Item must continue after a corrective predecessor closes,
+fetch and rebase its dedicated branch onto the latest discovered remote default
+branch, update `predecessorWorkItem` with the completed closure evidence, then
+run:
+
+```text
+make ai-resume-work-item \
+  CONTRACT=.ai/work-items/active/<task>.contract.json \
+  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
+```
+
+The command preserves the original Start Receipt and appends a source-bound
+`resumeHistory` transition before advancing the Contract baseline. It fails
+closed unless the prior base is an ancestor of the exact predecessor merge,
+the branch is the original dedicated Work Item branch, and the predecessor's
+archive manifest and closure facts are valid. Never edit the Start Receipt,
+`baseCommit`, or `resumeHistory` by hand. Re-run Preflight and all stale
+verification after a successful resume.
+
 `ai-close-work-item` is worktree-aware. If the base branch is checked out in another worktree, it verifies that worktree is clean, fast-forwards and validates the base there, detaches the Work Item worktree, then removes the local and remote Work Item branches. Historical archive evidence is retained. The governance complexity report still records `trackedFiles`, but that metric is observational; archive integrity and current-task ownership remain hard gates.
 
 1. Declare Intent (optional but recommended): Why does this work exist? What constraints must be respected? What's the rationale?

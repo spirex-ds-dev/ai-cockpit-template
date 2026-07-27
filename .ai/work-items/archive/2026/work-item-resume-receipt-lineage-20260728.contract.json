@@ -1,0 +1,271 @@
+{
+  "contractVersion": 2,
+  "workItemId": "work-item-resume-receipt-lineage-20260728",
+  "mode": "code",
+  "title": "Add governed Work Item resume receipt lineage",
+  "baseCommit": "f6b12629ec55e9f196af11b413317d24366282fc",
+  "predecessorWorkItem": {
+    "workItemId": "no-active-archive-status-diagnostic-20260728",
+    "status": "closed",
+    "pr": {
+      "number": 413,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/413",
+      "mergeCommit": "f6b12629ec55e9f196af11b413317d24366282fc"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/no-active-archive-status-diagnostic-20260728.archive-manifest.json"
+    }
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/work-item-resume-receipt-lineage-20260728.contract.json",
+    ".ai/work-items/active/work-item-resume-receipt-lineage-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".ai/guards/coverage_policy.yaml",
+    "Makefile",
+    "scripts/ai_resume_work_item.py",
+    "scripts/ai_start_receipt.py",
+    "scripts/ai_check_pr.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_pr_aggregate.py",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    "docs/contract-fields.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/repository-workflow.md",
+    "docs/reference/repository-workflow.ja.md",
+    "docs/superpowers/specs/2026-07-28-work-item-resume-receipt-lineage-design.md",
+    "docs/superpowers/plans/2026-07-28-work-item-resume-receipt-lineage.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": [
+    "Rewriting or deleting an immutable Start Receipt",
+    "Accepting an arbitrary Contract baseCommit change without generated lineage",
+    "Resuming the paused deep-performance implementation in this corrective",
+    "Changing release identity, release workflows, or publication state",
+    "Weakening one-Work-Item, one-branch, one-PR serial lifecycle rules"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_start_receipt.py",
+      "reason": "The current validator requires Start Receipt baseCommit to equal the mutable Contract baseline and has no governed resume transition."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "PR evidence independently assumes the Start Receipt and archived Contract baselines are identical, so resume lineage must be recognized consistently."
+    },
+    {
+      "path": ".ai/work-items/starts/quality-gate-deep-performance-optimization-20260728.json",
+      "reason": "The paused performance Work Item preserves the original f00ac8b3 start boundary that must remain immutable."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/no-active-archive-status-diagnostic-20260728.archive-manifest.json",
+      "reason": "The latest closed predecessor and merge commit f6b12629 are the concrete resume target that exposed RFE-ISSUE-117."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "The lifecycle is authoritative for serial closure, branch cleanup, synchronization, and restart ordering."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "The comprehensive plan is the durable record for process problems and bidirectional traceability."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_change",
+      "baseline_integrity",
+      "resume_process",
+      "fail_closed_boundary"
+    ],
+    "reason": "An over-broad exception would permit arbitrary baseline rewriting and hide out-of-scope changes; every transition must be generated and verified against predecessor closure and Git ancestry.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized fixing recorded process defects before resuming planned work and instructed continuous execution without another confirmation."
+  },
+  "preReviewWarnings": [
+    "Confirm the original Start Receipt bytes and binding remain unchanged after every resume.",
+    "Confirm resumeHistory is append-only and each transition forms one continuous old-base to new-base chain.",
+    "Confirm missing closure evidence, wrong merge commit, non-ancestor bases, branch mismatch, and direct baseCommit edits fail closed.",
+    "Confirm PR validation uses the same lineage rules and does not create a second permissive path."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Capture the governed transition design before implementation and re-check it before archive."
+  },
+  "acceptance": [
+    "A1: A repository command advances an active Contract baseline only by appending a versioned resumeHistory transition bound to old/new base commits, remote/default branch, Work Item branch, timestamp, prior Contract digest, predecessor identity, predecessor merge commit, and archive manifest.",
+    "A2: The original Start Receipt and Contract startReceipt binding remain byte-for-byte and value-for-value unchanged; a valid continuous resumeHistory is the only accepted explanation for a later Contract baseCommit.",
+    "A3: Validation fails closed for direct baseCommit edits, missing or malformed history, broken transition chains, non-ancestor commits, mismatched branch or predecessor data, unclosed predecessor state, wrong merge target, and missing/malformed/mismatched archive manifest.",
+    "A4: Repeated resumes append transitions without rewriting earlier entries, and validation accepts the final baseline only when every link remains valid.",
+    "A5: PR/archive validation consumes the same canonical lineage validator and preserves the existing one-Work-Item and PR merge-base boundaries.",
+    "A6: English and Japanese lifecycle guidance documents when and how to resume a paused Work Item and explicitly forbids manual receipt or baseline rewriting.",
+    "A7: RFE-ISSUE-117 is recorded in the comprehensive plan and bidirectionally mapped to Contract, implementation, negative regressions, and lifecycle evidence.",
+    "A8: The corrective completes Preflight/checkpoints, TDD, full quality, archive, PR, hosted CI, merge, ai-close-work-item, branch deletion, and main synchronization before the performance Work Item resumes."
+  ],
+  "guidelines": [
+    "Use one canonical resume-history validator across local receipt checks and PR evidence checks.",
+    "A resume transition is generated evidence, not a manually authored bypass.",
+    "The Start Receipt remains immutable and continues to prove the original delegation boundary.",
+    "Every accepted transition must be source-bound to Git ancestry and a fully closed predecessor archive.",
+    "Error messages must identify the failed lineage invariant instead of collapsing distinct causes."
+  ],
+  "intent": {
+    "problem": "A paused Work Item may legitimately rebase after one or more mandatory corrective Work Items complete. The Start Receipt correctly preserves the original baseline, but the Contract must advance to the new remote default-branch base so scope and ownership checks exclude intervening corrective commits. The current validator requires both baselines to remain equal and provides no generated, auditable transition, so legal continuation is impossible without either falsifying the Contract or rewriting immutable evidence.",
+    "constraints": [
+      "Never modify or replace the original Start Receipt.",
+      "Permit baseline advancement only through a generated append-only transition.",
+      "Bind each transition to the current dedicated branch, discovered remote/default branch, exact predecessor merge commit, valid closure manifest, and Git ancestry.",
+      "Keep direct edits and incomplete evidence fail closed with distinct diagnostics.",
+      "Use the same semantics in focused validation, Preflight, Finish, and PR/archive validation.",
+      "Do not change the paused performance implementation in this corrective."
+    ],
+    "rationale": "An append-only chain preserves the original delegation while proving why the active diff baseline moved. A repository command can verify live Git and closure facts before writing the transition; a shared validator can then deterministically reject tampering in local and hosted checks."
+  },
+  "rawUserRequest": "性能工单因纠正工单合并后 rebase 而出现 RFE-ISSUE-117：Start Receipt 必须不可变，但流程没有受治理的恢复/换基谱系。修复必须落地到流程和脚本检查，避免以后重复出错；先完成独立 corrective 的完整生命周期，再继续，不需要再次确认。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-rfe-117-process-first-continuous-execution",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:rfe-117-governed-resume-lineage-authorized"
+  },
+  "declaredIntent": {
+    "summary": "Add a generated, append-only, source-bound resume lineage so paused Work Items can safely advance their baseline without changing immutable Start Receipts.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A paused Work Item advances from its original baseline to the exact merge commit of a fully closed corrective predecessor.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_resume_contract_appends_source_bound_lineage_without_rewriting_receipt"
+      ],
+      "expected": "The command appends one transition, updates Contract baseCommit, leaves Start Receipt/binding unchanged, and canonical validation passes.",
+      "verificationPlan": "Build a temporary Git repository with a start base and merged corrective commit, generate the resume transition, and assert command output, Contract fields, immutable receipt bytes, and validator success."
+    },
+    {
+      "scenario": "A second corrective requires another resume of the same paused Work Item.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_resume_contract_appends_second_transition_without_rewriting_first"
+      ],
+      "expected": "The second transition appends to the first, starts at the prior toBaseCommit, and validates only when the full chain remains intact.",
+      "verificationPlan": "Run the generator twice against two ordered predecessor merges and assert the first transition is unchanged and the final effective baseline equals the second merge."
+    },
+    {
+      "scenario": "A Contract baseCommit is edited directly or its history is malformed, discontinuous, or inconsistent with the immutable receipt.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_resume_history_rejects_direct_or_malformed_baseline_transition"
+      ],
+      "expected": "Receipt validation rejects each distinct invariant with an actionable resume-history diagnostic.",
+      "verificationPlan": "Add parameterized negative tests for absent history, unsupported version, missing fields, first-link mismatch, broken chain, final baseline mismatch, and changed startReceipt binding."
+    },
+    {
+      "scenario": "A transition references untrusted repository or lifecycle facts.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_resume_contract_is_atomic_when_source_binding_fails",
+        "tests/test_start_and_archive.py::test_resume_history_rejects_non_ancestor_and_manifest_digest_mismatch",
+        "tests/test_start_and_archive.py::test_resume_contract_rejects_wrong_original_branch_and_missing_remote_atomically"
+      ],
+      "expected": "Non-ancestor bases, wrong work branch, wrong remote/default branch, unclosed predecessor, merge mismatch, missing manifest, malformed manifest, and wrong manifest Work Item all fail closed.",
+      "verificationPlan": "Create focused Git and filesystem fixtures for each source-binding failure and assert the generator writes nothing and validation reports the exact invariant."
+    },
+    {
+      "scenario": "Archived PR evidence contains a valid resumed Work Item or a forged lineage.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_pr_accepts_only_canonical_resumed_lineage"
+      ],
+      "expected": "PR validation accepts the valid shared lineage and rejects forged history without weakening merge-base or one-Work-Item checks.",
+      "verificationPlan": "Extend PR aggregate regressions to exercise archive_base_is_compatible and validate_receipt with valid and invalid resumed Contracts."
+    }
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "Ray",
+    "reason": "The user explicitly authorized durable process/script fixes before continuing; Makefile must expose the governed resume command."
+  },
+  "rollbackNote": "Revert this Work Item PR. Existing Work Items without resumeHistory retain the original exact Start Receipt/baseCommit validation behavior.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 621,
+      "governanceScriptDelta": 260,
+      "testDelta": 360,
+      "documentationDelta": 170
+    },
+    "reason": "A generator, shared fail-closed validator, focused Git fixtures, PR regressions, and bilingual lifecycle guidance are required to close the bypass surface."
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/work-item-resume-receipt-lineage-20260728.json",
+    "baseCommit": "f6b12629ec55e9f196af11b413317d24366282fc",
+    "initialScopeDigest": "c54bda9512cd6969a59e2d1a490c9cbb29bebbb783b821ebb6915bdd69de4950",
+    "contractSkeletonDigest": "ddccaa8c0a9521bf898c169c04e320bce26d9748179b3e82a9d9dd89396a7253"
+  }
+}

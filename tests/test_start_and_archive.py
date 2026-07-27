@@ -3,12 +3,18 @@ import runpy
 import sys
 import subprocess
 import fcntl
+import hashlib
+from pathlib import Path
+
 import pytest
 import ai_archive_work_item
 import ai_common
 import ai_check_scope
+import ai_resume_work_item
 import ai_start
 import ai_start_receipt
+from ai_resume_work_item import ResumeError
+from ai_resume_work_item import resume_contract
 from ai_start_receipt import build_receipt
 from ai_start_receipt import current_branch
 from ai_start_receipt import receipt_path
@@ -16,6 +22,7 @@ from ai_start_receipt import receipt_binding
 from ai_start_receipt import skeleton_digest
 from ai_start_receipt import scope_digest
 from ai_start_receipt import validate_receipt
+from ai_start_receipt import validate_resume_history
 
 
 def test_start_and_archive_use_clean_git_environment():
@@ -76,6 +83,403 @@ def test_start_receipt_binds_contract_and_rejects_tampering(tmp_path):
     assert "Start Receipt baseCommit does not match Contract" in validate_receipt(
         contract, tampered, project_root=tmp_path
     )
+
+
+def _git(root: Path, *args: str) -> str:
+    result = subprocess.run(
+        ["git", *args],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout.strip()
+
+
+def _write_commit(root: Path, name: str, content: str) -> str:
+    path = root / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+    _git(root, "add", name)
+    _git(root, "commit", "-m", f"write {name}")
+    return _git(root, "rev-parse", "HEAD")
+
+
+def _write_predecessor_archive(root: Path, work_item_id: str, sequence: int) -> str:
+    archive = root / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True, exist_ok=True)
+    predecessor_contract = archive / f"{work_item_id}.contract.json"
+    predecessor_summary = archive / f"{work_item_id}.summary.json"
+    predecessor_contract.write_text(
+        json.dumps({"workItemId": work_item_id}) + "\n", encoding="utf-8"
+    )
+    predecessor_summary.write_text(
+        json.dumps({"workItemId": work_item_id}) + "\n", encoding="utf-8"
+    )
+    manifest = archive / f"{work_item_id}.archive-manifest.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "format": "ai-cockpit-archive-manifest",
+                "manifestVersion": 1,
+                "workItemId": work_item_id,
+                "archiveSequence": sequence,
+                "contractPath": (f".ai/work-items/archive/2026/{work_item_id}.contract.json"),
+                "summaryPath": (f".ai/work-items/archive/2026/{work_item_id}.summary.json"),
+                "contractSha256": hashlib.sha256(predecessor_contract.read_bytes()).hexdigest(),
+                "summarySha256": hashlib.sha256(predecessor_summary.read_bytes()).hexdigest(),
+                "generatedStatusExcluded": True,
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return f".ai/work-items/archive/2026/{work_item_id}.archive-manifest.json"
+
+
+def _closed_predecessor(work_item_id: str, merge_commit: str, manifest_path: str) -> dict:
+    return {
+        "workItemId": work_item_id,
+        "status": "closed",
+        "pr": {"merged": True, "mergeCommit": merge_commit},
+        "closure": {
+            "succeeded": True,
+            "localBranchDeleted": True,
+            "remoteBranchDeleted": True,
+            "baseSynchronized": True,
+            "evidence": manifest_path,
+        },
+    }
+
+
+def _resume_fixture(tmp_path: Path) -> tuple[Path, Path, Path, str, str]:
+    root = tmp_path / "repository"
+    root.mkdir()
+    _git(root, "init", "-b", "main")
+    _git(root, "config", "user.name", "Test")
+    _git(root, "config", "user.email", "test@example.com")
+    start = _write_commit(root, "seed.txt", "start\n")
+    _git(root, "switch", "-c", "codex/paused-task")
+
+    contract_path = root / ".ai/work-items/active/paused-task.contract.json"
+    receipt_file = root / ".ai/work-items/starts/paused-task.json"
+    contract_path.parent.mkdir(parents=True)
+    receipt_file.parent.mkdir(parents=True)
+    contract = {
+        "contractVersion": 2,
+        "workItemId": "paused-task",
+        "mode": "code",
+        "title": "Paused task",
+        "baseCommit": start,
+        "scope": ["src/**"],
+    }
+    receipt = build_receipt(
+        contract,
+        timestamp="2026-07-28T00:00:00+00:00",
+        project_root=root,
+    )
+    contract["startReceipt"] = receipt_binding(receipt)
+    receipt_file.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+
+    _git(root, "switch", "main")
+    target = _write_commit(root, "corrective.txt", "fixed\n")
+    _git(root, "update-ref", "refs/remotes/origin/main", target)
+    _git(root, "switch", "codex/paused-task")
+    _git(root, "rebase", target)
+
+    manifest = _write_predecessor_archive(root, "corrective", 1)
+    contract["predecessorWorkItem"] = _closed_predecessor("corrective", target, manifest)
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    return root, contract_path, receipt_file, start, target
+
+
+def test_resume_contract_appends_source_bound_lineage_without_rewriting_receipt(tmp_path):
+    root, contract_path, receipt_file, start, target = _resume_fixture(tmp_path)
+    original_receipt = receipt_file.read_bytes()
+    original_binding = json.loads(contract_path.read_text(encoding="utf-8"))["startReceipt"]
+
+    transition = resume_contract(
+        contract_path,
+        base_remote="origin",
+        base_branch="main",
+        timestamp="2026-07-28T01:00:00+00:00",
+        project_root=root,
+    )
+
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    receipt = json.loads(receipt_file.read_text(encoding="utf-8"))
+    assert transition["fromBaseCommit"] == start
+    assert transition["toBaseCommit"] == target
+    assert transition["predecessorMergeCommit"] == target
+    assert transition["workBranch"] == "codex/paused-task"
+    assert len(transition["priorContractDigest"]) == 64
+    assert contract["baseCommit"] == target
+    assert contract["resumeHistory"] == [transition]
+    assert contract["startReceipt"] == original_binding
+    assert receipt_file.read_bytes() == original_receipt
+    assert validate_receipt(contract, receipt, project_root=root) == []
+
+
+def test_resume_contract_appends_second_transition_without_rewriting_first(tmp_path):
+    root, contract_path, receipt_file, _start, first_target = _resume_fixture(tmp_path)
+    first = resume_contract(
+        contract_path,
+        base_remote="origin",
+        base_branch="main",
+        timestamp="2026-07-28T01:00:00+00:00",
+        project_root=root,
+    )
+
+    _git(root, "switch", "main")
+    second_target = _write_commit(root, "corrective-2.txt", "fixed again\n")
+    _git(root, "update-ref", "refs/remotes/origin/main", second_target)
+    _git(root, "switch", "codex/paused-task")
+    _git(root, "rebase", second_target)
+    manifest = _write_predecessor_archive(root, "corrective-2", 2)
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    contract["predecessorWorkItem"] = _closed_predecessor("corrective-2", second_target, manifest)
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+
+    second = resume_contract(
+        contract_path,
+        base_remote="origin",
+        base_branch="main",
+        timestamp="2026-07-28T02:00:00+00:00",
+        project_root=root,
+    )
+
+    resumed = json.loads(contract_path.read_text(encoding="utf-8"))
+    assert resumed["resumeHistory"][0] == first
+    assert resumed["resumeHistory"][1] == second
+    assert second["fromBaseCommit"] == first_target
+    assert second["toBaseCommit"] == second_target
+    assert (
+        validate_receipt(
+            resumed,
+            json.loads(receipt_file.read_text(encoding="utf-8")),
+            project_root=root,
+        )
+        == []
+    )
+
+
+@pytest.mark.parametrize(
+    ("mutation", "expected"),
+    [
+        (lambda contract: contract.pop("resumeHistory"), "resumeHistory is required"),
+        (
+            lambda contract: contract["resumeHistory"][0].update({"resumeVersion": 99}),
+            "resumeHistory[0].resumeVersion is unsupported",
+        ),
+        (
+            lambda contract: contract["resumeHistory"][0].pop("priorContractDigest"),
+            "resumeHistory[0] missing field: priorContractDigest",
+        ),
+        (
+            lambda contract: contract["resumeHistory"][0].update({"fromBaseCommit": "f" * 40}),
+            "resumeHistory[0].fromBaseCommit does not continue from the immutable Start Receipt",
+        ),
+        (
+            lambda contract: contract.update({"baseCommit": "e" * 40}),
+            "resumeHistory final toBaseCommit does not match Contract baseCommit",
+        ),
+        (
+            lambda contract: contract["resumeHistory"][0].update(
+                {"workBranch": "codex/different-task"}
+            ),
+            "workBranch does not match immutable Start Receipt",
+        ),
+    ],
+)
+def test_resume_history_rejects_direct_or_malformed_baseline_transition(
+    tmp_path, mutation, expected
+):
+    root, contract_path, receipt_file, _start, _target = _resume_fixture(tmp_path)
+    resume_contract(
+        contract_path,
+        base_remote="origin",
+        base_branch="main",
+        timestamp="2026-07-28T01:00:00+00:00",
+        project_root=root,
+    )
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    receipt = json.loads(receipt_file.read_text(encoding="utf-8"))
+    mutation(contract)
+    assert any(
+        expected in issue for issue in validate_resume_history(contract, receipt, project_root=root)
+    )
+
+
+@pytest.mark.parametrize(
+    ("mutation", "expected"),
+    [
+        (
+            lambda contract: contract["predecessorWorkItem"].update({"status": "open"}),
+            "predecessor status must be closed",
+        ),
+        (
+            lambda contract: contract["predecessorWorkItem"]["pr"].update(
+                {"mergeCommit": "f" * 40}
+            ),
+            "predecessor merge commit must equal resume target",
+        ),
+        (
+            lambda contract: contract["predecessorWorkItem"]["closure"].update(
+                {"evidence": ".ai/work-items/archive/2026/missing.archive-manifest.json"}
+            ),
+            "predecessor archive manifest is missing",
+        ),
+    ],
+)
+def test_resume_contract_is_atomic_when_source_binding_fails(tmp_path, mutation, expected):
+    root, contract_path, receipt_file, _start, _target = _resume_fixture(tmp_path)
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    mutation(contract)
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    before_contract = contract_path.read_bytes()
+    before_receipt = receipt_file.read_bytes()
+
+    with pytest.raises(ResumeError, match=expected):
+        resume_contract(
+            contract_path,
+            base_remote="origin",
+            base_branch="main",
+            timestamp="2026-07-28T01:00:00+00:00",
+            project_root=root,
+        )
+
+    assert contract_path.read_bytes() == before_contract
+    assert receipt_file.read_bytes() == before_receipt
+
+
+def test_resume_history_rejects_non_ancestor_and_manifest_digest_mismatch(tmp_path, monkeypatch):
+    root, contract_path, receipt_file, _start, _target = _resume_fixture(tmp_path)
+    resume_contract(
+        contract_path,
+        base_remote="origin",
+        base_branch="main",
+        timestamp="2026-07-28T01:00:00+00:00",
+        project_root=root,
+    )
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    receipt = json.loads(receipt_file.read_text(encoding="utf-8"))
+    manifest_path = root / contract["resumeHistory"][0]["predecessorManifestPath"]
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["summarySha256"] = "f" * 64
+    manifest_path.write_text(json.dumps(manifest) + "\n", encoding="utf-8")
+    monkeypatch.setattr(ai_start_receipt, "_git_is_ancestor", lambda *_args: False)
+
+    issues = validate_resume_history(contract, receipt, project_root=root)
+
+    assert "resumeHistory[0]: fromBaseCommit is not an ancestor of toBaseCommit" in issues
+    assert "resumeHistory[0]: predecessor manifest summarySha256 does not match" in issues
+
+
+def test_resume_contract_rejects_wrong_original_branch_and_missing_remote_atomically(
+    tmp_path,
+):
+    root, contract_path, receipt_file, _start, _target = _resume_fixture(tmp_path)
+    receipt = json.loads(receipt_file.read_text(encoding="utf-8"))
+    receipt["baseBranch"] = "codex/other-task"
+    receipt_file.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+    before = contract_path.read_bytes()
+
+    with pytest.raises(ResumeError, match="current branch does not match immutable Start Receipt"):
+        resume_contract(
+            contract_path,
+            base_remote="origin",
+            base_branch="main",
+            project_root=root,
+        )
+    assert contract_path.read_bytes() == before
+
+    receipt["baseBranch"] = "codex/paused-task"
+    receipt_file.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+    with pytest.raises(ResumeError, match="Needed a single revision"):
+        resume_contract(
+            contract_path,
+            base_remote="missing",
+            base_branch="main",
+            project_root=root,
+        )
+    assert contract_path.read_bytes() == before
+
+
+def test_resume_cli_reports_success_and_failure(tmp_path, monkeypatch, capsys):
+    root, contract_path, _receipt_file, _start, _target = _resume_fixture(tmp_path)
+    monkeypatch.setattr(ai_resume_work_item, "PROJECT_ROOT", root)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_resume_work_item.py",
+            "--contract",
+            str(contract_path.relative_to(root)),
+            "--base-remote",
+            "origin",
+            "--base-branch",
+            "main",
+        ],
+    )
+    assert ai_resume_work_item.main() == 0
+    assert "Work Item resume recorded:" in capsys.readouterr().out
+
+    def reject(*_args, **_kwargs):
+        raise ResumeError("rejected")
+
+    monkeypatch.setattr(ai_resume_work_item, "resume_contract", reject)
+    assert ai_resume_work_item.main() == 1
+    assert "Work Item resume failed: rejected" in capsys.readouterr().out
+
+
+def test_resume_helpers_reject_malformed_inputs_with_specific_diagnostics(tmp_path):
+    malformed = tmp_path / "malformed.json"
+    malformed.write_text("{", encoding="utf-8")
+    with pytest.raises(ResumeError, match="Contract cannot be read"):
+        ai_resume_work_item._load_json(malformed, "Contract")
+
+    malformed.write_text("[]", encoding="utf-8")
+    with pytest.raises(ResumeError, match="Contract must be a JSON object"):
+        ai_resume_work_item._load_json(malformed, "Contract")
+
+    target = "a" * 40
+    with pytest.raises(ResumeError, match="predecessorWorkItem must be an evidence object"):
+        ai_resume_work_item._predecessor_transition_fields({}, target)
+
+    predecessor = _closed_predecessor("corrective", target, "manifest.json")
+    predecessor["closure"]["localBranchDeleted"] = False
+    with pytest.raises(ResumeError, match="predecessor closure is incomplete"):
+        ai_resume_work_item._predecessor_transition_fields(
+            {"predecessorWorkItem": predecessor}, target
+        )
+
+    predecessor = _closed_predecessor("", target, "manifest.json")
+    with pytest.raises(ResumeError, match="predecessor Work Item ID is missing"):
+        ai_resume_work_item._predecessor_transition_fields(
+            {"predecessorWorkItem": predecessor}, target
+        )
+
+    predecessor = _closed_predecessor("corrective", target, "")
+    with pytest.raises(ResumeError, match="predecessor archive manifest path is missing"):
+        ai_resume_work_item._predecessor_transition_fields(
+            {"predecessorWorkItem": predecessor}, target
+        )
+
+
+def test_resume_contract_rejects_contract_outside_repository(tmp_path):
+    repository = tmp_path / "repository"
+    repository.mkdir()
+    outside = tmp_path / "outside.contract.json"
+    outside.write_text('{"workItemId":"outside"}\n', encoding="utf-8")
+
+    with pytest.raises(ResumeError, match="Contract must be inside the repository"):
+        resume_contract(
+            outside,
+            base_remote="origin",
+            base_branch="main",
+            project_root=repository,
+        )
 
 
 def test_start_receipt_rejects_missing_binding_and_receipt():

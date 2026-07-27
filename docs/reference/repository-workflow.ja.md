@@ -30,6 +30,24 @@ keywords:
 - 自動 merge や、`ai-close-work-item` が branch ownership を確認する前の自動 branch 削除を有効にしない。
 - Contract と Summary の片方だけを削除しない。
 
+## Corrective 後の再開
+
+process corrective のため停止した Work Item は、corrective の PR、archive、
+`ai-close-work-item`、branch cleanup、base 同期が完了するまで再開しません。
+完了後、元の専用 branch を最新 remote default branch へ rebase し、
+`predecessorWorkItem` を corrective の closure 証跡へ更新して、次を実行します。
+
+```sh
+make ai-resume-work-item CONTRACT=<active-contract> \
+  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
+```
+
+元の Start Receipt は変更されません。コマンドが Git ancestry、開始時の専用
+branch、正確な predecessor merge、closure postconditions、archive manifest と
+digest を確認し、append-only な `resumeHistory` を追加した場合だけ Contract の
+baseline を進めます。Receipt、`baseCommit`、history の手編集や不連続な chain は
+fail closed です。成功後は Preflight と古くなった検証を再実行します。
+
 ## 導入・アップグレード
 
 導入とアップグレードは導入先プロジェクトの履歴に属します。移動中のテンプレートブランチではなく、公開済みテンプレート release tag を使用し、導入・設定・通常開発を別 Work Item に分けます。

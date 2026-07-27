@@ -42,6 +42,24 @@ Work Item を archive し、対応する PR が merge された後に `make ai-c
 
 `ai-close-work-item` は worktree を考慮します。base branch が別の worktree で checkout 済みの場合、その worktree が clean であることを確認し、そこで base を fast-forward と検証した後、Work Item worktree を detached にして local／remote の Work Item branch を削除します。過去の archive 証跡は保持します。ガバナンス複雑度レポートは `trackedFiles` を引き続き記録しますが、この値は観測値であり、archive 整合性と現在の Work Item 所有権は hard gate として残ります。
 
+停止中の Work Item を corrective predecessor のクローズ後に再開する場合は、専用
+branch を取得済みの最新 remote default branch へ rebase し、
+`predecessorWorkItem` を完了済み closure 証跡へ更新してから、次を実行します。
+
+```text
+make ai-resume-work-item \
+  CONTRACT=.ai/work-items/active/<task>.contract.json \
+  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
+```
+
+このコマンドは元の Start Receipt を変更せず、source-bound な
+`resumeHistory` transition を追加してから Contract の baseline を進めます。旧
+base が正確な predecessor merge の祖先であること、現在の branch が開始時と同じ
+専用 Work Item branch であること、predecessor の archive manifest と closure
+facts が有効であることを確認できない場合は fail closed です。Start Receipt、
+`baseCommit`、`resumeHistory` を手で編集してはいけません。再開後は Preflight
+をやり直し、古くなった検証をすべて再実行します。
+
 1. `make ai-start TASK=<task> TITLE="..." MODE=code` で Work Item を作成する。
 2. Contract の `scope`、`sources`、`acceptance`、`verification`、リスク評価、エージェント能力、実行判断を明確にする。
 3. 宣言したスコープ内のみ実装する。
