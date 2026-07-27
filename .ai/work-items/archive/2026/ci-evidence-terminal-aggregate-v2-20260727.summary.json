@@ -1,0 +1,753 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "ci-evidence-terminal-aggregate-v2-20260727",
+  "contractPath": ".ai/work-items/archive/2026/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+  "changedFiles": [
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Splits installation and release evidence ownership from template-smoke, gates both release Contract checks behind explicit release-preparation intent, and generates truthful three-Job evidence in a terminal if-always aggregate."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Regenerated the candidate SBOM because the workflow now contains three additional pinned Checkout action references."
+    },
+    {
+      "path": "release.json",
+      "reason": "Updates only the existing v0.5.42 SBOM digest projection to match the regenerated candidate SBOM; release identity and publication state are unchanged."
+    },
+    {
+      "path": ".ai/cockpit/release-digests.json",
+      "reason": "Regenerated the candidate digest manifest after the SBOM and release metadata projection changed."
+    },
+    {
+      "path": "scripts/check_ci_release_evidence.sh",
+      "reason": "Separates expected Head, workflow Head, required-job set, missing required Job, and conclusion consistency diagnostics while rejecting success evidence with failure reasons."
+    },
+    {
+      "path": "tests/test_ci_release_evidence.sh",
+      "reason": "Covers three-Job success, upstream failure with dependent skips, individual downstream failure, and each independent validator diagnostic."
+    },
+    {
+      "path": "tests/test_ci_quality_orchestration.py",
+      "reason": "Executes the actual release-evidence and terminal aggregate workflow scripts to prove ordinary-PR zero calls, explicit-intent fail-closed calls, complete success evidence, and preserved failure/skipped evidence."
+    },
+    {
+      "path": "docs/reference/ci-release-evidence.md",
+      "reason": "Documents terminal aggregation, explicit release-intent ownership, ordinary-PR not-applicable behavior, skipped Job preservation, and diagnostic boundaries."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Registers the replacement corrective Work Item, immutable superseded PR #410 evidence, and RFE-ISSUE-100/106/107 before WI-21 resumes."
+    },
+    {
+      "path": ".ai/work-items/starts/ci-evidence-terminal-aggregate-v2-20260727.json",
+      "reason": "Binds the Work Item start to origin/main 978809f9 and the initial Contract skeleton."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated Cockpit state for the active Work Item and, at archival, the no-active state."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "reason": "Immutable archived Contract produced by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "reason": "Immutable archived implementation and verification handoff produced by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ci-evidence-terminal-aggregate-v2-20260727.archive-manifest.json",
+      "reason": "Immutable archive evidence root produced by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index updated by ai-finish."
+    }
+  ],
+  "sourcesUsed": [
+    "AGENTS.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    ".github/workflows/smoke.yml",
+    "scripts/check_ci_release_evidence.sh",
+    "tests/test_ci_release_evidence.sh",
+    "tests/test_ci_quality_orchestration.py",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/410",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30272658885"
+  ],
+  "acceptanceEvidence": [
+    {
+      "acceptanceId": "A1",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly approved the terminal three-Job needs aggregate and permanent process correction."
+      },
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_ci_quality_orchestration.py",
+          "locator": "test_ci_evidence_is_terminal_and_requires_all_three_jobs and aggregate generator tests",
+          "verification": "aiScenarioCoverage"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A2",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User required the previously discovered ordinary-PR release-intent process error to be fixed before release."
+      },
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_ci_quality_orchestration.py",
+          "locator": "test_ordinary_pr_release_evidence_skips_all_release_contract_checks",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A3",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User required the correction to remain fail closed for real release preparation."
+      },
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_ci_quality_orchestration.py",
+          "locator": "test_explicit_release_intent_runs_release_contract_checks",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A4",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User supplied the required all-success, upstream-failure/skipped, and downstream-failure scenarios."
+      },
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_ci_release_evidence.sh",
+          "locator": "all_three, upstream_failed, and downstream_failed fixtures",
+          "verification": "aiScenarioCoverage"
+        },
+        {
+          "type": "test",
+          "path": "tests/test_ci_quality_orchestration.py",
+          "locator": "actual aggregate workflow script execution",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A5",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly required the misleading combined diagnostic to be split by root cause."
+      },
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_ci_release_evidence.sh",
+          "locator": "workflow_head_mismatch, required_set_mismatch, missing_job, and conclusion_mismatch exact stderr assertions",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A6",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User required the hosted PR #410 recurrence to be prevented by a permanent workflow regression."
+      },
+      "evidence": [
+        {
+          "type": "hosted_failure",
+          "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "locator": "PR #410 hosted run https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30272658885: release-evidence ordinary-PR failure and valid failed terminal aggregate",
+          "verification": "quality"
+        },
+        {
+          "type": "test",
+          "path": "tests/test_ci_quality_orchestration.py",
+          "locator": "ordinary-PR release workflow execution with zero make calls",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A7",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User instructed every process issue to be recorded for final unified improvement review."
+      },
+      "evidence": [
+        {
+          "type": "plan",
+          "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "locator": "PR #410 superseded boundary and RFE-ISSUE-100/106/107",
+          "verification": "aiWorkItem"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A8",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User authorized uninterrupted Contract-to-PR-to-merge-to-close execution and prohibited premature release."
+      },
+      "evidence": [
+        {
+          "type": "process",
+          "path": "AGENTS.md",
+          "locator": "one Work Item, one branch, one PR, archive, merge, ai-close-work-item, synchronize and clean",
+          "verification": "aiWorkItem"
+        }
+      ]
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Ordinary PR without explicit release-preparation intent.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_quality_orchestration.py::test_ordinary_pr_release_evidence_skips_all_release_contract_checks"
+      ]
+    },
+    {
+      "scenario": "Explicit release-preparation intent with controlled release paths changed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_quality_orchestration.py::test_explicit_release_intent_runs_release_contract_checks"
+      ]
+    },
+    {
+      "scenario": "All three required Jobs succeed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_quality_orchestration.py::test_aggregate_generator_records_all_successful_jobs",
+        "tests/test_ci_release_evidence.sh"
+      ]
+    },
+    {
+      "scenario": "template-smoke fails and dependent Jobs are skipped.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_quality_orchestration.py::test_aggregate_generator_preserves_failure_and_skipped_results",
+        "tests/test_ci_release_evidence.sh"
+      ]
+    },
+    {
+      "scenario": "A downstream required Job fails after template-smoke succeeds.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_release_evidence.sh"
+      ]
+    },
+    {
+      "scenario": "Required Job evidence is missing or source binding is wrong.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_release_evidence.sh",
+        "scripts/check_ci_release_evidence.sh"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:51:00.690960+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "5deca15d88ecc72d31c8db02487fe63af4a508d55b3e797c8874c2854aef0580",
+      "commandHash": "4e7a7e8331b9c4dafc9c49996013df8241477e7101efcbc373d56bf6e261ffc0",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "a8463b6770b18a95c0271d3b4a5a9364ae17e8da832fe8abf3221ac04f145022",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json work item contract check passed: .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json work item contract check passed: .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "outputBytes": 264
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:51:00.997098+00:00",
+      "exitCode": 0,
+      "durationMs": 243,
+      "outputDigest": "f8a80cb6bf46cda9ed58e5021f9a44bb8db02f9431539b834ab9192c909a1b3e",
+      "commandHash": "aaf5735044babad5ee55550f7c09b1f7d6e79c08b4627b1ddcbd6e7a3b4539fa",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "a8463b6770b18a95c0271d3b4a5a9364ae17e8da832fe8abf3221ac04f145022",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json scope guard passed: 11 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json scope guard passed: 11 changed path(s) covered",
+      "outputBytes": 195
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:51:01.217363+00:00",
+      "exitCode": 0,
+      "durationMs": 155,
+      "outputDigest": "02a6f5c8ad00c282446042bbf49d3634ea3ca4226b0f8b248f8a1f3da94241b7",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "a8463b6770b18a95c0271d3b4a5a9364ae17e8da832fe8abf3221ac04f145022",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/smoke.yml (.github/workflows/**) - CI workflow configuration. guard check completed: 3 warning(s) repor",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/smoke.yml (.github/workflows/**) - CI workflow configuration. guard check completed: 3 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 531
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:51:01.499144+00:00",
+      "exitCode": 0,
+      "durationMs": 219,
+      "outputDigest": "40faa0c93834a3b8bb7b91dc31329afe963d0ee7d56b050d50ecfda0729bef57",
+      "commandHash": "5afc49ef85656e7b599fa180b0ffeedebe93d0e5cae3f875bc8d7488074ec213",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "a8463b6770b18a95c0271d3b4a5a9364ae17e8da832fe8abf3221ac04f145022",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `ci-evidence-terminal-aggregate-v2-20260727` - Contract Hash: `8cdb5c9c3bdbc35a` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Co",
+      "outputTail": "tem completes archive, PR, hosted CI, merge, ai-close-work-item, branch cleanup, and base synchronization without publishing a release. ## Required Verification - `aiWorkItem`: passed - `aiScope`: passed - `aiGuards`: passed - `aiCheckpoint`: passed - `aiAgentRisk`: passed - `aiReviewPolicy`: passed - `aiBacktrack`: passed - `aiCoverage`: passed - `aiScenarioCoverage`: passed - `aiGuidelines`: passed - `aiSummary`: failed - `aiStatus`: passed - `aiStatusCheck`: passed - `aiStatusConsistency`: passed - `aiDiffOwnership`: passed - `quality`: passed ## Review Focus - Verify ordinary PR release-evidence invokes neither release Contract check. - Verify terminal aggregate records all three real results and validates failed evidence before returning failure. - Verify hosted run binds to the replacement PR Head and PR #410 remains immutable and superseded. ## Diff Ownership Preview - active_owned: `11`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sbom.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/ci-evidence-terminal-aggregate-v2-20260727.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `docs/reference/ci-release-evidence.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `scripts/check_ci_release_evidence.sh` — covered by Contract scope - [active_owned] `tests/test_ci_quality_orchestration.py` — covered by Contract scope - [active_owned] `tests/test_ci_release_evidence.sh` — covered by Contract scope ## Next Action - Run or record required verification: aiSummary",
+      "outputBytes": 6083
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:51:01.667272+00:00",
+      "exitCode": 0,
+      "durationMs": 104,
+      "outputDigest": "acf3b613527a02d2fc9588a3607376bb21a4b1fd520a98fc0eceb01741c43f8e",
+      "commandHash": "8955dab1def1d7bd678ea80718c80ffe8d2c0e62abf18ba04f4172d645fe3c66",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "a8463b6770b18a95c0271d3b4a5a9364ae17e8da832fe8abf3221ac04f145022",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json review policy matched 5 path(s) [review] .ai/work-items/starts/ci-evidence-terminal-aggregate-v2-20260727.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json [review] .github/workflows/smoke.yml review focus recorded: 3 item(s) report: target/ai_review_policy_report.jso",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json review policy matched 5 path(s) [review] .ai/work-items/starts/ci-evidence-terminal-aggregate-v2-20260727.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json [review] .github/workflows/smoke.yml review focus recorded: 3 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 502
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:51:02.078235+00:00",
+      "exitCode": 0,
+      "durationMs": 140,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "a8463b6770b18a95c0271d3b4a5a9364ae17e8da832fe8abf3221ac04f145022",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:51:02.232008+00:00",
+      "exitCode": 0,
+      "durationMs": 99,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "a8463b6770b18a95c0271d3b4a5a9364ae17e8da832fe8abf3221ac04f145022",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:51:02.351399+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "3519bcaf8c7e530670bf57270c6db199dec65e19b403b102bcd152e9faee7dae",
+      "commandHash": "26b323d31fbe001d12065869ab430d78c179687a5e2a5d7058646fece45b7ff8",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "a8463b6770b18a95c0271d3b4a5a9364ae17e8da832fe8abf3221ac04f145022",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 307
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:51:02.469630+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "a6834b7022d4a06defef381efec1a161814743b6c4fc76bae75348c28c3e9902",
+      "commandHash": "703e80e1ae96fd0109bf587701b25378e799548b725b8fe7cd145e4b1b7bf1f4",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "a8463b6770b18a95c0271d3b4a5a9364ae17e8da832fe8abf3221ac04f145022",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputBytes": 312
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:51:02.722531+00:00",
+      "exitCode": 0,
+      "durationMs": 199,
+      "outputDigest": "1be16e0bf96b995c1abc61e854455ceca7ca05b93007d091987737456815f2d8",
+      "commandHash": "ad0ff7eeb0a2e702858fde45af0b2a8621320793de144eae8dcb28927e5ad394",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "a8463b6770b18a95c0271d3b4a5a9364ae17e8da832fe8abf3221ac04f145022",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json ## Diff Ownership Preview - active_owned: `11`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sbom",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json ## Diff Ownership Preview - active_owned: `11`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sbom.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/ci-evidence-terminal-aggregate-v2-20260727.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `docs/reference/ci-release-evidence.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `scripts/check_ci_release_evidence.sh` — covered by Contract scope - [active_owned] `tests/test_ci_quality_orchestration.py` — covered by Contract scope - [active_owned] `tests/test_ci_release_evidence.sh` — covered by Contract scope",
+      "outputBytes": 1267
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:58:27.497866+00:00",
+      "exitCode": 0,
+      "durationMs": 444694,
+      "outputDigest": "5fd5f71a6c7a76ad8c50c633d359b7ac8fcaf3137376de0918c4adcab255b903",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "a8463b6770b18a95c0271d3b4a5a9364ae17e8da832fe8abf3221ac04f145022",
+      "outputSummary": "/usr/bin/make --no-print-directory quality-full PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate quality-fast --category orchestration --output target/quality/timing/quality-fast.json --log target/quality/logs/quality-fast.log -- /usr/bin/make --no-print-directory quality-fast PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate quality-heavy --category orchestration --output target/quality/timing/quality-heavy.json --log target/quality/logs/",
+      "outputTail": "/usr/bin/make --no-print-directory quality-full PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate quality-fast --category orchestration --output target/quality/timing/quality-fast.json --log target/quality/logs/quality-fast.log -- /usr/bin/make --no-print-directory quality-fast PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate quality-heavy --category orchestration --output target/quality/timing/quality-heavy.json --log target/quality/logs/quality-heavy.log -- /usr/bin/make --no-print-directory quality-heavy PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/summarize_quality_gates.py --input target/quality/timing --json-output target/quality/summary.json --markdown-output target/quality/summary.md quality gate summary written: target/quality/summary.json",
+      "outputBytes": 822
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:58:28.877530+00:00",
+      "exitCode": 0,
+      "durationMs": 211,
+      "outputDigest": "3f8876ea253450bb32f1d9cabfaedc870c5425faa6bdecff9655f978cb9e8dbb",
+      "commandHash": "0fbb04e1be46cffc7f28d42412bef65de261d5f757c141d9576fe6361cef21ae",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "865b043afc38b571222443546f48827563581df47b6731ea019b94aba2a60400",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 354
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:58:29.158023+00:00",
+      "exitCode": 0,
+      "durationMs": 226,
+      "outputDigest": "800617f3e968d974edb8ef95109ca316dcf14e263dcf2cfee838d4e7fa04e5d4",
+      "commandHash": "a4a7726c0e78030a0bf48a8337355ee60e6c456399bb2cbdcd0425299bba113a",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "865b043afc38b571222443546f48827563581df47b6731ea019b94aba2a60400",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 337
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:58:29.304157+00:00",
+      "exitCode": 0,
+      "durationMs": 79,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "865b043afc38b571222443546f48827563581df47b6731ea019b94aba2a60400",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:58:29.426116+00:00",
+      "exitCode": 0,
+      "durationMs": 67,
+      "outputDigest": "be800a2084c4ac3a9f5dd4425e933e38a12772430b2fd06a1ad567c67bc61d26",
+      "commandHash": "e8de3d8e0d1d834d069db5234665873d39cd87b9925d5f3cf0aae5356a0d9979",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "865b043afc38b571222443546f48827563581df47b6731ea019b94aba2a60400",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json --summary .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 317
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json CONTRACT=.ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T14:58:30.261427+00:00",
+      "exitCode": 0,
+      "durationMs": 112,
+      "outputDigest": "dce5b8857d89252b28e7a7658035d2a554858808790acfabaf2c3cd57685baf3",
+      "commandHash": "009503369177743a451a975b9b879b2806bf5fd6a3def5090c75da6167461120",
+      "contractHash": "8cdb5c9c3bdbc35aad03428ac174fc200a2932f1d7d5e2a5fb692d347c9c5363",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "worktreeDigest": "c1495377dae7f98db4dcceeeb848aefad8129cb328d1336602b19f86cc42fb28",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json ai summary check passed: .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json --contract .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.contract.json ai summary check passed: .ai/work-items/active/ci-evidence-terminal-aggregate-v2-20260727.summary.json",
+      "outputBytes": 343
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Preserve fail-closed behavior for explicit release preparation and verified or published evidence.",
+      "compliant": true,
+      "evidence": "Explicit intent runs both release Contract checks; validator strictness for verified/published evidence remains unchanged."
+    },
+    {
+      "guideline": "Use a fresh Work Item and replacement PR; never rewrite superseded archived evidence.",
+      "compliant": true,
+      "evidence": "The branch and Work Item started from origin/main 978809f9; PR #410 remains closed/unmerged and its archived evidence was not edited."
+    },
+    {
+      "guideline": "Add regression coverage for the hosted failure before applying the workflow correction.",
+      "compliant": true,
+      "evidence": "The two release-intent tests failed RED because release-evidence did not exist on origin/main, then passed after implementation."
+    },
+    {
+      "guideline": "Do not change release identity or publish provider assets.",
+      "compliant": true,
+      "evidence": "release.json, next-release.json, release-state.json, tags, Releases, and provider assets were not changed."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "CI and release evidence orchestration is release-blocking; local regressions are complete, while replacement hosted CI remains required before merge."
+  },
+  "generatedFiles": [
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "generator": ".venv/bin/python scripts/check_supply_chain.py sbom --write"
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "generator": "make generate-cockpit-status / make ai-finish"
+    },
+    {
+      "path": ".ai/cockpit/release-digests.json",
+      "generator": ".venv/bin/python scripts/check_supply_chain.py release --write"
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "generator": "make ai-finish"
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ci-evidence-terminal-aggregate-v2-20260727.archive-manifest.json",
+      "generator": "make ai-finish"
+    }
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "id": "RFE-ISSUE-100",
+      "category": "ci_evidence_structure",
+      "severity": "high",
+      "detail": "Generating required-job evidence inside template-smoke cannot observe Jobs that have not executed; the earlier combined error hid this structural impossibility.",
+      "resolution": "Moved generation to terminal ci-evidence with needs on all three Jobs, if: always(), real needs results, validation before failure return, and executable generator regressions.",
+      "status": "resolved"
+    },
+    {
+      "id": "RFE-ISSUE-106",
+      "category": "archive_status_sequence",
+      "severity": "medium",
+      "detail": "After archive but before commit, the no-active marker records zero transient changes while the required uncommitted archive bundle still exists; repair-ai-status cannot make status consistency pass in that phase.",
+      "resolution": "Recorded for the user's final process review; this Work Item follows the documented sequence of committing the immutable archive bundle before PR-boundary verification and does not weaken status checks.",
+      "status": "recorded"
+    },
+    {
+      "id": "RFE-ISSUE-107",
+      "category": "release_intent_boundary",
+      "severity": "high",
+      "detail": "PR #410 unconditionally ran check-release-state-consistency in release-evidence, blocking an ordinary non-release PR on historical release projections.",
+      "resolution": "Placed both release Contract checks exclusively inside explicit release-preparation intent and added an executable ordinary-PR zero-call regression.",
+      "status": "resolved"
+    },
+    {
+      "id": "RFE-ISSUE-108",
+      "category": "supply_chain_projection_check",
+      "severity": "medium",
+      "detail": "After regenerating the SBOM, direct sbom, provenance, and release supply-chain checks all passed even though release.json still carried the previous SBOM digest; only the seven-minute full release-distribution test exposed the mismatch.",
+      "resolution": "Updated the current digest projection without changing release identity. Recorded the missing fast cross-projection check for the user's final unified process-improvement decision.",
+      "status": "recorded"
+    },
+    {
+      "id": "RFE-ISSUE-109",
+      "category": "summary_validation_order",
+      "severity": "medium",
+      "detail": "ai-finish ran and passed the 431-second full quality gate before aiSummary rejected unregistered custom verification names and a hosted URL placed in a local path field.",
+      "resolution": "Removed the unregistered verification entries, represented hosted evidence through an existing local plan path plus URL locator, and passed check-ai-change-summary. Recorded the lack of an early schema-only Summary check for final process review.",
+      "status": "recorded"
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "high",
+      "area": "hosted_ci",
+      "detail": "Local tests cannot prove GitHub's needs results and event expressions; replacement hosted CI must show template-smoke, installation-smoke, release-evidence, and ci-evidence all succeed on the exact PR Head.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    },
+    {
+      "level": "medium",
+      "area": "process",
+      "detail": "RFE-ISSUE-106, RFE-ISSUE-108, and RFE-ISSUE-109 remain recorded for the user's final unified process-improvement decision; none is silently treated as resolved.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Verify ordinary PR release-evidence invokes neither release Contract check.",
+      "Verify terminal aggregate records all three real results and validates failed evidence before returning failure.",
+      "Verify hosted run binds to the replacement PR Head and PR #410 remains immutable and superseded."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "documented",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "verified"
+  },
+  "userCorrectionsCaptured": [
+    {
+      "correction": "The fix must be embedded in the process and regression checks so the same release failure cannot recur.",
+      "response": "The exact hosted control flow is now executed from the workflow YAML in tests, and validator failures are separated by root cause."
+    },
+    {
+      "correction": "Every process issue must be recorded while each Work Item continues; final improvement decisions happen after the plan.",
+      "response": "RFE-ISSUE-100/106/107/108/109 are recorded in both the plan and Summary, with RFE-ISSUE-106/108/109 intentionally left for final review."
+    }
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Ordinary PR release checks must not recur.",
+      "mechanism": "Executable workflow-script regression asserts no make call exists when RELEASE_PREPARATION_INTENT=false.",
+      "evidence": "tests/test_ci_quality_orchestration.py::test_ordinary_pr_release_evidence_skips_all_release_contract_checks"
+    },
+    {
+      "correction": "Three required Jobs must be complete and truthful.",
+      "mechanism": "Terminal needs graph plus executable all-success and failure/skipped generator scenarios and strict validator fixtures.",
+      "evidence": "tests/test_ci_quality_orchestration.py and tests/test_ci_release_evidence.sh"
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "8cdb5c9c3bdbc35a",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "8cdb5c9c3bdbc35a",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "Replacement hosted CI has not yet executed.",
+    "PR merge, ai-close-work-item, remote/local branch cleanup, and base synchronization remain.",
+    "RFE-ISSUE-106, RFE-ISSUE-108, and RFE-ISSUE-109 remain recorded for final process review."
+  ],
+  "overclaimPrevention": "Focused local regressions prove workflow script behavior and validator boundaries, not hosted provider success or lifecycle closure; no release or performance success is claimed.",
+  "archiveSequence": 615
+}

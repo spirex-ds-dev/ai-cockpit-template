@@ -91,6 +91,7 @@ keywords:
 | WI-20 | quality-gate-performance-architecture-20260727 | 在不降低可信度的前提下优化 `make quality` 与 GitHub Actions：去重、Fast/Full/Release 分层、计时证据、安全并行和安装/Release 职责拆分 | Gate timing/summary、调用图去重、Workflow ownership、scope/cache/并行测试、五类场景性能证据 |
 | WI-21 | quality-gate-performance-completion-20260727 | 完成 WI-20 尚未闭合的 Workflow Job 拆分、逐门禁计时和 hosted 前后性能证据 | 独立 Job ownership、逐门禁 timing/log/digest、五类 hosted before/after evidence、三语文档和双向追踪 |
 | corrective | process-evidence-release-preflight-20260727 | 修复 WI-21 暴露的点名文件追踪、hosted Summary schema、归档路径/digest、显式发布意图和 CI 失败证据结构 | 当前执行；完成后恢复 WI-21 |
+| corrective | ci-evidence-terminal-aggregate-v2-20260727 | 用末端聚合记录三个 required Job 的真实状态，并将所有发布 Contract 检查限定在显式发布准备意图内 | 替代未合并的 PR #410；本地回归、replacement PR、hosted 三 Job/aggregate evidence、merge/close/branch cleanup |
 
 严格执行以下五阶段顺序：
 
@@ -108,6 +109,14 @@ WI-21 的 PR #408 又暴露了 RFE-ISSUE-094（source-bound evidence 维护误�
 Corrective Work Item 质量门又记录 RFE-ISSUE-096：显式 release intent 改造初次删除了现有 workflow regression 依赖的事件边界注释，已恢复注释并保留新 intent 门禁；coverage 84.97% 也按 fail-closed 停止，补充分支回归后再重跑，不降低 85% 门槛。
 
 Corrective Work Item 最终收尾又记录 RFE-ISSUE-097：Contract 变更后，Summary 的 before_edit checkpoint hash 未同步，`aiAgentRisk` 按设计 fail-closed；已刷新 before_edit/before_finish 两个检查点并通过，保留该恢复步骤作为后续收尾流程要求。
+
+PR #410 的 hosted run `30272658885` 证明末端聚合能如实记录 `template-smoke=success`、`installation-smoke=success`、`release-evidence=failure`，但也暴露三个必须保留到最终流程复核的问题。`RFE-ISSUE-100`（CI evidence 结构，高）：required Job 列表曾在上游 `template-smoke` 内生成，结构上无法取得尚未执行的下游最终状态；修复必须固定为 `if: always()` 的末端 Job，从 `needs.<job>.result` 生成完整证据并先验证失败证据再返回失败。`RFE-ISSUE-106`（归档/状态恢复，中）：归档后、提交前的 transient diff 与 no-active status marker 语义冲突，提示的 `repair-ai-status` 无法消除该阶段差异；本工单只记录并遵循“先提交归档 bundle，再执行 PR 边界”，最终统一判断是否需要改进状态流程。`RFE-ISSUE-107`（发布意图边界，高）：PR #410 在普通 PR 上无条件执行 `check-release-state-consistency`，使非发布变更被历史发布 projection 阻塞；替代工单必须用可执行 workflow 回归证明普通 PR 两个发布 Contract 检查均为零调用，只有显式发布准备意图才 fail closed 执行。
+
+PR #410 已作为 superseded corrective PR 关闭且未合并，归档证据保持不可变。依照 Work Item 生命周期规则，修复由最新 `origin/main` 上的新工单 `ci-evidence-terminal-aggregate-v2-20260727` 和 replacement PR 完整交付；在其 hosted 三 Job 与末端 aggregate evidence 全部成功、PR 合并、`ai-close-work-item` 和本地/远端分支清理完成前，WI-21 不得恢复。
+
+替代工单首次完整质量门记录 `RFE-ISSUE-108`（供应链投影检查，中）：workflow 变化使 SBOM 重建后，`check_supply_chain.py sbom`、`provenance`、`release` 均通过，但 `release.json.supplyChain.sbomDigest` 仍引用旧 SBOM，直到约七分钟后的全量 `test_release_distribution` 才发现跨文件失配。本工单只对齐既有 v0.5.42 digest projection，不改变 release identity、Tag 或发布状态；“快速供应链检查应直接覆盖 release metadata projection”保留到计划完成后的统一流程改进评估，不以重复长测试代替问题记录。
+
+替代工单第三次完整质量门通过后记录 `RFE-ISSUE-109`（Summary 校验顺序，中）：`ai-finish` 在 431 秒 full quality 之后才由 `aiSummary` 发现三个未注册的自定义 verification 名称和一个被错误放入本地 `path` 字段的 hosted URL。已删除非 registry verification，并以现有本地计划路径加 URL locator 表示 hosted evidence，`check-ai-change-summary` 随后通过；“在长质量门前提供不要求所有 verification 已通过的 Summary schema-only 检查”保留到计划完成后的统一流程评估。
 
 当前已启动的 `publish-new-version-20260727` 只作为发布准备占位工单处理，不执行 provider publication；它完成后必须先关闭，再按上述五阶段顺序启动 WI-21 和后续 corrective Work Item。实际发布必须使用新的、单独的 WI-18 发布 Contract。
 
