@@ -1,0 +1,277 @@
+{
+  "contractVersion": 2,
+  "workItemId": "no-active-archive-status-diagnostic-20260728",
+  "mode": "code",
+  "title": "Clarify no-active archive status diagnostics",
+  "baseCommit": "464207945c5f5a989f9d060ee6dbf89f3f88c55c",
+  "predecessorWorkItem": {
+    "workItemId": "preflight-planned-scenario-transition-20260728",
+    "status": "closed",
+    "pr": {
+      "number": 412,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/412",
+      "mergeCommit": "464207945c5f5a989f9d060ee6dbf89f3f88c55c"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/preflight-planned-scenario-transition-20260728.archive-manifest.json"
+    }
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/no-active-archive-status-diagnostic-20260728.contract.json",
+    ".ai/work-items/active/no-active-archive-status-diagnostic-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    "scripts/ai_check_status_consistency.py",
+    "tests/test_core_gates.py",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    "docs/superpowers/specs/2026-07-28-no-active-archive-status-diagnostic-design.md",
+    "docs/superpowers/plans/2026-07-28-no-active-archive-status-diagnostic.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": [
+    "Ignoring arbitrary uncommitted start receipts or unrelated worktree changes",
+    "Weakening active Contract and Summary pair validation",
+    "Changing archive digest, sequence, or manifest integrity rules",
+    "Resuming the paused deep-performance implementation",
+    "Publishing or changing release identity"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_status_consistency.py",
+      "reason": "live_no_active_changed_files excludes archive paths but currently counts the matching start receipt, making an archive bundle internally inconsistent before its first commit."
+    },
+    {
+      "path": "scripts/ai_generate_status.py",
+      "reason": "No-active status intentionally records zero transient changes, so the consistency checker must recognize the same governed archive boundary."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Existing tests prove arbitrary live changes remain fail closed and provide the regression location for pre-commit archive bundles."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-planned-scenario-transition-20260728.archive-manifest.json",
+      "reason": "The completed predecessor provides a real contract/summary/manifest/start-receipt bundle that reproduced RFE-ISSUE-116."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "The comprehensive plan is the required durable process-problem record."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_change",
+      "lifecycle_diagnostic",
+      "fail_closed_boundary"
+    ],
+    "reason": "Over-broad filtering could hide an orphan start receipt or unrelated change; the exception must be bound to a same-task changed Contract, Summary, and valid archive manifest.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized recording and fixing discovered process defects before resuming planned work and instructed continuous execution."
+  },
+  "preReviewWarnings": [
+    "Confirm only a same-task changed archive Contract, Summary, and valid manifest can exempt a start receipt.",
+    "Confirm an orphan or historical start receipt still causes no-active consistency failure.",
+    "Confirm post-commit no-active consistency remains unchanged."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Before the first archive-bundle commit, no-active status consistency ignores only the start receipt whose same-task Contract, Summary, and valid archive manifest are all present in the current Git change set.",
+    "An orphan start receipt, a receipt paired only with historical archive files, an incomplete changed archive pair, or any unrelated changed path remains visible and causes the no-active consistency check to fail closed.",
+    "After the archive bundle is committed, no-active status consistency continues to pass with zero live changes.",
+    "Archive integrity is not inferred from filenames alone: the manifest must use the supported format, name the same Work Item, and bind the expected Contract and Summary paths.",
+    "The repair command no longer loops on a valid pre-commit archive bundle, while stale or unrelated state still returns an actionable failure.",
+    "English and Japanese runtime guidance describe the archive-before-commit boundary and do not imply that arbitrary dirty worktrees are accepted.",
+    "RFE-ISSUE-116 is recorded in the comprehensive plan and bidirectionally mapped to implementation, regression tests, and lifecycle verification.",
+    "The corrective completes preflight/checkpoints, TDD, full quality, archive, PR, hosted CI, merge, ai-close, and branch cleanup before deep-performance work resumes."
+  ],
+  "guidelines": [
+    "No-active status may omit only transient evidence that is structurally owned by the archive transaction.",
+    "Filename coincidence alone is not sufficient evidence of archive ownership.",
+    "Unrelated worktree changes remain fail closed and visible to the diagnostic.",
+    "Error recovery must be executable; do not recommend repair when repair cannot change the blocking condition."
+  ],
+  "intent": {
+    "problem": "Immediately after ai-finish archives a valid Work Item but before the archive bundle is committed, current_status.md intentionally records zero transient changes while live_no_active_changed_files counts the matching start receipt. check-ai-status-consistency then fails and recommends repair-ai-status, but repair regenerates the same status and fails again.",
+    "constraints": [
+      "Exclude only a start receipt owned by a same-task archive transaction visible in the current Git change set.",
+      "Validate the archive manifest identity and expected Contract/Summary paths before treating the receipt as transaction-owned.",
+      "Keep orphan receipts, historical-only pairs, incomplete pairs, and unrelated changes fail closed.",
+      "Do not edit predecessor archive evidence or resume performance/release changes in this corrective."
+    ],
+    "rationale": "Status generation already excludes transient archive paths; applying the same narrow transaction boundary to the matching start receipt makes pre-commit and post-commit lifecycle states consistent without hiding unrelated dirt."
+  },
+  "rawUserRequest": "每个工单遇到流程问题必须记录并先修流程；RFE-ISSUE-116 显示归档后提交前的 no-active consistency 误把同一 archive transaction 的 start receipt 当作状态漂移，并给出无法奏效的 repair 建议。先完成独立 corrective 的完整生命周期，再恢复性能工单。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-process-first-continuous-execution",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-process-first-continuous-execution"
+  },
+  "declaredIntent": {
+    "summary": "Make no-active status consistency understand the narrowly bound pre-commit archive transaction while preserving fail-closed diagnostics for every unrelated change.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A valid same-task pre-commit archive bundle does not make no-active status inconsistent.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_status_consistency_accepts_transaction_owned_archive_start_receipt"
+      ],
+      "expected": "The matching start receipt is classified as archive-transaction evidence and the consistency check passes.",
+      "verificationPlan": "Add a regression with changed Contract, Summary, valid manifest, index, and start receipt, then assert live changes are empty and validation passes."
+    },
+    {
+      "scenario": "Incomplete, historical-only, or malformed archive evidence cannot hide a start receipt.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_status_consistency_rejects_unowned_archive_start_receipt",
+        "tests/test_core_gates.py::test_status_consistency_rejects_receipt_paired_only_with_historical_archive",
+        "tests/test_core_gates.py::test_status_consistency_rejects_malformed_changed_archive_manifest"
+      ],
+      "expected": "The receipt remains in live changes and no-active consistency fails with an actionable diagnostic.",
+      "verificationPlan": "Add parameterized negative regressions for missing changed pair members, unchanged historical files, manifest identity/path mismatch, and an orphan receipt."
+    },
+    {
+      "scenario": "Unrelated dirty paths and normal post-commit no-active state retain existing behavior.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_status_consistency_rejects_live_no_active_changes",
+        "tests/test_core_gates.py::test_status_consistency_accepts_clean_post_commit_no_active_state"
+      ],
+      "expected": "Unrelated paths fail closed; a clean post-commit repository passes with zero live changes.",
+      "verificationPlan": "Preserve the existing arbitrary-change regression and add an explicit clean post-commit case alongside focused status tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized fixing discovered process defects before resuming planned work; this approval is limited to the declared governance code and documentation and excludes release."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 619
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/no-active-archive-status-diagnostic-20260728.json",
+    "baseCommit": "464207945c5f5a989f9d060ee6dbf89f3f88c55c",
+    "initialScopeDigest": "e4ca0bc59374e72c467bfb1563631d030666801fdb69bc54bc3ab2df4f0556c9",
+    "contractSkeletonDigest": "7070bddcb8bb07a175d093b34a758ab2dbd297d4525c9e9a61a7ced155a962d1"
+  }
+}
