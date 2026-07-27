@@ -1,0 +1,280 @@
+{
+  "contractVersion": 2,
+  "workItemId": "preflight-planned-scenario-transition-20260728",
+  "mode": "code",
+  "title": "Allow planned scenario verification before implementation",
+  "baseCommit": "f00ac8b3a86816c5fa541955603aee9ca12a9beb",
+  "predecessorWorkItem": {
+    "workItemId": "quality-gate-performance-completion-20260727",
+    "status": "closed",
+    "pr": {
+      "number": 408,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/408",
+      "mergeCommit": "f00ac8b3a86816c5fa541955603aee9ca12a9beb"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.archive-manifest.json"
+    }
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/preflight-planned-scenario-transition-20260728.contract.json",
+    ".ai/work-items/active/preflight-planned-scenario-transition-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    "scripts/ai_common.py",
+    "scripts/ai_preflight_review.py",
+    "scripts/ai_start.py",
+    "tests/test_preflight_review.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_scenario_coverage_gate.py",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    ".ai/glossary.md",
+    "templates/glossary.md",
+    "docs/superpowers/specs/2026-07-28-preflight-planned-scenario-transition-design.md",
+    "docs/superpowers/plans/2026-07-28-preflight-planned-scenario-transition.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json"
+  ],
+  "outOfScope": [
+    "Treating a human decision as a generic bypass for missing intent, scope, unknowns, acceptance, sources, capability, or verification",
+    "Allowing ai-finish or Scenario Coverage Guard to accept required unverified scenarios",
+    "Changing the enforced Preflight policy to advisory or removing blocked statuses",
+    "Implementing the paused deep-performance optimization in this corrective Work Item",
+    "Publishing a release or changing release identity"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "reason": "Current Scenario Coverage signal maps every required unverified scenario to Partial and therefore blocks implementation."
+    },
+    {
+      "path": "scripts/ai_check_scenario_coverage.py",
+      "reason": "Finish-time guard independently requires verified evidence or an explicit risk path; it must remain fail closed."
+    },
+    {
+      "path": "tests/test_preflight_review.py",
+      "reason": "Existing regressions prove missing evidence blocks, matching Decision Evidence remains paused, and fully verified Contracts are ready."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Existing lifecycle tests cover status refresh and ai-start rollback boundaries."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "RFE-ISSUE-052, RFE-ISSUE-065, and RFE-ISSUE-111 document the repeated dead-end transition and user-authorized corrective order."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_change",
+      "preflight_bypass",
+      "lifecycle_atomicity"
+    ],
+    "reason": "A permissive Preflight transition could become a governance bypass, while non-atomic ai-start failure can dirty authoritative status before a Work Item exists.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized fixing discovered process defects before resuming the performance Work Item and instructed continuous execution without another confirmation."
+  },
+  "preReviewWarnings": [
+    "Review that planned verification cannot mask missing or ambiguous Contract evidence.",
+    "Review that finish-time required scenario evidence remains unchanged and fail closed.",
+    "Review ai-start rollback so a rejected start leaves status bytes unchanged."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A medium/high-risk code Contract whose required unverified scenarios each declare non-empty expected and verificationPlan fields derives Scenario Coverage=Ready for implementation planning, with evidence explicitly stating that verification is planned rather than complete.",
+    "A required unverified scenario missing expected or verificationPlan remains Partial and causes enforced Preflight to return needs_human_confirmation.",
+    "Missing intent, unknown review, scope, outOfScope, sources, acceptance, verification, capability, or blocked execution decisions continue to produce needs_human_confirmation or not_ready; Decision Evidence does not override them.",
+    "The finish-time Scenario Coverage Guard still returns an error for required unverified Summary scenarios, including scenarios that had a Contract verificationPlan.",
+    "A failed ai-start lifecycle preflight restores current_status.md byte-for-byte and leaves no active Contract, Summary, start receipt, or Decision Evidence.",
+    "English and Japanese runtime guidance and canonical glossaries distinguish implementation-readiness planning from verified completion evidence.",
+    "RFE-ISSUE-052, RFE-ISSUE-065, RFE-ISSUE-111, and the newly observed ai-start atomicity issue are mapped to executable tests and the comprehensive plan.",
+    "The corrective completes Contract→preflight/checkpoint→TDD implementation→quality→Summary/archive→PR/Hosted CI→merge→ai-close→branch cleanup→main synchronization before the performance Work Item resumes."
+  ],
+  "guidelines": [
+    "Evidence over Self-Declaration remains the controlling principle.",
+    "Planned verification is permission to implement, never evidence that implementation passed.",
+    "A failed lifecycle command must not leave tracked governance state changed.",
+    "Prefer a narrow state derivation over policy weakening or human-approval bypass."
+  ],
+  "intent": {
+    "problem": "The enforced Preflight has no legal transition for medium/high-risk code Work Items whose required scenarios can only be verified after implementation: unverified scenarios force needs_human_confirmation, matching human Decision Evidence becomes human_decision_recorded and remains blocked, and marking scenarios verified before implementation would misstate evidence. During reproduction, ai-start also rewrote no-active current_status before rejecting a dirty lifecycle state.",
+    "constraints": [
+      "Do not weaken the enforced Preflight policy or treat human approval as a generic bypass.",
+      "Require explicit expected and verificationPlan fields for every required unverified scenario admitted to implementation.",
+      "Keep Summary Scenario Coverage and ai-finish fail closed until actual evidence verifies each required scenario.",
+      "Make failed ai-start operations atomic with respect to tracked status and generated Work Item artifacts.",
+      "Do not modify performance implementation or release state in this corrective."
+    ],
+    "rationale": "Separating implementation readiness from completion evidence removes the repeated deadlock while preserving the Trust Layer boundary: a concrete test plan may authorize coding, but only executed evidence may authorize finish and merge."
+  },
+  "rawUserRequest": "每个工单执行时如果发现流程问题先记录并修复流程，再继续原工单；计划完成后统一确认是否改善。当前发现 Preflight 对实现后才能验证的 required scenarios 没有合法 ready 转移，必须先完成独立 corrective 的完整 PR、合并、关闭和分支清理流程。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-process-defect-before-performance-resume",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-process-first-continuous-execution"
+  },
+  "declaredIntent": {
+    "summary": "Create a fail-closed implementation-ready transition for concrete planned scenario verification and make rejected ai-start operations atomic.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Missing or ambiguous Contract evidence does not become implementation-ready.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_preflight_review.py::test_conservative_contract_stays_advisory",
+        "tests/test_preflight_review.py::test_gate_blocks_until_preflight_recomputes_ready"
+      ]
+    },
+    {
+      "scenario": "Matching human Decision Evidence remains bound to the current Contract and does not turn a non-ready Contract into ready.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_preflight_review.py::test_valid_decision_evidence_is_bound_to_current_preflight_hash",
+        "tests/test_preflight_review.py::test_stale_or_wrong_decision_evidence_is_rejected"
+      ]
+    },
+    {
+      "scenario": "A fully evidenced Contract with verified required scenarios derives ready.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_preflight_review.py::test_ready_contract_derives_ready_preflight_review"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized fixing discovered process defects before resuming the Work Item and instructed continuous execution; this approval is limited to the declared governance documentation and code scope and does not authorize release."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 618
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/preflight-planned-scenario-transition-20260728.json",
+    "baseCommit": "f00ac8b3a86816c5fa541955603aee9ca12a9beb",
+    "initialScopeDigest": "06d36647a3a60b8e91f037cd3804ff64ea4526a1b2df65625e93f668d233df86",
+    "contractSkeletonDigest": "76d24cf0e936a5a6d50927e4b6ae18c1c665ed54a9a2a41952eda46f8176ee2d"
+  }
+}
