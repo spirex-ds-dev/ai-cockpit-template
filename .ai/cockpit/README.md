@@ -55,6 +55,8 @@ V2.6 adds a generic `Scenario Coverage` signal for medium/high risk Work Items. 
 
 V2.6.5 adds Preflight Review. It follows the principle of **Evidence over Self-Declaration**: implementation readiness is derived from Contract evidence, not from agent confidence. `make ai-start TASK=<task> TITLE="..." MODE=code` and `make ai-preflight` surface that review before implementation begins. The template default is the enforced profile: `needs_human_confirmation`, `human_decision_recorded`, and `not_ready` stop the governance path. A repository that needs compatibility behavior may explicitly use an advisory policy with `profile: advisory`, `gateEnabled: false`, and `blockedStatuses: []`; advisory mode is not the formal Trust Layer proof.
 
+For a medium/high-risk code Work Item, a required scenario that cannot be executed until after implementation may be implementation-ready only when the Contract records both a non-empty expected result and a non-empty `verificationPlan`. The Preflight evidence then says that verification is planned, not complete. This transition permits implementation only: the Summary Scenario Coverage Guard and `ai-finish` still require executed evidence and fail closed while a required scenario remains `unverified`.
+
 When `.ai/guards/preflight_review_policy.yaml` uses the enforced profile, the pause is a fail-closed Human Decision Gate. Decision Evidence is stored in the active Summary under `decisionEvidence` with `decisionId`, `decision`, `workItemId`, `contractHash`, `preflightHash`, `recordedAt`, and `recordedBy`. Record a selected option from the current request with:
 
 ```text

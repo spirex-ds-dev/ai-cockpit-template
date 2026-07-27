@@ -4,6 +4,7 @@ from pathlib import Path
 
 import ai_preflight_review
 import pytest
+from ai_common import validate_scenario_coverage
 
 
 def write_contract(path: Path, data: dict) -> None:
@@ -54,6 +55,21 @@ def ready_contract() -> dict:
     }
 
 
+def planned_scenario_contract() -> dict:
+    contract = ready_contract()
+    contract["scenarioCoverage"] = [
+        {
+            "scenario": "implementation-dependent behavior",
+            "required": True,
+            "status": "unverified",
+            "expected": "The implemented behavior passes its focused regression.",
+            "verificationPlan": "Run tests/test_feature.py::test_behavior after implementation.",
+            "evidence": [],
+        }
+    ]
+    return contract
+
+
 def conservative_contract() -> dict:
     return {
         "workItemId": "task",
@@ -76,6 +92,40 @@ def signal_map(report: dict) -> dict[str, str]:
     return {item["name"]: item["value"] for item in report["signals"]}
 
 
+def test_scenario_verification_plan_rejects_empty_value():
+    issues = validate_scenario_coverage(
+        [
+            {
+                "scenario": "implementation-dependent behavior",
+                "required": True,
+                "status": "unverified",
+                "expected": "The behavior is verified after implementation.",
+                "verificationPlan": "",
+                "evidence": [],
+            }
+        ]
+    )
+
+    assert "scenarioCoverage[0].verificationPlan must be a non-empty string when provided" in issues
+
+
+def test_scenario_verification_plan_accepts_non_empty_value():
+    issues = validate_scenario_coverage(
+        [
+            {
+                "scenario": "implementation-dependent behavior",
+                "required": True,
+                "status": "unverified",
+                "expected": "The behavior is verified after implementation.",
+                "verificationPlan": "Run tests/test_feature.py::test_behavior.",
+                "evidence": [],
+            }
+        ]
+    )
+
+    assert issues == []
+
+
 def test_ready_contract_derives_ready_preflight_review(tmp_path):
     contract = tmp_path / "task.contract.json"
     write_contract(contract, ready_contract())
@@ -86,6 +136,44 @@ def test_ready_contract_derives_ready_preflight_review(tmp_path):
     )
 
     assert report["status"] == "ready"
+
+
+def test_planned_scenario_contract_derives_ready_without_claiming_verification(tmp_path):
+    contract = planned_scenario_contract()
+    path = tmp_path / "task.contract.json"
+    write_contract(path, contract)
+
+    report = ai_preflight_review.derive_report(
+        contract,
+        contract_path=path,
+        policy_path=Path("/tmp/preflight_review_policy.yaml"),
+    )
+    scenario_signal = next(
+        item for item in report["signals"] if item["name"] == "Scenario Coverage"
+    )
+
+    assert report["status"] == "ready"
+    assert scenario_signal["value"] == "Ready"
+    assert scenario_signal["evidence"] == [
+        "1 required scenario(s) are planned for verification; 0 are already verified or not_applicable"
+    ]
+
+
+@pytest.mark.parametrize("missing_field", ["expected", "verificationPlan"])
+def test_planned_scenario_missing_required_detail_needs_human_confirmation(tmp_path, missing_field):
+    contract = planned_scenario_contract()
+    del contract["scenarioCoverage"][0][missing_field]
+    path = tmp_path / "task.contract.json"
+    write_contract(path, contract)
+
+    report = ai_preflight_review.derive_report(
+        contract,
+        contract_path=path,
+        policy_path=Path("/tmp/preflight_review_policy.yaml"),
+    )
+
+    assert report["status"] == "needs_human_confirmation"
+    assert signal_map(report)["Scenario Coverage"] == "Partial"
 
 
 def test_preflight_signals_expose_shared_protocol_envelope(tmp_path):

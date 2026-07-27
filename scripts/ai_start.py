@@ -93,8 +93,24 @@ def refresh_stale_no_active_status(issues: list[str]) -> list[str]:
         "cockpit status no-active state must not persist changed files; run `make repair-ai-status`",
     }
     if len(issues) == 1 and issues[0] in stale_messages:
-        write_no_active_status(DEFAULT_STATUS)
-        return validate_status_consistency()
+        previous_status = DEFAULT_STATUS.read_bytes() if DEFAULT_STATUS.exists() else None
+        try:
+            write_no_active_status(DEFAULT_STATUS)
+            refreshed_issues = validate_status_consistency()
+        except (OSError, RuntimeError, ValueError):
+            if previous_status is None:
+                DEFAULT_STATUS.unlink(missing_ok=True)
+            else:
+                DEFAULT_STATUS.parent.mkdir(parents=True, exist_ok=True)
+                DEFAULT_STATUS.write_bytes(previous_status)
+            raise
+        if refreshed_issues:
+            if previous_status is None:
+                DEFAULT_STATUS.unlink(missing_ok=True)
+            else:
+                DEFAULT_STATUS.parent.mkdir(parents=True, exist_ok=True)
+                DEFAULT_STATUS.write_bytes(previous_status)
+        return refreshed_issues
     return issues
 
 

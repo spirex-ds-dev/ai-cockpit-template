@@ -38,6 +38,29 @@ def test_required_unverified_hard_risk_fails_without_ack():
     )
 
 
+def test_planned_contract_metadata_does_not_satisfy_summary_completion():
+    contract = {"riskAssessment": {"level": "high", "riskTypes": ["security"]}}
+    summary = {
+        "scenarioCoverage": [
+            {
+                "scenario": "implementation-dependent behavior",
+                "required": True,
+                "status": "unverified",
+                "expected": "The behavior passes its focused regression.",
+                "verificationPlan": "Run tests/test_feature.py::test_behavior.",
+                "evidence": [],
+            }
+        ]
+    }
+
+    findings = ai_check_scenario_coverage.detect(contract, summary)
+
+    assert any(
+        item.kind == "required_scenario_unverified" and item.severity == "error"
+        for item in findings
+    )
+
+
 def test_missing_summary_is_reported():
     findings = ai_check_scenario_coverage.detect(
         {"riskAssessment": {"level": "high", "riskTypes": ["security"]}}, None

@@ -50,11 +50,13 @@ Work Item を archive し、対応する PR が merge された後に `make ai-c
 6. 生成されたステータスとアーカイブ済み Contract/Summary をレビューする。
 
 前置フローで導入準備状況を先に確認したい場合は `make ai-preflight` を実行してください。
-このターゲットは助言的な Preflight Review を生成してから検証します。既定では advisory のままで、policy が gate を有効にした場合のみ `needs_human_confirmation` や `not_ready` が失敗になります。
+このターゲットは Preflight Review を生成してから検証します。既定の enforced policy では、`needs_human_confirmation`、`human_decision_recorded`、`not_ready` は失敗になります。互換動作が必要なリポジトリだけが `profile: advisory`、`gateEnabled: false`、`blockedStatuses: []` を明示して advisory policy を選択できます。advisory mode は正式な Trust Layer の証明ではありません。
 `make generate-ai-preflight-review` は検証を行わずにレポートだけ生成したい場合に使えます。
 `make check-ai-preflight-review` は生成済みレポートの構造を検証し、policy が有効な場合のみ gate として動作します。
 
-V2.6.5 では Preflight Review を追加します。原則は **Evidence over Self-Declaration** で、実装可否は AI の自信ではなく Contract の証拠から派生させます。`make ai-start TASK=<task> TITLE="..." MODE=code` と `make ai-preflight` は実装前にこのレビューを表示します。既定では advisory のままで、`needs_human_confirmation` または `not_ready` の場合だけ、エージェントの作業フローは pause してユーザーへ報告します。
+V2.6.5 では Preflight Review を追加します。原則は **Evidence over Self-Declaration** で、実装可否は AI の自信ではなく Contract の証拠から派生させます。`make ai-start TASK=<task> TITLE="..." MODE=code` と `make ai-preflight` は実装前にこのレビューを表示します。既定は enforced profile であり、`needs_human_confirmation`、`human_decision_recorded`、`not_ready` の場合、ガバナンス経路を停止します。
+
+中高リスクの code Work Item で実装後にしか実行できない必須シナリオは、Contract に空でない期待結果と空でない `verificationPlan` の両方が記録されている場合だけ、実装開始の準備完了と判定できます。このとき Preflight 証拠が示すのは「検証予定」であり「検証完了」ではありません。この遷移が許可するのは実装だけです。Summary の Scenario Coverage Guard と `ai-finish` は実行済み証拠を引き続き必須とし、必須シナリオが `unverified` の間は fail closed を維持します。
 
 `notCodable: true`、`executionDecision.status` が `block` / `defer` / `needs_human_decision`、または実装不可・検証不可・人間判断要求を示す `agentCapability` は、直接 `not_ready` を導く明示的ブロッカーです。
 
@@ -82,7 +84,7 @@ make ai-onboard PHASE=3      # 導入準備のみ
 ## ライフサイクルチェック
 
 `make ai-start` は新しい skeleton 作成前にライフサイクル preflight を実行します。アクティブ Contract/Summary が不整合、複数 Work Item が同時アクティブ、`current_status.md` が実状態と不一致の場合は開始を拒否します。
-`MODE=code` ではさらに `make ai-preflight` を実行し、実装開始前に Preflight Review を表示します。`needs_human_confirmation` または `not_ready` の場合、エージェントはここで一度停止し、レビュー内容をユーザーへ報告してから実装判断を進めます。
+`MODE=code` ではさらに `make ai-preflight` を実行し、実装開始前に Preflight Review を表示します。`needs_human_confirmation`、`human_decision_recorded`、`not_ready` の場合、エージェントはここで停止し、レビュー内容をユーザーへ報告します。新しく再計算された `ready` の証拠が得られるまで、実装または finish へ進めません。
 
 Cockpit Status はレビュアー向けに Preflight Review を見えるままに保ちますが、実装前の pause の代わりにはなりません。
 

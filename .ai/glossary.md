@@ -20,7 +20,8 @@ description: AI Cockpit の主要用語とアーキテクチャ境界の定義�
 | Repository Truth | Summary によって表現される、変更・検証・リスク・整合性に関するリポジトリ上の事実。 |
 | Governance Compression | Repository Truth を人間の意思決定に必要な最小シグナルへ圧縮する層。V2.5 で導入され、V2.6 では Scenario Coverage を含む。Summary を複製せず、決定に必要な証拠だけを提示する。 |
 | Preflight Review | Work Item Contract の既存証拠から implementation 前の readiness を派生する助言的ビュー。AI の自己申告ではなく、Intent / Unknowns / Sources / Acceptance / Scope / OutOfScope / Scenario Coverage / Verification を根拠にする。`notCodable: true`、`executionDecision` の block/defer/needs_human_decision、または実装/検証不可・人間判断要求の `agentCapability` は直接 `not_ready` を導く。 |
-| Preflight Pause Rule | Preflight Review が `needs_human_confirmation` または `not_ready` の場合に、AI がユーザーへレビューを報告してから実装判断を続けるべきというワークフロー規則。コマンドの exit code とは独立する。 |
+| Preflight Pause Rule | Preflight Review が `needs_human_confirmation`、`human_decision_recorded`、`not_ready` の場合に、AI がユーザーへレビューを報告し、新しく再計算された `ready` の証拠が得られるまで実装または finish へ進まないというワークフロー規則。コマンドの exit code とは独立する。 |
+| Planned Scenario Verification | 実装後にしか検証できない必須シナリオについて、Contract に空でない期待結果と具体的な `verificationPlan` を記録し、実装準備を示す状態。検証完了の証拠ではないため、Summary Scenario Coverage Guard と `ai-finish` は実行済み証拠が揃うまで fail closed を維持する。 |
 | Scenario Coverage | 中高リスク Work Item で、どのリスクドメインのシナリオが verified / unverified / not_applicable なのかを示す通用的な証跡。シナリオ内容は Core ではなく Work Item が持つ。 |
 | Scenario Coverage Guard | `scenarioCoverage` の構造と、riskAssessment に応じた必須性を検証するガード。 |
 | Human Decision State | Cockpit が示す、人間が review / merge / block / investigate を判断するための状態。 |

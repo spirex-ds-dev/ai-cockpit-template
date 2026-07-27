@@ -1,0 +1,237 @@
+---
+author: Ray
+title: "Preflight Planned Scenario Transition Implementation Plan"
+description: Task-by-task implementation and verification plan for planned scenario readiness and atomic ai-start failure.
+---
+
+# Preflight Planned Scenario Transition Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Add a fail-closed implementation-ready transition for concrete scenario verification plans and make rejected `ai-start` status refreshes atomic.
+
+**Architecture:** Preflight classifies each required Contract scenario independently and accepts `unverified` only when `expected` and `verificationPlan` are explicit. Completion remains owned by the existing Summary Scenario Coverage Guard. `ai-start` wraps no-active status refresh in a byte-preserving rollback boundary.
+
+**Tech Stack:** Python 3, pytest, JSON Work Item Contracts, Make-based governance checks.
+
+## Global Constraints
+
+- Do not change `.ai/guards/preflight_review_policy.yaml` or its blocked statuses.
+- Human Decision Evidence cannot override incomplete Contract evidence.
+- Summary required scenarios remain fail closed until verified evidence exists.
+- A rejected lifecycle command leaves tracked status bytes unchanged.
+
+---
+
+### Task 1: Planned Scenario Contract Validation
+
+**Files:**
+- Modify: `scripts/ai_common.py`
+- Test: `tests/test_preflight_review.py`
+
+**Interfaces:**
+- Consumes: `validate_scenario_coverage(values, field_name="scenarioCoverage")`
+- Produces: validated optional `verificationPlan: str` on unverified entries
+
+- [ ] **Step 1: Add a failing validation test**
+
+Add cases proving a non-string `verificationPlan` is rejected while a non-empty string is
+accepted.
+
+- [ ] **Step 2: Run the focused test and confirm the expected failure**
+
+Run:
+
+```sh
+.venv/bin/python -m pytest -q tests/test_preflight_review.py -k verification_plan
+```
+
+Expected: failure because `verificationPlan` is not validated.
+
+- [ ] **Step 3: Implement minimal field validation**
+
+Extend `validate_scenario_coverage` so a present `verificationPlan` must be a non-empty string.
+
+- [ ] **Step 4: Re-run the focused test**
+
+Expected: pass.
+
+### Task 2: Implementation-Ready Scenario Signal
+
+**Files:**
+- Modify: `scripts/ai_preflight_review.py`
+- Test: `tests/test_preflight_review.py`
+
+**Interfaces:**
+- Consumes: required scenario entries validated by `validate_scenario_coverage`
+- Produces: `Scenario Coverage=Ready` only for verified, justified not-applicable, or explicit planned-verification entries
+
+- [ ] **Step 1: Add failing behavior tests**
+
+Add one test with `expected` and `verificationPlan` that must derive `ready`, and table-driven
+cases missing either field that must remain `needs_human_confirmation`.
+
+- [ ] **Step 2: Run the new tests and confirm RED**
+
+Run:
+
+```sh
+.venv/bin/python -m pytest -q tests/test_preflight_review.py -k planned_scenario
+```
+
+Expected: the complete plan is still `Partial`.
+
+- [ ] **Step 3: Implement the narrow classifier**
+
+Add a helper that recognizes only required `unverified` entries with both non-empty fields.
+Return `Ready` with evidence that reports verified/not-applicable and planned counts separately.
+
+- [ ] **Step 4: Run all Preflight tests**
+
+Run:
+
+```sh
+.venv/bin/python -m pytest -q tests/test_preflight_review.py
+```
+
+Expected: all tests pass, including conservative and Decision Evidence regressions.
+
+### Task 3: Preserve Finish-Time Fail-Closed Coverage
+
+**Files:**
+- Test: `tests/test_scenario_coverage_gate.py`
+
+**Interfaces:**
+- Consumes: Summary `scenarioCoverage`
+- Produces: unchanged error for required `unverified`, regardless of Contract planning metadata
+
+- [ ] **Step 1: Add a regression with `expected` and `verificationPlan`**
+
+The Summary entry remains `status: unverified`; assert `detect` returns
+`required_scenario_unverified` with severity `error`.
+
+- [ ] **Step 2: Run the test**
+
+Expected: pass against the existing guard, proving no production relaxation is required.
+
+### Task 4: Atomic No-Active Status Refresh
+
+**Files:**
+- Modify: `scripts/ai_start.py`
+- Test: `tests/test_start_and_archive.py`
+
+**Interfaces:**
+- Consumes: `refresh_stale_no_active_status(issues)`
+- Produces: consistency findings while restoring the previous status bytes on failed refresh
+
+- [ ] **Step 1: Add a failing rollback test**
+
+Create a temporary status containing literal `original\n`; make `write_no_active_status` replace
+it and `validate_status_consistency` return the persistent error; assert the returned error and
+the original bytes.
+
+- [ ] **Step 2: Run the focused test and confirm RED**
+
+Run:
+
+```sh
+.venv/bin/python -m pytest -q tests/test_start_and_archive.py -k failed_no_active_refresh
+```
+
+Expected: status contains regenerated bytes instead of `original\n`.
+
+- [ ] **Step 3: Implement snapshot and rollback**
+
+Snapshot `DEFAULT_STATUS`, regenerate, revalidate, and restore or unlink when findings remain.
+
+- [ ] **Step 4: Run start/archive tests**
+
+Run:
+
+```sh
+.venv/bin/python -m pytest -q tests/test_start_and_archive.py
+```
+
+Expected: all tests pass.
+
+### Task 5: Documentation and Traceability
+
+**Files:**
+- Modify: `.ai/cockpit/README.md`
+- Modify: `.ai/cockpit/README.ja.md`
+- Modify: `.ai/glossary.md`
+- Modify: `templates/glossary.md`
+- Modify: `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md`
+- Modify: `docs/reference/remediation-instruction-traceability.json`
+
+**Interfaces:**
+- Consumes: implemented planned-verification and atomic-start behavior
+- Produces: aligned runtime guidance and RFE-052/065/111/112 traceability
+
+- [ ] **Step 1: Document the boundary in English and Japanese**
+
+State that planned verification authorizes implementation only; it is not completion evidence.
+
+- [ ] **Step 2: Align canonical and installed glossaries**
+
+Define `Planned Scenario Verification` identically in `.ai/glossary.md` and
+`templates/glossary.md`.
+
+- [ ] **Step 3: Register corrective evidence**
+
+Map the user instruction and all four RFE records to Contract, tests, docs, and the comprehensive
+plan.
+
+- [ ] **Step 4: Run documentation and traceability checks**
+
+Run:
+
+```sh
+make check-docs-metadata
+make check-instruction-traceability
+```
+
+Expected: both pass.
+
+### Task 6: Complete Governance Lifecycle
+
+**Files:**
+- Modify: `.ai/work-items/active/preflight-planned-scenario-transition-20260728.summary.json`
+- Generate: `.ai/cockpit/current_status.md`
+- Generate: `.ai/work-items/archive/2026/preflight-planned-scenario-transition-20260728.*`
+
+**Interfaces:**
+- Consumes: all implementation and verification evidence
+- Produces: archived Work Item, PR, Hosted CI, merged closure, branch cleanup, synchronized main
+
+- [ ] **Step 1: Run focused and full quality verification**
+
+Run the focused suites, `make ai-checkpoint STAGE=before_finish`, and `make quality`.
+
+- [ ] **Step 2: Complete Summary and run `make ai-finish`**
+
+Record changed files, observed issues, scenario evidence, verification results, residual risks,
+and intent alignment.
+
+- [ ] **Step 3: Validate committed PR boundary**
+
+Commit the archive bundle and run:
+
+```sh
+make check-ai-pr AI_BASE_COMMIT=f00ac8b3a86816c5fa541955603aee9ca12a9beb
+```
+
+- [ ] **Step 4: Push, open PR, wait for all Hosted checks, and merge**
+
+No pending, failed, skipped required, or stale-Head check may be accepted.
+
+- [ ] **Step 5: Close lifecycle**
+
+Run:
+
+```sh
+make ai-close-work-item TASK=preflight-planned-scenario-transition-20260728
+```
+
+Verify local/remote branch deletion and local main equality with `origin/main`, then rebase and
+resume the paused performance Work Item.
