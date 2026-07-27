@@ -348,6 +348,48 @@ def test_ai_start_refreshes_only_stale_no_active_status(monkeypatch):
     ]
 
 
+def test_ai_start_failed_no_active_refresh_restores_status_bytes(tmp_path, monkeypatch):
+    status = tmp_path / ".ai" / "cockpit" / "current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_bytes(b"original status\n")
+    stale = (
+        "cockpit status no-active state must not persist changed files; run `make repair-ai-status`"
+    )
+    persistent = "worktree remains dirty"
+
+    monkeypatch.setattr(ai_start, "DEFAULT_STATUS", status)
+    monkeypatch.setattr(
+        ai_start,
+        "write_no_active_status",
+        lambda path: path.write_bytes(b"regenerated status\n"),
+    )
+    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [persistent])
+
+    assert ai_start.refresh_stale_no_active_status([stale]) == [persistent]
+    assert status.read_bytes() == b"original status\n"
+
+
+def test_ai_start_failed_no_active_refresh_removes_new_status(tmp_path, monkeypatch):
+    status = tmp_path / ".ai" / "cockpit" / "current_status.md"
+    stale = (
+        "cockpit status no-active state must not persist changed files; run `make repair-ai-status`"
+    )
+
+    monkeypatch.setattr(ai_start, "DEFAULT_STATUS", status)
+
+    def write_status(path):
+        path.parent.mkdir(parents=True)
+        path.write_bytes(b"regenerated status\n")
+
+    monkeypatch.setattr(ai_start, "write_no_active_status", write_status)
+    monkeypatch.setattr(
+        ai_start, "validate_status_consistency", lambda: ["worktree remains dirty"]
+    )
+
+    assert ai_start.refresh_stale_no_active_status([stale]) == ["worktree remains dirty"]
+    assert not status.exists()
+
+
 def test_ai_start_default_contains_agent_risk_gate(tmp_path, monkeypatch):
     active = tmp_path / ".ai" / "work-items" / "active"
     active.mkdir(parents=True)
