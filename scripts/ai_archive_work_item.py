@@ -98,6 +98,20 @@ def _restore_files(files_to_move: list[tuple[Path, Path]]) -> None:
             shutil.move(str(target), str(src))
 
 
+def _rewrite_archived_path_references(value: Any, replacements: dict[str, str]) -> Any:
+    """Rewrite exact active-artifact paths anywhere in archived evidence."""
+    if isinstance(value, dict):
+        return {
+            key: _rewrite_archived_path_references(item, replacements)
+            for key, item in value.items()
+        }
+    if isinstance(value, list):
+        return [_rewrite_archived_path_references(item, replacements) for item in value]
+    if isinstance(value, str):
+        return replacements.get(value, value)
+    return value
+
+
 def _generate_status(command: list[str]) -> None:
     subprocess.run(command, cwd=PROJECT_ROOT, env=clean_git_environment(), check=True)
 
@@ -601,6 +615,10 @@ def main() -> int:
                     (target_dir / path.name).relative_to(PROJECT_ROOT).as_posix()
                 )
             summary = redact_machine_paths_in_data(load_json(target_dir / summary_path.name))
+            if isinstance(summary.get("documentationAlignment"), dict):
+                summary["documentationAlignment"] = _rewrite_archived_path_references(
+                    summary["documentationAlignment"], replacements
+                )
             summary["contractPath"] = archived_contract
             summary["archiveSequence"] = archive_sequence
             changed = summary.get("changedFiles", [])

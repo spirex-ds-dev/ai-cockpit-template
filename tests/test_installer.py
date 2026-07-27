@@ -227,8 +227,15 @@ def test_create_adoption_ignores_ambient_git_dir_and_work_tree(tmp_path, monkeyp
             encoding="utf-8"
         )
     )
+    summary = json.loads(
+        (target / ".ai" / "work-items" / "active" / "adopt_ai_cockpit.summary.json").read_text(
+            encoding="utf-8"
+        )
+    )
     assert contract["baseCommit"] == target_base
     assert contract["baseCommit"] != ambient_base
+    assert summary["documentationAlignment"]["status"] == "aligned"
+    assert len(summary["documentationAlignment"]["checks"]) == 5
 
 
 def test_fresh_install_rejects_all_conflicting_managed_files_before_writing(tmp_path, capsys):
@@ -454,6 +461,8 @@ def test_upgrade_backs_up_policies_and_replaces_agent_marker_section(tmp_path):
     assert "Automatic commit, push, PR, merge, or branch deletion" in contract_data["outOfScope"]
     assert summary_data["rollbackEvidence"]["backupRoot"].startswith(".ai/cockpit/upgrade-backups/")
     assert any(item["path"] == ".ai/cockpit/version.json" for item in summary_data["changedFiles"])
+    assert summary_data["documentationAlignment"]["status"] == "aligned"
+    assert len(summary_data["documentationAlignment"]["checks"]) == 5
 
 
 @pytest.mark.parametrize("name", ["AGENTS.md", "GEMINI.md", "CLAUDE.md"])

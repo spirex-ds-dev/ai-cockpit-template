@@ -16,6 +16,10 @@ from pathlib import Path
 from typing import Iterable, cast
 
 from ai_generate_status import write_no_active_status
+from ai_check_summary import (
+    complete_generated_documentation_alignment,
+    documentation_alignment_skeleton,
+)
 from ai_adoption_evidence import build_runtime_verification
 from ai_upgrade_conflict_report import build_report
 from ai_preflight_review import upgrade_conflict_gate
@@ -948,6 +952,7 @@ class Installer:
             "checkpointEvidence": [],
             "knownGaps": ["Project-specific quality commands are not configured by adoption."],
             "overclaimPrevention": "This record covers governance adoption only, not product quality validation.",
+            "documentationAlignment": documentation_alignment_skeleton(),
         }
         for path, data, detail in (
             (contract_path, contract, "create adoption Contract"),
@@ -979,6 +984,9 @@ class Installer:
         summary["changedFiles"] = [
             {"path": path, "reason": reason} for path, reason in sorted(changed.items())
         ]
+        summary["documentationAlignment"] = complete_generated_documentation_alignment(
+            summary["changedFiles"]
+        )
         self.write_json(summary_path, summary)
         result = subprocess.run(
             [
@@ -1295,6 +1303,7 @@ class Installer:
             "checkpointEvidence": [],
             "knownGaps": [],
             "overclaimPrevention": "Do not report upgrade completion as merged or published.",
+            "documentationAlignment": documentation_alignment_skeleton(),
         }
         for path, data, detail in (
             (contract_path, contract, "create upgrade Contract"),
@@ -1320,6 +1329,9 @@ class Installer:
         summary["changedFiles"] = [
             {"path": path, "reason": reason} for path, reason in sorted(changed.items())
         ]
+        summary["documentationAlignment"] = complete_generated_documentation_alignment(
+            summary["changedFiles"]
+        )
         summary["rollbackEvidence"] = {
             "backupRoot": self.backup_dir.relative_to(self.target).as_posix(),
             "sourceVersion": self.load_version(self.source / ".ai" / "cockpit" / "version.json"),

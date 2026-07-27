@@ -7,6 +7,7 @@ from pathlib import Path
 
 from install_ai_cockpit import Installer
 import ai_common
+import ai_check_summary
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -191,6 +192,9 @@ def prepare_work_item(tmp_path: Path, *, archive_collision: bool = False):
                 for stage in ("before_edit", "before_finish")
             ],
         }
+    )
+    summary["documentationAlignment"] = ai_check_summary.complete_generated_documentation_alignment(
+        changed
     )
     summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     return contract_path, collision_path
