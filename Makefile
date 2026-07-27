@@ -26,6 +26,7 @@ check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	check-lockfile-reproducibility \
 	check-quality-architecture \
 	check-deprecated-assets \
+	check-instruction-traceability \
 	check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence \
 	ai-start ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	ai-verify-focused ai-verify-full \
@@ -86,6 +87,7 @@ help:
 	@printf '%s\n' '  make test'
 	@printf '%s\n' '  make check-docs-metadata'
 	@printf '%s\n' '  make check-governance-complexity'
+	@printf '%s\n' '  make check-instruction-traceability'
 	@printf '%s\n' '  make check-ai-system-invariants'
 	@printf '%s\n' '  make cockpit-doctor'
 	@printf '%s\n' '  make cockpit-calibrate'
@@ -108,6 +110,9 @@ check-quality-architecture:
 
 check-deprecated-assets:
 	$(AI_PYTHON) scripts/check_deprecated_assets.py
+
+check-instruction-traceability:
+	$(AI_PYTHON) scripts/check_instruction_traceability.py
 
 project-test:
 	$(AI_PYTHON) -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85
