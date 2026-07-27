@@ -49,9 +49,18 @@ jobs:
       - name: Install development quality tools
         run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
 
-      - name: Verify documented public release contract
+      - name: Determine release preparation scope
         env:
-          AI_RELEASE_PREPARATION: ${{ (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')) && '1' || '0' }}
+          AI_BASE_COMMIT: ${{ env.AI_BASE_COMMIT }}
+        run: |
+          release_files="$(git diff --name-only "${AI_BASE_COMMIT}...HEAD")"
+          if printf '%s\n' "$release_files" | grep -Eq '^(release\.json|next-release\.json|release-state\.json|install\.sh|\.ai/cockpit/(sbom|provenance|release-digests)\.json)$'; then
+            echo 'AI_RELEASE_PREPARATION=1' >> "$GITHUB_ENV"
+          else
+            echo 'AI_RELEASE_PREPARATION=0' >> "$GITHUB_ENV"
+          fi
+
+      - name: Verify documented public release contract
         run: make check-release-distribution
 
       - name: Run repository quality gates
