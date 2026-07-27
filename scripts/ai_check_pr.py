@@ -221,6 +221,72 @@ def archive_base_is_compatible(contract: dict[str, Any], pr_base: str) -> bool:
     return run_git(["merge-base", "--is-ancestor", archived_base, pr_base]).returncode == 0
 
 
+def source_references_contract(contract: dict[str, Any], contract_path: Path) -> bool:
+    """Return whether a Contract declares another archived Contract as a source."""
+    try:
+        expected = contract_path.relative_to(PROJECT_ROOT).as_posix()
+    except ValueError:
+        return False
+    return any(
+        isinstance(source, dict) and source.get("path") == expected
+        for source in contract.get("sources", [])
+    )
+
+
+def is_documented_pr_recovery_pair(
+    predecessor: tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]],
+    recovery: tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]],
+    pr_base: str,
+) -> bool:
+    """Accept only one auditable, immediately sequential recovery relationship."""
+    predecessor_path, predecessor_contract, predecessor_summary, _ = predecessor
+    _, recovery_contract, recovery_summary, _ = recovery
+    predecessor_base = predecessor_contract.get("baseCommit")
+    recovery_base = recovery_contract.get("baseCommit")
+    approval = recovery_contract.get("restrictedWriteApproval")
+    receipt = recovery_contract.get("startReceipt")
+    request_source = recovery_contract.get("rawRequestSource")
+    return (
+        isinstance(predecessor_summary.get("archiveSequence"), int)
+        and isinstance(recovery_summary.get("archiveSequence"), int)
+        and recovery_summary["archiveSequence"] == predecessor_summary["archiveSequence"] + 1
+        and archive_base_is_compatible(predecessor_contract, pr_base)
+        and isinstance(predecessor_base, str)
+        and isinstance(recovery_base, str)
+        and run_git(["merge-base", "--is-ancestor", predecessor_base, recovery_base]).returncode
+        == 0
+        and source_references_contract(recovery_contract, predecessor_path)
+        and isinstance(approval, dict)
+        and approval.get("approved") is True
+        and isinstance(approval.get("approvedBy"), str)
+        and bool(approval["approvedBy"].strip())
+        and isinstance(receipt, dict)
+        and receipt.get("baseCommit") == recovery_base
+        and isinstance(receipt.get("path"), str)
+        and bool(receipt["path"])
+        and isinstance(request_source, dict)
+        and request_source.get("type") == "human"
+    )
+
+
+def documented_recovery_paths(
+    entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]], pr_base: str
+) -> set[Path]:
+    """Return the sole recovery Contract eligible for the narrow exception."""
+    new_entries = [
+        entry
+        for entry in entries
+        if isinstance(entry[2].get("archiveSequence"), int)
+        and entry[2].get("archiveSequence", 0) >= NEW_WORK_ITEM_SEQUENCE
+        and entry[1].get("workItemId")
+    ]
+    if len(new_entries) == 2 and is_documented_pr_recovery_pair(
+        new_entries[0], new_entries[1], pr_base
+    ):
+        return {new_entries[1][0]}
+    return set()
+
+
 def machine_path_issues(value: Any, location: str = "root") -> list[str]:
     issues: list[str] = []
     if isinstance(value, str) and contains_machine_path(value):
@@ -331,15 +397,6 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
                     issues.append(f"{contract_rel}: Start Receipt was modified after its base")
         if contract.get("contractVersion") != 2:
             issues.append(f"{contract_rel}: PR archive evidence requires contractVersion 2")
-        elif (
-            isinstance(summary.get("archiveSequence"), int)
-            and summary.get("archiveSequence", 0) >= NEW_WORK_ITEM_SEQUENCE
-            and not archive_base_is_compatible(contract, base)
-        ):
-            issues.append(
-                f"{contract_rel}: Contract baseCommit is not compatible with the PR merge-base {base}; "
-                "require exact base or a verified ancestor base with matching Start Receipt"
-            )
         issues.extend(f"{contract_rel}: {issue}" for issue in validate_contract(contract))
         legacy_archive = is_legacy_archive(contract, summary)
         issues.extend(
@@ -360,6 +417,20 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         issues.extend(f"{summary_rel}: {issue}" for issue in machine_path_issues(summary))
 
     archive_entries.sort(key=lambda entry: entry[3])
+    recovery_paths = documented_recovery_paths(archive_entries, base)
+
+    for contract_path, contract, summary, _rank in archive_entries:
+        if (
+            isinstance(summary.get("archiveSequence"), int)
+            and summary.get("archiveSequence", 0) >= NEW_WORK_ITEM_SEQUENCE
+            and not archive_base_is_compatible(contract, base)
+            and contract_path not in recovery_paths
+        ):
+            contract_rel = contract_path.relative_to(PROJECT_ROOT).as_posix()
+            issues.append(
+                f"{contract_rel}: Contract baseCommit is not compatible with the PR merge-base {base}; "
+                "require exact base or a verified ancestor base with matching Start Receipt"
+            )
 
     new_work_items = {
         summary.get("workItemId")
@@ -368,7 +439,7 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
         and summary.get("archiveSequence", 0) >= NEW_WORK_ITEM_SEQUENCE
         and contract.get("workItemId")
     }
-    if len(new_work_items) > 1:
+    if len(new_work_items) > 1 and not recovery_paths:
         issues.append(
             "PR must contain exactly one newly maintained Work Item; "
             f"found {len(new_work_items)}: {', '.join(sorted(str(item) for item in new_work_items))}"

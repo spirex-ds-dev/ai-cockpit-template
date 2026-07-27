@@ -364,6 +364,16 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-041`（工单收尾/流程，低）：`make ai-finish TASK=release-smoke-dependency-timeout` 首次在场景覆盖检查失败，因为重写 Summary 时遗漏了 `scenarioCoverage` 字段。已补齐与 Contract 一致的四个场景，需重新执行 finish。
 `RFE-ISSUE-042`（CI效率/流程，中）：PR #395 的 compatibility 工作流包含 6 个 Python 平台任务，均重复执行完整 `make quality`，最长约 13 分 41 秒；template-smoke 又重复执行完整 `make quality`，总耗时约 21 分 45 秒。当前无失败且所有门禁均通过，因此本次不削弱或绕过门禁；已建立 `record-quality-gate-latency` 记录工单，将优化方案留给本计划完成后的统一评估。
 `RFE-ISSUE-062`（CI 质量门编排，高）：PR #398 的 6 个 Python platform matrix job 以及 template-smoke 都执行完整 `make quality`；GitHub Actions API 显示所有未完成 job 的当前步骤均为 `Run make quality`。本地单次全量质量门约 6.5 分钟，重复执行造成发布反馈极慢，且缺少阶段级超时/心跳，无法解释或阻止上一轮长达两天的等待。当前候选 PR 暂不合并；先建立独立 CI 流程 Work Item，将全量门禁收敛为单次权威执行，平台矩阵改为轻量兼容性测试，并保留 job/step timeout 与失败证据。
+`RFE-ISSUE-074`（PR 工单闭环/恢复例外，中）：PR #401 的已归档 Draft 修复只有把 candidate 推进到 v0.5.45 才能通过，但第二个、经用户授权的恢复工单被“单工单 PR”和 baseCommit 规则共同拒绝。恢复规则只允许一个相邻 pair：前序 Contract source 引用、人类批准、Start Receipt、Git 祖先关系和连续 archiveSequence 缺一不可；其他情况 fail closed。
+`RFE-ISSUE-075`（PR 修复交付顺序，中）：将上述门禁修复本身作为第三工单归入 #401，会把受限 pair 扩成三工单，正确地继续被拒绝。修复必须先在独立的一工单 PR 中完整 merge/close；#401 再基于该新主线重整，仅保留被授权的恢复 pair。该顺序避免以放宽门禁来解决门禁循环。
+`RFE-ISSUE-076`（质量门失败顺序，高）：独立恢复门禁工单的 `make ai-finish` 运行 560895ms 后才报告 quality failure；coverage 为 85.08%，installer/critical coverage/CI evidence shell 回归均通过，真正失败是 `mypy` 在 `scripts/ai_check_pr.py:283` 的参数展开错误。由于旧的并行质量图同时运行长 pytest 与静态门，静态错误被长测试拖延；必须先运行静态阶段，再运行全量测试。
+`RFE-ISSUE-077`（质量门证据/发布前顺序，高）：`ai_finish` 只保留每项命令输出前 500 个字符，导致失败尾部不可见；远端 #401 又先运行约 20 分钟质量门，之后才在秒级 `check-release-distribution` 发现 v0.5.44 candidate 已被 immutable Tag 保留。已将质量门改为静态/测试/证据阶段，并把 release candidate preflight 前移；后续必须验证阶段日志、失败尾部和单一 full-quality owner，禁止盲目重复全量运行。
+`RFE-ISSUE-078`（质量门兼容性，中）：阶段化 Make 编排首次执行证据门时，`check-ai-system-invariants` 将 Make 配方中的长参数形式误识别为文档中的缺失目标。并行参数改为短参数形式，保留并行阶段语义，同时满足目标引用扫描规则。
+`RFE-ISSUE-079`（工单收口顺序，中）：`ai-finish` 的质量门已通过，但最终 AI 风险检查拒绝了过期的 `before_edit` checkpoint，因为契约在该 checkpoint 后又发生了必要的验收更新。收口前必须在契约最终稳定后刷新全部 required checkpoint，再执行最终 finish。
+`RFE-ISSUE-080`（发布预检范围，高）：PR #402 的 `template-smoke` 在质量门前 57 秒失败，日志明确显示 `next-release.json` 仍为已被 Draft tag v0.5.44 占用的候选版本。严格候选校验不应妨碍不修改发布文件的普通 PR；已改为按 PR diff 识别发布文件，发布相关 PR 仍 fail closed 并先于质量门检查。
+`RFE-ISSUE-081`（工单依赖/质量门，高）：独立发布预检范围工单从当前 `origin/main` 执行完整质量时，在 434987ms 后暴露了尚未合并的 #402 mypy 修复，说明该流程修复不能先于 #402 独立合并。已将预检范围修复回填到 #402 的既有 workflow/测试范围，避免拆出无法通过基线质量门的依赖环。
+`RFE-ISSUE-082`（发布预检语义，高）：按 diff 关闭候选模式后，普通 PR 仍因 `release.json v0.5.42` 与远端 Draft tag v0.5.44 的公共身份不一致而失败；普通 PR 不应执行发布合同检查本身。现仅对发布文件 PR 执行合同检查，普通 PR 显式记录“不适用”后进入质量门。
+`RFE-ISSUE-083`（文档质量门，中）：远端全量测试在 20 分 20 秒完成、覆盖率 85.02%，但新增 RFE-080 行使用了文档检查禁止的中文术语，触发日语风格门并造成 3 个失败。已改用符合现有术语规则的中文措辞，必须重新通过文档元数据和系统不变量检查。
 `RFE-ISSUE-063`（工单初始化/预检，中）：CI 流程修复工单的 `ai-start` skeleton 缺少任务意图、原始请求、场景覆盖和具体验收，按要求停止在 `not_ready`。已补全 Contract，才允许进入实现。
 `RFE-ISSUE-064`（工单证据结构，中）：补全 Contract 后，preflight 又拒绝不完整的 `rawRequestSource`、中风险 unknowns review 和 `pending` 场景状态。已改为完整人类请求证据、显式 unknowns review 和 `unverified` 初始场景状态，继续保持门禁有效。
 `RFE-ISSUE-065`（预检授权路径，中）：CI 工单记录用户授权的选项 B 后，`ai-preflight --check` 仍将 `human_decision_recorded` 视为 blocked，没有“授权后先实现、再以真实证据闭合场景”的继续路径。已保留 Decision Evidence，严格限制为已确认的 CI 编排范围，继续以 checkpoint 和后续真实验证闭合场景，不提前伪造 verified 状态。

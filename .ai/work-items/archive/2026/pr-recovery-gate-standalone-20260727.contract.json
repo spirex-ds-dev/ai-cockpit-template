@@ -1,0 +1,171 @@
+{
+  "contractVersion": 2,
+  "workItemId": "pr-recovery-gate-standalone-20260727",
+  "mode": "code",
+  "title": "Allow documented PR recovery pair",
+  "baseCommit": "4ed7327fd404f4218756845333aa74eb07a51df9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/pr-recovery-gate-standalone-20260727.contract.json",
+    ".ai/work-items/active/pr-recovery-gate-standalone-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    "scripts/ai_finish.py",
+    "Makefile",
+    ".github/workflows/smoke.yml",
+    "tests/test_ci_quality_orchestration.py",
+    "tests/test_makefile.py",
+    "tests/test_core_gates.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": ["External publication", "Immutable release/tag mutation", "Generic multi-Work-Item PR support"],
+  "sources": [
+    {
+      "path": "scripts/ai_check_pr.py", "reason": "The aggregate PR gate needs a narrowly auditable recovery-pair exception."},
+    {"path": "tests/test_pr_aggregate.py", "reason": "Regression evidence for accepted and rejected recovery relations."},
+    {"path": "scripts/ai_finish.py", "reason": "Current finish evidence truncates output before the actionable failure tail."},
+    {"path": "Makefile", "reason": "Current quality graph runs expensive tests concurrently with later static gates."},
+    {"path": ".github/workflows/smoke.yml", "reason": "Current pull-request smoke runs full quality before candidate release preflight."},
+    {"path": "tests/test_ci_quality_orchestration.py", "reason": "Regression coverage for quality phase ordering and release gate ownership."},
+    {"path": "user-conversation:2026-07-27", "reason": "The user authorized continuous process correction and requires every process issue to be recorded."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low", "riskTypes": ["governance_policy"],
+    "reason": "The exception is deterministic and repository-local; all unrelated multi-Work-Item PRs remain rejected."
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue", "reason": "The user authorized the corrective path without further confirmation; tests and PR checks remain mandatory."
+  },
+  "preReviewWarnings": [
+    "Do not broaden the default one Work Item/one PR rule; accept only one source-linked, human-approved, sequential recovery pair."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The aggregate PR gate accepts exactly one adjacent recovery pair only when predecessor source reference, human approval, Start Receipt, and Git ancestry all validate.",
+    "Ordinary multi-Work-Item PRs, missing predecessor references, unapproved recovery, and unrelated bases remain fail-closed.",
+    "Regression tests cover acceptance and rejection paths.",
+    "Static quality checks run before full pytest/coverage, and quality phases expose gate-specific exit evidence without hiding a cheap failure behind a long-running sibling.",
+    "Release distribution preflight runs before the expensive repository quality graph in pull-request smoke.",
+    "AI finish evidence preserves a failure tail and durable output digest metadata.",
+    "RFE-ISSUE-074 through RFE-ISSUE-079 record the recovery cycle, the quality failure, and the corrective process boundaries, including Make target-scanner compatibility and checkpoint refresh ordering."
+  ],
+  "guidelines": [
+    "Preserve the one Work Item/one PR default and make exceptions deterministic and auditable.",
+    "Do not weaken immutable-tag or release-publication boundaries."
+  ],
+  "intent": {
+    "problem": "PR #401 requires a user-authorized candidate recovery after a Draft tag failure, but its two archived Work Items are rejected as a generic multi-Work-Item PR. The first standalone correction also exposed a second process defect: make quality waited behind a long pytest sibling while mypy failed, and ai-finish retained only the output prefix.",
+    "constraints": ["Deliver the gate and minimal quality/release orchestration correction in this standalone one-Work-Item PR.", "Permit only one adjacent recovery pair.", "Require source-linked predecessor, human approval, Start Receipt, and Git ancestry.", "Do not publish or mutate release state.", "Preserve all existing quality checks and supply-chain boundaries."],
+    "rationale": "A standalone PR preserves the default lifecycle; phased quality and durable failure evidence prevent another opaque long retry before #401 is resumed."
+  },
+  "rawUserRequest": "Continue without pausing; correct process problems first, record them, and do not weaken gates.",
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Add a narrow audited PR recovery-pair rule in its own normal Work Item PR.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "scenarioCoverage": [
+    {"scenario": "documented adjacent recovery pair", "required": true, "status": "verified", "evidence": ["tests/test_pr_aggregate.py", "PR #401 archive evidence"]},
+    {"scenario": "ordinary multi-Work-Item PR remains rejected", "required": true, "status": "verified", "evidence": ["tests/test_pr_aggregate.py"]},
+    {"scenario": "unrelated recovery base remains rejected", "required": true, "status": "verified", "evidence": ["tests/test_pr_aggregate.py"]}
+  ],
+  "rawRequestSource": {"type": "human", "reference": "user-conversation:2026-07-27", "capturedAt": "2026-07-27", "digest": "sha256:standalone-recovery-gate"},
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true, "approvedBy": "user", "reason": "The user explicitly authorized continued corrective process work without another confirmation."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 621
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/pr-recovery-gate-standalone-20260727.json",
+    "baseCommit": "4ed7327fd404f4218756845333aa74eb07a51df9",
+    "initialScopeDigest": "9c7a0a71cd6f381b82d0a2eefb54226f6e68a4887006e3bcbc1090aeb0a4ac94",
+    "contractSkeletonDigest": "7d547b94bc003420014d3583d5f464d056356043c4de00dca4fbd7c0e864c75f"
+  }
+}

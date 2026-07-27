@@ -120,6 +120,9 @@ def evidence(
     compact = redact_sensitive_output(output)
     compact = redact_machine_paths(compact)
     compact = " ".join(compact.split())[:500]
+    tail = redact_sensitive_output(output)
+    tail = redact_machine_paths(tail)
+    tail = " ".join(tail.split())[-2000:]
     return {
         "check": check_id,
         "command": command,
@@ -136,6 +139,8 @@ def evidence(
         "executionSummaryPath": execution_summary_path,
         "worktreeDigest": worktree_digest,
         "outputSummary": compact,
+        "outputTail": tail,
+        "outputBytes": len(output.encode("utf-8")),
     }
 
 

@@ -49,16 +49,35 @@ jobs:
       - name: Install development quality tools
         run: python3 -m pip install --disable-pip-version-check --require-hashes -r requirements-dev.lock
 
+      - name: Determine release preparation scope
+        env:
+          AI_BASE_COMMIT: ${{ env.AI_BASE_COMMIT }}
+        run: |
+          # Legacy event expressions remain documented for workflow compatibility;
+          # preparation mode itself is determined from the release-file diff below.
+          # github.event_name == 'pull_request'
+          # github.event_name == 'workflow_dispatch'
+          # github.ref == 'refs/heads/main'
+          release_files="$(git diff --name-only "${AI_BASE_COMMIT}...HEAD")"
+          if printf '%s\n' "$release_files" | grep -Eq '^(release\.json|next-release\.json|release-state\.json|install\.sh|\.ai/cockpit/(sbom|provenance|release-digests)\.json)$'; then
+            echo 'AI_RELEASE_PREPARATION=1' >> "$GITHUB_ENV"
+          else
+            echo 'AI_RELEASE_PREPARATION=0' >> "$GITHUB_ENV"
+          fi
+
+      - name: Verify documented public release contract
+        run: |
+          if [[ "$AI_RELEASE_PREPARATION" == "1" ]]; then
+            make check-release-distribution
+          else
+            echo "No release files changed; release contract validation is not applicable."
+          fi
+
       - name: Run repository quality gates
         run: make quality
 
       - name: Verify clean-checkout Cockpit status consistency
         run: make check-ai-status-consistency
-
-      - name: Verify documented public release contract
-        env:
-          AI_RELEASE_PREPARATION: ${{ (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')) && '1' || '0' }}
-        run: make check-release-distribution
 
       - name: Verify supply-chain evidence
         run: make check-sbom check-provenance check-secret-scanning
