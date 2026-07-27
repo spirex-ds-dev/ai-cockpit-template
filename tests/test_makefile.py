@@ -17,7 +17,10 @@ def test_check_ai_pr_uses_aggregate_validator():
     )
 
     assert result.returncode == 0, result.stdout + result.stderr
-    assert 'scripts/ai_check_pr.py --base "abc123"' in result.stdout
+    assert 'check-ai-pr-core AI_BASE_COMMIT="abc123"' in result.stdout
+    assert 'scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"' in (ROOT / "Makefile").read_text(
+        encoding="utf-8"
+    )
 
 
 def test_project_format_check_runs_ruff_format_check():
@@ -78,7 +81,7 @@ def test_quality_runs_static_tests_and_evidence_as_explicit_phases():
     )
 
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "quality-gates" in result.stdout
+    assert "quality-full" in result.stdout
     makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
     assert "quality-static:" in makefile
     assert "quality-tests:" in makefile
@@ -87,7 +90,7 @@ def test_quality_runs_static_tests_and_evidence_as_explicit_phases():
     assert "check-critical-domain-guards" in makefile
     assert "check-decision-protocol" in makefile
     assert "check-baseline-evidence" in makefile
-    assert "--cov-fail-under=85" in result.stdout
+    assert "--cov-fail-under=85" in makefile
 
 
 def test_project_governance_make_targets_are_public():

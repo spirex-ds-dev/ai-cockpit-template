@@ -1,6 +1,6 @@
 import hashlib
 import json
-import subprocess
+import sys
 from pathlib import Path
 
 import check_bandit_baseline
@@ -21,7 +21,7 @@ def test_load_baseline_rejects_non_objects(tmp_path):
         raise AssertionError("expected ValueError")
 
 
-def test_current_digest_is_order_independent(monkeypatch):
+def test_current_digest_is_order_independent(tmp_path):
     payload = {
         "results": [
             {
@@ -39,17 +39,9 @@ def test_current_digest_is_order_independent(monkeypatch):
         ]
     }
 
-    def fake_run(*_args, **_kwargs):
-        return subprocess.CompletedProcess(
-            args=["bandit"],
-            returncode=1,
-            stdout=json.dumps(payload),
-            stderr="",
-        )
-
-    monkeypatch.setattr(check_bandit_baseline.subprocess, "run", fake_run)
-
-    count, digest = check_bandit_baseline.current_digest()
+    evidence = tmp_path / "bandit.json"
+    evidence.write_text(json.dumps(payload), encoding="utf-8")
+    count, digest = check_bandit_baseline.current_digest(evidence)
 
     expected_items = [
         {"testId": "B101", "severity": "HIGH", "filename": "scripts/a.py", "issue": "first"},
@@ -68,11 +60,14 @@ def test_main_accepts_matching_baseline(tmp_path, monkeypatch):
     repo.mkdir()
     baseline = repo / ".ai" / "cockpit" / "bandit_low_risk_baseline.json"
     baseline.parent.mkdir(parents=True)
-    baseline.write_text(json.dumps({"count": 0, "digest": "0" * 64}), encoding="utf-8")
+    digest = hashlib.sha256(json.dumps([], sort_keys=True).encode("utf-8")).hexdigest()
+    baseline.write_text(json.dumps({"count": 0, "digest": digest}), encoding="utf-8")
 
     monkeypatch.setattr(check_bandit_baseline, "ROOT", repo)
     monkeypatch.setattr(check_bandit_baseline, "BASELINE", baseline)
-    monkeypatch.setattr(check_bandit_baseline, "current_digest", lambda: (0, "0" * 64))
+    evidence = repo / "bandit.json"
+    evidence.write_text(json.dumps({"results": []}), encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", ["check_bandit_baseline.py", "--input", str(evidence)])
 
     assert check_bandit_baseline.main() == 0
 
@@ -86,7 +81,9 @@ def test_main_rejects_mismatched_baseline(tmp_path, monkeypatch, capsys):
 
     monkeypatch.setattr(check_bandit_baseline, "ROOT", repo)
     monkeypatch.setattr(check_bandit_baseline, "BASELINE", baseline)
-    monkeypatch.setattr(check_bandit_baseline, "current_digest", lambda: (0, "0" * 64))
+    evidence = repo / "bandit.json"
+    evidence.write_text(json.dumps({"results": []}), encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", ["check_bandit_baseline.py", "--input", str(evidence)])
 
     assert check_bandit_baseline.main() == 1
     assert "bandit baseline drifted" in capsys.readouterr().err

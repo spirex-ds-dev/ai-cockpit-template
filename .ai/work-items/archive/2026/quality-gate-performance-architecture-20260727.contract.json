@@ -1,0 +1,239 @@
+{
+  "contractVersion": 2,
+  "workItemId": "quality-gate-performance-architecture-20260727",
+  "mode": "code",
+  "title": "Optimize quality gate execution without reducing trust",
+  "baseCommit": "86925b5ce43e9c093119a11c42de3abf7b2d6118",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/quality-gate-performance-architecture-20260727.contract.json",
+    ".ai/work-items/active/quality-gate-performance-architecture-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/quality/**",
+    ".github/workflows/**",
+    "Makefile",
+    "scripts/run_quality_gate.py",
+    "scripts/summarize_quality_gates.py",
+    "scripts/determine_quality_scope.py",
+    "scripts/check_bandit_baseline.py",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    "tests/test_quality_gate_architecture.py",
+    "tests/test_quality_scope.py",
+    "tests/test_quality_telemetry.py",
+    "tests/test_ci_quality_orchestration.py",
+    "tests/test_bandit_baseline.py",
+    "tests/test_makefile.py",
+    "tests/test_project_governance.py",
+    "README.md",
+    "README.zh-CN.md",
+    "README.ja.md",
+    "docs/operations/**",
+    "docs/getting-started/**",
+    "docs/reference/documentation-architecture.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Deleting Trust Layer, SBOM, Provenance, Secret Scanning, vulnerability, installer, or Release Evidence checks.",
+    "Lowering coverage thresholds, converting failures to warnings, or treating cache hits as final evidence.",
+    "Changing Work Item Contract format except for an evidence-backed optional timing field.",
+    "Changing Branch Protection or other external GitHub governance settings without separate external evidence.",
+    "Publishing a version or changing release candidate metadata."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/quality-gate-performance-architecture-20260727.contract.json",
+      "reason": "This Contract defines the implementation boundary for the user-authorized quality performance optimization."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository workflow requires Contract scope, fail-closed verification, PR lifecycle, and issue recording."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Current quality entry points and repeated gate ownership are defined here."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Current CI orchestration and the template-smoke quality/installer coupling are defined here."
+    },
+    {
+      "path": "user-attachment:AI-Cockpit-make-quality-GitHub-Actions-performance-optimization",
+      "reason": "User-provided development instruction describing performance goals, trust constraints, architecture, tests, documentation, and acceptance."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "The execution plan is updated to insert this Work Item after the traceability correction and before release-blocking remediation continues."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "ci_orchestration",
+      "evidence_integrity",
+      "shared_output_conflict"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "Changing Make and CI orchestration can accidentally remove, duplicate, or race evidence-producing gates; every optimization must preserve fail-closed ownership and output isolation."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized inserting and executing this performance optimization Work Item after the current traceability Work Item."
+  },
+  "preReviewWarnings": [
+    "Review that duplicate work is removed only after ownership is proven, Release verification is preserved, and parallel groups have isolated outputs."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "quality-fast, quality-full, quality-release, and backward-compatible quality entry points have explicit semantics, with quality equivalent to quality-full.",
+    "The Make quality graph invokes each pytest, supply-chain, PR static, and Bandit evidence owner at most once; standalone debug targets remain callable and the workflow does not invoke those owners a second time.",
+    "Gate timing, per-gate logs, output digests, exit codes, scope, cache status, skipped reasons, slowest gate, and final decision are emitted as machine-readable and GitHub Summary evidence.",
+    "Quality scope defaults fail closed to Full, Release remains complete, cache never becomes final evidence, and parallel groups have no shared write conflicts.",
+    "Workflow responsibilities distinguish quality-fast, quality-full, installation-smoke, compatibility, and release-evidence without making PR Fast look like Release Full.",
+    "The named architecture, workflow ownership, scope, telemetry, cache, and parallel-safety test files exit 0; the English, Chinese, and Japanese quality-gate operation documents exist; and the Summary records either repeated before/after evidence for five scenario classes or a specific not-run reason for each missing class.",
+    "All required AI/project checks pass and the complete PR, merge, ai-close, branch-cleanup lifecycle is completed; no release is performed by this Work Item.",
+    "The instruction-to-plan-to-implementation-to-acceptance trace is bidirectionally checked for this Work Item and the global remediation plan before closure; every identified omission is recorded and corrected before proceeding."
+  ],
+  "guidelines": [
+    "Preserve Evidence over Self-Declaration and fail closed on missing or conflicting telemetry.",
+    "Keep local and CI entry points aligned; GitHub Actions schedules gates but does not create a second quality fact source.",
+    "Never use parallel execution when gate output or Git worktree state is shared.",
+    "Document new public Make targets and machine-readable evidence formats."
+  ],
+  "intent": {
+    "problem": "The current make quality and GitHub Actions path repeats some checks, serializes independent heavy gates, hides installation work inside one long job, and lacks per-gate timing evidence. This produces long, poorly localized feedback without reducing the underlying verification burden.",
+    "constraints": [
+      "Do not reduce trust, coverage threshold, Release verification, SBOM, Provenance, sensitive-value policy scanning, vulnerability checks, or fail-closed behavior.",
+      "Do not use make -j8 quality, unbounded timeouts, floating action/tool versions, or shared output files across parallel gates.",
+      "Keep quality backward compatible and preserve independent targets for focused debugging.",
+      "Use measured before/after evidence; do not claim performance improvement from a single run.",
+      "Do not change external Branch Protection settings in this repository Work Item."
+    ],
+    "rationale": "The safe optimization is to make each evidence-producing gate run once, isolate outputs, parallelize only independent groups, and expose timing so speed improvements remain reviewable and auditable."
+  },
+  "rawUserRequest": "当前工单执行完成以后，插入一个工单，对应《AI Cockpit make quality 与 GitHub Actions 性能优化开发指示》。在不降低可信度、不削弱安全边界、不破坏本地开发体验的前提下，消除重复 Gate、分层 quality-fast/quality-full/quality-release、增加计时与可观测证据、进行安全并行和 Workflow 职责拆分；Release 验证必须保持完整。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message-2026-07-27-insert-quality-performance-work-item",
+    "capturedAt": "2026-07-27",
+    "digest": "sha256:user-authorized-quality-gate-performance-architecture"
+  },
+  "declaredIntent": {
+    "summary": "Optimize quality gate execution without reducing evidence, trust, security boundaries, or Release verification.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "quality-full owns the full test and evidence graph without duplicate specialized pytest execution.", "required": true, "status": "verified", "evidence": ["tests/test_quality_gate_architecture.py"]},
+    {"scenario": "quality-fast is materially narrower but quality remains an alias for quality-full.", "required": true, "status": "verified", "evidence": ["tests/test_quality_gate_architecture.py"]},
+    {"scenario": "Parallel gate groups have isolated writes and deterministic conflict checks.", "required": true, "status": "verified", "evidence": ["tests/test_quality_gate_architecture.py"]},
+    {"scenario": "CI workflow ownership does not repeat quality sub-gates and keeps installation/release responsibilities distinct.", "required": true, "status": "verified", "evidence": ["tests/test_ci_quality_orchestration.py"]},
+    {"scenario": "Gate timing and failure/timeout evidence are emitted without replacing the original exit result.", "required": true, "status": "verified", "evidence": ["tests/test_quality_telemetry.py"]},
+    {"scenario": "Release path retains complete SBOM, Provenance, Secret Scanning, vulnerability, installation, and release evidence checks.", "required": true, "status": "verified", "evidence": ["tests/test_quality_gate_architecture.py"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorization-2026-07-27",
+    "reason": "User explicitly authorized inserting and executing the quality gate performance optimization Work Item, including Makefile, workflow, and .ai governance changes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 624
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/quality-gate-performance-architecture-20260727.json",
+    "baseCommit": "86925b5ce43e9c093119a11c42de3abf7b2d6118",
+    "initialScopeDigest": "752a51d9fa8fc43860a977982a7dfe1ef8bc42c39163bb12c8fd99e157e0f364",
+    "contractSkeletonDigest": "1f38ce7edb4dd18fdf7d51d2dc396ac22a9e3c8b254bc5d0983bded5bd683957"
+  }
+}

@@ -27,6 +27,8 @@ def test_full_quality_has_one_workflow_owner():
     assert "Run repository quality gates" in smoke
     assert "timeout --foreground 25m make quality" in smoke
     assert "quality heartbeat" in smoke
+    assert "Publish quality timing summary" in smoke
+    assert "$GITHUB_STEP_SUMMARY" in smoke
 
 
 def test_release_preflight_precedes_expensive_quality():

@@ -21,7 +21,7 @@ AI_PREFLIGHT_VALIDATE_CONTRACT ?= true
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
 check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
-	check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning \
+	check-bandit-evidence check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning \
 	check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence \
 	check-lockfile-reproducibility \
 	check-quality-architecture \
@@ -33,7 +33,8 @@ check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy template-adoption-ready \
 	check-ai-scenario-coverage check-ai-start-receipt generate-ai-preflight-review check-ai-preflight-review ai-preflight \
-	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge \
+	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
+	quality-fast quality-full quality-release quality-fast-static quality-fast-policy quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
 	check-ai-task-outcome \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
@@ -143,10 +144,7 @@ delusion-test-gate:
 project-lint:
 	$(AI_PYTHON) -m ruff check scripts tests
 	$(AI_PYTHON) -m mypy scripts/*.py
-	$(AI_PYTHON) -m bandit -q -r scripts -ll
-	$(AI_PYTHON) scripts/check_bandit_baseline.py
 	$(AI_PYTHON) scripts/check_governance_complexity.py
-	$(AI_PYTHON) scripts/check_supply_chain.py secrets
 	$(AI_PYTHON) -m py_compile scripts/*.py tests/*.py
 
 diff-check:
@@ -222,8 +220,12 @@ check-decision-protocol:
 check-ai-system-invariants:
 	$(AI_PYTHON) scripts/check_system_invariants.py
 
-check-bandit-baseline:
-	$(AI_PYTHON) scripts/check_bandit_baseline.py
+check-bandit-evidence:
+	mkdir -p target/quality
+	@status=0; $(AI_PYTHON) -m bandit -q -r scripts -f json -o target/quality/bandit.json || status=$$?; test "$$status" -eq 0 -o "$$status" -eq 1
+
+check-bandit-baseline: check-bandit-evidence
+	$(AI_PYTHON) scripts/check_bandit_baseline.py --input target/quality/bandit.json
 
 check-sbom:
 	$(AI_PYTHON) scripts/check_supply_chain.py sbom
@@ -265,28 +267,69 @@ check-ai-project-profile:
 check-ai-guard-calibration: check-ai-project-profile
 	$(AI_PYTHON) scripts/ai_check_guard_calibration.py --root .
 
-QUALITY_STATIC_GATES := project-format-check project-lint diff-check
+QUALITY_FAST_STATIC_GATES := project-format-check project-lint diff-check
+QUALITY_FAST_POLICY_GATES := check-trust-schemas check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency
 QUALITY_TEST_GATES := project-test
-QUALITY_EVIDENCE_GATES := unsupported-claim-regression adopter-long-cycle check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning check-dependency-vulnerabilities check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence
+QUALITY_EVIDENCE_GATES := unsupported-claim-regression adopter-long-cycle check-release-evidence check-dependency-vulnerabilities
+QUALITY_SUPPLY_CHAIN_GATES := check-bandit-baseline check-sbom check-provenance check-secret-scanning
+QUALITY_PROJECT_CONSISTENCY_GATES := check-quality-architecture check-deprecated-assets check-instruction-traceability
+QUALITY_MAKE := $(shell command -v make)
 
-# Run cheap static checks before the long test/coverage phase.  The previous
-# parallel graph could hide an early mypy failure behind a still-running pytest.
+# Fast is intentionally narrower than Full.  It never implies release readiness.
+quality-fast:
+	+$(QUALITY_MAKE) --no-print-directory quality-fast-static
+	+$(QUALITY_MAKE) --no-print-directory quality-fast-policy
+
+quality-fast-static:
+	+$(QUALITY_MAKE) --no-print-directory -j2 $(QUALITY_FAST_STATIC_GATES)
+
+quality-fast-policy:
+	+$(QUALITY_MAKE) --no-print-directory -j2 $(QUALITY_FAST_POLICY_GATES)
+
+# Heavy groups are separate ownership units.  Their outputs are either read-only
+# or isolated by the gate itself; no blanket high-parallelism quality target is used.
+quality-heavy:
+	+$(QUALITY_MAKE) --no-print-directory -j2 quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group
+
+quality-tests-group:
+	+$(QUALITY_MAKE) --no-print-directory $(QUALITY_TEST_GATES)
+
+quality-evidence-group:
+	+$(QUALITY_MAKE) --no-print-directory $(QUALITY_EVIDENCE_GATES)
+
+quality-supply-chain-group:
+	+$(QUALITY_MAKE) --no-print-directory $(QUALITY_SUPPLY_CHAIN_GATES)
+
+quality-project-consistency-group:
+	+$(QUALITY_MAKE) --no-print-directory $(QUALITY_PROJECT_CONSISTENCY_GATES)
+
+quality-full:
+	@mkdir -p target/quality/timing target/quality/logs
+	+$(AI_PYTHON) scripts/run_quality_gate.py --gate quality-fast --category orchestration --output target/quality/timing/quality-fast.json --log target/quality/logs/quality-fast.log -- $(QUALITY_MAKE) --no-print-directory quality-fast
+	+$(AI_PYTHON) scripts/run_quality_gate.py --gate quality-heavy --category orchestration --output target/quality/timing/quality-heavy.json --log target/quality/logs/quality-heavy.log -- $(QUALITY_MAKE) --no-print-directory quality-heavy
+	+$(AI_PYTHON) scripts/summarize_quality_gates.py --input target/quality/timing --json-output target/quality/summary.json --markdown-output target/quality/summary.md
+
+# Backward-compatible aliases.  These names are compatibility/debug views of
+# the new ownership graph; none invokes the removed duplicate gate graph.
 quality:
-	+make --no-print-directory quality-gates
+	+$(QUALITY_MAKE) --no-print-directory quality-full
 
-quality-gates:
-	+make --no-print-directory quality-static
-	+make --no-print-directory quality-tests
-	+make --no-print-directory quality-evidence
+# Historical aggregate alias; it is intentionally routed to the new Full graph.
+quality-gates: quality-full
+quality-static: quality-fast-static
+quality-tests: quality-tests-group
+quality-evidence: quality-evidence-group
 
-quality-static:
-	+make --no-print-directory -j2 $(QUALITY_STATIC_GATES)
+quality-installation:
+	@echo 'Installation gates are owned by the installation-smoke workflow in this phase.'
 
-quality-tests:
-	+make --no-print-directory project-test
+quality-release-evidence:
+	+$(QUALITY_MAKE) --no-print-directory check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence
 
-quality-evidence:
-	+make --no-print-directory -j2 $(QUALITY_EVIDENCE_GATES)
+quality-release:
+	+$(QUALITY_MAKE) --no-print-directory quality-full
+	+$(QUALITY_MAKE) --no-print-directory quality-installation
+	+$(QUALITY_MAKE) --no-print-directory quality-release-evidence
 
 ai-cockpit-project-format-check: project-format-check
 
@@ -475,13 +518,16 @@ check-ai:
 		"$${MAKE:-make}" check-ai-pr AI_BASE_COMMIT="$(AI_BASE_COMMIT)"; \
 	fi
 
+check-ai-pr-core:
+	$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
+
 check-ai-pr:
 	@set -e; \
 		$(shell command -v make) project-format-check; \
 		if test -f scripts/check_governance_complexity.py && test -f .ai/guards/governance_complexity_policy.yaml; then \
 			$(AI_PYTHON) scripts/check_governance_complexity.py; \
 		fi; \
-		$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
+		$(shell command -v make) check-ai-pr-core AI_BASE_COMMIT="$(AI_BASE_COMMIT)"
 
 ai-finish:
 	$(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)"

@@ -100,13 +100,26 @@ jobs:
       - name: Verify clean-checkout Cockpit status consistency
         run: make check-ai-status-consistency
 
-      - name: Verify supply-chain evidence
-        run: make check-sbom check-provenance check-secret-scanning
+      - name: Publish quality timing summary
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if compgen -G 'target/quality/timing/*.json' > /dev/null; then
+            make_summary_args=(--input target/quality/timing --json-output target/quality/summary.json --markdown-output target/quality/summary.md)
+            python3 scripts/summarize_quality_gates.py "${make_summary_args[@]}"
+            cat target/quality/summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'No quality timing evidence was produced.' >&2
+            exit 1
+          fi
 
       - name: Run template AI checks
         run: |
           if [[ "${{ github.event_name }}" != "workflow_dispatch" ]]; then
-            make check-ai-pr AI_BASE_COMMIT="$AI_BASE_COMMIT"
+            # quality owns format/governance checks; this step owns only the
+            # PR diff/Contract binding after the quality graph has completed.
+            make check-ai-pr-core AI_BASE_COMMIT="$AI_BASE_COMMIT"
           else
             make check-ai-status-consistency
             make check-ai-backtrack
