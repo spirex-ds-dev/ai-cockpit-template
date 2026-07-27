@@ -28,7 +28,7 @@ check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	check-deprecated-assets \
 	check-instruction-traceability \
 	check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence \
-	ai-start ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
+	ai-start ai-resume-work-item ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	ai-verify-focused ai-verify-full \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy template-adoption-ready \
@@ -57,6 +57,7 @@ ai-pre-merge:
 help:
 	@printf '%s\n' 'AI Cockpit template commands:'
 	@printf '%s\n' '  make ai-start TASK=<task> TITLE="..." MODE=code'
+	@printf '%s\n' '  make ai-resume-work-item CONTRACT=<contract.json> BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>'
 	@printf '%s\n' '  make ai-onboard [PHASE=1|2|3]'
 	@printf '%s\n' '  make ai-doctor'
 	@printf '%s\n' '  make check-ai-adoption-ready'
@@ -412,6 +413,10 @@ ai-cockpit-quality: quality
 
 ai-start:
 	$(AI_PYTHON) scripts/ai_start.py --task "$(TASK)" --title "$(TITLE)" --mode "$(MODE)"
+
+ai-resume-work-item:
+	@test -n "$(CONTRACT)" -a -n "$(BASE_REMOTE)" -a -n "$(BASE_BRANCH)" || (echo "CONTRACT, BASE_REMOTE, and BASE_BRANCH are required" >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_resume_work_item.py --contract "$(CONTRACT)" --base-remote "$(BASE_REMOTE)" --base-branch "$(BASE_BRANCH)"
 
 ai-onboard:
 	$(AI_PYTHON) scripts/ai_onboard.py --root . $(if $(PHASE),--phase $(PHASE),) $(if $(SKIP_CALIBRATE),--skip-calibrate,) $(if $(SKIP_READINESS_CHECKS),--skip-readiness-checks,)

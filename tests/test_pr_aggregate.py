@@ -276,6 +276,48 @@ def test_pr_rejects_rebased_archive_without_receipt_binding(monkeypatch):
     assert not ai_check_pr.archive_base_is_compatible(contract, "b" * 40)
 
 
+def test_pr_accepts_only_canonical_resumed_lineage(monkeypatch):
+    original = "a" * 40
+    resumed = "b" * 40
+    contract = {
+        "baseCommit": resumed,
+        "startReceipt": {
+            "baseCommit": original,
+            "path": ".ai/work-items/starts/resumed.json",
+        },
+        "resumeHistory": [
+            {
+                "resumeVersion": 1,
+                "fromBaseCommit": original,
+                "toBaseCommit": resumed,
+                "baseRemote": "origin",
+                "baseBranch": "main",
+                "workBranch": "codex/resumed",
+                "recordedAt": "2026-07-28T00:00:00+00:00",
+                "priorContractDigest": "c" * 64,
+                "predecessorWorkItemId": "corrective",
+                "predecessorMergeCommit": resumed,
+                "predecessorManifestPath": (
+                    ".ai/work-items/archive/2026/corrective.archive-manifest.json"
+                ),
+                "predecessorClosure": {
+                    "statusClosed": True,
+                    "prMerged": True,
+                    "closureSucceeded": True,
+                    "localBranchDeleted": True,
+                    "remoteBranchDeleted": True,
+                    "baseSynchronized": True,
+                },
+            }
+        ],
+    }
+    monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
+
+    assert ai_check_pr.archive_base_is_compatible(contract, resumed)
+    contract["resumeHistory"][0]["fromBaseCommit"] = "f" * 40
+    assert not ai_check_pr.archive_base_is_compatible(contract, resumed)
+
+
 def test_aggregate_pr_reports_missing_summary_and_invalid_json(tmp_path, monkeypatch):
     archive = tmp_path / ".ai" / "work-items" / "archive" / "2026"
     archive.mkdir(parents=True)

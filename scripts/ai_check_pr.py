@@ -14,6 +14,7 @@ from typing import Any
 from ai_check_summary import changed_file_paths, validate_summary
 from ai_check_work_item import validate_contract
 from ai_start_receipt import validate_receipt
+from ai_start_receipt import validate_resume_history_structure
 from ai_common import (
     PROJECT_ROOT,
     changed_name_status,
@@ -211,13 +212,23 @@ def archive_base_is_compatible(contract: dict[str, Any], pr_base: str) -> bool:
     archived_base = contract.get("baseCommit")
     if not isinstance(archived_base, str) or not archived_base:
         return False
-    if archived_base == pr_base:
-        return True
     receipt = contract.get("startReceipt")
-    if not isinstance(receipt, dict) or receipt.get("baseCommit") != archived_base:
+    if archived_base == pr_base and not isinstance(receipt, dict):
+        return True
+    if not isinstance(receipt, dict):
         return False
     if not isinstance(receipt.get("path"), str) or not receipt["path"]:
         return False
+    receipt_base = receipt.get("baseCommit")
+    if not isinstance(receipt_base, str) or not receipt_base:
+        return False
+    if receipt_base != archived_base and validate_resume_history_structure(contract, receipt_base):
+        return False
+    if receipt_base == archived_base and contract.get("resumeHistory") is not None:
+        if validate_resume_history_structure(contract, receipt_base):
+            return False
+    if archived_base == pr_base:
+        return True
     return run_git(["merge-base", "--is-ancestor", archived_base, pr_base]).returncode == 0
 
 

@@ -16,6 +16,27 @@ remote base → Contract/Preflight → dedicated branch → implement → ai-fin
 
 The next Work Item must not start until the predecessor has evidence for all of the following: PR merged, archive succeeded, local branch deleted, remote branch deleted, and local base synchronized with the remote base. A successor Contract may record this evidence in `predecessorWorkItem`; `make check-ai-serial-order` fails closed when any field is absent or false.
 
+## Resume after a corrective predecessor
+
+When a process defect pauses a Work Item, complete and close the corrective
+Work Item first. Rebase the paused dedicated branch onto the latest discovered
+remote default branch, replace its `predecessorWorkItem` with that corrective's
+closed evidence, and run:
+
+```text
+make ai-resume-work-item CONTRACT=<active-contract> \
+  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
+```
+
+This is the only supported baseline transition for an existing Work Item. The
+writer preserves the immutable Start Receipt, verifies the exact remote ref,
+Git ancestry, original dedicated branch, predecessor merge identity, closure
+postconditions, archive-manifest identity and digests, then atomically appends
+one `resumeHistory` edge and advances Contract `baseCommit`. Repeated corrective
+cycles append edges; they do not rewrite prior edges. Direct edits, broken
+chains, or incomplete closure evidence fail closed. Afterward, rerun Preflight
+and every verification made stale by the new baseline.
+
 ## Contract readiness
 
 Active v2 code Contracts must contain concrete problem, constraints, rationale, sources, acceptance, and verification content. Generic starter phrases are rejected by the Contract check before implementation. If Preflight reports `needs_human_confirmation` or `not_ready`, stop and report the reason; do not continue by treating advisory output as authorization.
