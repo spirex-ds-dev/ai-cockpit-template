@@ -55,6 +55,21 @@ def ready_contract() -> dict:
     }
 
 
+def planned_scenario_contract() -> dict:
+    contract = ready_contract()
+    contract["scenarioCoverage"] = [
+        {
+            "scenario": "implementation-dependent behavior",
+            "required": True,
+            "status": "unverified",
+            "expected": "The implemented behavior passes its focused regression.",
+            "verificationPlan": "Run tests/test_feature.py::test_behavior after implementation.",
+            "evidence": [],
+        }
+    ]
+    return contract
+
+
 def conservative_contract() -> dict:
     return {
         "workItemId": "task",
@@ -121,6 +136,46 @@ def test_ready_contract_derives_ready_preflight_review(tmp_path):
     )
 
     assert report["status"] == "ready"
+
+
+def test_planned_scenario_contract_derives_ready_without_claiming_verification(tmp_path):
+    contract = planned_scenario_contract()
+    path = tmp_path / "task.contract.json"
+    write_contract(path, contract)
+
+    report = ai_preflight_review.derive_report(
+        contract,
+        contract_path=path,
+        policy_path=Path("/tmp/preflight_review_policy.yaml"),
+    )
+    scenario_signal = next(
+        item for item in report["signals"] if item["name"] == "Scenario Coverage"
+    )
+
+    assert report["status"] == "ready"
+    assert scenario_signal["value"] == "Ready"
+    assert scenario_signal["evidence"] == [
+        "1 required scenario(s) are planned for verification; 0 are already verified or not_applicable"
+    ]
+
+
+@pytest.mark.parametrize("missing_field", ["expected", "verificationPlan"])
+def test_planned_scenario_missing_required_detail_needs_human_confirmation(
+    tmp_path, missing_field
+):
+    contract = planned_scenario_contract()
+    del contract["scenarioCoverage"][0][missing_field]
+    path = tmp_path / "task.contract.json"
+    write_contract(path, contract)
+
+    report = ai_preflight_review.derive_report(
+        contract,
+        contract_path=path,
+        policy_path=Path("/tmp/preflight_review_policy.yaml"),
+    )
+
+    assert report["status"] == "needs_human_confirmation"
+    assert signal_map(report)["Scenario Coverage"] == "Partial"
 
 
 def test_preflight_signals_expose_shared_protocol_envelope(tmp_path):

@@ -640,13 +640,31 @@ def scenario_coverage_signal(contract: dict[str, Any]) -> Signal:
             ["contract.scenarioCoverage", "contract.riskAssessment"],
         )
 
+    unverified_items = [item for item in required_items if item.get("status") == "unverified"]
+    planned_items = [
+        item
+        for item in unverified_items
+        if non_empty_string(item.get("expected"))
+        and non_empty_string(item.get("verificationPlan"))
+    ]
+    if unverified_items and len(planned_items) == len(unverified_items):
+        completed_count = len(required_items) - len(unverified_items)
+        return Signal(
+            "Scenario Coverage",
+            "Ready",
+            [
+                f"{len(planned_items)} required scenario(s) are planned for verification; "
+                f"{completed_count} are already verified or not_applicable"
+            ],
+            ["contract.scenarioCoverage", "contract.riskAssessment"],
+        )
     statuses = {str(item.get("status")) for item in required_items}
-    if "unverified" in statuses:
+    if unverified_items:
         return Signal(
             "Scenario Coverage",
             "Partial",
             [
-                f"{len([item for item in required_items if item.get('status') == 'unverified'])} required scenario(s) remain unverified"
+                f"{len(unverified_items)} required scenario(s) remain unverified"
             ],
             ["contract.scenarioCoverage", "contract.riskAssessment"],
         )
