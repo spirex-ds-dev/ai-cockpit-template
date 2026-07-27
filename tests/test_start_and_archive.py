@@ -711,6 +711,42 @@ def archive_summary(*, verification_result: str = "passed") -> dict[str, object]
             {"path": ".ai/work-items/active/task.review.json", "reason": "review"},
         ],
         "sourcesUsed": ["scripts/ai_archive_work_item.py"],
+        "documentationAlignment": {
+            "status": "aligned",
+            "checkedAt": "2026-07-28T00:00:00+00:00",
+            "checks": [
+                {
+                    "area": "plan",
+                    "status": "not_applicable",
+                    "evidence": [],
+                    "reason": "fixture",
+                },
+                {
+                    "area": "contractSummaryEvidence",
+                    "status": "aligned",
+                    "evidence": [".ai/work-items/active/task.contract.json"],
+                    "reason": "fixture",
+                },
+                {
+                    "area": "documentationCommandsCapability",
+                    "status": "not_applicable",
+                    "evidence": [],
+                    "reason": "fixture",
+                },
+                {
+                    "area": "multilingualSemantics",
+                    "status": "not_applicable",
+                    "evidence": [],
+                    "reason": "fixture",
+                },
+                {
+                    "area": "limitationsUnknownsHistory",
+                    "status": "aligned",
+                    "evidence": [".ai/work-items/active/task.contract.json"],
+                    "reason": "fixture",
+                },
+            ],
+        },
         "verification": [
             {"check": "quality", "result": verification_result},
             {
@@ -810,6 +846,7 @@ def test_ai_start_default_contains_agent_risk_gate(tmp_path, monkeypatch):
 
     assert ai_start.main() == 0
     contract = json.loads((active / "sample.contract.json").read_text(encoding="utf-8"))
+    summary = json.loads((active / "sample.summary.json").read_text(encoding="utf-8"))
     checks = [item["check"] for item in contract["verification"]]
     assert "aiAgentRisk" in checks
     assert "aiCheckpoint" in checks
@@ -820,6 +857,14 @@ def test_ai_start_default_contains_agent_risk_gate(tmp_path, monkeypatch):
     assert contract["baseCommit"] == "a" * 40
     assert contract["checkpointPolicy"]["requiredStages"] == ["before_edit", "before_finish"]
     assert ".ai/cockpit/current_status.md" in contract["scope"]
+    assert summary["documentationAlignment"]["status"] == "not_checked"
+    assert {item["area"] for item in summary["documentationAlignment"]["checks"]} == {
+        "plan",
+        "contractSummaryEvidence",
+        "documentationCommandsCapability",
+        "multilingualSemantics",
+        "limitationsUnknownsHistory",
+    }
     receipt = tmp_path / ".ai" / "work-items" / "starts" / "sample.json"
     assert receipt.exists()
     assert json.loads(receipt.read_text(encoding="utf-8"))["workItemId"] == "sample"
@@ -1021,6 +1066,16 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     data = json.loads(archived_summary.read_text(encoding="utf-8"))
     assert data["archiveSequence"] == 1
     assert "/active/" not in data["contractPath"]
+    assert all(
+        "/active/" not in evidence
+        for check in data["documentationAlignment"]["checks"]
+        for evidence in check["evidence"]
+    )
+    assert any(
+        evidence.endswith("/archive/2026/task.contract.json")
+        for check in data["documentationAlignment"]["checks"]
+        for evidence in check["evidence"]
+    )
     assert all(
         "/archive/" in item["path"] or item["path"] == ".ai/cockpit/current_status.md"
         for item in data["changedFiles"]

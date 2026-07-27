@@ -193,6 +193,15 @@ Preflight が `needs_human_confirmation` の場合、生成レポートには `h
   - `evidence` の各要素は `type`、`path`、`locator`、`verification` を必須とします。`path` はリポジトリ相対で実在するテストファイル、`locator` はテスト名や行などの追跡位置、`verification` は Summary に記録された passed の検証 ID（文字列または配列）です。
   - バグ修正を示す証拠には `kind: "bug_fix"` と `failureScenario` を付けます。high-risk Contract では `humanReview: {"completed": true, ...}` のような明示的な人間レビュー証拠も必要です。
   - これは監査用の対応表であり、新しいテスト実行エンジンではありません。既存の Contract v1 アーカイブはこの項目なしで読み取り互換を維持します。
+- **`documentationAlignment`**: `object` (current v2 Summary)
+  - Work Item の完了前に、計画、Contract/Summary の証拠関係、文書・コマンド・Capability 表現、多言語意味、制約・Unknown・履歴が実装と一致しているかを記録します。これは Capability やテスト結果を新たに宣言する事実源ではありません。
+  - `schemaVersion`: 現在は `1`。
+  - `status`: Finish では `aligned` が必須です。生成直後の `not_checked` や `misaligned` は安全に停止します。
+  - `checkedAt`: タイムゾーン付き ISO-8601 タイムスタンプ。
+  - `checks`: `plan`、`contractSummaryEvidence`、`documentationCommandsCapability`、`multilingualSemantics`、`limitationsUnknownsHistory` の 5 area を重複なく 1 件ずつ持ちます。
+  - 各 check は `status` (`aligned` または `not_applicable`)、`evidence`、具体的な `reason` を持ちます。`aligned` の evidence は、実在するリポジトリ相対パスで、同じ Summary の `changedFiles` または `sourcesUsed` にも宣言されていなければなりません。
+  - 変更された Markdown、README、Makefile、`.mk`、`templates/make/` のコマンド表面は evidence から逆引きできなければ Finish が停止します。URL、絶対パス、`..`、存在しないパス、未宣言パスは証拠として受理されません。
+  - このフィールド導入前の immutable archive は `legacy_archive` 互換で読み取り可能なまま保持し、backfill や改変を行いません。新しい `ai-start`、installer adoption/upgrade、Summary example は同じ `not_checked` skeleton を生成します。
 
 ### 2.3 チェックポイント監査証跡
 

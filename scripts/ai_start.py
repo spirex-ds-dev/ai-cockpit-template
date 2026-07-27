@@ -25,6 +25,7 @@ from ai_common import (
 )
 from ai_check_status_consistency import DEFAULT_STATUS, validate_status_consistency
 from ai_check_diff_ownership import format_preview, preview
+from ai_check_summary import documentation_alignment_skeleton
 from ai_generate_status import write_active_status, write_no_active_status
 from ai_observability import create_observability
 from ai_readiness_policy import readiness_state
@@ -559,6 +560,7 @@ def main() -> int:
             "checkpointEvidence": [],
             "knownGaps": ["Replace this before finishing the Work Item."],
             "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+            "documentationAlignment": documentation_alignment_skeleton(),
         }
         if not persist_work_item(contract_path, summary_path, contract, summary):
             return 1
