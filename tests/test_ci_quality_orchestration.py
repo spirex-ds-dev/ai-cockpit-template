@@ -42,6 +42,15 @@ def test_quality_is_phased_before_expensive_test_graph():
     assert makefile.index("quality-static:") < makefile.index("quality-tests:")
 
 
+def test_release_preparation_is_scoped_to_release_file_changes():
+    smoke = SMOKE.read_text(encoding="utf-8")
+    assert "Determine release preparation scope" in smoke
+    assert 'git diff --name-only "${AI_BASE_COMMIT}...HEAD"' in smoke
+    assert "next-release\\.json" in smoke
+    assert "AI_RELEASE_PREPARATION=1" in smoke
+    assert "AI_RELEASE_PREPARATION=0" in smoke
+
+
 def test_compatibility_target_disables_coverage_overhead():
     makefile = MAKEFILE.read_text(encoding="utf-8")
     target = makefile.split("compatibility-test:", 1)[1].split("\n\n", 1)[0]

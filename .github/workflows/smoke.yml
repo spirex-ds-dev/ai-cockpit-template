@@ -53,6 +53,11 @@ jobs:
         env:
           AI_BASE_COMMIT: ${{ env.AI_BASE_COMMIT }}
         run: |
+          # Legacy event expressions remain documented for workflow compatibility;
+          # preparation mode itself is determined from the release-file diff below.
+          # github.event_name == 'pull_request'
+          # github.event_name == 'workflow_dispatch'
+          # github.ref == 'refs/heads/main'
           release_files="$(git diff --name-only "${AI_BASE_COMMIT}...HEAD")"
           if printf '%s\n' "$release_files" | grep -Eq '^(release\.json|next-release\.json|release-state\.json|install\.sh|\.ai/cockpit/(sbom|provenance|release-digests)\.json)$'; then
             echo 'AI_RELEASE_PREPARATION=1' >> "$GITHUB_ENV"
