@@ -201,7 +201,7 @@ def test_pr_accepts_one_documented_adjacent_recovery_pair(tmp_path, monkeypatch)
     assert ai_check_pr.documented_recovery_paths(entries, "a" * 40) == {recovery}
 
 
-def test_pr_rejects_recovery_pair_without_predecessor_reference(tmp_path, monkeypatch):
+def test_pr_recovery_pair_requires_predecessor_reference(tmp_path, monkeypatch):
     predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
     recovery = write_pair(tmp_path, "recovery", ["src/b.py"], ["src/b.py"], approved=True)
     for path, sequence in ((predecessor, 75), (recovery, 76)):
