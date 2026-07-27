@@ -6,7 +6,6 @@ from pathlib import Path
 
 import ai_calibrate
 import ai_project_doctor
-import check_bandit_baseline
 import check_system_invariants
 from ai_check_guard_calibration import calibration_issues
 from ai_project_profile import load_profile, validate_profile
@@ -442,10 +441,6 @@ def test_system_invariants_allow_missing_archive_summary_version(tmp_path, monke
         "archived Summary summaryVersion must be absent or 1/2 when present" not in issue
         for issue in issues
     )
-
-
-def test_bandit_baseline_matches_repository_low_risk_findings():
-    assert check_bandit_baseline.main() == 0
 
 
 def test_system_invariants_reject_manifest_stack_drift(tmp_path, monkeypatch):

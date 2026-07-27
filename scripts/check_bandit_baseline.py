@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-import subprocess
+import argparse
 import sys
 from pathlib import Path
 from typing import Any
@@ -22,17 +22,14 @@ def load_baseline(path: Path) -> dict[str, Any]:
     return data
 
 
-def current_digest() -> tuple[int, str]:
-    result = subprocess.run(
-        ["bandit", "-q", "-r", "scripts", "-f", "json"],
-        cwd=ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    if result.returncode not in {0, 1}:
-        raise RuntimeError(result.stderr.strip() or "bandit invocation failed")
-    data = json.loads(result.stdout or "{}")
+def current_digest(input_path: Path) -> tuple[int, str]:
+    if not input_path.is_file():
+        raise FileNotFoundError(
+            f"Bandit evidence is missing: {input_path}; run check-bandit-evidence first"
+        )
+    data = json.loads(input_path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError("Bandit evidence must be a JSON object")
     items = [
         {
             "testId": item["test_id"],
@@ -51,6 +48,9 @@ def current_digest() -> tuple[int, str]:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", type=Path, required=True)
+    args = parser.parse_args()
     try:
         baseline = load_baseline(BASELINE)
         expected_count = baseline["count"]
@@ -63,8 +63,8 @@ def main() -> int:
             raise ValueError("baseline count must be a non-negative integer")
         if not isinstance(expected_digest, str) or not expected_digest:
             raise ValueError("baseline digest must be a non-empty string")
-        actual_count, actual_digest = current_digest()
-    except (OSError, json.JSONDecodeError, ValueError, RuntimeError, KeyError) as exc:
+        actual_count, actual_digest = current_digest(args.input)
+    except (OSError, json.JSONDecodeError, ValueError, KeyError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
 

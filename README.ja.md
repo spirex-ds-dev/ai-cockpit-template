@@ -25,6 +25,8 @@ keywords:
 
 # AI Cockpit
 
+Quality Gate の責任範囲、timing 証拠、Work Item の追跡手順は[Quality Gate 運用](docs/operations/quality-gates.ja.md)を参照してください。
+
 企業向け統制の境界については、[Enterprise Control Boundary Checklist](docs/reference/enterprise-control-checklist.md) と [status matrix](docs/reference/enterprise-control-matrix.json) を参照してください。リポジトリ内の証拠は外部統制の検証を意味しません。公開前には必須の WI-16 日本語能力評価を完了する必要があります。
 
 現行の導入案内は、[30 秒で開始](docs/getting-started/30-second-start.md)、[標準導入ガイド](docs/getting-started/standard-adoption-guide.md)、[セキュリティとリリース検証](docs/getting-started/security-release-verification.md)の三層です。履歴計画とアーカイブ記録は現在の手順ではなく、証拠のコンテキストとして扱います。

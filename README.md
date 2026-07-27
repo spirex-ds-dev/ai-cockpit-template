@@ -25,6 +25,9 @@ keywords:
 
 # AI Cockpit
 
+For quality-gate ownership, timing evidence, and the required Work Item
+traceability lifecycle, see [Quality Gate Operations](docs/operations/quality-gates.md).
+
 Current adoption guidance is layered: [30-Second Start](docs/getting-started/30-second-start.md), [Standard Adoption Guide](docs/getting-started/standard-adoption-guide.md), and [Security and Release Verification](docs/getting-started/security-release-verification.md). Historical plans and archived records are evidence context, not current instructions.
 
 [中文](README.zh-CN.md) | [日本語](README.ja.md)

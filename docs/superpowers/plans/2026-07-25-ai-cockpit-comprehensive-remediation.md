@@ -88,8 +88,9 @@ keywords:
 | WI-17 | document_human_agent_trust_layer | 将现有 Trust Layer 升级为 Why/What/How 的英文权威版，并建立完整中文/日文版本、三语 README 入口、架构交叉链接和一致性检查 | 三语完整文档、现有 Gate/命令/Archive Manifest 保留、native/delegated evidence 映射、链接/章节/边界一致性检查 |
 | WI-18 | publish-new-version | 严格发布门禁、source/tag/asset/digest/SBOM/provenance、安装/升级/回滚验证并发布新版本 | merge/close 后的发布证据、版本/URL/checksum/provider evidence |
 | WI-19 | clean-execution-plan-documents | 最后清理过期执行计划，保留历史标记和 archive-backed 索引，完成计划对齐 | cleanup inventory、历史隔离检查、最终 clean plan 与用户复核材料 |
+| WI-20 | quality-gate-performance-architecture-20260727 | 在不降低可信度的前提下优化 `make quality` 与 GitHub Actions：去重、Fast/Full/Release 分层、计时证据、安全并行和安装/Release 职责拆分 | Gate timing/summary、调用图去重、Workflow ownership、scope/cache/并行测试、五类场景性能证据 |
 
-WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是发布前的强制日语能力门禁；若发现问题，必须先完成对应 corrective Work Item 的完整 PR/merge/close/分支清理流程。WI-17 是发布前的 Human-Agent Trust Layer 对齐门禁，必须确认文档声明、证据模型、责任边界和供应链证据边界与实际能力一致。WI-18 是唯一允许实际发布新版本的工单，且必须在 WI-16 及其所有 corrective Work Item、WI-17 全部关闭后执行。WI-19 必须最后执行；它不得删除当前计划、最终问题总览或任何仍被 Contract/Archive/Release evidence 引用的记录。
+WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。`quality-gate-performance-architecture-20260727` 是在当前追踪工单关闭后插入的流程/质量优化工单，必须先完成其完整 PR/merge/close/分支清理流程，再继续剩余发布阻塞整改。WI-16 是发布前的强制日语能力门禁；若发现问题，必须先完成对应 corrective Work Item 的完整 PR/merge/close/分支清理流程。WI-17 是发布前的 Human-Agent Trust Layer 对齐门禁，必须确认文档声明、证据模型、责任边界和供应链证据边界与实际能力一致。WI-18 是唯一允许实际发布新版本的工单，且必须在 WI-16 及其所有 corrective Work Item、WI-17、WI-20 全部关闭后执行。WI-19 必须最后执行；它不得删除当前计划、最终问题总览或任何仍被 Contract/Archive/Release evidence 引用的记录。
 
 ## 三、各 Work Item 的执行边界与验收要求
 
@@ -413,6 +414,16 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 **强制顺序：** 这是最后一个整改 Work Item。完成其 PR、merge、`make ai-close-work-item`、本地/远端分支清理和默认分支同步后，生成最终对齐报告，提交给用户确认；此前不得宣称“全面整改完成”。
 
+### WI-20：Quality Gate Performance Architecture（当前新增工单）
+
+**插入原因：** 当前追踪机制工单的 CI 验证进一步证明 `template-smoke` 的完整质量路径约需 23 分钟；用户随后要求在当前工单完成后插入《AI Cockpit make quality 与 GitHub Actions 性能优化》工单。该工单优化重复执行和可观测性，不以删除检查换取速度。
+
+**范围：** `make quality-fast`、`make quality-full`、`make quality-release` 与兼容入口；pytest、Supply Chain、PR、Bandit 和 Workflow 去重；Gate Runner/Timing/Summary；scope 判定；安全并行和输出隔离；quality/installation/release-evidence Workflow 职责；缓存边界；相关测试和中英日文档对齐。
+
+**强制边界：** 不降低 Coverage，不删除 SBOM、Provenance、credential-policy scanning、漏洞、安装或 Release Evidence；不把缓存当作最终证据；未知 scope 默认 Full；不修改 Branch Protection；不发布版本。
+
+**验收：** 必须有真实 Gate timing 和日志证据、去重调用图、失败/超时证据、并行冲突测试、缓存安全测试、Workflow ownership 测试、至少五类场景的重复前后测量，或对未执行场景给出结构化原因。`quality` 必须仍等价于 `quality-full`，Release Full 必须完整；同时必须通过“指示—计划—实现—验收”的双向追踪检查，并将所有遗漏记录、修正、复验后才能关闭。
+
 ## 四、问题记录与流程纠偏机制
 
 每个 Work Item 必须维护结构化问题记录，至少包含：`issueId`、`workItemId`、发现时间/阶段、问题类别（gap/defect/evidence/security/installer/release/process）、严重度、事实与证据引用、已知/未知、停止状态、风险、决策、解决动作、验证结果、残余风险、是否需要人工确认、是否触发流程 corrective Work Item。
@@ -457,6 +468,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 - 无未定义的“以后补充”步骤；每个 Work Item 有明确范围、验收和验证方向。
 - 未把任一 fixture、模板能力、测试通过、计划完成或用户授权自我声明成产品事实。
 - 所有后续工单均有串行 predecessor、PR、archive、close、分支清理和 base 同步要求。
+- 所有工单（包括后来插入的工单）都必须通过“指示→计划→实现→验收”和“验收→实现→计划→指示”的双向追踪检查；任一方向缺证据即视为遗漏，必须先记录并修正后再进入 PR/合并/发布。
 - 任何流程问题都有先纠偏、再恢复的明确路径。
 - 用户已经授权：本次计划文档的收查、确认、总结、工单拆解、PR/清理流程设计、问题记录机制和文档对齐机制。
 - 用户已授权：按本计划连续执行后续整改工单、创建专用分支/PR、完成合并/归档/关闭/分支清理/base 同步，并在发布前执行日语能力评估与 Trust Layer 对齐；不得绕过门禁。发布新版本和最终清理计划文档仍分别受 WI-18/WI-19 的专用验收与发布边界约束。
@@ -487,3 +499,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 - `RFE-ISSUE-073`（CI流程/可观测性，高）：PR #403 的 `template-smoke` 在 `Run repository quality gates` 进入后约 6 分钟没有任何日志更新，后续 quality/installer/template checks 未启动；run 已取消，不能视为通过。根因是质量门虽有 job-level 30 分钟 timeout，但没有 step-level bounded timeout、heartbeat 或明确的 timeout failure evidence，导致长时间不可解释等待。已建立 `ci-template-smoke-quality-timeout-20260727` corrective Work Item；先为 smoke quality step 增加 25 分钟 fail-closed timeout、逐分钟 heartbeat 和回归断言，再重新运行 #403 CI，确认新鲜可审计结果后才能合并审计工单。
 - `RFE-ISSUE-074`（流程/需求追踪，高）：用户确认建立“指示—计划—实现—验收”的双向追踪机制。原因是原有单向计划执行无法机械阻止用户明确点名的既有文件（例如 WI-10 的 `docs/getting-started/installation.md`）从实现中遗漏。已建立 `instruction-traceability-gate-20260727` corrective Work Item，增加结构化 traceability manifest、fail-closed 检查器、Make target、回归测试和文档；该检查只接受显式 no-change rationale 作为已识别缺口，不将其误报为完成或解除发布冻结。
 - `RFE-ISSUE-075`（流程/生命周期证据，中）：PR #405 的 CI 发现 traceability manifest 在 Work Item 归档后仍引用 active Contract，导致 clean-checkout 的追踪测试失败；同时新增 CLI 分支覆盖不足使总覆盖率为 84.94%。根因是归档生命周期的证据路径没有作为 manifest 的回归场景。已将引用切换为 archive Contract，补充“归档后 clean checkout”及 CLI 失败路径测试；修复通过后必须重新执行完整质量和 PR 检查。
+- `RFE-ISSUE-076`（流程/Preflight，中）：WI-20 实现开始后，Preflight 仍将“场景尚未验证”和一个宽泛验收句作为 Human Decision Gate，未提供“先执行聚焦验证、记录未运行的 hosted 性能测量、再继续收口”的结构化路径。已记录该流程缺口，补充具体验收文本并用真实聚焦测试证据更新六个场景状态；重复 Preflight 后必须确认状态恢复为 ready，且 Summary 仍须明确记录五类重复性能测量的未运行原因，不得声称性能提升。
+- `RFE-ISSUE-077`（安全/证据，中）：WI-20 新增两个使用受控 subprocess 的质量工具后，单次完整 Bandit JSON 扫描从 baseline 的 105 条低风险 finding 变为 109 条；原因是新增工具的 B404/B603/B607 低风险 finding，未发现中高风险 finding。已审阅并将 109 条当前结果以 digest 绑定写入 baseline；不得改用 `-ll` 隐藏低风险结果，也不得在后续工单重复扫描或静默漂移 baseline。
+- `RFE-ISSUE-078`（流程/checkpoint，中）：WI-20 在最后补入 Bandit baseline 和测试 scope 后，`ai-finish` 正确拒绝复用旧 `before_edit` checkpoint。已刷新最终 Contract 的 checkpoint；后续任何 Contract scope/acceptance/source 变更都必须刷新 checkpoint 后再收口。
+- `RFE-ISSUE-079`（流程/Summary，中）：WI-20 的实现反向检查发现 `tests/test_makefile.py` 和 `tests/test_project_governance.py` 已修改但未进入 Summary.changedFiles，`check-ai-change-summary` 正确 fail-closed。已补齐两项文件及原因；后续必须在每次测试/验证修订后重新执行 changedFiles 反向核对。
