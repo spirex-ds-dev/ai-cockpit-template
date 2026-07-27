@@ -579,6 +579,22 @@
       "resolution": "Reapplied RFE-098, hosted performance evidence, archive sequence, and digest bindings after rebase completion; verification is rerun from the final branch state.",
       "status": "resolved",
       "followUp": "Do not edit digest-bound archive files until the rebase state is clean."
+    },
+    {
+      "issueId": "RFE-ISSUE-100",
+      "category": "ci-evidence",
+      "severity": "high",
+      "stage": "pr-ci",
+      "fact": "After quality gates passed in PR #408 run 30266670055, the always-run template-smoke evidence step declared installation-smoke and release-evidence as required even though those jobs were skipped for this non-release PR. It emitted only template-smoke, and the evidence validator failed the job with a missing-required-job diagnostic; the generated failureReasons also contained template-smoke:success.",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30266670055/job/89978889383",
+        ".github/workflows/smoke.yml",
+        "scripts/check_ci_release_evidence.sh"
+      ],
+      "decision": "Do not merge WI-21 or weaken the validator. Stop the handoff and create a corrective Work Item that makes evidence job scope conditional and records every executed, skipped, or failed required job with an accurate conclusion.",
+      "resolution": "Open; the evidence-generation contract must be corrected and covered by a regression test before WI-21 can be revalidated.",
+      "status": "open",
+      "followUp": "Separate ordinary PR quality evidence from release-preparation evidence, bind requiredJobNames to the selected workflow scope, and add a hosted-equivalent regression for a successful quality job with skipped release jobs."
     }
   ],
   "residualRisks": [
@@ -596,7 +612,7 @@
     "comparisonRule": "Compare like-for-like hosted workflow/job scenarios only; unavailable or non-comparable measurements remain not_run and do not support an improvement claim.",
     "status": "partial",
     "scenarios": [
-      {"name": "pull_request_quality_gate", "scenario": "pull_request_quality_gate", "status": "fail", "reason": "WI-21 PR #408 hosted template-smoke failed before a comparable successful post-change measurement; the failure is retained as release-blocking evidence.", "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30261020073", "comparisonBoundary": "No before/after improvement comparison is valid until WI-21 is revalidated after the process-correction merge.", "evidence": [".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.summary.json"]},
+      {"name": "pull_request_quality_gate", "scenario": "pull_request_quality_gate", "status": "fail", "reason": "Quality gates passed in PR #408 run 30266670055, but the always-run CI evidence step failed because non-release skipped jobs were incorrectly declared required; no comparable successful post-change measurement is accepted.", "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30266670055", "comparisonBoundary": "No before/after improvement comparison is valid until the evidence-generation corrective Work Item is merged and WI-21 is revalidated.", "evidence": [".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.summary.json"]},
       {"name": "main_quality_gate", "scenario": "main_quality_gate", "status": "not_run", "reason": "No comparable hosted main-branch baseline was available for this completion attempt.", "source": "docs/operations/quality-gates.md", "comparisonBoundary": "Do not infer improvement from local timing or unrelated workflow runs.", "evidence": []},
       {"name": "installation_smoke", "scenario": "installation_smoke", "status": "not_run", "reason": "The failed PR run did not produce a successful comparable installation-smoke measurement.", "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/408", "comparisonBoundary": "Requires a successful revalidation run after WI-21 is rebased onto current main.", "evidence": []},
       {"name": "release_evidence", "scenario": "release_evidence", "status": "not_run", "reason": "Release evidence is out of scope for WI-21 and must not be used as a performance comparison.", "source": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "comparisonBoundary": "Release evidence is evaluated only by the release Work Item after all prerequisites close.", "evidence": []},
