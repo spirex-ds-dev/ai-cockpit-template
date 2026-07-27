@@ -93,7 +93,7 @@ Expected: all tests pass, including conservative and Decision Evidence regressio
 ### Task 3: Preserve Finish-Time Fail-Closed Coverage
 
 **Files:**
-- Test: `tests/test_scenario_coverage_guard.py`
+- Test: `tests/test_scenario_coverage_gate.py`
 
 **Interfaces:**
 - Consumes: Summary `scenarioCoverage`
@@ -229,4 +229,3 @@ make ai-close-work-item TASK=preflight-planned-scenario-transition-20260728
 
 Verify local/remote branch deletion and local main equality with `origin/main`, then rebase and
 resume the paused performance Work Item.
-
