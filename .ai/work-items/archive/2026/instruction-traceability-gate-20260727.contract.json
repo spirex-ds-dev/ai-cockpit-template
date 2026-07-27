@@ -1,0 +1,220 @@
+{
+  "contractVersion": 2,
+  "workItemId": "instruction-traceability-gate-20260727",
+  "mode": "code",
+  "title": "Add bidirectional instruction-to-evidence traceability gate",
+  "baseCommit": "48c35fcefb27437ce0eae1fcb5adb46d3aa37060",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/instruction-traceability-gate-20260727.contract.json",
+    ".ai/work-items/active/instruction-traceability-gate-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/check_instruction_traceability.py",
+    "tests/test_instruction_traceability.py",
+    "Makefile",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/instruction-traceability.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Rewriting immutable archived Work Item Contracts or Summaries.",
+    "Automatically inferring missing requirements from natural-language prose without a declared traceability record.",
+    "Changing release behavior, version metadata, or unresolved remediation Work Items."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/instruction-traceability-gate-20260727.contract.json",
+      "reason": "This Contract defines the governed implementation boundary and acceptance evidence."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository workflow requires explicit scope, acceptance, verification, Summary evidence, PR lifecycle, and fail-closed closure."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "The remediation plan is the plan-side source that must be checked against implementation and acceptance evidence."
+    },
+    {
+      "path": "scripts/ai_check_work_item.py",
+      "reason": "Existing Contract validation conventions are reused rather than creating an unconnected governance path."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "traceability_integrity"
+    ],
+    "reason": "A false pass would allow an explicit user requirement to disappear between the plan and implementation; the gate therefore fails closed on missing mappings and missing evidence. Natural-language inference is an explicit out-of-scope limitation, not an open unknown."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized establishing the bidirectional traceability mechanism; implementation remains limited to deterministic repository checks."
+  },
+  "preReviewWarnings": [
+    "Review that the gate proves declared mappings and evidence without claiming semantic natural-language completeness."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A versioned traceability record assigns every remediation-plan instruction a stable ID, plan Work Item, Contract path, implementation evidence, acceptance evidence, and verification command.",
+    "The deterministic checker fails closed when an instruction is unmapped, a mapped Contract is missing, a required named path is absent from implementation evidence without an explicit no-change rationale, or acceptance/verification evidence is missing.",
+    "The checker includes a regression case for the WI-10 installation-document omission that failed the prior audit.",
+    "The checker is exposed through a Make target and covered by focused tests, including pass, missing mapping, missing evidence, and explicit no-change rationale cases.",
+    "Documentation explains the forward and reverse traceability workflow and its limitation: structured declarations are checked; prose is not magically or completely inferred.",
+    "The remediation plan records this corrective Work Item and its verification evidence; all required AI and project checks pass and the complete PR/merge/ai-close/branch-cleanup lifecycle is completed."
+  ],
+  "guidelines": [
+    "Keep governance checks deterministic and fail closed.",
+    "Preserve immutable archived historical evidence; use addenda or plan records for corrections.",
+    "Do not encode repository-specific facts in generic installed-template behavior unless the Contract declares them."
+  ],
+  "intent": {
+    "problem": "Detailed user instructions and later corrections can be present in conversation and a written plan while a specifically named existing file or acceptance requirement is omitted from the implementation. The prior WI-10 audit demonstrated that one-way plan execution did not reliably preserve instruction coverage.",
+    "constraints": [
+      "Use a stable, reviewable, repository-local structured record rather than pretending a script can perfectly understand arbitrary natural language.",
+      "Keep archived historical Work Items immutable.",
+      "Require one Work Item, one dedicated branch, one PR, merge, ai-close, and branch cleanup for this correction.",
+      "Do not unblock or publish a release as part of this Work Item."
+    ],
+    "rationale": "A bidirectional deterministic gate makes omissions visible before implementation and before release: instructions must point to plan and evidence, while declared plan obligations must point back to implementation, acceptance, and verification."
+  },
+  "rawUserRequest": "接受建议：建立“指示—计划—实现—验收”的双向追踪机制，防止执行计划遗漏用户指示；继续按完整 Work Item、PR、合并、ai-close-work-item、分支清理流程执行。发布前保持冻结。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message-2026-07-27-traceability-authorization",
+    "capturedAt": "2026-07-27",
+    "digest": "user-authorized-bidirectional-instruction-plan-implementation-acceptance-traceability"
+  },
+  "declaredIntent": {
+    "summary": "Prevent explicit instructions and named deliverables from disappearing between user request, remediation plan, implementation, acceptance, and verification.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {
+      "scenario": "Complete bidirectional mapping passes.",
+      "riskDomain": "traceability_integrity",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_instruction_traceability.py"]
+    },
+    {
+      "scenario": "WI-10 named installation path is omitted from implementation evidence.",
+      "riskDomain": "requirement_omission",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_instruction_traceability.py"]
+    },
+    {
+      "scenario": "A declared no-change rationale is present for a named path.",
+      "riskDomain": "false_positive_control",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_instruction_traceability.py"]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorization-2026-07-27",
+    "reason": "User explicitly authorized establishing and implementing the bidirectional instruction-plan-implementation-acceptance traceability mechanism, including its Make gate."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 623
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/instruction-traceability-gate-20260727.json",
+    "baseCommit": "48c35fcefb27437ce0eae1fcb5adb46d3aa37060",
+    "initialScopeDigest": "c461e432dc26a0da3edbad93a47c407ee26f7cd958465111bfb4be5d3d7c6b5a",
+    "contractSkeletonDigest": "e3a47591507c0c8073d272c2bc739c382ae4b6df9c3d48878401c77cce3a4627"
+  }
+}
