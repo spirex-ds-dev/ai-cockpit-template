@@ -41,6 +41,7 @@ def test_runner_emits_pass_evidence(tmp_path):
     assert evidence["result"] == "passed"
     assert evidence["exitCode"] == 0
     assert evidence["outputDigest"].startswith("sha256:")
+    assert evidence["outputTail"].endswith("ok\n")
     assert "ok" in log.read_text(encoding="utf-8")
 
 
@@ -144,6 +145,7 @@ def test_summarizer_function_reports_failed_and_skipped_records():
             "finishedAt": "2026-07-27T00:00:01Z",
             "result": "failed",
             "commitSha": "abc",
+            "outputTail": "failure tail",
         },
         {
             "gate": "skipped",
@@ -159,6 +161,7 @@ def test_summarizer_function_reports_failed_and_skipped_records():
     summary = summarize_quality_gates.summarize(records)
     assert summary["decision"] == "FAIL"
     assert summary["failedGates"] == ["failed"]
+    assert summary["failureTails"] == {"failed": "failure tail"}
     assert summary["skippedGates"] == ["skipped"]
     assert "failed" in summarize_quality_gates.markdown(summary)
 
