@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import copy
 import json
+import sys
 from pathlib import Path
 
-from check_instruction_traceability import _path, validate_manifest
+from check_instruction_traceability import _path, main, validate_manifest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -75,3 +76,27 @@ def test_invalid_instruction_and_named_path_records_fail_closed() -> None:
     errors = validate_manifest(manifest, ROOT)
     assert any("must be an object" in error for error in errors)
     assert any("requiredNamedPaths contains an invalid record" in error for error in errors)
+
+
+def test_cli_passes_against_archived_contract_lifecycle(monkeypatch) -> None:
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["check_instruction_traceability.py", "--repository", str(ROOT)],
+    )
+    assert main() == 0
+
+
+def test_cli_fails_when_manifest_cannot_be_read(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "check_instruction_traceability.py",
+            "--repository",
+            str(tmp_path),
+            "--manifest",
+            "missing.json",
+        ],
+    )
+    assert main() == 1
