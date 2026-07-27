@@ -260,14 +260,28 @@ check-ai-project-profile:
 check-ai-guard-calibration: check-ai-project-profile
 	$(AI_PYTHON) scripts/ai_check_guard_calibration.py --root .
 
-QUALITY_GATES := project-format-check project-test unsupported-claim-regression adopter-long-cycle project-lint diff-check check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning check-dependency-vulnerabilities check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence
+QUALITY_STATIC_GATES := project-format-check project-lint diff-check
+QUALITY_TEST_GATES := project-test
+QUALITY_EVIDENCE_GATES := unsupported-claim-regression adopter-long-cycle check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning check-dependency-vulnerabilities check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence
 
-# Keep every gate explicit, but run independent gates with bounded parallelism.
-# Adopter projects may customize project-test, so specialized gates remain in the graph.
+# Run cheap static checks before the long test/coverage phase.  The previous
+# parallel graph could hide an early mypy failure behind a still-running pytest.
 quality:
-	+make --no-print-directory --jobs=2 quality-gates
+	+make --no-print-directory quality-gates
 
-quality-gates: $(QUALITY_GATES)
+quality-gates:
+	+make --no-print-directory quality-static
+	+make --no-print-directory quality-tests
+	+make --no-print-directory quality-evidence
+
+quality-static:
+	+make --no-print-directory -j2 $(QUALITY_STATIC_GATES)
+
+quality-tests:
+	+make --no-print-directory project-test
+
+quality-evidence:
+	+make --no-print-directory -j2 $(QUALITY_EVIDENCE_GATES)
 
 ai-cockpit-project-format-check: project-format-check
 

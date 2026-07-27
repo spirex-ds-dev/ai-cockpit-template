@@ -27,6 +27,21 @@ def test_full_quality_has_one_workflow_owner():
     assert "Run repository quality gates" in smoke
 
 
+def test_release_preflight_precedes_expensive_quality():
+    smoke = SMOKE.read_text(encoding="utf-8")
+    assert smoke.index("Verify documented public release contract") < smoke.index(
+        "Run repository quality gates"
+    )
+
+
+def test_quality_is_phased_before_expensive_test_graph():
+    makefile = MAKEFILE.read_text(encoding="utf-8")
+    assert "quality-static:" in makefile
+    assert "quality-tests:" in makefile
+    assert "quality-evidence:" in makefile
+    assert makefile.index("quality-static:") < makefile.index("quality-tests:")
+
+
 def test_compatibility_target_disables_coverage_overhead():
     makefile = MAKEFILE.read_text(encoding="utf-8")
     target = makefile.split("compatibility-test:", 1)[1].split("\n\n", 1)[0]

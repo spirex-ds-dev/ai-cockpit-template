@@ -395,6 +395,8 @@ def test_finish_evidence_redacts_and_replaces_existing_result(tmp_path, monkeypa
     assert recorded == [item]
     assert "secret-value" not in item["outputSummary"]
     assert "<LOCAL_PATH>" in item["outputSummary"]
+    assert item["outputTail"]
+    assert item["outputBytes"] > 0
     truncated_private_key = "".join(["-" * 5, "BEGIN PRIVATE KEY", "-" * 5, "\n", "A" * 40])
     truncated_item = ai_finish.evidence(
         "quality",
