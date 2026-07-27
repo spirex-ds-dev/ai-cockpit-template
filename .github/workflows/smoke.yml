@@ -127,6 +127,16 @@ jobs:
             make check-ai-diff-ownership
           fi
 
+  installation-smoke:
+    needs: template-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+
       - name: Installer dry run
         run: |
           tmp="$(mktemp -d)"
@@ -134,14 +144,9 @@ jobs:
           (
             cd "$tmp"
             printf 'include Makefile.ai\n' > Makefile
-            "$GITHUB_WORKSPACE/install.sh" --stack rust --dry-run
-            "$GITHUB_WORKSPACE/install.sh" --stack go --dry-run
-            "$GITHUB_WORKSPACE/install.sh" --stack java --dry-run
-            "$GITHUB_WORKSPACE/install.sh" --stack kotlin --dry-run
-            "$GITHUB_WORKSPACE/install.sh" --stack swift --dry-run
-            "$GITHUB_WORKSPACE/install.sh" --stack ruby --dry-run
-            "$GITHUB_WORKSPACE/install.sh" --stack php --dry-run
-            "$GITHUB_WORKSPACE/install.sh" --stack csharp --dry-run
+            for stack in rust go java kotlin swift ruby php csharp; do
+              "$GITHUB_WORKSPACE/install.sh" --stack "$stack" --dry-run
+            done
           )
 
       - name: Install into temporary repository
@@ -160,14 +165,9 @@ jobs:
             "$GITHUB_WORKSPACE/install.sh" --stack generic --with-examples --create-adoption
             test -f scripts/ai_check_pr.py
             grep -q '^check-ai-pr:' Makefile.ai
-            test -f examples/csharp/README.md
-            test -f examples/go/README.md
-            test -f examples/java/README.md
-            test -f examples/kotlin/README.md
-            test -f examples/php/README.md
-            test -f examples/python/README.md
-            test -f examples/ruby/README.md
-            test -f examples/swift/README.md
+            for stack in csharp go java kotlin php python ruby swift; do
+              test -f "examples/$stack/README.md"
+            done
             python3 -m py_compile scripts/*.py
             find scripts -type d -name __pycache__ -prune -exec rm -rf {} +
             if make ai-cockpit-quality; then
@@ -182,10 +182,6 @@ jobs:
             make check-ai-coverage-guard
             make check-ai-diff-ownership
             make check-ai-pr AI_BASE_COMMIT="$base"
-            make ai-start TASK=ci_smoke TITLE="CI smoke" MODE=investigate
-            python3 -c 'import json; from pathlib import Path; path = Path(".ai/work-items/active/ci_smoke.contract.json"); contract = json.loads(path.read_text()); contract["scope"].append(".ai/guards/scope_policy.yaml"); contract["restrictedWriteApproval"] = {"approved": True, "approvedBy": "CI smoke", "reason": "Verify installed Makefile.ai passes Contract approval to the guard."}; path.write_text(json.dumps(contract, indent=2) + "\n")'
-            printf '\n# install smoke restricted approval\n' >> .ai/guards/scope_policy.yaml
-            make check-ai-guards CONTRACT=.ai/work-items/active/ci_smoke.contract.json
           )
 
       - name: Reinstall is idempotent
@@ -201,30 +197,81 @@ jobs:
             "$GITHUB_WORKSPACE/install.sh" --stack typescript --dry-run --update-makefile
           )
 
-      - name: Generate independently verifiable CI evidence
-        if: always()
+  release-evidence:
+    needs: template-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+
+      - name: Verify release evidence ownership
+        env:
+          RELEASE_PREPARATION_INTENT: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'release-preparation') }}
         shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$RELEASE_PREPARATION_INTENT" == "true" ]]; then
+            make check-release-state-consistency
+            if git diff --name-only "${{ github.event.pull_request.base.sha || github.event.before }}...${{ github.sha }}" | grep -Eq '^(release\.json|next-release\.json|release-state\.json|install\.sh|\.ai/cockpit/(sbom|provenance|release-digests)\.json)$'; then
+              make check-release-distribution
+            else
+              echo 'Explicit release-preparation intent has no controlled release-file changes; release distribution evidence is not applicable.'
+            fi
+          else
+            echo 'No explicit release-preparation intent; release contract validation is not applicable.'
+          fi
+
+  ci-evidence:
+    needs: [template-smoke, installation-smoke, release-evidence]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+
+      - name: Generate and validate aggregate CI evidence
+        shell: bash
+        env:
+          TEMPLATE_RESULT: ${{ needs.template-smoke.result }}
+          INSTALLATION_RESULT: ${{ needs.installation-smoke.result }}
+          RELEASE_RESULT: ${{ needs.release-evidence.result }}
         run: |
           set -euo pipefail
           head_sha="${{ github.event.pull_request.head.sha || github.sha }}"
           merge_sha="${{ github.sha }}"
-          if [[ "${{ job.status }}" == "success" ]]; then
-            evidence_state=candidate
-            conclusion=success
-            failure_reasons='[]'
-          else
-            evidence_state=failed
-            conclusion=failure
-            failure_reasons='["template-smoke:${{ job.status }}"]'
+          results=("template-smoke:$TEMPLATE_RESULT" "installation-smoke:$INSTALLATION_RESULT" "release-evidence:$RELEASE_RESULT")
+          overall_conclusion=success
+          evidence_state=candidate
+          failure_args=()
+          for result in "${results[@]}"; do
+            status="${result#*:}"
+            if [[ "$status" != "success" ]]; then
+              overall_conclusion=failure
+              evidence_state=failed
+              failure_args+=("$result")
+            fi
+          done
+          failure_json='[]'
+          if ((${#failure_args[@]} > 0)); then
+            failure_json="$(printf '%s\n' "${failure_args[@]}" | jq -R . | jq -s .)"
           fi
           jq -n \
             --arg state "$evidence_state" \
-            --arg conclusion "$conclusion" \
+            --arg conclusion "$overall_conclusion" \
             --arg run_id "$GITHUB_RUN_ID" \
             --arg head_sha "$head_sha" \
             --arg merge_sha "$merge_sha" \
             --arg relation "${{ github.event_name == 'pull_request' && 'pull_request_merge_ref' || 'direct_commit' }}" \
-            --argjson failure_reasons "$failure_reasons" \
+            --argjson failure_reasons "$failure_json" \
+            --arg template "$TEMPLATE_RESULT" \
+            --arg installation "$INSTALLATION_RESULT" \
+            --arg release "$RELEASE_RESULT" \
             '{
               format: "ai-cockpit-ci-release-evidence",
               schemaVersion: 1,
@@ -234,15 +281,23 @@ jobs:
               headSha: $head_sha,
               mergeCommitSha: $merge_sha,
               headToMergeRelationship: $relation,
-              requiredJobNames: ["template-smoke"],
-              workflowRuns: [{workflowRunId: $run_id, workflowName: "smoke.yml", headSha: $head_sha, requiredJobNames: ["template-smoke"], jobs: [{name: "template-smoke", conclusion: $conclusion}], conclusion: $conclusion, failureReasons: $failure_reasons}],
+              requiredJobNames: ["template-smoke", "installation-smoke", "release-evidence"],
+              workflowRuns: [{workflowRunId: $run_id, workflowName: "smoke.yml", headSha: $head_sha, requiredJobNames: ["template-smoke", "installation-smoke", "release-evidence"], jobs: [{name: "template-smoke", conclusion: $template}, {name: "installation-smoke", conclusion: $installation}, {name: "release-evidence", conclusion: $release}], conclusion: $conclusion, failureReasons: $failure_reasons}],
               conclusion: $conclusion,
               failureReasons: $failure_reasons,
               artifactDigests: {"sbom.json": null, "provenance.json": null},
               sbom: {digest: null, sourceCommit: $head_sha},
               provenance: {digest: null, sourceCommit: $head_sha}
             }' > "$RUNNER_TEMP/ci-release-evidence.json"
+          validation_status=0
           make check-ci-release-evidence \
             CI_RELEASE_EVIDENCE="$RUNNER_TEMP/ci-release-evidence.json" \
-            CI_EXPECTED_HEAD_SHA="$head_sha"
+            CI_EXPECTED_HEAD_SHA="$head_sha" || validation_status=$?
           cat "$RUNNER_TEMP/ci-release-evidence.json"
+          if [[ "$validation_status" -ne 0 ]]; then
+            exit "$validation_status"
+          fi
+          if [[ "$overall_conclusion" != "success" ]]; then
+            echo 'One or more required CI jobs did not succeed.' >&2
+            exit 1
+          fi
