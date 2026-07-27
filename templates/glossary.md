@@ -31,5 +31,6 @@ AI エージェントは作業を開始する前に必ずこのドキュメン�
 AI Cockpit を採用しているリポジトリでは、次の用語を分散配布する glossary に含めてください。
 
 - **Preflight Review**: 実装前に Contract の証拠から派生する readiness の助言ビュー。
-- **Preflight Pause Rule**: `needs_human_confirmation` または `not_ready` のとき、エージェントはユーザーへレビューを報告してから実装判断を続ける。
+- **Preflight Pause Rule**: `needs_human_confirmation`、`human_decision_recorded`、`not_ready` のとき、エージェントはユーザーへレビューを報告し、新しく再計算された `ready` の証拠が得られるまで実装または finish へ進まない。
+- **Planned Scenario Verification**: 実装後にしか検証できない必須シナリオについて、Contract に期待結果と具体的な `verificationPlan` を記録して実装準備を示す状態。検証完了の証拠ではなく、Summary と finish は実行済み証拠が揃うまで fail closed を維持する。
 - **Evidence over Self-Declaration**: readiness を AI の自己申告ではなく、既存証拠から派生させる原則。

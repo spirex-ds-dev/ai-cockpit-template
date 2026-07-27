@@ -88,6 +88,15 @@
       "implementationEvidence": ["Makefile", ".github/workflows/smoke.yml", "scripts/run_quality_gate.py", "scripts/summarize_quality_gates.py", "docs/operations/quality-gates.md", "docs/operations/quality-gates.zh-CN.md", "docs/operations/quality-gates.ja.md"],
       "acceptanceEvidence": ["tests/test_quality_gate_architecture.py", "tests/test_quality_telemetry.py"],
       "verificationCommands": ["make check-instruction-traceability", "make ai-finish TASK=quality-gate-performance-completion-20260727", "make ai-close-work-item TASK=quality-gate-performance-completion-20260727"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-010",
+      "summary": "When implementation-only scenario evidence creates a Preflight deadlock, fix the governed state transition first: concrete planned verification may authorize implementation but never completion, and a rejected ai-start must leave governance state unchanged.",
+      "planWorkItems": ["WI-20", "preflight-planned-scenario-transition-20260728"],
+      "contractPaths": [".ai/work-items/active/preflight-planned-scenario-transition-20260728.contract.json"],
+      "implementationEvidence": ["scripts/ai_common.py", "scripts/ai_preflight_review.py", "scripts/ai_start.py", ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md"],
+      "acceptanceEvidence": ["tests/test_preflight_review.py", "tests/test_scenario_coverage_gate.py", "tests/test_start_and_archive.py"],
+      "verificationCommands": ["make ai-preflight", "make check-instruction-traceability", "make ai-finish TASK=preflight-planned-scenario-transition-20260728", "make ai-close-work-item TASK=preflight-planned-scenario-transition-20260728"]
     }
   ]
 }
