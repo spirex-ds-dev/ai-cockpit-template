@@ -523,6 +523,38 @@
       "resolution": "The index digests will be regenerated after the final Summary and Manifest edits, followed by a full archive integrity audit.",
       "status": "open",
       "followUp": "Make archive index regeneration and digest validation an automatic post-finish gate."
+    },
+    {
+      "issueId": "RFE-ISSUE-094",
+      "category": "release-preflight",
+      "severity": "high",
+      "stage": "pr-ci",
+      "fact": "PR #408 changed source-bound release evidence files as part of WI-21 baseline alignment, so smoke.yml entered AI_RELEASE_PREPARATION=1 and rejected the existing reserved v0.5.44 candidate before quality gates ran.",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30261020073/job/89960666163",
+        ".github/workflows/smoke.yml",
+        "next-release.json"
+      ],
+      "decision": "Do not change the candidate version or publish; stop the PR and create a corrective Work Item for release-preparation scope semantics.",
+      "resolution": "Open; the release-preparation classifier and candidate validation must be corrected before WI-21 can be revalidated.",
+      "status": "open",
+      "followUp": "Ensure ordinary governance/evidence maintenance PRs do not run publication-candidate validation unless the Work Item explicitly declares release preparation."
+    },
+    {
+      "issueId": "RFE-ISSUE-095",
+      "category": "ci-evidence",
+      "severity": "medium",
+      "stage": "pr-ci",
+      "fact": "When template-smoke failed, the always-run evidence step declared template-smoke, installation-smoke, and release-evidence as required jobs but emitted only template-smoke in the jobs array; the validator then reported a misleading top-level-head binding error.",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30261020073/job/89960666163",
+        "scripts/check_ci_release_evidence.sh",
+        ".github/workflows/smoke.yml"
+      ],
+      "decision": "Do not weaken evidence validation; create a corrective Work Item that records skipped/dependent jobs explicitly and reports the missing-job cause.",
+      "resolution": "Open; no merge or release is allowed until failed CI evidence is itself structurally valid and diagnosable.",
+      "status": "open",
+      "followUp": "Add failing regression coverage for incomplete required-job evidence and precise validator diagnostics."
     }
   ],
   "residualRisks": [

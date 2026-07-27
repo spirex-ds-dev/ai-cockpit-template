@@ -412,6 +412,8 @@ PR #410 已作为 superseded corrective PR 关闭且未合并，归档证据保�
 `RFE-ISSUE-091`（工单证据/验收，低）：`ai-finish` 后审计发现，五个 hosted 性能场景最初只有 prose/known gap；尝试补入结构化 `hostedPerformanceEvidence` 后又被 Summary schema 正确拒绝，说明“结构化未运行证据”尚未进入正式 schema。已暂停 PR 交接，移除不受支持的字段并保留 open 状态；后续必须建立 corrective Work Item 扩展 schema/validator，不能手工绕过门禁。
 `RFE-ISSUE-092`（指示追踪/归档路径，低）：WI-21 归档后，traceability manifest 仍引用 `active/...contract.json`，导致归档文件存在但检查器报路径缺失。已改为引用实际 archive Contract 路径，并要求归档/PR 前重新运行追踪检查。
 `RFE-ISSUE-093`（归档证据/索引，低）：修正 WI-21 的 Summary 与 Archive Manifest 后，`.ai/work-items/archive/index.json` 仍保留旧的 Summary/Manifest digest，说明归档后手工补证据会造成三处索引漂移。已暂停 PR 交接，必须在最终 Summary/Manifest 稳定后重新生成 index 并做全量 digest 审计。
+`RFE-ISSUE-094`（发布预检/流程，高）：PR #408 因 WI-21 为 source-bound baseline 对齐而修改 release evidence 文件，误进入 `AI_RELEASE_PREPARATION=1`，并在质量门前以 reserved v0.5.44 candidate 失败。已停止 PR 重跑，不修改版本或公开状态；必须先建立 corrective Work Item 修正“发布准备声明”与文件 diff 的边界。
+`RFE-ISSUE-095`（CI 证据/诊断，中）：PR #408 的失败 evidence step 只记录 `template-smoke`，却声明三个 required jobs，验证器因此输出误导性的 top-level head 错误。已停止合并，必须在 corrective Work Item 中补齐 skipped/dependent job 记录、精确错误分类和回归测试。
 `RFE-ISSUE-063`（工单初始化/预检，中）：CI 流程修复工单的 `ai-start` skeleton 缺少任务意图、原始请求、场景覆盖和具体验收，按要求停止在 `not_ready`。已补全 Contract，才允许进入实现。
 `RFE-ISSUE-064`（工单证据结构，中）：补全 Contract 后，preflight 又拒绝不完整的 `rawRequestSource`、中风险 unknowns review 和 `pending` 场景状态。已改为完整人类请求证据、显式 unknowns review 和 `unverified` 初始场景状态，继续保持门禁有效。
 `RFE-ISSUE-065`（预检授权路径，中）：CI 工单记录用户授权的选项 B 后，`ai-preflight --check` 仍将 `human_decision_recorded` 视为 blocked，没有“授权后先实现、再以真实证据闭合场景”的继续路径。已保留 Decision Evidence，严格限制为已确认的 CI 编排范围，继续以 checkpoint 和后续真实验证闭合场景，不提前伪造 verified 状态。
