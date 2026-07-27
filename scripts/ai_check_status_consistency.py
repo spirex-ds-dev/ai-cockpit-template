@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import subprocess
 import sys
@@ -59,6 +60,49 @@ def git_records(text: str) -> list[str]:
     return [line for line in text.splitlines() if line]
 
 
+def transaction_owned_start_receipts(changed: set[str]) -> set[str]:
+    """Return start receipts owned by a complete, currently changed archive bundle."""
+    archive_index = ".ai/work-items/archive/index.json"
+    if archive_index not in changed:
+        return set()
+
+    owned: set[str] = set()
+    starts_prefix = ".ai/work-items/starts/"
+    archive_prefix = ".ai/work-items/archive/"
+    for receipt in changed:
+        if not receipt.startswith(starts_prefix) or not receipt.endswith(".json"):
+            continue
+        task = Path(receipt).name.removesuffix(".json")
+        manifest_name = f"{task}.archive-manifest.json"
+        manifest_paths = sorted(
+            path
+            for path in changed
+            if path.startswith(archive_prefix) and path.endswith(f"/{manifest_name}")
+        )
+        for manifest_path in manifest_paths:
+            archive_dir = Path(manifest_path).parent.as_posix()
+            contract_path = f"{archive_dir}/{task}.contract.json"
+            summary_path = f"{archive_dir}/{task}.summary.json"
+            if contract_path not in changed or summary_path not in changed:
+                continue
+            try:
+                manifest = json.loads((PROJECT_ROOT / manifest_path).read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            if not isinstance(manifest, dict):
+                continue
+            if (
+                manifest.get("format") == "ai-cockpit-archive-manifest"
+                and manifest.get("manifestVersion") == 1
+                and manifest.get("workItemId") == task
+                and manifest.get("contractPath") == contract_path
+                and manifest.get("summaryPath") == summary_path
+            ):
+                owned.add(receipt)
+                break
+    return owned
+
+
 def live_no_active_changed_files(status_path: Path) -> list[str]:
     try:
         relative_status = relative(status_path)
@@ -100,6 +144,7 @@ def live_no_active_changed_files(status_path: Path) -> list[str]:
             line.strip() for line in git_records(getattr(untracked, "stdout", "")) if line.strip()
         )
     changed.discard(relative_status)
+    changed.difference_update(transaction_owned_start_receipts(changed))
     changed = {path for path in changed if not path.startswith(".ai/work-items/archive/")}
     return sorted(changed)
 

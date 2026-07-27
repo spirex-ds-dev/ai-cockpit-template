@@ -92,7 +92,7 @@ Cockpit Status はレビュアー向けに Preflight Review を見えるまま�
 
 アクティブ Work Item が 0 件、または 1 組の Contract/Summary ペアだけの場合、`make repair-ai-status` で `current_status.md` を再生成できます。不整合ファイルや複数アクティブ Work Item の修復は含みません。
 
-archive 後の状態は `no_active_work_item` です。これは worktree が clean である意味ではなく、no-active status はファイル一覧を保存しませんが、worktree change の圧縮信号と ownership preview state は残します。アーカイブ証跡と完全 PR diff の所有権は `make check-ai-pr AI_BASE_COMMIT=<merge-base>` で検証します。`repair-ai-status` は有効な 0 件または 1 組の active 状態だけを再生成し、所有権証跡自体は修復しません。
+archive 後の状態は `no_active_work_item` です。これは worktree が clean である意味ではなく、no-active status はファイル一覧を保存しません。最初の archive bundle commit 前に限り、現在の change set に同一 Work Item の有効な archived Contract、Summary、manifest、index 更新がすべて含まれる場合だけ、対応する start receipt を同じ transaction の証跡として扱います。孤立した receipt、履歴にしか存在しない pair、不完全な pair、不正な manifest、無関係な変更は引き続き fail closed です。完全な archive bundle を先に commit し、アーカイブ証跡と完全 PR diff の所有権を `make check-ai-pr AI_BASE_COMMIT=<merge-base>` で検証します。`repair-ai-status` は有効な 0 件または 1 組の active 状態だけを再生成し、所有権証跡自体は修復しません。
 
 `make check-ai-diff-ownership` は早期の読み取り専用 Preview です。`AI_BASE_COMMIT` なしでは未追跡ファイルを含むローカル diff を、指定時には PR diff を検査し、PR audit と同じく今回追加された archive pair だけを使用します。PR audit は重複する archive claim を決定的に解決し、最後に有効だった archive pair を採用します。`make ai-pre-merge AI_BASE_COMMIT=<merge-base>` は品質、lifecycle、Preview、最終 PR audit を順に表示し、いずれかが失敗すれば merge 不可です。
 
