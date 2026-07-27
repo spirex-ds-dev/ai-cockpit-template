@@ -257,3 +257,5 @@ def test_smoke_workflow_quality_gate_has_fail_closed_timeout():
     assert "timeout-minutes: 30" in workflow
     assert "Run repository quality gates" in workflow
     assert workflow.index("timeout-minutes: 30") < workflow.index("Run repository quality gates")
+    assert "timeout-minutes: 25" in workflow
+    assert "quality heartbeat" in workflow
