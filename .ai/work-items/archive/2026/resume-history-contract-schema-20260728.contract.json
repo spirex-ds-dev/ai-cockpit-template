@@ -1,0 +1,259 @@
+{
+  "contractVersion": 2,
+  "workItemId": "resume-history-contract-schema-20260728",
+  "mode": "code",
+  "title": "resume-history-contract-schema-20260728",
+  "baseCommit": "fffccd17a328399718b7734c276ac91b3321e510",
+  "rawUserRequest": "继续执行全部计划；如果工单执行遇到流程问题，记录并先修流程。性能工单通过 ai-resume-work-item 生成 resumeHistory 后，canonical Contract validator 将该 writer 产物拒绝为 unknown field。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-continuous-process-correction",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-continuous-corrective-execution"
+  },
+  "declaredIntent": {
+    "summary": "Make the governed resume writer and canonical Contract schema accept the same source-bound resumeHistory field.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/resume-history-contract-schema-20260728.contract.json",
+    ".ai/work-items/active/resume-history-contract-schema-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    "scripts/ai_check_work_item.py",
+    "tests/test_ai_check_work_item.py",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-28-resume-history-contract-schema.md"
+  ],
+  "outOfScope": [
+    "Changing resumeHistory lineage semantics already enforced by ai_start_receipt.py",
+    "Rewriting the performance Work Item Start Receipt or generated resume transition",
+    "Continuing performance implementation before this corrective closes",
+    "Release preparation, candidate identity, tags, or publication",
+    "General quality performance optimization"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_work_item.py",
+      "reason": "Canonical Contract allowlist rejects the resume writer's output."
+    },
+    {
+      "path": "scripts/ai_resume_work_item.py",
+      "reason": "Governed writer atomically appends resumeHistory."
+    },
+    {
+      "path": "scripts/ai_start_receipt.py",
+      "reason": "Canonical lineage validator already checks resumeHistory semantics."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/work-item-resume-receipt-lineage-20260728.summary.json",
+      "reason": "RFE-117 evidence claims the writer and validation path form one supported transition."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "schema_writer_mismatch",
+      "governance_deadlock"
+    ],
+    "reason": "A one-field allowlist omission blocks the only supported baseline transition after the writer has already produced valid lineage evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The mismatch is reproduced, the correction is narrow, and the user authorized continuous process correction."
+  },
+  "preReviewWarnings": [
+    "Confirm resumeHistory becomes allowed without weakening validate_receipt lineage checks.",
+    "Confirm unknown unrelated fields remain fail closed.",
+    "Confirm a writer-generated resumed Contract passes canonical Contract validation and Preflight.",
+    "Confirm the paused performance Work Item remains unmodified by this corrective PR."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: A red-first regression reproduces canonical Contract rejection of resumeHistory as an unknown field.",
+    "A2: resumeHistory is an allowed current Contract field while every unrelated unknown field remains rejected.",
+    "A3: Existing validate_receipt and validate_resume_history semantic, ancestry, digest, predecessor, and manifest checks remain unchanged and pass.",
+    "A4: A writer-generated resumed active Contract passes check-ai-contract and enforced Preflight without deleting or hand-editing resumeHistory.",
+    "A5: The comprehensive plan, corrective plan, traceability, Contract, Summary, implementation, and acceptance evidence remain bidirectionally aligned.",
+    "A6: Full quality, archive sequence 622, committed aggregate PR validation, hosted CI, merge, ai-close-work-item, branch cleanup, and synchronized main complete before performance resumes."
+  ],
+  "guidelines": [
+    "Writer output and canonical reader schema must be tested as one executable contract.",
+    "Keep resumeHistory fail-closed semantic validation in ai_start_receipt.py unchanged.",
+    "Do not repair the paused performance Contract by deleting lineage evidence or rewriting its Start Receipt.",
+    "Record this process mismatch before resuming successor implementation."
+  ],
+  "intent": {
+    "problem": "The merged ai-resume-work-item command successfully appends a validated resumeHistory transition, but ai_check_work_item.ALLOWED_FIELDS omits resumeHistory. The next mandatory ai-preflight therefore fails with unknown field, making the supported writer unusable end to end.",
+    "constraints": [
+      "Preserve all existing resumeHistory semantic and repository-fact validation.",
+      "Do not broaden arbitrary Contract fields.",
+      "Do not mutate the immutable performance Start Receipt.",
+      "Keep performance implementation and release work paused."
+    ],
+    "rationale": "Adding the writer-owned field to the canonical allowlist, with a regression that unrelated fields still fail, closes the schema boundary without weakening lineage checks."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A current Contract contains writer-generated resumeHistory.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_check_work_item.py::test_contract_schema_accepts_resume_writer_field_and_rejects_unrelated_unknowns"
+      ],
+      "expected": "Canonical Contract validation accepts the field and delegates lineage semantics to validate_receipt.",
+      "verificationPlan": "Add a red-first canonical validator regression and rerun the paused Contract through check-ai-contract and Preflight after merge."
+    },
+    {
+      "scenario": "A current Contract contains an unrelated unknown field.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_check_work_item.py::test_contract_schema_accepts_resume_writer_field_and_rejects_unrelated_unknowns"
+      ],
+      "expected": "The canonical validator still reports unknown field.",
+      "verificationPlan": "Retain and extend the negative allowlist assertion in tests/test_ai_check_work_item.py."
+    },
+    {
+      "scenario": "resumeHistory lineage is malformed or source evidence is invalid.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_resume_history_rejects_direct_or_malformed_baseline_transition",
+        "tests/test_start_and_archive.py::test_resume_history_rejects_non_ancestor_and_manifest_digest_mismatch"
+      ],
+      "expected": "Existing receipt/history validation remains fail closed.",
+      "verificationPlan": "Run the existing resumeHistory negative matrix in tests/test_start_and_archive.py."
+    },
+    {
+      "scenario": "The corrective diff accidentally includes paused performance implementation.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        ".ai/work-items/active/resume-history-contract-schema-20260728.contract.json",
+        "docs/superpowers/plans/2026-07-28-resume-history-contract-schema.md"
+      ],
+      "expected": "Only schema, regression, plan, traceability, and Work Item evidence appear in the corrective diff.",
+      "verificationPlan": "Run check-ai-scope and aggregate PR ownership from the latest origin/main."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "No restricted path is modified."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 623
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/resume-history-contract-schema-20260728.json",
+    "baseCommit": "fffccd17a328399718b7734c276ac91b3321e510",
+    "initialScopeDigest": "b923ae3119aea6da214cfb5397ac90f4c631d8ae9b29df6ed79b12f5659b9314",
+    "contractSkeletonDigest": "1d7298b979455409a52dbf00dc5bb7c550ad010d6aebe121b5ce075a5570ab67"
+  }
+}
