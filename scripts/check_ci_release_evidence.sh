@@ -24,6 +24,7 @@ jq -e '
   (.workflowRuns | type == "array" and length > 0) and
   (.conclusion | IN("success", "failure", "cancelled", "skipped")) and
   (.failureReasons | type == "array" and all(.[]; type == "string" and length > 0)) and
+  (.conclusion != "success" or (.failureReasons | length == 0)) and
   (.artifactDigests | type == "object") and
   (.artifactDigests["sbom.json"] == null or ((.artifactDigests["sbom.json"] | type) == "string" and (.artifactDigests["sbom.json"] | test("^[0-9a-f]{64}$")))) and
   (.artifactDigests["provenance.json"] == null or ((.artifactDigests["provenance.json"] | type) == "string" and (.artifactDigests["provenance.json"] | test("^[0-9a-f]{64}$"))))
@@ -34,20 +35,44 @@ if [[ -n "$expected_head" ]]; then
   [[ "$(jq -r '.headSha' "$evidence_path")" == "$expected_head" ]] || fail "head SHA does not match expected source"
 fi
 
+top_head=$(jq -r '.headSha' "$evidence_path")
+top_conclusion=$(jq -r '.conclusion' "$evidence_path")
+top_required_jobs=$(jq -c '.requiredJobNames' "$evidence_path")
+
 jq -e '
   all(.workflowRuns[];
-    . as $run |
-    ($run.workflowRunId | tostring | length > 0) and
-    ($run.workflowName | type == "string" and length > 0) and
-    ($run.headSha == $headSha and ($run.headSha | test("^[0-9a-f]{40}$"))) and
-    ($run.requiredJobNames | type == "array" and length > 0) and
-    ($run.jobs | type == "array") and
-    ($run.conclusion | IN("success", "failure", "cancelled", "skipped")) and
-    ($run.failureReasons | type == "array") and
-    (all($run.jobs[]; (.name | type == "string" and length > 0) and (.conclusion | IN("success", "failure", "cancelled", "skipped")))) and
-    (all($run.requiredJobNames[]; . as $required | any($run.jobs[]; .name == $required)))
+    (.workflowRunId | tostring | length > 0) and
+    (.workflowName | type == "string" and length > 0) and
+    (.headSha | type == "string" and test("^[0-9a-f]{40}$")) and
+    (.jobs | type == "array" and length > 0) and
+    (.conclusion | IN("success", "failure", "cancelled", "skipped")) and
+    (.failureReasons | type == "array" and all(.[]; type == "string" and length > 0)) and
+    (all(.jobs[]; (.name | type == "string" and length > 0) and (.conclusion | IN("success", "failure", "cancelled", "skipped"))))
   )
-' --arg headSha "$(jq -r '.headSha' "$evidence_path")" "$evidence_path" >/dev/null || fail "workflow run evidence is missing a required job or is not bound to the top-level head"
+' --arg headSha "$top_head" "$evidence_path" >/dev/null || fail "workflow run evidence is malformed"
+
+jq -e 'all(.workflowRuns[]; .headSha == $headSha)' \
+  --arg headSha "$top_head" "$evidence_path" >/dev/null || fail "workflow run Head SHA does not match top-level Head SHA"
+
+jq -e 'all(.workflowRuns[]; (.requiredJobNames | sort) == ($required | sort))' \
+  --argjson required "$top_required_jobs" "$evidence_path" >/dev/null || fail "workflow-run required-job set does not match top-level required-job set"
+
+jq -e 'all(.workflowRuns[]; . as $run | all($run.requiredJobNames[]; . as $required | any($run.jobs[]; .name == $required)))' \
+  "$evidence_path" >/dev/null || fail "required job evidence is missing a declared required job"
+
+jq -e '
+  all(.workflowRuns[];
+    if $topConclusion == "success" then
+      (.conclusion == "success") and (.failureReasons | length == 0) and
+      (. as $run | all($run.requiredJobNames[]; . as $required | any($run.jobs[]; .name == $required and .conclusion == "success")))
+    elif $topConclusion == "failure" then
+      (.conclusion == "failure") and (.failureReasons | length > 0) and
+      (. as $run | any($run.requiredJobNames[]; . as $required | any($run.jobs[]; .name == $required and .conclusion != "success")))
+    else
+      (.conclusion == $topConclusion)
+    end
+  )
+' --arg topConclusion "$top_conclusion" "$evidence_path" >/dev/null || fail "job status is inconsistent with top-level conclusion"
 
 jq -e '
   . as $e |

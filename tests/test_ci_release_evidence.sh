@@ -6,7 +6,7 @@ tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 head='c2022fa1d0c2d94ed3edf6c1d16a89260d3fd68f'
 valid="$tmp/valid.json"
-jq -n --arg head "$head" '{format:"ai-cockpit-ci-release-evidence",schemaVersion:1,state:"verified",evidenceSource:"github_api",workflowRunId:"12345",headSha:$head,mergeCommitSha:("d"*40),headToMergeRelationship:"pull_request_merge_ref",requiredJobNames:["smoke"],workflowRuns:[{workflowRunId:"12345",workflowName:"smoke.yml",headSha:$head,requiredJobNames:["smoke"],jobs:[{name:"smoke",conclusion:"success"}],conclusion:"success",failureReasons:[]}],conclusion:"success",failureReasons:[],artifactDigests:{"sbom.json":("a"*64),"provenance.json":("b"*64)},sbom:{digest:("a"*64),sourceCommit:$head},provenance:{digest:("b"*64),sourceCommit:$head}}' > "$valid"
+jq -n --arg head "$head" '{format:"ai-cockpit-ci-release-evidence",schemaVersion:1,state:"verified",evidenceSource:"github_api",workflowRunId:"12345",headSha:$head,mergeCommitSha:("d"*40),headToMergeRelationship:"pull_request_merge_ref",requiredJobNames:["template-smoke"],workflowRuns:[{workflowRunId:"12345",workflowName:"smoke.yml",headSha:$head,requiredJobNames:["template-smoke"],jobs:[{name:"template-smoke",conclusion:"success"}],conclusion:"success",failureReasons:[]}],conclusion:"success",failureReasons:[],artifactDigests:{"sbom.json":("a"*64),"provenance.json":("b"*64)},sbom:{digest:("a"*64),sourceCommit:$head},provenance:{digest:("b"*64),sourceCommit:$head}}' > "$valid"
 bash "$root/scripts/check_ci_release_evidence.sh" "$valid" "$head"
 
 for mutation in missing-run stale-head failed-without-reason pr-body; do
@@ -25,6 +25,29 @@ bad_required_jobs="$tmp/bad-required-jobs.json"
 jq '.requiredJobNames += ["installation-smoke"]' "$valid" > "$bad_required_jobs"
 if bash "$root/scripts/check_ci_release_evidence.sh" "$bad_required_jobs" "$head"; then
   echo 'incomplete required-job evidence unexpectedly passed' >&2
+  exit 1
+fi
+all_three="$tmp/all-three.json"
+jq '.state = "candidate" | .requiredJobNames = ["template-smoke","installation-smoke","release-evidence"] | .workflowRuns[0].requiredJobNames = ["template-smoke","installation-smoke","release-evidence"] | .workflowRuns[0].jobs += [{name:"installation-smoke",conclusion:"success"},{name:"release-evidence",conclusion:"success"}] | .state = "candidate" | .conclusion = "success"' "$valid" > "$all_three"
+bash "$root/scripts/check_ci_release_evidence.sh" "$all_three" "$head"
+upstream_failed="$tmp/upstream-failed.json"
+jq '.state = "failed" | .conclusion = "failure" | .failureReasons = ["template-smoke:failure","installation-smoke:skipped","release-evidence:skipped"] | .workflowRuns[0].conclusion = "failure" | .workflowRuns[0].failureReasons = .failureReasons | .workflowRuns[0].jobs[0].conclusion = "failure" | .workflowRuns[0].jobs += [{name:"installation-smoke",conclusion:"skipped"},{name:"release-evidence",conclusion:"skipped"}]' "$valid" > "$upstream_failed"
+bash "$root/scripts/check_ci_release_evidence.sh" "$upstream_failed" "$head"
+downstream_failed="$tmp/downstream-failed.json"
+jq '.state = "failed" | .conclusion = "failure" | .failureReasons = ["installation-smoke:failure"] | .workflowRuns[0].conclusion = "failure" | .workflowRuns[0].failureReasons = .failureReasons | .workflowRuns[0].jobs += [{name:"installation-smoke",conclusion:"failure"},{name:"release-evidence",conclusion:"success"}]' "$valid" > "$downstream_failed"
+# Make the downstream-failure fixture require and record all three jobs.
+jq '.requiredJobNames = ["template-smoke","installation-smoke","release-evidence"] | .workflowRuns[0].requiredJobNames = .requiredJobNames' "$downstream_failed" > "$tmp/downstream-failed-3.json"
+bash "$root/scripts/check_ci_release_evidence.sh" "$tmp/downstream-failed-3.json" "$head"
+missing_job="$tmp/missing-job.json"
+jq '.state = "failed" | .conclusion = "failure" | .failureReasons = ["installation-smoke:skipped"] | .requiredJobNames = ["template-smoke","installation-smoke"] | .workflowRuns[0].requiredJobNames = .requiredJobNames | .workflowRuns[0].conclusion = "failure" | .workflowRuns[0].failureReasons = .failureReasons' "$valid" > "$missing_job"
+if bash "$root/scripts/check_ci_release_evidence.sh" "$missing_job" "$head"; then
+  echo 'missing required job evidence unexpectedly passed' >&2
+  exit 1
+fi
+success_with_failure_reason="$tmp/success-with-failure-reason.json"
+jq '.state = "candidate" | .failureReasons = ["template-smoke:success"] | .workflowRuns[0].failureReasons = ["template-smoke:success"]' "$valid" > "$success_with_failure_reason"
+if bash "$root/scripts/check_ci_release_evidence.sh" "$success_with_failure_reason" "$head"; then
+  echo 'successful evidence with a success failure reason unexpectedly passed' >&2
   exit 1
 fi
 mkdir "$tmp/release"

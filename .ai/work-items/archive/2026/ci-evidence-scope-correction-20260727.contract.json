@@ -1,0 +1,188 @@
+{
+  "contractVersion": 2,
+  "workItemId": "ci-evidence-scope-correction-20260727",
+  "mode": "code",
+  "title": "Correct CI evidence job scope and conclusion reporting",
+  "baseCommit": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+    ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".github/workflows/smoke.yml",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    "scripts/check_ci_release_evidence.sh",
+    "tests/test_ci_release_evidence.sh",
+    "tests/test_ci_quality_orchestration.py",
+    "docs/reference/ci-release-evidence.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "WI-21 performance implementation",
+    "WI-10 installation documentation content",
+    "next-release.json",
+    "release-state.json",
+    "GitHub tag or release publication",
+    "weakening required CI, SBOM, provenance, or release evidence validation"
+  ],
+  "sources": [
+    {"path": "AGENTS.md", "reason": "Requires process-root-cause review and fail-closed Work Item lifecycle."},
+    {"path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "reason": "Defines serial order and requires corrective Work Items before resuming blocked work."},
+    {"path": ".github/workflows/smoke.yml", "reason": "Run 30266670055 failed in the always-run evidence step after quality passed."},
+    {"path": "scripts/check_ci_release_evidence.sh", "reason": "Defines required-job and source-binding validation contract."},
+    {"path": "tests/test_ci_release_evidence.sh", "reason": "Existing validator regression fixture and location for the new failure case."},
+    {"path": "tests/test_ci_quality_orchestration.py", "reason": "Workflow structure regression coverage."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30266670055/job/89978889383", "reason": "Hosted failure evidence: quality passed, CI evidence generation failed."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["ci", "release", "evidence_integrity"],
+    "reason": "Incorrect job-scope binding can block valid PRs or make release evidence incomplete; validation must remain fail closed.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized continuous execution; this corrective Work Item is required before WI-21 can resume and is bounded to the observed CI evidence defect."
+  },
+  "preReviewWarnings": [
+    "Do not weaken required-job validation; the terminal aggregate must always declare and record template-smoke, installation-smoke, and release-evidence, including skipped results."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: The terminal ci-evidence Job runs after template-smoke, installation-smoke, and release-evidence with if: always(), declares all three as required, and records every needs result including skipped.",
+    "A2: Evidence records executed, skipped, and failed jobs with accurate conclusions and failure reasons; a successful template-smoke job is never emitted as template-smoke:success failure reason.",
+    "A3: Validator diagnostics distinguish missing required job evidence from head-SHA binding failure without weakening either gate.",
+    "A4: Regression coverage reproduces the PR #408/CI run 30266670055 structural failure and covers all-three success, upstream failure with dependent Jobs skipped, and an individual downstream failure.",
+    "A5: The plan records RFE-ISSUE-100 and the corrective dependency; WI-21 remains release-blocking until revalidation succeeds.",
+    "A6: All required AI/project checks pass and this Work Item completes PR, merge, archive, ai-close-work-item, branch cleanup, and base synchronization without publishing a release."
+  ],
+  "guidelines": [
+    "Preserve fail-closed behavior for verified and published evidence.",
+    "Add regression coverage before changing the workflow evidence contract.",
+    "Do not change release identity or publish provider assets."
+  ],
+  "intent": {
+    "problem": "PR #408 run 30266670055 passed the expensive quality gates but failed in its always-run evidence step because the step emitted only template-smoke while declaring installation-smoke and release-evidence required. This repeated the class of process failure previously recorded as RFE-ISSUE-095.",
+    "constraints": ["Keep validation fail closed.", "Keep WI-21, WI-10, and release publication out of scope.", "Make evidence scope explicit and machine-checkable."],
+    "rationale": "Correct the workflow/validator contract at its source before re-running or merging the blocked performance Work Item."
+  },
+  "rawUserRequest": "PR #408 run 30266670055 的 Head SHA 正确；真正根因是 requiredJobNames 声明三个 Job，但证据步骤位于 template-smoke 内，只能生成 template-smoke，随后下游 Job 因 needs 被 skipped，且校验器把缺失 Job 与 Head 错误合并。请建立末端 ci-evidence Job，needs 三个 Job、if: always()，记录全部真实状态，拆分诊断并增加完整回归测试；先完成该 corrective Work Item，再恢复 WI-21。",
+  "rawRequestSource": {"type": "human", "reference": "user-performance-investigation-and-process-correction-20260727", "capturedAt": "2026-07-27", "digest": "sha256:user-authorized-ci-evidence-scope-correction-20260727", "summary": "User authorized continuous execution and requires discovered process issues to be fixed before the next Work Item."},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Make CI evidence job scope and conclusions truthful and mechanically valid for both ordinary PR and release-preparation workflow paths.", "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]},
+  "scenarioCoverage": [
+    {"scenario": "Observed PR #408 evidence failure is captured as a release-blocking reproduction.", "expected": "The Work Item records the quality-success/evidence-failure boundary and does not treat it as a performance success.", "required": true, "status": "verified", "evidence": ["https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30266670055/job/89978889383"]},
+    {"scenario": "All three required Jobs succeed.", "expected": "The terminal aggregate emits candidate/success evidence with all three Job records and no failure reasons.", "required": true, "status": "verified", "evidence": [".github/workflows/smoke.yml", "tests/test_ci_release_evidence.sh"]},
+    {"scenario": "template-smoke fails and both dependent Jobs are skipped.", "expected": "The terminal aggregate still runs, records failure/skipped/skipped, validates failed evidence, and then returns failure.", "required": true, "status": "verified", "evidence": [".github/workflows/smoke.yml", "tests/test_ci_release_evidence.sh"]},
+    {"scenario": "A downstream required Job fails after template-smoke succeeds.", "expected": "The terminal aggregate records the individual downstream failure and fails without inventing a template-smoke failure.", "required": true, "status": "verified", "evidence": ["scripts/check_ci_release_evidence.sh", "tests/test_ci_release_evidence.sh"]},
+    {"scenario": "Required Job evidence is missing or Head SHA is wrong.", "expected": "The validator rejects each condition with a distinct diagnostic.", "required": true, "status": "verified", "evidence": ["scripts/check_ci_release_evidence.sh", "tests/test_ci_release_evidence.sh"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User",
+    "reason": "User explicitly approved implementation of the permanent CI evidence aggregation and diagnostic workflow fix."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 627
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/ci-evidence-scope-correction-20260727.json",
+    "baseCommit": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+    "initialScopeDigest": "0445570a6d07a4233e1f5fd48e935e5c734a56760e132d0789b5f97469006eff",
+    "contractSkeletonDigest": "a0cb1a5965195aac25e5296a4e92578f5d5b62230a9b7c4ecf6fe6441efeaa08"
+  }
+}

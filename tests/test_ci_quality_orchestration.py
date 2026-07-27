@@ -59,6 +59,38 @@ def test_release_preparation_is_scoped_to_release_file_changes():
     assert "RELEASE_PREPARATION_INTENT" in smoke
 
 
+def test_pr_evidence_scope_records_skipped_release_jobs_without_requiring_them():
+    smoke = SMOKE.read_text(encoding="utf-8")
+    evidence = smoke.split("  ci-evidence:", 1)[1]
+
+    assert "needs: [template-smoke, installation-smoke, release-evidence]" in evidence
+    assert "needs.template-smoke.result" in evidence
+    assert "needs.installation-smoke.result" in evidence
+    assert "needs.release-evidence.result" in evidence
+    assert (
+        'requiredJobNames: ["template-smoke", "installation-smoke", "release-evidence"]' in evidence
+    )
+
+
+def test_ci_evidence_is_terminal_aggregate_job():
+    smoke = SMOKE.read_text(encoding="utf-8")
+    template = smoke.split("  installation-smoke:", 1)[0]
+
+    assert "Generate independently verifiable CI evidence" not in template
+    assert "  ci-evidence:" in smoke
+    assert "if: always()" in smoke.split("  ci-evidence:", 1)[1]
+    assert smoke.index("  ci-evidence:") > smoke.index("  release-evidence:")
+
+
+def test_release_evidence_requires_explicit_release_intent():
+    smoke = SMOKE.read_text(encoding="utf-8")
+    release = smoke.split("  release-evidence:", 1)[1].split("  ci-evidence:", 1)[0]
+
+    assert "RELEASE_PREPARATION_INTENT" in release
+    assert '[[ "$RELEASE_PREPARATION_INTENT" == "true" ]]' in release
+    assert "No explicit release-preparation intent" in release
+
+
 def test_compatibility_target_disables_coverage_overhead():
     makefile = MAKEFILE.read_text(encoding="utf-8")
     target = makefile.split("compatibility-test:", 1)[1].split("\n\n", 1)[0]

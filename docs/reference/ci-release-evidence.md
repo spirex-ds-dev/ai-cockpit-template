@@ -15,6 +15,10 @@ CI/Release Evidence is a provider-derived JSON record. Its authority is GitHub A
 
 Every record binds a Workflow Run ID, Head SHA, Required Job Names, per-job Conclusions, overall Conclusion, failure reasons, artifact digests, SBOM, Provenance, and a Head-to-Merge relationship. A verified or published record must also bind a merge commit, successful required jobs, empty failure reasons, and non-null SBOM/Provenance digests whose source commit equals the Head SHA. Missing or cross-source identity fails closed.
 
+The smoke workflow has a terminal `ci-evidence` Job with `needs: [template-smoke, installation-smoke, release-evidence]` and `if: always()`. Its evidence always declares and records all three required Jobs from `needs.<job>.result`, including `skipped` results. Release-preparation intent controls whether `release-evidence` runs the release-distribution subgate; it does not remove that Job from the aggregate evidence contract. A successful record must have an empty `failureReasons` array. A skipped or failed Job must never be silently omitted, and a successful Job must never be reported as a failure reason.
+
+The validator reports these boundaries separately: expected Head SHA versus workflow-run Head SHA; a declared required Job absent from `jobs`; a workflow-run required-job set different from the top-level set; and Job statuses inconsistent with the top-level conclusion. The smoke workflow validates the aggregate record before returning its failure, so an upstream failure and dependent skipped Jobs remain reviewable evidence.
+
 The state boundary is explicit:
 
 - `candidate` records describe CI evidence for a change or release candidate and may omit release-only SBOM/Provenance assets.

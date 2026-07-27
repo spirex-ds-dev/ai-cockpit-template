@@ -1,0 +1,702 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "ci-evidence-scope-correction-20260727",
+  "contractPath": ".ai/work-items/archive/2026/ci-evidence-scope-correction-20260727.contract.json",
+  "changedFiles": [
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Moved CI evidence generation to a terminal aggregate Job requiring template-smoke, installation-smoke, and release-evidence; records all needs results before failing."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Regenerated candidate SBOM baseline after the workflow graph changed the repository evidence inventory."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Regenerated candidate provenance baseline after the workflow graph change."
+    },
+    {
+      "path": ".ai/cockpit/release-digests.json",
+      "reason": "Regenerated candidate release digest bindings for the updated SBOM and provenance evidence."
+    },
+    {
+      "path": "release.json",
+      "reason": "Updated only the existing v0.5.42 supply-chain digest projection to match the regenerated candidate SBOM and provenance; release identity was not changed."
+    },
+    {
+      "path": "scripts/check_ci_release_evidence.sh",
+      "reason": "Added separate Head binding, required-job presence, required-job set, and conclusion consistency diagnostics; success evidence cannot carry failure reasons."
+    },
+    {
+      "path": "tests/test_ci_release_evidence.sh",
+      "reason": "Added all-success, upstream-failure/downstream-skipped, downstream-failure, missing-job, Head mismatch, and inconsistent-success fixtures."
+    },
+    {
+      "path": "tests/test_ci_quality_orchestration.py",
+      "reason": "Verifies the terminal aggregate Job and three-job needs graph are statically present."
+    },
+    {
+      "path": "docs/reference/ci-release-evidence.md",
+      "reason": "Documents the terminal three-Job aggregate, explicit release-preparation subgate, skipped-job evidence, and distinct validator diagnostics."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Registers RFE-ISSUE-100 and makes this corrective Work Item a prerequisite to WI-21 revalidation."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ci-evidence-scope-correction-20260727.contract.json",
+      "reason": "Completed Contract v2 with user authorization, scope, scenarios, acceptance, and restricted workflow approval."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ci-evidence-scope-correction-20260727.summary.json",
+      "reason": "Records implementation, process issue, verification, and residual risks."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ci-evidence-scope-correction-20260727.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "AGENTS.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    ".github/workflows/smoke.yml",
+    "scripts/check_ci_release_evidence.sh",
+    "tests/test_ci_release_evidence.sh",
+    "tests/test_ci_quality_orchestration.py",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30266670055/job/89978889383"
+  ],
+  "acceptanceEvidence": [
+    {
+      "acceptanceId": "A1",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly approved the permanent terminal three-Job CI evidence aggregation."
+      },
+      "evidence": [
+        {
+          "type": "workflow",
+          "path": ".github/workflows/smoke.yml",
+          "locator": "ci-evidence needs graph and requiredJobNames",
+          "verification": "aiScenarioCoverage"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A2",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly required accurate success, failure, cancelled, and skipped evidence."
+      },
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_ci_release_evidence.sh",
+          "locator": "upstream failure/downstream skipped and downstream failure fixtures",
+          "verification": "aiScenarioCoverage"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A3",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly required separate Head binding, missing Job, set, and conclusion diagnostics."
+      },
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_ci_release_evidence.sh",
+          "locator": "Head, missing-job, set mismatch, and conclusion diagnostics",
+          "verification": "aiScenarioCoverage"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A4",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly supplied the required regression scenario matrix."
+      },
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_ci_release_evidence.sh",
+          "locator": "all-three success, upstream failure/downstream skipped, and downstream failure fixtures",
+          "verification": "aiScenarioCoverage"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A5",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly required process issues to be recorded and corrected before WI-21 resumes."
+      },
+      "evidence": [
+        {
+          "type": "plan",
+          "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "locator": "RFE-ISSUE-100 and corrective ordering",
+          "verification": "aiWorkItem"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A6",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User authorized continuous execution through PR, merge, archive, closure, and branch cleanup, without release publication."
+      },
+      "evidence": [
+        {
+          "type": "process",
+          "path": "AGENTS.md",
+          "locator": "Work Item PR/merge/archive/close lifecycle",
+          "verification": "aiWorkItem"
+        }
+      ]
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Observed PR #408 evidence failure is captured as a release-blocking reproduction.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30266670055/job/89978889383"
+      ]
+    },
+    {
+      "scenario": "All three required Jobs succeed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_release_evidence.sh",
+        "tests/test_ci_quality_orchestration.py"
+      ]
+    },
+    {
+      "scenario": "template-smoke fails and both dependent Jobs are skipped.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_release_evidence.sh",
+        ".github/workflows/smoke.yml"
+      ]
+    },
+    {
+      "scenario": "A downstream required Job fails after template-smoke succeeds.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_release_evidence.sh",
+        "scripts/check_ci_release_evidence.sh"
+      ]
+    },
+    {
+      "scenario": "Required Job evidence is missing or Head SHA is wrong.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_release_evidence.sh",
+        "scripts/check_ci_release_evidence.sh"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:45:41.703660+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "6edf6c1c5ff84ba1b2ffee23f6427c5e3fc9843b27dd81cd78be9159bb90643f",
+      "commandHash": "2483441a0ebf6c4edd7dc01f7145774ef0bad0b111663e30147bebc5bca332d2",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "7318f4895680606d83a74b1040e4bb060c9ab32b3b67ca3cbdbf9e2e05afc086",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json work item contract check passed: .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json work item contract check passed: .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "outputBytes": 254
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:45:41.853743+00:00",
+      "exitCode": 0,
+      "durationMs": 101,
+      "outputDigest": "021e81225de1b0fb0308d92db53223e97f47fb2cf9adfe04962990eee63adc53",
+      "commandHash": "55a436e1948bbd5b63cd1b35658ce7a384ad3adac2867add090294e5eee9f4f8",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "7318f4895680606d83a74b1040e4bb060c9ab32b3b67ca3cbdbf9e2e05afc086",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json scope guard passed: 12 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json scope guard passed: 12 changed path(s) covered",
+      "outputBytes": 190
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:45:42.043222+00:00",
+      "exitCode": 0,
+      "durationMs": 140,
+      "outputDigest": "c5b032ff7613fb1459d9fea49647d6a5407c7f01821dfd2f002be6508779521f",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "7318f4895680606d83a74b1040e4bb060c9ab32b3b67ca3cbdbf9e2e05afc086",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/smoke.yml (.",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/smoke.yml (.github/workflows/**) - CI workflow configuration. guard check completed: 4 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 622
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:45:42.290249+00:00",
+      "exitCode": 0,
+      "durationMs": 194,
+      "outputDigest": "4474310bcdfc6d6cd29098162b266137eced2896e9fb07436d8158ffc24cbbd8",
+      "commandHash": "90d33e32f1a8bcc5c7b9a8d421167443fda3e25b8ceb9ff046b06c0fb1b0ee37",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "7318f4895680606d83a74b1040e4bb060c9ab32b3b67ca3cbdbf9e2e05afc086",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `ci-evidence-scope-correction-20260727` - Contract Hash: `4c9c73dbfba12247` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unkn",
+      "outputTail": "close-work-item, branch cleanup, and base synchronization without publishing a release. ## Required Verification - `aiWorkItem`: passed - `aiScope`: passed - `aiGuards`: passed - `aiCheckpoint`: passed - `aiAgentRisk`: not_run - `aiReviewPolicy`: passed - `aiBacktrack`: passed - `aiCoverage`: passed - `aiScenarioCoverage`: passed - `aiGuidelines`: passed - `aiSummary`: not_run - `aiStatus`: not_run - `aiStatusCheck`: not_run - `aiStatusConsistency`: not_run - `aiDiffOwnership`: passed - `quality`: failed ## Review Focus - Verify aggregate evidence is generated after all three Jobs and remains valid when downstream Jobs are skipped. - Verify validator error classes are distinct and fail closed. - Verify WI-21 rebase does not reintroduce evidence generation inside template-smoke. ## Diff Ownership Preview - active_owned: `12`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sbom.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/ci-evidence-scope-correction-20260727.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `docs/reference/ci-release-evidence.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `scripts/check_ci_release_evidence.sh` — covered by Contract scope - [active_owned] `tests/test_ci_quality_orchestration.py` — covered by Contract scope - [active_owned] `tests/test_ci_release_evidence.sh` — covered by Contract scope ## Next Action - Run or record required verification: aiAgentRisk",
+      "outputBytes": 5083
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:45:42.471416+00:00",
+      "exitCode": 0,
+      "durationMs": 111,
+      "outputDigest": "86d1114162665fabe0ab4544d9bd8938361b5f8c5c68064ec2ee56f3541ad800",
+      "commandHash": "d1d4c002edd5da6c77922579e53e5a51c2a9905f03d66ed6656e2f1f18d783fb",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "7318f4895680606d83a74b1040e4bb060c9ab32b3b67ca3cbdbf9e2e05afc086",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/ci-evidence-scope-correction-20260727.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json [review] .github/workflows/smoke.yml review focus recorded: 3 item(s) report: target/",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/ci-evidence-scope-correction-20260727.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json [review] .github/workflows/smoke.yml review focus recorded: 3 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 529
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:45:42.621559+00:00",
+      "exitCode": 0,
+      "durationMs": 101,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "7318f4895680606d83a74b1040e4bb060c9ab32b3b67ca3cbdbf9e2e05afc086",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:45:42.774906+00:00",
+      "exitCode": 0,
+      "durationMs": 106,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "7318f4895680606d83a74b1040e4bb060c9ab32b3b67ca3cbdbf9e2e05afc086",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:45:42.884344+00:00",
+      "exitCode": 0,
+      "durationMs": 59,
+      "outputDigest": "48130a728ae26db9f0becebd28a0b97db727d59b729f9d905259d7f2e7fdfd01",
+      "commandHash": "b62c64d67907271771251758df16d648850fc7543ded5d4c5d1e0375acb9cc46",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "7318f4895680606d83a74b1040e4bb060c9ab32b3b67ca3cbdbf9e2e05afc086",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 297
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:45:43.233379+00:00",
+      "exitCode": 0,
+      "durationMs": 89,
+      "outputDigest": "6943c52f6653a4c00ec877fbbcbbd824019ffa8a72c43dda9d7896ce726534e2",
+      "commandHash": "77cb5dca2f7e21aafdd7873e6cfc72c36654da01d0e656fbaaba1a849161c64d",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "7318f4895680606d83a74b1040e4bb060c9ab32b3b67ca3cbdbf9e2e05afc086",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputBytes": 302
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:45:43.489622+00:00",
+      "exitCode": 0,
+      "durationMs": 202,
+      "outputDigest": "92c754736320eb92a63e5397f3977fc2c97414a9a15789a0dc5ac54e1bc303b8",
+      "commandHash": "59f3defbdecdbe659059a768b4b8b5f5a33cff24dae360ec6a672adce3d89f61",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "7318f4895680606d83a74b1040e4bb060c9ab32b3b67ca3cbdbf9e2e05afc086",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json ## Diff Ownership Preview - active_owned: `12`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digest",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json ## Diff Ownership Preview - active_owned: `12`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sbom.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/ci-evidence-scope-correction-20260727.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `docs/reference/ci-release-evidence.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `scripts/check_ci_release_evidence.sh` — covered by Contract scope - [active_owned] `tests/test_ci_quality_orchestration.py` — covered by Contract scope - [active_owned] `tests/test_ci_release_evidence.sh` — covered by Contract scope",
+      "outputBytes": 1334
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:53:20.547775+00:00",
+      "exitCode": 0,
+      "durationMs": 456979,
+      "outputDigest": "5fd5f71a6c7a76ad8c50c633d359b7ac8fcaf3137376de0918c4adcab255b903",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "7318f4895680606d83a74b1040e4bb060c9ab32b3b67ca3cbdbf9e2e05afc086",
+      "outputSummary": "/usr/bin/make --no-print-directory quality-full PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate quality-fast --category orchestration --output target/quality/timing/quality-fast.json --log target/quality/logs/quality-fast.log -- /usr/bin/make --no-print-directory quality-fast PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate quality-heavy --category orchestration --output target/quality/timing/quality-heavy.json --log target/quality/logs/",
+      "outputTail": "/usr/bin/make --no-print-directory quality-full PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate quality-fast --category orchestration --output target/quality/timing/quality-fast.json --log target/quality/logs/quality-fast.log -- /usr/bin/make --no-print-directory quality-fast PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate quality-heavy --category orchestration --output target/quality/timing/quality-heavy.json --log target/quality/logs/quality-heavy.log -- /usr/bin/make --no-print-directory quality-heavy PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/summarize_quality_gates.py --input target/quality/timing --json-output target/quality/summary.json --markdown-output target/quality/summary.md quality gate summary written: target/quality/summary.json",
+      "outputBytes": 822
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:53:22.011400+00:00",
+      "exitCode": 0,
+      "durationMs": 240,
+      "outputDigest": "1c9b29729b468989cd2261734430add477cbd038ee63bce9ba6b62329beffe03",
+      "commandHash": "7092e8a858848cd724615386b0320c2062749f05fe0c9a148b441bf183c0d3b6",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "e73affd6232d86247a8efd8689c7a97f8ac86a93c7b96b5d220743bca09b7283",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 344
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:53:22.291573+00:00",
+      "exitCode": 0,
+      "durationMs": 226,
+      "outputDigest": "f0fa8f450a0fc9ceda8cf79781153ac563b0f6c9dc6736796058bc9835381e67",
+      "commandHash": "2f4ae9eee0607cc48b0e25aabb38f3c5f62b76f83fdca858d677934bd595bdcb",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "e73affd6232d86247a8efd8689c7a97f8ac86a93c7b96b5d220743bca09b7283",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 327
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:53:22.393358+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "e73affd6232d86247a8efd8689c7a97f8ac86a93c7b96b5d220743bca09b7283",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json SUMMARY=.ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:53:22.539812+00:00",
+      "exitCode": 0,
+      "durationMs": 65,
+      "outputDigest": "1dd08e5ed194c241b625ebbf15a09c45d27ab820c751be91db15e2e6c3c317a7",
+      "commandHash": "f7b501e4b4eae03aed6dbca558d2e6fab0c2273e2a5582d15b865b34c4ff30fe",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "e73affd6232d86247a8efd8689c7a97f8ac86a93c7b96b5d220743bca09b7283",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json --summary .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 307
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json CONTRACT=.ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T13:53:23.478842+00:00",
+      "exitCode": 0,
+      "durationMs": 102,
+      "outputDigest": "aab41f0d88c381a5318e34b799b382191e48530e1169d5d9c9aeb65c46e1fd90",
+      "commandHash": "3b61aa0586393d5d191c8359a3eac8c42592bf5a6c32dd810dfb20435c4d54d5",
+      "contractHash": "4c9c73dbfba1224768dd6e13fe65bc68a046b3b992ea842cb3d9401a83c47fe6",
+      "commitSha": "978809f9af1b512f8c3924b88aa82e3e48f58c12",
+      "executionContractPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "worktreeDigest": "3253b11e38d230d9e0b70694cb87a380714a59becf9f990eb33cfeab11229bd9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json ai summary check passed: .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json --contract .ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json ai summary check passed: .ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+      "outputBytes": 328
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Preserve fail-closed behavior for verified and published evidence.",
+      "compliant": true,
+      "evidence": "Validator remains fail closed; aggregate validates evidence before returning failure."
+    },
+    {
+      "guideline": "Add regression coverage before changing the workflow evidence contract.",
+      "compliant": true,
+      "evidence": "Focused shell and orchestration regressions were added and pass."
+    },
+    {
+      "guideline": "Do not change release identity or publish provider assets.",
+      "compliant": true,
+      "evidence": "No release identity, tag, or provider asset was changed."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "The workflow graph and evidence validator jointly determine whether CI failures remain diagnosable and release-blocking."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "RFE-ISSUE-100",
+      "category": "ci-evidence",
+      "severity": "high",
+      "fact": "PR #408 run 30266670055 generated evidence inside template-smoke before downstream Jobs existed, while declaring all three Jobs required; validator diagnostics were conflated.",
+      "resolution": "Moved generation to terminal ci-evidence with needs.*.result, complete job records, pre-failure validation, and separate diagnostics.",
+      "status": "in_progress",
+      "evidence": [
+        ".github/workflows/smoke.yml",
+        "scripts/check_ci_release_evidence.sh",
+        "tests/test_ci_release_evidence.sh"
+      ]
+    },
+    {
+      "issueId": "RFE-ISSUE-101",
+      "category": "work-item-preflight",
+      "severity": "medium",
+      "fact": "Initial corrective startup created a skeleton before restricted workflow approval and final scenario/scope evidence were recorded.",
+      "resolution": "Stopped implementation, completed Contract v2, recorded explicit user authorization, enabled restricted-write approval, and ran preflight/checkpoint before final verification.",
+      "status": "resolved",
+      "evidence": [
+        ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+        "target/ai_preflight_review.json"
+      ]
+    },
+    {
+      "issueId": "RFE-ISSUE-102",
+      "category": "quality-gate-format",
+      "severity": "low",
+      "fact": "The first full ai-finish attempt stopped at quality-fast because the newly added orchestration test was not ruff-formatted.",
+      "resolution": "Ran the repository formatter, reran quality-fast, and obtained a passing result; no test or quality threshold was weakened.",
+      "status": "resolved",
+      "evidence": [
+        "target/quality/logs/quality-fast.log",
+        "tests/test_ci_quality_orchestration.py"
+      ]
+    },
+    {
+      "issueId": "RFE-ISSUE-103",
+      "category": "supply-chain-evidence",
+      "severity": "medium",
+      "fact": "Full quality found that the workflow graph change invalidated the committed candidate SBOM baseline, causing the supply-chain baseline regression to fail.",
+      "resolution": "Added the generated SBOM, provenance, and release-digest paths to Contract scope; regenerated them with check_supply_chain and reran their checks successfully.",
+      "status": "resolved",
+      "evidence": [
+        ".ai/cockpit/sbom.json",
+        ".ai/cockpit/provenance.json",
+        ".ai/cockpit/release-digests.json",
+        "scripts/check_supply_chain.py"
+      ]
+    },
+    {
+      "issueId": "RFE-ISSUE-104",
+      "category": "release-evidence-projection",
+      "severity": "medium",
+      "fact": "After regenerating SBOM and provenance, full quality found that release.json still projected the previous supply-chain digests; a direct release-distribution check also demonstrated that the historical v0.5.42 metadata must not be promoted to a newer public identity inside this corrective Work Item.",
+      "resolution": "Added release.json to Contract scope, updated only its SBOM/provenance digest projection, refreshed release-digests.json, and made the expensive distribution check conditional on explicit release-preparation intent while retaining release-state consistency for ordinary PRs.",
+      "status": "resolved",
+      "evidence": [
+        "release.json",
+        ".ai/cockpit/release-digests.json",
+        ".github/workflows/smoke.yml"
+      ]
+    },
+    {
+      "issueId": "RFE-ISSUE-105",
+      "category": "instruction-traceability",
+      "severity": "high",
+      "fact": "A reverse traceability audit found that Contract acceptance, scenario coverage, Summary evidence, and CI evidence documentation still described an earlier ordinary-PR subset design even though the user-authorized implementation requires a terminal aggregate over all three Jobs.",
+      "resolution": "Before archive, aligned Contract, Summary, plan, documentation, and regression descriptions to the authoritative three-Job terminal aggregation design and removed the contradictory ordinary-PR subset fixture.",
+      "status": "resolved",
+      "evidence": [
+        ".ai/work-items/active/ci-evidence-scope-correction-20260727.contract.json",
+        ".ai/work-items/active/ci-evidence-scope-correction-20260727.summary.json",
+        "docs/reference/ci-release-evidence.md",
+        "tests/test_ci_release_evidence.sh"
+      ]
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "high",
+      "area": "hosted-validation",
+      "detail": "The new aggregate graph still requires a hosted run to prove GitHub needs.result semantics and failure evidence persistence.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    },
+    {
+      "level": "medium",
+      "area": "workflow-overlap",
+      "detail": "WI-21 must rebase and resolve any smoke workflow overlap before its performance claims are re-evaluated.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Verify aggregate evidence is generated after all three Jobs and remains valid when downstream Jobs are skipped.",
+      "Verify validator error classes are distinct and fail closed.",
+      "Verify WI-21 rebase does not reintroduce evidence generation inside template-smoke."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "check-ci-release-evidence"
+  },
+  "userCorrectionsCaptured": [
+    "User supplied the complete root cause and required terminal ci-evidence aggregation with needs.*.result and real upstream/skipped regression coverage."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Do not use a temporary workaround; land the fix in the governed workflow, validator, and regression tests.",
+      "solidifiedIn": [
+        ".github/workflows/smoke.yml",
+        "scripts/check_ci_release_evidence.sh",
+        "tests/test_ci_release_evidence.sh",
+        "tests/test_ci_quality_orchestration.py"
+      ]
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "4c9c73dbfba12247",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "4c9c73dbfba12247",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    }
+  ],
+  "knownGaps": [
+    "Hosted CI has not yet verified the new aggregate Job; no completion or performance improvement claim is made until that evidence exists."
+  ],
+  "overclaimPrevention": "This Summary does not claim WI-21 completion, hosted success, performance improvement, release readiness, or publication.",
+  "archiveSequence": 615
+}

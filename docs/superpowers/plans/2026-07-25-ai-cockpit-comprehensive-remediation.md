@@ -91,6 +91,7 @@ keywords:
 | WI-20 | quality-gate-performance-architecture-20260727 | 在不降低可信度的前提下优化 `make quality` 与 GitHub Actions：去重、Fast/Full/Release 分层、计时证据、安全并行和安装/Release 职责拆分 | Gate timing/summary、调用图去重、Workflow ownership、scope/cache/并行测试、五类场景性能证据 |
 | WI-21 | quality-gate-performance-completion-20260727 | 完成 WI-20 尚未闭合的 Workflow Job 拆分、逐门禁计时和 hosted 前后性能证据 | 独立 Job ownership、逐门禁 timing/log/digest、五类 hosted before/after evidence、三语文档和双向追踪 |
 | corrective | process-evidence-release-preflight-20260727 | 修复 WI-21 暴露的点名文件追踪、hosted Summary schema、归档路径/digest、显式发布意图和 CI 失败证据结构 | 当前执行；完成后恢复 WI-21 |
+| corrective | ci-evidence-scope-correction-20260727 | 修复 PR #408 / RFE-ISSUE-100 暴露的 evidence 生成时序：以末端 Job 聚合三个 required Jobs、完整记录 skipped/failed 状态并拆分诊断 | 完成后重新验证 WI-21；未完成前不得进入深度性能工单 |
 
 严格执行以下五阶段顺序：
 
@@ -105,6 +106,8 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。`quality-g
 WI-21 是 WI-20 的 corrective process/quality Work Item，必须在 WI-18 发布前完成。WI-20 已交付去重、Fast/Full/Release 入口、组级 telemetry 和 fail-closed 约束，但其 Summary 明确保留了三项未闭合证据：Workflow 尚未拆成独立 Job、尚无五类 hosted before/after 测量、计时尚未覆盖每个 Make gate。不得把这些 Known Gap 直接当作发布前已完成；WI-21 必须分别补齐实现和证据，或以结构化、可审计的 not-run 原因经用户最终复核后才能决定是否继续。
 
 WI-21 的 PR #408 又暴露了 RFE-ISSUE-094（source-bound evidence 维护误触发发布准备）和 RFE-ISSUE-095（失败 evidence 未列出 skipped/dependent jobs 且诊断误导）。在恢复 WI-21 前，`process-evidence-release-preflight-20260727` corrective Work Item 先修复这些问题以及 RFE-ISSUE-091/092/093；不实现 WI-10、不修改候选版本、不发布。
+WI-21 的重新验证又暴露了 RFE-ISSUE-100：质量门通过后，位于 `template-smoke` 内的 evidence step 在下游 Job 尚未运行时声明三个 required Jobs，却只能写入一个 Job；步骤失败又使下游 Job 因 `needs` 被 skipped，校验器还把 required Job 缺失与 Head SHA 错误合并成误导诊断。`ci-evidence-scope-correction-20260727` 必须以 `needs: [template-smoke, installation-smoke, release-evidence]`、`if: always()` 的末端 Job 完整记录三者状态，先验证失败证据再返回失败，并完成 Contract→实现→验收→PR→merge→archive→`ai-close-work-item`→分支清理→main 同步生命周期，之后才能重新验证 WI-21；在此之前不得开始深度性能工单。
+该 corrective Work Item 另记录 RFE-ISSUE-101 至 RFE-ISSUE-105：预检 skeleton/授权顺序、formatter 后置、供应链基线联动、release metadata digest 投影，以及旧 ordinary-PR subset 文案未随用户授权的三 Job 末端聚合方案对齐。各项均在本工单 Summary 中保留事实、处理与证据；计划全部完成后再由用户统一判断是否进一步改进流程。
 Corrective Work Item 质量门又记录 RFE-ISSUE-096：显式 release intent 改造初次删除了现有 workflow regression 依赖的事件边界注释，已恢复注释并保留新 intent 门禁；coverage 84.97% 也按 fail-closed 停止，补充分支回归后再重跑，不降低 85% 门槛。
 
 Corrective Work Item 最终收尾又记录 RFE-ISSUE-097：Contract 变更后，Summary 的 before_edit checkpoint hash 未同步，`aiAgentRisk` 按设计 fail-closed；已刷新 before_edit/before_finish 两个检查点并通过，保留该恢复步骤作为后续收尾流程要求。
