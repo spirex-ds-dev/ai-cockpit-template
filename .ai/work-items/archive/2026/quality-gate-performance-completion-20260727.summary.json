@@ -555,6 +555,30 @@
       "resolution": "Open; no merge or release is allowed until failed CI evidence is itself structurally valid and diagnosable.",
       "status": "open",
       "followUp": "Add failing regression coverage for incomplete required-job evidence and precise validator diagnostics."
+    },
+    {
+      "issueId": "RFE-ISSUE-098",
+      "category": "branch-synchronization",
+      "severity": "medium",
+      "stage": "post-process-corrective",
+      "fact": "Resuming WI-21 from its older work branch and rebasing onto the merged process-correction main exposed conflicts in generated status, archive index, and instruction traceability.",
+      "evidence": [".ai/cockpit/current_status.md", ".ai/work-items/archive/index.json", "docs/reference/remediation-instruction-traceability.json"],
+      "decision": "Resolve by retaining the latest main process records and explicitly re-registering WI-21 archive and traceability evidence; do not force-reset or discard either Work Item.",
+      "resolution": "Rebase conflicts were resolved with latest main as the process baseline and WI-21 archive/traceability entries restored; digest validation will run before PR revalidation.",
+      "status": "resolved",
+      "followUp": "Every resumed Work Item must rebase from current origin/main and run archive/index/traceability integrity checks before CI revalidation."
+    },
+    {
+      "issueId": "RFE-ISSUE-099",
+      "category": "rebase-evidence",
+      "severity": "medium",
+      "stage": "post-process-corrective",
+      "fact": "Evidence edits made while resolving an interrupted rebase were overwritten when the remaining rebased commit replayed.",
+      "evidence": ["git rebase --continue", ".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.summary.json"],
+      "decision": "Complete the rebase before editing archive evidence, then reapply and verify all digest-bound changes in a separate commit.",
+      "resolution": "Reapplied RFE-098, hosted performance evidence, archive sequence, and digest bindings after rebase completion; verification is rerun from the final branch state.",
+      "status": "resolved",
+      "followUp": "Do not edit digest-bound archive files until the rebase state is clean."
     }
   ],
   "residualRisks": [
@@ -566,6 +590,19 @@
       "followUpCandidate": false
     }
   ],
+  "hostedPerformanceEvidence": {
+    "schemaVersion": 1,
+    "baselineWorkItem": "quality-gate-performance-architecture-20260727",
+    "comparisonRule": "Compare like-for-like hosted workflow/job scenarios only; unavailable or non-comparable measurements remain not_run and do not support an improvement claim.",
+    "status": "partial",
+    "scenarios": [
+      {"name": "pull_request_quality_gate", "scenario": "pull_request_quality_gate", "status": "fail", "reason": "WI-21 PR #408 hosted template-smoke failed before a comparable successful post-change measurement; the failure is retained as release-blocking evidence.", "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30261020073", "comparisonBoundary": "No before/after improvement comparison is valid until WI-21 is revalidated after the process-correction merge.", "evidence": [".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.summary.json"]},
+      {"name": "main_quality_gate", "scenario": "main_quality_gate", "status": "not_run", "reason": "No comparable hosted main-branch baseline was available for this completion attempt.", "source": "docs/operations/quality-gates.md", "comparisonBoundary": "Do not infer improvement from local timing or unrelated workflow runs.", "evidence": []},
+      {"name": "installation_smoke", "scenario": "installation_smoke", "status": "not_run", "reason": "The failed PR run did not produce a successful comparable installation-smoke measurement.", "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/408", "comparisonBoundary": "Requires a successful revalidation run after WI-21 is rebased onto current main.", "evidence": []},
+      {"name": "release_evidence", "scenario": "release_evidence", "status": "not_run", "reason": "Release evidence is out of scope for WI-21 and must not be used as a performance comparison.", "source": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "comparisonBoundary": "Release evidence is evaluated only by the release Work Item after all prerequisites close.", "evidence": []},
+      {"name": "compatibility_matrix", "scenario": "compatibility_matrix", "status": "not_run", "reason": "No before/after hosted compatibility timing pair was captured for WI-21.", "source": "docs/operations/quality-gates.md", "comparisonBoundary": "Compatibility pass/fail is not a performance improvement measurement.", "evidence": []}
+    ]
+  },
   "reviewReadiness": {
     "status": "ready_with_risks",
     "reason": "All required verification passed; residual risk remains documented.",
@@ -608,5 +645,5 @@
     "Historical WI-20 hosted before measurements may not be available; record the exact limitation and do not infer improvement."
   ],
   "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
-  "archiveSequence": 614
+  "archiveSequence": 615
 }
