@@ -1,0 +1,580 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "quality-gate-performance-completion-20260727",
+  "contractPath": ".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.contract.json",
+      "reason": "Defined WI-20 omission closure: independent CI Job ownership, per-gate timing, and source-bound hosted measurement limitations."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.summary.json",
+      "reason": "Will record bidirectional traceability, verification, process findings, and residual performance risks."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated status from the active WI-21 Contract and Summary."
+    },
+    {
+      "path": ".ai/work-items/starts/quality-gate-performance-completion-20260727.json",
+      "reason": "Preserves the Work Item start receipt and lifecycle evidence."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Adds per-gate timing ownership while preserving Fast/Full/Release entrypoints and parallel groups."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Separates quality, installation-smoke, and release-evidence Job responsibilities without duplicate full quality."
+    },
+    {
+      "path": "scripts/run_quality_gate.py",
+      "reason": "Persists bounded failure-tail evidence with each gate record."
+    },
+    {
+      "path": "scripts/summarize_quality_gates.py",
+      "reason": "Publishes failure tails in the machine-readable gate summary."
+    },
+    {
+      "path": "tests/test_quality_gate_architecture.py",
+      "reason": "Regresses per-gate ownership and independent hosted Job structure."
+    },
+    {
+      "path": "tests/test_quality_telemetry.py",
+      "reason": "Regresses per-gate output-tail and failure-summary evidence."
+    },
+    {
+      "path": "tests/test_quality_telemetry.py",
+      "reason": "Regresses output-tail and failure-summary evidence."
+    },
+    {
+      "path": "docs/operations/quality-gates.md",
+      "reason": "Documents ownership, evidence, and not-run measurement boundaries in English."
+    },
+    {
+      "path": "docs/operations/quality-gates.zh-CN.md",
+      "reason": "Documents the same quality-gate boundaries in Chinese."
+    },
+    {
+      "path": "docs/operations/quality-gates.ja.md",
+      "reason": "Documents the same quality-gate boundaries in Japanese."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Adds WI-21 instruction-to-plan-to-implementation-to-acceptance mapping."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Regenerated source-bound SBOM baseline after the WI-21 implementation changed repository inputs."
+    },
+    {
+      "path": ".ai/cockpit/release-digests.json",
+      "reason": "Regenerated candidate release digest evidence after source-bound SBOM alignment."
+    },
+    {
+      "path": "release.json",
+      "reason": "Updated only the source-bound SBOM digest field; releaseTag and publication identity were not changed."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records WI-21 ordering and RFE-ISSUE-086 branch-process finding."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T10:55:30.455406+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "639b0946b1089700bef71ae93c442c970a29d5d17a3b324202253730f8ab42be",
+      "commandHash": "a0cdf3feafa22f3faa07483be7c4dffdd0449ec9a8ceb0eeb941e0083493fe6c",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "d8de9b229c4b7c90c6413cb1ef561c7884bd69c73e334167554f59981cf343cb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json work item contract check passed: .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json work item contract check passed: .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "outputBytes": 268
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T10:55:30.617875+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "3e2e086920fa346815d2cedcc7ee60750785687fbd2f90fa39fa74f741276371",
+      "commandHash": "574a92b567d816dee93b7505e219fe1ce20193e619e11c2a8654d24703d3019c",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "d8de9b229c4b7c90c6413cb1ef561c7884bd69c73e334167554f59981cf343cb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json scope guard passed: 16 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json scope guard passed: 16 changed path(s) covered",
+      "outputBytes": 197
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T10:55:30.835660+00:00",
+      "exitCode": 0,
+      "durationMs": 165,
+      "outputDigest": "4fb5c5adf28e4d7e0984799830fecda2a0bf5331554e9725a623ca45d86285d4",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "d8de9b229c4b7c90c6413cb1ef561c7884bd69c73e334167554f59981cf343cb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/smoke.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: Makefile (M",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/smoke.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 4 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 623
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/quality-gate-performance-completion-20260727.contract.json SUMMARY=.ai/work-items/active/quality-gate-performance-completion-20260727.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T10:55:31.283397+00:00",
+      "exitCode": 0,
+      "durationMs": 214,
+      "outputDigest": "632862e411d18dba40aa076c99b250b5412589660a16a19f2a66da0662397266",
+      "commandHash": "a8c89e6278c8ec83c3a093a82acb862841dda02a07d32f10b272b41060a2b487",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "d8de9b229c4b7c90c6413cb1ef561c7884bd69c73e334167554f59981cf343cb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `quality-gate-performance-completion-20260727` - Contract Hash: `edc7553e71897f87` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Accepta",
+      "outputTail": "iAgentRisk`: not_run - `aiReviewPolicy`: not_run - `aiBacktrack`: not_run - `aiCoverage`: not_run - `aiScenarioCoverage`: not_run - `aiGuidelines`: not_run - `aiSummary`: not_run - `aiStatus`: not_run - `aiStatusCheck`: not_run - `aiStatusConsistency`: not_run - `aiDiffOwnership`: not_run - `quality`: not_run ## Review Focus - Confirm no required quality or release evidence gate was removed. - Confirm each hosted measurement is PASS or structured not-run. ## Diff Ownership Preview - active_owned: `16`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sbom.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/quality-gate-performance-completion-20260727.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.ja.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `scripts/run_quality_gate.py` — covered by Contract scope - [active_owned] `scripts/summarize_quality_gates.py` — covered by Contract scope - [active_owned] `tests/test_quality_gate_architecture.py` — covered by Contract scope - [active_owned] `tests/test_quality_telemetry.py` — covered by Contract scope ## Next Action - Run or record required verification: aiCheckpoint",
+      "outputBytes": 6167
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T10:55:31.469168+00:00",
+      "exitCode": 0,
+      "durationMs": 131,
+      "outputDigest": "21a8e8642a49d2830589e208bd846994c4f6132d93405864adc9fdde0dafc6f1",
+      "commandHash": "8f7719f17f959d7abe5234665aa0ca6a79fb30768550298f25b6280426a1fb6d",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "d8de9b229c4b7c90c6413cb1ef561c7884bd69c73e334167554f59981cf343cb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/quality-gate-performance-completion-20260727.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json [review] .github/workflows/smoke.yml [review] Makefile review focus recorded: 2 item(s) report: target/ai_re",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/quality-gate-performance-completion-20260727.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json [review] .github/workflows/smoke.yml [review] Makefile review focus recorded: 2 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 524
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T10:55:31.635942+00:00",
+      "exitCode": 0,
+      "durationMs": 115,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "d8de9b229c4b7c90c6413cb1ef561c7884bd69c73e334167554f59981cf343cb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T10:55:31.816536+00:00",
+      "exitCode": 0,
+      "durationMs": 122,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "d8de9b229c4b7c90c6413cb1ef561c7884bd69c73e334167554f59981cf343cb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/quality-gate-performance-completion-20260727.contract.json SUMMARY=.ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T10:55:31.939765+00:00",
+      "exitCode": 0,
+      "durationMs": 64,
+      "outputDigest": "04abf56d554985b13bf765fc3b07972bd72a09eb5af08764021eaf6e48e6d8f8",
+      "commandHash": "3a620a4cd84ecf14246d4f30e94d351fc79c0e792846c069258d12b3d2ccd4ee",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "d8de9b229c4b7c90c6413cb1ef561c7884bd69c73e334167554f59981cf343cb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 401
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/quality-gate-performance-completion-20260727.contract.json SUMMARY=.ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T10:55:32.042831+00:00",
+      "exitCode": 0,
+      "durationMs": 54,
+      "outputDigest": "d516a5bcd78a9b76b3ad3001a8c6f97ab862f0f57bd9edd6efc1224bf9902286",
+      "commandHash": "1f41b4bdb4ea6601a798ec764bad7e683cb9a5633592eba7158229b4f9c668ec",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "d8de9b229c4b7c90c6413cb1ef561c7884bd69c73e334167554f59981cf343cb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputBytes": 316
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T10:55:32.298002+00:00",
+      "exitCode": 0,
+      "durationMs": 208,
+      "outputDigest": "8a140096f5682d222b9eda7ecb0964860bc7a39b2d5ef35aaf079059bf16e2c2",
+      "commandHash": "da831dc077be93fce675c063877625eefcbd5ddb851be966ece223363d25890b",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "d8de9b229c4b7c90c6413cb1ef561c7884bd69c73e334167554f59981cf343cb",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json ## Diff Ownership Preview - active_owned: `16`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sb",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json ## Diff Ownership Preview - active_owned: `16`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.json` — covered by Contract scope - [active_owned] `.ai/cockpit/sbom.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/quality-gate-performance-completion-20260727.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.ja.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `scripts/run_quality_gate.py` — covered by Contract scope - [active_owned] `scripts/summarize_quality_gates.py` — covered by Contract scope - [active_owned] `tests/test_quality_gate_architecture.py` — covered by Contract scope - [active_owned] `tests/test_quality_telemetry.py` — covered by Contract scope",
+      "outputBytes": 1677
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T11:03:00.115680+00:00",
+      "exitCode": 0,
+      "durationMs": 447757,
+      "outputDigest": "3954fe5f5c74a4773265d6279622e75cd351e03b4a8862eaaa40007f1dad2877",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "d8de9b229c4b7c90c6413cb1ef561c7884bd69c73e334167554f59981cf343cb",
+      "outputSummary": "/usr/bin/make --no-print-directory quality-full rm -f target/quality/timing/*.json target/quality/logs/*.log /usr/bin/make --no-print-directory quality-fast /usr/bin/make --no-print-directory quality-fast-static /usr/bin/make --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --output target/quality/timing/project-format-check.json --log target/quality/logs/project-format-check.lo",
+      "outputTail": "python scripts/run_quality_gate.py --gate check-sbom --category supply-chain --output target/quality/timing/check-sbom.json --log target/quality/logs/check-sbom.log -- /usr/bin/make --no-print-directory check-sbom PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate check-provenance --category supply-chain --output target/quality/timing/check-provenance.json --log target/quality/logs/check-provenance.log -- /usr/bin/make --no-print-directory check-provenance PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate check-secret-scanning --category supply-chain --output target/quality/timing/check-secret-scanning.json --log target/quality/logs/check-secret-scanning.log -- /usr/bin/make --no-print-directory check-secret-scanning PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate check-quality-architecture --category project-consistency --output target/quality/timing/check-quality-architecture.json --log target/quality/logs/check-quality-architecture.log -- /usr/bin/make --no-print-directory check-quality-architecture PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate check-deprecated-assets --category project-consistency --output target/quality/timing/check-deprecated-assets.json --log target/quality/logs/check-deprecated-assets.log -- /usr/bin/make --no-print-directory check-deprecated-assets PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate check-instruction-traceability --category project-consistency --output target/quality/timing/check-instruction-traceability.json --log target/quality/logs/check-instruction-traceability.log -- /usr/bin/make --no-print-directory check-instruction-traceability PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/summarize_quality_gates.py --input target/quality/timing --json-output target/quality/summary.json --markdown-output target/quality/summary.md quality gate summary written: target/quality/summary.json",
+      "outputBytes": 6963
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/quality-gate-performance-completion-20260727.contract.json SUMMARY=.ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T11:03:01.773238+00:00",
+      "exitCode": 0,
+      "durationMs": 247,
+      "outputDigest": "2d6b4a1ea59b6fb3c08a99d706bf8ddfedcb1cc3518897a6970282ac8316a1c3",
+      "commandHash": "67107cf27ab69f89b67527293ee7a913b5483f7f4ac229a626e496324d8fc849",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "b520de44c2cdde8932b2b0afb26f128139c80c4ab4b96a5b7157c85753b6cdb2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 358
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/quality-gate-performance-completion-20260727.contract.json SUMMARY=.ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T11:03:02.033637+00:00",
+      "exitCode": 0,
+      "durationMs": 213,
+      "outputDigest": "d626a9a9c7615f625ce03abc332efb656aa8599ce39cdbc1f2ad0711107084e0",
+      "commandHash": "e5e50b6c35206594c8719e70fa0af8aae9963fdd79883bd705862c2f42b56cd7",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "b520de44c2cdde8932b2b0afb26f128139c80c4ab4b96a5b7157c85753b6cdb2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 341
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T11:03:02.133366+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "b520de44c2cdde8932b2b0afb26f128139c80c4ab4b96a5b7157c85753b6cdb2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/quality-gate-performance-completion-20260727.contract.json SUMMARY=.ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T11:03:02.235397+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "393b4e5c2487bd508bce3f426ddc965d0f5a264c30d4c0165d984254170504c9",
+      "commandHash": "df4b194b7d512f3eba34400f6102adcab858ebb071c058334842fae461c7db67",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "b520de44c2cdde8932b2b0afb26f128139c80c4ab4b96a5b7157c85753b6cdb2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json --summary .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 321
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/quality-gate-performance-completion-20260727.summary.json CONTRACT=.ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T11:03:03.024429+00:00",
+      "exitCode": 0,
+      "durationMs": 104,
+      "outputDigest": "5e588fa13951c422ddc6d6a163a07859764844a3d48966005f5578a10759fc4c",
+      "commandHash": "a5ad6f5833ed6b78338fbefe180141b6bc3bb8ba9fc0dd2c8c2b9660745b6fa0",
+      "contractHash": "edc7553e71897f87150ce856d775bd44c6d4a048ef1ef353079f3469cc7b2331",
+      "commitSha": "6408947754bb14600c463588f4150de42261e385",
+      "executionContractPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "worktreeDigest": "c92a797e20b3ae3b938e3e84ae4056dfea0fbeb531c021bcdb5dd92b774d9693",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json ai summary check passed: .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json --contract .ai/work-items/active/quality-gate-performance-completion-20260727.contract.json ai summary check passed: .ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+      "outputBytes": 349
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Do not trade evidence completeness or coverage for speed.",
+      "compliant": true,
+      "evidence": "Required gates remain present; only ownership and telemetry were changed."
+    },
+    {
+      "guideline": "Unknown scope and unavailable hosted measurements fail closed or remain explicitly not-run.",
+      "compliant": true,
+      "evidence": "Documentation and Contract prohibit performance claims when hosted baseline evidence is unavailable."
+    },
+    {
+      "guideline": "Every optimization must preserve a reproducible, machine-readable evidence trail.",
+      "compliant": true,
+      "evidence": "Each gate writes timing/log/digest/output-tail records and the summary preserves failure tails."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Hosted runner variability and historical WI-20 baseline availability limit statistical performance claims; any missing comparison remains explicitly not-run. Release publication remains out of scope."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "RFE-ISSUE-086",
+      "category": "process",
+      "severity": "medium",
+      "stage": "implementation-start",
+      "fact": "WI-21 implementation initially began on main because ai-start generated evidence but did not switch branches.",
+      "evidence": [
+        "git branch --show-current",
+        "make ai-start TASK=quality-gate-performance-completion-20260727"
+      ],
+      "decision": "Stop implementation and move to a dedicated Work Item branch before further validation or commit.",
+      "resolution": "Created codex/quality-gate-performance-completion-20260727 and continued there.",
+      "status": "resolved",
+      "followUp": "Add an explicit post-ai-start branch assertion to the workflow and preserve it in future Summary evidence."
+    },
+    {
+      "issueId": "RFE-ISSUE-087",
+      "category": "quality",
+      "severity": "low",
+      "stage": "quality-fast",
+      "fact": "The new telemetry summary was not ruff-formatted, so project-format-check failed closed before other gates ran.",
+      "evidence": [
+        "target/quality/logs/project-format-check.log"
+      ],
+      "decision": "Format the changed script and rerun the affected gate.",
+      "resolution": "Ran ruff format on scripts/summarize_quality_gates.py; quality-fast subsequently passed.",
+      "status": "resolved",
+      "followUp": "Keep formatting in the per-gate quality-fast evidence and do not bypass it."
+    },
+    {
+      "issueId": "RFE-ISSUE-088",
+      "category": "supply-chain",
+      "severity": "medium",
+      "stage": "quality-full",
+      "fact": "The changed implementation caused committed SBOM evidence to differ from recomputed evidence.",
+      "evidence": [
+        "target/quality/timing/check-sbom.json",
+        ".ai/cockpit/sbom.json"
+      ],
+      "decision": "Stop and regenerate the source-bound SBOM baseline within Work Item scope.",
+      "resolution": "Ran check_supply_chain.py sbom --write and reran check-sbom successfully.",
+      "status": "resolved",
+      "followUp": "Require supply-chain baseline alignment before reporting quality completion."
+    },
+    {
+      "issueId": "RFE-ISSUE-089",
+      "category": "release",
+      "severity": "medium",
+      "stage": "quality-full",
+      "fact": "release.json.supplyChain.sbomDigest still referenced the previous SBOM after baseline regeneration.",
+      "evidence": [
+        "tests/test_release_distribution.py::test_release_preparation_evidence_matches_local_metadata"
+      ],
+      "decision": "Update the digest binding only; do not change releaseTag, candidate version, or provider state.",
+      "resolution": "Updated release.json to the recomputed SBOM digest and reran release evidence checks.",
+      "status": "resolved",
+      "followUp": "Keep release metadata digest bindings in the Work Item scope when implementation changes alter evidence."
+    },
+    {
+      "issueId": "RFE-ISSUE-090",
+      "category": "release",
+      "severity": "medium",
+      "stage": "quality-full",
+      "fact": "Candidate release-digests.json differed from recomputed artifact evidence after the SBOM change.",
+      "evidence": [
+        "target/quality/timing/check-release-evidence.json",
+        ".ai/cockpit/release-digests.json"
+      ],
+      "decision": "Regenerate candidate release digest evidence and rerun the supply-chain gates.",
+      "resolution": "Ran check_supply_chain.py release --write; release, SBOM, and provenance checks passed.",
+      "status": "resolved",
+      "followUp": "Do not reuse release evidence from before a source or artifact change."
+    },
+    {
+      "issueId": "RFE-ISSUE-091",
+      "category": "work-item-evidence",
+      "severity": "low",
+      "stage": "post-finish-audit",
+      "fact": "The five hosted performance scenarios were initially recorded only as prose/known gaps after ai-finish; an attempted custom hostedPerformanceEvidence field was then rejected because the Summary schema does not allow it.",
+      "evidence": [
+        ".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.summary.json"
+      ],
+      "decision": "Stop PR handoff; remove the unsupported field and create a schema-level corrective Work Item rather than bypassing Summary validation.",
+      "resolution": "The unsupported field remains removed from the accepted Summary shape; the five hosted scenarios remain an explicit open evidence gap.",
+      "status": "open",
+      "followUp": "Create a corrective Work Item to add a registered structured hosted-evidence schema and validator before claiming this acceptance complete."
+    },
+    {
+      "issueId": "RFE-ISSUE-093",
+      "category": "archive-integrity",
+      "severity": "low",
+      "stage": "post-finish-audit",
+      "fact": "After the archived Summary and Archive Manifest were corrected, archive/index.json still retained the previous Summary and Manifest digests.",
+      "evidence": [
+        ".ai/work-items/archive/index.json",
+        ".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.archive-manifest.json"
+      ],
+      "decision": "Stop PR handoff until the archive index, Manifest, Contract, and Summary digests agree.",
+      "resolution": "The index digests will be regenerated after the final Summary and Manifest edits, followed by a full archive integrity audit.",
+      "status": "open",
+      "followUp": "Make archive index regeneration and digest validation an automatic post-finish gate."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Hosted before/after evidence may remain not-run if historical baseline or comparable runner data is unavailable; no improvement claim is allowed.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Confirm no required quality or release evidence gate was removed.",
+      "Confirm each hosted measurement is PASS or structured not-run."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "edc7553e71897f87",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "edc7553e71897f87",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "Historical WI-20 hosted before measurements may not be available; record the exact limitation and do not infer improvement."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "archiveSequence": 614
+}

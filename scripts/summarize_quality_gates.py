@@ -42,6 +42,7 @@ def summarize(records: list[dict[str, Any]]) -> dict[str, Any]:
         if records
         else None,
         "failedGates": [record.get("gate") for record in failed],
+        "failureTails": {record.get("gate"): record.get("outputTail", "") for record in failed},
         "skippedGates": [
             record.get("gate") for record in records if record.get("result") == "skipped"
         ],

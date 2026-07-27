@@ -98,6 +98,7 @@ def run_gate(args: argparse.Namespace) -> int:
         "cache": {"applicable": args.cache_applicable, "hit": args.cache_hit},
         "logPath": display_path(log, repository),
         "outputDigest": digest(log),
+        "outputTail": captured[-4000:],
         "timedOut": timed_out,
     }
     output.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")

@@ -26,6 +26,9 @@ and release preparation uses `make quality-release`.
   cached results never substitute for release evidence.
 - Compatibility jobs validate the interpreter/platform matrix and do not run
   the full quality graph.
+- Hosted smoke has explicit `template-smoke` (the single full-quality owner),
+  `installation-smoke`, and `release-evidence` jobs. The latter two depend on
+  the quality owner and never invoke the full graph again.
 
 ## Evidence and failure behavior
 
@@ -33,8 +36,12 @@ and release preparation uses `make quality-release`.
 gate, including the command, commit, duration, exit code, timeout state,
 cache status, and output digest. `scripts/summarize_quality_gates.py` writes
 JSON and Markdown summaries with wall time, total gate time, parallel
-efficiency, slowest gate, failures, skips, and the final decision. Missing
+efficiency, slowest gate, failures, failure tails, skips, and the final decision. Missing
 timing evidence is an error; a cache hit is not final evidence.
+
+Hosted before/after timing is an evidence claim, not an assumption. If a WI-20
+baseline or a hosted run cannot be retrieved, record a structured `not-run`
+reason, run ID and limitation; do not report an improvement.
 
 `scripts/determine_quality_scope.py` selects Fast, Full, or Release from the
 changed paths. Unknown or mixed paths default to Full. Parallel groups may

@@ -34,7 +34,7 @@ check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy template-adoption-ready \
 	check-ai-scenario-coverage check-ai-start-receipt generate-ai-preflight-review check-ai-preflight-review ai-preflight \
 	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
-	quality-fast quality-full quality-release quality-fast-static quality-fast-policy quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
+	quality-fast quality-full quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
 	check-ai-task-outcome \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
@@ -275,16 +275,44 @@ QUALITY_SUPPLY_CHAIN_GATES := check-bandit-baseline check-sbom check-provenance 
 QUALITY_PROJECT_CONSISTENCY_GATES := check-quality-architecture check-deprecated-assets check-instruction-traceability
 QUALITY_MAKE := $(shell command -v make)
 
+define RUN_QUALITY_GATE
+	+$(AI_PYTHON) scripts/run_quality_gate.py --gate $(1) --category $(2) --output target/quality/timing/$(1).json --log target/quality/logs/$(1).log -- $(QUALITY_MAKE) --no-print-directory $(1)
+endef
+
 # Fast is intentionally narrower than Full.  It never implies release readiness.
 quality-fast:
 	+$(QUALITY_MAKE) --no-print-directory quality-fast-static
 	+$(QUALITY_MAKE) --no-print-directory quality-fast-policy
 
 quality-fast-static:
-	+$(QUALITY_MAKE) --no-print-directory -j2 $(QUALITY_FAST_STATIC_GATES)
+	+$(QUALITY_MAKE) --no-print-directory -j2 quality-fast-static-gates
+
+quality-fast-static-gates: qg-project-format-check qg-project-lint qg-diff-check
+
+qg-project-format-check:
+	$(call RUN_QUALITY_GATE,project-format-check,static)
+qg-project-lint:
+	$(call RUN_QUALITY_GATE,project-lint,static)
+qg-diff-check:
+	$(call RUN_QUALITY_GATE,diff-check,static)
 
 quality-fast-policy:
-	+$(QUALITY_MAKE) --no-print-directory -j2 $(QUALITY_FAST_POLICY_GATES)
+	+$(QUALITY_MAKE) --no-print-directory -j2 quality-fast-policy-gates
+
+quality-fast-policy-gates: qg-check-trust-schemas qg-check-docs-metadata qg-check-ai-system-invariants qg-check-ai-project-profile qg-check-ai-guard-calibration qg-check-ai-status-consistency
+
+qg-check-trust-schemas:
+	$(call RUN_QUALITY_GATE,check-trust-schemas,policy)
+qg-check-docs-metadata:
+	$(call RUN_QUALITY_GATE,check-docs-metadata,policy)
+qg-check-ai-system-invariants:
+	$(call RUN_QUALITY_GATE,check-ai-system-invariants,policy)
+qg-check-ai-project-profile:
+	$(call RUN_QUALITY_GATE,check-ai-project-profile,policy)
+qg-check-ai-guard-calibration:
+	$(call RUN_QUALITY_GATE,check-ai-guard-calibration,policy)
+qg-check-ai-status-consistency:
+	$(call RUN_QUALITY_GATE,check-ai-status-consistency,policy)
 
 # Heavy groups are separate ownership units.  Their outputs are either read-only
 # or isolated by the gate itself; no blanket high-parallelism quality target is used.
@@ -292,21 +320,50 @@ quality-heavy:
 	+$(QUALITY_MAKE) --no-print-directory -j2 quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group
 
 quality-tests-group:
-	+$(QUALITY_MAKE) --no-print-directory $(QUALITY_TEST_GATES)
+quality-tests-group: qg-project-test
+
+qg-project-test:
+	$(call RUN_QUALITY_GATE,project-test,tests)
 
 quality-evidence-group:
-	+$(QUALITY_MAKE) --no-print-directory $(QUALITY_EVIDENCE_GATES)
+quality-evidence-group: qg-unsupported-claim-regression qg-adopter-long-cycle qg-check-release-evidence qg-check-dependency-vulnerabilities
+
+qg-unsupported-claim-regression:
+	$(call RUN_QUALITY_GATE,unsupported-claim-regression,evidence)
+qg-adopter-long-cycle:
+	$(call RUN_QUALITY_GATE,adopter-long-cycle,evidence)
+qg-check-release-evidence:
+	$(call RUN_QUALITY_GATE,check-release-evidence,evidence)
+qg-check-dependency-vulnerabilities:
+	$(call RUN_QUALITY_GATE,check-dependency-vulnerabilities,evidence)
 
 quality-supply-chain-group:
-	+$(QUALITY_MAKE) --no-print-directory $(QUALITY_SUPPLY_CHAIN_GATES)
+quality-supply-chain-group: qg-check-bandit-baseline qg-check-sbom qg-check-provenance qg-check-secret-scanning
+
+qg-check-bandit-baseline:
+	$(call RUN_QUALITY_GATE,check-bandit-baseline,supply-chain)
+qg-check-sbom:
+	$(call RUN_QUALITY_GATE,check-sbom,supply-chain)
+qg-check-provenance:
+	$(call RUN_QUALITY_GATE,check-provenance,supply-chain)
+qg-check-secret-scanning:
+	$(call RUN_QUALITY_GATE,check-secret-scanning,supply-chain)
 
 quality-project-consistency-group:
-	+$(QUALITY_MAKE) --no-print-directory $(QUALITY_PROJECT_CONSISTENCY_GATES)
+quality-project-consistency-group: qg-check-quality-architecture qg-check-deprecated-assets qg-check-instruction-traceability
+
+qg-check-quality-architecture:
+	$(call RUN_QUALITY_GATE,check-quality-architecture,project-consistency)
+qg-check-deprecated-assets:
+	$(call RUN_QUALITY_GATE,check-deprecated-assets,project-consistency)
+qg-check-instruction-traceability:
+	$(call RUN_QUALITY_GATE,check-instruction-traceability,project-consistency)
 
 quality-full:
 	@mkdir -p target/quality/timing target/quality/logs
-	+$(AI_PYTHON) scripts/run_quality_gate.py --gate quality-fast --category orchestration --output target/quality/timing/quality-fast.json --log target/quality/logs/quality-fast.log -- $(QUALITY_MAKE) --no-print-directory quality-fast
-	+$(AI_PYTHON) scripts/run_quality_gate.py --gate quality-heavy --category orchestration --output target/quality/timing/quality-heavy.json --log target/quality/logs/quality-heavy.log -- $(QUALITY_MAKE) --no-print-directory quality-heavy
+	+rm -f target/quality/timing/*.json target/quality/logs/*.log
+	+$(QUALITY_MAKE) --no-print-directory quality-fast
+	+$(QUALITY_MAKE) --no-print-directory quality-heavy
 	+$(AI_PYTHON) scripts/summarize_quality_gates.py --input target/quality/timing --json-output target/quality/summary.json --markdown-output target/quality/summary.md
 
 # Backward-compatible aliases.  These names are compatibility/debug views of

@@ -20,8 +20,10 @@ def test_quality_entry_points_have_explicit_compatibility_semantics():
     assert "quality-release:" in text
     assert "quality:\n\t+$(QUALITY_MAKE) --no-print-directory quality-full" in text
     assert "quality-gates: quality-full" in text
-    assert "scripts/run_quality_gate.py --gate quality-fast" in text
-    assert "scripts/run_quality_gate.py --gate quality-heavy" in text
+    assert "define RUN_QUALITY_GATE" in text
+    assert "$(call RUN_QUALITY_GATE,project-format-check,static)" in text
+    assert "$(call RUN_QUALITY_GATE,project-test,tests)" in text
+    assert "$(call RUN_QUALITY_GATE,check-sbom,supply-chain)" in text
     assert "scripts/summarize_quality_gates.py" in text
 
 
@@ -63,3 +65,12 @@ def test_release_preserves_security_and_installation_ownership():
         "check-secret-scanning",
     ):
         assert required in text
+
+
+def test_smoke_assigns_quality_installation_and_release_to_distinct_jobs():
+    smoke = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    assert "  template-smoke:" in smoke
+    assert "  installation-smoke:" in smoke
+    assert "  release-evidence:" in smoke
+    assert "needs: template-smoke" in smoke
+    assert smoke.count("make quality") == 1

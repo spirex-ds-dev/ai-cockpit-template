@@ -1,0 +1,248 @@
+{
+  "contractVersion": 2,
+  "workItemId": "quality-gate-performance-completion-20260727",
+  "mode": "code",
+  "title": "Complete quality gate performance architecture",
+  "baseCommit": "6408947754bb14600c463588f4150de42261e385",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/quality-gate-performance-completion-20260727.contract.json",
+    ".ai/work-items/active/quality-gate-performance-completion-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "Makefile",
+    ".github/workflows/smoke.yml",
+    "scripts/run_quality_gate.py",
+    "scripts/summarize_quality_gates.py",
+    "scripts/determine_quality_scope.py",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    "tests/test_quality_gate_performance.py",
+    "tests/test_quality_gate_*.py",
+    "tests/test_quality_telemetry.py",
+    "docs/operations/quality-gates.md",
+    "docs/operations/quality-gates.zh-CN.md",
+    "docs/operations/quality-gates.ja.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Removing or weakening coverage, security, SBOM, provenance, installer, compatibility, or release evidence gates",
+    "Changing Branch Protection or claiming hosted performance improvement without measured evidence",
+    "Publishing a release or changing release identity metadata; this Work Item may only refresh the source-bound SBOM digest field required by evidence consistency",
+    "Treating unavailable hosted before/after measurements as proof of improvement",
+    "Deleting WI-20 historical evidence or rewriting its archived Summary"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/quality-gate-performance-architecture-20260727.summary.json",
+      "reason": "WI-20 archived Summary records the three performance omissions that this corrective Work Item must close."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Current quality-fast/full/release ownership and gate entrypoints."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Hosted template-smoke quality, installation, and evidence sequence."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "User-ordered corrective Work Item sequence and WI-20 known gaps."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "workflow_orchestration",
+      "performance_evidence",
+      "quality_gate_regression"
+    ],
+    "reason": "Workflow and quality-gate changes can create duplicate execution or silently omit evidence; all changes must remain fail-closed and measured.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized serial execution; WI-21 must close WI-20 omissions without weakening any evidence gate."
+  },
+  "preReviewWarnings": [
+    "Review independent Job ownership, per-gate timing, and whether hosted before/after evidence is measured or explicitly not-run."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Workflow quality, installation-smoke, and release-evidence responsibilities are represented by explicit independent Job ownership with no duplicate full-quality invocation.",
+    "Every quality gate has machine-readable timing, log, exit status, and digest evidence; summaries identify the single owner and preserve failure tails.",
+    "Five hosted before/after scenario classes are measured against WI-20 baseline where available; unavailable measurements are recorded with structured not-run reasons and no improvement claim.",
+    "Local quality-fast/full/release equivalence, coverage, security, supply-chain, installer, compatibility, and workflow ownership regression tests pass.",
+    "English, Chinese, and Japanese quality-gate documentation and instruction-to-plan traceability are aligned with the implementation and known limitations.",
+    "The complete Contract→preflight/checkpoint→implementation→verification→Summary→PR/CI→merge→archive→ai-close→branch cleanup→main synchronization lifecycle succeeds."
+  ],
+  "guidelines": [
+    "Do not trade evidence completeness or coverage for speed.",
+    "Unknown scope and unavailable hosted measurements fail closed or remain explicitly not-run.",
+    "Every optimization must preserve a reproducible, machine-readable evidence trail."
+  ],
+  "intent": {
+    "problem": "WI-20 delivered de-duplication and fast/full/release entrypoints but its archived Summary leaves three release-relevant performance gaps: workflow Job ownership is not fully separated, timing is not per gate, and five hosted before/after scenario measurements are absent.",
+    "constraints": [
+      "Use the latest synchronized origin/main after the preparation Work Item is closed.",
+      "Do not remove, weaken, skip, or reclassify required quality, security, supply-chain, installer, compatibility, or release evidence.",
+      "Do not claim hosted performance improvement without source-bound before/after evidence.",
+      "Keep all changes within this Work Item and update the plan, Summary, status, tests, and three-language documentation."
+    ],
+    "rationale": "Closing the explicit WI-20 omissions is required to make the observed quality-gate optimization auditable and to prevent future long-running release attempts from hiding duplicate or unmeasured work."
+  },
+  "rawUserRequest": "按已确认顺序先完成性能优化，再处理 WI-20 遗漏；所有工单必须按“指示—计划—实现—验收”双向追踪，完整走 PR、合并、归档、关闭、分支清理和 main 同步。发布必须延后到这些事项及所有流程问题解决以后。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-27-performance-order-and-traceability",
+    "capturedAt": "2026-07-27",
+    "digest": "sha256:user-confirmed-performance-before-release-order"
+  },
+  "declaredIntent": {
+    "summary": "Complete WI-20 performance omissions with measurable, fail-closed evidence before any release Work Item.",
+    "requestedCapabilities": ["ai_governance", "software_design", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A workflow change would run full quality more than once.",
+      "expected": "Ownership check fails or identifies one authoritative full-quality owner before merge.",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/smoke.yml", "tests/test_quality_gate_performance.py"]
+    },
+    {
+      "scenario": "A gate fails or times out during hosted execution.",
+      "expected": "The gate records status, timing, log tail, and digest without masking the failure.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["scripts/run_quality_gate.py", "scripts/summarize_quality_gates.py"]
+    },
+    {
+      "scenario": "A hosted before/after measurement cannot be obtained.",
+      "expected": "The report records a structured not-run reason and does not claim performance improvement.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["docs/operations/quality-gates.md", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"]
+    },
+    {
+      "scenario": "An optimization removes or weakens a required evidence gate.",
+      "expected": "Regression tests and quality gates fail closed.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["Makefile", "tests/test_quality_gate_performance.py"]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized serial performance optimization, workflow correction, PR lifecycle, and process issue recording; no release publication is authorized by this Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 626
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/quality-gate-performance-completion-20260727.json",
+    "baseCommit": "6408947754bb14600c463588f4150de42261e385",
+    "initialScopeDigest": "c34809ad4e47bc6254bf58786f74e81d33294798bef64fd79965e846d9338e4c",
+    "contractSkeletonDigest": "39430eadae811d361abee3729b2a102bac82a9b1bad10e570ec0f2fc3aefd3cc"
+  }
+}

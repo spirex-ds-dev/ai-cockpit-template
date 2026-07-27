@@ -405,6 +405,13 @@ PR #410 已作为 superseded corrective PR 关闭且未合并，归档证据保�
 `RFE-ISSUE-083`（文档质量门，中）：远端全量测试在 20 分 20 秒完成、覆盖率 85.02%，但新增 RFE-080 行使用了文档检查禁止的中文术语，触发日语风格门并造成 3 个失败。已改用符合现有术语规则的中文措辞，必须重新通过文档元数据和系统不变量检查。
 `RFE-ISSUE-084`（工单分支/流程，中）：发布准备工单初始在 `main` 上启动，`ai-finish` 按规则拒绝在仓库基线分支归档。已停止收口并转移到专用 Work Item 分支；后续所有工单在启动后必须先确认当前分支不是默认基线，再进入实现/finish。
 `RFE-ISSUE-085`（操作策略/流程，低）：为拆分“发布准备”和“外部发布”而临时声明 `repository_release_preparation.validate_and_record`，但现有策略没有该操作，preflight 正确拒绝。已改用既有 `repository_governance.modify`/`document` 记录准备状态，外部发布保持 out-of-scope；若未来需要新操作类型，必须另立 corrective Work Item 修改策略、映射和测试。
+`RFE-ISSUE-086`（工单分支/流程，中）：WI-21 通过 `ai-start` 生成 Contract 后仍停留在 `main`，实现变更因此先出现在基线工作树。已停止继续修改并切换到 `codex/quality-gate-performance-completion-20260727` 专用分支；后续需把“启动后确认专用分支”加入 WI-21 Summary 和流程改进记录，不能在 main 上 finish、commit 或 PR。
+`RFE-ISSUE-088`（供应链证据，中）：WI-21 的新增脚本和 Workflow 变更使重新计算的 `.ai/cockpit/sbom.json` 与已提交 baseline 不一致；全量 `project-test` 和 `check-sbom` 均 fail-closed。已停止收口，先将 SBOM 证据纳入 WI-21 scope，按现有 source-bound 规则重新生成并复验；不得删除或弱化 SBOM 门禁。
+`RFE-ISSUE-089`（供应链/发布证据，中）：SBOM baseline 修复后，`release.json.supplyChain.sbomDigest` 仍指向旧 SBOM，`test_release_preparation_evidence_matches_local_metadata` fail-closed。已停止收口，按 source-bound 证据链更新 digest 并纳入 WI-21 scope；不修改 releaseTag、候选版本或任何 provider 状态。
+`RFE-ISSUE-090`（供应链/发布证据，中）：更新 SBOM digest 后，候选 `.ai/cockpit/release-digests.json` 也与重新计算的 artifact evidence 不一致，`check_supply_chain.py release` fail-closed。已停止收口，先按候选 baseline 规则重新生成 release digests，再运行完整测试；不创建 tag 或公开资产。
+`RFE-ISSUE-091`（工单证据/验收，低）：`ai-finish` 后审计发现，五个 hosted 性能场景最初只有 prose/known gap；尝试补入结构化 `hostedPerformanceEvidence` 后又被 Summary schema 正确拒绝，说明“结构化未运行证据”尚未进入正式 schema。已暂停 PR 交接，移除不受支持的字段并保留 open 状态；后续必须建立 corrective Work Item 扩展 schema/validator，不能手工绕过门禁。
+`RFE-ISSUE-092`（指示追踪/归档路径，低）：WI-21 归档后，traceability manifest 仍引用 `active/...contract.json`，导致归档文件存在但检查器报路径缺失。已改为引用实际 archive Contract 路径，并要求归档/PR 前重新运行追踪检查。
+`RFE-ISSUE-093`（归档证据/索引，低）：修正 WI-21 的 Summary 与 Archive Manifest 后，`.ai/work-items/archive/index.json` 仍保留旧的 Summary/Manifest digest，说明归档后手工补证据会造成三处索引漂移。已暂停 PR 交接，必须在最终 Summary/Manifest 稳定后重新生成 index 并做全量 digest 审计。
 `RFE-ISSUE-063`（工单初始化/预检，中）：CI 流程修复工单的 `ai-start` skeleton 缺少任务意图、原始请求、场景覆盖和具体验收，按要求停止在 `not_ready`。已补全 Contract，才允许进入实现。
 `RFE-ISSUE-064`（工单证据结构，中）：补全 Contract 后，preflight 又拒绝不完整的 `rawRequestSource`、中风险 unknowns review 和 `pending` 场景状态。已改为完整人类请求证据、显式 unknowns review 和 `unverified` 初始场景状态，继续保持门禁有效。
 `RFE-ISSUE-065`（预检授权路径，中）：CI 工单记录用户授权的选项 B 后，`ai-preflight --check` 仍将 `human_decision_recorded` 视为 blocked，没有“授权后先实现、再以真实证据闭合场景”的继续路径。已保留 Decision Evidence，严格限制为已确认的 CI 编排范围，继续以 checkpoint 和后续真实验证闭合场景，不提前伪造 verified 状态。

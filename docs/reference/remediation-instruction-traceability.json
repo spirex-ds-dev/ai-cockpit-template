@@ -79,6 +79,15 @@
       "implementationEvidence": ["scripts/ai_check_summary.py", "scripts/check_instruction_traceability.py", "scripts/ai_archive_work_item.py", "scripts/check_ci_release_evidence.sh", ".github/workflows/smoke.yml"],
       "acceptanceEvidence": ["tests/test_ai_check_summary.py", "tests/test_instruction_traceability.py", "tests/test_ci_release_evidence.sh"],
       "verificationCommands": ["make check-instruction-traceability", "make ai-finish TASK=process-evidence-release-preflight-20260727", "make ai-close-work-item TASK=process-evidence-release-preflight-20260727"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-008",
+      "summary": "WI-21 must close WI-20 performance omissions with explicit Job ownership, per-gate evidence, hosted measurement limitations, and complete lifecycle traceability before release.",
+      "planWorkItems": ["WI-21"],
+      "contractPaths": [".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.contract.json"],
+      "implementationEvidence": ["Makefile", ".github/workflows/smoke.yml", "scripts/run_quality_gate.py", "scripts/summarize_quality_gates.py", "docs/operations/quality-gates.md", "docs/operations/quality-gates.zh-CN.md", "docs/operations/quality-gates.ja.md"],
+      "acceptanceEvidence": ["tests/test_quality_gate_architecture.py", "tests/test_quality_telemetry.py"],
+      "verificationCommands": ["make check-instruction-traceability", "make ai-finish TASK=quality-gate-performance-completion-20260727", "make ai-close-work-item TASK=quality-gate-performance-completion-20260727"]
     }
   ]
 }
