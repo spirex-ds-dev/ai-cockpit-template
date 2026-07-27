@@ -19,7 +19,7 @@ AI_PREFLIGHT_VALIDATE_CONTRACT ?= true
 .PHONY: help \
 	test project-format-check project-test project-lint diff-check quality quality-gates \
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
-check-docs-metadata check-trust-layer-docs check-governance-complexity \
+check-docs-metadata check-remediation-plan-completion check-trust-layer-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
 	check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning \
 	check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence \
@@ -85,6 +85,7 @@ help:
 	@printf '%s\n' '  make quality'
 	@printf '%s\n' '  make test'
 	@printf '%s\n' '  make check-docs-metadata'
+	@printf '%s\n' '  make check-remediation-plan-completion'
 	@printf '%s\n' '  make check-governance-complexity'
 	@printf '%s\n' '  make check-ai-system-invariants'
 	@printf '%s\n' '  make cockpit-doctor'
@@ -149,6 +150,9 @@ diff-check:
 
 check-docs-metadata:
 	$(AI_PYTHON) scripts/check_docs_metadata.py
+
+check-remediation-plan-completion:
+	$(AI_PYTHON) scripts/check_remediation_plan_completion.py --root . --output target/remediation_plan_completion_audit.json
 
 check-trust-layer-docs:
 	$(AI_PYTHON) scripts/check_trust_layer_docs.py

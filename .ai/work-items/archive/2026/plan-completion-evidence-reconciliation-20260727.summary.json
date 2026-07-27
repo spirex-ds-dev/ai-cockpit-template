@@ -1,0 +1,529 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "plan-completion-evidence-reconciliation-20260727",
+  "contractPath": ".ai/work-items/archive/2026/plan-completion-evidence-reconciliation-20260727.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": "scripts/check_remediation_plan_completion.py",
+      "reason": "Added deterministic release-blocking audit for WI-01 through WI-19 completion evidence."
+    },
+    {
+      "path": "tests/test_remediation_plan_completion.py",
+      "reason": "Added regression coverage for missing alignment evidence, not-ready evidence, and archive immutability."
+    },
+    {
+      "path": "docs/reference/comprehensive-remediation-completion-audit.md",
+      "reason": "Documented the audit command, release-blocking semantics, and immutable archive rule."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Added the check-remediation-plan-completion entrypoint."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Recorded audit findings and the user-directed WI-19-before-WI-18 ordering."
+    },
+    {
+      "path": ".ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.request.json",
+      "reason": "Preflight human-decision request evidence."
+    },
+    {
+      "path": ".ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.evidence.json",
+      "reason": "Preflight human-decision evidence record."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/plan-completion-evidence-reconciliation-20260727.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/work-items/archive/2026/*.summary.json",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/pulls?q=is%3Apr+is%3Amerged"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "WI-01 through WI-17 archive pairs and review readiness are enumerated from authoritative archive evidence",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        ".ai/work-items/archive/index.json",
+        ".ai/work-items/archive/2026/*.summary.json"
+      ]
+    },
+    {
+      "scenario": "Missing documentationAlignment and not_ready evidence are reported as release blockers without rewriting history",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "target/remediation_plan_completion_audit.json",
+        "tests/test_remediation_plan_completion.py"
+      ]
+    },
+    {
+      "scenario": "WI-10 installation-document scope, WI-16 Japanese evidence boundary, and WI-19 ordering are recorded",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "target/remediation_plan_completion_audit.json",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:37:07.620795+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "939a48d5f8323db13cafd0dc962fcc796bd7f624e2994085267e951ba50cc11b",
+      "commandHash": "e159ddebe2dcba127c275e7b29610f151745c0c5fd98bf3c1d1f3c1c5796455c",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "331fffe644be1b914a50d973a73a381180cc7b761ab06d246b248465dd1edbac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json work item contract check passed: .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json work item contract check passed: .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "outputBytes": 276
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:37:07.765796+00:00",
+      "exitCode": 0,
+      "durationMs": 97,
+      "outputDigest": "c23a6e3ce39da51cf7721b6a4444fc2f71a10a2fb75be5b7ff2e20478352b234",
+      "commandHash": "c05f82d3602aa92507dda0f6c3b97b5efecbcbf25c0d27ebd4769d71572b48f5",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "331fffe644be1b914a50d973a73a381180cc7b761ab06d246b248465dd1edbac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputBytes": 200
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:37:07.931481+00:00",
+      "exitCode": 0,
+      "durationMs": 116,
+      "outputDigest": "18d36194a389a006f0533f74910abd9cb6a9d64e4bc3ac3cc3e31a1dd0c0ba44",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "331fffe644be1b914a50d973a73a381180cc7b761ab06d246b248465dd1edbac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json [warning] restricted_write: .ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entry",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json [warning] restricted_write: .ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 3 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 579
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json SUMMARY=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:37:08.182062+00:00",
+      "exitCode": 0,
+      "durationMs": 202,
+      "outputDigest": "f9a3083a2c4af406df388886c843361e0495fe478bdec3ceb076ce98bef07ef6",
+      "commandHash": "64ab0219311f55d9c5171b8780919253dd6cdba06a587686147ace56fb078700",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "331fffe644be1b914a50d973a73a381180cc7b761ab06d246b248465dd1edbac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `plan-completion-evidence-reconciliation-20260727` - Contract Hash: `d2decbcf15ad9ebb` - Mode: `code` - notCodable: `False` - Execution Decision: `continu",
+      "outputTail": "ork Item or explicit release-blocking condition. - A regression test proves that an archived Work Item missing documentationAlignment or marked not_ready cannot be reported as plan-complete. - No release tag, Release, or external provider state is changed by this Work Item. ## Required Verification - `aiWorkItem`: passed - `aiScope`: passed - `aiGuards`: passed - `aiCheckpoint`: passed - `aiAgentRisk`: not_run - `aiReviewPolicy`: passed - `aiBacktrack`: passed - `aiCoverage`: passed - `aiScenarioCoverage`: passed - `aiGuidelines`: passed - `aiSummary`: not_run - `aiStatus`: not_run - `aiStatusCheck`: not_run - `aiStatusConsistency`: not_run - `aiDiffOwnership`: passed - `quality`: failed ## Review Focus - Immutable archive evidence - WI-04 not_ready status - WI-10 installation documentation scope - documentationAlignment evidence for WI-01 through WI-17 - WI-16 Japanese evidence boundary and WI-19 ordering ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.evidence.json` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.request.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/plan-completion-evidence-reconciliation-20260727.json` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/reference/comprehensive-remediation-completion-audit.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `scripts/check_remediation_plan_completion.py` — covered by Contract scope - [active_owned] `tests/test_remediation_plan_completion.py` — covered by Contract scope ## Next Action - Run or record required verification: aiAgentRisk",
+      "outputBytes": 4871
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:37:08.430730+00:00",
+      "exitCode": 0,
+      "durationMs": 193,
+      "outputDigest": "cb291912156ecfb6785cdcabf15389190dc92c968b8659e6e7e71757dbaa06e7",
+      "commandHash": "1311cae44c11e422c2fd7453455e2ac0539eba57139f1ff366f42993dc085c07",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "331fffe644be1b914a50d973a73a381180cc7b761ab06d246b248465dd1edbac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json review policy matched 5 path(s) [review] .ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.evidence.json [review] .ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.request.json [review] .ai/work-items/starts/plan-completion-evidence-reconciliation-20260727.json [review] .ai/cockpit/current_status.md [review] Makefile review focus recorded:",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json review policy matched 5 path(s) [review] .ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.evidence.json [review] .ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.request.json [review] .ai/work-items/starts/plan-completion-evidence-reconciliation-20260727.json [review] .ai/cockpit/current_status.md [review] Makefile review focus recorded: 5 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 555
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:37:08.567452+00:00",
+      "exitCode": 0,
+      "durationMs": 90,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "331fffe644be1b914a50d973a73a381180cc7b761ab06d246b248465dd1edbac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:37:08.704538+00:00",
+      "exitCode": 0,
+      "durationMs": 89,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "331fffe644be1b914a50d973a73a381180cc7b761ab06d246b248465dd1edbac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json SUMMARY=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:37:08.800853+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "4c7b010a0924c756ad8bd2b0bca5190a1431f86c5133ff211b078a3da8ed7547",
+      "commandHash": "c64f5ee1a82454af67b27202f6e8c44cf77f9ca669b0aaf1fc62c68981635857",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "331fffe644be1b914a50d973a73a381180cc7b761ab06d246b248465dd1edbac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 319
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json SUMMARY=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:37:08.899241+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "f89c22f3597bb554141aa061bda4022ae04e1c88638b8c196172c44c87dcd8dc",
+      "commandHash": "101e9520c7900d226e5ccf884ef80f67749af59e3c79549004eeb90ee65e6c6d",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "331fffe644be1b914a50d973a73a381180cc7b761ab06d246b248465dd1edbac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputBytes": 324
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:37:09.147248+00:00",
+      "exitCode": 0,
+      "durationMs": 198,
+      "outputDigest": "8f4c0f42b0c3d04aa7155b6922a4ebac77800f30c2bd07d8c7b414371e47ad86",
+      "commandHash": "97cff8a3f11c425974e02f8b8ed25cd54740a619409fc72370bcdd78cea14027",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "331fffe644be1b914a50d973a73a381180cc7b761ab06d246b248465dd1edbac",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.evidence.json` — covered by Contract scope - [a",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.evidence.json` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-05996e7f2cd9bc2c-6b402d98.request.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/plan-completion-evidence-reconciliation-20260727.json` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/reference/comprehensive-remediation-completion-audit.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `scripts/check_remediation_plan_completion.py` — covered by Contract scope - [active_owned] `tests/test_remediation_plan_completion.py` — covered by Contract scope",
+      "outputBytes": 1208
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:46:15.318982+00:00",
+      "exitCode": 0,
+      "durationMs": 546094,
+      "outputDigest": "dcc6aa4c2825ca83678093f613b2e675de7b8b7ed08023f26e14f5ae441d67a7",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "331fffe644be1b914a50d973a73a381180cc7b761ab06d246b248465dd1edbac",
+      "outputSummary": "make --no-print-directory quality-gates make --no-print-directory quality-static make --no-print-directory -j2 project-format-check project-lint diff-check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff check scripts tests 242 files already formatted git diff --check All checks passed! PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m mypy scripts/*.py git diff --check Success: no issues found in 117 source files PYT",
+      "outputTail": "d73f0fc296bb2c5e65bc81953d88b2f4ac9\", \"rollbackCommit\": \"ca7a4a902d33ec0f88908209745354e459d1e394\", \"upgradeWorktreeRemoved\": true, \"localBranchesCleaned\": true, \"remoteBranchesCleaned\": true, \"enterpriseAssurance\": \"not_claimed\" } PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_calibrate.py validate --profile .ai/project_profile.yaml --confirmed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed project Profile validation passed: .ai/project_profile.yaml PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_bandit_baseline.py PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_supply_chain.py sbom sbom supply-chain check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_supply_chain.py provenance provenance supply-chain check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_supply_chain.py release release supply-chain check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_supply_chain.py secrets bandit low-risk baseline check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_supply_chain.py vulnerabilities secrets supply-chain check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_trust_schema.py --check Trust Layer schema check passed: 5 schema(s) PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q tests/test_trust_guards.py ........................... [100%]vulnerabilities supply-chain check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q tests/test_critical_domain_guards.py ......... [100%] 9 passed in 0.01s PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q tests/test_decision_protocol.py .... [100%] 4 passed in 1.63s 27 passed in 5.89s PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q tests/test_baseline_evidence.py PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guard_calibration.py --root . project Profile and Guard calibration check passed ... [100%] 3 passed in 18.14s",
+      "outputBytes": 28997
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json SUMMARY=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:46:17.051617+00:00",
+      "exitCode": 0,
+      "durationMs": 205,
+      "outputDigest": "5f12b3532433e0e1b7bce53a3b51f21f52b5a95ccfe0e21747055e85bea6857d",
+      "commandHash": "bd5d579a99130045809a40c5bdcf1c79590ea511a4b4d460ae005b34e45e5323",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "7060df7b72cf57c61ab9636173a1430f70209f07af2a0836ee9d23bce3e4a223",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 366
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json SUMMARY=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:46:17.302462+00:00",
+      "exitCode": 0,
+      "durationMs": 202,
+      "outputDigest": "b30d9ff15df70f57ce42221179635f30cb6909ee90c4a80813daa1f9acbd0be1",
+      "commandHash": "3231fad01f8216cfca2094876e92871f6a0be785eca6779156eb7cac7c651db9",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "7060df7b72cf57c61ab9636173a1430f70209f07af2a0836ee9d23bce3e4a223",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 349
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:46:17.399514+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "7060df7b72cf57c61ab9636173a1430f70209f07af2a0836ee9d23bce3e4a223",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json SUMMARY=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:46:17.493853+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "869fe9c8707b627a8593bc8db354a77703d4a7baea04b6d15be105f0008aa32d",
+      "commandHash": "340c40a9bb746e8a859f58854de63c4048c09175816e24cb2657290ef4e06238",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "7060df7b72cf57c61ab9636173a1430f70209f07af2a0836ee9d23bce3e4a223",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json --summary .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 329
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json CONTRACT=.ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T05:46:18.235753+00:00",
+      "exitCode": 0,
+      "durationMs": 88,
+      "outputDigest": "9fe8f869e6c9f80f11e6f6e54c8411468a6ded821e4d3bdd5a75d3a04a0398aa",
+      "commandHash": "ad2f5fa52a6653a2967b055be5307ce6e1f30c194f4244fd73e0dc7c1b9178f8",
+      "contractHash": "d2decbcf15ad9ebba97cedc0b9e9237eee851454bc66fedfc1237ea418dd1cfc",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "worktreeDigest": "fee4421c1a01ec439caa7d5d8a113d518e5888923e428ec2648ba8b61a6269a3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json ai summary check passed: .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json --contract .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json ai summary check passed: .ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+      "outputBytes": 361
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New audit commands and outputs are documented in the completion audit.",
+      "compliant": true,
+      "evidence": "docs/reference/comprehensive-remediation-completion-audit.md and Makefile target document the audit command."
+    },
+    {
+      "guideline": "The audit checker remains deterministic and uses standard-library-only repository inspection.",
+      "compliant": true,
+      "evidence": "scripts/check_remediation_plan_completion.py uses only the Python standard library; focused tests and Ruff passed."
+    },
+    {
+      "guideline": "Do not rewrite or delete historical archived evidence; append new audit evidence instead.",
+      "compliant": true,
+      "evidence": "The audit scope explicitly excludes rewriting or deleting historical archived evidence."
+    }
+  ],
+  "unknownsRemaining": [
+    "The corrective Work Items required to resolve each audit blocker are not yet completed."
+  ],
+  "risk": {
+    "level": "medium",
+    "detail": "Initial skeleton; scope and acceptance still need task-specific review."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "PLAN-012",
+      "category": "process",
+      "severity": "medium",
+      "stage": "preflight",
+      "status": "resolved",
+      "detail": "Initial ai-start skeleton omitted raw request, requested operation, declared intent, and scenario coverage; preflight stopped as not_ready.",
+      "resolution": "Completed the Contract fields and reran ai-preflight successfully."
+    },
+    {
+      "issueId": "PLAN-013",
+      "category": "process",
+      "severity": "medium",
+      "stage": "preflight",
+      "status": "resolved",
+      "detail": "The first recorded human decision became stale after Contract evidence was corrected.",
+      "resolution": "Regenerated the preflight report and reran the current Contract preflight; no stale decision was used as completion evidence."
+    },
+    {
+      "issueId": "PLAN-008",
+      "category": "evidence",
+      "severity": "high",
+      "stage": "completion-audit",
+      "status": "unresolved",
+      "detail": "Archived Summaries lack documentationAlignment evidence and must not be rewritten in place.",
+      "resolution": "Created a deterministic audit and queued separate corrective Work Items."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "The audit will expose release-blocking completion evidence gaps; those gaps intentionally remain unresolved until their own Work Items complete.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "not_ready",
+    "reason": "Required verification or known-unknown evidence is incomplete.",
+    "expectedReviewFocus": [
+      "Immutable archive evidence",
+      "WI-04 not_ready status",
+      "WI-10 installation documentation scope",
+      "documentationAlignment evidence for WI-01 through WI-17",
+      "WI-16 Japanese evidence boundary and WI-19 ordering"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [
+    {
+      "correction": "先完成，计划任务再做发布",
+      "source": "user message 2026-07-27",
+      "solidifiedAs": "WI-19 must close and its final alignment report must be available before WI-18 publication."
+    },
+    {
+      "correction": "检查其余任务是否有遗漏；如有，版本发布延后",
+      "source": "user message 2026-07-27",
+      "solidifiedAs": "The completion audit is release-blocking and reports WI-04, WI-10, WI-16, documentationAlignment, and WI-19 ordering gaps."
+    }
+  ],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "d2decbcf15ad9ebb",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 2
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "d2decbcf15ad9ebb",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    }
+  ],
+  "knownGaps": [
+    "The audit blockers are not yet resolved; this Summary must remain non-complete until corrective Work Items and their complete lifecycles finish.",
+    "Historical Summary files are intentionally not rewritten; alignment evidence must be appended through current corrective Work Items.",
+    "WI-16 lacks human/provider-backed Japanese object-engineer interaction evidence."
+  ],
+  "overclaimPrevention": "Do not report plan completion or release readiness from a merged PR, a ready_with_risks Summary, or a narrow test.",
+  "decisionEvidence": {
+    "decisionId": "HD-05996e7f2cd9",
+    "decision": "A",
+    "workItemId": "plan-completion-evidence-reconciliation-20260727",
+    "contractHash": "05996e7f2cd9bc2c",
+    "preflightHash": "6b402d98107e5603",
+    "recordedAt": "2026-07-27T05:29:58.541752+00:00",
+    "recordedBy": "User"
+  },
+  "archiveSequence": 610
+}

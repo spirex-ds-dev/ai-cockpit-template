@@ -1,0 +1,249 @@
+{
+  "contractVersion": 2,
+  "workItemId": "plan-completion-evidence-reconciliation-20260727",
+  "predecessorWorkItem": {
+    "workItemId": "document_human_agent_trust_layer",
+    "status": "closed",
+    "pr": {
+      "number": 381,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/381"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/document_human_agent_trust_layer.archive-manifest.json"
+    }
+  },
+  "mode": "code",
+  "title": "Reconcile comprehensive plan completion and documentation alignment evidence",
+  "rawUserRequest": "先走完当前文档的全部流程，发布延后；每个工单执行时遇到流程问题要记录，计划完成后再统一确认并判断是否需要改进。检查其余任务是否有遗漏，并补齐后再发布。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user instruction: complete the plan workflow before publication and record omissions/process issues",
+    "capturedAt": "2026-07-27",
+    "digest": "sha256:plan-completion-before-publication-request"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "e2874577049c948a758ed70c34b307cc52d9800f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.contract.json",
+    ".ai/work-items/active/plan-completion-evidence-reconciliation-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    "docs/reference/comprehensive-remediation-completion-audit.md",
+    "scripts/check_remediation_plan_completion.py",
+    "tests/test_remediation_plan_completion.py",
+    "Makefile",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Rewriting or deleting historical archived Contract, Summary, or Manifest contents",
+    "Publishing a version, creating tags/releases, or modifying external provider state",
+    "Claiming WI-04, WI-10, WI-16, or WI-17 complete without direct evidence",
+    "Implementing new runtime security, installer, or Trust Layer product behavior"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative ordered plan and explicit documentationAlignment requirement."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/*.summary.json",
+      "reason": "Archived Work Item completion and review-readiness evidence to audit without rewriting history."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Archive pair and sequence authority."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pulls?q=is%3Apr+is%3Amerged",
+      "reason": "Provider PR merge evidence for the plan Work Items."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance",
+      "documentation",
+      "evidence_alignment"
+    ],
+    "reason": "The audit must distinguish missing completion evidence from actual implementation gaps without mutating immutable history or allowing release to proceed on indirect evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User explicitly authorized completing the plan before any version publication and required process issues to be recorded during execution."
+  },
+  "preReviewWarnings": [
+    "Archived evidence is immutable; findings must be represented by a new audit/corrective Work Item.",
+    "A not_ready or missing documentationAlignment result is release-blocking until corrected and reverified."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A deterministic audit enumerates WI-01 through WI-19 and reports archive pair, review readiness, documentationAlignment evidence, required files, and PR/closure evidence without changing historical archive contents.",
+    "The audit identifies and records the confirmed WI-04 not_ready state, the WI-10 existing installation-document omission, the missing documentationAlignment evidence, the bounded WI-16 Japanese evidence limitation, and the current WI-19 ordering/state.",
+    "The plan records the audit findings and maps each unresolved item to a corrective Work Item or explicit release-blocking condition.",
+    "A regression test proves that an archived Work Item missing documentationAlignment or marked not_ready cannot be reported as plan-complete.",
+    "No release tag, Release, or external provider state is changed by this Work Item."
+  ],
+  "guidelines": [
+    "New audit commands and outputs are documented in the completion audit.",
+    "The audit checker remains deterministic and uses standard-library-only repository inspection.",
+    "Do not rewrite or delete historical archived evidence; append new audit evidence instead."
+  ],
+  "intent": {
+    "problem": "The comprehensive remediation plan was treated as complete even though WI-04 is archived as not_ready, WI-10 did not modify the existing installation guide as expected, and every audited Summary lacks the plan-required documentationAlignment field.",
+    "constraints": [
+      "Historical archive files are immutable evidence and cannot be rewritten to make the audit pass.",
+      "The current release PR remains unmerged and no release/tag/provider mutation is allowed.",
+      "Every unresolved finding must be recorded and resolved through the same Work Item PR/merge/close lifecycle."
+    ],
+    "rationale": "Create an executable, evidence-backed completion audit before resuming the release sequence so omissions cannot recur as another release-blocking surprise."
+  },
+  "declaredIntent": {
+    "summary": "Establish an evidence-backed completion audit and corrective-work map before the mandatory release sequence.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "WI-01 through WI-17 archive pairs and review readiness are enumerated from authoritative archive evidence",
+      "required": true,
+      "status": "verified",
+      "evidence": [".ai/work-items/archive/index.json", ".ai/work-items/archive/2026/*.summary.json", "gh pr view 365 through 381"],
+      "reason": "The archive index and provider PR state were inspected on the current origin/main."
+    },
+    {
+      "scenario": "Missing documentationAlignment and not_ready evidence are reported as release blockers without rewriting history",
+      "required": true,
+      "status": "verified",
+      "evidence": [".ai/work-items/archive/2026/calibration-adopter-evidence.summary.json", ".ai/work-items/archive/2026/canonical-evidence-foundation.summary.json", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
+      "reason": "The current archive evidence directly shows WI-04 reviewReadiness not_ready and the audited Summaries omit documentationAlignment."
+    },
+    {
+      "scenario": "WI-10 installation-document scope, WI-16 Japanese evidence boundary, and WI-19 ordering are recorded",
+      "required": true,
+      "status": "verified",
+      "evidence": [".ai/work-items/archive/2026/documentation-alignment-20260726.summary.json", "docs/getting-started/installation.md", ".ai/work-items/archive/2026/japanese-capability-assessment.summary.json", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
+      "reason": "The WI-10 changedFiles list, existing installation guide, WI-16 bounded evidence, and WI-19 plan ordering were inspected directly."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User",
+    "reason": "User explicitly authorized completing the plan workflow and recording corrective governance evidence before publication."
+  },
+  "rollbackNote": "Revert only the new audit checker, tests, audit document, and plan issue record; preserve all historical archive evidence.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 622
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/plan-completion-evidence-reconciliation-20260727.json",
+    "baseCommit": "e2874577049c948a758ed70c34b307cc52d9800f",
+    "initialScopeDigest": "56c1c16f70d253300a2d1ad32b8c28e124e0d58a4512a284228ea50e3cdcc034",
+    "contractSkeletonDigest": "a3dc26abca44c79a2cd8933d7364d2aec635eff70c0b92261b5d92cfcf9c67fd"
+  }
+}

@@ -306,6 +306,8 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 
 ### WI-18：Publish New Version
 
+**当前执行顺序覆盖：** 根据用户最新指示“先完成计划任务，再做发布”，WI-19 必须先于 WI-18 完成完整的 Contract/实现/验证/PR/merge/archive/`make ai-close-work-item`/分支清理/base 同步流程；只有 WI-19 关闭且最终计划对齐报告可供用户确认后，才允许执行 WI-18。
+
 **范围：** 这是唯一实际发布新版本的 Work Item。Contract 必须明确 release identity、source commit/ref、tag、asset、distribution、release note、SBOM、provenance、vulnerability/secret、installer lifecycle、Public Install、兼容性和人工发布授权。
 
 **验收：** 严格 Release Gate、source/tag/asset binding、可复现 archive、digest/checksum、SBOM、provenance、扫描、安装/更新/回滚/disable-enable/uninstall proposal/public install、Provider evidence 全部通过；任何失败、未知高风险、授权缺失、身份不匹配或验证器错误 fail closed。
@@ -484,3 +486,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 - `WI-05-ISSUE-006`（流程/CI，待恢复）：最新 PR 提交的 `template-smoke` job 自 2026-07-25T16:41Z 起停留在 `Run repository quality gates`，其余步骤未启动，远超同类运行时长且无可用最终日志。已取消僵死 run；必须重新触发完整 CI 并取得新的可审计结论后，才能合并 WI-05，不得把取消或旧 run 当作通过。
 - `WI-06-ISSUE-001`（流程/命令一致性，低）：AI Cockpit skill 文档曾列出一个当前 Makefile 不存在的旧 ownership alias；实际归属门禁为 `make check-ai-diff-ownership`。已记录并使用实际目标完成检查，后续应在流程文档对齐工单中统一命令名称，不因别名缺失绕过归属检查。
 - `WI-06-ISSUE-002`（流程/coverage guard，低）：coverage guard 初始没有为新 `scripts/ai_capability_truth.py` 配置对应测试关联，导致已有 `tests/test_absurd_capability_truth.py` 被误报为缺少测试差异。已补充 `capabilityTruth` association 并通过 guard；该规则变更必须随本工单的完整 PR/归档流程审查。
+- `PLAN-008`（流程/完成证据，高）：对 WI-01 至 WI-19 的归档证据审计发现，已归档 Summary 普遍缺少计划明确要求的 `documentationAlignment` 字段；历史 archive 不得直接改写。已建立 `plan-completion-evidence-reconciliation-20260727` 审计工单，并要求通过新增审计/纠偏工单补齐可追踪证据后，才能宣称计划完成。
+- `PLAN-009`（验收/安装文档，高）：WI-10 的合并 PR 未修改现有 `docs/getting-started/installation.md`，与用户要求检查其余任务是否遗漏的事实不一致。已将其标为发布阻塞，并建立独立安装文档对齐 corrective Work Item；不得用新增指南替代既有入口的核验。
+- `PLAN-010`（验收/日语能力，高）：WI-16 只能证明仓库本地确定性日语治理路径，未证明安装对象工程多数使用的日语对象工程师交互能力。由于用户明确日语能力为必须，必须建立对应 corrective Work Item，补充可审计证据或明确经用户确认的边界；在重新评估通过前不得发布。
+- `PLAN-011`（流程/工单顺序，高）：原计划将 WI-19 放在 WI-18 发布之后；用户最新指示要求先完成计划任务再发布。已将覆盖规则写入 WI-18 前置条件，实际执行顺序调整为 WI-19 完成并经用户确认后再进入 WI-18；不得提前发布。
