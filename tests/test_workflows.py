@@ -170,7 +170,12 @@ def test_release_workflow_verifies_tagged_quick_install_before_publish():
     verifier = "python3 scripts/verify_quick_install_release.py"
     draft = workflow.index("Verify Draft tag target and release asset subjects")
     publish = workflow.index('gh release edit "$RELEASE_TAG"')
-    assert "gh release download" in workflow and "/releases/download/" in workflow
+    verification = workflow[
+        workflow.index("Verify tagged Quick Install contract before publication") : publish
+    ]
+    assert 'verified_archive="$RUNNER_TEMP/release-evidence/$archive_name"' in verification
+    assert 'metadata-url "file://$GITHUB_WORKSPACE/release.json"' in verification
+    assert "gh release download" not in verification
     assert '--asset-url "$verified_archive_url"' in workflow
     assert draft < workflow.index(verifier) < publish
 

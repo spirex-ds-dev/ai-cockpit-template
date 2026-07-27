@@ -1,0 +1,224 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-draft-release-asset-verification-20260727",
+  "mode": "code",
+  "title": "Fix draft release asset verification",
+  "baseCommit": "4ed7327fd404f4218756845333aa74eb07a51df9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fix-draft-release-asset-verification-20260727.contract.json",
+    ".ai/work-items/active/fix-draft-release-asset-verification-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    "tests/test_workflows.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "External provider publication or release mutation",
+    "Deleting, moving, or modifying the immutable v0.5.44 tag or Draft Release",
+    "Unrelated CI performance changes"
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "The failed v0.5.44 release workflow downloaded a Draft Release by tag before publication."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Regression coverage for release workflow ordering and commands."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30225870674",
+      "reason": "Authoritative provider evidence: Draft assets exist, but the tagged Quick Install verification fails with no assets matching the pattern."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "release_publication",
+      "ci_workflow"
+    ],
+    "reason": "A release tag is immutable once created; the correction must preserve the Draft-before-publication safety boundary and prove the asset verification path."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous corrective Work Items. This item changes the pre-publication workflow only; no provider publication occurs in this item."
+  },
+  "preReviewWarnings": [
+    "Review Draft Release asset access separately from public tagged download behavior; reject any change that publishes before Quick Install verification."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The release workflow verifies the Draft Release's uploaded archive and projected metadata before publication without relying on a public tagged asset URL.",
+    "The workflow still validates the public tag URL and performs the real public Quick Install only after the Draft is published.",
+    "A regression test proves the Draft verification uses an access path supported for Draft assets and does not make release publication occur earlier.",
+    "The immutable failed v0.5.44 tag and Draft Release are not mutated, deleted, or republished by this Work Item.",
+    "The process failure and corrective boundary are recorded in the execution plan."
+  ],
+  "guidelines": [
+    "Preserve fail-closed release behavior and immutable tag boundaries.",
+    "Keep the fix scoped to the provider workflow and its deterministic regression coverage.",
+    "Do not claim v0.5.44 is publicly released; use a new patch release only after the correction lifecycle closes."
+  ],
+  "intent": {
+    "problem": "The v0.5.44 workflow created its immutable tag and Draft Release successfully, but failed before publication because `gh release download v0.5.44` cannot select assets from the Draft Release by tag. The release has uploaded evidence assets but remains a Draft.",
+    "constraints": [
+      "Do not mutate, delete, or re-publish v0.5.44 or its Draft Release.",
+      "Keep the release Draft until verification succeeds; do not weaken the Quick Install gate.",
+      "Use a new patch tag for the eventual corrective public release.",
+      "Record all process failures in the plan."
+    ],
+    "rationale": "Draft asset validation must use an authenticated Draft-supported selector or the local generated files, while public tagged Quick Install remains a post-publication external check. This removes the impossible Draft-by-tag download assumption without bypassing evidence validation."
+  },
+  "rawUserRequest": "Continue the complete serial Work Item process. Record process failures, repair the release workflow without modifying immutable failed tags, and continue until the documented plan is fully completed.",
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Correct Draft Release asset verification while preserving fail-closed public publication.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Draft Release asset verification before publication",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/release.yml", "GitHub Actions run 30225870674 failed log: no assets match the file pattern"]
+    },
+    {
+      "scenario": "public tagged Quick Install after publication",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/release.yml", "docs/reference/distribution.md"]
+    },
+    {
+      "scenario": "immutable failed tag remains unchanged",
+      "required": true,
+      "status": "verified",
+      "evidence": ["https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/untagged-baa6747472c7c300c47a"]
+    },
+    {
+      "scenario": "external publication",
+      "required": true,
+      "status": "not_applicable",
+      "reason": "This corrective Work Item fixes preparation only; publication occurs only after its PR lifecycle is closed.",
+      "evidence": ["Contract outOfScope"]
+    }
+  ],
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-conversation:continuous-plan-execution",
+    "capturedAt": "2026-07-27",
+    "digest": "sha256:release-draft-asset-verification"
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized continuous corrective Work Items, including CI and release-process repair, while requiring immutable failed tags and release gates to remain intact."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 621
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-draft-release-asset-verification-20260727.json",
+    "baseCommit": "4ed7327fd404f4218756845333aa74eb07a51df9",
+    "initialScopeDigest": "ee93228c982a68208f8ef405c6801d9705ec7d767fe16b6f93ef3906f9352572",
+    "contractSkeletonDigest": "8d767f3e19e99ba270632ac5327e78a49d634fe3f4025d692e08b5753cee7fe1"
+  }
+}
