@@ -382,9 +382,7 @@ def test_ai_start_failed_no_active_refresh_removes_new_status(tmp_path, monkeypa
         path.write_bytes(b"regenerated status\n")
 
     monkeypatch.setattr(ai_start, "write_no_active_status", write_status)
-    monkeypatch.setattr(
-        ai_start, "validate_status_consistency", lambda: ["worktree remains dirty"]
-    )
+    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: ["worktree remains dirty"])
 
     assert ai_start.refresh_stale_no_active_status([stale]) == ["worktree remains dirty"]
     assert not status.exists()

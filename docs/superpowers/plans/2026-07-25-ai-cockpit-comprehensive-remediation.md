@@ -449,6 +449,7 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 `RFE-ISSUE-111`（预检状态转换/流程，高）：深度性能工单再次证明，中高风险 code Contract 的必需场景只有在实现后才能实测时，`unverified` 会令 enforced Preflight 返回 `needs_human_confirmation`；记录匹配的人工 Decision Evidence 后又进入同样被停止的 `human_decision_recorded`，而提前声明 `verified` 会伪造证据。已暂停性能实现，建立前置 corrective `preflight-planned-scenario-transition-20260728`：仅当每个待验证必需场景都具有非空 expected 与具体 `verificationPlan` 时允许进入实现，并明确输出“planned, not verified”；Summary Scenario Coverage Guard 与 `ai-finish` 仍在真实证据缺失时 fail closed。
 `RFE-ISSUE-112`（工单启动原子性/流程，高）：复现 RFE-ISSUE-111 时，`ai-start` 在创建新工单前尝试刷新 stale no-active status，刷新后仍发现生命周期不一致并拒绝启动，却把修改后的 `current_status.md` 留在工作树中。已在同一 corrective 中为旧状态做 byte-for-byte 快照；后续校验失败或异常时恢复旧文件，新创建的状态文件则删除，并增加“恢复旧文件”和“移除新文件”回归测试，确保失败启动不遗留治理状态。
 `RFE-ISSUE-113`（日语流程文档漂移，中）：corrective 文档反查发现英文运行说明与实际策略均为默认 enforced，但日文 `.ai/cockpit/README.ja.md` 仍称默认 advisory，且遗漏 `human_decision_recorded` 停止状态。已在 corrective 内对齐日文说明，明确 enforced/advisory 边界以及 Planned Scenario Verification 只授权实现、不构成完成证据，并同步英文说明与两份 glossary。
+`RFE-ISSUE-114`（收口/格式门禁，低）：corrective 首次 `ai-finish` 在 `quality-fast` 的 `project-format-check` 即停止，四个 Python 变更未符合 Ruff formatter；长测试尚未启动。已运行项目 formatter、重新通过 80 项聚焦回归，并刷新当前 Contract 对应的 checkpoint 后重跑完整 finish，不复用失败运行。
 
 ### WI-19：Clean Execution Plan Documents（最终工单）
 

@@ -644,8 +644,7 @@ def scenario_coverage_signal(contract: dict[str, Any]) -> Signal:
     planned_items = [
         item
         for item in unverified_items
-        if non_empty_string(item.get("expected"))
-        and non_empty_string(item.get("verificationPlan"))
+        if non_empty_string(item.get("expected")) and non_empty_string(item.get("verificationPlan"))
     ]
     if unverified_items and len(planned_items) == len(unverified_items):
         completed_count = len(required_items) - len(unverified_items)
@@ -663,9 +662,7 @@ def scenario_coverage_signal(contract: dict[str, Any]) -> Signal:
         return Signal(
             "Scenario Coverage",
             "Partial",
-            [
-                f"{len(unverified_items)} required scenario(s) remain unverified"
-            ],
+            [f"{len(unverified_items)} required scenario(s) remain unverified"],
             ["contract.scenarioCoverage", "contract.riskAssessment"],
         )
     if statuses <= {"verified", "not_applicable"}:

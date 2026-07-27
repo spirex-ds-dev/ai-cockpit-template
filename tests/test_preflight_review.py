@@ -160,9 +160,7 @@ def test_planned_scenario_contract_derives_ready_without_claiming_verification(t
 
 
 @pytest.mark.parametrize("missing_field", ["expected", "verificationPlan"])
-def test_planned_scenario_missing_required_detail_needs_human_confirmation(
-    tmp_path, missing_field
-):
+def test_planned_scenario_missing_required_detail_needs_human_confirmation(tmp_path, missing_field):
     contract = planned_scenario_contract()
     del contract["scenarioCoverage"][0][missing_field]
     path = tmp_path / "task.contract.json"

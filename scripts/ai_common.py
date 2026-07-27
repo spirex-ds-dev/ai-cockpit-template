@@ -546,9 +546,7 @@ def validate_scenario_coverage(values: Any, *, field_name: str = "scenarioCovera
         ):
             issues.append(f"{prefix}.reason must be a string when provided")
         if "verificationPlan" in item and not non_empty_string(item.get("verificationPlan")):
-            issues.append(
-                f"{prefix}.verificationPlan must be a non-empty string when provided"
-            )
+            issues.append(f"{prefix}.verificationPlan must be a non-empty string when provided")
     return issues
 
 
