@@ -536,8 +536,8 @@
         "next-release.json"
       ],
       "decision": "Do not change the candidate version or publish; stop the PR and create a corrective Work Item for release-preparation scope semantics.",
-      "resolution": "Open; the release-preparation classifier and candidate validation must be corrected before WI-21 can be revalidated.",
-      "status": "open",
+      "resolution": "Resolved by the merged process-evidence-release-preflight-20260727 corrective Work Item; revalidation run 30280375075 treated this ordinary PR as non-release work and release-evidence completed successfully without candidate publication validation.",
+      "status": "resolved",
       "followUp": "Ensure ordinary governance/evidence maintenance PRs do not run publication-candidate validation unless the Work Item explicitly declares release preparation."
     },
     {
@@ -552,8 +552,8 @@
         ".github/workflows/smoke.yml"
       ],
       "decision": "Do not weaken evidence validation; create a corrective Work Item that records skipped/dependent jobs explicitly and reports the missing-job cause.",
-      "resolution": "Open; no merge or release is allowed until failed CI evidence is itself structurally valid and diagnosable.",
-      "status": "open",
+      "resolution": "Resolved by the merged ci-evidence-terminal-aggregate-v2-20260727 corrective Work Item; run 30280375075 recorded all three required jobs and the terminal ci-evidence Job validated the aggregate successfully.",
+      "status": "resolved",
       "followUp": "Add failing regression coverage for incomplete required-job evidence and precise validator diagnostics."
     },
     {
@@ -592,9 +592,25 @@
         "scripts/check_ci_release_evidence.sh"
       ],
       "decision": "Do not merge WI-21 or weaken the validator. Stop the handoff and create a corrective Work Item that makes evidence job scope conditional and records every executed, skipped, or failed required job with an accurate conclusion.",
-      "resolution": "Open; the evidence-generation contract must be corrected and covered by a regression test before WI-21 can be revalidated.",
-      "status": "open",
+      "resolution": "Resolved by the merged ci-evidence-terminal-aggregate-v2-20260727 corrective Work Item and hosted revalidation run 30280375075; template-smoke, installation-smoke, release-evidence, and terminal ci-evidence all succeeded.",
+      "status": "resolved",
       "followUp": "Separate ordinary PR quality evidence from release-preparation evidence, bind requiredJobNames to the selected workflow scope, and add a hosted-equivalent regression for a successful quality job with skipped release jobs."
+    },
+    {
+      "issueId": "RFE-ISSUE-110",
+      "category": "quality-performance-evidence",
+      "severity": "medium",
+      "stage": "hosted-revalidation",
+      "fact": "Hosted run 30280375075 succeeded, but repository quality gates took approximately 21 minutes 21 seconds and the job log exposed only per-minute heartbeats while gate subprocess output remained buffered; no timing artifact was uploaded for independent per-gate inspection.",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30280375075",
+        "scripts/run_quality_gate.py",
+        ".github/workflows/smoke.yml"
+      ],
+      "decision": "Accept WI-21 only as telemetry and workflow-ownership completion; do not claim material performance improvement.",
+      "resolution": "Open for the next dedicated deep-performance Work Item, which must add run-isolated timing evidence, streaming diagnostics, failure-path artifact upload, and structural project-test optimization.",
+      "status": "open",
+      "followUp": "Use run 30280375075 as the pre-optimization hosted baseline and require at least three like-for-like hosted runs before any median or p95 improvement claim."
     }
   ],
   "residualRisks": [
@@ -612,11 +628,11 @@
     "comparisonRule": "Compare like-for-like hosted workflow/job scenarios only; unavailable or non-comparable measurements remain not_run and do not support an improvement claim.",
     "status": "partial",
     "scenarios": [
-      {"name": "pull_request_quality_gate", "scenario": "pull_request_quality_gate", "status": "fail", "reason": "Quality gates passed in PR #408 run 30266670055, but the always-run CI evidence step failed because non-release skipped jobs were incorrectly declared required; no comparable successful post-change measurement is accepted.", "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30266670055", "comparisonBoundary": "No before/after improvement comparison is valid until the evidence-generation corrective Work Item is merged and WI-21 is revalidated.", "evidence": [".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.summary.json"]},
+      {"name": "pull_request_quality_gate", "scenario": "pull_request_quality_gate", "status": "pass", "reason": "PR #408 revalidation run 30280375075 completed successfully on rebased Head f5bfe49ec68cef94a10ea1edf173cf23c649847f; repository quality gates ran from 15:31:59Z to 15:53:19Z (approximately 21 minutes 21 seconds), so this is a valid completion baseline but not evidence of material speed improvement.", "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30280375075", "comparisonBoundary": "Use only as a like-for-like pre-optimization hosted baseline; require at least three post-optimization runs for median and p95 claims.", "evidence": ["https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30280375075/job/90024931861"]},
       {"name": "main_quality_gate", "scenario": "main_quality_gate", "status": "not_run", "reason": "No comparable hosted main-branch baseline was available for this completion attempt.", "source": "docs/operations/quality-gates.md", "comparisonBoundary": "Do not infer improvement from local timing or unrelated workflow runs.", "evidence": []},
-      {"name": "installation_smoke", "scenario": "installation_smoke", "status": "not_run", "reason": "The failed PR run did not produce a successful comparable installation-smoke measurement.", "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/408", "comparisonBoundary": "Requires a successful revalidation run after WI-21 is rebased onto current main.", "evidence": []},
+      {"name": "installation_smoke", "scenario": "installation_smoke", "status": "pass", "reason": "Run 30280375075 completed installation-smoke successfully in 1 minute 27 seconds after template-smoke.", "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30280375075", "comparisonBoundary": "This proves independent Job ownership and a hosted baseline; it does not prove critical-path reduction because installation-smoke still depends on template-smoke.", "evidence": ["https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30280375075/job/90030893295"]},
       {"name": "release_evidence", "scenario": "release_evidence", "status": "not_run", "reason": "Release evidence is out of scope for WI-21 and must not be used as a performance comparison.", "source": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "comparisonBoundary": "Release evidence is evaluated only by the release Work Item after all prerequisites close.", "evidence": []},
-      {"name": "compatibility_matrix", "scenario": "compatibility_matrix", "status": "not_run", "reason": "No before/after hosted compatibility timing pair was captured for WI-21.", "source": "docs/operations/quality-gates.md", "comparisonBoundary": "Compatibility pass/fail is not a performance improvement measurement.", "evidence": []}
+      {"name": "compatibility_matrix", "scenario": "compatibility_matrix", "status": "pass", "reason": "Compatibility run 30280370545 completed all 28 jobs successfully for the same rebased Head.", "source": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30280370545", "comparisonBoundary": "Compatibility pass/fail proves behavior coverage, not a performance improvement measurement.", "evidence": ["https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30280370545"]}
     ]
   },
   "reviewReadiness": {

@@ -118,6 +118,8 @@ PR #410 已作为 superseded corrective PR 关闭且未合并，归档证据保�
 
 替代工单第三次完整质量门通过后记录 `RFE-ISSUE-109`（Summary 校验顺序，中）：`ai-finish` 在 431 秒 full quality 之后才由 `aiSummary` 发现三个未注册的自定义 verification 名称和一个被错误放入本地 `path` 字段的 hosted URL。已删除非 registry verification，并以现有本地计划路径加 URL locator 表示 hosted evidence，`check-ai-change-summary` 随后通过；“在长质量门前提供不要求所有 verification 已通过的 Summary schema-only 检查”保留到计划完成后的统一流程评估。
 
+WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 重验：`template-smoke` 22 分 14 秒、`installation-smoke` 1 分 27 秒、`release-evidence` 7 秒、末端 `ci-evidence` 4 秒，兼容性 run `30280370545` 的 28 个 Job 全部通过。`make quality` 对应步骤约 21 分 21 秒，未达到 p95 <15 分钟目标，也不能证明实质性能改善。新增 `RFE-ISSUE-110`（性能证据/诊断，中）：当前 Job 日志仍以 heartbeat 为主，gate 子进程输出未实时流式呈现，且 timing/JUnit/慢用例报告未作为成功或失败工件上传。WI-21 只按“可观测性与职责边界完成”收口；下一张深度性能工单必须以该 run 为 hosted 前基线，完成 session 隔离、流式诊断、失败工件上传和 `project-test` 结构性优化，并以至少三次同类型 Hosted run 的 median/p95 验收。
+
 当前已启动的 `publish-new-version-20260727` 只作为发布准备占位工单处理，不执行 provider publication；它完成后必须先关闭，再按上述五阶段顺序启动 WI-21 和后续 corrective Work Item。实际发布必须使用新的、单独的 WI-18 发布 Contract。
 
 ## 三、各 Work Item 的执行边界与验收要求
