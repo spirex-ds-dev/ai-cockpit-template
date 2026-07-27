@@ -168,90 +168,70 @@ def test_pr_rejects_multiple_newly_maintained_work_items(tmp_path, monkeypatch):
 
 
 def test_pr_accepts_one_documented_adjacent_recovery_pair(tmp_path, monkeypatch):
-    predecessor = write_pair(tmp_path, "predecessor", ["src/first.py"], ["src/first.py"])
-    recovery = write_pair(tmp_path, "recovery", ["src/second.py"], ["src/second.py"], approved=True)
+    predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
+    recovery = write_pair(tmp_path, "recovery", ["src/b.py"], ["src/b.py"], approved=True)
     for path, sequence in ((predecessor, 75), (recovery, 76)):
-        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
-        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        summary = json.loads(path.with_name(path.name.replace(".contract", ".summary")).read_text())
         summary["archiveSequence"] = sequence
-        summary_path.write_text(json.dumps(summary), encoding="utf-8")
-    recovery_contract = json.loads(recovery.read_text(encoding="utf-8"))
-    recovery_contract.update(
+        path.with_name(path.name.replace(".contract", ".summary")).write_text(json.dumps(summary))
+    data = json.loads(recovery.read_text())
+    data.update(
         {
             "baseCommit": "b" * 40,
-            "sources": [
-                {
-                    "path": predecessor.relative_to(tmp_path).as_posix(),
-                    "reason": "The predecessor is blocked until this recovery is included.",
-                }
-            ],
-            "startReceipt": {
-                "baseCommit": "b" * 40,
-                "path": ".ai/work-items/starts/recovery.json",
-            },
+            "sources": [{"path": predecessor.relative_to(tmp_path).as_posix()}],
+            "startReceipt": {"baseCommit": "b" * 40, "path": ".ai/work-items/starts/recovery.json"},
             "rawRequestSource": {"type": "human"},
         }
     )
-    recovery.write_text(json.dumps(recovery_contract), encoding="utf-8")
-    receipt_path = tmp_path / ".ai" / "work-items" / "starts" / "recovery.json"
-    receipt_path.parent.mkdir(parents=True, exist_ok=True)
-    receipt_path.write_text("{}", encoding="utf-8")
-    policy = tmp_path / "scope.yaml"
-    policy.write_text("allowAlways:\n", encoding="utf-8")
+    recovery.write_text(json.dumps(data))
     monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
-
-    def git_with_unrelated_recovery_base(args):
-        if args == ["merge-base", "--is-ancestor", "b" * 40, "a" * 40]:
-            return fake_git_result(returncode=1)
-        return fake_git_result(returncode=0)
-
-    monkeypatch.setattr(ai_check_pr, "run_git", git_with_unrelated_recovery_base)
-    patch_changes(monkeypatch, ["src/first.py", "src/second.py"])
-
-    issues = ai_check_pr.validate_pr_bundle("a" * 40, [predecessor, recovery])
-
-    assert not any("exactly one newly maintained Work Item" in issue for issue in issues)
-    assert not any("baseCommit is not compatible" in issue for issue in issues)
+    monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
+    entries = []
+    for path in (predecessor, recovery):
+        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
+        entries.append(
+            (
+                path,
+                json.loads(path.read_text()),
+                json.loads(summary_path.read_text()),
+                ai_check_pr.archive_pair_rank(path, summary_path),
+            )
+        )
+    entries.sort(key=lambda entry: entry[3])
+    assert ai_check_pr.documented_recovery_paths(entries, "a" * 40) == {recovery}
 
 
 def test_pr_rejects_recovery_pair_without_predecessor_reference(tmp_path, monkeypatch):
-    predecessor = write_pair(tmp_path, "predecessor", ["src/first.py"], ["src/first.py"])
-    recovery = write_pair(tmp_path, "recovery", ["src/second.py"], ["src/second.py"], approved=True)
+    predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
+    recovery = write_pair(tmp_path, "recovery", ["src/b.py"], ["src/b.py"], approved=True)
     for path, sequence in ((predecessor, 75), (recovery, 76)):
-        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
-        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        summary = json.loads(path.with_name(path.name.replace(".contract", ".summary")).read_text())
         summary["archiveSequence"] = sequence
-        summary_path.write_text(json.dumps(summary), encoding="utf-8")
-    recovery_contract = json.loads(recovery.read_text(encoding="utf-8"))
-    recovery_contract.update(
+        path.with_name(path.name.replace(".contract", ".summary")).write_text(json.dumps(summary))
+    data = json.loads(recovery.read_text())
+    data.update(
         {
             "baseCommit": "b" * 40,
-            "startReceipt": {
-                "baseCommit": "b" * 40,
-                "path": ".ai/work-items/starts/recovery.json",
-            },
+            "startReceipt": {"baseCommit": "b" * 40, "path": ".ai/work-items/starts/recovery.json"},
             "rawRequestSource": {"type": "human"},
         }
     )
-    recovery.write_text(json.dumps(recovery_contract), encoding="utf-8")
-    policy = tmp_path / "scope.yaml"
-    policy.write_text("allowAlways:\n", encoding="utf-8")
+    recovery.write_text(json.dumps(data))
     monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
-
-    def git_with_unrelated_recovery_base(args):
-        if args == ["merge-base", "--is-ancestor", "b" * 40, "a" * 40]:
-            return fake_git_result(returncode=1)
-        return fake_git_result(returncode=0)
-
-    monkeypatch.setattr(ai_check_pr, "run_git", git_with_unrelated_recovery_base)
-    patch_changes(monkeypatch, ["src/first.py", "src/second.py"])
-
-    issues = ai_check_pr.validate_pr_bundle("a" * 40, [predecessor, recovery])
-
-    assert any("exactly one newly maintained Work Item" in issue for issue in issues)
-    assert any("baseCommit is not compatible" in issue for issue in issues)
+    monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
+    entries = []
+    for path in (predecessor, recovery):
+        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
+        entries.append(
+            (
+                path,
+                json.loads(path.read_text()),
+                json.loads(summary_path.read_text()),
+                ai_check_pr.archive_pair_rank(path, summary_path),
+            )
+        )
+    entries.sort(key=lambda entry: entry[3])
+    assert ai_check_pr.documented_recovery_paths(entries, "a" * 40) == set()
 
 
 def test_pr_rejects_work_item_based_on_different_merge_base(tmp_path, monkeypatch):

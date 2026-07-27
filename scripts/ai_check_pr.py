@@ -227,10 +227,10 @@ def source_references_contract(contract: dict[str, Any], contract_path: Path) ->
         expected = contract_path.relative_to(PROJECT_ROOT).as_posix()
     except ValueError:
         return False
-    sources = contract.get("sources")
-    if not isinstance(sources, list):
-        return False
-    return any(isinstance(source, dict) and source.get("path") == expected for source in sources)
+    return any(
+        isinstance(source, dict) and source.get("path") == expected
+        for source in contract.get("sources", [])
+    )
 
 
 def is_documented_pr_recovery_pair(
@@ -238,26 +238,18 @@ def is_documented_pr_recovery_pair(
     recovery: tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]],
     pr_base: str,
 ) -> bool:
-    """Accept one auditable, immediately sequential recovery relationship.
-
-    This is intentionally narrower than a general multi-Work-Item PR allowance.
-    The recovery must cite the predecessor's immutable Contract, carry a human
-    approval, bind its own Start Receipt, and begin on a Git descendant of the
-    predecessor's historical base.
-    """
-    predecessor_path, predecessor_contract, predecessor_summary, predecessor_rank = predecessor
-    _recovery_path, recovery_contract, recovery_summary, recovery_rank = recovery
-    predecessor_sequence = predecessor_summary.get("archiveSequence")
-    recovery_sequence = recovery_summary.get("archiveSequence")
+    """Accept only one auditable, immediately sequential recovery relationship."""
+    predecessor_path, predecessor_contract, predecessor_summary, _ = predecessor
+    _, recovery_contract, recovery_summary, _ = recovery
     predecessor_base = predecessor_contract.get("baseCommit")
     recovery_base = recovery_contract.get("baseCommit")
     approval = recovery_contract.get("restrictedWriteApproval")
     receipt = recovery_contract.get("startReceipt")
     request_source = recovery_contract.get("rawRequestSource")
     return (
-        isinstance(predecessor_sequence, int)
-        and isinstance(recovery_sequence, int)
-        and recovery_sequence == predecessor_sequence + 1
+        isinstance(predecessor_summary.get("archiveSequence"), int)
+        and isinstance(recovery_summary.get("archiveSequence"), int)
+        and recovery_summary["archiveSequence"] == predecessor_summary["archiveSequence"] + 1
         and archive_base_is_compatible(predecessor_contract, pr_base)
         and isinstance(predecessor_base, str)
         and isinstance(recovery_base, str)
@@ -278,22 +270,20 @@ def is_documented_pr_recovery_pair(
 
 
 def documented_recovery_paths(
-    archive_entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]],
-    pr_base: str,
+    entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]], pr_base: str
 ) -> set[Path]:
-    """Return the sole recovery Contract eligible for the narrow PR exception."""
+    """Return the sole recovery Contract eligible for the narrow exception."""
     new_entries = [
         entry
-        for entry in archive_entries
+        for entry in entries
         if isinstance(entry[2].get("archiveSequence"), int)
         and entry[2].get("archiveSequence", 0) >= NEW_WORK_ITEM_SEQUENCE
         and entry[1].get("workItemId")
     ]
-    if len(new_entries) != 2:
-        return set()
-    predecessor, recovery = new_entries
-    if is_documented_pr_recovery_pair(predecessor, recovery, pr_base):
-        return {recovery[0]}
+    if len(new_entries) == 2 and is_documented_pr_recovery_pair(
+        new_entries[0], new_entries[1], pr_base
+    ):
+        return {new_entries[1][0]}
     return set()
 
 
