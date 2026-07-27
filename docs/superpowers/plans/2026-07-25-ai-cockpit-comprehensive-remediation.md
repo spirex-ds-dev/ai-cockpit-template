@@ -374,6 +374,7 @@ WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。WI-16 是�
 `RFE-ISSUE-081`（工单依赖/质量门，高）：独立发布预检范围工单从当前 `origin/main` 执行完整质量时，在 434987ms 后暴露了尚未合并的 #402 mypy 修复，说明该流程修复不能先于 #402 独立合并。已将预检范围修复回填到 #402 的既有 workflow/测试范围，避免拆出无法通过基线质量门的依赖环。
 `RFE-ISSUE-082`（发布预检语义，高）：按 diff 关闭候选模式后，普通 PR 仍因 `release.json v0.5.42` 与远端 Draft tag v0.5.44 的公共身份不一致而失败；普通 PR 不应执行发布合同检查本身。现仅对发布文件 PR 执行合同检查，普通 PR 显式记录“不适用”后进入质量门。
 `RFE-ISSUE-083`（文档质量门，中）：远端全量测试在 20 分 20 秒完成、覆盖率 85.02%，但新增 RFE-080 行使用了文档检查禁止的中文术语，触发日语风格门并造成 3 个失败。已改用符合现有术语规则的中文措辞，必须重新通过文档元数据和系统不变量检查。
+`RFE-ISSUE-084`（发布预检边界，高）：#401 重整后的本地专项验证显示，`check-release-distribution` 是发布后公共版本检查，读取历史 `release.json v0.5.42` 时会因最高公开 tag `v0.5.44` 而 fail closed；本地 `check-release-preflight` 也正确拒绝未在工单收口后 materialize 的 freeze、source tree 和 archive。未创建 tag 或 Release；后续必须先完成本恢复 PR 的 merge/close/分支清理，再由 provider 的 detached main 执行 finalizer、preflight 与公开发布。
 `RFE-ISSUE-063`（工单初始化/预检，中）：CI 流程修复工单的 `ai-start` skeleton 缺少任务意图、原始请求、场景覆盖和具体验收，按要求停止在 `not_ready`。已补全 Contract，才允许进入实现。
 `RFE-ISSUE-064`（工单证据结构，中）：补全 Contract 后，preflight 又拒绝不完整的 `rawRequestSource`、中风险 unknowns review 和 `pending` 场景状态。已改为完整人类请求证据、显式 unknowns review 和 `unverified` 初始场景状态，继续保持门禁有效。
 `RFE-ISSUE-065`（预检授权路径，中）：CI 工单记录用户授权的选项 B 后，`ai-preflight --check` 仍将 `human_decision_recorded` 视为 blocked，没有“授权后先实现、再以真实证据闭合场景”的继续路径。已保留 Decision Evidence，严格限制为已确认的 CI 编排范围，继续以 checkpoint 和后续真实验证闭合场景，不提前伪造 verified 状态。
