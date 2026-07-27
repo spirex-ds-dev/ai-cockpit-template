@@ -4,6 +4,7 @@ from pathlib import Path
 
 import ai_preflight_review
 import pytest
+from ai_common import validate_scenario_coverage
 
 
 def write_contract(path: Path, data: dict) -> None:
@@ -74,6 +75,40 @@ def conservative_contract() -> dict:
 
 def signal_map(report: dict) -> dict[str, str]:
     return {item["name"]: item["value"] for item in report["signals"]}
+
+
+def test_scenario_verification_plan_rejects_empty_value():
+    issues = validate_scenario_coverage(
+        [
+            {
+                "scenario": "implementation-dependent behavior",
+                "required": True,
+                "status": "unverified",
+                "expected": "The behavior is verified after implementation.",
+                "verificationPlan": "",
+                "evidence": [],
+            }
+        ]
+    )
+
+    assert "scenarioCoverage[0].verificationPlan must be a non-empty string when provided" in issues
+
+
+def test_scenario_verification_plan_accepts_non_empty_value():
+    issues = validate_scenario_coverage(
+        [
+            {
+                "scenario": "implementation-dependent behavior",
+                "required": True,
+                "status": "unverified",
+                "expected": "The behavior is verified after implementation.",
+                "verificationPlan": "Run tests/test_feature.py::test_behavior.",
+                "evidence": [],
+            }
+        ]
+    )
+
+    assert issues == []
 
 
 def test_ready_contract_derives_ready_preflight_review(tmp_path):
