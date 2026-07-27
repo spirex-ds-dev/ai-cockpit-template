@@ -52,14 +52,14 @@ jobs:
       - name: Determine release preparation scope
         env:
           AI_BASE_COMMIT: ${{ env.AI_BASE_COMMIT }}
+          RELEASE_PREPARATION_INTENT: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'release-preparation') }}
         run: |
-          # Legacy event expressions remain documented for workflow compatibility;
-          # preparation mode itself is determined from the release-file diff below.
+          # Keep event boundaries visible for workflow compatibility and review.
           # github.event_name == 'pull_request'
           # github.event_name == 'workflow_dispatch'
           # github.ref == 'refs/heads/main'
           release_files="$(git diff --name-only "${AI_BASE_COMMIT}...HEAD")"
-          if printf '%s\n' "$release_files" | grep -Eq '^(release\.json|next-release\.json|release-state\.json|install\.sh|\.ai/cockpit/(sbom|provenance|release-digests)\.json)$'; then
+          if [[ "$RELEASE_PREPARATION_INTENT" == "true" ]] && printf '%s\n' "$release_files" | grep -Eq '^(release\.json|next-release\.json|release-state\.json|install\.sh|\.ai/cockpit/(sbom|provenance|release-digests)\.json)$'; then
             echo 'AI_RELEASE_PREPARATION=1' >> "$GITHUB_ENV"
           else
             echo 'AI_RELEASE_PREPARATION=0' >> "$GITHUB_ENV"

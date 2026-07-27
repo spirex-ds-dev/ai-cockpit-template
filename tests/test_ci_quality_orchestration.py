@@ -55,6 +55,8 @@ def test_release_preparation_is_scoped_to_release_file_changes():
     assert "AI_RELEASE_PREPARATION=0" in smoke
     assert 'if [[ "$AI_RELEASE_PREPARATION" == "1" ]]' in smoke
     assert "release contract validation is not applicable" in smoke
+    assert "release-preparation" in smoke
+    assert "RELEASE_PREPARATION_INTENT" in smoke
 
 
 def test_compatibility_target_disables_coverage_overhead():

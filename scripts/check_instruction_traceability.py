@@ -7,6 +7,7 @@ import argparse
 import json
 from pathlib import Path
 from typing import Any
+import hashlib
 
 
 REQUIRED_FIELDS = (
@@ -28,8 +29,69 @@ def _path(value: Any) -> str | None:
     return None
 
 
+def _resolved_path(repository: Path, path: str) -> Path | None:
+    """Resolve an evidence path, including a deterministic archived fallback."""
+    direct = repository / path
+    if direct.is_file():
+        return direct
+    active = Path(".ai/work-items/active")
+    try:
+        relative = Path(path).relative_to(active)
+    except ValueError:
+        return None
+    candidates = sorted((repository / ".ai/work-items/archive").glob(f"*/{relative.name}"))
+    return candidates[0] if len(candidates) == 1 and candidates[0].is_file() else None
+
+
+def _validate_archive_integrity(repository: Path) -> list[str]:
+    """Validate archive index/manifest bindings so post-finish edits cannot drift silently."""
+    index_path = repository / ".ai/work-items/archive/index.json"
+    if not index_path.is_file():
+        return []
+    try:
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return [f"archive index cannot be read: {exc}"]
+    entries = index.get("entries") if isinstance(index, dict) else None
+    if not isinstance(entries, list):
+        return ["archive index entries must be a list"]
+    errors: list[str] = []
+    for entry in entries:
+        if not isinstance(entry, dict):
+            errors.append("archive index contains a non-object entry")
+            continue
+        for kind in ("contract", "summary", "manifest"):
+            path = entry.get(f"{kind}Path")
+            recorded = entry.get(f"{kind}Sha256")
+            if not isinstance(path, str) or not isinstance(recorded, str):
+                continue
+            target = repository / path
+            if not target.is_file():
+                errors.append(f"archive index {kind} path does not exist: {path}")
+            elif hashlib.sha256(target.read_bytes()).hexdigest() != recorded:
+                errors.append(f"archive index {kind} digest mismatch: {path}")
+        manifest_path = entry.get("manifestPath")
+        if isinstance(manifest_path, str) and (repository / manifest_path).is_file():
+            try:
+                manifest = json.loads((repository / manifest_path).read_text(encoding="utf-8"))
+                for kind in ("contract", "summary"):
+                    path = manifest.get(f"{kind}Path")
+                    recorded = manifest.get(f"{kind}Sha256")
+                    manifest_target: Path | None = (
+                        repository / path if isinstance(path, str) else None
+                    )
+                    if manifest_target is None or not manifest_target.is_file():
+                        errors.append(f"archive manifest {kind} path does not exist: {path}")
+                    elif hashlib.sha256(manifest_target.read_bytes()).hexdigest() != recorded:
+                        errors.append(f"archive manifest {kind} digest mismatch: {path}")
+            except (OSError, json.JSONDecodeError) as exc:
+                errors.append(f"archive manifest cannot be read: {manifest_path}: {exc}")
+    return errors
+
+
 def validate_manifest(manifest: dict[str, Any], repository: Path) -> list[str]:
     errors: list[str] = []
+    errors.extend(_validate_archive_integrity(repository))
     if manifest.get("schemaVersion") != 1:
         errors.append("schemaVersion must be 1")
 
@@ -87,7 +149,7 @@ def validate_manifest(manifest: dict[str, Any], repository: Path) -> list[str]:
                 path = _path(value)
                 if not path:
                     errors.append(f"{instruction_id}: {field} contains an invalid path record")
-                elif not (repository / path).is_file():
+                elif _resolved_path(repository, path) is None:
                     errors.append(f"{instruction_id}: {field} path does not exist: {path}")
 
         commands = instruction.get("verificationCommands", [])
@@ -104,7 +166,7 @@ def validate_manifest(manifest: dict[str, Any], repository: Path) -> list[str]:
                 errors.append(f"{instruction_id}: requiredNamedPaths contains an invalid record")
                 continue
             named_path = named["path"]
-            if not (repository / named_path).is_file():
+            if _resolved_path(repository, named_path) is None:
                 errors.append(f"{instruction_id}: required named path does not exist: {named_path}")
             if (
                 named_path not in implementation_paths

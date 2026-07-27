@@ -90,6 +90,7 @@ keywords:
 | WI-19 | clean-execution-plan-documents | 最后清理过期执行计划，保留历史标记和 archive-backed 索引，完成计划对齐 | cleanup inventory、历史隔离检查、最终 clean plan 与用户复核材料 |
 | WI-20 | quality-gate-performance-architecture-20260727 | 在不降低可信度的前提下优化 `make quality` 与 GitHub Actions：去重、Fast/Full/Release 分层、计时证据、安全并行和安装/Release 职责拆分 | Gate timing/summary、调用图去重、Workflow ownership、scope/cache/并行测试、五类场景性能证据 |
 | WI-21 | quality-gate-performance-completion-20260727 | 完成 WI-20 尚未闭合的 Workflow Job 拆分、逐门禁计时和 hosted 前后性能证据 | 独立 Job ownership、逐门禁 timing/log/digest、五类 hosted before/after evidence、三语文档和双向追踪 |
+| corrective | process-evidence-release-preflight-20260727 | 修复 WI-21 暴露的点名文件追踪、hosted Summary schema、归档路径/digest、显式发布意图和 CI 失败证据结构 | 当前执行；完成后恢复 WI-21 |
 
 严格执行以下五阶段顺序：
 
@@ -102,6 +103,11 @@ keywords:
 WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。`quality-gate-performance-architecture-20260727` 是性能优化阶段，`quality-gate-performance-completion-20260727` 专门处理 WI-20 已明确的遗漏；两者必须分别完成完整 Contract→实现→验收→PR→merge→archive→`ai-close-work-item`→分支清理→main 同步生命周期。已发现但尚未解决的流程问题不得与性能工单或发布工单混做，必须先记录并建立独立 corrective Work Item。WI-16 是发布前的强制日语能力门禁；若发现问题，必须先完成对应 corrective Work Item 的完整生命周期。WI-17 是发布前的 Human-Agent Trust Layer 对齐门禁。WI-18 是唯一允许实际发布新版本的工单，且必须在前四阶段、WI-16/WI-17 及其 corrective Work Item 全部关闭后执行。WI-19 必须最后执行；它不得删除当前计划、最终问题总览或任何仍被 Contract/Archive/Release evidence 引用的记录。
 
 WI-21 是 WI-20 的 corrective process/quality Work Item，必须在 WI-18 发布前完成。WI-20 已交付去重、Fast/Full/Release 入口、组级 telemetry 和 fail-closed 约束，但其 Summary 明确保留了三项未闭合证据：Workflow 尚未拆成独立 Job、尚无五类 hosted before/after 测量、计时尚未覆盖每个 Make gate。不得把这些 Known Gap 直接当作发布前已完成；WI-21 必须分别补齐实现和证据，或以结构化、可审计的 not-run 原因经用户最终复核后才能决定是否继续。
+
+WI-21 的 PR #408 又暴露了 RFE-ISSUE-094（source-bound evidence 维护误触发发布准备）和 RFE-ISSUE-095（失败 evidence 未列出 skipped/dependent jobs 且诊断误导）。在恢复 WI-21 前，`process-evidence-release-preflight-20260727` corrective Work Item 先修复这些问题以及 RFE-ISSUE-091/092/093；不实现 WI-10、不修改候选版本、不发布。
+Corrective Work Item 质量门又记录 RFE-ISSUE-096：显式 release intent 改造初次删除了现有 workflow regression 依赖的事件边界注释，已恢复注释并保留新 intent 门禁；coverage 84.97% 也按 fail-closed 停止，补充分支回归后再重跑，不降低 85% 门槛。
+
+Corrective Work Item 最终收尾又记录 RFE-ISSUE-097：Contract 变更后，Summary 的 before_edit checkpoint hash 未同步，`aiAgentRisk` 按设计 fail-closed；已刷新 before_edit/before_finish 两个检查点并通过，保留该恢复步骤作为后续收尾流程要求。
 
 当前已启动的 `publish-new-version-20260727` 只作为发布准备占位工单处理，不执行 provider publication；它完成后必须先关闭，再按上述五阶段顺序启动 WI-21 和后续 corrective Work Item。实际发布必须使用新的、单独的 WI-18 发布 Contract。
 
