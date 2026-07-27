@@ -104,6 +104,13 @@ checks, template/adopter boundary errors, and source-bound evidence design. If t
 failure is preventable in the workflow, open and complete a corrective Work Item
 that adds an executable fail-closed gate before resuming the original operation.
 
+Hosted quality failures must preserve their diagnostic payload before runner
+teardown. A workflow that buffers individual Gate output may keep heartbeat
+notices for liveness, but on failure it must also emit every non-passing Gate's
+durable log. If the wrapper exits before per-Gate timing is written, it must emit
+the wrapper log as the fallback. Timing metadata without the exact failing output
+is not sufficient evidence for root-cause analysis.
+
 Before release evidence is generated, run
 `make finalize-release-freeze-premerge TASK=<task>` on the dedicated Work Item
 branch after `ai-finish` has archived the Work Item and before committing the

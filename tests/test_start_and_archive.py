@@ -29,6 +29,22 @@ def test_start_and_archive_use_clean_git_environment():
     assert all(not key.startswith("GIT_") for key in ai_common.clean_git_environment())
 
 
+def test_rewrite_archived_path_references_preserves_non_path_scalars():
+    active = ".ai/work-items/active/task.contract.json"
+    archived = ".ai/work-items/archive/2026/task.contract.json"
+    evidence = {
+        "path": active,
+        "nested": [active, "make ai-finish CONTRACT=" + active, 622, True, None],
+    }
+
+    rewritten = ai_archive_work_item._rewrite_archived_path_references(evidence, {active: archived})
+
+    assert rewritten == {
+        "path": archived,
+        "nested": [archived, "make ai-finish CONTRACT=" + active, 622, True, None],
+    }
+
+
 def test_start_preflight_can_skip_contract_validation_for_new_skeleton(monkeypatch):
     observed = {}
 

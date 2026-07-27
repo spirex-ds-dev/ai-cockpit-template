@@ -97,6 +97,34 @@ jobs:
           fi
           exit "$quality_status"
 
+      - name: Publish failed quality gate logs
+        if: failure()
+        shell: bash
+        run: |
+          set -uo pipefail
+          found_failed_gate=0
+          for timing_path in target/quality/timing/*.json; do
+            [[ -f "$timing_path" ]] || continue
+            gate_result="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("result", "unknown"))' "$timing_path")"
+            [[ "$gate_result" == "passed" ]] && continue
+            found_failed_gate=1
+            gate_name="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("gate", "unknown"))' "$timing_path")"
+            log_path="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("logPath", ""))' "$timing_path")"
+            echo "::group::failure log: ${gate_name} (${gate_result})"
+            if [[ -n "$log_path" && -f "$log_path" ]]; then
+              tail -n 2000 "$log_path"
+            else
+              echo "Detailed gate log is missing: ${log_path:-target/quality/logs/${gate_name}.log}" >&2
+              cat "$timing_path"
+            fi
+            echo "::endgroup::"
+          done
+          if [[ "$found_failed_gate" -eq 0 ]]; then
+            echo "::group::failure log: repository quality wrapper"
+            tail -n 2000 "$RUNNER_TEMP/repository-quality.log" || true
+            echo "::endgroup::"
+          fi
+
       - name: Verify clean-checkout Cockpit status consistency
         run: make check-ai-status-consistency
 
