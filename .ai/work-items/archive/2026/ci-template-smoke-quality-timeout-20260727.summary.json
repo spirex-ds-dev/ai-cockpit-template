@@ -1,0 +1,494 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "ci-template-smoke-quality-timeout-20260727",
+  "contractPath": ".ai/work-items/archive/2026/ci-template-smoke-quality-timeout-20260727.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Added a bounded quality-step timeout, heartbeat notices, and explicit timeout failure evidence."
+    },
+    {
+      "path": "tests/test_ci_quality_orchestration.py",
+      "reason": "Added regression assertions for the quality timeout and heartbeat contract."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Extended workflow regression coverage for the fail-closed quality bound."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Recorded RFE-ISSUE-073 and the blocked PR recovery order."
+    },
+    {
+      "path": ".ai/decisions/HDR-18abba2f3cc6690d-a4e03eb1.request.json",
+      "reason": "Current preflight request evidence."
+    },
+    {
+      "path": ".ai/decisions/HDR-2bebd696bad22eb7-a77d037d.request.json",
+      "reason": "Earlier user authorization request evidence."
+    },
+    {
+      "path": ".ai/decisions/HDR-2bebd696bad22eb7-a77d037d.evidence.json",
+      "reason": "Earlier user authorization decision evidence."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated no-active cockpit status after archival."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/ci-template-smoke-quality-timeout-20260727.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30240750152",
+    ".github/workflows/smoke.yml",
+    "tests/test_ci_quality_orchestration.py"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "The PR #403 smoke run reaches the quality gate without progress and is captured as a reproducible failure input",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30240750152"
+      ]
+    },
+    {
+      "scenario": "The corrective design preserves the existing required repository quality gate invocation",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        ".github/workflows/smoke.yml",
+        "tests/test_ci_quality_orchestration.py"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:13:37.324554+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "5999d91a8c4709811908fc3e211fa723a29588aeb95e7cc2265752615182ce04",
+      "commandHash": "ac9019e91c158bb08a50f902fec7e486338bb1fefe5df5ebd8da1e66dc483918",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "d82219d5d2dac2be4403ed089a16f87df859cb025d2dab50be5272a03ffe8637",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json work item contract check passed: .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json work item contract check passed: .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "outputBytes": 264
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:13:37.471918+00:00",
+      "exitCode": 0,
+      "durationMs": 97,
+      "outputDigest": "b2658e33cd3b96cba74a1cbb83a27782204dcc19c5c6704d1006c5f979432cec",
+      "commandHash": "ff59f7556d3267fdde3fa42760a671aa94c66a0b7bb803bacdd68a610ce3acff",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "d82219d5d2dac2be4403ed089a16f87df859cb025d2dab50be5272a03ffe8637",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputBytes": 194
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:13:37.670250+00:00",
+      "exitCode": 0,
+      "durationMs": 145,
+      "outputDigest": "393b3ac632e3053ac4eabf432b221c2b2cbdbe0a820f8ba83df53eb15f6b2f42",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "d82219d5d2dac2be4403ed089a16f87df859cb025d2dab50be5272a03ffe8637",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json [warning] restricted_write: .ai/decisions/HDR-18abba2f3cc6690d-a4e03eb1.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-2bebd696bad22eb7-a77d037d.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-2bebd696bad22eb7-a77d037d.request.json (.ai",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json [warning] restricted_write: .ai/decisions/HDR-18abba2f3cc6690d-a4e03eb1.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-2bebd696bad22eb7-a77d037d.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-2bebd696bad22eb7-a77d037d.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/smoke.yml (.github/workflows/**) - CI workflow configuration. guard check completed: 4 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 716
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json SUMMARY=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:13:37.910509+00:00",
+      "exitCode": 0,
+      "durationMs": 185,
+      "outputDigest": "218ad7569471672997fe7919aea79fc6f06899d8f9e2928ce7fe5257cd17e977",
+      "commandHash": "89390b5cd88dc1e6944e7057a7bc3ad1577240d0c3e6430478354cf7ed036a61",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "d82219d5d2dac2be4403ed089a16f87df859cb025d2dab50be5272a03ffe8637",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `ci-template-smoke-quality-timeout-20260727` - Contract Hash: `124727cfacb13829` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Co",
+      "outputTail": "-smoke has an explicit bounded timeout and exposes a failure reason when repository quality gates exceed it. - Required quality gates remain enforced and are not deleted or silently skipped. - A regression test or deterministic workflow inspection verifies the timeout/heartbeat contract. - The plan records the PR #403 cancellation, root cause evidence, corrective Work Item, and recovery order. ## Required Verification - `aiWorkItem`: passed - `aiScope`: passed - `aiGuards`: passed - `aiCheckpoint`: passed - `aiAgentRisk`: passed - `aiReviewPolicy`: passed - `aiBacktrack`: passed - `aiCoverage`: passed - `aiScenarioCoverage`: passed - `aiGuidelines`: passed - `aiSummary`: failed - `aiStatus`: passed - `aiStatusCheck`: passed - `aiStatusConsistency`: passed - `aiDiffOwnership`: passed - `quality`: passed ## Review Focus - Step timeout is fail-closed - Heartbeat is observable - Required make quality invocation remains present ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-18abba2f3cc6690d-a4e03eb1.request.json` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-2bebd696bad22eb7-a77d037d.evidence.json` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-2bebd696bad22eb7-a77d037d.request.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/ci-template-smoke-quality-timeout-20260727.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `tests/test_ci_quality_orchestration.py` — covered by Contract scope - [active_owned] `tests/test_workflows.py` — covered by Contract scope ## Next Action - Run or record required verification: aiSummary",
+      "outputBytes": 4048
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:13:38.069888+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "60deb0f2c458e71de33857bb3ce490d5bacd036f833701f44543f752764ae915",
+      "commandHash": "20d83c4f7a2367ad575c3552aa3d675c51b85db902e7daecdf3af9822dc84a9e",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "d82219d5d2dac2be4403ed089a16f87df859cb025d2dab50be5272a03ffe8637",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json review policy matched 6 path(s) [review] .ai/decisions/HDR-18abba2f3cc6690d-a4e03eb1.request.json [review] .ai/decisions/HDR-2bebd696bad22eb7-a77d037d.evidence.json [review] .ai/decisions/HDR-2bebd696bad22eb7-a77d037d.request.json [review] .ai/work-items/starts/ci-template-smoke-quality-timeout-20260727.json [review] .ai/cockpit/curr",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json review policy matched 6 path(s) [review] .ai/decisions/HDR-18abba2f3cc6690d-a4e03eb1.request.json [review] .ai/decisions/HDR-2bebd696bad22eb7-a77d037d.evidence.json [review] .ai/decisions/HDR-2bebd696bad22eb7-a77d037d.request.json [review] .ai/work-items/starts/ci-template-smoke-quality-timeout-20260727.json [review] .ai/cockpit/current_status.md [review] .github/workflows/smoke.yml review focus recorded: 3 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 628
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:13:38.197230+00:00",
+      "exitCode": 0,
+      "durationMs": 83,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "d82219d5d2dac2be4403ed089a16f87df859cb025d2dab50be5272a03ffe8637",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:13:38.350643+00:00",
+      "exitCode": 0,
+      "durationMs": 103,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "d82219d5d2dac2be4403ed089a16f87df859cb025d2dab50be5272a03ffe8637",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json SUMMARY=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:13:38.449983+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "702144cef04bfab9c6dc3aae9c8249586b4a479425f8bf34bb14e68ec7b06ec3",
+      "commandHash": "025f9c56e4f8f4a8acf37ef377245929802ea0f6c6a4ec407fc69c876050643d",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "d82219d5d2dac2be4403ed089a16f87df859cb025d2dab50be5272a03ffe8637",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 307
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json SUMMARY=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:13:38.550812+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "26dfd9a2449971b24f41577c9f0b8da11a1f64a03d7b1a5e2ba22ad6906e4f25",
+      "commandHash": "9ceacb30484e7bb5dea64f807af32ddf0258c8a8637433eada913ac51fb82466",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "d82219d5d2dac2be4403ed089a16f87df859cb025d2dab50be5272a03ffe8637",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputBytes": 312
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:13:38.790484+00:00",
+      "exitCode": 0,
+      "durationMs": 191,
+      "outputDigest": "1c9575b97cad23c4c7afe8e6ba8d4f64b2324affec064016d99957ab80681d2e",
+      "commandHash": "ea5025b0dad3e173d952a64df88e0aa56d708b4f85a8681b70575635b556aa62",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "d82219d5d2dac2be4403ed089a16f87df859cb025d2dab50be5272a03ffe8637",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-18abba2f3cc6690d-a4e03eb1.request.json` — covered by Contract scope - [active_o",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-18abba2f3cc6690d-a4e03eb1.request.json` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-2bebd696bad22eb7-a77d037d.evidence.json` — covered by Contract scope - [active_owned] `.ai/decisions/HDR-2bebd696bad22eb7-a77d037d.request.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/ci-template-smoke-quality-timeout-20260727.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `tests/test_ci_quality_orchestration.py` — covered by Contract scope - [active_owned] `tests/test_workflows.py` — covered by Contract scope",
+      "outputBytes": 1187
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:21:09.509862+00:00",
+      "exitCode": 0,
+      "durationMs": 450646,
+      "outputDigest": "8359902043704e3d15ef7ec633ca84919a139f2a3135d6b0c4a43fc2625bfeef",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "d82219d5d2dac2be4403ed089a16f87df859cb025d2dab50be5272a03ffe8637",
+      "outputSummary": "make --no-print-directory quality-gates make --no-print-directory quality-static make --no-print-directory -j2 project-format-check project-lint diff-check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff format --check scripts tests PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m ruff check scripts tests 240 files already formatted All checks passed! git diff --check PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m mypy scripts/*.py git diff --check Success: no issues found in 116 source files PYT",
+      "outputTail": "ency.py ai status consistency check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_bandit_baseline.py { \"repository\": \"isolated temporary adopter repository\", \"defaultBranch\": \"main\", \"remote\": \"local bare origin\", \"baselineCommit\": \"e77ef4739fcb4a7d113ae20c422827646149a609\", \"upgradeCommit\": \"93ba135dc2746f31f2d11e330fd5ea4c4bc05146\", \"mergeCommit\": \"55ed296fd59a3b72aeb82fd1eb27e9f9d9940415\", \"rollbackCommit\": \"bdc8178745a6eda06b113dea6760d79da69162ca\", \"upgradeWorktreeRemoved\": true, \"localBranchesCleaned\": true, \"remoteBranchesCleaned\": true, \"enterpriseAssurance\": \"not_claimed\" } PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_supply_chain.py sbom sbom supply-chain check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_supply_chain.py provenance provenance supply-chain check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_supply_chain.py release release supply-chain check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_supply_chain.py secrets bandit low-risk baseline check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_supply_chain.py vulnerabilities secrets supply-chain check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_trust_schema.py --check Trust Layer schema check passed: 5 schema(s) PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q tests/test_trust_guards.py ........................... [100%] 27 passed in 0.05s PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q tests/test_critical_domain_guards.py ......... [100%] 9 passed in 0.01s PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q tests/test_decision_protocol.py .... [100%] 4 passed in 0.04s PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q tests/test_baseline_evidence.py ... [100%]vulnerabilities supply-chain check passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guard_calibration.py --root . project Profile and Guard calibration check passed 3 passed in 13.18s",
+      "outputBytes": 28903
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json SUMMARY=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:21:10.827538+00:00",
+      "exitCode": 0,
+      "durationMs": 220,
+      "outputDigest": "3a7d398a195bb06fb85ad1f2264f6f82cdbad2aa207a6872fab27a8e2ecd572f",
+      "commandHash": "77542d2cf19b67b477c146e6f5f3cd2e3d6e94f7d6a518ba02b3a9caaf575e4e",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "8fffbb7363554e271546e05423cd5346a61da4fd53acd8c760bb617a8f9c5936",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 354
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json SUMMARY=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:21:11.063189+00:00",
+      "exitCode": 0,
+      "durationMs": 189,
+      "outputDigest": "bacb2f3ac862208da46d059155837e16afd0e65ea1a1f9b33d6c1cf6a7ef807c",
+      "commandHash": "cffcb953eeda0718b90cad644da517acf4f89e2572400cc5166e21ab6165cb1c",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "8fffbb7363554e271546e05423cd5346a61da4fd53acd8c760bb617a8f9c5936",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 337
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:21:11.149681+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "8fffbb7363554e271546e05423cd5346a61da4fd53acd8c760bb617a8f9c5936",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json SUMMARY=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:21:11.245740+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "6dfeba6aeba216bed52d2cb64b3b37d20a5e8217f6782695f9c64872d0280c70",
+      "commandHash": "9827bf9da23bb457f54f4e023e33e70cfd07302937af103082008e39f813520f",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "8fffbb7363554e271546e05423cd5346a61da4fd53acd8c760bb617a8f9c5936",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json --summary .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 317
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json CONTRACT=.ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-27T06:21:12.005244+00:00",
+      "exitCode": 0,
+      "durationMs": 89,
+      "outputDigest": "cc99326e70f60cafed6083e0eb7218f583fd1151f3d78bd3d6d7c7042ab88b04",
+      "commandHash": "6b663cbd87977317eaa0ec1042ea125146d7f2ca237a8a9a5a0f2ad6f26f244b",
+      "contractHash": "124727cfacb138298e8c2fdc0295db004885126faa30677db69232e806cd9b65",
+      "commitSha": "e2874577049c948a758ed70c34b307cc52d9800f",
+      "executionContractPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "worktreeDigest": "1443444d7310003bee4a6fc38aad4d5ba08975fc4cfb1583b8b05e68f4f47203",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json ai summary check passed: .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json --contract .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json ai summary check passed: .ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+      "outputBytes": 343
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Fail closed on missing quality evidence; never convert a canceled run into success.",
+      "compliant": true,
+      "evidence": "The step exits with the make/timeout status and canceled PR #403 remains unmerged."
+    },
+    {
+      "guideline": "Keep the corrective change bounded to CI workflow observability and timeboxing.",
+      "compliant": true,
+      "evidence": "Only smoke workflow and its regression assertions are changed for the implementation."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "low",
+    "detail": "The change is bounded to a workflow timeout/heartbeat and deterministic regression assertions."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "RFE-ISSUE-073",
+      "category": "process",
+      "severity": "high",
+      "stage": "pr_ci",
+      "status": "in_progress",
+      "detail": "PR #403 template-smoke stopped progressing at Run repository quality gates without logs; the run was canceled fail-closed.",
+      "resolution": "Added step timeout, heartbeat, and explicit timeout diagnostics; fresh CI evidence is still required."
+    },
+    {
+      "issueId": "PLAN-014",
+      "category": "process",
+      "severity": "medium",
+      "stage": "preflight",
+      "status": "resolved",
+      "detail": "The corrective Work Item skeleton initially lacked supported intent/capability, scenario coverage, and raw request fields.",
+      "resolution": "Completed the Contract, recorded user authorization, and reran preflight successfully."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "scope",
+      "detail": "Fresh CI must prove the heartbeat and timeout behavior before the dependent audit PR can merge.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Step timeout is fail-closed",
+      "Heartbeat is observable",
+      "Required make quality invocation remains present"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [
+    {
+      "correction": "发现流程问题时先记录并修正流程，再继续工单",
+      "source": "user instruction",
+      "solidifiedAs": "RFE-ISSUE-073 corrective Work Item precedes PR #403 merge."
+    }
+  ],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "124727cfacb13829",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "124727cfacb13829",
+      "acceptanceCount": 4,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "Fresh GitHub CI evidence after this workflow change is not yet available.",
+    "PR #403 remains open and must be rebased/rechecked after this corrective Work Item closes."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "decisionEvidence": {
+    "decisionId": "HD-2bebd696bad2",
+    "decision": "A",
+    "workItemId": "ci-template-smoke-quality-timeout-20260727",
+    "contractHash": "2bebd696bad22eb7",
+    "preflightHash": "a77d037d00aa6b2a",
+    "recordedAt": "2026-07-27T05:55:36.408364+00:00",
+    "recordedBy": "User"
+  },
+  "archiveSequence": 610
+}

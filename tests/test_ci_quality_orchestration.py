@@ -25,6 +25,8 @@ def test_full_quality_has_one_workflow_owner():
     assert compatibility.count("make quality") == 0
     assert smoke.count("make quality") == 1
     assert "Run repository quality gates" in smoke
+    assert "timeout --foreground 25m make quality" in smoke
+    assert "quality heartbeat" in smoke
 
 
 def test_release_preflight_precedes_expensive_quality():

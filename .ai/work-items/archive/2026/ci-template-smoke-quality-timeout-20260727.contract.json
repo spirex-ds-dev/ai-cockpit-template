@@ -1,0 +1,216 @@
+{
+  "contractVersion": 2,
+  "workItemId": "ci-template-smoke-quality-timeout-20260727",
+  "mode": "code",
+  "title": "ci-template-smoke-quality-timeout-20260727",
+  "rawUserRequest": "继续完成计划任务；发现 CI 在 template-smoke 的 Run repository quality gates 无日志更新时，先记录流程根因并修正流程，再恢复工单 PR 生命周期，发布继续延后。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user instruction and current plan process rule",
+    "capturedAt": "2026-07-27",
+    "digest": "sha256:template-smoke-timeout-process-correction"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "e2874577049c948a758ed70c34b307cc52d9800f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.contract.json",
+    ".ai/work-items/active/ci-template-smoke-quality-timeout-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".github/workflows/**",
+    "tests/test_ci_quality_orchestration.py",
+    "tests/test_workflows.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Publishing a version, creating tags/releases, or changing provider release state",
+    "Reducing required quality coverage or deleting required smoke gates",
+    "Rewriting historical archive evidence"
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Workflow implementation and timeout boundary under investigation."
+    },
+    {
+      "path": "tests/test_ci_quality_orchestration.py",
+      "reason": "Workflow regression tests for the bounded quality gate."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative issue record and corrective-work lifecycle."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30240750152",
+      "reason": "PR #403 template-smoke run stopped without log progress at the quality-gate step."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "ci_timeout",
+      "workflow_observability",
+      "quality_gate_deduplication"
+    ],
+    "reason": "The smoke job reached the quality gate but produced no log updates for the observation window; the fix must add bounded timeout/heartbeat evidence without weakening required verification."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized continuous plan execution and explicitly required process correction before resuming the blocked PR."
+  },
+  "preReviewWarnings": [
+    "Do not merge the dependent audit PR until the smoke timeout/heartbeat behavior has fresh CI evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "template-smoke has an explicit bounded timeout and exposes a failure reason when repository quality gates exceed it.",
+    "Required quality gates remain enforced and are not deleted or silently skipped.",
+    "A regression test or deterministic workflow inspection verifies the timeout/heartbeat contract.",
+    "The plan records the PR #403 cancellation, root cause evidence, corrective Work Item, and recovery order."
+  ],
+  "guidelines": [
+    "Fail closed on missing quality evidence; never convert a canceled run into success.",
+    "Keep the corrective change bounded to CI workflow observability and timeboxing."
+  ],
+  "intent": {
+    "problem": "PR #403 template-smoke reached Run repository quality gates and remained without log updates for about six minutes while all other checks completed, repeating the release-blocking long-running CI pattern.",
+    "constraints": [
+      "Do not merge PR #403 or publish a version until fresh CI evidence exists.",
+      "Do not lower coverage, remove required checks, or treat cancellation as pass.",
+      "Every process correction must use its own Contract, PR, merge, archive, close, branch cleanup, and base synchronization lifecycle."
+    ],
+    "rationale": "Bound the unobservable quality step so the workflow either produces a completed result or a timely, auditable failure that can be corrected without multi-day ambiguity."
+  },
+  "declaredIntent": {
+    "summary": "Correct recurring template-smoke quality-gate timeout/observability failure before resuming the dependent audit PR.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The PR #403 smoke run reaches the quality gate without progress and is captured as a reproducible failure input",
+      "required": true,
+      "status": "verified",
+      "evidence": ["https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30240750152"],
+      "reason": "The run entered Run repository quality gates, produced no log update for the observation window, and was canceled fail-closed."
+    },
+    {
+      "scenario": "The corrective design preserves the existing required repository quality gate invocation",
+      "required": true,
+      "status": "verified",
+      "evidence": [".github/workflows/smoke.yml", "tests/test_ci_quality_orchestration.py"],
+      "reason": "The current workflow requires the repository quality gate step; implementation must retain that invocation and add only bounded observability."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User",
+    "reason": "User explicitly authorized correcting the workflow before resuming the plan PR."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 622
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/ci-template-smoke-quality-timeout-20260727.json",
+    "baseCommit": "e2874577049c948a758ed70c34b307cc52d9800f",
+    "initialScopeDigest": "b23914674b07fd95894125bb1a70591ca037c67bd8c5df43bff18d213246e325",
+    "contractSkeletonDigest": "97bb7c5e0d3e000d48a9e8cdd8ef0d01d9df199e48d6cbd915ee2ae540a5d69c"
+  }
+}

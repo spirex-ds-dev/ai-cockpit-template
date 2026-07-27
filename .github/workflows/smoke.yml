@@ -74,7 +74,28 @@ jobs:
           fi
 
       - name: Run repository quality gates
-        run: make quality
+        timeout-minutes: 25
+        shell: bash
+        run: |
+          set -uo pipefail
+          echo 'Starting bounded repository quality gates (25 minute step timeout).'
+          timeout --foreground 25m make quality > >(tee "$RUNNER_TEMP/repository-quality.log") 2>&1 &
+          quality_pid=$!
+          (
+            while kill -0 "$quality_pid" 2>/dev/null; do
+              echo "::notice title=quality heartbeat::repository quality gates still running at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+              sleep 60
+            done
+          ) &
+          heartbeat_pid=$!
+          wait "$quality_pid"
+          quality_status=$?
+          kill "$heartbeat_pid" 2>/dev/null || true
+          wait "$heartbeat_pid" 2>/dev/null || true
+          if [[ "$quality_status" -eq 124 ]]; then
+            echo 'Repository quality gates exceeded the 25 minute bound.' >&2
+          fi
+          exit "$quality_status"
 
       - name: Verify clean-checkout Cockpit status consistency
         run: make check-ai-status-consistency
