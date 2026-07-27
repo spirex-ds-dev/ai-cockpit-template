@@ -52,14 +52,14 @@ def test_candidate_release_is_next_patch_and_separate_from_published_metadata():
         (release_distribution.ROOT / "next-release.json").read_text(encoding="utf-8")
     )
 
-    assert candidate_release_issues(candidate, published, accepted_previous_tags={"v0.5.43"}) == []
+    assert candidate_release_issues(candidate, published, reserved_tags={"v0.5.44"}) == []
     assert candidate["releaseTag"] == published["releaseTag"] or candidate["releaseTag"].startswith(
         "v"
     )
     assert candidate["published"] is False
 
 
-def test_candidate_release_accepts_next_patch_after_quarantined_public_tag():
+def test_candidate_release_requires_next_patch_after_reserved_immutable_tag():
     published = {"releaseTag": "v0.5.42", "releaseEvidenceAuthority": "release-assets-v1"}
     candidate = {
         "releaseTag": "v0.5.44",
@@ -72,7 +72,14 @@ def test_candidate_release_accepts_next_patch_after_quarantined_public_tag():
         "supplyChain": {},
     }
 
-    assert candidate_release_issues(candidate, published, accepted_previous_tags={"v0.5.43"}) == []
+    assert candidate_release_issues(candidate, published, reserved_tags={"v0.5.43"}) == []
+
+    candidate["releaseTag"] = "v0.5.45"
+    issues = candidate_release_issues(candidate, published, reserved_tags={"v0.5.43"})
+    assert issues == [
+        "next-release.json releaseTag 'v0.5.45' must equal or be the next patch after "
+        "the highest release-sequence tag 'v0.5.43'"
+    ]
 
 
 def test_preparation_mode_validates_published_identity_before_next_candidate(monkeypatch, tmp_path):

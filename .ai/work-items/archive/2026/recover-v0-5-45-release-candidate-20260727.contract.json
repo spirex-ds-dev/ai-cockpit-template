@@ -1,0 +1,77 @@
+{
+  "contractVersion": 2,
+  "workItemId": "recover-v0-5-45-release-candidate-20260727",
+  "mode": "code",
+  "title": "Recover v0.5.45 release candidate progression",
+  "baseCommit": "6bbbaa2948acc8afd9013f1c7e9cc2cfe787991b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/recover-v0-5-45-release-candidate-20260727.contract.json",
+    ".ai/work-items/active/recover-v0-5-45-release-candidate-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    "next-release.json",
+    "release-state.json",
+    "scripts/check_release_distribution.py",
+    "scripts/check_release_recovery_policy.py",
+    "scripts/check_release_state_consistency.py",
+    "tests/test_release_distribution.py",
+    "tests/test_release_recovery_policy.py",
+    "tests/test_release_state_consistency.py",
+    "Makefile",
+    "docs/reference/distribution.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "External provider publication or release mutation",
+    "Deleting, moving, modifying, or publishing the immutable v0.5.44 tag or Draft Release",
+    "Changing the archived Contract, Summary, or archive evidence for fix-draft-release-asset-verification-20260727",
+    "Unrelated CI performance changes"
+  ],
+  "sources": [
+    {"path": "scripts/check_release_distribution.py", "reason": "Preparation validation uses the highest immutable remote semantic tag when checking the next candidate."},
+    {"path": "next-release.json", "reason": "The pending v0.5.44 candidate must advance because v0.5.44 is already an immutable Draft tag."},
+    {"path": "release-state.json", "reason": "The canonical candidate projection must remain consistent while the published baseline remains v0.5.42."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30227984437", "reason": "Authoritative PR #401 CI evidence: template-smoke rejects candidate v0.5.44 because immutable tag v0.5.44 already exists."},
+    {"path": ".ai/work-items/archive/2026/fix-draft-release-asset-verification-20260727.contract.json", "reason": "Archived predecessor defines the Draft verification repair; its unmerged PR is blocked by the candidate progression check."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "low", "riskTypes": ["release_metadata", "governance_lifecycle"], "reason": "This Work Item changes only repository-local candidate metadata, deterministic validation, documentation, and the installed operating skill. It performs no provider mutation, public publication, or immutable-tag change; those remain separately fail-closed."},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user authorized a documented recovery Work Item in PR #401 because its archived predecessor is blocked by the release-candidate validation it repaired. This is a narrowly scoped serial recovery exception, not permission to alter archived evidence or bypass PR checks."},
+  "preReviewWarnings": ["Review public-release identity separately from immutable tag reservation; a Draft tag reserves its version but does not become the published baseline."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record checkpoints around recovery metadata and guard changes."},
+  "acceptance": [
+    "Preparation validation describes remote tags as immutable reserved tags rather than accepted public releases and still requires the candidate to be exactly one patch after the highest reserved tag.",
+    "The candidate and canonical candidate state advance to v0.5.45 while release.json and previousRelease remain v0.5.42.",
+    "Regression tests prove a Draft-reserved v0.5.44 requires v0.5.45 and that the diagnostic does not imply Draft publication.",
+    "The v0.5.44 tag and Draft Release remain untouched, and no external publication is performed.",
+    "The plan records the lifecycle cycle, user-authorized same-PR recovery exception, and mandatory future recovery sequence: record failure, repair the gate, advance to the next reserved patch, complete PR lifecycle, then retry publication."
+  ],
+  "guidelines": [
+    "Preserve fail-closed release validation and immutable tag boundaries.",
+    "Keep published release truth separate from reserved tag sequence truth.",
+    "Use a narrowly documented recovery exception only when an archived predecessor PR is blocked by the corrective candidate metadata itself.",
+    "Do not claim v0.5.44 is publicly released."
+  ],
+  "intent": {"problem": "PR #401 repairs Draft asset verification but its template-smoke gate fails because the remote highest semantic tag is already the immutable, unpublished v0.5.44 Draft tag while next-release.json still names v0.5.44. The checker calls that tag an accepted previous release, obscuring that the public baseline remains v0.5.42 and creating a lifecycle cycle: the corrective PR cannot merge until the next candidate advances.", "constraints": ["Preserve the immutable v0.5.44 tag and Draft Release.", "Advance the candidate only to v0.5.45; retain v0.5.42 as the published baseline and basedOnReleaseTag.", "Do not publish externally in this Work Item.", "Record the same-PR recovery exception and the durable process rule in the plan.", "Retain PR checks, archive evidence, and branch cleanup requirements."], "rationale": "An immutable tag reserves its semantic version whether its associated Release is Draft or published. Separating reserved-tag progression from published-release truth makes the required v0.5.45 correction explicit, prevents reuse of a failed tag, and allows the corrective PR to regain a valid candidate without rewriting historical evidence."},
+  "rawUserRequest": "The next candidate is v0.5.45. Adding it to archived, unmerged #401 is acceptable; what matters is fixing the process so this does not keep happening in the future.",
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Repair release-candidate progression after an immutable failed Draft tag and record the recovery mechanism.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "scenarioCoverage": [
+    {"scenario": "Draft tag reserves version without becoming the public baseline", "required": true, "status": "verified", "evidence": ["GitHub Actions run 30227984437", "tests/test_release_distribution.py", "scripts/check_release_recovery_policy.py"]},
+    {"scenario": "v0.5.45 candidate succeeds after immutable v0.5.44 tag", "required": true, "status": "verified", "evidence": ["next-release.json", "scripts/check_release_distribution.py", "tests/test_release_recovery_policy.py"]},
+    {"scenario": "historical v0.5.42 public release remains the candidate base", "required": true, "status": "verified", "evidence": ["release.json", "release-state.json", "scripts/check_release_state_consistency.py"]},
+    {"scenario": "provider publication and v0.5.44 mutation", "required": true, "status": "not_applicable", "reason": "This recovery changes repository metadata and deterministic checks only.", "evidence": ["Contract outOfScope"]}
+  ],
+  "rawRequestSource": {"type": "human", "reference": "user-conversation:2026-07-27-v0.5.45-recovery", "capturedAt": "2026-07-27", "digest": "sha256:v0.5.45-recovery-process-fix"},
+  "verification": [{"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user explicitly authorized v0.5.45 recovery work in the unmerged #401 PR, provided the process defect is corrected and recorded."},
+  "rollbackNote": "Revert this Work Item diff; do not alter the v0.5.44 tag or Draft Release.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 622}},
+  "startReceipt": {"path": ".ai/work-items/starts/recover-v0-5-45-release-candidate-20260727.json", "baseCommit": "6bbbaa2948acc8afd9013f1c7e9cc2cfe787991b", "initialScopeDigest": "e755226116c35c45d983ad877ef8afd145c6e3bda13d86d257b4ff10b606a100", "contractSkeletonDigest": "8a38df68828d3027122e942fe77603f6912d132abed916bd3f7396a998667104"}
+}

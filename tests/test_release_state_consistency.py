@@ -46,6 +46,16 @@ def test_consistent_canonical_state_passes(tmp_path):
     assert check_release_state_consistency.check_repository(tmp_path) == []
 
 
+def test_release_state_rejects_reuse_of_reserved_immutable_tag(tmp_path):
+    write_metadata(tmp_path)
+    state = json.loads((tmp_path / "release-state.json").read_text(encoding="utf-8"))
+    state["reservedTags"] = ["v0.5.34"]
+    (tmp_path / "release-state.json").write_text(json.dumps(state), encoding="utf-8")
+
+    issues = check_release_state_consistency.check_repository(tmp_path)
+    assert "next-release.json releaseTag must not reuse an immutable reserved tag" in issues
+
+
 def test_previous_release_and_candidate_conflicts_are_rejected(tmp_path):
     write_metadata(
         tmp_path,

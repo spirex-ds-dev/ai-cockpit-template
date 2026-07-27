@@ -133,7 +133,7 @@ def candidate_release_issues(
     candidate: dict[str, object],
     published: dict[str, object],
     *,
-    accepted_previous_tags: set[str] | None = None,
+    reserved_tags: set[str] | None = None,
 ) -> list[str]:
     """Validate candidate metadata without treating it as the public release contract."""
     issues: list[str] = []
@@ -144,12 +144,16 @@ def candidate_release_issues(
     if not isinstance(published_tag, str) or not published_tag:
         issues.append("release.json releaseTag is missing")
     if isinstance(candidate_tag, str) and isinstance(published_tag, str):
-        accepted_previous = {published_tag, *(accepted_previous_tags or set())}
-        if candidate_tag != published_tag and not any(
-            is_next_patch_release(candidate_tag, previous) for previous in accepted_previous
+        release_sequence_tags = {published_tag, *(reserved_tags or set())}
+        highest_sequence_tag = max(
+            release_sequence_tags, key=lambda tag: tuple(int(part) for part in tag[1:].split("."))
+        )
+        if candidate_tag != highest_sequence_tag and not is_next_patch_release(
+            candidate_tag, highest_sequence_tag
         ):
             issues.append(
-                f"next-release.json releaseTag {candidate_tag!r} is not the next patch after any accepted previous release {sorted(accepted_previous)!r}"
+                f"next-release.json releaseTag {candidate_tag!r} must equal or be the next patch after "
+                f"the highest release-sequence tag {highest_sequence_tag!r}"
             )
     if candidate.get("releaseState") != "candidate":
         issues.append("next-release.json releaseState must be 'candidate'")
@@ -1010,7 +1014,7 @@ def main() -> int:
             candidate_issues = candidate_release_issues(
                 candidate,
                 published,
-                accepted_previous_tags={latest_tag},
+                reserved_tags={latest_tag},
             )
             if candidate_issues:
                 raise RuntimeError("candidate metadata is invalid: " + "; ".join(candidate_issues))

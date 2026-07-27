@@ -22,7 +22,7 @@ AI_PREFLIGHT_VALIDATE_CONTRACT ?= true
 check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
 	check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning \
-	check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence \
+	check-release-distribution check-release-recovery-policy check-release-state-consistency check-release-preflight check-ci-release-evidence \
 	check-lockfile-reproducibility \
 	check-quality-architecture \
 	check-deprecated-assets \
@@ -159,6 +159,9 @@ check-governance-complexity:
 check-release-distribution:
 	$(AI_PYTHON) scripts/check_release_distribution.py
 
+check-release-recovery-policy:
+	$(AI_PYTHON) scripts/check_release_recovery_policy.py
+
 check-release-distribution-post-publish:
 	AI_RELEASE_POST_PUBLISH=1 $(AI_PYTHON) scripts/check_release_distribution.py
 
@@ -262,7 +265,7 @@ check-ai-guard-calibration: check-ai-project-profile
 
 QUALITY_STATIC_GATES := project-format-check project-lint diff-check
 QUALITY_TEST_GATES := project-test
-QUALITY_EVIDENCE_GATES := unsupported-claim-regression adopter-long-cycle check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning check-dependency-vulnerabilities check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence
+QUALITY_EVIDENCE_GATES := unsupported-claim-regression adopter-long-cycle check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency check-bandit-baseline check-sbom check-provenance check-release-evidence check-release-recovery-policy check-secret-scanning check-dependency-vulnerabilities check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence
 
 # Run cheap static checks before the long test/coverage phase.  The previous
 # parallel graph could hide an early mypy failure behind a still-running pytest.

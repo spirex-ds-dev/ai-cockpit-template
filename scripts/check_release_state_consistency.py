@@ -80,6 +80,13 @@ def check_repository(root: Path) -> list[str]:
     previous = state.get("previousRelease")
     if not isinstance(previous, str) or not TAG_PATTERN.fullmatch(previous):
         issues.append("release-state.json previousRelease must be a semantic version tag")
+    reserved_tags = state.get("reservedTags", [])
+    if not isinstance(reserved_tags, list) or any(
+        not isinstance(tag, str) or not TAG_PATTERN.fullmatch(tag) for tag in reserved_tags
+    ):
+        issues.append("release-state.json reservedTags must be a list of semantic version tags")
+    elif len(set(reserved_tags)) != len(reserved_tags):
+        issues.append("release-state.json reservedTags must not contain duplicates")
     evidence_status = state.get("evidenceStatus")
     if evidence_status not in EVIDENCE_STATUSES:
         issues.append(
@@ -116,6 +123,8 @@ def check_repository(root: Path) -> list[str]:
         )
     if published_tag == candidate_tag:
         issues.append("published and candidate tags must be distinct")
+    if isinstance(reserved_tags, list) and candidate_tag in reserved_tags:
+        issues.append("next-release.json releaseTag must not reuse an immutable reserved tag")
     if candidate.get("basedOnReleaseTag") != published_tag:
         issues.append("next-release.json basedOnReleaseTag must equal release.json releaseTag")
     if candidate.get("releaseState") != "candidate" or candidate.get("published") is not False:
