@@ -1,0 +1,186 @@
+{
+  "contractVersion": 2,
+  "workItemId": "allow-documented-pr-recovery-20260727",
+  "mode": "code",
+  "title": "allow-documented-pr-recovery-20260727",
+  "baseCommit": "34505bc9961b92f8fde6976687bf24ecc2fd1183",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/allow-documented-pr-recovery-20260727.contract.json",
+    ".ai/work-items/active/allow-documented-pr-recovery-20260727.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": ["External publication", "Changing immutable tags or Draft Releases", "General multi-Work-Item PRs without documented recovery evidence"],
+  "sources": [
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "The PR gate rejects the user-authorized recovery pair in #401."
+    }, {"path": "tests/test_pr_aggregate.py", "reason": "PR aggregate regression coverage."}, {"path": "user-conversation:2026-07-27", "reason": "User authorized recorded same-PR recovery and requires a durable process fix."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "scope_unclear"
+    ],
+    "reason": "Repository-local PR validation and tests only; the exception remains fail-closed and no provider action occurs."
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue", "reason": "User authorized a documented recovery mechanism; tests must prove all other multi-Work-Item PRs remain blocked."
+  },
+  "preReviewWarnings": [
+    "Do not broaden the one Work Item/one PR default; permit only an adjacent archived recovery whose predecessor is already in the PR and whose Contract records user authorization."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "PR validation permits exactly one explicitly authorized, immediately following recovery Work Item only when its archived predecessor is also in the PR.", "The recovery Contract must name the predecessor through a source reference, record human authorization, and use a baseCommit descended from the predecessor's historical base.", "All ordinary multi-Work-Item PRs and unrelated base divergences remain rejected by regression tests.", "RFE-ISSUE-074 records the controlled exception and continuing lifecycle."
+  ],
+  "guidelines": [
+    "Preserve the one Work Item/one PR default and make every exception deterministic and auditable.", "Do not weaken immutable-tag or release-publication boundaries."
+  ],
+  "intent": {
+    "problem": "PR #401 contains an archived corrective Work Item and a user-authorized recovery Work Item because the former's CI cannot pass until candidate v0.5.45 is recorded. The PR gate rejects that auditable recovery pair, creating a lifecycle cycle.", "constraints": ["Allow only one adjacent recovery pair.", "Require explicit predecessor and user authority evidence.", "Keep all other multi-Work-Item PRs fail-closed.", "No provider publication."], "rationale": "The gate must recognize the documented recovery relation rather than force an impossible new PR or silently bypass ownership and archive checks."
+  },
+  "rawUserRequest": "Adding v0.5.45 to the archived but unmerged #401 is acceptable; correct the process so it cannot recur. Continue without further confirmation unless a real authority boundary requires it.",
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Permit only a fully evidenced sequential recovery pair in one PR while preserving the normal one-Work-Item rule.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "documented adjacent recovery pair",
+      "required": true,
+      "status": "verified",
+      "evidence": [".ai/work-items/archive/2026/fix-draft-release-asset-verification-20260727.contract.json", ".ai/work-items/archive/2026/recover-v0-5-45-release-candidate-20260727.contract.json", "make check-ai-pr failure evidence"]
+    },
+    {
+      "scenario": "ordinary multiple Work Items remain rejected",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_pr_aggregate.py"]
+    },
+    {
+      "scenario": "unrelated recovery base remains rejected",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_pr_aggregate.py"]
+    }
+  ],
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-conversation:2026-07-27-documented-pr-recovery",
+    "capturedAt": "2026-07-27",
+    "digest": "sha256:documented-pr-recovery-authorized"
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized the v0.5.45 recovery in unmerged PR #401 and directed that the PR process defect be corrected without further confirmation."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 623
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/allow-documented-pr-recovery-20260727.json",
+    "baseCommit": "34505bc9961b92f8fde6976687bf24ecc2fd1183",
+    "initialScopeDigest": "29f1b720f8cc963a7d978c8eea6abc4b358ff56f86590e6861fef4bbe6132277",
+    "contractSkeletonDigest": "c115ddc513b290d8503ed6031e975d959dfb5decb1044c634096a100d22b88c6"
+  }
+}
