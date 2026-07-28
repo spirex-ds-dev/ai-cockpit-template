@@ -61,6 +61,9 @@ class FakeGit:
         if normalized == ("switch", "--detach", "HEAD"):
             self.current_branch = ""
             return closure.CommandResult(0, "")
+        if normalized == ("switch", "codex/example"):
+            self.current_branch = "codex/example"
+            return closure.CommandResult(0, "")
         if normalized == ("worktree", "list", "--porcelain"):
             if self.base_worktree_path:
                 return closure.CommandResult(
@@ -103,7 +106,7 @@ def prepare(monkeypatch: pytest.MonkeyPatch, fake: FakeGit) -> None:
     )
 
 
-def test_success_orders_synchronization_before_branch_deletion(
+def test_success_proves_remote_absence_before_local_branch_deletion(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     fake = FakeGit()
@@ -112,12 +115,15 @@ def test_success_orders_synchronization_before_branch_deletion(
     result = closure.close_work_item("example", fake)
 
     assert result["state"] == "closed"
-    assert fake.commands.index(("switch", "main")) < fake.commands.index(
-        ("branch", "-D", "codex/example")
-    )
-    assert fake.commands.index(("branch", "-D", "codex/example")) < fake.commands.index(
+    remote_delete = fake.commands.index(
         ("push", "origin", "--delete", "codex/example")
     )
+    remote_absence = fake.commands.index(
+        ("ls-remote", "--exit-code", "--heads", "origin", "codex/example")
+    )
+    local_delete = fake.commands.index(("branch", "-D", "codex/example"))
+
+    assert remote_delete < remote_absence < local_delete
 
 
 def test_unmerged_pr_blocks_all_cleanup(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -231,10 +237,25 @@ def test_remote_deletion_failure_does_not_report_closed(monkeypatch: pytest.Monk
     with pytest.raises(RuntimeError, match="remote work branch still exists"):
         closure.close_work_item("example", fake)
 
-    assert ("branch", "-D", "codex/example") in fake.commands
-    assert fake.commands.index(("switch", "main")) < fake.commands.index(
-        ("branch", "-D", "codex/example")
-    )
+    assert ("branch", "-D", "codex/example") not in fake.commands
+    assert ("switch", "--detach", "HEAD") not in fake.commands
+    assert fake.current_branch == "codex/example"
+
+
+def test_linked_worktree_local_delete_failure_restores_checkout(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake = FakeGit(fail_on=("branch", "-D"))
+    fake.base_worktree_path = "/tmp/base-worktree"
+    prepare(monkeypatch, fake)
+
+    with pytest.raises(RuntimeError, match="restored for retry"):
+        closure.close_work_item("example", fake)
+
+    detach = fake.commands.index(("switch", "--detach", "HEAD"))
+    restore = fake.commands.index(("switch", "codex/example"))
+    assert detach < restore
+    assert fake.current_branch == "codex/example"
 
 
 def test_remote_deletion_race_is_accepted_when_postcondition_is_absent(
@@ -247,7 +268,11 @@ def test_remote_deletion_race_is_accepted_when_postcondition_is_absent(
 
     assert result["state"] == "closed"
     assert ("fetch", "origin", "--prune") in fake.commands
-    assert fake.commands[-1] == ("rev-parse", "origin/main")
+    remote_absence = fake.commands.index(
+        ("ls-remote", "--exit-code", "--heads", "origin", "codex/example")
+    )
+    local_delete = fake.commands.index(("branch", "-D", "codex/example"))
+    assert remote_absence < local_delete
 
 
 def test_remote_deletion_failure_with_unverifiable_state_fails_closed(
