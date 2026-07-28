@@ -114,6 +114,50 @@ def _rewrite_archived_path_references(value: Any, replacements: dict[str, str]) 
     return value
 
 
+_SUMMARY_PATH_VALUE_FIELDS = frozenset({"path", "contractPath", "summaryPath", "location"})
+_SUMMARY_PATH_COLLECTION_FIELDS = frozenset(
+    {"evidence", "generatedFiles", "solidifiedIn", "sourcesUsed"}
+)
+_IMMUTABLE_SUMMARY_SUBTREES = frozenset({"verification"})
+
+
+def _rewrite_archived_summary_paths(
+    value: Any,
+    replacements: dict[str, str],
+    *,
+    collection_values_are_paths: bool = False,
+) -> Any:
+    """Migrate schema-defined Summary paths without altering prose or provenance."""
+    if isinstance(value, dict):
+        rewritten: dict[Any, Any] = {}
+        for key, item in value.items():
+            if key in _IMMUTABLE_SUMMARY_SUBTREES:
+                rewritten[key] = item
+            elif key in _SUMMARY_PATH_VALUE_FIELDS and isinstance(item, str):
+                rewritten[key] = replacements.get(item, item)
+            else:
+                rewritten[key] = _rewrite_archived_summary_paths(
+                    item,
+                    replacements,
+                    collection_values_are_paths=(
+                        collection_values_are_paths or key in _SUMMARY_PATH_COLLECTION_FIELDS
+                    ),
+                )
+        return rewritten
+    if isinstance(value, list):
+        return [
+            _rewrite_archived_summary_paths(
+                item,
+                replacements,
+                collection_values_are_paths=collection_values_are_paths,
+            )
+            for item in value
+        ]
+    if collection_values_are_paths and isinstance(value, str):
+        return replacements.get(value, value)
+    return value
+
+
 def _rewrite_exact_string(value: Any, source: str, target: str) -> tuple[Any, int]:
     """Recursively replace one exact string and return the replacement count."""
     if isinstance(value, dict):
@@ -531,6 +575,8 @@ def _execute_archive_transaction(
     """Execute and roll back one archive mutation as a single transaction."""
     index_path = _archive_index_path()
     index_backup = index_path.read_bytes() if index_path.exists() else None
+    status_path = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
+    status_backup = status_path.read_bytes() if status_path.exists() else None
     active_file_backups = {source: source.read_bytes() for source, _ in files_to_move}
     traceability_changed = False
     try:
@@ -572,10 +618,7 @@ def _execute_archive_transaction(
                     _atomic_save_json(traceability_path, rewritten_traceability)
                     traceability_changed = True
             summary = redact_machine_paths_in_data(load_json(target_dir / summary_path.name))
-            if isinstance(summary.get("documentationAlignment"), dict):
-                summary["documentationAlignment"] = _rewrite_archived_path_references(
-                    summary["documentationAlignment"], replacements
-                )
+            summary = _rewrite_archived_summary_paths(summary, replacements)
             summary["contractPath"] = archived_contract
             summary["archiveSequence"] = archive_sequence
             changed = summary.get("changedFiles", [])
@@ -590,9 +633,6 @@ def _execute_archive_transaction(
                             "reason": "Generated no-active cockpit status after archival.",
                         }
                     )
-                for item in changed:
-                    if isinstance(item, dict) and item.get("path") in replacements:
-                        item["path"] = replacements[item["path"]]
                 existing = {item.get("path") for item in changed if isinstance(item, dict)}
                 for archived_path in replacements.values():
                     if archived_path not in existing:
@@ -682,20 +722,10 @@ def _execute_archive_transaction(
                     f"ERROR: Failed to roll back traceability manifest: {rollback_exc}",
                     file=sys.stderr,
                 )
-        try:
-            subprocess.run(
-                [
-                    sys.executable,
-                    "scripts/ai_generate_status.py",
-                    str(contract_path),
-                    "--summary",
-                    str(summary_path),
-                ],
-                cwd=PROJECT_ROOT,
-                check=False,
-            )
-        except Exception:
-            pass
+        if status_backup is None:
+            status_path.unlink(missing_ok=True)
+        else:
+            _restore_original_bytes(status_path, status_backup)
         raise
 
 

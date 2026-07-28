@@ -1,0 +1,731 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "fix-archive-summary-evidence-path-rewrite-20260728",
+  "contractPath": ".ai/work-items/archive/2026/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "reason": "Defines the process-first archive evidence correction, immutable provenance boundaries, acceptance, scenarios, and complete lifecycle."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "reason": "Records red-first evidence, implementation, traceability, risks, documentation alignment, and verification."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated current Work Item governance status."
+    },
+    {
+      "path": ".ai/cockpit/bandit_low_risk_baseline.json",
+      "reason": "Rebinds the low-risk security baseline after rollback hardening removes one B603 subprocess finding and one B110 silent-exception finding."
+    },
+    {
+      "path": ".ai/work-items/starts/fix-archive-summary-evidence-path-rewrite-20260728.json",
+      "reason": "Binds the dedicated corrective branch to the exact origin/main base."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Migrates exact mutable Summary evidence paths through one recursive archive-time mechanism while preserving immutable execution provenance."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Reproduces WI-10 stale lifecycle evidence, verifies nested migration and immutable provenance, and retains missing-path rejection."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registers the corrective implementation plan."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Adds PLAN-DIRECTIVE-028 from the user instruction through plan, implementation, acceptance, and lifecycle verification."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records RFE-ISSUE-150 and the mandatory process-first pause before resuming WI-10."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-28-archive-summary-evidence-path-rewrite.md",
+      "reason": "Defines root cause, boundaries, implementation sequence, acceptance, and rollback."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-archive-summary-evidence-path-rewrite-20260728.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_pr.py",
+    "tests/test_start_and_archive.py",
+    ".ai/work-items/archive/2026/archive-traceability-path-rewrite-20260728.contract.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:51:07.711386+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "7c2faecc1496d4bd6514fb6d953fff98a71560ec6b5e27c644a1befefb41ed0a",
+      "commandHash": "91124493ed8cc0783fb6d3279cb55d562a24cdeefe49d4ec28513991f3acfaca",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "2e01ae828a802db452d7f17080269d289aaff388657986057ce25710aee339fe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json work item contract check passed: .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json work item contract check passed: .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "outputBytes": 280
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:51:08.083308+00:00",
+      "exitCode": 0,
+      "durationMs": 266,
+      "outputDigest": "9166a6c3f95b7acb99303e370976495951d420c05541d7539771282a35aed558",
+      "commandHash": "507976c3dca1ed6f7605df97e76e4a557f1b0cd0d4fbc12e7c23fc5d934dbeee",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "2e01ae828a802db452d7f17080269d289aaff388657986057ce25710aee339fe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputBytes": 202
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:51:08.426093+00:00",
+      "exitCode": 0,
+      "durationMs": 258,
+      "outputDigest": "932673911b95ad15e0c7c3c514ddde95de9b6bf5bf74fd2701e8f0c4462f9253",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "2e01ae828a802db452d7f17080269d289aaff388657986057ce25710aee339fe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json [warning] restricted_write: .ai/cockpit/bandit_low_risk_baseline.json (.ai/**) - AI governance configuration. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json [warning] restricted_write: .ai/cockpit/bandit_low_risk_baseline.json (.ai/**) - AI governance configuration. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 350
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json SUMMARY=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:51:08.819432+00:00",
+      "exitCode": 0,
+      "durationMs": 307,
+      "outputDigest": "21201159b783434e8adea00b2e6bac14be83c274cb3325835b3aa89da2c33b2e",
+      "commandHash": "be84ebd1471303c1e285b4b90681f243d016c4f3db9a0a91618cd4296de2334a",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "2e01ae828a802db452d7f17080269d289aaff388657986057ce25710aee339fe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix-archive-summary-evidence-path-rewrite-20260728` - Contract Hash: `327b96df342b22a2` - Mode: `code` - notCodable: `False` - Execution Decision: `c",
+      "outputTail": "also removes one B603 finding and one silent-exception B110 finding; no medium or high severity finding is introduced. ## Required Verification - `aiWorkItem`: passed - `aiScope`: passed - `aiGuards`: passed - `aiCheckpoint`: passed - `aiAgentRisk`: not_run - `aiReviewPolicy`: passed - `aiBacktrack`: passed - `aiCoverage`: passed - `aiScenarioCoverage`: passed - `aiGuidelines`: passed - `aiSummary`: not_run - `aiStatus`: not_run - `aiStatusCheck`: not_run - `aiStatusConsistency`: not_run - `aiDiffOwnership`: passed - `quality`: failed ## Review Focus - Schema-defined lifecycle evidence paths migrate before Summary digest and Manifest generation. - The complete verification subtree and ordinary prose remain unchanged. - Genuinely missing evidence remains fail closed. - Late rollback restores original generated Status bytes. - WI-10 is resumed only after this independent corrective closes. ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/bandit_low_risk_baseline.json` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/fix-archive-summary-evidence-path-rewrite-20260728.json` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-28-archive-summary-evidence-path-rewrite.md` — covered by Contract scope - [active_owned] `scripts/ai_archive_work_item.py` — covered by Contract scope - [active_owned] `tests/test_start_and_archive.py` — covered by Contract scope ## Next Action - Run or record required verification: aiAgentRisk",
+      "outputBytes": 6331
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:51:09.048711+00:00",
+      "exitCode": 0,
+      "durationMs": 139,
+      "outputDigest": "40fbbb04c83ac363fc766cbec9bea7f8c5422634fd899e0828ad988b84e09a30",
+      "commandHash": "d26c19de531e6ab3f19ecef31172e6159c0f1892568f8bdbe062a6d43d3ff97d",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "2e01ae828a802db452d7f17080269d289aaff388657986057ce25710aee339fe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json review policy matched 4 path(s) [review] .ai/work-items/starts/fix-archive-summary-evidence-path-rewrite-20260728.json [review] .ai/cockpit/bandit_low_risk_baseline.json [review] .ai/cockpit/current_status.md [review] scripts/ai_archive_work_item.py review focus recorded: 5 item(s) report: target/ai_review_policy_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json review policy matched 4 path(s) [review] .ai/work-items/starts/fix-archive-summary-evidence-path-rewrite-20260728.json [review] .ai/cockpit/bandit_low_risk_baseline.json [review] .ai/cockpit/current_status.md [review] scripts/ai_archive_work_item.py review focus recorded: 5 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 500
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:51:09.270745+00:00",
+      "exitCode": 0,
+      "durationMs": 141,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "2e01ae828a802db452d7f17080269d289aaff388657986057ce25710aee339fe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:51:09.515188+00:00",
+      "exitCode": 0,
+      "durationMs": 132,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "2e01ae828a802db452d7f17080269d289aaff388657986057ce25710aee339fe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json SUMMARY=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:51:09.713525+00:00",
+      "exitCode": 0,
+      "durationMs": 100,
+      "outputDigest": "55c264faf64947871852412adc6c56cab2e916a846d0d95827152db0d4853830",
+      "commandHash": "e93a9e0c468452720c4e7378cda70936c19ed9bd24c28136ddfc395ffd64c0d3",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "2e01ae828a802db452d7f17080269d289aaff388657986057ce25710aee339fe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 323
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json SUMMARY=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:51:09.854616+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "e7dc7c96ba6c372a2a2d584b6991d3a6a9ef1edb1f3961ba6d2c5fefdd5a6dc2",
+      "commandHash": "7cefe3517999966d19cd1706031107843cf1dc7881b62c28f027f95d1a00cf62",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "2e01ae828a802db452d7f17080269d289aaff388657986057ce25710aee339fe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputBytes": 328
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:51:10.248719+00:00",
+      "exitCode": 0,
+      "durationMs": 315,
+      "outputDigest": "d914a19c011dc23e4bc9c4ee714eff038afb8a56d79ecd666bf237d72d3bfe02",
+      "commandHash": "cd2a6fc3d0d859a6b8fbba1628259417070a9f0da5c76e767641af6e076bd455",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "2e01ae828a802db452d7f17080269d289aaff388657986057ce25710aee339fe",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/bandit_low_risk_baseline.json` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/bandit_low_risk_baseline.json` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/fix-archive-summary-evidence-path-rewrite-20260728.json` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-28-archive-summary-evidence-path-rewrite.md` — covered by Contract scope - [active_owned] `scripts/ai_archive_work_item.py` — covered by Contract scope - [active_owned] `tests/test_start_and_archive.py` — covered by Contract scope",
+      "outputBytes": 1229
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:55:41.942530+00:00",
+      "exitCode": 0,
+      "durationMs": 271588,
+      "outputDigest": "7cadbce945aa2df259677dcc7e900cbdb9de4c50c864cb8f73d468b6809a1c73",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "2e01ae828a802db452d7f17080269d289aaff388657986057ce25710aee339fe",
+      "outputSummary": "/usr/bin/make --no-print-directory quality-full /usr/bin/make --no-print-directory quality-fast-static /usr/bin/make --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"511ccaabafdd-local-20260728T125110Z-94338-0\" --run-id \"local\" --output \"target/quality/sessions/511ccaabafdd-local-20260728T125110Z-94338-0/timing/project-format-check.json\" --log \"target/quality/sessi",
+      "outputTail": "py::test_reinstall_preserves_project_glossary_by_default[True-False] 2.00s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 1.96s call tests/test_project_governance.py::test_system_invariants_reject_unpinned_workflow_actions 1.94s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[False-True] 1.90s call tests/test_release_preflight.py::test_candidate_freeze_survives_real_no_ff_merge_and_detached_preflight 1.88s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 1.86s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 1343 passed, 3 warnings in 261.69s (0:04:21) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.xSbyugkuvH/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.xSbyugkuvH/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.xSbyugkuvH/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.xSbyugkuvH/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/511ccaabafdd-local-20260728T125110Z-94338-0/summary.json",
+      "outputBytes": 44298
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json SUMMARY=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:55:44.413729+00:00",
+      "exitCode": 0,
+      "durationMs": 318,
+      "outputDigest": "7091f4754d2447b07e18ad17f6b14a9e629447012915bfc775376497c7968130",
+      "commandHash": "bf63684f740e55f6668d3abd48ecdb3e5766733817a87d0f454d46ffc7994790",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "3284f95ee6564e94ae78b6ebba0b04d14b2cc672fd450a27dd056df780a388a6",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 420
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json SUMMARY=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:55:44.810497+00:00",
+      "exitCode": 0,
+      "durationMs": 317,
+      "outputDigest": "be084f77e885a7c46bd5f5fc9dabb4cb2e007eab9fbcb2aad1c6ba87fc8df857",
+      "commandHash": "eb40d932012f12ad7c5b68a11c5bcb17aaf6c25380755b0e55befe34b871b0bc",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "3284f95ee6564e94ae78b6ebba0b04d14b2cc672fd450a27dd056df780a388a6",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 353
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:55:44.947977+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "3284f95ee6564e94ae78b6ebba0b04d14b2cc672fd450a27dd056df780a388a6",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json SUMMARY=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:55:45.086291+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "16c77bf6f6a0ab8a38233cbadae972ef00f8066ce84aa373fdbdfe5b7019e6a5",
+      "commandHash": "81c82d8aa7fca6cbccac15d6297f08f5dea427090636e22f62816106c300424c",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "3284f95ee6564e94ae78b6ebba0b04d14b2cc672fd450a27dd056df780a388a6",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json --summary .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 333
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json CONTRACT=.ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T12:55:46.174689+00:00",
+      "exitCode": 0,
+      "durationMs": 137,
+      "outputDigest": "0182552b7c38a1c505c60e0e1d12cfac0863d02e46a6d19856973387b525a7cf",
+      "commandHash": "9a71055ce6bee5067c6867d318ccdb1fb50e2f3d56c9c51011d057f7e4a8cee3",
+      "contractHash": "327b96df342b22a2250f0686bf2877e0dfd8f1c42dc836dea1834711c52529ef",
+      "commitSha": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "executionContractPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "worktreeDigest": "0770d31c45268b7b94d6a8652b2849eadd11f9f2fe8b8d1b02384e94bbb50982",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json ai summary check passed: .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json --contract .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json ai summary check passed: .ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+      "outputBytes": 367
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Use exact repository-relative replacement only for schema-defined path values and evidence/path collections, never prose or substring replacement.",
+      "compliant": true,
+      "evidence": "_rewrite_archived_summary_paths recognizes path-valued keys and evidence/path collection keys; regression assertions preserve exact prose, embedded, and unrelated values."
+    },
+    {
+      "guideline": "Keep the complete verification subtree, including future execution provenance fields, unchanged.",
+      "compliant": true,
+      "evidence": "The helper preserves verification structurally, and the archive regression checks existing and future captured fields."
+    },
+    {
+      "guideline": "Make Summary migration part of the existing atomic archive transaction before digest and Manifest generation.",
+      "compliant": true,
+      "evidence": "Migration runs after active files move but before Summary atomic replacement, Archive Manifest hashing, and archive index update."
+    },
+    {
+      "guideline": "Add a regression for every newly covered Summary structure and a negative case for unrelated/missing evidence.",
+      "compliant": true,
+      "evidence": "The archive E2E verifies acceptanceEvidence, scenarioCoverage, documentationAlignment, changedFiles, immutable provenance, and genuine missing-path rejection."
+    },
+    {
+      "guideline": "Record the discovered defect and durable process correction in the remediation plan and traceability map.",
+      "compliant": true,
+      "evidence": "RFE-ISSUE-150, the dedicated corrective plan, registry entry, and PLAN-DIRECTIVE-028 record both directions."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Focused archive and aggregate validation regressions pass; complete quality and real self-archive remain required before review."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "RFE-ISSUE-150",
+      "category": "archive-summary-evidence",
+      "severity": "high",
+      "fact": "WI-10 ai-finish archived its Summary, but three acceptanceEvidence paths remained active and committed check-ai-pr rejected them.",
+      "decision": "Pause WI-10 and fix the generic archive migration process in an independent Work Item without editing immutable archive evidence or weakening validation.",
+      "resolution": "Implemented recursive exact-path migration across mutable Summary evidence with explicit immutable provenance exclusions and red-first regressions.",
+      "status": "resolved_locally",
+      "followUp": "Complete this corrective lifecycle, then regenerate WI-10 archive evidence on the fixed main."
+    },
+    {
+      "issueId": "RFE-ISSUE-150-REVIEW-001",
+      "category": "provenance-boundary",
+      "severity": "high",
+      "fact": "Independent review proved the initial five-key denylist could rewrite exact prose and future verification provenance.",
+      "decision": "Replace the denylist with schema-defined path/evidence conventions and preserve the complete verification subtree.",
+      "resolution": "Added exact prose and futureCapturedOutput negative assertions; structural migration now passes both.",
+      "status": "resolved_locally",
+      "followUp": "Retain structural convention tests in full quality."
+    },
+    {
+      "issueId": "RFE-ISSUE-150-REVIEW-002",
+      "category": "aggregate-pr-evidence",
+      "severity": "high",
+      "fact": "The first regression called acceptance policy directly and did not traverse validate_pr_bundle.",
+      "decision": "Submit the generated archived pair through aggregate bundle validation for both migrated and genuinely missing evidence.",
+      "resolution": "The archive E2E now runs validate_pr_bundle with the real acceptance policy and verifies pass/fail diagnostics.",
+      "status": "resolved_locally",
+      "followUp": "Run committed check-ai-pr after self-archive and commit."
+    },
+    {
+      "issueId": "RFE-ISSUE-150-REVIEW-003",
+      "category": "archive-rollback-status",
+      "severity": "high",
+      "fact": "Late rollback regenerated active Status best-effort and could leave no-active Status after active evidence restoration.",
+      "decision": "Capture generated Status bytes before mutation and restore or remove the file exactly during rollback.",
+      "resolution": "Late index-failure injection now mutates Status to no-active and proves exact original-byte restoration with no partial archive artifacts.",
+      "status": "resolved_locally",
+      "followUp": "Retain rollback injection in full quality."
+    },
+    {
+      "issueId": "RFE-ISSUE-150-ENV-001",
+      "category": "verification-environment",
+      "severity": "medium",
+      "fact": "The first full quality run passed 1340 tests but failed three nested adopter/Make tests because the worktree command-line AI_PYTHON=../../.venv/bin/python override propagated into temporary repositories.",
+      "decision": "Treat the run as failed evidence, do not change product code, and use an ignored worktree-local .venv link so canonical Make defaults run without an inherited AI_PYTHON override.",
+      "resolution": "The exact three failed tests pass in a clean environment without AI_PYTHON; full ai-finish must rerun from the beginning.",
+      "status": "resolved_locally",
+      "followUp": "Require the replacement full quality run to pass before archive."
+    },
+    {
+      "issueId": "RFE-ISSUE-150-BASELINE-001",
+      "category": "verification-baseline",
+      "severity": "medium",
+      "fact": "The clean replacement run passed all 1343 pytest cases but failed check-bandit-baseline because rollback hardening reduced low-risk findings from 114 to 112.",
+      "decision": "Treat baseline drift as failed evidence, verify the exact removed findings, then deliberately rebind the governed baseline within this Contract.",
+      "resolution": "Confirmed that removing the best-effort subprocess rollback removes one B603 subprocess finding and one B110 silent-exception finding; no medium or high severity finding was introduced.",
+      "status": "resolved_locally",
+      "followUp": "Require the rebound baseline and complete quality run to pass before archive."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "future-summary-path-conventions",
+      "detail": "Future mutable Summary path fields must follow the registered path/evidence naming conventions or extend them with a regression; the complete verification subtree is already structurally immutable.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Schema-defined lifecycle evidence paths migrate before Summary digest and Manifest generation.",
+      "The complete verification subtree and ordinary prose remain unchanged.",
+      "Genuinely missing evidence remains fail closed.",
+      "Late rollback restores original generated Status bytes.",
+      "WI-10 is resumed only after this independent corrective closes."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified: only the existing archive transaction behavior changes",
+    "userVisibleOutput": "verified: no command interface or success claim changed",
+    "persistence": "verified: Summary migration and exact pre-transaction Status bytes share the existing rollback-bound archive transaction",
+    "localization": "not_applicable",
+    "generatedArtifacts": "verified: migrated Summary is hashed before Archive Manifest and index generation",
+    "makeEntrypoints": "verified: existing ai-finish, archive-work-item, check-ai-pr, and ai-close-work-item entrypoints remain"
+  },
+  "userCorrectionsCaptured": [
+    "If a process problem is found, fix the process before continuing the current Work Item.",
+    "Archive traceability paths must be rewritten or resolved automatically so the omission cannot recur.",
+    "Every Work Item must use bidirectional instruction-plan-implementation-acceptance traceability.",
+    "Continue without stopping when no new human confirmation is required."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Do not manually repair stale active paths after every archive.",
+      "implementation": "The archive transaction migrates schema-defined mutable Summary evidence paths before hashing, preserves complete verification provenance, and restores Status bytes on rollback.",
+      "acceptance": "Red-first archive E2E, generated-pair aggregate bundle validation, rollback fault injection, full quality, real self-archive, PR, Hosted CI, merge, closure, and branch cleanup."
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "327b96df342b22a2",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "327b96df342b22a2",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    }
+  ],
+  "knownGaps": [
+    "Two full quality runs remain failed evidence: the first inherited an invalid worktree-only AI_PYTHON into nested repositories, and the second exposed an intentional low-risk Bandit reduction that required governed baseline rebinding. A clean replacement full run, real self-archive, committed aggregate PR validation, Hosted CI, merge, closure, and branch cleanup remain to run.",
+    "WI-10 remains paused and must regenerate its archive from the fixed main; its existing local archive commit is not edited in place.",
+    "RFE-ISSUE-147, RFE-ISSUE-082, Japanese assessment, documentation alignment, deprecated-assets cleanup, release, and plan cleanup remain later independent stages."
+  ],
+  "overclaimPrevention": "Do not report this corrective or WI-10 complete until each has separately passed full archive, aggregate PR, Hosted CI, merge, ai-close-work-item, branch deletion, and synchronized-main evidence.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-28T21:19:40+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "docs/superpowers/plans/2026-07-28-archive-summary-evidence-path-rewrite.md"
+        ],
+        "reason": "The comprehensive and corrective plans agree on RFE-ISSUE-150, the process-first pause, immutable archive boundary, and complete lifecycle."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+          ".ai/work-items/archive/2026/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+          "tests/test_start_and_archive.py"
+        ],
+        "reason": "Contract acceptance, Summary claims, and red/green tests describe the same structural exact-path migration, complete verification preservation, aggregate validation, and Status rollback."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "scripts/ai_archive_work_item.py",
+          "docs/reference/remediation-instruction-traceability.json"
+        ],
+        "reason": "No new command or broader archive capability is claimed; the existing archive and PR gates enforce the implemented behavior."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "This internal archive process corrective changes no localized product documentation or runtime messages."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "docs/superpowers/plans/2026-07-28-archive-summary-evidence-path-rewrite.md"
+        ],
+        "reason": "Immutable historical archives remain protected, future provenance-field risk is explicit, and all later release prerequisites remain deferred."
+      }
+    ]
+  },
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "The archive transaction's existing replacement map now migrates schema-defined mutable Summary evidence before hashing while focused tests preserve complete verification provenance, restore Status on rollback, and keep missing evidence fail closed."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Summary acceptanceEvidence entry points to its own active Summary before archive.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_archive_code_item_rewrites_summary_paths"
+      ]
+    },
+    {
+      "scenario": "Path references occur in nested documentationAlignment, scenario evidence, changedFiles, or future Summary objects and arrays.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_archive_code_item_rewrites_summary_paths"
+      ]
+    },
+    {
+      "scenario": "Verification commands and execution provenance contain the same active path as part of immutable text or dedicated provenance fields.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py immutable verification provenance assertions"
+      ]
+    },
+    {
+      "scenario": "An unrelated evidence path is genuinely absent after archive.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py generated archive pair validate_pr_bundle pass/fail assertions"
+      ]
+    },
+    {
+      "scenario": "A failure occurs after the rewritten Summary is prepared but before archive transaction completion.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py archive transaction rollback regressions"
+      ]
+    }
+  ],
+  "acceptanceEvidence": [
+    {
+      "acceptanceId": "A1",
+      "kind": "bug_fix",
+      "failureScenario": "Archive moved the Summary while lifecycle acceptance evidence retained its now-missing active path.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_start_and_archive.py",
+          "locator": "test_archive_code_item_rewrites_summary_paths acceptanceEvidence assertion",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A2",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_start_and_archive.py",
+          "locator": "nested documentationAlignment, scenarioCoverage, changedFiles, acceptanceEvidence, exact prose, and future provenance assertions",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A3",
+      "kind": "bug_fix",
+      "failureScenario": "A broad recursive replacement could rewrite immutable command or execution provenance.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_start_and_archive.py",
+          "locator": "complete verification subtree and exact prose assertions",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A4",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_start_and_archive.py",
+          "locator": "late index failure restores active evidence, traceability, Status bytes, and removes partial archive artifacts",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A5",
+      "kind": "bug_fix",
+      "failureScenario": "Fixing stale archive paths by weakening missing-path validation could allow unsupported evidence claims.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_start_and_archive.py",
+          "locator": "generated archive pair validate_pr_bundle accepts migrated evidence and rejects missing-evidence.json",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A6",
+      "evidence": [
+        {
+          "type": "traceability",
+          "path": "docs/reference/remediation-instruction-traceability.json",
+          "locator": "PLAN-DIRECTIVE-028",
+          "verification": "quality"
+        },
+        {
+          "type": "lifecycle-plan",
+          "path": "docs/superpowers/plans/2026-07-28-archive-summary-evidence-path-rewrite.md",
+          "locator": "Acceptance",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A7",
+      "evidence": [
+        {
+          "type": "security-baseline",
+          "path": ".ai/cockpit/bandit_low_risk_baseline.json",
+          "locator": "count and digest",
+          "verification": "quality"
+        },
+        {
+          "type": "implementation",
+          "path": "scripts/ai_archive_work_item.py",
+          "locator": "rollback restores Status bytes without best-effort subprocess execution",
+          "verification": "quality"
+        }
+      ]
+    }
+  ],
+  "archiveSequence": 638
+}

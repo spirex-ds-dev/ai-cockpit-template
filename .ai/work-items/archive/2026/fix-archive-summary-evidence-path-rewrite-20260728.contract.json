@@ -1,0 +1,273 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-archive-summary-evidence-path-rewrite-20260728",
+  "mode": "code",
+  "title": "fix-archive-summary-evidence-path-rewrite-20260728",
+  "baseCommit": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+  "rawUserRequest": "每个工单执行过程中，如果发现有问题，请记录到文档。（如果是流程问题，应该先改流程，再执行工单）。强制把用户点名文件映射成实现/无变更理由；Summary schema 没有覆盖 hosted 证据结构；归档后没有自动重写或解析 traceability 路径。要不然继续补的时候，还是会有遗漏。确认并继续执行，没有需要我确认的不要停。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-wi10-aggregate-pr-archive-path-failure",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-process-first-archive-summary-path-fix"
+  },
+  "declaredIntent": {
+    "summary": "Make archive-time active-to-archive path migration cover Summary evidence structures so committed aggregate PR validation never depends on a stale active path.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "bf76b5689ebe0b8db4d5b664b86f785ce6600aa8db6403496124e5ae9790ff92"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.contract.json",
+    ".ai/work-items/active/fix-archive-summary-evidence-path-rewrite-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_archive_work_item.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_pr_aggregate.py",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-28-archive-summary-evidence-path-rewrite.md"
+  ],
+  "outOfScope": [
+    "Editing the already-generated WI-10 archive bundle in place",
+    "Weakening check-ai-pr path existence validation or allowing arbitrary missing evidence",
+    "Rewriting verification command strings, executionContractPath fields, or historical archive bundles",
+    "Combining WI-10 documentation changes, RFE-ISSUE-082, release, or later remediation into this PR"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "The archive transaction currently rewrites documentationAlignment and changedFiles but not acceptanceEvidence."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "The committed aggregate PR validator correctly rejects evidence paths that no longer exist."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Existing archive transaction, exact path rewrite, and rollback regression coverage."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/archive-traceability-path-rewrite-20260728.contract.json",
+      "reason": "Predecessor process fix defines exact, immutable-safe active-to-archive path migration boundaries."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative remediation sequence and previously recorded archive-path process defect."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "archive_transaction",
+      "evidence_integrity",
+      "rollback",
+      "aggregate_pr_validation"
+    ],
+    "reason": "Changing archive-time evidence rewriting can corrupt immutable evidence or hide a genuinely missing path unless replacements are exact, structure-aware, and rollback-tested.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized fixing discovered process defects before resuming the blocked Work Item and requested continuous execution."
+  },
+  "preReviewWarnings": [
+    "Confirm exact path-valued evidence is migrated while command and execution provenance strings remain immutable.",
+    "Confirm the archive Manifest digest is calculated after Summary migration.",
+    "Confirm rollback restores active files and leaves no partial archive bundle.",
+    "Confirm an archived Summary with lifecycle acceptance evidence passes committed check-ai-pr without weakening missing-path diagnostics."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Archive rewrites every exact path-valued reference to the current active Contract, Summary, review, success, or outcome file within mutable Summary evidence structures to its generated archive path before hashing and manifest generation.",
+    "A2: acceptanceEvidence, documentationAlignment, changedFiles, scenario evidence, sourcesUsed, generatedFiles, user-correction solidifiedIn/location, nested collections, and future schema-conforming path/evidence fields use one structural migration mechanism rather than a top-level field denylist.",
+    "A3: The complete verification subtree, ordinary prose, embedded or similar strings, unrelated paths, and non-string values remain unchanged.",
+    "A4: If migration or any later archive step fails, active evidence, archive index, generated status bytes, registered traceability, and partial archive artifacts are restored by the existing transaction rollback.",
+    "A5: Red-first regression coverage reproduces WI-10's stale acceptanceEvidence failure and submits the generated archive pair to aggregate PR validation, proving both success and unchanged genuinely missing-path rejection.",
+    "A6: The user instruction, plan, implementation, tests, verification, archive, PR, Hosted CI, merge, closure, and branch cleanup remain bidirectionally traceable.",
+    "A7: The low-risk Bandit baseline is deliberately rebound from 114 to 112 findings because removal of the best-effort subprocess rollback also removes one B603 finding and one silent-exception B110 finding; no medium or high severity finding is introduced."
+  ],
+  "guidelines": [
+    "Use exact repository-relative replacement only for schema-defined path values and evidence/path collections, never prose or substring replacement.",
+    "Keep the complete verification subtree, including future execution provenance fields, unchanged.",
+    "Make Summary migration part of the existing atomic archive transaction before digest and Manifest generation.",
+    "Add a regression for every newly covered Summary structure and a negative case for unrelated/missing evidence.",
+    "Record the discovered defect and durable process correction in the remediation plan and traceability map."
+  ],
+  "intent": {
+    "problem": "WI-10 completed all local checks and ai-finish, but committed check-ai-pr failed because three acceptanceEvidence entries still referenced the active Summary path after that Summary had been moved into archive. The archive implementation already knows every active-to-archive replacement, yet applies them only to documentationAlignment and changedFiles. This field-specific rewrite leaves any other Summary evidence structure vulnerable to the same recurring omission.",
+    "constraints": [
+      "Do not edit WI-10's immutable archive bundle in place.",
+      "Do not weaken check-ai-pr or accept missing evidence paths.",
+      "Preserve verification commands and execution provenance exactly.",
+      "Deliver this process correction as one independent Work Item and PR before resuming WI-10."
+    ],
+    "rationale": "The archive transaction is the only component that knows the complete active-to-archive identity map and controls Summary hashing, Manifest creation, index update, and rollback. Applying one structure-aware exact-path migration there eliminates memory-dependent field lists and prevents future Summary schema additions from recreating the defect."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Summary acceptanceEvidence entry points to its own active Summary before archive.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The archived Summary points to its archived Summary path and committed aggregate PR validation accepts it.",
+      "verificationPlan": "Add an archive fixture reproducing WI-10 lifecycle evidence and run the aggregate PR path validator."
+    },
+    {
+      "scenario": "Path references occur in nested documentationAlignment, scenario evidence, changedFiles, or future Summary objects and arrays.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Every exact path-valued occurrence migrates through the same recursive mechanism.",
+      "verificationPlan": "Add focused nested replacement assertions across representative Summary structures."
+    },
+    {
+      "scenario": "Verification commands and execution provenance contain the same active path as part of immutable text or dedicated provenance fields.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Command text and executionContractPath/executionSummaryPath remain unchanged.",
+      "verificationPlan": "Add negative assertions to the archive transaction regression."
+    },
+    {
+      "scenario": "An unrelated evidence path is genuinely absent after archive.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "check-ai-pr still fails closed with the precise missing-path diagnostic.",
+      "verificationPlan": "Retain and extend aggregate PR negative coverage."
+    },
+    {
+      "scenario": "A failure occurs after the rewritten Summary is prepared but before archive transaction completion.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Rollback restores all mutable and active state with no partial immutable bundle.",
+      "verificationPlan": "Reuse fault injection in archive transaction tests and assert byte-for-byte restoration."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "repository owner",
+    "reason": "The user explicitly authorized continuing all required process corrections before WI-10 and release; this governed baseline reduction is required to close the discovered quality-gate issue without weakening validation."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 639
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-archive-summary-evidence-path-rewrite-20260728.json",
+    "baseCommit": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+    "initialScopeDigest": "e74ff251d6227af707bc8f1b34dcb73f7a64f64a3604de54eb246b9085fc314a",
+    "contractSkeletonDigest": "26a0cbae2efbfee1f9e1185ebbdef9dec93bed2ac421fcfaf2e304560bfcf462"
+  }
+}
