@@ -536,10 +536,11 @@ def test_status_consistency_rejects_live_no_active_changes(tmp_path, monkeypatch
 
     issues = ai_check_status_consistency.validate_status_consistency(status)
 
-    assert (
-        "cockpit status no-active state must not persist changed files; run `make repair-ai-status`"
-        in issues
-    )
+    assert issues == [
+        "no active Work Item has uncommitted paths outside a complete current archive "
+        "transaction: src/app.py; repair-ai-status cannot establish ownership; "
+        "restore the paths or create/resume a Work Item"
+    ]
 
 
 def test_no_active_status_does_not_persist_repository_changes(tmp_path, monkeypatch):
@@ -569,3 +570,26 @@ def test_no_active_status_does_not_persist_repository_changes(tmp_path, monkeypa
     assert "Ownership Preview: `clean`" in text
     assert "intentionally excludes transient worktree changes" in text
     assert "check-ai-pr" in text
+
+
+def test_status_repair_restores_original_bytes_when_generator_fails(tmp_path, monkeypatch):
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    original = b"- State: `no_active_work_item`\n"
+    status.write_bytes(original)
+    monkeypatch.setattr(ai_check_status_consistency, "active_contracts", lambda: [])
+    monkeypatch.setattr(ai_check_status_consistency, "active_summaries", lambda: [])
+    monkeypatch.setattr(
+        ai_check_status_consistency,
+        "live_no_active_changed_files",
+        lambda _status: [],
+    )
+
+    def failed_generator(_command, **_kwargs):
+        status.write_bytes(b"partial generated status\n")
+        return type("Result", (), {"returncode": 2})()
+
+    monkeypatch.setattr(ai_check_status_consistency.subprocess, "run", failed_generator)
+
+    assert ai_check_status_consistency.repair_status(status) == 2
+    assert status.read_bytes() == original

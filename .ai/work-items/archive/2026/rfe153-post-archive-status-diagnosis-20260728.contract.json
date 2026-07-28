@@ -1,0 +1,299 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe153-post-archive-status-diagnosis-20260728",
+  "mode": "code",
+  "title": "Fix post-archive no-active status diagnosis",
+  "baseCommit": "83e382f83028da552a81f00f69a513d8f031b267",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe153-post-archive-status-diagnosis-20260728.contract.json",
+    ".ai/work-items/active/rfe153-post-archive-status-diagnosis-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_check_status_consistency.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_core_gates.py",
+    "tests/test_start_and_archive.py",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    "docs/reference/how-to-read-cockpit-status.md",
+    "docs/reference/how-to-read-cockpit-status.ja.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/specs/2026-07-28-rfe153-post-archive-status-diagnosis-design.md",
+    "docs/superpowers/plans/2026-07-28-rfe153-post-archive-status-diagnosis.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Weakening no-active protection for arbitrary ungoverned worktree changes.",
+    "Changing immutable archive evidence or the archive writer transaction.",
+    "Implementing RFE-ISSUE-152 nested Make propagation or RFE-ISSUE-082 release reconciliation.",
+    "Publishing a release."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_status_consistency.py",
+      "reason": "The validator and repair entrypoint that reproduce the impossible repair recommendation."
+    },
+    {
+      "path": "tests/test_guards_and_status.py",
+      "reason": "Existing no-active live-change and generator behavior regressions."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Existing archive transaction and start-receipt ownership regressions."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe151-calibration-transactional-confirmation-20260728.summary.json",
+      "reason": "Immutable real evidence whose changedFiles list owns the complete post-archive, pre-commit diff."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe151-calibration-transactional-confirmation-20260728.archive-manifest.json",
+      "reason": "Immutable manifest binding the real archived Contract and Summary."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-07-28-no-active-archive-status-diagnostic-design.md",
+      "reason": "Historical RFE-116 design that solved only matching start-receipt ownership and preserved unrelated fail-closed behavior."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative release-blocking process issue history including RFE-106 and RFE-116."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "governance_ownership",
+      "archive_transaction",
+      "diagnostic_accuracy",
+      "repair_idempotency"
+    ],
+    "reason": "A broad exemption could hide ungoverned no-active edits, while the current contradiction makes the canonical post-archive state appear repairable when repair cannot change it.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized permanent process fixes before later Work Items and release, and no new product decision is required."
+  },
+  "preReviewWarnings": [
+    "Only a complete currently changed archive bundle may own post-archive pre-commit paths.",
+    "Archived Summary changedFiles must be used as the path ownership source; scope alone is insufficient.",
+    "Every unrelated, omitted, malformed, or historical-only path must remain fail closed.",
+    "repair-ai-status must not claim it can resolve ungoverned live changes."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "No-active consistency accepts the canonical post-ai-finish, pre-first-commit state only when every live path is owned by a complete currently changed archive transaction and its immutable archived Summary changedFiles.",
+    "A qualifying archive transaction requires the current index update, same-task Start Receipt, Contract, Summary, and valid manifest that binds the exact archive paths; historical files alone never qualify.",
+    "Any live path omitted from the archived Summary, any unrelated path, malformed Summary changedFiles, incomplete bundle, mismatched manifest, or orphan receipt remains fail closed.",
+    "The diagnostic distinguishes stale serialized Status from ungoverned live changes: only stale Status recommends repair; unowned dirt explicitly says repair cannot resolve it and directs the operator to restore changes or create/resume a Work Item.",
+    "repair-ai-status succeeds or is idempotent for a fully owned post-archive transaction and a clean no-active tree, but fails before rewriting Status for unowned live changes.",
+    "Existing one-active-pair repair, stale no-active refresh rollback, archive receipt ownership, and clean post-commit behavior remain unchanged.",
+    "English and Japanese Cockpit/status guidance describe the exact archive-owned exception and actionable failure paths without implying that any dirty no-active tree is acceptable.",
+    "Bidirectional traceability records the RFE-153 extension of RFE-106/RFE-116, its implementation, negative tests, and complete lifecycle.",
+    "Focused regressions, all Contract checks, full quality, archive, aggregate PR validation, Hosted CI, merge, ai-close-work-item, branch cleanup, and synchronized clean main complete before RFE-152 starts."
+  ],
+  "guidelines": [
+    "Use systematic root-cause debugging and red-green-refactor TDD; do not patch the generated Status marker to hide live changes.",
+    "Derive post-archive ownership from the valid manifest-bound archived Summary changedFiles, not from broad path prefixes or Contract scope alone.",
+    "Keep arbitrary no-active live changes fail closed and emit remediation that the named command can actually perform.",
+    "Preserve byte-for-byte Status on a failed repair attempt.",
+    "Keep English and Japanese lifecycle semantics aligned."
+  ],
+  "intent": {
+    "problem": "After RFE-151 ai-finish, check-ai-status-consistency rejected the canonical no-active post-archive pre-commit worktree and recommended repair-ai-status. The generator intentionally writes a deterministic zero-change marker, so repair regenerated the same bytes and failed again. RFE-116 only excluded the matching Start Receipt; implementation and documentation paths listed by the archived Summary remain misclassified.",
+    "constraints": [
+      "The complete archive transaction must remain immutable and must be the only source of temporary ownership.",
+      "No arbitrary dirty no-active worktree may pass.",
+      "The fix must preserve clean post-commit validation and active-pair repair behavior.",
+      "Release and later process Work Items remain blocked until this corrective completes its full lifecycle."
+    ],
+    "rationale": "Classify the entire current change set against a valid changed archive bundle and its archived Summary changedFiles. This makes the canonical archive-before-commit transition machine-verifiable while keeping any unowned path fail closed and replacing impossible repair advice with truthful recovery."
+  },
+  "rawUserRequest": "Complete all release-blocking Work Items through full lifecycle, and when a process issue is found, fix the process before continuing so the error cannot recur. During RFE-151 closure, check-ai-status-consistency rejected the post-ai-finish, pre-first-commit state and instructed repair-ai-status; repair reproduced the same failure. Root cause investigation proved the no-active generator intentionally records zero transient changes while the checker treats the governed archived implementation diff as unowned. Fix this permanently before RFE-152, RFE-ISSUE-082, Japanese assessment, documentation alignment, cleanup, and release.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-complete-release-blocking-process-fixes",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:rfe153-post-archive-status-process-fix-authorized"
+  },
+  "declaredIntent": {
+    "summary": "Make post-archive no-active ownership and repair diagnostics truthful without weakening fail-closed governance.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A complete current archive bundle owns every uncommitted path through its archived Summary changedFiles.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_status_consistency_accepts_summary_owned_post_archive_implementation_changes",
+        "tests/test_core_gates.py::test_status_consistency_accepts_transaction_owned_archive_start_receipt"
+      ],
+      "expected": "No-active consistency and repair accept the governed pre-first-commit transition without serializing transient paths.",
+      "verificationPlan": "Add a red-first fixture with implementation, docs, Start Receipt, archive pair, manifest, index, and matching Summary changedFiles."
+    },
+    {
+      "scenario": "The same bundle has one unrelated or Summary-omitted live path.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_status_consistency_rejects_summary_omitted_path_without_false_repair",
+        "tests/test_guards_and_status.py::test_status_consistency_rejects_live_no_active_changes"
+      ],
+      "expected": "Validation fails closed with an explicit message that repair cannot resolve ownership and leaves Status unchanged.",
+      "verificationPlan": "Add negative fixtures for unrelated source and path omitted from changedFiles, then assert repair performs no generator subprocess."
+    },
+    {
+      "scenario": "The archive bundle is incomplete, historical-only, malformed, or manifest-mismatched.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_status_consistency_rejects_unowned_archive_start_receipt",
+        "tests/test_core_gates.py::test_status_consistency_rejects_receipt_paired_only_with_historical_archive",
+        "tests/test_core_gates.py::test_status_consistency_rejects_malformed_changed_archive_manifest",
+        "tests/test_core_gates.py::test_status_consistency_rejects_malformed_archive_summary_changed_files"
+      ],
+      "expected": "No transaction ownership is granted and every live path remains visible.",
+      "verificationPlan": "Extend existing RFE-116 fixtures with malformed Summary changedFiles and mismatched/current-versus-historical bundle cases."
+    },
+    {
+      "scenario": "The persisted no-active Status itself contains stale changed files or a nonzero count.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_status_consistency_repair_no_active_state",
+        "tests/test_guards_and_status.py::test_no_active_status_does_not_persist_repository_changes",
+        "tests/test_guards_and_status.py::test_status_repair_restores_original_bytes_when_generator_fails"
+      ],
+      "expected": "Validation recommends repair and repair regenerates a deterministic no-active marker.",
+      "verificationPlan": "Preserve and strengthen the existing serialized-status repair regression."
+    },
+    {
+      "scenario": "The archive bundle has been committed and the no-active worktree is clean.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_status_consistency_accepts_clean_post_commit_no_active_state"
+      ],
+      "expected": "Consistency passes with no transaction exception and no stale diagnostic.",
+      "verificationPlan": "Run a clean fixture and the real post-commit repository check."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized permanent process corrections, executable checks, documentation alignment, PR/merge/closure, and branch cleanup before release."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 654
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe153-post-archive-status-diagnosis-20260728.json",
+    "baseCommit": "83e382f83028da552a81f00f69a513d8f031b267",
+    "initialScopeDigest": "b78fabb8de11e3e9b25d0498bbfb4d635aa3c1e7f800d94d47870e9cdbeff821",
+    "contractSkeletonDigest": "4d65bcd3fcc913638b0efa75f851279accd28c3fe846d2506dd11308215d9e22"
+  }
+}

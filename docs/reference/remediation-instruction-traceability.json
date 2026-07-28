@@ -929,6 +929,39 @@
         "make ai-finish TASK=rfe151-calibration-transactional-confirmation-20260728",
         "make ai-close-work-item TASK=rfe151-calibration-transactional-confirmation-20260728"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-030",
+      "summary": "Fix the RFE-153 post-archive, pre-first-commit no-active contradiction by deriving temporary ownership from a current manifest-bound archived Summary changedFiles set, preserving fail-closed behavior for every omitted or unrelated path, and ensuring repair guidance names only actions that can resolve the state.",
+      "planWorkItems": [
+        "RFE-ISSUE-153",
+        "rfe153-post-archive-status-diagnosis-20260728"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/rfe153-post-archive-status-diagnosis-20260728.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_check_status_consistency.py",
+        ".ai/cockpit/README.md",
+        ".ai/cockpit/README.ja.md",
+        "docs/reference/how-to-read-cockpit-status.md",
+        "docs/reference/how-to-read-cockpit-status.ja.md",
+        "docs/superpowers/specs/2026-07-28-rfe153-post-archive-status-diagnosis-design.md",
+        "docs/superpowers/plans/2026-07-28-rfe153-post-archive-status-diagnosis.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_core_gates.py",
+        "tests/test_guards_and_status.py",
+        "tests/test_start_and_archive.py",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        ".venv/bin/python -m pytest -q tests/test_core_gates.py tests/test_guards_and_status.py tests/test_start_and_archive.py",
+        "make check-instruction-traceability",
+        "make quality",
+        "make ai-finish TASK=rfe153-post-archive-status-diagnosis-20260728",
+        "make ai-close-work-item TASK=rfe153-post-archive-status-diagnosis-20260728"
+      ]
     }
   ]
 }
