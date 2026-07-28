@@ -865,6 +865,33 @@
         "make ai-finish TASK=wi10-platform-table-rendering-corrective-20260728",
         "make ai-close-work-item TASK=wi10-platform-table-rendering-corrective-20260728"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-028",
+      "summary": "When WI-10 aggregate PR validation exposes stale active Summary evidence after archive, stop WI-10, fix the archive process first, and prevent recurrence through exact generic Summary evidence migration rather than manual archive edits or weaker validation.",
+      "planWorkItems": [
+        "fix-archive-summary-evidence-path-rewrite-20260728",
+        "RFE-ISSUE-150"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/fix-archive-summary-evidence-path-rewrite-20260728.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_archive_work_item.py",
+        "docs/superpowers/plans/2026-07-28-archive-summary-evidence-path-rewrite.md",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_start_and_archive.py",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        ".venv/bin/python -m pytest -q tests/test_start_and_archive.py tests/test_pr_aggregate.py",
+        "make check-instruction-traceability",
+        "make quality",
+        "make ai-finish TASK=fix-archive-summary-evidence-path-rewrite-20260728",
+        "make ai-close-work-item TASK=fix-archive-summary-evidence-path-rewrite-20260728"
+      ]
     }
   ]
 }

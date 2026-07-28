@@ -8,11 +8,13 @@ from pathlib import Path
 
 import pytest
 import ai_archive_work_item
+import ai_check_pr
 import ai_common
 import ai_check_scope
 import ai_resume_work_item
 import ai_start
 import ai_start_receipt
+from ai_acceptance_policy import validate_acceptance_evidence
 from ai_resume_work_item import ResumeError
 from ai_resume_work_item import resume_contract
 from ai_start_receipt import build_receipt
@@ -762,6 +764,7 @@ def archive_contract(mode: str = "review") -> dict[str, object]:
 
 
 def archive_summary(*, verification_result: str = "passed") -> dict[str, object]:
+    active_summary = ".ai/work-items/active/task.summary.json"
     return {
         "summaryVersion": 2,
         "workItemId": "task",
@@ -772,6 +775,38 @@ def archive_summary(*, verification_result: str = "passed") -> dict[str, object]
             {"path": ".ai/work-items/active/task.review.json", "reason": "review"},
         ],
         "sourcesUsed": ["scripts/ai_archive_work_item.py"],
+        "acceptanceEvidence": [
+            {
+                "acceptanceId": "A1",
+                "kind": "lifecycle",
+                "evidence": [
+                    {
+                        "type": "lifecycle",
+                        "path": active_summary,
+                        "locator": "verification and hosted evidence",
+                        "verification": "quality",
+                    }
+                ],
+            }
+        ],
+        "scenarioCoverage": [
+            {
+                "scenario": "Archived evidence remains resolvable.",
+                "required": True,
+                "status": "verified",
+                "evidence": [active_summary],
+            }
+        ],
+        "userCorrectionSolidification": [
+            {
+                "correction": "Archive evidence paths.",
+                "solidifiedIn": [
+                    active_summary,
+                    {"nested": [active_summary]},
+                ],
+                "location": ".ai/work-items/active/task.contract.json",
+            }
+        ],
         "documentationAlignment": {
             "status": "aligned",
             "checkedAt": "2026-07-28T00:00:00+00:00",
@@ -814,10 +849,16 @@ def archive_summary(*, verification_result: str = "passed") -> dict[str, object]
                 "check": "aiSummary",
                 "result": "passed",
                 "worktreeDigest": "a" * 64,
+                "command": active_summary,
+                "executionContractPath": ".ai/work-items/active/task.contract.json",
+                "executionSummaryPath": active_summary,
+                "outputSummary": active_summary,
+                "outputTail": active_summary,
+                "futureCapturedOutput": active_summary,
             },
         ],
         "unknownsRemaining": [],
-        "risk": {"level": "low", "detail": "fixture"},
+        "risk": {"level": "low", "detail": active_summary},
         "generatedFiles": [],
         "destructiveChanges": [],
         "observedIssues": [],
@@ -1152,7 +1193,9 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     outcome = active / "task.outcome.json"
     markdown = active / "task.outcome.md"
     events = active / "task.events.jsonl"
-    contract.write_text(json.dumps(archive_contract("code")), encoding="utf-8")
+    contract_payload = archive_contract("code")
+    contract_payload["acceptance"] = ["A1: Archived lifecycle evidence remains resolvable."]
+    contract.write_text(json.dumps(contract_payload), encoding="utf-8")
     summary.write_text(json.dumps(archive_summary()), encoding="utf-8")
     review.write_text(json.dumps({"workItemId": "task", "result": "ok"}), encoding="utf-8")
     success.write_text(
@@ -1211,6 +1254,86 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
         evidence.endswith("/archive/2026/task.contract.json")
         for check in data["documentationAlignment"]["checks"]
         for evidence in check["evidence"]
+    )
+    archived_summary_path = ".ai/work-items/archive/2026/task.summary.json"
+    assert data["acceptanceEvidence"][0]["evidence"][0]["path"] == archived_summary_path
+    assert data["scenarioCoverage"][0]["evidence"] == [archived_summary_path]
+    solidification = data["userCorrectionSolidification"][0]
+    assert solidification["solidifiedIn"] == [
+        archived_summary_path,
+        {"nested": [archived_summary_path]},
+    ]
+    assert solidification["location"] == ".ai/work-items/archive/2026/task.contract.json"
+    immutable_verification = data["verification"][1]
+    assert immutable_verification["command"] == ".ai/work-items/active/task.summary.json"
+    assert (
+        immutable_verification["executionContractPath"]
+        == ".ai/work-items/active/task.contract.json"
+    )
+    assert (
+        immutable_verification["executionSummaryPath"] == ".ai/work-items/active/task.summary.json"
+    )
+    assert immutable_verification["outputSummary"] == ".ai/work-items/active/task.summary.json"
+    assert immutable_verification["outputTail"] == ".ai/work-items/active/task.summary.json"
+    assert (
+        immutable_verification["futureCapturedOutput"] == ".ai/work-items/active/task.summary.json"
+    )
+    assert data["risk"]["detail"] == ".ai/work-items/active/task.summary.json"
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    changed = [item["path"] for item in data["changedFiles"]]
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    monkeypatch.setattr(ai_check_pr, "changed_paths", lambda *_args, **_kwargs: changed)
+    monkeypatch.setattr(
+        ai_check_pr,
+        "changed_name_status",
+        lambda *_args, **_kwargs: [("A", path) for path in changed],
+    )
+    monkeypatch.setattr(
+        ai_check_pr,
+        "run_git",
+        lambda *_args: type(
+            "Result",
+            (),
+            {"returncode": 0, "stdout": "", "stderr": ""},
+        )(),
+    )
+    monkeypatch.setattr(ai_check_pr, "validate_contract", lambda _contract: [])
+    monkeypatch.setattr(
+        ai_check_pr,
+        "validate_summary",
+        lambda checked_summary, checked_contract, **_kwargs: validate_acceptance_evidence(
+            checked_contract,
+            checked_summary,
+            checked_summary["verification"],
+            project_root=tmp_path,
+        ),
+    )
+    aggregate_issues = ai_check_pr.validate_pr_bundle(
+        "a" * 40,
+        [archived_summary.with_name("task.contract.json")],
+    )
+    assert not aggregate_issues, aggregate_issues
+    assert (
+        validate_acceptance_evidence(
+            contract_payload,
+            data,
+            data["verification"],
+            project_root=tmp_path,
+        )
+        == []
+    )
+    missing_evidence = json.loads(json.dumps(data))
+    missing_evidence["acceptanceEvidence"][0]["evidence"][0]["path"] = "missing-evidence.json"
+    archived_summary.write_text(json.dumps(missing_evidence), encoding="utf-8")
+    aggregate_missing_issues = ai_check_pr.validate_pr_bundle(
+        "a" * 40,
+        [archived_summary.with_name("task.contract.json")],
+    )
+    assert any(
+        "acceptanceEvidence[0].evidence[0].path does not exist" in issue
+        for issue in aggregate_missing_issues
     )
     assert all(
         "/archive/" in item["path"] or item["path"] == ".ai/cockpit/current_status.md"
@@ -1317,6 +1440,15 @@ def test_archive_failure_restores_registered_traceability_bytes(tmp_path, monkey
     active_contract = ".ai/work-items/active/task.contract.json"
     original = json.dumps({"contractPaths": [active_contract]}, indent=2).encode() + b"\n"
     traceability.write_bytes(original)
+    status = tmp_path / ".ai" / "cockpit" / "current_status.md"
+    status.parent.mkdir(parents=True)
+    original_status = b"active status before archive\n"
+    status.write_bytes(original_status)
+    monkeypatch.setattr(
+        ai_archive_work_item,
+        "_generate_status",
+        lambda _command: status.write_bytes(b"no active work item\n"),
+    )
     monkeypatch.setattr(
         ai_archive_work_item,
         "_write_archive_index",
@@ -1329,7 +1461,9 @@ def test_archive_failure_restores_registered_traceability_bytes(tmp_path, monkey
     assert contract.read_bytes() == original_contract
     assert summary.read_bytes() == original_summary
     assert traceability.read_bytes() == original
+    assert status.read_bytes() == original_status
     assert not list(archive.glob("*/task.contract.json"))
+    assert not list(archive.glob("*/task.summary.json"))
     assert not list(archive.glob("*/task.archive-manifest.json"))
 
 
