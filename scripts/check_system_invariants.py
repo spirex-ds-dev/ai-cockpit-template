@@ -250,10 +250,11 @@ def invariant_issues(root: Path = ROOT) -> list[str]:
         *sorted((root / "examples").glob("*/README.md")),
     ]
     documented_targets: set[str] = set()
+    make_prefix = r"make[ \t]+(?:(?:-n|--dry-run|--just-print|--recon)[ \t]+)*"
     for path in documentation:
         text = path.read_text(encoding="utf-8")
-        documented_targets.update(re.findall(r"(?m)^[ \t]*make[ \t]+([A-Za-z0-9_.-]+)", text))
-        documented_targets.update(re.findall(r"`make[ \t]+([A-Za-z0-9_.-]+)", text))
+        documented_targets.update(re.findall(rf"(?m)^[ \t]*{make_prefix}([A-Za-z0-9_.-]+)", text))
+        documented_targets.update(re.findall(rf"`{make_prefix}([A-Za-z0-9_.-]+)", text))
     for target in documented_targets:
         if target not in targets:
             issues.append(f"documentation references missing Make target: {target}")

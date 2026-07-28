@@ -137,6 +137,23 @@
       "resolution": "Open; the corrective must complete PR, merge, ai-close-work-item, branch cleanup, and main synchronization before this performance Work Item resumes.",
       "status": "open",
       "followUp": "Add an explicit generated resume receipt or lineage record with old base, new base, predecessor closure, branch identity, timestamp, and Contract binding; arbitrary manual base changes remain fail closed."
+    },
+    {
+      "issueId": "RFE-ISSUE-144",
+      "category": "documentation-command-parser",
+      "severity": "low",
+      "stage": "hosted-snapshot-fast-policy",
+      "fact": "The first measurement snapshot quality run treated the documented command make -n quality as a reference to a nonexistent Make target named -n and stopped before heavy tests.",
+      "evidence": [
+        "scripts/check_system_invariants.py",
+        "tests/test_system_invariants.py",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+        "target/quality/current-session.txt"
+      ],
+      "decision": "Fix the parser with a red-first regression so recognized no-argument dry-run options are skipped and the real target remains checked; do not hide the defect by rewriting the documentation.",
+      "resolution": "The focused regression and make check-ai-system-invariants pass with the corrected parser.",
+      "status": "resolved",
+      "followUp": "Keep future option forms explicit; options that consume arguments require separate parser coverage before use in documented command extraction."
     }
   ],
   "residualRisks": [

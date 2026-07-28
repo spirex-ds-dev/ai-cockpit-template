@@ -92,3 +92,18 @@ def test_system_invariants_reject_archive_summary_invalid_version(tmp_path, monk
     assert _archive_summary_version_issues(issues) == [
         f"{archive_summary.relative_to(copy)}: archived Summary summaryVersion must be absent or 1/2 when present"
     ]
+
+
+def test_system_invariants_ignore_make_options_before_documented_target(tmp_path, monkeypatch):
+    copy = _copy_repository_tree(tmp_path)
+    (copy / "docs" / "make-options.md").write_text(
+        "Use `make -n quality` to inspect the dry-run graph.\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        check_system_invariants, "exercise_installer", lambda *_args, **_kwargs: None
+    )
+
+    issues = check_system_invariants.invariant_issues(copy)
+
+    assert "documentation references missing Make target: -n" not in issues
