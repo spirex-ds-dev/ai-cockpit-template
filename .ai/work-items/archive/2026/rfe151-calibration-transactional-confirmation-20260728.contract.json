@@ -1,0 +1,324 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe151-calibration-transactional-confirmation-20260728",
+  "mode": "code",
+  "title": "Make calibration readiness, confirmation, and persistence fail closed",
+  "rawUserRequest": "Complete the recorded release-blocking RFE-ISSUE-151 before RFE-152, RFE-ISSUE-082, Japanese assessment, documentation alignment, cleanup, and release. Unknown answers must machine-block readiness and activation; reviewer and owner confirmations must bind an immutable Candidate revision and SHA-256 digest; the complete ten-stage calibration checklist must have a structured evidence location; Active and Session persistence must roll back or provide an equivalent recovery guarantee; regressions must cover all-unknown input, stale confirmation, Candidate changes after confirmation, and Session-save failure. The user authorized continuous execution of every corrective Work Item through its full Contract, implementation, verification, PR, Hosted CI, merge, ai-close-work-item, and branch-cleanup lifecycle.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-complete-ordered-remediation-and-release",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:rfe151-user-authorized-release-blocking-corrective"
+  },
+  "declaredIntent": {
+    "summary": "Make Calibration readiness, Candidate confirmation, checklist evidence, and Active/Session persistence machine-enforced and fail closed.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "3a09fc880683991762eb9e38806e5b74eb02821a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe151-calibration-transactional-confirmation-20260728.contract.json",
+    ".ai/work-items/active/rfe151-calibration-transactional-confirmation-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/sbom.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_calibrate.py",
+    "scripts/ai_calibration_wizard.py",
+    "scripts/check_docs_metadata.py",
+    "tests/test_calibration_session.py",
+    "tests/test_calibration_wizard.py",
+    "tests/test_docs_metadata.py",
+    "docs/reference/calibration-session.md",
+    "docs/getting-started/installation.md",
+    "docs/getting-started/installation.zh-CN.md",
+    "docs/getting-started/installation.ja.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/specs/2026-07-28-rfe151-calibration-transaction-design.md",
+    "docs/superpowers/plans/2026-07-28-rfe151-calibration-transaction.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Proving reviewer or owner identity without an external trusted identity provider.",
+    "Changing Project Profile field semantics unrelated to Calibration Session evidence and activation.",
+    "Implementing RFE-ISSUE-152 nested Make entrypoint propagation or RFE-ISSUE-082 release-source reconciliation.",
+    "Claiming multi-file filesystem replacement is physically atomic; the required guarantee is exact rollback or an explicitly blocked recoverable state.",
+    "Publishing a release."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_calibrate.py",
+      "reason": "Core CalibrationSession currently marks Unknown answers complete, generates Candidate only during activation, stores digest-free confirmations, and writes Active before the CLI saves Session."
+    },
+    {
+      "path": "scripts/ai_calibration_wizard.py",
+      "reason": "Wizard adds some Unknown guards but persists Active and Session in separate non-transactional operations, leaving the core CLI path weaker."
+    },
+    {
+      "path": "tests/test_calibration_session.py",
+      "reason": "Current core regressions do not cover all-unknown readiness, Candidate digest binding, stale confirmation, or Session-save rollback."
+    },
+    {
+      "path": "tests/test_calibration_wizard.py",
+      "reason": "Current wizard regressions verify visible Unknown blocking and Active preservation on simulated activation failure, but not Candidate/session transaction integrity."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "The authoritative English beginner checklist records the present persistence limitations and defines all seven structured columns required for each of ten stages."
+    },
+    {
+      "path": "docs/reference/calibration-session.md",
+      "reason": "Current lifecycle reference describes answer/check/confirmation persistence and the old Active-only atomic replacement boundary."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "RFE-ISSUE-151 records the release-blocking root causes, required regression scenarios, and serial position."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "calibration_readiness",
+      "confirmation_binding",
+      "persistent_evidence",
+      "transaction_rollback",
+      "backward_compatibility"
+    ],
+    "reason": "A false-ready Calibration Session can activate unsupported project boundaries. A stale confirmation or partial Active/Session write can make the repository claim a human-approved configuration that was not reviewed.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized the ordered release-blocking corrective sequence and instructed execution to continue without stopping unless a genuine new decision is required."
+  },
+  "preReviewWarnings": [
+    "Review compatibility for existing schemaVersion 1 Calibration Sessions and ensure migration cannot convert Unknown or incomplete evidence into readiness.",
+    "Review exact byte restoration for both pre-existing and previously absent Active/Session files.",
+    "Review that Candidate digest binding does not imply trusted actor identity."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The core CalibrationSession, direct CLI, and Wizard all treat every Unknown answer and stale stage as machine-blocking for review, full self-check, Candidate preparation, confirmation, and activation.",
+    "Every one of the ten stages has a schema-defined structured checklist evidence record for observed evidence, answer type/value/reason, Candidate change, intended Owner and Reviewer, PASS/STOP decision, decision reason, and retry step; missing required evidence blocks Candidate preparation.",
+    "Candidate preparation occurs before human confirmation and records an immutable canonical configuration, monotonically increasing revision, and SHA-256 digest that are visible in persisted Session output.",
+    "Reviewer and Owner confirmation each require and persist the exact current Candidate revision and digest; a mismatch, stale confirmation, or Candidate change after either confirmation fails closed and invalidates prior confirmations.",
+    "Activation recomputes and validates Candidate identity, full self-check, Governance Simulation, both digest-bound confirmations, and zero Unknown/stale/incomplete checklist blockers before writing.",
+    "Active configuration and activated Session are committed as one recoverable transaction: any Active replace, Session replace, or post-Active Session-save failure restores both paths byte-for-byte to their transaction-start state, including deleting files that did not previously exist.",
+    "Existing schemaVersion 1 Sessions remain readable through an explicit fail-closed migration that adds missing evidence as incomplete and never grants readiness or preserves unbound confirmation as valid.",
+    "Red-first regressions cover all ten stages answered Unknown, incomplete checklist evidence, stale confirmation digest, Candidate changed after confirmation, Active replace failure, Session replace failure after Active replacement, rollback restoration failure reporting, and successful CLI/Wizard activation.",
+    "English, Chinese, and Japanese beginner installation guidance and the Calibration Session reference describe the new machine-enforced boundary, Candidate prepare/digest confirmation sequence, structured evidence location, and rollback guarantee without claiming trusted actor identity.",
+    "Focused tests, all Contract checks, full quality, archive, aggregate PR validation, Hosted CI, merge, ai-close-work-item, local/remote branch cleanup, and synchronized clean main complete before RFE-152 starts."
+  ],
+  "guidelines": [
+    "Use red-green-refactor TDD and observe each required negative scenario fail before changing production behavior.",
+    "Keep fail-closed checks in CalibrationSession so direct CLI and Wizard cannot diverge.",
+    "Use canonical JSON bytes for Candidate SHA-256 and never accept a confirmation that omits or mismatches the visible revision and digest.",
+    "Preserve original path bytes before a two-file activation transaction and report rollback failure without claiming consistency.",
+    "Keep English, Chinese, and Japanese semantics aligned and do not promote phase records to trusted actor identity evidence."
+  ],
+  "intent": {
+    "problem": "Calibration can currently report complete with Unknown answers, record human phase confirmations without binding the reviewed Candidate, omit most checklist evidence from the Session schema, and leave Active/Session inconsistent when Session persistence fails after Active replacement.",
+    "constraints": [
+      "Release remains blocked until RFE-151 completes its independent lifecycle.",
+      "Unknown, stale, migrated-incomplete, digest-mismatched, or partially persisted state must never become ready or active.",
+      "Existing Session evidence must remain readable without silently manufacturing new evidence or approval.",
+      "Reviewer/Owner phase records do not prove external actor identity.",
+      "Implementation must remain Python-standard-library compatible and usable through both direct CLI and Wizard."
+    ],
+    "rationale": "Move all readiness predicates into the core state machine, materialize and hash the Candidate before confirmation, bind every confirmation to that immutable identity, and treat Active plus Session persistence as a rollback-capable transaction so every entrypoint enforces the same evidence boundary."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "All ten stages are answered with answerType=unknown.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_session.py::test_all_unknown_answers_block_core_readiness_and_candidate_preparation",
+        "tests/test_calibration_wizard.py::test_blocking_unknown_fails_closed"
+      ],
+      "expected": "Every stage remains explicitly blocked; review, full self-check, Candidate preparation, confirmation, and activation all fail closed.",
+      "verificationPlan": "Add red-first core and CLI regressions that answer all ten stages Unknown and assert no ready review, prepared Candidate, confirmation, Active write, or activated Session."
+    },
+    {
+      "scenario": "Ten answers exist but one or more structured checklist evidence fields are absent or STOP.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_session.py::test_candidate_requires_complete_structured_checklist_evidence"
+      ],
+      "expected": "The persisted evidence gap is named by stage and field and blocks Candidate preparation.",
+      "verificationPlan": "Add a regression that completes answers without evidence, then progressively fills records and proves only ten complete PASS records permit preparation."
+    },
+    {
+      "scenario": "A confirmation supplies a stale or incorrect Candidate revision or SHA-256 digest.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_session.py::test_confirmation_binds_candidate_revision_and_digest_and_mutation_invalidates"
+      ],
+      "expected": "Confirmation is rejected and no confirmation record is persisted.",
+      "verificationPlan": "Prepare a Candidate, call each confirmation phase with mismatched revision/digest values, and assert fail-closed state and unchanged confirmation map."
+    },
+    {
+      "scenario": "A stage answer or checklist evidence changes after one or both confirmations.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_session.py::test_confirmation_binds_candidate_revision_and_digest_and_mutation_invalidates",
+        "tests/test_calibration_session.py::test_checklist_evidence_change_after_confirmation_invalidates_candidate"
+      ],
+      "expected": "The Candidate becomes stale, previous confirmations are invalidated, and activation requires a newly prepared Candidate plus two new matching confirmations.",
+      "verificationPlan": "Confirm one Candidate, mutate an upstream answer and a checklist evidence field in separate regressions, and assert old digest rejection and explicit re-preparation."
+    },
+    {
+      "scenario": "Active replacement succeeds but Session replacement fails.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_session.py::test_session_replace_failure_restores_active_and_session_bytes",
+        "tests/test_calibration_session.py::test_session_failure_removes_transaction_paths_that_were_initially_absent",
+        "tests/test_calibration_session.py::test_active_replace_failure_preserves_both_original_files"
+      ],
+      "expected": "Both Active and Session paths are restored byte-for-byte to the transaction-start state and activation reports failure without an active claim.",
+      "verificationPlan": "Inject a failure at the second replace for both pre-existing and absent files and compare exact bytes/existence before and after."
+    },
+    {
+      "scenario": "A legacy schemaVersion 1 Session contains Unknown answers or unbound confirmations.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_session.py::test_schema_v1_migration_is_fail_closed_for_unknown_and_unbound_confirmation"
+      ],
+      "expected": "Loading preserves historical data but migrates missing checklist/Candidate binding as incomplete, clears or invalidates unbound confirmation authority, and remains blocked.",
+      "verificationPlan": "Load representative v1 JSON with complete-status Unknown and confirmation records, then assert schema migration facts and blocked readiness."
+    },
+    {
+      "scenario": "A fully evidenced Candidate is prepared, separately confirmed by reviewer and owner against the exact identity, and transactionally activated.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_session.py::test_successful_activation_persists_matching_candidate_identity",
+        "tests/test_calibration_session.py::test_session_persists_and_cli_runs_adopter_flow",
+        "tests/test_calibration_wizard.py::test_separate_confirmations_and_activation_failure"
+      ],
+      "expected": "Active and Session persist matching sessionId, Candidate revision, digest, configuration, and activated state through both direct CLI and Wizard.",
+      "verificationPlan": "Extend in-process CLI and Wizard happy-path tests to inspect both persisted files and their shared Candidate identity."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized permanent workflow fixes, documentation alignment, release-blocking corrective implementation, PR/merge/closure, and cleanup before publication."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 653
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe151-calibration-transactional-confirmation-20260728.json",
+    "baseCommit": "3a09fc880683991762eb9e38806e5b74eb02821a",
+    "initialScopeDigest": "b3b72e73d4e0898a91950f057aa644fe763c41f26ac96416914df6d785f51d90",
+    "contractSkeletonDigest": "371061dfe992218228847295854ed9df7f97e48729a5176d418629abd1ceafad"
+  }
+}

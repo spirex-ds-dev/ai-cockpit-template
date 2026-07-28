@@ -4,13 +4,15 @@
 from __future__ import annotations
 
 import argparse
+import copy
+import hashlib
 import json
 import os
 import tempfile
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from ai_project_profile import BOUNDARY_KEYS, FACT_KEYS, load_profile
 
@@ -29,6 +31,8 @@ CALIBRATION_STAGES = (
 )
 ANSWER_TYPES = ("yes_no", "alternative_input", "unknown", "not_applicable")
 CONFIRMATION_PHASES = ("reviewer", "owner")
+SESSION_SCHEMA_VERSION = 2
+CHECKLIST_DECISIONS = ("PASS", "STOP")
 
 
 def _now() -> str:
@@ -37,6 +41,32 @@ def _now() -> str:
 
 def _evidence(kind: str, detail: str, *, status: str = "passed") -> dict[str, str]:
     return {"kind": kind, "status": status, "detail": detail, "recordedAt": _now()}
+
+
+def _empty_checklist_evidence() -> dict[str, Any]:
+    return {
+        "observedEvidence": [],
+        "candidateChange": None,
+        "owner": None,
+        "reviewer": None,
+        "decision": None,
+        "decisionReason": None,
+        "retryStep": None,
+        "recordedAt": None,
+    }
+
+
+def _canonical_json_bytes(value: Any) -> bytes:
+    return json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+
+
+def _json_document_bytes(value: Any) -> bytes:
+    return json.dumps(value, ensure_ascii=False, indent=2).encode("utf-8") + b"\n"
 
 
 class CalibrationError(ValueError):
@@ -68,13 +98,14 @@ class CalibrationSession:
                     "answer": None,
                     "reason": None,
                 },
+                "checklistEvidence": _empty_checklist_evidence(),
                 "evidence": [],
             }
             for index, stage in enumerate(CALIBRATION_STAGES)
         ]
         return cls(
             {
-                "schemaVersion": 1,
+                "schemaVersion": SESSION_SCHEMA_VERSION,
                 "sessionId": session_id,
                 "language": "ja",
                 "state": "in_progress",
@@ -83,9 +114,16 @@ class CalibrationSession:
                 "events": [_evidence("session_started", "Calibration session created.")],
                 "checks": {},
                 "confirmations": {},
-                "candidate": {"status": "not_prepared", "configuration": None},
+                "candidate": {
+                    "status": "not_prepared",
+                    "revision": 0,
+                    "digestAlgorithm": "sha256",
+                    "digest": None,
+                    "configuration": None,
+                },
                 "active": {"status": "unchanged", "configuration": None},
                 "staleStages": [],
+                "legacyConfirmationHistory": [],
             }
         )
 
@@ -100,6 +138,132 @@ class CalibrationSession:
             raise CalibrationError("resume the paused session before continuing")
         if self.data["state"] in {"activated", "aborted"}:
             raise CalibrationError(f"session is already {self.data['state']}")
+
+    def _invalidate_candidate(self, detail: str) -> None:
+        candidate = self.data.get("candidate", {})
+        if candidate.get("status") in {"prepared", "activated"}:
+            candidate["status"] = "stale"
+            candidate["staleReason"] = detail
+            self.data["events"].append(_evidence("candidate_stale", detail, status="warning"))
+        if self.data.get("confirmations"):
+            self.data["events"].append(
+                _evidence(
+                    "confirmations_invalidated",
+                    detail,
+                    status="warning",
+                )
+            )
+        self.data["confirmations"] = {}
+        for check in ("full_self_check", "governance_simulation"):
+            if check in self.data.get("checks", {}):
+                self.data["checks"][check] = {
+                    "status": "blocked",
+                    "evidence": _evidence(
+                        check,
+                        f"Re-run after calibration changed: {detail}",
+                        status="blocked",
+                    ),
+                }
+        self.data.pop("review", None)
+
+    def blocking_fields(self) -> dict[str, list[str]]:
+        blockers: dict[str, list[str]] = {}
+        for stage in self.data["stages"]:
+            fields: list[str] = []
+            checklist = stage.get("checklist", {})
+            answer_type = checklist.get("answerType")
+            if answer_type not in ANSWER_TYPES:
+                fields.append("answerType")
+            if not isinstance(checklist.get("answer"), str) or not checklist["answer"].strip():
+                fields.append("answer")
+            if answer_type == "unknown":
+                fields.append("unknown")
+            if answer_type == "not_applicable" and (
+                not isinstance(checklist.get("reason"), str) or not checklist["reason"].strip()
+            ):
+                fields.append("reason")
+            if stage.get("status") == "stale" or stage["id"] in self.data.get("staleStages", []):
+                fields.append("stale")
+
+            record = stage.get("checklistEvidence", {})
+            observed = record.get("observedEvidence")
+            if (
+                not isinstance(observed, list)
+                or not observed
+                or any(not isinstance(item, str) or not item.strip() for item in observed)
+            ):
+                fields.append("observedEvidence")
+            for field in (
+                "candidateChange",
+                "owner",
+                "reviewer",
+                "decisionReason",
+            ):
+                if not isinstance(record.get(field), str) or not record[field].strip():
+                    fields.append(field)
+            decision = record.get("decision")
+            if decision not in CHECKLIST_DECISIONS:
+                fields.append("decision")
+            if decision == "STOP":
+                fields.append("decision")
+                if not isinstance(record.get("retryStep"), str) or not record["retryStep"].strip():
+                    fields.append("retryStep")
+            if fields:
+                blockers[stage["id"]] = sorted(set(fields))
+        return blockers
+
+    def _require_no_blockers(self) -> None:
+        blockers = self.blocking_fields()
+        if blockers:
+            details = "; ".join(
+                f"{stage}: {', '.join(fields)}" for stage, fields in blockers.items()
+            )
+            raise CalibrationError(f"blocking calibration evidence: {details}")
+
+    def record_checklist_evidence(
+        self,
+        stage_id: str,
+        *,
+        observed_evidence: list[str],
+        candidate_change: str,
+        owner: str,
+        reviewer: str,
+        decision: str,
+        decision_reason: str,
+        retry_step: str = "",
+    ) -> None:
+        self._require_live()
+        stage = self._stage(stage_id)
+        if (
+            not isinstance(observed_evidence, list)
+            or not observed_evidence
+            or any(not isinstance(item, str) or not item.strip() for item in observed_evidence)
+        ):
+            raise CalibrationError("observed evidence must contain non-empty values")
+        for name, value in (
+            ("candidate change", candidate_change),
+            ("owner", owner),
+            ("reviewer", reviewer),
+            ("decision reason", decision_reason),
+        ):
+            if not isinstance(value, str) or not value.strip():
+                raise CalibrationError(f"{name} must not be empty")
+        if decision not in CHECKLIST_DECISIONS:
+            raise CalibrationError(f"decision must be one of {CHECKLIST_DECISIONS}")
+        if decision == "STOP" and not retry_step.strip():
+            raise CalibrationError("STOP requires a retry step")
+        stage["checklistEvidence"] = {
+            "observedEvidence": [item.strip() for item in observed_evidence],
+            "candidateChange": candidate_change.strip(),
+            "owner": owner.strip(),
+            "reviewer": reviewer.strip(),
+            "decision": decision,
+            "decisionReason": decision_reason.strip(),
+            "retryStep": retry_step.strip() or None,
+            "recordedAt": _now(),
+        }
+        self.data["events"].append(_evidence("checklist_evidence_recorded", stage_id))
+        self._invalidate_candidate(f"checklist evidence changed for {stage_id}")
 
     def answer(
         self,
@@ -119,24 +283,31 @@ class CalibrationSession:
             raise CalibrationError("yes_no answers must be Y or N")
         if answer_type == "not_applicable" and not reason.strip():
             raise CalibrationError("Not Applicable requires a reason")
-        previous = stage["checklist"].get("answer")
+        previous = (
+            stage["checklist"].get("answerType"),
+            stage["checklist"].get("answer"),
+            stage["checklist"].get("reason"),
+        )
         stage["checklist"] = {
             "answerTypes": list(ANSWER_TYPES),
             "answer": answer,
             "reason": reason or None,
         }
         stage["checklist"]["answerType"] = answer_type
-        stage["status"] = "complete"
+        stage["status"] = "blocked" if answer_type == "unknown" else "complete"
         stage["evidence"].append(_evidence("answer", f"{stage_id}: {answer_type}={answer}"))
         self.data["events"].append(_evidence("answer_recorded", stage_id))
         position = stage["position"]
-        if previous is not None and previous != answer:
+        current = (answer_type, answer, reason or None)
+        if previous[1] is not None and previous != current:
             for downstream in self.data["stages"][position + 1 :]:
                 if downstream["status"] == "complete":
                     downstream["status"] = "stale"
                 if downstream["id"] not in self.data["staleStages"]:
                     self.data["staleStages"].append(downstream["id"])
             self.data["events"].append(_evidence("dependency_stale", stage_id, status="warning"))
+        if previous != current:
+            self._invalidate_candidate(f"answer changed for {stage_id}")
         if position + 1 < len(self.data["stages"]):
             self.data["currentStage"] = self.data["stages"][position + 1]["id"]
             if self.data["stages"][position + 1]["status"] == "pending":
@@ -162,10 +333,16 @@ class CalibrationSession:
         self.data["events"].append(_evidence("back", previous["id"]))
 
     def review(self) -> dict[str, Any]:
-        incomplete = [stage["id"] for stage in self.data["stages"] if stage["status"] != "complete"]
+        blocking_fields = self.blocking_fields()
+        incomplete = [
+            stage["id"]
+            for stage in self.data["stages"]
+            if stage["status"] != "complete" or stage["id"] in blocking_fields
+        ]
         review = {
             "status": "blocked" if incomplete else "ready",
             "incompleteStages": incomplete,
+            "blockingFields": blocking_fields,
             "evidence": _evidence("review", "Calibration review generated."),
         }
         self.data["review"] = review
@@ -216,18 +393,22 @@ class CalibrationSession:
         )
         return self._check(
             "stage_self_check",
-            stage["status"] == "complete",
+            stage["status"] == "complete" and stage["id"] not in self.blocking_fields(),
             f"Stage {stage['id']} checklist state.",
         )
 
     def full_self_check(self) -> dict[str, Any]:
-        complete = all(stage["status"] == "complete" for stage in self.data["stages"])
+        complete = (
+            all(stage["status"] == "complete" for stage in self.data["stages"])
+            and not self.blocking_fields()
+        )
         return self._check("full_self_check", complete, "All ten stages are complete.")
 
     def governance_simulation(self) -> dict[str, Any]:
         passed = (
             all(stage["status"] == "complete" for stage in self.data["stages"])
             and not self.data["staleStages"]
+            and not self.blocking_fields()
         )
         return self._check(
             "governance_simulation",
@@ -235,64 +416,180 @@ class CalibrationSession:
             "Candidate governance checks use recorded calibration answers.",
         )
 
-    def confirm(self, phase: str) -> None:
+    def prepare_candidate(self) -> dict[str, Any]:
+        self._require_live()
+        self._require_no_blockers()
+        if self.data.get("review", {}).get("status") != "ready":
+            raise CalibrationError("ready review is required before Candidate preparation")
+        for check in ("full_self_check", "governance_simulation"):
+            if self.data.get("checks", {}).get(check, {}).get("status") != "passed":
+                raise CalibrationError(
+                    f"{check.replace('_', ' ')} must pass before Candidate preparation"
+                )
+        previous_revision = self.data.get("candidate", {}).get("revision", 0)
+        revision = previous_revision + 1 if isinstance(previous_revision, int) else 1
+        configuration = {
+            "sessionId": self.data["sessionId"],
+            "language": self.data["language"],
+            "stages": [
+                {
+                    "id": stage["id"],
+                    "answer": copy.deepcopy(stage["checklist"]),
+                    "evidence": copy.deepcopy(stage["checklistEvidence"]),
+                }
+                for stage in self.data["stages"]
+            ],
+        }
+        digest = hashlib.sha256(_canonical_json_bytes(configuration)).hexdigest()
+        candidate = {
+            "status": "prepared",
+            "revision": revision,
+            "digestAlgorithm": "sha256",
+            "digest": digest,
+            "configuration": configuration,
+            "preparedAt": _now(),
+        }
+        self.data["candidate"] = candidate
+        self.data["confirmations"] = {}
+        self.data["events"].append(
+            _evidence("candidate_prepared", f"revision={revision}; sha256={digest}")
+        )
+        return copy.deepcopy(candidate)
+
+    def confirm(
+        self,
+        phase: str,
+        *,
+        candidate_revision: int,
+        candidate_digest: str,
+    ) -> None:
         if phase not in CONFIRMATION_PHASES:
             raise CalibrationError(f"confirmation phase must be one of {CONFIRMATION_PHASES}")
         if self.data.get("checks", {}).get("full_self_check", {}).get("status") != "passed":
             raise CalibrationError("full self-check must pass before human confirmation")
+        candidate = self.data.get("candidate", {})
+        if candidate.get("status") != "prepared":
+            raise CalibrationError("a prepared Candidate is required before human confirmation")
+        if candidate_revision != candidate.get("revision"):
+            raise CalibrationError("Candidate revision does not match the prepared Candidate")
+        if candidate_digest != candidate.get("digest"):
+            raise CalibrationError("Candidate digest does not match the prepared Candidate")
         self.data["confirmations"][phase] = {
             "status": "confirmed",
+            "candidateRevision": candidate_revision,
+            "candidateDigest": candidate_digest,
             "evidence": _evidence("human_confirmation", phase),
         }
 
-    def activate(self, *, active_path: Path, fail: bool = False) -> None:
+    def activation_configuration(self) -> dict[str, Any]:
+        self._require_live()
+        self._require_no_blockers()
         if set(self.data.get("confirmations", {})) != set(CONFIRMATION_PHASES):
             raise CalibrationError("both human confirmation phases are required")
+        if self.data.get("checks", {}).get("full_self_check", {}).get("status") != "passed":
+            raise CalibrationError("full self-check must pass before activation")
         if self.data.get("checks", {}).get("governance_simulation", {}).get("status") != "passed":
             raise CalibrationError("governance simulation must pass before activation")
-        candidate = {
-            "sessionId": self.data["sessionId"],
-            "language": self.data["language"],
-            "answers": {stage["id"]: stage["checklist"] for stage in self.data["stages"]},
+        candidate = self.data.get("candidate", {})
+        if candidate.get("status") != "prepared":
+            raise CalibrationError("a prepared Candidate is required before activation")
+        configuration = candidate.get("configuration")
+        if not isinstance(configuration, dict):
+            raise CalibrationError("prepared Candidate configuration is missing")
+        digest = hashlib.sha256(_canonical_json_bytes(configuration)).hexdigest()
+        if digest != candidate.get("digest"):
+            raise CalibrationError("prepared Candidate digest is stale or invalid")
+        for phase in CONFIRMATION_PHASES:
+            confirmation = self.data["confirmations"][phase]
+            if (
+                confirmation.get("candidateRevision") != candidate.get("revision")
+                or confirmation.get("candidateDigest") != digest
+            ):
+                raise CalibrationError(
+                    f"{phase} confirmation is not bound to the current Candidate"
+                )
+        return {
+            **copy.deepcopy(configuration),
+            "candidateRevision": candidate["revision"],
+            "candidateDigest": digest,
         }
-        if fail:
-            self.data["candidate"] = {
-                "status": "blocked",
-                "configuration": candidate,
-                "evidence": _evidence(
-                    "candidate_activation", "Activation failed closed.", status="blocked"
-                ),
-            }
-            raise CalibrationError("candidate activation failed closed")
-        active_path.parent.mkdir(parents=True, exist_ok=True)
-        fd, temporary = tempfile.mkstemp(prefix="calibration-active-", dir=str(active_path.parent))
-        try:
-            with os.fdopen(fd, "w", encoding="utf-8") as handle:
-                json.dump(candidate, handle, ensure_ascii=False, indent=2)
-                handle.write("\n")
-            os.replace(temporary, active_path)
-        except Exception:
-            Path(temporary).unlink(missing_ok=True)
-            self.data["candidate"] = {
-                "status": "blocked",
-                "configuration": candidate,
-                "evidence": _evidence(
-                    "candidate_activation", "Activation failed closed.", status="blocked"
-                ),
-            }
-            raise
-        self.data["candidate"] = {
-            "status": "activated",
-            "configuration": candidate,
-            "evidence": _evidence("candidate_activation", "Candidate atomically activated."),
-        }
-        self.data["active"] = {"status": "active", "configuration": candidate}
-        self.data["state"] = "activated"
+
+
+def _write_temporary(path: Path, content: bytes, prefix: str) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(prefix=prefix, dir=str(path.parent))
+    temporary_path = Path(temporary)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+    except Exception:
+        temporary_path.unlink(missing_ok=True)
+        raise
+    return temporary_path
+
+
+def _atomic_write(
+    path: Path,
+    content: bytes,
+    *,
+    replace_fn: Callable[[str | Path, str | Path], None] = os.replace,
+) -> None:
+    temporary = _write_temporary(path, content, "calibration-write-")
+    try:
+        replace_fn(temporary, path)
+    except Exception:
+        temporary.unlink(missing_ok=True)
+        raise
 
 
 def save_session(session: CalibrationSession, path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(session.data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    _atomic_write(path, _json_document_bytes(session.data))
+
+
+def _migrate_session(value: dict[str, Any]) -> dict[str, Any]:
+    version = value.get("schemaVersion")
+    if version == SESSION_SCHEMA_VERSION:
+        return value
+    if version != 1:
+        raise CalibrationError("unsupported calibration session schema or language")
+    migrated = copy.deepcopy(value)
+    migrated["schemaVersion"] = SESSION_SCHEMA_VERSION
+    legacy_confirmations = copy.deepcopy(migrated.get("confirmations", {}))
+    migrated["legacyConfirmationHistory"] = (
+        [{"migratedAt": _now(), "records": legacy_confirmations}] if legacy_confirmations else []
+    )
+    migrated["confirmations"] = {}
+    for stage in migrated.get("stages", []):
+        stage.setdefault("checklistEvidence", _empty_checklist_evidence())
+        if stage.get("checklist", {}).get("answerType") == "unknown":
+            stage["status"] = "blocked"
+    old_candidate = migrated.get("candidate", {})
+    migrated["candidate"] = {
+        "status": "not_prepared",
+        "revision": int(old_candidate.get("revision", 0)) if isinstance(old_candidate, dict) else 0,
+        "digestAlgorithm": "sha256",
+        "digest": None,
+        "configuration": None,
+    }
+    if migrated.get("state") == "activated":
+        migrated["state"] = "paused"
+        legacy_active = migrated.get("active")
+        migrated["active"] = {
+            "status": "legacy_unverified",
+            "configuration": copy.deepcopy(
+                legacy_active.get("configuration") if isinstance(legacy_active, dict) else None
+            ),
+        }
+    migrated.setdefault("events", []).append(
+        _evidence(
+            "session_schema_migrated",
+            "schemaVersion 1 migrated fail closed to schemaVersion 2.",
+            status="warning",
+        )
+    )
+    return migrated
 
 
 def load_session(path: Path) -> CalibrationSession:
@@ -300,11 +597,107 @@ def load_session(path: Path) -> CalibrationSession:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise CalibrationError(f"failed to read session: {exc}") from exc
-    if value.get("schemaVersion") != 1 or value.get("language") != "ja":
+    if not isinstance(value, dict) or value.get("language") != "ja":
         raise CalibrationError("unsupported calibration session schema or language")
+    value = _migrate_session(value)
     if [stage.get("id") for stage in value.get("stages", [])] != list(CALIBRATION_STAGES):
         raise CalibrationError("calibration session must contain exactly ten ordered stages")
     return CalibrationSession(value)
+
+
+def _restore_snapshot(
+    path: Path,
+    existed: bool,
+    content: bytes,
+    *,
+    replace_fn: Callable[[str | Path, str | Path], None],
+) -> None:
+    if existed:
+        _atomic_write(path, content, replace_fn=replace_fn)
+    else:
+        path.unlink(missing_ok=True)
+
+
+def persist_activation(
+    session: CalibrationSession,
+    *,
+    session_path: Path,
+    active_path: Path,
+    replace_fn: Callable[[str | Path, str | Path], None] = os.replace,
+) -> None:
+    active_configuration = session.activation_configuration()
+    before_data = copy.deepcopy(session.data)
+    final_data = copy.deepcopy(before_data)
+    final_data["candidate"]["status"] = "activated"
+    final_data["candidate"]["activatedAt"] = _now()
+    final_data["candidate"]["evidence"] = _evidence(
+        "candidate_activation",
+        "Candidate and Session persisted through the rollback transaction.",
+    )
+    final_data["active"] = {
+        "status": "active",
+        "configuration": copy.deepcopy(active_configuration),
+    }
+    final_data["state"] = "activated"
+    final_data["events"].append(
+        _evidence("candidate_activated", f"revision={active_configuration['candidateRevision']}")
+    )
+
+    snapshots = {
+        active_path: (
+            active_path.exists(),
+            active_path.read_bytes() if active_path.exists() else b"",
+        ),
+        session_path: (
+            session_path.exists(),
+            session_path.read_bytes() if session_path.exists() else b"",
+        ),
+    }
+    active_temporary: Path | None = None
+    session_temporary: Path | None = None
+    attempted_replacements: list[Path] = []
+    try:
+        active_temporary = _write_temporary(
+            active_path,
+            _json_document_bytes(active_configuration),
+            "calibration-active-",
+        )
+        session_temporary = _write_temporary(
+            session_path,
+            _json_document_bytes(final_data),
+            "calibration-session-",
+        )
+        attempted_replacements.append(active_path)
+        replace_fn(active_temporary, active_path)
+        attempted_replacements.append(session_path)
+        replace_fn(session_temporary, session_path)
+    except Exception as exc:
+        if active_temporary is not None:
+            active_temporary.unlink(missing_ok=True)
+        if session_temporary is not None:
+            session_temporary.unlink(missing_ok=True)
+        rollback_errors: list[str] = []
+        for path in attempted_replacements:
+            existed, content = snapshots[path]
+            try:
+                _restore_snapshot(
+                    path,
+                    existed,
+                    content,
+                    replace_fn=replace_fn,
+                )
+            except Exception as rollback_exc:
+                rollback_errors.append(f"{path}: {rollback_exc}")
+        session.data = before_data
+        if rollback_errors:
+            raise CalibrationError(
+                "activation transaction failed and rollback failed; consistency is unproved: "
+                + "; ".join(rollback_errors)
+            ) from exc
+        raise CalibrationError(
+            f"activation transaction failed; Active and Session restored: {exc}"
+        ) from exc
+    session.data = final_data
 
 
 def quote(value: str) -> str:
@@ -428,6 +821,7 @@ def main() -> int:
         choices=(
             "start",
             "answer",
+            "record-evidence",
             "back",
             "review",
             "pause",
@@ -435,6 +829,7 @@ def main() -> int:
             "stage-self-check",
             "full-self-check",
             "simulate",
+            "prepare-candidate",
             "confirm",
             "activate",
         ),
@@ -445,9 +840,17 @@ def main() -> int:
     session_parser.add_argument("--answer")
     session_parser.add_argument("--answer-type", default="alternative_input", choices=ANSWER_TYPES)
     session_parser.add_argument("--reason", default="")
+    session_parser.add_argument("--observed-evidence", action="append", default=[])
+    session_parser.add_argument("--candidate-change")
+    session_parser.add_argument("--owner")
+    session_parser.add_argument("--reviewer")
+    session_parser.add_argument("--decision", choices=CHECKLIST_DECISIONS)
+    session_parser.add_argument("--decision-reason")
+    session_parser.add_argument("--retry-step", default="")
     session_parser.add_argument("--phase", choices=CONFIRMATION_PHASES)
+    session_parser.add_argument("--candidate-revision", type=int)
+    session_parser.add_argument("--candidate-digest")
     session_parser.add_argument("--active", default=".ai/calibration/active.json")
-    session_parser.add_argument("--fail", action="store_true")
     args = parser.parse_args()
     if args.command == "generate":
         root = Path(args.root).resolve()
@@ -466,6 +869,32 @@ def main() -> int:
                 session.answer(
                     args.stage, args.answer, answer_type=args.answer_type, reason=args.reason
                 )
+            elif args.action == "record-evidence":
+                if not all(
+                    (
+                        args.stage,
+                        args.observed_evidence,
+                        args.candidate_change,
+                        args.owner,
+                        args.reviewer,
+                        args.decision,
+                        args.decision_reason,
+                    )
+                ):
+                    raise CalibrationError(
+                        "record-evidence requires stage, observed evidence, Candidate change, "
+                        "owner, reviewer, decision, and decision reason"
+                    )
+                session.record_checklist_evidence(
+                    args.stage,
+                    observed_evidence=args.observed_evidence,
+                    candidate_change=args.candidate_change,
+                    owner=args.owner,
+                    reviewer=args.reviewer,
+                    decision=args.decision,
+                    decision_reason=args.decision_reason,
+                    retry_step=args.retry_step,
+                )
             elif args.action == "back":
                 session.back()
             elif args.action == "review":
@@ -480,13 +909,26 @@ def main() -> int:
                 session.full_self_check()
             elif args.action == "simulate":
                 session.governance_simulation()
+            elif args.action == "prepare-candidate":
+                session.prepare_candidate()
             elif args.action == "confirm":
-                if not args.phase:
-                    raise CalibrationError("confirm requires --phase")
-                session.confirm(args.phase)
+                if not args.phase or args.candidate_revision is None or not args.candidate_digest:
+                    raise CalibrationError(
+                        "confirm requires phase, Candidate revision, and Candidate digest"
+                    )
+                session.confirm(
+                    args.phase,
+                    candidate_revision=args.candidate_revision,
+                    candidate_digest=args.candidate_digest,
+                )
             elif args.action == "activate":
-                session.activate(active_path=Path(args.active), fail=args.fail)
-        save_session(session, session_path)
+                persist_activation(
+                    session,
+                    session_path=session_path,
+                    active_path=Path(args.active),
+                )
+        if args.action != "activate":
+            save_session(session, session_path)
         print(json.dumps(session.data, ensure_ascii=False, indent=2))
         return 0
     except CalibrationError as exc:

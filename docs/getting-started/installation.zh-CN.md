@@ -379,14 +379,15 @@ value 必须是 `Y` 或 `N`；
 提供正确值的 **alternative input**；
 缺乏证据并阻断 readiness 的 **unknown**；附书面理由的 **not applicable**。
 
-<!-- calibration-runtime-boundary: unknown-not-machine-blocked,confirmations-not-candidate-bound -->
-通俗地说：工具目前不会因为 Unknown 自动停止；确认记录也没有绑定到“这次准确
-设置提案”的数字指纹。
+<!-- calibration-runtime-boundary: unknown-machine-blocked,confirmations-candidate-bound -->
+通俗地说：只要存在 Unknown、过期、不完整或 STOP 证据，工具就会自动停止。
+Reviewer 与 Owner 的 phase record 都必须写明已准备 Candidate 的精确 revision 和
+SHA-256 digest。
 
-当前实现边界：Session 目前会把 `unknown` 记录为 complete，Reviewer/Owner 确认记录
-也没有绑定不可变 Candidate digest。因此 STOP 是必须执行的人/代理手顺，尚不是机器
-强制保证。后续 runtime corrective 发布前，只要存在 `unknown` 就不得执行确认或
-激活；独立激活批准前必须显示并重新核对持久化 Session ID 与 SHA-256。
+当前实现边界：Session 会保留并机器阻断每一项 Unknown；确认前先准备一个 canonical
+Candidate。回答或证据发生变化后，Candidate 和两个 phase record 都会失效；只有两项
+记录都匹配当前 Candidate identity 才允许激活。这些 phase record 只把决定绑定到内容，
+不会验证人员身份，也不会单独证明角色分离。
 
 ```text
 从刚同步的默认分支创建 configure_ai_cockpit，并依次引导十个 Calibration 阶段。
@@ -450,21 +451,20 @@ verification 证据，并同时显示两个位置。若没有合法 schema 字�
 填写副本；只有持久化 Session 确认已记录回答后，才把该行标为完成。只是提出问题
 不代表完成。事实或负责人缺失时填写 `unknown` 并选择 STOP。
 
-<!-- calibration-session-persistence-boundary: answer-only,work-item-evidence -->
+<!-- calibration-session-persistence-boundary: structured-checklist-evidence,candidate-bound -->
 
 复制下面提示词，你不需要寻找或编辑治理文件：
 
 ```text
-找到 active configure_ai_cockpit Work Item 及其持久化 Calibration Session。
-使用下面十行清单作为审核格式。当前阶段只显示一行通俗填写草案，包含观察证据、
-回答类型/值、proposed configuration 变化、Owner/Reviewer 与 PASS/STOP。先显示
-准备写入 Session 的准确回答和 configuration 变化，然后等待我决定。我决定后，
-只能通过已安装的 Calibration Session 入口持久化回答类型/值与理由。其他列只能
-映射到 schema 支持的 Work Item review、acceptance 或 verification 证据，并显示
-Session 路径、只读 review 输出与这些 Work Item 位置。任何列没有支持的位置时，
-报告持久化缺口并 STOP；不得发明 JSON 字段。不要让我手工编辑 JSON。unknown
-未解决时不得前进；不得编造证据、激活 Candidate、commit、push、创建或合并 PR、
-release 或关闭 Work Item。
+找到 active configure_ai_cockpit Work Item 及持久化 Calibration Session。使用
+下面十行清单作为审核格式。当前阶段只显示一行通俗填写草案：观察证据、回答
+type/value/reason、proposed Candidate change、预定 Owner/Reviewer，以及带理由与
+重试步骤的 PASS/STOP。先显示准确 Session record 并等待我决定。我决定后，通过
+已安装 Calibration Session 接口的 `answer` 保存回答，通过 `record-evidence`
+保存其余各列。显示 Session 路径和只读 review 输出，证明 schema 已支持整行记录。
+字段缺失、决定为 STOP 或回答为 Unknown 时必须 STOP。不要让我手工编辑 JSON；
+不得编造证据、prepare/activate Candidate、commit、push、创建或合并 PR、release
+或关闭 Work Item。
 ```
 
 <!-- calibration-completion-checklist: state,evidence,answer,candidate,owner-reviewer,pass-stop -->
@@ -494,57 +494,62 @@ PASS/STOP。需要写入时，只针对这份准确 CI diff 询问一个 yes/no 
 
 ### 单独审核并批准激活
 
-十行全部勾选只表示 Candidate 可审核，不代表已经激活。Session 只保存 `reviewer`
-与 `owner` 两个 phase record，不保存或证明人员身份。先识别 Reviewer 与 Owner，并
-确认人员/角色证据将保存到哪个 Work Item 审核位置；然后复制下面提示词，分别取得
-并记录两项决定：
+十行全部勾选只表示 Candidate 可审核，不代表已经激活。Session 为每行保存完整的
+七列结构化证据，但 `reviewer` 与 `owner` phase 名称仍不证明人员身份。先识别
+Reviewer 与 Owner，确认人员/角色外部证据将保存到哪个 Work Item 审核位置，再让
+代理依次执行 review、full self-check、Governance Simulation 与
+`prepare-candidate`。然后复制下面提示词，分别取得并记录两项决定：
 
 <!-- calibration-confirmation-boundary: phase-records,external-actor-identity -->
 ```text
-不要激活。显示当前 Session ID/路径/SHA-256 与 proposed configuration。由我这个
-当前操作者先把审核材料交给已识别 Reviewer，再把该人员的明确决定和身份
-证据交回给你；收到前必须等待。随后我会对已识别 Owner 单独重复同一步骤。只有我
-交回本人明确决定后才记录对应 Session phase。显示两个持久化 phase record，以及 Work Item 中
-证明人员身份和角色分离的外部证据。明确 Session 自身不绑定身份或 Candidate digest。
-任何决定缺失、过期、拒绝或来自同一人时 STOP。
+不要激活。通过已安装 Calibration Session 接口，显示持久化 Session ID/路径、
+prepared Candidate revision、SHA-256 digest、准确 configuration 与十行结构化
+checklist evidence。由我先把这份准确审核材料交给已识别 Reviewer，再交回该人员的
+明确决定与外部身份凭据；收到前必须等待。随后对已识别 Owner 单独重复。只有收到
+本人决定后，才能用刚才显示的准确 revision/digest 记录对应 phase。显示两个
+digest-bound phase record，以及 Work Item 中证明人员身份和角色分离的外部证据。
+明确 Session 绑定的是决定与 Candidate 内容，不会验证人员身份。决定缺失、过期、
+拒绝、digest 不一致或来自同一人时 STOP。
 ```
 
 再复制下面的只读计划提示词：
 
 <!-- calibration-activation: plan-before-approval -->
 ```text
-先不要激活。显示持久化 Calibration Session ID、路径与 SHA-256；由回答推导的
-proposed configuration；当前 Active configuration；所有 `unknown`；full self-check
-与 Governance Simulation 结果；Reviewer/Owner 各自的确认记录；激活将替换的文件、
-原子写入行为及失败恢复。明确说明当前确认记录没有机器绑定 Candidate digest。每项
-标为 Observed、Inferred 或 Unknown。最后只问一个 yes/no：证据是否完整，以及是否
-进入针对这个准确 Session hash 与 proposed configuration 的独立激活批准步骤。明确
-回答 yes 也不授权激活。不得修改文件、commit、push、创建或合并 PR、release 或
-关闭 Work Item。
+先不要激活。显示持久化 Calibration Session ID/路径、prepared Candidate revision
+与 SHA-256、准确 configuration、当前 Active configuration、所有结构化 checklist
+blocker、full self-check 与 Governance Simulation 结果，以及 Reviewer/Owner
+confirmation 中的 revision/digest。显示同一 rollback transaction 将替换的 Active
+和 Session 路径、当前标识，以及 Active 失败、Active 替换后 Session 失败或 rollback
+失败时的准确恢复行为。每项标为 Observed、Inferred 或 Unknown。最后只问一个
+yes/no：证据是否完整，以及是否进入针对这个准确 Candidate identity 的独立激活
+批准步骤。明确回答 yes 也不授权激活。不得修改文件、commit、push、创建或合并
+PR、release 或关闭 Work Item。
 ```
 
-PASS 表示 Session hash 仍是最新、两项确认记录都存在、proposed configuration 与
-已记录回答一致，且没有任何 `unknown`。在 runtime binding 实现前，这是人工
-fail-closed guard。否则 STOP，返回相应清单行。PASS 后才复制下面独立的限定批准：
+PASS 表示两项确认记录都匹配 prepared Candidate revision/digest，configuration
+包含十行回答与证据，且没有 Unknown、STOP、stale stage 或缺失字段。runtime 现已
+机器执行这些条件；是否批准仍由人审核决定。否则 STOP，返回相应清单行。PASS 后
+才复制下面独立的限定批准：
 
 <!-- calibration-activation: bounded-approval -->
 ```text
-我只批准刚刚审核的准确 Calibration Session ID、SHA-256 与 proposed configuration
-的本次激活。激活前立即重新计算 Session SHA-256；hash 有变化或任一回答为 `unknown`
-时 STOP。只能通过已安装的 Calibration Session 入口激活。显示激活前后 Active
-configuration 标识、Active 文件替换结果、独立的 Session 保存结果、持久化
-Session review 与验证结果，然后停止。Active 文件替换之前或替换过程中失败时，
-必须保留并核实原 Active configuration。若 Active 已替换但 Session 保存或后续
-验证失败，显示 Active/Session 不一致，报告 STOP，联系仓库 owner，不得声称已经
-回滚，也不得用较弱证据重试。不得 commit、push、创建或合并 PR、release 或关闭
-Work Item。
+我只批准刚刚审核的准确 Calibration Session ID、prepared Candidate revision、
+SHA-256 digest 与 configuration 的本次激活。激活前立即重新计算 Candidate digest；
+digest 有变化、confirmation 不匹配或仍有 checklist blocker 时 STOP。只能通过已
+安装的 Calibration Session transaction 激活。显示激活前后 Active 与 Session
+标识、两者持久化的同一 Candidate identity 与验证结果，然后停止。Active 或 Session
+任一持久化失败时，核实两条路径都恢复到 transaction 开始前的准确字节或不存在
+状态。rollback 失败时报告 STOP 与“consistency unproved”，联系仓库 owner，不得
+用较弱证据重试。不得 commit、push、创建或合并 PR、release 或关闭 Work Item。
 ```
 
-预期结果：可审核 Candidate 与 inventory，没有隐藏 Unknown。只有 Active 文件替换
-是原子的；Session 保存是独立步骤。两份记录验证一致后才算成功。这不等于企业合规
-或 runtime sandbox。
+预期结果：prepared 且 digest-bound 的 Candidate 与完整 inventory，没有隐藏
+Unknown。Active 与 Session 使用两文件 rollback transaction；这是恢复保证，不是
+物理多文件原子性声明。两份记录带有同一 Candidate identity 才算成功。这不会验证
+人员身份，也不等于企业合规或 runtime sandbox。
 
-<!-- calibration-activation-atomicity: active-file-only,session-save-separate -->
+<!-- calibration-activation-atomicity: active-session-rollback-transaction,candidate-digest-bound -->
 
 <!-- novice-stage: run-local-checks -->
 ## 10. 执行本地检查

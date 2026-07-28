@@ -169,6 +169,9 @@ CALIBRATION_ANSWER_TYPES_MARKER = (
 )
 CALIBRATION_YES_NO_BOUNDARY = "<!-- calibration-yes-no: type=yes_no,values=Y-or-N -->"
 CALIBRATION_RUNTIME_BOUNDARY = (
+    "<!-- calibration-runtime-boundary: unknown-machine-blocked,confirmations-candidate-bound -->"
+)
+CALIBRATION_OBSOLETE_RUNTIME_BOUNDARY = (
     "<!-- calibration-runtime-boundary: "
     "unknown-not-machine-blocked,confirmations-not-candidate-bound -->"
 )
@@ -192,10 +195,17 @@ CALIBRATION_CI_GAP_BOUNDARY = (
     "<!-- calibration-ci-gap-boundary: plan,approval,implementation,verification -->"
 )
 CALIBRATION_SESSION_PERSISTENCE_BOUNDARY = (
-    "<!-- calibration-session-persistence-boundary: answer-only,work-item-evidence -->"
+    "<!-- calibration-session-persistence-boundary: "
+    "structured-checklist-evidence,candidate-bound -->"
 )
 CALIBRATION_ACTIVATION_ATOMICITY_BOUNDARY = (
-    "<!-- calibration-activation-atomicity: active-file-only,session-save-separate -->"
+    "<!-- calibration-activation-atomicity: "
+    "active-session-rollback-transaction,candidate-digest-bound -->"
+)
+CALIBRATION_TRANSACTION_RUNTIME_TERMS = (
+    "`record-evidence`",
+    "`prepare-candidate`",
+    "consistency unproved",
 )
 TAG_PINNED_RELEASE_METADATA_TEMPLATE = (
     "https://raw.githubusercontent.com/spirex-ds-dev/"
@@ -976,6 +986,11 @@ def beginner_installation_errors(root: Path) -> list[str]:
                 errors.append(
                     f"{installation_relative}: missing current Calibration Session runtime boundary"
                 )
+            if CALIBRATION_OBSOLETE_RUNTIME_BOUNDARY in text:
+                errors.append(
+                    f"{installation_relative}: obsolete non-enforced Calibration runtime "
+                    "boundary must be removed"
+                )
             if INSTALLATION_PLAN_RELEASE_BINDING not in text:
                 errors.append(
                     f"{installation_relative}: installation plan must bind verified "
@@ -996,6 +1011,12 @@ def beginner_installation_errors(root: Path) -> list[str]:
                 )
             if CALIBRATION_ACTIVATION_ATOMICITY_BOUNDARY not in text:
                 errors.append(f"{installation_relative}: missing Active/Session atomicity boundary")
+            for runtime_term in CALIBRATION_TRANSACTION_RUNTIME_TERMS:
+                if runtime_term not in text:
+                    errors.append(
+                        f"{installation_relative}: missing Calibration transaction "
+                        f"runtime term: {runtime_term}"
+                    )
             activation_stages = _marker_values(text, "calibration-activation")
             for activation_stage in CALIBRATION_ACTIVATION_STAGES:
                 if activation_stage not in activation_stages:

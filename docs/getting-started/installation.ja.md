@@ -409,17 +409,16 @@ Calibration Session は Configuration Work Item 内で 10 段階の回答を保�
 **alternative input**、証拠不足で readiness
 をブロックする **unknown**、理由必須の **not applicable** の 4 種類です。
 
-<!-- calibration-runtime-boundary: unknown-not-machine-blocked,confirmations-not-candidate-bound -->
-平易に言うと、Unknown でも tool はまだ自動停止しません。また確認記録は、今回
-承認する正確な設定案のデジタル指紋に結び付いていません。
+<!-- calibration-runtime-boundary: unknown-machine-blocked,confirmations-candidate-bound -->
+平易に言うと、Unknown、stale、不完全、または STOP の証拠が 1 件でもあれば
+tool は自動停止します。Reviewer と Owner の phase record は、それぞれ準備済み
+Candidate の正確な revision と SHA-256 digest を指定しなければなりません。
 
-現在の実装境界: 回答記録（Session）は不明回答（`unknown`）も完了として保存し、
-Reviewer/Owner の確認記録（confirmation record）は、変更不能な設定案のデジタル
-指紋（immutable Candidate digest）に結び付いていません。そのため STOP は人と
-エージェントが守る必須手順で、まだ機械による強制保証ではありません。後続 runtime
-corrective の release までは、`unknown` が 1 件でも
-あれば confirm/activate を実行せず、別の activation 承認直前に永続化 Session ID
-と SHA-256 を表示・再確認します。
+現在の実装境界: Session はすべての Unknown を残して機械的にブロックし、確認前に
+canonical Candidate を 1 つ準備します。回答または証拠の変更後は Candidate と両方の
+phase record が無効になり、現在の Candidate identity と一致する 2 つの記録がなければ
+activate を拒否します。phase record は判断を内容に結び付けますが、人物の本人性や
+役割分離を独立して証明するものではありません。
 
 ```text
 同期済み default branch から configure_ai_cockpit を開始し、Calibration 10 段階を
@@ -482,25 +481,22 @@ commit、push、PR、merge、release、closure は禁止です。
 だけ完了表示にします。質問しただけでは完了ではありません。事実または担当者が
 不足する場合は `unknown` と STOP を選びます。
 
-<!-- calibration-session-persistence-boundary: answer-only,work-item-evidence -->
+<!-- calibration-session-persistence-boundary: structured-checklist-evidence,candidate-bound -->
 
 governance file を探したり編集したりせず、次の prompt をコピーします。
 
 ```text
 active configure_ai_cockpit Work Item と永続化済み Calibration Session を特定して
-ください。下記 10 行の確認表を使います。現在の段階について、確認した根拠
-（observed evidence）、回答の種類と値（type/value）、設定案の変更（proposed
-configuration）、責任者/確認担当者（Owner/Reviewer）、PASS/STOP を含む 1 行の
-記入案を平易な日本語で示してください。各項目には「正式名称」「日本語の意味」
-「私が今判断する内容」を併記します。Session に記録する正確な回答と設定変更を
-先に示し、私の判断を待ってください。判断後は導入済み Calibration Session
-interface で回答の種類/値と理由だけを保存します。他の列は保存形式（schema）が
-対応する Work Item の確認・受入条件・検証結果だけに対応付け、Session path、
-read-only review 結果、Work Item の保存場所を表示
-してください。対応する保存場所がない列は永続化 gap を報告して STOP し、JSON
-field を創作しません。私に JSON を手編集させないでください。unknown のまま進行、
-根拠の創作、Candidate 有効化、commit、push、PR 作成・merge、release、Work Item
-close は禁止です。
+ください。下記 10 行の確認表を使い、現在の段階について observed evidence、
+回答 type/value/reason、proposed Candidate change、予定 Owner/Reviewer、理由と
+再確認手順を含む PASS/STOP の 1 行案を平易な日本語で示してください。各項目には
+「正式名称」「日本語の意味」「私が今判断する内容」を併記し、正確な Session
+record を先に示して私の判断を待ちます。判断後は導入済み Calibration Session
+interface の `answer` で回答を、`record-evidence` で他の全列を保存します。
+Session path と read-only review を表示して schema 対応を証明してください。
+field 不足、STOP、Unknown なら停止します。JSON の手編集、根拠の創作、Candidate
+prepare/activate、commit、push、PR 作成・merge、release、Work Item close は
+禁止です。
 ```
 
 <!-- calibration-completion-checklist: state,evidence,answer,candidate,owner-reviewer,pass-stop -->
@@ -533,62 +529,69 @@ Calibration の confirmation/activation を行いません。
 ### Activation を別に review・承認する
 
 10 行の check は Candidate が review 可能という意味で、activation ではありません。
-Session が保存するのは `reviewer` と `owner` の phase record だけで、人物の身元を
-保存・証明しません。先に Reviewer と Owner を特定し、人物・役割の根拠を保存する
-Work Item review 位置を確認します。その後、次の prompt をコピーして 2 件の判断を
-別々に取得・記録します。
+Session は各行の 7 列を完全な構造化 evidence として保存しますが、`reviewer` と
+`owner` という phase 名は人物の身元を証明しません。先に Reviewer と Owner を
+特定し、人物・役割の外部根拠を保存する Work Item review 位置を確認します。次に
+review、full self-check、Governance Simulation、`prepare-candidate` の順で実行
+してから、次の prompt で 2 件の判断を別々に取得・記録します。
 
 <!-- calibration-confirmation-boundary: phase-records,external-actor-identity -->
 ```text
-activate しないでください。現在の Session ID/path/SHA-256 と proposed
-configuration を表示します。現在の操作者である私が、確認資料を特定済み Reviewer
-へ先に渡し、その人の明示判断と本人確認の根拠をあなたへ返します。それまで待って
-ください。次に Owner へ同じ手順を別に行います。私が本人の判断を返した後だけ
-Session phase を記録します。永続化済み 2 phase record と、人物・役割分離を示す
-Work Item の外部根拠を表示してください。Session 自体は人物や Candidate digest
-を binding しないと明記し、不足・古い・却下・同一人物の判断なら STOP します。
+activate しないでください。導入済み Calibration Session interface で、永続化
+Session ID/path、prepared Candidate revision、SHA-256 digest、正確な
+configuration、10 行の構造化 checklist evidence を表示してください。現在の
+操作者である私が、その正確な review package を特定済み Reviewer へ先に渡し、
+その人の明示判断と外部の本人確認根拠を返します。それまで待ちます。次に Owner
+へ別に同じ手順を行います。本人の判断を受け取った後だけ、表示済みの正確な
+revision/digest を指定して各 phase を記録します。digest-bound の 2 phase record
+と人物・役割分離を示す Work Item の外部根拠を表示してください。Session が
+binding するのは判断と Candidate 内容であり、人物を認証しないと明記します。
+不足・古い・却下・digest 不一致・同一人物の判断なら STOP します。
 ```
 
 次に読み取り専用 plan prompt をコピーします。
 
 <!-- calibration-activation: plan-before-approval -->
 ```text
-まだ activate しないでください。永続化 Calibration Session ID/path/SHA-256、
-回答から導出する proposed configuration、現在の Active configuration、全
-`unknown`、full self-check と Governance Simulation、Reviewer/Owner の別々の
-confirmation record、activation が置換する file、atomic write、失敗時の復旧を
-示してください。現在の confirmation record は Candidate digest に machine
-binding されないことを明記してください。各事実を Observed、Inferred、Unknown
-に分け、最後に「証拠が揃い、この正確な Session hash と proposed configuration
-について別の activation 承認段階へ進むか」だけを yes/no で 1 件質問してください。
-yes は activation の承認ではないと明記します。file 変更、commit、push、PR
-作成・merge、release、Work Item close は禁止です。
+まだ activate しないでください。永続化 Calibration Session ID/path、prepared
+Candidate revision と SHA-256、正確な configuration、現在の Active
+configuration、全 checklist blocker、full self-check と Governance Simulation、
+Reviewer/Owner confirmation の revision/digest を表示してください。同じ rollback
+transaction が置換する Active/Session path、現在の識別子、Active failure、
+Active 置換後の Session failure、rollback failure の正確な復旧動作を示します。
+各事実を Observed、Inferred、Unknown に分け、最後に「証拠が揃い、この正確な
+Candidate identity について別の activation 承認段階へ進むか」だけを yes/no で
+1 件質問してください。yes は activation の承認ではありません。file 変更、
+commit、push、PR 作成・merge、release、Work Item close は禁止です。
 ```
 
-PASS は Session hash が最新、両 confirmation record が存在、proposed
-configuration が記録済み回答と一致し、`unknown` が 0 件の状態です。runtime
-binding 実装までは manual fail-closed guard です。それ以外は STOP し、該当
-checklist row へ戻ります。PASS 後だけ、次の限定承認を別にコピーします。
+PASS は両 confirmation record が prepared Candidate revision/digest と一致し、
+configuration に 10 行の回答/evidence が含まれ、Unknown、STOP、stale stage、
+不足 field が 0 件の状態です。runtime がこれらの条件を machine enforce し、
+承認するかは人が review して判断します。それ以外は STOP し、該当 checklist
+row へ戻ります。PASS 後だけ、次の限定承認を別にコピーします。
 
 <!-- calibration-activation: bounded-approval -->
 ```text
-直前に review した正確な Calibration Session ID、SHA-256、proposed configuration
-の activation だけを承認します。activate 直前に Session SHA-256 を再計算し、
-hash 変更または `unknown` が 1 件でもあれば STOP してください。導入済み
-Calibration Session interface だけで activate し、前後の Active configuration
-識別子、Active file 置換結果、別処理の Session 保存結果、永続化 Session review、
-validation 結果を表示して停止してください。Active file 置換前または置換中の
-失敗では旧 Active configuration が保持されたことを確認します。Active 置換後に
-Session 保存または検証が失敗した場合は Active/Session 不整合を表示して STOP と
-報告し、repository owner に連絡します。rollback 済みとは主張せず、弱い根拠で
-再試行しません。commit、push、PR 作成・merge、release、Work Item close は禁止です。
+直前に review した正確な Calibration Session ID、prepared Candidate revision、
+SHA-256 digest、configuration の activation だけを承認します。activate 直前に
+Candidate digest を再計算し、変更、confirmation 不一致、checklist blocker が
+あれば STOP してください。導入済み Calibration Session transaction だけで
+activate し、前後の Active/Session 識別子、両方に永続化された同一 Candidate
+identity、validation 結果を表示して停止します。Active または Session の永続化に
+失敗した場合は、両 path が transaction 開始時の正確な bytes または不存在へ
+戻ったことを確認します。rollback 失敗なら STOP と `consistency unproved` を
+報告し、repository owner に連絡して、弱い根拠で再試行しません。commit、push、
+PR 作成・merge、release、Work Item close は禁止です。
 ```
 
-期待する結果: Unknown を隠さない Candidate と inventory。atomic なのは Active
-file の置換だけで、Session 保存は別処理です。両記録の整合を確認できて初めて成功
-です。enterprise compliance や runtime sandbox の証明ではありません。
+期待する結果: Unknown を隠さない prepared/digest-bound Candidate と完全な
+inventory。Active/Session は 2 file rollback transaction を使用します。これは
+復旧保証であり、物理的な multi-file atomicity の主張ではありません。両記録が
+同じ Candidate identity を持って初めて成功です。人物認証、enterprise compliance、
+runtime sandbox の証明ではありません。
 
-<!-- calibration-activation-atomicity: active-file-only,session-save-separate -->
+<!-- calibration-activation-atomicity: active-session-rollback-transaction,candidate-digest-bound -->
 
 <!-- novice-stage: run-local-checks -->
 ## 10. Local check を実行する
