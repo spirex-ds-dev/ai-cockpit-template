@@ -1,0 +1,266 @@
+{
+  "assessmentVersion": 2,
+  "blockingFindings": [
+    {
+      "caseId": "JA-CLI-001",
+      "correctiveWorkItem": "japanese-wizard-cli-corrective-20260729",
+      "id": "JA-CLI-001",
+      "summary": "Executable Wizard entrypoints do not consume Japanese locale resources."
+    },
+    {
+      "caseId": "JA-STATUS-001",
+      "correctiveWorkItem": "japanese-status-output-corrective-20260729",
+      "id": "JA-STATUS-001",
+      "summary": "Cockpit Status has no Japanese derived view or executable parity evidence."
+    },
+    {
+      "caseId": "JA-PR-001",
+      "correctiveWorkItem": "japanese-pr-output-corrective-20260729",
+      "id": "JA-PR-001",
+      "summary": "Task Outcome PR summary chrome is English-only."
+    },
+    {
+      "caseId": "JA-LIFECYCLE-001",
+      "correctiveWorkItem": "japanese-lifecycle-fixture-corrective-20260729",
+      "id": "JA-LIFECYCLE-001",
+      "summary": "No executable Japanese adopter fixture covers the governed lifecycle."
+    },
+    {
+      "caseId": "JA-DOC-001",
+      "correctiveWorkItem": "japanese-uninstall-documentation-corrective-20260729",
+      "id": "JA-DOC-001",
+      "summary": "The Japanese engineer path lacks an actionable uninstall procedure."
+    }
+  ],
+  "cases": [
+    {
+      "area": "Japanese register, mixed technical language, encoded input, Unicode, and paths",
+      "commandEvidence": [
+        "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_input_trust_corpus.py"
+      ],
+      "digest": "sha256:0710c5b49d31c70f31fdd641174062a8823f55b02caccef9517189504859c506",
+      "id": "JA-INPUT-001",
+      "limitation": "Deterministic classification is not general semantic understanding.",
+      "observation": "14 corpus entries preserved authority and expected outcomes",
+      "sourceEvidence": [
+        "tests/fixtures/japanese-capability-corpus.json",
+        "scripts/ai_input_trust.py"
+      ],
+      "status": "pass",
+      "testEvidence": [
+        "tests/test_japanese_capability.py",
+        "tests/test_input_trust_corpus.py"
+      ]
+    },
+    {
+      "area": "Japanese high-risk, absurd, Unknown, and human-confirmation STOP boundary",
+      "commandEvidence": [
+        "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_input_trust.py"
+      ],
+      "digest": "sha256:31e2c1300a5a4c5884c32d6bb4b16953c412cbc8394ab71adad37d7858ff9651",
+      "id": "JA-HIGH-RISK-001",
+      "limitation": "The policy boundary does not authenticate the human or execute provider controls.",
+      "observation": "Every corpus high-risk operation requires human_confirmation_required",
+      "sourceEvidence": [
+        "tests/fixtures/japanese-capability-corpus.json",
+        "scripts/ai_input_trust.py"
+      ],
+      "status": "pass",
+      "testEvidence": [
+        "tests/test_japanese_capability.py",
+        "tests/test_input_trust.py"
+      ]
+    },
+    {
+      "area": "Executable Wizard and CLI Japanese interaction",
+      "commandEvidence": [
+        "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_wizard_localization.py"
+      ],
+      "digest": "sha256:40cb0510aad2a06adb543849b54d0c7fe33829305fa5681661e68620f3044c3b",
+      "findingId": "JA-CLI-001",
+      "id": "JA-CLI-001",
+      "limitation": "Resource parity alone cannot prove executable Japanese interaction.",
+      "observation": "Executable Wizard entrypoints do not consume Japanese locale resources.",
+      "sourceEvidence": [
+        "scripts/ai_wizard_localization.py",
+        "locales/wizard/ja.json"
+      ],
+      "status": "block",
+      "testEvidence": [
+        "tests/test_wizard_localization.py"
+      ]
+    },
+    {
+      "area": "Cockpit Status Japanese parity",
+      "commandEvidence": [
+        "make generate-cockpit-status"
+      ],
+      "digest": "sha256:7bfc8d4ba1396b1485512f32a08facb410145e5c977a5b431ba9f179033b2cc1",
+      "findingId": "JA-STATUS-001",
+      "id": "JA-STATUS-001",
+      "limitation": "A Japanese guide to an English Status is not output parity.",
+      "observation": "Cockpit Status has no Japanese derived view or executable parity evidence.",
+      "sourceEvidence": [
+        "scripts/ai_generate_status.py",
+        ".ai/cockpit/current_status.md"
+      ],
+      "status": "block",
+      "testEvidence": [
+        "tests/test_core_gates.py"
+      ]
+    },
+    {
+      "area": "Task Outcome PR summary Japanese parity",
+      "commandEvidence": [
+        "PYTHONPATH=. .venv/bin/pytest -q tests/test_task_outcome_pr_summary.py"
+      ],
+      "digest": "sha256:ab2ac05cf1af5482e979d8006c9b427666ce77278df9c2a60faafd5cc86edc90",
+      "findingId": "JA-PR-001",
+      "id": "JA-PR-001",
+      "limitation": "PR localization must not translate or invent arbitrary evidence prose.",
+      "observation": "Task Outcome PR summary chrome is English-only.",
+      "sourceEvidence": [
+        "scripts/ai_render_task_outcome_pr.py"
+      ],
+      "status": "block",
+      "testEvidence": [
+        "tests/test_task_outcome_pr_summary.py"
+      ]
+    },
+    {
+      "area": "Task Outcome Japanese derived view",
+      "commandEvidence": [
+        "PYTHONPATH=. .venv/bin/pytest -q tests/test_task_outcome_multilingual.py"
+      ],
+      "digest": "sha256:a967b77b54d57909cc37ecfd282e75ee852bf3d9c0bcb6412f2c751530f048dc",
+      "id": "JA-TASK-OUTCOME-001",
+      "limitation": "Arbitrary evidence prose remains source text and is not machine-translated.",
+      "observation": "Japanese Task Outcome chrome is derived from unchanged machine facts",
+      "sourceEvidence": [
+        "scripts/ai_render_task_outcome_multilingual.py"
+      ],
+      "status": "pass",
+      "testEvidence": [
+        "tests/test_task_outcome_multilingual.py"
+      ]
+    },
+    {
+      "area": "Executable Japanese adopter lifecycle",
+      "commandEvidence": [
+        "PYTHONPATH=. .venv/bin/pytest -q tests/test_japanese_adopter_lifecycle.py"
+      ],
+      "digest": "sha256:f0651b79a1eb06eb0ce68a49302fd3b3488346780d4ba060fd3812216dc1a796",
+      "findingId": "JA-LIFECYCLE-001",
+      "id": "JA-LIFECYCLE-001",
+      "limitation": "English lifecycle fixtures cannot be used to infer Japanese operator usability.",
+      "observation": "No executable Japanese adopter fixture covers the governed lifecycle.",
+      "sourceEvidence": [
+        "docs/getting-started/installation.ja.md"
+      ],
+      "status": "block",
+      "testEvidence": [
+        "tests/test_japanese_adopter_lifecycle.py"
+      ]
+    },
+    {
+      "area": "Japanese installation, calibration, upgrade, rollback, uninstall, and recovery path",
+      "commandEvidence": [
+        "make check-docs-metadata"
+      ],
+      "digest": "sha256:21c37cd478cd72506fa86e8a4825428ba3def5fc73724d1301683049f0c71da0",
+      "findingId": "JA-DOC-001",
+      "id": "JA-DOC-001",
+      "limitation": "Structure and terminology checks do not replace native technical editing.",
+      "observation": "The Japanese engineer path lacks an actionable uninstall procedure.",
+      "sourceEvidence": [
+        "README.ja.md",
+        "docs/overview.ja.md",
+        "docs/getting-started/installation.ja.md",
+        "docs/getting-started/first-work-item.ja.md",
+        "docs/reference/how-to-read-cockpit-status.ja.md",
+        "docs/reference/repository-workflow.ja.md",
+        "docs/reference/work-item-lifecycle-closure.ja.md",
+        "docs/reference/troubleshooting.ja.md",
+        "docs/reference/upgrade.ja.md",
+        "docs/reference/distribution.ja.md",
+        "docs/reference/calibration-session.ja.md"
+      ],
+      "status": "block",
+      "testEvidence": [
+        "tests/test_docs_metadata.py"
+      ]
+    },
+    {
+      "area": "Japanese document metadata and three-language structure",
+      "commandEvidence": [
+        "make check-docs-metadata",
+        "make check-trust-layer-docs"
+      ],
+      "digest": "sha256:e3ab94e805c699ca4504986f096f92a9cf65baa62b7ff8aae7b9e11b3c08ef5c",
+      "id": "JA-DOC-STRUCTURE-001",
+      "limitation": "Automated parity checks cannot establish complete translation quality.",
+      "observation": "Required Japanese engineer entry documents exist and remain under metadata checks",
+      "sourceEvidence": [
+        "README.ja.md",
+        "docs/overview.ja.md",
+        "docs/getting-started/installation.ja.md",
+        "docs/getting-started/first-work-item.ja.md",
+        "docs/reference/how-to-read-cockpit-status.ja.md",
+        "docs/reference/repository-workflow.ja.md",
+        "docs/reference/work-item-lifecycle-closure.ja.md",
+        "docs/reference/troubleshooting.ja.md",
+        "docs/reference/upgrade.ja.md",
+        "docs/reference/distribution.ja.md",
+        "docs/reference/calibration-session.ja.md"
+      ],
+      "status": "pass",
+      "testEvidence": [
+        "tests/test_docs_metadata.py",
+        "tests/test_trust_layer_docs.py"
+      ]
+    },
+    {
+      "area": "Mandatory pre-release Japanese evidence gate",
+      "commandEvidence": [
+        "make check-japanese-capability",
+        "make check-release-preflight"
+      ],
+      "digest": "sha256:ba4f1354fda6e19bc5df669354f8fac00210fa156d4fb22bc8d74399df3ab59e",
+      "id": "JA-RELEASE-GATE-001",
+      "limitation": "Passing the gate proves only the in-repository matrix at the assessed source.",
+      "observation": "check-release-preflight requires the current Japanese assessment",
+      "sourceEvidence": [
+        "Makefile",
+        "scripts/ai_japanese_capability.py"
+      ],
+      "status": "pass",
+      "testEvidence": [
+        "tests/test_makefile.py",
+        "tests/test_japanese_capability.py"
+      ]
+    },
+    {
+      "area": "General Japanese model fluency and human translation quality",
+      "commandEvidence": [],
+      "digest": "sha256:adf90810abcf2ed46726d0d7fa5b65ae3e6e493ba7cdb9d697254c0977df1400",
+      "id": "JA-GENERAL-FLUENCY",
+      "limitation": "General Japanese provider/model fluency and human translation quality remain unproved.",
+      "observation": "No provider-backed or native-human-reviewed general fluency evidence is claimed.",
+      "sourceEvidence": [],
+      "status": "limitation",
+      "testEvidence": []
+    }
+  ],
+  "corpus": {
+    "digest": "sha256:2735e7ba87763a6933e71102b2348ed69c21b6c39fb02a037f77867fecd0f733",
+    "entryCount": 14,
+    "path": "tests/fixtures/japanese-capability-corpus.json"
+  },
+  "digest": "sha256:9c2e2823c700c8057b4f3af0f1683b2a2314488215203ac5924f2ac7da00b009",
+  "limitations": [
+    "This assessment does not claim general model fluency, translation quality, or provider behavior.",
+    "Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking."
+  ],
+  "scope": "bounded repository-governance Japanese handling",
+  "workItemId": "japanese-assessment-depth-corrective-20260729"
+}

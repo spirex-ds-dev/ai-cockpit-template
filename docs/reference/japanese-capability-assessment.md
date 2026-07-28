@@ -1,38 +1,55 @@
 ---
 author: Ray
 title: "Japanese Capability Assessment"
-description: Bounded, evidence-backed assessment of Japanese repository-governance handling.
+description: Comprehensive, bounded, evidence-backed Japanese repository-governance release gate.
 ---
 
 # Japanese Capability Assessment
 
 > This is a release gate, not a claim of general Japanese model fluency.
 
-- Work Item: `japanese-capability-assessment`
-- Assessment digest: `sha256:75de8ef8f25f4201ed2896c9baa19986f37193708f8970bd3f209b175db40e30`
-- Blocking findings: `0`
+- Work Item: `japanese-assessment-depth-corrective-20260729`
+- Assessment digest: `sha256:9c2e2823c700c8057b4f3af0f1683b2a2314488215203ac5924f2ac7da00b009`
+- Corpus: `tests/fixtures/japanese-capability-corpus.json` (`14` entries)
+- Blocking findings: `5`
 
 ## Evidence boundary
 
-The assessment executes deterministic repository behavior and checks the Japanese engineer documentation path. It does not replace human language review, provider evaluation, object-project execution, or delegated release evidence.
+The matrix evaluates current repository behavior, executable evidence, and Japanese engineer paths. Missing or English-inferred evidence is blocking. General provider/model fluency and native-human translation review remain explicit non-claims.
 
 ## Matrix
 
-| ID | Area | Status | Observation | Evidence |
+| ID | Area | Status | Observation | Source / tests / commands |
 | --- | --- | --- | --- | --- |
-| `ja-injection` | Japanese and mixed-language untrusted input | **pass** | outcome=detected; authority=none | `scripts/ai_input_trust.py`; `tests/test_input_trust_corpus.py` |
-| `ja-hidden-html` | Japanese and mixed-language untrusted input | **pass** | outcome=detected; authority=none | `scripts/ai_input_trust.py`; `tests/test_input_trust_corpus.py` |
-| `ja-mixed-tool` | Japanese and mixed-language untrusted input | **pass** | outcome=blocked; authority=none | `scripts/ai_input_trust.py`; `tests/test_input_trust_corpus.py` |
-| `ja-nested-quote` | Japanese and mixed-language untrusted input | **pass** | outcome=detected; authority=none | `scripts/ai_input_trust.py`; `tests/test_input_trust_corpus.py` |
-| `ja-human-decision` | Human request and high-risk operation | **pass** | authority=human_request; release_allowed=False; outcome=human_confirmation_required | `scripts/ai_input_trust.py`; `tests/test_input_trust.py` |
-| `ja-document-actionability` | Japanese engineer documentation path | **pass** | all required entry documents and governance terms are present | `README.ja.md`; `docs/overview.ja.md`; `docs/getting-started/installation.ja.md`; `docs/getting-started/first-work-item.ja.md`; `docs/reference/how-to-read-cockpit-status.ja.md`; `docs/reference/repository-workflow.ja.md`; `docs/reference/work-item-lifecycle-closure.ja.md`; `docs/reference/troubleshooting.ja.md`; `docs/reference/upgrade.ja.md`; `docs/reference/distribution.ja.md`; `docs/reference/calibration-session.ja.md` |
-| `ja-general-fluency-boundary` | General model fluency outside repository governance paths | **limitation** | No provider-backed or human-reviewed object-engineer conversation evidence is claimed by this repository assessment. | none |
+| `JA-INPUT-001` | Japanese register, mixed technical language, encoded input, Unicode, and paths | **pass** | 14 corpus entries preserved authority and expected outcomes | `tests/fixtures/japanese-capability-corpus.json`; `scripts/ai_input_trust.py`; `tests/test_japanese_capability.py`; `tests/test_input_trust_corpus.py`; `PYTHONPATH=scripts .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_input_trust_corpus.py` |
+| `JA-HIGH-RISK-001` | Japanese high-risk, absurd, Unknown, and human-confirmation STOP boundary | **pass** | Every corpus high-risk operation requires human_confirmation_required | `tests/fixtures/japanese-capability-corpus.json`; `scripts/ai_input_trust.py`; `tests/test_japanese_capability.py`; `tests/test_input_trust.py`; `PYTHONPATH=scripts .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_input_trust.py` |
+| `JA-CLI-001` | Executable Wizard and CLI Japanese interaction | **block** | Executable Wizard entrypoints do not consume Japanese locale resources. | `scripts/ai_wizard_localization.py`; `locales/wizard/ja.json`; `tests/test_wizard_localization.py`; `PYTHONPATH=scripts .venv/bin/pytest -q tests/test_wizard_localization.py` |
+| `JA-STATUS-001` | Cockpit Status Japanese parity | **block** | Cockpit Status has no Japanese derived view or executable parity evidence. | `scripts/ai_generate_status.py`; `.ai/cockpit/current_status.md`; `tests/test_core_gates.py`; `make generate-cockpit-status` |
+| `JA-PR-001` | Task Outcome PR summary Japanese parity | **block** | Task Outcome PR summary chrome is English-only. | `scripts/ai_render_task_outcome_pr.py`; `tests/test_task_outcome_pr_summary.py`; `PYTHONPATH=. .venv/bin/pytest -q tests/test_task_outcome_pr_summary.py` |
+| `JA-TASK-OUTCOME-001` | Task Outcome Japanese derived view | **pass** | Japanese Task Outcome chrome is derived from unchanged machine facts | `scripts/ai_render_task_outcome_multilingual.py`; `tests/test_task_outcome_multilingual.py`; `PYTHONPATH=. .venv/bin/pytest -q tests/test_task_outcome_multilingual.py` |
+| `JA-LIFECYCLE-001` | Executable Japanese adopter lifecycle | **block** | No executable Japanese adopter fixture covers the governed lifecycle. | `docs/getting-started/installation.ja.md`; `tests/test_japanese_adopter_lifecycle.py`; `PYTHONPATH=. .venv/bin/pytest -q tests/test_japanese_adopter_lifecycle.py` |
+| `JA-DOC-001` | Japanese installation, calibration, upgrade, rollback, uninstall, and recovery path | **block** | The Japanese engineer path lacks an actionable uninstall procedure. | `README.ja.md`; `docs/overview.ja.md`; `docs/getting-started/installation.ja.md`; `docs/getting-started/first-work-item.ja.md`; `docs/reference/how-to-read-cockpit-status.ja.md`; `docs/reference/repository-workflow.ja.md`; `docs/reference/work-item-lifecycle-closure.ja.md`; `docs/reference/troubleshooting.ja.md`; `docs/reference/upgrade.ja.md`; `docs/reference/distribution.ja.md`; `docs/reference/calibration-session.ja.md`; `tests/test_docs_metadata.py`; `make check-docs-metadata` |
+| `JA-DOC-STRUCTURE-001` | Japanese document metadata and three-language structure | **pass** | Required Japanese engineer entry documents exist and remain under metadata checks | `README.ja.md`; `docs/overview.ja.md`; `docs/getting-started/installation.ja.md`; `docs/getting-started/first-work-item.ja.md`; `docs/reference/how-to-read-cockpit-status.ja.md`; `docs/reference/repository-workflow.ja.md`; `docs/reference/work-item-lifecycle-closure.ja.md`; `docs/reference/troubleshooting.ja.md`; `docs/reference/upgrade.ja.md`; `docs/reference/distribution.ja.md`; `docs/reference/calibration-session.ja.md`; `tests/test_docs_metadata.py`; `tests/test_trust_layer_docs.py`; `make check-docs-metadata`; `make check-trust-layer-docs` |
+| `JA-RELEASE-GATE-001` | Mandatory pre-release Japanese evidence gate | **pass** | check-release-preflight requires the current Japanese assessment | `Makefile`; `scripts/ai_japanese_capability.py`; `tests/test_makefile.py`; `tests/test_japanese_capability.py`; `make check-japanese-capability`; `make check-release-preflight` |
+| `JA-GENERAL-FLUENCY` | General Japanese model fluency and human translation quality | **limitation** | No provider-backed or native-human-reviewed general fluency evidence is claimed. | none |
 
-## Blocking interpretation
+## Blocking findings
 
-Every `block` or `unverified` row is release-blocking. A corrective Work Item must name the row, add executable or human-reviewed evidence, complete its PR/merge/archive/`make ai-close-work-item` lifecycle, and trigger a fresh assessment. The general-fluency boundary is intentionally a non-claim and cannot be reported as evidence of general model ability.
+- `JA-CLI-001`: Executable Wizard entrypoints do not consume Japanese locale resources. Corrective Work Item: `japanese-wizard-cli-corrective-20260729`.
+- `JA-STATUS-001`: Cockpit Status has no Japanese derived view or executable parity evidence. Corrective Work Item: `japanese-status-output-corrective-20260729`.
+- `JA-PR-001`: Task Outcome PR summary chrome is English-only. Corrective Work Item: `japanese-pr-output-corrective-20260729`.
+- `JA-LIFECYCLE-001`: No executable Japanese adopter fixture covers the governed lifecycle. Corrective Work Item: `japanese-lifecycle-fixture-corrective-20260729`.
+- `JA-DOC-001`: The Japanese engineer path lacks an actionable uninstall procedure. Corrective Work Item: `japanese-uninstall-documentation-corrective-20260729`.
+
+Each blocker requires its own Contract, implementation, verification, PR, Hosted CI, merge, `make ai-close-work-item`, branch cleanup, and a fresh assessment. A blocker cannot be cleared by editing this report.
+
+## Reproduce
+
+```bash
+PYTHONPATH=scripts .venv/bin/python scripts/ai_japanese_capability.py --check
+```
 
 ## Limitations
 
 - This assessment does not claim general model fluency, translation quality, or provider behavior.
-- Japanese capability outside the tested repository paths remains unverified and is not a release claim.
+- Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking.

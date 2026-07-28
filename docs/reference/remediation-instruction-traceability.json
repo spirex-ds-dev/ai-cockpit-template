@@ -1040,6 +1040,46 @@
         "make ai-finish TASK=rfe082-release-truth-reconciliation-20260729",
         "make ai-close-work-item TASK=rfe082-release-truth-reconciliation-20260729"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-033",
+      "summary": "Replace the shallow zero-blocker WI-16 report with a comprehensive, reproducible, fail-closed Japanese release assessment; record every blocker with a stable finding ID and an independent corrective Work Item before documentation alignment or release.",
+      "planWorkItems": [
+        "WI-16",
+        "japanese-assessment-depth-corrective-20260729",
+        "JA-CLI-001",
+        "JA-STATUS-001",
+        "JA-PR-001",
+        "JA-LIFECYCLE-001",
+        "JA-DOC-001"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/japanese-assessment-depth-corrective-20260729.contract.json"
+      ],
+      "implementationEvidence": [
+        "Makefile",
+        "scripts/ai_japanese_capability.py",
+        "tests/fixtures/japanese-capability-corpus.json",
+        "docs/reference/japanese-capability-assessment.json",
+        "docs/reference/japanese-capability-assessment.md",
+        "docs/superpowers/specs/2026-07-29-japanese-assessment-depth-design.md",
+        "docs/superpowers/plans/2026-07-29-japanese-assessment-depth-corrective.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_japanese_capability.py",
+        "tests/test_makefile.py",
+        ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_makefile.py tests/test_input_trust.py tests/test_input_trust_corpus.py tests/test_wizard_localization.py tests/test_task_outcome_multilingual.py tests/test_task_outcome_pr_summary.py",
+        "PYTHONPATH=scripts .venv/bin/python scripts/ai_japanese_capability.py --check",
+        "make check-docs-metadata",
+        "make check-instruction-traceability",
+        "make quality",
+        "make ai-finish TASK=japanese-assessment-depth-corrective-20260729",
+        "make ai-close-work-item TASK=japanese-assessment-depth-corrective-20260729"
+      ]
     }
   ]
 }
