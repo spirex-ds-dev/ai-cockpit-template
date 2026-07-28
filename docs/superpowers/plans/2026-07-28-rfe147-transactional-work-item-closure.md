@@ -620,7 +620,7 @@ Run:
 
 ```bash
 .venv/bin/pytest -q tests/test_work_item_lifecycle_closure.py \
-  --cov=scripts/ai_close_work_item.py --cov-report=term-missing
+  --cov=ai_close_work_item --cov-report=term-missing
 ```
 
 Expected: PASS and all newly added branches appear in the report.

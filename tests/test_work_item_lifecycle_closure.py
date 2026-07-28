@@ -1,10 +1,46 @@
 from __future__ import annotations
 
 import inspect
+import os
+import subprocess
+from pathlib import Path
 
 import pytest
 
 import ai_close_work_item as closure
+
+
+def run_command(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        list(args),
+        cwd=cwd,
+        text=True,
+        capture_output=True,
+        check=True,
+        env={**os.environ, "GIT_CONFIG_NOSYSTEM": "1"},
+    )
+
+
+def repository_runner(cwd: Path) -> closure.Runner:
+    def run(args, check=False):
+        result = subprocess.run(
+            ["git", *args],
+            cwd=cwd,
+            text=True,
+            capture_output=True,
+            check=False,
+            env={**os.environ, "GIT_CONFIG_NOSYSTEM": "1"},
+        )
+        converted = closure.CommandResult(
+            result.returncode,
+            result.stdout,
+            result.stderr,
+        )
+        if check and converted.returncode != 0:
+            raise RuntimeError(converted.stderr.strip() or "git command failed")
+        return converted
+
+    return run
 
 
 def test_quality_gate_requires_at_least_85_percent_coverage() -> None:
@@ -452,3 +488,73 @@ def test_main_reports_detached_closure_as_not_ready(monkeypatch, capsys) -> None
     assert "Current worktree: detached; not ready for the next Work Item" in output
     assert "Continue from synchronized base worktree: /tmp/base-worktree" in output
     assert "Repository state: ready for next Work Item" not in output
+
+
+def test_real_linked_worktree_closure_is_closed_but_not_ready(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    remote = tmp_path / "remote.git"
+    repository = tmp_path / "repository"
+    base_worktree = tmp_path / "base-worktree"
+
+    run_command(tmp_path, "git", "init", "--bare", str(remote))
+    run_command(tmp_path, "git", "clone", str(remote), str(repository))
+    run_command(repository, "git", "config", "user.name", "Test User")
+    run_command(repository, "git", "config", "user.email", "test@example.test")
+    run_command(repository, "git", "switch", "-c", "main")
+    (repository / "tracked.txt").write_text("base\n", encoding="utf-8")
+    run_command(repository, "git", "add", "tracked.txt")
+    run_command(repository, "git", "commit", "-m", "base")
+    run_command(repository, "git", "push", "-u", "origin", "main")
+    run_command(remote, "git", "symbolic-ref", "HEAD", "refs/heads/main")
+    run_command(repository, "git", "remote", "set-head", "origin", "-a")
+
+    run_command(repository, "git", "switch", "-c", "codex/example")
+    (repository / "tracked.txt").write_text("work\n", encoding="utf-8")
+    run_command(repository, "git", "commit", "-am", "work")
+    work_commit = run_command(repository, "git", "rev-parse", "HEAD").stdout.strip()
+    run_command(repository, "git", "push", "-u", "origin", "codex/example")
+    run_command(repository, "git", "worktree", "add", str(base_worktree), "main")
+    run_command(base_worktree, "git", "merge", "--no-ff", "codex/example", "-m", "merge")
+    run_command(base_worktree, "git", "push", "origin", "main")
+
+    monkeypatch.setattr(
+        closure,
+        "_verify_archived_evidence",
+        lambda _task: closure.PROJECT_ROOT
+        / ".ai/work-items/archive/2026/example.contract.json",
+    )
+    monkeypatch.setattr(
+        closure,
+        "_verify_pr",
+        lambda _runner, _branch, _base, _head: {
+            "url": "https://example.test/pr/1",
+            "headRefOid": work_commit,
+        },
+    )
+
+    result = closure.close_work_item("example", repository_runner(repository))
+
+    assert result["repositoryState"] == "closed_but_current_worktree_detached"
+    assert result["nextWorkItemReady"] is False
+    assert run_command(repository, "git", "branch", "--show-current").stdout.strip() == ""
+    assert run_command(base_worktree, "git", "branch", "--show-current").stdout.strip() == "main"
+    assert (
+        run_command(base_worktree, "git", "rev-parse", "main").stdout
+        == run_command(base_worktree, "git", "rev-parse", "origin/main").stdout
+    )
+    assert run_command(repository, "git", "status", "--porcelain").stdout == ""
+    local_branches = run_command(
+        repository, "git", "branch", "--format=%(refname:short)"
+    ).stdout
+    assert "codex/example" not in local_branches.splitlines()
+    remote_heads = run_command(
+        repository,
+        "git",
+        "ls-remote",
+        "--heads",
+        "origin",
+        "codex/example",
+    ).stdout
+    assert remote_heads == ""
