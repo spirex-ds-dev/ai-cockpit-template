@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -22,6 +23,7 @@ from ai_calibrate import (
     CalibrationSession,
     generate,
     load_session,
+    persist_activation,
     save_session,
 )
 from ai_project_doctor import scan_project
@@ -114,6 +116,33 @@ class CalibrationWizard:
             if stage.get("checklist", {}).get("answerType") == "unknown"
         ]
 
+    def record_checklist_evidence(
+        self,
+        stage: str,
+        *,
+        observed_evidence: list[str],
+        candidate_change: str,
+        owner: str,
+        reviewer: str,
+        decision: str,
+        decision_reason: str,
+        retry_step: str = "",
+    ) -> None:
+        if self.session is None:
+            raise CalibrationError("wizard session has not been loaded")
+        self._validate_stage(stage)
+        self.session.record_checklist_evidence(
+            stage,
+            observed_evidence=[self._redact(item) for item in observed_evidence],
+            candidate_change=self._redact(candidate_change),
+            owner=self._redact(owner),
+            reviewer=self._redact(reviewer),
+            decision=decision,
+            decision_reason=self._redact(decision_reason),
+            retry_step=self._redact(retry_step),
+        )
+        self.persist()
+
     def revalidate(self) -> None:
         if self.session is None:
             raise CalibrationError("wizard session has not been loaded")
@@ -142,31 +171,15 @@ class CalibrationWizard:
         return self._checked("stage_self_check")
 
     def full_self_check(self) -> dict[str, Any]:
-        result = self._checked("full_self_check")
-        return self._apply_blocking_guard(result)
+        return self._checked("full_self_check")
 
     def governance_simulation(self) -> dict[str, Any]:
-        result = self._checked("governance_simulation")
-        return self._apply_blocking_guard(result)
-
-    def _apply_blocking_guard(self, result: dict[str, Any]) -> dict[str, Any]:
-        if self.session is None:
-            raise CalibrationError("wizard session has not been loaded")
-        blockers = self.blocking_unknowns() + list(self.session.data.get("staleStages", []))
-        if blockers:
-            result = {**result, "status": "blocked", "blockingStages": sorted(set(blockers))}
-            self.session.data.setdefault("checks", {})[result["evidence"]["kind"]] = result
-            self.persist()
-        return result
+        return self._checked("governance_simulation")
 
     def review(self) -> dict[str, Any]:
         if self.session is None:
             raise CalibrationError("wizard session has not been loaded")
         result = self.session.review()
-        blockers = self.blocking_unknowns() + list(self.session.data.get("staleStages", []))
-        if blockers:
-            result = {**result, "status": "blocked", "blockingStages": sorted(set(blockers))}
-            self.session.data["review"] = result
         self.persist()
         return result
 
@@ -177,26 +190,42 @@ class CalibrationWizard:
         self.persist()
         return result
 
-    def confirm(self, phase: str) -> None:
+    def prepare_candidate(self) -> dict[str, Any]:
         if self.session is None:
             raise CalibrationError("wizard session has not been loaded")
-        self.session.confirm(phase)
+        candidate = self.session.prepare_candidate()
+        self.persist()
+        return candidate
+
+    def confirm(
+        self,
+        phase: str,
+        *,
+        candidate_revision: int,
+        candidate_digest: str,
+    ) -> None:
+        if self.session is None:
+            raise CalibrationError("wizard session has not been loaded")
+        self.session.confirm(
+            phase,
+            candidate_revision=candidate_revision,
+            candidate_digest=candidate_digest,
+        )
         self.persist()
 
-    def activate(self, *, fail: bool = False) -> None:
+    def activate(
+        self,
+        *,
+        replace_fn: Callable[[str | Path, str | Path], None] = os.replace,
+    ) -> None:
         if self.session is None:
             raise CalibrationError("wizard session has not been loaded")
-        if self.blocking_unknowns() or self.session.data.get("staleStages"):
-            raise CalibrationError("blocking Unknown or stale evidence requires revalidation")
-        if self.session.data.get("checks", {}).get("full_self_check", {}).get("status") != "passed":
-            raise CalibrationError("full self-check must pass before activation")
-        if (
-            self.session.data.get("checks", {}).get("governance_simulation", {}).get("status")
-            != "passed"
-        ):
-            raise CalibrationError("governance simulation must pass before activation")
-        self.session.activate(active_path=self.active_path, fail=fail)
-        self.persist()
+        persist_activation(
+            self.session,
+            session_path=self.session_path,
+            active_path=self.active_path,
+            replace_fn=replace_fn,
+        )
 
     def render(self) -> str:
         if self.session is None:
@@ -209,6 +238,16 @@ class CalibrationWizard:
             )
             lines.append("    answers: " + ", ".join(ANSWER_PROMPTS[k] for k in ANSWER_TYPES))
         lines.append(f"state: {self.session.data['state']}")
+        lines.append(f"session: {self.session_path}")
+        candidate = self.session.data.get("candidate", {})
+        lines.append(
+            "candidate: "
+            f"{candidate.get('status')} revision={candidate.get('revision')} "
+            f"sha256={candidate.get('digest') or 'not_prepared'}"
+        )
+        blockers = self.session.blocking_fields()
+        if blockers:
+            lines.append("blocking evidence: " + json.dumps(blockers, ensure_ascii=False))
         lines.append("Unknown remains explicit; N/A requires a reason.")
         return "\n".join(lines)
 

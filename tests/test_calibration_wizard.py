@@ -18,6 +18,31 @@ def wizard(tmp_path: Path) -> CalibrationWizard:
 def complete(wizard: CalibrationWizard) -> None:
     for stage in CALIBRATION_STAGES:
         wizard.answer(stage, "Y", answer_type="yes_no")
+        wizard.record_checklist_evidence(
+            stage,
+            observed_evidence=[f"evidence/{stage}.txt"],
+            candidate_change=f"no change: {stage} is evidenced",
+            owner="repository-owner",
+            reviewer="repository-reviewer",
+            decision="PASS",
+            decision_reason=f"{stage} evidence is complete",
+        )
+
+
+def prepared(wizard: CalibrationWizard) -> dict[str, object]:
+    complete(wizard)
+    assert wizard.review()["status"] == "ready"
+    assert wizard.full_self_check()["status"] == "passed"
+    assert wizard.governance_simulation()["status"] == "passed"
+    return wizard.prepare_candidate()
+
+
+def confirm(wizard: CalibrationWizard, phase: str, candidate: dict[str, object]) -> None:
+    wizard.confirm(
+        phase,
+        candidate_revision=int(candidate["revision"]),
+        candidate_digest=str(candidate["digest"]),
+    )
 
 
 def test_fixed_stage_order(tmp_path: Path):
@@ -68,18 +93,13 @@ def test_separate_confirmations_and_activation_failure(tmp_path: Path):
     active = current.active_path
     active.parent.mkdir(parents=True, exist_ok=True)
     active.write_text('{"old": true}\n', encoding="utf-8")
-    complete(current)
-    current.full_self_check()
-    current.governance_simulation()
+    candidate = prepared(current)
     with pytest.raises(CalibrationError, match="both human"):
         current.activate()
-    current.confirm("reviewer")
+    confirm(current, "reviewer", candidate)
     with pytest.raises(CalibrationError, match="both human"):
         current.activate()
-    current.confirm("owner")
-    with pytest.raises(CalibrationError, match="failed closed"):
-        current.activate(fail=True)
-    assert json.loads(active.read_text(encoding="utf-8")) == {"old": True}
+    confirm(current, "owner", candidate)
     current.activate()
     assert json.loads(active.read_text(encoding="utf-8"))["sessionId"] == "activation"
 
@@ -107,7 +127,7 @@ def test_blocking_unknown_fails_closed(tmp_path: Path):
     current.answer(CALIBRATION_STAGES[0], "unknown", answer_type="unknown")
     assert current.blocking_unknowns() == [CALIBRATION_STAGES[0]]
     assert current.full_self_check()["status"] == "blocked"
-    with pytest.raises(CalibrationError, match="blocking Unknown"):
+    with pytest.raises(CalibrationError, match="blocking calibration evidence"):
         current.activate()
 
 
@@ -120,7 +140,7 @@ def test_stale_session_requires_revalidation(tmp_path: Path):
     current.back()
     current.answer(CALIBRATION_STAGES[1], "TypeScript")
     assert current.session.data["staleStages"]
-    with pytest.raises(CalibrationError, match="revalidation"):
+    with pytest.raises(CalibrationError, match="blocking calibration evidence.*stale"):
         current.activate()
     current.revalidate()
     assert current.session.data["staleStages"] == []
@@ -186,11 +206,19 @@ def test_activation_failure_preserves_active(tmp_path: Path):
     current.load_or_start("failure")
     current.active_path.parent.mkdir(parents=True, exist_ok=True)
     current.active_path.write_text('{"original": true}\n', encoding="utf-8")
-    complete(current)
-    current.full_self_check()
-    current.governance_simulation()
-    current.confirm("reviewer")
-    current.confirm("owner")
-    with pytest.raises(CalibrationError, match="failed closed"):
-        current.activate(fail=True)
+    candidate = prepared(current)
+    confirm(current, "reviewer", candidate)
+    confirm(current, "owner", candidate)
+    real_replace = __import__("os").replace
+    failed = False
+
+    def fail_session_replace(source: str | Path, destination: str | Path) -> None:
+        nonlocal failed
+        if Path(destination) == current.session_path and not failed:
+            failed = True
+            raise OSError("simulated Session replace failure")
+        real_replace(source, destination)
+
+    with pytest.raises(CalibrationError, match="Active and Session restored"):
+        current.activate(replace_fn=fail_session_replace)
     assert json.loads(current.active_path.read_text(encoding="utf-8")) == {"original": True}

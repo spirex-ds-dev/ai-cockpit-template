@@ -894,6 +894,41 @@
         "make ai-finish TASK=fix-archive-summary-evidence-path-rewrite-20260728",
         "make ai-close-work-item TASK=fix-archive-summary-evidence-path-rewrite-20260728"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-029",
+      "summary": "Close RFE-ISSUE-151 by making every Unknown or incomplete calibration stage machine-blocking, persisting the complete ten-stage checklist, preparing one immutable SHA-256 Candidate before confirmation, binding separate reviewer and owner phase records to its exact revision and digest, and transactionally restoring Active plus Session after any persistence failure without claiming actor identity or physical multi-file atomicity.",
+      "planWorkItems": [
+        "RFE-ISSUE-151",
+        "rfe151-calibration-transactional-confirmation-20260728"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/rfe151-calibration-transactional-confirmation-20260728.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_calibrate.py",
+        "scripts/ai_calibration_wizard.py",
+        "docs/reference/calibration-session.md",
+        "docs/getting-started/installation.md",
+        "docs/getting-started/installation.zh-CN.md",
+        "docs/getting-started/installation.ja.md",
+        "docs/superpowers/specs/2026-07-28-rfe151-calibration-transaction-design.md",
+        "docs/superpowers/plans/2026-07-28-rfe151-calibration-transaction.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_calibration_session.py",
+        "tests/test_calibration_wizard.py",
+        "tests/test_docs_metadata.py",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        ".venv/bin/python -m pytest -q tests/test_calibration_session.py tests/test_calibration_wizard.py tests/test_docs_metadata.py",
+        "make check-docs-metadata",
+        "make check-instruction-traceability",
+        "make quality",
+        "make ai-finish TASK=rfe151-calibration-transactional-confirmation-20260728",
+        "make ai-close-work-item TASK=rfe151-calibration-transactional-confirmation-20260728"
+      ]
     }
   ]
 }

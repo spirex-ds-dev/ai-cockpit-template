@@ -172,7 +172,7 @@ def test_wi10_beginner_check_requires_runtime_boundary_and_release_bound_plan(tm
         english.read_text(encoding="utf-8")
         .replace(
             "<!-- calibration-runtime-boundary: "
-            "unknown-not-machine-blocked,confirmations-not-candidate-bound -->",
+            "unknown-machine-blocked,confirmations-candidate-bound -->",
             "",
             1,
         )
@@ -196,6 +196,23 @@ def test_wi10_beginner_check_requires_runtime_boundary_and_release_bound_plan(tm
     ) in errors
 
 
+def test_wi10_beginner_check_rejects_obsolete_calibration_runtime_boundary(tmp_path):
+    copy_documentation(tmp_path)
+    english = tmp_path / "docs/getting-started/installation.md"
+    english.write_text(
+        english.read_text(encoding="utf-8") + "\n<!-- calibration-runtime-boundary: "
+        "unknown-not-machine-blocked,confirmations-not-candidate-bound -->\n",
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+
+    assert (
+        "docs/getting-started/installation.md: obsolete non-enforced Calibration "
+        "runtime boundary must be removed"
+    ) in errors
+
+
 def test_wi10_beginner_check_requires_release_make_confirmation_and_ci_boundaries(tmp_path):
     copy_documentation(tmp_path)
     chinese = tmp_path / "docs/getting-started/installation.zh-CN.md"
@@ -206,8 +223,10 @@ def test_wi10_beginner_check_requires_release_make_confirmation_and_ci_boundarie
         "<!-- calibration-yes-no: type=yes_no,values=Y-or-N -->",
         "<!-- calibration-confirmation-boundary: phase-records,external-actor-identity -->",
         "<!-- calibration-ci-gap-boundary: plan,approval,implementation,verification -->",
-        "<!-- calibration-session-persistence-boundary: answer-only,work-item-evidence -->",
-        "<!-- calibration-activation-atomicity: active-file-only,session-save-separate -->",
+        "<!-- calibration-session-persistence-boundary: "
+        "structured-checklist-evidence,candidate-bound -->",
+        "<!-- calibration-activation-atomicity: "
+        "active-session-rollback-transaction,candidate-digest-bound -->",
         "<!-- make-composite-boundary: integration-required-before-ai-finish -->",
     ):
         text = text.replace(marker, "", 1)
@@ -242,6 +261,23 @@ def test_wi10_beginner_check_requires_release_make_confirmation_and_ci_boundarie
     assert (
         "docs/getting-started/installation.zh-CN.md: missing composite Make integration boundary"
     ) in errors
+
+
+def test_wi10_beginner_check_requires_transaction_runtime_terms(tmp_path):
+    copy_documentation(tmp_path)
+    japanese = tmp_path / "docs/getting-started/installation.ja.md"
+    text = japanese.read_text(encoding="utf-8")
+    for runtime_term in ("`record-evidence`", "`prepare-candidate`", "consistency unproved"):
+        text = text.replace(runtime_term, "", 1)
+    japanese.write_text(text, encoding="utf-8")
+
+    errors = beginner_installation_errors(tmp_path)
+
+    for runtime_term in ("`record-evidence`", "`prepare-candidate`", "consistency unproved"):
+        assert (
+            "docs/getting-started/installation.ja.md: missing Calibration transaction "
+            f"runtime term: {runtime_term}"
+        ) in errors
 
 
 def test_wi10_beginner_check_rejects_missing_platform_language_or_stage(tmp_path):

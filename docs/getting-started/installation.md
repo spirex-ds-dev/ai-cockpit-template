@@ -484,18 +484,17 @@ Use this answer vocabulary at every stage:
 - **unknown:** evidence is missing; this blocks readiness;
 - **not applicable:** only with a written reason.
 
-<!-- calibration-runtime-boundary: unknown-not-machine-blocked,confirmations-not-candidate-bound -->
-In plain language, the tool does not yet stop automatically on an Unknown
-answer, and its confirmation records are not tied to a digital fingerprint of
-the exact proposal.
+<!-- calibration-runtime-boundary: unknown-machine-blocked,confirmations-candidate-bound -->
+In plain language, the tool automatically stops on Unknown, stale, incomplete,
+or STOP evidence. Reviewer and Owner phase records must each name the exact
+prepared Candidate revision and SHA-256 digest.
 
-Current implementation boundary: the Session currently records `unknown` as a
-completed answer, and Reviewer/Owner confirmation records are not bound to an
-immutable Candidate digest. Therefore the STOP rule is a required human/agent
-procedure, not yet a machine-enforced guarantee. Until the later runtime
-corrective is released, do not run confirmation or activation while any answer
-is `unknown`; show and recheck the persisted Session ID and SHA-256 immediately
-before the separate activation approval.
+Current implementation boundary: the Session keeps every Unknown visible and
+machine-blocking. It prepares one canonical Candidate before confirmation,
+invalidates that Candidate and both phase records after an answer or evidence
+change, and refuses activation unless both records match the current identity.
+These phase records bind a decision to content; they do not authenticate the
+person or independently prove role separation.
 
 Copy this calibration prompt:
 
@@ -560,24 +559,23 @@ marks it complete only after the persisted Session confirms the answer. A
 question alone is not completion. Use `unknown` and STOP when a fact or
 responsible person is missing.
 
-<!-- calibration-session-persistence-boundary: answer-only,work-item-evidence -->
+<!-- calibration-session-persistence-boundary: structured-checklist-evidence,candidate-bound -->
 
 Copy this prompt so you do not need to locate or edit a governance file:
 
 ```text
-Locate the active configure_ai_cockpit Work Item and its persisted Calibration
+Locate the active configure_ai_cockpit Work Item and persisted Calibration
 Session. Use the ten-row checklist below as the review format. For the current
-stage, show one filled row in plain language, including observed evidence,
-answer type/value, proposed configuration change, Owner/Reviewer, and
-PASS/STOP. Show the exact proposed Session answer and configuration change,
-then wait for my decision. After I decide, persist only the answer type/value
-and reason through the installed Calibration Session interface. Map the other
-columns only to schema-supported Work Item review, acceptance, or verification
-evidence, and show the Session path, its read-only review output, and those Work
-Item locations. If a column has no supported location, report the persistence
-gap and STOP; do not invent JSON fields. Do not ask me to edit JSON. Do not
-advance on unknown, invent evidence, activate the Candidate, commit, push,
-create or merge a PR, release, or close the Work Item.
+stage, show one filled row in plain language: observed evidence, answer
+type/value/reason, proposed Candidate change, intended Owner/Reviewer, and
+PASS/STOP with reason/retry. Show the exact Session record, then wait for my
+decision. After I decide, persist the answer through `answer` and all other
+columns through `record-evidence` using the installed Calibration Session
+interface. Show the Session path and read-only review output proving the
+schema-supported record. STOP if any field is missing, the decision is STOP,
+or the answer is Unknown. Do not ask me to edit JSON, invent evidence, prepare
+or activate the Candidate, commit, push, create or merge a PR, release, or
+close the Work Item.
 ```
 
 <!-- calibration-completion-checklist: state,evidence,answer,candidate,owner-reviewer,pass-stop -->
@@ -611,70 +609,76 @@ unverified.
 ### Review and approve activation separately
 
 Ten checked rows mean the Candidate is reviewable; they do not activate it.
-The Session stores only `reviewer` and `owner` phase records; it does not store
-or prove actor identity. First identify the Reviewer and Owner and confirm the
-Work Item review location that will store their identity and role evidence.
-Then copy this prompt to obtain and record the two decisions separately:
+The Session stores the complete seven-column evidence record for every row,
+but its `reviewer` and `owner` phase names still do not prove actor identity.
+First identify the Reviewer and Owner and confirm the Work Item review location
+that stores external identity and role evidence. Then ask the agent to run
+review, full self-check, Governance Simulation, and `prepare-candidate`. Copy
+this prompt to obtain and record the two decisions separately:
 
 <!-- calibration-confirmation-boundary: phase-records,external-actor-identity -->
 ```text
-Do not activate. Show the current Session ID/path/SHA-256 and proposed
-configuration. I, the current operator, will give this review package to the
-identified Reviewer first and return that person's explicit decision and
-identity evidence to you. Wait for it. I will then do the same separately for
-the identified Owner. Record each Session phase only after I return that
-person's decision. Show both persisted phase records and the external Work
-Item evidence for actor identity and role separation. State that the Session
-itself does not bind identity or Candidate digest. STOP on a missing, stale,
-rejected, or same-person decision.
+Do not activate. Through the installed Calibration Session interface, show the
+persisted Session ID/path, prepared Candidate revision, SHA-256 digest, exact
+configuration, and all ten structured checklist evidence records. I will give
+that exact review package to the identified Reviewer first and return that
+person's explicit decision and external identity evidence. Wait for it. I will
+then do the same separately for the identified Owner. Record each phase only
+with the exact displayed Candidate revision and digest after I return that
+person's decision. Show both persisted digest-bound phase records and the
+external Work Item evidence for actor identity and role separation. State that
+the Session binds the decision to Candidate content but does not authenticate
+the person. STOP on a missing, stale, rejected, digest-mismatched, or
+same-person decision.
 ```
 
 First copy this read-only planning prompt:
 
 <!-- calibration-activation: plan-before-approval -->
 ```text
-Do not activate yet. Show the persisted Calibration Session ID, path, and
-SHA-256; the proposed configuration derived from its answers; current Active
-configuration; every `unknown`; full self-check and Governance Simulation
-results; separate Reviewer and Owner confirmation records; files activation
-would replace; atomic-write behavior; and failure recovery. State clearly that
-the current confirmation records are not machine-bound to a Candidate digest.
+Do not activate yet. Show the persisted Calibration Session ID/path, prepared
+Candidate revision and SHA-256, exact configuration, current Active
+configuration, every structured checklist blocker, full self-check and
+Governance Simulation results, and the Reviewer/Owner confirmation revision
+and digest. Show the Active and Session paths that one rollback transaction
+would replace, their current identifiers, and the exact restore behavior for
+Active failure, Session failure after Active replacement, or rollback failure.
 Mark each fact Observed, Inferred, or Unknown. End with one yes/no question
 asking only whether the evidence is complete and I want to proceed to the
-separate activation-approval step for this exact Session hash and proposed
-configuration. State that answering yes does not authorize activation. Do not
-change files, commit, push, create or merge a PR, release, or close the Work
-Item.
+separate activation-approval step for this exact Candidate identity. State that
+answering yes does not authorize activation. Do not change files, commit, push,
+create or merge a PR, release, or close the Work Item.
 ```
 
-PASS means the Session hash is current, both confirmation records are present,
-the proposed configuration matches the recorded answers, and no `unknown`
-remains. This is a manual fail-closed guard until runtime binding is
-implemented. Otherwise STOP and return to the affected checklist row. Only
-after PASS, copy this separate bounded approval:
+PASS means both confirmation records match the prepared Candidate revision and
+digest, the configuration contains all ten answer/evidence records, and no
+Unknown, STOP, stale stage, or missing field remains. The runtime now enforces
+these predicates; human review still decides whether to approve. Otherwise
+STOP and return to the affected checklist row. Only after PASS, copy this
+separate bounded approval:
 
 <!-- calibration-activation: bounded-approval -->
 ```text
-I approve activation only for the exact Calibration Session ID, SHA-256, and
-proposed configuration just reviewed. Recompute the Session SHA-256 immediately
-before activation and STOP if it changed or any answer is `unknown`. Activate
-through the installed Calibration Session interface. Show the before/after
-Active configuration identifiers, the Active-file replacement result, the
-separate Session-save result, persisted Session review, and validation result,
-then stop. A failure before or during Active-file replacement must preserve the
-previous Active configuration; verify it. If Active replacement succeeds but
-Session save or verification then fails, show the Active/Session mismatch,
-report STOP, contact the repository owner, and do not claim rollback or retry
-with weaker evidence. Do not commit, push, create or merge a PR, release, or
-close the Work Item.
+I approve activation only for the exact Calibration Session ID, prepared
+Candidate revision, SHA-256 digest, and configuration just reviewed. Recompute
+the Candidate digest immediately before activation and STOP if it changed, a
+confirmation does not match, or any checklist blocker exists. Activate through
+the installed Calibration Session transaction. Show the before/after Active
+and Session identifiers, persisted matching Candidate identity, and validation
+result, then stop. On any Active or Session persistence failure, verify both
+paths were restored to their transaction-start bytes or absence. If rollback
+fails, report STOP and “consistency unproved”, contact the repository owner,
+and do not retry with weaker evidence. Do not commit, push, create or merge a
+PR, release, or close the Work Item.
 ```
 
-Expected result: a reviewable Candidate and inventory with no hidden Unknown.
-Only the Active-file replacement is atomic; Session save is a separate step.
-Success requires both records to verify as consistent. This does not prove
-enterprise compliance or runtime sandboxing.
+Expected result: a prepared, digest-bound Candidate and complete inventory with
+no hidden Unknown. Active and Session use a two-file rollback transaction;
+this is a recovery guarantee, not a claim of physical multi-file atomicity.
+Success requires both records to carry the same Candidate identity. This does
+not authenticate people or prove enterprise compliance or runtime sandboxing.
 
-<!-- calibration-activation-atomicity: active-file-only,session-save-separate -->
+<!-- calibration-activation-atomicity: active-session-rollback-transaction,candidate-digest-bound -->
 
 <!-- novice-stage: run-local-checks -->
 ## 10. Run local checks
