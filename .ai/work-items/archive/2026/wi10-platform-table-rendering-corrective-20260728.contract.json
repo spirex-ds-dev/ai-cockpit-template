@@ -1,0 +1,408 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi10-platform-table-rendering-corrective-20260728",
+  "mode": "code",
+  "title": "Repair WI-10 platform tables and complete calibration checklists",
+  "declaredIntent": {
+    "summary": "Repair the nine broken multilingual platform tables, add the omitted complete calibration checklist to all three installation guides, and make both requirements fail closed.",
+    "requestedCapabilities": [
+      "documentation",
+      "test_automation",
+      "ai_governance"
+    ]
+  },
+  "baseCommit": "489658bf7f45d82755a930a935c86e18e3f8e715",
+  "predecessorWorkItem": {
+    "workItemId": "fix-archive-summary-evidence-path-rewrite-20260728",
+    "status": "closed",
+    "pr": {
+      "number": 428,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/428",
+      "mergeCommit": "489658bf7f45d82755a930a935c86e18e3f8e715"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/fix-archive-summary-evidence-path-rewrite-20260728.archive-manifest.json"
+    }
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi10-platform-table-rendering-corrective-20260728.contract.json",
+    ".ai/work-items/active/wi10-platform-table-rendering-corrective-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/getting-started/installation.md",
+    "docs/getting-started/installation.zh-CN.md",
+    "docs/getting-started/installation.ja.md",
+    "docs/getting-started/examples/ios.md",
+    "docs/getting-started/examples/ios.zh-CN.md",
+    "docs/getting-started/examples/ios.ja.md",
+    "docs/getting-started/examples/android.md",
+    "docs/getting-started/examples/android.zh-CN.md",
+    "docs/getting-started/examples/android.ja.md",
+    "docs/getting-started/examples/java.md",
+    "docs/getting-started/examples/java.zh-CN.md",
+    "docs/getting-started/examples/java.ja.md",
+    "scripts/check_docs_metadata.py",
+    "scripts/check_system_invariants.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_system_invariants.py",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-28-wi10-platform-table-and-calibration-checklist.md"
+  ],
+  "outOfScope": [
+    "Changing installer, runtime, CI, release, mobile, or Java execution behavior",
+    "Claiming platform commands, signing, hosted evidence, or adopter capability without repository evidence",
+    "Replacing prompt-first novice instructions with command-line-first instructions",
+    "Changing capability truth statuses or adding new product capability claims",
+    "Implementing RFE-ISSUE-147, RFE-ISSUE-082, Japanese evaluation, documentation alignment, deprecated-asset cleanup, or release",
+    "Combining this correction with another independent Work Item"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.contract.json",
+      "reason": "Authoritative original WI-10 scope and complete-calibration-checklist acceptance requirement."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/archive-traceability-path-rewrite-20260728.summary.json",
+      "reason": "Records WI-10-ISSUE-015 and WI-10-ISSUE-016 as release-blocking omissions."
+    },
+    {
+      "path": "docs/getting-started/installation.zh-CN.md",
+      "reason": "User-identified installation guide lacking a fillable complete calibration checklist."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Existing structural checker that missed rendered table continuity and checklist completeness."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Existing documentation mutation tests to extend red-first."
+    },
+    {
+      "path": "scripts/check_system_invariants.py",
+      "reason": "Existing documentation Make-target parser that must understand the installed Makefile.ai entrypoint."
+    },
+    {
+      "path": "tests/test_system_invariants.py",
+      "reason": "Existing invariant regressions to extend red-first for make -f Makefile.ai."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Bidirectional instruction-to-plan-to-implementation-to-acceptance mapping."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "multilingual_drift",
+      "markdown_rendering",
+      "novice_installation",
+      "acceptance_omission"
+    ],
+    "reason": "A visually broken table or incomplete checklist can make installation unusable while weak source-only checks still pass.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user identified both omissions, required full correction before later work, and authorized continuous execution without another confirmation."
+  },
+  "preReviewWarnings": [
+    "Verify GitHub-compatible table continuity rather than merely counting pipe-prefixed lines.",
+    "Verify all nine platform/language files, not only the reported Chinese iOS example.",
+    "Verify the calibration checklist is independently fillable and is not confused with the ten-stage explanation or final success list.",
+    "Keep the three checklist structures and safety meanings aligned while using natural English, Chinese, and Japanese.",
+    "Verify installation dynamically selects the highest verifiable stable published release, reports newer invalid releases, and stops for explicit approval before using an older verifiable release; never hardcode or silently downgrade.",
+    "Verify beginners use the persisted Calibration Session rather than hand-editing Summary JSON, and activation has separate plan and bounded approval prompts.",
+    "State the current runtime truth: unknown is not machine-blocking and confirmations are not Candidate-digest-bound; this manual fail-closed boundary remains release-blocking until a separate runtime corrective.",
+    "Require a seven-stage filled-answer example in every platform and language document, not only Japanese.",
+    "Do not introduce unsupported commands or claims while improving novice usability."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record implementation-boundary and pre-finish evidence for this corrective."
+  },
+  "acceptance": [
+    "A1: Each of the nine iOS, Android, and Java English, Chinese, and Japanese examples contains one uninterrupted GitHub-compatible platform table with one header, one separator, and exactly seven consecutive stage rows; no blank line, HTML comment, or block element interrupts those rows.",
+    "A2: Each platform example retains exactly one Stage 5 proposal-only marker outside the table, and Stage 5 continues to require Candidate-only calibration rather than writing or activation.",
+    "A3: Each of installation.md, installation.zh-CN.md, and installation.ja.md contains an explicit, independently usable ten-item calibration completion checklist. Every item has fields for completion state, observed evidence, answer type/value, Candidate change, Owner/Reviewer, and PASS/STOP decision.",
+    "A4: The three installation checklists have the same item order, field structure, and safety meaning and are complete documents rather than English-complete translations or summaries.",
+    "A5: Red-first tests prove the checker rejects comments or blank lines inside platform tables, wrong stage counts, missing or misplaced proposal-only markers, missing checklist items or fields, and multilingual structural drift.",
+    "A6: PLAN-DIRECTIVE-027 maps every user-named file to implementation or an explicit no-change reason and maps implementation back to focused tests and lifecycle verification.",
+    "A7: Focused tests, documentation checks, full quality, and ai-finish archive complete successfully before review.",
+    "A8: All three installation guides dynamically inspect stable semantic-version releases newest-to-oldest, select the highest release whose provider record, tag-pinned metadata, installer, archive, and digests agree, report every newer invalid release, and STOP for explicit user direction before using an older verifiable release; no version is hardcoded and no downgrade is silent.",
+    "A9: All three guides map human yes/no to machine answer type yes_no and value Y or N; state that the Session persists only schema-supported answer/type/reason/stage/events/check data while other checklist evidence must use schema-supported Work Item locations; separate activation planning from bounded approval; state that only Active-file replacement is atomic and Session save is separate; and truthfully state that current unknown answers are not machine-blocking and confirmation phase records prove neither actor identity nor Candidate-digest binding.",
+    "A10: Every iOS, Android, and Java English, Chinese, and Japanese example contains a structurally valid seven-row filled-answer example; every unresolved tool/device/integration example explicitly stops and retries; tests reject a missing, interrupted, or malformed example.",
+    "A11: All three guides provide a bounded older-release fallback review, route Upgrade and Dry Run away from the New Adoption continuation, use make -f Makefile.ai for direct targets when Make integration is off, require separately approved and verified Make integration before composite lifecycle targets such as ai-finish, and close CI gaps through separate plan, approval, implementation, and verification before Calibration confirmation.",
+    "A12: The dedicated PR owns only this Work Item, aggregate PR checks and Hosted required checks pass on its Head SHA, and the human merge completes before closure.",
+    "A13: ai-close-work-item verifies archive/PR ownership, synchronizes the base, deletes local and remote work branches, and leaves a clean base equal to the remote base before the next Work Item starts; any failure must not be reported as closed and actual branch state must be inspected rather than assuming preservation."
+  ],
+  "guidelines": [
+    "Use prompt-first novice language and explain what the user records; do not add command-line burden without necessity.",
+    "Keep platform evidence fail closed: unknown, missing owner, missing hosted proof, or unsupported commands must remain STOP rather than guessed PASS.",
+    "Use one stable machine-readable checklist schema across English, Chinese, and Japanese while keeping human wording natural.",
+    "Strengthen structural checks so the rendered Markdown requirement cannot be bypassed by logically collecting nonconsecutive rows.",
+    "Maintain bidirectional instruction-plan-implementation-acceptance evidence for every named document."
+  ],
+  "intent": {
+    "problem": "WI-10 passed its previous checks even though a block HTML marker splits every platform table after Stage 4 on GitHub and even though the required complete calibration checklist was never delivered. The existing checker recognized markers and logical row counts but did not model Markdown continuity or distinguish explanatory stages from a fillable checklist.",
+    "constraints": [
+      "Correct all affected English, Chinese, and Japanese documents together.",
+      "Preserve prompt-first instructions and proposal-only calibration boundaries.",
+      "Do not invent platform commands or evidence.",
+      "Add automated negative coverage before changing the documents.",
+      "Complete the independent Work Item, PR, merge, closure, and branch cleanup lifecycle."
+    ],
+    "rationale": "A small explicit schema for continuous platform tables and ten-field-complete calibration rows gives novices a usable procedure and gives CI an objective regression boundary. Repairing all language/platform variants in one WI-10 corrective avoids another partial multilingual delivery."
+  },
+  "rawUserRequest": "WI-10 的三语平台文档从第 5 行开始表格格式出问题，其他语言也要检查；校对清单在哪里；安装必须简单、每个脚手架与校准步骤详细，按没有编程经验的人也能完成的标准；安装手顺没必要固定到某个版本，应动态发现最新正式发布版本后只绑定本次安装解析出的 tag。结束当前工单后纠正，按“指示—计划—实现—验收”双向追踪完成完整 PR、合并、关闭和清理流程，没有需要确认的继续执行。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-wi10-table-and-calibration-checklist-correction",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-directed-wi10-table-and-complete-calibration-checklist-corrective"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A platform table has a comment or blank line between Stage 4 and Stage 5.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The checker rejects the file even if all seven pipe-prefixed stage rows remain present.",
+      "verificationPlan": "Add red-first mutations for an HTML comment and blank line inside an otherwise complete table."
+    },
+    {
+      "scenario": "One platform/language file is missing a stage, has an extra stage, or has a misplaced proposal-only marker.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The checker identifies the exact file and structural defect.",
+      "verificationPlan": "Extend platform-table mutation tests across the discovered nine-file matrix."
+    },
+    {
+      "scenario": "An installation guide has ten-stage prose but no independently fillable calibration checklist.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The checker rejects the guide because explanation is not completion evidence.",
+      "verificationPlan": "Require a dedicated checklist marker, one header/separator, ten rows, and all required fields."
+    },
+    {
+      "scenario": "One checklist item omits completion, evidence, answer, Candidate, Owner/Reviewer, or PASS/STOP.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The checker fails closed and names the missing field or malformed row.",
+      "verificationPlan": "Add field-removal and row-removal mutation regressions."
+    },
+    {
+      "scenario": "English, Chinese, and Japanese checklist structure drifts while individual files remain syntactically valid.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The cross-language structure check rejects inconsistent item order, row count, or field count.",
+      "verificationPlan": "Compare stable checklist stage IDs and field schemas across all three documents."
+    },
+    {
+      "scenario": "An installation guide hardcodes a release version or combines moving main metadata with a tagged release asset.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The checker rejects both forms while accepting dynamic provider discovery followed by resolved-tag metadata verification.",
+      "verificationPlan": "Add moving-main and hardcoded-semver mutations to the multilingual installation checks."
+    },
+    {
+      "scenario": "A beginner is told to hand-edit Summary JSON, persist unsupported checklist fields in the Session, use an inexact answer mapping, treat Active and Session persistence as one atomic transaction, or activate without separate planning and approval.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The guides expose the exact Session persistence boundary and yes_no mapping, use only schema-supported Work Item evidence for other fields, distinguish atomic Active replacement from separate Session save, and contain distinct read-only plan and bounded activation approval stages.",
+      "verificationPlan": "Require stable answer, persistence, atomicity, and activation markers, mutation coverage, and independent documentation review."
+    },
+    {
+      "scenario": "A newer stable release has missing or inconsistent tag-pinned metadata, installer, archive, or digest evidence while an older release is verifiable.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The guide reports the newer failure and stops for explicit user direction before selecting the older verifiable release.",
+      "verificationPlan": "Require the highest-verifiable release boundary and mutate it to the old latest-published behavior."
+    },
+    {
+      "scenario": "Calibration contains unknown answers or confirmations that are not bound to an immutable Candidate digest.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The guide exposes the current runtime limitation and requires manual STOP, Session identity/digest review, and separate activation approval.",
+      "verificationPlan": "Require the runtime-boundary marker in all three languages and record the implementation corrective as release-blocking."
+    },
+    {
+      "scenario": "One platform/language document omits the concrete seven-stage filled-answer example.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The checker rejects the exact document even when its abstract seven-stage request table is valid.",
+      "verificationPlan": "Require one uninterrupted seven-row filled example in all nine documents and add a marker-removal mutation."
+    },
+    {
+      "scenario": "A beginner follows New Adoption after choosing Upgrade or Dry Run, invokes unavailable plain Make targets while integration is off, or reaches Calibration confirmation with an unresolved CI gap.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The guide routes modes correctly, uses the explicit Makefile.ai entrypoint when needed, and requires CI plan, bounded approval, implementation, and verification.",
+      "verificationPlan": "Require stable fallback, Make-entrypoint, confirmation-identity, yes_no-value, and CI-gap markers in every language and mutate their absence."
+    },
+    {
+      "scenario": "The review branch or PR contains unrelated ownership, or Hosted required checks do not bind to the reviewed Head SHA.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Aggregate PR ownership and Hosted checks pass on the exact PR Head SHA before human merge.",
+      "verificationPlan": "Run check-ai-pr against the base commit, inspect Hosted required checks, and record the human merge."
+    },
+    {
+      "scenario": "Closure fails after merge or branch deletion state differs between local and remote.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The Work Item is not reported closed until archive/PR ownership, branch deletion, clean worktree, and synchronized base all verify.",
+      "verificationPlan": "Run ai-close-work-item, inspect actual branch state, and verify local base equals the remote base."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "Ray",
+    "reason": "The user explicitly authorized this complete WI-10 corrective and continuous governed execution."
+  },
+  "rollbackNote": "Revert this Work Item through its PR; documentation and checker changes are isolated from runtime behavior.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 650
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi10-platform-table-rendering-corrective-20260728.json",
+    "baseCommit": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+    "initialScopeDigest": "3b42598773c8255ad9fce9a8a2e605f149023af6add54e9064f666472a527586",
+    "contractSkeletonDigest": "91693dc56faea2f4ae6d79293d33f6c79516facfb8f231a2696a64a478663651"
+  },
+  "resumeHistory": [
+    {
+      "resumeVersion": 1,
+      "fromBaseCommit": "511ccaabafdd4c5b62e2d6b7bcc1dcf765c8d288",
+      "toBaseCommit": "489658bf7f45d82755a930a935c86e18e3f8e715",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/wi10-platform-table-rendering-corrective-20260728",
+      "recordedAt": "2026-07-28T13:06:54.366252+00:00",
+      "priorContractDigest": "f3c4230098cd3660cdc89686e3fb666871c1b94df181201b777a2c791148ca3f",
+      "predecessorWorkItemId": "fix-archive-summary-evidence-path-rewrite-20260728",
+      "predecessorMergeCommit": "489658bf7f45d82755a930a935c86e18e3f8e715",
+      "predecessorManifestPath": ".ai/work-items/archive/2026/fix-archive-summary-evidence-path-rewrite-20260728.archive-manifest.json",
+      "predecessorClosure": {
+        "statusClosed": true,
+        "prMerged": true,
+        "closureSucceeded": true,
+        "localBranchDeleted": true,
+        "remoteBranchDeleted": true,
+        "baseSynchronized": true
+      }
+    }
+  ]
+}
