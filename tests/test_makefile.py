@@ -356,3 +356,12 @@ def test_makefile_exposes_paired_japanese_status_generation_and_validation():
         "scripts/ai_check_status.py target/ai_cockpit_status.ja.md "
         "$(SUMMARY_ARGS) $(STATUS_ARGS) --language ja"
     ) in makefile
+
+
+def test_task_outcome_pr_make_entrypoint_accepts_explicit_language():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+
+    assert (
+        'scripts/ai_render_task_outcome_pr.py "$(OUTCOME)" "$(PROFILE)" '
+        '$(if $(LANGUAGE),--language "$(LANGUAGE)")'
+    ) in makefile

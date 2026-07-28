@@ -12,7 +12,6 @@ from ai_japanese_capability import (
 
 
 EXPECTED_FINDINGS = {
-    "JA-PR-001": "japanese-pr-output-corrective-20260729",
     "JA-LIFECYCLE-001": "japanese-lifecycle-fixture-corrective-20260729",
     "JA-DOC-001": "japanese-uninstall-documentation-corrective-20260729",
 }
@@ -75,6 +74,34 @@ def test_wizard_capability_requires_both_entrypoints_and_executable_tests(tmp_pa
 
     (scripts / "ai_calibration_wizard.py").write_text(localization_import, encoding="utf-8")
     assert ai_japanese_capability._wizard_is_executable() is True
+
+
+def test_pr_capability_requires_language_wiring_and_executable_safety_parity(tmp_path, monkeypatch):
+    (tmp_path / "scripts").mkdir()
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "scripts/ai_render_task_outcome_pr.py").write_text(
+        'LANGUAGE_OPTION = "--language"\n日本語 = True\n',
+        encoding="utf-8",
+    )
+    (tmp_path / "Makefile").write_text(
+        'render-task-outcome-pr:\n\t--language "$(LANGUAGE)"\n',
+        encoding="utf-8",
+    )
+    (tmp_path / "tests/test_task_outcome_pr_summary.py").write_text(
+        "def test_japanese_pr_summary_localizes_chrome_and_preserves_approved_values(): pass\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_japanese_capability, "ROOT", tmp_path)
+
+    assert ai_japanese_capability._pr_has_japanese_view() is False
+
+    (tmp_path / "tests/test_task_outcome_pr_summary.py").write_text(
+        "def test_japanese_pr_summary_localizes_chrome_and_preserves_approved_values(): pass\n"
+        "def test_japanese_pr_summary_preserves_sanitization_and_opt_in_boundaries(): pass\n"
+        "def test_cli_language_selection_and_unsupported_locale_fail_before_write(): pass\n",
+        encoding="utf-8",
+    )
+    assert ai_japanese_capability._pr_has_japanese_view() is True
 
 
 def test_independent_corpus_covers_every_required_japanese_input_domain():
@@ -154,9 +181,12 @@ def test_json_and_markdown_are_deterministic_views_of_one_result():
     assert first["digest"] in markdown
     assert "JA-CLI-001" in markdown
     status_case = next(case for case in first["cases"] if case["id"] == "JA-STATUS-001")
+    pr_case = next(case for case in first["cases"] if case["id"] == "JA-PR-001")
     assert status_case["status"] == "pass"
+    assert pr_case["status"] == "pass"
     assert "| `JA-STATUS-001` | Cockpit Status Japanese parity | **pass** |" in markdown
     assert "japanese-status-output-corrective-20260729" not in markdown
+    assert "japanese-pr-output-corrective-20260729" not in markdown
 
 
 def test_report_drift_rejects_stale_json_and_markdown(tmp_path):

@@ -10,10 +10,12 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any, Mapping
 
 from ai_common import parse_yaml
+from ai_render_task_outcome_multilingual import normalize_locale
 
 
 SAFE_FIELDS = (
@@ -27,14 +29,49 @@ SAFE_FIELDS = (
     "residualRisks",
 )
 DEFAULT_FIELDS = ("status", "outcomeSummary")
-FIELD_LABELS = {
-    "outcomeSummary": "Outcome",
-    "taskOverview": "Overview",
-    "deliveredChanges": "Delivered Changes",
-    "findings": "Findings",
-    "risks": "Risks",
-    "warnings": "Warnings",
-    "residualRisks": "Residual Risks",
+PR_CHROME: dict[str, dict[str, Any]] = {
+    "en": {
+        "title": "Task Outcome Summary",
+        "status": "Status",
+        "none": "None",
+        "fields": {
+            "outcomeSummary": "Outcome",
+            "taskOverview": "Overview",
+            "deliveredChanges": "Delivered Changes",
+            "findings": "Findings",
+            "risks": "Risks",
+            "warnings": "Warnings",
+            "residualRisks": "Residual Risks",
+        },
+    },
+    "ja": {
+        "title": "タスク結果の概要",
+        "status": "状態",
+        "none": "なし",
+        "fields": {
+            "outcomeSummary": "結果",
+            "taskOverview": "タスク概要",
+            "deliveredChanges": "変更内容",
+            "findings": "検出事項",
+            "risks": "リスク",
+            "warnings": "警告",
+            "residualRisks": "残存リスク",
+        },
+    },
+    "zh-CN": {
+        "title": "任务结果摘要",
+        "status": "状态",
+        "none": "无",
+        "fields": {
+            "outcomeSummary": "结果",
+            "taskOverview": "任务概览",
+            "deliveredChanges": "交付变更",
+            "findings": "发现",
+            "risks": "风险",
+            "warnings": "警告",
+            "residualRisks": "剩余风险",
+        },
+    },
 }
 SECRET = re.compile(
     r"(?i)(?:password|passwd|secret|token|api[_-]?key|private[_-]?key)\s*[:=]\s*[^\s,;]+"
@@ -51,6 +88,23 @@ def _policy(profile: Mapping[str, Any]) -> Mapping[str, Any]:
         return {}
     policy = reporting.get("pullRequestSummary", {})
     return policy if isinstance(policy, Mapping) else {}
+
+
+def _language(profile: Mapping[str, Any], requested: str | None) -> str:
+    """Resolve explicit, PR-policy, or reporting locale without silent fallback."""
+    if requested is not None:
+        return normalize_locale(requested)
+    reporting = profile.get("reporting", {})
+    if not isinstance(reporting, Mapping):
+        return "en"
+    policy = _policy(profile)
+    configured = policy.get("language", reporting.get("defaultLanguage", "en"))
+    return normalize_locale(configured)
+
+
+def _enabled(policy: Mapping[str, Any]) -> bool:
+    value = policy.get("enabled")
+    return value is True or (isinstance(value, str) and value.strip().lower() == "true")
 
 
 def _safe_text(value: Any) -> str:
@@ -83,12 +137,19 @@ def _items(value: Any) -> list[str]:
     return result
 
 
-def render_pr_summary(outcome: Mapping[str, Any], profile: Mapping[str, Any]) -> str:
+def render_pr_summary(
+    outcome: Mapping[str, Any],
+    profile: Mapping[str, Any],
+    *,
+    language: str | None = None,
+) -> str:
     """Return a PR-safe Markdown fragment, or empty string when not approved."""
 
     policy = _policy(profile)
-    if policy.get("enabled") is not True:
+    if not _enabled(policy):
         return ""
+    locale = _language(profile, language)
+    chrome = PR_CHROME[locale]
     requested = policy.get("fields", DEFAULT_FIELDS)
     fields = (
         tuple(field for field in requested if field in SAFE_FIELDS)
@@ -98,23 +159,22 @@ def render_pr_summary(outcome: Mapping[str, Any], profile: Mapping[str, Any]) ->
     sections = outcome.get("sections", {})
     if not isinstance(sections, Mapping):
         sections = {}
-    lines = ["## Task Outcome Summary", ""]
+    lines = [f"## {chrome['title']}", ""]
     for field in fields:
         if field == "status":
             status = _safe_text(outcome.get("status")) or "unknown"
-            lines.append(f"- Status: `{status}`")
-        elif field == "outcomeSummary":
-            lines.append(f"- Outcome: {_safe_text(sections.get(field)) or 'None'}")
-        elif field == "taskOverview":
-            lines.append(f"- Overview: {_safe_text(sections.get(field)) or 'None'}")
+            lines.append(f"- {chrome['status']}: `{status}`")
+        elif field in {"outcomeSummary", "taskOverview"}:
+            value = _safe_text(sections.get(field)) or chrome["none"]
+            lines.append(f"- {chrome['fields'][field]}: {value}")
         else:
             values = _items(sections.get(field))
-            label = FIELD_LABELS[field]
+            label = chrome["fields"][field]
             if values:
                 lines.append(f"- {label}:")
                 lines.extend(f"  - {value}" for value in values)
             else:
-                lines.append(f"- {label}: None")
+                lines.append(f"- {label}: {chrome['none']}")
     return "\n".join(lines) + "\n"
 
 
@@ -123,10 +183,15 @@ def _main() -> int:
     parser.add_argument("outcome", type=Path)
     parser.add_argument("profile", type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--language")
     args = parser.parse_args()
-    outcome = json.loads(args.outcome.read_text(encoding="utf-8"))
-    profile = parse_yaml(args.profile) if args.profile.exists() else {}
-    rendered = render_pr_summary(outcome, profile)
+    try:
+        outcome = json.loads(args.outcome.read_text(encoding="utf-8"))
+        profile = parse_yaml(args.profile) if args.profile.exists() else {}
+        rendered = render_pr_summary(outcome, profile, language=args.language)
+    except (OSError, json.JSONDecodeError, ValueError) as exc:
+        print(f"Failed to render Task Outcome PR summary: {exc}", file=sys.stderr)
+        return 2
     if args.output:
         args.output.write_text(rendered, encoding="utf-8")
     else:

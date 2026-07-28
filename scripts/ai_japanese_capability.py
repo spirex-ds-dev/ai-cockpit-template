@@ -188,8 +188,20 @@ def _status_has_japanese_view() -> bool:
 
 
 def _pr_has_japanese_view() -> bool:
-    text = _read("scripts/ai_render_task_outcome_pr.py")
-    return "ja" in text and ("状態" in text or "Japanese" in text)
+    implementation = _read("scripts/ai_render_task_outcome_pr.py")
+    makefile = _read("Makefile")
+    tests = _read("tests/test_task_outcome_pr_summary.py")
+    return all(
+        (
+            "--language" in implementation,
+            ("タスク結果の概要" in implementation or "日本語" in implementation),
+            "render-task-outcome-pr:" in makefile,
+            "--language" in makefile,
+            "test_japanese_pr_summary_localizes_chrome_and_preserves_approved_values" in tests,
+            "test_japanese_pr_summary_preserves_sanitization_and_opt_in_boundaries" in tests,
+            "test_cli_language_selection_and_unsupported_locale_fail_before_write" in tests,
+        )
+    )
 
 
 def _task_outcome_has_japanese_view() -> bool:
@@ -308,9 +320,12 @@ def evaluate() -> dict[str, Any]:
             "Japanese PR chrome preserves the approved field set"
             if _pr_has_japanese_view()
             else FINDINGS["JA-PR-001"]["summary"],
-            source=["scripts/ai_render_task_outcome_pr.py"],
+            source=["scripts/ai_render_task_outcome_pr.py", "Makefile"],
             tests=["tests/test_task_outcome_pr_summary.py"],
-            commands=["PYTHONPATH=. .venv/bin/pytest -q tests/test_task_outcome_pr_summary.py"],
+            commands=[
+                "PYTHONPATH=scripts:. .venv/bin/pytest -q tests/test_task_outcome_pr_summary.py",
+                "make render-task-outcome-pr OUTCOME=<outcome> PROFILE=<profile> LANGUAGE=ja",
+            ],
             limitation="PR localization must not translate or invent arbitrary evidence prose.",
             finding_id=None if _pr_has_japanese_view() else "JA-PR-001",
         ),
