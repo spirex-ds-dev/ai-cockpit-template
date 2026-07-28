@@ -28,9 +28,16 @@ make check-ai-scope CONTRACT=.ai/work-items/active/<task>.contract.json
 
 作業中の Work Item を一部だけ削除しないでください。中止する場合は Contract と Summary を組で保全または意図的に archive し、履歴とブランチの扱いを人が確認してください。
 
+無効化、通常の証拠保持アンインストール、または purge の途中で停止した場合は、
+手動で残存ファイルを削除せず、
+[日本語インストール手順の「AI Cockpit を無効化またはアンインストールする」](../getting-started/installation.ja.md#15-ai-cockpit-を無効化またはアンインストールする)
+へ戻ってください。proposal（削除候補書）、drift/ownership（導入時からのずれと
+所有者）、detached executor（別プロセスの公開削除機能）、receipt（完了記録）の
+うち、最後に PASS した 15.x 段階を確認してから再開します。
+
 ## Wizard の復旧
 
-- Installation Wizard が dirty worktree、remote/default branch 不在、管理対象 conflict を示した場合は、確認せずにリポジトリを修正します。Dry Run で計画だけ確認できます。
+- Installation Wizard が dirty worktree、remote/default branch 不在、管理対象 conflict を示した場合は、その場で変更せず停止します。原因と復旧計画を確認し、人がその修正だけを別途承認してから対応します。Dry Run では計画だけを確認できます。
 - Calibration Wizard の Unknown または stale は迂回せず、事実や理由を入力して該当 stage を再検証します。
 - EOF / Ctrl+C / Pause の後は `make cockpit-calibration-wizard` で再開します。保存済み Session は activation 済みとは扱われません。
 - 外部モバイルコマンドがない場合は、導入先の Gradle Wrapper、Xcode、CocoaPods、JDK を確認します。AI Cockpit は外部 toolchain を導入・切替しません。

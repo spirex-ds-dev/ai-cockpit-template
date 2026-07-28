@@ -125,14 +125,14 @@
     {
       "id": "governed_update_and_uninstall",
       "status": "adopter_installed",
-      "claim": "Installed update proposal/apply and preserve-evidence uninstall boundaries expose standard Work Item, snapshot, migration, recalibration, PR handoff, rollback, detached-uninstaller, purge-export, and receipt evidence.",
-      "evidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_uninstall_proposal.py", "docs/reference/installed-lifecycle.md"],
-      "verification": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_uninstall_proposal.py", "tests/test_detached_uninstaller.py", "tests/test_purge.py", "tests/test_installed_lifecycle_e2e.py"],
-      "sourceEvidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_uninstall_proposal.py", "docs/reference/installed-lifecycle.md"],
-      "testEvidence": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_uninstall_proposal.py", "tests/test_detached_uninstaller.py", "tests/test_purge.py", "tests/test_installed_lifecycle_e2e.py"],
+      "claim": "Installed update proposal/apply and uninstall proposal/state-output boundaries expose reviewable Work Item, snapshot, migration, recalibration, PR handoff, rollback, disable-result, deletion-list, evidence-retention, and receipt-requirement evidence; they do not expose detached filesystem removal or purge execution.",
+      "evidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_disable_enable.py", "scripts/ai_uninstall_proposal.py", "scripts/ai_installer_catalog.json", "docs/reference/installed-lifecycle.md"],
+      "verification": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_disable_enable.py", "tests/test_uninstall_proposal.py", "tests/test_japanese_capability.py"],
+      "sourceEvidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_disable_enable.py", "scripts/ai_uninstall_proposal.py", "scripts/ai_installer_catalog.json", "docs/reference/installed-lifecycle.md"],
+      "testEvidence": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_disable_enable.py", "tests/test_uninstall_proposal.py", "tests/test_japanese_capability.py"],
       "commandEvidence": ["make quality"],
-      "limitations": "Installed lifecycle claims require target-repository receipts and do not prove a completed external operation.",
-      "digest": "sha256:74309dc59c1f68f99cca67f52fc420fa39b2109d4ee32ddf7c4b18563eb8e3e3"
+      "limitations": "Uninstall proposal and disable write result JSON but do not delete Runtime or update canonical installed state. No public uninstall-facts builder or proposal-digest binding exists. Detached-removal and purge models are not installed; no public detached filesystem-removal or purge entrypoint exists. Target-repository receipts remain required.",
+      "digest": "sha256:713a9cfd07a4bb098686909a87611cde2f37fa420193b21ba46be32461c2137f"
     },
     {
       "id": "quick_install_release_archive_digest",

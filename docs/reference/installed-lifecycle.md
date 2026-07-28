@@ -61,17 +61,49 @@ Project-owned configuration migrations use a versioned registry and produce a pl
 
 ## Rollback snapshot and execution
 
+Before an update mutates Runtime or Managed Regions, a snapshot is created under `.ai/upgrade/snapshots/<upgrade-id>/`. It contains `manifest.before.json`, `version.before.json`, `managed-regions.before.json`, Runtime restore sources, the Project Config hash, the Migration Plan, and rollback instructions. Rollback first validates the current installed manifest, then emits a confirmation-gated proposal. Confirmation restores only snapshot-owned Runtime and Managed Region content; Project-owned code and configuration are preserved even when they drifted after the update. Missing snapshots or current-installation drift are `blocked`. A non-invertible migration is `partial_rollback` and lists remaining manual operations; no write occurs in either state.
+
 ## Disable and enable
 
-Disable is a reversible state transition, not uninstall: it records disable evidence, sets `disabled`, and adds a blocking entry while retaining Runtime, Policy, Evidence, Archive, Update, Uninstall, and CI managed-region content. It does not silently remove a CI Gate. Enable rechecks Runtime Integrity, Manifest, Project Profile, Policy, and Adoption Readiness; any failed check leaves the installation disabled with a resume condition. Only when all checks pass is the state changed back to `active`.
+The installed `ai-cockpit-disable` and `ai-cockpit-enable` entrypoints model a
+reversible state transition and write a result JSON. They do not update the
+input file or canonical installed state. The disable result retains Runtime,
+Policy, Evidence, Archive, and Managed Regions and proposes a blocking entry.
+The enable result requires Runtime Integrity, Manifest, Project Profile,
+Policy, and Adoption Readiness checks. A target repository must not claim an
+actual state transition until it has reviewed and persisted the result through
+an evidenced canonical-state integration.
 
 ## Uninstall proposal and preserve-evidence mode
 
-Phase A is a read-only proposal boundary with three explicit modes: `disable`, `preserve-evidence`, and `purge`. The default `preserve-evidence` mode requires drift and Ownership checks, exports an evidence bundle, and hands off to a detached uninstaller; it retains Bootstrap Evidence, Archive, Human Decisions, Project Policy, Complexity Baseline, Audit Evidence, and project-owned files. Modified Template/Shared content, unknown Ownership, or drift blocks the proposal. `purge` remains destructive and confirmation-gated, with an explicit deletion list, export requirement, and final receipt.
+Phase A is a Runtime/deletion read-only proposal boundary that writes one
+proposal JSON. The current function accepts `disable`, `preserve-evidence`,
+and `purge`, but mode-specific execution is not implemented. It blocks only
+when the supplied aggregate `drift` value is true or `unknownOwnership` is
+non-empty; it does not itself validate installation facts or inspect modified
+Template/Shared entries. The default `preserve-evidence` proposal lists
+Bootstrap Evidence, Archive, Human Decisions, Project Policy, Complexity
+Baseline, and Audit Evidence for retention and excludes supplied
+`projectOwned` paths from its deletion list.
 
-The detached uninstaller runs from `<system-temp>/ai-cockpit-uninstall/<session-id>/uninstall.py` and must not import the object project Runtime. It performs Drift Check → confirmed Runtime removal → Managed Region handling → evidence retention → final Receipt → Runtime Removal Verification. Unconfirmed, modified, or unknown-owned files remain untouched; the receipt records removed files, preserved business/evidence files, and verification state.
+The required detached-uninstaller design runs from `<system-temp>/ai-cockpit-uninstall/<session-id>/uninstall.py` and must not import the object project Runtime. It performs Drift Check → confirmed Runtime removal → Managed Region handling → evidence retention → final Receipt → Runtime Removal Verification. Unconfirmed, modified, or unknown-owned files remain untouched; the receipt records removed files, preserved business/evidence files, and verification state.
 
-Purge is a separate destructive gate. It is blocked until an Evidence Export Bundle is complete and verified, displays the exact deletion list and irreversible impact, and requires two explicit confirmations. Protected project-owned files, external evidence references, Work Item Contracts/Summaries, and audit records are excluded. Success produces `purged` state, an evidence digest, and a receipt; any export failure blocks without deletion.
+**Current implementation boundary:** the installed public Make surface provides
+only `ai-cockpit-uninstall-propose`. It has no public builder for the uninstall
+facts input and no proposal-digest binding. The template source contains
+`scripts/ai_detached_uninstaller.py`, which models confirmation, blocked states,
+writes, and receipt data in memory, but that script is not in the installed
+catalog, does not remove filesystem paths, and has no CLI/Make entrypoint.
+Therefore proposal success is not uninstall success. An adopter must stop
+before removal rather than call the internal model or manually delete files.
+
+Purge is a required separate destructive gate, but the current purge code is
+also a template-only in-memory model: it is not in the installed catalog and
+has no CLI/Make entrypoint or filesystem deletion behavior. An adopter must
+stop rather than claim `purged`. A future implementation must verify an
+Evidence Export Bundle, display the exact deletion list and irreversible
+impact, require separate confirmations, protect project-owned and audit
+evidence, and emit a verified receipt.
 
 ## Cockpit, CLI, and Summary alignment
 
@@ -80,5 +112,3 @@ The generated Cockpit Status is the user-facing projection of Lifecycle Facts. I
 Cross-stack E2E evidence uses three explicit kinds: `local_real_execution`, `not_run`, and `simulation`. A real Python fixture must cover the lifecycle phases; TypeScript/Java lanes are recorded as `not_run` when their toolchain is unavailable. Manifest, Schema, Rollback, and Uninstall evidence carries the stack and phase so a simulated result cannot be presented as an execution result.
 
 The lifecycle safety gate tests both negative and legal boundary cases. Silent overwrite/delete, drift, unconfirmed operations, and forged execution claims return `blocked` with `state`, `reason`, `evidence`, `resumeCondition`, and `policyReference`. Legal no-op, documentation, sandbox mock, and cancellation cases may return `allowed`. A failed safety gate blocks release and plan cleanup.
-
-Before an update mutates Runtime or Managed Regions, a snapshot is created under `.ai/upgrade/snapshots/<upgrade-id>/`. It contains `manifest.before.json`, `version.before.json`, `managed-regions.before.json`, Runtime restore sources, the Project Config hash, the Migration Plan, and rollback instructions. Rollback first validates the current installed manifest, then emits a confirmation-gated proposal. Confirmation restores only snapshot-owned Runtime and Managed Region content; Project-owned code and configuration are preserved even when they drifted after the update. Missing snapshots or current-installation drift are `blocked`. A non-invertible migration is `partial_rollback` and lists remaining manual operations; no write occurs in either state.

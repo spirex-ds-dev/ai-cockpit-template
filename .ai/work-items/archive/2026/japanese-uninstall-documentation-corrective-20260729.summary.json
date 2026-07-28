@@ -1,0 +1,803 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "japanese-uninstall-documentation-corrective-20260729",
+  "contractPath": ".ai/work-items/archive/2026/japanese-uninstall-documentation-corrective-20260729.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "reason": "Binds the Japanese documentation gap, discovered runtime boundary, exact scope, scenarios, and next corrective."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "reason": "Records red-first tests, five-strategy document review, capability corrections, issues, and residual release blocker."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated current Work Item status."
+    },
+    {
+      "path": ".ai/work-items/starts/japanese-uninstall-documentation-corrective-20260729.json",
+      "reason": "Binds this Work Item to its starting base and scope."
+    },
+    {
+      "path": "docs/getting-started/installation.ja.md",
+      "reason": "Adds the version-neutral, prompt-first Japanese disable/uninstall/purge procedure with beginner explanations and explicit current STOP boundaries."
+    },
+    {
+      "path": "docs/reference/upgrade.ja.md",
+      "reason": "Routes Japanese maintainers to the same actionable uninstall procedure."
+    },
+    {
+      "path": "docs/reference/troubleshooting.ja.md",
+      "reason": "Routes failed removal recovery to the last verified stage and restores the no-write-before-review boundary."
+    },
+    {
+      "path": "docs/reference/installed-lifecycle.md",
+      "reason": "Separates installed proposal/state-output behavior from non-installed detached and purge models and restores rollback content to its heading."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Corrects the governed update/uninstall capability claim and deterministic digest to the installed catalog truth."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Generated machine assessment clears JA-DOC-001 and records JA-UNINSTALL-RUNTIME-001 as the sole blocker."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Generated human view of the same Japanese assessment."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registers this corrective plan as a current instruction."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Adds PLAN-DIRECTIVE-035 and maps the runtime finding in both directions."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records WI-16-ISSUE-015 and the runtime corrective before documentation alignment."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-29-japanese-uninstall-documentation-corrective.md",
+      "reason": "Defines instruction-to-acceptance delivery and the discovered model-versus-runtime boundary."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Requires ordered actionable uninstall markers and a genuinely installed facts/digest/executor surface."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Makes the actionable Japanese uninstall structure, ordering, links, and version-neutrality part of the docs gate."
+    },
+    {
+      "path": "tests/test_japanese_capability.py",
+      "reason": "Rejects keyword-only, missing-step, out-of-order, and non-installed executor evidence."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Mutation-tests the repository documentation route."
+    },
+    {
+      "path": "tests/test_capability_truth_matrix.py",
+      "reason": "Requires explicit non-installed public detached-removal limitations."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-uninstall-documentation-corrective-20260729.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/installed-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "scripts/ai_uninstall_proposal.py",
+    "scripts/ai_disable_enable.py",
+    "scripts/ai_detached_uninstaller.py",
+    "scripts/ai_purge.py",
+    "scripts/ai_installer_catalog.json",
+    "templates/make/Makefile.ai",
+    "docs/getting-started/installation.ja.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:39:37.405180+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "a5a5d7b66f2c585b023e9327b8e1219754f22c4b750036e89e6ad913335c038b",
+      "commandHash": "b516bba492db178ddcaa47dcff2065450472641b5a65ff321d2919f58a175715",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "b27b1a1368f47c5db56c55bbd85bc1d7f0449edcc19d5709c571b0d8be85abd5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "outputBytes": 284
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:39:37.544743+00:00",
+      "exitCode": 0,
+      "durationMs": 91,
+      "outputDigest": "82e4f0d45a931d399f3f3bc514b1715b29714dd40475c6b747324d1ca3496de3",
+      "commandHash": "752be5fbc90983da1e7c09d129b3b29b13bbed7759cb571f44dc9fa37ade09de",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "b27b1a1368f47c5db56c55bbd85bc1d7f0449edcc19d5709c571b0d8be85abd5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json scope guard passed: 18 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json scope guard passed: 18 changed path(s) covered",
+      "outputBytes": 205
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:39:37.707538+00:00",
+      "exitCode": 0,
+      "durationMs": 113,
+      "outputDigest": "028607d63c7e8b4f3d68bacea4ef9c07dfc50b5bba4b7a721fbcd47ea68123c0",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "b27b1a1368f47c5db56c55bbd85bc1d7f0449edcc19d5709c571b0d8be85abd5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 242
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:39:37.942464+00:00",
+      "exitCode": 0,
+      "durationMs": 183,
+      "outputDigest": "e2e38f334ba1603f5d18ce1360169d627b5bb7db1f14aee6fa95db25e79e0df6",
+      "commandHash": "39637d55602d6c1bdee33a3fbaa4ce8dbf6a866f36171899b45531ec61b89d57",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "b27b1a1368f47c5db56c55bbd85bc1d7f0449edcc19d5709c571b0d8be85abd5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `japanese-uninstall-documentation-corrective-20260729` - Contract Hash: `3411fbbe69d7b9a3` - Mode: `code` - notCodable: `False` - Execution Decisi",
+      "outputTail": "plate-only model code - Beginner prompt-first PASS/STOP flow - JA-DOC-001 pass with JA-UNINSTALL-RUNTIME-001 still blocking ## Diff Ownership Preview - active_owned: `18`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-uninstall-documentation-corrective-20260729.json` — covered by Contract scope - [active_owned] `docs/getting-started/installation.ja.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/installed-lifecycle.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/reference/troubleshooting.ja.md` — covered by Contract scope - [active_owned] `docs/reference/upgrade.ja.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-japanese-uninstall-documentation-corrective.md` — covered by Contract scope - [active_owned] `scripts/ai_japanese_capability.py` — covered by Contract scope - [active_owned] `scripts/check_docs_metadata.py` — covered by Contract scope - [active_owned] `tests/test_capability_truth_matrix.py` — covered by Contract scope - [active_owned] `tests/test_docs_metadata.py` — covered by Contract scope - [active_owned] `tests/test_japanese_capability.py` — covered by Contract scope ## Next Action - Run or record required verification: aiSummary",
+      "outputBytes": 8765
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:39:38.108826+00:00",
+      "exitCode": 0,
+      "durationMs": 100,
+      "outputDigest": "496849ab6608f7c5bde2fa3f22d34bde4e46ff408f94d0a1c1be458fbcc2a971",
+      "commandHash": "60db9e7d4501d1f8653d55d901e8d63e85a76206c1032ebf65dd810baa5a7985",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "b27b1a1368f47c5db56c55bbd85bc1d7f0449edcc19d5709c571b0d8be85abd5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/japanese-uninstall-documentation-corrective-20260729.json [review] .ai/cockpit/current_status.md [review] scripts/ai_japanese_capability.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/japanese-uninstall-documentation-corrective-20260729.json [review] .ai/cockpit/current_status.md [review] scripts/ai_japanese_capability.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 455
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:39:38.255033+00:00",
+      "exitCode": 0,
+      "durationMs": 97,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "b27b1a1368f47c5db56c55bbd85bc1d7f0449edcc19d5709c571b0d8be85abd5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:39:38.407463+00:00",
+      "exitCode": 0,
+      "durationMs": 102,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "b27b1a1368f47c5db56c55bbd85bc1d7f0449edcc19d5709c571b0d8be85abd5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:39:38.507166+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "a55c87742bcbc977addf6126c4a9ed525acd45802e38c81c1d0bb2f264f207ab",
+      "commandHash": "7b22d26b0908121512ba1630501e92a4734ed7caa3de8c45d51f6f1dd9f314f2",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "b27b1a1368f47c5db56c55bbd85bc1d7f0449edcc19d5709c571b0d8be85abd5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 417
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:39:38.607728+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "2d92c85891f7ca9bbba1dea0d64eef2c7572e2b45e6e28db666564d4073faca7",
+      "commandHash": "d529e9a410e7930eb7370ba9c88991d795d14396f30c5349d7dc2fa6e67c6b63",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "b27b1a1368f47c5db56c55bbd85bc1d7f0449edcc19d5709c571b0d8be85abd5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json guidelines compliance check passed: 6 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json guidelines compliance check passed: 6 guideline(s) verified",
+      "outputBytes": 332
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:39:38.856556+00:00",
+      "exitCode": 0,
+      "durationMs": 200,
+      "outputDigest": "03aa3bd530b678c5d97c4ea99589c62403624b8ec4070fc51dea1dc7993cd5d3",
+      "commandHash": "b328b0fbc0e1459193bf23dc6b1439a50d95daff3f59bdd110bdd6ee2586fcfd",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "b27b1a1368f47c5db56c55bbd85bc1d7f0449edcc19d5709c571b0d8be85abd5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `18`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-uninstall-documentation-corrective-20260729.json` — cov",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `18`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-uninstall-documentation-corrective-20260729.json` — covered by Contract scope - [active_owned] `docs/getting-started/installation.ja.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/installed-lifecycle.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/reference/troubleshooting.ja.md` — covered by Contract scope - [active_owned] `docs/reference/upgrade.ja.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-japanese-uninstall-documentation-corrective.md` — covered by Contract scope - [active_owned] `scripts/ai_japanese_capability.py` — covered by Contract scope - [active_owned] `scripts/check_docs_metadata.py` — covered by Contract scope - [active_owned] `tests/test_capability_truth_matrix.py` — covered by Contract scope - [active_owned] `tests/test_docs_metadata.py` — covered by Contract scope - [active_owned] `tests/test_japanese_capability.py` — covered by Contract scope",
+      "outputBytes": 2028
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:44:31.589365+00:00",
+      "exitCode": 0,
+      "durationMs": 292655,
+      "outputDigest": "7f28d39b9a4dc2ee29eff7075b961b432b35506bab5f275ef82024b173a84470",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "b27b1a1368f47c5db56c55bbd85bc1d7f0449edcc19d5709c571b0d8be85abd5",
+      "outputSummary": "\"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-full \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-fast-static \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"29d92d22561d",
+      "outputTail": "s call tests/test_project_governance.py::test_system_invariants_allow_missing_archive_summary_version 2.46s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 2.42s call tests/test_start_and_archive.py::test_ai_start_journeys 2.27s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 2.20s call tests/test_installer.py::test_upgrade_rolls_back_when_post_copy_validation_fails 2.16s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[False-True] 2.09s call tests/test_system_invariants.py::test_system_invariants_ignore_make_options_before_documented_target 1441 passed, 3 warnings in 284.41s (0:04:44) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.ic4OcPUsPz/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.ic4OcPUsPz/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.ic4OcPUsPz/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.ic4OcPUsPz/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/29d92d22561d-local-20260728T193938Z-18720-0/summary.json",
+      "outputBytes": 46620
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:44:31.933431+00:00",
+      "exitCode": 0,
+      "durationMs": 226,
+      "outputDigest": "cc2fdc3aefb3f073e87e6e28ede6118945e7cbd26653ead622a693ac3b1bcc5a",
+      "commandHash": "f8cf2d9588db018783fd9404c0ff538f7ce0e5eaf5b925f0e67abbcaa24efeb3",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "75000622147cdc6bc473a9de91f1284b4416496252903462a48fd611bd0adc54",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 374
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:44:32.181096+00:00",
+      "exitCode": 0,
+      "durationMs": 201,
+      "outputDigest": "c743d9ed2e5f9e95a6a5cee468337bb2eda8ef546a08ca901badab6679390443",
+      "commandHash": "ab72adaad9749ab99dd2888cc5655c625af1512d82a6cedbb3c546b750ac1949",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "75000622147cdc6bc473a9de91f1284b4416496252903462a48fd611bd0adc54",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 357
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:44:32.272662+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "75000622147cdc6bc473a9de91f1284b4416496252903462a48fd611bd0adc54",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:44:32.382523+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "5b4408d8c1b324b52e7c2ecbe9d22f5f160a5ba8fccd8273ee0ace2f36153e23",
+      "commandHash": "06d2e81ff1eee21ffe90ab805ecc3c0f04c8b8a6bf5bd8c7941d0cf5667d5d56",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "75000622147cdc6bc473a9de91f1284b4416496252903462a48fd611bd0adc54",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 337
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json CONTRACT=.ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "result": "failed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T19:44:32.837989+00:00",
+      "exitCode": 2,
+      "durationMs": 95,
+      "outputDigest": "d272713425403332dce320fbbf197088efd9dff9ce2f82eb0b1c418990ddf54b",
+      "commandHash": "abd8347a4b606b498ec46ddc93b1775bc1f8e440a830603d88ae0e78a7f88756",
+      "contractHash": "3411fbbe69d7b9a32cc7155be750aea132d657c3fb2443513ffc09c90e4f00dc",
+      "commitSha": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+      "executionContractPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "worktreeDigest": "75000622147cdc6bc473a9de91f1284b4416496252903462a48fd611bd0adc54",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json [ERROR] documentationAlignment evidence is missing changed documentation/command surface: docs/reference/japanese-capability-assessment.md [ERROR] summary.acceptanceEvidence must be a list make: *** [check-ai-change-summary] Error 1",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json --contract .ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json [ERROR] documentationAlignment evidence is missing changed documentation/command surface: docs/reference/japanese-capability-assessment.md [ERROR] summary.acceptanceEvidence must be a list make: *** [check-ai-change-summary] Error 1",
+      "outputBytes": 493
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Use production proposal/state-output code and installed catalog evidence; treat detached removal and purge as non-installed models and do not invent a public deletion command.",
+      "compliant": true,
+      "evidence": "Installation, Installed Lifecycle, Capability Truth Matrix, and the Japanese assessment all stop at the installed proposal/state-output boundary."
+    },
+    {
+      "guideline": "Prefer copy-ready Japanese prompts and human checkpoints over unexplained command lines.",
+      "compliant": true,
+      "evidence": "Section 15 uses copy-ready prompts, Japanese field names, PASS/STOP, and owner guidance; no new raw shell procedure was added."
+    },
+    {
+      "guideline": "Preserve fail-closed drift, ownership, evidence-export, detached-execution, receipt, and runtime-removal verification boundaries.",
+      "compliant": true,
+      "evidence": "Every boundary has an ordered marker and explicit stop; missing public facts/digest/executor evidence remains release-blocking."
+    },
+    {
+      "guideline": "Keep installation and uninstall guidance version-neutral.",
+      "compliant": true,
+      "evidence": "The procedure discovers current installed capability and the docs checker rejects semantic versions in the uninstall section."
+    },
+    {
+      "guideline": "Strengthen machine checks so document presence or a keyword cannot clear JA-DOC-001.",
+      "compliant": true,
+      "evidence": "Keyword-only, each missing marker, and reversed marker order are rejected by focused tests."
+    },
+    {
+      "guideline": "Record instruction → plan → implementation → acceptance evidence in both the human plan and machine traceability registry.",
+      "compliant": true,
+      "evidence": "PLAN-DIRECTIVE-035 and both plan documents map implementation and acceptance files."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "The documentation gap is corrected, but real installed disable/uninstall/purge execution remains absent and release-blocking."
+  },
+  "generatedFiles": [
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/cockpit/current_status.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "WI-16-ISSUE-015",
+      "category": "uninstall-capability-overclaim",
+      "severity": "critical",
+      "fact": "Installed repositories receive only proposal/state-output entrypoints. They have no public uninstall-facts builder or proposal digest binding; detached removal and purge are non-installed in-memory models without filesystem behavior.",
+      "decision": "Correct every current-state document and matrix claim, keep release blocked, and create an independent runtime corrective.",
+      "resolution": "The Japanese procedure stops at the real boundary; Installed Lifecycle, Capability Truth Matrix, and the assessment now agree.",
+      "status": "resolved_locally",
+      "followUp": "Implement installed-detached-uninstaller-runtime-corrective-20260729 before documentation alignment."
+    },
+    {
+      "issueId": "WI-16-ISSUE-016",
+      "category": "assessment-keyword-false-positive",
+      "severity": "high",
+      "fact": "The prior assessor cleared JA-DOC-001 when any selected document merely contained the Japanese or English uninstall word.",
+      "decision": "Require ordered actionable markers, same-language routes, and version-neutral semantics.",
+      "resolution": "Keyword-only, missing-step, and out-of-order mutations fail; the complete repository procedure passes.",
+      "status": "resolved_locally",
+      "followUp": "Retain the same ordered contract when runtime execution is implemented."
+    },
+    {
+      "issueId": "WI-16-ISSUE-017",
+      "category": "document-review-factual-drift",
+      "severity": "high",
+      "fact": "Five independent document-review strategies found proposal-write, disable-mode, digest-binding, facts-validation, purge, installed-payload, rollback-placement, and beginner-clarity defects.",
+      "decision": "Apply every factual exception and every multi-strategy consensus finding before finish.",
+      "resolution": "Proposal JSON is identified as the sole write, disable is split, digest is not claimed, facts/executor absence stops, model code is identified as non-installed, rollback content is restored, and beginner terms are simplified.",
+      "status": "resolved_locally",
+      "followUp": "The separate runtime corrective must rerun accuracy and audience review after executable commands exist."
+    },
+    {
+      "issueId": "WI-16-ISSUE-018",
+      "category": "preflight-capability-label",
+      "severity": "low",
+      "fact": "Initial Preflight rejected the non-catalog capability label localization.",
+      "decision": "Use the supported software_design/documentation/test_automation capabilities without requesting new authority.",
+      "resolution": "Preflight returned ready after the Contract-only correction.",
+      "status": "resolved_locally",
+      "followUp": "No capability-catalog change is required."
+    },
+    {
+      "issueId": "WI-16-ISSUE-019",
+      "category": "traceability-wording-regression",
+      "severity": "medium",
+      "fact": "A plan status rewrite temporarily removed literal completed finding IDs required by PLAN-DIRECTIVE-033 reverse parsing.",
+      "decision": "Restore exact IDs and rerun traceability rather than weakening the parser.",
+      "resolution": "Instruction traceability passes with both old and new directives.",
+      "status": "resolved_locally",
+      "followUp": "Keep machine identifiers literal in future status summaries."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "high",
+      "area": "installed-removal-runtime",
+      "detail": "There is no public installed facts builder, proposal identity binding, detached filesystem-removal executor, canonical disable persistence, or purge executor.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    },
+    {
+      "level": "medium",
+      "area": "native-language-quality",
+      "detail": "Repository checks and five-strategy review do not replace native Japanese technical editing or prove general model fluency.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    },
+    {
+      "level": "medium",
+      "area": "hosted-delivery",
+      "detail": "Hosted required jobs have not run on this Work Item Head.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "Focused implementation and document review pass; full quality and Hosted delivery remain required, and the separate runtime blocker is explicit.",
+    "expectedReviewFocus": [
+      "Proposal JSON versus Runtime/deletion writes",
+      "Installed catalog versus template-only model code",
+      "Beginner prompt-first PASS/STOP flow",
+      "JA-DOC-001 pass with JA-UNINSTALL-RUNTIME-001 still blocking"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "No runtime behavior changed; installed proposal/state-output entrypoints and missing facts/detached/purge entrypoints are stated exactly.",
+    "userVisibleOutput": "Japanese section 15 uses prompts, Japanese labels, PASS/STOP, owner, and explicit unsupported-capability stops.",
+    "persistence": "Proposal and disable write result JSON only; no canonical installed-state or filesystem-removal claim remains.",
+    "localization": "JA-DOC-001 is structurally actionable; general Japanese fluency and native editorial quality remain non-claims.",
+    "generatedArtifacts": "Japanese assessment JSON is authoritative and Markdown is derived; Capability Truth Matrix row digest is recomputed.",
+    "makeEntrypoints": "Only installed Make targets are named, and absent facts/execution targets block progression."
+  },
+  "userCorrectionsCaptured": [
+    "Japanese capability is mandatory because most adopter engineers use Japanese.",
+    "Installation and related lifecycle steps must be simple, prompt-first, detailed, and usable without programming experience.",
+    "Installation guidance must not be fixed to one release version.",
+    "Every issue discovered during a Work Item must be recorded; process defects must be corrected before continuing.",
+    "Every Work Item must complete PR, merge, closure, branch cleanup, and documentation alignment before the next."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Do not clear a user instruction through a shallow presence check.",
+      "solidifiedIn": "Ordered uninstall markers shared by documentation metadata and Japanese release assessment, with mutation tests."
+    },
+    {
+      "correction": "Do not claim unimplemented behavior in installation documentation.",
+      "solidifiedIn": "Installed catalog checks, corrected Capability Truth Matrix, explicit proposal/model boundaries, and JA-UNINSTALL-RUNTIME-001."
+    },
+    {
+      "correction": "Make the procedure usable by a beginner.",
+      "solidifiedIn": "Copy-ready Japanese prompts, translated field table, bounded yes/no questions, PASS/STOP, owner, and same-language recovery routes."
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "3411fbbe69d7b9a3",
+      "acceptanceCount": 10,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "3411fbbe69d7b9a3",
+      "acceptanceCount": 10,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "acceptanceEvidence": [
+    {
+      "acceptanceId": "A1",
+      "evidence": [
+        {
+          "type": "documentation",
+          "path": "docs/getting-started/installation.ja.md",
+          "locator": "15. 無効化・アンインストール・完全削除を安全に相談する",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A2",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_docs_metadata.py",
+          "locator": "actionable Japanese uninstall markers and beginner PASS/STOP route",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A3",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_docs_metadata.py",
+          "locator": "version-neutral Japanese uninstall procedure",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A4",
+      "evidence": [
+        {
+          "type": "documentation",
+          "path": "docs/getting-started/installation.ja.md",
+          "locator": "証拠を残す既定経路 and bounded STOP conditions",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A5",
+      "evidence": [
+        {
+          "type": "implementation",
+          "path": "scripts/ai_japanese_capability.py",
+          "locator": "ordered disable, proposal-output, detached-execution, and purge markers",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A6",
+      "evidence": [
+        {
+          "type": "documentation",
+          "path": "docs/reference/upgrade.ja.md",
+          "locator": "same-language uninstall route",
+          "verification": "quality"
+        },
+        {
+          "type": "documentation",
+          "path": "docs/reference/troubleshooting.ja.md",
+          "locator": "last-PASS-stage recovery route",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A7",
+      "kind": "bug_fix",
+      "failureScenario": "A keyword-only or out-of-order Japanese uninstall paragraph could previously clear JA-DOC-001 without an actionable procedure.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_japanese_capability.py",
+          "locator": "keyword-only, missing-marker, reversed-marker, and installed-executor regressions",
+          "verification": "quality"
+        },
+        {
+          "type": "test",
+          "path": "tests/test_docs_metadata.py",
+          "locator": "repository documentation mutation checks",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A8",
+      "evidence": [
+        {
+          "type": "documentation",
+          "path": "docs/reference/installed-lifecycle.md",
+          "locator": "public result-file boundary and template-only detached models",
+          "verification": "quality"
+        },
+        {
+          "type": "test",
+          "path": "tests/test_capability_truth_matrix.py",
+          "locator": "governed_update_and_uninstall limitations",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A9",
+      "evidence": [
+        {
+          "type": "generated-evidence",
+          "path": "docs/reference/japanese-capability-assessment.json",
+          "locator": "JA-DOC-001 passed and JA-UNINSTALL-RUNTIME-001 blocked",
+          "verification": "quality"
+        },
+        {
+          "type": "documentation",
+          "path": "docs/reference/japanese-capability-assessment.md",
+          "locator": "human-readable assessment with the same blocker",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A10",
+      "evidence": [
+        {
+          "type": "traceability",
+          "path": "docs/reference/remediation-instruction-traceability.json",
+          "locator": "PLAN-DIRECTIVE-035",
+          "verification": "quality"
+        },
+        {
+          "type": "lifecycle-plan",
+          "path": "docs/superpowers/plans/2026-07-29-japanese-uninstall-documentation-corrective.md",
+          "locator": "finish, archive, PR, Hosted CI, merge, closure, and branch cleanup",
+          "verification": "quality"
+        }
+      ]
+    }
+  ],
+  "knownGaps": [
+    "JA-UNINSTALL-RUNTIME-001 remains release-blocking and requires installed-detached-uninstaller-runtime-corrective-20260729.",
+    "Hosted required jobs and terminal ci-evidence have not run on this Head.",
+    "Documentation alignment, deprecated code/logic/document cleanup, release, and final plan cleanup remain deferred by the approved order."
+  ],
+  "overclaimPrevention": "This Work Item proves an actionable Japanese stop/review path and accurate current-state evidence; it does not claim that disable, uninstall, purge, general Japanese fluency, or release readiness is complete.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-29T00:00:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "docs/superpowers/plans/2026-07-29-japanese-uninstall-documentation-corrective.md",
+          "docs/reference/remediation-instruction-traceability.json"
+        ],
+        "reason": "Plans and PLAN-DIRECTIVE-035 record JA-DOC-001 delivery and the new runtime corrective in the same order."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/japanese-uninstall-documentation-corrective-20260729.contract.json",
+          ".ai/work-items/archive/2026/japanese-uninstall-documentation-corrective-20260729.summary.json",
+          "tests/test_japanese_capability.py",
+          "tests/test_docs_metadata.py"
+        ],
+        "reason": "Intent, exact scope, scenarios, red-first evidence, findings, and residual blocker agree."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "templates/make/Makefile.ai",
+          "scripts/ai_installer_catalog.json",
+          "docs/reference/installed-lifecycle.md",
+          "docs/reference/capability-truth-matrix.json"
+        ],
+        "reason": "Public targets, result-file writes, missing facts/digest/executor surface, and non-installed models are represented without overclaim."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "docs/getting-started/installation.ja.md",
+          "docs/reference/upgrade.ja.md",
+          "docs/reference/troubleshooting.ja.md",
+          "docs/reference/japanese-capability-assessment.json",
+          "docs/reference/japanese-capability-assessment.md"
+        ],
+        "reason": "The Japanese path is complete for the current review/STOP boundary and routes remain same-language; broader three-language alignment remains a later phase."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/japanese-capability-assessment.json",
+          "docs/reference/capability-truth-matrix.json",
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+        ],
+        "reason": "JA-DOC-001 pass, JA-UNINSTALL-RUNTIME-001 block, model-only evidence, native-review limitation, and next corrective are explicit."
+      }
+    ]
+  },
+  "archiveSequence": 651
+}

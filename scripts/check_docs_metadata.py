@@ -10,6 +10,7 @@ from pathlib import Path
 from pathlib import PurePosixPath
 
 from install_ai_cockpit import STACKS
+from ai_japanese_capability import JAPANESE_UNINSTALL_MARKERS
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1208,6 +1209,37 @@ def historical_context_errors(root: Path) -> list[str]:
     return errors
 
 
+def japanese_uninstall_errors(root: Path) -> list[str]:
+    """Require the complete Japanese uninstall route, not keyword presence."""
+    relative = "docs/getting-started/installation.ja.md"
+    installation = root / relative
+    if not installation.is_file():
+        return [f"{relative}: Japanese uninstall procedure is missing"]
+    text = installation.read_text(encoding="utf-8")
+    errors = [
+        f"{relative}: missing actionable uninstall step: {marker}"
+        for marker in JAPANESE_UNINSTALL_MARKERS
+        if marker not in text
+    ]
+    positions = [text.find(marker) for marker in JAPANESE_UNINSTALL_MARKERS]
+    if all(position >= 0 for position in positions) and positions != sorted(positions):
+        errors.append(f"{relative}: actionable uninstall steps are out of order")
+    expected_link = "installation.ja.md#15-ai-cockpit-を無効化またはアンインストールする"
+    for route in (
+        "docs/reference/upgrade.ja.md",
+        "docs/reference/troubleshooting.ja.md",
+    ):
+        path = root / route
+        if not path.is_file() or expected_link not in path.read_text(encoding="utf-8"):
+            errors.append(f"{route}: missing same-language actionable uninstall route")
+    section_start = text.find(JAPANESE_UNINSTALL_MARKERS[0])
+    section_end = text.find("<!-- novice-stage: confirm-installation-success -->", section_start)
+    section = text[section_start : section_end if section_end >= 0 else None]
+    if re.search(r"\bv\d+\.\d+\.\d+\b", section):
+        errors.append(f"{relative}: uninstall procedure must not hardcode a release version")
+    return errors
+
+
 def check_repository(root: Path) -> list[str]:
     errors = []
     for path in documentation_files(root):
@@ -1220,6 +1252,7 @@ def check_repository(root: Path) -> list[str]:
     errors.extend(multilingual_layer_errors(root))
     errors.extend(command_evidence_errors(root))
     errors.extend(beginner_installation_errors(root))
+    errors.extend(japanese_uninstall_errors(root))
     errors.extend(historical_context_errors(root))
     return errors
 

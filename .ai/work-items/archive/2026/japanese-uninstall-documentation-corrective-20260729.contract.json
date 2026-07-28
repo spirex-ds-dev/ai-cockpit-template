@@ -1,0 +1,318 @@
+{
+  "contractVersion": 2,
+  "workItemId": "japanese-uninstall-documentation-corrective-20260729",
+  "mode": "code",
+  "title": "Add an actionable Japanese uninstall procedure",
+  "baseCommit": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.contract.json",
+    ".ai/work-items/active/japanese-uninstall-documentation-corrective-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/getting-started/installation.ja.md",
+    "docs/reference/upgrade.ja.md",
+    "docs/reference/troubleshooting.ja.md",
+    "docs/reference/installed-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-29-japanese-uninstall-documentation-corrective.md",
+    "scripts/ai_japanese_capability.py",
+    "scripts/check_docs_metadata.py",
+    "tests/test_japanese_capability.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_capability_truth_matrix.py"
+  ],
+  "outOfScope": [
+    "Changing uninstall runtime behavior, deletion semantics, installer payloads, or Make targets.",
+    "Claiming that AI Cockpit independently provides identity, isolation, immutable audit, or enterprise compliance.",
+    "Adding a version-pinned installation or uninstall path.",
+    "Treating disable mode as uninstall or allowing purge without separate destructive confirmation and evidence export.",
+    "General three-language documentation alignment, deprecated-asset cleanup, release publication, or final plan cleanup."
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "JA-DOC-001 records the release-blocking absence of an actionable Japanese uninstall procedure."
+    },
+    {
+      "path": "docs/reference/installed-lifecycle.md",
+      "reason": "Lifecycle reference whose implemented proposal/state-output behavior must be separated from required but non-installed detached removal and purge designs."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Current-state authority whose governed update/uninstall row must distinguish installed proposal behavior from non-installed model-only removal and purge code."
+    },
+    {
+      "path": "scripts/ai_uninstall_proposal.py",
+      "reason": "Implemented read-only proposal behavior and mode semantics that the Japanese guide must describe accurately."
+    },
+    {
+      "path": "scripts/ai_detached_uninstaller.py",
+      "reason": "Implemented confirmation, detached, drift, ownership, receipt, and runtime-removal verification boundaries."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Installed repository exposes ai-cockpit-uninstall-propose as the supported proposal entrypoint."
+    },
+    {
+      "path": "docs/getting-started/installation.ja.md",
+      "reason": "Complete prompt-first Japanese beginner route where uninstall and recovery must be actionable."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-16 requires every Japanese assessment blocker to complete a separate corrective lifecycle before documentation alignment."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "destructive_guidance",
+      "evidence_retention",
+      "localization_false_positive",
+      "beginner_operability"
+    ],
+    "reason": "Incorrect or shallow uninstall guidance can cause evidence loss, confuse disable with removal, or let the Japanese release assessment pass without an executable beginner path.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user made Japanese capability mandatory, authorized correction of every finding, and directed continuous execution before documentation alignment and release."
+  },
+  "preReviewWarnings": [
+    "The guide must not imply that generating a proposal deletes files.",
+    "The default path preserves evidence; purge remains separately destructive and cannot be silently selected.",
+    "The assessment must require an actionable structure, not a Japanese uninstall keyword."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: The Japanese beginner installation guide contains a complete prompt-first uninstall route covering read-only facts, disable/preserve-evidence/purge choices, exact proposal review, explicit bounded confirmation, detached execution, receipt verification, STOP conditions, and recovery.",
+    "A2: Every step explains purpose, expected PASS, STOP condition, and responsible owner in language usable by a person with no programming experience; commands are delegated to the agent unless a real installed entrypoint must be shown and explained.",
+    "A3: The guide is version-neutral and dynamically uses the repository's installed release behavior without a hardcoded semantic version.",
+    "A4: The default preserve-evidence path retains bootstrap, archive, human decisions, project policy, complexity baseline, audit evidence, and project-owned files; modified, unknown-owned, or drifted paths remain untouched.",
+    "A5: Disable is distinguished from uninstall, purge requires evidence export plus a separate destructive review and confirmation, and proposal generation writes only its reviewable output JSON without Runtime or deletion writes.",
+    "A6: Japanese upgrade and troubleshooting pages route readers to the same actionable uninstall and recovery procedure without duplicating divergent semantics.",
+    "A7: The Japanese capability assessor and documentation checker require stable actionable markers and semantic boundaries; keyword-only, missing-step, missing-STOP, or missing-evidence mutations fail.",
+    "A8: The installed lifecycle reference and Capability Truth Matrix state that proposal/state output files are the only current public writes, uninstall facts have no public builder, proposal identity has no digest binding, and detached/purge filesystem execution is template-only model code absent from the installed payload.",
+    "A9: A regenerated assessment reports JA-DOC-001 pass with source, test, command, limitation, and digest evidence, while separately blocking JA-UNINSTALL-RUNTIME-001 because the current detached executor is a non-installed in-memory model rather than a public filesystem-removal entrypoint; general Japanese fluency remains a non-claim.",
+    "A10: The plan, Contract, implementation, tests, assessment, and acceptance evidence are bidirectionally mapped, then full finish/archive, one PR, Hosted CI, merge, ai-close-work-item, branch cleanup, and synchronized main complete before the separate installed-detached-uninstaller-runtime corrective starts."
+  ],
+  "guidelines": [
+    "Use production proposal/state-output code and installed catalog evidence; treat detached removal and purge as non-installed models and do not invent a public deletion command.",
+    "Prefer copy-ready Japanese prompts and human checkpoints over unexplained command lines.",
+    "Preserve fail-closed drift, ownership, evidence-export, detached-execution, receipt, and runtime-removal verification boundaries.",
+    "Keep installation and uninstall guidance version-neutral.",
+    "Strengthen machine checks so document presence or a keyword cannot clear JA-DOC-001.",
+    "Record instruction → plan → implementation → acceptance evidence in both the human plan and machine traceability registry."
+  ],
+  "intent": {
+    "problem": "The Japanese capability report correctly blocks release because Japanese engineers have no actionable uninstall procedure. Worse, the current assessor clears JA-DOC-001 when any one of three documents contains only the word uninstall, so a non-actionable edit could falsely authorize release. Implementation review also proved that the installed repository exposes only a proposal/state-output surface; detached removal and purge are non-installed in-memory models without filesystem behavior.",
+    "constraints": [
+      "Do not change runtime deletion behavior or expose an unimplemented public executor command.",
+      "Keep proposal generation free of Runtime/deletion writes, identify its output JSON write, and require a separate confirmation before detached execution.",
+      "Preserve evidence by default and leave project-owned, modified, drifted, and unknown-owned paths untouched.",
+      "Keep purge separately destructive and confirmation-gated.",
+      "Write for a person with no programming experience and avoid fixed release versions.",
+      "Record the missing public executor as a separate blocking corrective and complete both lifecycles before broader documentation alignment."
+    ],
+    "rationale": "A prompt-first Japanese procedure bound to the actual implemented boundary, plus mutation-resistant structural checks, closes the documentation gap without inventing deletion capability. A separate stable runtime finding keeps release blocked until a real public detached executor exists."
+  },
+  "rawUserRequest": "Japanese capability is mandatory for adopter engineers. Correct every Japanese assessment issue before release. The installation path must be simple and detailed enough for a person with no programming experience, use prompts where possible, avoid fixed versions, preserve evidence, record discovered process problems, and complete the full PR, merge, closure, and branch-cleanup lifecycle before continuing.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:japanese-mandatory-beginner-prompt-first-version-neutral-continuous-execution",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:japanese-actionable-uninstall-prompt-first-preserve-evidence"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:continue-without-stopping-unless-confirmation-required",
+    "scope": "Correct JA-DOC-001, strengthen the process against omission, and complete its governed lifecycle before later phases."
+  },
+  "declaredIntent": {
+    "summary": "Add an actionable, beginner-safe Japanese uninstall procedure and prevent keyword-only assessment passes.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Japanese document contains the word アンインストール but lacks an actionable sequence.",
+      "expected": "JA-DOC-001 remains blocking and documentation checks name the missing steps.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_japanese_capability.py::test_uninstall_capability_rejects_keyword_only_and_requires_complete_actionable_path",
+        "tests/test_japanese_capability.py::test_uninstall_capability_rejects_each_missing_actionable_step",
+        "tests/test_japanese_capability.py::test_uninstall_capability_rejects_out_of_order_actionable_steps"
+      ],
+      "verificationPlan": "Add red-first mutation tests that retain the keyword while removing required actionable markers and semantics."
+    },
+    {
+      "scenario": "A beginner requests normal uninstall with no special retention choice.",
+      "expected": "The guide defaults to preserve-evidence, begins with read-only facts and proposal review, and asks a bounded confirmation before detached execution.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/getting-started/installation.ja.md#15-ai-cockpit-を無効化またはアンインストールする",
+        "tests/test_docs_metadata.py::test_japanese_uninstall_check_accepts_repository_procedure"
+      ],
+      "verificationPlan": "Validate the complete prompt sequence and required PASS/STOP/owner fields in installation.ja.md."
+    },
+    {
+      "scenario": "Drift, modified managed files, or unknown ownership is detected.",
+      "expected": "The procedure stops without deletion, preserves files, records missing facts and owner, and resumes only after evidence reconciliation.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/getting-started/installation.ja.md#151-削除前の事実を読み取り専用で確認する",
+        "docs/getting-started/installation.ja.md#158-stop-から再開する",
+        "tests/test_uninstall_proposal.py::test_drift_or_unknown_ownership_blocks"
+      ],
+      "verificationPlan": "Require exact fail-closed markers and mutation-test removal of the drift/ownership boundary."
+    },
+    {
+      "scenario": "A user asks to purge all retained evidence.",
+      "expected": "The guide requires completed evidence export, exact deletion list and irreversible-impact review, plus a separate destructive confirmation; project-owned and protected audit evidence remain excluded.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/getting-started/installation.ja.md#159-purge-は別の破壊的確認にする",
+        "docs/reference/installed-lifecycle.md",
+        "docs/reference/capability-truth-matrix.json"
+      ],
+      "verificationPlan": "Check purge-specific semantic markers and reject a guide that merges purge approval into normal uninstall."
+    },
+    {
+      "scenario": "Detached execution completes or fails partway.",
+      "expected": "Success requires a final receipt and runtime-removal verification; failure preserves evidence, reports actual state, and does not claim completion.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/getting-started/installation.ja.md#156-detached-executor-の実装境界を確認する",
+        "docs/reference/japanese-capability-assessment.json",
+        "tests/test_japanese_capability.py::test_uninstall_runtime_requires_a_public_installed_executor"
+      ],
+      "verificationPlan": "Validate receipt/recovery markers and align them to installed-lifecycle.md and lifecycle executable tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 663
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/japanese-uninstall-documentation-corrective-20260729.json",
+    "baseCommit": "29d92d22561dd85cfa12cdbe089dc09f00b762d9",
+    "initialScopeDigest": "adfd99ef9b070c0ee4a5f1d502ddafc058a7b925295d9b544d5d3eba005b97ef",
+    "contractSkeletonDigest": "64fffdaca7bcd26b1c03878779466f700c0b0c588ecb1facc728c3a7fc688247"
+  }
+}

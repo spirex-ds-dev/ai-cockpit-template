@@ -2,10 +2,10 @@
   "assessmentVersion": 2,
   "blockingFindings": [
     {
-      "caseId": "JA-DOC-001",
-      "correctiveWorkItem": "japanese-uninstall-documentation-corrective-20260729",
-      "id": "JA-DOC-001",
-      "summary": "The Japanese engineer path lacks an actionable uninstall procedure."
+      "caseId": "JA-UNINSTALL-RUNTIME-001",
+      "correctiveWorkItem": "installed-detached-uninstaller-runtime-corrective-20260729",
+      "id": "JA-UNINSTALL-RUNTIME-001",
+      "summary": "The installed runtime has a proposal/state-output surface but no public uninstall facts builder, proposal-digest binding, or installed detached removal entrypoint that performs and verifies filesystem removal."
     }
   ],
   "cases": [
@@ -128,14 +128,14 @@
       ]
     },
     {
-      "area": "Executable Japanese adopter lifecycle",
+      "area": "Executable Japanese adopter lifecycle through uninstall proposal and model boundary",
       "commandEvidence": [
         "PYTHONPATH=. .venv/bin/pytest -q tests/test_japanese_adopter_lifecycle.py"
       ],
-      "digest": "sha256:8427d94987afdb6d713aec4d90134a8c9a6e3e4e4afabc7a73e1f1900e0bf00f",
+      "digest": "sha256:1359a5c807f6185dc95daa3190d06225ff3a367ea1d1537c5422d2db43dae55a",
       "id": "JA-LIFECYCLE-001",
-      "limitation": "The fixture proves bounded repository behavior and Japanese evidence handling; it does not prove general fluency, provider operations, or real adopter platform quality.",
-      "observation": "Isolated Japanese adopter fixture executes supported installation, calibration, recovery, and evidence-preserving removal authorities",
+      "limitation": "The fixture proves bounded repository behavior and Japanese evidence handling; it does not prove filesystem removal, general fluency, provider operations, or real adopter platform quality.",
+      "observation": "Isolated Japanese adopter fixture executes installation, calibration, recovery, uninstall proposal, and detached-removal model boundaries",
       "sourceEvidence": [
         "docs/getting-started/installation.ja.md",
         "scripts/ai_calibrate.py",
@@ -153,11 +153,10 @@
       "commandEvidence": [
         "make check-docs-metadata"
       ],
-      "digest": "sha256:21c37cd478cd72506fa86e8a4825428ba3def5fc73724d1301683049f0c71da0",
-      "findingId": "JA-DOC-001",
+      "digest": "sha256:14112ac64be156b9f164997e8915d8c011767e21df64eacb1015cbdd82e1538c",
       "id": "JA-DOC-001",
       "limitation": "Structure and terminology checks do not replace native technical editing.",
-      "observation": "The Japanese engineer path lacks an actionable uninstall procedure.",
+      "observation": "All required Japanese documents and an actionable uninstall path are present",
       "sourceEvidence": [
         "README.ja.md",
         "docs/overview.ja.md",
@@ -171,9 +170,32 @@
         "docs/reference/distribution.ja.md",
         "docs/reference/calibration-session.ja.md"
       ],
-      "status": "block",
+      "status": "pass",
       "testEvidence": [
         "tests/test_docs_metadata.py"
+      ]
+    },
+    {
+      "area": "Installed public detached uninstall execution",
+      "commandEvidence": [
+        "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_japanese_adopter_lifecycle.py"
+      ],
+      "digest": "sha256:dbe16b6b939419564873c3f997dddb5c441e7139f5e4ab54b4dee2899f0d521a",
+      "findingId": "JA-UNINSTALL-RUNTIME-001",
+      "id": "JA-UNINSTALL-RUNTIME-001",
+      "limitation": "A proposal or in-memory model is not filesystem-removal evidence; provider permissions and platform locks remain adopter responsibilities.",
+      "observation": "The installed runtime has a proposal/state-output surface but no public uninstall facts builder, proposal-digest binding, or installed detached removal entrypoint that performs and verifies filesystem removal.",
+      "sourceEvidence": [
+        "templates/make/Makefile.ai",
+        "scripts/ai_uninstall_proposal.py",
+        "scripts/ai_detached_uninstaller.py",
+        "scripts/ai_installer_catalog.json",
+        "docs/reference/installed-lifecycle.md"
+      ],
+      "status": "block",
+      "testEvidence": [
+        "tests/test_japanese_capability.py",
+        "tests/test_japanese_adopter_lifecycle.py"
       ]
     },
     {
@@ -242,7 +264,7 @@
     "entryCount": 14,
     "path": "tests/fixtures/japanese-capability-corpus.json"
   },
-  "digest": "sha256:12569b4a0edf886ffce887bc8531c0e40129fa556f9141cbd58a7763fe0733c3",
+  "digest": "sha256:de27786c58c2f7240b13dd5c3658c1f03739f0bb0b0dd8a0d85582e43c335eee",
   "limitations": [
     "This assessment does not claim general model fluency, translation quality, or provider behavior.",
     "Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking."
