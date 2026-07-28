@@ -238,7 +238,7 @@ def _delete_local_branch(
         ) from exc
 
 
-def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, str]:
+def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
     contract_path = _verify_archived_evidence(task)
     branch_result = runner(["branch", "--show-current"], False)
     if branch_result.returncode != 0 or not branch_result.stdout.strip():
@@ -302,6 +302,10 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, str]:
         detach_required=base_path is not None,
     )
 
+    linked_base = base_path is not None
+    repository_state = (
+        "closed_but_current_worktree_detached" if linked_base else "ready_on_base"
+    )
     return {
         "task": task,
         "contract": contract_path.relative_to(PROJECT_ROOT).as_posix(),
@@ -311,7 +315,9 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, str]:
         "baseBranch": base_branch,
         "baseCommit": final_local,
         "state": "closed",
-        "repositoryState": "ready_for_next_work_item",
+        "repositoryState": repository_state,
+        "nextWorkItemReady": not linked_base,
+        "baseWorktree": base_path or "",
     }
 
 
@@ -335,7 +341,11 @@ def main() -> int:
     print(
         f"Local {result['baseBranch']}: synchronized with {result['baseRemote']}/{result['baseBranch']}"
     )
-    print("Repository state: ready for next Work Item")
+    if result["nextWorkItemReady"] is True:
+        print("Repository state: ready for next Work Item")
+    else:
+        print("Current worktree: detached; not ready for the next Work Item")
+        print(f"Continue from synchronized base worktree: {result['baseWorktree']}")
     return 0
 
 

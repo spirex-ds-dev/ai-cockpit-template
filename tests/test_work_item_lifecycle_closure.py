@@ -115,6 +115,9 @@ def test_success_proves_remote_absence_before_local_branch_deletion(
     result = closure.close_work_item("example", fake)
 
     assert result["state"] == "closed"
+    assert result["repositoryState"] == "ready_on_base"
+    assert result["nextWorkItemReady"] is True
+    assert result["baseWorktree"] == ""
     remote_delete = fake.commands.index(
         ("push", "origin", "--delete", "codex/example")
     )
@@ -167,6 +170,10 @@ def test_base_branch_worktree_occupancy_is_supported(
 
     assert ("worktree", "list", "--porcelain") in fake.commands
     assert result["state"] == "closed"
+    assert result["repositoryState"] == "closed_but_current_worktree_detached"
+    assert result["nextWorkItemReady"] is False
+    assert result["baseWorktree"] == "/tmp/base-worktree"
+    assert fake.current_branch == ""
     assert ("-C", "/tmp/base-worktree", "merge", "--ff-only", "origin/main") in fake.commands
 
 
@@ -393,3 +400,55 @@ def test_clean_worktree_and_remote_postconditions_fail_closed():
 
     with pytest.raises(RuntimeError, match="could not verify"):
         closure._remote_branch_absent(unverifiable, "origin", "branch")
+
+
+def test_main_reports_ready_only_for_ready_on_base(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(
+        closure,
+        "parse_args",
+        lambda: type("Args", (), {"task": "example"})(),
+    )
+    monkeypatch.setattr(
+        closure,
+        "close_work_item",
+        lambda *_args: {
+            "pullRequest": "https://example.test/pr/1",
+            "workBranch": "codex/example",
+            "baseRemote": "origin",
+            "baseBranch": "main",
+            "baseWorktree": "",
+            "repositoryState": "ready_on_base",
+            "nextWorkItemReady": True,
+        },
+    )
+
+    assert closure.main() == 0
+    output = capsys.readouterr().out
+    assert "Repository state: ready for next Work Item" in output
+
+
+def test_main_reports_detached_closure_as_not_ready(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(
+        closure,
+        "parse_args",
+        lambda: type("Args", (), {"task": "example"})(),
+    )
+    monkeypatch.setattr(
+        closure,
+        "close_work_item",
+        lambda *_args: {
+            "pullRequest": "https://example.test/pr/1",
+            "workBranch": "codex/example",
+            "baseRemote": "origin",
+            "baseBranch": "main",
+            "baseWorktree": "/tmp/base-worktree",
+            "repositoryState": "closed_but_current_worktree_detached",
+            "nextWorkItemReady": False,
+        },
+    )
+
+    assert closure.main() == 0
+    output = capsys.readouterr().out
+    assert "Current worktree: detached; not ready for the next Work Item" in output
+    assert "Continue from synchronized base worktree: /tmp/base-worktree" in output
+    assert "Repository state: ready for next Work Item" not in output
