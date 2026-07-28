@@ -18,6 +18,26 @@ the decision maker. Installation copies the governance Runtime; calibration,
 the first pull request, hosted CI, merge, and lifecycle closure are separate
 steps.
 
+Plain-language terms used below:
+
+- **Runtime:** the governance files and tools copied into the project.
+- **Calibration:** adapting those rules to this specific project.
+- **Hosted CI:** checks run by the Git provider, outside your computer.
+- **Lifecycle closure:** archive evidence, verify the merged PR, synchronize
+  the base, and clean branches; branch cleanup is only one part.
+- **Work Item:** one governed unit of work, with its plan and evidence.
+- **Session:** the saved record of calibration answers.
+- **Candidate:** a proposed configuration that is not active yet.
+- **Evidence / Owner / Reviewer:** proof, the accountable person, and the
+  separate person who checks it.
+- **Full self-check:** the Session's check that all ten answers and required
+  checks are complete.
+- **SHA-256 / digest:** a fingerprint used to detect changed content.
+- **Phase record:** the Session entry that says Reviewer or Owner confirmed.
+- **Active configuration:** the configuration currently in force.
+- **Governance Simulation:** a safe check of how the proposed rules would
+  behave before activation.
+
 Read the [Capability Truth Matrix](../reference/capability-truth-matrix.md) for
 what is currently implemented. For a shorter entry, use
 [30-Second Start](30-second-start.md); for security evidence, use
@@ -96,14 +116,23 @@ is open, open the intended project and repeat Step 2.
 
 Copy everything in the following text block:
 
+<!-- release-metadata-boundary: provider-discovers-latest-verifiable,tag-pinned-verifies-evidence -->
 ```text
 I want to install AI Cockpit in this project. Work read-only first.
 Use the canonical public source
-https://github.com/spirex-ds-dev/ai-cockpit-template.git and public metadata
-https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template/main/release.json
-unless I provide an explicitly verified private mirror. Resolve a fixed tag and
-report its tag target, source commit, installer digest, archive asset and
-SHA-256 evidence; stop if any required published evidence is missing/mismatched.
+https://github.com/spirex-ds-dev/ai-cockpit-template.git unless I provide an
+explicitly verified private mirror. Inspect stable published semantic-version
+releases from newest to oldest and select the highest release whose provider
+record, tag-pinned metadata, installer, archive asset, and digests are complete
+and mutually consistent. Do not hardcode a version, select a draft/prerelease,
+or use moving `main` metadata as digest authority. If a newer stable release is
+incomplete or mismatched, list every failed check and STOP for my explicit
+decision before selecting an older verifiable release; never silently
+downgrade. Resolve the selected release to one tag for this installation, fetch
+https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template/<resolved-tag>/release.json
+and use only this tag-pinned metadata to verify the tag target, source commit,
+installer digest, archive asset, and SHA-256. Stop if required published
+evidence is missing or mismatched.
 Do not create, edit, delete, commit, push, open or merge a PR, or publish.
 Preserve every unrelated user change.
 
@@ -131,6 +160,20 @@ explicitly approve that plan.
 Expected result: a read-only report, not a changed-file list. If the agent
 changed anything, stop and restore only changes the agent can prove it made;
 do not discard pre-existing user work.
+
+If the newest stable release fails verification, do not improvise a fallback.
+Give the failed checks to the release owner. Only after that owner reviews the
+failure, copy this bounded recovery prompt:
+
+<!-- release-fallback-approval: failed-newer-evidence,owner-review,reverify -->
+```text
+Show the newer stable releases that failed, every failed check and its evidence,
+the release owner's recorded review, and the exact older tag proposed for this
+installation. Re-run the complete provider, tag-pinned metadata, installer,
+archive, and digest verification for that tag. If all checks pass, ask one
+yes/no question authorizing only this verified older tag for this installation.
+Do not write, install, or treat this as permission for any other action.
+```
 
 <!-- novice-stage: review-read-only-report -->
 ## 4. Review the discovery report
@@ -174,9 +217,8 @@ git status --short
 The current interactive Wizard asks only for the mode: New Adoption, Upgrade,
 or Dry Run. Stack is detected; branch/base is detected; other values below are
 fixed Wizard defaults or CLI/environment controls, not extra Wizard screens.
-Ask the agent to explain and record the interaction model:
-
-First paste this prompt. It prevents you from having to interpret the technical
+Copy this prompt to have the agent explain and record the interaction model.
+It prevents you from having to interpret the technical
 option names yourself:
 
 ```text
@@ -190,7 +232,7 @@ Unknown and ask for expert help instead of guessing. Do not run or write.
 | Kind | Item | Normal behavior |
 | --- | --- | --- |
 | Selectable | Mode | **New Adoption** for a project without AI Cockpit; **Upgrade** only for an existing installation; **Dry Run** to preview without writing. |
-| Bootstrap evidence | Source | The beginner route supplies a published fixed release. A local clone/private mirror is an explicit non-public trust path. |
+| Bootstrap evidence | Source | Use the highest verifiable stable release selected dynamically in Step 3; its resolved tag stays unchanged only during this installation. A local clone/private mirror is an explicit non-public trust path. |
 | Detected | Stack | The Wizard currently auto-detects Python, Swift, and Android signals; absent, other, or mixed signals use `generic`. Another stack may be supplied only by the scripted `--stack` control after evidence review; it is not a Wizard question. |
 | Detected | Base/branch | The installer derives remote/default-branch evidence; `--create-adoption` creates the adoption branch for New Adoption. |
 | Fixed default | Make integration | Off in the Wizard (`update_makefile=false`); scripted installs may use `--update-makefile` after conflict review. |
@@ -198,8 +240,9 @@ Unknown and ask for expert help instead of guessing. Do not run or write.
 | Fixed default | Glossary replacement | Off (`replace_glossary=false`); scripted `--replace-glossary` requires explicit content review. |
 | Entry mode | Interactive | `--interactive` enters plan review and final write confirmation. |
 
-Normal safe behavior is New Adoption, canonical published fixed release,
-the detected stack (otherwise `generic`), a dedicated adoption branch, no Make
+Normal safe behavior is New Adoption, the highest verifiable stable release
+selected in Step 3 with its tag unchanged for this installation, the detected
+stack (otherwise `generic`), a dedicated adoption branch, no Make
 integration, no optional examples, preserve the existing glossary, and
 interactive plan review. Stop for the repository owner if any default conflicts
 with existing files or organization policy.
@@ -209,6 +252,27 @@ Maintenance-only options are `--upgrade` and `--upgrade-with-active`.
 explicit source ref; `AI_COCKPIT_TEMPLATE_SHA256` is only an additional
 assertion and cannot replace published release metadata.
 
+This document continues only with **New Adoption**. For **Upgrade**, stop here
+and use the [Upgrade guide](../reference/upgrade.md) in a separate Work Item.
+For **Dry Run**, review its unchanged-worktree statement and complete plan,
+then stop; return to this mode table and choose New Adoption only after the
+plan is acceptable. A Dry Run is not installation evidence.
+
+<!-- make-entrypoint-boundary: included-makefile-or-explicit-f -->
+Because the Wizard leaves Make integration off, later `make <target>` wording is
+conditional: the agent may use it only after `include Makefile.ai` was
+separately reviewed and installed. Otherwise the agent must use
+`make -f Makefile.ai <target>`. The agent shows the exact choice; the beginner
+does not edit the Makefile or type either command without a separate approved
+plan.
+
+<!-- make-composite-boundary: integration-required-before-ai-finish -->
+A direct target may use the explicit `Makefile.ai` entrypoint. Before a
+composite lifecycle target such as `ai-finish`, however, the agent must
+separately review and install `include Makefile.ai`, because its child steps
+currently invoke ordinary Make. If that integration is absent or conflicts,
+STOP before the composite target and contact the build/repository owner.
+
 For iOS, Android, or Java, open the same-language example before choosing:
 [iOS](examples/ios.md), [Android](examples/android.md), [Java](examples/java.md).
 
@@ -217,11 +281,17 @@ For iOS, Android, or Java, open the same-language example before choosing:
 
 Copy this prompt:
 
+<!-- installation-plan-release-binding: resolved-tag,metadata,asset,digest,installer,wizard -->
 ```text
-Show the final installation plan without writing. Include the fixed release
-identity and trust evidence, fetched base commit, new branch, stack, every
-installer option, every file to create/modify/preserve, conflicts, rollback
-behavior, and post-write checks. Explain why each choice fits this repository.
+Show the final installation plan without writing. Include the dynamically
+resolved stable release tag, its tag-pinned metadata URL, archive asset,
+verified SHA-256, exact installer entrypoint and Wizard launch method, fetched
+base commit, new branch, stack, every installer option, every file to
+create/modify/preserve, conflicts, rollback behavior, and post-write checks.
+Show that the tag checkout used by the installer, the verified installer
+digest, and the separately verified archive asset all bind to that same
+release; do not call the archive the installer input.
+Explain why each choice fits this repository.
 Mark Unknown instead of guessing. End with one yes/no question asking whether
 you may perform only the scaffold write and its validation. Do not authorize
 commit, push, PR, merge, release, deletion, or calibration activation.
@@ -243,7 +313,7 @@ Expected result: a dedicated adoption branch and a validation report. No
 commit, push, PR, merge, or release.
 
 Before approving, verify seven visible rows: target folder, clean worktree,
-fixed release evidence, fetched default-branch commit, exact changed files,
+selected release evidence, fetched default-branch commit, exact changed files,
 conflicts, and rollback. Then copy this exact bounded approval:
 
 ```text
@@ -377,8 +447,11 @@ mismatch; send the plan and evidence to the repository owner.
 I approve lifecycle closure only for adopt_ai_cockpit using the reviewed plan.
 Run ai-close-work-item, verify remote/local adoption branch deletion, clean
 worktree, fast-forward-only base synchronization, and equality with the remote
-default branch. Stop and show each result. On any failure preserve the branch
-and evidence and contact the repository owner. Do not start configuration.
+default branch. Stop and show each result. On any failure, do not report
+closed; show the actual local and remote branch state and preserve all
+remaining evidence. If a branch is already absent, propose recovery from the
+merged PR Head SHA and base evidence, and contact the repository owner. Do not
+start configuration.
 ```
 
 Expected result: the adoption PR is human-merged, `adopt_ai_cockpit` is closed,
@@ -389,20 +462,40 @@ the remote default branch. Only then proceed.
 ## 9. Complete all ten calibration stages
 
 Start a separate `configure_ai_cockpit` Work Item only after the adoption Work
-Item's PR is merged and lifecycle closure is verified. The agent may run
-`make cockpit-doctor`, generate a proposal with `make cockpit-calibrate`, and
-drive the installed resumable interface through
-`make cockpit-calibrate-session ARGS="..."`. The template-maintenance-only
+Item's PR is merged and lifecycle closure is verified. The agent uses the
+installed `cockpit-doctor`, `cockpit-calibrate`, and
+`cockpit-calibrate-session` targets. It uses ordinary `make` only when Make
+integration was reviewed; otherwise it uses `make -f Makefile.ai`. The
+template-maintenance-only
 `make cockpit-calibration-wizard` target is not installed into adopter
 projects. Prefer the copy-ready agent prompts below; the agent must show
 evidence and wait for Reviewer and Owner confirmation before activation.
 
+A Calibration Session is the saved record of your ten answers inside the
+Configuration Work Item. The agent operates it for you; you do not type its
+command or edit its JSON.
+
 Use this answer vocabulary at every stage:
 
-- **yes/no:** confirms or rejects the proposed fact;
+<!-- calibration-answer-types: yes_no,alternative_input,unknown,not_applicable -->
+<!-- calibration-yes-no: type=yes_no,values=Y-or-N -->
+- **yes/no:** machine answer type `yes_no`, with value `Y` or `N`;
 - **alternative input:** supplies the correct value;
 - **unknown:** evidence is missing; this blocks readiness;
 - **not applicable:** only with a written reason.
+
+<!-- calibration-runtime-boundary: unknown-not-machine-blocked,confirmations-not-candidate-bound -->
+In plain language, the tool does not yet stop automatically on an Unknown
+answer, and its confirmation records are not tied to a digital fingerprint of
+the exact proposal.
+
+Current implementation boundary: the Session currently records `unknown` as a
+completed answer, and Reviewer/Owner confirmation records are not bound to an
+immutable Candidate digest. Therefore the STOP rule is a required human/agent
+procedure, not yet a machine-enforced guarantee. Until the later runtime
+corrective is released, do not run confirmation or activation while any answer
+is `unknown`; show and recheck the persisted Session ID and SHA-256 immediately
+before the separate activation approval.
 
 Copy this calibration prompt:
 
@@ -411,7 +504,7 @@ Start the configure_ai_cockpit Work Item from the newly synchronized default
 branch. Guide all ten Calibration stages in order. For each stage show:
 plain-language question, repository files inspected, observed evidence,
 inference, Unknowns, proposed answer type/value, files the Candidate would
-change, PASS/STOP condition, and who must review. Accept only yes/no,
+change, PASS/STOP condition, and who must review. Accept only `yes_no`,
 alternative_input, unknown, or not_applicable with a reason. Do not invent
 quality commands or convert missing evidence to N/A. Pause after every stage
 for my answer. After Stage 10, show the complete Candidate and inventory;
@@ -449,30 +542,156 @@ after the user decides.
 | 7. Quality commands | “Copy exact quality commands only from repository or CI evidence. Show prerequisites, purpose, success output, and failure action.” | A CI command proves syntax used there, not that local SDKs are installed. | Every required command has evidence and expected result. | Command would be invented or prerequisites missing; contact build/CI owner. |
 | 8. Review requirements | “Show CODEOWNERS, branch protection, required hosted checks, and actions the agent cannot authorize.” | CODEOWNERS suggests reviewers; provider settings prove enforcement. | Human owners and required checks are explicit. | Provider evidence unavailable; contact repository administrator. |
 | 9. Risks and unknowns | “List every unresolved fact with consequence, owner, and recovery. Do not change Unknown to N/A.” | Missing device access remains blocking for a required device test. | No hidden blocking Unknown remains. | Any blocking Unknown; contact its named owner. |
-| 10. Adoption readiness | “Show all answers, Candidate diff, inventory, checks, residual limits, and separate Reviewer/Owner decisions. Do not activate yet.” | A complete Candidate is reviewable evidence, not approval. | Full self-check passes and both humans explicitly confirm. | Missing/stale evidence or rejected answer; return to that stage. |
+| 10. Adoption readiness | “Show all answers, proposed configuration, inventory, checks, residual limits, and the intended Reviewer and Owner. Persist the Stage 10 answer and run the full self-check; do not create confirmation phase records or activate yet.” | A complete proposed configuration is reviewable evidence, not approval. | The Stage 10 answer is persisted, the full self-check passes, and the future Reviewer and Owner are identified. | Missing/stale evidence or rejected answer; return to that stage. |
+
+### Calibration completion checklist
+
+Use this table as the human review view. In plain language, the Session stores
+your answer, answer type, reason, and stage execution state; the Work Item
+stores supporting evidence, proposed changes, responsible people, and
+PASS/STOP. The persisted JSON Calibration Session
+is authoritative only for the answer type, answer value, reason, stage state,
+events, and checks that its schema stores. It does not store the other checklist
+columns. Record those only in schema-supported Work Item review, acceptance, or
+verification evidence and show both locations. If no valid schema field exists,
+STOP and report a persistence gap; never invent a Summary key or hand-edit this
+document. The agent displays a filled copy of one row in its review output and
+marks it complete only after the persisted Session confirms the answer. A
+question alone is not completion. Use `unknown` and STOP when a fact or
+responsible person is missing.
+
+<!-- calibration-session-persistence-boundary: answer-only,work-item-evidence -->
+
+Copy this prompt so you do not need to locate or edit a governance file:
+
+```text
+Locate the active configure_ai_cockpit Work Item and its persisted Calibration
+Session. Use the ten-row checklist below as the review format. For the current
+stage, show one filled row in plain language, including observed evidence,
+answer type/value, proposed configuration change, Owner/Reviewer, and
+PASS/STOP. Show the exact proposed Session answer and configuration change,
+then wait for my decision. After I decide, persist only the answer type/value
+and reason through the installed Calibration Session interface. Map the other
+columns only to schema-supported Work Item review, acceptance, or verification
+evidence, and show the Session path, its read-only review output, and those Work
+Item locations. If a column has no supported location, report the persistence
+gap and STOP; do not invent JSON fields. Do not ask me to edit JSON. Do not
+advance on unknown, invent evidence, activate the Candidate, commit, push,
+create or merge a PR, release, or close the Work Item.
+```
+
+<!-- calibration-completion-checklist: state,evidence,answer,candidate,owner-reviewer,pass-stop -->
+| Display stage label and check | Complete | Observed evidence to record | Answer type/value to record | Candidate change to record | Owner / Reviewer to record | Decision to record |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1. repository-role — Repository role and release responsibility | [ ] | Record inspected release/deploy files and the observed role: ___ | Record `yes_no`, `alternative_input`, `unknown`, or reasoned `not_applicable`: ___ | Record Candidate role fields or `no change` with reason: ___ | Owner: ___; Reviewer: ___ | Record `PASS` — reason; or `STOP` — missing evidence, Owner, and retry step: ___ |
+| 2. language-and-stack — Languages, versions, tools, and preset fit | [ ] | Record manifests, version files, build/package evidence: ___ | Record answer type and exact stack/version value: ___ | Record Candidate stack fields or `no change` with reason: ___ | Owner: ___; Reviewer: ___ | Record `PASS` — reason; or `STOP` — missing evidence, Owner, and retry step: ___ |
+| 3. source-boundaries — Maintained and excluded paths | [ ] | Record every inspected source, vendor, generated, cache, and output path: ___ | Record answer type and exact include/exclude values: ___ | Record Candidate source-boundary diff or `no change` with reason: ___ | Owner: ___; Reviewer: ___ | Record `PASS` — reason; or `STOP` — missing evidence, Owner, and retry step: ___ |
+| 4. test-boundaries — Test types, fixtures, and environments | [ ] | Record unit/integration/UI/device/fixture evidence and required environments: ___ | Record answer type and exact test-boundary values: ___ | Record Candidate test-boundary diff or `no change` with reason: ___ | Owner: ___; Reviewer: ___ | Record `PASS` — reason; or `STOP` — missing evidence, Owner, and retry step: ___ |
+| 5. generated-artifacts — Generator and regeneration rules | [ ] | Record generated paths, source of truth, generator, and regeneration evidence: ___ | Record answer type and exact generator/editing rule: ___ | Record Candidate generated-artifact diff or `no change` with reason: ___ | Owner: ___; Reviewer: ___ | Record `PASS` — reason; or `STOP` — missing evidence, Owner, and retry step: ___ |
+| 6. critical-paths — High-risk paths and human review | [ ] | Record security/release/migration/signing/deploy paths and evidence: ___ | Record answer type and exact critical-path values: ___ | Record Candidate critical-path diff or `no change` with reason: ___ | Owner: ___; Reviewer: ___ | Record `PASS` — reason; or `STOP` — missing evidence, Owner, and retry step: ___ |
+| 7. quality-commands — Exact evidenced commands and prerequisites | [ ] | Record repository/CI source, exact command, prerequisite, and expected result: ___ | Record answer type and exact evidenced command set: ___ | Record Candidate quality-command diff or `no change` with reason: ___ | Owner: ___; Reviewer: ___ | Record `PASS` — reason; or `STOP` — missing evidence, Owner, and retry step: ___ |
+| 8. review-requirements — Owners, protections, and hosted checks | [ ] | Record CODEOWNERS/provider/CI evidence and unavailable provider facts: ___ | Record answer type and exact review requirements: ___ | Record Candidate review-policy diff or `no change` with reason: ___ | Owner: ___; Reviewer: ___ | Record `PASS` — reason; or `STOP` — missing evidence, Owner, and retry step: ___ |
+| 9. risks-and-unknowns — Consequence, owner, and recovery | [ ] | Record each remaining risk/Unknown, consequence, owner, and recovery evidence: ___ | Record answer type; never change missing evidence to N/A: ___ | Record Candidate risk/Unknown diff or `no change` with reason: ___ | Owner: ___; Reviewer: ___ | Record `PASS` — reason; or `STOP` — missing evidence, Owner, and retry step: ___ |
+| 10. adoption-readiness — Proposed configuration, inventory, checks, and future decisions | [ ] | Record fresh proposed-configuration/inventory/check evidence and residual limits: ___ | Record final answer type/value without activating: ___ | Record the proposed Candidate change and configuration identifier: ___ | Intended Owner: ___; intended Reviewer: ___; do not confirm yet | Record `PASS` only after the answer persists and the full self-check passes; otherwise record `STOP`; create phase records only in the next separate step: ___ |
+
+Before confirmations, close every CI gap carried from scaffold review:
+
+<!-- calibration-ci-gap-boundary: plan,approval,implementation,verification -->
+```text
+Read the CI gap list from the closed adoption Work Item. For each item, show
+repository evidence, owner, exact Candidate diff or an evidence-backed
+no-change reason, validation, hosted proof required, rollback, and PASS/STOP.
+If a write is needed, ask one yes/no question for only that exact CI diff and
+wait. After approval, implement only that diff and show local validation; the
+later PR must provide hosted evidence from the same commit. Do not confirm or
+activate Calibration while any required CI item is Unknown, unimplemented, or
+unverified.
+```
+
+### Review and approve activation separately
+
+Ten checked rows mean the Candidate is reviewable; they do not activate it.
+The Session stores only `reviewer` and `owner` phase records; it does not store
+or prove actor identity. First identify the Reviewer and Owner and confirm the
+Work Item review location that will store their identity and role evidence.
+Then copy this prompt to obtain and record the two decisions separately:
+
+<!-- calibration-confirmation-boundary: phase-records,external-actor-identity -->
+```text
+Do not activate. Show the current Session ID/path/SHA-256 and proposed
+configuration. I, the current operator, will give this review package to the
+identified Reviewer first and return that person's explicit decision and
+identity evidence to you. Wait for it. I will then do the same separately for
+the identified Owner. Record each Session phase only after I return that
+person's decision. Show both persisted phase records and the external Work
+Item evidence for actor identity and role separation. State that the Session
+itself does not bind identity or Candidate digest. STOP on a missing, stale,
+rejected, or same-person decision.
+```
+
+First copy this read-only planning prompt:
+
+<!-- calibration-activation: plan-before-approval -->
+```text
+Do not activate yet. Show the persisted Calibration Session ID, path, and
+SHA-256; the proposed configuration derived from its answers; current Active
+configuration; every `unknown`; full self-check and Governance Simulation
+results; separate Reviewer and Owner confirmation records; files activation
+would replace; atomic-write behavior; and failure recovery. State clearly that
+the current confirmation records are not machine-bound to a Candidate digest.
+Mark each fact Observed, Inferred, or Unknown. End with one yes/no question
+asking only whether the evidence is complete and I want to proceed to the
+separate activation-approval step for this exact Session hash and proposed
+configuration. State that answering yes does not authorize activation. Do not
+change files, commit, push, create or merge a PR, release, or close the Work
+Item.
+```
+
+PASS means the Session hash is current, both confirmation records are present,
+the proposed configuration matches the recorded answers, and no `unknown`
+remains. This is a manual fail-closed guard until runtime binding is
+implemented. Otherwise STOP and return to the affected checklist row. Only
+after PASS, copy this separate bounded approval:
+
+<!-- calibration-activation: bounded-approval -->
+```text
+I approve activation only for the exact Calibration Session ID, SHA-256, and
+proposed configuration just reviewed. Recompute the Session SHA-256 immediately
+before activation and STOP if it changed or any answer is `unknown`. Activate
+through the installed Calibration Session interface. Show the before/after
+Active configuration identifiers, the Active-file replacement result, the
+separate Session-save result, persisted Session review, and validation result,
+then stop. A failure before or during Active-file replacement must preserve the
+previous Active configuration; verify it. If Active replacement succeeds but
+Session save or verification then fails, show the Active/Session mismatch,
+report STOP, contact the repository owner, and do not claim rollback or retry
+with weaker evidence. Do not commit, push, create or merge a PR, release, or
+close the Work Item.
+```
 
 Expected result: a reviewable Candidate and inventory with no hidden Unknown.
-Activation is atomic and preserves the previous Active configuration on
-failure; this does not prove enterprise compliance or runtime sandboxing.
+Only the Active-file replacement is atomic; Session save is a separate step.
+Success requires both records to verify as consistent. This does not prove
+enterprise compliance or runtime sandboxing.
+
+<!-- calibration-activation-atomicity: active-file-only,session-save-separate -->
 
 <!-- novice-stage: run-local-checks -->
 ## 10. Run local checks
 
-Ask the agent:
-
-```text
-Run only the local checks declared by the active Contract. Explain each check
-before running it. Stream progress, record actual pass/fail/not-run evidence,
-and stop on failure. Do not weaken, skip, or relabel a gate. Do not commit,
-push, open a PR, merge, or release.
-```
-
-The readiness sequence must include these exact repository targets:
+The readiness sequence must run the installed `ai-cockpit-quality` target and
+then `check-ai-adoption-ready`. Copy this single prompt:
 
 <!-- public-quality-target: ai-cockpit-quality -->
+<!-- readiness-target-order: ai-cockpit-quality,check-ai-adoption-ready -->
 ```text
-make ai-cockpit-quality
-make check-ai-adoption-ready
+Run the installed target ai-cockpit-quality, then check-ai-adoption-ready.
+If Make integration was separately reviewed and installed, use the normal make
+entrypoint; otherwise use the Makefile.ai entrypoint. Run only checks declared
+by the active Contract. First show and explain the two exact commands and wait
+for my approval of this step. After approval, stream progress, record actual
+pass/fail/not-run evidence, and stop on failure. Do not weaken, skip, or
+relabel a gate. Do not commit, push, open a PR, merge, or release.
 ```
 
 Purpose: run project quality, then verify adoption evidence. Success: both
@@ -484,11 +703,11 @@ project problem in the same Work Item.
 ## 11. Complete the configuration Work Item
 
 The agent now completes `configure_ai_cockpit`: it updates the Summary, runs the `before_finish` checkpoint and
-`make ai-finish TASK=<task>`, archives the Contract/Summary, and presents the
+the installed `ai-finish` target with the current task, archives the Contract/Summary, and presents the
 exact diff and verification. If no active Contract/Summary is supplied,
-`make check-ai-status` may report
+the installed `check-ai-status` target may report
 `Skipping status check (no active contract/summary provided)`; use
-`make check-ai-status-consistency` to validate the no-active state.
+the installed `check-ai-status-consistency` target to validate the no-active state.
 
 Human decision: approve the archive-evidence commit only after reviewing the
 diff. A commit approval is not push approval.
@@ -553,7 +772,7 @@ for human merge review. Do not merge or delete the branch.
 ## 13. Merge and close the lifecycle
 
 After a human merges the configuration PR, separately approve
-`make ai-close-work-item TASK=configure_ai_cockpit`.
+the installed `ai-close-work-item` target for `configure_ai_cockpit`.
 Closure verifies archived evidence and PR ownership, synchronizes the base
 fast-forward-only, deletes the remote/local work branch, checks a clean
 worktree, and confirms local base equals remote base. Any failure is not
@@ -578,9 +797,11 @@ repository owner with the evidence.
 I approve lifecycle closure only for configure_ai_cockpit using the reviewed
 plan. Run ai-close-work-item, verify remote/local configuration branch
 deletion, clean worktree, fast-forward-only synchronization, and equality with
-the remote default branch. Show every result and stop. On failure preserve the
-branch/evidence and contact the repository owner. Do not start another Work
-Item.
+the remote default branch. Show every result and stop. On failure, do not
+report closed; show the actual local/remote branch state and all remaining
+evidence. If a branch is already absent, propose recovery from the merged PR
+Head SHA and base evidence, and contact the repository owner. Do not start
+another Work Item.
 ```
 
 <!-- novice-stage: recover-from-a-stop -->
@@ -590,20 +811,20 @@ Item.
 | --- | --- |
 | Dirty worktree | Identify and preserve every user change; use a separate branch/worktree or finish that work first. |
 | No initial commit | Ask the repository owner to create/review the initial commit before adoption. |
-| Missing tool | Install it through the organization's approved method; rerun read-only discovery. |
+| Missing tool | Contact the repository/build administrator identified in Step 1, obtain a reviewed installation method, and then rerun Step 1 read-only discovery. |
 | Unknown default branch/remote | Inspect provider and Git remote HEAD; do not guess. |
 | Active Work Item | Finish/close it or explicitly resume it; do not create a competing active item. |
 | Managed-file conflict | Show a three-way explanation; preserve adopter content and revise the plan. |
 | Calibration Unknown | Gather evidence or assign an owner; do not activate. |
 | Local/hosted check failure | Preserve logs, diagnose root cause, update evidence, and rerun the same check. |
-| PR merged but closure fails | Keep the branch, inspect closure evidence, and fix lifecycle state before reporting completion. |
+| PR merged but closure fails | Do not report closed. Inspect actual local/remote branch state and closure evidence; if a branch is already absent, recover it from the merged PR Head SHA when the owner approves. |
 
 <!-- novice-stage: confirm-installation-success -->
 ## 15. Final success checklist
 
 Installation is complete only when all are true:
 
-- the published fixed release and fetched base are recorded;
+- the selected highest-verifiable release and fetched base are recorded;
 - the adoption and configuration Work Items each used a dedicated branch and
   reviewable lifecycle;
 - every scaffold path and conflict was explained;

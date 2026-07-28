@@ -160,7 +160,53 @@ SCAFFOLD_REVIEW_TABLE_MARKER = "<!-- scaffold-review-table: copy-request,expecte
 CALIBRATION_REVIEW_TABLE_MARKER = (
     "<!-- calibration-review-table: copy-request,example,pass,stop -->"
 )
+CALIBRATION_COMPLETION_TABLE_MARKER = (
+    "<!-- calibration-completion-checklist: "
+    "state,evidence,answer,candidate,owner-reviewer,pass-stop -->"
+)
+CALIBRATION_ANSWER_TYPES_MARKER = (
+    "<!-- calibration-answer-types: yes_no,alternative_input,unknown,not_applicable -->"
+)
+CALIBRATION_YES_NO_BOUNDARY = "<!-- calibration-yes-no: type=yes_no,values=Y-or-N -->"
+CALIBRATION_RUNTIME_BOUNDARY = (
+    "<!-- calibration-runtime-boundary: "
+    "unknown-not-machine-blocked,confirmations-not-candidate-bound -->"
+)
+INSTALLATION_PLAN_RELEASE_BINDING = (
+    "<!-- installation-plan-release-binding: "
+    "resolved-tag,metadata,asset,digest,installer,wizard -->"
+)
+RELEASE_METADATA_BOUNDARY = (
+    "<!-- release-metadata-boundary: "
+    "provider-discovers-latest-verifiable,tag-pinned-verifies-evidence -->"
+)
+RELEASE_FALLBACK_APPROVAL = (
+    "<!-- release-fallback-approval: failed-newer-evidence,owner-review,reverify -->"
+)
+MAKE_ENTRYPOINT_BOUNDARY = "<!-- make-entrypoint-boundary: included-makefile-or-explicit-f -->"
+MAKE_COMPOSITE_BOUNDARY = "<!-- make-composite-boundary: integration-required-before-ai-finish -->"
+CALIBRATION_CONFIRMATION_BOUNDARY = (
+    "<!-- calibration-confirmation-boundary: phase-records,external-actor-identity -->"
+)
+CALIBRATION_CI_GAP_BOUNDARY = (
+    "<!-- calibration-ci-gap-boundary: plan,approval,implementation,verification -->"
+)
+CALIBRATION_SESSION_PERSISTENCE_BOUNDARY = (
+    "<!-- calibration-session-persistence-boundary: answer-only,work-item-evidence -->"
+)
+CALIBRATION_ACTIVATION_ATOMICITY_BOUNDARY = (
+    "<!-- calibration-activation-atomicity: active-file-only,session-save-separate -->"
+)
+TAG_PINNED_RELEASE_METADATA_TEMPLATE = (
+    "https://raw.githubusercontent.com/spirex-ds-dev/"
+    "ai-cockpit-template/<resolved-tag>/release.json"
+)
+MOVING_MAIN_RELEASE_METADATA = (
+    "https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template/main/release.json"
+)
+CALIBRATION_ACTIVATION_STAGES = ("plan-before-approval", "bounded-approval")
 PLATFORM_STEP_TABLE_MARKER = "<!-- platform-step-table: copy-request,example,pass,stop -->"
+PLATFORM_FILLED_EXAMPLE_MARKER = "<!-- platform-filled-example: seven-stages -->"
 PLATFORM_STAGE5_PROPOSAL_MARKER = "<!-- platform-stage5: proposal-only -->"
 LIFECYCLE_ORDER_MARKER = "<!-- lifecycle-order: adoption-close-before-configuration -->"
 LIFECYCLE_APPROVAL_STAGES = (
@@ -444,7 +490,10 @@ def installation_command_errors(root: Path) -> list[str]:
         errors.append(
             "docs/getting-started/installation.md: public quality target differs from release.json"
         )
-    if f"make {quality_target}\nmake check-ai-adoption-ready" not in installation:
+    readiness_target_order = (
+        f"<!-- readiness-target-order: {quality_target},check-ai-adoption-ready -->"
+    )
+    if readiness_target_order not in installation:
         errors.append(
             "docs/getting-started/installation.md: readiness commands do not use the public quality target"
         )
@@ -692,27 +741,34 @@ def _step_table_errors(
     expected_rows: int,
     relative: str,
     label: str,
+    require_pass_stop: bool = True,
+    require_copy_request: bool = True,
 ) -> list[str]:
-    """Require ordered, populated beginner decision rows after a machine marker."""
+    """Require one consecutive Markdown table with ordered beginner decision rows."""
     marker_position = text.find(marker)
     if marker_position < 0:
         return [f"{relative}: missing {label} decision table"]
     section_end = text.find("\n## ", marker_position)
     section = text[marker_position : section_end if section_end >= 0 else None]
+    section_lines = section.splitlines()
+    table_start = next(
+        (index for index, line in enumerate(section_lines) if line.startswith("|")),
+        None,
+    )
+    if table_start is None:
+        return [f"{relative}: {label} decision table must contain {expected_rows} rows"]
     table_lines: list[str] = []
-    table_started = False
-    for line in section.splitlines():
-        if line.startswith("|"):
-            table_started = True
-            table_lines.append(line)
-        elif table_started and line.startswith("<!--"):
-            continue
-        elif table_started:
+    for line in section_lines[table_start:]:
+        if not line.startswith("|"):
             break
-    if len(table_lines) < expected_rows + 2:
+        table_lines.append(line)
+    all_table_lines = [line for line in section_lines if line.startswith("|")]
+    if len(table_lines) != expected_rows + 2:
+        if len(all_table_lines) >= expected_rows + 2:
+            return [f"{relative}: {label} table must be one uninterrupted Markdown table"]
         return [f"{relative}: {label} decision table must contain {expected_rows} rows"]
     header = table_lines[0]
-    if "PASS" not in header or "STOP" not in header:
+    if require_pass_stop and ("PASS" not in header or "STOP" not in header):
         return [f"{relative}: {label} decision table must expose PASS and STOP columns"]
     numbered_rows: list[tuple[int, list[str]]] = []
     for line in table_lines[2:]:
@@ -724,13 +780,70 @@ def _step_table_errors(
         return [f"{relative}: {label} decision rows must be ordered 1-{expected_rows}"]
     errors: list[str] = []
     for number, cells in numbered_rows:
-        if len(cells) < 4 or any(not cell for cell in cells):
+        if len(cells) != 5:
+            errors.append(f"{relative}: {label} row {number} must contain 5 columns")
+            continue
+        if any(not cell for cell in cells):
             errors.append(f"{relative}: {label} row {number} has an empty decision field")
             continue
-        has_curly_request = "“" in cells[1] and "”" in cells[1]
-        has_japanese_request = "「" in cells[1] and "」" in cells[1]
-        if not (has_curly_request or has_japanese_request):
-            errors.append(f"{relative}: {label} row {number} lacks a copy-ready request")
+        if require_copy_request:
+            has_curly_request = "“" in cells[1] and "”" in cells[1]
+            has_japanese_request = "「" in cells[1] and "」" in cells[1]
+            if not (has_curly_request or has_japanese_request):
+                errors.append(f"{relative}: {label} row {number} lacks a copy-ready request")
+    return errors
+
+
+def _calibration_completion_checklist_errors(text: str, *, relative: str) -> list[str]:
+    """Require a fillable ten-stage checklist distinct from calibration explanation."""
+    if text.count(CALIBRATION_COMPLETION_TABLE_MARKER) != 1:
+        return [f"{relative}: missing complete calibration checklist"]
+    marker_position = text.find(CALIBRATION_COMPLETION_TABLE_MARKER)
+    section_end = text.find("\n## ", marker_position)
+    section_lines = text[marker_position : section_end if section_end >= 0 else None].splitlines()
+    table_start = next(
+        (index for index, line in enumerate(section_lines) if line.startswith("|")),
+        None,
+    )
+    if table_start is None:
+        return [f"{relative}: complete calibration checklist must contain 10 rows"]
+    table_lines: list[str] = []
+    for line in section_lines[table_start:]:
+        if not line.startswith("|"):
+            break
+        table_lines.append(line)
+    if len(table_lines) != len(CALIBRATION_STAGES) + 2:
+        return [f"{relative}: complete calibration checklist must contain 10 rows"]
+
+    rows: list[list[str]] = [
+        [cell.strip() for cell in line.strip().strip("|").split("|")] for line in table_lines[2:]
+    ]
+    found_stage_ids: list[str] = []
+    errors: list[str] = []
+    for number, cells in enumerate(rows, start=1):
+        match = re.match(r"^(\d+)\.\s+([a-z-]+)\b", cells[0]) if cells else None
+        if match:
+            found_stage_ids.append(match.group(2))
+        if len(cells) != 7 or any(not cell for cell in cells):
+            errors.append(
+                f"{relative}: calibration checklist row {number} must contain all 7 fields"
+            )
+            continue
+        if "[ ]" not in cells[1] and "[x]" not in cells[1].lower():
+            errors.append(f"{relative}: calibration checklist row {number} lacks completion state")
+        if "Candidate" not in cells[4]:
+            errors.append(f"{relative}: calibration checklist row {number} lacks Candidate change")
+        if "Owner" not in cells[5] or "Reviewer" not in cells[5]:
+            errors.append(f"{relative}: calibration checklist row {number} lacks Owner/Reviewer")
+        if "PASS" not in cells[6] or "STOP" not in cells[6]:
+            errors.append(
+                f"{relative}: calibration checklist row {number} lacks PASS/STOP decision"
+            )
+    if found_stage_ids != list(CALIBRATION_STAGES):
+        errors.append(
+            f"{relative}: calibration checklist stage IDs must match the ten-stage "
+            "calibration order"
+        )
     return errors
 
 
@@ -813,6 +926,83 @@ def beginner_installation_errors(root: Path) -> list[str]:
                     f"{installation_relative}: copy-ready discovery prompt lost its "
                     "no-write/no-downstream-authority sentence"
                 )
+            if RELEASE_METADATA_BOUNDARY not in text:
+                errors.append(
+                    f"{installation_relative}: missing dynamic tag-pinned release metadata boundary"
+                )
+            if RELEASE_FALLBACK_APPROVAL not in text:
+                errors.append(
+                    f"{installation_relative}: missing bounded older-release fallback approval"
+                )
+            if MAKE_ENTRYPOINT_BOUNDARY not in text:
+                errors.append(
+                    f"{installation_relative}: missing installed Make entrypoint boundary"
+                )
+            if MAKE_COMPOSITE_BOUNDARY not in text:
+                errors.append(
+                    f"{installation_relative}: missing composite Make integration boundary"
+                )
+            if TAG_PINNED_RELEASE_METADATA_TEMPLATE not in text:
+                errors.append(
+                    f"{installation_relative}: missing resolved-tag release metadata template"
+                )
+            if MOVING_MAIN_RELEASE_METADATA in text:
+                errors.append(
+                    f"{installation_relative}: moving main release metadata must not "
+                    "verify a tagged asset"
+                )
+            release_boundary_position = text.find(RELEASE_METADATA_BOUNDARY)
+            release_section_end = text.find("\n## ", release_boundary_position)
+            release_section = text[
+                release_boundary_position : (
+                    release_section_end if release_section_end >= 0 else None
+                )
+            ]
+            if re.search(r"\bv\d+\.\d+\.\d+\b", release_section):
+                errors.append(
+                    f"{installation_relative}: installation discovery must not "
+                    "hardcode a release version"
+                )
+            if CALIBRATION_ANSWER_TYPES_MARKER not in text:
+                errors.append(
+                    f"{installation_relative}: missing exact Calibration Session "
+                    "answer-type mapping"
+                )
+            if CALIBRATION_YES_NO_BOUNDARY not in text:
+                errors.append(
+                    f"{installation_relative}: missing yes_no type and Y/N value boundary"
+                )
+            if CALIBRATION_RUNTIME_BOUNDARY not in text:
+                errors.append(
+                    f"{installation_relative}: missing current Calibration Session runtime boundary"
+                )
+            if INSTALLATION_PLAN_RELEASE_BINDING not in text:
+                errors.append(
+                    f"{installation_relative}: installation plan must bind verified "
+                    "release evidence to the installer entrypoint"
+                )
+            if CALIBRATION_CONFIRMATION_BOUNDARY not in text:
+                errors.append(
+                    f"{installation_relative}: missing confirmation phase and actor-identity boundary"
+                )
+            if CALIBRATION_CI_GAP_BOUNDARY not in text:
+                errors.append(
+                    f"{installation_relative}: missing CI-gap plan, approval, implementation, "
+                    "and verification path"
+                )
+            if CALIBRATION_SESSION_PERSISTENCE_BOUNDARY not in text:
+                errors.append(
+                    f"{installation_relative}: missing Session checklist-persistence boundary"
+                )
+            if CALIBRATION_ACTIVATION_ATOMICITY_BOUNDARY not in text:
+                errors.append(f"{installation_relative}: missing Active/Session atomicity boundary")
+            activation_stages = _marker_values(text, "calibration-activation")
+            for activation_stage in CALIBRATION_ACTIVATION_STAGES:
+                if activation_stage not in activation_stages:
+                    errors.append(
+                        f"{installation_relative}: missing separate calibration "
+                        f"activation stage: {activation_stage}"
+                    )
             if LIFECYCLE_ORDER_MARKER not in text:
                 errors.append(
                     f"{installation_relative}: adoption must close before configuration starts"
@@ -830,6 +1020,12 @@ def beginner_installation_errors(root: Path) -> list[str]:
                     expected_rows=7,
                     relative=installation_relative,
                     label="scaffold review",
+                )
+            )
+            errors.extend(
+                _calibration_completion_checklist_errors(
+                    text,
+                    relative=installation_relative,
                 )
             )
             errors.extend(
@@ -891,8 +1087,13 @@ def beginner_installation_errors(root: Path) -> list[str]:
                 errors.append(f"{relative}: missing platform evidence boundary")
             if PLATFORM_PROMPT_MARKER not in text:
                 errors.append(f"{relative}: missing copy-ready platform prompt")
-            if PLATFORM_STAGE5_PROPOSAL_MARKER not in text:
+            if text.count(PLATFORM_STAGE5_PROPOSAL_MARKER) != 1:
                 errors.append(f"{relative}: platform Stage 5 must remain proposal-only")
+            elif text.find(PLATFORM_STAGE5_PROPOSAL_MARKER) > text.find(PLATFORM_STEP_TABLE_MARKER):
+                errors.append(
+                    f"{relative}: platform Stage 5 proposal-only marker must remain "
+                    "outside the table"
+                )
             errors.extend(
                 _step_table_errors(
                     text,
@@ -900,6 +1101,17 @@ def beginner_installation_errors(root: Path) -> list[str]:
                     expected_rows=7,
                     relative=relative,
                     label="platform step",
+                )
+            )
+            errors.extend(
+                _step_table_errors(
+                    text,
+                    marker=PLATFORM_FILLED_EXAMPLE_MARKER,
+                    expected_rows=7,
+                    relative=relative,
+                    label="platform filled example",
+                    require_pass_stop=False,
+                    require_copy_request=False,
                 )
             )
             installation_link = f"examples/{platform}{suffix}.md"

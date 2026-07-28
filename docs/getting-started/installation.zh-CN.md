@@ -12,7 +12,23 @@ keywords:
 
 # 安装
 
-这是完整的中文手顺，不是英文版摘要。你不需要编程经验。AI 编程代理可以检查和准备工作，但决定权始终在你手中。复制治理 Runtime、完成工程校准、创建第一个 PR、确认托管 CI、合并和清理分支，是相互独立的步骤。
+这是完整的中文手顺，不是英文版摘要。你不需要编程经验。AI 编程代理可以检查和准备工作，但决定权始终在你手中。复制治理 Runtime、完成工程校准、创建第一个 PR、确认托管 CI、合并和完整 lifecycle closure，是相互独立的步骤；清理分支只是 closure 的一部分。
+
+下文常用词的日常含义：
+
+- **Runtime：**复制到工程中的治理文件与工具。
+- **Calibration（校准）：**让通用规则适合当前工程。
+- **Hosted CI（托管 CI）：**由 Git 服务商在你的电脑以外执行的检查。
+- **Lifecycle closure（完整关闭）：**归档证据、核实已合并 PR、同步 base、清理分支。
+- **Work Item（工单）：**一组独立受治理的工作、计划与证据。
+- **Session（会话记录）：**持久化的校准回答记录。
+- **Candidate（候选配置）：**尚未激活的配置提案。
+- **Evidence / Owner / Reviewer：**证据、承担责任的人、独立检查的人。
+- **Full self-check（完整自检）：**确认十项回答和 required checks 是否齐全。
+- **SHA-256 / digest（摘要）：**用于发现内容变化的数字指纹。
+- **Phase record（阶段记录）：**表示 Reviewer 或 Owner 已确认的 Session 记录。
+- **Active configuration（当前配置）：**现在实际生效的配置。
+- **Governance Simulation（治理模拟）：**激活前安全模拟 proposed rules 如何工作。
 
 当前能力以 [Capability Truth Matrix](../reference/capability-truth-matrix.md)
 为准。只想快速开始时阅读 [30 秒开始](30-second-start.zh-CN.md)；需要确认安全与发布证据时阅读[安全与发布验证](security-release-verification.zh-CN.md)。
@@ -72,14 +88,19 @@ AI Cockpit 模板而不是我的工程、或已有修改无法解释，立即 ST
 
 完整复制下面的文本：
 
+<!-- release-metadata-boundary: provider-discovers-latest-verifiable,tag-pinned-verifies-evidence -->
 ```text
 我想在这个工程安装 AI Cockpit。首先只做只读调查。
 除非我提供经过明确验证的 private mirror，否则使用权威公开 source
-https://github.com/spirex-ds-dev/ai-cockpit-template.git
-和公开 metadata
-https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template/main/release.json。
-解析固定 tag，报告 tag target、source commit、installer digest、archive asset 和
-SHA-256 证据；缺失或不一致立即停止。
+https://github.com/spirex-ds-dev/ai-cockpit-template.git。按从新到旧顺序检查正式
+发布的语义化版本，动态选择 provider release、tag-pinned metadata、installer、
+archive asset 与 digest 都完整且相互一致的最高版本。不得写死版本、选择
+draft/prerelease，也不得把 moving `main` metadata 当作 digest 权威。如果更新的
+正式 release 证据缺失或不一致，逐项列出失败并 STOP；得到我的明确决定后才可选择
+较旧但证据完整的 release，禁止静默降级。为本次安装解析出选定 tag 后，读取
+https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template/<resolved-tag>/release.json，
+并且只用这份 tag-pinned metadata 验证 tag target、source commit、installer
+digest、archive asset 和 SHA-256。证据缺失或不一致立即停止。
 不要创建、编辑、删除、commit、push、创建或合并 PR，也不要发布。
 保留所有与本任务无关的用户修改。
 
@@ -102,6 +123,17 @@ SHA-256 证据；缺失或不一致立即停止。
 
 预期结果：只读报告，而不是“修改文件列表”。若代理已经修改文件，立即停止；
 只恢复代理能证明由它产生的修改，绝不能丢弃原有用户工作。
+
+如果最新正式 release 验证失败，不要自行改用旧版本。先把失败证据交给 release
+owner 审核；只有 owner 审核后才复制下面的限定恢复提示词：
+
+<!-- release-fallback-approval: failed-newer-evidence,owner-review,reverify -->
+```text
+列出验证失败的较新正式 release、每项失败检查与证据、release owner 的审核记录，
+以及本次安装建议使用的较旧 tag。对该 tag 重新执行完整的 provider、tag-pinned
+metadata、installer、archive 与 digest 验证。全部通过后，只问一个 yes/no：
+是否仅批准本次安装使用这个已验证的较旧 tag。不得写入、安装或扩张为其他权限。
+```
 
 <!-- novice-stage: review-read-only-report -->
 ## 4. 逐项确认只读报告
@@ -135,7 +167,7 @@ base/branch 由证据检测；其余项目是固定默认值或 CLI/environment 
 | 类型 | 项目 | 通常行为 |
 | --- | --- | --- |
 | 可选择 | Mode | 未安装过选 **New Adoption**；已有安装才选 **Upgrade**；只预览选 **Dry Run**。 |
-| 启动证据 | Source | 初学者路径使用已发布的固定 release；local clone/private mirror 是明确的非公开信任路径。 |
+| 启动证据 | Source | 使用第 3 步动态选择的最高可验证正式 release；解析出的 tag 只在本次安装期间保持不变。local clone/private mirror 是明确的非公开信任路径。 |
 | 自动检测 | Stack | Wizard 目前只根据 Python、Swift、Android 信号自动检测；无信号或混合布局会用 `generic`。`--stack` 是脚本方式的控制项，不是 Wizard 问题。 |
 | 自动检测 | Base/branch | installer 从 remote/default-branch 证据推导；New Adoption 的 `--create-adoption` 创建专用分支。 |
 | 固定默认 | Make 接入 | Wizard 默认关闭（`update_makefile=false`）；脚本安装使用 `--update-makefile` 前必须审核冲突。 |
@@ -151,13 +183,30 @@ default 或 CLI/environment control。输出：可选择/检测/固定/CLI-only�
 当前值、工程证据、安全建议、STOP 条件。Unknown 不猜；不要启动或写文件。
 ```
 
-普通行为：New Adoption、权威公开固定 release、检测 stack（否则
-`generic`）、专用 adoption branch、不接入 Make、不安装可选 examples、保留现有
+普通行为：New Adoption、使用第 3 步动态选出的最高可验证正式 release（选定 tag
+只在本次安装期间保持不变）、检测 stack（否则 `generic`）、专用 adoption branch、
+不接入 Make、不安装可选 examples、保留现有
 glossary、interactive 计划审核。与已有文件或组织规则冲突时联系仓库 owner。
 
 维护专用选项为 `--upgrade` 和 `--upgrade-with-active`。`--dry-run`
 必须保持只读。`AI_COCKPIT_TEMPLATE_REF` 指定明确的 source ref；
 `AI_COCKPIT_TEMPLATE_SHA256` 只是附加断言，不能替代已发布元数据。
+
+本文后续只适用于 **New Adoption**。选择 **Upgrade** 时在此停止，并在独立 Work
+Item 中使用英文 [Upgrade guide](../reference/upgrade.md)；需要中文说明时先联系
+upgrade/repository owner。选择 **Dry Run** 时审核“工作区未改变”的结果和完整计划，
+然后停止；只有计划可接受后才返回本表选择 New Adoption。Dry Run 不是安装证据。
+
+<!-- make-entrypoint-boundary: included-makefile-or-explicit-f -->
+Wizard 默认不接入 Make。因此下文 `make <target>` 只有在 `include Makefile.ai`
+经过单独审核并安装后才成立；否则代理必须使用 `make -f Makefile.ai <target>`。
+代理要显示实际使用的入口；初学者无需自行编辑 Makefile 或输入命令。
+
+<!-- make-composite-boundary: integration-required-before-ai-finish -->
+单一直接 target 可以使用明确的 `Makefile.ai` 入口。但是，在 `ai-finish` 等复合
+lifecycle target 之前，代理必须另行审核并安装 `include Makefile.ai`，因为其子步骤
+目前仍调用普通 Make。接入缺失或冲突时，在复合 target 前 STOP，并联系 build/
+repository owner。
 
 移动/Java 工程先看同语言实例：[iOS](examples/ios.zh-CN.md)、
 [Android](examples/android.zh-CN.md)、[Java](examples/java.zh-CN.md)。
@@ -165,10 +214,14 @@ glossary、interactive 计划审核。与已有文件或组织规则冲突时联
 <!-- novice-stage: review-installation-plan -->
 ## 6. 审核安装计划
 
+<!-- installation-plan-release-binding: resolved-tag,metadata,asset,digest,installer,wizard -->
 ```text
-请在不写入的前提下展示最终安装计划：固定 release 与信任证据、fetch 后的
-base commit、新分支、stack、所有 installer 选项、每个新增/修改/保留文件、
-冲突、回滚行为和写入后检查。逐项解释为何适合本工程，不能确定的写 Unknown。
+请在不写入的前提下展示最终安装计划：动态解析出的 stable release tag、
+tag-pinned metadata URL、archive asset、已验证 SHA-256、准确 installer 入口和
+Wizard 启动方式、fetch 后的 base commit、新分支、stack、所有 installer 选项、
+每个新增/修改/保留文件、冲突、回滚行为和写入后检查。说明 installer 使用的 tag
+checkout、已验证 installer digest 与单独验证的 archive asset 都绑定同一 release；
+不得把 archive 称为 installer 输入。逐项解释为何适合本工程，不能确定的写 Unknown。
 最后只询问一个 yes/no：是否允许执行本次脚手架写入和验证。
 不要请求 commit、push、PR、merge、release、删除或校准激活权限。
 ```
@@ -184,7 +237,7 @@ marker/冲突，发现并 fetch 默认 base，创建 adoption 分支，写入 ma
 
 预期结果：专用 adoption 分支与验证报告；不得 commit、push、创建 PR、merge 或发布。
 
-批准前逐项看到：目标目录、干净工作区、固定 release 证据、fetch 后默认分支
+批准前逐项看到：目标目录、干净工作区、选定 release 证据、fetch 后默认分支
 commit、确切修改文件、冲突、rollback。然后完整复制：
 
 ```text
@@ -262,6 +315,9 @@ PASS：archive、diff 和全部检查记录可见。STOP：检查失败、路径
 或 configuration。
 ```
 
+PASS：只有一个本地 commit，工作区干净且没有未审核路径。STOP：commit 混入未审核
+路径或仍有 adoption 修改；联系仓库 owner。
+
 **C. 独立批准 push 与准备 PR：**
 
 ```text
@@ -269,6 +325,10 @@ PASS：archive、diff 和全部检查记录可见。STOP：检查失败、路径
 branch，禁用 auto-merge/provider 自动删分支，显示 PR 链接、Head SHA、required
 hosted checks 后停止。不得 merge 或 closure。
 ```
+
+PASS：PR 指向正确 base、Head SHA 是刚审核的 commit、required checks 已列出且
+source branch 仍保留。STOP：push 被拒、base/Head SHA 错误、required check 缺失
+或分支被自动删除；联系 repository/CI owner。
 
 **D. 人工审核与 merge：** 人在 GitHub 查看 **Files changed**、**Conversation**、
 **Checks**，required checks 通过后手动 merge。PR 创建不等于已 merge。
@@ -290,8 +350,9 @@ PASS：ownership、archive、commit、branch 与计划一致。STOP：任一不�
 ```text
 我只批准按已审核计划关闭 adopt_ai_cockpit。执行 ai-close-work-item，逐项验证远程/
 本地 adoption branch 删除、工作区干净、fast-forward-only 同步、本地默认分支等于
-remote，然后停止并显示结果。任一步失败都保留分支/证据并联系仓库 owner。
-不得开始 configuration。
+remote，然后停止并显示结果。任一步失败都不得报告 closed；显示本地/远程分支的
+实际状态并保留剩余证据。若某分支已经不存在，依据已合并 PR Head SHA 与 base
+证据提出恢复计划，并联系仓库 owner。不得开始 configuration。
 ```
 
 预期结果：adoption PR 已由人 merge，`adopt_ai_cockpit` 已关闭，远程/本地分支
@@ -301,19 +362,36 @@ remote，然后停止并显示结果。任一步失败都保留分支/证据并�
 ## 9. 完成十个校准阶段
 
 adoption PR merge 且 lifecycle closure 验证后，才创建独立的
-`configure_ai_cockpit` Work Item。代理可以执行 `make cockpit-doctor`、
-`make cockpit-calibrate`，并通过已安装入口
-`make cockpit-calibrate-session ARGS="..."` 驱动可恢复 Session。仅模板维护仓库
+`configure_ai_cockpit` Work Item。代理使用已安装的 `cockpit-doctor`、
+`cockpit-calibrate`、`cockpit-calibrate-session` target。只有已审核 Make 接入
+时代理才用普通 `make`，否则使用
+`make -f Makefile.ai`。仅模板维护仓库
 具有 `make cockpit-calibration-wizard`，采用方安装后不能使用该命令。初学者优先
 复制下面提示词，不手工拼接 Session 命令；激活前必须分别得到 Reviewer 与 Owner 确认。
 
-每个阶段只使用四种回答：**yes/no**；提供正确值的 **alternative input**；
+Calibration Session 是 Configuration Work Item 内保存十个阶段回答的记录。代理代你
+操作；你不需要输入它的命令或编辑 JSON。
+
+<!-- calibration-answer-types: yes_no,alternative_input,unknown,not_applicable -->
+<!-- calibration-yes-no: type=yes_no,values=Y-or-N -->
+每个阶段只使用四种回答：**yes/no** 的 machine answer type 是 `yes_no`，
+value 必须是 `Y` 或 `N`；
+提供正确值的 **alternative input**；
 缺乏证据并阻断 readiness 的 **unknown**；附书面理由的 **not applicable**。
+
+<!-- calibration-runtime-boundary: unknown-not-machine-blocked,confirmations-not-candidate-bound -->
+通俗地说：工具目前不会因为 Unknown 自动停止；确认记录也没有绑定到“这次准确
+设置提案”的数字指纹。
+
+当前实现边界：Session 目前会把 `unknown` 记录为 complete，Reviewer/Owner 确认记录
+也没有绑定不可变 Candidate digest。因此 STOP 是必须执行的人/代理手顺，尚不是机器
+强制保证。后续 runtime corrective 发布前，只要存在 `unknown` 就不得执行确认或
+激活；独立激活批准前必须显示并重新核对持久化 Session ID 与 SHA-256。
 
 ```text
 从刚同步的默认分支创建 configure_ai_cockpit，并依次引导十个 Calibration 阶段。
 每阶段输出：日常语言问题、检查的工程文件、观察证据、推断、Unknown、建议回答
-类型/值、Candidate 将修改的文件、PASS/STOP、必须审核的人。回答只允许 yes/no、
+类型/值、Candidate 将修改的文件、PASS/STOP、必须审核的人。回答只允许 `yes_no`、
 alternative_input、unknown、附理由的 not_applicable。不得编造质量命令或把缺证据
 写成 N/A。每阶段等待我回答。第十阶段后展示完整 Candidate 和 inventory；
 activation 前分别等待 Reviewer 与 Owner 确认。不得 commit、push、PR、merge、
@@ -347,40 +425,142 @@ release 或 closure。
 逐阶段复制下面对应请求，看到结果后再选择回答：
 
 <!-- calibration-review-table: copy-request,example,pass,stop -->
-| 阶段 | 复制请求与证据例 | PASS | STOP / 联系谁 |
-| --- | --- | --- | --- |
-| 1 仓库角色 | “用 release/deploy 文件证明这是应用、库、monorepo、模板或其他，并说明谁负责发布；先不要记录回答。”例如 release workflow 只能支持建议，不是最终批准。 | 角色和发布责任人都有证据。 | Unknown；联系仓库 owner。 |
-| 2 语言/stack | “列出 manifest、语言版本、build/package tool，解释 preset 为何只是起点和备选项。”例如 `pom.xml` 不证明 JDK 已安装。 | 版本和 preset 适配有证据。 | 混合/特殊布局；联系 platform owner。 |
-| 3 源码边界 | “分开列出维护源码与 vendor/generated/cache/build，并解释每个包含/排除。” | 每条路径有 owner 和理由。 | 可能误排维护代码；联系 module owner。 |
-| 4 测试边界 | “区分 unit、integration、UI/device、fixture、测试生成物和所需环境。”例如 `src/test` 不证明 `src/androidTest`。 | 类型/环境清楚。 | owner/环境 Unknown；联系 test/platform owner。 |
-| 5 生成物 | “列出生成路径、生成器、source of truth、再生成方法和直接编辑规则。” | generator 与 drift 规则有证据。 | 不知如何生成；联系 build owner。 |
-| 6 关键路径 | “列出安全、发布、migration、支付、身份、签名、部署及工程特殊高风险路径和 reviewer。” | 每类有人工 reviewer。 | ownership 缺失；联系 security/release owner。 |
-| 7 质量命令 | “只从 repo/CI 复制精确命令，逐项说明前提、用途、成功输出和失败处理。” | 每条命令有证据和预期。 | 需要编造或缺前提；联系 build/CI owner。 |
-| 8 审核要求 | “显示 CODEOWNERS、branch protection、required hosted checks 和 agent 无权批准的动作。” | 人员和 required checks 明确。 | provider 证据不可见；联系 repo admin。 |
-| 9 风险/Unknown | “列出所有未决事实、后果、owner、恢复，不得把 Unknown 改成 N/A。” | 没有隐藏 blocking Unknown。 | 任一 blocking Unknown；联系表中 owner。 |
-| 10 准备状态 | “显示十项回答、Candidate diff、inventory、checks、残余边界和 Reviewer/Owner 两个决定；先不要激活。” | full self-check 通过且两人分别确认。 | 证据缺失/stale/被拒；退回对应阶段。 |
+| 阶段 | 复制请求 | 证据示例与日常含义 | PASS | STOP / 联系谁 |
+| --- | --- | --- | --- | --- |
+| 1 仓库角色 | “用 release/deploy 文件证明这是应用、库、monorepo、模板或其他，并说明谁负责发布；先不要记录回答。” | release workflow 与 app manifest 可以支持“应用”建议，但还不是最终批准。 | 角色和发布责任人都有证据。 | Unknown；联系仓库 owner。 |
+| 2 语言/stack | “列出 manifest、语言版本、build/package tool，解释 preset 为何只是起点和备选项。” | `pom.xml` 暗示 Java/Maven，但不证明所需 JDK 已安装。 | 版本和 preset 适配有证据。 | 混合/特殊布局；联系 platform owner。 |
+| 3 源码边界 | “分开列出维护源码与 vendor/generated/cache/build，并解释每个包含/排除。” | `src/main/` 可能是维护源码；只有工程证据确认后，`build/` 才能判定为输出。 | 每条路径有 owner 和理由。 | 可能误排维护代码；联系 module owner。 |
+| 4 测试边界 | “区分 unit、integration、UI/device、fixture、测试生成物和所需环境。” | `src/test` 与 `src/androidTest` 是不同证据，不能互相替代。 | 类型/环境清楚。 | owner/环境 Unknown；联系 test/platform owner。 |
+| 5 生成物 | “列出生成路径、生成器、source of truth、再生成方法和直接编辑规则。” | 已知 schema 与 generator 时，生成 client 不是 source of truth。 | generator 与 drift 规则有证据。 | 不知如何生成；联系 build owner。 |
+| 6 关键路径 | “列出安全、发布、migration、支付、身份、签名、部署及工程特殊高风险路径和 reviewer。” | 即使测试通过，signing workflow 仍可能要求 release owner。 | 每类有人工 reviewer。 | ownership 缺失；联系 security/release owner。 |
+| 7 质量命令 | “只从 repo/CI 复制精确命令，逐项说明前提、用途、成功输出和失败处理。” | CI 中的命令只证明该环境使用过此语法，不证明本机 SDK 已安装。 | 每条命令有证据和预期。 | 需要编造或缺前提；联系 build/CI owner。 |
+| 8 审核要求 | “显示 CODEOWNERS、branch protection、required hosted checks 和 agent 无权批准的动作。” | CODEOWNERS 提示 reviewer；provider 设置才证明是否强制。 | 人员和 required checks 明确。 | provider 证据不可见；联系 repo admin。 |
+| 9 风险/Unknown | “列出所有未决事实、后果、owner、恢复，不得把 Unknown 改成 N/A。” | required device test 缺少 device 时，仍是 blocking Unknown。 | 没有隐藏 blocking Unknown。 | 任一 blocking Unknown；联系表中 owner。 |
+| 10 准备状态 | “显示十项回答、proposed configuration、inventory、checks、残余边界以及预定 Reviewer/Owner。先持久化第 10 阶段回答并执行 full self-check；此时不要创建 confirmation phase record，也不要激活。” | 完整 proposed configuration 是可审核证据，不等于批准。 | 第 10 阶段回答已持久化，full self-check 通过，未来 Reviewer 与 Owner 已识别。 | 证据缺失/stale/被拒；退回对应阶段。 |
 
-预期结果：可审核 Candidate 与 inventory，没有隐藏 Unknown。激活失败时保留旧
-Active configuration；这不等于企业合规或 runtime sandbox。
+### 校准完成记录清单
+
+此表是给人看的审核视图。简单说，Session 只保存你的回答、回答类型、理由和阶段
+运行状态；Work Item 保存支持证据、proposed change、负责人和 PASS/STOP。持久化
+JSON Calibration Session 只对其 schema 实际保存
+的回答类型、回答值、理由、阶段状态、events 与 checks 构成权威记录；它不保存清单
+中的其他列。其他列只能记录到 schema 支持的 Work Item review、acceptance 或
+verification 证据，并同时显示两个位置。若没有合法 schema 字段，必须 STOP 并报告
+持久化缺口；不得发明 Summary key 或手工编辑本文档。代理在 review 输出中显示一行
+填写副本；只有持久化 Session 确认已记录回答后，才把该行标为完成。只是提出问题
+不代表完成。事实或负责人缺失时填写 `unknown` 并选择 STOP。
+
+<!-- calibration-session-persistence-boundary: answer-only,work-item-evidence -->
+
+复制下面提示词，你不需要寻找或编辑治理文件：
+
+```text
+找到 active configure_ai_cockpit Work Item 及其持久化 Calibration Session。
+使用下面十行清单作为审核格式。当前阶段只显示一行通俗填写草案，包含观察证据、
+回答类型/值、proposed configuration 变化、Owner/Reviewer 与 PASS/STOP。先显示
+准备写入 Session 的准确回答和 configuration 变化，然后等待我决定。我决定后，
+只能通过已安装的 Calibration Session 入口持久化回答类型/值与理由。其他列只能
+映射到 schema 支持的 Work Item review、acceptance 或 verification 证据，并显示
+Session 路径、只读 review 输出与这些 Work Item 位置。任何列没有支持的位置时，
+报告持久化缺口并 STOP；不得发明 JSON 字段。不要让我手工编辑 JSON。unknown
+未解决时不得前进；不得编造证据、激活 Candidate、commit、push、创建或合并 PR、
+release 或关闭 Work Item。
+```
+
+<!-- calibration-completion-checklist: state,evidence,answer,candidate,owner-reviewer,pass-stop -->
+| 显示用阶段标签与检查项 | 完成状态 | 记录观察证据 | 记录回答类型/值 | 记录 Candidate 变化 | 记录 Owner / Reviewer | 记录判定 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1. repository-role — 仓库角色与发布责任 | [ ] | 记录检查过的 release/deploy 文件及观察到的角色：___ | 记录 `yes_no`、`alternative_input`、`unknown` 或附理由的 `not_applicable`：___ | 记录 Candidate 角色字段，或写明 `no change` 与理由：___ | Owner：___；Reviewer：___ | 记录 `PASS`—理由；或 `STOP`—缺失证据、Owner 和重试步骤：___ |
+| 2. language-and-stack — 语言、版本、工具与 preset 适配 | [ ] | 记录 manifest、版本文件及 build/package 证据：___ | 记录回答类型及准确 stack/version 值：___ | 记录 Candidate stack 字段，或写明 `no change` 与理由：___ | Owner：___；Reviewer：___ | 记录 `PASS`—理由；或 `STOP`—缺失证据、Owner 和重试步骤：___ |
+| 3. source-boundaries — 维护路径与排除路径 | [ ] | 记录检查过的 source、vendor、generated、cache、output 路径：___ | 记录回答类型及准确 include/exclude 值：___ | 记录 Candidate source-boundary diff，或写明 `no change` 与理由：___ | Owner：___；Reviewer：___ | 记录 `PASS`—理由；或 `STOP`—缺失证据、Owner 和重试步骤：___ |
+| 4. test-boundaries — 测试类型、fixture 与环境 | [ ] | 记录 unit/integration/UI/device/fixture 证据及所需环境：___ | 记录回答类型及准确 test-boundary 值：___ | 记录 Candidate test-boundary diff，或写明 `no change` 与理由：___ | Owner：___；Reviewer：___ | 记录 `PASS`—理由；或 `STOP`—缺失证据、Owner 和重试步骤：___ |
+| 5. generated-artifacts — 生成器与再生成规则 | [ ] | 记录 generated 路径、source of truth、generator 与再生成证据：___ | 记录回答类型及准确 generator/editing 规则：___ | 记录 Candidate generated-artifact diff，或写明 `no change` 与理由：___ | Owner：___；Reviewer：___ | 记录 `PASS`—理由；或 `STOP`—缺失证据、Owner 和重试步骤：___ |
+| 6. critical-paths — 高风险路径与人工审核 | [ ] | 记录 security/release/migration/signing/deploy 路径及证据：___ | 记录回答类型及准确 critical-path 值：___ | 记录 Candidate critical-path diff，或写明 `no change` 与理由：___ | Owner：___；Reviewer：___ | 记录 `PASS`—理由；或 `STOP`—缺失证据、Owner 和重试步骤：___ |
+| 7. quality-commands — 有证据的精确命令与前提 | [ ] | 记录 repo/CI 来源、精确命令、前提及预期结果：___ | 记录回答类型及准确的有证据命令集：___ | 记录 Candidate quality-command diff，或写明 `no change` 与理由：___ | Owner：___；Reviewer：___ | 记录 `PASS`—理由；或 `STOP`—缺失证据、Owner 和重试步骤：___ |
+| 8. review-requirements — Owner、保护与 hosted checks | [ ] | 记录 CODEOWNERS/provider/CI 证据及不可见的 provider 事实：___ | 记录回答类型及准确审核要求：___ | 记录 Candidate review-policy diff，或写明 `no change` 与理由：___ | Owner：___；Reviewer：___ | 记录 `PASS`—理由；或 `STOP`—缺失证据、Owner 和重试步骤：___ |
+| 9. risks-and-unknowns — 后果、负责人及恢复 | [ ] | 记录每项风险/Unknown、后果、owner 与恢复证据：___ | 记录回答类型；不得把缺少证据改成 N/A：___ | 记录 Candidate risk/Unknown diff，或写明 `no change` 与理由：___ | Owner：___；Reviewer：___ | 记录 `PASS`—理由；或 `STOP`—缺失证据、Owner 和重试步骤：___ |
+| 10. adoption-readiness — Proposed configuration、inventory、checks 与未来决定 | [ ] | 记录最新 proposed-configuration/inventory/check 证据及残余边界：___ | 记录最终回答类型/值，但不要激活：___ | 记录 proposed Candidate change 与 configuration 标识：___ | 预定 Owner：___；预定 Reviewer：___；此时不要确认 | 只有回答已持久化且 full self-check 通过后才记录 `PASS`，否则记录 `STOP`；phase record 仅在下一独立步骤创建：___ |
+
+确认前必须闭合脚手架审核留下的每项 CI 缺口：
+
+<!-- calibration-ci-gap-boundary: plan,approval,implementation,verification -->
+```text
+读取已关闭 adoption Work Item 的 CI 缺口清单。逐项显示工程证据、owner、准确
+Candidate diff 或有证据的 no-change 理由、验证、所需 hosted 证据、回滚和
+PASS/STOP。需要写入时，只针对这份准确 CI diff 询问一个 yes/no 并等待。批准后
+只实施该 diff 并显示本地验证；后续 PR 必须提供同一 commit 的 hosted 证据。
+任一 required CI 项仍为 Unknown、未实施或未验证时，不得确认或激活 Calibration。
+```
+
+### 单独审核并批准激活
+
+十行全部勾选只表示 Candidate 可审核，不代表已经激活。Session 只保存 `reviewer`
+与 `owner` 两个 phase record，不保存或证明人员身份。先识别 Reviewer 与 Owner，并
+确认人员/角色证据将保存到哪个 Work Item 审核位置；然后复制下面提示词，分别取得
+并记录两项决定：
+
+<!-- calibration-confirmation-boundary: phase-records,external-actor-identity -->
+```text
+不要激活。显示当前 Session ID/路径/SHA-256 与 proposed configuration。由我这个
+当前操作者先把审核材料交给已识别 Reviewer，再把该人员的明确决定和身份
+证据交回给你；收到前必须等待。随后我会对已识别 Owner 单独重复同一步骤。只有我
+交回本人明确决定后才记录对应 Session phase。显示两个持久化 phase record，以及 Work Item 中
+证明人员身份和角色分离的外部证据。明确 Session 自身不绑定身份或 Candidate digest。
+任何决定缺失、过期、拒绝或来自同一人时 STOP。
+```
+
+再复制下面的只读计划提示词：
+
+<!-- calibration-activation: plan-before-approval -->
+```text
+先不要激活。显示持久化 Calibration Session ID、路径与 SHA-256；由回答推导的
+proposed configuration；当前 Active configuration；所有 `unknown`；full self-check
+与 Governance Simulation 结果；Reviewer/Owner 各自的确认记录；激活将替换的文件、
+原子写入行为及失败恢复。明确说明当前确认记录没有机器绑定 Candidate digest。每项
+标为 Observed、Inferred 或 Unknown。最后只问一个 yes/no：证据是否完整，以及是否
+进入针对这个准确 Session hash 与 proposed configuration 的独立激活批准步骤。明确
+回答 yes 也不授权激活。不得修改文件、commit、push、创建或合并 PR、release 或
+关闭 Work Item。
+```
+
+PASS 表示 Session hash 仍是最新、两项确认记录都存在、proposed configuration 与
+已记录回答一致，且没有任何 `unknown`。在 runtime binding 实现前，这是人工
+fail-closed guard。否则 STOP，返回相应清单行。PASS 后才复制下面独立的限定批准：
+
+<!-- calibration-activation: bounded-approval -->
+```text
+我只批准刚刚审核的准确 Calibration Session ID、SHA-256 与 proposed configuration
+的本次激活。激活前立即重新计算 Session SHA-256；hash 有变化或任一回答为 `unknown`
+时 STOP。只能通过已安装的 Calibration Session 入口激活。显示激活前后 Active
+configuration 标识、Active 文件替换结果、独立的 Session 保存结果、持久化
+Session review 与验证结果，然后停止。Active 文件替换之前或替换过程中失败时，
+必须保留并核实原 Active configuration。若 Active 已替换但 Session 保存或后续
+验证失败，显示 Active/Session 不一致，报告 STOP，联系仓库 owner，不得声称已经
+回滚，也不得用较弱证据重试。不得 commit、push、创建或合并 PR、release 或关闭
+Work Item。
+```
+
+预期结果：可审核 Candidate 与 inventory，没有隐藏 Unknown。只有 Active 文件替换
+是原子的；Session 保存是独立步骤。两份记录验证一致后才算成功。这不等于企业合规
+或 runtime sandbox。
+
+<!-- calibration-activation-atomicity: active-file-only,session-save-separate -->
 
 <!-- novice-stage: run-local-checks -->
 ## 10. 执行本地检查
 
-```text
-只执行 active Contract 声明的本地检查。执行前用日常语言解释每项检查，
-实时显示进度，按实际结果记录 pass/fail/not-run，失败立即停止。
-不得削弱、跳过或改名 gate；不得 commit、push、创建 PR、merge 或发布。
-```
-
-英文权威文档绑定的 readiness 顺序为 `make ai-cockpit-quality` 后执行
-`make check-ai-adoption-ready`。要求代理按本工程安装后的同一入口执行并解释。
-
-代理执行的顺序必须保持为：
+readiness 顺序固定为先执行已安装 target `ai-cockpit-quality`，再执行
+`check-ai-adoption-ready`。只复制下面这一份提示词：
 
 <!-- public-quality-target: ai-cockpit-quality -->
+<!-- readiness-target-order: ai-cockpit-quality,check-ai-adoption-ready -->
 ```text
-make ai-cockpit-quality
-make check-ai-adoption-ready
+先运行已安装 target ai-cockpit-quality，再运行 check-ai-adoption-ready。
+如果 Make integration 已单独审核并安装，使用普通 make 入口；否则使用
+Makefile.ai 入口。只执行 active Contract 声明的检查。先显示两条准确命令并用日常
+语言解释，等待我批准本步骤；批准后再执行，实时显示进度，按实际结果记录
+pass/fail/not-run，失败立即停止。不得削弱、跳过或改名 gate；不得 commit、push、
+创建 PR、merge 或发布。
 ```
 
 用途：先跑工程质量，再验证采用证据。成功：两项退出成功且 Summary 如实记录。
@@ -390,10 +570,10 @@ make check-ai-adoption-ready
 ## 11. 完成 configuration Work Item
 
 代理只完成 `configure_ai_cockpit`：更新 Summary，执行 `before_finish` checkpoint 与
-`make ai-finish TASK=<task>`，归档 Contract/Summary，然后展示完整 diff 和检查证据。人工审核后才能批准 archive-evidence commit；批准 commit 不等于批准 push。
-如果没有传入 active Contract/Summary，`make check-ai-status` 可能显示
+通过已安装的 `ai-finish` target 并传入当前 task，归档 Contract/Summary，然后展示完整 diff 和检查证据。人工审核后才能批准 archive-evidence commit；批准 commit 不等于批准 push。
+如果没有传入 active Contract/Summary，已安装的 `check-ai-status` target 可能显示
 `Skipping status check (no active contract/summary provided)`；此时必须用
-`make check-ai-status-consistency` 验证确实不存在 active 状态。
+已安装的 `check-ai-status-consistency` target 验证确实不存在 active 状态。
 
 复制：
 
@@ -448,7 +628,8 @@ required GitHub Job、最终状态和 Head SHA，失败/skip 不得隐藏，给�
 <!-- novice-stage: merge-and-close -->
 ## 13. 合并并关闭 lifecycle
 
-merge 后另行批准 `make ai-close-work-item TASK=configure_ai_cockpit`。closure 必须验证归档证据与 PR 所属关系，fast-forward-only 同步 base，删除远程/本地 configuration 分支，确认工作区干净且本地 base 等于 remote base。任一步失败都不能称为 closed。
+merge 后另行批准通过已安装的 `ai-close-work-item` target 关闭
+`configure_ai_cockpit`。closure 必须验证归档证据与 PR 所属关系，fast-forward-only 同步 base，删除远程/本地 configuration 分支，确认工作区干净且本地 base 等于 remote base。任一步失败都不能称为 closed。
 
 <!-- lifecycle-approval: configuration-closure-plan -->
 **A. 只读审核：**
@@ -466,8 +647,9 @@ PASS：PR/archive/commit/branch/plan 全部一致。STOP：不一致；把证据
 ```text
 我只批准按已审核计划关闭 configure_ai_cockpit。执行 ai-close-work-item，逐项验证
 远程/本地 configuration branch 删除、工作区干净、fast-forward-only 同步、本地
-默认分支等于 remote，然后停止。失败时保留 branch/evidence 并联系仓库 owner。
-不得开始新 Work Item。
+默认分支等于 remote，然后停止。失败时不得报告 closed；显示本地/远程分支实际状态
+与剩余证据。若某分支已经不存在，依据已合并 PR Head SHA 与 base 证据提出恢复计划，
+并联系仓库 owner。不得开始新 Work Item。
 ```
 
 
@@ -478,18 +660,18 @@ PASS：PR/archive/commit/branch/plan 全部一致。STOP：不一致；把证据
 | --- | --- |
 | 工作区不干净 | 识别并保留所有用户修改；先完成原工作或使用独立 worktree。 |
 | 没有初始 commit | 让仓库 owner 创建并审核初始 commit。 |
-| 缺少工具 | 按组织认可方式安装，再次只读调查。 |
+| 缺少工具 | 联系第 1 步识别的 repository/build 管理员，取得已审核的安装方法，再重跑第 1 步只读调查。 |
 | 默认 remote/分支未知 | 检查 provider 与 remote HEAD，不猜。 |
 | 已有 active Work Item | 完成/关闭或明确 resume，不并行建立竞争项。 |
 | managed 文件冲突 | 展示差异并保留采用方内容，修改计划。 |
 | 校准 Unknown | 收集证据或指定负责人，不激活。 |
 | local/hosted 失败 | 保留日志、找根因、更新证据并重跑同一检查。 |
-| merge 后 closure 失败 | 保留分支并修复 lifecycle 状态，不能报告完成。 |
+| merge 后 closure 失败 | 不得报告 closed。检查本地/远程分支实际状态与 closure 证据；若分支已不存在，经 owner 批准后从已合并 PR Head SHA 恢复。 |
 
 <!-- novice-stage: confirm-installation-success -->
 ## 15. 最终成功清单
 
-- 固定 release 与 fetch base 已记录；
+- 选定的最高可验证 release 与 fetch base 已记录；
 - adoption/configuration 各自使用独立 Work Item、分支和审核流程；
 - 每个脚手架路径和冲突已解释；
 - 十个校准阶段与所有 Unknown 已审核；

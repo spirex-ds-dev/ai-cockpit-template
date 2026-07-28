@@ -94,6 +94,156 @@ def test_wi10_beginner_check_rejects_missing_prompt_boundary_or_command_explanat
     ) in errors
 
 
+def test_wi10_beginner_check_rejects_moving_or_hardcoded_release_metadata(tmp_path):
+    copy_documentation(tmp_path)
+    chinese = tmp_path / "docs/getting-started/installation.zh-CN.md"
+    chinese.write_text(
+        chinese.read_text(encoding="utf-8").replace(
+            "<resolved-tag>/release.json",
+            "main/release.json",
+            1,
+        ),
+        encoding="utf-8",
+    )
+    english = tmp_path / "docs/getting-started/installation.md"
+    english.write_text(
+        english.read_text(encoding="utf-8").replace(
+            "<resolved-tag>/release.json",
+            "v9.9.9/release.json",
+            1,
+        ),
+        encoding="utf-8",
+    )
+    japanese = tmp_path / "docs/getting-started/installation.ja.md"
+    japanese.write_text(
+        japanese.read_text(encoding="utf-8").replace(
+            "<!-- release-metadata-boundary: "
+            "provider-discovers-latest-verifiable,tag-pinned-verifies-evidence -->",
+            "",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+    assert (
+        "docs/getting-started/installation.zh-CN.md: moving main release metadata "
+        "must not verify a tagged asset"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.md: installation discovery must not "
+        "hardcode a release version"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.ja.md: missing dynamic tag-pinned "
+        "release metadata boundary"
+    ) in errors
+
+
+def test_wi10_beginner_check_rejects_missing_answer_mapping_or_activation_stage(tmp_path):
+    copy_documentation(tmp_path)
+    japanese = tmp_path / "docs/getting-started/installation.ja.md"
+    japanese.write_text(
+        japanese.read_text(encoding="utf-8")
+        .replace(
+            "<!-- calibration-answer-types: yes_no,alternative_input,unknown,not_applicable -->",
+            "",
+            1,
+        )
+        .replace("<!-- calibration-activation: bounded-approval -->", "", 1),
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+    assert (
+        "docs/getting-started/installation.ja.md: missing exact Calibration Session "
+        "answer-type mapping"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.ja.md: missing separate calibration "
+        "activation stage: bounded-approval"
+    ) in errors
+
+
+def test_wi10_beginner_check_requires_runtime_boundary_and_release_bound_plan(tmp_path):
+    copy_documentation(tmp_path)
+    english = tmp_path / "docs/getting-started/installation.md"
+    english.write_text(
+        english.read_text(encoding="utf-8")
+        .replace(
+            "<!-- calibration-runtime-boundary: "
+            "unknown-not-machine-blocked,confirmations-not-candidate-bound -->",
+            "",
+            1,
+        )
+        .replace(
+            "<!-- installation-plan-release-binding: "
+            "resolved-tag,metadata,asset,digest,installer,wizard -->",
+            "",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+
+    assert (
+        "docs/getting-started/installation.md: missing current Calibration Session runtime boundary"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.md: installation plan must bind verified "
+        "release evidence to the installer entrypoint"
+    ) in errors
+
+
+def test_wi10_beginner_check_requires_release_make_confirmation_and_ci_boundaries(tmp_path):
+    copy_documentation(tmp_path)
+    chinese = tmp_path / "docs/getting-started/installation.zh-CN.md"
+    text = chinese.read_text(encoding="utf-8")
+    for marker in (
+        "<!-- release-fallback-approval: failed-newer-evidence,owner-review,reverify -->",
+        "<!-- make-entrypoint-boundary: included-makefile-or-explicit-f -->",
+        "<!-- calibration-yes-no: type=yes_no,values=Y-or-N -->",
+        "<!-- calibration-confirmation-boundary: phase-records,external-actor-identity -->",
+        "<!-- calibration-ci-gap-boundary: plan,approval,implementation,verification -->",
+        "<!-- calibration-session-persistence-boundary: answer-only,work-item-evidence -->",
+        "<!-- calibration-activation-atomicity: active-file-only,session-save-separate -->",
+        "<!-- make-composite-boundary: integration-required-before-ai-finish -->",
+    ):
+        text = text.replace(marker, "", 1)
+    chinese.write_text(text, encoding="utf-8")
+
+    errors = beginner_installation_errors(tmp_path)
+
+    assert (
+        "docs/getting-started/installation.zh-CN.md: missing bounded older-release "
+        "fallback approval"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.zh-CN.md: missing installed Make entrypoint boundary"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.zh-CN.md: missing yes_no type and Y/N value boundary"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.zh-CN.md: missing confirmation phase and "
+        "actor-identity boundary"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.zh-CN.md: missing CI-gap plan, approval, "
+        "implementation, and verification path"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.zh-CN.md: missing Session checklist-persistence boundary"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.zh-CN.md: missing Active/Session atomicity boundary"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.zh-CN.md: missing composite Make integration boundary"
+    ) in errors
+
+
 def test_wi10_beginner_check_rejects_missing_platform_language_or_stage(tmp_path):
     copy_documentation(tmp_path)
     android = tmp_path / "docs/getting-started/examples/android.zh-CN.md"
@@ -212,6 +362,161 @@ def test_wi10_beginner_check_rejects_incomplete_decision_tables(tmp_path):
     assert (
         "docs/getting-started/examples/ios.ja.md: platform step row 4 lacks a copy-ready request"
     ) in errors
+
+
+def test_wi10_beginner_check_rejects_merged_calibration_request_and_example(tmp_path):
+    copy_documentation(tmp_path)
+    japanese = tmp_path / "docs/getting-started/installation.ja.md"
+    japanese.write_text(
+        japanese.read_text(encoding="utf-8").replace(
+            "まだ回答を記録しません。」 | release workflow",
+            "まだ回答を記録しません。」release workflow",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    assert (
+        "docs/getting-started/installation.ja.md: calibration review row 1 must contain 5 columns"
+    ) in beginner_installation_errors(tmp_path)
+
+
+def test_wi10_beginner_check_rejects_interrupted_platform_table(tmp_path):
+    copy_documentation(tmp_path)
+    ios = tmp_path / "docs/getting-started/examples/ios.md"
+    text = ios.read_text(encoding="utf-8")
+    text = text.replace("<!-- platform-stage5: proposal-only -->\n", "", 1)
+    text = text.replace(
+        "| 4 Commands |",
+        "<!-- platform-stage5: proposal-only -->\n| 4 Commands |",
+        1,
+    )
+    text = text.replace(
+        "| 3 Boundaries |",
+        "| 3 Boundaries |",
+        1,
+    ).replace(
+        "\n| 4 Commands |",
+        "\n<!-- interruption-that-breaks-github-table -->\n| 4 Commands |",
+        1,
+    )
+    ios.write_text(text, encoding="utf-8")
+
+    errors = beginner_installation_errors(tmp_path)
+    assert (
+        "docs/getting-started/examples/ios.md: platform step table must be one "
+        "uninterrupted Markdown table"
+    ) in errors
+
+
+def test_wi10_beginner_check_requires_seven_stage_filled_examples(tmp_path):
+    copy_documentation(tmp_path)
+    ios = tmp_path / "docs/getting-started/examples/ios.md"
+    ios.write_text(
+        ios.read_text(encoding="utf-8").replace(
+            "<!-- platform-filled-example: seven-stages -->", "", 1
+        ),
+        encoding="utf-8",
+    )
+    japanese = tmp_path / "docs/getting-started/examples/android.ja.md"
+    marker = "<!-- platform-filled-example: seven-stages -->"
+    before, separator, after = japanese.read_text(encoding="utf-8").partition(marker)
+    japanese.write_text(
+        before + separator + after.replace("\n| 4 |", "\n\n| 4 |", 1),
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+
+    assert (
+        "docs/getting-started/examples/ios.md: missing platform filled example decision table"
+    ) in errors
+    assert (
+        "docs/getting-started/examples/android.ja.md: platform filled example table "
+        "must be one uninterrupted Markdown table"
+    ) in errors
+
+
+def test_wi10_beginner_check_rejects_platform_table_blank_or_misplaced_marker(tmp_path):
+    copy_documentation(tmp_path)
+    android = tmp_path / "docs/getting-started/examples/android.zh-CN.md"
+    text = android.read_text(encoding="utf-8")
+    text = text.replace("<!-- platform-stage5: proposal-only -->\n", "", 1)
+    text = text.replace(
+        "\n| 5 校准 |",
+        "\n\n| 5 校准 |",
+        1,
+    )
+    text = text.replace(
+        "\n| 7 验证 |",
+        "\n<!-- platform-stage5: proposal-only -->\n| 7 验证 |",
+        1,
+    )
+    android.write_text(text, encoding="utf-8")
+
+    errors = beginner_installation_errors(tmp_path)
+    assert (
+        "docs/getting-started/examples/android.zh-CN.md: platform step table must be one "
+        "uninterrupted Markdown table"
+    ) in errors
+    assert (
+        "docs/getting-started/examples/android.zh-CN.md: platform Stage 5 proposal-only "
+        "marker must remain outside the table"
+    ) in errors
+
+
+def test_wi10_beginner_check_rejects_missing_complete_calibration_checklist(tmp_path):
+    copy_documentation(tmp_path)
+    installation = tmp_path / "docs/getting-started/installation.zh-CN.md"
+    installation.write_text(
+        installation.read_text(encoding="utf-8").replace(
+            "<!-- calibration-completion-checklist: "
+            "state,evidence,answer,candidate,owner-reviewer,pass-stop -->\n",
+            "",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    assert (
+        "docs/getting-started/installation.zh-CN.md: missing complete calibration checklist"
+        in beginner_installation_errors(tmp_path)
+    )
+
+
+def test_wi10_beginner_check_rejects_incomplete_calibration_checklist_field(tmp_path):
+    copy_documentation(tmp_path)
+    installation = tmp_path / "docs/getting-started/installation.md"
+    installation.write_text(
+        installation.read_text(encoding="utf-8").replace(
+            "Record Candidate role fields or `no change` with reason: ___",
+            "Record proposed role fields: ___",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    assert (
+        "docs/getting-started/installation.md: calibration checklist row 1 lacks Candidate change"
+    ) in beginner_installation_errors(tmp_path)
+
+
+def test_wi10_beginner_check_rejects_calibration_checklist_language_drift(tmp_path):
+    copy_documentation(tmp_path)
+    japanese = tmp_path / "docs/getting-started/installation.ja.md"
+    japanese.write_text(
+        japanese.read_text(encoding="utf-8").replace(
+            "1. repository-role",
+            "1. repository-kind",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    assert (
+        "docs/getting-started/installation.ja.md: calibration checklist stage IDs "
+        "must match the ten-stage calibration order"
+    ) in beginner_installation_errors(tmp_path)
 
 
 def test_wi10_beginner_check_rejects_crossed_commit_or_candidate_authority(tmp_path):
@@ -570,8 +875,8 @@ def test_check_rejects_public_quality_command_drift(tmp_path):
     installation = tmp_path / "docs" / "getting-started" / "installation.md"
     installation.write_text(
         installation.read_text(encoding="utf-8").replace(
-            "make ai-cockpit-quality\nmake check-ai-adoption-ready",
-            "make quality\nmake check-ai-adoption-ready",
+            "<!-- readiness-target-order: ai-cockpit-quality,check-ai-adoption-ready -->",
+            "<!-- readiness-target-order: quality,check-ai-adoption-ready -->",
         ),
         encoding="utf-8",
     )
@@ -581,6 +886,27 @@ def test_check_rejects_public_quality_command_drift(tmp_path):
     assert (
         "docs/getting-started/installation.md: readiness commands do not use the public quality target"
         in errors
+    )
+
+
+def test_check_accepts_prompt_first_readiness_target_order(tmp_path):
+    copy_documentation(tmp_path)
+    installation = tmp_path / "docs" / "getting-started" / "installation.md"
+    text = installation.read_text(encoding="utf-8")
+    text = text.replace(
+        "<!-- public-quality-target: ai-cockpit-quality -->",
+        "<!-- public-quality-target: ai-cockpit-quality -->\n"
+        "<!-- readiness-target-order: "
+        "ai-cockpit-quality,check-ai-adoption-ready -->",
+        1,
+    )
+    installation.write_text(text, encoding="utf-8")
+
+    errors = check_repository(tmp_path)
+
+    assert (
+        "docs/getting-started/installation.md: readiness commands do not use the public quality target"
+        not in errors
     )
 
 
