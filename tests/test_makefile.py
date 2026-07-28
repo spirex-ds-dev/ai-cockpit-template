@@ -333,3 +333,11 @@ def test_distributed_makefile_no_active_branch_requires_pr_gate():
     assert "check-ai-diff-ownership" in template
     assert 'test -n "$(AI_BASE_COMMIT)"' in template
     assert 'check-ai-pr AI_BASE_COMMIT="$(AI_BASE_COMMIT)"' in template
+
+
+def test_release_preflight_requires_current_japanese_capability_evidence():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+
+    assert "check-japanese-capability:" in makefile
+    assert "check-release-preflight: check-japanese-capability" in makefile
+    assert "scripts/ai_japanese_capability.py --check" in makefile

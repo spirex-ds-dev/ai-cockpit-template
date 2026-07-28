@@ -31,7 +31,7 @@ QUALITY_SUMMARY_DIR ?= target/quality
 check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
 	check-bandit-evidence check-bandit-baseline check-sbom check-provenance check-release-evidence check-secret-scanning \
-	check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence \
+	check-release-distribution check-release-state-consistency check-japanese-capability check-release-preflight check-ci-release-evidence \
 	check-lockfile-reproducibility \
 	check-quality-architecture \
 	check-deprecated-assets \
@@ -181,7 +181,10 @@ check-release-distribution-post-publish:
 check-release-state-consistency:
 	$(AI_PYTHON) scripts/check_release_state_consistency.py --root .
 
-check-release-preflight:
+check-japanese-capability:
+	$(AI_PYTHON) scripts/ai_japanese_capability.py --check
+
+check-release-preflight: check-japanese-capability
 	$(AI_PYTHON) scripts/check_release_preflight.py --root . \
 		$(if $(RELEASE_PREFLIGHT_SOURCE_COMMIT),--source-commit "$(RELEASE_PREFLIGHT_SOURCE_COMMIT)",)
 

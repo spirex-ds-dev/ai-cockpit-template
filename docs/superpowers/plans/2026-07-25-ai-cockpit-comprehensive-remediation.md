@@ -348,9 +348,11 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 
 **强制顺序：** WI-15 关闭 → WI-16 日语评估 → （若有问题）corrective Work Item 串行完成并重新评估 → WI-16 关闭 → WI-17 Trust Layer 对齐 → WI-18 发布新版本。任何日语评估问题、对应 corrective Work Item 未关闭、Trust Layer 声明与证据不一致，均停止发布准备。
 
-**WI-16 当前执行结果：** `scripts/ai_japanese_capability.py` 与 `tests/test_japanese_capability.py` 已证明日语/混合输入的确定性不信任分类、高风险操作人工确认边界，以及安装、校准、Work Item、状态、恢复、升级和发布文档的按职责可操作入口；报告位于 `docs/reference/japanese-capability-assessment.md`。通用 provider/model fluency 不属于本仓库治理层的可证明能力，已作为明确的 non-claim 记录，不被误写成通过或发布证据；当前 WI-16 的发布门禁只接受仓库内有证据的日语治理路径。
+**WI-16 当前重新评估状态：** 2026-07-29 复核证明旧版零 blocker 报告只覆盖少量输入与 11 份文档的关键词存在，未覆盖 WI-16 要求的可执行 CLI/Status/PR/lifecycle/path/encoding 证据，也未被 release preflight 消费。独立 corrective `japanese-assessment-depth-corrective-20260729` 正在把评估升级为同一机器 JSON 派生 Markdown 的可复现发布门禁。当前评估明确阻断 5 项：`JA-CLI-001`（Wizard 未消费日语资源）、`JA-STATUS-001`（Status 无日语派生 parity）、`JA-PR-001`（PR Summary chrome 仅英文）、`JA-LIFECYCLE-001`（无日语 adopter 全周期 executable fixture）、`JA-DOC-001`（无可操作卸载手顺）。对应 corrective Work Item 固定为 `japanese-wizard-cli-corrective-20260729` → `japanese-status-output-corrective-20260729` → `japanese-pr-output-corrective-20260729` → `japanese-lifecycle-fixture-corrective-20260729` → `japanese-uninstall-documentation-corrective-20260729`，必须串行完成完整生命周期并每次重生成评估；五项全部清零前不得进入 WI-17。
 
 **WI-16 流程问题记录：** `WI-16-ISSUE-001`：初始文档检查器要求每份文档都包含同一组通用词，错误地把按职责编写的文档判为缺失；已先修正评估流程为每份文档使用职责对应的日语行动术语，再重新生成报告并通过聚焦测试。`WI-16-ISSUE-002`：初始评估把无法由仓库本地证据证明的通用模型 fluency 当成 required 场景；已修正流程边界为“仓库治理路径必须有日语证据，通用模型 fluency 只能作为明确 non-claim”，并在报告与 Contract 中保留限制，未将其声明为能力或发布证据。`WI-16-ISSUE-003`：首次 `ai-finish` 因新增脚本未通过项目 formatter 检查而停止；已运行项目 formatter，重新执行全量质量门禁并以 1147 tests、85.06% coverage 通过后才 archive。
+
+**WI-16-ISSUE-004（评估深度/发布门禁，高）：** 旧版评估把“关键词存在”和英语侧实现证据推断成日语能力，且没有接入 `check-release-preflight`，因此 stale 或浅层零 blocker 报告仍可能放行发布。修复必须以独立 corpus、逐行 source/test/command/limitation/digest、JSON→Markdown 派生、字节级 freshness 检查和 release prerequisite 落地；阻塞报告是正确门禁结果，不允许为使质量通过而把 blocker 改成 limitation。
 
 ### WI-17：Add the Authoritative Multilingual Human-Agent Trust Layer Document
 

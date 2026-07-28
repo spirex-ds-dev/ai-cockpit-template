@@ -1,0 +1,679 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "japanese-assessment-depth-corrective-20260729",
+  "contractPath": ".ai/work-items/archive/2026/japanese-assessment-depth-corrective-20260729.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/japanese-assessment-depth-corrective-20260729.contract.json",
+      "reason": "Defined the source-bound assessment-process corrective, release boundary, scenarios, and full lifecycle."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-assessment-depth-corrective-20260729.summary.json",
+      "reason": "Recorded TDD evidence, five capability findings, process correction, risks, and bidirectional traceability."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Regenerated governed Work Item status."
+    },
+    {
+      "path": ".ai/work-items/starts/japanese-assessment-depth-corrective-20260729.json",
+      "reason": "Generated the immutable Start Receipt from synchronized origin/main."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Added the Japanese assessment check and made it a release-preflight prerequisite without blocking normal corrective quality."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Replaced the shallow assessment with a deterministic domain matrix, per-case evidence/digests, stable findings, derived reports, and freshness checks."
+    },
+    {
+      "path": "tests/test_japanese_capability.py",
+      "reason": "Added red-green coverage for corpus breadth, matrix evidence, blockers, STOP preservation, deterministic views, stale reports, and CLI behavior."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Added the release-preflight Japanese prerequisite regression."
+    },
+    {
+      "path": "tests/fixtures/japanese-capability-corpus.json",
+      "reason": "Added the independent versioned Japanese positive, negative, mixed, injection, encoding, path, Unknown, and absurd-request corpus."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Generated the authoritative machine-readable assessment with five current blocking findings."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Generated the human-readable matrix and ordered corrective queue from the same assessment object."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registered the assessment depth design and execution plan."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Added PLAN-DIRECTIVE-033 instruction-plan-implementation-acceptance bindings."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-07-29-japanese-assessment-depth-design.md",
+      "reason": "Recorded evidence boundaries, required domains, release integration, and expected findings."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-29-japanese-assessment-depth-corrective.md",
+      "reason": "Recorded TDD tasks and the bidirectional traceability matrix."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Replaced the stale zero-blocker WI-16 claim with the five-finding serial corrective queue."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-assessment-depth-corrective-20260729.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "scripts/ai_japanese_capability.py",
+    "tests/test_japanese_capability.py",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/work-items/archive/2026/japanese-capability-assessment.summary.json",
+    "scripts/ai_wizard_localization.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_render_task_outcome_pr.py"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "The repository has Japanese files and keywords but lacks executable Japanese behavior for a required domain.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_japanese_capability.py::test_comprehensive_matrix_is_evidence_bound_and_reports_current_blockers",
+        "docs/reference/japanese-capability-assessment.json"
+      ]
+    },
+    {
+      "scenario": "The checked-in JSON or Markdown report is stale or manually changed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_japanese_capability.py::test_report_drift_rejects_stale_json_and_markdown",
+        "tests/test_japanese_capability.py::test_cli_check_rejects_report_drift_before_reporting_blockers"
+      ]
+    },
+    {
+      "scenario": "Japanese input contains polite/plain register, mixed technical terms, hidden instructions, Unicode controls, encoded text, or Japanese paths.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/fixtures/japanese-capability-corpus.json",
+        "tests/test_japanese_capability.py::test_independent_corpus_covers_every_required_japanese_input_domain",
+        "tests/test_japanese_capability.py::test_japanese_corpus_preserves_authority_and_high_risk_stop_boundaries"
+      ]
+    },
+    {
+      "scenario": "Release preflight runs while one or more Japanese findings are blocking.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_makefile.py::test_release_preflight_requires_current_japanese_capability_evidence",
+        "make check-release-preflight"
+      ]
+    },
+    {
+      "scenario": "General Japanese model fluency or human translation quality is requested as a repository capability.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_japanese_capability.py::test_general_fluency_remains_a_limitation_not_a_pass",
+        "docs/reference/japanese-capability-assessment.md"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:50:21.216588+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "a67ccb910f2c8fe0e0702f2fdb69ca8e109db2aa37d8c12be1cc2be434d7e0bb",
+      "commandHash": "73429177c0aca5119907f5eb376630e1ea0d879ac285cbfdf62901e135367c34",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "616f99426fae8965a70e7fb2de5d1499df8dbd2c3892ce9968264db6bd50f1ca",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "outputBytes": 270
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:50:21.355126+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "8b439c29450b4e8b094c33ca74415e6821816d27c3411c524833271b12d5e51c",
+      "commandHash": "6ae4646360602939cb9fc9a63c495aa2d383311f0fe15a05e8f8e0f01aae080b",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "616f99426fae8965a70e7fb2de5d1499df8dbd2c3892ce9968264db6bd50f1ca",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json scope guard passed: 14 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json scope guard passed: 14 changed path(s) covered",
+      "outputBytes": 198
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:50:21.512177+00:00",
+      "exitCode": 0,
+      "durationMs": 111,
+      "outputDigest": "241b79245a26b0f1c2510d706b469889c61b1f74995610f01710fab4c608b580",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "616f99426fae8965a70e7fb2de5d1499df8dbd2c3892ce9968264db6bd50f1ca",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 325
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:50:21.737611+00:00",
+      "exitCode": 0,
+      "durationMs": 177,
+      "outputDigest": "5a88398a0bcbc5a0d60fe54f55ebec2ecb97437a7a0378667588b2fdd21430cb",
+      "commandHash": "210d9b09f6f5204d008b9f3faea53b3a4dc2b74891d3779b789455d315c53588",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "616f99426fae8965a70e7fb2de5d1499df8dbd2c3892ce9968264db6bd50f1ca",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `japanese-assessment-depth-corrective-20260729` - Contract Hash: `1ed483cd57b18b4f` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acce",
+      "outputTail": "overage`: not_run - `aiScenarioCoverage`: not_run - `aiGuidelines`: not_run - `aiSummary`: not_run - `aiStatus`: not_run - `aiStatusCheck`: not_run - `aiStatusConsistency`: not_run - `aiDiffOwnership`: not_run - `quality`: not_run ## Review Focus - Blockers derive from missing executable evidence rather than keywords - JSON/Markdown freshness and per-case digests - Release-preflight prerequisite ordering - Five independent corrective Work Item identities ## Diff Ownership Preview - active_owned: `14`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-assessment-depth-corrective-20260729.json` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-japanese-assessment-depth-corrective.md` — covered by Contract scope - [active_owned] `docs/superpowers/specs/2026-07-29-japanese-assessment-depth-design.md` — covered by Contract scope - [active_owned] `scripts/ai_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/fixtures/japanese-capability-corpus.json` — covered by Contract scope - [active_owned] `tests/test_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope ## Next Action - Run or record required verification: aiCheckpoint",
+      "outputBytes": 6781
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:50:21.877037+00:00",
+      "exitCode": 0,
+      "durationMs": 84,
+      "outputDigest": "839e16965196eab7ec6de2b52027db05720ca8e35c2cd6e407f68bdfdd256064",
+      "commandHash": "dd93809812c4bcdf406344b4ff38adaab527a585efa573c9197bfcf9fbd8928a",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "616f99426fae8965a70e7fb2de5d1499df8dbd2c3892ce9968264db6bd50f1ca",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json review policy matched 4 path(s) [review] .ai/work-items/starts/japanese-assessment-depth-corrective-20260729.json [review] .ai/cockpit/current_status.md [review] Makefile [review] scripts/ai_japanese_capability.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json review policy matched 4 path(s) [review] .ai/work-items/starts/japanese-assessment-depth-corrective-20260729.json [review] .ai/cockpit/current_status.md [review] Makefile [review] scripts/ai_japanese_capability.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 459
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:50:22.017394+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "616f99426fae8965a70e7fb2de5d1499df8dbd2c3892ce9968264db6bd50f1ca",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:50:22.151694+00:00",
+      "exitCode": 0,
+      "durationMs": 88,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "616f99426fae8965a70e7fb2de5d1499df8dbd2c3892ce9968264db6bd50f1ca",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:50:22.247646+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "98e9cb947469d8d8f604eff2cfdaecc5b2de7d62aa7737f77601bc3757d7bd43",
+      "commandHash": "a0cc088a80059c6ad1e887150362bc87dfdef0ccdaa8c2e9ca86aabe5a8caafb",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "616f99426fae8965a70e7fb2de5d1499df8dbd2c3892ce9968264db6bd50f1ca",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 313
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:50:22.336155+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "f8f582181c4d8ef2371fcc04b3cbc6d6b578e1f09407e2a8a91944e2476ba7a2",
+      "commandHash": "7b7df2fb1e5dac140c452d4d082f9a645deaf2183ae1db40ad2af308fbfd8a6a",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "616f99426fae8965a70e7fb2de5d1499df8dbd2c3892ce9968264db6bd50f1ca",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputBytes": 318
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:50:22.556838+00:00",
+      "exitCode": 0,
+      "durationMs": 174,
+      "outputDigest": "b9e422576282657b259183df842fd926e39e50888788697d1f3426d61178cc30",
+      "commandHash": "5b420cc75589241787ce082f2f369db75f0d30fc57249ec92a86ae0b02ea6bc9",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "616f99426fae8965a70e7fb2de5d1499df8dbd2c3892ce9968264db6bd50f1ca",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `14`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-assessment-depth-corrective-20260729.json` — covered by Contra",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `14`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-assessment-depth-corrective-20260729.json` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-japanese-assessment-depth-corrective.md` — covered by Contract scope - [active_owned] `docs/superpowers/specs/2026-07-29-japanese-assessment-depth-design.md` — covered by Contract scope - [active_owned] `scripts/ai_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/fixtures/japanese-capability-corpus.json` — covered by Contract scope - [active_owned] `tests/test_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope",
+      "outputBytes": 1675
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:54:44.482209+00:00",
+      "exitCode": 0,
+      "durationMs": 261854,
+      "outputDigest": "d84ec2b8098ca7dd656f55a2c0e55b5f51c0e8e4d657f6c72688b8286d9f34ea",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "616f99426fae8965a70e7fb2de5d1499df8dbd2c3892ce9968264db6bd50f1ca",
+      "outputSummary": "\"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-full \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-fast-static \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"e694f93a31ea",
+      "outputTail": "_documented_target 3.80s call tests/test_system_invariants.py::test_system_invariants_reject_archive_summary_invalid_version 2.26s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 2.22s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[True-False] 2.16s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 2.10s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 2.06s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 1.99s call tests/test_start_and_archive.py::test_ai_start_journeys 1406 passed, 3 warnings in 254.91s (0:04:14) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.e3QkqcDiBV/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.e3QkqcDiBV/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.e3QkqcDiBV/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.e3QkqcDiBV/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/e694f93a31ea-local-20260728T165022Z-73623-0/summary.json",
+      "outputBytes": 46562
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:54:45.692954+00:00",
+      "exitCode": 0,
+      "durationMs": 196,
+      "outputDigest": "2b10330c23643796f346cd4fe28cdefbf965276de7cd8dfd78062621c85e40f1",
+      "commandHash": "2a07ac008e59ffbba625e51788367046500a017557a281d88d1276e9991ae8d3",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "8d02012a5f41a37017591f895ee905a01b7821aab1e50e6da7d0fc8917f2e33d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 360
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:54:45.970619+00:00",
+      "exitCode": 0,
+      "durationMs": 228,
+      "outputDigest": "1fcd18c90d4b74662d645ad2b2b861908d20a05ac470fec306acb8fb82f121e0",
+      "commandHash": "f5b737a77d7e1f66137aa9f57a3eeffdb19cc1b196ee3ed5e286ba42a6c01602",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "8d02012a5f41a37017591f895ee905a01b7821aab1e50e6da7d0fc8917f2e33d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 343
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:54:46.060300+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "8d02012a5f41a37017591f895ee905a01b7821aab1e50e6da7d0fc8917f2e33d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:54:46.153888+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "0b5b672a7c4fb030ee9da6e96ab669923bae5d37d8daa5bc4c1f0acaff4d5f2d",
+      "commandHash": "4ffea8bb98678dc60e52fd21571f6b8ab827228235213002ae1d5ac56e329a7e",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "8d02012a5f41a37017591f895ee905a01b7821aab1e50e6da7d0fc8917f2e33d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 323
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json CONTRACT=.ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:54:46.885845+00:00",
+      "exitCode": 0,
+      "durationMs": 90,
+      "outputDigest": "c4dc2febf9aae1f002ea89e35b0eac11033565f35fec0e5c8195d7e4b3919305",
+      "commandHash": "7c423d72cf12b759ebe461a5a5cd7fa7e971bc6041a6f9bf01230f49116a4cf8",
+      "contractHash": "1ed483cd57b18b4f5db6271ee89c6f958cae6d156c7ea04224b89b1a41c67e84",
+      "commitSha": "e694f93a31ea10fe05b2bf8221c0fadbc2adc25d",
+      "executionContractPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "worktreeDigest": "2d3aa5a3759c572b322c0dfc8c3fb998b158b13d77f0e62db093d12f3eb4d809",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json ai summary check passed: .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json --contract .ai/work-items/active/japanese-assessment-depth-corrective-20260729.contract.json ai summary check passed: .ai/work-items/active/japanese-assessment-depth-corrective-20260729.summary.json",
+      "outputBytes": 352
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Treat missing, stale, ambiguous, English-inferred, or non-executable Japanese evidence as blocking.",
+      "compliant": true,
+      "evidence": "Five current capability gaps are block rows with stable finding IDs; report drift returns failure."
+    },
+    {
+      "guideline": "Keep general Japanese model fluency and human translation quality as explicit non-claims.",
+      "compliant": true,
+      "evidence": "JA-GENERAL-FLUENCY remains limitation and is regression-guarded against a pass claim."
+    },
+    {
+      "guideline": "Do not combine capability remediation with assessment-process remediation.",
+      "compliant": true,
+      "evidence": "This diff adds assessment and gate behavior only; five capability fixes are named independent Work Items."
+    },
+    {
+      "guideline": "Use one machine-readable result as the source for Markdown and release-gate decisions.",
+      "compliant": true,
+      "evidence": "evaluate() produces one deterministic object; JSON and Markdown renderers plus report_drift consume it."
+    },
+    {
+      "guideline": "Record every discovered issue and bidirectional instruction-plan-implementation-acceptance binding.",
+      "compliant": true,
+      "evidence": "PLAN-DIRECTIVE-033, observedIssues, generated reports, and the execution plan map all findings."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "The gate controls release readiness; blocker derivation, report freshness, and release prerequisite ordering are deterministic and tested."
+  },
+  "generatedFiles": [
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "WI-16-ISSUE-004",
+      "category": "assessment-depth-and-release-gate",
+      "severity": "high",
+      "fact": "The prior zero-blocker assessment checked a small corpus and term presence but omitted required executable domains and was not consumed by release preflight.",
+      "decision": "Replace it with a comprehensive machine report, freshness gate, and release-preflight prerequisite.",
+      "resolution": "The new assessment reports five blockers and release preflight stops on them before identity checks.",
+      "status": "resolved_locally",
+      "followUp": "Complete this Work Item lifecycle, then execute all five capability correctives."
+    },
+    {
+      "issueId": "JA-CLI-001",
+      "category": "japanese-executable-cli",
+      "severity": "high",
+      "fact": "Wizard locale resources exist but no executable Wizard imports the localization layer.",
+      "decision": "Create japanese-wizard-cli-corrective-20260729 after this Work Item closes.",
+      "resolution": "Release-blocking finding recorded; capability not modified in this process corrective.",
+      "status": "planned_corrective",
+      "followUp": "Complete independent Contract, implementation, tests, PR, Hosted CI, merge, closure, and re-assessment."
+    },
+    {
+      "issueId": "JA-STATUS-001",
+      "category": "japanese-status-parity",
+      "severity": "high",
+      "fact": "Cockpit Status has no Japanese derived view or executable parity evidence.",
+      "decision": "Create japanese-status-output-corrective-20260729 after JA-CLI-001 closes.",
+      "resolution": "Release-blocking finding recorded; capability not modified in this process corrective.",
+      "status": "planned_corrective",
+      "followUp": "Complete independent lifecycle and re-assessment."
+    },
+    {
+      "issueId": "JA-PR-001",
+      "category": "japanese-pr-parity",
+      "severity": "high",
+      "fact": "Task Outcome PR summary chrome is English-only.",
+      "decision": "Create japanese-pr-output-corrective-20260729 after JA-STATUS-001 closes.",
+      "resolution": "Release-blocking finding recorded; capability not modified in this process corrective.",
+      "status": "planned_corrective",
+      "followUp": "Complete independent lifecycle and re-assessment."
+    },
+    {
+      "issueId": "JA-LIFECYCLE-001",
+      "category": "japanese-executable-lifecycle",
+      "severity": "high",
+      "fact": "No Japanese adopter fixture executes the governed installation-through-recovery/removal path.",
+      "decision": "Create japanese-lifecycle-fixture-corrective-20260729 after JA-PR-001 closes.",
+      "resolution": "Release-blocking finding recorded; capability not modified in this process corrective.",
+      "status": "planned_corrective",
+      "followUp": "Complete independent lifecycle and re-assessment."
+    },
+    {
+      "issueId": "JA-DOC-001",
+      "category": "japanese-uninstall-documentation",
+      "severity": "high",
+      "fact": "The Japanese engineer documentation path lacks an actionable uninstall procedure.",
+      "decision": "Create japanese-uninstall-documentation-corrective-20260729 after JA-LIFECYCLE-001 closes.",
+      "resolution": "Release-blocking finding recorded; capability not modified in this process corrective.",
+      "status": "planned_corrective",
+      "followUp": "Complete independent lifecycle and final zero-blocker re-assessment."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "high",
+      "area": "japanese-release-readiness",
+      "detail": "Five in-scope Japanese capability findings remain open and intentionally block release.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    },
+    {
+      "level": "medium",
+      "area": "general-fluency",
+      "detail": "General provider/model fluency and native-human translation quality remain outside repository evidence and must not be claimed.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Blockers derive from missing executable evidence rather than keywords",
+      "JSON/Markdown freshness and per-case digests",
+      "Release-preflight prerequisite ordering",
+      "Five independent corrective Work Item identities"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "normal development quality remains available; only release preflight consumes the blocking assessment",
+    "userVisibleOutput": "JSON and Markdown expose stable blockers, evidence, limitations, and corrective identities",
+    "persistence": "checked-in JSON and Markdown must byte-match deterministic regeneration",
+    "localization": "14-case Japanese corpus and 11-domain matrix are assessed without claiming general fluency",
+    "generatedArtifacts": "JSON is authoritative and Markdown is derived from the same result",
+    "makeEntrypoints": "check-release-preflight depends on check-japanese-capability"
+  },
+  "userCorrectionsCaptured": [
+    "Japanese handling is mandatory because most adopter engineers use Japanese.",
+    "A comprehensive Japanese assessment must run before release and every problem must be corrected.",
+    "Every Work Item must complete PR, merge, ai-close-work-item, branch cleanup, and bidirectional traceability."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Do not infer Japanese capability from English tests or file existence.",
+      "solidifiedIn": "Independent corpus, executable domain matrix, five current block rows, and regression tests."
+    },
+    {
+      "correction": "Do not allow release while Japanese findings remain.",
+      "solidifiedIn": "Makefile release-preflight prerequisite and checked-in blocking assessment."
+    },
+    {
+      "correction": "Correct every finding independently.",
+      "solidifiedIn": "Stable JA finding IDs, named serial corrective Work Items, PLAN-DIRECTIVE-033, and comprehensive plan."
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "1ed483cd57b18b4f",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "1ed483cd57b18b4f",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "JA-CLI-001, JA-STATUS-001, JA-PR-001, JA-LIFECYCLE-001, and JA-DOC-001 remain release-blocking until their independent corrective lifecycles and fresh assessment complete.",
+    "Full ai-finish/archive, aggregate PR, Hosted CI, merge, closure, and branch cleanup remain pending for this assessment-process corrective.",
+    "WI-17 documentation alignment cannot begin before the final Japanese assessment has zero in-scope blockers."
+  ],
+  "overclaimPrevention": "This Work Item proves assessment depth, freshness, and release blocking only; it does not claim the five missing capabilities, general Japanese fluency, native-human translation quality, provider behavior, or release readiness.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-29T02:00:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-29-japanese-assessment-depth-corrective.md",
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+        ],
+        "reason": "The five blockers, serial order, release stop, and lifecycle requirements are explicit."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/japanese-assessment-depth-corrective-20260729.contract.json",
+          ".ai/work-items/archive/2026/japanese-assessment-depth-corrective-20260729.summary.json",
+          "docs/reference/remediation-instruction-traceability.json"
+        ],
+        "reason": "Every scenario and finding maps to implementation and acceptance evidence."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "Makefile",
+          "scripts/ai_japanese_capability.py",
+          "docs/reference/japanese-capability-assessment.md",
+          "tests/test_japanese_capability.py"
+        ],
+        "reason": "Documented reproduction and release-blocking behavior match executable checks."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "tests/fixtures/japanese-capability-corpus.json",
+          "docs/reference/japanese-capability-assessment.json",
+          "docs/reference/japanese-capability-assessment.md"
+        ],
+        "reason": "Japanese and mixed-language evidence, missing parity, and explicit non-claims are represented without English inference."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/japanese-capability-assessment.summary.json",
+          "docs/superpowers/specs/2026-07-29-japanese-assessment-depth-design.md",
+          "docs/reference/japanese-capability-assessment.json"
+        ],
+        "reason": "The prior shallow pass remains immutable history while the current report records the corrected boundary and five blockers."
+      }
+    ]
+  },
+  "archiveSequence": 645
+}
