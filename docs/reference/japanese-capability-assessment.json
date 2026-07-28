@@ -2,12 +2,6 @@
   "assessmentVersion": 2,
   "blockingFindings": [
     {
-      "caseId": "JA-CLI-001",
-      "correctiveWorkItem": "japanese-wizard-cli-corrective-20260729",
-      "id": "JA-CLI-001",
-      "summary": "Executable Wizard entrypoints do not consume Japanese locale resources."
-    },
-    {
       "caseId": "JA-STATUS-001",
       "correctiveWorkItem": "japanese-status-output-corrective-20260729",
       "id": "JA-STATUS-001",
@@ -74,20 +68,23 @@
     {
       "area": "Executable Wizard and CLI Japanese interaction",
       "commandEvidence": [
-        "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_wizard_localization.py"
+        "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_wizard_localization.py tests/test_install_wizard.py tests/test_calibration_wizard.py"
       ],
-      "digest": "sha256:40cb0510aad2a06adb543849b54d0c7fe33829305fa5681661e68620f3044c3b",
-      "findingId": "JA-CLI-001",
+      "digest": "sha256:ac22cfa7d4238d33ce149c8e07e9f3219fab45cc62215135bdd6c2dc934a4e75",
       "id": "JA-CLI-001",
       "limitation": "Resource parity alone cannot prove executable Japanese interaction.",
-      "observation": "Executable Wizard entrypoints do not consume Japanese locale resources.",
+      "observation": "Both Wizard entrypoints consume the strict Japanese resource layer with executable tests",
       "sourceEvidence": [
         "scripts/ai_wizard_localization.py",
+        "scripts/ai_install_wizard.py",
+        "scripts/ai_calibration_wizard.py",
         "locales/wizard/ja.json"
       ],
-      "status": "block",
+      "status": "pass",
       "testEvidence": [
-        "tests/test_wizard_localization.py"
+        "tests/test_wizard_localization.py",
+        "tests/test_install_wizard.py",
+        "tests/test_calibration_wizard.py"
       ]
     },
     {
@@ -256,7 +253,7 @@
     "entryCount": 14,
     "path": "tests/fixtures/japanese-capability-corpus.json"
   },
-  "digest": "sha256:9c2e2823c700c8057b4f3af0f1683b2a2314488215203ac5924f2ac7da00b009",
+  "digest": "sha256:d988b9a345fbbecaa840fb649cd1c55d468af929c3a72b1087281b90445bf67a",
   "limitations": [
     "This assessment does not claim general model fluency, translation quality, or provider behavior.",
     "Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking."

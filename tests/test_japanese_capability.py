@@ -12,12 +12,37 @@ from ai_japanese_capability import (
 
 
 EXPECTED_FINDINGS = {
-    "JA-CLI-001": "japanese-wizard-cli-corrective-20260729",
     "JA-STATUS-001": "japanese-status-output-corrective-20260729",
     "JA-PR-001": "japanese-pr-output-corrective-20260729",
     "JA-LIFECYCLE-001": "japanese-lifecycle-fixture-corrective-20260729",
     "JA-DOC-001": "japanese-uninstall-documentation-corrective-20260729",
 }
+
+
+def test_wizard_capability_requires_both_entrypoints_and_executable_tests(tmp_path, monkeypatch):
+    scripts = tmp_path / "scripts"
+    tests = tmp_path / "tests"
+    scripts.mkdir()
+    tests.mkdir()
+    localization_import = (
+        'from ai_wizard_localization import load_messages\nLANGUAGE_OPTION = "--language"\n'
+    )
+    (scripts / "ai_install_wizard.py").write_text(localization_import, encoding="utf-8")
+    (scripts / "ai_calibration_wizard.py").write_text("", encoding="utf-8")
+    (tests / "test_install_wizard.py").write_text(
+        "def test_japanese_dry_run_uses_executable_locale_resources(): pass\n",
+        encoding="utf-8",
+    )
+    (tests / "test_calibration_wizard.py").write_text(
+        "def test_japanese_render_and_pause_use_executable_locale_resources(): pass\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_japanese_capability, "ROOT", tmp_path)
+
+    assert ai_japanese_capability._wizard_is_executable() is False
+
+    (scripts / "ai_calibration_wizard.py").write_text(localization_import, encoding="utf-8")
+    assert ai_japanese_capability._wizard_is_executable() is True
 
 
 def test_independent_corpus_covers_every_required_japanese_input_domain():
@@ -96,7 +121,7 @@ def test_json_and_markdown_are_deterministic_views_of_one_result():
     markdown = render_markdown(first)
     assert first["digest"] in markdown
     assert "JA-CLI-001" in markdown
-    assert "japanese-wizard-cli-corrective-20260729" in markdown
+    assert "japanese-status-output-corrective-20260729" in markdown
 
 
 def test_report_drift_rejects_stale_json_and_markdown(tmp_path):

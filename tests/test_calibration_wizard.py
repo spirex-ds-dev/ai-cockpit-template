@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from ai_calibrate import CALIBRATION_STAGES, CalibrationError
-from ai_calibration_wizard import CalibrationWizard
+from ai_calibration_wizard import CalibrationWizard, main
 
 
 def wizard(tmp_path: Path) -> CalibrationWizard:
@@ -12,6 +12,7 @@ def wizard(tmp_path: Path) -> CalibrationWizard:
         tmp_path,
         tmp_path / ".ai/calibration/session.json",
         tmp_path / ".ai/calibration/active.json",
+        language="en",
     )
 
 
@@ -222,3 +223,70 @@ def test_activation_failure_preserves_active(tmp_path: Path):
     with pytest.raises(CalibrationError, match="Active and Session restored"):
         current.activate(replace_fn=fail_session_replace)
     assert json.loads(current.active_path.read_text(encoding="utf-8")) == {"original": True}
+
+
+def test_japanese_render_and_pause_use_executable_locale_resources(tmp_path: Path):
+    current = CalibrationWizard(
+        tmp_path,
+        tmp_path / ".ai/calibration/session.json",
+        tmp_path / ".ai/calibration/active.json",
+        language="ja-JP",
+    )
+    current.load_or_start("ja-session")
+    rendered = current.render()
+
+    assert rendered.startswith("校正ウィザード")
+    assert "状態: in_progress" in rendered
+    assert "セッション:" in rendered
+    assert "不明は明示したまま" in rendered
+    assert "repository_role" in rendered
+
+    prompts: list[str] = []
+    output: list[str] = []
+
+    def pause(prompt: str) -> str:
+        prompts.append(prompt)
+        return "pause"
+
+    assert current.run(input_fn=pause, output_fn=output.append) == 0
+    assert prompts == ["操作を選択してください (answer/back/check/review/pause/quit): "]
+    assert any("一時停止しました。Activation は実行していません。" in line for line in output)
+
+
+def test_japanese_unknown_command_and_answer_prompt(tmp_path: Path):
+    current = CalibrationWizard(
+        tmp_path,
+        tmp_path / ".ai/calibration/session.json",
+        tmp_path / ".ai/calibration/active.json",
+        language="ja",
+    )
+    current.load_or_start("commands-ja")
+    prompts: list[str] = []
+    output: list[str] = []
+    commands = iter(["unknown-command", "answer", "Y", "pause"])
+
+    def input_fn(prompt: str) -> str:
+        prompts.append(prompt)
+        return next(commands)
+
+    assert current.run(input_fn=input_fn, output_fn=output.append) == 0
+    assert any("不明な操作です" in line for line in output)
+    assert "回答: " in prompts
+
+
+def test_calibration_cli_exposes_language_and_rejects_unknown(capsys) -> None:
+    with pytest.raises(SystemExit) as error:
+        main(["--help"])
+    assert error.value.code == 0
+    assert "--language" in capsys.readouterr().out
+
+    assert main(["--language", "fr"]) == 2
+    assert "unsupported language: fr" in capsys.readouterr().err
+
+
+def test_calibration_cli_japanese_summary(tmp_path: Path, capsys) -> None:
+    assert main(["--root", str(tmp_path), "--language", "ja", "--summary"]) == 0
+
+    rendered = capsys.readouterr().out
+    assert rendered.startswith("校正ウィザード")
+    assert "状態: in_progress" in rendered

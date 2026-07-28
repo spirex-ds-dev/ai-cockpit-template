@@ -1,0 +1,298 @@
+{
+  "contractVersion": 2,
+  "workItemId": "japanese-wizard-cli-corrective-20260729",
+  "mode": "code",
+  "title": "Connect Japanese localization to executable Wizard entrypoints",
+  "baseCommit": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Japanese capability is mandatory because most adopter engineers use Japanese. Correct every issue found by the comprehensive Japanese assessment before documentation alignment or release, using a separate complete Work Item lifecycle for each issue.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message:japanese-capability-mandatory-and-continue",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:user-authorized-japanese-capability-corrections"
+  },
+  "declaredIntent": {
+    "summary": "Provide executable Japanese interaction for both governed Wizard entrypoints without changing evidence or control semantics.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+    ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_wizard_localization.py",
+    "scripts/ai_install_wizard.py",
+    "scripts/ai_calibration_wizard.py",
+    "scripts/ai_japanese_capability.py",
+    "locales/wizard/*.json",
+    "tests/test_wizard_localization.py",
+    "tests/test_install_wizard.py",
+    "tests/test_calibration_wizard.py",
+    "tests/test_japanese_capability.py",
+    "docs/architecture/wizard-io-and-localization.md",
+    "docs/architecture/interactive-installation-wizard.md",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Translating repository evidence, detected project facts, paths, commands, or user-supplied values.",
+    "Changing CalibrationSession state transitions, installer transactions, confirmation authority, or activation rules.",
+    "Claiming general Japanese model fluency or human translation quality.",
+    "Fixing JA-STATUS-001, JA-PR-001, JA-LIFECYCLE-001, or JA-DOC-001 in this Work Item.",
+    "Starting documentation alignment, deprecated-assets cleanup, or release."
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "JA-CLI-001 records that executable Wizard entrypoints do not consume the Japanese resource layer."
+    },
+    {
+      "path": "scripts/ai_install_wizard.py",
+      "reason": "The executable installation Wizard currently renders its interaction chrome and confirmations in English."
+    },
+    {
+      "path": "scripts/ai_calibration_wizard.py",
+      "reason": "The executable calibration Wizard currently renders commands, prompts, states, and recovery messages in English."
+    },
+    {
+      "path": "scripts/ai_wizard_localization.py",
+      "reason": "The strict locale normalization and resource loader already exist but are not connected to executable entrypoints."
+    },
+    {
+      "path": "locales/wizard/ja.json",
+      "reason": "The Japanese resource currently has exact parity but only seven generic keys."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-16 requires each Japanese blocker to be corrected serially through a complete lifecycle."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "localization_boundary",
+      "confirmation_semantics",
+      "release_gate_false_positive"
+    ],
+    "reason": "Incorrect localization can obscure fail-closed confirmation and recovery semantics or clear the release blocker on static imports alone.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized correction of every Japanese assessment finding and continuous execution."
+  },
+  "preReviewWarnings": [
+    "Review exact Japanese meaning for confirmation, STOP, pause, recovery, Unknown, and N/A boundaries.",
+    "Verify both executable Wizard entrypoints consume resources; one static import is insufficient.",
+    "Keep paths, commands, identifiers, and evidence values byte-preserving."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Both installation and calibration Wizard executable entrypoints resolve an explicit language, AI_COCKPIT_LANGUAGE, system locale, and the safe Japanese default through ai_wizard_localization.",
+    "Both CLI parsers expose --language in help output and reject unsupported language values instead of silently falling back.",
+    "All user-visible Wizard interaction chrome needed for selection, plan review, confirmation, blocking, pause/recovery, command navigation, Unknown, and N/A is rendered from exact-parity ja/en/zh-CN resources.",
+    "Japanese executable tests assert Japanese prompts and output for installation and calibration, including declined confirmation, dry run, blocked readiness, pause/recovery, unknown command, and summary rendering.",
+    "Paths, commands, stage IDs, statuses, detected facts, user answers, and machine evidence remain unchanged values and are not machine-translated.",
+    "The Japanese assessor requires both executable entrypoints plus Japanese behavior tests before JA-CLI-001 can pass; an import-only or single-entrypoint implementation remains blocking.",
+    "The machine JSON and derived Markdown Japanese assessment are regenerated; JA-CLI-001 passes while the other four corrective findings remain blocking.",
+    "Architecture documentation states the executable localization boundary and does not claim general Japanese fluency.",
+    "Full local finish/archive, one PR, Hosted CI, merge, ai-close-work-item, branch cleanup, synchronized clean main, and assessment refresh complete before JA-STATUS-001 begins."
+  ],
+  "guidelines": [
+    "Use one strict resource layer for both Wizard entrypoints and preserve exact key/placeholder parity.",
+    "Localize presentation chrome only; never translate or alter evidence-bearing values.",
+    "Keep confirmation and failure paths fail closed in every supported locale.",
+    "Test executable behavior rather than accepting resource-file or import presence as capability evidence.",
+    "Record assessment changes and remaining blockers without overclaiming Japanese readiness."
+  ],
+  "intent": {
+    "problem": "AI Cockpit has Japanese Wizard message resources, but neither executable installation nor calibration Wizard consumes them. Japanese adopters therefore receive English-only interaction and static resource parity can be mistaken for working Japanese capability.",
+    "constraints": [
+      "Preserve installer and CalibrationSession authority and all fail-closed write boundaries.",
+      "Do not translate evidence values, paths, commands, IDs, statuses, or user input.",
+      "Keep ja, en, and zh-CN keys and placeholders exactly aligned.",
+      "Require executable tests for both entrypoints before clearing JA-CLI-001.",
+      "Leave all unrelated Japanese blockers active and complete this Work Item lifecycle before the next corrective."
+    ],
+    "rationale": "Connecting one shared strict localization layer to both executable Wizard paths provides deterministic Japanese interaction without duplicating business logic or making unsupported fluency claims."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Japanese adopter runs either Wizard without a language option or with --language ja-JP.",
+      "expected": "The executable resolves ja and renders Japanese interaction chrome while preserving evidence values.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_install_wizard.py::test_japanese_dry_run_uses_executable_locale_resources",
+        "tests/test_calibration_wizard.py::test_japanese_render_and_pause_use_executable_locale_resources",
+        "tests/test_calibration_wizard.py::test_calibration_cli_japanese_summary"
+      ],
+      "verificationPlan": "Add red-first executable tests for both entrypoints using the default and ja-JP alias, then assert Japanese prompts/output and unchanged paths, IDs, and facts."
+    },
+    {
+      "scenario": "A caller requests an unsupported language.",
+      "expected": "The entrypoint exits non-zero with an explicit unsupported-language error and never silently falls back or mutates the target.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_install_wizard.py::test_install_wizard_unknown_language_fails_before_target_write",
+        "tests/test_install_wizard.py::test_install_wizard_cli_exposes_language_and_rejects_unknown",
+        "tests/test_calibration_wizard.py::test_calibration_cli_exposes_language_and_rejects_unknown"
+      ],
+      "verificationPlan": "Add CLI and unit regressions for unsupported language resolution before implementing argument wiring."
+    },
+    {
+      "scenario": "Japanese installation is declined, dry-run, or blocked by missing readiness evidence.",
+      "expected": "Japanese STOP/cancel/read-only text is shown and the installer is never invoked before affirmative confirmation.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_install_wizard.py::test_japanese_decline_preserves_fail_closed_write_boundary",
+        "tests/test_install_wizard.py::test_japanese_dry_run_uses_executable_locale_resources",
+        "tests/test_install_wizard.py::test_japanese_blocked_readiness_stops_before_installer"
+      ],
+      "verificationPlan": "Extend installation Wizard tests across decline, dry-run, and blocked paths with Japanese output and write-boundary assertions."
+    },
+    {
+      "scenario": "A Japanese calibration session pauses, receives an unknown command, or displays Unknown/N/A evidence.",
+      "expected": "Japanese recovery and navigation chrome is rendered while CalibrationSession state, answer types, and fail-closed activation rules remain unchanged.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_wizard.py::test_japanese_render_and_pause_use_executable_locale_resources",
+        "tests/test_calibration_wizard.py::test_japanese_unknown_command_and_answer_prompt",
+        "tests/test_calibration_wizard.py::test_interrupt_and_quit_pause_safely"
+      ],
+      "verificationPlan": "Extend calibration Wizard tests for render, command loop, EOF/pause, unknown command, and summary behavior."
+    },
+    {
+      "scenario": "Only one Wizard imports localization or resources exist without executable assertions.",
+      "expected": "JA-CLI-001 remains blocking and release preflight cannot treat the capability as implemented.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_japanese_capability.py::test_wizard_capability_requires_both_entrypoints_and_executable_tests",
+        "docs/reference/japanese-capability-assessment.json"
+      ],
+      "verificationPlan": "Strengthen the assessor and its tests to require both entrypoints and named executable Japanese test evidence."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all Japanese capability corrections before release and continuous execution."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 658
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/japanese-wizard-cli-corrective-20260729.json",
+    "baseCommit": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+    "initialScopeDigest": "a9e11bdbb1ac9e67e7608fb067ffec724118b0dddc06c81f7570f699c2ece616",
+    "contractSkeletonDigest": "6361426d940f1eb58179020848a653d13f2ae1f4db85b3bbb22db381b13bdbc7"
+  }
+}

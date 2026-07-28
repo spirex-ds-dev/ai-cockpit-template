@@ -29,14 +29,14 @@ def resolve_language(
     *, explicit: str | None, environ: str | None = None, system_locale: str | None = None
 ) -> str:
     """Resolve explicit, environment, system locale, then the safe ``ja`` default."""
-    candidates = (
-        explicit,
-        environ if environ is not None else os.environ.get("AI_COCKPIT_LANGUAGE"),
-        system_locale,
-    )
-    for candidate in candidates:
-        if candidate and candidate.strip():
-            return normalize_language(candidate)
+    if explicit and explicit.strip():
+        return normalize_language(explicit)
+    environment_value = environ if environ is not None else os.environ.get("AI_COCKPIT_LANGUAGE")
+    if environment_value and environment_value.strip():
+        return normalize_language(environment_value)
+    if system_locale and system_locale.strip():
+        if system_locale.strip().upper() not in {"C", "POSIX"}:
+            return normalize_language(system_locale)
     return "ja"
 
 
@@ -53,6 +53,21 @@ def load_messages(language: str) -> dict[str, str]:
     ):
         raise ValueError(f"Wizard resource must be a string map: {path}")
     return value
+
+
+def format_message(messages: Mapping[str, str], key: str, **values: object) -> str:
+    """Render one resource message and reject missing keys or placeholder values."""
+    template = messages.get(key)
+    if template is None:
+        raise ValueError(f"missing Wizard message key: {key}")
+    expected = _placeholders(template)
+    supplied = frozenset(values)
+    if expected != supplied:
+        raise ValueError(
+            f"invalid values for Wizard message {key}: "
+            f"expected {sorted(expected)}, received {sorted(supplied)}"
+        )
+    return template.format(**values)
 
 
 def _placeholders(text: str) -> frozenset[str]:
