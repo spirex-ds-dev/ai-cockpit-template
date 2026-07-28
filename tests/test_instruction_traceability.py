@@ -9,16 +9,116 @@ from check_instruction_traceability import (
     _path,
     _validate_archive_integrity,
     main,
+    validate_audit,
     validate_manifest,
 )
 
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "docs/reference/remediation-instruction-traceability.json"
+AUDIT = ROOT / "docs/reference/wi01-wi20-bidirectional-traceability-audit.json"
 
 
 def load_manifest() -> dict:
     return json.loads(MANIFEST.read_text(encoding="utf-8"))
+
+
+def load_audit() -> dict:
+    return json.loads(AUDIT.read_text(encoding="utf-8"))
+
+
+def test_current_wi01_wi20_audit_passes() -> None:
+    assert validate_audit(load_audit(), ROOT) == []
+
+
+def test_audit_requires_exactly_wi01_through_wi20() -> None:
+    audit = load_audit()
+    audit["workItems"] = audit["workItems"][1:]
+    errors = validate_audit(audit, ROOT)
+    assert any("audit is missing Work Items: WI-01" in error for error in errors)
+
+
+def test_audit_rejects_missing_implementation_and_acceptance_paths() -> None:
+    audit = load_audit()
+    row = audit["workItems"][0]
+    row["implementationEvidence"][0]["path"] = "scripts/not-present.py"
+    row["acceptanceEvidence"][0]["path"] = "tests/not-present.py"
+    errors = validate_audit(audit, ROOT)
+    assert any("implementationEvidence[0] path does not exist" in error for error in errors)
+    assert any("acceptanceEvidence[0] path does not exist" in error for error in errors)
+
+
+def test_audit_rejects_archive_triple_mismatch() -> None:
+    audit = load_audit()
+    row = audit["workItems"][0]
+    row["contractEvidence"][0]["summaryPath"] = row["contractEvidence"][0]["contractPath"]
+    errors = validate_audit(audit, ROOT)
+    assert any("does not match one archive index entry" in error for error in errors)
+
+
+def test_audit_named_path_requires_exact_disposition() -> None:
+    audit = load_audit()
+    row = audit["workItems"][9]
+    row["implementationEvidence"] = [
+        record
+        for record in row["implementationEvidence"]
+        if record["path"] != "docs/getting-started/installation.md"
+    ]
+    errors = validate_audit(audit, ROOT)
+    assert any(
+        "lacks exact implementation evidence: docs/getting-started/installation.md" in error
+        for error in errors
+    )
+
+
+def test_audit_rejects_missing_reverse_instruction_reference() -> None:
+    audit = load_audit()
+    audit["workItems"][0]["implementationEvidence"][0]["instructionRefs"] = []
+    errors = validate_audit(audit, ROOT)
+    assert any(
+        "implementationEvidence[0].instructionRefs must reference this row's evidence" in error
+        for error in errors
+    )
+
+
+def test_audit_rejects_duplicate_ownership_without_shared_reason() -> None:
+    audit = load_audit()
+    first = audit["workItems"][0]["implementationEvidence"][0]
+    second = audit["workItems"][1]["implementationEvidence"][0]
+    second["path"] = first["path"]
+    errors = validate_audit(audit, ROOT)
+    assert any("duplicate ownership without sharedEvidenceReason" in error for error in errors)
+
+
+def test_complete_audit_rejects_open_finding() -> None:
+    audit = load_audit()
+    audit["status"] = "complete"
+    audit["findings"] = [
+        {
+            "findingId": "AUDIT-TEST-001",
+            "workItemId": "WI-01",
+            "severity": "high",
+            "missingDomain": "acceptance",
+            "fact": "test mutation",
+            "evidence": ["tests/test_instruction_traceability.py"],
+            "status": "open",
+            "releaseBlocking": True,
+            "correctiveWorkItemId": "",
+            "reverification": "not_run",
+        }
+    ]
+    audit["workItems"][0]["status"] = "verified"
+    audit["workItems"][0]["findings"] = ["AUDIT-TEST-001"]
+    errors = validate_audit(audit, ROOT)
+    assert any("verified row contains open findings" in error for error in errors)
+    assert "complete audit contains open findings" in errors
+
+
+def test_audit_rejects_finding_linked_from_the_wrong_work_item() -> None:
+    audit = load_audit()
+    audit["workItems"][0]["findings"] = ["WI10-AUDIT-001"]
+    errors = validate_audit(audit, ROOT)
+    assert any("WI-01: finding WI10-AUDIT-001 belongs to WI-10" in error for error in errors)
 
 
 def test_current_traceability_manifest_passes() -> None:
@@ -109,6 +209,21 @@ def test_cli_fails_when_manifest_cannot_be_read(tmp_path: Path, monkeypatch) -> 
             str(tmp_path),
             "--manifest",
             "missing.json",
+        ],
+    )
+    assert main() == 1
+
+
+def test_cli_fails_when_wi01_wi20_audit_cannot_be_read(monkeypatch) -> None:
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "check_instruction_traceability.py",
+            "--repository",
+            str(ROOT),
+            "--audit",
+            "docs/reference/missing-wi-audit.json",
         ],
     )
     assert main() == 1
