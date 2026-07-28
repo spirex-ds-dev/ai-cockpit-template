@@ -29,6 +29,10 @@ AI Cockpit 保持 `make quality` 向后兼容：它等价于 `make quality-full`
 
 Hosted CI 使用 `if: always()` 上传完整 session 目录和外层日志，因此成功、失败、取消和超时都会保留诊断证据。缺失计时或工件证据即失败关闭；缓存命中不是最终证据。
 
+手动触发 smoke 时必须声明用途。用于绑定源提交的性能测量时，执行
+`gh workflow run smoke.yml --ref <measurement-branch> -f purpose=hosted_measurement`。
+`release_preparation` 仍是严格默认值并执行发布状态证据检查；性能测量触发不声明发布意图。
+
 Hosted 前后计时是证据声明，不是推断。如果无法取得 WI-20 基线或 hosted run，必须记录结构化 `not-run` 原因、run ID 和限制，不能报告性能改善。
 
 `scripts/determine_quality_scope.py` 根据变更路径选择 Fast、Full 或 Release。未知或混合范围默认 Full。只有 `.ai/quality/gates.yaml` 声明输出不冲突时才允许并行。

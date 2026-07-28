@@ -30,6 +30,11 @@ AI Cockpit は `make quality` の後方互換性を維持します。`make quali
 
 Hosted CI は `if: always()` で session directory 全体と wrapper log を upload するため、success、failure、cancel、timeout のいずれでも診断証拠を保持します。timing または artifact 証拠がない場合は fail-closed とし、cache hit を最終証拠にはしません。
 
+smoke を手動実行する時は purpose を明示します。source-bound な性能測定には
+`gh workflow run smoke.yml --ref <measurement-branch> -f purpose=hosted_measurement`
+を使います。`release_preparation` は引き続き厳格な default で release-state
+証拠検査を実行し、性能測定の dispatch は release intent を主張しません。
+
 Hosted の前後 timing は推測ではなく証拠です。WI-20 の baseline または hosted run を取得できない場合は、構造化した `not-run` 理由、run ID、制限を記録し、改善を主張してはいけません。
 
 `scripts/determine_quality_scope.py` は変更 path から Fast、Full、Release を決定します。未知または混在する範囲は Full になります。並列実行は `.ai/quality/gates.yaml` で出力の競合がない場合に限ります。

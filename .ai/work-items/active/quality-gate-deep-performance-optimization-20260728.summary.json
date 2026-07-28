@@ -172,6 +172,25 @@
       "resolution": "The environment regression and all three previously failing lifecycle tests pass together.",
       "status": "resolved",
       "followUp": "The next complete snapshot quality run must prove the sanitized boundary across the whole suite before any measurement push."
+    },
+    {
+      "issueId": "RFE-ISSUE-146",
+      "category": "workflow-dispatch-intent",
+      "severity": "high",
+      "stage": "hosted-measurement-run-1",
+      "fact": "Hosted run 30324321071 bound to ef9d54dc completed template-smoke quality in 10 minutes 53 seconds and installation-smoke in 15 seconds, but workflow_dispatch was unconditionally classified as release preparation, so release-evidence failed on unrelated historical release-state drift and the aggregate correctly failed.",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30324321071",
+        ".github/workflows/smoke.yml",
+        "tests/test_workflows.py",
+        "docs/operations/quality-gates.md",
+        "docs/operations/quality-gates.zh-CN.md",
+        "docs/operations/quality-gates.ja.md"
+      ],
+      "decision": "Add an explicit manual-dispatch purpose choice, preserve release_preparation as the strict default, and require hosted_measurement for non-release source-bound performance runs.",
+      "resolution": "Workflow and tests now separate manual hosted measurement from release preparation; a new committed snapshot and hosted run must prove the boundary.",
+      "status": "resolved",
+      "followUp": "Do not count run 30324321071 among the three successful post-change samples; retain it as diagnostic and initial timing evidence."
     }
   ],
   "residualRisks": [
@@ -216,12 +235,20 @@
     "schemaVersion": 1,
     "baselineWorkItem": "quality-gate-performance-completion-20260727",
     "comparisonRule": "Compare at least three serial, like-for-like smoke workflow runs bound to one measured commit against hosted run 30280375075; report median and p95, and do not claim improvement from local timing or a single hosted run.",
-    "status": "not_run",
+    "status": "partial",
     "scenarios": [
+      {
+        "scenario": "manual_dispatch_release_intent_boundary",
+        "status": "fail",
+        "reason": "Run 30324321071 measured the intended source commit, but the workflow incorrectly treated hosted measurement as release preparation; template quality succeeded while release-evidence and aggregate failed.",
+        "evidence": [
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30324321071"
+        ]
+      },
       {
         "scenario": "pull_request_quality_gate",
         "status": "not_run",
-        "reason": "The resumed implementation has passed focused local regression, but the clean committed measurement candidate and its three source-bound hosted runs have not yet been produced.",
+        "reason": "The corrected explicit-purpose measurement candidate and its three successful source-bound hosted runs have not yet been produced.",
         "evidence": []
       }
     ]

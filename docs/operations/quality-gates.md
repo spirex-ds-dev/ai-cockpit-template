@@ -58,6 +58,12 @@ Hosted CI uploads the complete session directory and wrapper log with
 diagnostics. Missing timing or artifact evidence is an error; a cache hit is
 not final evidence.
 
+Manual smoke dispatch must declare its purpose. Use
+`gh workflow run smoke.yml --ref <measurement-branch> -f purpose=hosted_measurement`
+for source-bound performance measurement. `release_preparation` remains the
+strict default and runs release-state evidence checks; measurement dispatch
+does not claim release intent.
+
 Hosted before/after timing is an evidence claim, not an assumption. If a WI-20
 baseline or a hosted run cannot be retrieved, record a structured `not-run`
 reason, run ID and limitation; do not report an improvement.

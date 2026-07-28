@@ -6,6 +6,15 @@ on:
       - main
   pull_request:
   workflow_dispatch:
+    inputs:
+      purpose:
+        description: Select the governed reason for the manual smoke run.
+        required: true
+        default: release_preparation
+        type: choice
+        options:
+          - hosted_measurement
+          - release_preparation
 
 permissions:
   contents: read
@@ -52,7 +61,7 @@ jobs:
       - name: Determine release preparation scope
         env:
           AI_BASE_COMMIT: ${{ env.AI_BASE_COMMIT }}
-          RELEASE_PREPARATION_INTENT: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'release-preparation') }}
+          RELEASE_PREPARATION_INTENT: ${{ (github.event_name == 'workflow_dispatch' && inputs.purpose == 'release_preparation') || contains(github.event.pull_request.labels.*.name, 'release-preparation') }}
         run: |
           # Keep event boundaries visible for workflow compatibility and review.
           # github.event_name == 'pull_request'
@@ -260,7 +269,7 @@ jobs:
 
       - name: Verify release evidence ownership
         env:
-          RELEASE_PREPARATION_INTENT: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'release-preparation') }}
+          RELEASE_PREPARATION_INTENT: ${{ (github.event_name == 'workflow_dispatch' && inputs.purpose == 'release_preparation') || contains(github.event.pull_request.labels.*.name, 'release-preparation') }}
         shell: bash
         run: |
           set -euo pipefail
