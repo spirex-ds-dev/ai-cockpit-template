@@ -237,6 +237,51 @@ def test_resume_contract_appends_source_bound_lineage_without_rewriting_receipt(
     assert validate_receipt(contract, receipt, project_root=root) == []
 
 
+def test_resume_contract_recovers_base_branch_receipt_without_rewriting_it(tmp_path):
+    root, contract_path, receipt_file, _start, target = _resume_fixture(tmp_path)
+    receipt = json.loads(receipt_file.read_text(encoding="utf-8"))
+    receipt["baseBranch"] = "main"
+    receipt_file.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+    original_receipt = receipt_file.read_bytes()
+
+    transition = resume_contract(
+        contract_path,
+        base_remote="origin",
+        base_branch="main",
+        timestamp="2026-07-28T01:00:00+00:00",
+        project_root=root,
+    )
+
+    resumed = json.loads(contract_path.read_text(encoding="utf-8"))
+    assert transition["toBaseCommit"] == target
+    assert transition["baseBranch"] == "main"
+    assert transition["workBranch"] == "codex/paused-task"
+    assert receipt_file.read_bytes() == original_receipt
+    assert validate_receipt(resumed, receipt, project_root=root) == []
+
+
+@pytest.mark.parametrize("work_branch", ["codex/unrelated-task", "agent/paused-task"])
+def test_resume_contract_rejects_unrelated_branch_for_base_branch_receipt(tmp_path, work_branch):
+    root, contract_path, receipt_file, _start, _target = _resume_fixture(tmp_path)
+    receipt = json.loads(receipt_file.read_text(encoding="utf-8"))
+    receipt["baseBranch"] = "main"
+    receipt_file.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+    _git(root, "switch", "-c", work_branch)
+    original_contract = contract_path.read_bytes()
+    original_receipt = receipt_file.read_bytes()
+
+    with pytest.raises(ResumeError, match="does not identify this Work Item"):
+        resume_contract(
+            contract_path,
+            base_remote="origin",
+            base_branch="main",
+            project_root=root,
+        )
+
+    assert contract_path.read_bytes() == original_contract
+    assert receipt_file.read_bytes() == original_receipt
+
+
 def test_resume_contract_appends_second_transition_without_rewriting_first(tmp_path):
     root, contract_path, receipt_file, _start, first_target = _resume_fixture(tmp_path)
     first = resume_contract(
@@ -920,6 +965,51 @@ def test_ai_start_requires_initial_commit(tmp_path, monkeypatch):
     assert ai_start.validate_start_state("sample", force=False) is None
     assert ai_start.main() == 1
     assert not (active / "sample.contract.json").exists()
+
+
+def test_ai_start_refuses_discovered_remote_default_branch_before_writes(tmp_path, monkeypatch):
+    root = tmp_path / "repository"
+    root.mkdir()
+    _git(root, "init", "-b", "main")
+    _git(root, "config", "user.name", "Test")
+    _git(root, "config", "user.email", "test@example.com")
+    _write_commit(root, "seed.txt", "start\n")
+    _git(root, "remote", "add", "origin", str(tmp_path / "remote.git"))
+    _git(root, "update-ref", "refs/remotes/origin/main", "HEAD")
+    _git(root, "symbolic-ref", "refs/remotes/origin/HEAD", "refs/remotes/origin/main")
+    active = root / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    status = root / ".ai" / "cockpit" / "current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text("unchanged\n", encoding="utf-8")
+    before_status = status.read_bytes()
+
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", root)
+    monkeypatch.setattr(ai_start, "DEFAULT_STATUS", status)
+    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "must-not-start"])
+
+    assert ai_start.main() == 1
+    assert not (active / "must-not-start.contract.json").exists()
+    assert not (active / "must-not-start.summary.json").exists()
+    assert not (root / ".ai/work-items/starts/must-not-start.json").exists()
+    assert status.read_bytes() == before_status
+
+
+def test_default_branch_start_guard_allows_matching_dedicated_branch(tmp_path):
+    root = tmp_path / "repository"
+    root.mkdir()
+    _git(root, "init", "-b", "main")
+    _git(root, "config", "user.name", "Test")
+    _git(root, "config", "user.email", "test@example.com")
+    _write_commit(root, "seed.txt", "start\n")
+    _git(root, "remote", "add", "origin", str(tmp_path / "remote.git"))
+    _git(root, "update-ref", "refs/remotes/origin/main", "HEAD")
+    _git(root, "symbolic-ref", "refs/remotes/origin/HEAD", "refs/remotes/origin/main")
+    _git(root, "switch", "-c", "codex/sample")
+
+    assert ai_start.default_branch_start_issue(root=root) is None
 
 
 def test_ai_start_refuses_when_an_active_work_item_already_exists(tmp_path, monkeypatch):

@@ -1,0 +1,603 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "fix-resume-base-branch-binding-20260728",
+  "contractPath": ".ai/work-items/archive/2026/fix-resume-base-branch-binding-20260728.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/fix-resume-base-branch-binding-20260728.contract.json",
+      "reason": "Defines the process corrective, exact scope, scenarios, and acceptance."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-resume-base-branch-binding-20260728.summary.json",
+      "reason": "Records root cause, implementation, tests, alignment, issues, and residual risk."
+    },
+    {
+      "path": ".ai/work-items/starts/fix-resume-base-branch-binding-20260728.json",
+      "reason": "Preserves the corrective's immutable start identity."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated current Work Item status."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Fails before persistence when the discovered remote default branch is checked out."
+    },
+    {
+      "path": "scripts/ai_resume_work_item.py",
+      "reason": "Adds bounded compatibility recovery while retaining dedicated-branch identity checks."
+    },
+    {
+      "path": "scripts/ai_start_receipt.py",
+      "reason": "Validates normal and compatibility branch bindings plus one-work-branch lineage."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Adds red-green real Git lifecycle and negative branch-binding regressions."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Makes dedicated-branch-before-ai-start order and compatibility recovery explicit."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Aligns installed governance guidance with enforced start and resume boundaries."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records AUDIT-PROCESS-002 and keeps audit/release frozen until closure."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-resume-base-branch-binding-20260728.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "scripts/ai_start.py",
+    "scripts/ai_resume_work_item.py",
+    "scripts/ai_start_receipt.py",
+    "tests/test_start_and_archive.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:29:54.022306+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "78b1fcc2d2702628f52d6557ef8d6ba02f11bf7b654a845ca5ebe34213ba86c6",
+      "commandHash": "99acede685720b6f7086d46a050a3a642db333611895aab14c60ba9a9b8e9ecd",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "b609fcf74b06b567bfcb7be3a2d263d5f66bdefd09fc8f393846e1ec1abdbfb1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_work_item.py .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json work item contract check passed: .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_work_item.py .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json work item contract check passed: .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "outputBytes": 249
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:29:54.218433+00:00",
+      "exitCode": 0,
+      "durationMs": 123,
+      "outputDigest": "01337e194ebac1ccdda46eff23ae9d96439e7c6d7e644dd918386ba53147854b",
+      "commandHash": "bea0e14d932b0ed30e7103f46fb4e11f73ae9becdaa7ec80c84a3bfe32f8fd1d",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "b609fcf74b06b567bfcb7be3a2d263d5f66bdefd09fc8f393846e1ec1abdbfb1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scope.py .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scope.py .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputBytes": 182
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:29:54.445206+00:00",
+      "exitCode": 0,
+      "durationMs": 146,
+      "outputDigest": "aa6217dc47547034288f9261d8ed72c5f7f747f129160d204e594223fd746ff9",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "b609fcf74b06b567bfcb7be3a2d263d5f66bdefd09fc8f393846e1ec1abdbfb1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guards.py --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guards.py --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 310
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json SUMMARY=.ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:29:54.817077+00:00",
+      "exitCode": 0,
+      "durationMs": 289,
+      "outputDigest": "b541de076f1dcddb50eb5b4f61f298afb4158d2e18558f22da341e994730db94",
+      "commandHash": "491678304859e404a70009f34ab0e1f805a4f1f4e9d2e139f244d0b6b8ab6f62",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "b609fcf74b06b567bfcb7be3a2d263d5f66bdefd09fc8f393846e1ec1abdbfb1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_checkpoint.py --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `fix-resume-base-branch-binding-20260728` - Contract Hash: `39fc538468c0d0f6` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `9` - Unknown",
+      "outputTail": " semantics explicit. - Focused tests, full quality, Contract/Summary/status checks, PR aggregate and Hosted CI pass before merge; the corrective then archives, merges, closes, deletes both branches, synchronizes main, and only afterward permits the paused audit to retry governed resume. ## Required Verification - `aiWorkItem`: passed - `aiScope`: passed - `aiGuards`: passed - `aiCheckpoint`: passed - `aiAgentRisk`: failed - `aiReviewPolicy`: passed - `aiBacktrack`: passed - `aiCoverage`: passed - `aiScenarioCoverage`: passed - `aiGuidelines`: passed - `aiSummary`: passed - `aiStatus`: passed - `aiStatusCheck`: passed - `aiStatusConsistency`: passed - `aiDiffOwnership`: passed - `quality`: passed ## Review Focus - No persistent evidence is written by ai-start on a discovered default branch. - Compatibility recovery is narrower than normal dedicated-branch binding. - Receipt bytes and prior resume transitions remain immutable. - Paused audit and release implementation are absent from this corrective diff. ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/README.md` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/fix-resume-base-branch-binding-20260728.json` — covered by Contract scope - [active_owned] `docs/reference/ai-cockpit-work-item-lifecycle.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `scripts/ai_resume_work_item.py` — covered by Contract scope - [active_owned] `scripts/ai_start.py` — covered by Contract scope - [active_owned] `scripts/ai_start_receipt.py` — covered by Contract scope - [active_owned] `tests/test_start_and_archive.py` — covered by Contract scope ## Next Action - Run or record required verification: aiAgentRisk",
+      "outputBytes": 6417
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:29:55.024820+00:00",
+      "exitCode": 0,
+      "durationMs": 131,
+      "outputDigest": "117bc6dc81ba51cbf93e2993c5e376429ca8adf74886a113f3ca9f75cfc9a859",
+      "commandHash": "bc45c180d7fae5209e3e4a6eba195f0606b375429b497f71f7075ca460b2f029",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "b609fcf74b06b567bfcb7be3a2d263d5f66bdefd09fc8f393846e1ec1abdbfb1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/fix-resume-base-branch-binding-20260728.json [review] .ai/cockpit/README.md [review] .ai/cockpit/current_status.md [review] scripts/ai_resume_work_item.py [review] scripts/ai_start.py [review] scripts/ai_start_receipt.py review focus recorded: 4 item(s) report: target/ai_review_polic",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_review_policy.py --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/fix-resume-base-branch-binding-20260728.json [review] .ai/cockpit/README.md [review] .ai/cockpit/current_status.md [review] scripts/ai_resume_work_item.py [review] scripts/ai_start.py [review] scripts/ai_start_receipt.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 514
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:29:55.222821+00:00",
+      "exitCode": 0,
+      "durationMs": 125,
+      "outputDigest": "7129fb431d5d59c569f22fa9d6ff9b30876753d23ac690d93f14eed56841f07c",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "b609fcf74b06b567bfcb7be3a2d263d5f66bdefd09fc8f393846e1ec1abdbfb1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 131
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:29:55.419084+00:00",
+      "exitCode": 0,
+      "durationMs": 122,
+      "outputDigest": "a2e66935f0b5b56e7ea492a898b6ab49413746bdde21a6663eaa1d889cb54e56",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "b609fcf74b06b567bfcb7be3a2d263d5f66bdefd09fc8f393846e1ec1abdbfb1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json SUMMARY=.ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:29:55.551650+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "c6e8aec548bebac8274ba477362603ff4e63a3a8bc760b193169a6fbca3a8d18",
+      "commandHash": "6c66a982b977e500413bc99d8bc6d438295830e087250a17e81938a5692072fd",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "b609fcf74b06b567bfcb7be3a2d263d5f66bdefd09fc8f393846e1ec1abdbfb1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 292
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json SUMMARY=.ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:29:55.682076+00:00",
+      "exitCode": 0,
+      "durationMs": 54,
+      "outputDigest": "fdaa291fe6b1ee6c7e691d41d89310d9085c4f98ae0ab02c79ecb8c6c3ca7eb9",
+      "commandHash": "fb9f542afda5df8bd002676b597eb5c96af1391e8be41c092d3cee1e789f56a4",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "b609fcf74b06b567bfcb7be3a2d263d5f66bdefd09fc8f393846e1ec1abdbfb1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guidelines.py --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputBytes": 297
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:29:56.036528+00:00",
+      "exitCode": 0,
+      "durationMs": 279,
+      "outputDigest": "420aaa227a523141570b2e06fcb5972cdc77420c4796b18770bcd8953e59ebb8",
+      "commandHash": "79ce3283871834dc789e9debe98f35cb23fe583b6fe9f6feffd6fa8b6258eb1e",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "b609fcf74b06b567bfcb7be3a2d263d5f66bdefd09fc8f393846e1ec1abdbfb1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/README.md` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/fix-resume-base-br",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/README.md` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/fix-resume-base-branch-binding-20260728.json` — covered by Contract scope - [active_owned] `docs/reference/ai-cockpit-work-item-lifecycle.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `scripts/ai_resume_work_item.py` — covered by Contract scope - [active_owned] `scripts/ai_start.py` — covered by Contract scope - [active_owned] `scripts/ai_start_receipt.py` — covered by Contract scope - [active_owned] `tests/test_start_and_archive.py` — covered by Contract scope",
+      "outputBytes": 1091
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:35:20.174694+00:00",
+      "exitCode": 0,
+      "durationMs": 324042,
+      "outputDigest": "ef788a9d0c277fdbc7c41ec34c26e7e3bb6f0487bab825cc892d84aa52ea96bd",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "b609fcf74b06b567bfcb7be3a2d263d5f66bdefd09fc8f393846e1ec1abdbfb1",
+      "outputSummary": "/usr/bin/make --no-print-directory quality-full /usr/bin/make --no-print-directory quality-fast-static /usr/bin/make --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 python3 scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"38dca0c9ead1-local-20260728T082956Z-3757-0\" --run-id \"local\" --output \"target/quality/sessions/38dca0c9ead1-local-20260728T082956Z-3757-0/timing/project-format-check.json\" --log \"target/quality/sessions/38dca0c",
+      "outputTail": "s/test_install_script.py::test_remote_install_rejects_sha256_mismatch_before_extraction 2.72s call tests/test_external_adopter_long_cycle.py::test_external_adopter_lifecycle_records_independent_git_evidence 2.31s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 2.22s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 2.10s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[True-False] 2.09s call tests/test_adoption_e2e.py::test_runtime_failure_restores_detached_head 2.06s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 1320 passed, 3 warnings in 313.41s (0:05:13) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 python3 scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.JxYYrKcEJb/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.JxYYrKcEJb/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.JxYYrKcEJb/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.JxYYrKcEJb/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/38dca0c9ead1-local-20260728T082956Z-3757-0/summary.json",
+      "outputBytes": 43416
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json SUMMARY=.ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:35:21.956936+00:00",
+      "exitCode": 0,
+      "durationMs": 295,
+      "outputDigest": "d76853ef6551d50095477820bb96da800fdae879daf96efa925198be3e60835e",
+      "commandHash": "b26f51069c4c6492b6d5e118c5d0e25cc0f3aecd547f3df73758bc6612a581e2",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "7ee4715034305d4b3703a1410fe01a2a97027ca4ecb528e5a1ef7f76e24dd850",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_generate_status.py .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_generate_status.py .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 390
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json SUMMARY=.ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:35:22.313415+00:00",
+      "exitCode": 0,
+      "durationMs": 282,
+      "outputDigest": "3187fe18a034da23bb623e239ba98a506eba0bd70f11d39527bc9a106cf4b02c",
+      "commandHash": "df22f415b03e100ffaa9e5eaabce520d38b2f655bb1879af5d04388321623eba",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "7ee4715034305d4b3703a1410fe01a2a97027ca4ecb528e5a1ef7f76e24dd850",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 322
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:35:22.437303+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "1156c9e1bf158b3423d353f4c44540bca1436905785abef51a57014ed23ad1e4",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "7ee4715034305d4b3703a1410fe01a2a97027ca4ecb528e5a1ef7f76e24dd850",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 108
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json SUMMARY=.ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:35:22.568906+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "9135809a9a0c9346859912a14dae02811802313455e743c48c06aee4a94ea5d3",
+      "commandHash": "1f74ca909cae51ba79cea81a3aec91b836cb91fa4f848eb4782c1848116de0f4",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "7ee4715034305d4b3703a1410fe01a2a97027ca4ecb528e5a1ef7f76e24dd850",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_agent_risk.py --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json --summary .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 302
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json CONTRACT=.ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T08:35:23.583242+00:00",
+      "exitCode": 0,
+      "durationMs": 124,
+      "outputDigest": "683082e991775a2b9818932f1d4cce53f03a1deee99b6c08ef2198c952141834",
+      "commandHash": "c8f2a5917f19c40a5926230023a4a88488f0f6a83f096db216eeacf58e3aff68",
+      "contractHash": "39fc538468c0d0f68a43c031d3e95903c7ff15274162e48986288d62393e37da",
+      "commitSha": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+      "executionContractPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "worktreeDigest": "0369ee465ab1b002d373084188fac493d5e7431d2560d6f61aa3516d9f4b5360",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_summary.py .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json ai summary check passed: .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_summary.py .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json --contract .ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json ai summary check passed: .ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+      "outputBytes": 325
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Preserve immutable Start Receipt bytes and append-only resumeHistory.",
+      "compliant": true,
+      "evidence": "Normal and compatibility resume tests assert unchanged Receipt bytes; history remains append-only."
+    },
+    {
+      "guideline": "Fail before persistent writes when a new Work Item starts on the discovered default branch.",
+      "compliant": true,
+      "evidence": "The regression checks absent Contract, Summary, and Receipt plus unchanged status bytes."
+    },
+    {
+      "guideline": "Bind compatibility recovery to the Work Item identity, one dedicated branch, requested base branch, Git ancestry, and closed predecessor evidence.",
+      "compliant": true,
+      "evidence": "Writer and validator require exact codex/<work-item-id> compatibility identity while existing ancestry, closure, manifest, and digest regressions pass."
+    },
+    {
+      "guideline": "Keep normal dedicated-branch semantics stricter than compatibility recovery and document both without ambiguity.",
+      "compliant": true,
+      "evidence": "Normal Receipts require exact branch equality; only a Receipt matching the requested base branch enters compatibility handling."
+    },
+    {
+      "guideline": "Add red-first regression evidence for the observed real lifecycle, not only mocked field mutations.",
+      "compliant": true,
+      "evidence": "Three observed-path tests failed before implementation and pass after the writer/validator correction."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Focused real-Git and negative branch-binding checks pass; full quality and hosted PR evidence remain required."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "AUDIT-PROCESS-002",
+      "category": "work-item-resume-branch-binding",
+      "severity": "critical",
+      "stage": "paused-audit-resume",
+      "fact": "ai-start allowed the audit to begin on main, while ai-resume-work-item and its validator later interpreted Receipt baseBranch as the original dedicated branch and made recovery impossible.",
+      "decision": "Pause the audit, preserve its Receipt, and repair both prevention and compatibility recovery in this isolated corrective.",
+      "resolution": "ai-start now rejects a discovered default branch before persistence; writer and validator support a Work Item-bound base-Receipt compatibility path and retain one dedicated branch across transitions.",
+      "status": "resolved",
+      "followUp": "Complete full quality, PR, Hosted CI, merge, closure, cleanup, then rerun audit resume against the unchanged Receipt."
+    },
+    {
+      "issueId": "AUDIT-PROCESS-002-QUALITY-001",
+      "category": "security-baseline",
+      "severity": "medium",
+      "stage": "ai-finish",
+      "fact": "The first full finish run passed all 1320 project tests and coverage, but the new fixed git subprocess triggered Bandit B603 and B607 and therefore changed the approved low-risk finding count.",
+      "decision": "Do not widen or regenerate the Bandit baseline. Add the narrow existing-style nosec annotations only to the fixed git executable call.",
+      "resolution": "The focused Bandit baseline gate passes with the original baseline unchanged.",
+      "status": "resolved",
+      "followUp": "Rerun the complete transactional ai-finish gate from the beginning."
+    },
+    {
+      "issueId": "AUDIT-PROCESS-002-CHECKPOINT-001",
+      "category": "checkpoint-contract-binding",
+      "severity": "high",
+      "stage": "ai-finish-agent-risk",
+      "fact": "The second full finish run passed all 1320 project tests, coverage, Bandit, status, and project quality, then failed because before_edit checkpoint evidence retained Contract hash 1cc0c481af4f8424 while the final reviewed Contract hash is 39fc538468c0d0f6.",
+      "decision": "Do not reuse partial finish evidence. Record the drift, refresh checkpoint evidence against the stable final Contract, verify Agent Risk directly, and rerun the complete transactional finish.",
+      "resolution": "Both checkpoints now bind final Contract hash 39fc538468c0d0f6, and focused check-ai-agent-risk passes.",
+      "status": "resolved",
+      "followUp": "Rerun the complete transactional ai-finish from the beginning."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "remote-default-discovery",
+      "detail": "Repositories without exactly one discoverable remote HEAD cannot receive the default-branch start prohibition; this preserves fixtures/bootstrap and is not treated as proof of branch safety.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "No persistent evidence is written by ai-start on a discovered default branch.",
+      "Compatibility recovery is narrower than normal dedicated-branch binding.",
+      "Receipt bytes and prior resume transitions remain immutable.",
+      "Paused audit and release implementation are absent from this corrective diff."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified: ai-start and ai-resume-work-item are the corrected authoritative entrypoints",
+    "userVisibleOutput": "verified: failures name the branch-bound corrective action",
+    "persistence": "verified: start rejection precedes writes and resume preserves Receipt bytes while atomically appending history",
+    "localization": "not_applicable: no localized user-facing route changed",
+    "generatedArtifacts": "verified: Contract, Start Receipt, resumeHistory, and Cockpit Status remain machine checked",
+    "makeEntrypoints": "verified: existing make ai-start and make ai-resume-work-item surfaces are unchanged"
+  },
+  "userCorrectionsCaptured": [
+    "Every discovered process problem must be fixed before the next planned Work Item or release continues.",
+    "The correction must be implemented in the process and executable checks so the same failure does not recur."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Do not bypass a resume failure by editing immutable evidence.",
+      "implementation": "Keep the audit Receipt unchanged and add a bounded compatibility branch binding.",
+      "acceptance": "Real Git tests assert unchanged Receipt bytes and atomic Contract behavior."
+    },
+    {
+      "correction": "Prevent recurrence at the process entrypoint.",
+      "implementation": "ai-start identifies one remote default branch and stops before persistence when it is checked out.",
+      "acceptance": "The regression checks Work Item evidence paths remain absent or byte-identical."
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "39fc538468c0d0f6",
+      "acceptanceCount": 9,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "39fc538468c0d0f6",
+      "acceptanceCount": 9,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "Full quality, archive, PR, Hosted CI, merge, lifecycle closure, branch cleanup, and paused-audit resume have not yet run."
+  ],
+  "overclaimPrevention": "Do not report the process corrected until local quality, Hosted CI, merge, closure, and unchanged-Receipt audit resume evidence exist.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-28T17:12:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+        ],
+        "reason": "AUDIT-PROCESS-002 and the pause/correct/resume sequence are explicit."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          "scripts/ai_start.py",
+          "scripts/ai_resume_work_item.py",
+          "scripts/ai_start_receipt.py",
+          "tests/test_start_and_archive.py"
+        ],
+        "reason": "Every acceptance domain maps to writer, validator, real-Git, and negative evidence."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/ai-cockpit-work-item-lifecycle.md",
+          ".ai/cockpit/README.md"
+        ],
+        "reason": "The existing commands now state their enforced order and compatibility boundary."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "No localized adopter-facing workflow changed in this process corrective."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+        ],
+        "reason": "The unchanged historical Receipt, compatibility limitation, and required post-close audit retry remain explicit."
+      }
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "ai-start is invoked while the uniquely discovered remote default branch is checked out.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_ai_start_refuses_discovered_remote_default_branch_before_writes"
+      ]
+    },
+    {
+      "scenario": "A normal Receipt was created on the dedicated Work Item branch and the branch is rebased after a closed corrective.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_resume_contract_appends_source_bound_lineage_without_rewriting_receipt"
+      ]
+    },
+    {
+      "scenario": "An existing version-1 Receipt truthfully records the base branch and the canonical codex/<work-item-id> branch is rebased after a closed corrective.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_resume_contract_recovers_base_branch_receipt_without_rewriting_it"
+      ]
+    },
+    {
+      "scenario": "A base-branch Receipt is presented from an unrelated dedicated branch or a later transition changes dedicated branches.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_resume_contract_rejects_unrelated_branch_for_base_branch_receipt",
+        "tests/test_start_and_archive.py::test_resume_history_rejects_direct_or_malformed_baseline_transition"
+      ]
+    },
+    {
+      "scenario": "The repository has no uniquely discoverable remote default branch.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_ai_start_default_contains_agent_risk_gate",
+        "tests/test_start_and_archive.py::test_default_branch_start_guard_allows_matching_dedicated_branch"
+      ]
+    }
+  ],
+  "archiveSequence": 634
+}

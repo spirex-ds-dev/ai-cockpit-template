@@ -19,6 +19,7 @@ from ai_start_receipt import predecessor_closure_snapshot
 from ai_start_receipt import receipt_path
 from ai_start_receipt import validate_receipt
 from ai_start_receipt import validate_resume_history
+from ai_start_receipt import work_branch_identifies_work_item
 
 
 class ResumeError(ValueError):
@@ -132,8 +133,20 @@ def resume_contract(
     if work_branch == base_branch:
         raise ResumeError("resume requires a dedicated non-base Work Item branch")
     receipt_branch = receipt.get("baseBranch")
-    if isinstance(receipt_branch, str) and receipt_branch and receipt_branch != work_branch:
-        raise ResumeError("current branch does not match immutable Start Receipt")
+    history = contract.get("resumeHistory")
+    if isinstance(history, list) and history:
+        first_transition = history[0]
+        first_work_branch = (
+            first_transition.get("workBranch") if isinstance(first_transition, dict) else None
+        )
+        if first_work_branch != work_branch:
+            raise ResumeError("current branch does not match the first resume transition")
+    if isinstance(receipt_branch, str) and receipt_branch:
+        if receipt_branch == base_branch:
+            if not work_branch_identifies_work_item(work_branch, work_item_id):
+                raise ResumeError("compatibility work branch does not identify this Work Item")
+        elif receipt_branch != work_branch:
+            raise ResumeError("current branch does not match immutable Start Receipt")
     target_ref = f"refs/remotes/{base_remote}/{base_branch}"
     target = _git(project_root, "rev-parse", "--verify", target_ref)
     head = _git(project_root, "rev-parse", "HEAD")

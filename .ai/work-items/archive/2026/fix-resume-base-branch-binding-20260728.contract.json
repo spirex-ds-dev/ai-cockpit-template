@@ -1,0 +1,286 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fix-resume-base-branch-binding-20260728",
+  "mode": "code",
+  "title": "Fix Work Item resume base and work branch binding",
+  "baseCommit": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fix-resume-base-branch-binding-20260728.contract.json",
+    ".ai/work-items/active/fix-resume-base-branch-binding-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_start.py",
+    "scripts/ai_resume_work_item.py",
+    "scripts/ai_start_receipt.py",
+    "tests/test_start_and_archive.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    ".ai/cockpit/README.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Editing an immutable Start Receipt to hide the branch on which the Work Item actually started",
+    "Changing archive evidence for completed Work Items",
+    "Resuming or implementing the paused WI-01 through WI-20 audit inside this corrective branch",
+    "Weakening predecessor closure, Git ancestry, manifest digest, or dedicated-branch checks",
+    "Release, tag, capability-status, installer, or unrelated workflow changes"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Current Work Item writer creates a Start Receipt without rejecting execution on the discovered remote default branch."
+    },
+    {
+      "path": "scripts/ai_resume_work_item.py",
+      "reason": "Observed fail-closed writer path compares receipt baseBranch directly with the current dedicated branch."
+    },
+    {
+      "path": "scripts/ai_start_receipt.py",
+      "reason": "Canonical receipt and resume-history validator contains the same branch-binding assumption."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Existing resume fixture generates its Receipt only after switching to a dedicated branch and therefore misses the observed base-branch start sequence."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "AUDIT-PROCESS-002 records the observed immutable Receipt value, failed resume diagnostic, and required corrective sequence."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Lifecycle documentation must state the enforced branch order and bounded compatibility recovery."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_deadlock",
+      "branch_identity",
+      "legacy_evidence_compatibility",
+      "false_recovery"
+    ],
+    "reason": "Incorrect branch semantics can either make every paused Work Item impossible to resume or accept an unrelated branch as the original Work Item branch."
+    ,
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user required discovered process defects to be fixed before the paused audit continues and already authorized continuous execution."
+  },
+  "preReviewWarnings": [
+    "Do not make a base-branch Receipt look as if it was created on a dedicated branch.",
+    "Compatibility recovery must reject unrelated current branches and preserve all existing closure, ancestry, and digest checks.",
+    "A fresh Work Item must fail before writing Contract, Summary, Receipt, status, or event evidence when started on the discovered default branch."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ai-start detects a uniquely discoverable remote default branch and fails before persistent Work Item creation when the current branch is that default branch.",
+    "ai-start remains usable on a dedicated branch and in repository fixtures where no unique remote default branch can be discovered.",
+    "ai-resume-work-item continues to accept a Receipt bound to the original dedicated branch and rejects a different dedicated branch.",
+    "A version-1 Receipt that truthfully records the requested base branch can resume only through a bounded compatibility path whose current branch is exactly codex/<work-item-id> and whose base/target ancestry, predecessor merge, closure, manifest, and digest evidence all pass.",
+    "Resume history validation accepts both defined branch-binding forms, requires every transition to retain one dedicated work branch, and rejects base/work branch equality or branch changes across repeated resumes.",
+    "A real Git lifecycle regression covers start on main, branch creation, corrective merge, rebase, predecessor binding, successful atomic resume, unchanged Receipt bytes, and valid resulting Contract.",
+    "Negative regressions cover start-on-default persistent-write prevention, unrelated compatibility branch, changed branch across repeated transitions, missing remote default discovery, and existing malformed Receipt behavior.",
+    "Lifecycle documentation clearly requires dedicated branch creation before ai-start, explains the bounded compatibility recovery as historical/observed evidence handling rather than the normal path, and keeps immutable Receipt semantics explicit.",
+    "Focused tests, full quality, Contract/Summary/status checks, PR aggregate and Hosted CI pass before merge; the corrective then archives, merges, closes, deletes both branches, synchronizes main, and only afterward permits the paused audit to retry governed resume."
+  ],
+  "guidelines": [
+    "Preserve immutable Start Receipt bytes and append-only resumeHistory.",
+    "Fail before persistent writes when a new Work Item starts on the discovered default branch.",
+    "Bind compatibility recovery to the Work Item identity, one dedicated branch, requested base branch, Git ancestry, and closed predecessor evidence.",
+    "Keep normal dedicated-branch semantics stricter than compatibility recovery and document both without ambiguity.",
+    "Add red-first regression evidence for the observed real lifecycle, not only mocked field mutations."
+  ],
+  "intent": {
+    "problem": "The paused WI-01 through WI-20 audit was started while main was checked out, so its immutable version-1 Start Receipt truthfully records baseBranch main. After the audit was moved to its dedicated branch and rebased over the mandatory WI-10 corrective, ai-resume-work-item compared that baseBranch with the dedicated branch and failed. The writer also allowed the invalid start order, while tests covered only Receipts created after switching branches.",
+    "constraints": [
+      "Do not edit or regenerate the paused audit Receipt.",
+      "Do not weaken Git ancestry, predecessor closure, archive manifest, digest, or atomic-write checks.",
+      "Prevent future base-branch starts rather than making compatibility recovery the normal workflow.",
+      "Keep this corrective isolated from audit implementation and release work.",
+      "Complete the full branch, PR, merge, closure, branch cleanup, and main synchronization lifecycle before resuming the audit."
+    ],
+    "rationale": "Enforcing the correct order at ai-start removes the future hazard, while a narrowly bound compatibility path recovers truthful existing evidence without falsifying immutable history. A real Git journey prevents mocks from reintroducing the semantic mismatch."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Prevent Work Items from starting on the default branch and safely recover truthful legacy base-branch Start Receipts.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "rawUserRequest": "The WI-01 through WI-20 audit cannot resume because its immutable Start Receipt records main while ai-resume-work-item requires the dedicated branch. The user requires every discovered process problem to be fixed in the process and executable checks before continuing, so prevent recurrence, preserve immutable evidence, complete this corrective through PR/merge/cleanup, then resume the audit without another confirmation.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-process-issues-before-release-and-continuous-execution",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-resume-branch-binding-process-corrective"
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "ai-start is invoked while the uniquely discovered remote default branch is checked out.",
+      "expected": "The command fails before creating or modifying Contract, Summary, Receipt, status, or event evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_ai_start_refuses_discovered_remote_default_branch_before_writes"
+      ],
+      "verificationPlan": "Add a real repository regression that snapshots relevant files before invoking the writer on main."
+    },
+    {
+      "scenario": "A normal Receipt was created on the dedicated Work Item branch and the branch is rebased after a closed corrective.",
+      "expected": "Resume succeeds only on the same dedicated branch and preserves the Receipt.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_resume_contract_appends_source_bound_lineage_without_rewriting_receipt",
+        "tests/test_start_and_archive.py::test_resume_contract_rejects_wrong_original_branch_and_missing_remote_atomically"
+      ],
+      "verificationPlan": "Retain and strengthen the existing dedicated-branch resume fixture."
+    },
+    {
+      "scenario": "An existing version-1 Receipt truthfully records the base branch and the canonical codex/<work-item-id> branch is rebased after a closed corrective.",
+      "expected": "Bounded compatibility resume succeeds, records one work branch, and leaves Receipt bytes unchanged.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_resume_contract_recovers_base_branch_receipt_without_rewriting_it"
+      ],
+      "verificationPlan": "Add a real main-start compatibility fixture matching the observed audit lifecycle."
+    },
+    {
+      "scenario": "A base-branch Receipt is presented from an unrelated dedicated branch or a later transition changes dedicated branches.",
+      "expected": "Writer and validator fail closed without modifying Contract or Receipt.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_resume_contract_rejects_unrelated_branch_for_base_branch_receipt",
+        "tests/test_start_and_archive.py::test_resume_history_rejects_direct_or_malformed_baseline_transition"
+      ],
+      "verificationPlan": "Add unrelated-branch and repeated-transition branch mutation regressions."
+    },
+    {
+      "scenario": "The repository has no uniquely discoverable remote default branch.",
+      "expected": "Existing fixture/bootstrap behavior remains available without claiming a verified default branch.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_ai_start_default_contains_agent_risk_gate",
+        "tests/test_start_and_archive.py::test_default_branch_start_guard_allows_matching_dedicated_branch"
+      ],
+      "verificationPlan": "Add a no-remote start regression and retain current fixture coverage."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized process and executable-check corrections before the audit and release continue."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 635
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fix-resume-base-branch-binding-20260728.json",
+    "baseCommit": "38dca0c9ead1d1ed8e2df4e2a916fb3b1b2328a5",
+    "initialScopeDigest": "b89e1285a38f3e51c05d5b5611e29038e2f96d0fc69ce9fa19e37c6d359c9ab9",
+    "contractSkeletonDigest": "f0296d39a7522c991e7f98f9e70704daf4f77146bce053cce2fa821678b4e1b0"
+  }
+}

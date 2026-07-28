@@ -92,6 +92,10 @@ Use `make ai-close-work-item TASK=<task>` after the Work Item is archived and it
 
 The required order is: latest remote base, dedicated Work Item branch, implementation, `ai-finish`/archive, push, PR, PR merge, then `ai-close-work-item`. Do not merge the feature branch into local `main` before the PR, and do not delete the Work Item branch before closure; otherwise local `main` can diverge from `origin/main` or the merged branch identity can be lost before ownership verification.
 
+Run `make ai-start` only after creating the dedicated Work Item branch.
+When the remote default branch is uniquely discoverable, the command rejects
+starting on that branch before it persists Work Item evidence.
+
 When a Contract explicitly requires hosted verification that cannot run from
 an unpublished commit, a narrow pre-finish measurement stage is available.
 Complete the implementation and local checks, create a local snapshot commit
@@ -133,6 +137,13 @@ the branch is the original dedicated Work Item branch, and the predecessor's
 archive manifest and closure facts are valid. Never edit the Start Receipt,
 `baseCommit`, or `resumeHistory` by hand. Re-run Preflight and all stale
 verification after a successful resume.
+
+For an existing version-1 Receipt that truthfully records the default branch,
+the resume command has a compatibility-only path: the current branch must be
+exactly `codex/<work-item-id>`, all
+resume transitions must retain that branch, and every ordinary ancestry,
+predecessor, closure, manifest, and digest check still applies. The Receipt is
+never rewritten, and new Work Items cannot use this path to start on the base.
 
 `ai-close-work-item` is worktree-aware. If the base branch is checked out in another worktree, it verifies that worktree is clean, fast-forwards and validates the base there, detaches the Work Item worktree, then removes the local and remote Work Item branches. Historical archive evidence is retained. The governance complexity report still records `trackedFiles`, but that metric is observational; archive integrity and current-task ownership remain hard gates.
 

@@ -64,6 +64,13 @@ def current_branch(*, project_root: Path = PROJECT_ROOT) -> str:
     return result.stdout.strip()
 
 
+def work_branch_identifies_work_item(branch: str, work_item_id: str) -> bool:
+    """Return whether compatibility recovery uses the canonical Work Item branch."""
+    if not branch or not work_item_id:
+        return False
+    return branch == f"codex/{work_item_id}"
+
+
 def build_receipt(
     contract: dict[str, Any],
     *,
@@ -299,6 +306,7 @@ def validate_resume_history(
     history = contract.get("resumeHistory")
     if issues or not isinstance(history, list) or not history:
         return issues
+    expected_work_branch = ""
     for index, transition in enumerate(history):
         if not isinstance(transition, dict):
             continue
@@ -309,13 +317,24 @@ def validate_resume_history(
             str(transition.get("toBaseCommit", "")),
         ):
             issues.append(f"{location}: fromBaseCommit is not an ancestor of toBaseCommit")
+        transition_work_branch = transition.get("workBranch")
+        if isinstance(transition_work_branch, str):
+            if expected_work_branch and transition_work_branch != expected_work_branch:
+                issues.append(f"{location}: workBranch does not match the first resume transition")
+            elif not expected_work_branch:
+                expected_work_branch = transition_work_branch
         receipt_branch = receipt.get("baseBranch")
-        if (
-            isinstance(receipt_branch, str)
-            and receipt_branch
-            and transition.get("workBranch") != receipt_branch
-        ):
-            issues.append(f"{location}: workBranch does not match immutable Start Receipt")
+        transition_base_branch = transition.get("baseBranch")
+        if isinstance(receipt_branch, str) and receipt_branch:
+            if receipt_branch == transition_base_branch:
+                if not work_branch_identifies_work_item(
+                    str(transition_work_branch), str(contract.get("workItemId", ""))
+                ):
+                    issues.append(
+                        f"{location}: compatibility workBranch does not identify this Work Item"
+                    )
+            elif transition_work_branch != receipt_branch:
+                issues.append(f"{location}: workBranch does not match immutable Start Receipt")
         issues.extend(_manifest_issues(transition, project_root=project_root, location=location))
     if require_latest_predecessor and isinstance(history[-1], dict):
         issues.extend(_latest_predecessor_issues(contract, history[-1]))

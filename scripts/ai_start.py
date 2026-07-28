@@ -21,6 +21,7 @@ from ai_common import (
     capture_dirty_baseline,
     clean_git_environment,
     current_head,
+    discover_remote_default_candidates,
     save_json,
 )
 from ai_check_status_consistency import DEFAULT_STATUS, validate_status_consistency
@@ -30,6 +31,7 @@ from ai_generate_status import write_active_status, write_no_active_status
 from ai_observability import create_observability
 from ai_readiness_policy import readiness_state
 from ai_start_receipt import build_receipt
+from ai_start_receipt import current_branch
 from ai_start_receipt import receipt_binding
 from ai_start_receipt import receipt_path
 
@@ -162,6 +164,36 @@ def configuration_gate_issue(
     return (
         "ERROR: Configuration Required; finish configure_ai_cockpit and reach Adoption Ready "
         "before starting ordinary governed development."
+    )
+
+
+def default_branch_start_issue(*, root: Path = PROJECT_ROOT) -> str | None:
+    """Reject a new Work Item on a uniquely discovered remote default branch."""
+
+    def run_git(args: list[str]) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            ["git", *args],  # nosec B603 B607
+            cwd=root,
+            env=clean_git_environment(),
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+    try:
+        candidates = discover_remote_default_candidates(run_git)
+    except (OSError, RuntimeError):
+        return None
+    if len(candidates) != 1:
+        return None
+    remote, base_branch = candidates[0]
+    if current_branch(project_root=root) != base_branch:
+        return None
+    return (
+        "ERROR: ai-start requires a dedicated Work Item branch; "
+        f"current branch {base_branch!r} is the discovered default branch "
+        f"{remote}/{base_branch}. Create the dedicated branch from the latest remote base, "
+        "then run ai-start again."
     )
 
 
@@ -365,6 +397,11 @@ def validate_start_state(
     task: str, *, force: bool, mode: str = "code"
 ) -> tuple[Path, Path, str] | None:
     """Validate lifecycle state and return target paths plus trusted base commit."""
+    branch_issue = default_branch_start_issue(root=PROJECT_ROOT)
+    if branch_issue:
+        print(branch_issue, file=sys.stderr)
+        return None
+
     consistency_issues = refresh_stale_no_active_status(validate_status_consistency())
     if consistency_issues:
         for issue in consistency_issues:
