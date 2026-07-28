@@ -4,6 +4,10 @@ title: "Governed Work Item Resume Receipt Lineage Design"
 description: Append-only, source-bound baseline transitions for paused Work Items.
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Governed Work Item Resume Receipt Lineage
 
 ## Problem

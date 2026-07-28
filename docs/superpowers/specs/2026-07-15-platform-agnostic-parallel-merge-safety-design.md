@@ -11,6 +11,10 @@ keywords:
   - hci
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Platform-Agnostic Parallel Merge Safety Design
 
 ## Status

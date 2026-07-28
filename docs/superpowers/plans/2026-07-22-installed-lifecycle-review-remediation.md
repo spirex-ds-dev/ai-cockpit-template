@@ -5,6 +5,10 @@ description: "已完成 Installed Lifecycle 整改计划的历史关闭索引。
 keywords: [installed-lifecycle, historical, work-item-lifecycle]
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Installed Lifecycle Management Closure
 
 **Status:** HISTORICAL / completed. Do not launch new Work Items from this plan.

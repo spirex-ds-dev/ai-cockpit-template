@@ -9,6 +9,10 @@ keywords:
   - documentation
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Documentation Alignment Hosted Recovery
 
 ## Purpose

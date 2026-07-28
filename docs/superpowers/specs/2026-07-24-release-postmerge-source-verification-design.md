@@ -9,6 +9,10 @@ keywords:
   - candidate-merge
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Release Candidate-to-Merge Source Verification Design
 
 ## Goal

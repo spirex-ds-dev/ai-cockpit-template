@@ -7,6 +7,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from pathlib import PurePosixPath
 
 from install_ai_cockpit import STACKS
 
@@ -41,6 +42,96 @@ JAPANESE_STYLE_RULES = {
     "Suggested guard patterns": "translate instructional prose into Japanese",
     "阻断": "use Japanese terminology such as ブロッキング",
     "確信度": "use 信頼度 for confidence in Japanese documentation",
+}
+COMMAND_EVIDENCE_LABELS = {
+    "syntax_tested",
+    "fixture_executed",
+    "hosted_executed",
+    "adopter_required",
+    "illustrative_only",
+}
+EXECUTABLE_FENCE_LANGUAGES = {"sh", "bash", "shell", "console", "make", "zsh"}
+CAPABILITY_MATRIX_RELATIVE_LINK = str(
+    PurePosixPath("..") / "reference" / "capability-truth-matrix.md"
+)
+DOCUMENTED_INSTALLER_OPTIONS = {
+    "--create-adoption",
+    "--dry-run",
+    "--interactive",
+    "--replace-glossary",
+    "--stack",
+    "--update-makefile",
+    "--upgrade",
+    "--upgrade-with-active",
+    "--with-examples",
+}
+DOCUMENTED_INSTALLER_ENV = {
+    "AI_COCKPIT_TEMPLATE_REF",
+    "AI_COCKPIT_TEMPLATE_SHA256",
+}
+README_BOOTSTRAP_ENV = {
+    "AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY",
+    "AI_COCKPIT_TEMPLATE_RAW_BASE",
+    "AI_COCKPIT_TEMPLATE_REPO",
+    "AI_COCKPIT_TEMPLATE_SOURCE",
+}
+CANONICAL_PUBLIC_SOURCE_DEFAULTS = {
+    "https://github.com/spirex-ds-dev/ai-cockpit-template.git",
+    "https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template",
+}
+LAYERED_DOCUMENTS = {
+    "30-second-start": {
+        "wizard-start",
+        "does",
+        "does-not",
+        "after-installation",
+    },
+    "standard-adoption-guide": {
+        "adoption",
+        "calibration",
+        "work-item",
+        "ci",
+        "human-approval",
+        "target-project-adaptation",
+    },
+    "security-release-verification": {
+        "release-metadata",
+        "digest",
+        "provenance",
+        "sbom",
+        "trust-root",
+        "private-mirror",
+        "local-source",
+        "enterprise-boundary",
+    },
+}
+LANGUAGE_SUFFIXES = {"en": "", "zh-CN": ".zh-CN", "ja": ".ja"}
+SEMANTIC_DOMAINS = {
+    "north-star",
+    "product-boundary",
+    "installation-flow",
+    "human-confirmation",
+    "security-limits",
+    "prompt-injection-limits",
+    "enterprise-compliance-boundary",
+    "supported-scope",
+    "release-version",
+    "task-outcome-fields",
+}
+HISTORICAL_MARKER = (
+    "> **Historical Record**\n"
+    "> **Not Current Product Documentation**\n"
+    "> **Do Not Use As Runtime Instruction**"
+)
+STALE_UI_LOCALIZATION_CLAIMS = {
+    "Japanese is the default UI locale",
+    "既定の Wizard 言語は日本語です",
+    "Wizard 默认语言是日语",
+}
+STALE_PUBLISHED_TAG_CLAIMS = {
+    "highest published semantic-version tag",
+    "公开的语义化版本标签中选择最高版本",
+    "公開済みのセマンティックバージョンタグから最新",
 }
 
 
@@ -253,11 +344,33 @@ def installation_command_errors(root: Path) -> list[str]:
                     f"{relative}:{number}: SHA256 verification is not published for {release_tag}"
                 )
     install_script = (root / "install.sh").read_text(encoding="utf-8")
-    if f'REF="${{AI_COCKPIT_TEMPLATE_REF:-{release_tag}}}"' not in install_script:
-        errors.append("install.sh: default ref does not match release.json")
     installation = (root / "docs" / "getting-started" / "installation.md").read_text(
         encoding="utf-8"
     )
+    for option in sorted(DOCUMENTED_INSTALLER_OPTIONS):
+        if option not in install_script:
+            errors.append(f"install.sh: documented installer option is not implemented: {option}")
+        if option not in installation:
+            errors.append(
+                "docs/getting-started/installation.md: "
+                f"implemented installer option is undocumented: {option}"
+            )
+    for variable in sorted(DOCUMENTED_INSTALLER_ENV):
+        if variable not in install_script:
+            errors.append(
+                f"install.sh: documented installer environment variable is not implemented: {variable}"
+            )
+        if variable not in installation:
+            errors.append(
+                "docs/getting-started/installation.md: "
+                f"installer environment variable is undocumented: {variable}"
+            )
+    for variable in sorted(README_BOOTSTRAP_ENV):
+        for name in README_FILES:
+            if variable not in (root / name).read_text(encoding="utf-8"):
+                errors.append(f"{name}: bootstrap environment variable is undocumented: {variable}")
+    if f'REF="${{AI_COCKPIT_TEMPLATE_REF:-{release_tag}}}"' not in install_script:
+        errors.append("install.sh: default ref does not match release.json")
     if quality_marker not in installation:
         errors.append(
             "docs/getting-started/installation.md: public quality target differs from release.json"
@@ -278,6 +391,8 @@ def japanese_style_errors(root: Path) -> list[str]:
     ]
     for path in paths:
         relative = path.relative_to(root).as_posix()
+        if not (path.name == "README.ja.md" or path.name.endswith(".ja.md")):
+            continue
         for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
             for phrase, reason in JAPANESE_STYLE_RULES.items():
                 if phrase in line:
@@ -328,6 +443,218 @@ def capability_claim_errors(root: Path) -> list[str]:
     return errors
 
 
+def documentation_fact_errors(root: Path) -> list[str]:
+    """Bind prominent WI-10 prose facts to executable repository behavior."""
+    errors: list[str] = []
+    makefile = (root / "Makefile").read_text(encoding="utf-8")
+    floor_match = re.search(r"--cov-fail-under=([0-9]+(?:\.[0-9]+)?)", makefile)
+    if floor_match is None:
+        errors.append("Makefile: project-test coverage floor is missing")
+    else:
+        floor = f"{floor_match.group(1)}%"
+        for name in README_FILES:
+            text = (root / name).read_text(encoding="utf-8")
+            if floor not in text:
+                errors.append(f"{name}: documented coverage floor differs from Makefile: {floor}")
+
+    for name in README_FILES:
+        text = (root / name).read_text(encoding="utf-8")
+        for source in sorted(CANONICAL_PUBLIC_SOURCE_DEFAULTS):
+            if source not in text:
+                errors.append(f"{name}: canonical public source default is missing: {source}")
+        for claim in sorted(STALE_UI_LOCALIZATION_CLAIMS | STALE_PUBLISHED_TAG_CLAIMS):
+            if claim in text:
+                errors.append(f"{name}: unsupported documentation claim: {claim}")
+        install_position = text.find("--create-adoption")
+        base_position = text.find('ADOPTION_BASE="$(git rev-parse HEAD)"')
+        finish_position = text.find("make ai-finish TASK=adopt_ai_cockpit")
+        if (
+            min(install_position, base_position, finish_position) < 0
+            or not install_position < base_position < finish_position
+        ):
+            errors.append(f"{name}: adoption base must be captured after installer branch creation")
+
+    authoritative = [
+        root / "docs" / "getting-started" / "installation.md",
+        root / "docs" / "getting-started" / "installation.ja.md",
+    ]
+    for suffix in LANGUAGE_SUFFIXES.values():
+        authoritative.extend(_layer_path(root, stem, suffix) for stem in LAYERED_DOCUMENTS)
+    for path in authoritative:
+        if path.is_file() and "git merge-base HEAD origin/main" in path.read_text(encoding="utf-8"):
+            relative = path.relative_to(root).as_posix()
+            errors.append(f"{relative}: adopter guidance must not assume origin/main")
+
+    for suffix in LANGUAGE_SUFFIXES.values():
+        path = _layer_path(root, "standard-adoption-guide", suffix)
+        text = path.read_text(encoding="utf-8")
+        lifecycle = (
+            "make ai-finish TASK=adopt_ai_cockpit",
+            'git commit -m "adopt AI Cockpit governance"',
+            "make check-ai-pr",
+            "make ai-close-work-item TASK=adopt_ai_cockpit",
+        )
+        positions = [text.find(item) for item in lifecycle]
+        if any(position < 0 for position in positions) or positions != sorted(positions):
+            relative = path.relative_to(root).as_posix()
+            errors.append(
+                f"{relative}: adoption lifecycle must commit archive evidence before PR check and closure"
+            )
+    return errors
+
+
+def _layer_path(root: Path, stem: str, suffix: str) -> Path:
+    return root / "docs" / "getting-started" / f"{stem}{suffix}.md"
+
+
+def multilingual_layer_errors(root: Path) -> list[str]:
+    """Require complete same-language WI-10 layers and semantic-domain parity."""
+    errors: list[str] = []
+    readmes = {
+        "en": root / "README.md",
+        "zh-CN": root / "README.zh-CN.md",
+        "ja": root / "README.ja.md",
+    }
+    for language, suffix in LANGUAGE_SUFFIXES.items():
+        language_text: list[str] = [readmes[language].read_text(encoding="utf-8")]
+        for stem, required_domains in LAYERED_DOCUMENTS.items():
+            path = _layer_path(root, stem, suffix)
+            relative = path.relative_to(root).as_posix()
+            if not path.is_file():
+                errors.append(f"{relative}: required WI-10 language document is missing")
+                continue
+            text = path.read_text(encoding="utf-8")
+            language_text.append(text)
+            found = set(re.findall(r"<!--\s*doc-domain:\s*([a-z0-9-]+)\s*-->", text))
+            for domain in sorted(required_domains - found):
+                errors.append(f"{relative}: missing required documentation domain: {domain}")
+
+            expected_link = relative
+            if expected_link not in readmes[language].read_text(encoding="utf-8"):
+                errors.append(
+                    f"{readmes[language].name}: missing same-language WI-10 entry: {expected_link}"
+                )
+
+        combined = "\n".join(language_text)
+        found_semantics = set(re.findall(r"<!--\s*semantic-domain:\s*([a-z0-9-]+)\s*-->", combined))
+        for domain in sorted(SEMANTIC_DOMAINS - found_semantics):
+            errors.append(f"{readmes[language].name}: missing semantic domain: {domain}")
+        if CAPABILITY_MATRIX_RELATIVE_LINK not in combined:
+            errors.append(
+                f"{readmes[language].name}: layered guidance must link Capability Truth Matrix"
+            )
+    return errors
+
+
+def command_evidence_errors(root: Path) -> list[str]:
+    """Require explicit conservative evidence labels for WI-10 executable fences."""
+    errors: list[str] = []
+    paths: list[Path] = []
+    for suffix in LANGUAGE_SUFFIXES.values():
+        paths.extend(_layer_path(root, stem, suffix) for stem in LAYERED_DOCUMENTS)
+    paths.extend(
+        (
+            root / "docs" / "getting-started" / "installation.md",
+            root / "docs" / "getting-started" / "installation.ja.md",
+        )
+    )
+    marker_pattern = re.compile(r"^<!--\s*command-evidence:\s*([a-z_]+)\s*-->$")
+    for path in paths:
+        if not path.is_file():
+            continue
+        relative = path.relative_to(root).as_posix()
+        lines = path.read_text(encoding="utf-8").splitlines()
+        for number, line in enumerate(lines, start=1):
+            marker = marker_pattern.match(line.strip())
+            if marker and marker.group(1) not in COMMAND_EVIDENCE_LABELS:
+                errors.append(
+                    f"{relative}:{number}: unknown command evidence label: {marker.group(1)}"
+                )
+            if marker:
+                following = lines[number].strip() if number < len(lines) else ""
+                following_fence = re.match(r"^```([A-Za-z0-9_-]*)\s*$", following)
+                if (
+                    following_fence is None
+                    or following_fence.group(1).lower() not in EXECUTABLE_FENCE_LANGUAGES
+                ):
+                    errors.append(
+                        f"{relative}:{number}: command-evidence is not attached to an executable fence"
+                    )
+            fence = re.match(r"^```([A-Za-z0-9_-]*)\s*$", line.strip())
+            if fence is None or fence.group(1).lower() not in EXECUTABLE_FENCE_LANGUAGES:
+                continue
+            preceding = lines[number - 2].strip() if number >= 2 else ""
+            match = marker_pattern.match(preceding)
+            if match is None:
+                errors.append(
+                    f"{relative}:{number}: executable command fence is missing command-evidence"
+                )
+    return errors
+
+
+def historical_context_errors(root: Path) -> list[str]:
+    """Validate current/historical context without mutating immutable archives."""
+    registry_path = root / "docs" / "reference" / "documentation-context-registry.json"
+    if not registry_path.is_file():
+        return ["docs/reference/documentation-context-registry.json: missing context registry"]
+    try:
+        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return ["docs/reference/documentation-context-registry.json: invalid JSON"]
+    errors: list[str] = []
+    if registry.get("schemaVersion") != 1:
+        errors.append("docs/reference/documentation-context-registry.json: schemaVersion must be 1")
+    entries = registry.get("entries")
+    if not isinstance(entries, list):
+        return [
+            *errors,
+            "docs/reference/documentation-context-registry.json: entries must be a list",
+        ]
+    by_path: dict[str, dict[str, object]] = {}
+    archive_pattern_found = False
+    for index, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            errors.append(f"documentation context entry {index} must be an object")
+            continue
+        path = entry.get("path")
+        context = entry.get("context")
+        mutable = entry.get("mutable")
+        if not isinstance(path, str) or not path:
+            errors.append(f"documentation context entry {index} requires path")
+            continue
+        if path in by_path:
+            errors.append(f"documentation context path is duplicated: {path}")
+        by_path[path] = entry
+        if context not in {"current_instruction", "historical_record", "implementation_record"}:
+            errors.append(f"documentation context path has invalid context: {path}")
+        if not isinstance(mutable, bool):
+            errors.append(f"documentation context path requires boolean mutable: {path}")
+        if path == ".ai/work-items/archive/**":
+            archive_pattern_found = context == "historical_record" and mutable is False
+            continue
+        candidate = root / path
+        if not candidate.is_file():
+            errors.append(f"documentation context path does not exist: {path}")
+            continue
+        if context != "current_instruction" and mutable is True:
+            if HISTORICAL_MARKER not in candidate.read_text(encoding="utf-8"):
+                errors.append(f"{path}: missing historical context marker")
+
+    governed = [
+        *sorted((root / "docs" / "superpowers" / "plans").glob("*.md")),
+        *sorted((root / "docs" / "superpowers" / "specs").glob("*.md")),
+    ]
+    for path in governed:
+        relative = path.relative_to(root).as_posix()
+        if relative not in by_path:
+            errors.append(f"{relative}: missing from documentation context registry")
+    if not archive_pattern_found:
+        errors.append(
+            ".ai/work-items/archive/**: immutable historical archive classification is missing"
+        )
+    return errors
+
+
 def check_repository(root: Path) -> list[str]:
     errors = []
     for path in documentation_files(root):
@@ -336,6 +663,10 @@ def check_repository(root: Path) -> list[str]:
     errors.extend(installation_command_errors(root))
     errors.extend(japanese_style_errors(root))
     errors.extend(capability_claim_errors(root))
+    errors.extend(documentation_fact_errors(root))
+    errors.extend(multilingual_layer_errors(root))
+    errors.extend(command_evidence_errors(root))
+    errors.extend(historical_context_errors(root))
     return errors
 
 

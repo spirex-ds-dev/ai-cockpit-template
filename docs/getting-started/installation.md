@@ -15,18 +15,36 @@ Installing the Runtime copies governance entrypoints; it does not complete calib
 
 Install a fixed release of AI Cockpit into an existing repository. Start with the Quick Install entry in [README.md](../../README.md), then use this guide to confirm the repository is ready for adoption.
 
+Use the layered guidance according to the decision in front of you:
+
+- [30-Second Start](30-second-start.md) for the shortest wizard path and its limits.
+- [Standard Adoption Guide](standard-adoption-guide.md) for calibration, Work Item, CI, and human-approval responsibilities.
+- [Security and Release Verification](security-release-verification.md) for release metadata, digest, provenance, SBOM, trust-root, mirror, and enterprise boundaries.
+
 ## Choose an entrypoint
 
-For a guided first install, run `./install.sh` in a terminal or use `./install.sh --interactive`. The wizard is read-only through plan review and asks for explicit confirmation before its write boundary. It supports New Adoption, Upgrade, and Dry Run; it does not commit, push, create a PR, or merge. For automation or scripted maintenance, keep using the explicit installer options. A no-argument non-TTY invocation exits without waiting for input.
+For a guided remote install, use the fixed-tag download and interactive command
+in [30-Second Start](30-second-start.md). Run `./install.sh --interactive`
+directly only from a fixed-release local template checkout. The wizard is
+read-only through plan review and asks for explicit confirmation before its
+write boundary. It supports New Adoption, Upgrade, and Dry Run; it does not
+commit, push, create a PR, or merge. For automation or scripted maintenance,
+keep using the explicit installer options. A no-argument non-TTY invocation
+exits without waiting for input.
 
 The installation wizard and calibration wizard are separate boundaries:
 
 1. `./install.sh --interactive` installs or proposes the Runtime and records the adoption plan.
 2. `make cockpit-calibration-wizard` runs the persisted ten-stage calibration session after installation.
 
-The calibration wizard can pause and resume, requires reasons for Not Applicable answers, blocks unresolved Unknown or stale evidence, and requires separate Reviewer and Owner confirmations before activation. The UI locale is selected independently of the target project's documentation language.
+The calibration wizard can pause and resume, requires reasons for Not Applicable answers, blocks unresolved Unknown or stale evidence, and requires separate Reviewer and Owner confirmations before activation. The persisted Session schema currently records Japanese as its language; this does not claim that every visible Wizard string is localized.
 
-Quick Install consumes the published `release.json` only. Release preparation may maintain a separate `next-release.json` candidate record, but that file is never used to choose the public installer tag; candidate testing must pass an explicit ref.
+Quick Install prefers the published `release.json`. During the documented
+metadata-rollout fallback it may select the highest remote semantic-version tag,
+which is not by itself provider publication evidence. Release preparation may
+maintain a separate `next-release.json` candidate record, but that file is never
+used to choose the public installer tag; candidate testing must pass an explicit
+ref.
 
 For a remote install, the tagged `release.json` is the trust root: the installer verifies the tag target, source commit, installer digest, and the exact downloadable release-archive asset and SHA256 before applying changes. Missing or mismatched archive evidence fails closed. `AI_COCKPIT_TEMPLATE_SHA256` is an additional assertion, but it cannot replace the published metadata; local or explicitly configured source installs are an intentional non-public path.
 
@@ -34,7 +52,19 @@ For a remote install, the tagged `release.json` is the trust root: the installer
 
 Installation is performed in the adopter repository, not in the template repository's working branch. The adopter repository keeps its own history and branch policy.
 
-The installation flow has five stages. With `--create-adoption`, the installer first completes Agent Marker and managed-conflict validation while remaining on the current HEAD. Only after those checks pass does it discover the remote whose `HEAD` identifies the default branch, fetch it, and create `adopt/ai-cockpit` from that latest remote base before writing files. `--dry-run --create-adoption` stays read-only: it does not fetch, create a branch, switch, or delete references. If installation fails after branch or filesystem mutation, rollback restores the original branch or detached HEAD and removes the partial install. The first governed Work Item walkthrough comes after adoption readiness:
+With `--create-adoption`, the installer performs the write transaction in this
+order:
+
+1. Validate Agent Markers and managed-file conflicts while remaining on the current HEAD.
+2. Discover the remote whose `HEAD` identifies the default branch and fetch its latest base.
+3. Create `adopt/ai-cockpit` from that fetched base.
+4. Write the managed installation files.
+5. If any mutation or post-copy validation fails, restore the original branch or detached HEAD and remove the partial install.
+
+`--dry-run --create-adoption` is read-only: it does not fetch, create or switch a
+branch, or delete references. The user-facing installation flow then has five
+stages; the first governed Work Item walkthrough comes only after adoption
+readiness:
 
 1. Pre-flight: confirm the repository is a clean Git work tree with the required toolchain.
 2. Install: choose the stack preset and run the installer.
@@ -48,6 +78,7 @@ For an adopter project, the installer records the actual remote, default branch,
 
 Before installing, run the checks that keep the installer from failing late:
 
+<!-- command-evidence: adopter_required -->
 ```sh
 git status --short
 git rev-parse --is-inside-work-tree
@@ -101,6 +132,7 @@ You should not expect `templates/` to be copied into the target repository. That
 
 From a clean Git repository with at least one commit, finish the generated adoption Work Item and verify status:
 
+<!-- command-evidence: adopter_required -->
 ```sh
 make ai-finish TASK=adopt_ai_cockpit
 make check-ai-status
@@ -109,7 +141,13 @@ git commit -m "adopt AI Cockpit governance"
 make check-ai-pr AI_BASE_COMMIT='<pre-adoption-commit>'
 ```
 
-These commands are local checkpoints, not an unattended publish script. Stop after local finish/archive for human review. Commit only after explicit human approval, push only after a second explicit approval, and create the PR for manual review and merge. Do not enable automatic merge or automatic source-branch deletion. After a human has merged the PR, obtain explicit approval again before running `make ai-close-work-item TASK=adopt_ai_cockpit`; closure performs the verified base synchronization and local/remote branch cleanup.
+These commands are local checkpoints, not an unattended publish script:
+
+1. Stop after local finish/archive for human review.
+2. Commit only after explicit human approval.
+3. Push only after a separate approval.
+4. Create the PR without automatic merge or automatic source-branch deletion, then have a human merge it.
+5. After merge, obtain approval again before `make ai-close-work-item TASK=adopt_ai_cockpit`; closure verifies base synchronization and performs local/remote branch cleanup.
 
 The installer-generated Work Item owns every file actually written or appended by installation. It keeps project quality configuration as an explicit follow-up rather than recording temporary stand-in commands as passed. `--create-adoption` fails before writing unless the repository has an initial commit, a clean worktree, and no active Work Item. Marker and managed-conflict validation also complete before any adoption-branch mutation. When called without Contract and Summary arguments, `make check-ai-status` prints `Skipping status check (no active contract/summary provided)`. Use `make check-ai-status-consistency` to verify the generated no-active status before you move on.
 
@@ -137,6 +175,7 @@ The installed [Adoption Readiness](../../.ai/cockpit/adoption.md) checklist mirr
 
 After committing the installation Adoption Work Item, create a second Work Item before calibration or configuration:
 
+<!-- command-evidence: adopter_required -->
 ```sh
 CONFIG_BASE="$(git rev-parse HEAD)"
 make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this project" MODE=code
@@ -163,6 +202,7 @@ Bootstrap Adoption is explicitly separate from normal development: records use `
 
 Then calibrate the runtime before starting normal development:
 
+<!-- command-evidence: adopter_required -->
 ```sh
 make ai-onboard
 # Or step by step:
@@ -195,6 +235,7 @@ Apply the same manual gates to the configuration PR: stop after local finish/arc
 
 Before enabling production-required gates, complete the installed `.ai/cockpit/adoption.md` checklist and run the static configuration completeness gate:
 
+<!-- command-evidence: adopter_required -->
 ```sh
 make ai-cockpit-quality
 make check-ai-adoption-ready
@@ -204,6 +245,7 @@ The readiness check fails closed until the confirmed Project Profile is valid, b
 
 After adoption and calibration, a quick verify should show both readiness and status are clean:
 
+<!-- command-evidence: adopter_required -->
 ```sh
 make ai-cockpit-quality
 make check-ai-status
@@ -221,7 +263,7 @@ If those commands succeed, the installation is operational rather than merely co
 - [Distribution](../reference/distribution.md)
 - [Troubleshooting](../reference/troubleshooting.md)
 
-### Phase 6. First Work Item Walkthrough
+### Post-installation: First Work Item Walkthrough
 
 Continue in [First Work Item](first-work-item.md) for the full walkthrough that starts, checkpoints, and finishes the first governed task.
 
@@ -231,6 +273,7 @@ Installation is complete when validation succeeds and the first Work Item walkth
 
 The installed `.ai/cockpit/version.json` records the distribution and Contract schema version. Use `--upgrade` for an existing installation:
 
+<!-- command-evidence: adopter_required -->
 ```sh
 CURRENT_VERSION="${CURRENT_VERSION:?set CURRENT_VERSION to the installed release tag}"
 TARGET_VERSION="${TARGET_VERSION:?set TARGET_VERSION to a newer release tag}"
@@ -246,18 +289,29 @@ The installer rejects distribution or Contract-schema downgrades; never set `TAR
 
 By default, upgrade stops before writing if `.ai/work-items/active/` contains Work Item JSON. Finish and archive the active task first. `--upgrade-with-active` is an explicit high-risk override for recovery scenarios where changing governance semantics during a task is intentional.
 
-Before replacement, managed files are copied under `.ai/cockpit/upgrade-backups/<timestamp>/`. Despite the historical directory name, the installer also uses it as a transaction rollback area when a first installation appends to an existing file such as `Makefile`; its presence does not mean an upgrade occurred. This directory and active review records are added to the managed `.gitignore` rules. Agent sections between the AI Cockpit markers are replaced as one managed block. If an existing `AGENTS.md`, `GEMINI.md`, or `CLAUDE.md` has no markers, upgrade preserves its content and appends the managed section. Customized guards and `checks.yaml` are backed up before the source version is installed. Project-owned `.ai/glossary.md` is preserved by default; `--replace-glossary` backs it up before installing a fresh template. The installer validates version metadata before writing, rejects distribution or Contract-schema downgrades, validates the installed managed runtime afterward, and automatically restores backed-up files if installation or post-copy validation fails. Review and remove successful-upgrade backups when they are no longer needed. `--force` replaces managed files without an upgrade backup, but does not replace the glossary unless explicitly requested.
+Upgrade and rollback behavior is divided by ownership:
+
+- **Backup location:** Before replacement, managed files are copied under `.ai/cockpit/upgrade-backups/<timestamp>/`. The installer also uses this directory as a transaction rollback area when a first installation appends to an existing file such as `Makefile`; its presence alone does not prove an upgrade occurred.
+- **Managed files:** AI Cockpit sections between managed markers are replaced as one block. If `AGENTS.md`, `GEMINI.md`, or `CLAUDE.md` has no markers, existing content is preserved and the managed section is appended. Customized Guards and `checks.yaml` are backed up.
+- **Project-owned files:** `.ai/glossary.md` is preserved by default. `--replace-glossary` backs it up before installing a fresh template.
+- **Validation and rollback:** The installer validates version metadata before writing, rejects distribution or Contract-schema downgrades, validates the copied Runtime afterward, and restores backed-up files if installation or post-copy validation fails.
+- **Cleanup:** The backup directory and active review records are covered by managed `.gitignore` rules. Review and remove successful-upgrade backups when they are no longer needed.
+- **`--force`:** This option replaces managed files without an upgrade backup. It still does not replace the glossary unless `--replace-glossary` is explicit.
 
 If you did not use `--update-makefile`, add this line to your project Makefile:
 
+<!-- command-evidence: adopter_required -->
 ```make
 include Makefile.ai
 ```
 
 After successful Work Item finish/archive, configure pull-request CI to fetch full Git history and run:
 
+<!-- command-evidence: adopter_required -->
 ```sh
-make check-ai-pr AI_BASE_COMMIT="$(git merge-base HEAD origin/main)"
+ADOPTER_REMOTE="${ADOPTER_REMOTE:?use the remote recorded in the Contract}"
+ADOPTER_DEFAULT_BRANCH="${ADOPTER_DEFAULT_BRANCH:?use the default branch recorded in the Contract}"
+make check-ai-pr AI_BASE_COMMIT="$(git merge-base HEAD "$ADOPTER_REMOTE/$ADOPTER_DEFAULT_BRANCH")"
 ```
 
 For GitHub Actions, a complete minimal job is:

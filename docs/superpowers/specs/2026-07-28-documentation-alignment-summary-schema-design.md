@@ -9,6 +9,10 @@ keywords:
   - traceability
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Documentation Alignment Summary Schema Design
 
 ## Problem

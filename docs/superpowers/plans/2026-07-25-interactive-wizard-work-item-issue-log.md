@@ -9,6 +9,10 @@ keywords:
   - verification
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Interactive Wizard Work Item Issue Log
 
 ## Purpose

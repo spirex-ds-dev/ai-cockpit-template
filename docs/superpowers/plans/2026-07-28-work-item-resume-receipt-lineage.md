@@ -4,6 +4,10 @@ title: "Work Item Resume Receipt Lineage Implementation Plan"
 description: TDD plan for RFE-ISSUE-117 and its full governed delivery lifecycle.
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Work Item Resume Receipt Lineage Implementation Plan
 
 ## Traceability

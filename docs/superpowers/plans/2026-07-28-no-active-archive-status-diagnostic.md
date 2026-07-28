@@ -4,6 +4,10 @@ title: "No-Active Archive Status Diagnostic Implementation Plan"
 description: TDD implementation plan for transaction-bound start-receipt classification.
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # No-Active Archive Status Diagnostic Implementation Plan
 
 > **For agentic workers:** Use the repository Work Item lifecycle and execute each task with

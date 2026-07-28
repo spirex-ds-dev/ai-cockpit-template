@@ -4,6 +4,10 @@ title: "2026-07-21 Bootstrap Adoption and Project-Calibrated Complexity Review R
 description: "已完成的 Bootstrap Adoption、Project Configuration 和 Governed Development 串行整改计划。"
 keywords: [bootstrap-adoption, project-configuration, complexity-calibration, review-remediation]
 ---
+
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
 # 2026-07-21 Bootstrap Adoption 评审整改执行计划（历史完成）
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task.
 **状态：** 2026-07-22 已完成 WI01–WI15；本计划保留为审计记录，不再创建后续整改工单。

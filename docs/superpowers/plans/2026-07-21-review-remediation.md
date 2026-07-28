@@ -9,6 +9,10 @@ keywords:
   - evidence-root
   - work-item-lifecycle
 ---
+
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
 # 2026-07-21 最新评审整改执行计划
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 **Goal:** 以 2026-07-21 最新 `main`、提交 `41b5f66` 为基准，把本轮评审发现的多重事实源、双重决策语义、可伪造证据占位符和不完整 Fixture 证据收敛为可审计的串行整改闭环。

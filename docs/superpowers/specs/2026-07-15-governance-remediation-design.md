@@ -8,6 +8,10 @@ keywords:
   - adoption
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Governance Remediation Design
 
 ## Goal
