@@ -133,6 +133,17 @@ Execution-time evidence such as recorded commands and `executionContractPath`
 remains unchanged because it describes the actual check context rather than a
 current resolvable documentation reference.
 
+The same archive transaction loads the registered instruction-traceability
+manifest before moving any active artifact. If that JSON is malformed, archive
+fails closed without moving the Contract or Summary. Every value exactly equal
+to the current active Contract path is migrated to the generated archive
+Contract path; lookalike paths, command strings that merely contain the path,
+unrelated Work Items, and historical archive paths are not rewritten. A
+manifest with no exact reference is a byte-for-byte no-op. When a rewrite is
+needed, the archived Summary owns that generated change. If any later archive,
+index, manifest, or status step fails, the transaction restores the original
+active artifacts and traceability bytes before reporting failure.
+
 This gate first runs the project formatter and, when the governance script and policy
 are installed, the governance complexity/budget check; only then does it validate PR
 ownership. This catches formatting drift and budget overflow before remote CI.

@@ -1,0 +1,267 @@
+{
+  "contractVersion": 2,
+  "workItemId": "archive-traceability-path-rewrite-20260728",
+  "mode": "code",
+  "title": "Rewrite traceability Contract paths during archive",
+  "declaredIntent": {
+    "summary": "Make the archive transaction atomically migrate exact current-Work-Item Contract references in the registered instruction traceability manifest.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "baseCommit": "9548a73771bdf3242b2870ece1494815d9c3de88",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/archive-traceability-path-rewrite-20260728.contract.json",
+    ".ai/work-items/active/archive-traceability-path-rewrite-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_archive_work_item.py",
+    "tests/test_start_and_archive.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-28-archive-traceability-path-rewrite.md"
+  ],
+  "outOfScope": [
+    "Rewriting immutable archived Contract, Summary, Manifest, verification command, or execution-path evidence",
+    "Fuzzy replacement of similar task names, arbitrary active paths, or unrelated JSON strings",
+    "Changing no-active status semantics, branch closure behavior, release state, or RFE-ISSUE-082",
+    "Repairing historical traceability entries that do not reference the currently archived Contract",
+    "Advancing Japanese assessment, documentation alignment, release, or plan cleanup"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "RFE-ISSUE-080 records repeated stale active Contract references after archive."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi01-wi20-hosted-coverage-recovery-20260728.summary.json",
+      "reason": "Latest sequence 636 evidence records the manual post-archive active-to-archive traceability migration and resulting transient status conflict."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Authoritative archive transaction, path rewrite helper, index/manifest generation, and rollback boundary."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Existing archive E2E, path rewrite, immutable execution evidence, and rollback regressions."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Registered external traceability manifest whose current Work Item Contract path must migrate during archive."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "archive_transaction",
+      "evidence_integrity",
+      "rollback",
+      "traceability_path"
+    ],
+    "reason": "An external evidence rewrite during archive can leave the repository half-migrated or alter historical strings if it is not exact, atomic, and rollback-bound.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly required this recurring omission to be fixed in the process before later Work Items and authorized continuous execution."
+  },
+  "preReviewWarnings": [
+    "Confirm only the exact current active Contract path is replaced in the registered traceability manifest.",
+    "Confirm absent references are a no-op while malformed registered JSON fails before immutable archive completion.",
+    "Confirm any later archive/index/manifest failure restores the traceability file byte-for-byte with active evidence.",
+    "Confirm the archived Summary records the generated traceability-manifest change and its documentation alignment path remains durable.",
+    "Confirm verification command and executionContractPath strings inside immutable Summary evidence remain unchanged."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: During archive, every exact occurrence of the current Contract path in docs/reference/remediation-instruction-traceability.json is atomically rewritten to the generated archive Contract path before the immutable Summary and Manifest are finalized.",
+    "A2: Similar task names, unrelated active paths, historical archive paths, verification commands, executionContractPath fields, and non-string values remain byte-for-byte or semantically unchanged.",
+    "A3: A valid traceability manifest with no current Contract reference is a deterministic no-op; malformed registered JSON fails closed without moving active evidence.",
+    "A4: If any later archive transaction step fails, the traceability manifest, active Contract/Summary, archive index, generated status, and partial archive artifacts are restored according to the existing rollback contract.",
+    "A5: When a rewrite occurs, the archived Summary changedFiles and documentationAlignment use the durable traceability path, and post-archive check-instruction-traceability plus status consistency do not require a manual path edit.",
+    "A6: Red-first focused regressions, archive lifecycle E2E, full quality, archive, committed aggregate PR check, Hosted CI, merge, ai-close-work-item, and branch cleanup all pass before RFE-147 starts."
+  ],
+  "guidelines": [
+    "Keep archive migration exact, repository-relative, deterministic, and limited to the registered mutable traceability manifest.",
+    "Treat the external traceability rewrite as part of the same atomic archive transaction and restore its exact original bytes on failure.",
+    "Do not rewrite immutable execution evidence or historical archive bundles.",
+    "Record generated external evidence changes in the archived Summary so reverse ownership remains complete.",
+    "Use red-first positive, no-op, malformed-input, lookalike, and rollback regressions before implementation."
+  ],
+  "intent": {
+    "problem": "The instruction traceability manifest legitimately references an active Contract while a Work Item is executing. ai_archive_work_item moves that Contract and rewrites paths inside the Summary, but it does not migrate the external manifest. Every completed Work Item therefore risks a stale active path; clean-checkout traceability fails until an agent remembers a manual edit, and that post-archive edit also conflicts with the transient no-active status diagnostic. The defect repeated in WI-20 and again in the WI-01 through WI-20 Hosted recovery.",
+    "constraints": [
+      "Modify only exact references to the currently archived Contract in the registered traceability manifest.",
+      "Preserve immutable archive and execution evidence and all unrelated manifest values.",
+      "Make the rewrite and restoration part of the existing archive transaction rather than a follow-up command.",
+      "Do not combine RFE-147 closure state, RFE-082 release facts, or later release work."
+    ],
+    "rationale": "The archive transaction already owns active-to-archive identity, path replacements, Summary regeneration, Manifest digests, index update, and rollback. Extending that exact transaction to one registered mutable traceability manifest removes the memory-dependent post-step while preserving fail-closed evidence integrity."
+  },
+  "rawUserRequest": "结束当前工单以后先补漏洞：归档后没有自动重写或解析 traceability 路径，要不然继续补的时候还是会有遗漏。所有工单完成都要按照“指示—计划—实现—验收”双向追踪机制检查验收；发现的流程问题解决以后再发版本。确认并继续执行，没有需要我确认的不要停。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-traceability-archive-rewrite-and-continuous-execution",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-automatic-traceability-archive-path-rewrite"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The registered manifest contains the exact current active Contract path one or more times.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "All exact occurrences become the generated archive Contract path and the archived Summary owns the manifest change.",
+      "verificationPlan": "Add an archive E2E fixture with duplicate exact references and assert post-archive traceability plus changedFiles."
+    },
+    {
+      "scenario": "The manifest contains lookalike, unrelated, historical, non-string, and verification execution values.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Only the exact current Contract path changes; all other values remain unchanged.",
+      "verificationPlan": "Add a focused recursive rewrite boundary test and preserve existing immutable Summary execution-path assertions."
+    },
+    {
+      "scenario": "The registered manifest is valid but does not reference the current Contract.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Archive succeeds without rewriting or adding a false changedFiles claim.",
+      "verificationPlan": "Add a no-op archive fixture and compare original manifest bytes."
+    },
+    {
+      "scenario": "The registered manifest is malformed before archive mutation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Archive fails closed before moving active evidence or changing the index.",
+      "verificationPlan": "Add malformed JSON fixture and assert active files and index bytes remain."
+    },
+    {
+      "scenario": "A later archive step fails after the traceability rewrite.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Rollback restores the manifest byte-for-byte and restores active evidence with no partial Manifest.",
+      "verificationPlan": "Inject an index-write or status-generation failure after rewrite and assert complete restoration."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "Ray",
+    "reason": "The user explicitly authorized durable process correction of the archive traceability omission and continuous governed execution."
+  },
+  "rollbackNote": "Revert this Work Item through its PR; runtime archive failures must restore the registered traceability manifest from captured original bytes together with the existing archive rollback.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 649
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/archive-traceability-path-rewrite-20260728.json",
+    "baseCommit": "9548a73771bdf3242b2870ece1494815d9c3de88",
+    "initialScopeDigest": "9445db4c4590e34fb28b3bce5b347520ef070007d30211b5ee91bfaae66ad304",
+    "contractSkeletonDigest": "b69f08628cd7af731e2b563ca02b2f28d97d5222bb32c7e2b6bb315595d941f5"
+  }
+}
