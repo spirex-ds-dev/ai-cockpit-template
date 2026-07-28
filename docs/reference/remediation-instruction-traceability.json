@@ -24,7 +24,7 @@
       "id": "PLAN-DIRECTIVE-003",
       "summary": "After each Work Item, re-check and align the plan and related documentation; do not silently defer drift.",
       "planWorkItems": ["WI-10", "WI-17", "WI-19"],
-      "contractPaths": [".ai/work-items/archive/2026/documentation-alignment-20260726.contract.json", ".ai/work-items/archive/2026/document_human_agent_trust_layer.contract.json", ".ai/work-items/archive/2026/clean-execution-plan-documents.contract.json", ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.contract.json", ".ai/work-items/active/wi10-prompt-first-multiplatform-installation-20260728.contract.json"],
+      "contractPaths": [".ai/work-items/archive/2026/documentation-alignment-20260726.contract.json", ".ai/work-items/archive/2026/document_human_agent_trust_layer.contract.json", ".ai/work-items/archive/2026/clean-execution-plan-documents.contract.json", ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.contract.json", ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.contract.json"],
       "implementationEvidence": ["docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "docs/superpowers/specs/2026-07-28-wi10-prompt-first-multiplatform-installation-design.md", "docs/superpowers/plans/2026-07-28-wi10-prompt-first-multiplatform-installation.md", "docs/getting-started/installation.md", "docs/getting-started/installation.zh-CN.md", "docs/getting-started/installation.ja.md", "docs/getting-started/examples/ios.md", "docs/getting-started/examples/ios.zh-CN.md", "docs/getting-started/examples/ios.ja.md", "docs/getting-started/examples/android.md", "docs/getting-started/examples/android.zh-CN.md", "docs/getting-started/examples/android.ja.md", "docs/getting-started/examples/java.md", "docs/getting-started/examples/java.zh-CN.md", "docs/getting-started/examples/java.ja.md", "docs/getting-started/30-second-start.md", "docs/getting-started/30-second-start.zh-CN.md", "docs/getting-started/30-second-start.ja.md", "docs/getting-started/standard-adoption-guide.md", "docs/getting-started/standard-adoption-guide.zh-CN.md", "docs/getting-started/standard-adoption-guide.ja.md", "docs/getting-started/security-release-verification.md", "docs/getting-started/security-release-verification.zh-CN.md", "docs/getting-started/security-release-verification.ja.md", "scripts/check_docs_metadata.py"],
       "acceptanceEvidence": [".ai/work-items/archive/2026/documentation-alignment-20260726.summary.json", "tests/test_docs_metadata.py"],
       "requiredNamedPaths": [
@@ -107,7 +107,7 @@
       "id": "PLAN-DIRECTIVE-009",
       "summary": "Fix the three WI-21 process vulnerabilities before resuming WI-10: named-path mapping, registered hosted evidence, archive path/digest integrity, explicit release intent, and complete CI failure evidence.",
       "planWorkItems": ["WI-21", "WI-10"],
-      "contractPaths": [".ai/work-items/active/process-evidence-release-preflight-20260727.contract.json"],
+      "contractPaths": [".ai/work-items/archive/2026/process-evidence-release-preflight-20260727.contract.json"],
       "implementationEvidence": ["scripts/ai_check_summary.py", "scripts/check_instruction_traceability.py", "scripts/ai_archive_work_item.py", "scripts/check_ci_release_evidence.sh", ".github/workflows/smoke.yml"],
       "acceptanceEvidence": ["tests/test_ai_check_summary.py", "tests/test_instruction_traceability.py", "tests/test_ci_release_evidence.sh"],
       "verificationCommands": ["make check-instruction-traceability", "make ai-finish TASK=process-evidence-release-preflight-20260727", "make ai-close-work-item TASK=process-evidence-release-preflight-20260727"]
@@ -125,7 +125,7 @@
       "id": "PLAN-DIRECTIVE-010",
       "summary": "When implementation-only scenario evidence creates a Preflight deadlock, fix the governed state transition first: concrete planned verification may authorize implementation but never completion, and a rejected ai-start must leave governance state unchanged.",
       "planWorkItems": ["WI-20", "preflight-planned-scenario-transition-20260728"],
-      "contractPaths": [".ai/work-items/active/preflight-planned-scenario-transition-20260728.contract.json"],
+      "contractPaths": [".ai/work-items/archive/2026/preflight-planned-scenario-transition-20260728.contract.json"],
       "implementationEvidence": ["scripts/ai_common.py", "scripts/ai_preflight_review.py", "scripts/ai_start.py", ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md"],
       "acceptanceEvidence": ["tests/test_preflight_review.py", "tests/test_scenario_coverage_gate.py", "tests/test_start_and_archive.py"],
       "verificationCommands": ["make ai-preflight", "make check-instruction-traceability", "make ai-finish TASK=preflight-planned-scenario-transition-20260728", "make ai-close-work-item TASK=preflight-planned-scenario-transition-20260728"]
@@ -134,7 +134,7 @@
       "id": "PLAN-DIRECTIVE-011",
       "summary": "Fix the post-archive, pre-commit no-active diagnostic so only a manifest-bound current archive transaction owns its matching start receipt; every unrelated change remains fail closed.",
       "planWorkItems": ["WI-20", "no-active-archive-status-diagnostic-20260728"],
-      "contractPaths": [".ai/work-items/active/no-active-archive-status-diagnostic-20260728.contract.json"],
+      "contractPaths": [".ai/work-items/archive/2026/no-active-archive-status-diagnostic-20260728.contract.json"],
       "implementationEvidence": ["scripts/ai_check_status_consistency.py", ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md"],
       "acceptanceEvidence": ["tests/test_core_gates.py"],
       "verificationCommands": ["make ai-preflight", "make check-ai-status-consistency", "make check-instruction-traceability", "make ai-finish TASK=no-active-archive-status-diagnostic-20260728", "make ai-close-work-item TASK=no-active-archive-status-diagnostic-20260728"]
@@ -143,7 +143,7 @@
       "id": "PLAN-DIRECTIVE-012",
       "summary": "Preserve the immutable Start Receipt while allowing a paused Work Item to advance its baseline only through generated, append-only, predecessor-closure-bound resume lineage.",
       "planWorkItems": ["WI-20", "work-item-resume-receipt-lineage-20260728"],
-      "contractPaths": [".ai/work-items/active/work-item-resume-receipt-lineage-20260728.contract.json"],
+      "contractPaths": [".ai/work-items/archive/2026/work-item-resume-receipt-lineage-20260728.contract.json"],
       "implementationEvidence": ["scripts/ai_resume_work_item.py", "scripts/ai_start_receipt.py", "scripts/ai_check_pr.py", "Makefile", ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md"],
       "acceptanceEvidence": ["tests/test_start_and_archive.py", "tests/test_pr_aggregate.py"],
       "verificationCommands": ["make ai-preflight", "make check-ai-start-receipt", "make check-instruction-traceability", "make ai-finish TASK=work-item-resume-receipt-lineage-20260728", "make ai-close-work-item TASK=work-item-resume-receipt-lineage-20260728"]
@@ -233,7 +233,7 @@
       "id": "PLAN-DIRECTIVE-022",
       "summary": "Treat deep quality performance as the highest-priority bottleneck: remove history-amplified installer traversal, isolate and stream quality evidence, preserve diagnostics on every outcome, parallelize independent hosted jobs, and require three comparable hosted runs before claiming improvement.",
       "planWorkItems": ["WI-20", "quality-gate-deep-performance-optimization-20260728"],
-      "contractPaths": [".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json"],
+      "contractPaths": [".ai/work-items/archive/2026/quality-gate-deep-performance-optimization-20260728.contract.json"],
       "implementationEvidence": ["Makefile", ".github/workflows/smoke.yml", "scripts/run_quality_gate.py", "scripts/install_ai_cockpit.py", "scripts/check_system_invariants.py", "scripts/ai_prepare_hosted_verification.py", "docs/operations/quality-gates.md", "docs/operations/quality-gates.zh-CN.md", "docs/operations/quality-gates.ja.md"],
       "acceptanceEvidence": ["tests/test_quality_telemetry.py", "tests/test_quality_gate_architecture.py", "tests/test_ci_quality_orchestration.py", "tests/test_workflows.py", "tests/test_installer.py", "tests/test_system_invariants.py", "tests/test_hosted_verification_snapshot.py"],
       "verificationCommands": ["make ai-preflight", "make check-instruction-traceability", "make quality", "make ai-finish TASK=quality-gate-deep-performance-optimization-20260728", "make ai-close-work-item TASK=quality-gate-deep-performance-optimization-20260728"]
@@ -242,10 +242,19 @@
       "id": "PLAN-DIRECTIVE-023",
       "summary": "Enforce the user-confirmed eight-stage order: deep performance, WI-10, WI-01 through WI-20 bidirectional audit, remaining process issues and RFE-ISSUE-082, Japanese assessment and corrections, documentation alignment, release, then plan cleanup.",
       "planWorkItems": ["WI-01", "WI-02", "WI-03", "WI-04", "WI-05", "WI-06", "WI-07", "WI-08", "WI-09", "WI-10", "WI-11", "WI-12", "WI-13", "WI-14", "WI-15", "WI-16", "WI-17", "WI-18", "WI-19", "WI-20", "quality-gate-deep-performance-optimization-20260728"],
-      "contractPaths": [".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json"],
+      "contractPaths": [".ai/work-items/archive/2026/quality-gate-deep-performance-optimization-20260728.contract.json", ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.contract.json"],
       "implementationEvidence": ["docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
-      "acceptanceEvidence": ["docs/reference/remediation-instruction-traceability.json"],
-      "verificationCommands": ["make check-instruction-traceability", "make ai-finish TASK=quality-gate-deep-performance-optimization-20260728"]
+      "acceptanceEvidence": ["docs/reference/remediation-instruction-traceability.json", "docs/reference/wi01-wi20-bidirectional-traceability-audit.json", "docs/reference/wi01-wi20-bidirectional-traceability-audit.md"],
+      "verificationCommands": ["make check-instruction-traceability", ".venv/bin/python -m pytest -q tests/test_instruction_traceability.py"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-024",
+      "summary": "Recover the immutable WI-01 through WI-20 audit after Hosted Linux exposes insufficient portable coverage margin; retain the 85.10 percent threshold and require meaningful fail-closed tests plus a complete replacement lifecycle.",
+      "planWorkItems": ["WI-01", "WI-02", "WI-03", "WI-04", "WI-05", "WI-06", "WI-07", "WI-08", "WI-09", "WI-10", "WI-11", "WI-12", "WI-13", "WI-14", "WI-15", "WI-16", "WI-17", "WI-18", "WI-19", "WI-20", "wi01-wi20-hosted-coverage-recovery-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/wi01-wi20-bidirectional-traceability-audit-20260728.contract.json", ".ai/work-items/archive/2026/wi01-wi20-hosted-coverage-recovery-20260728.contract.json"],
+      "implementationEvidence": ["tests/test_instruction_traceability.py", "docs/superpowers/plans/2026-07-28-wi01-wi20-hosted-coverage-recovery.md", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
+      "acceptanceEvidence": [".ai/work-items/archive/2026/wi01-wi20-bidirectional-traceability-audit-20260728.summary.json", "docs/reference/wi01-wi20-bidirectional-traceability-audit.json", "tests/test_instruction_traceability.py"],
+      "verificationCommands": [".venv/bin/python -m pytest -q tests/test_instruction_traceability.py", "make check-instruction-traceability", "make quality", "make ai-finish TASK=wi01-wi20-hosted-coverage-recovery-20260728", "make ai-close-work-item TASK=wi01-wi20-hosted-coverage-recovery-20260728"]
     }
   ]
 }

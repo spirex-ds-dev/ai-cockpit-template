@@ -1,0 +1,274 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi01-wi20-hosted-coverage-recovery-20260728",
+  "mode": "code",
+  "title": "Recover WI-01 through WI-20 audit hosted coverage margin",
+  "declaredIntent": {
+    "summary": "Preserve the immutable WI-01 through WI-20 audit while adding behavior-focused fail-closed traceability tests that restore a portable Hosted coverage margin for replacement delivery.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "baseCommit": "9548a82a199a7fd2c97ea55adf0f40f813e7fd10",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi01-wi20-hosted-coverage-recovery-20260728.contract.json",
+    ".ai/work-items/active/wi01-wi20-hosted-coverage-recovery-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "tests/test_instruction_traceability.py",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-28-wi01-wi20-hosted-coverage-recovery.md"
+  ],
+  "outOfScope": [
+    "Editing the immutable archived Contract, Summary, or Manifest from wi01-wi20-bidirectional-traceability-audit-20260728",
+    "Reopening or merging superseded PR #425",
+    "Lowering the 85.10 percent executable coverage threshold, excluding production files, or weakening project-test failure semantics",
+    "Changing the completed WI-01 through WI-20 audit result or reopening a closed finding without new contradictory evidence",
+    "Implementing other process issues, RFE-ISSUE-082, Japanese evaluation, documentation alignment, release, or plan cleanup"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi01-wi20-bidirectional-traceability-audit-20260728.contract.json",
+      "reason": "Immutable predecessor Contract and exact scope for the adjacent recovery relationship."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi01-wi20-bidirectional-traceability-audit-20260728.summary.json",
+      "reason": "Immutable predecessor verification showing 1333 local tests and 85.102326 percent coverage."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi01-wi20-bidirectional-traceability-audit-20260728.archive-manifest.json",
+      "reason": "Digest and archive sequence 635 for the predecessor evidence bundle."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30345295068",
+      "reason": "Provider-bound Hosted run where all 1333 tests passed but Linux coverage was 85.05 percent and template-smoke failed."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/425",
+      "reason": "Superseded predecessor PR retained as failed Hosted delivery evidence."
+    },
+    {
+      "path": "scripts/check_instruction_traceability.py",
+      "reason": "The audited fail-closed checker contains behavior branches that can receive meaningful regression coverage without production changes."
+    },
+    {
+      "path": "tests/test_instruction_traceability.py",
+      "reason": "Existing focused suite and the only implementation surface permitted for stable coverage recovery."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "hosted_only_failure",
+      "coverage_threshold",
+      "immutable_recovery",
+      "traceability_regression"
+    ],
+    "reason": "The exact Hosted failure is known, but a coverage-only recovery can become meaningless if it merely exercises lines without validating fail-closed behavior. The predecessor archive must remain immutable and replacement delivery must preserve recovery-chain ownership.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized continuous execution, required process defects to be fixed before later stages, and requested no pause when no new decision is needed."
+  },
+  "preReviewWarnings": [
+    "Confirm predecessor archive sequence 635 and every predecessor byte remain unchanged.",
+    "Confirm added tests assert externally meaningful rejection or acceptance behavior rather than only executing lines.",
+    "Confirm local coverage has a stable margin above 85.10 percent and Hosted Linux passes the unchanged threshold.",
+    "Confirm PR #425 remains closed and the replacement PR is accepted only through the documented adjacent recovery chain.",
+    "Confirm later serial stages remain blocked until this recovery is merged and both branches are cleaned."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Immutable predecessor Contract, Summary, Manifest, archive sequence 635, and closed PR #425 remain unchanged and are cited by the recovery.",
+    "A2: New behavior-focused tests cover currently unverified fail-closed traceability paths, including malformed corrective evidence and stale or mismatched archive relationships, without changing production semantics.",
+    "A3: The full local suite passes the unchanged 85.10 percent executable threshold with enough margin that the observed 0.052326 percentage-point local-to-Hosted variance would not fail the gate.",
+    "A4: Focused traceability checks and the complete twenty-row machine audit still pass with zero open findings; WI-18 and WI-19 remain deferred by the approved order.",
+    "A5: Recovery documentation and the instruction traceability registry map the Hosted failure, plan, implementation, acceptance, archive, and provider evidence in both directions.",
+    "A6: The recovery receives the sequence immediately after 635 and committed aggregate PR validation accepts the predecessor and recovery only as a human-authorized, source-bound adjacent chain.",
+    "A7: The replacement PR passes every required Hosted check including template-smoke and terminal ci-evidence, then merge, ai-close-work-item, predecessor/recovery branch deletion, and main synchronization complete before the process-issues stage starts."
+  ],
+  "guidelines": [
+    "Never rewrite superseded archived evidence; recover through one documented adjacent Work Item and replacement PR.",
+    "Increase coverage only through behaviorally relevant tests; do not lower thresholds, omit production files, add no-cover markers, or alter success criteria.",
+    "Each new test must assert a fail-closed diagnostic or valid recovery relationship that protects instruction-to-acceptance traceability.",
+    "Keep the completed audit conclusion stable unless new contradictory repository evidence is discovered.",
+    "Record the Hosted failure as a process issue and preserve the fixed eight-stage execution order."
+  ],
+  "intent": {
+    "problem": "The WI-01 through WI-20 audit passed 1333 local tests at 85.102326 percent and was archived as sequence 635, but replacement delivery PR #425 ran the same 1333 tests on Hosted Linux at 85.05 percent. The unchanged executable threshold is 85.10 percent, so template-smoke and terminal ci-evidence failed. The predecessor local result exceeded the threshold by only 0.002326 percentage points and therefore did not provide a portable verification margin.",
+    "constraints": [
+      "Preserve the predecessor archived bundle and superseded PR #425 as immutable historical evidence.",
+      "Do not lower 85.10 percent, exclude production code, weaken CI evidence, or rely on a blind rerun.",
+      "Add only behavior-focused regression tests for the audited traceability checker and retain the zero-open-findings conclusion.",
+      "Use the documented adjacent recovery-chain exception and complete replacement PR, merge, closure, and branch cleanup before advancing."
+    ],
+    "rationale": "The checker still has untested fail-closed branches for malformed and mismatched evidence. Covering those branches with exact negative regressions improves the audited control and creates a portable margin at the same time. A fresh recovery Work Item keeps the already archived predecessor truthful and makes the Hosted failure part of the governed evidence chain."
+  },
+  "rawUserRequest": "继续执行，不要停；每个工单如果发现流程问题先修流程再继续。所有工单都要按“指示—计划—实现—验收”双向追踪机制检查，发布必须在这些对应之后。当前 WI-01～WI-20 审计的 Hosted CI 已完成 1333 tests，但 coverage 85.05% 低于 85.10%；不得改写已归档前序，也不得降低门槛，应建立 replacement recovery 根治稳定余量后完成完整 PR、合并、关闭和分支清理。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-continuous-plan-and-process-correction",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-continuous-recovery-traceability-and-process-first-execution"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Local recovery coverage margin is larger than the observed local-to-Hosted variance.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Behavior-focused tests raise full local coverage far enough above 85.10 percent that subtracting the observed 0.052326 percentage-point variance remains at or above the threshold.",
+      "verificationPlan": "Measure focused and full local coverage at the unchanged threshold and compare the exact margin with the predecessor local and Hosted results."
+    },
+    {
+      "scenario": "Resolved corrective evidence is malformed, mismatched, missing, or points to a stale active path.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The traceability checker fails closed with a specific diagnostic for each invalid relationship.",
+      "verificationPlan": "Add red-first negative fixtures around uncovered checker branches and run tests/test_instruction_traceability.py."
+    },
+    {
+      "scenario": "The complete WI-01 through WI-20 audit is revalidated after coverage recovery.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The machine audit remains complete with exactly 20 rows, 18 verified, WI-18/WI-19 deferred, and zero open findings.",
+      "verificationPlan": "Run make check-instruction-traceability and inspect the authoritative JSON report."
+    },
+    {
+      "scenario": "The replacement PR contains immutable predecessor and new recovery archive pairs.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Aggregate validation accepts only the consecutive, human-authorized, source-bound recovery relationship.",
+      "verificationPlan": "Archive and commit the recovery, then run make check-ai-pr against the predecessor's recorded base."
+    },
+    {
+      "scenario": "A required Hosted job or terminal evidence fails after template-smoke succeeds.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Existing provider gates keep the replacement PR unmerged until every required check and ci-evidence succeeds.",
+      "verificationPlan": "Re-run the existing workflow and CI-evidence regressions locally; after archival, wait for and inspect the complete replacement PR check set before merge."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "Ray",
+    "reason": "The user explicitly authorized continuous corrective execution, process-first fixes, governed recovery, PR replacement, and cleanup without another confirmation when no new authority is required."
+  },
+  "rollbackNote": "Close the replacement PR without merge and retain the immutable predecessor and recovery evidence; never amend predecessor sequence 635 or merge a threshold-weakening fallback.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 648
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi01-wi20-hosted-coverage-recovery-20260728.json",
+    "baseCommit": "9548a82a199a7fd2c97ea55adf0f40f813e7fd10",
+    "initialScopeDigest": "2a9906a281d14dab4ee73f05a3519b7829bc27b7ef555f9c6de34c85b3996db4",
+    "contractSkeletonDigest": "4ba08fffc6d4fcbb4c5a826f81cc25a44b9819e29f8e1a35a0ff5e27e8372a23"
+  }
+}
