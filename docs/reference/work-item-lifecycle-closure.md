@@ -12,7 +12,10 @@ keywords:
 
 # Work Item Lifecycle Closure
 
-Closure means the repository is ready to begin the next Work Item. It is not equivalent to deleting a branch.
+Closure means the Work Item lifecycle is complete, its local and remote work
+branch identities are removed, and a clean synchronized base worktree is
+verified. It is not equivalent to deleting a branch, and it does not imply
+that the invoking worktree is ready when another worktree owns the base.
 
 Run:
 
@@ -20,24 +23,40 @@ Run:
 make ai-close-work-item TASK=<task>
 ```
 
-The command requires the Work Item Contract and Summary to be archived, no active Work Item evidence, a consistent no-active Cockpit Status, and a merged PR whose head branch is the current Work Item branch.
+The command requires the Work Item Contract and Summary to be archived, no
+active Work Item evidence, a consistent no-active Cockpit Status, and a merged
+PR whose head branch and Head SHA match the current local Work Item branch.
 
 Its ordered protocol is:
 
 ```text
-verify evidence and merged PR
-→ switch to discovered base branch
-→ fetch remote
-→ fast-forward base branch
-→ verify local base equals remote base
-→ delete local Work Item branch
+verify evidence, local Work Item Head, and merged PR Head SHA
+→ synchronize and verify the discovered base worktree
 → request remote Work Item branch deletion
-→ refresh remote refs and verify the Work Item branch is absent
-→ verify clean repository and synchronized base
-→ report ready for next Work Item
+→ fetch/prune and prove remote Work Item branch absence
+→ detach only when another worktree owns base
+→ delete the local Work Item branch
+→ restore the Work Item checkout if linked local deletion fails
+→ report ready_on_base or closed_but_current_worktree_detached
 ```
 
-The command stops at the first unverified failure. It never deletes the remote branch before local base safety is established, never uses an implicit merge commit, and never reports `closed` unless the final remote-ref check proves the branch is absent. If GitHub or another platform has already deleted the branch, the redundant delete request may return non-zero; after `fetch --prune`, a verified absent remote ref is treated as the idempotent success state. A branch that still exists, or a remote state that cannot be verified, remains fail-closed. Squash and rebase PRs are supported because the merged PR, rather than local ancestry, authorizes deletion of the source branch.
+The command stops at the first unverified failure. It establishes base safety,
+then proves remote absence before deleting the local retry identity. If remote
+deletion fails or cannot be verified, the local branch is retained and the
+invoking Work Item checkout is retained or restored for direct retry. If
+GitHub or another platform has already deleted the branch, the redundant
+delete request may return non-zero; after `fetch --prune`, a verified absent
+remote ref is the idempotent success state. A branch that still exists, or a
+remote state that cannot be verified, remains fail closed. Squash and rebase
+PRs are supported because the merged PR, rather than local ancestry,
+authorizes deletion of the source branch.
+
+`ready_on_base` means the invoking worktree is clean, synchronized, and checked
+out on the discovered base; it is ready for the next Work Item.
+`closed_but_current_worktree_detached` means closure completed while another
+verified worktree owns the base. The invoking worktree is deliberately
+detached and is not ready for the next Work Item. Continue from the base
+worktree path printed by the command. Closure never removes that worktree.
 
 `make ai-finish TASK=<task>` is an archive milestone, not lifecycle closure. Its successful output explicitly directs the operator to push the Work Item branch, open and merge the PR, and then run `ai-close-work-item`. Historical local branches or detached worktrees outside the current Work Item are not deleted automatically because their ownership cannot be established safely from a branch name alone; audit and remove them only with explicit operator authorization.
 

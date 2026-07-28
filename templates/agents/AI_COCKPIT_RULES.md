@@ -8,7 +8,9 @@ For template-maintenance work, create the branch from the latest `origin/main`. 
 
 Installation and upgrade changes are changes in the adopter project's history. Use a published template release tag and record its source identity; do not install from a moving template work branch. After the PR is merged, delete the remote and local work branch unless a documented recovery exception applies.
 
-Work Item completion is a lifecycle closure, not merely branch deletion. Run `make ai-close-work-item TASK=<task>` only after the Work Item is archived and the corresponding PR is merged. Closure must verify archived evidence, branch/PR ownership, fast-forward-only base synchronization, local and remote branch deletion, a clean worktree, and local-base equality with the remote base. Any failed step is fail closed and must not report the Work Item as closed.
+Work Item completion is a lifecycle closure, not merely branch deletion. Run `make ai-close-work-item TASK=<task>` only after the Work Item is archived and the corresponding PR is merged. Closure must verify archived evidence, local branch/PR Head SHA ownership, fast-forward-only base synchronization, clean worktrees, and remote branch absence before deleting the local retry identity. Any failed step is fail closed and must not report the Work Item as closed. A remote failure must retain or restore the Work Item checkout for retry.
+
+Only `ready_on_base` means the invoking worktree can start the next Work Item. `closed_but_current_worktree_detached` means closure succeeded while another worktree owns the synchronized base; continue from the reported base worktree and do not treat the detached invoking worktree as ready.
 
 ### Required Workflow
 

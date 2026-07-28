@@ -27,22 +27,44 @@ keywords:
 make ai-close-work-item TASK=<task>
 ```
 
-コマンドは Contract/Summary/Cockpit Status の archive 証拠、PR の所有権、base の fast-forward-only 同期、local/remote branch の削除、clean worktree、local base と remote base の一致を順に検証します。
+コマンドは Contract/Summary/Cockpit Status の archive 証拠、local Work Item
+branch の Head SHA と merge 済み PR Head SHA の一致、base の
+fast-forward-only 同期、clean worktree、remote branch の不在、local branch
+の削除を順に検証します。remote branch の不在を証明する前に、再試行に必要な
+local Work Item branch を削除しません。
 
 ## Worktree を使う場合
 
-base branch が別の worktree で checkout されている場合、その worktree の clean 状態を確認してから base を fast-forward します。その後、Work Item worktree を detached にし、local/remote の Work Item branch を削除します。ホスト環境が管理する worktree は、コマンドが所有権を確認せずに削除しません。
+base branch が別の worktree で checkout されている場合、その worktree の
+clean 状態を確認して base を fast-forward し、remote Work Item branch の
+削除と不在を検証してから、Work Item worktree を detached にして local branch
+を削除します。detach 後に local branch の削除が失敗した場合は、可能な限り
+元の Work Item checkout を復元して再試行可能な状態を保ちます。ホスト環境が
+管理する worktree は、コマンドが所有権を確認せずに削除しません。
 
 ## 失敗時の扱い
 
-どれかの事後条件が満たされない場合は fail closed となり、Work Item は閉じたと報告されません。エラーの証拠を確認し、PR、archive、base、worktree の問題を個別に解消してから同じコマンドを再実行してください。`git branch -d` やリモート branch 削除を先に実行すると、PR ownership を検証できなくなるため避けます。
+どれかの事後条件が満たされない場合は fail closed となり、Work Item は閉じた
+と報告されません。remote branch の削除が失敗または検証不能の場合、local
+branch を保持し、通常の worktree では元の Work Item checkout へ戻してから
+失敗を報告します。エラーの証拠を確認し、同じコマンドを再実行してください。
+`git branch -d` や手動の remote branch 削除を先に実行すると、PR ownership
+または再試行 identity を失うため避けます。
 
 ## 完了状態
 
-成功時は次の条件が揃います。
+成功時は共通して次の条件が揃います。
 
 - `active/` に Contract/Summary の組がない。
 - archive 証拠が保持されている。
 - local base が remote base と一致する。
 - Work Item の local/remote branch が削除されている。
-- worktree が clean で、次の Work Item を開始できる。
+- 検証済み base worktree が clean である。
+
+さらに、コマンドは次の二つを区別します。
+
+- `ready_on_base`: 実行元 worktree 自体が同期済み base 上にあり、次の Work
+  Item を開始できます。
+- `closed_but_current_worktree_detached`: Work Item のクローズは完了しましたが、
+  実行元 worktree は detached であり、次の Work Item を開始できません。
+  コマンドが表示する同期済み base worktree へ移動して続行します。
