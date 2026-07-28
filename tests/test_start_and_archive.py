@@ -824,6 +824,36 @@ def archive_summary(*, verification_result: str = "passed") -> dict[str, object]
     }
 
 
+def prepare_archive_transaction(tmp_path, monkeypatch):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    archive = tmp_path / ".ai" / "work-items" / "archive"
+    traceability = tmp_path / "docs" / "reference" / "remediation-instruction-traceability.json"
+    active.mkdir(parents=True)
+    traceability.parent.mkdir(parents=True)
+    contract = active / "task.contract.json"
+    summary = active / "task.summary.json"
+    contract.write_text(json.dumps(archive_contract("code")), encoding="utf-8")
+    summary.write_text(json.dumps(archive_summary()), encoding="utf-8")
+    monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_archive_work_item, "ARCHIVE_BASE_DIR", archive)
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_archive_work_item, "validate_contract", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr(ai_archive_work_item, "validate_summary", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr(
+        ai_archive_work_item,
+        "_current_worktree_digest",
+        lambda _contract: "a" * 64,
+    )
+    monkeypatch.setattr(ai_archive_work_item.subprocess, "run", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(
+        ai_archive_work_item,
+        "create_observability",
+        lambda **_kwargs: type("Obs", (), {"record": lambda *_args, **_kwargs: None})(),
+    )
+    monkeypatch.setattr(sys, "argv", ["ai_archive_work_item.py", str(contract)])
+    return contract, summary, archive, traceability
+
+
 def stub_active_status(monkeypatch):
     monkeypatch.setattr(ai_start, "write_active_status", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(ai_start, "run_make", lambda *_args, **_kwargs: (0, ""))
@@ -1204,6 +1234,103 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     }
     assert len(index["entries"][0]["manifestSha256"]) == 64
     assert index["entries"][0]["manifestPath"].endswith("task.archive-manifest.json")
+
+
+def test_archive_atomically_rewrites_exact_registered_traceability_contract_paths(
+    tmp_path, monkeypatch
+):
+    contract, _summary, archive, traceability = prepare_archive_transaction(tmp_path, monkeypatch)
+    active_contract = ".ai/work-items/active/task.contract.json"
+    lookalike = ".ai/work-items/active/task-copy.contract.json"
+    command = f"make check-ai-contract CONTRACT={active_contract}"
+    traceability.write_text(
+        json.dumps(
+            {
+                "schemaVersion": 1,
+                "planPath": "plan.md",
+                "instructions": [
+                    {
+                        "id": "CURRENT",
+                        "contractPaths": [active_contract, active_contract, lookalike],
+                        "verificationCommands": [command],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert ai_archive_work_item.main() == 0
+
+    archived_contract = next(archive.glob("*/task.contract.json"))
+    archived_relative = archived_contract.relative_to(tmp_path).as_posix()
+    payload = json.loads(traceability.read_text(encoding="utf-8"))
+    instruction = payload["instructions"][0]
+    assert instruction["contractPaths"] == [archived_relative, archived_relative, lookalike]
+    assert instruction["verificationCommands"] == [command]
+    assert not contract.exists()
+
+    archived_summary = json.loads(
+        next(archive.glob("*/task.summary.json")).read_text(encoding="utf-8")
+    )
+    assert any(
+        item["path"] == "docs/reference/remediation-instruction-traceability.json"
+        and "archive" in item["reason"].lower()
+        for item in archived_summary["changedFiles"]
+    )
+    assert archived_summary["verification"][0]["result"] == "passed"
+
+
+def test_archive_rejects_malformed_registered_traceability_before_moving_files(
+    tmp_path, monkeypatch
+):
+    contract, summary, archive, traceability = prepare_archive_transaction(tmp_path, monkeypatch)
+    original_index = b'{"indexVersion":1,"entries":[]}\n'
+    (archive / "index.json").parent.mkdir(parents=True, exist_ok=True)
+    (archive / "index.json").write_bytes(original_index)
+    traceability.write_bytes(b"{not-json\n")
+
+    assert ai_archive_work_item.main() == 1
+    assert contract.exists()
+    assert summary.exists()
+    assert traceability.read_bytes() == b"{not-json\n"
+    assert (archive / "index.json").read_bytes() == original_index
+    assert not list(archive.glob("*/task.contract.json"))
+
+
+def test_archive_traceability_no_reference_is_byte_for_byte_noop(tmp_path, monkeypatch):
+    _contract, _summary, _archive, traceability = prepare_archive_transaction(tmp_path, monkeypatch)
+    original = (
+        b'{\n  "schemaVersion": 1,\n  "contractPaths": '
+        b'[".ai/work-items/active/other.contract.json"]\n}\n'
+    )
+    traceability.write_bytes(original)
+
+    assert ai_archive_work_item.main() == 0
+    assert traceability.read_bytes() == original
+
+
+def test_archive_failure_restores_registered_traceability_bytes(tmp_path, monkeypatch):
+    contract, summary, archive, traceability = prepare_archive_transaction(tmp_path, monkeypatch)
+    original_contract = contract.read_bytes()
+    original_summary = summary.read_bytes()
+    active_contract = ".ai/work-items/active/task.contract.json"
+    original = json.dumps({"contractPaths": [active_contract]}, indent=2).encode() + b"\n"
+    traceability.write_bytes(original)
+    monkeypatch.setattr(
+        ai_archive_work_item,
+        "_write_archive_index",
+        lambda _index: (_ for _ in ()).throw(OSError("disk full after rewrite")),
+    )
+
+    assert ai_archive_work_item.main() == 1
+    assert contract.exists()
+    assert summary.exists()
+    assert contract.read_bytes() == original_contract
+    assert summary.read_bytes() == original_summary
+    assert traceability.read_bytes() == original
+    assert not list(archive.glob("*/task.contract.json"))
+    assert not list(archive.glob("*/task.archive-manifest.json"))
 
 
 def test_archive_rolls_back_when_status_regeneration_fails(tmp_path, monkeypatch):

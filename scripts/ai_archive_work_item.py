@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import fnmatch
 import hashlib
+import json
 import shutil
 import subprocess
 import sys
@@ -33,6 +34,7 @@ from ai_observability import AiEvent, AiEventLevel, AiEventType, create_observab
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 ARCHIVE_BASE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
+TRACEABILITY_MANIFEST = Path("docs/reference/remediation-instruction-traceability.json")
 
 
 def owned_success_criteria_path(contract_path: Path) -> Path:
@@ -110,6 +112,63 @@ def _rewrite_archived_path_references(value: Any, replacements: dict[str, str]) 
     if isinstance(value, str):
         return replacements.get(value, value)
     return value
+
+
+def _rewrite_exact_string(value: Any, source: str, target: str) -> tuple[Any, int]:
+    """Recursively replace one exact string and return the replacement count."""
+    if isinstance(value, dict):
+        rewritten: dict[Any, Any] = {}
+        replacements = 0
+        for key, item in value.items():
+            rewritten_item, count = _rewrite_exact_string(item, source, target)
+            rewritten[key] = rewritten_item
+            replacements += count
+        return rewritten, replacements
+    if isinstance(value, list):
+        rewritten_list: list[Any] = []
+        replacements = 0
+        for item in value:
+            rewritten_item, count = _rewrite_exact_string(item, source, target)
+            rewritten_list.append(rewritten_item)
+            replacements += count
+        return rewritten_list, replacements
+    if isinstance(value, str) and value == source:
+        return target, 1
+    return value, 0
+
+
+def _load_registered_traceability() -> tuple[Path, bytes | None, dict[str, Any] | None]:
+    """Read the mutable traceability manifest before any archive mutation."""
+    path = PROJECT_ROOT / TRACEABILITY_MANIFEST
+    if not path.is_file():
+        return path, None, None
+    original = path.read_bytes()
+    try:
+        payload = json.loads(original.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"registered traceability manifest cannot be read: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise ValueError("registered traceability manifest must contain a JSON object")
+    return path, original, payload
+
+
+def _atomic_save_json(path: Path, payload: dict[str, Any]) -> None:
+    temporary = path.with_suffix(f"{path.suffix}.tmp")
+    try:
+        save_json(temporary, payload)
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def _restore_original_bytes(path: Path, content: bytes) -> None:
+    temporary = path.with_suffix(f"{path.suffix}.rollback.tmp")
+    try:
+        temporary.parent.mkdir(parents=True, exist_ok=True)
+        temporary.write_bytes(content)
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def _generate_status(command: list[str]) -> None:
@@ -450,6 +509,196 @@ def _validate_archive_inputs(
     return issues
 
 
+def _execute_archive_transaction(
+    *,
+    contract_path: Path,
+    summary_path: Path,
+    review_path: Path,
+    success_path: Path,
+    outcome_paths: list[Path],
+    files_to_move: list[tuple[Path, Path]],
+    target_dir: Path,
+    summary_tmp: Path | None,
+    manifest_target: Path,
+    has_summary: bool,
+    has_review: bool,
+    has_success: bool,
+    archive_sequence: int,
+    traceability_path: Path,
+    traceability_backup: bytes | None,
+    traceability_payload: dict[str, Any] | None,
+) -> None:
+    """Execute and roll back one archive mutation as a single transaction."""
+    index_path = _archive_index_path()
+    index_backup = index_path.read_bytes() if index_path.exists() else None
+    active_file_backups = {source: source.read_bytes() for source, _ in files_to_move}
+    traceability_changed = False
+    try:
+        for src, target in files_to_move:
+            shutil.move(str(src), str(target))
+            print(f"moved: {target.relative_to(PROJECT_ROOT)}")
+        _generate_status([sys.executable, "scripts/ai_generate_status.py", "--no-active"])
+
+        if has_summary:
+            archived_contract = (
+                (target_dir / contract_path.name).relative_to(PROJECT_ROOT).as_posix()
+            )
+            archived_summary = (target_dir / summary_path.name).relative_to(PROJECT_ROOT).as_posix()
+            replacements = {
+                contract_path.relative_to(PROJECT_ROOT).as_posix(): archived_contract,
+                summary_path.relative_to(PROJECT_ROOT).as_posix(): archived_summary,
+            }
+            if has_review:
+                replacements[review_path.relative_to(PROJECT_ROOT).as_posix()] = (
+                    (target_dir / review_path.name).relative_to(PROJECT_ROOT).as_posix()
+                )
+            if has_success:
+                replacements[success_path.relative_to(PROJECT_ROOT).as_posix()] = (
+                    (target_dir / success_path.name).relative_to(PROJECT_ROOT).as_posix()
+                )
+            for path in outcome_paths:
+                replacements[path.relative_to(PROJECT_ROOT).as_posix()] = (
+                    (target_dir / path.name).relative_to(PROJECT_ROOT).as_posix()
+                )
+            if traceability_payload is not None:
+                rewritten_traceability, replacement_count = _rewrite_exact_string(
+                    traceability_payload,
+                    contract_path.relative_to(PROJECT_ROOT).as_posix(),
+                    archived_contract,
+                )
+                if replacement_count:
+                    if not isinstance(rewritten_traceability, dict):
+                        raise ValueError("rewritten traceability manifest must remain an object")
+                    _atomic_save_json(traceability_path, rewritten_traceability)
+                    traceability_changed = True
+            summary = redact_machine_paths_in_data(load_json(target_dir / summary_path.name))
+            if isinstance(summary.get("documentationAlignment"), dict):
+                summary["documentationAlignment"] = _rewrite_archived_path_references(
+                    summary["documentationAlignment"], replacements
+                )
+            summary["contractPath"] = archived_contract
+            summary["archiveSequence"] = archive_sequence
+            changed = summary.get("changedFiles", [])
+            if isinstance(changed, list):
+                if not any(
+                    isinstance(item, dict) and item.get("path") == ".ai/cockpit/current_status.md"
+                    for item in changed
+                ):
+                    changed.append(
+                        {
+                            "path": ".ai/cockpit/current_status.md",
+                            "reason": "Generated no-active cockpit status after archival.",
+                        }
+                    )
+                for item in changed:
+                    if isinstance(item, dict) and item.get("path") in replacements:
+                        item["path"] = replacements[item["path"]]
+                existing = {item.get("path") for item in changed if isinstance(item, dict)}
+                for archived_path in replacements.values():
+                    if archived_path not in existing:
+                        changed.append(
+                            {"path": archived_path, "reason": "Archived Work Item audit evidence."}
+                        )
+                index_rel = _archive_index_path().relative_to(PROJECT_ROOT).as_posix()
+                if index_rel not in existing:
+                    changed.append(
+                        {
+                            "path": index_rel,
+                            "reason": "Generated archive discovery index.",
+                        }
+                    )
+                manifest_rel = manifest_target.relative_to(PROJECT_ROOT).as_posix()
+                if manifest_rel not in existing:
+                    changed.append(
+                        {"path": manifest_rel, "reason": "Immutable archive evidence root."}
+                    )
+                traceability_rel = traceability_path.relative_to(PROJECT_ROOT).as_posix()
+                if traceability_changed and traceability_rel not in existing:
+                    changed.append(
+                        {
+                            "path": traceability_rel,
+                            "reason": (
+                                "Archive transaction migrated the current Work Item Contract "
+                                "reference to durable traceability evidence."
+                            ),
+                        }
+                    )
+            summary_target = target_dir / summary_path.name
+            assert summary_tmp is not None
+            save_json(summary_tmp, summary)
+            summary_tmp.replace(summary_target)
+
+            save_json(
+                manifest_target,
+                _archive_manifest(
+                    contract_target=target_dir / contract_path.name,
+                    summary_target=summary_target,
+                    archive_sequence=archive_sequence,
+                    outcome_targets=[target_dir / path.name for path in outcome_paths],
+                ),
+            )
+
+        index = _load_archive_index()
+        entries = index.get("entries")
+        if not isinstance(entries, list):
+            raise ValueError("archive index entries must be a list")
+        new_entry = _archive_entry(
+            contract_path=contract_path,
+            summary_path=summary_path if has_summary else None,
+            target_dir=target_dir,
+            archive_sequence=archive_sequence,
+        )
+        new_pair = (new_entry.get("contractPath"), new_entry.get("summaryPath"))
+        for entry_index, entry in enumerate(entries):
+            if (
+                isinstance(entry, dict)
+                and (entry.get("contractPath"), entry.get("summaryPath")) == new_pair
+            ):
+                entries[entry_index] = new_entry
+                break
+        else:
+            entries.append(new_entry)
+        entries.sort(key=_archive_sequence_key)
+        _write_archive_index(index)
+    except Exception:
+        if summary_tmp and summary_tmp.exists():
+            summary_tmp.unlink()
+        manifest_target.unlink(missing_ok=True)
+        if index_backup is None:
+            index_path.unlink(missing_ok=True)
+        else:
+            index_path.write_bytes(index_backup)
+        try:
+            _restore_files(files_to_move)
+            for source, content in active_file_backups.items():
+                _restore_original_bytes(source, content)
+        except Exception as rollback_exc:
+            print(f"ERROR: Failed to roll back archive files: {rollback_exc}", file=sys.stderr)
+        if traceability_changed and traceability_backup is not None:
+            try:
+                _restore_original_bytes(traceability_path, traceability_backup)
+            except Exception as rollback_exc:
+                print(
+                    f"ERROR: Failed to roll back traceability manifest: {rollback_exc}",
+                    file=sys.stderr,
+                )
+        try:
+            subprocess.run(
+                [
+                    sys.executable,
+                    "scripts/ai_generate_status.py",
+                    str(contract_path),
+                    "--summary",
+                    str(summary_path),
+                ],
+                cwd=PROJECT_ROOT,
+                check=False,
+            )
+        except Exception:
+            pass
+        raise
+
+
 def main() -> int:
     args = parse_args()
     if getattr(args, "rebuild_index", False):
@@ -577,6 +826,14 @@ def main() -> int:
         )
         return 1
 
+    try:
+        traceability_path, traceability_backup, traceability_payload = (
+            _load_registered_traceability()
+        )
+    except (OSError, ValueError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+
     if args.dry_run:
         print("Dry run: files that would be archived:")
         for src, target in files_to_move:
@@ -585,139 +842,26 @@ def main() -> int:
 
     archive_sequence = _next_archive_sequence()
     target_dir.mkdir(parents=True, exist_ok=True)
-    index_path = _archive_index_path()
-    index_backup = index_path.read_bytes() if index_path.exists() else None
     try:
-        for src, target in files_to_move:
-            shutil.move(str(src), str(target))
-            print(f"moved: {target.relative_to(PROJECT_ROOT)}")
-        _generate_status([sys.executable, "scripts/ai_generate_status.py", "--no-active"])
-
-        if has_summary:
-            archived_contract = (
-                (target_dir / contract_path.name).relative_to(PROJECT_ROOT).as_posix()
-            )
-            archived_summary = (target_dir / summary_path.name).relative_to(PROJECT_ROOT).as_posix()
-            replacements = {
-                contract_path.relative_to(PROJECT_ROOT).as_posix(): archived_contract,
-                summary_path.relative_to(PROJECT_ROOT).as_posix(): archived_summary,
-            }
-            if has_review:
-                replacements[review_path.relative_to(PROJECT_ROOT).as_posix()] = (
-                    (target_dir / review_path.name).relative_to(PROJECT_ROOT).as_posix()
-                )
-            if has_success:
-                replacements[success_path.relative_to(PROJECT_ROOT).as_posix()] = (
-                    (target_dir / success_path.name).relative_to(PROJECT_ROOT).as_posix()
-                )
-            for path in outcome_paths:
-                replacements[path.relative_to(PROJECT_ROOT).as_posix()] = (
-                    (target_dir / path.name).relative_to(PROJECT_ROOT).as_posix()
-                )
-            summary = redact_machine_paths_in_data(load_json(target_dir / summary_path.name))
-            if isinstance(summary.get("documentationAlignment"), dict):
-                summary["documentationAlignment"] = _rewrite_archived_path_references(
-                    summary["documentationAlignment"], replacements
-                )
-            summary["contractPath"] = archived_contract
-            summary["archiveSequence"] = archive_sequence
-            changed = summary.get("changedFiles", [])
-            if isinstance(changed, list):
-                if not any(
-                    isinstance(item, dict) and item.get("path") == ".ai/cockpit/current_status.md"
-                    for item in changed
-                ):
-                    changed.append(
-                        {
-                            "path": ".ai/cockpit/current_status.md",
-                            "reason": "Generated no-active cockpit status after archival.",
-                        }
-                    )
-                for item in changed:
-                    if isinstance(item, dict) and item.get("path") in replacements:
-                        item["path"] = replacements[item["path"]]
-                existing = {item.get("path") for item in changed if isinstance(item, dict)}
-                for archived_path in replacements.values():
-                    if archived_path not in existing:
-                        changed.append(
-                            {"path": archived_path, "reason": "Archived Work Item audit evidence."}
-                        )
-                index_rel = _archive_index_path().relative_to(PROJECT_ROOT).as_posix()
-                if index_rel not in existing:
-                    changed.append(
-                        {
-                            "path": index_rel,
-                            "reason": "Generated archive discovery index.",
-                        }
-                    )
-                manifest_rel = manifest_target.relative_to(PROJECT_ROOT).as_posix()
-                if manifest_rel not in existing:
-                    changed.append(
-                        {"path": manifest_rel, "reason": "Immutable archive evidence root."}
-                    )
-            summary_target = target_dir / summary_path.name
-            assert summary_tmp is not None
-            save_json(summary_tmp, summary)
-            summary_tmp.replace(summary_target)
-
-            save_json(
-                manifest_target,
-                _archive_manifest(
-                    contract_target=target_dir / contract_path.name,
-                    summary_target=summary_target,
-                    archive_sequence=archive_sequence,
-                    outcome_targets=[target_dir / path.name for path in outcome_paths],
-                ),
-            )
-
-        index = _load_archive_index()
-        entries = index.get("entries")
-        if not isinstance(entries, list):
-            raise ValueError("archive index entries must be a list")
-        new_entry = _archive_entry(
+        _execute_archive_transaction(
             contract_path=contract_path,
-            summary_path=summary_path if has_summary else None,
+            summary_path=summary_path,
+            review_path=review_path,
+            success_path=success_path,
+            outcome_paths=outcome_paths,
+            files_to_move=files_to_move,
             target_dir=target_dir,
+            summary_tmp=summary_tmp,
+            manifest_target=manifest_target,
+            has_summary=has_summary,
+            has_review=has_review,
+            has_success=has_success,
             archive_sequence=archive_sequence,
+            traceability_path=traceability_path,
+            traceability_backup=traceability_backup,
+            traceability_payload=traceability_payload,
         )
-        new_pair = (new_entry.get("contractPath"), new_entry.get("summaryPath"))
-        for entry_index, entry in enumerate(entries):
-            if (
-                isinstance(entry, dict)
-                and (entry.get("contractPath"), entry.get("summaryPath")) == new_pair
-            ):
-                entries[entry_index] = new_entry
-                break
-        else:
-            entries.append(new_entry)
-        entries.sort(key=_archive_sequence_key)
-        _write_archive_index(index)
     except Exception as exc:
-        if summary_tmp and summary_tmp.exists():
-            summary_tmp.unlink()
-        manifest_target.unlink(missing_ok=True)
-        if index_backup is None:
-            index_path.unlink(missing_ok=True)
-        else:
-            index_path.write_bytes(index_backup)
-        try:
-            _restore_files(files_to_move)
-        except Exception as rollback_exc:
-            print(f"ERROR: Failed to roll back archive files: {rollback_exc}", file=sys.stderr)
-        try:
-            subprocess.run(
-                [
-                    sys.executable,
-                    "scripts/ai_generate_status.py",
-                    str(contract_path),
-                    "--summary",
-                    str(summary_path),
-                ],
-                cwd=PROJECT_ROOT,
-                check=False,
-            )
-        except Exception:
-            pass
         print(f"ERROR: Failed to archive Work Item: {exc}", file=sys.stderr)
         return 1
 
