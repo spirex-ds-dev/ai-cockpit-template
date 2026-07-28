@@ -16,6 +16,19 @@ This page explains how to read the generated Cockpit Status during V2.5/V2.6 sta
 It is written for reviewers, maintainers, and approvers who want the shortest path from status to decision.
 If you are about to start implementation, read the latest Preflight Review first. Cockpit Status is for reviewer visibility; it does not replace the pre-implementation pause.
 
+## Validated Japanese View
+
+The committed `.ai/cockpit/current_status.md` remains the canonical generated Status artifact. A reviewer can create and validate an on-demand Japanese projection without adding a second lifecycle artifact:
+
+```sh
+make generate-cockpit-status-ja CONTRACT=<contract.json> SUMMARY=<summary.json>
+make check-ai-status-ja CONTRACT=<contract.json> SUMMARY=<summary.json>
+```
+
+The generated view is `target/ai_cockpit_status.ja.md`. Both views come from the same governance model and canonical rendering. The Japanese projection localizes presentation chrome such as headings, conclusions, and action labels; it does not independently derive or translate paths, commands, identifiers, statuses, counts, or arbitrary evidence values. Backtick-delimited values remain byte-identical and ordered. Do not edit either generated view by hand: the paired check rejects stale or changed Japanese output.
+
+This derived view proves bounded repository-output parity. It does not prove general Japanese fluency, translate adopter evidence, or authorize commit, merge, release, or external operations.
+
 ## Read Order
 
 Start with these fields in order:

@@ -9,9 +9,9 @@ description: Comprehensive, bounded, evidence-backed Japanese repository-governa
 > This is a release gate, not a claim of general Japanese model fluency.
 
 - Work Item: `japanese-assessment-depth-corrective-20260729`
-- Assessment digest: `sha256:d988b9a345fbbecaa840fb649cd1c55d468af929c3a72b1087281b90445bf67a`
+- Assessment digest: `sha256:be209542599c86338a4f8673221bd1315bdb6e63f103c35c55db5708d768b657`
 - Corpus: `tests/fixtures/japanese-capability-corpus.json` (`14` entries)
-- Blocking findings: `4`
+- Blocking findings: `3`
 
 ## Evidence boundary
 
@@ -24,7 +24,7 @@ The matrix evaluates current repository behavior, executable evidence, and Japan
 | `JA-INPUT-001` | Japanese register, mixed technical language, encoded input, Unicode, and paths | **pass** | 14 corpus entries preserved authority and expected outcomes | `tests/fixtures/japanese-capability-corpus.json`; `scripts/ai_input_trust.py`; `tests/test_japanese_capability.py`; `tests/test_input_trust_corpus.py`; `PYTHONPATH=scripts .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_input_trust_corpus.py` |
 | `JA-HIGH-RISK-001` | Japanese high-risk, absurd, Unknown, and human-confirmation STOP boundary | **pass** | Every corpus high-risk operation requires human_confirmation_required | `tests/fixtures/japanese-capability-corpus.json`; `scripts/ai_input_trust.py`; `tests/test_japanese_capability.py`; `tests/test_input_trust.py`; `PYTHONPATH=scripts .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_input_trust.py` |
 | `JA-CLI-001` | Executable Wizard and CLI Japanese interaction | **pass** | Both Wizard entrypoints consume the strict Japanese resource layer with executable tests | `scripts/ai_wizard_localization.py`; `scripts/ai_install_wizard.py`; `scripts/ai_calibration_wizard.py`; `locales/wizard/ja.json`; `tests/test_wizard_localization.py`; `tests/test_install_wizard.py`; `tests/test_calibration_wizard.py`; `PYTHONPATH=scripts .venv/bin/pytest -q tests/test_wizard_localization.py tests/test_install_wizard.py tests/test_calibration_wizard.py` |
-| `JA-STATUS-001` | Cockpit Status Japanese parity | **block** | Cockpit Status has no Japanese derived view or executable parity evidence. | `scripts/ai_generate_status.py`; `.ai/cockpit/current_status.md`; `tests/test_core_gates.py`; `make generate-cockpit-status` |
+| `JA-STATUS-001` | Cockpit Status Japanese parity | **pass** | Japanese Status view is derived from the same machine facts | `scripts/ai_generate_status.py`; `scripts/ai_check_status.py`; `Makefile`; `.ai/cockpit/current_status.md`; `tests/test_guards_and_status.py`; `tests/test_core_gates.py`; `make generate-cockpit-status-ja CONTRACT=<contract> SUMMARY=<summary>`; `make check-ai-status-ja CONTRACT=<contract> SUMMARY=<summary>` |
 | `JA-PR-001` | Task Outcome PR summary Japanese parity | **block** | Task Outcome PR summary chrome is English-only. | `scripts/ai_render_task_outcome_pr.py`; `tests/test_task_outcome_pr_summary.py`; `PYTHONPATH=. .venv/bin/pytest -q tests/test_task_outcome_pr_summary.py` |
 | `JA-TASK-OUTCOME-001` | Task Outcome Japanese derived view | **pass** | Japanese Task Outcome chrome is derived from unchanged machine facts | `scripts/ai_render_task_outcome_multilingual.py`; `tests/test_task_outcome_multilingual.py`; `PYTHONPATH=. .venv/bin/pytest -q tests/test_task_outcome_multilingual.py` |
 | `JA-LIFECYCLE-001` | Executable Japanese adopter lifecycle | **block** | No executable Japanese adopter fixture covers the governed lifecycle. | `docs/getting-started/installation.ja.md`; `tests/test_japanese_adopter_lifecycle.py`; `PYTHONPATH=. .venv/bin/pytest -q tests/test_japanese_adopter_lifecycle.py` |
@@ -35,7 +35,6 @@ The matrix evaluates current repository behavior, executable evidence, and Japan
 
 ## Blocking findings
 
-- `JA-STATUS-001`: Cockpit Status has no Japanese derived view or executable parity evidence. Corrective Work Item: `japanese-status-output-corrective-20260729`.
 - `JA-PR-001`: Task Outcome PR summary chrome is English-only. Corrective Work Item: `japanese-pr-output-corrective-20260729`.
 - `JA-LIFECYCLE-001`: No executable Japanese adopter fixture covers the governed lifecycle. Corrective Work Item: `japanese-lifecycle-fixture-corrective-20260729`.
 - `JA-DOC-001`: The Japanese engineer path lacks an actionable uninstall procedure. Corrective Work Item: `japanese-uninstall-documentation-corrective-20260729`.
