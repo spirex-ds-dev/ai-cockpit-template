@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -211,7 +212,7 @@ def validate_release_preflight(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path.cwd())
-    parser.add_argument("--source-commit", default="HEAD")
+    parser.add_argument("--source-commit")
     args = parser.parse_args()
     root = args.root.resolve()
     release = _load_object(root / "release.json", "release.json")
@@ -222,7 +223,14 @@ def main() -> int:
         root / ".ai" / "cockpit" / "release-digests.json", "release-digests.json"
     )
     try:
-        source_commit = resolve_source_commit(root, args.source_commit)
+        source_ref = (
+            args.source_commit
+            if args.source_commit is not None
+            else os.environ.get("RELEASE_PREFLIGHT_SOURCE_COMMIT") or "HEAD"
+        )
+        if not source_ref.strip():
+            raise ReleasePreflightError("release source commit must not be empty")
+        source_commit = resolve_source_commit(root, source_ref)
         resolved_declared_source = resolve_release_identity_ref(
             root, release_digests.get("sourceCommit"), "release-digests sourceCommit"
         )

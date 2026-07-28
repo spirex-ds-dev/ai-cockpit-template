@@ -12,6 +12,7 @@ PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 AI_PYTHON = PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
 override AI_COCKPIT_MAKE_ENTRYPOINT := $(firstword $(MAKEFILE_LIST))
 export AI_COCKPIT_MAKE_ENTRYPOINT
+export RELEASE_PREFLIGHT_SOURCE_COMMIT
 AI_NESTED_MAKE = "$(MAKE)" -f "$(AI_COCKPIT_MAKE_ENTRYPOINT)"
 # Resolve a configured executable name before recipes change directory.  Using
 # abspath on a bare name would incorrectly turn `python3` into a path under the
@@ -185,8 +186,7 @@ check-japanese-capability:
 	$(AI_PYTHON) scripts/ai_japanese_capability.py --check
 
 check-release-preflight: check-japanese-capability
-	$(AI_PYTHON) scripts/check_release_preflight.py --root . \
-		$(if $(RELEASE_PREFLIGHT_SOURCE_COMMIT),--source-commit "$(RELEASE_PREFLIGHT_SOURCE_COMMIT)",)
+	$(AI_PYTHON) scripts/check_release_preflight.py --root .
 
 finalize-release-freeze:
 	$(AI_PYTHON) scripts/finalize_release_freeze.py \

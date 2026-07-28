@@ -1,0 +1,303 @@
+{
+  "contractVersion": 2,
+  "workItemId": "japanese-assessment-source-binding-corrective-20260729",
+  "mode": "code",
+  "title": "Bind Japanese release assessment to immutable source identity",
+  "baseCommit": "83ba616981a1003342b37220b958823d53b85410",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/japanese-assessment-source-binding-corrective-20260729.contract.json",
+    ".ai/work-items/active/japanese-assessment-source-binding-corrective-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "Makefile",
+    "scripts/ai_japanese_capability.py",
+    "scripts/check_release_preflight.py",
+    "tests/test_japanese_capability.py",
+    "tests/test_makefile.py",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/plans/2026-07-29-japanese-assessment-source-binding-corrective.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Declaring the final Japanese reassessment complete in this process corrective.",
+    "Changing Japanese product behavior, translations, installation steps, or general-fluency claims.",
+    "Starting documentation alignment, deprecated-assets cleanup, release publication, or plan cleanup.",
+    "Binding a checked-in report to its own Git commit through a circular self-referential digest.",
+    "Publishing or mutating any tag, GitHub Release, release asset, or release identity."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "The current report uses a hard-coded prior Work Item identity and hashes evidence path names rather than the bytes of the implementation, tests, and documents being assessed."
+    },
+    {
+      "path": "tests/test_japanese_capability.py",
+      "reason": "Current drift tests mutate only the generated JSON or Markdown and do not prove that a semantically unchanged evidence-file edit makes the checked-in assessment stale."
+    },
+    {
+      "path": "Makefile",
+      "reason": "check-release-preflight depends on check-japanese-capability, but the prerequisite does not receive or verify RELEASE_PREFLIGHT_SOURCE_COMMIT."
+    },
+    {
+      "path": "scripts/check_release_preflight.py",
+      "reason": "The release preflight binds release identity to an explicit source commit only after the Japanese prerequisite has run without that identity."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "The current zero-blocker report contains no content identity for the assessed source/test/document evidence."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "The mandatory order requires a workflow defect found during Japanese reassessment to be fixed before the reassessment resumes."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release_gate_false_positive",
+      "stale_assessment",
+      "source_identity_mismatch",
+      "evidence_integrity"
+    ],
+    "reason": "A report can remain green after assessed evidence bytes change, and a release preflight source assertion is not currently propagated to the Japanese prerequisite.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous execution, required every discovered workflow defect to be fixed before resuming the affected Work Item, and requires Japanese capability to remain release-blocking."
+  },
+  "preReviewWarnings": [
+    "Content identity must avoid a circular digest over the generated report itself.",
+    "Generated transient Status bytes must not make the canonical Japanese report stale on every unrelated Work Item.",
+    "The corrective may report zero current capability blockers but must not claim that the final reassessment lifecycle is complete.",
+    "General Japanese model fluency and native-human translation quality remain explicit non-claims."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Bind implementation and final verification to the completed source-identity Contract."
+  },
+  "acceptance": [
+    "A1: The canonical assessment records a deterministic content identity over every stable repository source, test, corpus, and document file used as Japanese capability evidence, including the assessment implementation itself.",
+    "A2: The evidence identity lists normalized repository-relative paths and per-file SHA-256 values, rejects non-file or repository-escaping evidence, excludes generated transient Status output, and contributes to the top-level assessment digest.",
+    "A3: Changing even non-marker bytes in any bound evidence file makes the checked-in JSON and Markdown stale until the assessment is regenerated; changing unrelated repository bytes does not create false staleness.",
+    "A4: check-japanese-capability accepts an optional expected source commit, resolves it and HEAD to immutable commits, and fails with a Japanese-assessment-specific source mismatch before accepting the report when they differ.",
+    "A5: check-release-preflight propagates RELEASE_PREFLIGHT_SOURCE_COMMIT to check-japanese-capability, so the Japanese gate evaluates the exact checkout asserted for release rather than an unrelated HEAD.",
+    "A6: The regenerated machine JSON and derived Markdown identify the content-binding algorithm and assessed evidence digest, retain zero current in-scope blockers, and preserve the bounded repository-governance and general-fluency non-claim.",
+    "A7: Red-first regressions prove evidence-byte drift, missing/escaping evidence rejection, expected-source mismatch, exact-source success, and Make source propagation before implementation is accepted.",
+    "A8: The comprehensive plan, machine traceability, Contract, Summary, implementation, and acceptance evidence map bidirectionally and record this defect as a reusable process correction.",
+    "A9: Full quality, ai-finish archive, aggregate PR verification, exact-Head Hosted checks, merge, ai-close-work-item, local/remote branch deletion, and synchronized clean main complete before a fresh final Japanese reassessment starts.",
+    "A10: This Work Item changes no Japanese product capability, release metadata, public provider state, or later-stage completion status."
+  ],
+  "guidelines": [
+    "Fix the reusable assessment and release-gate flow rather than manually relabeling the current report.",
+    "Use content identity for assessed evidence and runtime commit equality for the release checkout; do not invent a circular self-commit binding.",
+    "Treat missing, escaping, stale, or source-mismatched Japanese evidence as release-blocking.",
+    "Write and observe failing regressions before changing production behavior.",
+    "Keep general Japanese fluency and native-human translation quality as explicit non-claims.",
+    "Do not resume final reassessment until this corrective completes its full lifecycle."
+  ],
+  "intent": {
+    "problem": "The existing Japanese gate recomputes statuses from current path names and marker checks, but its case digests do not contain source/test/document bytes. The checked-in report also retains a hard-coded old Work Item ID. Therefore an evidence file can change without changing any marker and the gate still accepts the old zero-blocker report. During release, Make invokes this gate before the preflight recipe but does not pass RELEASE_PREFLIGHT_SOURCE_COMMIT, so the Japanese check cannot prove it ran on the asserted release checkout.",
+    "constraints": [
+      "Do not solve the problem with a report digest that recursively includes the report's own commit or bytes.",
+      "Bind all stable evidence inputs while excluding generated transient Status output.",
+      "Do not broaden the claim beyond bounded repository-governance Japanese handling.",
+      "Do not alter Japanese product behavior or combine the final reassessment into this corrective.",
+      "Preserve direct make check-japanese-capability usage when no expected source commit is supplied.",
+      "Complete this independent corrective lifecycle before restarting the final reassessment."
+    ],
+    "rationale": "A deterministic evidence-file identity catches semantically invisible source drift without self-reference, while an expected-commit equality check proves the release gate runs in the exact checkout selected by release finalization. Together they prevent stale Japanese evidence from authorizing publication."
+  },
+  "rawUserRequest": "Continue the approved serial plan. Japanese capability is mandatory. If any problem is found during a Work Item, record it; if it is a workflow problem, fix the workflow first through its own complete PR, merge, archive, closure, branch-cleanup, and main-sync lifecycle, then resume the Work Item without another confirmation.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continue-final-japanese-assessment-and-fix-process-first",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:continue-japanese-final-reassessment-process-first-source-binding"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:continuous-execution-through-all-work-items",
+    "scope": "Fix discovered reusable workflow defects and complete their full lifecycle before resuming the affected Japanese assessment."
+  },
+  "declaredIntent": {
+    "summary": "Bind the Japanese capability report to the bytes it assesses and bind the release-time gate execution to the asserted release source commit.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A bound Japanese evidence file changes only whitespace or other bytes that do not alter existing marker predicates.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The evidence-source digest changes and the checked-in assessment is rejected as stale.",
+      "verificationPlan": "Add a red-first regression that changes bytes while preserving the evaluated pass status and requires report_drift to reject the old report."
+    },
+    {
+      "scenario": "A source or test evidence path is missing, is not a regular file, or escapes the repository.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Evidence identity construction fails closed with the exact path in the diagnostic.",
+      "verificationPlan": "Add red-first helper tests for missing, directory, absolute, and parent-traversal evidence paths."
+    },
+    {
+      "scenario": "The generated transient Cockpit Status changes for an unrelated active Work Item.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The canonical Japanese assessment remains stable because executable Status behavior is bound through implementation and tests, not transient generated output.",
+      "verificationPlan": "Assert the evidence-source path inventory excludes .ai/cockpit/current_status.md while retaining the Status generator, validator, Make target, and tests."
+    },
+    {
+      "scenario": "Release preflight asserts a source commit different from the checked-out HEAD.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The Japanese gate stops with a source-mismatch diagnostic before accepting zero blockers.",
+      "verificationPlan": "Create two real commits in a temporary Git repository and run the source-binding helper against mismatched expected and HEAD refs."
+    },
+    {
+      "scenario": "Release preflight asserts the exact checked-out HEAD commit.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The source binding passes and normal report freshness/blocker validation continues.",
+      "verificationPlan": "Use the same temporary Git fixture with equal expected and HEAD refs and assert the resolved immutable SHA."
+    },
+    {
+      "scenario": "Make invokes check-release-preflight with RELEASE_PREFLIGHT_SOURCE_COMMIT.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The prerequisite Japanese command receives the exact variable through --source-commit before the release preflight recipe runs.",
+      "verificationPlan": "Add a static Make regression for propagation and ordering, then verify a dry-run command line."
+    },
+    {
+      "scenario": "The source-binding corrective has not completed its PR/merge/closure/cleanup lifecycle.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Final Japanese reassessment, documentation alignment, cleanup, and release remain blocked.",
+      "verificationPlan": "Record exact PR Head, Hosted checks, merge commit, archive manifest, closure, and branch deletion before updating the serial stage."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized completing the ordered remediation plan and fixing discovered reusable workflow defects before release."
+  },
+  "rollbackNote": "Revert the corrective PR; the prior zero-blocker report and this issue record remain historical evidence, and final reassessment stays blocked.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 656
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/japanese-assessment-source-binding-corrective-20260729.json",
+    "baseCommit": "83ba616981a1003342b37220b958823d53b85410",
+    "initialScopeDigest": "d016a50b909952a8cbd160f50f1f460ef7d67d194f13ca988b681d56da0ba592",
+    "contractSkeletonDigest": "b171ceab281cff95bf8b598faa5952302c9121acb47f10db2d2c2bc52d9a3f6b"
+  }
+}
