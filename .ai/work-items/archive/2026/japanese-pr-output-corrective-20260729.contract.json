@@ -1,0 +1,270 @@
+{
+  "contractVersion": 2,
+  "workItemId": "japanese-pr-output-corrective-20260729",
+  "mode": "code",
+  "title": "Add a Japanese Task Outcome PR summary derived view",
+  "baseCommit": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Japanese capability is mandatory because most adopter engineers use Japanese. Correct every issue found by the comprehensive Japanese assessment before documentation alignment or release, using a separate complete Work Item lifecycle for each issue.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message:japanese-capability-mandatory-and-continue",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:user-authorized-japanese-capability-corrections"
+  },
+  "declaredIntent": {
+    "summary": "Render a sanitized Japanese Task Outcome PR fragment from the same approved facts and field policy as the English fragment.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+    ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "Makefile",
+    "scripts/ai_render_task_outcome_pr.py",
+    "scripts/ai_japanese_capability.py",
+    "tests/test_task_outcome_pr_summary.py",
+    "tests/test_japanese_capability.py",
+    "tests/test_makefile.py",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Changing Task Outcome JSON, its allowlisted PR field set, sanitization policy, evidence selection, or opt-in requirement.",
+    "Machine-translating arbitrary Outcome prose, evidence, paths, identifiers, statuses, or user-authored values.",
+    "Posting to or editing a provider pull request.",
+    "Fixing JA-LIFECYCLE-001 or JA-DOC-001 in this Work Item.",
+    "Starting documentation alignment, deprecated-assets cleanup, or release."
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "JA-PR-001 records that the sanitized Task Outcome PR summary chrome is English-only."
+    },
+    {
+      "path": "scripts/ai_render_task_outcome_pr.py",
+      "reason": "The opt-in renderer owns the allowlisted and sanitized PR fragment but currently has fixed English chrome."
+    },
+    {
+      "path": "scripts/ai_render_task_outcome_multilingual.py",
+      "reason": "The existing Task Outcome derived-view policy establishes strict locale normalization and unchanged arbitrary facts."
+    },
+    {
+      "path": "tests/test_task_outcome_pr_summary.py",
+      "reason": "Existing regressions bind opt-in, allowlisting, sanitization, empty states, determinism, and non-mutation."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-16 fixes JA-PR-001 after JA-STATUS-001 and before lifecycle and uninstall findings."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "localized_safety_drift",
+      "unsupported_locale_fallback",
+      "release_gate_false_positive"
+    ],
+    "reason": "Localized labels must not broaden approved fields, weaken redaction, mutate arbitrary prose, or clear the assessment without executable evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized correction of every Japanese assessment finding and continuous execution."
+  },
+  "preReviewWarnings": [
+    "Confirm language changes presentation chrome only and the PR-safe field allowlist remains identical.",
+    "Verify synthetic sensitive-value/path/unsupported-claim redaction is byte-equivalent in Japanese and English.",
+    "Verify unsupported locale requests fail before writing output and do not silently fall back."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The PR renderer accepts a strict supported language selection and derives Japanese chrome from the same opt-in policy, SAFE_FIELDS, sanitization, and source Outcome as English.",
+    "Japanese output localizes the title, field labels, and empty marker while preserving status values and arbitrary approved prose byte-for-byte.",
+    "Disabled policy still returns an empty fragment in every language; unsupported locale requests fail non-zero before writing an output file.",
+    "Japanese and English render exactly the same requested field set and continue excluding provenance, evidence, forced-stop details, synthetic sensitive-value fixtures, absolute paths, and unsupported quantitative claims.",
+    "The Make entrypoint passes an explicit language selection without posting to a provider or editing a PR.",
+    "Executable tests cover full allowlisted sections, empty/warning states, redaction, deterministic non-mutation, disabled policy, CLI file output, and unsupported locale.",
+    "The Japanese assessor requires explicit language support and named executable safety/parity tests before JA-PR-001 can pass.",
+    "The machine JSON and derived Markdown assessment are regenerated; JA-PR-001 passes while JA-LIFECYCLE-001 and JA-DOC-001 remain blocking.",
+    "The comprehensive plan records implementation evidence, limitations, remaining serial queue, and any process issue found.",
+    "Full local finish/archive, one PR, Hosted CI, merge, ai-close-work-item, branch cleanup, and synchronized clean main complete before JA-LIFECYCLE-001 begins."
+  ],
+  "guidelines": [
+    "Keep SAFE_FIELDS, opt-in policy, sanitization, and source Outcome single-sourced across languages.",
+    "Localize fixed presentation chrome only; never translate or alter arbitrary approved values.",
+    "Reject unsupported locales without silent fallback and before writing output.",
+    "Test executable CLI and safety parity rather than accepting Japanese keywords in source.",
+    "Clear only JA-PR-001 and retain all unrelated Japanese blockers and non-claims."
+  ],
+  "intent": {
+    "problem": "Task Outcome can produce a Japanese full derived report, but its explicitly approved PR-safe fragment has fixed English chrome. Japanese reviewers cannot obtain a validated sanitized PR fragment, and JA-PR-001 correctly blocks release.",
+    "constraints": [
+      "Preserve the existing pullRequestSummary enabled policy and exact SAFE_FIELDS allowlist.",
+      "Apply the same synthetic sensitive-value, absolute-path, and unsupported-claim sanitization in every language.",
+      "Preserve status and arbitrary approved prose byte-for-byte; localize fixed labels only.",
+      "Do not call a provider API or mutate Outcome JSON.",
+      "Leave lifecycle and uninstall findings active and finish this lifecycle before the next corrective."
+    ],
+    "rationale": "A strict language-aware presentation layer on the existing PR-safe renderer gives Japanese reviewers usable output without duplicating facts, widening disclosure, or performing external PR mutations."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "An enabled policy selects every SAFE_FIELDS section and requests Japanese.",
+      "expected": "Japanese and English expose the same field set; only fixed chrome differs and all arbitrary approved values are byte-identical.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add paired full-field rendering assertions and ordered source-value comparisons."
+    },
+    {
+      "scenario": "Outcome content contains synthetic sensitive-value fixtures, absolute local paths, unsupported quantitative claims, and non-allowlisted evidence or forced-stop details.",
+      "expected": "Japanese output applies the same redaction/exclusion boundary as English and reveals none of the unsafe content.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run the same adversarial Outcome through both languages and assert exact disclosure parity."
+    },
+    {
+      "scenario": "The PR summary policy is disabled or an enabled section is empty.",
+      "expected": "Disabled remains empty; enabled empty sections use localized chrome without inventing facts.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Extend disabled and empty/warning-state tests across English and Japanese."
+    },
+    {
+      "scenario": "A caller requests an unsupported locale through the CLI with an output path.",
+      "expected": "The command fails non-zero before creating or overwriting the output.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add CLI fail-before-write regression with a sentinel output."
+    },
+    {
+      "scenario": "Japanese keywords exist but language wiring or executable safety tests are removed.",
+      "expected": "JA-PR-001 remains release-blocking.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Strengthen the assessor to require CLI language support and named Japanese parity/safety tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized every Japanese corrective Work Item and its required Make/process changes; this Work Item limits the Makefile edit to explicit PR renderer language passthrough."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 660
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/japanese-pr-output-corrective-20260729.json",
+    "baseCommit": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+    "initialScopeDigest": "2636a4b862bc856ba77a73e885a57f79b2971f02575e796bba4eb2f90517be0c",
+    "contractSkeletonDigest": "bd9aac8d49997609c6684391deec2f035613ab787c175764ce6ded916b4e6bef"
+  }
+}

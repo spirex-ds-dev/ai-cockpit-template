@@ -2,12 +2,6 @@
   "assessmentVersion": 2,
   "blockingFindings": [
     {
-      "caseId": "JA-PR-001",
-      "correctiveWorkItem": "japanese-pr-output-corrective-20260729",
-      "id": "JA-PR-001",
-      "summary": "Task Outcome PR summary chrome is English-only."
-    },
-    {
       "caseId": "JA-LIFECYCLE-001",
       "correctiveWorkItem": "japanese-lifecycle-fixture-corrective-20260729",
       "id": "JA-LIFECYCLE-001",
@@ -106,17 +100,18 @@
     {
       "area": "Task Outcome PR summary Japanese parity",
       "commandEvidence": [
-        "PYTHONPATH=. .venv/bin/pytest -q tests/test_task_outcome_pr_summary.py"
+        "PYTHONPATH=scripts:. .venv/bin/pytest -q tests/test_task_outcome_pr_summary.py",
+        "make render-task-outcome-pr OUTCOME=<outcome> PROFILE=<profile> LANGUAGE=ja"
       ],
-      "digest": "sha256:ab2ac05cf1af5482e979d8006c9b427666ce77278df9c2a60faafd5cc86edc90",
-      "findingId": "JA-PR-001",
+      "digest": "sha256:9ca2437cfe433a9cf873b9388aa96d19cd9b88c272253db142a19b4c8a9bdf84",
       "id": "JA-PR-001",
       "limitation": "PR localization must not translate or invent arbitrary evidence prose.",
-      "observation": "Task Outcome PR summary chrome is English-only.",
+      "observation": "Japanese PR chrome preserves the approved field set",
       "sourceEvidence": [
-        "scripts/ai_render_task_outcome_pr.py"
+        "scripts/ai_render_task_outcome_pr.py",
+        "Makefile"
       ],
-      "status": "block",
+      "status": "pass",
       "testEvidence": [
         "tests/test_task_outcome_pr_summary.py"
       ]
@@ -250,7 +245,7 @@
     "entryCount": 14,
     "path": "tests/fixtures/japanese-capability-corpus.json"
   },
-  "digest": "sha256:be209542599c86338a4f8673221bd1315bdb6e63f103c35c55db5708d768b657",
+  "digest": "sha256:52fc7db389b076392311865b52aa8e1ad13bdf6184e1a55a1322a00670e5b7a6",
   "limitations": [
     "This assessment does not claim general model fluency, translation quality, or provider behavior.",
     "Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking."

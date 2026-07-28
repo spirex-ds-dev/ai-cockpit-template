@@ -1,0 +1,648 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "japanese-pr-output-corrective-20260729",
+  "contractPath": ".ai/work-items/archive/2026/japanese-pr-output-corrective-20260729.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/japanese-pr-output-corrective-20260729.contract.json",
+      "reason": "Declares the bounded Japanese PR Summary corrective, scenarios, risks, and verification."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-pr-output-corrective-20260729.summary.json",
+      "reason": "Records bidirectional implementation and verification evidence."
+    },
+    {
+      "path": ".ai/work-items/starts/japanese-pr-output-corrective-20260729.json",
+      "reason": "Records the immutable start receipt from synchronized origin/main."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated the governed Work Item status."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Passes an explicit LANGUAGE to the Task Outcome PR renderer."
+    },
+    {
+      "path": "scripts/ai_render_task_outcome_pr.py",
+      "reason": "Adds strict multilingual PR chrome while preserving opt-in, allowlisting, sanitization, and source facts."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Requires language wiring, Make exposure, and named executable parity/safety tests before JA-PR-001 passes."
+    },
+    {
+      "path": "tests/test_task_outcome_pr_summary.py",
+      "reason": "Covers Japanese full fields, value preservation, sanitization, empty states, real YAML CLI output, and fail-before-write."
+    },
+    {
+      "path": "tests/test_japanese_capability.py",
+      "reason": "Prevents keyword-only or incomplete PR evidence from clearing JA-PR-001."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Locks explicit language passthrough on the public Make entrypoint."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Regenerates machine evidence with JA-PR-001 passing and two remaining blockers."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Regenerates the human-readable assessment from the same machine result."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Aligns WI-16 progress, YAML opt-in finding, Contract wording event, and remaining queue."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-pr-output-corrective-20260729.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/reference/japanese-capability-assessment.json",
+    "scripts/ai_render_task_outcome_pr.py",
+    "scripts/ai_render_task_outcome_multilingual.py",
+    "tests/test_task_outcome_pr_summary.py",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "An enabled policy selects every SAFE_FIELDS section and requests Japanese.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_pr_summary.py::test_japanese_pr_summary_localizes_chrome_and_preserves_approved_values"
+      ]
+    },
+    {
+      "scenario": "Outcome content contains synthetic sensitive-value fixtures, absolute local paths, unsupported quantitative claims, and non-allowlisted evidence or forced-stop details.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_pr_summary.py::test_japanese_pr_summary_preserves_sanitization_and_opt_in_boundaries"
+      ]
+    },
+    {
+      "scenario": "The PR summary policy is disabled or an enabled section is empty.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_pr_summary.py::test_profile_must_explicitly_enable_pr_summary",
+        "tests/test_task_outcome_pr_summary.py::test_japanese_empty_state_uses_localized_marker"
+      ]
+    },
+    {
+      "scenario": "A caller requests an unsupported locale through the CLI with an output path.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_pr_summary.py::test_cli_language_selection_and_unsupported_locale_fail_before_write"
+      ]
+    },
+    {
+      "scenario": "Japanese keywords exist but language wiring or executable safety tests are removed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_japanese_capability.py::test_pr_capability_requires_language_wiring_and_executable_safety_parity"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:00:26.235115+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "f3167e5f8706d64983b6a89e204c70f1db37792f0f39f5e3aad0478c90ba4594",
+      "commandHash": "014ff0f6ae3154b344c0684f752b4c359024811d038e0994dba30602c1ca17ff",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "1258300ce22012365c9d84257910e8361203b201d05a59608ae29ad7a8d0b5cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "outputBytes": 256
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:00:26.373607+00:00",
+      "exitCode": 0,
+      "durationMs": 88,
+      "outputDigest": "6a5c13aa27b19150f457acb13fde37d56fccda9f1f61ad81c6119efbb749e7e1",
+      "commandHash": "96c345a8c0130f1a6cefacbb0886edf2364706f92e3cb9182de6880056662fb9",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "1258300ce22012365c9d84257910e8361203b201d05a59608ae29ad7a8d0b5cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json scope guard passed: 11 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json scope guard passed: 11 changed path(s) covered",
+      "outputBytes": 191
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:00:26.533580+00:00",
+      "exitCode": 0,
+      "durationMs": 113,
+      "outputDigest": "ae32563264885a1c19a5442a7b3a9441b3461816270e2685a457bf56588232ef",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "1258300ce22012365c9d84257910e8361203b201d05a59608ae29ad7a8d0b5cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 318
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:00:26.760614+00:00",
+      "exitCode": 0,
+      "durationMs": 175,
+      "outputDigest": "23f5b7b26707dccafc3761e90681c61f75f80ec261f07bf41139f770458f8269",
+      "commandHash": "dc322ef453ac51a2a0976771e47341ae183428abc6571dad41e50b70ef62e52b",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "1258300ce22012365c9d84257910e8361203b201d05a59608ae29ad7a8d0b5cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `japanese-pr-output-corrective-20260729` - Contract Hash: `db360da8ab5cef17` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `10` - ",
+      "outputTail": "rial queue, and any process issue found. - Full local finish/archive, one PR, Hosted CI, merge, ai-close-work-item, branch cleanup, and synchronized clean main complete before JA-LIFECYCLE-001 begins. ## Required Verification - `aiWorkItem`: passed - `aiScope`: passed - `aiGuards`: passed - `aiCheckpoint`: not_run - `aiAgentRisk`: not_run - `aiReviewPolicy`: not_run - `aiBacktrack`: not_run - `aiCoverage`: not_run - `aiScenarioCoverage`: not_run - `aiGuidelines`: not_run - `aiSummary`: not_run - `aiStatus`: not_run - `aiStatusCheck`: not_run - `aiStatusConsistency`: not_run - `aiDiffOwnership`: not_run - `quality`: not_run ## Review Focus - No expansion of SAFE_FIELDS or opt-in behavior - Identical sanitization and source values across languages - Unsupported locale fails before output write - Only JA-PR-001 is cleared ## Diff Ownership Preview - active_owned: `11`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-pr-output-corrective-20260729.json` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `scripts/ai_japanese_capability.py` — covered by Contract scope - [active_owned] `scripts/ai_render_task_outcome_pr.py` — covered by Contract scope - [active_owned] `tests/test_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_pr_summary.py` — covered by Contract scope ## Next Action - Run or record required verification: aiCheckpoint",
+      "outputBytes": 5992
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:00:26.903323+00:00",
+      "exitCode": 0,
+      "durationMs": 89,
+      "outputDigest": "ca7608774fd4ebd0aec085546e391292b63e37ad89a39d604cfe56b90d3a09f7",
+      "commandHash": "f3563b02a04ad31e2a09d7e8270ffc488fb23de3d8312d883ea4a477fd1b07d4",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "1258300ce22012365c9d84257910e8361203b201d05a59608ae29ad7a8d0b5cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json review policy matched 5 path(s) [review] .ai/work-items/starts/japanese-pr-output-corrective-20260729.json [review] .ai/cockpit/current_status.md [review] Makefile [review] scripts/ai_japanese_capability.py [review] scripts/ai_render_task_outcome_pr.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json review policy matched 5 path(s) [review] .ai/work-items/starts/japanese-pr-output-corrective-20260729.json [review] .ai/cockpit/current_status.md [review] Makefile [review] scripts/ai_japanese_capability.py [review] scripts/ai_render_task_outcome_pr.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 491
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:00:27.044525+00:00",
+      "exitCode": 0,
+      "durationMs": 93,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "1258300ce22012365c9d84257910e8361203b201d05a59608ae29ad7a8d0b5cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:00:27.376660+00:00",
+      "exitCode": 0,
+      "durationMs": 269,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "1258300ce22012365c9d84257910e8361203b201d05a59608ae29ad7a8d0b5cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:00:27.477292+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "50ec06aa682626e64febebead916296d417557b833f8f3b40367cbb0f1506d86",
+      "commandHash": "3ab733eaa3999ed8f07c5e6a8653d21e05b4988c78d2d4790d175a725533126e",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "1258300ce22012365c9d84257910e8361203b201d05a59608ae29ad7a8d0b5cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 299
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:00:27.571913+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "ded47e5cfe077d92648f41b213e400f00edf959256ae0ed8da23b37d76eb5a51",
+      "commandHash": "c966077fd3a70ea10873000e4e428c85e397727286286051d77dc9126c94204f",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "1258300ce22012365c9d84257910e8361203b201d05a59608ae29ad7a8d0b5cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputBytes": 304
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:00:27.796664+00:00",
+      "exitCode": 0,
+      "durationMs": 178,
+      "outputDigest": "2e4d02a5cedc10ade61344c3343e7e130abfb87d22587bc78d51425359fdbddb",
+      "commandHash": "b3e83ed63f5939560d3a966af7d03a85b37a147780a08b95d8c352662b33a802",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "1258300ce22012365c9d84257910e8361203b201d05a59608ae29ad7a8d0b5cd",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `11`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-pr-output-corrective-20260729.json` — covered by Contract scope - [ac",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `11`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-pr-output-corrective-20260729.json` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `scripts/ai_japanese_capability.py` — covered by Contract scope - [active_owned] `scripts/ai_render_task_outcome_pr.py` — covered by Contract scope - [active_owned] `tests/test_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_pr_summary.py` — covered by Contract scope",
+      "outputBytes": 1290
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:04:59.713811+00:00",
+      "exitCode": 0,
+      "durationMs": 271845,
+      "outputDigest": "8ba4da6c69f43578ae245036f8c7c3b4ea8d5a5bf3ab41f687ddfddcd25f884c",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "1258300ce22012365c9d84257910e8361203b201d05a59608ae29ad7a8d0b5cd",
+      "outputSummary": "\"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-full \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-fast-static \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"9fc350873b33",
+      "outputTail": "t_guard_calibration_fails_when_confirmed_path_is_missing 3.66s call tests/test_system_invariants.py::test_system_invariants_reject_archive_summary_invalid_version 2.45s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 2.25s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 2.22s call tests/test_installer.py::test_upgrade_rolls_back_when_post_copy_validation_fails 2.07s call tests/test_release_preflight.py::test_postmerge_preflight_rejects_included_content_after_candidate_merge 2.00s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 1429 passed, 3 warnings in 264.50s (0:04:24) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DXGoNo19UE/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DXGoNo19UE/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DXGoNo19UE/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DXGoNo19UE/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/9fc350873b33-local-20260728T180027Z-33342-0/summary.json",
+      "outputBytes": 46598
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:05:00.948922+00:00",
+      "exitCode": 0,
+      "durationMs": 204,
+      "outputDigest": "d21e9c9adea49aa01ddec2eb50a6e122a6517e538f5271b894b7ab75cc6eca08",
+      "commandHash": "4561052d1910f61c4efa7b0b1548e10204f273fdd7a3e88a96e29179a798abf2",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "61f38089de489d78af96baf7431e2b2a884c4da880c356e57888dd7cbeaff4a7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 346
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:05:01.399683+00:00",
+      "exitCode": 0,
+      "durationMs": 224,
+      "outputDigest": "9858c7ed2f47f64a81418082f9c23d9792872b9981c994f389d7ae63f8005b1e",
+      "commandHash": "0327d989b8dd0205501243e12938fd6dd4da5d85c67c9b6ee11548435252b354",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "61f38089de489d78af96baf7431e2b2a884c4da880c356e57888dd7cbeaff4a7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 329
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:05:01.488029+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "61f38089de489d78af96baf7431e2b2a884c4da880c356e57888dd7cbeaff4a7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:05:01.593426+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "4d03595beecddfac2099d3a68bc02103328c14a66950cc582fd6604f4bbfc983",
+      "commandHash": "8e362ecbb83e1a793e8abf161a95478499d8b1eceaba794a42a99786b67fa3aa",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "61f38089de489d78af96baf7431e2b2a884c4da880c356e57888dd7cbeaff4a7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 309
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json CONTRACT=.ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T18:05:02.309727+00:00",
+      "exitCode": 0,
+      "durationMs": 93,
+      "outputDigest": "05acfc5eeb688461c530cb2cc98190fbe9c607acf17c3197dc5e86b998bc779c",
+      "commandHash": "e373c234edf553451611e38d12598357b04c43d964f38a85cd848d45add45cf0",
+      "contractHash": "db360da8ab5cef17eaa9eb176d0bf65a5102ffca39b47cee05b78a8396583b67",
+      "commitSha": "9fc350873b33c53dc3473891bb5e74a9e2a29d54",
+      "executionContractPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "worktreeDigest": "a89c76d6fa55c4cdf271d3ae5b4221f1ddda2a84133723068e7f067faa8bf435",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json ai summary check passed: .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json --contract .ai/work-items/active/japanese-pr-output-corrective-20260729.contract.json ai summary check passed: .ai/work-items/active/japanese-pr-output-corrective-20260729.summary.json",
+      "outputBytes": 331
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep SAFE_FIELDS, opt-in policy, sanitization, and source Outcome single-sourced across languages.",
+      "compliant": true,
+      "evidence": "All languages share SAFE_FIELDS, _policy, _safe_text, and _items; only PR_CHROME varies."
+    },
+    {
+      "guideline": "Localize fixed presentation chrome only; never translate or alter arbitrary approved values.",
+      "compliant": true,
+      "evidence": "Paired Japanese/English tests assert every approved source value remains present and unchanged."
+    },
+    {
+      "guideline": "Reject unsupported locales without silent fallback and before writing output.",
+      "compliant": true,
+      "evidence": "The CLI resolves locale before output writing and preserves a sentinel file for unsupported fr."
+    },
+    {
+      "guideline": "Test executable CLI and safety parity rather than accepting Japanese keywords in source.",
+      "compliant": true,
+      "evidence": "Real YAML CLI and assessor mutation tests require language wiring plus named parity and safety tests."
+    },
+    {
+      "guideline": "Clear only JA-PR-001 and retain all unrelated Japanese blockers and non-claims.",
+      "compliant": true,
+      "evidence": "The regenerated assessment retains JA-LIFECYCLE-001, JA-DOC-001, and general-fluency limitation."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Localized PR output could widen disclosure; shared allowlisting/sanitization and paired adversarial tests preserve the original boundary."
+  },
+  "generatedFiles": [
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/cockpit/current_status.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "JA-PR-001",
+      "category": "japanese-pr-summary-parity",
+      "severity": "high",
+      "fact": "The opt-in sanitized Task Outcome PR fragment had fixed English chrome.",
+      "decision": "Add strict language-aware chrome on the same policy, field allowlist, sanitizer, and Outcome facts.",
+      "resolution": "Japanese output and executable CLI pass parity, sanitization, empty-state, and fail-before-write tests; assessment reports JA-PR-001 pass.",
+      "status": "resolved_locally",
+      "followUp": "Complete PR, Hosted CI, merge, closure, and branch cleanup before JA-LIFECYCLE-001."
+    },
+    {
+      "issueId": "WI-16-ISSUE-006",
+      "category": "yaml-opt-in-runtime",
+      "severity": "medium",
+      "fact": "The lightweight YAML parser preserved enabled: true as a string while the renderer accepted only Python boolean True, producing an empty CLI fragment.",
+      "decision": "Normalize only explicit boolean True or case-insensitive string true at the renderer policy boundary.",
+      "resolution": "A real YAML CLI fixture now produces Japanese output; false and missing values remain disabled.",
+      "status": "resolved_locally",
+      "followUp": "Keep executable configuration-path tests for profile-controlled renderers."
+    },
+    {
+      "issueId": "WI-16-ISSUE-007",
+      "category": "contract-critical-domain-wording",
+      "severity": "low",
+      "fact": "Initial Contract wording described synthetic redaction fixtures as secrets, causing Preflight to classify the task as real critical-domain handling.",
+      "decision": "Clarify that tests use synthetic sensitive-value fixtures and no credentials or production data.",
+      "resolution": "Preflight became ready without critical-domain authorization or bypass.",
+      "status": "resolved_locally",
+      "followUp": "Use precise synthetic-fixture wording in future redaction-test Contracts."
+    },
+    {
+      "issueId": "JA-PR-QUALITY-001",
+      "category": "formatter-gate",
+      "severity": "low",
+      "fact": "The first quality-fast run stopped because the assessor and its test were not project-formatted.",
+      "decision": "Run the project formatter and restart quality-fast from the beginning.",
+      "resolution": "Ruff reformatted both files and the complete quality-fast sequence passed.",
+      "status": "resolved_locally",
+      "followUp": "Retain formatter verification before full finish."
+    },
+    {
+      "issueId": "JA-PR-PROCESS-002",
+      "category": "restricted-write-approval-binding",
+      "severity": "medium",
+      "fact": "The first ai-finish stopped because Makefile was in scope but restrictedWriteApproval still contained the skeleton false value.",
+      "decision": "Bind the user's existing Japanese-corrective authorization explicitly to the narrow Makefile language-passthrough change and refresh Preflight plus both checkpoints.",
+      "resolution": "No restricted-write gate was bypassed; finish will restart only after the final Contract hash is rebound.",
+      "status": "resolved_locally",
+      "followUp": "For future Work Items, resolve restricted paths and authorization fields before the before_edit checkpoint."
+    }
+  ],
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "Japanese PR-safe chrome is now derived from the existing approved and sanitized fact path without provider mutation or field expansion."
+  },
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "remaining-japanese-release-readiness",
+      "detail": "JA-LIFECYCLE-001 and JA-DOC-001 remain release-blocking.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    },
+    {
+      "level": "medium",
+      "area": "general-fluency",
+      "detail": "Localized fixed PR chrome does not prove arbitrary prose translation, native-human review, or provider behavior.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "No expansion of SAFE_FIELDS or opt-in behavior",
+      "Identical sanitization and source values across languages",
+      "Unsupported locale fails before output write",
+      "Only JA-PR-001 is cleared"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "ai_render_task_outcome_pr.py accepts --language and remains presentation-only",
+    "userVisibleOutput": "fixed chrome is localized; status and arbitrary approved prose remain unchanged",
+    "persistence": "not_applicable",
+    "localization": "strict ja/en/zh-CN normalization rejects unsupported values",
+    "generatedArtifacts": "assessment Markdown remains derived from one machine assessment",
+    "makeEntrypoints": "render-task-outcome-pr passes optional explicit LANGUAGE without external posting"
+  },
+  "userCorrectionsCaptured": [
+    "Japanese capability is mandatory because most adopter engineers use Japanese.",
+    "Every Japanese finding must be corrected before documentation alignment or release.",
+    "Every corrective Work Item must complete PR, merge, closure, branch cleanup, and base synchronization."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "English-only PR output is not acceptable for Japanese adopter engineers.",
+      "solidifiedIn": "Strict language-aware PR renderer, Make passthrough, executable CLI, and assessment gate."
+    },
+    {
+      "correction": "Do not clear findings by keyword presence or weaken safety for localization.",
+      "solidifiedIn": "Named parity, sanitizer, opt-in, and fail-before-write tests required by the assessor."
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "db360da8ab5cef17",
+      "acceptanceCount": 10,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "db360da8ab5cef17",
+      "acceptanceCount": 10,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "Two independent Japanese findings remain release-blocking and require serial corrective lifecycles.",
+    "Full ai-finish/archive, PR Hosted CI, merge, ai-close-work-item, and branch cleanup remain pending for this Work Item."
+  ],
+  "overclaimPrevention": "This Work Item proves bounded Japanese PR-safe fragment parity only; it does not translate arbitrary prose, post to providers, clear lifecycle/uninstall findings, prove general fluency, or authorize release.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-29T03:15:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "docs/reference/japanese-capability-assessment.json"
+        ],
+        "reason": "WI-16 records JA-PR implementation, YAML/Preflight findings, remaining blockers, and serial order."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/japanese-pr-output-corrective-20260729.contract.json",
+          ".ai/work-items/archive/2026/japanese-pr-output-corrective-20260729.summary.json",
+          "tests/test_task_outcome_pr_summary.py"
+        ],
+        "reason": "Each acceptance boundary and required scenario maps to named executable evidence."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "Makefile",
+          "scripts/ai_render_task_outcome_pr.py",
+          "tests/test_makefile.py"
+        ],
+        "reason": "The public Make command and CLI language behavior match executable tests."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "scripts/ai_render_task_outcome_pr.py",
+          "tests/test_task_outcome_pr_summary.py"
+        ],
+        "reason": "Fixed labels differ by locale while approved values and safety boundaries remain equivalent."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/japanese-capability-assessment.json",
+          "docs/reference/japanese-capability-assessment.md"
+        ],
+        "reason": "Only JA-PR-001 clears; two blockers and the general-fluency non-claim remain explicit."
+      }
+    ]
+  },
+  "archiveSequence": 648
+}
