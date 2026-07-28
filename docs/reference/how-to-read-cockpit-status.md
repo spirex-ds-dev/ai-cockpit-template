@@ -66,7 +66,7 @@ The report is `not_ready` immediately when `notCodable` is `true`; when `executi
 
 ## No Active Work Item
 
-`no_active_work_item` means no Contract/Summary pair is active. It does **not** mean the worktree is unchanged: the generated no-active status intentionally omits the file list, but it now surfaces a compressed `Worktree Changes` signal, a count, and an `Ownership Preview` state so dirty trees do not read as `none`. Use `make check-ai-diff-ownership` for a local ownership preview and `make check-ai-pr AI_BASE_COMMIT=<merge-base>` for final PR audit. In PR mode the audit resolves overlapping archive claims deterministically, with the latest matching archive pair winning.
+`no_active_work_item` means no Contract/Summary pair is active. It does **not** mean the worktree is unchanged. The generated marker intentionally omits transient paths and records zero changes. `check-ai-status-consistency` separately accepts the brief archive-before-first-commit transition only when a current valid manifest binds the archive pair and its archived Summary `changedFiles` owns every live path. Any omitted or unrelated path fails with guidance to restore it or create/resume a Work Item; `repair-ai-status` cannot create ownership. Use `make check-ai-diff-ownership` for a local ownership preview and `make check-ai-pr AI_BASE_COMMIT=<merge-base>` for final PR audit. In PR mode the audit resolves overlapping archive claims deterministically, with the latest matching archive pair winning.
 
 ## What the Recommendation Means
 

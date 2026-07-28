@@ -50,7 +50,7 @@ Preflight Review は Contract の証拠から実装準備度を導出します�
 
 ## Active Work Item がない場合
 
-`no_active_work_item` は active Contract/Summary の組がない状態です。作業ツリーが変更されていないことを意味しません。ローカルの所有権は `make check-ai-diff-ownership`、PR の最終監査は `make check-ai-pr AI_BASE_COMMIT=<merge-base>` で確認します。
+`no_active_work_item` は active Contract/Summary の組がない状態であり、作業ツリーが変更されていないことを意味しません。生成 marker は transient path を保存せず change count を 0 とします。`check-ai-status-consistency` が archive 後・最初の commit 前を許可するのは、現在変更中の有効な manifest が archive pair を束縛し、archived Summary の `changedFiles` がすべての live path を所有する場合だけです。Summary にない path や無関係な変更は fail closed になり、変更を戻すか Work Item を作成・再開します。`repair-ai-status` は所有権を作れません。ローカルの所有権は `make check-ai-diff-ownership`、PR の最終監査は `make check-ai-pr AI_BASE_COMMIT=<merge-base>` で確認します。
 
 ## Recommendation の意味
 

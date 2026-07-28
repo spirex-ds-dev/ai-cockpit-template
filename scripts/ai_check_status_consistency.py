@@ -4,11 +4,13 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 from ai_common import PROJECT_ROOT, clean_git_environment
 
@@ -60,8 +62,42 @@ def git_records(text: str) -> list[str]:
     return [line for line in text.splitlines() if line]
 
 
-def transaction_owned_start_receipts(changed: set[str]) -> set[str]:
-    """Return start receipts owned by a complete, currently changed archive bundle."""
+def _repository_relative_path(value: Any) -> str | None:
+    if not isinstance(value, str) or not value or "\\" in value:
+        return None
+    path = Path(value)
+    if path.is_absolute() or ".." in path.parts or path.as_posix() != value:
+        return None
+    return value
+
+
+def _summary_owned_paths(summary_path: str, task: str) -> set[str] | None:
+    try:
+        summary = json.loads((PROJECT_ROOT / summary_path).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if (
+        not isinstance(summary, dict)
+        or summary.get("summaryVersion") != 2
+        or summary.get("workItemId") != task
+    ):
+        return None
+    changed_files = summary.get("changedFiles")
+    if not isinstance(changed_files, list):
+        return None
+    owned: set[str] = set()
+    for record in changed_files:
+        if not isinstance(record, dict):
+            return None
+        path = _repository_relative_path(record.get("path"))
+        if path is None or path in owned:
+            return None
+        owned.add(path)
+    return owned
+
+
+def transaction_owned_paths(changed: set[str]) -> set[str]:
+    """Return paths owned by complete, currently changed archive bundles."""
     archive_index = ".ai/work-items/archive/index.json"
     if archive_index not in changed:
         return set()
@@ -98,7 +134,31 @@ def transaction_owned_start_receipts(changed: set[str]) -> set[str]:
                 and manifest.get("contractPath") == contract_path
                 and manifest.get("summaryPath") == summary_path
             ):
-                owned.add(receipt)
+                try:
+                    contract_digest = hashlib.sha256(
+                        (PROJECT_ROOT / contract_path).read_bytes()
+                    ).hexdigest()
+                    summary_digest = hashlib.sha256(
+                        (PROJECT_ROOT / summary_path).read_bytes()
+                    ).hexdigest()
+                except OSError:
+                    continue
+                if (
+                    manifest.get("contractSha256") != contract_digest
+                    or manifest.get("summarySha256") != summary_digest
+                ):
+                    continue
+                summary_owned = _summary_owned_paths(summary_path, task)
+                required = {
+                    archive_index,
+                    receipt,
+                    manifest_path,
+                    contract_path,
+                    summary_path,
+                }
+                if summary_owned is None or not required.issubset(summary_owned):
+                    continue
+                owned.update(summary_owned)
                 break
     return owned
 
@@ -144,8 +204,7 @@ def live_no_active_changed_files(status_path: Path) -> list[str]:
             line.strip() for line in git_records(getattr(untracked, "stdout", "")) if line.strip()
         )
     changed.discard(relative_status)
-    changed.difference_update(transaction_owned_start_receipts(changed))
-    changed = {path for path in changed if not path.startswith(".ai/work-items/archive/")}
+    changed.difference_update(transaction_owned_paths(changed))
     return sorted(changed)
 
 
@@ -182,14 +241,16 @@ def validate_status_consistency(status_path: Path = DEFAULT_STATUS) -> list[str]
                 "cockpit status is not no_active_work_item while no active Work Item exists; run `make repair-ai-status`"
             )
         recorded = no_active_worktree_count(text)
-        live = len(live_no_active_changed_files(status_path))
-        if (
-            no_active_changed_files(text)
-            or (recorded is None and live > 0)
-            or (recorded is not None and live != recorded)
-        ):
+        if no_active_changed_files(text) or (recorded is not None and recorded != 0):
             issues.append(
                 "cockpit status no-active state must not persist changed files; run `make repair-ai-status`"
+            )
+        live = live_no_active_changed_files(status_path)
+        if live:
+            issues.append(
+                "no active Work Item has uncommitted paths outside a complete current "
+                f"archive transaction: {', '.join(live)}; repair-ai-status cannot "
+                "establish ownership; restore the paths or create/resume a Work Item"
             )
         return issues
 
@@ -228,6 +289,18 @@ def repair_status(status_path: Path = DEFAULT_STATUS) -> int:
             print(f"[ERROR] cannot auto-repair: {issue}", file=sys.stderr)
         return 1
 
+    if not contract_ids:
+        unowned = live_no_active_changed_files(status_path)
+        if unowned:
+            print(
+                "[ERROR] cannot auto-repair: no active Work Item has uncommitted "
+                "paths outside a complete current archive transaction: "
+                f"{', '.join(unowned)}; repair-ai-status cannot establish ownership; "
+                "restore the paths or create/resume a Work Item",
+                file=sys.stderr,
+            )
+            return 1
+
     command = [sys.executable, "scripts/ai_generate_status.py"]
     if not contract_ids:
         command.append("--no-active")
@@ -242,12 +315,23 @@ def repair_status(status_path: Path = DEFAULT_STATUS) -> int:
         )
     if status_path != DEFAULT_STATUS:
         command.extend(["--output", str(status_path)])
+    original = status_path.read_bytes() if status_path.exists() else None
     result = subprocess.run(command, cwd=PROJECT_ROOT, env=clean_git_environment(), check=False)
     if result.returncode != 0:
+        if original is None:
+            status_path.unlink(missing_ok=True)
+        else:
+            status_path.parent.mkdir(parents=True, exist_ok=True)
+            status_path.write_bytes(original)
         return result.returncode
 
     issues = validate_status_consistency(status_path)
     if issues:
+        if original is None:
+            status_path.unlink(missing_ok=True)
+        else:
+            status_path.parent.mkdir(parents=True, exist_ok=True)
+            status_path.write_bytes(original)
         for issue in issues:
             print(f"[ERROR] repair did not produce consistent status: {issue}", file=sys.stderr)
         return 1

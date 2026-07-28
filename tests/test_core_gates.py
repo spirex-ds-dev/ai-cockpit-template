@@ -1,4 +1,5 @@
 import json
+import hashlib
 import sys
 from types import SimpleNamespace
 
@@ -277,13 +278,14 @@ def test_status_consistency_rejects_live_no_active_changes(tmp_path, monkeypatch
 
     issues = ai_check_status_consistency.validate_status_consistency(status)
 
-    assert (
-        "cockpit status no-active state must not persist changed files; run `make repair-ai-status`"
-        in issues
-    )
+    assert issues == [
+        "no active Work Item has uncommitted paths outside a complete current archive "
+        "transaction: src/app.py; repair-ai-status cannot establish ownership; "
+        "restore the paths or create/resume a Work Item"
+    ]
 
 
-def test_status_consistency_ignores_uncommitted_archive_evidence(tmp_path, monkeypatch):
+def test_status_consistency_rejects_incomplete_uncommitted_archive_evidence(tmp_path, monkeypatch):
     active = tmp_path / ".ai" / "work-items" / "active"
     active.mkdir(parents=True)
     status = tmp_path / "current_status.md"
@@ -308,7 +310,10 @@ def test_status_consistency_ignores_uncommitted_archive_evidence(tmp_path, monke
 
     monkeypatch.setattr(ai_check_status_consistency.subprocess, "run", fake_run)
 
-    assert ai_check_status_consistency.validate_status_consistency(status) == []
+    issues = ai_check_status_consistency.validate_status_consistency(status)
+    assert len(issues) == 1
+    assert ".ai/work-items/archive/2026/task.summary.json" in issues[0]
+    assert "repair-ai-status cannot establish ownership" in issues[0]
 
 
 def _archive_bundle_paths(task: str = "task") -> dict[str, str]:
@@ -336,17 +341,44 @@ def _stub_changed_paths(monkeypatch, changed: list[str]) -> None:
 
 
 def _write_archive_manifest(root, paths: dict[str, str], **overrides) -> None:
+    contract_target = root / paths["contract"]
+    contract_target.parent.mkdir(parents=True, exist_ok=True)
+    if not contract_target.exists():
+        contract_target.write_text(
+            json.dumps({"contractVersion": 2, "workItemId": "task"}),
+            encoding="utf-8",
+        )
+    summary_target = root / paths["summary"]
+    if not summary_target.exists():
+        _write_archive_summary(root, paths, list(paths.values()))
     manifest = {
         "format": "ai-cockpit-archive-manifest",
         "manifestVersion": 1,
         "workItemId": "task",
         "contractPath": paths["contract"],
         "summaryPath": paths["summary"],
+        "contractSha256": hashlib.sha256(contract_target.read_bytes()).hexdigest(),
+        "summarySha256": hashlib.sha256(summary_target.read_bytes()).hexdigest(),
         **overrides,
     }
     target = root / paths["manifest"]
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(manifest), encoding="utf-8")
+
+
+def _write_archive_summary(root, paths: dict[str, str], changed_files: list[str] | object) -> None:
+    summary = {
+        "summaryVersion": 2,
+        "workItemId": "task",
+        "changedFiles": (
+            [{"path": path, "reason": "fixture"} for path in changed_files]
+            if isinstance(changed_files, list)
+            else changed_files
+        ),
+    }
+    target = root / paths["summary"]
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(summary), encoding="utf-8")
 
 
 def test_status_consistency_accepts_transaction_owned_archive_start_receipt(tmp_path, monkeypatch):
@@ -359,6 +391,7 @@ def test_status_consistency_accepts_transaction_owned_archive_start_receipt(tmp_
         "## Changed Files\n\n- none\n",
         encoding="utf-8",
     )
+    _write_archive_summary(tmp_path, paths, list(paths.values()))
     _write_archive_manifest(tmp_path, paths)
     monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(
@@ -369,6 +402,101 @@ def test_status_consistency_accepts_transaction_owned_archive_start_receipt(tmp_
     assert ai_check_status_consistency.live_no_active_changed_files(status) == []
     assert ai_check_status_consistency.validate_status_consistency(status) == []
     assert ai_check_status_consistency.repair_status(status) == 0
+
+
+def test_status_consistency_accepts_summary_owned_post_archive_implementation_changes(
+    tmp_path, monkeypatch
+):
+    paths = _archive_bundle_paths()
+    implementation_paths = ["src/app.py", "docs/guide.md"]
+    changed = [*paths.values(), *implementation_paths]
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text(
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n",
+        encoding="utf-8",
+    )
+    _write_archive_summary(tmp_path, paths, changed)
+    _write_archive_manifest(tmp_path, paths)
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    _stub_changed_paths(monkeypatch, changed)
+
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == []
+    assert ai_check_status_consistency.validate_status_consistency(status) == []
+
+
+def test_status_consistency_rejects_summary_omitted_path_without_false_repair(
+    tmp_path, monkeypatch
+):
+    paths = _archive_bundle_paths()
+    unowned = "src/unowned.py"
+    changed = [*paths.values(), unowned]
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    original = (
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n"
+    )
+    status.write_text(original, encoding="utf-8")
+    _write_archive_summary(tmp_path, paths, list(paths.values()))
+    _write_archive_manifest(tmp_path, paths)
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    commands: list[list[str]] = []
+
+    def fake_run(command, **kwargs):
+        commands.append(command)
+        if command[:3] == ["git", "rev-parse", "--verify"]:
+            return SimpleNamespace(returncode=0, stdout="head\n")
+        if command[:3] == ["git", "diff", "--name-only"]:
+            return SimpleNamespace(returncode=0, stdout="")
+        if command[:3] == ["git", "ls-files", "--others"]:
+            return SimpleNamespace(returncode=0, stdout="\n".join(changed))
+        return SimpleNamespace(returncode=0, stdout="")
+
+    monkeypatch.setattr(ai_check_status_consistency.subprocess, "run", fake_run)
+
+    issues = ai_check_status_consistency.validate_status_consistency(status)
+
+    assert issues == [
+        "no active Work Item has uncommitted paths outside a complete current archive "
+        "transaction: src/unowned.py; repair-ai-status cannot establish ownership; "
+        "restore the paths or create/resume a Work Item"
+    ]
+    assert ai_check_status_consistency.repair_status(status) == 1
+    assert status.read_text(encoding="utf-8") == original
+    assert not any("ai_generate_status.py" in command for command in commands)
+
+
+def test_status_consistency_rejects_malformed_archive_summary_changed_files(tmp_path, monkeypatch):
+    paths = _archive_bundle_paths()
+    changed = [*paths.values(), "src/app.py"]
+    status = tmp_path / ".ai/cockpit/current_status.md"
+    status.parent.mkdir(parents=True)
+    status.write_text(
+        "- State: `no_active_work_item`\n"
+        "- Worktree Change Count: `0`\n\n"
+        "## Changed Files\n\n- none\n",
+        encoding="utf-8",
+    )
+    _write_archive_summary(tmp_path, paths, "not-a-list")
+    _write_archive_manifest(tmp_path, paths)
+    monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_status_consistency, "ACTIVE_DIR", tmp_path / ".ai/work-items/active"
+    )
+    _stub_changed_paths(monkeypatch, changed)
+
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == sorted(changed)
+    assert ai_check_status_consistency.validate_status_consistency(status)
 
 
 @pytest.mark.parametrize(
@@ -382,6 +510,8 @@ def test_status_consistency_accepts_transaction_owned_archive_start_receipt(tmp_
         (None, {"contractPath": ".ai/work-items/archive/2026/other.contract.json"}),
         (None, {"summaryPath": ".ai/work-items/archive/2026/other.summary.json"}),
         (None, {"format": "unsupported"}),
+        (None, {"contractSha256": "0" * 64}),
+        (None, {"summarySha256": "0" * 64}),
     ],
 )
 def test_status_consistency_rejects_unowned_archive_start_receipt(
@@ -396,6 +526,7 @@ def test_status_consistency_rejects_unowned_archive_start_receipt(
         "## Changed Files\n\n- none\n",
         encoding="utf-8",
     )
+    _write_archive_summary(tmp_path, paths, list(paths.values()))
     _write_archive_manifest(tmp_path, paths, **manifest_overrides)
     changed = [path for key, path in paths.items() if key != missing_key]
     monkeypatch.setattr(ai_check_status_consistency, "PROJECT_ROOT", tmp_path)
@@ -404,7 +535,7 @@ def test_status_consistency_rejects_unowned_archive_start_receipt(
     )
     _stub_changed_paths(monkeypatch, changed)
 
-    assert ai_check_status_consistency.live_no_active_changed_files(status) == [paths["receipt"]]
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == sorted(changed)
     assert ai_check_status_consistency.validate_status_consistency(status)
 
 
@@ -449,7 +580,9 @@ def test_status_consistency_rejects_malformed_changed_archive_manifest(tmp_path,
     )
     _stub_changed_paths(monkeypatch, list(paths.values()))
 
-    assert ai_check_status_consistency.live_no_active_changed_files(status) == [paths["receipt"]]
+    assert ai_check_status_consistency.live_no_active_changed_files(status) == sorted(
+        paths.values()
+    )
 
 
 def test_status_consistency_accepts_clean_post_commit_no_active_state(tmp_path, monkeypatch):
