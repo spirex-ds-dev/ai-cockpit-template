@@ -13,6 +13,11 @@ keywords:
 
 対象リポジトリに AI Cockpit のファイルがすでにあり、管理対象の実行系、ポリシー、マーカーファイルを更新する場合は `--upgrade` を使います。アップグレードは導入先プロジェクトの独立した Work Item と専用ブランチで行い、リモート、既定ブランチ、base commit、対象 release tag を Contract に記録します。
 
+導入済み Runtime Surface には、読み取り専用 uninstall facts、digest-bound proposal、
+system temporary directory から起動する preserve-evidence detached executor が
+含まれます。exact proposal digest、現在の facts、symlink、receipt replay の検証に
+失敗すると削除前に停止します。purge はこの executor の対象外です。
+
 ```sh
 CURRENT_VERSION="${CURRENT_VERSION:?set CURRENT_VERSION to the installed release tag}"
 TARGET_VERSION="${TARGET_VERSION:?set TARGET_VERSION to a newer release tag}"

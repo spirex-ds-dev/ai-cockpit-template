@@ -76,34 +76,34 @@ an evidenced canonical-state integration.
 
 ## Uninstall proposal and preserve-evidence mode
 
-Phase A is a Runtime/deletion read-only proposal boundary that writes one
-proposal JSON. The current function accepts `disable`, `preserve-evidence`,
-and `purge`, but mode-specific execution is not implemented. It blocks only
-when the supplied aggregate `drift` value is true or `unknownOwnership` is
-non-empty; it does not itself validate installation facts or inspect modified
-Template/Shared entries. The default `preserve-evidence` proposal lists
-Bootstrap Evidence, Archive, Human Decisions, Project Policy, Complexity
-Baseline, and Audit Evidence for retention and excludes supplied
-`projectOwned` paths from its deletion list.
+The installed preserve-evidence path has three public Make entrypoints:
 
-The required detached-uninstaller design runs from `<system-temp>/ai-cockpit-uninstall/<session-id>/uninstall.py` and must not import the object project Runtime. It performs Drift Check → confirmed Runtime removal → Managed Region handling → evidence retention → final Receipt → Runtime Removal Verification. Unconfirmed, modified, or unknown-owned files remain untouched; the receipt records removed files, preserved business/evidence files, and verification state.
+1. `ai-cockpit-uninstall-facts` validates the installation fact bundle and
+   current filesystem. It rejects malformed, absolute, traversing, duplicate,
+   symlinked, missing, modified, or unknown-owned managed paths.
+2. `ai-cockpit-uninstall-propose` emits a zero-Runtime-write proposal. Its
+   canonical `proposalDigest` binds repository identity, installation ID,
+   session ID, mode, deletion list, preservation list, and receipt path.
+3. `ai-cockpit-uninstall-execute` copies the executor and its validation
+   modules to a system temporary directory, then starts that detached copy.
+   Direct internal execution is blocked. The detached process re-collects facts
+   immediately before mutation and accepts only the exact confirmed digest.
 
-**Current implementation boundary:** the installed public Make surface provides
-only `ai-cockpit-uninstall-propose`. It has no public builder for the uninstall
-facts input and no proposal-digest binding. The template source contains
-`scripts/ai_detached_uninstaller.py`, which models confirmation, blocked states,
-writes, and receipt data in memory, but that script is not in the installed
-catalog, does not remove filesystem paths, and has no CLI/Make entrypoint.
-Therefore proposal success is not uninstall success. An adopter must stop
-before removal rather than call the internal model or manually delete files.
+Only unchanged Template-owned files listed by the validated installation
+manifest are removable. Project, Shared, Generated, Historical, modified,
+unknown-owned, protected, unlisted, escaping, and symlinked paths remain
+untouched. The receipt is outside the deletion set and records detached
+execution, actual removed/preserved/missing/failed paths, partial failure
+recovery, and post-state verification. `runtimeRemovalVerified: true` appears
+only when every requested Runtime path is absent and every preserved path
+remains. An existing receipt blocks replay.
 
-Purge is a required separate destructive gate, but the current purge code is
-also a template-only in-memory model: it is not in the installed catalog and
-has no CLI/Make entrypoint or filesystem deletion behavior. An adopter must
-stop rather than claim `purged`. A future implementation must verify an
-Evidence Export Bundle, display the exact deletion list and irreversible
-impact, require separate confirmations, protect project-owned and audit
-evidence, and emit a verified receipt.
+`disable` remains a separate public state-result entrypoint and is rejected by
+the uninstall proposal. `purge` remains unsupported by the preserve-evidence
+executor and returns `blocked`; no public purge filesystem-removal entrypoint
+exists. A future purge implementation must verify an Evidence Export Bundle,
+display exact irreversible impact, require separate confirmation, protect
+project-owned and audit evidence, and emit its own verified receipt.
 
 ## Cockpit, CLI, and Summary alignment
 

@@ -54,7 +54,9 @@ RUNTIME_TARGETS = (
     "ai-cockpit-rollback-propose",
     "ai-cockpit-disable",
     "ai-cockpit-enable",
+    "ai-cockpit-uninstall-facts",
     "ai-cockpit-uninstall-propose",
+    "ai-cockpit-uninstall-execute",
 )
 
 RUNTIME_SURFACE_SCRIPTS = frozenset(
@@ -66,6 +68,8 @@ RUNTIME_SURFACE_SCRIPTS = frozenset(
         "ai_rollback.py",
         "ai_disable_enable.py",
         "ai_uninstall_proposal.py",
+        "ai_uninstall_facts.py",
+        "ai_detached_uninstaller.py",
     }
 )
 AGENT_MARKER = "<!-- AI_COCKPIT_SECTION -->"

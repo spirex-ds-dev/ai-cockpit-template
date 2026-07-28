@@ -49,6 +49,8 @@ def read_json(path: Path) -> Any:
 
 
 def classify_path(relative: str) -> str:
+    if relative in {"README.md", "README.zh-CN.md", "README.ja.md"}:
+        return "project"
     if relative.startswith(".ai/work-items/archive/"):
         return "historical"
     if relative.startswith(".ai/cockpit/") or relative.startswith(".ai/install/"):
@@ -83,6 +85,8 @@ def build_manifest(
         if not path.is_file() or FACT_DIR.as_posix() in path.relative_to(target).as_posix():
             continue
         relative = path.relative_to(target).as_posix()
+        if relative == ".ai/cockpit/.install.lock":
+            continue
         if relative.startswith(".git/") or relative in {".gitignore"}:
             continue
         if relative.startswith(".ai/work-items/active/"):

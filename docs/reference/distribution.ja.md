@@ -57,6 +57,16 @@ SBOM と provenance のリリース証拠は、`--source-commit` または `SUPP
 
 `--update-makefile` を使わない場合、インストーラーは `Makefile.ai` と `Makefile.ai.stack` を作成しますが、ホスト側の Makefile は変更しません。
 
+## 導入済み Runtime Surface
+
+導入物には uninstall facts builder、digest-bound proposal generator、
+preserve-evidence detached executor と三つの公開 Make entrypoint が含まれます。
+executor は必要 module を system temporary directory へ分離し、exact proposal
+digest と現在の導入 facts を再検証してから unchanged Runtime file だけを削除します。
+purge は未実装であり、この executor では `blocked` になります。導入先での実行可能性
+は clean Adopter Fixture の証拠で確認し、source tree に file があるだけでは
+導入済み能力とみなしません。
+
 ## ローカル導入
 
 ```sh

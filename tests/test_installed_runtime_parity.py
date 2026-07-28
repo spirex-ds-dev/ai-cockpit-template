@@ -19,6 +19,8 @@ RUNTIME_SCRIPTS = {
     "ai_rollback.py",
     "ai_disable_enable.py",
     "ai_uninstall_proposal.py",
+    "ai_uninstall_facts.py",
+    "ai_detached_uninstaller.py",
 }
 EXPECTED_RUNTIME_TARGETS = (
     "ai-cockpit-version",
@@ -29,7 +31,9 @@ EXPECTED_RUNTIME_TARGETS = (
     "ai-cockpit-rollback-propose",
     "ai-cockpit-disable",
     "ai-cockpit-enable",
+    "ai-cockpit-uninstall-facts",
     "ai-cockpit-uninstall-propose",
+    "ai-cockpit-uninstall-execute",
 )
 
 

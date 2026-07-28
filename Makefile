@@ -48,7 +48,7 @@ check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
 	check-ai-task-outcome \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
-	ai-cockpit-uninstall-propose
+	ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
 
 check-ai-diff-ownership:
 	$(AI_PYTHON) scripts/ai_check_diff_ownership.py $(if $(AI_BASE_COMMIT),--base $(AI_BASE_COMMIT),) $(if $(CONTRACT),--contract $(CONTRACT),)
@@ -481,7 +481,15 @@ ai-cockpit-enable:
 
 ai-cockpit-uninstall-propose:
 	@test -n "$(FACTS)" || (echo "FACTS is required" >&2; exit 2)
-	$(AI_PYTHON) scripts/ai_uninstall_proposal.py --facts "$(FACTS)" --mode "$(or $(MODE),preserve-evidence)" --output "$(OUTPUT)"
+	$(AI_PYTHON) scripts/ai_uninstall_proposal.py --facts "$(FACTS)" --mode "$(or $(UNINSTALL_MODE),preserve-evidence)" --output "$(OUTPUT)"
+
+ai-cockpit-uninstall-facts:
+	@test -n "$(ROOT)" -a -n "$(SESSION_ID)" -a -n "$(OUTPUT)" || (echo "ROOT, SESSION_ID, and OUTPUT are required" >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_uninstall_facts.py --root "$(ROOT)" --session-id "$(SESSION_ID)" --output "$(OUTPUT)"
+
+ai-cockpit-uninstall-execute:
+	@test -n "$(ROOT)" -a -n "$(PROPOSAL)" -a -n "$(CONFIRM_DIGEST)" || (echo "ROOT, PROPOSAL, and CONFIRM_DIGEST are required" >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_detached_uninstaller.py --root "$(ROOT)" --proposal "$(PROPOSAL)" --confirm-digest "$(CONFIRM_DIGEST)"
 
 cross-stack-long-cycle:
 	$(AI_PYTHON) scripts/cross_stack_long_cycle.py --root . > target/cross-stack-long-cycle.json

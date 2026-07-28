@@ -11,9 +11,7 @@ from ai_japanese_capability import (
 )
 
 
-EXPECTED_FINDINGS = {
-    "JA-UNINSTALL-RUNTIME-001": "installed-detached-uninstaller-runtime-corrective-20260729",
-}
+EXPECTED_FINDINGS = {}
 
 
 def test_status_capability_requires_generator_checker_make_and_executable_parity(
@@ -310,14 +308,16 @@ def test_report_drift_rejects_stale_json_and_markdown(tmp_path):
     ]
 
 
-def test_cli_writes_both_reports_and_returns_blocking(tmp_path, monkeypatch, capsys):
+def test_cli_writes_both_reports_without_blocking_after_installed_lifecycle(
+    tmp_path, monkeypatch, capsys
+):
     json_path = tmp_path / "japanese-capability-assessment.json"
     markdown_path = tmp_path / "japanese-capability-assessment.md"
     monkeypatch.setattr(ai_japanese_capability, "JSON_REPORT_PATH", json_path)
     monkeypatch.setattr(ai_japanese_capability, "MARKDOWN_REPORT_PATH", markdown_path)
     monkeypatch.setattr(sys, "argv", ["ai_japanese_capability.py", "--write"])
 
-    assert ai_japanese_capability.main() == 2
+    assert ai_japanese_capability.main() == 0
     assert json_path.is_file()
     assert markdown_path.is_file()
     assert "JA-STATUS-001" in markdown_path.read_text(encoding="utf-8")

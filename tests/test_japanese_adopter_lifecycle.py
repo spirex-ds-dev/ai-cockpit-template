@@ -1,4 +1,5 @@
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -195,3 +196,58 @@ def test_japanese_adopter_removal_blocks_unknown_ownership_and_preserves_evidenc
         ".ai/upgrade/uninstall-evidence/日本語-removal-1.json",
     ]
     assert removed["receipt"]["evidencePreserved"] is True
+
+
+def test_japanese_adopter_executes_installed_uninstall_lifecycle(japanese_adopter, tmp_path):
+    target, _ = japanese_adopter
+    isolated = tmp_path / "日本語採用先"
+    shutil.copytree(target, isolated, symlinks=True)
+    installed_executor = isolated / "scripts/ai_detached_uninstaller.py"
+    assert "def execute_proposal" in installed_executor.read_text(encoding="utf-8")
+
+    facts_path = "target/uninstall-facts.json"
+    proposal_path = "target/uninstall-proposal.json"
+    facts = _run(
+        isolated,
+        "make",
+        "-f",
+        "Makefile.ai",
+        "ai-cockpit-uninstall-facts",
+        "ROOT=.",
+        "SESSION_ID=日本語-installed-lifecycle",
+        f"OUTPUT={facts_path}",
+        f"PYTHON={sys.executable}",
+    )
+    assert facts.returncode == 0, facts.stdout + facts.stderr
+    proposal = _run(
+        isolated,
+        "make",
+        "-f",
+        "Makefile.ai",
+        "ai-cockpit-uninstall-propose",
+        f"FACTS={facts_path}",
+        f"OUTPUT={proposal_path}",
+        f"PYTHON={sys.executable}",
+    )
+    assert proposal.returncode == 0, proposal.stdout + proposal.stderr
+    proposal_value = json.loads((isolated / proposal_path).read_text(encoding="utf-8"))
+    assert proposal_value["state"] == "needs_human_confirmation"
+
+    executed = _run(
+        isolated,
+        "make",
+        "-f",
+        "Makefile.ai",
+        "ai-cockpit-uninstall-execute",
+        "ROOT=.",
+        f"PROPOSAL={proposal_path}",
+        f"CONFIRM_DIGEST={proposal_value['proposalDigest']}",
+        f"PYTHON={sys.executable}",
+    )
+    assert executed.returncode == 0, executed.stdout + executed.stderr
+    receipt = isolated / ".ai/upgrade/uninstall-evidence/日本語-installed-lifecycle.receipt.json"
+    result = json.loads(receipt.read_text(encoding="utf-8"))
+    assert result["state"] == "completed"
+    assert result["detachedExecution"] is True
+    assert result["runtimeRemovalVerified"] is True
+    assert (isolated / "README.md").is_file()

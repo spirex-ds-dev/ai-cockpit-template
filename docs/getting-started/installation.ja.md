@@ -770,11 +770,12 @@ PASS: 対象と ownership が証拠で確定し、変更済み・Unknown・drift
 STOP: dirty、active Work Item、変更済み、Unknown、drift のいずれかがあります。
 停止時は repository owner と該当ファイル owner が事実を確定するまで削除しません。
 
-**現在の実装境界:** `ai-lifecycle-facts` は Work Item などの一般状態を表示しますが、
-uninstall proposal が必要とする `sessionId`、`runtimeFiles`、`projectOwned`、
-`drift`、`unknownOwnership` を生成・検証する公開 builder ではありません。
-これらを導入時証拠から作る公開 entrypoint がない場合、初心者向けの安全な入力を
-作れないため、ここで STOP します。手作り JSON や推測で 15.3 へ進みません。
+導入済み Runtime には読み取り専用の `ai-cockpit-uninstall-facts` entrypoint が
+あります。エージェントにこの入口を使わせ、対象 repository、今回だけの
+`sessionId`、出力先を先に表示させてください。出力は導入時 Manifest と現在の
+filesystem を照合し、repository identity、installation ID、削除候補、保持対象を
+決定します。absolute path、`..`、重複、symlink、変更済み file、Unknown ownership、
+壊れた導入証拠は `blocked` です。手作り JSON や推測で 15.3 へ進みません。
 
 <!-- japanese-uninstall: mode-choice -->
 ### 15.2 三つの mode から一つだけ選ぶ
@@ -790,37 +791,41 @@ file 変更も行わないでください。
 PASS: 一つの mode と理由が明確です。STOP: mode が曖昧、purge の影響が不明、
 または disable が削除として説明されています。判断 owner は repository owner です。
 
-`disable` を選んだ場合は uninstall proposal へ進みません。
-`MODE=disable` の uninstall proposal は現在、他 mode と同じ deletion list と
-detached handoff を返すラベルにすぎず、実行可能な disable plan ではありません。
-別の `ai-cockpit-disable` は結果 JSON を作りますが、canonical installed state を
-直接更新しません。repository owner が state input、result output、canonical state
-への反映と再有効化を実装証拠で示せない場合は STOP します。
+`disable` を選んだ場合は uninstall proposal へ進みません。uninstall proposal は
+`disable` を拒否し、`ai-cockpit-disable` を使うよう案内します。この別入口は結果
+JSON を作りますが、canonical installed state を直接更新しません。repository owner
+が state input、result output、canonical state への反映と再有効化を実装証拠で
+示せない場合は STOP します。
 
 <!-- japanese-uninstall: proposal-runtime-zero-write -->
 ### 15.3 Runtime を削除しない proposal だけを作る
 
-導入済みの公開入口は `ai-cockpit-uninstall-propose` です。これは候補を JSON に
-まとめ、指定した `OUTPUT` に proposal JSON を一つ書きます。Runtime や管理対象
-file は変更・削除しません。初心者はコマンドを手入力せず、次をコピーします。
+15.1 の facts が `ready` の場合だけ、導入済み
+`ai-cockpit-uninstall-propose` を使います。これは候補を JSON にまとめ、指定した
+出力先に proposal JSON を一つ書きます。Runtime や管理対象 file は変更・削除
+しません。初心者はコマンドを手入力せず、次をコピーします。
 
 | 日本語表示 | 内部名 | 確認する内容 |
 | --- | --- | --- |
 | 確認番号 | `sessionId` | 今回だけの識別子 |
+| Repository | `repositoryIdentity` / `installationId` | 同じ導入先か |
 | 削除候補 | `deletionList` | Runtime 候補だけか |
-| 残す証拠 | `preserveEvidence` | Archive、判断、policy、audit など |
+| 保持 path | `preservePaths` | project、shared、generated、historical |
+| 残す証拠 | `preserveEvidence` | Archive、判断、policy、audit の分類 |
 | 証拠の退避 | `evidenceExport` | 必須か、完了したか |
 | 別プロセス実行 | `detachedUninstaller` | 公開実装が存在するか |
 | 完了記録 | `receipt` | 実行後に必須か |
+| 正確な確認値 | `proposalDigest` | proposal 全体の SHA-256 binding |
 
 ```text
-preserve-evidence または purge について、導入済み ai-cockpit-uninstall-propose
-entrypoint を使う計画を示してください。review 済み FACTS、選択 MODE、proposal
-JSON の OUTPUT を表示し、上表の日本語名で内容を説明してください。実行前に
+preserve-evidence について、導入済み ai-cockpit-uninstall-propose entrypoint を
+使う計画を示してください。15.1 で生成した facts、選択 mode、proposal JSON の
+出力先を表示し、上表の日本語名で内容を説明してください。実行前に
 proposal JSON 一件の作成だけを承認する yes/no 質問をしてください。承認後は
 生成結果、終了 code 0、state=needs_human_confirmation、writes が空であることを
-表示して停止してください。exit 2 または state=blocked は STOP です。Runtime、
-Managed Regions、証拠 file は変更・削除しないでください。
+表示して停止してください。proposalDigest も省略せず表示してください。exit 2
+または state=blocked は STOP です。Runtime、Managed Regions、証拠 file は
+変更・削除しないでください。
 ```
 
 PASS: proposal の `writes` が空で、対象・保持証拠・receipt 要求が表示されます。
@@ -845,14 +850,13 @@ PASS: 保持と削除候補が完全に分離されています。STOP: 証拠�
 ### 15.5 正確な proposal だけを確認する
 
 ```text
-15.3 で保存した proposal JSON の session ID、mode、正確な deletionList、
-preserveEvidence、evidence export の成否、detached executor の公開 entrypoint の
-有無を再表示してください。現在の proposal schema には proposal digest がなく、
-executor による digest 再検証もないため、SHA-256 binding があると主張しないで
-ください。一つでも変化・不足・Unknown があれば
-STOP。すべて一致する場合だけ、この正確な proposal を次の detached execution
-review へ渡すか yes/no で一件質問してください。この回答は削除実行の承認では
-ありません。
+15.3 で保存した proposal JSON の repository identity、installation ID、session ID、
+mode、正確な deletionList、preservePaths、receipt path、proposalDigest を
+再表示してください。proposal の一項目でも変われば digest が無効になることを
+説明し、一つでも変化・不足・Unknown があれば STOP してください。すべて一致する
+場合だけ、表示した proposalDigest と完全に同じ値を削除実行の確認値として使うか
+yes/no で一件質問してください。単なる「はい」や古い digest を実行承認に
+置き換えないでください。
 ```
 
 PASS: 同じ proposal identity が再確認されます。STOP: stale、export 未完了、
@@ -861,37 +865,37 @@ PASS: 同じ proposal identity が再確認されます。STOP: stale、export �
 <!-- japanese-uninstall: detached-execution -->
 ### 15.6 Detached executor の実装境界を確認する
 
-現在の repository で公開されているのが proposal entrypoint だけなら、ここで
-**STOP** します。内部確認用の仕組みは、実際にファイルを削除できる公開機能では
-ありません。テンプレート source の `prepare` model は installed payload にも
-含まれていません。手動削除へ置き換えず、repository owner に
-「detached public executor、実 deletion、失敗時 rollback/partial-state、receipt」
-の実装とレビューを依頼してください。
-
-将来、導入済み release が公開 executor を証明できる場合だけ次をコピーします。
+導入済み Runtime の `ai-cockpit-uninstall-execute` は、実行前に executor と必要な
+検証 module を system temporary directory へコピーし、repository 内の削除候補
+から分離した子 process だけが実行します。内部 `execute_proposal` の直接呼び出しは
+`detached_execution_required` で停止します。子 process は proposalDigest、
+repository identity、installation ID、現在の facts、receipt replay、symlink を
+再検証してから、一致した unchanged Runtime file だけを削除します。
 
 ```text
-repository 内ではなく system temporary directory に配置された、自己完結した
-public detached executor の entrypoint、source digest、proposal digest、session ID、
-exact deletionList、rollback/partial-state behavior を読み取り専用で示してください。
-project runtime を import せず、drift/unknown ownership を再確認し、別の実行承認を
-yes/no で一件だけ質問してください。承認後はその proposal だけを実行し、追加対象を
-推測しないでください。
+導入済み public detached executor の entrypoint、system temporary directory への
+分離方法、proposalDigest、repository identity、installation ID、session ID、
+exact deletionList、preservePaths、partial-failure receipt を読み取り専用で
+説明してください。project runtime を import せず、drift、unknown ownership、
+symlink、receipt replay を再確認し、15.5 で表示した proposalDigest をもう一度
+示して削除実行を yes/no で一件だけ質問してください。承認後はその exact digest
+だけを渡して実行し、追加対象を推測しないでください。
 ```
 
-PASS: 公開 executor と同じ proposal の実行証拠があります。STOP: executor が
-非公開 model、repository 内で自己削除、digest 不一致、drift/Unknown、対象追加、
-または partial failure です。担当は repository/release owner です。
+PASS: temporary directory から起動した公開 executor と同じ proposal の実行証拠が
+あります。STOP: detached 分離なし、digest 不一致、drift/Unknown、symlink、
+対象追加、receipt replay、または partial failure です。担当は repository/release
+owner です。
 
 <!-- japanese-uninstall: receipt-verification -->
 ### 15.7 Receipt と Runtime Removal Verification を確認する
 
 ```text
-実行後の最終 receipt を読み取り専用で表示し、session ID、実際に removed/preserved
-となった各 path、evidence export、Runtime Removal Verification、残存 Runtime、
-Managed Regions、project-owned files、Git status を proposal と照合してください。
-一致した項目だけ PASS とし、不明・未確認・partial を completed と報告しないで
-ください。
+実行後の最終 receipt を読み取り専用で表示し、session ID、detachedExecution、
+実際に removed/preserved/missing/failed となった各 path、
+runtimeRemovalVerified、残存 Runtime、Managed Regions、project-owned files、
+Git status を proposal と照合してください。一致した項目だけ PASS とし、
+不明・未確認・partial を completed と報告しないでください。
 ```
 
 PASS: receipt と実 filesystem が一致し、Runtime removal が確認済みです。
@@ -922,8 +926,9 @@ exact deletion list と不可逆な影響を人がレビューした後でも、
 purge proposal の evidence export receipt、exact deletion list、保持対象、
 project-owned/audit 除外、不可逆な影響、復旧不能な項目を再表示してください。
 通常の uninstall confirmation が purge を許可しないことを明記し、すべて確認済み
-の場合だけ purge 専用の破壊的承認を yes/no で一件質問してください。公開 detached
-executor が未実装・未検証なら質問せず STOP してください。
+の場合だけ purge 専用の破壊的承認を yes/no で一件質問してください。
+preserve-evidence executor は purge を実行しないため、purge 専用 executor が
+未実装・未検証なら質問せず STOP してください。
 ```
 
 PASS: 独立した purge 承認と公開 executor の証拠があります。STOP: export 未完了、

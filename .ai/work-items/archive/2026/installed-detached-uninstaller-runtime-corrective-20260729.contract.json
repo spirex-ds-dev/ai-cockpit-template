@@ -1,0 +1,312 @@
+{
+  "contractVersion": 2,
+  "workItemId": "installed-detached-uninstaller-runtime-corrective-20260729",
+  "mode": "code",
+  "title": "Implement installed detached uninstall runtime with evidence binding",
+  "baseCommit": "6d6c6df97ab19aad302b4ed685af66663ceba31c",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue the mandatory Japanese assessment remediation. The installed adopter runtime must provide a real, safe uninstall path rather than a template-only model. Fix the discovered process and capability problem before documentation alignment or release, use the instruction-plan-implementation-acceptance bidirectional traceability mechanism, and complete the Work Item through PR, Hosted CI, merge, lifecycle closure, and branch cleanup.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:mandatory-japanese-remediation-and-approved-continuous-serial-execution",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:installed-detached-uninstall-runtime-evidence-binding"
+  },
+  "declaredIntent": {
+    "summary": "Close JA-UNINSTALL-RUNTIME-001 with an installed public facts/proposal/execution flow that is fail-closed, proposal-digest bound, evidence-preserving by default, independently verifiable, and accurately documented and assessed.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/installed-detached-uninstaller-runtime-corrective-20260729.contract.json",
+    ".ai/work-items/active/installed-detached-uninstaller-runtime-corrective-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_uninstall_facts.py",
+    "scripts/ai_uninstall_proposal.py",
+    "scripts/ai_detached_uninstaller.py",
+    "scripts/ai_install_facts.py",
+    "scripts/ai_japanese_capability.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/install_ai_cockpit.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "tests/test_uninstall_facts.py",
+    "tests/test_uninstall_proposal.py",
+    "tests/test_detached_uninstaller.py",
+    "tests/test_install_facts.py",
+    "tests/test_installer.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_capability_truth_matrix.py",
+    "tests/test_japanese_capability.py",
+    "tests/test_japanese_adopter_lifecycle.py",
+    "docs/getting-started/installation.ja.md",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/reference/installed-lifecycle.md",
+    "docs/reference/upgrade.md",
+    "docs/reference/upgrade.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-29-installed-detached-uninstaller-runtime-corrective.md"
+  ],
+  "outOfScope": [
+    "Purge execution or deletion of archived governance evidence.",
+    "Deletion of project-owned, modified, drifted, unknown-owned, protected, or unlisted paths.",
+    "Changing installation, upgrade, rollback, release publication, or branch-protection behavior.",
+    "Claiming general Japanese fluency, enterprise compliance, security sandboxing, or identity guarantees.",
+    "General three-language documentation alignment, deprecated-asset cleanup, release publication, or final plan cleanup."
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Authoritative machine-readable release blocker JA-UNINSTALL-RUNTIME-001."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-uninstall-documentation-corrective-20260729.summary.json",
+      "reason": "Implementation review that distinguishes installed public behavior from template-only models."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Approved serial order and WI-16-ISSUE-015 corrective requirement."
+    },
+    {
+      "path": "scripts/ai_uninstall_proposal.py",
+      "reason": "Current proposal surface and missing digest binding."
+    },
+    {
+      "path": "scripts/ai_detached_uninstaller.py",
+      "reason": "Current non-installed in-memory model that does not mutate or verify filesystem state."
+    },
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "Authoritative installed payload boundary."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Authoritative adopter-facing public command surface."
+    },
+    {
+      "path": "docs/reference/installed-lifecycle.md",
+      "reason": "Current lifecycle truth and required documentation alignment surface."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "filesystem_deletion",
+      "governance_evidence_loss",
+      "proposal_replay_or_substitution",
+      "partial_failure",
+      "installed_payload_drift"
+    ],
+    "reason": "This Work Item introduces a public filesystem-removal executor. It must prove exact proposal identity, confinement, evidence preservation, fail-closed ownership/drift behavior, truthful partial-failure receipts, and installed-payload availability.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the ordered corrective work; implementation is confined to repository code and temporary test repositories, while real deletion remains confirmation- and digest-gated."
+  },
+  "preReviewWarnings": [
+    "Review path confinement, symlink handling, proposal canonicalization, and time-of-check/time-of-use behavior.",
+    "Review that every non-success result reports actual removed, preserved, missing, and failed paths without claiming completion.",
+    "Review installer catalog and Make target parity in a clean adopter fixture."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record the destructive-boundary design before editing and re-evaluate it against the final implementation."
+  },
+  "acceptance": [
+    "A1: An installed `ai-cockpit-uninstall-facts` entrypoint produces deterministic, repository-relative facts for only catalog-managed runtime paths, records existence/type/digest/ownership evidence, and fails closed on symlinks, path escape, malformed state, drift, or unknown ownership.",
+    "A2: `ai-cockpit-uninstall-propose` binds the canonical facts, exact mode, deletion list, preservation list, repository identity, and session to a deterministic proposalDigest; changing any bound field invalidates execution.",
+    "A3: An installed `ai-cockpit-uninstall-execute` entrypoint requires an exact confirmed proposal digest, revalidates current facts immediately before mutation, removes only unchanged listed runtime files inside the repository, preserves governance evidence and project-owned paths by default, and never follows symlinks.",
+    "A4: Execution is detached from files it may remove, writes its receipt outside the deletion set, verifies post-state, and reports `runtimeRemovalVerified: true` only when every requested removable path is absent and every preserved path remains.",
+    "A5: Drift, unknown ownership, missing confirmation, digest mismatch, repository mismatch, replayed/completed receipt, and time-of-check/time-of-use changes produce a fail-closed non-mutating result.",
+    "A6: Partial filesystem failure produces a non-success receipt with exact removed, preserved, missing, and failed path evidence plus recovery guidance; it never reports completed or runtimeRemovalVerified.",
+    "A7: The facts builder and executor scripts plus their public Make targets are in the installer catalog and work in a clean adopted repository without importing template-only files.",
+    "A8: Unit, mutation, path-escape/symlink, partial-failure, and clean-adopter lifecycle tests prove the public behavior; the Japanese assessment cannot clear the blocker from source-marker presence alone.",
+    "A9: Japanese installation guidance, Installed Lifecycle, Capability Truth Matrix, and regenerated Japanese assessment state the exact facts/proposal/execution/receipt results, retain the purge STOP boundary, and clear JA-UNINSTALL-RUNTIME-001 only when the clean-adopter lifecycle test passes.",
+    "A10: Plan, Contract, implementation, tests, generated assessment, and acceptance evidence are mapped bidirectionally; full quality, archive, one PR, Hosted CI including terminal evidence, merge, ai-close-work-item, branch deletion, and synchronized clean main complete before documentation alignment begins."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A proposal is confirmed and no managed path changed after facts collection.",
+      "expected": "The installed detached executor removes only the exact bound runtime paths, preserves evidence/project-owned paths, writes a receipt outside the deletion set, and verifies post-state.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Create a clean adopter fixture, generate facts and proposal through installed Make targets, execute by exact digest, and assert filesystem plus receipt state."
+    },
+    {
+      "scenario": "A managed file, proposal field, repository identity, or confirmation digest changes before execution.",
+      "expected": "Execution fails before the first deletion and records the mismatch without mutating the repository.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Mutation-test facts, proposal, repository identity, file digest, deletion list, and confirmation digest."
+    },
+    {
+      "scenario": "A candidate is absolute, escapes the repository, traverses a symlink, is unknown-owned, or is not catalog-managed.",
+      "expected": "Facts/proposal/execution fail closed and no external or unlisted path is touched.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use temporary repositories with traversal, absolute, symlink, and unlisted candidates and assert byte-for-byte no mutation."
+    },
+    {
+      "scenario": "Filesystem removal fails after one or more earlier paths were removed.",
+      "expected": "The executor stops, records a partial non-success receipt with exact actual state and recovery guidance, and never sets runtimeRemovalVerified.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Inject a deterministic removal failure after an earlier successful removal and validate receipt truth."
+    },
+    {
+      "scenario": "The runtime scripts and Make targets are installed into a clean adopter repository.",
+      "expected": "Facts, proposal, and execute commands run using installed files only, and the Japanese assessment clears JA-UNINSTALL-RUNTIME-001 from executable lifecycle evidence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Extend installer and Japanese adopter lifecycle tests, regenerate assessment, and run the focused suite plus full quality."
+    }
+  ],
+  "guidelines": [
+    "Use Python standard-library primitives and repository-relative normalized paths.",
+    "Keep facts/proposal generation non-mutating except for their explicitly requested output files.",
+    "Require exact proposalDigest confirmation and immediate pre-mutation revalidation.",
+    "Never follow symlinks or remove project-owned, evidence, modified, unknown-owned, protected, unlisted, absolute, or escaping paths.",
+    "Write truthful durable receipts outside the deletion set for success, block, and partial failure.",
+    "Document only installed, executable behavior and retain explicit unsupported boundaries.",
+    "Use red-first tests for every destructive and fail-closed scenario.",
+    "Record discovered implementation or process problems in the Summary before continuing."
+  ],
+  "intent": {
+    "problem": "The Japanese release assessment proves that adopter repositories can generate only an uninstall proposal/state output. They cannot build authoritative uninstall facts, bind confirmation to a proposal digest, invoke an installed detached filesystem-removal executor, or verify actual removal. The existing detached module is a non-installed in-memory model, so documentation or marker checks alone cannot safely clear the mandatory Japanese release blocker.",
+    "constraints": [
+      "Preserve evidence and project-owned content by default.",
+      "Do not implement purge in this Work Item.",
+      "Do not delete any path that was not catalog-managed, facts-bound, proposal-bound, repository-confined, unchanged, and explicitly confirmed.",
+      "Keep all real mutation tests inside disposable temporary repositories.",
+      "Do not enter documentation alignment or release while JA-UNINSTALL-RUNTIME-001 remains blocked.",
+      "Complete one Work Item, one branch, one PR, merge, closure, and branch cleanup before the next Work Item."
+    ],
+    "rationale": "A three-stage facts/proposal/detached-execution protocol with deterministic identity binding and post-state receipts turns the existing conceptual model into reviewable installed behavior while preserving fail-closed control. Executable adopter evidence, rather than source markers or claims, is the only acceptable basis for clearing the release blocker."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized continuous implementation of the Japanese corrective and all required process changes. This approval is bounded to adding the installed ai-cockpit-uninstall-facts, ai-cockpit-uninstall-propose, and ai-cockpit-uninstall-execute public targets to the template-maintenance root Makefile and updating the reviewed Bandit low-risk baseline for the executor's two expected LOW findings; it does not authorize release, purge, unrelated Make behavior, or suppression of medium/high findings."
+  },
+  "rollbackNote": "Revert this Work Item diff. Runtime tests use disposable repositories; no production repository deletion is part of implementation verification.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 664
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/installed-detached-uninstaller-runtime-corrective-20260729.json",
+    "baseCommit": "6d6c6df97ab19aad302b4ed685af66663ceba31c",
+    "initialScopeDigest": "0de6a4c7c9cb8ac9621208d6be84a0194486d0edf890e844f5ce0ca52e70239d",
+    "contractSkeletonDigest": "f52eaebc13348133f60867b87993e4c8acfff3f8d134f7523dc97f3302c63b01"
+  }
+}
