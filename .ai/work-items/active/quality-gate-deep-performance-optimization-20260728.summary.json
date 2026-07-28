@@ -154,6 +154,24 @@
       "resolution": "The focused regression and make check-ai-system-invariants pass with the corrected parser.",
       "status": "resolved",
       "followUp": "Keep future option forms explicit; options that consume arguments require separate parser coverage before use in documented command extraction."
+    },
+    {
+      "issueId": "RFE-ISSUE-145",
+      "category": "snapshot-environment-isolation",
+      "severity": "high",
+      "stage": "hosted-snapshot-project-test",
+      "fact": "The snapshot command-line CONTRACT override propagated through GNU Make into pytest and then into nested adopter make processes, causing three lifecycle tests to select the template performance Contract instead of each adopter's local e2e Contract.",
+      "evidence": [
+        "scripts/ai_prepare_hosted_verification.py",
+        "tests/test_hosted_verification_snapshot.py",
+        "tests/test_finish_e2e.py",
+        "tests/test_project_governance_journey.py",
+        "target/quality/current-session.txt"
+      ],
+      "decision": "Sanitize parent Make and Work Item override variables only at the isolated snapshot quality subprocess boundary; preserve the rest of the hosted/local execution environment.",
+      "resolution": "The environment regression and all three previously failing lifecycle tests pass together.",
+      "status": "resolved",
+      "followUp": "The next complete snapshot quality run must prove the sanitized boundary across the whole suite before any measurement push."
     }
   ],
   "residualRisks": [

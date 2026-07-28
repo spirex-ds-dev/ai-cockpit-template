@@ -200,17 +200,31 @@ def test_default_quality_runner_binds_the_current_session(tmp_path, monkeypatch)
         session_id + "\n", encoding="utf-8"
     )
     write_json(session / "summary.json", {"decision": "PASS"})
-    monkeypatch.setattr(
-        hosted.subprocess,
-        "run",
-        lambda *_args, **_kwargs: SimpleNamespace(returncode=0),
-    )
+    inherited = {
+        "MAKEFLAGS": "-- CONTRACT=/template/active.contract.json",
+        "MAKEOVERRIDES": "CONTRACT",
+        "MFLAGS": "--",
+        "GNUMAKEFLAGS": "--warn-undefined-variables",
+        "CONTRACT": "/template/active.contract.json",
+        "SUMMARY": "/template/active.summary.json",
+        "TASK": "template-task",
+    }
+    for key, value in inherited.items():
+        monkeypatch.setenv(key, value)
+    captured = {}
+
+    def fake_run(*_args, **kwargs):
+        captured.update(kwargs["env"])
+        return SimpleNamespace(returncode=0)
+
+    monkeypatch.setattr(hosted.subprocess, "run", fake_run)
 
     result = hosted.default_quality_runner(tmp_path)
 
     assert result["sessionId"] == session_id
     assert result["decision"] == "PASS"
     assert result["summaryDigest"].startswith("sha256:")
+    assert inherited.keys().isdisjoint(captured)
 
 
 def test_default_quality_runner_rejects_failed_or_unbound_quality(tmp_path, monkeypatch):

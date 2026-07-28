@@ -202,8 +202,8 @@
       "summary": "Treat deep quality performance as the highest-priority bottleneck: remove history-amplified installer traversal, isolate and stream quality evidence, preserve diagnostics on every outcome, parallelize independent hosted jobs, and require three comparable hosted runs before claiming improvement.",
       "planWorkItems": ["WI-20", "quality-gate-deep-performance-optimization-20260728"],
       "contractPaths": [".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json"],
-      "implementationEvidence": ["Makefile", ".github/workflows/smoke.yml", "scripts/run_quality_gate.py", "scripts/install_ai_cockpit.py", "scripts/check_system_invariants.py", "docs/operations/quality-gates.md", "docs/operations/quality-gates.zh-CN.md", "docs/operations/quality-gates.ja.md"],
-      "acceptanceEvidence": ["tests/test_quality_telemetry.py", "tests/test_quality_gate_architecture.py", "tests/test_ci_quality_orchestration.py", "tests/test_workflows.py", "tests/test_installer.py", "tests/test_system_invariants.py"],
+      "implementationEvidence": ["Makefile", ".github/workflows/smoke.yml", "scripts/run_quality_gate.py", "scripts/install_ai_cockpit.py", "scripts/check_system_invariants.py", "scripts/ai_prepare_hosted_verification.py", "docs/operations/quality-gates.md", "docs/operations/quality-gates.zh-CN.md", "docs/operations/quality-gates.ja.md"],
+      "acceptanceEvidence": ["tests/test_quality_telemetry.py", "tests/test_quality_gate_architecture.py", "tests/test_ci_quality_orchestration.py", "tests/test_workflows.py", "tests/test_installer.py", "tests/test_system_invariants.py", "tests/test_hosted_verification_snapshot.py"],
       "verificationCommands": ["make ai-preflight", "make check-instruction-traceability", "make quality", "make ai-finish TASK=quality-gate-deep-performance-optimization-20260728", "make ai-close-work-item TASK=quality-gate-deep-performance-optimization-20260728"]
     }
   ]
