@@ -227,7 +227,7 @@ def test_wi10_beginner_check_requires_release_make_confirmation_and_ci_boundarie
         "structured-checklist-evidence,candidate-bound -->",
         "<!-- calibration-activation-atomicity: "
         "active-session-rollback-transaction,candidate-digest-bound -->",
-        "<!-- make-composite-boundary: integration-required-before-ai-finish -->",
+        "<!-- make-composite-boundary: selected-entrypoint-propagates-through-ai-finish -->",
     ):
         text = text.replace(marker, "", 1)
     chinese.write_text(text, encoding="utf-8")
@@ -259,7 +259,8 @@ def test_wi10_beginner_check_requires_release_make_confirmation_and_ci_boundarie
         "docs/getting-started/installation.zh-CN.md: missing Active/Session atomicity boundary"
     ) in errors
     assert (
-        "docs/getting-started/installation.zh-CN.md: missing composite Make integration boundary"
+        "docs/getting-started/installation.zh-CN.md: missing composite Make entrypoint "
+        "propagation boundary"
     ) in errors
 
 

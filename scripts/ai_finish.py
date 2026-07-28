@@ -21,6 +21,7 @@ from ai_common import (
     current_head,
     discover_remote_default_candidates,
     load_json,
+    nested_make_command,
     path_fingerprint,
     redact_machine_paths,
     redact_sensitive_output,
@@ -85,6 +86,12 @@ def run(command: list[str], *, extra_env: dict[str, str] | None = None) -> tuple
         for name in ("PROJECT_FORMAT_CHECK", "PROJECT_TEST", "PROJECT_LINT"):
             if name in os.environ and not any(item.startswith(f"{name}=") for item in command):
                 command.append(f"{name}={os.environ[name]}")
+    try:
+        command = nested_make_command(command, root=PROJECT_ROOT)
+    except ValueError as exc:
+        output = f"ERROR: {exc}\n"
+        print(output, end="", file=sys.stderr)
+        return 2, 0, output
     print("$ " + " ".join(command))
     start = time.time()
     environment = clean_git_environment()

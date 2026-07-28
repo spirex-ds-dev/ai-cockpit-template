@@ -14,6 +14,8 @@ import subprocess  # nosec B404 - every executable and argument list is fixed be
 import sys
 from typing import Any
 
+from ai_common import nested_make_command
+
 
 class HostedVerificationError(ValueError):
     """A hosted-verification snapshot does not satisfy the narrow lifecycle boundary."""
@@ -115,8 +117,12 @@ def default_quality_runner(root: Path) -> dict[str, str]:
         "SUMMARY",
         "TASK",
     }
+    try:
+        command = nested_make_command(["make", "quality"], root=root)
+    except ValueError as exc:
+        raise HostedVerificationError(str(exc)) from exc
     result = subprocess.run(  # nosec B603 B607
-        ["make", "quality"],
+        command,
         cwd=root,
         env={
             **{key: value for key, value in os.environ.items() if key not in inherited_make_state},

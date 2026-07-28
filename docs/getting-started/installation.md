@@ -266,12 +266,13 @@ separately reviewed and installed. Otherwise the agent must use
 does not edit the Makefile or type either command without a separate approved
 plan.
 
-<!-- make-composite-boundary: integration-required-before-ai-finish -->
-A direct target may use the explicit `Makefile.ai` entrypoint. Before a
-composite lifecycle target such as `ai-finish`, however, the agent must
-separately review and install `include Makefile.ai`, because its child steps
-currently invoke ordinary Make. If that integration is absent or conflicts,
-STOP before the composite target and contact the build/repository owner.
+<!-- make-composite-boundary: selected-entrypoint-propagates-through-ai-finish -->
+Both direct targets and composite lifecycle targets such as `ai-start` and
+`ai-finish` may use the explicit `make -f Makefile.ai <target>` entrypoint.
+AI Cockpit validates that selected repository-local Makefile and propagates it
+through every nested Make step. Root Make integration remains optional. If the
+selected file is missing, outside the repository, unsupported, or conflicts
+with another `-f` selection, STOP and contact the build/repository owner.
 
 For iOS, Android, or Java, open the same-language example before choosing:
 [iOS](examples/ios.md), [Android](examples/android.md), [Java](examples/java.md).

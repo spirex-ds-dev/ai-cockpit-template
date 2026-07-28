@@ -1,0 +1,701 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "rfe152-nested-make-entrypoint-propagation-20260729",
+  "contractPath": ".ai/work-items/archive/2026/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "reason": "Defined the source-bound RFE-152 scope, authority boundary, scenarios, acceptance, and full lifecycle."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "reason": "Recorded red-green evidence, implementation, risks, documentation alignment, and bidirectional traceability."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Regenerated governed Work Item status."
+    },
+    {
+      "path": ".ai/cockpit/bandit_low_risk_baseline.json",
+      "reason": "Recorded the reviewed low-risk finding set after suppressing the Make -f false positive and the validated argv refactor removed one scanner-only B607 identity."
+    },
+    {
+      "path": ".ai/work-items/starts/rfe152-nested-make-entrypoint-propagation-20260729.json",
+      "reason": "Generated the immutable Start Receipt from synchronized origin/main."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Exported the selected root entrypoint and routed every recursive template-maintenance Make call through it."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Exported and propagated the selected adopter Makefile for direct and composite installed lifecycle targets."
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "Added the shared repository-local Make entrypoint validator and argv constructor."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Applied the selected entrypoint to Preflight, registered checks, stabilization, final Status checks, and archive."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Applied the selected entrypoint to nested startup Preflight and status checks."
+    },
+    {
+      "path": "scripts/ai_onboard.py",
+      "reason": "Applied the shared entrypoint to onboarding targets with controlled failure diagnostics."
+    },
+    {
+      "path": "scripts/ai_prepare_hosted_verification.py",
+      "reason": "Applied the selected entrypoint to isolated hosted-snapshot quality execution."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Changed the three-language composite Make invariant from temporary integration-required to implemented propagation."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Added repository, path, filename, symlink/conflict, GNUmakefile, and command construction regressions."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Added the no-root-include adopter start, nested failure, retry, finish, and archive journey."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Added the direct ai_start nested-entrypoint regression required by production-to-test coverage mapping."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Added static parity checks that reject legacy recursive plain-Make call sites."
+    },
+    {
+      "path": "tests/test_ai_onboard.py",
+      "reason": "Added selected-entrypoint onboarding regression and isolated inherited Make authority in fixtures."
+    },
+    {
+      "path": "tests/test_hosted_verification_snapshot.py",
+      "reason": "Added selected-entrypoint hosted quality regression and inherited-environment isolation."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Updated mutation coverage for the implemented three-language composite propagation marker."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Aligned English novice guidance with explicit entrypoint support for direct and composite targets."
+    },
+    {
+      "path": "docs/getting-started/installation.zh-CN.md",
+      "reason": "Aligned Chinese novice guidance with explicit entrypoint support and fail-closed boundaries."
+    },
+    {
+      "path": "docs/getting-started/installation.ja.md",
+      "reason": "Aligned Japanese novice guidance with explicit entrypoint support and fail-closed boundaries."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registered the RFE-152 design and implementation plan."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Added PLAN-DIRECTIVE-031 instruction-plan-implementation-acceptance bindings."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-07-29-rfe152-nested-make-entrypoint-design.md",
+      "reason": "Recorded root cause, authority boundary, propagation, failure behavior, and non-claims."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-29-rfe152-nested-make-entrypoint.md",
+      "reason": "Recorded TDD tasks and the bidirectional instruction-plan-implementation-acceptance matrix."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Bound RFE-ISSUE-152 to the corrective Work Item and post-fix documentation requirement."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe152-nested-make-entrypoint-propagation-20260729.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "scripts/ai_finish.py",
+    "scripts/ai_common.py",
+    "templates/make/Makefile.ai",
+    "tests/test_finish_e2e.py",
+    ".ai/work-items/archive/2026/wi10-platform-table-rendering-corrective-20260728.summary.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "An adopter with a root Makefile that does not include Makefile.ai invokes a direct target with make -f Makefile.ai.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_finish_e2e.py::test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry",
+        "tests/test_start_and_archive.py::test_start_nested_make_uses_selected_explicit_entrypoint"
+      ]
+    },
+    {
+      "scenario": "The same no-include adopter invokes ai-finish through make -f Makefile.ai.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_finish_e2e.py::test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry"
+      ]
+    },
+    {
+      "scenario": "A required nested check fails in the no-include adopter and is retried.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_finish_e2e.py::test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry"
+      ]
+    },
+    {
+      "scenario": "The selected entrypoint is outside the repository, traverses outside it, is missing, has an unsupported name, or conflicts with an explicit nested -f.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_nested_make_command_rejects_untrusted_or_conflicting_entrypoint"
+      ]
+    },
+    {
+      "scenario": "AI Cockpit is invoked from a normal root Makefile that includes Makefile.ai or from the template repository root Makefile.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_finish_e2e.py::test_required_failure_keeps_active_and_retry_archives",
+        "tests/test_core_gates.py::test_nested_make_command_supports_an_including_gnumakefile",
+        "tests/test_makefile.py::test_make_entrypoint_is_exported_and_all_recursive_calls_use_it"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:49:59.978867+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "980d387111a2b860edf4e661312a5961e940fd4d246e50bc06af8617b76310ed",
+      "commandHash": "cf12aadc2eca489ec474d00ce2f5502a8f72bd561155f785002563663db921dd",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "10872c945002f117a10823f0f0a0c7fbd3e0c2846a2b58e07fc423f3133b9013",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json work item contract check passed: .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json work item contract check passed: .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "outputBytes": 280
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:50:00.204519+00:00",
+      "exitCode": 0,
+      "durationMs": 163,
+      "outputDigest": "27a4f739bd10b3bd9227c50187bb3d10c129d266e0ccd7b0ac6403fccdcc0279",
+      "commandHash": "8bca45c4292e7d3d2b3aca7071c1772c638f62d1fef391c22cc0db72c5c5cb45",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "10872c945002f117a10823f0f0a0c7fbd3e0c2846a2b58e07fc423f3133b9013",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json scope guard passed: 26 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json scope guard passed: 26 changed path(s) covered",
+      "outputBytes": 203
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:50:00.374301+00:00",
+      "exitCode": 0,
+      "durationMs": 121,
+      "outputDigest": "df11fb662af7e57f0a5c295e53264af534f991cf6c38bbb0c64e058d5a78690b",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "10872c945002f117a10823f0f0a0c7fbd3e0c2846a2b58e07fc423f3133b9013",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json [warning] restricted_write: .ai/cockpit/bandit_low_risk_baseline.json (.ai/**) - AI governance configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 2 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json [warning] restricted_write: .ai/cockpit/bandit_low_risk_baseline.json (.ai/**) - AI governance configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 2 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 440
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:50:00.664052+00:00",
+      "exitCode": 0,
+      "durationMs": 215,
+      "outputDigest": "8847fd7c284d1f71dd60c2664534bae829d11ae10fc8bafc3e218c73f6975bc7",
+      "commandHash": "c7cfb9f095dff2545ad726135d6febdfb1ed2c0ab5815f5b473cf7cad42fbda8",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "10872c945002f117a10823f0f0a0c7fbd3e0c2846a2b58e07fc423f3133b9013",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `rfe152-nested-make-entrypoint-propagation-20260729` - Contract Hash: `afe61f3972017fd5` - Mode: `code` - notCodable: `False` - Execution Decision: `c",
+      "outputTail": "y Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/getting-started/installation.ja.md` — covered by Contract scope - [active_owned] `docs/getting-started/installation.md` — covered by Contract scope - [active_owned] `docs/getting-started/installation.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-rfe152-nested-make-entrypoint.md` — covered by Contract scope - [active_owned] `docs/superpowers/specs/2026-07-29-rfe152-nested-make-entrypoint-design.md` — covered by Contract scope - [active_owned] `scripts/ai_common.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/ai_onboard.py` — covered by Contract scope - [active_owned] `scripts/ai_prepare_hosted_verification.py` — covered by Contract scope - [active_owned] `scripts/ai_start.py` — covered by Contract scope - [active_owned] `scripts/check_docs_metadata.py` — covered by Contract scope - [active_owned] `templates/make/Makefile.ai` — covered by Contract scope - [active_owned] `tests/test_ai_onboard.py` — covered by Contract scope - [active_owned] `tests/test_core_gates.py` — covered by Contract scope - [active_owned] `tests/test_docs_metadata.py` — covered by Contract scope - [active_owned] `tests/test_finish_e2e.py` — covered by Contract scope - [active_owned] `tests/test_hosted_verification_snapshot.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope - [active_owned] `tests/test_start_and_archive.py` — covered by Contract scope ## Next Action - Run or record required verification: aiAgentRisk",
+      "outputBytes": 8237
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:50:00.817524+00:00",
+      "exitCode": 0,
+      "durationMs": 101,
+      "outputDigest": "8ef55288f0412c572f54807f55a935d0ab04e65757a5950ef37b62e7b2da5d2f",
+      "commandHash": "2d47198d77b964ef7da3f30104ef3da9e69829dde77e406b124195829c14abad",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "10872c945002f117a10823f0f0a0c7fbd3e0c2846a2b58e07fc423f3133b9013",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json review policy matched 10 path(s) [review] .ai/work-items/starts/rfe152-nested-make-entrypoint-propagation-20260729.json [review] .ai/cockpit/bandit_low_risk_baseline.json [review] .ai/cockpit/current_status.md [review] Makefile [review] scripts/ai_common.py [review] scripts/ai_finish.py [review] scripts/ai_onboard.py [review]",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json review policy matched 10 path(s) [review] .ai/work-items/starts/rfe152-nested-make-entrypoint-propagation-20260729.json [review] .ai/cockpit/bandit_low_risk_baseline.json [review] .ai/cockpit/current_status.md [review] Makefile [review] scripts/ai_common.py [review] scripts/ai_finish.py [review] scripts/ai_onboard.py [review] scripts/ai_prepare_hosted_verification.py [review] scripts/ai_start.py [review] templates/make/Makefile.ai review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 685
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:50:00.965264+00:00",
+      "exitCode": 0,
+      "durationMs": 96,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "10872c945002f117a10823f0f0a0c7fbd3e0c2846a2b58e07fc423f3133b9013",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:50:01.484454+00:00",
+      "exitCode": 0,
+      "durationMs": 249,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "10872c945002f117a10823f0f0a0c7fbd3e0c2846a2b58e07fc423f3133b9013",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:50:01.998249+00:00",
+      "exitCode": 0,
+      "durationMs": 453,
+      "outputDigest": "f1c63d2024e6fb7e68c75fe82be7d95644c14262cbbbf65179c66299e3064348",
+      "commandHash": "f9bf547dbd0d765d2f1dc99285c8002a9ab62fe200b549f24942b8b4f6321376",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "10872c945002f117a10823f0f0a0c7fbd3e0c2846a2b58e07fc423f3133b9013",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 323
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:50:02.106593+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "dd8d38cd89156c05f6e72b8276931028ab553cb2b07a1b23d0c4e43693309ba1",
+      "commandHash": "f917d066d9f4674257670d0651beee1ebfdbb7528682c7d9f5c84278d33d1f65",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "10872c945002f117a10823f0f0a0c7fbd3e0c2846a2b58e07fc423f3133b9013",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputBytes": 328
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:50:02.346450+00:00",
+      "exitCode": 0,
+      "durationMs": 193,
+      "outputDigest": "34e592eede97f47bdf0702f584ef3123fe7f7c0c47824d40fa34ec647311a505",
+      "commandHash": "66cfbf3a89a005f68428d36ac613393bad0c4637140c8fd97abad55f724a162b",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "10872c945002f117a10823f0f0a0c7fbd3e0c2846a2b58e07fc423f3133b9013",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json ## Diff Ownership Preview - active_owned: `26`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/bandit_low_risk_baseline.json` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] ",
+      "outputTail": "e152-nested-make-entrypoint-propagation-20260729.json` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/getting-started/installation.ja.md` — covered by Contract scope - [active_owned] `docs/getting-started/installation.md` — covered by Contract scope - [active_owned] `docs/getting-started/installation.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-rfe152-nested-make-entrypoint.md` — covered by Contract scope - [active_owned] `docs/superpowers/specs/2026-07-29-rfe152-nested-make-entrypoint-design.md` — covered by Contract scope - [active_owned] `scripts/ai_common.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/ai_onboard.py` — covered by Contract scope - [active_owned] `scripts/ai_prepare_hosted_verification.py` — covered by Contract scope - [active_owned] `scripts/ai_start.py` — covered by Contract scope - [active_owned] `scripts/check_docs_metadata.py` — covered by Contract scope - [active_owned] `templates/make/Makefile.ai` — covered by Contract scope - [active_owned] `tests/test_ai_onboard.py` — covered by Contract scope - [active_owned] `tests/test_core_gates.py` — covered by Contract scope - [active_owned] `tests/test_docs_metadata.py` — covered by Contract scope - [active_owned] `tests/test_finish_e2e.py` — covered by Contract scope - [active_owned] `tests/test_hosted_verification_snapshot.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope - [active_owned] `tests/test_start_and_archive.py` — covered by Contract scope",
+      "outputBytes": 2579
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:54:28.661750+00:00",
+      "exitCode": 0,
+      "durationMs": 266221,
+      "outputDigest": "4e0e09f229a568014cc2c65ac556a0fab843dd49ce6da289a9ecf28bd032f669",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "10872c945002f117a10823f0f0a0c7fbd3e0c2846a2b58e07fc423f3133b9013",
+      "outputSummary": "\"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-full \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-fast-static \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"30d4f4e56ed1",
+      "outputTail": ".06s call tests/test_start_and_archive.py::test_ai_start_journeys 2.71s call tests/test_project_governance.py::test_system_invariants_reject_missing_governance_docs 2.37s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[True-False] 2.33s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 2.11s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[False-True] 2.02s call tests/test_installer.py::test_upgrade_rolls_back_when_post_copy_validation_fails 1.97s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 1391 passed, 3 warnings in 258.61s (0:04:18) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.zzChf2s40r/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.zzChf2s40r/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.zzChf2s40r/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.zzChf2s40r/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/30d4f4e56ed1-local-20260728T155002Z-28038-0/summary.json",
+      "outputBytes": 46471
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:54:30.239888+00:00",
+      "exitCode": 0,
+      "durationMs": 231,
+      "outputDigest": "bc6667722998906ceb75819f8a4abced223f6aae757d6f0724a8e842fbf7edf1",
+      "commandHash": "5fd4b478d03d0939877611edd1ed229ef360a4c3757774eef47993ba552c884e",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "8bee2e2584cf958b63cc2da36198762b923f0ab57d671159449d9ed8589fbfe5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 370
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:54:30.574957+00:00",
+      "exitCode": 0,
+      "durationMs": 276,
+      "outputDigest": "9dc1d486bc405b99bc5582ed0546dcccd2c3a38e5a0714634fcd45c11c53710a",
+      "commandHash": "5f657d555fc30787e79d0c487099694922829ed4490121e0fb2cbc7fc06fd8c1",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "8bee2e2584cf958b63cc2da36198762b923f0ab57d671159449d9ed8589fbfe5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 353
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:54:30.673675+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "8bee2e2584cf958b63cc2da36198762b923f0ab57d671159449d9ed8589fbfe5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:54:30.926942+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "50fa91311fc46fd63b5b23300e44fc7d8950b8167e830c3f47e5361c9fb8deef",
+      "commandHash": "4d866ad9813c773f9e633bc9f4baa4564fb08a3ba876c9946dc4c8ef9ec7b318",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "8bee2e2584cf958b63cc2da36198762b923f0ab57d671159449d9ed8589fbfe5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json --summary .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 333
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json CONTRACT=.ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T15:54:32.059509+00:00",
+      "exitCode": 0,
+      "durationMs": 100,
+      "outputDigest": "b9230b3b436d861440e705a1a948e17ad2b6873a173f24a3612a8a5f262604fe",
+      "commandHash": "c3fee02bdffad7b5bb09258bbdb9999a7ad82a3a06c634d88a7349a8658df936",
+      "contractHash": "afe61f3972017fd598b3c9b5b17bb8e94a829f65a0b64761f3afd1c87d52edbf",
+      "commitSha": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+      "executionContractPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "worktreeDigest": "4b73885d95b00759768656771ea19b95f54bc37dd45c7035b6b025bc3a81edce",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json ai summary check passed: .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json --contract .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json ai summary check passed: .ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+      "outputBytes": 367
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Use red-green-refactor TDD and reproduce the no-include adopter failure before implementation.",
+      "compliant": true,
+      "evidence": "The initial no-include e2e failed at nested ai-preflight; the same test now completes failure/retry/archive."
+    },
+    {
+      "guideline": "Propagate one validated argv boundary; do not encode shell command strings or trust ambient MAKEFLAGS to preserve -f.",
+      "compliant": true,
+      "evidence": "scripts/ai_common.py nested_make_command constructs list argv and Makefiles export firstword MAKEFILE_LIST."
+    },
+    {
+      "guideline": "Keep canonical registered check/evidence commands repository-relative and machine-independent.",
+      "compliant": true,
+      "evidence": "ai_finish records catalog command identity while only subprocess argv receives the repository-relative -f selection."
+    },
+    {
+      "guideline": "Fail closed on conflicting or untrusted entrypoint authority rather than silently falling back to plain make.",
+      "compliant": true,
+      "evidence": "The table-driven negative matrix rejects external, traversal, missing, unsupported, and conflicting forms."
+    },
+    {
+      "guideline": "Keep the root Makefile and distributed templates/make/Makefile.ai behavior aligned.",
+      "compliant": true,
+      "evidence": "tests/test_makefile.py verifies identical export/recursive invariants and absence of legacy call forms."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The Make entrypoint is execution authority; validation, no-fallback behavior, and included-root compatibility are regression-guarded."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "RFE-ISSUE-152-ROOT-001",
+      "category": "nested-entrypoint-loss",
+      "severity": "high",
+      "fact": "The red adopter journey proved ai_start.py reached ai-preflight with plain make and failed because the root Makefile did not include AI Cockpit.",
+      "decision": "Propagate one repository-local selected Makefile through Python callers rather than requiring a root edit.",
+      "resolution": "Shared argv construction makes the same explicit entrypoint available to start, finish, onboarding, and hosted verification.",
+      "status": "resolved_locally",
+      "followUp": "Require Hosted CI and full lifecycle closure."
+    },
+    {
+      "issueId": "RFE-ISSUE-152-ROOT-002",
+      "category": "recursive-make-loss",
+      "severity": "high",
+      "fact": "After the Python boundary was fixed, the same red journey reached ai-preflight but Make recipes still launched /usr/bin/make without -f.",
+      "decision": "Replace all recursive command sites with AI_NESTED_MAKE bound to the exported selected entrypoint.",
+      "resolution": "Static parity tests reject both legacy command-v lookup and ambient MAKE fallback forms.",
+      "status": "resolved_locally",
+      "followUp": "Full quality exercises every recursive quality and lifecycle path."
+    },
+    {
+      "issueId": "RFE-ISSUE-152-PATH-001",
+      "category": "make-executable-path",
+      "severity": "medium",
+      "fact": "The platform Make executable path contains spaces; the first recursive implementation invoked it unquoted and failed before target lookup.",
+      "decision": "Quote the Make executable and selected entrypoint independently in Make recipes while retaining list argv in Python.",
+      "resolution": "The no-include journey passes on the current Xcode toolchain path and static Make tests retain the quoting invariant.",
+      "status": "resolved_locally",
+      "followUp": "Hosted macOS and compatibility checks provide external confirmation."
+    },
+    {
+      "issueId": "RFE-ISSUE-152-COVERAGE-001",
+      "category": "coverage-evidence-mapping",
+      "severity": "low",
+      "fact": "The first ai-finish stopped before full quality because scripts/ai_start.py was covered by the adopter e2e but its configured production-to-test association required tests/test_start_and_archive.py.",
+      "decision": "Keep the association strict and add a direct ai_start.run_make regression instead of weakening the Coverage Guard.",
+      "resolution": "The selected explicit entrypoint is now proven both by the full adopter journey and the canonical start/archive test surface.",
+      "status": "resolved_locally",
+      "followUp": "Restart ai-finish from the beginning with a fresh Contract-bound checkpoint."
+    },
+    {
+      "issueId": "RFE-ISSUE-152-BANDIT-001",
+      "category": "security-baseline-drift",
+      "severity": "medium",
+      "fact": "The first complete quality run passed 1391 tests but Bandit reported the same count with a changed digest: the literal Make option -f was misclassified as B105 while the validated argv variable no longer emitted the prior scanner-only B607 identity.",
+      "decision": "Suppress only the proven -f false positive, review the old and new normalized finding sets, and update the low-risk baseline to the resulting smaller set rather than regenerating it blindly.",
+      "resolution": "The Make option carries a narrow B105 nosec rationale; the baseline records the reviewed 111-finding set and the dedicated gate must pass before full ai-finish is restarted.",
+      "status": "resolved_locally",
+      "followUp": "Run the focused Bandit baseline gate, refresh Contract-bound checkpoints, then restart complete ai-finish."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "external-make-implementations",
+      "detail": "Behavior is verified with the repository's supported GNU Make environments; unusual non-GNU Make implementations remain governed by compatibility CI.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Repository-local Makefile authority and conflict rejection",
+      "No-root-include adopter start/finish/archive journey",
+      "Canonical evidence command identity",
+      "Three-language installation boundary alignment"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "selected Make entrypoint is validated and propagated through every composite caller",
+    "userVisibleOutput": "invalid entrypoints fail with an explicit reason and no fallback",
+    "persistence": "not_applicable",
+    "localization": "English, Chinese, and Japanese installation guidance is semantically aligned",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "root and distributed Makefiles export the first parsed Makefile and use AI_NESTED_MAKE recursively"
+  },
+  "userCorrectionsCaptured": [
+    "WI-10 installation must remain simple enough for a non-programmer and should use prompts instead of unnecessary command-line burden.",
+    "Process defects must be fixed permanently before release so later models do not repeat the same failure.",
+    "Every Work Item must use bidirectional instruction-plan-implementation-acceptance verification and complete PR/branch cleanup."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Do not require a beginner to edit the root Makefile for composite lifecycle targets.",
+      "solidifiedIn": "templates/make/Makefile.ai, nested_make_command, no-include finish e2e, and three installation guides"
+    },
+    {
+      "correction": "Do not leave the old invocation path available to future agents.",
+      "solidifiedIn": "AI_NESTED_MAKE static regression and the installed ai-cockpit skill Make entrypoint rule"
+    },
+    {
+      "correction": "Prevent instruction omissions with bidirectional traceability.",
+      "solidifiedIn": "PLAN-DIRECTIVE-031 and the RFE-152 implementation plan matrix"
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "afe61f3972017fd5",
+      "acceptanceCount": 9,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "afe61f3972017fd5",
+      "acceptanceCount": 9,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    }
+  ],
+  "knownGaps": [
+    "Full ai-finish/archive, aggregate PR validation, Hosted CI, merge, closure, and branch cleanup are pending lifecycle evidence.",
+    "RFE-ISSUE-082 remains the next independent release-blocking corrective."
+  ],
+  "overclaimPrevention": "Entrypoint propagation proves lifecycle target availability and fail-closed selection only; it does not prove adopter project quality commands, CI, signing, compliance, or release readiness.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-29T00:30:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-29-rfe152-nested-make-entrypoint.md",
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+        ],
+        "reason": "RFE-152 task order, root causes, and lifecycle remain explicit."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+          ".ai/work-items/archive/2026/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+          "docs/reference/remediation-instruction-traceability.json"
+        ],
+        "reason": "Five scenarios and every user correction map to executable evidence."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "Makefile",
+          "templates/make/Makefile.ai",
+          "scripts/ai_common.py",
+          "tests/test_finish_e2e.py"
+        ],
+        "reason": "Documented explicit composite entrypoint behavior is implemented and tested."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "docs/getting-started/installation.md",
+          "docs/getting-started/installation.zh-CN.md",
+          "docs/getting-started/installation.ja.md",
+          "scripts/check_docs_metadata.py"
+        ],
+        "reason": "All three guides carry the same propagation and STOP boundaries."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/specs/2026-07-29-rfe152-nested-make-entrypoint-design.md",
+          ".ai/work-items/archive/2026/wi10-platform-table-rendering-corrective-20260728.summary.json"
+        ],
+        "reason": "Temporary WI-10 limitation remains immutable history while current docs state the implemented boundary."
+      }
+    ]
+  },
+  "archiveSequence": 643
+}

@@ -22,6 +22,7 @@ from ai_common import (
     clean_git_environment,
     current_head,
     discover_remote_default_candidates,
+    nested_make_command,
     save_json,
 )
 from ai_check_status_consistency import DEFAULT_STATUS, validate_status_consistency
@@ -230,7 +231,10 @@ def acquire_start_lock() -> Iterator[None]:
 def run_make(
     target: str, *, contract: str | None = None, variables: list[str] | None = None
 ) -> tuple[int, str]:
-    command = ["make", target]
+    try:
+        command = nested_make_command(["make", target], root=PROJECT_ROOT)
+    except ValueError as exc:
+        return 2, str(exc)
     if contract:
         command.append(f"CONTRACT={contract}")
     command.extend(variables or [])

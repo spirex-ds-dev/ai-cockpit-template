@@ -61,8 +61,11 @@ def run(root: Path, *args: str, env=None):
     )
 
 
-def prepare_work_item(tmp_path: Path, *, archive_collision: bool = False):
-    (tmp_path / "Makefile").write_text("include Makefile.ai\n", encoding="utf-8")
+def prepare_work_item(
+    tmp_path: Path, *, archive_collision: bool = False, integrate_makefile: bool = True
+):
+    root_makefile = "include Makefile.ai\n" if integrate_makefile else "project-target:\n\t@true\n"
+    (tmp_path / "Makefile").write_text(root_makefile, encoding="utf-8")
     installer = Installer(
         source=ROOT,
         target=tmp_path,
@@ -86,9 +89,10 @@ def prepare_work_item(tmp_path: Path, *, archive_collision: bool = False):
     run(tmp_path, "git", "config", "user.name", "Test")
     assert run(tmp_path, "git", "add", ".").returncode == 0
     assert run(tmp_path, "git", "commit", "-qm", "base").returncode == 0
+    make_entrypoint = ["make"] if integrate_makefile else ["make", "-f", "Makefile.ai"]
     start = run(
         tmp_path,
-        "make",
+        *make_entrypoint,
         "ai-start",
         "TASK=e2e",
         "TITLE=E2E",
@@ -206,6 +210,37 @@ def prepare_work_item(tmp_path: Path, *, archive_collision: bool = False):
     )
     summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     return contract_path, collision_path
+
+
+def test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry(tmp_path):
+    contract_path, _ = prepare_work_item(tmp_path, integrate_makefile=False)
+    failed = run(
+        tmp_path,
+        "make",
+        "-f",
+        "Makefile.ai",
+        "ai-finish",
+        "TASK=e2e",
+        f"PYTHON={sys.executable}",
+        "PROJECT_TEST=false",
+    )
+    assert failed.returncode != 0
+    assert contract_path.exists()
+    assert "No rule to make target" not in failed.stdout + failed.stderr
+
+    retried = run(
+        tmp_path,
+        "make",
+        "-f",
+        "Makefile.ai",
+        "ai-finish",
+        "TASK=e2e",
+        f"PYTHON={sys.executable}",
+        "PROJECT_TEST=true",
+    )
+    assert retried.returncode == 0, retried.stdout + retried.stderr
+    assert not contract_path.exists()
+    assert list((tmp_path / ".ai/work-items/archive").rglob("e2e.contract.json"))
 
 
 def test_required_failure_keeps_active_and_retry_archives(tmp_path):

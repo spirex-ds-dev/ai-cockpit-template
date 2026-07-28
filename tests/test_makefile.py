@@ -268,6 +268,16 @@ def test_nested_make_keeps_bytecode_suppression_when_ai_python_is_in_environment
     assert "/ambient/python scripts/ai_finish.py" not in result.stdout
 
 
+def test_make_entrypoint_is_exported_and_all_recursive_calls_use_it():
+    for path in (ROOT / "Makefile", ROOT / "templates" / "make" / "Makefile.ai"):
+        text = path.read_text(encoding="utf-8")
+        assert "override AI_COCKPIT_MAKE_ENTRYPOINT := $(firstword $(MAKEFILE_LIST))" in text
+        assert "export AI_COCKPIT_MAKE_ENTRYPOINT" in text
+        assert 'AI_NESTED_MAKE = "$(MAKE)" -f "$(AI_COCKPIT_MAKE_ENTRYPOINT)"' in text
+        assert "$(shell command -v make)" not in text
+        assert '"$${MAKE:-make}"' not in text
+
+
 def test_ai_pre_merge_clears_base_commit_for_quality_steps():
     env = {**os.environ, "AI_BASE_COMMIT": "abc123"}
     template_makefile_content = (ROOT / "templates" / "make" / "Makefile.ai").read_text(

@@ -9,7 +9,7 @@ import subprocess
 from pathlib import Path
 
 from ai_check_adoption_ready import readiness_failures
-from ai_common import clean_git_environment
+from ai_common import clean_git_environment, nested_make_command
 from ai_doctor import diagnose
 from ai_readiness_policy import readiness_state
 
@@ -121,14 +121,17 @@ def msg(locale: str, key: str, **kwargs: object) -> str:
 
 def run_make(root: Path, target: str) -> tuple[int, str]:
     try:
+        command = nested_make_command(["make", target], root=root)
         result = subprocess.run(
-            ["make", target],
+            command,
             cwd=root,
             env=clean_git_environment(),
             text=True,
             capture_output=True,
             check=False,
         )
+    except ValueError as exc:
+        return 2, str(exc)
     except OSError as exc:
         return 127, str(exc)
     output = (result.stdout or "") + (result.stderr or "")

@@ -146,6 +146,8 @@ def test_onboard_phase_readiness_propagates_check_failure(tmp_path, monkeypatch)
 
 
 def test_onboard_nested_make_and_phase_failures_are_reported(tmp_path, monkeypatch):
+    monkeypatch.delenv("AI_COCKPIT_MAKE_ENTRYPOINT", raising=False)
+
     def raise_os_error(*_args, **_kwargs):
         raise OSError("missing make")
 
@@ -158,6 +160,21 @@ def test_onboard_nested_make_and_phase_failures_are_reported(tmp_path, monkeypat
     )
     assert ai_onboard.phase_calibration(tmp_path, "en", run_calibrate=True) == 2
     assert ai_onboard.phase_readiness(tmp_path, "en", run_checks=True) == 2
+
+
+def test_onboard_run_make_uses_selected_explicit_entrypoint(tmp_path, monkeypatch):
+    (tmp_path / "Makefile.ai").write_text("quality:\n\t@true\n", encoding="utf-8")
+    monkeypatch.setenv("AI_COCKPIT_MAKE_ENTRYPOINT", "Makefile.ai")
+    captured = {}
+
+    def fake_run(command, **_kwargs):
+        captured["command"] = command
+        return type("Result", (), {"returncode": 0, "stdout": "ok", "stderr": ""})()
+
+    monkeypatch.setattr(ai_onboard.subprocess, "run", fake_run)
+
+    assert ai_onboard.run_make(tmp_path, "quality") == (0, "ok")
+    assert captured["command"] == ["make", "-f", "Makefile.ai", "quality"]
 
 
 def test_onboard_exposes_non_production_readiness_state(tmp_path):
