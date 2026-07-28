@@ -1,0 +1,211 @@
+{
+  "contractVersion": 2,
+  "workItemId": "hosted-verification-snapshot-lifecycle-20260728",
+  "mode": "code",
+  "title": "Add governed pre-finish hosted verification snapshots",
+  "baseCommit": "9deb1e53b32ec703c3ee7a6be19442eb908d7b73",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "The user requires every discovered process defect to be fixed before dependent Work Items continue, and the active performance Work Item requires at least three comparable hosted runs before its Summary and Finish can be complete.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-deep-performance-continue-and-process-first",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-process-corrective-before-hosted-performance"
+  },
+  "declaredIntent": {
+    "summary": "Create a narrow, fail-closed lifecycle stage that permits only a committed Work Item snapshot to be pushed for required hosted verification before ai-finish, without allowing PR, merge, release, archive mutation, or closure.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/hosted-verification-snapshot-lifecycle-20260728.contract.json",
+    ".ai/work-items/active/hosted-verification-snapshot-lifecycle-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    ".ai/guards/coverage_policy.yaml",
+    "AGENTS.md",
+    "Makefile",
+    "scripts/ai_prepare_hosted_verification.py",
+    "tests/test_hosted_verification_snapshot.py",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    "docs/reference/repository-workflow.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Automatic commit, push, pull-request creation, merge, release, tag, or publication",
+    "Allowing an uncommitted, dirty, base-branch, archived, or release-publication Work Item snapshot",
+    "Treating a hosted-verification snapshot as review readiness, Work Item completion, or archive evidence",
+    "Weakening ai-finish, PR ownership, merge, ai-close-work-item, or branch cleanup",
+    "Changing performance implementation or claiming hosted performance results"
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Canonical lifecycle currently requires archive before push and therefore has no legal path for implementation-dependent hosted evidence."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Registered hostedPerformanceEvidence must be complete in the final Summary rather than hand-edited after archive."
+    },
+    {
+      "path": "docs/reference/repository-workflow.md",
+      "reason": "Authoritative repository workflow documents the normal archive-before-push order."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "RFE-ISSUE-137 records the hosted-evidence lifecycle contradiction and required corrective boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "intent": {
+    "problem": "A Work Item whose acceptance requires hosted evidence cannot place that evidence into its final Summary under the current archive-before-push order: an unpublished local commit cannot run on hosted CI, while an archived Summary is immutable after PR CI.",
+    "constraints": [
+      "Preserve archive-before-review as the normal path and limit the exception to explicitly required hosted verification.",
+      "The validator must be non-mutating except for a local target receipt and must never commit, push, open a PR, merge, tag, release, archive, or close.",
+      "A successful receipt does not permit review handoff or provider action; explicit human confirmation for commit and push remains required.",
+      "Release/publication intent, dirty state, base or detached branch, failed local quality, complete hosted evidence, and archived Work Items must fail closed.",
+      "After hosted evidence is recorded, the Work Item must return to the full canonical Finish, PR, merge, closure, and cleanup lifecycle."
+    ],
+    "rationale": "A mechanically checked measurement snapshot removes the evidence deadlock without weakening final lifecycle controls or normalizing arbitrary pre-finish pushes."
+  },
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "lifecycle_order",
+      "external_push_boundary",
+      "evidence_integrity",
+      "release_bypass"
+    ],
+    "reason": "A pre-finish remote snapshot is safe only when it is a committed dedicated-branch state with passed local quality, explicit Contract demand for hosted evidence, incomplete hosted evidence, no archive, and no publication intent.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized continuous execution and required discovered process defects to be fixed before the performance Work Item continues."
+  },
+  "preReviewWarnings": [
+    "Review that the exception authorizes only commit-and-push for hosted measurement and cannot authorize PR, merge, release, archive mutation, or closure."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Lifecycle policy and external push boundaries require checkpoints before implementation and final archive."
+  },
+  "acceptance": [
+    "A deterministic command refuses snapshots unless the current branch is dedicated and non-base, HEAD is committed and clean, the v2 Contract is active and unarchived, local quality is recorded passed, and hosted evidence is explicitly required but still incomplete.",
+    "The command rejects release/publication intent, completed hosted evidence, missing or malformed Summary evidence, base mismatch, dirty worktrees, detached HEAD, base branch, and already archived Work Items.",
+    "The command emits a commit-, tree-, branch-, base-, Contract-, and Summary-digest-bound local receipt but performs no commit, push, PR, merge, tag, release, archive, or branch mutation.",
+    "Agent rules and lifecycle documentation define the narrow order: implement and verify locally, create a local snapshot commit with explicit authorization, run the snapshot gate, push only that branch for hosted measurement, record hosted evidence, then return to canonical ai-finish/archive → final push → PR → merge → ai-close → cleanup.",
+    "Tests cover allowed performance evidence, dirty state, base/detached branch, archive presence, quality not passed, hosted evidence already complete, release intent, and non-mutating behavior.",
+    "The comprehensive plan, instruction traceability, Contract, Summary, implementation, tests, and documentation preserve bidirectional instruction-plan-implementation-acceptance mapping.",
+    "The corrective completes full local quality, PR, hosted CI, merge, archive, ai-close-work-item, remote/local branch cleanup, and synchronized main before the performance Work Item resumes."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A Work Item without a completed local quality result attempts to prepare a hosted snapshot.",
+      "expected": "The snapshot command fails closed and writes no receipt.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run the command against a fixture Summary whose quality result is not_run and assert nonzero exit with no output."
+    },
+    {
+      "scenario": "A release or publication Work Item attempts to use the hosted snapshot exception.",
+      "expected": "The command rejects the Contract regardless of branch cleanliness.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Set requestedOperation and declared intent to publication semantics and assert fail-closed rejection."
+    },
+    {
+      "scenario": "A valid performance Work Item has a clean committed dedicated branch and pending hosted evidence.",
+      "expected": "The command writes a digest-bound receipt without mutating Git refs, the active Contract, Summary, or archive.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use a temporary Git repository, compare refs and governed file bytes before/after, and validate every receipt binding."
+    },
+    {
+      "scenario": "Hosted evidence is already complete or the Work Item is already archived.",
+      "expected": "The snapshot exception is unavailable and canonical Finish/PR lifecycle remains required.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Exercise complete hosted evidence and archive-presence fixtures and assert rejection."
+    }
+  ],
+  "guidelines": [
+    "Keep the exception explicit, source-bound, non-mutating, and narrower than normal review or release authority.",
+    "Do not infer authorization to push, open a PR, merge, or release from a successful snapshot receipt.",
+    "Preserve canonical Finish, archive, PR, merge, closure, and branch cleanup after hosted measurements complete."
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuation-authorization-2026-07-28",
+    "reason": "The user explicitly required every discovered process issue to be fixed before dependent work continues and authorized continuous completion of the governed Work Item lifecycle."
+  },
+  "rollbackNote": "Revert the snapshot validator, target, tests, and lifecycle documentation; no remote or release mutation is performed by the implementation.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 624
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/hosted-verification-snapshot-lifecycle-20260728.json",
+    "baseCommit": "9deb1e53b32ec703c3ee7a6be19442eb908d7b73",
+    "initialScopeDigest": "e33bba47ae5793766b35e67cf569c3b2b7e84b985bdb45ce4250764bcb9f30c6",
+    "contractSkeletonDigest": "b5c7dc6800b724f7515e823f501cd2ea16aa82253a68164cd6779817830145a7"
+  }
+}

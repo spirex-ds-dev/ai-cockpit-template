@@ -92,6 +92,29 @@ Use `make ai-close-work-item TASK=<task>` after the Work Item is archived and it
 
 The required order is: latest remote base, dedicated Work Item branch, implementation, `ai-finish`/archive, push, PR, PR merge, then `ai-close-work-item`. Do not merge the feature branch into local `main` before the PR, and do not delete the Work Item branch before closure; otherwise local `main` can diverge from `origin/main` or the merged branch identity can be lost before ownership verification.
 
+When a Contract explicitly requires hosted verification that cannot run from
+an unpublished commit, a narrow pre-finish measurement stage is available.
+Complete the implementation and local checks, create a local snapshot commit
+with explicit human authorization, then run:
+
+```text
+make ai-prepare-hosted-verification-snapshot \
+  CONTRACT=.ai/work-items/active/<task>.contract.json
+```
+
+The command requires a clean committed dedicated branch, an active v2
+Contract, pending registered hosted evidence, a valid Contract baseline, and a
+passing local `make quality` session. It emits a commit/tree/branch/base and
+Contract/Summary digest-bound receipt under `target/`; it does not commit,
+push, open a PR, merge, release, archive, close, or mutate a branch. The
+receipt identifies only pushing that exact branch for hosted measurement as
+eligible and explicitly does not provide human authorization. It
+is unavailable for release/publication intent, archived Work Items, completed
+hosted evidence, dirty or detached state, the base branch, or failed quality.
+After recording hosted results in the active Summary, resume the canonical
+`ai-finish`/archive, final push, PR, merge, `ai-close-work-item`, and cleanup
+sequence.
+
 If a paused Work Item must continue after a corrective predecessor closes,
 fetch and rebase its dedicated branch onto the latest discovered remote default
 branch, update `predecessorWorkItem` with the completed closure evidence, then

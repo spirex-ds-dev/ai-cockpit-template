@@ -2,6 +2,7 @@ import subprocess
 import os
 import re
 import shutil
+import sys
 from pathlib import Path
 
 
@@ -69,7 +70,45 @@ def test_project_test_uses_stricter_coverage_floor():
     )
 
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "--cov-fail-under=85" in result.stdout
+    assert "--cov-fail-under=85.10" in result.stdout
+
+
+def test_coverage_floor_rejects_a_result_that_only_rounds_to_85(tmp_path):
+    target = tmp_path / "target"
+    target.mkdir()
+    covered = [f"value_{index} = {index}" for index in range(1, 170)]
+    uncovered = ["def uncovered():", *[f"    value_{index} = {index}" for index in range(30)]]
+    uncovered.append("    return value_29")
+    (tmp_path / "subject.py").write_text(
+        "\n".join([*covered, *uncovered]) + "\n",
+        encoding="utf-8",
+    )
+    test_path = tmp_path / "test_subject.py"
+    test_path.write_text(
+        "import subject\n\n\ndef test_subject():\n    assert subject.value_1 == 1\n",
+        encoding="utf-8",
+    )
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "pytest",
+            "-q",
+            str(test_path),
+            "--cov=subject",
+            "--cov-report=term",
+            "--cov-fail-under=85",
+            f"--cov-config={ROOT / 'pyproject.toml'}",
+        ],
+        cwd=tmp_path,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert "Total coverage: 84.58%" in result.stdout
+    assert result.returncode != 0, result.stdout + result.stderr
 
 
 def test_quality_runs_static_tests_and_evidence_as_explicit_phases():
@@ -90,7 +129,7 @@ def test_quality_runs_static_tests_and_evidence_as_explicit_phases():
     assert "check-critical-domain-guards" in makefile
     assert "check-decision-protocol" in makefile
     assert "check-baseline-evidence" in makefile
-    assert "--cov-fail-under=85" in makefile
+    assert "--cov-fail-under=85.10" in makefile
 
 
 def test_project_governance_make_targets_are_public():

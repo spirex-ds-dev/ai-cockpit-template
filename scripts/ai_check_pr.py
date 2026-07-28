@@ -232,14 +232,16 @@ def archive_base_is_compatible(contract: dict[str, Any], pr_base: str) -> bool:
     return run_git(["merge-base", "--is-ancestor", archived_base, pr_base]).returncode == 0
 
 
-def source_references_contract(contract: dict[str, Any], contract_path: Path) -> bool:
-    """Return whether a Contract declares another archived Contract as a source."""
+def source_references_archive_pair(contract: dict[str, Any], contract_path: Path) -> bool:
+    """Return whether a Contract sources the exact predecessor Contract or paired Summary."""
     try:
-        expected = contract_path.relative_to(PROJECT_ROOT).as_posix()
+        contract_source = contract_path.relative_to(PROJECT_ROOT).as_posix()
     except ValueError:
         return False
+    summary_source = contract_source.replace(".contract.json", ".summary.json")
+    expected = {contract_source, summary_source}
     return any(
-        isinstance(source, dict) and source.get("path") == expected
+        isinstance(source, dict) and source.get("path") in expected
         for source in contract.get("sources", [])
     )
 
@@ -248,6 +250,8 @@ def is_documented_pr_recovery_pair(
     predecessor: tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]],
     recovery: tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]],
     pr_base: str,
+    *,
+    require_pr_base_compatibility: bool = True,
 ) -> bool:
     """Accept only one auditable, immediately sequential recovery relationship."""
     predecessor_path, predecessor_contract, predecessor_summary, _ = predecessor
@@ -261,12 +265,15 @@ def is_documented_pr_recovery_pair(
         isinstance(predecessor_summary.get("archiveSequence"), int)
         and isinstance(recovery_summary.get("archiveSequence"), int)
         and recovery_summary["archiveSequence"] == predecessor_summary["archiveSequence"] + 1
-        and archive_base_is_compatible(predecessor_contract, pr_base)
+        and (
+            not require_pr_base_compatibility
+            or archive_base_is_compatible(predecessor_contract, pr_base)
+        )
         and isinstance(predecessor_base, str)
         and isinstance(recovery_base, str)
         and run_git(["merge-base", "--is-ancestor", predecessor_base, recovery_base]).returncode
         == 0
-        and source_references_contract(recovery_contract, predecessor_path)
+        and source_references_archive_pair(recovery_contract, predecessor_path)
         and isinstance(approval, dict)
         and approval.get("approved") is True
         and isinstance(approval.get("approvedBy"), str)
@@ -283,18 +290,34 @@ def is_documented_pr_recovery_pair(
 def documented_recovery_paths(
     entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]], pr_base: str
 ) -> set[Path]:
-    """Return the sole recovery Contract eligible for the narrow exception."""
-    new_entries = [
-        entry
-        for entry in entries
-        if isinstance(entry[2].get("archiveSequence"), int)
-        and entry[2].get("archiveSequence", 0) >= NEW_WORK_ITEM_SEQUENCE
-        and entry[1].get("workItemId")
-    ]
-    if len(new_entries) == 2 and is_documented_pr_recovery_pair(
-        new_entries[0], new_entries[1], pr_base
+    """Return recovery Contracts only when every adjacent chain link is auditable."""
+    new_entries = sorted(
+        [
+            entry
+            for entry in entries
+            if isinstance(entry[2].get("archiveSequence"), int)
+            and entry[2].get("archiveSequence", 0) >= NEW_WORK_ITEM_SEQUENCE
+            and entry[1].get("workItemId")
+        ],
+        key=lambda entry: entry[3],
+    )
+    root_is_compatible = bool(
+        new_entries and archive_base_is_compatible(new_entries[0][1], pr_base)
+    )
+    if (
+        len(new_entries) >= 2
+        and root_is_compatible
+        and all(
+            is_documented_pr_recovery_pair(
+                predecessor,
+                recovery,
+                pr_base,
+                require_pr_base_compatibility=False,
+            )
+            for predecessor, recovery in zip(new_entries, new_entries[1:])
+        )
     ):
-        return {new_entries[1][0]}
+        return {entry[0] for entry in new_entries[1:]}
     return set()
 
 

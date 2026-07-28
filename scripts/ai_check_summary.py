@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 import time
 from datetime import datetime, timezone
@@ -415,6 +416,17 @@ def _validate_summary_metadata(summary: dict[str, Any]) -> list[str]:
     for key in ("userCorrectionsCaptured", "userCorrectionSolidification", "knownGaps"):
         if key in summary and not isinstance(summary.get(key), list):
             issues.append(f"{key} must be a list")
+
+    known_gaps = summary.get("knownGaps")
+    if summary.get("archiveSequence") is None and isinstance(known_gaps, list):
+        if any(
+            isinstance(item, str)
+            and re.search(r"\barchive[\s_-]+sequence\s+#?\d+\b", item, re.IGNORECASE)
+            for item in known_gaps
+        ):
+            issues.append(
+                "knownGaps must not predict a numeric archive sequence before the generator allocates it"
+            )
 
     checkpoints = summary.get("checkpointEvidence")
     if checkpoints is not None:

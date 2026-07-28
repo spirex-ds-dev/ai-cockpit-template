@@ -33,6 +33,7 @@ check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy template-adoption-ready \
 	check-ai-scenario-coverage check-ai-start-receipt generate-ai-preflight-review check-ai-preflight-review ai-preflight \
+	ai-prepare-hosted-verification-snapshot \
 	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
 	quality-fast quality-full quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
@@ -76,6 +77,7 @@ help:
 	@printf '%s\n' '  make ai-preflight'
 	@printf '%s\n' '  make ai-verify-focused CONTRACT=<contract.json> SUMMARY=<summary.json>'
 	@printf '%s\n' '  make ai-verify-full CONTRACT=<contract.json> SUMMARY=<summary.json> [STAGE=pr|release]'
+	@printf '%s\n' '  make ai-prepare-hosted-verification-snapshot CONTRACT=<contract.json>  # validate a push-only measurement snapshot'
 	@printf '%s\n' '  make generate-ai-preflight-review'
 	@printf '%s\n' '  make check-ai-preflight-review'
 	@printf '%s\n' '  make check-ai-change-summary SUMMARY=<summary.json> CONTRACT=<contract.json>'
@@ -117,7 +119,7 @@ check-instruction-traceability:
 	$(AI_PYTHON) scripts/check_instruction_traceability.py
 
 project-test:
-	$(AI_PYTHON) -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85
+	$(AI_PYTHON) -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85.10
 	bash tests/test_installer_boundaries.sh
 	$(AI_PYTHON) scripts/check_critical_coverage.py
 	bash tests/test_ci_release_evidence.sh
@@ -505,6 +507,12 @@ ai-preflight:
 	@if [ "$(AI_PREFLIGHT_VALIDATE_CONTRACT)" = "true" ]; then $(AI_PYTHON) scripts/ai_check_work_item.py $(CONTRACT); fi
 	$(shell command -v make) check-ai-serial-order CONTRACT="$(CONTRACT)"
 	$(shell command -v make) check-ai-budget-impact CONTRACT="$(CONTRACT)"
+
+ai-prepare-hosted-verification-snapshot:
+	@test -n "$(CONTRACT)" || (echo 'CONTRACT=<active-contract.json> is required' >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_prepare_hosted_verification.py \
+		--contract "$(CONTRACT)" \
+		--output "$(or $(OUTPUT),target/hosted-verification-snapshot.json)"
 
 generate-ai-preflight-review:
 	$(AI_PYTHON) scripts/ai_preflight_review.py $(if $(CONTRACT),--contract $(CONTRACT))

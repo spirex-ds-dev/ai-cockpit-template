@@ -142,6 +142,60 @@
       "implementationEvidence": ["scripts/ai_check_work_item.py", "docs/superpowers/plans/2026-07-28-resume-history-contract-schema.md"],
       "acceptanceEvidence": ["tests/test_ai_check_work_item.py", "tests/test_start_and_archive.py"],
       "verificationCommands": ["make ai-preflight", "make check-ai-contract", "make check-instruction-traceability", "make ai-finish TASK=resume-history-contract-schema-20260728", "make ai-close-work-item TASK=resume-history-contract-schema-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-016",
+      "summary": "Allow a source-bound, push-only pre-finish snapshot solely for explicitly required hosted measurement, then require the full canonical Finish, PR, merge, closure, and branch-cleanup lifecycle.",
+      "planWorkItems": ["WI-20", "hosted-verification-snapshot-lifecycle-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/hosted-verification-snapshot-lifecycle-20260728.contract.json"],
+      "implementationEvidence": ["AGENTS.md", "Makefile", "scripts/ai_prepare_hosted_verification.py", ".ai/guards/coverage_policy.yaml", ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md", "docs/reference/repository-workflow.md", "docs/reference/ai-cockpit-work-item-lifecycle.md"],
+      "acceptanceEvidence": ["tests/test_hosted_verification_snapshot.py"],
+      "verificationCommands": ["make ai-preflight", "make ai-prepare-hosted-verification-snapshot", "make check-instruction-traceability", "make ai-finish TASK=hosted-verification-snapshot-lifecycle-20260728", "make ai-close-work-item TASK=hosted-verification-snapshot-lifecycle-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-017",
+      "summary": "Make the 85 percent coverage floor compare at explicit two-decimal precision and prove the actual pytest-cov exit boundary so contradictory failure text can never be summarized as PASS.",
+      "planWorkItems": ["WI-20", "coverage-threshold-precision-recovery-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/coverage-threshold-precision-recovery-20260728.contract.json"],
+      "implementationEvidence": ["pyproject.toml"],
+      "acceptanceEvidence": ["tests/test_makefile.py", "tests/test_hosted_verification_snapshot.py"],
+      "verificationCommands": ["make ai-preflight", "make project-test", "make check-instruction-traceability", "make ai-finish TASK=coverage-threshold-precision-recovery-20260728", "make ai-close-work-item TASK=coverage-threshold-precision-recovery-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-018",
+      "summary": "Require a portable coverage safety buffer above the 85 percent policy floor and permit iterative pre-merge recovery only as a fully validated adjacent archive chain.",
+      "planWorkItems": ["WI-20", "hosted-coverage-margin-recovery-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/hosted-coverage-margin-recovery-20260728.contract.json"],
+      "implementationEvidence": ["Makefile", "scripts/ai_check_pr.py", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
+      "acceptanceEvidence": ["tests/test_makefile.py", "tests/test_pr_aggregate.py", "tests/test_hosted_verification_snapshot.py", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
+      "verificationCommands": ["make ai-preflight", "make project-test", "make check-ai-pr AI_BASE_COMMIT=9deb1e53b32ec703c3ee7a6be19442eb908d7b73", "make check-instruction-traceability", "make ai-finish TASK=hosted-coverage-margin-recovery-20260728", "make ai-close-work-item TASK=hosted-coverage-margin-recovery-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-019",
+      "summary": "Treat archive sequence as generator-owned evidence and reject pre-finish numeric predictions before they can become immutable contradictions.",
+      "planWorkItems": ["WI-20", "archive-sequence-prediction-guard-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/archive-sequence-prediction-guard-20260728.contract.json"],
+      "implementationEvidence": ["scripts/ai_check_summary.py", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
+      "acceptanceEvidence": ["tests/test_ai_check_summary.py", ".ai/work-items/archive/2026/hosted-coverage-margin-recovery-20260728.summary.json"],
+      "verificationCommands": ["make ai-preflight", "make check-ai-change-summary", "make check-instruction-traceability", "make ai-finish TASK=archive-sequence-prediction-guard-20260728", "make ai-close-work-item TASK=archive-sequence-prediction-guard-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-020",
+      "summary": "Validate the recovery-chain root against the PR merge-base and validate each later archive only against its immediate predecessor using realistic directed Git ancestry.",
+      "planWorkItems": ["WI-20", "recovery-chain-base-compatibility-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/recovery-chain-base-compatibility-20260728.contract.json"],
+      "implementationEvidence": ["scripts/ai_check_pr.py", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
+      "acceptanceEvidence": ["tests/test_pr_aggregate.py"],
+      "verificationCommands": ["make ai-preflight", "make check-ai-pr AI_BASE_COMMIT=9deb1e53b32ec703c3ee7a6be19442eb908d7b73", "make check-instruction-traceability", "make ai-finish TASK=recovery-chain-base-compatibility-20260728", "make ai-close-work-item TASK=recovery-chain-base-compatibility-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-021",
+      "summary": "Accept recovery source evidence only from the exact immediate predecessor Contract or its manifest-paired Summary, while rejecting unrelated archive summaries.",
+      "planWorkItems": ["WI-20", "recovery-chain-source-evidence-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/recovery-chain-source-evidence-20260728.contract.json"],
+      "implementationEvidence": ["scripts/ai_check_pr.py", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
+      "acceptanceEvidence": ["tests/test_pr_aggregate.py"],
+      "verificationCommands": ["make ai-preflight", "make check-ai-pr AI_BASE_COMMIT=9deb1e53b32ec703c3ee7a6be19442eb908d7b73", "make check-instruction-traceability", "make ai-finish TASK=recovery-chain-source-evidence-20260728", "make ai-close-work-item TASK=recovery-chain-source-evidence-20260728"]
     }
   ]
 }

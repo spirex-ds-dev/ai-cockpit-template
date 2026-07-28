@@ -1,0 +1,221 @@
+{
+  "contractVersion": 2,
+  "workItemId": "recovery-chain-base-compatibility-20260728",
+  "mode": "code",
+  "title": "Validate recovery chain base compatibility by edge",
+  "baseCommit": "ad4d0a462de597a36a1db72ab36fb08d10bb5d32",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue the deep performance Work Item, and fix discovered process problems durably before proceeding.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-continue-deep-performance",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-recovery-chain-base-compatibility"
+  },
+  "declaredIntent": {
+    "summary": "Validate the recovery-chain root against the PR base and each later recovery against only its immediate predecessor.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/recovery-chain-base-compatibility-20260728.contract.json",
+    ".ai/work-items/active/recovery-chain-base-compatibility-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Weakening any source reference, approval, receipt, sequence, or ancestry predicate",
+    "Allowing unrelated multi-Work-Item PRs",
+    "General performance implementation, WI-10 installation changes, or release publication"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/archive-sequence-prediction-guard-20260728.contract.json",
+      "reason": "The immediate predecessor completes the fourth archive in the rejected recovery chain."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "The aggregate PR gate currently applies root PR-base compatibility to every recovery edge."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "The existing chain test mocks all ancestry checks successful and cannot detect reverse PR-base compatibility."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "pr_ownership",
+      "recovery_chain",
+      "test_fidelity"
+    ],
+    "reason": "Incorrect base semantics can either reject a valid immutable recovery chain or accidentally weaken Work Item ownership.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous process-first correction."
+  },
+  "preReviewWarnings": [
+    "Verify only the chain root consumes PR-base compatibility and every later edge retains direct ancestry plus all existing recovery predicates."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The recovery-chain root must be compatible with the PR merge-base.",
+    "Each later recovery must be a descendant of its immediate predecessor base without being required to be an ancestor of the PR base.",
+    "A precise ancestry graph regression fails the old implementation and passes the corrected implementation.",
+    "Broken ancestry, source reference, approval, receipt, or sequence still rejects the entire chain.",
+    "RFE-ISSUE-142 and traceability record the real aggregate failure, mock gap, fix, and complete lifecycle.",
+    "Full quality, aggregate five-item PR validation, hosted CI, merge, closure, cleanup, and synchronization complete before performance resumes."
+  ],
+  "guidelines": [
+    "Separate root PR-base validation from pairwise chain-edge validation.",
+    "Use a realistic directed ancestry graph in tests; do not mock all Git relations as true.",
+    "Preserve every existing fail-closed recovery predicate and unrelated bundle rejection."
+  ],
+  "intent": {
+    "problem": "The generalized chain reused a pair predicate that requires each predecessor base to be compatible with the original PR merge-base. Valid later recoveries point forward from the PR base and therefore fail. The unit test returned success for every Git ancestry query, hiding this reverse relation.",
+    "constraints": [
+      "Only the first archive may consume PR merge-base compatibility.",
+      "Every later edge must retain direct predecessor-to-recovery ancestry and all non-ancestry predicates.",
+      "Use the real five-archive branch as aggregate acceptance evidence."
+    ],
+    "rationale": "A chain has one root relation to the PR and N-1 edge relations. Modeling them separately matches Git directionality and keeps unrelated bundles fail closed."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The root base is PR-compatible and later bases form only forward adjacent ancestry.",
+      "expected": "The complete recovery chain is accepted.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use a directed fake ancestry graph and run the real aggregate PR gate."
+    },
+    {
+      "scenario": "A later edge is broken or the root is not PR-compatible.",
+      "expected": "The complete chain is rejected.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run focused negative chain regressions."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuation-authorization-2026-07-28",
+    "reason": "The user requires discovered process defects to be fixed before performance resumes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 628
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/recovery-chain-base-compatibility-20260728.json",
+    "baseCommit": "ad4d0a462de597a36a1db72ab36fb08d10bb5d32",
+    "initialScopeDigest": "0accfb9341feb35c67f81896e986123442499654ec82aa7bf2314b51bbc37c1e",
+    "contractSkeletonDigest": "cfb667af7aa95f28bc7b729918f32d72b5b73403fafef00f91209c99231798c0"
+  }
+}

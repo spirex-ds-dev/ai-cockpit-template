@@ -28,6 +28,18 @@ Work Item completion is a lifecycle closure, not merely branch deletion. Run `ma
 
 The canonical order is: latest remote base → dedicated Work Item branch → implement → `ai-finish`/archive → push branch → PR → merge PR → `make ai-close-work-item` → synchronize and clean the local base. Do not merge the feature branch into local `main` before the PR; that creates local commits that are not on `origin/main`. Do not use a PR merge option or provider setting that deletes the Work Item branch before `ai-close-work-item` can identify it. Branch deletion belongs to lifecycle closure.
 
+One narrow exception exists when an active Contract explicitly requires hosted
+verification that cannot run from an unpublished commit. After implementation
+and local verification, create a local snapshot commit only with explicit human
+authorization, then run `make ai-prepare-hosted-verification-snapshot
+CONTRACT=<active-contract>`. A successful receipt identifies pushing that
+exact dedicated branch for hosted measurement as the only eligible next
+action; the receipt provides no human authorization itself. It does not permit
+a PR, merge, release, archive mutation, closure, or branch deletion. Record the hosted
+results in the active Summary, then return to the canonical
+`ai-finish`/archive → final push → PR → merge → `ai-close-work-item` → cleanup
+order. The snapshot command must never perform Git or provider mutations.
+
 Before changing code, docs, CI, build files, or AI governance files:
 
 1. Create or identify a Work Item Contract in `.ai/work-items/active/`.

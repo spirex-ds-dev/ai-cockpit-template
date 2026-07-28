@@ -185,6 +185,7 @@ def test_pr_accepts_one_documented_adjacent_recovery_pair(tmp_path, monkeypatch)
     )
     recovery.write_text(json.dumps(data))
     monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
     monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
     entries = []
     for path in (predecessor, recovery):
@@ -199,6 +200,145 @@ def test_pr_accepts_one_documented_adjacent_recovery_pair(tmp_path, monkeypatch)
         )
     entries.sort(key=lambda entry: entry[3])
     assert ai_check_pr.documented_recovery_paths(entries, "a" * 40) == {recovery}
+
+
+def test_recovery_source_accepts_exact_manifest_paired_summary(tmp_path, monkeypatch):
+    predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
+    recovery = {
+        "sources": [
+            {
+                "path": predecessor.with_name("predecessor.summary.json")
+                .relative_to(tmp_path)
+                .as_posix()
+            }
+        ]
+    }
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    assert ai_check_pr.source_references_archive_pair(recovery, predecessor)
+
+
+def test_recovery_source_rejects_an_unrelated_summary(tmp_path, monkeypatch):
+    predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
+    recovery = {
+        "sources": [
+            {"path": predecessor.with_name("older.summary.json").relative_to(tmp_path).as_posix()}
+        ]
+    }
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    assert not ai_check_pr.source_references_archive_pair(recovery, predecessor)
+
+
+def test_pr_accepts_a_fully_validated_adjacent_recovery_chain(tmp_path, monkeypatch):
+    predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
+    first_recovery = write_pair(
+        tmp_path, "first-recovery", ["src/b.py"], ["src/b.py"], approved=True
+    )
+    second_recovery = write_pair(
+        tmp_path, "second-recovery", ["src/c.py"], ["src/c.py"], approved=True
+    )
+    paths = (predecessor, first_recovery, second_recovery)
+    for path, sequence in zip(paths, (75, 76, 77), strict=True):
+        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
+        summary = json.loads(summary_path.read_text())
+        summary["archiveSequence"] = sequence
+        summary_path.write_text(json.dumps(summary))
+    for path, previous, base in (
+        (first_recovery, predecessor, "b" * 40),
+        (second_recovery, first_recovery, "c" * 40),
+    ):
+        data = json.loads(path.read_text())
+        data.update(
+            {
+                "baseCommit": base,
+                "sources": [{"path": previous.relative_to(tmp_path).as_posix()}],
+                "startReceipt": {
+                    "baseCommit": base,
+                    "path": f".ai/work-items/starts/{path.stem}.json",
+                },
+                "rawRequestSource": {"type": "human"},
+            }
+        )
+        path.write_text(json.dumps(data))
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    def ancestry_result(args):
+        if args[:2] != ["merge-base", "--is-ancestor"]:
+            return fake_git_result(returncode=0)
+        ancestor, descendant = args[2:]
+        valid_edges = {
+            ("a" * 40, "b" * 40),
+            ("b" * 40, "c" * 40),
+        }
+        return fake_git_result(returncode=0 if (ancestor, descendant) in valid_edges else 1)
+
+    monkeypatch.setattr(ai_check_pr, "run_git", ancestry_result)
+    entries = []
+    for path in paths:
+        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
+        entries.append(
+            (
+                path,
+                json.loads(path.read_text()),
+                json.loads(summary_path.read_text()),
+                ai_check_pr.archive_pair_rank(path, summary_path),
+            )
+        )
+    entries.sort(key=lambda entry: entry[3])
+
+    assert ai_check_pr.documented_recovery_paths(entries, "a" * 40) == {
+        first_recovery,
+        second_recovery,
+    }
+
+
+def test_pr_rejects_a_recovery_chain_with_a_broken_later_link(tmp_path, monkeypatch):
+    predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
+    first_recovery = write_pair(
+        tmp_path, "first-recovery", ["src/b.py"], ["src/b.py"], approved=True
+    )
+    second_recovery = write_pair(
+        tmp_path, "second-recovery", ["src/c.py"], ["src/c.py"], approved=True
+    )
+    paths = (predecessor, first_recovery, second_recovery)
+    for path, sequence in zip(paths, (75, 76, 77), strict=True):
+        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
+        summary = json.loads(summary_path.read_text())
+        summary["archiveSequence"] = sequence
+        summary_path.write_text(json.dumps(summary))
+    for path, previous, base in (
+        (first_recovery, predecessor, "b" * 40),
+        (second_recovery, predecessor, "c" * 40),
+    ):
+        data = json.loads(path.read_text())
+        data.update(
+            {
+                "baseCommit": base,
+                "sources": [{"path": previous.relative_to(tmp_path).as_posix()}],
+                "startReceipt": {
+                    "baseCommit": base,
+                    "path": f".ai/work-items/starts/{path.stem}.json",
+                },
+                "rawRequestSource": {"type": "human"},
+            }
+        )
+        path.write_text(json.dumps(data))
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
+    entries = []
+    for path in paths:
+        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
+        entries.append(
+            (
+                path,
+                json.loads(path.read_text()),
+                json.loads(summary_path.read_text()),
+                ai_check_pr.archive_pair_rank(path, summary_path),
+            )
+        )
+
+    assert ai_check_pr.documented_recovery_paths(entries, "a" * 40) == set()
 
 
 def test_pr_recovery_pair_requires_predecessor_reference(tmp_path, monkeypatch):
