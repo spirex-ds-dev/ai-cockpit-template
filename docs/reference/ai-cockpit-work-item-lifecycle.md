@@ -16,6 +16,32 @@ remote base → Contract/Preflight → dedicated branch → implement → ai-fin
 
 The next Work Item must not start until the predecessor has evidence for all of the following: PR merged, archive succeeded, local branch deleted, remote branch deleted, and local base synchronized with the remote base. A successor Contract may record this evidence in `predecessorWorkItem`; `make check-ai-serial-order` fails closed when any field is absent or false.
 
+## Pre-finish hosted verification snapshot
+
+Some performance or environment-specific acceptance criteria require hosted
+execution from a committed source before the final Summary can truthfully
+report completion. For only that case, the active Contract must explicitly
+require hosted verification and register pending `hostedPerformanceEvidence`.
+After local implementation and verification, create a local snapshot commit
+with explicit human authorization and run:
+
+```text
+make ai-prepare-hosted-verification-snapshot \
+  CONTRACT=.ai/work-items/active/<task>.contract.json
+```
+
+The validator reruns local quality, binds a receipt to the branch, base,
+commit, tree, active Contract and Summary, and confirms that Git refs and the
+worktree were not mutated. The receipt identifies only pushing that exact
+branch for hosted measurement as eligible and provides no human authorization.
+It is not review readiness and cannot authorize a PR,
+merge, tag, release, archive mutation, closure, or branch deletion. Release
+intent, an archived Work Item, complete hosted evidence, a dirty/detached/base
+state, baseline mismatch, or failed quality stops the stage. Once hosted
+results are recorded in the active Summary, the Work Item must return to the
+full `ai-finish`/archive → final push → PR → merge → `ai-close-work-item` →
+cleanup lifecycle.
+
 ## Resume after a corrective predecessor
 
 When a process defect pauses a Work Item, complete and close the corrective

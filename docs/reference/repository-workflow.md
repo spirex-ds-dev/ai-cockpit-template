@@ -27,6 +27,27 @@ latest remote base → dedicated Work Item branch → finish/archive → push �
 
 Do not merge the Work Item branch into local `main` before opening or merging the PR. That makes local `main` appear ahead of `origin/main` and bypasses the review unit. Do not delete the Work Item branch as part of PR merge before running `ai-close-work-item`; closure needs the merged branch identity to verify ownership before it synchronizes the base and removes both branch copies.
 
+### Pre-finish hosted measurement
+
+The normal archive-before-push order remains authoritative. A Work Item may
+use one narrower stage only when its active Contract explicitly requires
+hosted evidence that cannot be produced from an unpublished commit:
+
+```text
+implement and verify locally → authorized local snapshot commit
+  → ai-prepare-hosted-verification-snapshot → push exact branch for measurement
+  → record hosted evidence in active Summary → canonical finish/archive and review
+```
+
+`make ai-prepare-hosted-verification-snapshot CONTRACT=<active-contract>`
+runs local quality and writes a source-bound receipt. It performs no Git or
+provider mutation. A valid receipt identifies a push of the exact committed
+dedicated branch for hosted measurement as the only eligible next action but
+provides no human authorization; it never permits a PR, merge,
+release, archive mutation, closure, or deletion. Those actions remain blocked
+until hosted evidence is recorded and the Work Item completes the canonical
+Finish, final push, PR, merge, closure, and cleanup lifecycle.
+
 Required Review is a hosting-platform control, not a Contract field. This
 repository's `.github/CODEOWNERS` names `@xinglun` as the owner for the
 template repository. The repository administrator must enable branch

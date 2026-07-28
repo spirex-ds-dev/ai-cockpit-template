@@ -40,6 +40,29 @@ AI Cockpit は、エージェント型開発のための協調エンジニアリ
 
 Work Item を archive し、対応する PR が merge された後に `make ai-close-work-item TASK=<task>` を実行します。Contract/Summary/Cockpit Status、ブランチと PR の一対一対応、fast-forward のみの base 同期、ローカル／リモートブランチ削除、clean な repository、local base と remote base の一致を検証します。どれかが失敗した場合は fail closed とし、全ての事後条件を満たすまで `ready for next Work Item` を報告しません。
 
+Contract が未公開 commit では実行できない hosted verification を明示的に
+要求する場合に限り、Finish 前の測定 stage を利用できます。実装とローカル検証を
+完了し、人間の明示的な承認を得てローカル snapshot commit を作成した後、次を
+実行します。
+
+```text
+make ai-prepare-hosted-verification-snapshot \
+  CONTRACT=.ai/work-items/active/<task>.contract.json
+```
+
+このコマンドは、clean で commit 済みの専用 branch、active な v2 Contract、
+未完了の登録済み hosted evidence、正しい Contract baseline、成功したローカル
+`make quality` session を要求します。`target/` に commit、tree、branch、base、
+Contract/Summary digest を束縛した receipt を出力しますが、commit、push、PR
+作成、merge、release、archive、close、branch 変更は実行しません。receipt が
+示す次の適格な操作は、その正確な branch を hosted 測定のためだけに push する
+ことですが、receipt 自体は人間の承認を提供しません。
+release/publication intent、archive 済み Work Item、完了済み hosted
+evidence、dirty/detached state、base branch、quality failure では fail closed
+です。hosted 結果を active Summary に記録した後、通常の
+`ai-finish`/archive、final push、PR、merge、`ai-close-work-item`、cleanup に
+戻ります。
+
 `ai-close-work-item` は worktree を考慮します。base branch が別の worktree で checkout 済みの場合、その worktree が clean であることを確認し、そこで base を fast-forward と検証した後、Work Item worktree を detached にして local／remote の Work Item branch を削除します。過去の archive 証跡は保持します。ガバナンス複雑度レポートは `trackedFiles` を引き続き記録しますが、この値は観測値であり、archive 整合性と現在の Work Item 所有権は hard gate として残ります。
 
 停止中の Work Item を corrective predecessor のクローズ後に再開する場合は、専用
