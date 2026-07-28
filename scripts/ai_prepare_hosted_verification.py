@@ -105,11 +105,21 @@ def validate_no_release_intent(contract: dict[str, Any]) -> None:
 
 
 def default_quality_runner(root: Path) -> dict[str, str]:
+    inherited_make_state = {
+        "AI_BASE_COMMIT",
+        "CONTRACT",
+        "GNUMAKEFLAGS",
+        "MAKEFLAGS",
+        "MAKEOVERRIDES",
+        "MFLAGS",
+        "SUMMARY",
+        "TASK",
+    }
     result = subprocess.run(  # nosec B603 B607
         ["make", "quality"],
         cwd=root,
         env={
-            **os.environ,
+            **{key: value for key, value in os.environ.items() if key not in inherited_make_state},
             "PYTHONDONTWRITEBYTECODE": "1",
         },
         check=False,

@@ -92,6 +92,10 @@ def test_installed_distribution_contains_adoption_files(tmp_path):
     assert "\n# Agent Operating Rules" not in managed
     assert not list((tmp_path / ".ai" / "work-items" / "active").glob("*.json"))
     assert not list((tmp_path / ".ai" / "work-items" / "archive").rglob("*.json"))
+    assert not list((tmp_path / ".ai" / "work-items" / "starts").glob("*.json"))
+    assert not list((tmp_path / ".ai" / "decisions").glob("*.json"))
+    assert (tmp_path / ".ai" / "work-items" / "starts" / ".gitkeep").is_file()
+    assert (tmp_path / ".ai" / "decisions" / ".gitkeep").is_file()
     assert "- State: `no_active_work_item`" in (
         tmp_path / ".ai" / "cockpit" / "current_status.md"
     ).read_text(encoding="utf-8")
@@ -126,6 +130,51 @@ def test_installed_distribution_contains_adoption_files(tmp_path):
     )
     assert result.returncode == 0, result.stdout + result.stderr
     assert 'scripts/ai_check_pr.py --base "abc123"' in result.stdout
+
+
+def test_installer_reuses_pruned_immutable_source_inventory(tmp_path, monkeypatch):
+    installer_mod._IMMUTABLE_SOURCE_INVENTORIES.pop((ROOT, ".ai"), None)
+    first_installer = Installer(
+        source=ROOT,
+        target=tmp_path / "first",
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+    original_walk = installer_mod.os.walk
+    scanned = []
+
+    def counting_walk(path):
+        scanned.append(Path(path))
+        return original_walk(path)
+
+    monkeypatch.setattr(installer_mod.os, "walk", counting_walk)
+    first = first_installer.tree_copy_pairs(".ai")
+    second_installer = Installer(
+        source=ROOT,
+        target=tmp_path / "second",
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+    second = second_installer.tree_copy_pairs(".ai")
+    assert [source.relative_to(ROOT) for source, _ in first] == [
+        source.relative_to(ROOT) for source, _ in second
+    ]
+    assert scanned == [ROOT / ".ai"]
+    distributed = {source.relative_to(ROOT).as_posix() for source, _ in first}
+    assert not any(
+        path.startswith(".ai/work-items/archive/") and path.endswith(".json")
+        for path in distributed
+    )
+    assert not any(path.endswith(".json") and "/starts/" in path for path in distributed)
+    assert not any(
+        path.endswith(".json") and path.startswith(".ai/decisions/") for path in distributed
+    )
 
 
 def test_installed_cursor_rule_defaults_to_opt_in_apply(tmp_path):

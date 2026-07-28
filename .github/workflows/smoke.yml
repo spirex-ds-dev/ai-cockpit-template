@@ -6,6 +6,15 @@ on:
       - main
   pull_request:
   workflow_dispatch:
+    inputs:
+      purpose:
+        description: Select the governed reason for the manual smoke run.
+        required: true
+        default: release_preparation
+        type: choice
+        options:
+          - hosted_measurement
+          - release_preparation
 
 permissions:
   contents: read
@@ -52,7 +61,7 @@ jobs:
       - name: Determine release preparation scope
         env:
           AI_BASE_COMMIT: ${{ env.AI_BASE_COMMIT }}
-          RELEASE_PREPARATION_INTENT: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'release-preparation') }}
+          RELEASE_PREPARATION_INTENT: ${{ (github.event_name == 'workflow_dispatch' && inputs.purpose == 'release_preparation') || contains(github.event.pull_request.labels.*.name, 'release-preparation') }}
         run: |
           # Keep event boundaries visible for workflow compatibility and review.
           # github.event_name == 'pull_request'
@@ -103,7 +112,11 @@ jobs:
         run: |
           set -uo pipefail
           found_failed_gate=0
-          for timing_path in target/quality/timing/*.json; do
+          session_root=''
+          if [[ -f target/quality/current-session.txt ]]; then
+            session_root="target/quality/sessions/$(cat target/quality/current-session.txt)"
+          fi
+          for timing_path in "$session_root"/timing/*.json; do
             [[ -f "$timing_path" ]] || continue
             gate_result="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("result", "unknown"))' "$timing_path")"
             [[ "$gate_result" == "passed" ]] && continue
@@ -114,7 +127,7 @@ jobs:
             if [[ -n "$log_path" && -f "$log_path" ]]; then
               tail -n 2000 "$log_path"
             else
-              echo "Detailed gate log is missing: ${log_path:-target/quality/logs/${gate_name}.log}" >&2
+              echo "Detailed gate log is missing: ${log_path:-$session_root/logs/${gate_name}.log}" >&2
               cat "$timing_path"
             fi
             echo "::endgroup::"
@@ -133,14 +146,35 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if compgen -G 'target/quality/timing/*.json' > /dev/null; then
-            make_summary_args=(--input target/quality/timing --json-output target/quality/summary.json --markdown-output target/quality/summary.md)
-            python3 scripts/summarize_quality_gates.py "${make_summary_args[@]}"
-            cat target/quality/summary.md >> "$GITHUB_STEP_SUMMARY"
+          if [[ -f target/quality/current-session.txt ]]; then
+            session_id="$(cat target/quality/current-session.txt)"
+            session_root="target/quality/sessions/$session_id"
+            if compgen -G "$session_root/timing/*.json" > /dev/null; then
+              python3 scripts/summarize_quality_gates.py \
+                --input "$session_root/timing" \
+                --json-output "$session_root/summary.json" \
+                --markdown-output "$session_root/summary.md"
+              cat "$session_root/summary.md" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "No quality timing evidence was produced for session $session_id." >&2
+              exit 1
+            fi
           else
-            echo 'No quality timing evidence was produced.' >&2
+            echo 'Quality session identity was not produced.' >&2
             exit 1
           fi
+
+      - name: Upload quality diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: quality-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            target/quality/current-session.txt
+            target/quality/sessions/**
+            ${{ runner.temp }}/repository-quality.log
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Run template AI checks
         run: |
@@ -156,7 +190,6 @@ jobs:
           fi
 
   installation-smoke:
-    needs: template-smoke
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -226,7 +259,6 @@ jobs:
           )
 
   release-evidence:
-    needs: template-smoke
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -237,7 +269,7 @@ jobs:
 
       - name: Verify release evidence ownership
         env:
-          RELEASE_PREPARATION_INTENT: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'release-preparation') }}
+          RELEASE_PREPARATION_INTENT: ${{ (github.event_name == 'workflow_dispatch' && inputs.purpose == 'release_preparation') || contains(github.event.pull_request.labels.*.name, 'release-preparation') }}
         shell: bash
         run: |
           set -euo pipefail

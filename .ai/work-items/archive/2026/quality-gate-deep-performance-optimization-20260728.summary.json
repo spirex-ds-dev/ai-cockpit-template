@@ -1,0 +1,824 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "quality-gate-deep-performance-optimization-20260728",
+  "contractPath": ".ai/work-items/archive/2026/quality-gate-deep-performance-optimization-20260728.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "reason": "Defines the resumed deep-performance scope, verified scenarios, hosted measurement boundary, and predecessor lineage."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "reason": "Records implementation, process findings, three-run hosted evidence, residual risks, and documentation alignment."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated current Work Item status."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Regenerated source-bound supply-chain evidence after implementation changes."
+    },
+    {
+      "path": ".ai/cockpit/release-digests.json",
+      "reason": "Regenerated source-bound digest projection without publishing or changing release identity."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Regenerated the repository SBOM after source changes."
+    },
+    {
+      "path": ".ai/decisions/.gitkeep",
+      "reason": "Preserves the empty decisions directory in adopter payloads."
+    },
+    {
+      "path": ".ai/decisions/HDR-7615681f4b3e9943-33e93679.evidence.json",
+      "reason": "Preserves the source-bound human decision evidence captured during the initial Preflight stop."
+    },
+    {
+      "path": ".ai/decisions/HDR-7615681f4b3e9943-33e93679.request.json",
+      "reason": "Preserves the matching Preflight human decision request."
+    },
+    {
+      "path": ".ai/decisions/HDR-8a6d0aaaa1342cb4-ab34d200.evidence.json",
+      "reason": "Preserves the later source-bound execution authorization evidence."
+    },
+    {
+      "path": ".ai/decisions/HDR-8a6d0aaaa1342cb4-ab34d200.request.json",
+      "reason": "Preserves the matching execution authorization request."
+    },
+    {
+      "path": ".ai/work-items/starts/.gitkeep",
+      "reason": "Preserves the empty starts directory in adopter payloads."
+    },
+    {
+      "path": ".ai/work-items/starts/quality-gate-deep-performance-optimization-20260728.json",
+      "reason": "Preserves the immutable Work Item start receipt."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Runs independent smoke Jobs, separates hosted measurement from release preparation, and always uploads run-isolated diagnostics."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Creates commit/run-bound quality sessions, preserves the outer session pointer, and emits JUnit and slow-test evidence."
+    },
+    {
+      "path": "docs/operations/quality-gates.md",
+      "reason": "Documents the optimized quality graph, evidence boundaries, limitations, and explicit hosted measurement command in English."
+    },
+    {
+      "path": "docs/operations/quality-gates.zh-CN.md",
+      "reason": "Provides the equivalent Chinese quality-gate guidance."
+    },
+    {
+      "path": "docs/operations/quality-gates.ja.md",
+      "reason": "Provides the equivalent Japanese quality-gate guidance."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Maps the deep-performance directive and user-confirmed eight-stage sequence to implementation and acceptance evidence."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records root causes, resolved process issues, hosted measurements, residual bottleneck, and the authoritative eight-stage order."
+    },
+    {
+      "path": "release.json",
+      "reason": "Aligns only source-bound SBOM/digest projection; no release identity or publication state is changed."
+    },
+    {
+      "path": "scripts/ai_prepare_hosted_verification.py",
+      "reason": "Isolates inherited Make/Work Item overrides before the snapshot quality subprocess."
+    },
+    {
+      "path": "scripts/check_system_invariants.py",
+      "reason": "Parses documented Make dry-run options without mistaking them for targets."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Prunes template-maintenance history before traversal and reuses immutable source inventories."
+    },
+    {
+      "path": "scripts/run_quality_gate.py",
+      "reason": "Streams gate output while retaining bounded tails, cancellation/timeout state, logs, digests, and Make jobserver descriptors."
+    },
+    {
+      "path": "tests/test_ci_quality_orchestration.py",
+      "reason": "Regresses terminal quality evidence and artifact ownership."
+    },
+    {
+      "path": "tests/test_hosted_verification_snapshot.py",
+      "reason": "Regresses fail-closed snapshot state and isolated subprocess environment."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Regresses history exclusion, skeleton preservation, immutable inventory reuse, installation, and upgrade behavior."
+    },
+    {
+      "path": "tests/test_quality_gate_architecture.py",
+      "reason": "Regresses run-isolated session ownership, outer pointer restoration, and preserved gate graph."
+    },
+    {
+      "path": "tests/test_quality_telemetry.py",
+      "reason": "Regresses streaming, bounded evidence, timeout/cancellation handling, and jobserver propagation."
+    },
+    {
+      "path": "tests/test_system_invariants.py",
+      "reason": "Regresses documented Make option parsing."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Regresses independent Jobs, terminal aggregate evidence, always-on diagnostics, and manual dispatch intent separation."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/quality-gate-deep-performance-optimization-20260728.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+    ".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.summary.json",
+    ".ai/work-items/archive/2026/preflight-planned-scenario-transition-20260728.summary.json",
+    ".ai/work-items/archive/2026/work-item-resume-receipt-lineage-20260728.summary.json",
+    ".ai/work-items/archive/2026/resume-history-contract-schema-20260728.summary.json",
+    ".ai/work-items/archive/2026/recovery-chain-source-evidence-20260728.archive-manifest.json",
+    ".github/workflows/smoke.yml",
+    "Makefile",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "install.sh",
+    "scripts/install_ai_cockpit.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:00:49.489526+00:00",
+      "exitCode": 0,
+      "durationMs": 100,
+      "outputDigest": "567f2c72866af19029b830cd4056632cc811608e9a3db326cd09b87e8747641f",
+      "commandHash": "4e7f83e6b3784ad7921193926455afe143d3ae934daa6a78369b97c6969084eb",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "1154fc60c4ef876251855c3b3e76256b13bdad2c123273f1afcd68a4f23ddac5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json work item contract check passed: .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json work item contract check passed: .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "outputBytes": 282
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:00:49.668363+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "e8ecd7845072bf784a41dfd28896d7a9a5d79b6d5932599a0a7ac1700422f643",
+      "commandHash": "93c8388aa449f8291a1f901a8ac2e47029744dff28694b266ba23593c1b7dc26",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "5317f138128fac33d933e419adbc873ebc7ea22b15b92c110a047ea754915296",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json scope guard passed: 32 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json scope guard passed: 32 changed path(s) covered",
+      "outputBytes": 204
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:00:50.011826+00:00",
+      "exitCode": 0,
+      "durationMs": 253,
+      "outputDigest": "171a87ee4c7071e32f6ffdcf6ffc865ceda51da4644b54e13af69ff441893cb3",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "e3b547009cc2ceb024154218fee0fa721a9430a83922a4ce8d2e9738619c385f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json [warning] restricted_write: .ai/decisions/.gitkeep (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-7615681f4b3e9943-33e93679.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-7615681f4b3e9943-33e93679.request.json (.ai/**) - AI governance conf",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json [warning] restricted_write: .ai/decisions/.gitkeep (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-7615681f4b3e9943-33e93679.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-7615681f4b3e9943-33e93679.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-8a6d0aaaa1342cb4-ab34d200.evidence.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/decisions/HDR-8a6d0aaaa1342cb4-ab34d200.request.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/smoke.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 10 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 1320
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json SUMMARY=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:00:50.308880+00:00",
+      "exitCode": 0,
+      "durationMs": 231,
+      "outputDigest": "5c38f30d3c4cdc64bf63e955d59e70cff195095c0b53763b903fea69637096fd",
+      "commandHash": "acc2538812644340d4b86dbdffb425b0fc85fc538c3272aa8af4a45f8340641a",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "7c6cff507235b0c9673ef4b97d221abaff9766d53ee576a088634408181f10f4",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `quality-gate-deep-performance-optimization-20260728` - Contract Hash: `fe22b50014b8d62f` - Mode: `code` - notCodable: `False` - Execution Decision:",
+      "outputTail": "8.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/.gitkeep` — covered by Contract scope - [active_owned] `.ai/work-items/starts/quality-gate-deep-performance-optimization-20260728.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.ja.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `scripts/ai_prepare_hosted_verification.py` — covered by Contract scope - [active_owned] `scripts/check_system_invariants.py` — covered by Contract scope - [active_owned] `scripts/install_ai_cockpit.py` — covered by Contract scope - [active_owned] `scripts/run_quality_gate.py` — covered by Contract scope - [active_owned] `tests/test_ci_quality_orchestration.py` — covered by Contract scope - [active_owned] `tests/test_hosted_verification_snapshot.py` — covered by Contract scope - [active_owned] `tests/test_installer.py` — covered by Contract scope - [active_owned] `tests/test_quality_gate_architecture.py` — covered by Contract scope - [active_owned] `tests/test_quality_telemetry.py` — covered by Contract scope - [active_owned] `tests/test_system_invariants.py` — covered by Contract scope - [active_owned] `tests/test_workflows.py` — covered by Contract scope ## Next Action - Run or record required verification: aiCheckpoint",
+      "outputBytes": 9211
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:00:50.482352+00:00",
+      "exitCode": 0,
+      "durationMs": 123,
+      "outputDigest": "6f0598b3ee6b83c898e7648d41b8b0a0ee55647aebaca838f76a980216543b1b",
+      "commandHash": "38b113abbb3c69950f793e3529dc2a08868916f814e7182efa94d668b381ac56",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "b71e24694465bbbc955e2dc460ec36ef3a0c76b65fa727efe7bf5a5ea83d94e2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json review policy matched 15 path(s) [review] .ai/decisions/.gitkeep [review] .ai/decisions/HDR-7615681f4b3e9943-33e93679.evidence.json [review] .ai/decisions/HDR-7615681f4b3e9943-33e93679.request.json [review] .ai/decisions/HDR-8a6d0aaaa1342cb4-ab34d200.evidence.json [review] .ai/decisions/HDR-8a6d0aaaa1342cb4-ab34d200.request.",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json review policy matched 15 path(s) [review] .ai/decisions/.gitkeep [review] .ai/decisions/HDR-7615681f4b3e9943-33e93679.evidence.json [review] .ai/decisions/HDR-7615681f4b3e9943-33e93679.request.json [review] .ai/decisions/HDR-8a6d0aaaa1342cb4-ab34d200.evidence.json [review] .ai/decisions/HDR-8a6d0aaaa1342cb4-ab34d200.request.json [review] .ai/work-items/starts/.gitkeep [review] .ai/work-items/starts/quality-gate-deep-performance-optimization-20260728.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json [review] .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json [review] .github/workflows/smoke.yml [review] Makefile [review] scripts/ai_prepare_hosted_verification.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 1062
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:00:50.724125+00:00",
+      "exitCode": 0,
+      "durationMs": 182,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "f7ef803950722b219037b8a1d8f4f4c42ea09e4f7195ebd081a1fc4f10c01671",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:00:50.909178+00:00",
+      "exitCode": 0,
+      "durationMs": 127,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "9b04d9009c7f3edafd9aef759e831c9b1b23650df32876b95c5f3fc6002c4fa3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json SUMMARY=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:00:51.029840+00:00",
+      "exitCode": 0,
+      "durationMs": 69,
+      "outputDigest": "c4635c0b472fbc2fa799fa29e92298fc31d25f63e959854cb9d48611414b5e42",
+      "commandHash": "f564d1299883623a559f68345986f7be43f022d78e4008e51a56abfcc82e600d",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "2e341e21a29d413d03cf6f662a1b64d89cc925a1ab433a0a12d179dde244fff5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 325
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json SUMMARY=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:00:51.130758+00:00",
+      "exitCode": 0,
+      "durationMs": 55,
+      "outputDigest": "4529a784742901de608291b08d15e20848c5a77463b62f443f365b2183d1b0a1",
+      "commandHash": "c8464f4f401f1044716ec6dc4bafdff07ddcb7653e6e12e2b0e511648d71c9bd",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "e20136cecdffc70e041d5406691ac01ab70cfc2ca2c67a6826ffc83af514151f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputBytes": 330
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:00:51.439188+00:00",
+      "exitCode": 0,
+      "durationMs": 256,
+      "outputDigest": "1c064db05950afb4bd321fb7fca70d23fd2a70ec7fee6ca97750984d8b6b0280",
+      "commandHash": "646035fc92bf16da2787000941f7371c7613db1cb0b61efa8f1649252b8d48a6",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "f9fc9495ea00da35aae478e3e1c016cfb4986e256e5b52811bd549f88af03d85",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json ## Diff Ownership Preview - active_owned: `32`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/",
+      "outputTail": "ork-items/active/quality-gate-deep-performance-optimization-20260728.contract.json` — covered by Contract scope - [active_owned] `.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/.gitkeep` — covered by Contract scope - [active_owned] `.ai/work-items/starts/quality-gate-deep-performance-optimization-20260728.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.ja.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.md` — covered by Contract scope - [active_owned] `docs/operations/quality-gates.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `scripts/ai_prepare_hosted_verification.py` — covered by Contract scope - [active_owned] `scripts/check_system_invariants.py` — covered by Contract scope - [active_owned] `scripts/install_ai_cockpit.py` — covered by Contract scope - [active_owned] `scripts/run_quality_gate.py` — covered by Contract scope - [active_owned] `tests/test_ci_quality_orchestration.py` — covered by Contract scope - [active_owned] `tests/test_hosted_verification_snapshot.py` — covered by Contract scope - [active_owned] `tests/test_installer.py` — covered by Contract scope - [active_owned] `tests/test_quality_gate_architecture.py` — covered by Contract scope - [active_owned] `tests/test_quality_telemetry.py` — covered by Contract scope - [active_owned] `tests/test_system_invariants.py` — covered by Contract scope - [active_owned] `tests/test_workflows.py` — covered by Contract scope",
+      "outputBytes": 3196
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:05:48.387422+00:00",
+      "exitCode": 0,
+      "durationMs": 296878,
+      "outputDigest": "656b78c6b5c0de4733ee160f17483f20878adcecc37b133b56a247ee98f2d405",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "06a574def999c3839744540ca5fcb5a1cd73462615830b5e5108222df2d31078",
+      "outputSummary": "/usr/bin/make --no-print-directory quality-full /usr/bin/make --no-print-directory quality-fast-static /usr/bin/make --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"f9e1b7e41ec2-local-20260728T040051Z-9035-0\" --run-id \"local\" --output \"target/quality/sessions/f9e1b7e41ec2-local-20260728T040051Z-9035-0/timing/project-format-check.json\" --log \"target/quality/session",
+      "outputTail": "d_calibration_fails_when_confirmed_path_is_missing 4.02s call tests/test_release_preflight.py::test_canonical_archive_helper_covers_current_source 3.68s call tests/test_start_and_archive.py::test_ai_start_journeys 2.89s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 2.52s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 2.50s call tests/test_docs_metadata.py::test_check_rejects_supported_stack_drift 2.49s call tests/test_installer.py::test_upgrade_rolls_back_when_post_copy_validation_fails 2.37s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 1293 passed, 3 warnings in 283.18s (0:04:43) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.hGEOiLi6sy/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.hGEOiLi6sy/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.hGEOiLi6sy/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.hGEOiLi6sy/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/f9e1b7e41ec2-local-20260728T040051Z-9035-0/summary.json",
+      "outputBytes": 43378
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json SUMMARY=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:05:49.815046+00:00",
+      "exitCode": 0,
+      "durationMs": 236,
+      "outputDigest": "3f544f07e3668cba36dbb81eeb87fc975f527bbd87f0f2e2dca879ec37057298",
+      "commandHash": "eec4b202dd4791093e5519bf8fd754143100478b7c2f0b825cf531c16966cd88",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "1b44f63813c315a8888b07e30ffcaa2f7d3a9256abb28b51fda7c77c42963c2c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 372
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json SUMMARY=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:05:50.059595+00:00",
+      "exitCode": 0,
+      "durationMs": 198,
+      "outputDigest": "2d6c81055b59819c453d8fceab1e8c82732886af6d827211d95d750968a7dd84",
+      "commandHash": "eca334174b85b4d9dd49115f6138d643497386e3a558e147bec46e438cfe074b",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "40d8b63d7d4ff92326dd339816930f016ada19a4d1f4938e962e30287a5900e7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 355
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:05:50.164765+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "747e800aba4b76c04219545938f6e4eeccb61a62e4e0ad05ed807ea7f09e3698",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json SUMMARY=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:05:50.285671+00:00",
+      "exitCode": 0,
+      "durationMs": 63,
+      "outputDigest": "19ae55f9d2c3a98258e232a98937d7c7110bffda3f83c45528aee6dc4016403c",
+      "commandHash": "9adc5ad1fde271e41183ba0a9485d033925eb9d63d8f0045b4e334c3e0c69070",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "6024990e3b75abe7ebf27149a312372e03b3fd452d8284e63f24be3cf56f4b55",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json --summary .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 335
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json CONTRACT=.ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T04:05:51.229338+00:00",
+      "exitCode": 0,
+      "durationMs": 91,
+      "outputDigest": "90b252f352d6f51598a6b49233bb34cfc69e11790386ffea7d3cda2781617a99",
+      "commandHash": "54891d846132852ae15202e10a66948202071980c72497f0b3009d9f8ef65c46",
+      "contractHash": "fe22b50014b8d62f0ac988ea52141fd718205071f9b29b3eb9c6b467b154b005",
+      "commitSha": "f9e1b7e41ec282de2704497369a9db4a7ac8db6c",
+      "executionContractPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "worktreeDigest": "61f1d6c8083b7dd9f5df195925c96c21e60db9f3c0136a3f15db6d8b63449e9a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json ai summary check passed: .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json --contract .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json ai summary check passed: .ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+      "outputBytes": 370
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Do not trade evidence completeness, deterministic isolation, or coverage for speed.",
+      "compliant": true,
+      "evidence": "All 21 quality gates, the 85.10% executable coverage floor, JUnit, timing, logs, supply-chain checks, installation smoke, and terminal CI evidence remain enforced."
+    },
+    {
+      "guideline": "Optimize measured structural costs before adding concurrency.",
+      "compliant": true,
+      "evidence": "The implementation prunes installer history traversal, caches immutable inventory, and parallelizes only independent hosted Jobs; pytest high concurrency was not enabled."
+    },
+    {
+      "guideline": "Treat archived template-maintenance history separately from adopter runtime payload and document the boundary.",
+      "compliant": true,
+      "evidence": "Installer tests prove active/archive/starts/decisions history is excluded while skeleton, policies, baselines, adoption, upgrade, and governance journeys remain covered."
+    },
+    {
+      "guideline": "Use source-bound, like-for-like hosted evidence and record failed performance targets honestly.",
+      "compliant": true,
+      "evidence": "Three serial successful runs bind exact commit f9e1b7e41ec282de2704497369a9db4a7ac8db6c; failed run 30324321071 remains diagnostic only and the remaining ~11-minute project-test bottleneck is explicit."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "The structural optimization is proven on three hosted runs and preserves all governed gates, but project-test still takes about 10 minutes 40 seconds and runner/test-growth variability remains. Release publication is out of scope."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "RFE-ISSUE-111",
+      "category": "preflight-process",
+      "severity": "high",
+      "stage": "implementation-start",
+      "fact": "A medium-risk code Contract with five explicit required scenarios, no unknowns, concrete acceptance, implementation capability, and executionDecision=continue remained needs_human_confirmation solely because the scenarios were unverified before implementation. Recording the user-authorized Decision Evidence changed the state to human_decision_recorded, which the enforced policy also blocks; no valid transition to ready exists without falsely marking implementation-dependent scenarios verified.",
+      "evidence": [
+        "target/ai_preflight_review.json",
+        ".ai/decisions/HDR-7615681f4b3e9943-33e93679.request.json",
+        ".ai/decisions/HDR-7615681f4b3e9943-33e93679.evidence.json",
+        ".ai/guards/preflight_review_policy.yaml",
+        "scripts/ai_preflight_review.py"
+      ],
+      "decision": "Stop further performance implementation, preserve the current branch unchanged, and complete a separate corrective Work Item that distinguishes concrete planned verification from missing or ambiguous scenario coverage.",
+      "resolution": "Resolved by corrective Work Item preflight-planned-scenario-transition-20260728 and merged PR #412; planned scenarios can authorize implementation only with concrete expected results and verification plans, while finish remains fail closed until evidence is verified.",
+      "status": "resolved",
+      "followUp": "The resumed performance Contract passed enforced Preflight and all five required scenarios now carry real implementation and hosted evidence."
+    },
+    {
+      "issueId": "RFE-ISSUE-117",
+      "category": "resume-process",
+      "severity": "high",
+      "stage": "post-corrective-rebase",
+      "fact": "After PR #412 and PR #413 closed the performance Work Item prerequisites, the paused branch rebased cleanly to origin/main f6b12629 and Preflight derived ready with five planned scenarios. The immutable Start Receipt still binds the original base f00ac8b3, while the Contract must record the new branch base; validate_receipt rejects the mismatch and the repository provides no governed rebase/resume receipt lineage.",
+      "evidence": [
+        ".ai/work-items/starts/quality-gate-deep-performance-optimization-20260728.json",
+        ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+        "scripts/ai_start_receipt.py",
+        "target/ai_preflight_review.json"
+      ],
+      "decision": "Pause performance implementation again and complete a dedicated corrective that preserves the immutable original receipt while adding a source-bound resume/rebase lineage accepted only after predecessor closure.",
+      "resolution": "Resolved by work-item-resume-receipt-lineage-20260728 in merged PR #414 and schema alignment in merged PR #417; the immutable Start Receipt is retained and three generated resumeHistory edges bind each new base to a closed predecessor.",
+      "status": "resolved",
+      "followUp": "The final resume edge to 5e7c9d2d passed Contract validation and Preflight before implementation resumed."
+    },
+    {
+      "issueId": "RFE-ISSUE-144",
+      "category": "documentation-command-parser",
+      "severity": "low",
+      "stage": "hosted-snapshot-fast-policy",
+      "fact": "The first measurement snapshot quality run treated the documented command make -n quality as a reference to a nonexistent Make target named -n and stopped before heavy tests.",
+      "evidence": [
+        "scripts/check_system_invariants.py",
+        "tests/test_system_invariants.py",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+        "target/quality/current-session.txt"
+      ],
+      "decision": "Fix the parser with a red-first regression so recognized no-argument dry-run options are skipped and the real target remains checked; do not hide the defect by rewriting the documentation.",
+      "resolution": "The focused regression and make check-ai-system-invariants pass with the corrected parser.",
+      "status": "resolved",
+      "followUp": "Keep future option forms explicit; options that consume arguments require separate parser coverage before use in documented command extraction."
+    },
+    {
+      "issueId": "RFE-ISSUE-145",
+      "category": "snapshot-environment-isolation",
+      "severity": "high",
+      "stage": "hosted-snapshot-project-test",
+      "fact": "The snapshot command-line CONTRACT override propagated through GNU Make into pytest and then into nested adopter make processes, causing three lifecycle tests to select the template performance Contract instead of each adopter's local e2e Contract.",
+      "evidence": [
+        "scripts/ai_prepare_hosted_verification.py",
+        "tests/test_hosted_verification_snapshot.py",
+        "tests/test_finish_e2e.py",
+        "tests/test_project_governance_journey.py",
+        "target/quality/current-session.txt"
+      ],
+      "decision": "Sanitize parent Make and Work Item override variables only at the isolated snapshot quality subprocess boundary; preserve the rest of the hosted/local execution environment.",
+      "resolution": "The environment regression and all three previously failing lifecycle tests pass together.",
+      "status": "resolved",
+      "followUp": "The complete f9e1b7e4 snapshot passed 1293 tests and all three hosted measurements passed on the sanitized boundary."
+    },
+    {
+      "issueId": "RFE-ISSUE-146",
+      "category": "workflow-dispatch-intent",
+      "severity": "high",
+      "stage": "hosted-measurement-run-1",
+      "fact": "Hosted run 30324321071 bound to ef9d54dc completed template-smoke quality in 10 minutes 53 seconds and installation-smoke in 15 seconds, but workflow_dispatch was unconditionally classified as release preparation, so release-evidence failed on unrelated historical release-state drift and the aggregate correctly failed.",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30324321071",
+        ".github/workflows/smoke.yml",
+        "tests/test_workflows.py",
+        "docs/operations/quality-gates.md",
+        "docs/operations/quality-gates.zh-CN.md",
+        "docs/operations/quality-gates.ja.md"
+      ],
+      "decision": "Add an explicit manual-dispatch purpose choice, preserve release_preparation as the strict default, and require hosted_measurement for non-release source-bound performance runs.",
+      "resolution": "Workflow and tests separate manual hosted measurement from release preparation; runs 30325316583, 30325920850, and 30326505323 all completed release-evidence as successful not-applicable ownership checks and ci-evidence as success.",
+      "status": "resolved",
+      "followUp": "Run 30324321071 remains diagnostic only and is excluded from the three-run statistics."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "project-test",
+      "detail": "The dominant pytest path still takes 637-642 seconds hosted; future archive growth and lifecycle test expansion can increase it even though installer history traversal no longer scales with archived evidence.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    },
+    {
+      "level": "low",
+      "area": "statistics",
+      "detail": "Three runs are sufficient for the required acceptance but p95 is a conservative nearest-rank maximum over a small sample, not a long-term service-level estimate.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Confirm installer history pruning cannot omit adopter runtime governance files.",
+      "Confirm quality session isolation and streaming preserve failure, timeout, cancellation, JUnit, and log evidence.",
+      "Confirm the three hosted runs bind one SHA and support the reported median/p95 without overclaim.",
+      "Confirm hosted_measurement and release_preparation remain distinct fail-closed intents."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "Installer install, reinstall, upgrade, adoption, rollback, and governance journey regressions pass with the reduced payload.",
+    "userVisibleOutput": "Quality output streams live and still writes bounded machine-readable tails and digests.",
+    "persistence": "Quality evidence is isolated under commit/run/session paths and the outer session pointer is restored on exit.",
+    "localization": "English, Chinese, and Japanese quality-gate documents retain equivalent commands, boundaries, and limitations.",
+    "generatedArtifacts": "Hosted artifacts contain the outer timing summary, per-gate logs, JUnit, slow-test report, wrapper log, and nested diagnostic sessions.",
+    "makeEntrypoints": "quality-fast remains narrow, quality/quality-full retain all required gates, and Make jobserver descriptors are preserved only when valid."
+  },
+  "userCorrectionsCaptured": [
+    "Treat deep performance as the current highest-priority bottleneck and complete it before WI-10.",
+    "After deep performance, execute WI-10, WI-01 through WI-20 bidirectional audit, remaining process issues plus RFE-ISSUE-082, Japanese assessment/corrections, documentation alignment, release, and only then plan cleanup."
+  ],
+  "userCorrectionSolidification": [
+    "PLAN-DIRECTIVE-022 maps the deep-performance instruction to Contract, implementation, tests, three hosted runs, and lifecycle commands.",
+    "PLAN-DIRECTIVE-023 and the comprehensive plan mechanically preserve the user-confirmed eight-stage order and release freeze."
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "fe22b50014b8d62f",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "fe22b50014b8d62f",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "project-test remains the dominant hosted path at 637.117-642.422 seconds; this Work Item meets the first-stage p95 target but does not claim the heavy suite is fully optimized.",
+    "No pytest xdist or multi-shard execution was enabled because safe structural gains met the target without introducing unproven high-concurrency isolation risk."
+  ],
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "History-amplified installer traversal, repeated source inventory construction, buffered diagnostics, mixed timing sessions, and serial hosted Job dependencies were addressed without removing gates or entering release scope; three hosted runs demonstrate a stable critical-path reduction."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Installer history is excluded but an adopter requires a runtime governance file.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_installer.py",
+        "tests/test_project_governance_journey.py",
+        "tests/test_adoption_e2e.py",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323"
+      ]
+    },
+    {
+      "scenario": "A reused fixture or test shard leaks mutations between tests.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_installer.py::test_installer_reuses_pruned_immutable_source_inventory",
+        "tests/test_quality_gate_architecture.py",
+        "Three serial hosted runs completed without order-dependent or shared-output failure."
+      ]
+    },
+    {
+      "scenario": "A quality gate fails, times out, or is cancelled.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_quality_telemetry.py",
+        "tests/test_ci_quality_orchestration.py",
+        "tests/test_workflows.py",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583/artifacts/8675625223",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850/artifacts/8675833128",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323/artifacts/8676034327"
+      ]
+    },
+    {
+      "scenario": "One fast hosted run appears to meet the target.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "Baseline run 30280375075 quality step: 1281 seconds.",
+        "Post-change runs 30325316583, 30325920850, and 30326505323 quality steps: 650, 655, and 653 seconds.",
+        "Nearest-rank median: 653 seconds; conservative p95: 655 seconds."
+      ]
+    },
+    {
+      "scenario": "Parallel Job restructuring causes a required downstream result to be skipped.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_quality_orchestration.py",
+        "tests/test_workflows.py",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583/job/90171007040",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850/job/90172843336",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323/job/90174532123"
+      ]
+    }
+  ],
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-28T03:58:54Z",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+        ],
+        "reason": "The plan records the root causes, three hosted samples, residual project-test bottleneck, resolved process findings, and the user-confirmed eight-stage order."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/quality-gate-deep-performance-optimization-20260728.contract.json",
+          ".ai/work-items/archive/2026/quality-gate-deep-performance-optimization-20260728.summary.json",
+          "docs/reference/remediation-instruction-traceability.json"
+        ],
+        "reason": "Contract scenarios, Summary evidence, and PLAN-DIRECTIVE-022/023 form a bidirectional instruction-to-acceptance chain."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "Makefile",
+          "docs/operations/quality-gates.md",
+          "docs/operations/quality-gates.zh-CN.md",
+          "docs/operations/quality-gates.ja.md"
+        ],
+        "reason": "Documented quality and hosted-measurement commands match implemented Make and Workflow entrypoints and do not claim release readiness."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "docs/operations/quality-gates.md",
+          "docs/operations/quality-gates.zh-CN.md",
+          "docs/operations/quality-gates.ja.md"
+        ],
+        "reason": "English, Chinese, and Japanese documents preserve the same session, artifact, dispatch-intent, and limitation semantics."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/operations/quality-gates.md",
+          "docs/operations/quality-gates.zh-CN.md",
+          "docs/operations/quality-gates.ja.md",
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+        ],
+        "reason": "The documents retain the failed diagnostic run, small-sample statistical boundary, no-xdist decision, remaining heavy-test bottleneck, and release exclusion."
+      }
+    ]
+  },
+  "hostedPerformanceEvidence": {
+    "schemaVersion": 1,
+    "baselineWorkItem": "quality-gate-performance-completion-20260727",
+    "comparisonRule": "Compare at least three serial, like-for-like smoke workflow runs bound to one measured commit against hosted run 30280375075; report median and p95, and do not claim improvement from local timing or a single hosted run.",
+    "status": "complete",
+    "scenarios": [
+      {
+        "scenario": "manual_dispatch_release_intent_boundary",
+        "status": "pass",
+        "reason": "The failed diagnostic run 30324321071 exposed the old intent collision; after the explicit purpose fix, all three measurement runs completed release-evidence and terminal ci-evidence successfully without entering release preparation.",
+        "evidence": [
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30324321071",
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583",
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850",
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323"
+        ]
+      },
+      {
+        "scenario": "pull_request_quality_gate",
+        "status": "pass",
+        "reason": "Three serial like-for-like hosted measurement runs on exact commit f9e1b7e41ec282de2704497369a9db4a7ac8db6c completed quality in 650, 655, and 653 seconds. Median is 653 seconds and conservative nearest-rank p95 is 655 seconds, 48.9% below baseline run 30280375075 at 1281 seconds and below the 900-second first-stage target.",
+        "evidence": [
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30280375075",
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583",
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850",
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323"
+        ]
+      },
+      {
+        "scenario": "project_test_critical_path",
+        "status": "pass",
+        "reason": "The three outer session summaries report project-test at 637117, 642422, and 640607 ms. Median is 640607 ms and conservative p95 is 642422 ms; this proves repeatability while retaining the roughly 11-minute path as an explicit residual bottleneck.",
+        "evidence": [
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583/artifacts/8675625223",
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850/artifacts/8675833128",
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323/artifacts/8676034327"
+        ]
+      },
+      {
+        "scenario": "independent_job_and_terminal_evidence",
+        "status": "pass",
+        "reason": "In every measurement, installation-smoke and release-evidence ran independently and succeeded before template-smoke; the always-run terminal ci-evidence then validated all three required Job results.",
+        "evidence": [
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583/job/90171007040",
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850/job/90172843336",
+          "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323/job/90174532123"
+        ]
+      }
+    ]
+  },
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "decisionEvidence": null,
+  "archiveSequence": 629
+}

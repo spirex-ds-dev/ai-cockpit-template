@@ -72,5 +72,23 @@ def test_smoke_assigns_quality_installation_and_release_to_distinct_jobs():
     assert "  template-smoke:" in smoke
     assert "  installation-smoke:" in smoke
     assert "  release-evidence:" in smoke
-    assert "needs: template-smoke" in smoke
+    installation = smoke.split("  installation-smoke:", 1)[1].split("\n  release-evidence:", 1)[0]
+    release = smoke.split("  release-evidence:", 1)[1].split("\n  ci-evidence:", 1)[0]
+    assert "needs: template-smoke" not in installation
+    assert "needs: template-smoke" not in release
+    assert "needs: [template-smoke, installation-smoke, release-evidence]" in smoke
+    assert "actions/upload-artifact@" in smoke
+    assert "name: Upload quality diagnostics" in smoke
+    assert "if: always()" in smoke
     assert smoke.count("make quality") == 1
+
+
+def test_quality_full_uses_commit_and_run_bound_session_directories():
+    text = MAKEFILE.read_text(encoding="utf-8")
+    assert "target/quality/sessions" in text
+    assert "QUALITY_SESSION_ID" in text
+    assert "GITHUB_RUN_ID" in text
+    assert "--session-id" in text
+    assert "--run-id" in text
+    assert "trap 'printf" in text
+    assert "target/quality/current-session.txt' EXIT" in text

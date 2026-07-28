@@ -185,8 +185,8 @@ def test_ci_evidence_is_terminal_and_requires_all_three_jobs():
     workflow = yaml.safe_load(SMOKE.read_text(encoding="utf-8"))
     jobs = workflow["jobs"]
 
-    assert jobs["installation-smoke"]["needs"] == "template-smoke"
-    assert jobs["release-evidence"]["needs"] == "template-smoke"
+    assert "needs" not in jobs["installation-smoke"]
+    assert "needs" not in jobs["release-evidence"]
     assert jobs["ci-evidence"]["needs"] == [
         "template-smoke",
         "installation-smoke",
