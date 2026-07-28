@@ -10,14 +10,37 @@ keywords:
 
 # 30-Second Start
 
+For prerequisites, every Wizard choice, scaffold inspection, all ten
+calibration stages, the first PR, recovery, and platform examples, continue
+with the complete [Installation](installation.md).
+
 <!-- doc-domain: wizard-start -->
 ## Start the Wizard
 
-From a clean target repository with at least one commit, resolve the published
-tag, download that tag's installer, and start the Installation Wizard. The
-copy-ready defaults point to the canonical public repository; override them only
-for an explicitly verified source. For a private or mirrored source, use
-[Installation](installation.md#choose-an-entrypoint) instead of guessing a URL.
+The recommended beginner path is to paste this into the coding agent that has
+your target project open:
+
+```text
+Help me begin AI Cockpit installation from the canonical public repository
+https://github.com/spirex-ds-dev/ai-cockpit-template.git. Work read-only first.
+Verify that this is the intended Git project, it has an initial commit, its
+worktree is clean, and Python 3.10+, Git, GNU Make, and curl are available.
+Read the public release.json, resolve a fixed published tag, and explain the
+release/tag/digest evidence in plain language. Do not download or execute
+anything until you show the exact plan and I approve only that installation
+step. Do not commit, push, create or merge a PR, delete, or publish.
+```
+
+Expected result: a plain-language prerequisite and fixed-release report plus
+one bounded approval question. For a private or mirrored source, stay in the
+complete [Installation](installation.md) route and ask the source owner for its
+trust evidence.
+
+### Advanced manual fallback
+
+The block below is for an experienced operator who cannot use an agent. Paste
+it only in the target repository's terminal. Success means the Wizard opens;
+on any error, stop and use the complete Installation recovery table.
 
 <!-- command-evidence: adopter_required -->
 ```sh

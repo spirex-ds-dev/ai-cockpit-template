@@ -106,6 +106,74 @@ LAYERED_DOCUMENTS = {
     },
 }
 LANGUAGE_SUFFIXES = {"en": "", "zh-CN": ".zh-CN", "ja": ".ja"}
+BEGINNER_INSTALLATION_STAGES = (
+    "before-you-start",
+    "open-your-project",
+    "copy-discovery-prompt",
+    "review-read-only-report",
+    "choose-wizard-options",
+    "review-installation-plan",
+    "approve-scaffold-write",
+    "inspect-scaffold",
+    "complete-calibration",
+    "run-local-checks",
+    "complete-first-work-item",
+    "review-pr-and-hosted-ci",
+    "merge-and-close",
+    "recover-from-a-stop",
+    "confirm-installation-success",
+)
+CALIBRATION_STAGES = (
+    "repository-role",
+    "language-and-stack",
+    "source-boundaries",
+    "test-boundaries",
+    "generated-artifacts",
+    "critical-paths",
+    "quality-commands",
+    "review-requirements",
+    "risks-and-unknowns",
+    "adoption-readiness",
+)
+PROMPT_SAFETY_BOUNDARIES = (
+    "read-only-discovery",
+    "explain-evidence-unknowns",
+    "plan-before-write",
+    "human-confirmation-before-write",
+    "no-downstream-authority",
+    "preserve-user-changes",
+)
+INSTALLATION_PLATFORMS = ("ios", "android", "java")
+PLATFORM_INSTALLATION_STAGES = (
+    "detect-project",
+    "collect-toolchain-evidence",
+    "choose-stack-and-boundaries",
+    "discover-quality-commands",
+    "calibrate-generated-and-critical-paths",
+    "stop-and-recover",
+    "verify-platform-adoption",
+)
+PLATFORM_EVIDENCE_BOUNDARY = "<!-- platform-boundary: no-toolchain-device-signing-hosted-claim -->"
+COMMAND_GUIDE_MARKER = "<!-- command-guide: purpose,success,failure -->"
+PLATFORM_PROMPT_MARKER = "<!-- platform-prompt: copy-ready -->"
+SCAFFOLD_REVIEW_TABLE_MARKER = "<!-- scaffold-review-table: copy-request,expected,pass,stop -->"
+CALIBRATION_REVIEW_TABLE_MARKER = (
+    "<!-- calibration-review-table: copy-request,example,pass,stop -->"
+)
+PLATFORM_STEP_TABLE_MARKER = "<!-- platform-step-table: copy-request,example,pass,stop -->"
+PLATFORM_STAGE5_PROPOSAL_MARKER = "<!-- platform-stage5: proposal-only -->"
+LIFECYCLE_ORDER_MARKER = "<!-- lifecycle-order: adoption-close-before-configuration -->"
+LIFECYCLE_APPROVAL_STAGES = (
+    "adoption-closure-plan",
+    "adoption-closure-execute",
+    "configuration-closure-plan",
+    "configuration-closure-execute",
+)
+PROMPT_AUTHORITY_TEXT = {
+    "en": "Do not create, edit, delete, commit, push, open or merge a PR, or publish.",
+    "zh-CN": "不要创建、编辑、删除、commit、push、创建或合并 PR，也不要发布。",
+    "ja": "作成、編集、削除、commit、push、PR 作成・マージ、公開は禁止です。",
+}
 SEMANTIC_DOMAINS = {
     "north-star",
     "product-boundary",
@@ -289,6 +357,7 @@ def installation_command_errors(root: Path) -> list[str]:
                 "make ai-finish TASK=adopt_ai_cockpit",
                 "git commit",
                 "make check-ai-pr",
+                "make ai-close-work-item TASK=adopt_ai_cockpit",
                 "make ai-start TASK=configure_ai_cockpit",
                 "make cockpit-doctor",
             )
@@ -429,6 +498,7 @@ def capability_claim_errors(root: Path) -> list[str]:
         root / "README.ja.md",
         root / "README.zh-CN.md",
         root / "docs" / "getting-started" / "installation.md",
+        root / "docs" / "getting-started" / "installation.zh-CN.md",
         root / "docs" / "getting-started" / "installation.ja.md",
         root / "docs" / "reference" / "upgrade.md",
     )
@@ -466,13 +536,31 @@ def documentation_fact_errors(root: Path) -> list[str]:
             if claim in text:
                 errors.append(f"{name}: unsupported documentation claim: {claim}")
         install_position = text.find("--create-adoption")
-        base_position = text.find('ADOPTION_BASE="$(git rev-parse HEAD)"')
+        contract_position = text.find('ADOPTION_CONTRACT="$(python3 -c')
+        base_position = text.find('ADOPTION_BASE="$(python3 -c')
         finish_position = text.find("make ai-finish TASK=adopt_ai_cockpit")
+        commit_position = text.find('git commit -m "adopt AI Cockpit governance"')
         if (
-            min(install_position, base_position, finish_position) < 0
-            or not install_position < base_position < finish_position
+            min(
+                install_position,
+                finish_position,
+                contract_position,
+                base_position,
+                commit_position,
+            )
+            < 0
+            or not install_position
+            < finish_position
+            < contract_position
+            < base_position
+            < commit_position
+            or ".ai/work-items/archive/index.json" not in text
+            or '"workItemId"]=="adopt_ai_cockpit"' not in text
+            or ".ai/work-items/active/adopt_ai_cockpit.contract.json" in text
         ):
-            errors.append(f"{name}: adoption base must be captured after installer branch creation")
+            errors.append(
+                f"{name}: adoption PR check must reload archived Contract base after finish approval"
+            )
 
     authoritative = [
         root / "docs" / "getting-started" / "installation.md",
@@ -555,6 +643,7 @@ def command_evidence_errors(root: Path) -> list[str]:
     paths.extend(
         (
             root / "docs" / "getting-started" / "installation.md",
+            root / "docs" / "getting-started" / "installation.zh-CN.md",
             root / "docs" / "getting-started" / "installation.ja.md",
         )
     )
@@ -588,6 +677,235 @@ def command_evidence_errors(root: Path) -> list[str]:
             if match is None:
                 errors.append(
                     f"{relative}:{number}: executable command fence is missing command-evidence"
+                )
+    return errors
+
+
+def _marker_values(text: str, marker: str) -> set[str]:
+    return set(re.findall(rf"<!--\s*{re.escape(marker)}:\s*([a-z0-9-]+)\s*-->", text))
+
+
+def _step_table_errors(
+    text: str,
+    *,
+    marker: str,
+    expected_rows: int,
+    relative: str,
+    label: str,
+) -> list[str]:
+    """Require ordered, populated beginner decision rows after a machine marker."""
+    marker_position = text.find(marker)
+    if marker_position < 0:
+        return [f"{relative}: missing {label} decision table"]
+    section_end = text.find("\n## ", marker_position)
+    section = text[marker_position : section_end if section_end >= 0 else None]
+    table_lines: list[str] = []
+    table_started = False
+    for line in section.splitlines():
+        if line.startswith("|"):
+            table_started = True
+            table_lines.append(line)
+        elif table_started and line.startswith("<!--"):
+            continue
+        elif table_started:
+            break
+    if len(table_lines) < expected_rows + 2:
+        return [f"{relative}: {label} decision table must contain {expected_rows} rows"]
+    header = table_lines[0]
+    if "PASS" not in header or "STOP" not in header:
+        return [f"{relative}: {label} decision table must expose PASS and STOP columns"]
+    numbered_rows: list[tuple[int, list[str]]] = []
+    for line in table_lines[2:]:
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        match = re.match(r"^(\d+)(?:[.\s]|$)", cells[0]) if cells else None
+        if match:
+            numbered_rows.append((int(match.group(1)), cells))
+    if [number for number, _ in numbered_rows] != list(range(1, expected_rows + 1)):
+        return [f"{relative}: {label} decision rows must be ordered 1-{expected_rows}"]
+    errors: list[str] = []
+    for number, cells in numbered_rows:
+        if len(cells) < 4 or any(not cell for cell in cells):
+            errors.append(f"{relative}: {label} row {number} has an empty decision field")
+            continue
+        has_curly_request = "“" in cells[1] and "”" in cells[1]
+        has_japanese_request = "「" in cells[1] and "」" in cells[1]
+        if not (has_curly_request or has_japanese_request):
+            errors.append(f"{relative}: {label} row {number} lacks a copy-ready request")
+    return errors
+
+
+def _executable_fence_bodies(text: str) -> list[str]:
+    return re.findall(
+        r"^```(?:sh|bash|shell|console|make|zsh)\s*$\n(.*?)^```\s*$",
+        text,
+        flags=re.MULTILINE | re.DOTALL,
+    )
+
+
+def beginner_installation_errors(root: Path) -> list[str]:
+    """Require complete novice-safe trilingual installation and platform routes."""
+    errors: list[str] = []
+    readmes = {
+        "en": root / "README.md",
+        "zh-CN": root / "README.zh-CN.md",
+        "ja": root / "README.ja.md",
+    }
+    linked_layers = {
+        "en": (
+            root / "docs/getting-started/30-second-start.md",
+            root / "docs/getting-started/standard-adoption-guide.md",
+        ),
+        "zh-CN": (
+            root / "docs/getting-started/30-second-start.zh-CN.md",
+            root / "docs/getting-started/standard-adoption-guide.zh-CN.md",
+        ),
+        "ja": (
+            root / "docs/getting-started/30-second-start.ja.md",
+            root / "docs/getting-started/standard-adoption-guide.ja.md",
+        ),
+    }
+    for language, suffix in LANGUAGE_SUFFIXES.items():
+        installation_relative = f"docs/getting-started/installation{suffix}.md"
+        installation = root / installation_relative
+        installation_text = ""
+        if not installation.is_file():
+            errors.append(
+                f"{installation_relative}: required beginner installation guide is missing"
+            )
+        else:
+            text = installation.read_text(encoding="utf-8")
+            installation_text = text
+            novice_stages = _marker_values(text, "novice-stage")
+            for stage in BEGINNER_INSTALLATION_STAGES:
+                if stage not in novice_stages:
+                    errors.append(
+                        f"{installation_relative}: missing novice installation stage: {stage}"
+                    )
+            calibration_stages = _marker_values(text, "calibration-stage")
+            for stage in CALIBRATION_STAGES:
+                if stage not in calibration_stages:
+                    errors.append(f"{installation_relative}: missing calibration stage: {stage}")
+            prompt_boundaries = _marker_values(text, "prompt-safety")
+            for boundary in PROMPT_SAFETY_BOUNDARIES:
+                if boundary not in prompt_boundaries:
+                    errors.append(
+                        f"{installation_relative}: missing prompt safety boundary: {boundary}"
+                    )
+            novice_positions = [
+                text.find(f"<!-- novice-stage: {stage} -->")
+                for stage in BEGINNER_INSTALLATION_STAGES
+            ]
+            if all(position >= 0 for position in novice_positions) and novice_positions != sorted(
+                novice_positions
+            ):
+                errors.append(
+                    f"{installation_relative}: novice installation stages are out of order"
+                )
+            calibration_positions = [
+                text.find(f"<!-- calibration-stage: {stage} -->") for stage in CALIBRATION_STAGES
+            ]
+            if all(
+                position >= 0 for position in calibration_positions
+            ) and calibration_positions != sorted(calibration_positions):
+                errors.append(f"{installation_relative}: calibration stages are out of order")
+            if PROMPT_AUTHORITY_TEXT[language] not in text:
+                errors.append(
+                    f"{installation_relative}: copy-ready discovery prompt lost its "
+                    "no-write/no-downstream-authority sentence"
+                )
+            if LIFECYCLE_ORDER_MARKER not in text:
+                errors.append(
+                    f"{installation_relative}: adoption must close before configuration starts"
+                )
+            lifecycle_approvals = _marker_values(text, "lifecycle-approval")
+            for approval in LIFECYCLE_APPROVAL_STAGES:
+                if approval not in lifecycle_approvals:
+                    errors.append(
+                        f"{installation_relative}: missing separate lifecycle approval: {approval}"
+                    )
+            errors.extend(
+                _step_table_errors(
+                    text,
+                    marker=SCAFFOLD_REVIEW_TABLE_MARKER,
+                    expected_rows=7,
+                    relative=installation_relative,
+                    label="scaffold review",
+                )
+            )
+            errors.extend(
+                _step_table_errors(
+                    text,
+                    marker=CALIBRATION_REVIEW_TABLE_MARKER,
+                    expected_rows=10,
+                    relative=installation_relative,
+                    label="calibration review",
+                )
+            )
+            executable_fences = len(
+                re.findall(
+                    r"^```(?:sh|bash|shell|console|make|zsh)\s*$",
+                    text,
+                    flags=re.MULTILINE,
+                )
+            )
+            if executable_fences and text.count(COMMAND_GUIDE_MARKER) != executable_fences:
+                errors.append(
+                    f"{installation_relative}: retained commands require purpose, success, "
+                    "and failure guidance"
+                )
+
+        readme_text = readmes[language].read_text(encoding="utf-8")
+        if any(
+            "make ai-finish" in body and "git add ." in body
+            for body in _executable_fence_bodies(readme_text)
+        ):
+            errors.append(
+                f"{readmes[language].name}: finish and commit must use separate command blocks"
+            )
+        if installation_relative not in readme_text:
+            errors.append(
+                f"{readmes[language].name}: missing same-language beginner installation entry: "
+                f"{installation_relative}"
+            )
+        for layer in linked_layers[language]:
+            layer_relative = layer.relative_to(root).as_posix()
+            local_installation_link = f"installation{suffix}.md"
+            if local_installation_link not in layer.read_text(encoding="utf-8"):
+                errors.append(
+                    f"{layer_relative}: missing same-language beginner installation entry: "
+                    f"{installation_relative}"
+                )
+
+        for platform in INSTALLATION_PLATFORMS:
+            relative = f"docs/getting-started/examples/{platform}{suffix}.md"
+            path = root / relative
+            if not path.is_file():
+                errors.append(f"{relative}: required platform installation example is missing")
+                continue
+            text = path.read_text(encoding="utf-8")
+            found_stages = _marker_values(text, "platform-stage")
+            for stage in PLATFORM_INSTALLATION_STAGES:
+                if stage not in found_stages:
+                    errors.append(f"{relative}: missing platform installation stage: {stage}")
+            if PLATFORM_EVIDENCE_BOUNDARY not in text:
+                errors.append(f"{relative}: missing platform evidence boundary")
+            if PLATFORM_PROMPT_MARKER not in text:
+                errors.append(f"{relative}: missing copy-ready platform prompt")
+            if PLATFORM_STAGE5_PROPOSAL_MARKER not in text:
+                errors.append(f"{relative}: platform Stage 5 must remain proposal-only")
+            errors.extend(
+                _step_table_errors(
+                    text,
+                    marker=PLATFORM_STEP_TABLE_MARKER,
+                    expected_rows=7,
+                    relative=relative,
+                    label="platform step",
+                )
+            )
+            installation_link = f"examples/{platform}{suffix}.md"
+            if installation.is_file() and installation_link not in installation_text:
+                errors.append(
+                    f"{installation_relative}: missing same-language platform entry: {relative}"
                 )
     return errors
 
@@ -666,6 +984,7 @@ def check_repository(root: Path) -> list[str]:
     errors.extend(documentation_fact_errors(root))
     errors.extend(multilingual_layer_errors(root))
     errors.extend(command_evidence_errors(root))
+    errors.extend(beginner_installation_errors(root))
     errors.extend(historical_context_errors(root))
     return errors
 

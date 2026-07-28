@@ -1,8 +1,10 @@
 import json
 import shutil
+import subprocess
 from pathlib import Path
 
 from check_docs_metadata import (
+    beginner_installation_errors,
     check_repository,
     command_evidence_errors,
     documentation_fact_errors,
@@ -37,6 +39,217 @@ def test_wi10_layered_documents_are_complete_and_trilingual():
 
 def test_wi10_authoritative_command_examples_have_evidence_labels():
     assert command_evidence_errors(ROOT) == []
+
+
+def test_wi10_beginner_installation_routes_are_complete():
+    assert beginner_installation_errors(ROOT) == []
+
+
+def test_wi10_beginner_check_rejects_missing_chinese_installation(tmp_path):
+    copy_documentation(tmp_path)
+    chinese = tmp_path / "docs/getting-started/installation.zh-CN.md"
+    if chinese.exists():
+        chinese.unlink()
+
+    assert (
+        "docs/getting-started/installation.zh-CN.md: required beginner installation guide is missing"
+        in beginner_installation_errors(tmp_path)
+    )
+
+
+def test_wi10_beginner_check_rejects_missing_novice_or_calibration_stage(tmp_path):
+    copy_documentation(tmp_path)
+    installation = tmp_path / "docs/getting-started/installation.md"
+    text = installation.read_text(encoding="utf-8")
+    text = text.replace("<!-- novice-stage: inspect-scaffold -->", "", 1)
+    text = text.replace("<!-- calibration-stage: critical-paths -->", "", 1)
+    installation.write_text(text, encoding="utf-8")
+
+    errors = beginner_installation_errors(tmp_path)
+    assert (
+        "docs/getting-started/installation.md: missing novice installation stage: inspect-scaffold"
+        in errors
+    )
+    assert (
+        "docs/getting-started/installation.md: missing calibration stage: critical-paths" in errors
+    )
+
+
+def test_wi10_beginner_check_rejects_missing_prompt_boundary_or_command_explanation(tmp_path):
+    copy_documentation(tmp_path)
+    installation = tmp_path / "docs/getting-started/installation.ja.md"
+    text = installation.read_text(encoding="utf-8")
+    text = text.replace("<!-- prompt-safety: read-only-discovery -->", "", 1)
+    text = text.replace("<!-- command-guide: purpose,success,failure -->", "", 1)
+    installation.write_text(text, encoding="utf-8")
+
+    errors = beginner_installation_errors(tmp_path)
+    assert (
+        "docs/getting-started/installation.ja.md: missing prompt safety boundary: "
+        "read-only-discovery"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.ja.md: retained commands require purpose, success, "
+        "and failure guidance"
+    ) in errors
+
+
+def test_wi10_beginner_check_rejects_missing_platform_language_or_stage(tmp_path):
+    copy_documentation(tmp_path)
+    android = tmp_path / "docs/getting-started/examples/android.zh-CN.md"
+    if android.exists():
+        android.unlink()
+    ios = tmp_path / "docs/getting-started/examples/ios.md"
+    if ios.exists():
+        ios.write_text(
+            ios.read_text(encoding="utf-8").replace(
+                "<!-- platform-stage: discover-quality-commands -->", "", 1
+            ),
+            encoding="utf-8",
+        )
+
+    errors = beginner_installation_errors(tmp_path)
+    assert (
+        "docs/getting-started/examples/android.zh-CN.md: required platform installation "
+        "example is missing"
+    ) in errors
+    assert (
+        "docs/getting-started/examples/ios.md: missing platform installation stage: "
+        "discover-quality-commands"
+    ) in errors
+
+
+def test_wi10_beginner_check_rejects_platform_overclaim_boundary_or_same_language_link(
+    tmp_path,
+):
+    copy_documentation(tmp_path)
+    java = tmp_path / "docs/getting-started/examples/java.ja.md"
+    if java.exists():
+        java.write_text(
+            java.read_text(encoding="utf-8").replace(
+                "<!-- platform-boundary: no-toolchain-device-signing-hosted-claim -->", "", 1
+            ),
+            encoding="utf-8",
+        )
+    readme = tmp_path / "README.zh-CN.md"
+    readme.write_text(
+        readme.read_text(encoding="utf-8").replace(
+            "docs/getting-started/installation.zh-CN.md", "docs/getting-started/installation.md"
+        ),
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+    assert (
+        "docs/getting-started/examples/java.ja.md: missing platform evidence boundary"
+    ) in errors
+    assert (
+        "README.zh-CN.md: missing same-language beginner installation entry: "
+        "docs/getting-started/installation.zh-CN.md"
+    ) in errors
+
+
+def test_wi10_beginner_check_rejects_unsafe_prompt_or_lifecycle_order_loss(tmp_path):
+    copy_documentation(tmp_path)
+    installation = tmp_path / "docs/getting-started/installation.md"
+    installation.write_text(
+        installation.read_text(encoding="utf-8")
+        .replace(
+            "Do not create, edit, delete, commit, push, open or merge a PR, or publish.",
+            "Commit and push all installation changes.",
+            1,
+        )
+        .replace("<!-- lifecycle-order: adoption-close-before-configuration -->", "", 1),
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+    assert any("lost its no-write/no-downstream-authority sentence" in error for error in errors)
+    assert any("adoption must close before configuration starts" in error for error in errors)
+
+
+def test_wi10_beginner_check_rejects_platform_without_copy_ready_prompt(tmp_path):
+    copy_documentation(tmp_path)
+    android = tmp_path / "docs/getting-started/examples/android.ja.md"
+    android.write_text(
+        android.read_text(encoding="utf-8").replace("<!-- platform-prompt: copy-ready -->", "", 1),
+        encoding="utf-8",
+    )
+
+    assert (
+        "docs/getting-started/examples/android.ja.md: missing copy-ready platform prompt"
+        in beginner_installation_errors(tmp_path)
+    )
+
+
+def test_wi10_beginner_check_rejects_incomplete_decision_tables(tmp_path):
+    copy_documentation(tmp_path)
+    installation = tmp_path / "docs/getting-started/installation.zh-CN.md"
+    installation.write_text(
+        installation.read_text(encoding="utf-8").replace(
+            "| 7. 可选 examples | “说明是否请求 examples、全部路径，以及为何它们不能证明本工程 stack。” | 没有 examples，或只有计划批准的路径。 | 选择与计划一致。 | 未请求文件或能力夸大；只能在修订计划获批后移除。 |\n",
+            "",
+            1,
+        ),
+        encoding="utf-8",
+    )
+    ios = tmp_path / "docs/getting-started/examples/ios.ja.md"
+    ios.write_text(
+        ios.read_text(encoding="utf-8").replace(
+            "「repo/CI 出典どおりの正確な command と scheme、destination、"
+            "configuration、前提、成功/失敗を説明し、創作しないでください。」",
+            "copy request missing",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+    assert (
+        "docs/getting-started/installation.zh-CN.md: scaffold review decision table must "
+        "contain 7 rows"
+    ) in errors
+    assert (
+        "docs/getting-started/examples/ios.ja.md: platform step row 4 lacks a copy-ready request"
+    ) in errors
+
+
+def test_wi10_beginner_check_rejects_crossed_commit_or_candidate_authority(tmp_path):
+    copy_documentation(tmp_path)
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        readme.read_text(encoding="utf-8").replace(
+            "make ai-finish TASK=adopt_ai_cockpit\n```\n\nStop and review the archive/diff. "
+            "After separate human commit approval:\n\n"
+            "<!-- command-evidence: adopter_required -->\n```sh\n",
+            "make ai-finish TASK=adopt_ai_cockpit\n",
+            1,
+        ),
+        encoding="utf-8",
+    )
+    java = tmp_path / "docs/getting-started/examples/java.zh-CN.md"
+    java.write_text(
+        java.read_text(encoding="utf-8").replace("<!-- platform-stage5: proposal-only -->", "", 1),
+        encoding="utf-8",
+    )
+    installation = tmp_path / "docs/getting-started/installation.ja.md"
+    installation.write_text(
+        installation.read_text(encoding="utf-8").replace(
+            "<!-- lifecycle-approval: configuration-closure-execute -->", "", 1
+        ),
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+    assert "README.md: finish and commit must use separate command blocks" in errors
+    assert (
+        "docs/getting-started/examples/java.zh-CN.md: platform Stage 5 must remain proposal-only"
+        in errors
+    )
+    assert (
+        "docs/getting-started/installation.ja.md: missing separate lifecycle approval: "
+        "configuration-closure-execute"
+    ) in errors
 
 
 def test_historical_context_registry_is_complete_and_non_authoritative():
@@ -144,9 +357,15 @@ def test_wi10_check_rejects_coverage_base_or_lifecycle_fact_drift(tmp_path):
     readme = tmp_path / "README.ja.md"
     text = readme.read_text(encoding="utf-8")
     text = text.replace("85.10%", "80%", 1)
-    base = 'ADOPTION_BASE="$(git rev-parse HEAD)"'
-    text = text.replace(f"{base} # installer", "# installer", 1)
-    text = text.replace('STACK="${STACK:-generic}"', f'{base}\nSTACK="${{STACK:-generic}}"', 1)
+    contract_line = next(
+        line for line in text.splitlines() if line.startswith('ADOPTION_CONTRACT="')
+    )
+    text = text.replace(contract_line, "", 1)
+    text = text.replace(
+        'STACK="${STACK:-generic}"',
+        f'{contract_line}\nSTACK="${{STACK:-generic}}"',
+        1,
+    )
     readme.write_text(text, encoding="utf-8")
 
     adoption = tmp_path / "docs/getting-started/standard-adoption-guide.ja.md"
@@ -159,11 +378,53 @@ def test_wi10_check_rejects_coverage_base_or_lifecycle_fact_drift(tmp_path):
 
     errors = documentation_fact_errors(tmp_path)
     assert "README.ja.md: documented coverage floor differs from Makefile: 85.10%" in errors
-    assert "README.ja.md: adoption base must be captured after installer branch creation" in errors
+    assert (
+        "README.ja.md: adoption PR check must reload archived Contract base after finish approval"
+        in errors
+    )
     assert any(
         "adoption lifecycle must commit archive evidence before PR check and closure" in error
         for error in errors
     )
+
+
+def test_readme_adoption_base_snippet_works_after_active_contract_is_archived(tmp_path):
+    archive = tmp_path / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True)
+    contract = archive / "adopt_ai_cockpit.contract.json"
+    contract.write_text(json.dumps({"baseCommit": "a" * 40}), encoding="utf-8")
+    index = tmp_path / ".ai/work-items/archive/index.json"
+    index.write_text(
+        json.dumps(
+            {
+                "entries": [
+                    {
+                        "workItemId": "adopt_ai_cockpit",
+                        "contractPath": ".ai/work-items/archive/2026/adopt_ai_cockpit.contract.json",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    body = next(
+        part
+        for part in readme.split("```sh\n")
+        if part.startswith('ADOPTION_CONTRACT="$(python3 -c')
+    ).split("\n```", 1)[0]
+    discovery = "\n".join(body.splitlines()[:2]) + '\nprintf "%s" "$ADOPTION_BASE"\n'
+
+    result = subprocess.run(
+        ["sh", "-c", discovery],
+        cwd=tmp_path,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout == "a" * 40
 
 
 def test_wi10_check_rejects_ui_localization_or_published_tag_overclaim(tmp_path):

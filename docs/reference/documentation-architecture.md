@@ -16,7 +16,7 @@ This page is for documentation maintainers. It defines authoritative ownership,
 language mapping, and current-versus-historical context; adopters normally enter
 through their language README and installation guide.
 
-日本語の主要入口は、[日本語 README](../../README.ja.md)、[インストール](../getting-started/installation.ja.md)、[最初の Work Item](../getting-started/first-work-item.ja.md)、[設定](../configuration.ja.md)、[アーキテクチャ](../architecture.ja.md) です。詳細な英語リファレンスへ進む必要がある場合は、各日本語ページの対応リンクを使用してください。
+主要入口は各言語内で完結します。英語は [Installation](../getting-started/installation.md)、中文は[完整中文安装手顺](../getting-started/installation.zh-CN.md)、日本語は[日本語インストール手順](../getting-started/installation.ja.md)です。英語版だけを完全版として扱わず、3 言語の章順序・安全境界・platform 例を一致させます。
 
 ## Authoritative entry points
 
@@ -36,7 +36,8 @@ This page describes the stable documentation split for AI Cockpit. It keeps the 
 | Page | Role | Reader question |
 | --- | --- | --- |
 | [README.md](../../README.md) | Entry page | What is this, and how do I start quickly? |
-| [docs/getting-started/installation.md](../getting-started/installation.md) | Getting started | How do I install and adopt AI Cockpit? |
+| [Complete trilingual Installation](../getting-started/installation.md) | Beginner adoption source route | What exact prompt, choice, scaffold checkpoint, calibration stage, PR/CI decision, recovery, and closure step comes next? |
+| [iOS / Android / Java examples](../getting-started/examples/ios.md) | Platform calibration | Which repository evidence and platform boundaries must be collected without claiming a toolchain, device, signing setup, or hosted run? |
 | [30-Second Start](../getting-started/30-second-start.md) | Guided entry | What is the shortest wizard path, and what remains afterward? |
 | [Standard Adoption Guide](../getting-started/standard-adoption-guide.md) | Adoption lifecycle | How do calibration, Work Items, CI, human approval, and target-project adaptation fit together? |
 | [Security and Release Verification](../getting-started/security-release-verification.md) | External evidence boundary | Which release, supply-chain, trust-root, mirror, and enterprise evidence must be verified? |
@@ -71,15 +72,20 @@ The Human-Agent Trust Layer is the authoritative Why / What / How explanation. I
 
 | Layer | English | 中文 | 日本語 |
 | --- | --- | --- | --- |
+| Complete beginner installation | [Installation](../getting-started/installation.md) | [安装](../getting-started/installation.zh-CN.md) | [インストール](../getting-started/installation.ja.md) |
 | Shortest wizard path | [30-Second Start](../getting-started/30-second-start.md) | [30 秒开始](../getting-started/30-second-start.zh-CN.md) | [30 秒で開始](../getting-started/30-second-start.ja.md) |
 | Adoption lifecycle | [Standard Adoption Guide](../getting-started/standard-adoption-guide.md) | [标准采用指南](../getting-started/standard-adoption-guide.zh-CN.md) | [標準導入ガイド](../getting-started/standard-adoption-guide.ja.md) |
 | Security/release evidence | [Security and Release Verification](../getting-started/security-release-verification.md) | [安全与发布验证](../getting-started/security-release-verification.zh-CN.md) | [セキュリティとリリース検証](../getting-started/security-release-verification.ja.md) |
+| iOS example | [iOS](../getting-started/examples/ios.md) | [iOS](../getting-started/examples/ios.zh-CN.md) | [iOS](../getting-started/examples/ios.ja.md) |
+| Android example | [Android](../getting-started/examples/android.md) | [Android](../getting-started/examples/android.zh-CN.md) | [Android](../getting-started/examples/android.ja.md) |
+| Java example | [Java](../getting-started/examples/java.md) | [Java](../getting-started/examples/java.zh-CN.md) | [Java](../getting-started/examples/java.ja.md) |
 
 ## Split Rules
 
 - Keep the README short enough that a reader can reach the installer in one glance.
 - Use README for five-minute positioning, the shortest governance loop, and the Quick Install entry; do not turn it into a complete feature catalogue or Release Reference.
-- Keep `docs/getting-started/installation.md` focused on the adoption lifecycle and validation.
+- Keep all three Installation guides complete, prompt-first, beginner-safe, and machine-aligned across the full adoption lifecycle. Shorter layers link to them and do not replace missing steps.
+- Keep iOS, Android, and Java examples complete in all three languages. Detection must never be promoted to toolchain, device, signing, or hosted execution evidence.
 - Keep the 30-Second Start, Standard Adoption Guide, and Security and Release Verification complete and semantically aligned in English, Chinese, and Japanese; README entrypoints link to their own language.
 - Keep `docs/getting-started/first-work-item.md` focused on the first governed task.
 - Keep Philosophy authoritative for why AI Cockpit exists and how calibrated trust, evidence, and responsibility boundaries shape the design.

@@ -56,9 +56,9 @@ AI Cockpit は業務スキルや Agent Runtime ではなく、Human-Agent Trust 
 
 ## 対話型エントリポイント
 
-TTY で引数なしの `./install.sh` を実行するか `--interactive` を指定すると、8 段階の Installation Wizard が起動します。対象リポジトリ、New Adoption / Upgrade / Dry Run、書き込み計画を表示し、明示的な確認まで書き込みません。非対話の引数なし実行は fail closed になり、既存の明示的な CLI オプションの動作は変わりません。Wizard は commit、push、PR 作成、merge を行いません。
+TTY で引数なしの `./install.sh` を実行するか `--interactive` を指定すると、8 段階の Installation Wizard が起動します。対象 repository を検出し、numeric mode (`1` New Adoption、`2` Upgrade、`3` Dry Run) を 1 件受け取り、書き込み計画を表示して明示的な確認まで書き込みません。現在の low-level selector 自体は label を表示しないため、prompt-first のインストール手順が対応表と review context を示します。非対話の引数なし実行は fail closed で、明示した legacy flags は従来の deterministic behavior を保持します。Wizard は commit、push、PR 作成、merge を行いません。
 
-インストール後は `make cockpit-calibration-wizard` で再開可能な 10 段階の Calibration Wizard を実行します。永続化された Calibration Session を再利用し、Back / Pause / Resume と stale 再検証に対応します。Unknown または stale な証拠がある場合は停止し、Candidate 有効化には Reviewer と Owner の別々の確認が必要です。永続 Session schema は現在 `language: ja` を記録しますが、表示文字列がすべて日本語化済みという主張ではありません。
+インストール後は、エージェントが導入済みの `make cockpit-calibrate-session ARGS="..."` を使って、再開可能な 10 段階の Calibration Session を進めます。Back / Pause / Resume と stale 再検証に対応し、Unknown または stale な証拠がある場合は停止します。Candidate 有効化には Reviewer と Owner の別々の確認が必要です。`make cockpit-calibration-wizard` は template maintenance 専用で、導入先には配置されません。永続 Session schema は現在 `language: ja` を記録しますが、表示文字列がすべて日本語化済みという主張ではありません。
 
 モバイル例は証拠 fixture とシナリオです。ホステッド検証は最小 Swift Package と Android smoke path が中心で、Xcode project/workspace、CocoaPods、導入先固有の Gradle variant、ホスト JDK の選択、instrumented test 実行を Wizard が保証するものではありません。これらは導入先で校正してください。
 
@@ -121,6 +121,21 @@ Cockpit が更新される。
 
 ## 最新の公開ランタイムをインストール
 
+初心者は、対象プロジェクトを開いたエージェントへ先に次をコピーします。
+
+```text
+完全な日本語インストール手順に従い、このプロジェクトへ AI Cockpit を導入してください。
+読み取り専用の前提確認と調査から始め、全用語を平易に説明し、私が検証済み
+private mirror を示さない限り正規の固定 public release を使ってください。
+各段階で、確認した根拠、期待結果、続行可否、問題時の連絡先を示してください。書き込み、commit、
+push、PR 準備、人の merge、lifecycle closure、configuration は別々に確認し、
+後続段階を 1 つの連続 shell block で実行しないでください。
+```
+
+次は**上級者向けの手動 fallback**であり、初心者の入口ではありません。
+local finish/archive まで実行したら停止します。
+
+<!-- command-evidence: adopter_required -->
 ```sh
 STACK="${STACK:-generic}" # generic、python、go、rust、typescript、java、android、kotlin、flutter、swift、ruby、php、csharp
 PUBLIC_REPOSITORY="${AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY:-https://github.com/spirex-ds-dev/ai-cockpit-template.git}"
@@ -131,11 +146,32 @@ trap 'rm -f "$INSTALLER"' EXIT
 curl -fsSL "${RAW_BASE}/${RELEASE_TAG}/install.sh" -o "$INSTALLER"
 AI_COCKPIT_TEMPLATE_REPO="$PUBLIC_REPOSITORY" \
   AI_COCKPIT_TEMPLATE_REF="$RELEASE_TAG" sh "$INSTALLER" --stack "$STACK" --update-makefile --create-adoption
-ADOPTION_BASE="$(git rev-parse HEAD)" # installer が remote default branch から adoption branch を作成済み
 make ai-finish TASK=adopt_ai_cockpit
+```
+
+停止して archive/diff をレビューします。別の人の commit 承認後だけ実行します。
+
+<!-- command-evidence: adopter_required -->
+```sh
+ADOPTION_CONTRACT="$(python3 -c 'import json; entries=[item for item in json.load(open(".ai/work-items/archive/index.json"))["entries"] if item["workItemId"]=="adopt_ai_cockpit"]; assert len(entries)==1; print(entries[0]["contractPath"])')"
+ADOPTION_BASE="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["baseCommit"])' "$ADOPTION_CONTRACT")"
 git add .
 git commit -m "adopt AI Cockpit governance"
 make check-ai-pr AI_BASE_COMMIT="$ADOPTION_BASE"
+```
+
+停止し、push の別承認、PR、hosted CI、人の merge を完了します。別の lifecycle
+closure 承認後だけ実行します。
+
+<!-- command-evidence: adopter_required -->
+```sh
+make ai-close-work-item TASK=adopt_ai_cockpit
+```
+
+closure が default branch を同期した後、configuration を別途開始します。
+
+<!-- command-evidence: adopter_required -->
+```sh
 CONFIG_BASE="$(git rev-parse HEAD)"
 make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this project" MODE=code
 ```
@@ -146,6 +182,12 @@ make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this pro
 リリース元のメタデータやタグ付きインストーラーが公開されていない場合、このクイックインストールを匿名導入の前提として扱わないでください。`AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY` と `AI_COCKPIT_TEMPLATE_RAW_BASE` はリリースタグの解決とインストーラーの取得にだけ使われ、インストーラー自体は `AI_COCKPIT_TEMPLATE_REPO` と `AI_COCKPIT_TEMPLATE_SOURCE` で clone / source の選択を行います。その場合はローカル clone か、明示的に設定した source を使ってください。
 
 生成された設定用 Contract の変更範囲を確認・拡張してから、Project Profile、Guard、品質コマンド、CI を変更します。その後、ブロッキングゲートを有効にする前に実行系を対象プロジェクトへ適合させます。
+
+### 上級者向けの設定・開発コマンド
+
+初心者は以下を直接実行せず、[完全な日本語インストール手順](docs/getting-started/installation.ja.md)
+の copy-ready prompt を使ってください。以降の shell block は、各人の承認境界を
+理解している上級者向け手動リファレンスです。
 
 <!-- governance-flow: install,configure-work-item,onboard,doctor,calibrate,confirm,validate,readiness,develop -->
 
@@ -159,6 +201,12 @@ make check-ai-project-profile
 make check-ai-guard-calibration
 make check-ai-adoption-ready
 make ai-finish TASK=configure_ai_cockpit
+```
+
+停止して configuration archive/diff をレビューします。別の commit 承認後だけ:
+
+<!-- command-evidence: adopter_required -->
+```sh
 git add .
 git commit -m "configure AI Cockpit for this project"
 make check-ai-pr AI_BASE_COMMIT="$CONFIG_BASE"
@@ -244,6 +292,7 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 
 - **ホステッド環境で検証済み:** `python`、`go`、`rust`、`typescript` は `real-stack-quality`、`java`、`kotlin`、`ruby`、`php`、`csharp` は `extended-real-stack-quality`、`flutter`、`android`、`swift` は `mobile-stack-quality` で最小プロジェクトの `make ai-cockpit-quality` を実行します。
 - **Swift 検証範囲:** `mobile-stack-quality` は最小 Swift Package Manager fixture のみを対象とします。Xcode プロジェクト、workspace、CocoaPods はホステッド検証の対象外であり、導入後の Project Calibration が必要です。詳細は [インストール](docs/getting-started/installation.ja.md) と [Swift 適応例](examples/swift/README.md) を参照してください。
+- **初心者向け platform 手順:** 完全な[日本語インストール手順](docs/getting-started/installation.ja.md)から、[iOS](docs/getting-started/examples/ios.ja.md)、[Android](docs/getting-started/examples/android.ja.md)、[Java](docs/getting-started/examples/java.ja.md)へ進みます。プロジェクト file が見つかっただけでは、必要な開発 tool、実機・simulator、署名設定、GitHub Actions 等での実行成功は確認できません。
 - **プリセットのみ:** `generic` は設定が完了するまで意図的に失敗します。
 - **未対応の実行環境:** ネイティブ Windows シェル。WSL または別の POSIX 環境を使用してください。
 

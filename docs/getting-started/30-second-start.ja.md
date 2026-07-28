@@ -10,10 +10,29 @@ keywords:
 
 # 30 秒で開始
 
+前提、Wizard の全選択、scaffold 確認、Calibration 10 段階、最初の PR、復旧、platform 例は、完全な[日本語インストール手順](installation.ja.md)へ進んでください。
+
 <!-- doc-domain: wizard-start -->
 ## Wizard を開始する
 
-初回 commit があり、worktree が clean な導入先で、公開 tag を解決し、その tag の installer を取得して Installation Wizard を開始します。copy-ready な既定値は正規 public repository を指します。明示的に検証した source だけを override してください。private repository または mirror では URL を推測せず、[インストール](installation.ja.md#エントリポイントを選ぶ)の手順を使用してください。
+初心者は、対象プロジェクトを開いた AI コーディングエージェントへ次をコピーします。
+
+```text
+正規 public repository
+https://github.com/spirex-ds-dev/ai-cockpit-template.git
+から AI Cockpit 導入を始めたいです。最初は読み取り専用で、対象 Git リポジトリ、
+initial commit、clean worktree、Python 3.10+、Git、GNU Make、curl を確認してください。
+public release.json から固定 published tag を解決し、release/tag/digest evidence を
+平易な日本語で説明してください。正確な計画を示し、この install step だけを
+私が承認するまで download/execute しないでください。
+commit、push、PR 作成・merge、削除、publish は禁止です。
+```
+
+期待する結果: 前提と固定 release の平易なレポート、および限定された承認質問です。private repository/mirror は[完全な日本語インストール手順](installation.ja.md)を使い、source owner から trust evidence を取得します。URL を推測しません。
+
+### 上級者向け手動 fallback
+
+次の block は agent を利用できない経験者が対象プロジェクトの terminal でだけ使います。Wizard が開けば成功です。エラー時は停止し、完全手順の復旧表を使用します。
 
 <!-- command-evidence: adopter_required -->
 ```sh
