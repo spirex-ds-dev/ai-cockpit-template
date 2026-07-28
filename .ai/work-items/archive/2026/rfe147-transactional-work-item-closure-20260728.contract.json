@@ -1,0 +1,301 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe147-transactional-work-item-closure-20260728",
+  "mode": "code",
+  "title": "Make Work Item closure transactional and retry-safe",
+  "baseCommit": "34590a2ee75c05eee17e250509ff47b96f83da27",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+    ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "AGENTS.md",
+    "templates/agents/AI_COCKPIT_RULES.md",
+    "scripts/ai_close_work_item.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/reference/work-item-lifecycle-closure.ja.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/specs/2026-07-28-rfe147-transactional-work-item-closure-design.md",
+    "docs/superpowers/plans/2026-07-28-rfe147-transactional-work-item-closure.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Deleting or pruning arbitrary stale worktrees without explicit ownership and user authorization.",
+    "Changing pull-request provider APIs beyond requesting and validating existing PR identity fields.",
+    "Changing archive immutability, release publication, installation calibration, or unrelated lifecycle commands.",
+    "Treating a detached current worktree as ready to start the next Work Item."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Current closure implementation deletes the local Work Item branch before remote deletion is verified and emits one unconditional ready state."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Current regressions encode local-before-remote deletion and do not prove retry identity or truthful multi-worktree readiness."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.md",
+      "reason": "Current authoritative closure protocol and idempotent remote-deletion contract."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.ja.md",
+      "reason": "Current Japanese closure and multi-worktree behavior that must remain semantically aligned."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "RFE-ISSUE-147 field evidence records detached-ready misreporting and loss of retry identity after PR #427."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository-level mandatory lifecycle rules consumed by agents."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "branch_identity",
+      "transaction_order",
+      "multi_worktree_state",
+      "agent_workflow"
+    ],
+    "reason": "Closure intentionally deletes local and remote Work Item refs. Incorrect ordering can destroy retry identity, while incorrect reporting can start the next Work Item from detached HEAD.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user approved the proposed transactional design and instructed continuous execution of the remaining ordered Work Items."
+  },
+  "preReviewWarnings": [
+    "Review mutation ordering: no operation may destroy the local retry identity before remote absence is proven.",
+    "Review multi-worktree output: lifecycle closure and current-worktree readiness must be separate facts.",
+    "Review rollback behavior after detaching the current worktree and before local branch deletion."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Closure captures and validates archived evidence, the current Work Item branch, merged PR ownership, PR Head SHA, discovered base, clean worktrees, and synchronized base before any identity-destroying local branch mutation.",
+    "Remote Work Item branch deletion and verified absence occur before local Work Item branch deletion; an already absent provider-side remote branch remains an idempotent success.",
+    "When remote deletion fails or remains unverifiable, closure fails closed while the current local Work Item branch and checkout remain directly retryable.",
+    "When the base branch is owned by another worktree, closure may detach the current Work Item worktree only after remote absence is proven; a failed local deletion restores the Work Item checkout when recovery is possible.",
+    "A successful closure reports repositoryState=ready_on_base only when the invoking worktree is clean, synchronized, and on the base branch.",
+    "A successful closure with the base in another worktree reports repositoryState=closed_but_current_worktree_detached, identifies that it is not ready for the next Work Item in the current worktree, and directs the operator to the verified base worktree without deleting it.",
+    "Unit regressions cover mutation order, remote deletion failure, already-absent retry, detach rollback, distinct result states, and truthful CLI output.",
+    "A real temporary bare remote plus linked-worktree regression proves the invoking worktree ends detached while the other clean worktree owns synchronized base and the result never claims ready_on_base.",
+    "English and Japanese lifecycle references, repository agent rules, template agent rules, and Cockpit guidance describe the same retry-safe transaction and readiness distinction.",
+    "Focused tests, all Contract checks, full quality, archive, aggregate PR validation, Hosted CI, merge, ai-close-work-item, local/remote branch cleanup, and synchronized clean main complete before RFE-151 starts."
+  ],
+  "guidelines": [
+    "Preserve fail-closed behavior and never infer remote absence from a failed deletion request alone.",
+    "Model closure completion separately from whether the invoking worktree is ready for the next Work Item.",
+    "Do not delete or prune a worktree whose ownership is not established by this Work Item.",
+    "Use test-driven development: add failing regressions for each field scenario before changing production behavior.",
+    "Keep English and Japanese behavior statements semantically aligned and synchronize the installed ai-cockpit skill only from the merged repository truth."
+  ],
+  "intent": {
+    "problem": "RFE-ISSUE-147 has repeated in real closures. The command deletes the local Work Item branch before confirming remote deletion, so a remote failure destroys the branch identity needed for a direct retry. When another worktree owns the base branch, the command also leaves the invoking worktree detached but unconditionally reports it ready for the next Work Item.",
+    "constraints": [
+      "Preserve the one Work Item, branch, PR, archive, merge, closure, and branch cleanup lifecycle.",
+      "Retain merged PR ownership and remote branch absence as mandatory evidence.",
+      "Accept provider-side auto-deletion only after an idempotent absence check.",
+      "Leave unrelated or stale worktrees untouched.",
+      "Reject next-task-ready reporting for a detached invoking worktree."
+    ],
+    "rationale": "A prevalidated, retry-safe mutation order preserves local identity until remote absence is proven. Separate closure and current-worktree readiness states make multi-worktree outcomes truthful without weakening branch cleanup."
+  },
+  "declaredIntent": {
+    "summary": "Make Work Item closure a retry-safe transaction and report multi-worktree readiness truthfully.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "rawUserRequest": "Fix the recorded RFE-ISSUE-147 process defect permanently before later Work Items and release. The fix must be landed in workflow guidance and executable script checks so it does not recur. Preserve retry identity when remote deletion fails, distinguish ready-on-base from closed-but-detached in multi-worktree closure, add regression coverage, and complete the full Contract, implementation, verification, PR, Hosted CI, merge, ai-close-work-item, and branch cleanup lifecycle. The user approved the proposed transactional design by replying ‘继续’.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-rfe147-transactional-closure-approved",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:rfe147-transactional-closure-user-approved"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Remote Work Item branch deletion fails and the branch still exists.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_remote_deletion_failure_does_not_report_closed"
+      ],
+      "expected": "Closure fails closed before local branch deletion and leaves the invoking worktree checked out on the original Work Item branch for direct retry.",
+      "verificationPlan": "Add a red-first unit regression that records all Git commands, simulates a failed remote deletion with a still-present ref, and asserts no detach or local branch deletion occurred."
+    },
+    {
+      "scenario": "The provider already deleted the remote Work Item branch or a prior attempt deleted it.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_remote_deletion_race_is_accepted_when_postcondition_is_absent"
+      ],
+      "expected": "Verified remote absence is accepted idempotently and local cleanup proceeds without weakening PR or base checks.",
+      "verificationPlan": "Add a focused retry regression where push --delete is nonzero but fetch/prune and ls-remote prove absence, then assert successful local cleanup."
+    },
+    {
+      "scenario": "The base branch is checked out in another clean worktree.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_base_branch_worktree_occupancy_is_supported",
+        "tests/test_work_item_lifecycle_closure.py::test_real_linked_worktree_closure_is_closed_but_not_ready"
+      ],
+      "expected": "The base worktree is synchronized, the invoking worktree is detached only at the final local-cleanup boundary, and the result reports closed_but_current_worktree_detached rather than ready_on_base.",
+      "verificationPlan": "Add both a command-order unit regression and a real temporary bare-remote/linked-worktree integration regression that inspect final branches, commits, cleanliness, and result fields."
+    },
+    {
+      "scenario": "Local branch deletion fails after the invoking worktree was detached.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_linked_worktree_local_delete_failure_restores_checkout"
+      ],
+      "expected": "Closure fails closed and restores the Work Item branch checkout when the local ref still exists, preserving a retryable identity.",
+      "verificationPlan": "Add a red-first unit regression that forces branch -D failure after detach and asserts an explicit switch back to the Work Item branch plus a recovery-specific diagnostic."
+    },
+    {
+      "scenario": "The invoking worktree can switch to and synchronize the base branch normally.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_success_proves_remote_absence_before_local_branch_deletion",
+        "tests/test_work_item_lifecycle_closure.py::test_main_reports_ready_only_for_ready_on_base"
+      ],
+      "expected": "Closure deletes remote then local Work Item refs and reports ready_on_base only after the invoking worktree is clean and its base equals the remote base.",
+      "verificationPlan": "Update the normal-success regression to assert exact mutation order, final branch, repositoryState, and nextWorkItemReady."
+    },
+    {
+      "scenario": "PR Head SHA or local Work Item branch identity does not match the closure target.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_verify_pr_requires_exact_local_head_sha",
+        "tests/test_work_item_lifecycle_closure.py::test_branch_mapping_mismatch_blocks_before_switch"
+      ],
+      "expected": "Closure rejects the mismatch before base switching, remote deletion, detaching, or local branch deletion.",
+      "verificationPlan": "Extend PR identity regressions with headRefOid/local ref mismatch and assert that no cleanup mutation is attempted."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized permanent process correction in executable checks, repository/installed agent workflow guidance, documentation, PR, merge, closure, and cleanup before continuing later Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 652
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe147-transactional-work-item-closure-20260728.json",
+    "baseCommit": "34590a2ee75c05eee17e250509ff47b96f83da27",
+    "initialScopeDigest": "3a30ad5ea732b37118ee10c59148dbdb237fafad321d9fa2e182fa8aae1d6b4c",
+    "contractSkeletonDigest": "16c94135a79da4a8e5d7fa27e88a9373f7323efb843ad495a2857917f71012c9"
+  }
+}

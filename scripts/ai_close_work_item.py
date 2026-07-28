@@ -286,12 +286,9 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
             restored = runner(["switch", work_branch], False)
             if restored.returncode != 0:
                 raise RuntimeError(
-                    f"{exc}; local Work Item branch remains, but checkout "
-                    "restoration also failed"
+                    f"{exc}; local Work Item branch remains, but checkout restoration also failed"
                 ) from exc
-            raise RuntimeError(
-                f"{exc}; the Work Item checkout was restored for retry"
-            ) from exc
+            raise RuntimeError(f"{exc}; the Work Item checkout was restored for retry") from exc
         raise
 
     # A merged PR is the authority for deleting a branch. -D is intentional here:
@@ -303,9 +300,7 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
     )
 
     linked_base = base_path is not None
-    repository_state = (
-        "closed_but_current_worktree_detached" if linked_base else "ready_on_base"
-    )
+    repository_state = "closed_but_current_worktree_detached" if linked_base else "ready_on_base"
     return {
         "task": task,
         "contract": contract_path.relative_to(PROJECT_ROOT).as_posix(),

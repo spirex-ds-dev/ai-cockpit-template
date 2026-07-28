@@ -895,8 +895,13 @@ absence before local retry-identity deletion and rejects detached next-task
 readiness. Verify:
 
 ```bash
+installed_skill_file="$(
+  find "${CODEX_HOME:-${HOME}/.codex}/skills" \
+    -path '*/ai-cockpit/SKILL.md' -print -quit
+)"
+test -n "$installed_skill_file"
 rg -n "remote absence|closed-but-detached|next Work Item" \
-  /Users/sei-rinn/.codex/skills/ai-cockpit/SKILL.md
+  "$installed_skill_file"
 ```
 
 The installed skill must contain the merged semantics and no old unconditional

@@ -1,0 +1,648 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "rfe147-transactional-work-item-closure-20260728",
+  "contractPath": ".ai/work-items/archive/2026/rfe147-transactional-work-item-closure-20260728.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": ".ai/work-items/starts/rfe147-transactional-work-item-closure-20260728.json",
+      "reason": "Generated the immutable Work Item Start Receipt from the latest origin/main."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-07-28-rfe147-transactional-work-item-closure-design.md",
+      "reason": "Recorded the approved retry-safe transaction, multi-worktree state model, failure recovery, and verification design before implementation."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registered the new design and active implementation plan with explicit documentation contexts."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-28-rfe147-transactional-work-item-closure.md",
+      "reason": "Translated the approved design into red-green implementation, documentation, verification, PR, merge, closure, and installed-skill synchronization steps."
+    },
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Bound PR Head SHA, proved remote absence before local deletion, restored retry checkout on failure, and returned truthful normal versus linked-worktree terminal states."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Added red-first identity, mutation-order, recovery, CLI-state, and real bare-remote/linked-worktree regressions."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.md",
+      "reason": "Updated the authoritative English transaction order, retry semantics, and two terminal states."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.ja.md",
+      "reason": "Aligned the Japanese lifecycle reference with the same transaction, recovery, and readiness semantics."
+    },
+    {
+      "path": ".ai/cockpit/README.md",
+      "reason": "Aligned the English Cockpit workflow summary with remote-before-local deletion and linked-worktree handoff."
+    },
+    {
+      "path": ".ai/cockpit/README.ja.md",
+      "reason": "Aligned the Japanese Cockpit workflow summary with remote-before-local deletion and linked-worktree handoff."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Required agents to preserve retry identity and treat only ready_on_base as next-task-ready."
+    },
+    {
+      "path": "templates/agents/AI_COCKPIT_RULES.md",
+      "reason": "Propagated the corrected lifecycle rule to adopter installations."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Recorded RFE-147 local implementation and kept external lifecycle closure pending."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Regenerated Cockpit Status from the current Contract and Summary."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe147-transactional-work-item-closure-20260728.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/archive/2026/rfe147-transactional-work-item-closure-20260728.contract.json",
+    "scripts/ai_close_work_item.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/reference/work-item-lifecycle-closure.ja.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "AGENTS.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:54:08.328345+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "22729ad99cdd761a52bc24bc31480c52eeee493ea018f0f1fc088534fb37523a",
+      "commandHash": "7f3fa114cf4b1ebdb6d64fa1060920280a8eb4383a0655c1f8f0c1ea7a9a9885",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "3018983b7e9c6584934209579001985e3ae5847e528935802baa73ff3f4c3787",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json work item contract check passed: .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json work item contract check passed: .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "outputBytes": 274
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:54:08.490843+00:00",
+      "exitCode": 0,
+      "durationMs": 108,
+      "outputDigest": "da142e33f29697621fb91045f996218d57e4996de465e6524049141fb40f5efe",
+      "commandHash": "eb86698e2eed481ae150cb55fd25687fbe6728a0a168477f28612c7b950fbf39",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "3018983b7e9c6584934209579001985e3ae5847e528935802baa73ff3f4c3787",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json scope guard passed: 14 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json scope guard passed: 14 changed path(s) covered",
+      "outputBytes": 200
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:54:08.692726+00:00",
+      "exitCode": 0,
+      "durationMs": 151,
+      "outputDigest": "dc95908e35946f46c6463edddd368f1b969067cf72846b14bd31492202746c5c",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "3018983b7e9c6584934209579001985e3ae5847e528935802baa73ff3f4c3787",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json [warning] restricted_write: .ai/cockpit/README.ja.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. [warning] restricted_write: AGENTS.md (AGENTS.md) - Agent operating rules. guard check completed: 3 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json [warning] restricted_write: .ai/cockpit/README.ja.md (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/README.md (.ai/**) - AI governance configuration. [warning] restricted_write: AGENTS.md (AGENTS.md) - Agent operating rules. guard check completed: 3 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 495
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json SUMMARY=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:54:09.011599+00:00",
+      "exitCode": 0,
+      "durationMs": 252,
+      "outputDigest": "68da0a3251dc8b12d86226cc7839127247a63e8a3d31da330bf6c75c3e59c724",
+      "commandHash": "e781d9bb186941409b93356940d3d2a8d7cfe16eab8494f63fa95fe179c211d3",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "3018983b7e9c6584934209579001985e3ae5847e528935802baa73ff3f4c3787",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `rfe147-transactional-work-item-closure-20260728` - Contract Hash: `bd29efe5d8ce2cf0` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` ",
+      "outputTail": "Status`: not_run - `aiStatusCheck`: not_run - `aiStatusConsistency`: not_run - `aiDiffOwnership`: not_run - `quality`: not_run ## Review Focus - Remote absence is proven before local branch deletion. - Remote failure retains or restores a directly retryable Work Item checkout. - Linked local deletion failure restores checkout after detach. - Only ready_on_base permits the next Work Item in the invoking worktree. - Real linked-worktree topology and English/Japanese guidance agree. ## Diff Ownership Preview - active_owned: `14`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/README.ja.md` — covered by Contract scope - [active_owned] `.ai/cockpit/README.md` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/rfe147-transactional-work-item-closure-20260728.json` — covered by Contract scope - [active_owned] `AGENTS.md` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/work-item-lifecycle-closure.ja.md` — covered by Contract scope - [active_owned] `docs/reference/work-item-lifecycle-closure.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-28-rfe147-transactional-work-item-closure.md` — covered by Contract scope - [active_owned] `docs/superpowers/specs/2026-07-28-rfe147-transactional-work-item-closure-design.md` — covered by Contract scope - [active_owned] `scripts/ai_close_work_item.py` — covered by Contract scope - [active_owned] `templates/agents/AI_COCKPIT_RULES.md` — covered by Contract scope - [active_owned] `tests/test_work_item_lifecycle_closure.py` — covered by Contract scope ## Next Action - Run or record required verification: aiCheckpoint",
+      "outputBytes": 7225
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:54:09.182125+00:00",
+      "exitCode": 0,
+      "durationMs": 115,
+      "outputDigest": "1361e2e1abf8c148e68d32ebb0b64866933434398c1327c80a2fa65b103bb85e",
+      "commandHash": "995ce9712ed50e26d84b5347757eef2adeff18b26401eaf5b9e8d473f95bfd87",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "3018983b7e9c6584934209579001985e3ae5847e528935802baa73ff3f4c3787",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/rfe147-transactional-work-item-closure-20260728.json [review] .ai/cockpit/README.ja.md [review] .ai/cockpit/README.md [review] .ai/cockpit/current_status.md [review] AGENTS.md [review] scripts/ai_close_work_item.py review focus recorded: 5 item(s) report: target/ai_r",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/rfe147-transactional-work-item-closure-20260728.json [review] .ai/cockpit/README.ja.md [review] .ai/cockpit/README.md [review] .ai/cockpit/current_status.md [review] AGENTS.md [review] scripts/ai_close_work_item.py review focus recorded: 5 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 525
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:54:09.343529+00:00",
+      "exitCode": 0,
+      "durationMs": 110,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "3018983b7e9c6584934209579001985e3ae5847e528935802baa73ff3f4c3787",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:54:09.509533+00:00",
+      "exitCode": 0,
+      "durationMs": 116,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "3018983b7e9c6584934209579001985e3ae5847e528935802baa73ff3f4c3787",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json SUMMARY=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:54:09.627060+00:00",
+      "exitCode": 0,
+      "durationMs": 66,
+      "outputDigest": "ea6e92417fee30a75d5976832aa962b3803a1bfaa4fd6696189cd1e990db2186",
+      "commandHash": "e0de665588cf97e241fce167902f43963b07bbcc71f98ab0434c3cc863a42c9c",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "3018983b7e9c6584934209579001985e3ae5847e528935802baa73ff3f4c3787",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 317
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json SUMMARY=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:54:09.972857+00:00",
+      "exitCode": 0,
+      "durationMs": 75,
+      "outputDigest": "23090e0f318d52e919ae3c7e56b328645faa518ced0723604f608a861ef73c48",
+      "commandHash": "11fd4a9b8ac4aef274af71dbb2ce6317c0b1587df65d37a7ffdb7d7621326396",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "3018983b7e9c6584934209579001985e3ae5847e528935802baa73ff3f4c3787",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputBytes": 322
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:54:10.241074+00:00",
+      "exitCode": 0,
+      "durationMs": 215,
+      "outputDigest": "e39b5064fc29a39b49281238b5de8426a2018bf0ca550998c2563ce7fe227a12",
+      "commandHash": "4f65997277484ad58aeb4f770ce042f4d6bedb1afb45bcaf9d4b565de8013ffe",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "3018983b7e9c6584934209579001985e3ae5847e528935802baa73ff3f4c3787",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json ## Diff Ownership Preview - active_owned: `14`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/README.ja.md` — covered by Contract scope - [active_owned] `.ai/cockpit/README.md` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json ## Diff Ownership Preview - active_owned: `14`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/README.ja.md` — covered by Contract scope - [active_owned] `.ai/cockpit/README.md` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/rfe147-transactional-work-item-closure-20260728.json` — covered by Contract scope - [active_owned] `AGENTS.md` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/work-item-lifecycle-closure.ja.md` — covered by Contract scope - [active_owned] `docs/reference/work-item-lifecycle-closure.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-28-rfe147-transactional-work-item-closure.md` — covered by Contract scope - [active_owned] `docs/superpowers/specs/2026-07-28-rfe147-transactional-work-item-closure-design.md` — covered by Contract scope - [active_owned] `scripts/ai_close_work_item.py` — covered by Contract scope - [active_owned] `templates/agents/AI_COCKPIT_RULES.md` — covered by Contract scope - [active_owned] `tests/test_work_item_lifecycle_closure.py` — covered by Contract scope",
+      "outputBytes": 1651
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:58:26.154119+00:00",
+      "exitCode": 0,
+      "durationMs": 255837,
+      "outputDigest": "bce20718a86fb9c42ea8f9e8f0da483efe0a7e86a8a6b8aaf857d8c86bb06387",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "3018983b7e9c6584934209579001985e3ae5847e528935802baa73ff3f4c3787",
+      "outputSummary": "/usr/bin/make --no-print-directory quality-full /usr/bin/make --no-print-directory quality-fast-static /usr/bin/make --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"9510e88c13ad-local-20260728T135410Z-39491-0\" --run-id \"local\" --output \"target/quality/sessions/9510e88c13ad-local-20260728T135410Z-39491-0/timing/project-format-check.json\" --log \"target/quality/sessi",
+      "outputTail": "venance_bound_baselines 2.34s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 2.20s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 2.07s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 1.99s call tests/test_start_and_archive.py::test_ai_start_journeys 1.95s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[False-True] 1.88s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 1.88s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[True-False] 1361 passed, 3 warnings in 248.73s (0:04:08) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.03yySMfVyL/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.03yySMfVyL/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.03yySMfVyL/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.03yySMfVyL/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/9510e88c13ad-local-20260728T135410Z-39491-0/summary.json",
+      "outputBytes": 44151
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json SUMMARY=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:58:27.525241+00:00",
+      "exitCode": 0,
+      "durationMs": 228,
+      "outputDigest": "e28e07192a4a873086a85eb4bc0780861a211bfd21337bc7428f361b5841b734",
+      "commandHash": "28844e8cbf0f8fc44711820822b83c297f81c8cc9fd4a2e2b3af8696001e4d4a",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "83bd1114f90c834871473ae9daacb70853f5fe77f0271cdb6dfb64365b5c2025",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 364
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json SUMMARY=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:58:27.800323+00:00",
+      "exitCode": 0,
+      "durationMs": 226,
+      "outputDigest": "cd562dbed9d703db8a7adb681cf52d2e3046263700237f5fe786e7dd08b22810",
+      "commandHash": "546e978d611a2187bef0d6db3d4f3cd8ab42a8d2477d5c9e2da8880ef346b411",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "83bd1114f90c834871473ae9daacb70853f5fe77f0271cdb6dfb64365b5c2025",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 347
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:58:27.948060+00:00",
+      "exitCode": 0,
+      "durationMs": 54,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "83bd1114f90c834871473ae9daacb70853f5fe77f0271cdb6dfb64365b5c2025",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json SUMMARY=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:58:28.262951+00:00",
+      "exitCode": 0,
+      "durationMs": 262,
+      "outputDigest": "708864bf8a642f9f544104de3c772b6d3c44f3edcfda202e144990715fd1f27f",
+      "commandHash": "6039da5a2448b65210c82f6359920c6e8802b06b381e863966e94de139da46bd",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "83bd1114f90c834871473ae9daacb70853f5fe77f0271cdb6dfb64365b5c2025",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json --summary .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 327
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json CONTRACT=.ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T13:58:29.086689+00:00",
+      "exitCode": 0,
+      "durationMs": 107,
+      "outputDigest": "6c7ea882ca0d0d65ebc888210463847a2afce126b828148596cafd7045e1d4b6",
+      "commandHash": "2e1851cd7927d42952ce8410cee04f2b1c5496cf5b4c773fb6d5ecd094b9ca7e",
+      "contractHash": "bd29efe5d8ce2cf05cba847eebf8c8d1fc65d4a6c84cd38c2b4f3540043bb993",
+      "commitSha": "9510e88c13ad8bc91ef8900ad673550653687711",
+      "executionContractPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "worktreeDigest": "e6e9a3fa4ee540e7fe789a4e109902cd91c94bd8cbed18d63901c9a7feb7567d",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json ai summary check passed: .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json --contract .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.contract.json ai summary check passed: .ai/work-items/active/rfe147-transactional-work-item-closure-20260728.summary.json",
+      "outputBytes": 358
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Preserve fail-closed behavior and never infer remote absence from a failed deletion request alone.",
+      "compliant": true,
+      "evidence": "_delete_remote_branch always fetches/prunes and calls _remote_branch_absent; focused failures cover present and unverifiable remote refs."
+    },
+    {
+      "guideline": "Model closure completion separately from whether the invoking worktree is ready for the next Work Item.",
+      "compliant": true,
+      "evidence": "close_work_item returns state=closed plus repositoryState, nextWorkItemReady, and baseWorktree; CLI tests reject ready output for detached closure."
+    },
+    {
+      "guideline": "Do not delete or prune a worktree whose ownership is not established by this Work Item.",
+      "compliant": true,
+      "evidence": "The command only discovers, checks, and synchronizes the base worktree; neither production code nor real topology tests remove it."
+    },
+    {
+      "guideline": "Use test-driven development: add failing regressions for each field scenario before changing production behavior.",
+      "compliant": true,
+      "evidence": "PR Head SHA, mutation order, remote-failure checkout, detach rollback, and terminal-state tests were observed failing against the old implementation before each minimal production change."
+    },
+    {
+      "guideline": "Keep English and Japanese behavior statements semantically aligned and synchronize the installed ai-cockpit skill only from the merged repository truth.",
+      "compliant": true,
+      "evidence": "English/Japanese references and Cockpit READMEs use the same exact state names; installed skill synchronization remains explicitly post-merge."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Branch cleanup is intentionally destructive. The approved design preserves local retry identity until remote absence is proven and separates closed state from invoking-worktree readiness."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "RFE-ISSUE-147-VERIFY-001",
+      "category": "verification-command",
+      "severity": "low",
+      "fact": "The implementation plan initially used --cov=scripts.ai_close_work_item, but the test environment imports the script as ai_close_work_item after adding scripts/ to sys.path; pytest therefore passed while coverage emitted module-not-imported and no-data warnings.",
+      "decision": "Treat warning-only output as insufficient verification, correct the plan to the actual import identity, and rerun the whole focused file with real coverage.",
+      "resolution": "The corrected --cov=ai_close_work_item run passed 24 tests and measured scripts/ai_close_work_item.py at 77.11% focused coverage without warnings.",
+      "status": "resolved_locally",
+      "followUp": "Satisfied by full quality session 9510e88c13ad-local-20260728T134747Z-28568-0; retain the corrected command in the implementation plan."
+    },
+    {
+      "issueId": "RFE-ISSUE-147-VERIFY-002",
+      "category": "format-gate",
+      "severity": "low",
+      "fact": "The first full make quality attempt stopped in the static stage because Ruff required formatting scripts/ai_close_work_item.py and tests/test_work_item_lifecycle_closure.py; lint, mypy, complexity, and py_compile had passed.",
+      "decision": "Keep the failed quality session as evidence, apply the canonical Ruff formatter only to the two named files, rerun all focused closure tests, then restart full quality from the beginning.",
+      "resolution": "Ruff formatted both files, git diff --check passed, and all 24 focused closure tests passed.",
+      "status": "resolved_locally",
+      "followUp": "Satisfied by replacement full quality session 9510e88c13ad-local-20260728T134747Z-28568-0."
+    },
+    {
+      "issueId": "RFE-ISSUE-147-VERIFY-003",
+      "category": "verification-provenance",
+      "severity": "medium",
+      "fact": "After independently running the required gates, manually setting Summary verification results to passed caused check-ai-change-summary to reject every entry because V2 passed results require ai_finish-owned command, timestamp, exit code, output digest, command/Contract/worktree hashes, execution paths, and commit binding.",
+      "decision": "Do not treat truthful command execution alone as sufficient machine-readable evidence. Restore all verification entries to not_run, refresh the generated checkpoint, and let ai_finish execute and bind every registered check.",
+      "resolution": "Manual pass claims were removed before archive; no immutable evidence was created from them.",
+      "status": "resolved_locally",
+      "followUp": "Require ai_finish-generated provenance and a passing archived Summary before push or PR."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "process-interruption",
+      "detail": "The command is retry-safe for handled Git failures but does not claim crash-atomicity between separate Git processes; verified remote absence makes a later retry idempotent and local identity is retained until that boundary.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Remote absence is proven before local branch deletion.",
+      "Remote failure retains or restores a directly retryable Work Item checkout.",
+      "Linked local deletion failure restores checkout after detach.",
+      "Only ready_on_base permits the next Work Item in the invoking worktree.",
+      "Real linked-worktree topology and English/Japanese guidance agree."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified: the existing ai-close-work-item entrypoint keeps its TASK interface and changes only closure identity, ordering, recovery, and result classification",
+    "userVisibleOutput": "verified: ready output is emitted only for ready_on_base; detached closure prints not-ready state and the synchronized base worktree path",
+    "persistence": "verified: local and remote Git refs are mutated in retry-safe order; no new journal or repository evidence schema is introduced",
+    "localization": "verified: authoritative English and Japanese references plus Cockpit summaries preserve the same exact state names and meanings",
+    "generatedArtifacts": "verified: Cockpit Status remains generated and archive artifacts will be produced only by ai-finish",
+    "makeEntrypoints": "verified: make ai-close-work-item TASK=<task> remains the sole documented closure entrypoint"
+  },
+  "userCorrectionsCaptured": [
+    "Fix discovered process defects before later Work Items and release.",
+    "Land the prevention in workflow guidance and executable script checks so the same failure cannot recur.",
+    "Preserve retry identity when remote branch deletion fails.",
+    "Distinguish a synchronized base checkout from a successfully closed but detached invoking worktree.",
+    "Continue the approved design through the complete Work Item lifecycle."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Do not leave the repeated closure failures as operator cleanup; fix the workflow and executable checks before release.",
+      "implementation": "The approved design uses prevalidated remote-before-local deletion, checkout restoration after detach failure, PR Head SHA binding, and distinct ready-on-base versus closed-but-detached states.",
+      "acceptance": "Red-first unit and real linked-worktree regressions, aligned agent/docs guidance, full quality, PR, Hosted CI, merge, corrected closure, and branch cleanup."
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "bd29efe5d8ce2cf0",
+      "acceptanceCount": 10,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "bd29efe5d8ce2cf0",
+      "acceptanceCount": 10,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "ai-finish/archive, committed aggregate PR validation, Hosted CI, merge, corrected self-closure, branch cleanup, and synchronized clean main remain to run.",
+    "The installed ai-cockpit SKILL.md remains unchanged until repository behavior is merged; synchronizing it before merge would make local instruction outrun repository truth.",
+    "RFE-151, RFE-152, RFE-ISSUE-082, Japanese assessment, documentation alignment, deprecated-assets cleanup, release, and final plan cleanup remain later independent Work Items."
+  ],
+  "overclaimPrevention": "Do not report completion for checks or behavior that were not verified.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-28T22:44:05+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/specs/2026-07-28-rfe147-transactional-work-item-closure-design.md",
+          "docs/superpowers/plans/2026-07-28-rfe147-transactional-work-item-closure.md",
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+        ],
+        "reason": "The approved design, executable plan, and parent remediation issue agree on identity binding, remote-before-local deletion, recovery, terminal states, and full lifecycle."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/rfe147-transactional-work-item-closure-20260728.contract.json",
+          ".ai/work-items/archive/2026/rfe147-transactional-work-item-closure-20260728.summary.json",
+          "tests/test_work_item_lifecycle_closure.py"
+        ],
+        "reason": "Ten acceptance items, six verified scenarios, Summary claims, and focused tests describe the same implemented behavior and pending external lifecycle."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "scripts/ai_close_work_item.py",
+          "docs/reference/work-item-lifecycle-closure.md",
+          "AGENTS.md",
+          "templates/agents/AI_COCKPIT_RULES.md"
+        ],
+        "reason": "The existing command interface and executable state names match authoritative guidance and repository/adopter agent rules."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/work-item-lifecycle-closure.md",
+          "docs/reference/work-item-lifecycle-closure.ja.md",
+          ".ai/cockpit/README.md",
+          ".ai/cockpit/README.ja.md"
+        ],
+        "reason": "English and Japanese documents use ready_on_base and closed_but_current_worktree_detached with equivalent retry and handoff semantics."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "docs/superpowers/specs/2026-07-28-rfe147-transactional-work-item-closure-design.md"
+        ],
+        "reason": "The prior PR #427 and stale-worktree failures remain recorded; crash-atomicity is not claimed, unrelated worktrees remain out of scope, and later process/release stages remain pending."
+      }
+    ]
+  },
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "Focused unit and real Git regressions prove that local retry identity survives until remote absence, failure restores checkout where needed, and closure readiness is reported separately without deleting unrelated worktrees."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Remote Work Item branch deletion fails and the branch still exists.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_remote_deletion_failure_does_not_report_closed"
+      ]
+    },
+    {
+      "scenario": "The provider already deleted the remote Work Item branch or a prior attempt deleted it.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_remote_deletion_race_is_accepted_when_postcondition_is_absent"
+      ]
+    },
+    {
+      "scenario": "The base branch is checked out in another clean worktree.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_base_branch_worktree_occupancy_is_supported",
+        "tests/test_work_item_lifecycle_closure.py::test_real_linked_worktree_closure_is_closed_but_not_ready"
+      ]
+    },
+    {
+      "scenario": "Local branch deletion fails after the invoking worktree was detached.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_linked_worktree_local_delete_failure_restores_checkout"
+      ]
+    },
+    {
+      "scenario": "The invoking worktree can switch to and synchronize the base branch normally.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_success_proves_remote_absence_before_local_branch_deletion",
+        "tests/test_work_item_lifecycle_closure.py::test_main_reports_ready_only_for_ready_on_base"
+      ]
+    },
+    {
+      "scenario": "PR Head SHA or local Work Item branch identity does not match the closure target.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py::test_verify_pr_requires_exact_local_head_sha",
+        "tests/test_work_item_lifecycle_closure.py::test_branch_mapping_mismatch_blocks_before_switch"
+      ]
+    }
+  ],
+  "archiveSequence": 640
+}

@@ -154,9 +154,7 @@ def test_success_proves_remote_absence_before_local_branch_deletion(
     assert result["repositoryState"] == "ready_on_base"
     assert result["nextWorkItemReady"] is True
     assert result["baseWorktree"] == ""
-    remote_delete = fake.commands.index(
-        ("push", "origin", "--delete", "codex/example")
-    )
+    remote_delete = fake.commands.index(("push", "origin", "--delete", "codex/example"))
     remote_absence = fake.commands.index(
         ("ls-remote", "--exit-code", "--heads", "origin", "codex/example")
     )
@@ -522,8 +520,7 @@ def test_real_linked_worktree_closure_is_closed_but_not_ready(
     monkeypatch.setattr(
         closure,
         "_verify_archived_evidence",
-        lambda _task: closure.PROJECT_ROOT
-        / ".ai/work-items/archive/2026/example.contract.json",
+        lambda _task: closure.PROJECT_ROOT / ".ai/work-items/archive/2026/example.contract.json",
     )
     monkeypatch.setattr(
         closure,
@@ -545,9 +542,7 @@ def test_real_linked_worktree_closure_is_closed_but_not_ready(
         == run_command(base_worktree, "git", "rev-parse", "origin/main").stdout
     )
     assert run_command(repository, "git", "status", "--porcelain").stdout == ""
-    local_branches = run_command(
-        repository, "git", "branch", "--format=%(refname:short)"
-    ).stdout
+    local_branches = run_command(repository, "git", "branch", "--format=%(refname:short)").stdout
     assert "codex/example" not in local_branches.splitlines()
     remote_heads = run_command(
         repository,
