@@ -1,0 +1,220 @@
+{
+  "contractVersion": 2,
+  "workItemId": "archive-sequence-prediction-guard-20260728",
+  "mode": "code",
+  "title": "Prevent pre-finish archive sequence predictions",
+  "baseCommit": "35dbc29469e26d300fe06c20bdfdcc7b570ac1a6",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue the deep performance Work Item, and fix discovered process problems durably before proceeding.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-continue-deep-performance",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-archive-sequence-prediction-guard"
+  },
+  "declaredIntent": {
+    "summary": "Prevent pre-finish free text from predicting generator-owned archive sequence facts.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/archive-sequence-prediction-guard-20260728.contract.json",
+    ".ai/work-items/active/archive-sequence-prediction-guard-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    "scripts/ai_check_summary.py",
+    "tests/test_ai_check_summary.py",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Editing the immutable hosted-coverage-margin-recovery archive",
+    "Changing archive sequence allocation",
+    "General performance implementation, WI-10 installation changes, or release publication"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/hosted-coverage-margin-recovery-20260728.summary.json",
+      "reason": "The immutable predecessor records authoritative archiveSequence 625 but its pre-finish knownGaps text predicted 626."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "The canonical Summary validator owns free-text evidence integrity before Finish."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Summary behavior requires a red-first regression for generator-owned sequence prediction."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_integrity",
+      "archive_lifecycle",
+      "adjacent_recovery_chain"
+    ],
+    "reason": "A stale numeric prediction in immutable evidence can contradict generated archive facts and mislead later traceability.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized process-first correction and continuous execution."
+  },
+  "preReviewWarnings": [
+    "Reject only predictive numeric archive sequence claims before allocation; preserve ordinary historical references and the generated archiveSequence field."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "An active Summary without archiveSequence cannot claim a concrete future archive sequence in knownGaps.",
+    "The validator still accepts nonnumeric 'next archive sequence' wording and archived Summaries with a generated archiveSequence field.",
+    "RFE-ISSUE-141 records the immutable 626/625 mismatch, authoritative source, correction, and recurrence prevention.",
+    "The fourth adjacent recovery source-links the third archive and passes the complete chain PR gate.",
+    "Full quality, hosted CI, merge, closure, cleanup, and main synchronization complete before performance resumes."
+  ],
+  "guidelines": [
+    "Do not rewrite immutable archive evidence; append a corrective record.",
+    "Test the validator red-first and keep the rule specific to generator-owned future sequence prediction.",
+    "Preserve historical archive sequence facts and ordinary numeric content."
+  ],
+  "intent": {
+    "problem": "The predecessor Summary predicted archive sequence 626 in knownGaps before Finish, while the archive generator correctly allocated 625. Its authoritative archiveSequence is correct, but immutable free text now contradicts it.",
+    "constraints": [
+      "Do not edit the predecessor archive.",
+      "Reject future exact sequence prediction before allocation without rejecting generated archived facts.",
+      "Keep the corrective narrow and fully source-linked in the existing recovery chain."
+    ],
+    "rationale": "Archive sequence is generator-owned state. Pre-finish prose should say 'next archive sequence'; the validator can prevent unsupported numeric predictions before they become immutable."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "An active Summary predicts 'archive sequence 626' before allocation.",
+      "expected": "Summary validation fails with a specific generator-owned-fact error.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add and run a focused Summary validator regression."
+    },
+    {
+      "scenario": "A Summary says 'next archive sequence' or already contains generated archiveSequence.",
+      "expected": "The validator accepts the nonpredictive or authoritative form.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add focused positive regressions."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuation-authorization-2026-07-28",
+    "reason": "The user requires discovered process defects to be fixed durably before performance resumes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 627
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/archive-sequence-prediction-guard-20260728.json",
+    "baseCommit": "35dbc29469e26d300fe06c20bdfdcc7b570ac1a6",
+    "initialScopeDigest": "eb4f6da39e8b658bab69f49727f7d422784f82c1cf0d9d3631bacfd2cc884ffd",
+    "contractSkeletonDigest": "4d6803aa7b22f02bccae558114fee15f38317abc38ed4cb20713a1c8f4ad5e7f"
+  }
+}

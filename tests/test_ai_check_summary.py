@@ -504,6 +504,38 @@ def test_intent_alignment_validator_rejects_unknown_keys():
     assert "intentAlignment.unknownKey is not a recognized field" in issues
 
 
+def test_active_summary_rejects_a_predicted_archive_sequence():
+    issues = ai_check_summary._validate_summary_metadata(
+        {
+            "risk": {"level": "medium", "detail": "fixture"},
+            "knownGaps": ["Archive sequence 626 and hosted CI remain pending."],
+        }
+    )
+
+    assert (
+        "knownGaps must not predict a numeric archive sequence before the generator allocates it"
+        in issues
+    )
+
+
+def test_summary_accepts_nonnumeric_or_generator_owned_archive_sequence():
+    for summary in (
+        {
+            "risk": {"level": "medium", "detail": "fixture"},
+            "knownGaps": ["The next archive sequence and hosted CI remain pending."],
+        },
+        {
+            "risk": {"level": "medium", "detail": "fixture"},
+            "knownGaps": ["Archive sequence 625 was generated."],
+            "archiveSequence": 625,
+        },
+    ):
+        assert (
+            "knownGaps must not predict a numeric archive sequence before the generator allocates it"
+            not in ai_check_summary._validate_summary_metadata(summary)
+        )
+
+
 def test_scenario_coverage_validator_accepts_valid_payload():
     summary = {
         "summaryVersion": 2,
