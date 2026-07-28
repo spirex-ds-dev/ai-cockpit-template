@@ -142,12 +142,29 @@ def _evaluate_corpus() -> tuple[bool, bool, str]:
 
 
 def _wizard_is_executable() -> bool:
-    for path in ROOT.glob("scripts/*wizard*.py"):
-        if path.name == "ai_wizard_localization.py":
-            continue
-        if "ai_wizard_localization" in path.read_text(encoding="utf-8"):
-            return True
-    return False
+    entrypoints = (
+        ROOT / "scripts/ai_install_wizard.py",
+        ROOT / "scripts/ai_calibration_wizard.py",
+    )
+    executable_tests = (
+        (
+            ROOT / "tests/test_install_wizard.py",
+            "test_japanese_dry_run_uses_executable_locale_resources",
+        ),
+        (
+            ROOT / "tests/test_calibration_wizard.py",
+            "test_japanese_render_and_pause_use_executable_locale_resources",
+        ),
+    )
+    return all(
+        path.is_file()
+        and "ai_wizard_localization" in path.read_text(encoding="utf-8")
+        and "--language" in path.read_text(encoding="utf-8")
+        for path in entrypoints
+    ) and all(
+        path.is_file() and test_name in path.read_text(encoding="utf-8")
+        for path, test_name in executable_tests
+    )
 
 
 def _status_has_japanese_view() -> bool:
@@ -228,12 +245,23 @@ def evaluate() -> dict[str, Any]:
             "JA-CLI-001",
             "Executable Wizard and CLI Japanese interaction",
             "pass" if _wizard_is_executable() else "block",
-            "A Wizard entrypoint consumes the strict Japanese resource layer"
+            "Both Wizard entrypoints consume the strict Japanese resource layer with executable tests"
             if _wizard_is_executable()
             else FINDINGS["JA-CLI-001"]["summary"],
-            source=["scripts/ai_wizard_localization.py", "locales/wizard/ja.json"],
-            tests=["tests/test_wizard_localization.py"],
-            commands=["PYTHONPATH=scripts .venv/bin/pytest -q tests/test_wizard_localization.py"],
+            source=[
+                "scripts/ai_wizard_localization.py",
+                "scripts/ai_install_wizard.py",
+                "scripts/ai_calibration_wizard.py",
+                "locales/wizard/ja.json",
+            ],
+            tests=[
+                "tests/test_wizard_localization.py",
+                "tests/test_install_wizard.py",
+                "tests/test_calibration_wizard.py",
+            ],
+            commands=[
+                "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_wizard_localization.py tests/test_install_wizard.py tests/test_calibration_wizard.py"
+            ],
             limitation="Resource parity alone cannot prove executable Japanese interaction.",
             finding_id=None if _wizard_is_executable() else "JA-CLI-001",
         ),

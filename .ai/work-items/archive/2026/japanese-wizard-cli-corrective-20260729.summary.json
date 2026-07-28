@@ -1,0 +1,662 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "japanese-wizard-cli-corrective-20260729",
+  "contractPath": ".ai/work-items/archive/2026/japanese-wizard-cli-corrective-20260729.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/japanese-wizard-cli-corrective-20260729.contract.json",
+      "reason": "Created the Work Item Contract skeleton."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-wizard-cli-corrective-20260729.summary.json",
+      "reason": "Created the AI Change Summary skeleton."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated governed Work Item status."
+    },
+    {
+      "path": ".ai/work-items/starts/japanese-wizard-cli-corrective-20260729.json",
+      "reason": "Recorded the immutable start receipt from synchronized origin/main."
+    },
+    {
+      "path": "scripts/ai_wizard_localization.py",
+      "reason": "Added strict message formatting and safe C/POSIX locale handling."
+    },
+    {
+      "path": "scripts/ai_install_wizard.py",
+      "reason": "Connected executable installation selection, review, confirmation, STOP, and result chrome to locale resources."
+    },
+    {
+      "path": "scripts/ai_calibration_wizard.py",
+      "reason": "Connected executable calibration rendering, navigation, pause, recovery, Unknown, and N/A chrome to locale resources."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Required both Wizard entrypoints and named executable Japanese tests before JA-CLI-001 can pass."
+    },
+    {
+      "path": "locales/wizard/en.json",
+      "reason": "Expanded exact-parity English Wizard chrome."
+    },
+    {
+      "path": "locales/wizard/ja.json",
+      "reason": "Expanded exact-parity Japanese Wizard chrome."
+    },
+    {
+      "path": "locales/wizard/zh-CN.json",
+      "reason": "Expanded exact-parity Chinese Wizard chrome."
+    },
+    {
+      "path": "tests/test_wizard_localization.py",
+      "reason": "Covered locale precedence, C fallback, strict formatting, key errors, and value preservation."
+    },
+    {
+      "path": "tests/test_install_wizard.py",
+      "reason": "Covered executable Japanese dry run, decline, blocked readiness, CLI help, and unsupported locale behavior."
+    },
+    {
+      "path": "tests/test_calibration_wizard.py",
+      "reason": "Covered executable Japanese render, summary, prompts, pause/recovery, unknown command, and unsupported locale behavior."
+    },
+    {
+      "path": "tests/test_japanese_capability.py",
+      "reason": "Prevented one-entrypoint or import-only evidence from clearing JA-CLI-001."
+    },
+    {
+      "path": "docs/architecture/wizard-io-and-localization.md",
+      "reason": "Defined executable locale resolution, evidence-value preservation, and non-claim boundaries."
+    },
+    {
+      "path": "docs/architecture/interactive-installation-wizard.md",
+      "reason": "Documented installation --language and fail-before-write behavior."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Regenerated machine evidence with JA-CLI-001 passing and four remaining blockers."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Regenerated the human-readable assessment from the same machine object."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Aligned WI-16 status and preserved the serial corrective queue."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-wizard-cli-corrective-20260729.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/reference/japanese-capability-assessment.json",
+    "scripts/ai_install_wizard.py",
+    "scripts/ai_calibration_wizard.py",
+    "scripts/ai_wizard_localization.py",
+    "locales/wizard/ja.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A Japanese adopter runs either Wizard without a language option or with --language ja-JP.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_install_wizard.py::test_japanese_dry_run_uses_executable_locale_resources",
+        "tests/test_calibration_wizard.py::test_japanese_render_and_pause_use_executable_locale_resources",
+        "tests/test_calibration_wizard.py::test_calibration_cli_japanese_summary"
+      ]
+    },
+    {
+      "scenario": "A caller requests an unsupported language.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_install_wizard.py::test_install_wizard_unknown_language_fails_before_target_write",
+        "tests/test_install_wizard.py::test_install_wizard_cli_exposes_language_and_rejects_unknown",
+        "tests/test_calibration_wizard.py::test_calibration_cli_exposes_language_and_rejects_unknown"
+      ]
+    },
+    {
+      "scenario": "Japanese installation is declined, dry-run, or blocked by missing readiness evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_install_wizard.py::test_japanese_decline_preserves_fail_closed_write_boundary",
+        "tests/test_install_wizard.py::test_japanese_dry_run_uses_executable_locale_resources",
+        "tests/test_install_wizard.py::test_japanese_blocked_readiness_stops_before_installer"
+      ]
+    },
+    {
+      "scenario": "A Japanese calibration session pauses, receives an unknown command, or displays Unknown/N/A evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_wizard.py::test_japanese_render_and_pause_use_executable_locale_resources",
+        "tests/test_calibration_wizard.py::test_japanese_unknown_command_and_answer_prompt",
+        "tests/test_calibration_wizard.py::test_interrupt_and_quit_pause_safely"
+      ]
+    },
+    {
+      "scenario": "Only one Wizard imports localization or resources exist without executable assertions.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_japanese_capability.py::test_wizard_capability_requires_both_entrypoints_and_executable_tests",
+        "docs/reference/japanese-capability-assessment.json"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:19:40.665536+00:00",
+      "exitCode": 0,
+      "durationMs": 41,
+      "outputDigest": "cb95802425f5dc9117709b2ce15596662e67439bcc2e0020709e505667b46fd3",
+      "commandHash": "f7398adc2d185ab9b5ff90bdb0fd1a868732fadefa0755b8876255bb82262c5b",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "065e1f17333bf02eb0623dba110922d8c32326f3e2c30a35b2a78f19d3937984",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "outputBytes": 258
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:19:40.818018+00:00",
+      "exitCode": 0,
+      "durationMs": 106,
+      "outputDigest": "6f38020fe83000ecc5b3cd303fdd14204e3f26f5b6828dd389b15202466c8051",
+      "commandHash": "a225b2eccb89a5f45951b94210d971071c8ebb99fe7463c209edbd35412181dd",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "065e1f17333bf02eb0623dba110922d8c32326f3e2c30a35b2a78f19d3937984",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json scope guard passed: 18 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json scope guard passed: 18 changed path(s) covered",
+      "outputBytes": 192
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:19:40.968376+00:00",
+      "exitCode": 0,
+      "durationMs": 104,
+      "outputDigest": "03681c66aad3a3a9c9c62efb8d1a726e799e66176fa746cb5adb163a2fba3d06",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "065e1f17333bf02eb0623dba110922d8c32326f3e2c30a35b2a78f19d3937984",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 229
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:19:41.198124+00:00",
+      "exitCode": 0,
+      "durationMs": 183,
+      "outputDigest": "4250e26b97aa58ffeea1f545dc3fbc62386d1192563b148a43014289b5d47a34",
+      "commandHash": "08919adde47c0b56ce0486aedd70693b5742a6e597b4ea3ac4114f3b509ebd0f",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "065e1f17333bf02eb0623dba110922d8c32326f3e2c30a35b2a78f19d3937984",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `japanese-wizard-cli-corrective-20260729` - Contract Hash: `c6aaeab7f151edb1` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `9` ",
+      "outputTail": "sed - `quality`: passed ## Review Focus - Both executable entrypoints consume the shared strict locale layer - Confirmation, STOP, pause, and recovery remain fail closed - Evidence-bearing values are not translated - Only JA-CLI-001 is cleared ## Diff Ownership Preview - active_owned: `18`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-wizard-cli-corrective-20260729.json` — covered by Contract scope - [active_owned] `docs/architecture/interactive-installation-wizard.md` — covered by Contract scope - [active_owned] `docs/architecture/wizard-io-and-localization.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `locales/wizard/en.json` — covered by Contract scope - [active_owned] `locales/wizard/ja.json` — covered by Contract scope - [active_owned] `locales/wizard/zh-CN.json` — covered by Contract scope - [active_owned] `scripts/ai_calibration_wizard.py` — covered by Contract scope - [active_owned] `scripts/ai_install_wizard.py` — covered by Contract scope - [active_owned] `scripts/ai_japanese_capability.py` — covered by Contract scope - [active_owned] `scripts/ai_wizard_localization.py` — covered by Contract scope - [active_owned] `tests/test_calibration_wizard.py` — covered by Contract scope - [active_owned] `tests/test_install_wizard.py` — covered by Contract scope - [active_owned] `tests/test_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/test_wizard_localization.py` — covered by Contract scope ## Next Action - Run or record required verification: aiAgentRisk",
+      "outputBytes": 6865
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:19:41.338347+00:00",
+      "exitCode": 0,
+      "durationMs": 87,
+      "outputDigest": "c40e8c13344e717652c95a748ceee6903aecd51cebc1e825206fe4ad5885e59f",
+      "commandHash": "016e578056f4b5ef87f358945270abfea1edca866e68475de7b9faa4b1641b07",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "065e1f17333bf02eb0623dba110922d8c32326f3e2c30a35b2a78f19d3937984",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/japanese-wizard-cli-corrective-20260729.json [review] .ai/cockpit/current_status.md [review] scripts/ai_calibration_wizard.py [review] scripts/ai_install_wizard.py [review] scripts/ai_japanese_capability.py [review] scripts/ai_wizard_localization.py review focus recorded: 4 ",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/japanese-wizard-cli-corrective-20260729.json [review] .ai/cockpit/current_status.md [review] scripts/ai_calibration_wizard.py [review] scripts/ai_install_wizard.py [review] scripts/ai_japanese_capability.py [review] scripts/ai_wizard_localization.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 552
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:19:41.493647+00:00",
+      "exitCode": 0,
+      "durationMs": 107,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "065e1f17333bf02eb0623dba110922d8c32326f3e2c30a35b2a78f19d3937984",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:19:41.646074+00:00",
+      "exitCode": 0,
+      "durationMs": 90,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "065e1f17333bf02eb0623dba110922d8c32326f3e2c30a35b2a78f19d3937984",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:19:41.742924+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "342a5235371fef98fc557edd3a21205559fa01beba0f6e5ec71a9447e5a2c626",
+      "commandHash": "a4cbadd4d39db11c90add0abd0601ca286f1b280eb9dd5e1178b8437d156e917",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "065e1f17333bf02eb0623dba110922d8c32326f3e2c30a35b2a78f19d3937984",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 301
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:19:41.838477+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "5f05ed987ec4d8d053c035a9896513a70eaabc1fdf641d29e790d58585749923",
+      "commandHash": "f00b0c4b99b840dab336c164d9a90a4dbb0039f88539b754d3335fde9db8de18",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "065e1f17333bf02eb0623dba110922d8c32326f3e2c30a35b2a78f19d3937984",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputBytes": 306
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:19:42.066878+00:00",
+      "exitCode": 0,
+      "durationMs": 181,
+      "outputDigest": "ed114ced13c4b0e0a4a982fa460fa77b2e1b1b3b04f2a2c11047fb8c72c55c2d",
+      "commandHash": "1f702a0bfa5008197a18e7308b5145e5a4a64a3079e8329d7be82a79cb269b20",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "065e1f17333bf02eb0623dba110922d8c32326f3e2c30a35b2a78f19d3937984",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `18`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-wizard-cli-corrective-20260729.json` — covered by Contract scope - [",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `18`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-wizard-cli-corrective-20260729.json` — covered by Contract scope - [active_owned] `docs/architecture/interactive-installation-wizard.md` — covered by Contract scope - [active_owned] `docs/architecture/wizard-io-and-localization.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `locales/wizard/en.json` — covered by Contract scope - [active_owned] `locales/wizard/ja.json` — covered by Contract scope - [active_owned] `locales/wizard/zh-CN.json` — covered by Contract scope - [active_owned] `scripts/ai_calibration_wizard.py` — covered by Contract scope - [active_owned] `scripts/ai_install_wizard.py` — covered by Contract scope - [active_owned] `scripts/ai_japanese_capability.py` — covered by Contract scope - [active_owned] `scripts/ai_wizard_localization.py` — covered by Contract scope - [active_owned] `tests/test_calibration_wizard.py` — covered by Contract scope - [active_owned] `tests/test_install_wizard.py` — covered by Contract scope - [active_owned] `tests/test_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/test_wizard_localization.py` — covered by Contract scope",
+      "outputBytes": 1893
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:23:52.989189+00:00",
+      "exitCode": 0,
+      "durationMs": 250856,
+      "outputDigest": "6892c0ef65826d868c8f9369c111367a46b37d04f39abcec3ef58d1e2fba29bb",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "065e1f17333bf02eb0623dba110922d8c32326f3e2c30a35b2a78f19d3937984",
+      "outputSummary": "\"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-full \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-fast-static \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"b1cd61ebaf47",
+      "outputTail": "e_documented_target 2.62s call tests/test_start_and_archive.py::test_ai_start_journeys 2.17s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 2.09s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 2.04s call tests/test_installer.py::test_upgrade_rolls_back_when_post_copy_validation_fails 2.00s call tests/test_release_preflight.py::test_postmerge_preflight_rejects_included_content_after_candidate_merge 1.99s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 1.89s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 1418 passed, 3 warnings in 244.04s (0:04:04) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.C9FYDr1Qzd/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.C9FYDr1Qzd/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.C9FYDr1Qzd/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.C9FYDr1Qzd/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/b1cd61ebaf47-local-20260728T171942Z-277-0/summary.json",
+      "outputBytes": 46414
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:23:54.474302+00:00",
+      "exitCode": 0,
+      "durationMs": 206,
+      "outputDigest": "f07a21f70a8e2a92a24489567a0415f21c18106bc83cc3247d3f22acf33e2042",
+      "commandHash": "b7a04a43c8a1683bfecf0b21d7a5f6d03ab6cdfeeeb5920d73aa2d40757e8049",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "5f8deff800f1440b0335d33722f4efff21b2d4a3842da28264615926657a3026",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 348
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:23:54.719381+00:00",
+      "exitCode": 0,
+      "durationMs": 196,
+      "outputDigest": "2739ba091be6e8a9008a037dde149877e98cf089e7d227d29fd58f78b8263750",
+      "commandHash": "8df01e0bfcd0467d05e11f5e990ced6c8da6261dcab08e57920ab9cc47b9b30b",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "5f8deff800f1440b0335d33722f4efff21b2d4a3842da28264615926657a3026",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 331
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:23:54.811270+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "5f8deff800f1440b0335d33722f4efff21b2d4a3842da28264615926657a3026",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:23:54.928270+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "be52f6f6b04cb24511e67600177905ba71fe7c6b01813eb515d62f47e1414604",
+      "commandHash": "7ee445e493eb210eef4ea5073d6a4002e833f43363832605317c0d2450234c5f",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "5f8deff800f1440b0335d33722f4efff21b2d4a3842da28264615926657a3026",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 311
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json CONTRACT=.ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:23:55.627419+00:00",
+      "exitCode": 0,
+      "durationMs": 89,
+      "outputDigest": "c3343a6c1eac149e8cf96d444085d2b16c86dbedc80fad6b614adbd4b3269e4d",
+      "commandHash": "d16e3fd21ad0931f5f329da541c61f54115d979ab39403a1b01f2046d894a542",
+      "contractHash": "c6aaeab7f151edb1e7c1c359786a06d7d7a03ec75491a58801c38e9e5b41a2d3",
+      "commitSha": "b1cd61ebaf4732b23feb731340451fdad0b861a5",
+      "executionContractPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "worktreeDigest": "bc9488cf7430b9bbdd0c2a950bab8196f5c7895bd4a7e1c16ab6e4b31f39fcd8",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json ai summary check passed: .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json --contract .ai/work-items/active/japanese-wizard-cli-corrective-20260729.contract.json ai summary check passed: .ai/work-items/active/japanese-wizard-cli-corrective-20260729.summary.json",
+      "outputBytes": 334
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Use one strict resource layer for both Wizard entrypoints and preserve exact key/placeholder parity.",
+      "compliant": true,
+      "evidence": "Both entrypoints import ai_wizard_localization; test_all_message_resources_have_exact_key_and_placeholder_parity passes."
+    },
+    {
+      "guideline": "Localize presentation chrome only; never translate or alter evidence-bearing values.",
+      "compliant": true,
+      "evidence": "format_message inserts paths, facts, IDs, statuses, answers, and evidence unchanged; Japanese tests assert path and stage-ID preservation."
+    },
+    {
+      "guideline": "Keep confirmation and failure paths fail closed in every supported locale.",
+      "compliant": true,
+      "evidence": "Japanese decline, dry-run, blocked-readiness, pause, and unknown-language regressions pass without installer or activation writes."
+    },
+    {
+      "guideline": "Test executable behavior rather than accepting resource-file or import presence as capability evidence.",
+      "compliant": true,
+      "evidence": "The assessor requires both entrypoints, --language wiring, and named executable tests."
+    },
+    {
+      "guideline": "Record assessment changes and remaining blockers without overclaiming Japanese readiness.",
+      "compliant": true,
+      "evidence": "Generated assessment clears only JA-CLI-001 and retains four release-blocking findings plus the general-fluency non-claim."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Localization touches confirmation and recovery chrome; executable negative-path tests preserve the original fail-closed state and write boundaries."
+  },
+  "generatedFiles": [
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/cockpit/current_status.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "JA-CLI-001",
+      "category": "japanese-executable-cli",
+      "severity": "high",
+      "fact": "Both executable Wizard adapters ignored the checked-in Japanese resource layer, and the assessor accepted any single Wizard import.",
+      "decision": "Connect both adapters to one strict resource layer and require executable evidence for each before clearing the finding.",
+      "resolution": "Both entrypoints now expose --language, render Japanese interaction chrome, preserve machine values, and pass negative-path tests; the assessment reports JA-CLI-001 pass.",
+      "status": "resolved_locally",
+      "followUp": "Complete PR, Hosted CI, merge, closure, and branch cleanup before starting JA-STATUS-001."
+    },
+    {
+      "issueId": "JA-CLI-OPERATOR-001",
+      "category": "verification-command-discovery",
+      "severity": "low",
+      "fact": "Two exploratory verification invocations referenced nonexistent Make targets and one nonexistent checker filename.",
+      "decision": "Stop those invocations, discover registered targets from Makefile, and run the actual checks.",
+      "resolution": "check-docs-metadata, check-trust-layer-docs, check-ai-system-invariants, and check-instruction-traceability passed; no product or process implementation defect was found.",
+      "status": "resolved_locally",
+      "followUp": "Use registered Contract verification IDs and Makefile target discovery for subsequent checks."
+    },
+    {
+      "issueId": "JA-CLI-PROCESS-002",
+      "category": "checkpoint-contract-binding",
+      "severity": "medium",
+      "fact": "The first full ai-finish passed 1418 tests and 85.70% coverage, then the agent-risk guard rejected the before_edit checkpoint because scenario status evidence had changed the Contract hash after that checkpoint.",
+      "decision": "Treat the stale checkpoint as fail-closed evidence, record the event, and re-run before_edit against the final Contract before retrying finish.",
+      "resolution": "No gate was bypassed and no archive was created; the checkpoint will be rebound to the final Contract and the complete finish sequence rerun.",
+      "status": "resolved_locally",
+      "followUp": "In future Work Items, finalize planned scenario structure before before_edit and record executed scenario evidence in Summary without changing Contract fields after checkpoint unless the checkpoint is deliberately refreshed."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "remaining-japanese-release-readiness",
+      "detail": "JA-STATUS-001, JA-PR-001, JA-LIFECYCLE-001, and JA-DOC-001 remain release-blocking.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    },
+    {
+      "level": "medium",
+      "area": "general-fluency",
+      "detail": "Executable localized chrome does not prove general provider/model Japanese fluency or native-human translation review.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Both executable entrypoints consume the shared strict locale layer",
+      "Confirmation, STOP, pause, and recovery remain fail closed",
+      "Evidence-bearing values are not translated",
+      "Only JA-CLI-001 is cleared"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "installation and calibration Wizard CLIs both accept --language and resolve through ai_wizard_localization",
+    "userVisibleOutput": "interaction chrome is localized; evidence-bearing values remain unchanged",
+    "persistence": "not_applicable",
+    "localization": "ja, en, and zh-CN keys/placeholders have exact parity and unsupported requests fail closed",
+    "generatedArtifacts": "machine JSON and derived Markdown assessment were regenerated from one result",
+    "makeEntrypoints": "existing cockpit-calibration-wizard delegates to the now-localized executable adapter"
+  },
+  "userCorrectionsCaptured": [
+    "Japanese capability is mandatory because most adopter engineers use Japanese.",
+    "Every Japanese finding must be corrected before documentation alignment or release.",
+    "Every corrective Work Item must complete its PR, merge, closure, and branch cleanup lifecycle."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Static Japanese resources are not sufficient; executable handling is required.",
+      "solidifiedIn": "Both Wizard entrypoints, named Japanese behavior tests, and the strengthened assessor."
+    },
+    {
+      "correction": "Do not allow one partial implementation to clear the finding.",
+      "solidifiedIn": "test_wizard_capability_requires_both_entrypoints_and_executable_tests."
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "c6aaeab7f151edb1",
+      "acceptanceCount": 9,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "c6aaeab7f151edb1",
+      "acceptanceCount": 9,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "Four independent Japanese findings remain release-blocking and must complete serial corrective lifecycles.",
+    "Full ai-finish/archive, PR Hosted CI, merge, ai-close-work-item, and branch cleanup remain pending for this Work Item."
+  ],
+  "overclaimPrevention": "This Work Item proves bounded executable Wizard localization only; it does not prove general Japanese fluency, human translation quality, adopter lifecycle usability, Status parity, PR parity, uninstall completeness, or release readiness.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-29T02:30:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "docs/reference/japanese-capability-assessment.json"
+        ],
+        "reason": "WI-16 records JA-CLI-001 implementation evidence, full lifecycle boundary, remaining blockers, and serial order."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/japanese-wizard-cli-corrective-20260729.contract.json",
+          ".ai/work-items/archive/2026/japanese-wizard-cli-corrective-20260729.summary.json",
+          "tests/test_japanese_capability.py"
+        ],
+        "reason": "Each acceptance and scenario maps to named source and executable test evidence."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "scripts/ai_install_wizard.py",
+          "scripts/ai_calibration_wizard.py",
+          "docs/architecture/wizard-io-and-localization.md",
+          "docs/architecture/interactive-installation-wizard.md"
+        ],
+        "reason": "Both documented --language entrypoints and locale resolution boundaries match executable behavior."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "locales/wizard/en.json",
+          "locales/wizard/ja.json",
+          "locales/wizard/zh-CN.json",
+          "tests/test_wizard_localization.py"
+        ],
+        "reason": "Three languages retain exact keys/placeholders and equivalent fail-closed control meaning."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/japanese-capability-assessment.json",
+          "docs/reference/japanese-capability-assessment.md"
+        ],
+        "reason": "JA-CLI-001 is the only cleared finding; four blockers and the general-fluency non-claim remain explicit."
+      }
+    ]
+  },
+  "archiveSequence": 646
+}

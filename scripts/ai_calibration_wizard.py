@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import locale
 import os
 import re
 import sys
@@ -27,14 +28,15 @@ from ai_calibrate import (
     save_session,
 )
 from ai_project_doctor import scan_project
+from ai_wizard_localization import format_message, load_messages, resolve_language
 
 
 STAGES = CALIBRATION_STAGES
-ANSWER_PROMPTS = {
-    "yes_no": "Y/N",
-    "alternative_input": "Input",
-    "unknown": "Unknown",
-    "not_applicable": "N/A (reason required)",
+ANSWER_PROMPT_KEYS = {
+    "yes_no": "answer_yes_no",
+    "alternative_input": "answer_input",
+    "unknown": "answer_unknown",
+    "not_applicable": "answer_na",
 }
 IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$")
 SECRET_VALUE = re.compile(
@@ -45,11 +47,28 @@ SECRET_VALUE = re.compile(
 class CalibrationWizard:
     """Presentation and orchestration adapter around :class:`CalibrationSession`."""
 
-    def __init__(self, root: Path, session_path: Path, active_path: Path) -> None:
+    def __init__(
+        self,
+        root: Path,
+        session_path: Path,
+        active_path: Path,
+        *,
+        language: str | None = None,
+        system_language: str | None = None,
+    ) -> None:
         self.root = root.resolve()
         self.session_path = session_path
         self.active_path = active_path
         self.session: CalibrationSession | None = None
+        self.language = resolve_language(
+            explicit=language,
+            system_locale=system_language if system_language is not None else locale.getlocale()[0],
+        )
+        self.messages = load_messages(self.language)
+
+    def message(self, key: str, **values: object) -> str:
+        """Render locale chrome without changing evidence-bearing values."""
+        return format_message(self.messages, key, **values)
 
     def load_or_start(self, session_id: str = "calibration-1") -> CalibrationSession:
         if not IDENTIFIER.fullmatch(session_id):
@@ -230,25 +249,34 @@ class CalibrationWizard:
     def render(self) -> str:
         if self.session is None:
             raise CalibrationError("wizard session has not been loaded")
-        lines = ["Calibration Wizard / 校准向导", ""]
+        lines = [self.message("calibration_title"), ""]
         for stage in self.session.data["stages"]:
             current = " *" if stage["id"] == self.session.data.get("currentStage") else ""
             lines.append(
                 f"{stage['position'] + 1:02d}. {stage['id']} [{stage['status']}]" + current
             )
-            lines.append("    answers: " + ", ".join(ANSWER_PROMPTS[k] for k in ANSWER_TYPES))
-        lines.append(f"state: {self.session.data['state']}")
-        lines.append(f"session: {self.session_path}")
+            answer_labels = ", ".join(self.message(ANSWER_PROMPT_KEYS[key]) for key in ANSWER_TYPES)
+            lines.append("    " + self.message("label_answers", value=answer_labels))
+        lines.append(self.message("label_state", value=self.session.data["state"]))
+        lines.append(self.message("label_session", value=self.session_path))
         candidate = self.session.data.get("candidate", {})
         lines.append(
-            "candidate: "
-            f"{candidate.get('status')} revision={candidate.get('revision')} "
-            f"sha256={candidate.get('digest') or 'not_prepared'}"
+            self.message(
+                "label_candidate",
+                status=candidate.get("status"),
+                revision=candidate.get("revision"),
+                digest=candidate.get("digest") or "not_prepared",
+            )
         )
         blockers = self.session.blocking_fields()
         if blockers:
-            lines.append("blocking evidence: " + json.dumps(blockers, ensure_ascii=False))
-        lines.append("Unknown remains explicit; N/A requires a reason.")
+            lines.append(
+                self.message(
+                    "label_blocking",
+                    value=json.dumps(blockers, ensure_ascii=False),
+                )
+            )
+        lines.append(self.message("unknown_na_boundary"))
         return "\n".join(lines)
 
     def run(
@@ -261,16 +289,14 @@ class CalibrationWizard:
         output_fn(self.render())
         while self.session and self.session.data.get("state") == "in_progress":
             try:
-                command = (
-                    input_fn("command (answer/back/check/review/pause/quit): ").strip().lower()
-                )
+                command = input_fn(self.message("command_prompt")).strip().lower()
             except (EOFError, KeyboardInterrupt):
                 self.pause()
-                output_fn("Paused; resume with the same session file.")
+                output_fn(self.message("paused_resume"))
                 return 0
             if command in {"quit", "q", "pause"}:
                 self.pause()
-                output_fn("Paused; no activation performed.")
+                output_fn(self.message("paused_no_activation"))
                 return 0
             if command == "back":
                 self.back()
@@ -281,12 +307,12 @@ class CalibrationWizard:
             elif command == "answer":
                 stage = self.session.data.get("currentStage")
                 if not stage:
-                    output_fn("No current stage; use review.")
+                    output_fn(self.message("no_current_stage"))
                     continue
-                value = input_fn("answer: ")
+                value = input_fn(self.message("answer_prompt"))
                 self.answer(stage, value)
             else:
-                output_fn("Unknown command; session remains unchanged.")
+                output_fn(self.message("unknown_command"))
             output_fn(self.render())
         return 0
 
@@ -298,20 +324,29 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--active", default=".ai/calibration/active.json")
     parser.add_argument("--session-id", default="calibration-1")
     parser.add_argument(
+        "--language",
+        help="Wizard language: ja, en, or zh-CN (default: environment, system locale, then ja)",
+    )
+    parser.add_argument(
         "--summary", action="store_true", help="render the current wizard state and exit"
     )
     args = parser.parse_args(argv)
     root = Path(args.root).resolve()
-    wizard = CalibrationWizard(root, root / args.session, root / args.active)
     try:
+        wizard = CalibrationWizard(
+            root,
+            root / args.session,
+            root / args.active,
+            language=args.language,
+        )
         wizard.load_or_start(args.session_id)
         if args.summary:
             print(wizard.render())
             return 0
         return wizard.run()
-    except CalibrationError as exc:
+    except (CalibrationError, ValueError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
-        return 1
+        return 2 if isinstance(exc, ValueError) else 1
 
 
 if __name__ == "__main__":
