@@ -10,6 +10,9 @@ TITLE ?=
 MODE ?= investigate
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 AI_PYTHON = PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
+override AI_COCKPIT_MAKE_ENTRYPOINT := $(firstword $(MAKEFILE_LIST))
+export AI_COCKPIT_MAKE_ENTRYPOINT
+AI_NESTED_MAKE = "$(MAKE)" -f "$(AI_COCKPIT_MAKE_ENTRYPOINT)"
 # Resolve a configured executable name before recipes change directory.  Using
 # abspath on a bare name would incorrectly turn `python3` into a path under the
 # temporary lockfile directory.
@@ -55,10 +58,10 @@ check-ai-start-receipt:
 
 ai-pre-merge:
 	@set -e; \
-		echo 'Content quality:'; env -u AI_BASE_COMMIT -u AI_COCKPIT_EXECUTION_MODE -u MAKEFLAGS -u MAKEOVERRIDES $(shell command -v make) quality || { echo 'ALLOW COMMIT / MERGE: no (content quality failed)'; exit 1; }; \
-		echo 'Lifecycle evidence:'; env -u AI_BASE_COMMIT -u AI_COCKPIT_EXECUTION_MODE -u MAKEFLAGS -u MAKEOVERRIDES $(shell command -v make) check-ai-status-consistency || { echo 'ALLOW COMMIT / MERGE: no (lifecycle evidence failed)'; exit 1; }; \
-		echo 'Diff ownership preview:'; $(shell command -v make) check-ai-diff-ownership AI_BASE_COMMIT="$(AI_BASE_COMMIT)" || { echo 'ALLOW COMMIT / MERGE: no (diff ownership failed)'; exit 1; }; \
-		echo 'PR ownership:'; $(shell command -v make) check-ai-pr AI_BASE_COMMIT="$(AI_BASE_COMMIT)" || { echo 'ALLOW COMMIT / MERGE: no (PR ownership failed)'; exit 1; }; \
+		echo 'Content quality:'; env -u AI_BASE_COMMIT -u AI_COCKPIT_EXECUTION_MODE -u MAKEFLAGS -u MAKEOVERRIDES $(AI_NESTED_MAKE) quality || { echo 'ALLOW COMMIT / MERGE: no (content quality failed)'; exit 1; }; \
+		echo 'Lifecycle evidence:'; env -u AI_BASE_COMMIT -u AI_COCKPIT_EXECUTION_MODE -u MAKEFLAGS -u MAKEOVERRIDES $(AI_NESTED_MAKE) check-ai-status-consistency || { echo 'ALLOW COMMIT / MERGE: no (lifecycle evidence failed)'; exit 1; }; \
+		echo 'Diff ownership preview:'; $(AI_NESTED_MAKE) check-ai-diff-ownership AI_BASE_COMMIT="$(AI_BASE_COMMIT)" || { echo 'ALLOW COMMIT / MERGE: no (diff ownership failed)'; exit 1; }; \
+		echo 'PR ownership:'; $(AI_NESTED_MAKE) check-ai-pr AI_BASE_COMMIT="$(AI_BASE_COMMIT)" || { echo 'ALLOW COMMIT / MERGE: no (PR ownership failed)'; exit 1; }; \
 		echo 'ALLOW COMMIT / MERGE: yes'
 
 help:
@@ -283,7 +286,7 @@ QUALITY_TEST_GATES := project-test
 QUALITY_EVIDENCE_GATES := unsupported-claim-regression adopter-long-cycle check-release-evidence check-dependency-vulnerabilities
 QUALITY_SUPPLY_CHAIN_GATES := check-bandit-baseline check-sbom check-provenance check-secret-scanning
 QUALITY_PROJECT_CONSISTENCY_GATES := check-quality-architecture check-deprecated-assets check-instruction-traceability
-QUALITY_MAKE := $(shell command -v make)
+QUALITY_MAKE = $(AI_NESTED_MAKE)
 
 define RUN_QUALITY_GATE
 	+$(AI_PYTHON) scripts/run_quality_gate.py --gate $(1) --category $(2) --session-id "$(QUALITY_SESSION_ID)" --run-id "$(QUALITY_RUN_ID)" --output "$(QUALITY_TIMING_DIR)/$(1).json" --log "$(QUALITY_LOG_DIR)/$(1).log" -- $(QUALITY_MAKE) --no-print-directory $(1)
@@ -487,7 +490,7 @@ check-ai-adoption-ready:
 	$(AI_PYTHON) scripts/ai_check_adoption_ready.py --root .
 
 template-adoption-ready:
-	AI_COCKPIT_EXECUTION_MODE=template_maintenance $(shell command -v make) check-ai-adoption-ready
+	AI_COCKPIT_EXECUTION_MODE=template_maintenance $(AI_NESTED_MAKE) check-ai-adoption-ready
 
 check-ai-contract check-ai-work-item:
 	$(AI_PYTHON) scripts/ai_check_work_item.py $(CONTRACT)
@@ -523,8 +526,8 @@ ai-preflight:
 	$(AI_PYTHON) scripts/ai_preflight_review.py $(if $(CONTRACT),--contract $(CONTRACT))
 	$(AI_PYTHON) scripts/ai_preflight_review.py --check $(if $(CONTRACT),--contract $(CONTRACT))
 	@if [ "$(AI_PREFLIGHT_VALIDATE_CONTRACT)" = "true" ]; then $(AI_PYTHON) scripts/ai_check_work_item.py $(CONTRACT); fi
-	$(shell command -v make) check-ai-serial-order CONTRACT="$(CONTRACT)"
-	$(shell command -v make) check-ai-budget-impact CONTRACT="$(CONTRACT)"
+	$(AI_NESTED_MAKE) check-ai-serial-order CONTRACT="$(CONTRACT)"
+	$(AI_NESTED_MAKE) check-ai-budget-impact CONTRACT="$(CONTRACT)"
 
 ai-prepare-hosted-verification-snapshot:
 	@test -n "$(CONTRACT)" || (echo 'CONTRACT=<active-contract.json> is required' >&2; exit 2)
@@ -582,28 +585,28 @@ ai-close-work-item:
 
 check-ai:
 	@if [ -n "$(CONTRACT)" ]; then \
-		"$${MAKE:-make}" check-ai-contract CONTRACT="$(CONTRACT)" && \
-		"$${MAKE:-make}" check-ai-serial-order CONTRACT="$(CONTRACT)" && \
-		"$${MAKE:-make}" check-ai-budget-impact CONTRACT="$(CONTRACT)" && \
-		"$${MAKE:-make}" check-ai-scope CONTRACT="$(CONTRACT)" && \
-		"$${MAKE:-make}" check-ai-guards CONTRACT="$(CONTRACT)" && \
-		"$${MAKE:-make}" check-ai-agent-risk CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
-		"$${MAKE:-make}" check-ai-review-policy SUMMARY="$(SUMMARY)" && \
-		"$${MAKE:-make}" check-ai-backtrack && \
-		"$${MAKE:-make}" check-ai-coverage-guard && \
-		"$${MAKE:-make}" check-ai-scenario-coverage CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
-		"$${MAKE:-make}" check-ai-guidelines CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
-		"$${MAKE:-make}" check-ai-change-summary SUMMARY="$(SUMMARY)" CONTRACT="$(CONTRACT)" && \
-		"$${MAKE:-make}" generate-cockpit-status CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
-		"$${MAKE:-make}" check-ai-status CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
-		"$${MAKE:-make}" check-ai-status-consistency; \
+		$(AI_NESTED_MAKE) check-ai-contract CONTRACT="$(CONTRACT)" && \
+		$(AI_NESTED_MAKE) check-ai-serial-order CONTRACT="$(CONTRACT)" && \
+		$(AI_NESTED_MAKE) check-ai-budget-impact CONTRACT="$(CONTRACT)" && \
+		$(AI_NESTED_MAKE) check-ai-scope CONTRACT="$(CONTRACT)" && \
+		$(AI_NESTED_MAKE) check-ai-guards CONTRACT="$(CONTRACT)" && \
+		$(AI_NESTED_MAKE) check-ai-agent-risk CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
+		$(AI_NESTED_MAKE) check-ai-review-policy SUMMARY="$(SUMMARY)" && \
+		$(AI_NESTED_MAKE) check-ai-backtrack && \
+		$(AI_NESTED_MAKE) check-ai-coverage-guard && \
+		$(AI_NESTED_MAKE) check-ai-scenario-coverage CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
+		$(AI_NESTED_MAKE) check-ai-guidelines CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
+		$(AI_NESTED_MAKE) check-ai-change-summary SUMMARY="$(SUMMARY)" CONTRACT="$(CONTRACT)" && \
+		$(AI_NESTED_MAKE) generate-cockpit-status CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
+		$(AI_NESTED_MAKE) check-ai-status CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" && \
+		$(AI_NESTED_MAKE) check-ai-status-consistency; \
 	else \
-		"$${MAKE:-make}" check-ai-status-consistency && \
-		"$${MAKE:-make}" check-ai-backtrack && \
-		"$${MAKE:-make}" check-ai-coverage-guard && \
-		"$${MAKE:-make}" check-ai-diff-ownership && \
+		$(AI_NESTED_MAKE) check-ai-status-consistency && \
+		$(AI_NESTED_MAKE) check-ai-backtrack && \
+		$(AI_NESTED_MAKE) check-ai-coverage-guard && \
+		$(AI_NESTED_MAKE) check-ai-diff-ownership && \
 		test -n "$(AI_BASE_COMMIT)" && \
-		"$${MAKE:-make}" check-ai-pr AI_BASE_COMMIT="$(AI_BASE_COMMIT)"; \
+		$(AI_NESTED_MAKE) check-ai-pr AI_BASE_COMMIT="$(AI_BASE_COMMIT)"; \
 	fi
 
 check-ai-pr-core:
@@ -611,11 +614,11 @@ check-ai-pr-core:
 
 check-ai-pr:
 	@set -e; \
-		$(shell command -v make) project-format-check; \
+		$(AI_NESTED_MAKE) project-format-check; \
 		if test -f scripts/check_governance_complexity.py && test -f .ai/guards/governance_complexity_policy.yaml; then \
 			$(AI_PYTHON) scripts/check_governance_complexity.py; \
 		fi; \
-		$(shell command -v make) check-ai-pr-core AI_BASE_COMMIT="$(AI_BASE_COMMIT)"
+		$(AI_NESTED_MAKE) check-ai-pr-core AI_BASE_COMMIT="$(AI_BASE_COMMIT)"
 
 ai-finish:
 	$(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)"

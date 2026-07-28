@@ -1,0 +1,304 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe152-nested-make-entrypoint-propagation-20260729",
+  "mode": "code",
+  "title": "Propagate explicit Make entrypoint through nested lifecycle checks",
+  "baseCommit": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Complete the recorded release-blocking RFE-ISSUE-152 after RFE-151 and RFE-153 and before RFE-ISSUE-082, Japanese assessment, documentation alignment, cleanup, and release. The WI-10 installation path must remain simple for non-programmers: direct targets may use an explicit Makefile.ai entrypoint, while composite lifecycle targets must no longer lose that selected entrypoint in nested Make execution. Implement a permanent process fix, not a temporary documentation workaround; prove it in an adopter fixture whose root Makefile does not include Makefile.ai. The user authorized continuous execution through Contract, implementation, verification, PR, Hosted CI, merge, ai-close-work-item, and branch cleanup.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-to-2026-07-29-ordered-remediation-and-release",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:rfe152-user-authorized-release-blocking-corrective"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Propagate one validated repository-local Make entrypoint through every nested composite lifecycle operation.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scope": [
+    ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.contract.json",
+    ".ai/work-items/active/rfe152-nested-make-entrypoint-propagation-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_common.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_start.py",
+    "scripts/ai_onboard.py",
+    "scripts/ai_prepare_hosted_verification.py",
+    "scripts/check_docs_metadata.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_core_gates.py",
+    "tests/test_makefile.py",
+    "tests/test_ai_onboard.py",
+    "tests/test_bandit_baseline.py",
+    "tests/test_hosted_verification.py",
+    "tests/test_hosted_verification_snapshot.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_docs_metadata.py",
+    "docs/getting-started/installation.md",
+    "docs/getting-started/installation.zh-CN.md",
+    "docs/getting-started/installation.ja.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/specs/2026-07-29-rfe152-nested-make-entrypoint-design.md",
+    "docs/superpowers/plans/2026-07-29-rfe152-nested-make-entrypoint.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Requiring adopter projects to overwrite an existing root Makefile or silently install an include directive.",
+    "Allowing arbitrary external Makefiles or shell fragments to become nested execution authority.",
+    "Changing project quality commands, quality thresholds, or release evidence semantics.",
+    "Implementing RFE-ISSUE-082 or publishing a release."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "The composite lifecycle runner currently renders and launches every nested check, stabilization command, preflight, and archive operation with a fresh plain make argv."
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "The shared command registry parser and subprocess environment sanitizer are the narrow authority boundary for a validated selected Make entrypoint."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "The adopter-distributed entrypoint must identify whether the invocation selected the root Makefile or explicit Makefile.ai without requiring a root include."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Existing adopter lifecycle coverage always writes a root Makefile that includes Makefile.ai and therefore cannot reproduce RFE-152."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi10-platform-table-rendering-corrective-20260728.summary.json",
+      "reason": "Immutable WI-10 evidence records RFE-ISSUE-152 as a release-blocking gap and distinguishes direct from composite Make targets."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative task order and root-cause record require this corrective before RFE-ISSUE-082 and release."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_boundary",
+      "nested_execution",
+      "adopter_compatibility"
+    ],
+    "reason": "A lost or forged nested Make entrypoint can make lifecycle gates unavailable, execute a different project Makefile, or produce misleading verification evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized this release-blocking permanent process correction and continuous completion of its full governed lifecycle."
+  },
+  "preReviewWarnings": [
+    "Review the entrypoint trust boundary and reject path traversal, missing files, unsupported basenames, and conflicting explicit -f selections.",
+    "Review direct and composite adopter behavior when the root Makefile does not include Makefile.ai.",
+    "Review that persisted verification commands remain canonical and machine-independent while actual subprocess argv uses the selected entrypoint."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "An invocation through make -f Makefile.ai exports one repository-relative selected entrypoint, and normal root-Makefile invocation selects the root Makefile; no machine-specific path is persisted in governance evidence.",
+    "All nested Make commands launched by ai-finish, including Preflight, registered checks, stabilization, final Status validation, and archive, execute through the same validated selected entrypoint.",
+    "Shared nested Make callers used by start, onboarding, and hosted-verification preparation use the same command constructor instead of reintroducing plain-make assumptions.",
+    "The selected entrypoint is accepted only when it is an existing repository-local standard Makefile, GNUmakefile, makefile, or Makefile.ai path; absolute paths outside the repository, traversal, missing files, unsupported names, and conflicting explicit -f/--file selections fail closed.",
+    "An adopter fixture with no root Makefile include can run a direct target and complete the composite ai-finish lifecycle through make -f Makefile.ai, including archive creation.",
+    "The same adopter fixture proves a required nested check failure remains visible and retryable rather than being bypassed by entrypoint propagation.",
+    "Existing included-Makefile, normal template-maintenance, nested environment sanitization, canonical Summary command validation, and installed-runtime parity regressions remain passing.",
+    "Bidirectional traceability binds RFE-ISSUE-152 to this Contract, implementation, negative tests, acceptance evidence, and full PR lifecycle.",
+    "Focused red-green regressions, all Contract checks, full quality, archive, aggregate PR validation, Hosted CI, merge, ai-close-work-item, branch cleanup, and synchronized clean main complete before RFE-ISSUE-082 starts."
+  ],
+  "guidelines": [
+    "Use red-green-refactor TDD and reproduce the no-include adopter failure before implementation.",
+    "Propagate one validated argv boundary; do not encode shell command strings or trust ambient MAKEFLAGS to preserve -f.",
+    "Keep canonical registered check/evidence commands repository-relative and machine-independent.",
+    "Fail closed on conflicting or untrusted entrypoint authority rather than silently falling back to plain make.",
+    "Keep the root Makefile and distributed templates/make/Makefile.ai behavior aligned."
+  ],
+  "intent": {
+    "problem": "WI-10 can truthfully recommend make -f Makefile.ai for direct targets, but ai-finish and other composite lifecycle paths launch nested plain make commands. In an adopter repository that intentionally did not modify its root Makefile, those nested targets are unavailable, so installation appears to work until the governance lifecycle fails.",
+    "constraints": [
+      "Do not require or silently write an include into the adopter root Makefile.",
+      "Do not derive execution authority from an arbitrary absolute path or unparsed shell string.",
+      "Preserve existing verification command identity and Summary schema compatibility.",
+      "Complete this corrective before RFE-ISSUE-082 and release."
+    ],
+    "rationale": "Exporting the selected repository-local Make entrypoint at the Make boundary and consuming it through one shared argv constructor lets every nested lifecycle operation execute the same installed surface while retaining fail-closed validation and simple prompt-first installation guidance."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "An adopter with a root Makefile that does not include Makefile.ai invokes a direct target with make -f Makefile.ai.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_finish_e2e.py::test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry",
+        "tests/test_installed_runtime_parity.py::test_installed_adopter_contains_runtime_scripts_and_targets"
+      ],
+      "expected": "The direct target succeeds and records Makefile.ai as the selected repository-local entrypoint for nested execution.",
+      "verificationPlan": "Add an installed adopter fixture without root integration and assert a direct dry-run/diagnostic target succeeds through explicit -f."
+    },
+    {
+      "scenario": "The same no-include adopter invokes ai-finish through make -f Makefile.ai.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_finish_e2e.py::test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry",
+        "tests/test_start_and_archive.py::test_start_nested_make_uses_selected_explicit_entrypoint"
+      ],
+      "expected": "Preflight, every registered check, stabilization, final Status checks, and archive all resolve through Makefile.ai and the Work Item archives successfully.",
+      "verificationPlan": "Create a complete Work Item in the no-include fixture, run the real composite target, and inspect successful archive and nested command evidence."
+    },
+    {
+      "scenario": "A required nested check fails in the no-include adopter and is retried.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_finish_e2e.py::test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry"
+      ],
+      "expected": "ai-finish fails closed while preserving active evidence; after correcting the check, the same explicit entrypoint retry succeeds and archives.",
+      "verificationPlan": "Adapt the existing required-failure/retry e2e to remove the root include and invoke both attempts with -f Makefile.ai."
+    },
+    {
+      "scenario": "The selected entrypoint is outside the repository, traverses outside it, is missing, has an unsupported name, or conflicts with an explicit nested -f.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_nested_make_command_rejects_untrusted_or_conflicting_entrypoint"
+      ],
+      "expected": "The shared constructor rejects the command before subprocess execution and never silently falls back to plain make.",
+      "verificationPlan": "Add table-driven unit regressions for each malformed or conflicting authority form."
+    },
+    {
+      "scenario": "AI Cockpit is invoked from a normal root Makefile that includes Makefile.ai or from the template repository root Makefile.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_finish_e2e.py::test_required_failure_keeps_active_and_retry_archives",
+        "tests/test_core_gates.py::test_nested_make_command_supports_an_including_gnumakefile",
+        "tests/test_makefile.py::test_make_entrypoint_is_exported_and_all_recursive_calls_use_it"
+      ],
+      "expected": "Nested commands continue through the root Makefile, existing project overrides are preserved, and canonical evidence commands remain unchanged.",
+      "verificationPlan": "Retain existing lifecycle tests, add argv assertions for root selection, and run full quality."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized permanent workflow fixes, tests, documentation alignment, PR/merge/closure, and cleanup before publication."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 655
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe152-nested-make-entrypoint-propagation-20260729.json",
+    "baseCommit": "30d4f4e56ed1a8f5f755d7b572e27014fe13d3fe",
+    "initialScopeDigest": "5f3bb29747b3373b751d76df2f48354a882c28d15aa30041cb6f0d6f621034ee",
+    "contractSkeletonDigest": "548c63b0d558e1bc8e77e969561b7d803ec274395178c07eeb35f195ac0652dc"
+  }
+}

@@ -211,9 +211,12 @@ def test_default_quality_runner_binds_the_current_session(tmp_path, monkeypatch)
     }
     for key, value in inherited.items():
         monkeypatch.setenv(key, value)
+    (tmp_path / "Makefile.ai").write_text("quality:\n\t@true\n", encoding="utf-8")
+    monkeypatch.setenv("AI_COCKPIT_MAKE_ENTRYPOINT", "Makefile.ai")
     captured = {}
 
-    def fake_run(*_args, **kwargs):
+    def fake_run(command, **kwargs):
+        captured["command"] = command
         captured.update(kwargs["env"])
         return SimpleNamespace(returncode=0)
 
@@ -224,10 +227,12 @@ def test_default_quality_runner_binds_the_current_session(tmp_path, monkeypatch)
     assert result["sessionId"] == session_id
     assert result["decision"] == "PASS"
     assert result["summaryDigest"].startswith("sha256:")
+    assert captured["command"] == ["make", "-f", "Makefile.ai", "quality"]
     assert inherited.keys().isdisjoint(captured)
 
 
 def test_default_quality_runner_rejects_failed_or_unbound_quality(tmp_path, monkeypatch):
+    monkeypatch.delenv("AI_COCKPIT_MAKE_ENTRYPOINT", raising=False)
     monkeypatch.setattr(
         hosted.subprocess,
         "run",

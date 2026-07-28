@@ -71,6 +71,27 @@ def test_start_preflight_can_skip_contract_validation_for_new_skeleton(monkeypat
     assert observed["command"][-1] == "AI_PREFLIGHT_VALIDATE_CONTRACT=false"
 
 
+def test_start_nested_make_uses_selected_explicit_entrypoint(tmp_path, monkeypatch):
+    (tmp_path / "Makefile.ai").write_text("ai-preflight:\n\t@true\n", encoding="utf-8")
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setenv("AI_COCKPIT_MAKE_ENTRYPOINT", "Makefile.ai")
+    observed = {}
+
+    class Result:
+        returncode = 0
+        stdout = "ready"
+        stderr = ""
+
+    def fake_run(command, **_kwargs):
+        observed["command"] = command
+        return Result()
+
+    monkeypatch.setattr(ai_start.subprocess, "run", fake_run)
+
+    assert ai_start.run_make("ai-preflight") == (0, "ready")
+    assert observed["command"] == ["make", "-f", "Makefile.ai", "ai-preflight"]
+
+
 def test_next_available_task_id_resolves_archive_collision_before_creation():
     assert (
         ai_start.next_available_task_id(

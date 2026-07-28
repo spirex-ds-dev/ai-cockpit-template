@@ -187,7 +187,9 @@ RELEASE_FALLBACK_APPROVAL = (
     "<!-- release-fallback-approval: failed-newer-evidence,owner-review,reverify -->"
 )
 MAKE_ENTRYPOINT_BOUNDARY = "<!-- make-entrypoint-boundary: included-makefile-or-explicit-f -->"
-MAKE_COMPOSITE_BOUNDARY = "<!-- make-composite-boundary: integration-required-before-ai-finish -->"
+MAKE_COMPOSITE_BOUNDARY = (
+    "<!-- make-composite-boundary: selected-entrypoint-propagates-through-ai-finish -->"
+)
 CALIBRATION_CONFIRMATION_BOUNDARY = (
     "<!-- calibration-confirmation-boundary: phase-records,external-actor-identity -->"
 )
@@ -950,7 +952,7 @@ def beginner_installation_errors(root: Path) -> list[str]:
                 )
             if MAKE_COMPOSITE_BOUNDARY not in text:
                 errors.append(
-                    f"{installation_relative}: missing composite Make integration boundary"
+                    f"{installation_relative}: missing composite Make entrypoint propagation boundary"
                 )
             if TAG_PINNED_RELEASE_METADATA_TEMPLATE not in text:
                 errors.append(

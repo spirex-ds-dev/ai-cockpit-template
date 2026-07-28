@@ -26,6 +26,8 @@ MAKE_OVERRIDE_BLOCKLIST = {
     "TITLE",
     "MODE",
 }
+MAKE_ENTRYPOINT_ENV = "AI_COCKPIT_MAKE_ENTRYPOINT"
+SUPPORTED_MAKEFILE_NAMES = {"GNUmakefile", "makefile", "Makefile", "Makefile.ai"}
 
 
 def _clean_make_overrides(value: str) -> str:
@@ -59,6 +61,70 @@ def clean_git_environment() -> dict[str, str]:
             environment["MAKEOVERRIDES"] = overrides
     environment["PYTHONDONTWRITEBYTECODE"] = "1"
     return environment
+
+
+def _validated_make_entrypoint(value: str, *, root: Path) -> str:
+    """Return one normalized repository-local Make entrypoint or fail closed."""
+    raw = value.strip()
+    path = Path(raw)
+    if not raw or path.is_absolute() or ".." in path.parts:
+        raise ValueError("Make entrypoint must be a repository-relative path")
+    if path.name not in SUPPORTED_MAKEFILE_NAMES:
+        raise ValueError("Make entrypoint must name a supported Makefile or Makefile.ai")
+    root_resolved = root.resolve()
+    candidate = (root_resolved / path).resolve()
+    try:
+        relative = candidate.relative_to(root_resolved)
+    except ValueError as exc:
+        raise ValueError("Make entrypoint must remain inside the repository") from exc
+    if not candidate.is_file():
+        raise ValueError(f"Make entrypoint does not exist: {relative.as_posix()}")
+    return relative.as_posix()
+
+
+def _declared_makefiles(command: list[str]) -> list[str]:
+    values: list[str] = []
+    index = 1
+    while index < len(command):
+        token = command[index]
+        if token in {"-f", "--file", "--makefile"}:
+            if index + 1 >= len(command):
+                raise ValueError("Make entrypoint option requires a path")
+            values.append(command[index + 1])
+            index += 2
+            continue
+        if token.startswith("--file=") or token.startswith("--makefile="):
+            values.append(token.split("=", 1)[1])
+        elif token.startswith("-f") and token != "-f":  # nosec B105 - Make option
+            values.append(token[2:])
+        index += 1
+    return values
+
+
+def nested_make_command(
+    command: list[str],
+    *,
+    root: Path = PROJECT_ROOT,
+    environment: dict[str, str] | None = None,
+) -> list[str]:
+    """Apply the selected Makefile to a nested Make argv without using a shell."""
+    argv = list(command)
+    if not argv or Path(argv[0]).name not in {"make", "gmake"}:
+        return argv
+    source_environment = os.environ if environment is None else environment
+    selected_raw = source_environment.get(MAKE_ENTRYPOINT_ENV)
+    if not selected_raw:
+        return argv
+    selected = _validated_make_entrypoint(selected_raw, root=root)
+    declared = _declared_makefiles(argv)
+    if declared:
+        normalized = [_validated_make_entrypoint(value, root=root) for value in declared]
+        if any(value != selected for value in normalized):
+            raise ValueError(
+                "Make entrypoint conflicts with an explicit nested -f/--file selection"
+            )
+        return argv
+    return [argv[0], "-f", selected, *argv[1:]]
 
 
 def _reject_duplicate_keys(path: Path) -> Any:

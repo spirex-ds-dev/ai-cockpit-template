@@ -219,12 +219,13 @@ Wizard は Make integration を既定で無効にします。以後の `make <ta
 エージェントが `make -f Makefile.ai <target>` を使い、実際の入口を表示します。
 初心者が Makefile を編集したり command を手入力したりする必要はありません。
 
-<!-- make-composite-boundary: integration-required-before-ai-finish -->
-一つの target を直接実行する場合は明示的な `Makefile.ai` 入口を使えます。ただし
-`ai-finish` など複数処理を含む lifecycle target の前には、子処理が現在も通常の
-Make を呼ぶため、エージェントが `include Makefile.ai` を別途 review・導入する
-必要があります。未導入または競合時は複合 target の前で STOP し、build/
-repository 担当者へ連絡します。
+<!-- make-composite-boundary: selected-entrypoint-propagates-through-ai-finish -->
+直接 target と `ai-start`、`ai-finish` などの複合 lifecycle target は、どちらも
+明示的な `make -f Makefile.ai <target>` 入口を使えます。AI Cockpit は選択された
+repository 内の対応 Makefile を検証し、すべてのネストした Make step へ同じ入口を
+伝播します。root Make integration は引き続き任意です。選択ファイルが存在しない、
+repository 外にある、未対応名である、または別の `-f` 選択と競合する場合は STOP
+し、build/repository 担当者へ連絡します。
 
 モバイル・Java プロジェクトは同じ言語の例を先に開きます:
 [iOS](examples/ios.ja.md)、[Android](examples/android.ja.md)、

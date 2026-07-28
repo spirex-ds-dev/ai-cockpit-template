@@ -202,11 +202,12 @@ Wizard 默认不接入 Make。因此下文 `make <target>` 只有在 `include Ma
 经过单独审核并安装后才成立；否则代理必须使用 `make -f Makefile.ai <target>`。
 代理要显示实际使用的入口；初学者无需自行编辑 Makefile 或输入命令。
 
-<!-- make-composite-boundary: integration-required-before-ai-finish -->
-单一直接 target 可以使用明确的 `Makefile.ai` 入口。但是，在 `ai-finish` 等复合
-lifecycle target 之前，代理必须另行审核并安装 `include Makefile.ai`，因为其子步骤
-目前仍调用普通 Make。接入缺失或冲突时，在复合 target 前 STOP，并联系 build/
-repository owner。
+<!-- make-composite-boundary: selected-entrypoint-propagates-through-ai-finish -->
+直接 target 和 `ai-start`、`ai-finish` 等复合 lifecycle target 都可以使用明确的
+`make -f Makefile.ai <target>` 入口。AI Cockpit 会验证所选入口是仓库内受支持的
+Makefile，并把同一入口传播到每一个嵌套 Make 步骤；root Make integration 仍是
+可选项。如果所选文件缺失、位于仓库外、名称不受支持，或与另一个 `-f` 选择冲突，
+立即 STOP，并联系 build/repository owner。
 
 移动/Java 工程先看同语言实例：[iOS](examples/ios.zh-CN.md)、
 [Android](examples/android.zh-CN.md)、[Java](examples/java.zh-CN.md)。

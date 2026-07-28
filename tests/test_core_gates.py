@@ -20,6 +20,53 @@ def test_governance_entrypoints_can_clean_ambient_git_environment():
     assert all(not key.startswith("GIT_") for key in ai_common.clean_git_environment())
 
 
+def test_nested_make_command_uses_validated_repository_entrypoint(tmp_path):
+    (tmp_path / "Makefile.ai").write_text("target:\n\t@true\n", encoding="utf-8")
+    environment = {"AI_COCKPIT_MAKE_ENTRYPOINT": "Makefile.ai"}
+
+    assert ai_common.nested_make_command(
+        ["make", "target"], root=tmp_path, environment=environment
+    ) == ["make", "-f", "Makefile.ai", "target"]
+    assert ai_common.nested_make_command(
+        ["make", "-f", "Makefile.ai", "target"], root=tmp_path, environment=environment
+    ) == ["make", "-f", "Makefile.ai", "target"]
+
+
+def test_nested_make_command_supports_an_including_gnumakefile(tmp_path):
+    (tmp_path / "GNUmakefile").write_text("include Makefile.ai\n", encoding="utf-8")
+
+    assert ai_common.nested_make_command(
+        ["make", "target"],
+        root=tmp_path,
+        environment={"AI_COCKPIT_MAKE_ENTRYPOINT": "GNUmakefile"},
+    ) == ["make", "-f", "GNUmakefile", "target"]
+
+
+@pytest.mark.parametrize(
+    ("entrypoint", "command"),
+    [
+        ("../Makefile.ai", ["make", "target"]),
+        ("/tmp/Makefile.ai", ["make", "target"]),
+        ("missing/Makefile.ai", ["make", "target"]),
+        ("project.mk", ["make", "target"]),
+        ("Makefile.ai", ["make", "-f", "Makefile", "target"]),
+        ("Makefile.ai", ["make", "--file=Makefile", "target"]),
+    ],
+)
+def test_nested_make_command_rejects_untrusted_or_conflicting_entrypoint(
+    tmp_path, entrypoint, command
+):
+    (tmp_path / "Makefile.ai").write_text("target:\n\t@true\n", encoding="utf-8")
+    (tmp_path / "Makefile").write_text("target:\n\t@true\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="Make entrypoint"):
+        ai_common.nested_make_command(
+            command,
+            root=tmp_path,
+            environment={"AI_COCKPIT_MAKE_ENTRYPOINT": entrypoint},
+        )
+
+
 def test_finish_run_merges_stabilization_environment(monkeypatch):
     captured = {}
 
@@ -29,6 +76,7 @@ def test_finish_run_merges_stabilization_environment(monkeypatch):
         return SimpleNamespace(returncode=0, stdout="passed\n")
 
     monkeypatch.setattr(ai_finish.subprocess, "run", fake_run)
+    monkeypatch.delenv("AI_COCKPIT_MAKE_ENTRYPOINT", raising=False)
     code, _, output = ai_finish.run(
         ["make", "check-ai-agent-risk"], extra_env={"AI_FINISH_STABILIZING": "1"}
     )
