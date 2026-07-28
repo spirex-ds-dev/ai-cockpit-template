@@ -57,7 +57,29 @@ FINDINGS = {
         "correctiveWorkItem": "japanese-uninstall-documentation-corrective-20260729",
         "summary": "The Japanese engineer path lacks an actionable uninstall procedure.",
     },
+    "JA-UNINSTALL-RUNTIME-001": {
+        "correctiveWorkItem": "installed-detached-uninstaller-runtime-corrective-20260729",
+        "summary": (
+            "The installed runtime has a proposal/state-output surface but no public uninstall "
+            "facts builder, proposal-digest binding, or installed detached removal entrypoint "
+            "that performs and verifies filesystem removal."
+        ),
+    },
 }
+
+JAPANESE_UNINSTALL_MARKERS = (
+    "<!-- japanese-uninstall: entry -->",
+    "<!-- japanese-uninstall: version-neutral -->",
+    "<!-- japanese-uninstall: read-only-facts -->",
+    "<!-- japanese-uninstall: mode-choice -->",
+    "<!-- japanese-uninstall: proposal-runtime-zero-write -->",
+    "<!-- japanese-uninstall: preserve-evidence-default -->",
+    "<!-- japanese-uninstall: bounded-confirmation -->",
+    "<!-- japanese-uninstall: detached-execution -->",
+    "<!-- japanese-uninstall: receipt-verification -->",
+    "<!-- japanese-uninstall: stop-recovery -->",
+    "<!-- japanese-uninstall: purge-separate-confirmation -->",
+)
 
 
 def _digest(value: Any) -> str:
@@ -232,13 +254,32 @@ def _lifecycle_fixture_exists() -> bool:
 
 
 def _uninstall_path_exists() -> bool:
-    terms = ("アンインストール", "uninstall")
-    documents = (
-        _read("docs/getting-started/installation.ja.md"),
-        _read("docs/reference/upgrade.ja.md"),
-        _read("README.ja.md"),
+    installation = _read("docs/getting-started/installation.ja.md")
+    positions = [installation.find(marker) for marker in JAPANESE_UNINSTALL_MARKERS]
+    return (
+        "アンインストール" in installation
+        and all(position >= 0 for position in positions)
+        and positions == sorted(positions)
+        and "installation.ja.md#15-ai-cockpit-を無効化またはアンインストールする"
+        in _read("docs/reference/upgrade.ja.md")
+        and "installation.ja.md#15-ai-cockpit-を無効化またはアンインストールする"
+        in _read("docs/reference/troubleshooting.ja.md")
     )
-    return any(any(term in text for term in terms) for text in documents)
+
+
+def _public_uninstall_executor_exists() -> bool:
+    makefile = _read("templates/make/Makefile.ai")
+    executor = _read("scripts/ai_detached_uninstaller.py")
+    catalog = _read("scripts/ai_installer_catalog.json")
+    return (
+        "ai-cockpit-uninstall-facts:" in makefile
+        and "ai-cockpit-uninstall-execute:" in makefile
+        and "scripts/ai_detached_uninstaller.py" in makefile
+        and '"ai_detached_uninstaller.py"' in catalog
+        and "def main(" in executor
+        and "proposalDigest" in executor
+        and "runtimeRemovalVerified" in executor
+    )
 
 
 def _documents_present() -> tuple[bool, list[str]]:
@@ -360,10 +401,10 @@ def evaluate() -> dict[str, Any]:
         ),
         _case(
             "JA-LIFECYCLE-001",
-            "Executable Japanese adopter lifecycle",
+            "Executable Japanese adopter lifecycle through uninstall proposal and model boundary",
             "pass" if _lifecycle_fixture_exists() else "block",
-            "Isolated Japanese adopter fixture executes supported installation, calibration, "
-            "recovery, and evidence-preserving removal authorities"
+            "Isolated Japanese adopter fixture executes installation, calibration, recovery, "
+            "uninstall proposal, and detached-removal model boundaries"
             if _lifecycle_fixture_exists()
             else FINDINGS["JA-LIFECYCLE-001"]["summary"],
             source=[
@@ -377,7 +418,8 @@ def evaluate() -> dict[str, Any]:
             commands=["PYTHONPATH=. .venv/bin/pytest -q tests/test_japanese_adopter_lifecycle.py"],
             limitation=(
                 "The fixture proves bounded repository behavior and Japanese evidence handling; "
-                "it does not prove general fluency, provider operations, or real adopter platform quality."
+                "it does not prove filesystem removal, general fluency, provider operations, "
+                "or real adopter platform quality."
             ),
             finding_id=None if _lifecycle_fixture_exists() else "JA-LIFECYCLE-001",
         ),
@@ -396,6 +438,35 @@ def evaluate() -> dict[str, Any]:
             commands=["make check-docs-metadata"],
             limitation="Structure and terminology checks do not replace native technical editing.",
             finding_id=None if docs_pass and _uninstall_path_exists() else "JA-DOC-001",
+        ),
+        _case(
+            "JA-UNINSTALL-RUNTIME-001",
+            "Installed public detached uninstall execution",
+            "pass" if _public_uninstall_executor_exists() else "block",
+            "The installed repository exposes a public detached removal entrypoint"
+            if _public_uninstall_executor_exists()
+            else FINDINGS["JA-UNINSTALL-RUNTIME-001"]["summary"],
+            source=[
+                "templates/make/Makefile.ai",
+                "scripts/ai_uninstall_proposal.py",
+                "scripts/ai_detached_uninstaller.py",
+                "scripts/ai_installer_catalog.json",
+                "docs/reference/installed-lifecycle.md",
+            ],
+            tests=[
+                "tests/test_japanese_capability.py",
+                "tests/test_japanese_adopter_lifecycle.py",
+            ],
+            commands=[
+                "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_japanese_adopter_lifecycle.py"
+            ],
+            limitation=(
+                "A proposal or in-memory model is not filesystem-removal evidence; "
+                "provider permissions and platform locks remain adopter responsibilities."
+            ),
+            finding_id=(
+                None if _public_uninstall_executor_exists() else "JA-UNINSTALL-RUNTIME-001"
+            ),
         ),
         _case(
             "JA-DOC-STRUCTURE-001",

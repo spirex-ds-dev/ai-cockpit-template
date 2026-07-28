@@ -46,6 +46,10 @@ def test_remaining_review_gaps_and_completed_evidence_are_explicit() -> None:
     assert capabilities["bootstrap_wizard_lifecycle"]["status"] == "implemented"
     assert capabilities["ownership_manifest_and_managed_regions"]["status"] == "adopter_installed"
     assert capabilities["governed_update_and_uninstall"]["status"] == "adopter_installed"
+    uninstall = capabilities["governed_update_and_uninstall"]
+    assert "proposal" in uninstall["claim"]
+    assert "public detached" in uninstall["limitations"]
+    assert "not installed" in uninstall["limitations"]
 
 
 def test_matrix_document_points_to_machine_readable_source_and_plan() -> None:

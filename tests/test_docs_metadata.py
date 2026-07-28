@@ -9,6 +9,7 @@ from check_docs_metadata import (
     command_evidence_errors,
     documentation_fact_errors,
     historical_context_errors,
+    japanese_uninstall_errors,
     multilingual_layer_errors,
 )
 
@@ -92,6 +93,22 @@ def test_wi10_beginner_check_rejects_missing_prompt_boundary_or_command_explanat
         "docs/getting-started/installation.ja.md: retained commands require purpose, success, "
         "and failure guidance"
     ) in errors
+
+
+def test_japanese_uninstall_check_rejects_keyword_only_or_missing_actionable_step(tmp_path):
+    copy_documentation(tmp_path)
+    installation = tmp_path / "docs/getting-started/installation.ja.md"
+    installation.write_text(
+        "# アンインストール\nアンインストールできます。\n",
+        encoding="utf-8",
+    )
+
+    errors = japanese_uninstall_errors(tmp_path)
+    assert any("missing actionable uninstall step" in error for error in errors)
+
+
+def test_japanese_uninstall_check_accepts_repository_procedure():
+    assert japanese_uninstall_errors(ROOT) == []
 
 
 def test_wi10_beginner_check_rejects_moving_or_hardcoded_release_metadata(tmp_path):

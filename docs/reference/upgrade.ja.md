@@ -41,6 +41,11 @@ include Makefile.ai
 
 インストーラーオプションは [配布](distribution.ja.md)、失敗からの復旧は [トラブルシューティング](troubleshooting.ja.md) を参照してください。
 
+更新せず無効化または削除したい場合は、コマンドを推測せず、
+[日本語インストール手順の「AI Cockpit を無効化またはアンインストールする」](../getting-started/installation.ja.md#15-ai-cockpit-を無効化またはアンインストールする)
+を使ってください。そこでは読み取り専用の事実確認、証拠保持、STOP 条件、
+人の確認を順番に扱います。
+
 ## Cursor rule の既定値
 
 新規導入の `.cursor/rules/ai-cockpit.mdc` は `alwaysApply: false` です。読み取り専用調査にも Work Item を強制したいチームは、ローカルの影響を確認したうえで Cursor の **Always Apply** を有効にするか、`alwaysApply: true` を設定します。既存導入では upgrade または管理対象 `.cursor` ツリーの merge まで現在の rule が保持されます。

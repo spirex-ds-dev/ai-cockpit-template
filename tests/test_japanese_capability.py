@@ -12,7 +12,7 @@ from ai_japanese_capability import (
 
 
 EXPECTED_FINDINGS = {
-    "JA-DOC-001": "japanese-uninstall-documentation-corrective-20260729",
+    "JA-UNINSTALL-RUNTIME-001": "installed-detached-uninstaller-runtime-corrective-20260729",
 }
 
 
@@ -132,6 +132,77 @@ def test_lifecycle_capability_requires_named_install_calibration_recovery_and_re
     )
 
     assert ai_japanese_capability._lifecycle_fixture_exists() is True
+
+
+def test_uninstall_capability_rejects_keyword_only_and_requires_complete_actionable_path(
+    tmp_path, monkeypatch
+):
+    installation = tmp_path / "docs/getting-started/installation.ja.md"
+    installation.parent.mkdir(parents=True)
+    installation.write_text("# アンインストール\n", encoding="utf-8")
+    monkeypatch.setattr(ai_japanese_capability, "ROOT", tmp_path)
+
+    assert ai_japanese_capability._uninstall_path_exists() is False
+
+    installation.write_text(
+        "# アンインストール\n"
+        + "\n".join(ai_japanese_capability.JAPANESE_UNINSTALL_MARKERS)
+        + "\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "docs/reference").mkdir()
+    route = "installation.ja.md#15-ai-cockpit-を無効化またはアンインストールする"
+    (tmp_path / "docs/reference/upgrade.ja.md").write_text(route, encoding="utf-8")
+    (tmp_path / "docs/reference/troubleshooting.ja.md").write_text(route, encoding="utf-8")
+
+    assert ai_japanese_capability._uninstall_path_exists() is True
+
+
+def test_uninstall_capability_rejects_each_missing_actionable_step(tmp_path, monkeypatch):
+    installation = tmp_path / "docs/getting-started/installation.ja.md"
+    installation.parent.mkdir(parents=True)
+    complete = "# アンインストール\n" + "\n".join(ai_japanese_capability.JAPANESE_UNINSTALL_MARKERS)
+    (tmp_path / "docs/reference").mkdir()
+    route = "installation.ja.md#15-ai-cockpit-を無効化またはアンインストールする"
+    (tmp_path / "docs/reference/upgrade.ja.md").write_text(route, encoding="utf-8")
+    (tmp_path / "docs/reference/troubleshooting.ja.md").write_text(route, encoding="utf-8")
+    monkeypatch.setattr(ai_japanese_capability, "ROOT", tmp_path)
+
+    for marker in ai_japanese_capability.JAPANESE_UNINSTALL_MARKERS:
+        installation.write_text(complete.replace(marker, "", 1), encoding="utf-8")
+        assert ai_japanese_capability._uninstall_path_exists() is False, marker
+
+
+def test_uninstall_capability_rejects_out_of_order_actionable_steps(tmp_path, monkeypatch):
+    installation = tmp_path / "docs/getting-started/installation.ja.md"
+    installation.parent.mkdir(parents=True)
+    installation.write_text(
+        "# アンインストール\n"
+        + "\n".join(reversed(ai_japanese_capability.JAPANESE_UNINSTALL_MARKERS)),
+        encoding="utf-8",
+    )
+    (tmp_path / "docs/reference").mkdir()
+    route = "installation.ja.md#15-ai-cockpit-を無効化またはアンインストールする"
+    (tmp_path / "docs/reference/upgrade.ja.md").write_text(route, encoding="utf-8")
+    (tmp_path / "docs/reference/troubleshooting.ja.md").write_text(route, encoding="utf-8")
+    monkeypatch.setattr(ai_japanese_capability, "ROOT", tmp_path)
+
+    assert ai_japanese_capability._uninstall_path_exists() is False
+
+
+def test_uninstall_runtime_requires_a_public_installed_executor(tmp_path, monkeypatch):
+    (tmp_path / "templates/make").mkdir(parents=True)
+    (tmp_path / "scripts").mkdir()
+    (tmp_path / "templates/make/Makefile.ai").write_text(
+        "ai-cockpit-uninstall-propose:\n", encoding="utf-8"
+    )
+    (tmp_path / "scripts/ai_detached_uninstaller.py").write_text(
+        'def prepare():\n    return {"runtimeRemovalVerified": True}\n',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_japanese_capability, "ROOT", tmp_path)
+
+    assert ai_japanese_capability._public_uninstall_executor_exists() is False
 
 
 def test_independent_corpus_covers_every_required_japanese_input_domain():
