@@ -93,15 +93,18 @@ keywords:
 | corrective | process-evidence-release-preflight-20260727 | 修复 WI-21 暴露的点名文件追踪、hosted Summary schema、归档路径/digest、显式发布意图和 CI 失败证据结构 | 当前执行；完成后恢复 WI-21 |
 | corrective | ci-evidence-terminal-aggregate-v2-20260727 | 用末端聚合记录三个 required Job 的真实状态，并将所有发布 Contract 检查限定在显式发布准备意图内 | 替代未合并的 PR #410；本地回归、replacement PR、hosted 三 Job/aggregate evidence、merge/close/branch cleanup |
 
-严格执行以下五阶段顺序：
+严格执行以下八阶段顺序；任何阶段都必须完成独立 Work Item 的 Contract→实现→验收→PR→merge→archive→`ai-close-work-item`→本地/远程分支清理→main 同步，才允许进入下一阶段：
 
-1. 性能优化：完成 WI-20；
-2. 处理 WI-20 遗漏：完成 WI-21；
-3. 处理已发现但尚未解决的流程问题：逐项建立并完成 corrective Work Item；
-4. 处理发布阶段发现的 `RFE-ISSUE-082`：完成对应修复、PR/merge/close/分支清理和重新验证；
-5. 发布新版本：仅在前四阶段全部完成、双向追踪和文档对齐验收通过后执行 WI-18。
+1. 深度性能工单：完成 `quality-gate-deep-performance-optimization-20260728`；
+2. WI-10：按用户原始详细安装文档指示补齐全部点名文件、三语语义、命令证据和 no-change rationale；
+3. WI-01～WI-20 全量双向追踪审计：逐项核对“指示—计划—实现—验收”，任何遗漏必须先建立 corrective Work Item 并完成；
+4. 其他流程问题与 `RFE-ISSUE-082`：处理所有已记录未解决流程问题，再完成发布阶段发现的 `RFE-ISSUE-082`；
+5. 日语评估及整改：执行全面日语能力评估，任何问题必须完成 corrective Work Item 并重新评估；
+6. 文档对齐：对齐 Trust Layer、Capability Truth Matrix、README、架构、安全/发布证据与全部三语文档；
+7. 发布：仅在前六阶段全部关闭且发布前证据通过后执行 WI-18；
+8. 清理计划文档：发布完整关闭后最后执行 WI-19，不删除仍被 Contract、Archive 或 Release evidence 引用的记录。
 
-WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。`quality-gate-performance-architecture-20260727` 是性能优化阶段，`quality-gate-performance-completion-20260727` 专门处理 WI-20 已明确的遗漏；两者必须分别完成完整 Contract→实现→验收→PR→merge→archive→`ai-close-work-item`→分支清理→main 同步生命周期。已发现但尚未解决的流程问题不得与性能工单或发布工单混做，必须先记录并建立独立 corrective Work Item。WI-16 是发布前的强制日语能力门禁；若发现问题，必须先完成对应 corrective Work Item 的完整生命周期。WI-17 是发布前的 Human-Agent Trust Layer 对齐门禁。WI-18 是唯一允许实际发布新版本的工单，且必须在前四阶段、WI-16/WI-17 及其 corrective Work Item 全部关闭后执行。WI-19 必须最后执行；它不得删除当前计划、最终问题总览或任何仍被 Contract/Archive/Release evidence 引用的记录。
+WI-01 至 WI-17 只完成整改能力和验收，不发布新版本。`quality-gate-performance-architecture-20260727`、`quality-gate-performance-completion-20260727` 与 `quality-gate-deep-performance-optimization-20260728` 共同构成性能闭环；深度性能工单完整关闭后，下一项固定为 WI-10，而不是发布。WI-10 关闭后必须执行 WI-01～WI-20 的全量双向追踪审计，不能用既有“已完成”状态替代点名文件、实现证据和验收证据复核。已发现但尚未解决的流程问题不得与发布工单混做，必须先记录并建立独立 corrective Work Item。WI-16 是发布前的强制日语能力门禁；若发现问题，必须先完成对应 corrective Work Item 的完整生命周期并重新评估。WI-17 与发布前文档对齐阶段负责 Human-Agent Trust Layer 及相关事实源一致性。WI-18 是唯一允许实际发布新版本的工单，且必须在前六阶段及其 corrective Work Item 全部关闭后执行。WI-19 必须最后执行；它不得删除当前计划、最终问题总览或任何仍被 Contract/Archive/Release evidence 引用的记录。
 
 WI-21 是 WI-20 的 corrective process/quality Work Item，必须在 WI-18 发布前完成。WI-20 已交付去重、Fast/Full/Release 入口、组级 telemetry 和 fail-closed 约束，但其 Summary 明确保留了三项未闭合证据：Workflow 尚未拆成独立 Job、尚无五类 hosted before/after 测量、计时尚未覆盖每个 Make gate。不得把这些 Known Gap 直接当作发布前已完成；WI-21 必须分别补齐实现和证据，或以结构化、可审计的 not-run 原因经用户最终复核后才能决定是否继续。
 
@@ -586,3 +589,5 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 - `RFE-ISSUE-144`（文档 Make 命令解析，低）：深度性能 measurement snapshot 的首次 fast policy 在约十秒内把计划中的 ``make -n quality`` 错误识别为缺失 target `-n`。先以集成回归复现，再让 system-invariant parser 识别 `-n`、`--dry-run`、`--just-print`、`--recon` 这组无参数 dry-run 选项后提取真实 target；不通过改写文档隐藏解析缺陷。聚焦回归和真实 `make check-ai-system-invariants` 已通过，measurement candidate 必须包含该修复后重新生成。
 - `RFE-ISSUE-145`（Snapshot 子 Make 环境隔离，高）：第二次 measurement snapshot 的完整 pytest 中 1290 项通过、coverage 85.21%，但三个 adopter lifecycle 测试共同失败；snapshot 入口的命令行 `CONTRACT=<performance>` 经 GNU Make 的 `MAKEFLAGS`/`MAKEOVERRIDES` 传入 pytest，再泄漏到临时安装工程的嵌套 `make ai-finish TASK=e2e`，使 adopter 错用模板 active Contract。已用 red-first runner 回归要求独立 quality 子进程清除 `MAKEFLAGS`、`MAKEOVERRIDES`、`MFLAGS`、`GNUMAKEFLAGS`、`CONTRACT`、`SUMMARY`、`TASK`、`AI_BASE_COMMIT`，同时保留其他 CI/session 环境；原三个失败测试与环境单测聚焦重验均通过。不得以测试特判或复制模板 Contract 到 adopter 绕过。
 - `RFE-ISSUE-146`（Manual smoke intent 边界，高）：首个 source-bound hosted run `30324321071` 的 `template-smoke` 成功，quality step 为 10 分 53 秒，`installation-smoke` 15 秒，但整体失败；所有 `workflow_dispatch` 被旧表达式无条件视为 release preparation，导致非发布 measurement branch 执行历史 release-state consistency 并失败，末端 evidence 正确记录 `release-evidence:failure`。Workflow 现要求显式 `purpose` choice：`release_preparation` 保持严格默认和发布证据检查，`hosted_measurement` 只声明性能测量且 release-evidence Job 以 not-applicable 成功退出；三语质量文档给出精确 dispatch 命令，静态 Workflow 回归禁止重新合并两种 intent。该失败 run 只作为诊断/初始 timing，不计入三次成功验收样本。
+- `PLAN-006`（用户顺序确认/发布门禁，高）：用户最终确认后续严格顺序为“深度性能工单 → WI-10 → WI-01～WI-20 全量双向追踪审计 → 其他流程问题与 RFE-ISSUE-082 → 日语评估及整改 → 文档对齐 → 发布 → 清理计划文档”。该顺序已替换旧五阶段概括；发布不得越过任一前置阶段，任何阶段发现遗漏或流程问题都必须先完成对应 corrective Work Item 的完整生命周期。
+- 深度性能工单在提交 `f9e1b7e41ec282de2704497369a9db4a7ac8db6c` 上取得三次串行、同类型、同 SHA 的成功 hosted measurement：run `30325316583`、`30325920850`、`30326505323` 的 quality step 分别为 650、655、653 秒，median 653 秒，按小样本 nearest-rank 的保守 p95 为 655 秒；`project-test` 分别为 637.117、642.422、640.607 秒，median 640.607 秒，p95 642.422 秒。相对 run `30280375075` 的 1281 秒基线，quality p95 缩短约 48.9%，达到第一阶段 p95 <15 分钟目标。该结果证明结构性改善，但重测试绝对耗时仍约 11 分钟，`project-test` 仍是后续性能改进的主要残余瓶颈。

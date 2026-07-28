@@ -184,40 +184,72 @@
       "scenario": "Installer history is excluded but an adopter requires a runtime governance file.",
       "expected": "Install, upgrade, adoption, and journey regressions fail closed before merge.",
       "required": true,
-      "status": "unverified",
-      "evidence": [],
+      "status": "verified",
+      "evidence": [
+        "tests/test_installer.py",
+        "tests/test_project_governance_journey.py",
+        "tests/test_adoption_e2e.py",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323"
+      ],
       "verificationPlan": "Run installer, upgrade, adoption, and governance journey regressions against the reduced payload and assert every required runtime file remains installed."
     },
     {
       "scenario": "A reused fixture or test shard leaks mutations between tests.",
       "expected": "Isolation regressions detect changed files, shared outputs, or order-dependent results and parallelism remains disabled.",
       "required": true,
-      "status": "unverified",
-      "evidence": [],
+      "status": "verified",
+      "evidence": [
+        "tests/test_installer.py::test_installer_reuses_pruned_immutable_source_inventory",
+        "tests/test_quality_gate_architecture.py",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323"
+      ],
       "verificationPlan": "Add mutation and order-isolation regressions for any reused fixture, then run serial and proposed shard paths before enabling concurrency."
     },
     {
       "scenario": "A quality gate fails, times out, or is cancelled.",
       "expected": "Terminal evidence and uploaded timing/log/JUnit artifacts identify the exact gate and preserve a bounded diagnostic tail.",
       "required": true,
-      "status": "unverified",
-      "evidence": [],
+      "status": "verified",
+      "evidence": [
+        "tests/test_quality_telemetry.py",
+        "tests/test_ci_quality_orchestration.py",
+        "tests/test_workflows.py",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583/artifacts/8675625223",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850/artifacts/8675833128",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323/artifacts/8676034327"
+      ],
       "verificationPlan": "Exercise success, failure, and timeout gate paths and statically verify hosted artifact upload uses always() with run-isolated paths."
     },
     {
       "scenario": "One fast hosted run appears to meet the target.",
       "expected": "No improvement claim is made until at least three like-for-like runs support median and p95 comparison.",
       "required": true,
-      "status": "unverified",
-      "evidence": [],
+      "status": "verified",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30280375075",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+      ],
       "verificationPlan": "Collect at least three like-for-like hosted runs and compute median and p95 against run 30280375075 without using a single run as proof."
     },
     {
       "scenario": "Parallel Job restructuring causes a required downstream result to be skipped.",
       "expected": "The always-run terminal aggregate records skipped/failure accurately and fails closed.",
       "required": true,
-      "status": "unverified",
-      "evidence": [],
+      "status": "verified",
+      "evidence": [
+        "tests/test_ci_quality_orchestration.py",
+        "tests/test_workflows.py",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325316583/job/90171007040",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30325920850/job/90172843336",
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30326505323/job/90174532123"
+      ],
       "verificationPlan": "Run workflow architecture regressions for success, failure, cancellation, and skipped dependencies, then validate a real terminal ci-evidence job."
     }
   ],
