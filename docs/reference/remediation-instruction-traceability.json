@@ -1080,6 +1080,43 @@
         "make ai-finish TASK=japanese-assessment-depth-corrective-20260729",
         "make ai-close-work-item TASK=japanese-assessment-depth-corrective-20260729"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-034",
+      "summary": "Recover the Japanese adopter lifecycle delivery after Hosted AI_BASE_COMMIT crossed the installer subprocess boundary; preserve the immutable predecessor and fix production environment isolation before replacement delivery.",
+      "planWorkItems": [
+        "WI-16-ISSUE-012",
+        "JA-LIFECYCLE-001",
+        "japanese-lifecycle-fixture-corrective-20260729",
+        "japanese-lifecycle-hosted-env-recovery-20260729"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/japanese-lifecycle-fixture-corrective-20260729.contract.json",
+        ".ai/work-items/archive/2026/japanese-lifecycle-hosted-env-recovery-20260729.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_common.py",
+        "scripts/ai_installer_repository.py",
+        "scripts/install_ai_cockpit.py",
+        "tests/test_japanese_adopter_lifecycle.py",
+        "docs/superpowers/plans/2026-07-29-japanese-lifecycle-hosted-env-recovery.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_installer.py",
+        "tests/test_japanese_adopter_lifecycle.py",
+        ".ai/work-items/active/japanese-lifecycle-hosted-env-recovery-20260729.summary.json",
+        "docs/superpowers/plans/2026-07-29-japanese-lifecycle-hosted-env-recovery.md",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        "PYTHONPATH=.:scripts .venv/bin/pytest -q tests/test_installer.py tests/test_japanese_adopter_lifecycle.py tests/test_finish_e2e.py::test_finish_git_environment_helper_filters_nested_work_item_overrides tests/test_start_and_archive.py::test_start_and_archive_use_clean_git_environment",
+        "make check-instruction-traceability",
+        "make quality-fast",
+        "make quality",
+        "make ai-finish TASK=japanese-lifecycle-hosted-env-recovery-20260729",
+        "make check-ai-pr AI_BASE_COMMIT=f8da33712fe1c19bf1f017ca7b6b9824b00479de",
+        "make ai-close-work-item TASK=japanese-lifecycle-hosted-env-recovery-20260729"
+      ]
     }
   ]
 }

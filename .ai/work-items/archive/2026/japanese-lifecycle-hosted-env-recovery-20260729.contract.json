@@ -1,0 +1,278 @@
+{
+  "contractVersion": 2,
+  "workItemId": "japanese-lifecycle-hosted-env-recovery-20260729",
+  "mode": "code",
+  "title": "Prevent hosted governance context from contaminating adopter installation",
+  "baseCommit": "f5fb1f2f70f4ad6d3f1f1de90b05c4e0669879ad",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/japanese-lifecycle-hosted-env-recovery-20260729.contract.json",
+    ".ai/work-items/active/japanese-lifecycle-hosted-env-recovery-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_common.py",
+    "scripts/ai_installer_repository.py",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_installer.py",
+    "tests/test_japanese_adopter_lifecycle.py",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-29-japanese-lifecycle-hosted-env-recovery.md"
+  ],
+  "outOfScope": [
+    "Editing the immutable archived Contract, Summary, or Manifest from japanese-lifecycle-fixture-corrective-20260729",
+    "Reopening or merging superseded PR #439",
+    "Weakening baseCommit validation, Git history checks, installer transaction rollback, or Hosted required-job aggregation",
+    "Changing Japanese lifecycle behavior merely to bypass the Hosted failure",
+    "Implementing JA-DOC-001, general documentation alignment, deprecated asset cleanup, release, or final plan cleanup"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/japanese-lifecycle-fixture-corrective-20260729.contract.json",
+      "reason": "Immutable predecessor scope and acceptance evidence for the Japanese lifecycle fixture."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-lifecycle-fixture-corrective-20260729.summary.json",
+      "reason": "Immutable predecessor implementation and local verification evidence."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30387736987",
+      "reason": "Hosted run proving the adopter installation inherited outer AI_BASE_COMMIT and rolled back."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/439",
+      "reason": "Superseded predecessor PR retained as failed Hosted delivery evidence."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Real installer status-generation subprocess currently inherits ambient governance variables."
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "Existing authoritative nested-governance environment isolation semantics."
+    },
+    {
+      "path": "scripts/ai_installer_repository.py",
+      "reason": "Installer-specific subprocess environment boundary used by the affected entrypoint."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "hosted_only_failure",
+      "ambient_governance_context",
+      "installer_transaction",
+      "immutable_recovery"
+    ],
+    "reason": "The failure is deterministic under Hosted AI_BASE_COMMIT, but environment filtering must preserve legitimate installer inputs while preventing outer Work Item identity from overriding adopter evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous execution and required discovered process defects to be fixed durably before later Japanese and release stages."
+  },
+  "preReviewWarnings": [
+    "Confirm the predecessor archive and superseded PR #439 remain unchanged.",
+    "Confirm outer AI_BASE_COMMIT and Work Item Make overrides cannot reach adopter status generation.",
+    "Confirm legitimate release/source and non-governance environment inputs remain available.",
+    "Confirm the replacement PR contains the adjacent archive chain and all Hosted checks pass."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: The immutable predecessor archive bundle and closed PR #439 remain unchanged and are cited by the recovery.",
+    "A2: A red-first installer regression reproduces Hosted AI_BASE_COMMIT contamination and proves the adopter installation succeeds with Contract baseCommit bound to the adopter repository.",
+    "A3: Every installer subprocess that generates adopter status removes outer Git, coverage, Work Item identity, and recursive Make override context while preserving required non-governance installer inputs.",
+    "A4: The Japanese adopter lifecycle fixture passes under a hosted-equivalent outer AI_BASE_COMMIT and continues to verify installation, calibration pause/resume, rollback, and detached removal.",
+    "A5: Focused tests, quality-fast, full quality, instruction traceability, and aggregate PR ownership pass without weakening base validation or transaction rollback.",
+    "A6: The plan and traceability registry map the Hosted failure, root cause, recovery implementation, acceptance evidence, immutable predecessor, and replacement delivery in both directions.",
+    "A7: A replacement PR passes every required Hosted check including template-smoke and terminal ci-evidence, then merge, ai-close-work-item, predecessor/recovery branch deletion, auth restoration, and main synchronization complete before JA-DOC-001 starts."
+  ],
+  "guidelines": [
+    "Preserve immutable predecessor evidence and use one adjacent recovery Work Item plus replacement PR.",
+    "Fix the executable installer environment boundary; do not add a test-only environment deletion or relax validation.",
+    "Keep one authoritative governance override blocklist so installer and core subprocess behavior cannot drift.",
+    "Preserve release/source selection variables and ordinary user environment unless they are proven governance contamination.",
+    "Record the process issue in the comprehensive plan and bidirectional traceability registry."
+  ],
+  "intent": {
+    "problem": "PR #439 passed the complete local suite but Hosted template-smoke injected AI_BASE_COMMIT for the outer template Work Item. The real installer inherited that value while generating the temporary adopter status, so the adopter validator tried to resolve the template parent commit in the adopter repository and rolled back. Earlier nested-Make isolation did not cover direct installer status subprocesses.",
+    "constraints": [
+      "Do not modify the archived predecessor evidence or merge superseded PR #439.",
+      "Do not bypass adopter baseCommit validation or installer rollback.",
+      "Use the real installer and the existing Japanese lifecycle fixture as executable evidence.",
+      "Filter all relevant Work Item and recursive Make context, not only AI_BASE_COMMIT.",
+      "Complete replacement PR, merge, closure, and branch cleanup before continuing JA-DOC-001."
+    ],
+    "rationale": "A shared installer subprocess environment derived from the established core isolation policy removes the ambient authority leak at the production boundary and a hosted-equivalent regression prevents recurrence."
+  },
+  "rawUserRequest": "继续执行完整计划；每个工单发现流程问题时先修流程再继续，不要临时绕过。当前日本語 lifecycle 工单 PR #439 的 Hosted CI 因外层 AI_BASE_COMMIT 污染采用方安装而失败。保持已归档证据不可变，建立永久流程修复和 replacement PR，完成 Hosted、合并、关闭与分支清理后继续日语文档整改。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-29-continuous-japanese-corrective-execution",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:user-authorized-process-first-japanese-hosted-recovery"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Prevent Hosted or parent-process governance variables from corrupting adopter installation evidence and complete adjacent replacement delivery.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Installation runs with an outer template AI_BASE_COMMIT that does not exist in the adopter repository.",
+      "expected": "Installation succeeds and generated status validates the adopter Contract baseCommit instead of the outer value.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a red-first installer regression and run the Japanese adopter lifecycle fixture with a hosted-equivalent ambient value."
+    },
+    {
+      "scenario": "Outer Contract, Summary, Task, mode, coverage, Git, and recursive Make context are present.",
+      "expected": "Installer-owned subprocess environment removes governance context while retaining ordinary installer and release/source variables.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Unit-test the shared installer environment helper with direct and encoded Make overrides."
+    },
+    {
+      "scenario": "A genuine adopter baseCommit is invalid.",
+      "expected": "Existing status validation and installation transaction rollback remain fail closed.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run existing installer rollback and status-generation regressions unchanged."
+    },
+    {
+      "scenario": "The replacement PR contains the predecessor and recovery archive bundles.",
+      "expected": "Aggregate PR validation accepts only the adjacent human-authorized source-bound recovery chain.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Archive and commit the recovery, then run check-ai-pr against f8da33712fe1c19bf1f017ca7b6b9824b00479de."
+    },
+    {
+      "scenario": "Hosted template-smoke and terminal evidence execute on the replacement Head SHA.",
+      "expected": "Japanese lifecycle tests pass and ci-evidence reports every required Job successful.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Inspect every required check and terminal evidence before merge."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized discovered process defects to be fixed in the durable workflow and executable checks before continuing, and instructed execution to continue without another confirmation."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 662
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/japanese-lifecycle-hosted-env-recovery-20260729.json",
+    "baseCommit": "f5fb1f2f70f4ad6d3f1f1de90b05c4e0669879ad",
+    "initialScopeDigest": "9caef35ea723ec1dac6811bbd90782acad2b5e432a9cff7ed5812681b0f2829d",
+    "contractSkeletonDigest": "7c50aa59f8808807924f668a3aa58bd79f35254c766b274bf642ed7a731260f9"
+  }
+}

@@ -48,7 +48,7 @@ def clean_git_environment() -> dict[str, str]:
         if not key.startswith(GIT_ENV_PREFIX)
         and not key.startswith("COV_CORE_")
         and not key.startswith("COVERAGE_")
-        and key not in {"MFLAGS", "MAKELEVEL"}
+        and key not in {"GNUMAKEFLAGS", "MFLAGS", "MAKELEVEL"}
         and key not in MAKE_OVERRIDE_BLOCKLIST
     }
     if "MAKEFLAGS" in os.environ:

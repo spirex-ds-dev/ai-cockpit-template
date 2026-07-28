@@ -2,12 +2,6 @@
   "assessmentVersion": 2,
   "blockingFindings": [
     {
-      "caseId": "JA-LIFECYCLE-001",
-      "correctiveWorkItem": "japanese-lifecycle-fixture-corrective-20260729",
-      "id": "JA-LIFECYCLE-001",
-      "summary": "No executable Japanese adopter fixture covers the governed lifecycle."
-    },
-    {
       "caseId": "JA-DOC-001",
       "correctiveWorkItem": "japanese-uninstall-documentation-corrective-20260729",
       "id": "JA-DOC-001",
@@ -138,15 +132,18 @@
       "commandEvidence": [
         "PYTHONPATH=. .venv/bin/pytest -q tests/test_japanese_adopter_lifecycle.py"
       ],
-      "digest": "sha256:f0651b79a1eb06eb0ce68a49302fd3b3488346780d4ba060fd3812216dc1a796",
-      "findingId": "JA-LIFECYCLE-001",
+      "digest": "sha256:8427d94987afdb6d713aec4d90134a8c9a6e3e4e4afabc7a73e1f1900e0bf00f",
       "id": "JA-LIFECYCLE-001",
-      "limitation": "English lifecycle fixtures cannot be used to infer Japanese operator usability.",
-      "observation": "No executable Japanese adopter fixture covers the governed lifecycle.",
+      "limitation": "The fixture proves bounded repository behavior and Japanese evidence handling; it does not prove general fluency, provider operations, or real adopter platform quality.",
+      "observation": "Isolated Japanese adopter fixture executes supported installation, calibration, recovery, and evidence-preserving removal authorities",
       "sourceEvidence": [
-        "docs/getting-started/installation.ja.md"
+        "docs/getting-started/installation.ja.md",
+        "scripts/ai_calibrate.py",
+        "scripts/ai_rollback.py",
+        "scripts/ai_uninstall_proposal.py",
+        "scripts/ai_detached_uninstaller.py"
       ],
-      "status": "block",
+      "status": "pass",
       "testEvidence": [
         "tests/test_japanese_adopter_lifecycle.py"
       ]
@@ -245,7 +242,7 @@
     "entryCount": 14,
     "path": "tests/fixtures/japanese-capability-corpus.json"
   },
-  "digest": "sha256:52fc7db389b076392311865b52aa8e1ad13bdf6184e1a55a1322a00670e5b7a6",
+  "digest": "sha256:12569b4a0edf886ffce887bc8531c0e40129fa556f9141cbd58a7763fe0733c3",
   "limitations": [
     "This assessment does not claim general model fluency, translation quality, or provider behavior.",
     "Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking."
