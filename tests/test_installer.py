@@ -6,10 +6,48 @@ from pathlib import Path
 import pytest
 
 import install_ai_cockpit as installer_mod
+from ai_installer_repository import clean_git_environment
 from install_ai_cockpit import Installer
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_installer_subprocess_environment_isolates_outer_work_item_context(monkeypatch):
+    contaminated = {
+        "AI_BASE_COMMIT": "outer-template-base",
+        "CONTRACT": "outer.contract.json",
+        "SUMMARY": "outer.summary.json",
+        "TASK": "outer-task",
+        "TITLE": "Outer task",
+        "MODE": "code",
+        "GIT_DIR": "/outer/git",
+        "COVERAGE_FILE": "/outer/.coverage",
+        "MAKELEVEL": "9",
+        "MFLAGS": "-- CONTRACT=outer",
+        "GNUMAKEFLAGS": "-- SUMMARY=outer",
+        "MAKEFLAGS": "-- CONTRACT=outer TASK=outer PROJECT_TEST=true",
+        "MAKEOVERRIDES": "AI_BASE_COMMIT=outer PROJECT_TEST=true",
+    }
+    for name, value in contaminated.items():
+        monkeypatch.setenv(name, value)
+    monkeypatch.setenv("AI_COCKPIT_TEMPLATE_REF", "v0.5.45")
+    monkeypatch.setenv("AI_COCKPIT_TEMPLATE_REPO", "local source")
+    monkeypatch.setenv("INSTALLER_CUSTOM_INPUT", "preserved")
+
+    environment = clean_git_environment()
+
+    for name in contaminated:
+        if name in {"MAKEFLAGS", "MAKEOVERRIDES"}:
+            assert "outer" not in environment.get(name, "")
+            assert "PROJECT_TEST=true" in environment.get(name, "")
+        else:
+            assert name not in environment
+    assert environment["AI_COCKPIT_TEMPLATE_REF"] == "v0.5.45"
+    assert environment["AI_COCKPIT_TEMPLATE_REPO"] == "local source"
+    assert environment["INSTALLER_CUSTOM_INPUT"] == "preserved"
+    assert environment["GIT_OPTIONAL_LOCKS"] == "0"
+    assert environment["PYTHONDONTWRITEBYTECODE"] == "1"
 
 
 def run(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:

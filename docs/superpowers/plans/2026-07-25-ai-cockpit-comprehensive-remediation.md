@@ -250,6 +250,12 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 
 `WI-10-ISSUE-014`：本 corrective 首次完整 `ai-finish` 的 1315 项项目测试中有 1313 项通过，日语能力评估 2 项失败；根因是日文安装指南虽完整说明所有异常均停止，但翻译优化删除了评估要求保留的规范术语 `fail closed`。未弱化或绕过日语发布 Gate：在零经验读者可理解的“安全侧で停止”旁恢复规范术语，并要求先跑日语聚焦回归，再从头重跑事务性 `ai-finish`。
 
+`WI-16-ISSUE-012`（Hosted/安装器环境隔离，高）：`japanese-lifecycle-fixture-corrective-20260729` 本地 1434 tests 与 85.87% coverage 通过并归档为 sequence 649，但 PR #439 的 Hosted run `30387736987` 在真实日本語 adopter 安装时失败。外层 template-smoke 注入 `AI_BASE_COMMIT=f8da337...`，`install_ai_cockpit.py` 又以完整 `os.environ` 启动 adopter status generator，使采用方错误解析模板父提交并按设计回滚。PR #439 已关闭且前序 archive 不改写；相邻 recovery `japanese-lifecycle-hosted-env-recovery-20260729` 必须把 Git、coverage、Work Item identity 和递归 Make override 隔离落到安装器生产子进程边界，以 Hosted 同型回归证明采用方 Contract 自身 baseCommit 仍为唯一事实源，并完成 replacement PR、Hosted 全绿、merge、closure 与两个分支清理后才可进入 JA-DOC-001。
+
+`WI-16-ISSUE-013`（计划文档登记，低）：recovery 首次 `quality-fast` 的静态检查全部通过，但 Documentation Metadata 与 System Invariants 同时拒绝新计划未登记到 `docs/reference/documentation-context-registry.json`。门禁行为正确；已把 registry 加入 Contract scope，将本计划登记为 `current_instruction`，并要求从头重跑 fast gate，不复用失败运行的部分结果。
+
+`WI-16-ISSUE-014`（Coverage association，中）：首次完整 `ai-finish` 在长测试前拒绝 `scripts/ai_installer_repository.py`，因为 `installerBoundaries` domain 只登记 shell boundary tests，未把实际覆盖该 Python helper 的 `tests/test_installer.py` 关联为证据。门禁行为正确；已把 policy 加入 Contract scope，在既有 domain 增加真实回归关联，并要求刷新 Preflight/checkpoint 后从头重跑 Finish。
+
 `WI-10-ISSUE-015`（文档渲染/验收遗漏，高）：用户在 GitHub `main` 发现 iOS 安装示例表格从第 5 行开始失效。核对远端源码确认 iOS、Android、Java 的英/中/日 9 份文档都在第 4、5 行之间放置 `<!-- platform-stage5: proposal-only -->`，GitHub Markdown 因块级 HTML 注释结束表格，导致 1～4 渲染为表格、5～7 显示为原始 `|` 文本。现有 checker 只按 marker 存在和逻辑行数解析，未验证连续 Markdown 表格结构，因此错误通过 WI-10 验收。发布继续冻结；当前流程 corrective 完整关闭后，优先执行 `wi10-platform-table-rendering-corrective-20260728`，将 marker 移出表格、对 9 份文件逐一检查，并增加“表格行之间不得有块级注释/空行”的 fail-closed mutation regression，完成独立 PR/merge/close/branch cleanup 后才恢复其他流程问题。
 
 `WI-10-ISSUE-016`（校准清单/验收遗漏，高）：用户继续核对时询问校准清单位置。三语 `installation` 当前第 9 节只有十阶段说明和请求表，第 15 节只有最终成功项目；不存在可逐项填写/勾选的完整 Calibration checklist，不能为每一阶段清楚记录证据、回答类型/值、Candidate 变化、Owner/Reviewer、PASS/STOP 和完成状态。原 WI-10 Contract 明确要求 `complete calibration checklist`，但 checker 只验证 stage marker/行数，因而把“有十阶段内容”误当成“清单已交付”。同一 `wi10-platform-table-rendering-corrective-20260728` 必须升级三语主安装文档，提供结构和语义一致的十项可勾选清单，并新增字段完整性、十项数量、三语结构和 mutation regression；不得用最终成功清单替代校准清单。

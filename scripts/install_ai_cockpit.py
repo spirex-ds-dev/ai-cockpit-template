@@ -1020,7 +1020,7 @@ class Installer:
             text=True,
             capture_output=True,
             check=False,
-            env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"},
+            env=clean_git_environment(),
         )
         if result.returncode != 0:
             raise ValueError(f"failed to generate adoption status: {result.stderr.strip()}")
@@ -1427,7 +1427,7 @@ class Installer:
                 text=True,
                 capture_output=True,
                 check=False,
-                env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"},
+                env=clean_git_environment(),
             )
             if result.returncode != 0:
                 raise ValueError(

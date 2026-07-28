@@ -1,9 +1,10 @@
 """Read-only repository facts and the installer Git operation boundary."""
 
-import os
 import subprocess  # nosec B404
 from dataclasses import dataclass
 from pathlib import Path
+
+from ai_common import clean_git_environment as clean_governance_environment
 
 
 def git_target_args(target: Path) -> list[str]:
@@ -11,7 +12,7 @@ def git_target_args(target: Path) -> list[str]:
 
 
 def clean_git_environment() -> dict[str, str]:
-    environment = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
+    environment = clean_governance_environment()
     # Repository detection is strictly read-only; prevent Git's optional background
     # maintenance from creating transient lock files during fact collection.
     environment["GIT_OPTIONAL_LOCKS"] = "0"

@@ -38,14 +38,27 @@ def japanese_adopter(tmp_path_factory):
     assert _run(target, "git", "config", "user.name", "Test").returncode == 0
 
     rendered: list[str] = []
-    result = run_wizard(
-        target=target,
-        source=ROOT,
-        language="ja-JP",
-        input_fn=iter(["1", "y"]).__next__,
-        output=rendered.append,
-        is_tty=True,
-    )
+    with pytest.MonkeyPatch.context() as environment:
+        environment.setenv("AI_BASE_COMMIT", "f" * 40)
+        environment.setenv("CONTRACT", "outer-template.contract.json")
+        environment.setenv("SUMMARY", "outer-template.summary.json")
+        environment.setenv("TASK", "outer-template-task")
+        environment.setenv(
+            "MAKEFLAGS",
+            "-- CONTRACT=outer-template.contract.json PROJECT_TEST=true",
+        )
+        environment.setenv(
+            "MAKEOVERRIDES",
+            "AI_BASE_COMMIT=" + ("f" * 40) + " PROJECT_TEST=true",
+        )
+        result = run_wizard(
+            target=target,
+            source=ROOT,
+            language="ja-JP",
+            input_fn=iter(["1", "y"]).__next__,
+            output=rendered.append,
+            is_tty=True,
+        )
     assert result.status == "installed"
     return target, rendered
 
