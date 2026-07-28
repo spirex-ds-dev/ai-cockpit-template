@@ -1005,6 +1005,41 @@
         "make ai-finish TASK=rfe152-nested-make-entrypoint-propagation-20260729",
         "make ai-close-work-item TASK=rfe152-nested-make-entrypoint-propagation-20260729"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-032",
+      "summary": "Resolve RFE-ISSUE-082 by separating immutable tag reservation from stable provider publication, advancing the candidate to v0.5.45 with deferred final source binding, and retiring obsolete unmerged PR #401 and its branch without mutating tags, Releases, or assets.",
+      "planWorkItems": [
+        "RFE-ISSUE-082",
+        "rfe082-release-truth-reconciliation-20260729"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/rfe082-release-truth-reconciliation-20260729.contract.json"
+      ],
+      "implementationEvidence": [
+        "next-release.json",
+        "release-state.json",
+        "scripts/check_release_distribution.py",
+        "scripts/check_release_state_consistency.py",
+        "docs/reference/distribution.md",
+        "docs/superpowers/specs/2026-07-29-rfe082-release-truth-design.md",
+        "docs/superpowers/plans/2026-07-29-rfe082-release-truth-reconciliation.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_release_distribution.py",
+        "tests/test_release_state_consistency.py",
+        ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        ".venv/bin/python -m pytest -q tests/test_release_distribution.py tests/test_release_state_consistency.py",
+        "make check-release-state-consistency",
+        "AI_RELEASE_PREPARATION=1 make check-release-distribution",
+        "make check-instruction-traceability",
+        "make quality",
+        "make ai-finish TASK=rfe082-release-truth-reconciliation-20260729",
+        "make ai-close-work-item TASK=rfe082-release-truth-reconciliation-20260729"
+      ]
     }
   ]
 }

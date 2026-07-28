@@ -35,6 +35,22 @@ def sha256_file(path: Path) -> str | None:
         return None
 
 
+def semver_key(tag: str) -> tuple[int, int, int]:
+    match = re.fullmatch(r"v(\d+)\.(\d+)\.(\d+)", tag)
+    if not match:
+        raise ValueError(f"not a semantic-version tag: {tag!r}")
+    return (int(match.group(1)), int(match.group(2)), int(match.group(3)))
+
+
+def is_next_patch(candidate: str, previous: str) -> bool:
+    try:
+        candidate_parts = semver_key(candidate)
+        previous_parts = semver_key(previous)
+    except ValueError:
+        return False
+    return candidate_parts[:2] == previous_parts[:2] and candidate_parts[2] == previous_parts[2] + 1
+
+
 def check_ci_evidence(state: dict[str, Any], source_commit: Any, issues: list[str]) -> None:
     if state.get("state") not in {"candidate_verified", "release_published"}:
         return
@@ -74,12 +90,55 @@ def check_repository(root: Path) -> list[str]:
     state_tag = state.get("releaseTag")
     if not isinstance(state_tag, str) or not TAG_PATTERN.fullmatch(state_tag):
         issues.append("release-state.json releaseTag must be a semantic version tag")
+    source_binding = state.get("sourceBinding")
     source_commit = state.get("sourceCommit")
-    if not isinstance(source_commit, str) or not SHA_PATTERN.fullmatch(source_commit):
-        issues.append("release-state.json sourceCommit must be a 40-character lowercase SHA")
+    if state_name in {"development", "candidate_prepared"}:
+        if source_binding != "deferred_to_release_finalization" or source_commit is not None:
+            issues.append(f"{state_name} source binding must be deferred with null sourceCommit")
+    elif (
+        source_binding != "exact"
+        or not isinstance(source_commit, str)
+        or not SHA_PATTERN.fullmatch(source_commit)
+    ):
+        issues.append(
+            f"{state_name} source binding must be exact with a 40-character lowercase SHA"
+        )
     previous = state.get("previousRelease")
     if not isinstance(previous, str) or not TAG_PATTERN.fullmatch(previous):
         issues.append("release-state.json previousRelease must be a semantic version tag")
+    reserved_tags = state.get("reservedTags")
+    if not isinstance(reserved_tags, list) or any(
+        not isinstance(tag, str) or not TAG_PATTERN.fullmatch(tag) for tag in reserved_tags
+    ):
+        issues.append("release-state.json reservedTags must be semantic-version strings")
+        reserved_tags = []
+    elif reserved_tags != sorted(set(reserved_tags), key=semver_key):
+        issues.append("release-state.json reservedTags must be sorted unique")
+    unavailable_tags = state.get("unavailableTags")
+    unavailable_tag_names: list[str] = []
+    if not isinstance(unavailable_tags, list):
+        issues.append("release-state.json unavailableTags must be a list")
+    else:
+        for item in unavailable_tags:
+            if not isinstance(item, dict):
+                issues.append("release-state.json unavailableTags entries must be objects")
+                continue
+            tag_value = item.get("tag")
+            unavailable_tag_names.append(tag_value if isinstance(tag_value, str) else "")
+            if (
+                not isinstance(tag_value, str)
+                or not TAG_PATTERN.fullmatch(tag_value)
+                or item.get("kind") not in {"stable_release_unverified", "tag_only"}
+                or not isinstance(item.get("reason"), str)
+                or not item["reason"].strip()
+                or not isinstance(item.get("evidence"), str)
+                or not item["evidence"].strip()
+            ):
+                issues.append(
+                    "release-state.json unavailableTags entries require tag, kind, reason, and evidence"
+                )
+        if set(unavailable_tag_names) != set(reserved_tags):
+            issues.append("release-state.json unavailableTags must explain every reserved tag")
     evidence_status = state.get("evidenceStatus")
     if evidence_status not in EVIDENCE_STATUSES:
         issues.append(
@@ -116,6 +175,20 @@ def check_repository(root: Path) -> list[str]:
         )
     if published_tag == candidate_tag:
         issues.append("published and candidate tags must be distinct")
+    if candidate_tag in reserved_tags:
+        issues.append("candidate tag must not reuse a reserved tag")
+    if (
+        isinstance(candidate_tag, str)
+        and isinstance(previous, str)
+        and TAG_PATTERN.fullmatch(candidate_tag)
+        and TAG_PATTERN.fullmatch(previous)
+    ):
+        sequence = [previous, *reserved_tags]
+        highest_sequence_tag = max(sequence, key=semver_key)
+        if not is_next_patch(candidate_tag, highest_sequence_tag):
+            issues.append(
+                "candidate tag must be the next patch after the highest reserved sequence tag"
+            )
     if candidate.get("basedOnReleaseTag") != published_tag:
         issues.append("next-release.json basedOnReleaseTag must equal release.json releaseTag")
     if candidate.get("releaseState") != "candidate" or candidate.get("published") is not False:

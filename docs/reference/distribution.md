@@ -98,5 +98,18 @@ From a local clone:
 - You are documenting release-specific distribution details for maintainers or integrators.
 ## Next release candidate
 
-The historical v0.5.42 projection remains unchanged while a distinct unpublished corrective candidate advances the release sequence after quarantined public attempts. A candidate may become public only after finalization marks its canonical archive binding verified and the workflow validates the real tagged Quick Install while the GitHub Release is still Draft.
+The repository published projection, stable provider Releases, immutable Git
+tags, and the unpublished candidate are separate facts. A semantic Git tag
+reserves its version even when no stable GitHub Release exists; it must never
+be called published or reused as a candidate. `release-state.json` records
+unavailable versions with a reason and evidence reference, and the next
+candidate must be exactly one patch after the highest reserved version.
+
+At `candidate_prepared`, final source identity is deliberately deferred:
+`sourceBinding` is `deferred_to_release_finalization` and `sourceCommit` is
+null. Later release finalization binds the exact source commit, tag target,
+metadata commit, archive, freeze, digests, SBOM, provenance, and provider
+evidence. A candidate may become public only after those bindings are verified
+and the workflow validates the real tagged Quick Install while the GitHub
+Release is still Draft.
 The candidate records a preparation snapshot, but the release workflow resolves `SOURCE_COMMIT` from the freshly fetched default branch at dispatch time. The hosted boundary explicitly verifies that detached `HEAD` equals that SHA, records the `.gitattributes` identity, and invokes `make check-release-preflight RELEASE_PREFLIGHT_SOURCE_COMMIT="$SOURCE_COMMIT"`; the validator therefore cannot silently fall back to a different `HEAD`. The default-branch remote-tracking ref is fetched to resolve controlled `origin/main` metadata references in a fresh runner. An omitted `source_commit` input uses the resolved commit; a supplied value is only an assertion and must match it exactly. Detached checkout, tag, provider workflow, SBOM, provenance, and digest evidence must all reference that same immutable source before promotion. A stale or mismatched assertion fails closed before checkout or publication. Missing provider assets remain missing evidence; this release does not change the enterprise-security NO-GO boundary.

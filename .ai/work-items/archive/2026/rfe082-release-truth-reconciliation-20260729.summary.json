@@ -1,0 +1,686 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "rfe082-release-truth-reconciliation-20260729",
+  "contractPath": ".ai/work-items/archive/2026/rfe082-release-truth-reconciliation-20260729.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "reason": "Defined the source-bound RFE-082 scope, authority, release-truth scenarios, acceptance, and lifecycle."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "reason": "Recorded provider facts, TDD evidence, obsolete-path cleanup, risks, and bidirectional traceability."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Regenerated the governed Work Item status."
+    },
+    {
+      "path": ".ai/work-items/starts/rfe082-release-truth-reconciliation-20260729.json",
+      "reason": "Generated the immutable Start Receipt from synchronized origin/main."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Advanced the candidate to the first unreserved version, v0.5.45, and aligned supply-chain digests."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Separated the repository projection, deferred candidate source binding, reserved tags, and unavailable-tag evidence."
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Separated immutable tag reservation from stable GitHub Release discovery and truthful diagnostics."
+    },
+    {
+      "path": "scripts/check_release_state_consistency.py",
+      "reason": "Enforced deferred candidate binding, exact final binding, deterministic reserved-tag evidence, and candidate progression."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Added provider-fact, malformed-payload, reserved-version progression, and diagnostic regressions."
+    },
+    {
+      "path": "tests/test_release_state_consistency.py",
+      "reason": "Added source-binding and reserved/unavailable-tag consistency regressions."
+    },
+    {
+      "path": "tests/test_ci_release_evidence.sh",
+      "reason": "Aligned the shell-level canonical CI evidence fixture with exact verified binding and deterministic reserved-tag fields."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Documented the distinct Tag, stable Release, projection, candidate, and finalization boundaries."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registered the RFE-082 design and implementation plan."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Added PLAN-DIRECTIVE-032 instruction-plan-implementation-acceptance bindings."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-07-29-rfe082-release-truth-design.md",
+      "reason": "Recorded release truth domains, invariants, cleanup boundaries, and non-claims."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-29-rfe082-release-truth-reconciliation.md",
+      "reason": "Recorded TDD tasks and the bidirectional traceability matrix."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Corrected stale v0.5.44 publication claims and bound RFE-082 to the replacement Work Item."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe082-release-truth-reconciliation-20260729.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "scripts/check_release_distribution.py",
+    "scripts/check_release_state_consistency.py",
+    "tests/test_ci_release_evidence.sh",
+    ".ai/work-items/archive/2026/recover-v0-5-45-release-candidate-20260727.contract.json",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/401",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/releases",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A semantic Git tag exists without a stable GitHub Release.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_release_distribution.py::test_provider_facts_separate_stable_releases_from_reserved_tags",
+        "tests/test_release_distribution.py::test_release_identity_diagnostic_names_projection_release_and_reserved_tag"
+      ]
+    },
+    {
+      "scenario": "A stable GitHub Release exists but its distribution evidence is quarantined or does not match the repository projection.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "make check-release-distribution",
+        "tests/test_release_distribution.py::test_release_identity_diagnostic_names_projection_release_and_reserved_tag"
+      ]
+    },
+    {
+      "scenario": "The candidate tries to reuse an immutable reserved tag.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_release_distribution.py::test_candidate_progression_uses_reserved_versions_without_calling_them_published",
+        "tests/test_release_state_consistency.py::test_candidate_must_not_reuse_or_skip_reserved_version",
+        "AI_RELEASE_PREPARATION=1 make check-release-distribution"
+      ]
+    },
+    {
+      "scenario": "An agent attempts to continue through obsolete PR #401 or its branch.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/401",
+        "git branch --list codex/fix-draft-release-asset-verification-20260727",
+        "git branch -r --list origin/codex/fix-draft-release-asset-verification-20260727"
+      ]
+    },
+    {
+      "scenario": "Final v0.5.45 source-bound evidence is requested during this corrective.",
+      "required": true,
+      "status": "not_applicable",
+      "reason": "This corrective prepares truthful repository state but does not know the later final release source commit.",
+      "evidence": [
+        "Contract outOfScope",
+        "scripts/check_release_preflight.py"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:25:46.837839+00:00",
+      "exitCode": 0,
+      "durationMs": 40,
+      "outputDigest": "591a5c88c493e4b12114747a2d691dbc6f8bce3110f016fd2c52e1b8e3ffb80a",
+      "commandHash": "7f1c7ff910588250715348792f3eee8330ec427af6564332c4d92f5e2f5147fd",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "b4f6b6aa36bf9cd50fc337937a0e65a2f1048ca2406cefdff697ec9d98a39d58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json work item contract check passed: .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json work item contract check passed: .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "outputBytes": 268
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:25:46.977303+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "0fe39cdcd3b893746a16acdae01b695ddfb9010b6070aa4e40da6c23eef37cbb",
+      "commandHash": "dfdb5547a0bf189b550a00fd49f656267ca3b56c3ea11522cc61c6e29f71e577",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "b4f6b6aa36bf9cd50fc337937a0e65a2f1048ca2406cefdff697ec9d98a39d58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json scope guard passed: 15 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json scope guard passed: 15 changed path(s) covered",
+      "outputBytes": 197
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:25:47.125091+00:00",
+      "exitCode": 0,
+      "durationMs": 99,
+      "outputDigest": "c01650b626666536a5447474f2cbbae8e26ab5c1ed7df4742ff5db6e8f16dd45",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "b4f6b6aa36bf9cd50fc337937a0e65a2f1048ca2406cefdff697ec9d98a39d58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 234
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:25:47.353517+00:00",
+      "exitCode": 0,
+      "durationMs": 180,
+      "outputDigest": "8d588aacc65d7b8d12029b24de73c49280d698e1bcfd6e0367a7d09d88364ae1",
+      "commandHash": "5eb72e68e4befe8e5c1802d87a66c30b80b0c69ef624d865587e5fbf162f2b2d",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "b4f6b6aa36bf9cd50fc337937a0e65a2f1048ca2406cefdff697ec9d98a39d58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `rfe082-release-truth-reconciliation-20260729` - Contract Hash: `eb2f38946a48f764` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Accepta",
+      "outputTail": "overage`: passed - `aiGuidelines`: passed - `aiSummary`: not_run - `aiStatus`: not_run - `aiStatusCheck`: not_run - `aiStatusConsistency`: not_run - `aiDiffOwnership`: passed - `quality`: failed ## Review Focus - Stable Release versus immutable tag classification - v0.5.45 candidate progression and deferred source binding - Fail-closed stale projection diagnostic - Obsolete #401 path cleanup and non-reuse ## Diff Ownership Preview - active_owned: `15`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/rfe082-release-truth-reconciliation-20260729.json` — covered by Contract scope - [active_owned] `docs/reference/distribution.md` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-rfe082-release-truth-reconciliation.md` — covered by Contract scope - [active_owned] `docs/superpowers/specs/2026-07-29-rfe082-release-truth-design.md` — covered by Contract scope - [active_owned] `next-release.json` — covered by Contract scope - [active_owned] `release-state.json` — covered by Contract scope - [active_owned] `scripts/check_release_distribution.py` — covered by Contract scope - [active_owned] `scripts/check_release_state_consistency.py` — covered by Contract scope - [active_owned] `tests/test_ci_release_evidence.sh` — covered by Contract scope - [active_owned] `tests/test_release_distribution.py` — covered by Contract scope - [active_owned] `tests/test_release_state_consistency.py` — covered by Contract scope ## Next Action - Run or record required verification: aiAgentRisk",
+      "outputBytes": 7153
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:25:47.492566+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "b3a0bc446a4dfaca296b33ba221546206c9656a5b10ea3b19d3ada266110f909",
+      "commandHash": "09d210ccadb54d16373a24d573b3610dfaa93dfeaf7cdbcb074e4536536196c0",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "b4f6b6aa36bf9cd50fc337937a0e65a2f1048ca2406cefdff697ec9d98a39d58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json review policy matched 2 path(s) [review] .ai/work-items/starts/rfe082-release-truth-reconciliation-20260729.json [review] .ai/cockpit/current_status.md review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json review policy matched 2 path(s) [review] .ai/work-items/starts/rfe082-release-truth-reconciliation-20260729.json [review] .ai/cockpit/current_status.md review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 396
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:25:47.631648+00:00",
+      "exitCode": 0,
+      "durationMs": 90,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "b4f6b6aa36bf9cd50fc337937a0e65a2f1048ca2406cefdff697ec9d98a39d58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:25:47.770861+00:00",
+      "exitCode": 0,
+      "durationMs": 89,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "b4f6b6aa36bf9cd50fc337937a0e65a2f1048ca2406cefdff697ec9d98a39d58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:25:47.867999+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "8d12fbc2d6297f52ad4ad134fd7763efa96bac4a47dfaebc2eb0aef2de3b77e6",
+      "commandHash": "79e74df05316b590782fd4c9dda063e81c585448ebfa82973e4f160f8918d7bd",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "b4f6b6aa36bf9cd50fc337937a0e65a2f1048ca2406cefdff697ec9d98a39d58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 311
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:25:47.958742+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "095978e93f459bb41773add33ae33e3247778c36ff201da2e6965661b24dcea8",
+      "commandHash": "bd7006a740dd2374f27cf504d0b315cf327a5def2ad8a831eaa67d47595a9764",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "b4f6b6aa36bf9cd50fc337937a0e65a2f1048ca2406cefdff697ec9d98a39d58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputBytes": 316
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:25:48.187862+00:00",
+      "exitCode": 0,
+      "durationMs": 181,
+      "outputDigest": "ebe4844b623e45df6466a47c5d04d8afe2e9942d8e43fe83611709e482612d1a",
+      "commandHash": "ffb8b176751c548f605229f5ee11bc2efa77b682a8aa4ddf356ccc8350f586ff",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "b4f6b6aa36bf9cd50fc337937a0e65a2f1048ca2406cefdff697ec9d98a39d58",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json ## Diff Ownership Preview - active_owned: `15`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/rfe082-release-truth-reconciliation-20260729.json` — covered by Contract",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json ## Diff Ownership Preview - active_owned: `15`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/rfe082-release-truth-reconciliation-20260729.json` — covered by Contract scope - [active_owned] `docs/reference/distribution.md` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-rfe082-release-truth-reconciliation.md` — covered by Contract scope - [active_owned] `docs/superpowers/specs/2026-07-29-rfe082-release-truth-design.md` — covered by Contract scope - [active_owned] `next-release.json` — covered by Contract scope - [active_owned] `release-state.json` — covered by Contract scope - [active_owned] `scripts/check_release_distribution.py` — covered by Contract scope - [active_owned] `scripts/check_release_state_consistency.py` — covered by Contract scope - [active_owned] `tests/test_ci_release_evidence.sh` — covered by Contract scope - [active_owned] `tests/test_release_distribution.py` — covered by Contract scope - [active_owned] `tests/test_release_state_consistency.py` — covered by Contract scope",
+      "outputBytes": 1727
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:29:58.043131+00:00",
+      "exitCode": 0,
+      "durationMs": 249789,
+      "outputDigest": "c590c2ea5b94dadee50ccf144efedea9f30998d1943468607c2f0d72e03fc6ea",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "b4f6b6aa36bf9cd50fc337937a0e65a2f1048ca2406cefdff697ec9d98a39d58",
+      "outputSummary": "\"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-full \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-fast-static \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"067f8776c7d6",
+      "outputTail": "ts/test_installer.py::test_upgrade_with_active_requires_explicit_override 2.22s call tests/test_release_preflight.py::test_postmerge_preflight_rejects_included_content_after_candidate_merge 2.06s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[True-False] 2.03s call tests/test_start_and_archive.py::test_ai_start_journeys 2.00s call tests/test_project_governance.py::test_system_invariants_reject_unpinned_workflow_actions 1.84s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 1.83s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 1400 passed, 3 warnings in 242.57s (0:04:02) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.MdtJ9WPyUq/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.MdtJ9WPyUq/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.MdtJ9WPyUq/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.MdtJ9WPyUq/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/067f8776c7d6-local-20260728T162548Z-58655-0/summary.json",
+      "outputBytes": 46569
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:29:59.507246+00:00",
+      "exitCode": 0,
+      "durationMs": 202,
+      "outputDigest": "ddb6f43104779c19b58c165d041c12db79fad0adf82403366ca417a43613c0d9",
+      "commandHash": "641dce01e4aaf75366a5bb01418fa6b2b58ffcb30a3982185d68721a31fac670",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "139bd56dea3cae85c0ba350d8fcf1515da99c2e04826adafabb1c1960f2cfc5b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 358
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:29:59.752888+00:00",
+      "exitCode": 0,
+      "durationMs": 197,
+      "outputDigest": "cc04dcad979c84090769e5fd7f0888ff8b4efd8daf069261067872a27362dd4c",
+      "commandHash": "b696c7c12a434bd1edcbd96f1f5e6464f32a748f25d587c995d6e92a9e8446e7",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "139bd56dea3cae85c0ba350d8fcf1515da99c2e04826adafabb1c1960f2cfc5b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 341
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:29:59.840922+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "139bd56dea3cae85c0ba350d8fcf1515da99c2e04826adafabb1c1960f2cfc5b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json SUMMARY=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:29:59.936993+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "966639da7a090662fa2a38fbaeb847fb2f4f9c38ce9e2d5299b2cc22367ee254",
+      "commandHash": "54b5cfcfb054291d15c2775c94911cf0cbc58e7585f5b1fa38ac975eea6a7db1",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "139bd56dea3cae85c0ba350d8fcf1515da99c2e04826adafabb1c1960f2cfc5b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json --summary .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 321
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json CONTRACT=.ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T16:30:00.851079+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "d9da83934b4d9e8a5cc96bf1c96e1b8147c50831953aeea0d53d25fef79d7d3e",
+      "commandHash": "f3aba98bd668572986f25224879e9e4d6d6db07b53082a56b53d7d84a6534af4",
+      "contractHash": "eb2f38946a48f76459071fcea19bc3f42f2e3344b3db35b9029598ff1fec2682",
+      "commitSha": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+      "executionContractPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "worktreeDigest": "194a6816548003db3352c8eacb207949c72382af418434faa48b0420207dc5d9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json ai summary check passed: .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json --contract .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json ai summary check passed: .ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+      "outputBytes": 349
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Use provider evidence and deterministic classification; do not infer publication from the existence of a Git tag.",
+      "compliant": true,
+      "evidence": "Provider parsing excludes drafts/prereleases from stable Releases while all semantic refs independently reserve versions."
+    },
+    {
+      "guideline": "Advance candidates after every immutable reserved semantic version without rewriting or deleting historical tags.",
+      "compliant": true,
+      "evidence": "v0.5.43 and v0.5.44 remain immutable; next-release.json and release-state.json select v0.5.45."
+    },
+    {
+      "guideline": "Treat the archived #401 implementation as evidence only; implement independently from current origin/main.",
+      "compliant": true,
+      "evidence": "The replacement branch starts at 067f8776; #401 was closed and its exact branches deleted without cherry-picking."
+    },
+    {
+      "guideline": "Keep final source-bound freeze/digest generation in the later release Work Item, not this corrective.",
+      "compliant": true,
+      "evidence": "candidate_prepared uses deferred_to_release_finalization with a null sourceCommit; release preflight remains fail closed."
+    },
+    {
+      "guideline": "Record instruction-plan-implementation-acceptance bindings and every discovered process issue in the Summary.",
+      "compliant": true,
+      "evidence": "PLAN-DIRECTIVE-032, the RFE-082 plan matrix, and observedIssues provide both directions."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "Release identity affects immutable version selection and supply-chain claims; classification and progression are deterministic and regression-guarded."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [
+    {
+      "path": "github-pr:spirex-ds-dev/ai-cockpit-template#401",
+      "reason": "Closed the obsolete unmerged recovery path under explicit user authorization; the PR audit record remains recoverable."
+    },
+    {
+      "path": "git-branch:codex/fix-draft-release-asset-verification-20260727",
+      "reason": "Deleted the exact local and remote obsolete branch so later agents cannot accidentally revive it."
+    }
+  ],
+  "observedIssues": [
+    {
+      "issueId": "RFE-082-FACT-001",
+      "category": "provider-fact-drift",
+      "severity": "high",
+      "fact": "The plan and checker treated v0.5.44 as the latest public release, but provider evidence shows v0.5.43 is the latest stable GitHub Release and v0.5.44 is tag-only.",
+      "decision": "Model stable Releases and immutable reserved tags as separate facts.",
+      "resolution": "Provider classification, tests, distribution documentation, and the comprehensive plan now state the distinct facts.",
+      "status": "resolved_locally",
+      "followUp": "Require Hosted CI before lifecycle closure."
+    },
+    {
+      "issueId": "RFE-082-STATE-001",
+      "category": "release-state-drift",
+      "severity": "high",
+      "fact": "release-state.json reused reserved candidate v0.5.44, carried a stale exact source claim, and had a drifted published metadata digest.",
+      "decision": "Use deferred source binding for candidate preparation and reserve all immutable semantic tags.",
+      "resolution": "The canonical candidate is v0.5.45, digests match current projections, and consistency checks reject reuse or false exact binding.",
+      "status": "resolved_locally",
+      "followUp": "Generate exact source-bound evidence only in the later release Work Item."
+    },
+    {
+      "issueId": "RFE-082-OBSOLETE-001",
+      "category": "obsolete-execution-path",
+      "severity": "high",
+      "fact": "Unmerged PR #401 and its local/remote branch remained available even though their Work Item had been archived.",
+      "decision": "Preserve the PR as closed audit evidence and remove both exact branches.",
+      "resolution": "PR #401 is closed and branch codex/fix-draft-release-asset-verification-20260727 is absent locally and remotely.",
+      "status": "resolved_provider",
+      "followUp": "The replacement Work Item must complete independently."
+    },
+    {
+      "issueId": "RFE-082-DIAGNOSTIC-001",
+      "category": "misleading-release-diagnostic",
+      "severity": "medium",
+      "fact": "The old distribution failure called the highest Git tag the highest public release, obscuring whether the defect was publication, projection, or version reservation.",
+      "decision": "Report projection, stable GitHub Release, and highest reserved tag independently.",
+      "resolution": "The normal check now fails with all three identities; preparation mode confirms v0.5.45 follows reserved v0.5.44.",
+      "status": "resolved_locally",
+      "followUp": "Retain the normal fail-closed mismatch until a verified later release updates the projection."
+    },
+    {
+      "issueId": "RFE-082-FIXTURE-001",
+      "category": "cross-layer-test-fixture-drift",
+      "severity": "medium",
+      "fact": "The first full ai-finish passed 1400 pytest cases but the shell CI/Release Evidence regression still generated the prior release-state shape.",
+      "decision": "Keep the new schema fail closed and update the shell fixture instead of weakening consistency validation.",
+      "resolution": "The fixture now declares exact verified source binding and explicit empty reserved/unavailable collections.",
+      "status": "resolved_locally",
+      "followUp": "Restart full ai-finish from a refreshed Contract-bound checkpoint."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "high",
+      "area": "published-distribution",
+      "detail": "release.json remains v0.5.42 while the latest stable provider Release is v0.5.43; no valid evidence authorizes promotion, so normal distribution verification intentionally remains fail closed.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    },
+    {
+      "level": "medium",
+      "area": "future-release-finalization",
+      "detail": "v0.5.45 freeze, exact source commit, archive, assets, and provider evidence must be generated from the final later release source.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Stable Release versus immutable tag classification",
+      "v0.5.45 candidate progression and deferred source binding",
+      "Fail-closed stale projection diagnostic",
+      "Obsolete #401 path cleanup and non-reuse"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "release diagnostics name projection, stable Release, and reserved tag independently",
+    "persistence": "release-state records deterministic reserved/unavailable evidence and deferred candidate binding",
+    "localization": "not_applicable",
+    "generatedArtifacts": "final source-bound release artifacts remain intentionally ungenerated",
+    "makeEntrypoints": "preparation and normal distribution targets preserve separate pass/fail semantics"
+  },
+  "userCorrectionsCaptured": [
+    "RFE-ISSUE-082 and all discovered process defects must be resolved before release.",
+    "A candidate may advance to v0.5.45, but the process defect must be fixed permanently rather than patched once.",
+    "Obsolete callable paths must be cleaned so future agents cannot invoke them.",
+    "Every Work Item must use bidirectional instruction-plan-implementation-acceptance verification and complete PR/branch cleanup."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Do not conflate tags, stable Releases, repository projections, or prepared candidates.",
+      "solidifiedIn": "release-state schema enforcement, provider-fact tests, distribution documentation, and the installed ai-cockpit skill release-truth rule"
+    },
+    {
+      "correction": "Do not reuse v0.5.44; advance after all immutable reserved versions.",
+      "solidifiedIn": "next-release.json v0.5.45 plus distribution/state candidate progression gates"
+    },
+    {
+      "correction": "Do not leave archived, unmerged execution paths callable.",
+      "solidifiedIn": "closed PR #401, deleted exact local/remote branch, Contract non-reuse boundary, and installed ai-cockpit skill"
+    },
+    {
+      "correction": "Prevent instruction omission with bidirectional traceability.",
+      "solidifiedIn": "PLAN-DIRECTIVE-032 and the RFE-082 implementation plan matrix"
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "eb2f38946a48f764",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "eb2f38946a48f764",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    }
+  ],
+  "knownGaps": [
+    "Full ai-finish/archive, aggregate PR validation, Hosted CI, merge, closure, and branch cleanup remain pending lifecycle evidence.",
+    "Japanese assessment/remediation remains the next independent Work Item after this lifecycle closes.",
+    "release.json is intentionally unchanged because no verified v0.5.43 or v0.5.44 public asset evidence authorizes changing the repository published projection."
+  ],
+  "overclaimPrevention": "This Work Item proves release-fact classification, candidate preparation, and obsolete-path cleanup only; it does not claim that v0.5.43, v0.5.44, or v0.5.45 is a verified installable release and does not publish any tag, Release, or asset.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-29T10:30:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-29-rfe082-release-truth-reconciliation.md",
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+        ],
+        "reason": "The replacement Work Item, corrected provider facts, task order, and full lifecycle are explicit."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/rfe082-release-truth-reconciliation-20260729.contract.json",
+          ".ai/work-items/archive/2026/rfe082-release-truth-reconciliation-20260729.summary.json",
+          "docs/reference/remediation-instruction-traceability.json"
+        ],
+        "reason": "Five scenarios and every user correction map to implementation or explicit non-action evidence."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/distribution.md",
+          "scripts/check_release_distribution.py",
+          "scripts/check_release_state_consistency.py",
+          "tests/test_release_distribution.py",
+          "tests/test_release_state_consistency.py"
+        ],
+        "reason": "Documented preparation, publication, and failure boundaries match implemented checks."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "This release-state corrective changes no multilingual end-user document; Japanese assessment is the next independent Work Item."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "release.json",
+          "release-state.json",
+          "docs/superpowers/specs/2026-07-29-rfe082-release-truth-design.md",
+          ".ai/work-items/archive/2026/rfe082-release-truth-reconciliation-20260729.summary.json"
+        ],
+        "reason": "The stale projection, reserved versions, closed recovery path, and deferred final evidence remain explicit rather than being silently rewritten."
+      }
+    ]
+  },
+  "archiveSequence": 644
+}

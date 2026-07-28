@@ -16,6 +16,7 @@ import tempfile
 import urllib.parse
 import urllib.request
 from pathlib import Path
+from typing import TypedDict
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +27,7 @@ PUBLIC_REPOSITORY = os.environ.get(
     "AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY",
     f"https://github.com/{CANONICAL_REPOSITORY}.git",
 )
+PUBLIC_RELEASES_API = f"https://api.github.com/repos/{CANONICAL_REPOSITORY}/releases?per_page=100"
 SUPPLY_CHAIN_FILES = {
     "requirementsLockDigest": ROOT / "requirements-dev.lock",
     "sbomDigest": ROOT / ".ai" / "cockpit" / "sbom.json",
@@ -48,6 +50,14 @@ SOURCE_BOUND_ARTIFACTS = {
     ".ai/cockpit/provenance.json",
     ".ai/cockpit/release-digests.json",
 }
+
+
+class ProviderFacts(TypedDict):
+    reservedTags: list[str]
+    stableReleaseTags: list[str]
+    nonStableReservedTags: list[str]
+    highestReservedTag: str
+    highestStableReleaseTag: str
 
 
 def clean_git_environment() -> dict[str, str]:
@@ -115,6 +125,70 @@ def highest_semver_tag(refs: str) -> str:
     return max(tags, key=lambda tag: tuple(int(part) for part in tag[1:].split(".")))
 
 
+def _semver_key(tag: str) -> tuple[int, int, int]:
+    match = re.fullmatch(r"v(\d+)\.(\d+)\.(\d+)", tag)
+    if not match:
+        raise ValueError(f"not a semantic-version tag: {tag!r}")
+    return (int(match.group(1)), int(match.group(2)), int(match.group(3)))
+
+
+def stable_release_tags(payload: object) -> set[str]:
+    """Return stable semantic provider Releases from a validated API payload."""
+    if not isinstance(payload, list):
+        raise ValueError("provider release payload must be a list")
+    tags: set[str] = set()
+    for item in payload:
+        if not isinstance(item, dict):
+            raise ValueError("provider release payload entries must be objects")
+        tag = item.get("tag_name")
+        draft = item.get("draft")
+        prerelease = item.get("prerelease")
+        if (
+            not isinstance(tag, str)
+            or not isinstance(draft, bool)
+            or not isinstance(prerelease, bool)
+        ):
+            raise ValueError("provider release payload has invalid tag/draft/prerelease fields")
+        if not draft and not prerelease and re.fullmatch(r"v\d+\.\d+\.\d+", tag):
+            tags.add(tag)
+    if not tags:
+        raise ValueError("provider release payload has no stable semantic-version Release")
+    return tags
+
+
+def release_provider_facts(refs: str, releases_payload: object) -> ProviderFacts:
+    """Classify immutable tag reservation separately from stable publication."""
+    reserved = {
+        match.group(1)
+        for line in refs.splitlines()
+        if (match := re.search(r"refs/tags/(v\d+\.\d+\.\d+)$", line))
+    }
+    if not reserved:
+        raise ValueError("provider tag payload has no semantic-version tags")
+    stable = stable_release_tags(releases_payload)
+    if not stable.issubset(reserved):
+        raise ValueError("stable provider Release is missing its immutable Git tag")
+    reserved_sorted = sorted(reserved, key=_semver_key)
+    stable_sorted = sorted(stable, key=_semver_key)
+    return {
+        "reservedTags": reserved_sorted,
+        "stableReleaseTags": stable_sorted,
+        "nonStableReservedTags": sorted(reserved - stable, key=_semver_key),
+        "highestReservedTag": reserved_sorted[-1],
+        "highestStableReleaseTag": stable_sorted[-1],
+    }
+
+
+def release_identity_diagnostic(
+    *, projection_tag: str, stable_release_tag: str, reserved_tag: str
+) -> str:
+    """Describe each release identity fact without conflating their authority."""
+    return (
+        f"release.json projection is {projection_tag}; highest stable GitHub Release is "
+        f"{stable_release_tag}; highest immutable reserved tag is {reserved_tag}"
+    )
+
+
 def is_next_patch_release(candidate: str, published: str) -> bool:
     """Return whether *candidate* is exactly one patch after *published*."""
     pattern = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
@@ -133,7 +207,7 @@ def candidate_release_issues(
     candidate: dict[str, object],
     published: dict[str, object],
     *,
-    accepted_previous_tags: set[str] | None = None,
+    reserved_tags: set[str] | None = None,
 ) -> list[str]:
     """Validate candidate metadata without treating it as the public release contract."""
     issues: list[str] = []
@@ -144,13 +218,25 @@ def candidate_release_issues(
     if not isinstance(published_tag, str) or not published_tag:
         issues.append("release.json releaseTag is missing")
     if isinstance(candidate_tag, str) and isinstance(published_tag, str):
-        accepted_previous = {published_tag, *(accepted_previous_tags or set())}
-        if candidate_tag != published_tag and not any(
-            is_next_patch_release(candidate_tag, previous) for previous in accepted_previous
-        ):
+        reserved = set(reserved_tags or set())
+        if candidate_tag in reserved:
             issues.append(
-                f"next-release.json releaseTag {candidate_tag!r} is not the next patch after any accepted previous release {sorted(accepted_previous)!r}"
+                f"next-release.json releaseTag {candidate_tag!r} must not reuse immutable reserved tag"
             )
+        sequence = {published_tag, *reserved}
+        try:
+            highest_sequence_tag = max(sequence, key=_semver_key)
+        except ValueError as exc:
+            issues.append(str(exc))
+        else:
+            if not is_next_patch_release(candidate_tag, highest_sequence_tag):
+                issues.append(
+                    f"next-release.json releaseTag {candidate_tag!r} must be the next patch after "
+                    f"highest immutable reserved tag {highest_sequence_tag!r}"
+                )
+    elif candidate_tag is not None:
+        if not isinstance(candidate_tag, str):
+            issues.append("next-release.json releaseTag must be a semantic-version string")
     if candidate.get("releaseState") != "candidate":
         issues.append("next-release.json releaseState must be 'candidate'")
     if candidate.get("published") is not False:
@@ -988,6 +1074,19 @@ def list_remote_tags(repository_url: str) -> str:
         return query.stdout
 
 
+def fetch_public_releases() -> object:
+    """Fetch provider Release records without inheriting local Git credentials."""
+    request = urllib.request.Request(
+        PUBLIC_RELEASES_API,
+        headers={
+            "Accept": "application/vnd.github+json",
+            "User-Agent": "ai-cockpit-release-verifier",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=30) as response:  # nosec B310
+        return json.loads(response.read().decode("utf-8"))
+
+
 def main() -> int:
     preparation_mode = os.environ.get("AI_RELEASE_PREPARATION") == "1"
     post_publication_mode = os.environ.get("AI_RELEASE_POST_PUBLISH") == "1"
@@ -1002,7 +1101,9 @@ def main() -> int:
     local_source = os.environ.get("AI_COCKPIT_TEMPLATE_SOURCE")
     try:
         published = json.loads(RELEASE.read_text(encoding="utf-8"))
-        latest_tag = highest_semver_tag(list_remote_tags(PUBLIC_REPOSITORY))
+        facts = release_provider_facts(list_remote_tags(PUBLIC_REPOSITORY), fetch_public_releases())
+        latest_reserved_tag = str(facts["highestReservedTag"])
+        latest_stable_release_tag = str(facts["highestStableReleaseTag"])
         if preparation_mode:
             if not CANDIDATE_RELEASE.is_file():
                 raise RuntimeError("next-release.json is required in release preparation mode")
@@ -1010,7 +1111,7 @@ def main() -> int:
             candidate_issues = candidate_release_issues(
                 candidate,
                 published,
-                accepted_previous_tags={latest_tag},
+                reserved_tags=set(facts["reservedTags"]),
             )
             if candidate_issues:
                 raise RuntimeError("candidate metadata is invalid: " + "; ".join(candidate_issues))
@@ -1018,7 +1119,7 @@ def main() -> int:
             # After publication, release.json intentionally remains the
             # historical repository projection. The immutable public tag and
             # its release assets are authoritative for this verification path.
-            tag = latest_tag
+            tag = latest_stable_release_tag
             metadata, script, issues = inspect_tagged_release(tag, allow_historical_metadata=True)
             supported = archive_verification_supported(metadata)
             if issues:
@@ -1037,23 +1138,11 @@ def main() -> int:
             )
             print(f"post-publication release distribution check passed: {tag}")
             return 0
-        if tag != latest_tag:
+        if tag != latest_stable_release_tag:
             candidate_tag = candidate.get("releaseTag") if preparation_mode else None
-            preparation_tag = None
-            if (
-                preparation_mode
-                and isinstance(candidate_tag, str)
-                and is_next_patch_release(candidate_tag, latest_tag)
-            ):
-                preparation_tag = candidate_tag
-            elif preparation_mode and candidate_tag == latest_tag:
-                # A release may already exist while a follow-up PR still runs
-                # the repository-wide smoke contract.  This is only a
-                # preparation baseline; post-publication verification remains
-                # authoritative for the public release.
-                preparation_tag = candidate_tag
-            elif preparation_mode and is_next_patch_release(tag, latest_tag):
-                preparation_tag = tag
+            preparation_tag = (
+                candidate_tag if preparation_mode and isinstance(candidate_tag, str) else None
+            )
             if preparation_tag is not None:
                 if supply_chain_issues(metadata):
                     raise RuntimeError("release-preparation evidence does not match local metadata")
@@ -1063,11 +1152,17 @@ def main() -> int:
                     sha256_supported=supported,
                 )
                 print(
-                    f"release distribution check pending publication: {preparation_tag} follows public {latest_tag}"
+                    "release distribution check pending publication: "
+                    f"{preparation_tag} follows reserved {latest_reserved_tag}; "
+                    f"stable provider Release remains {latest_stable_release_tag}"
                 )
                 return 0
             raise RuntimeError(
-                f"release.json points to {tag}, but highest public tag is {latest_tag}"
+                release_identity_diagnostic(
+                    projection_tag=tag,
+                    stable_release_tag=latest_stable_release_tag,
+                    reserved_tag=latest_reserved_tag,
+                )
             )
         tag_metadata, script, issues = inspect_tagged_release(tag)
         if release_claims(tag_metadata) != release_claims(metadata):

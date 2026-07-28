@@ -14,7 +14,10 @@ from check_release_distribution import (
     highest_semver_tag,
     is_next_patch_release,
     candidate_release_issues,
+    release_identity_diagnostic,
+    release_provider_facts,
     release_claims,
+    stable_release_tags,
     supply_chain_issues,
 )
 from ai_common import discover_remote_default_candidates, remote_default_branch_from_symref
@@ -32,6 +35,17 @@ class _Response:
 
     def read(self):
         return self.payload
+
+
+@pytest.fixture(autouse=True)
+def _provider_releases_follow_each_test_remote(monkeypatch):
+    def releases():
+        tag = highest_semver_tag(
+            release_distribution.list_remote_tags(release_distribution.PUBLIC_REPOSITORY)
+        )
+        return [{"tag_name": tag, "draft": False, "prerelease": False}]
+
+    monkeypatch.setattr(release_distribution, "fetch_public_releases", releases)
 
 
 def test_release_distribution_uses_canonical_public_repository_by_default():
@@ -52,7 +66,9 @@ def test_candidate_release_is_next_patch_and_separate_from_published_metadata():
         (release_distribution.ROOT / "next-release.json").read_text(encoding="utf-8")
     )
 
-    assert candidate_release_issues(candidate, published, accepted_previous_tags={"v0.5.43"}) == []
+    assert (
+        candidate_release_issues(candidate, published, reserved_tags={"v0.5.43", "v0.5.44"}) == []
+    )
     assert candidate["releaseTag"] == published["releaseTag"] or candidate["releaseTag"].startswith(
         "v"
     )
@@ -72,7 +88,71 @@ def test_candidate_release_accepts_next_patch_after_quarantined_public_tag():
         "supplyChain": {},
     }
 
-    assert candidate_release_issues(candidate, published, accepted_previous_tags={"v0.5.43"}) == []
+    assert candidate_release_issues(candidate, published, reserved_tags={"v0.5.43"}) == []
+
+
+def test_provider_facts_separate_stable_releases_from_reserved_tags():
+    refs = "\n".join(
+        [
+            "a refs/tags/v0.5.43",
+            "b refs/tags/v0.5.44",
+            "c refs/tags/v0.5.45",
+        ]
+    )
+    releases = [
+        {"tag_name": "v0.5.43", "draft": False, "prerelease": False},
+        {"tag_name": "v0.5.44", "draft": True, "prerelease": False},
+        {"tag_name": "v0.5.45", "draft": False, "prerelease": True},
+        {"tag_name": "nightly", "draft": False, "prerelease": False},
+    ]
+
+    assert stable_release_tags(releases) == {"v0.5.43"}
+    assert release_provider_facts(refs, releases) == {
+        "reservedTags": ["v0.5.43", "v0.5.44", "v0.5.45"],
+        "stableReleaseTags": ["v0.5.43"],
+        "nonStableReservedTags": ["v0.5.44", "v0.5.45"],
+        "highestReservedTag": "v0.5.45",
+        "highestStableReleaseTag": "v0.5.43",
+    }
+
+
+@pytest.mark.parametrize("payload", [None, {}, [{"tag_name": 1}]])
+def test_stable_release_tags_reject_malformed_provider_payload(payload):
+    with pytest.raises(ValueError, match="provider release payload"):
+        stable_release_tags(payload)
+
+
+def test_candidate_progression_uses_reserved_versions_without_calling_them_published():
+    published = {"releaseTag": "v0.5.42", "releaseEvidenceAuthority": "release-assets-v1"}
+    candidate = {
+        "releaseTag": "v0.5.45",
+        "releaseState": "candidate",
+        "published": False,
+        "basedOnReleaseTag": "v0.5.42",
+        "releaseEvidenceAuthority": "release-assets-v1",
+        "publicContract": {},
+        "capabilities": {},
+        "supplyChain": {},
+    }
+
+    assert (
+        candidate_release_issues(candidate, published, reserved_tags={"v0.5.43", "v0.5.44"}) == []
+    )
+    candidate["releaseTag"] = "v0.5.44"
+    assert "must not reuse immutable reserved tag" in " ".join(
+        candidate_release_issues(candidate, published, reserved_tags={"v0.5.43", "v0.5.44"})
+    )
+
+
+def test_release_identity_diagnostic_names_projection_release_and_reserved_tag():
+    assert release_identity_diagnostic(
+        projection_tag="v0.5.42",
+        stable_release_tag="v0.5.43",
+        reserved_tag="v0.5.44",
+    ) == (
+        "release.json projection is v0.5.42; highest stable GitHub Release is "
+        "v0.5.43; highest immutable reserved tag is v0.5.44"
+    )
 
 
 def test_preparation_mode_validates_published_identity_before_next_candidate(monkeypatch, tmp_path):
@@ -99,7 +179,7 @@ def test_preparation_mode_validates_published_identity_before_next_candidate(mon
     assert release_distribution.main() == 0
 
 
-def test_preparation_mode_accepts_historical_projection_with_public_candidate(
+def test_preparation_mode_accepts_historical_projection_with_next_unreserved_candidate(
     monkeypatch, tmp_path
 ):
     published = json.loads((release_distribution.ROOT / "release.json").read_text(encoding="utf-8"))
@@ -107,7 +187,7 @@ def test_preparation_mode_accepts_historical_projection_with_public_candidate(
         (release_distribution.ROOT / "next-release.json").read_text(encoding="utf-8")
     )
     published["releaseTag"] = "v0.5.42"
-    candidate["releaseTag"] = "v0.5.43"
+    candidate["releaseTag"] = "v0.5.44"
     candidate["basedOnReleaseTag"] = "v0.5.42"
     release_path = tmp_path / "release.json"
     candidate_path = tmp_path / "next-release.json"
@@ -970,7 +1050,7 @@ def test_main_rejects_tag_missing_evidence_even_when_worktree_has_it(monkeypatch
 
     assert release_distribution.main() == 1
     error = capsys.readouterr().err
-    assert "tag release evidence is invalid" in error or "highest public tag" in error
+    assert "tag release evidence is invalid" in error or "highest stable GitHub Release" in error
 
 
 def test_exercise_public_distribution_rejects_missing_documented_target():
