@@ -107,3 +107,20 @@ def test_system_invariants_ignore_make_options_before_documented_target(tmp_path
     issues = check_system_invariants.invariant_issues(copy)
 
     assert "documentation references missing Make target: -n" not in issues
+
+
+def test_system_invariants_resolve_makefile_option_before_documented_target(tmp_path, monkeypatch):
+    copy = _copy_repository_tree(tmp_path)
+    (copy / "docs" / "makefile-option.md").write_text(
+        "Use `make -f Makefile.ai quality-fast` through the installed makefile.\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        check_system_invariants, "exercise_installer", lambda *_args, **_kwargs: None
+    )
+
+    issues = check_system_invariants.invariant_issues(copy)
+
+    assert "documentation references missing Make target: -f" not in issues
+    assert "documentation references missing Make target: Makefile.ai" not in issues
+    assert "documentation references missing Make target: quality-fast" not in issues

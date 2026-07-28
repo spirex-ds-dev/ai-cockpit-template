@@ -12,7 +12,25 @@ keywords:
 
 # インストール
 
-これは英語版の要約ではなく、完全な日本語手順です。プログラミング経験は不要です。AI コーディングエージェントは調査と準備を行えますが、判断するのは常に人です。Governance Runtime の配置、プロジェクト固有の Calibration、最初の PR、ホステッド CI、マージ、ブランチクリーンアップは別々の段階です。
+これは英語版の要約ではなく、完全な日本語手順です。プログラミング経験は不要です。AI コーディングエージェントは調査と準備を行えますが、判断するのは常に人です。Governance Runtime の配置、プロジェクト固有の Calibration、最初の PR、ホステッド CI、マージ、完全な lifecycle closure は別々の段階です。branch cleanup は closure の一部にすぎません。
+
+本文で使う用語の平易な意味:
+
+- **Runtime（実行基盤）：**プロジェクトへ配置するガバナンス用ファイルとツール。
+- **Calibration（調整）：**共通ルールをこのプロジェクトに合わせる作業。
+- **Hosted CI（外部 CI）：**Git サービス側で実行する、PC 外部の検査。
+- **Lifecycle closure（完全な終了処理）：**証拠の保管、merge 済み PR の確認、
+  base の同期、branch cleanup をまとめた処理。
+- **Work Item（作業単位）：**一つの計画と証拠で管理する独立した作業。
+- **Session（回答記録）：**保存された調整回答の記録。
+- **Candidate（設定案）：**まだ有効化していない設定の提案。
+- **Evidence / Owner / Reviewer：**根拠、責任者、別の確認担当者。
+- **Full self-check（全項目検査）：**10 件の回答と必須検査が揃ったか確認する処理。
+- **SHA-256 / digest（要約値）：**内容の変化を検出するデジタル指紋。
+- **Phase record（確認段階の記録）：**Reviewer または Owner の確認を示す記録。
+- **Active configuration（現在の設定）：**今実際に有効な設定。
+- **Governance Simulation（ガバナンス模擬検査）：**有効化前に設定案の動作を
+  安全に確認する検査。
 
 現在の実装範囲は [Capability Truth Matrix](../reference/capability-truth-matrix.md)
 で確認してください。最短の入口は [30 秒スタート](30-second-start.ja.md)、
@@ -73,13 +91,22 @@ Python version、GNU Make、curl、initial commit、branch/PR permission を確�
 
 次のテキスト全体をコピーします。
 
+<!-- release-metadata-boundary: provider-discovers-latest-verifiable,tag-pinned-verifies-evidence -->
 ```text
 このプロジェクトへ AI Cockpit を導入したいです。最初は読み取り専用で調査してください。
 明示的に検証済み private mirror を私が指定しない限り、正規 public source
-https://github.com/spirex-ds-dev/ai-cockpit-template.git と metadata
-https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template/main/release.json
-を使用してください。固定 tag を解決し、tag target、source commit、installer
-digest、archive asset、SHA-256 evidence を報告し、不足・不一致で停止してください。
+https://github.com/spirex-ds-dev/ai-cockpit-template.git を使用してください。導入の
+たびに正式公開 semantic version を新しい順に確認し、provider release、
+tag-pinned metadata、installer、archive asset、digest がすべて揃って相互に一致する
+最上位 release を動的に選んでください。version の固定記述、draft/prerelease の
+選択、moving `main` metadata の digest authority 利用は禁止です。より新しい正式
+release の evidence が不足・不一致なら、失敗項目をすべて表示して STOP し、私の
+明示判断後だけ古い検証可能 release を選べます。silent downgrade は禁止です。
+この導入で使う release tag を 1 件解決した後、
+https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template/<resolved-tag>/release.json
+を取得し、この tag-pinned metadata だけで tag target、source commit、installer
+digest、archive asset、SHA-256 evidence を検証してください。不足・不一致で停止
+してください。
 作成、編集、削除、commit、push、PR 作成・マージ、公開は禁止です。
 関係のないユーザー変更をすべて保持してください。
 
@@ -103,6 +130,18 @@ active Work Item がある場合は停止して復旧手順を示してくださ
 ```
 
 期待する結果: 変更一覧ではなく読み取り専用レポートです。既に変更した場合は停止し、エージェント自身が作ったと証明できる変更だけを戻します。既存のユーザー作業を破棄してはいけません。
+
+最新の正式 release が検証に失敗した場合、勝手に古い版へ変更しません。失敗根拠を
+release 担当者がレビューした後だけ、次の限定復旧 prompt をコピーします。
+
+<!-- release-fallback-approval: failed-newer-evidence,owner-review,reverify -->
+```text
+検証に失敗した新しい正式 release、全失敗 check と根拠、release 担当者の review
+記録、この導入で提案する古い tag を示してください。その tag について provider、
+tag-pinned metadata、installer、archive、digest の全検証を再実行してください。
+全件成功後、この検証済み tag を今回の導入だけに使うか yes/no で 1 件質問します。
+書き込み、導入、その他の操作権限は含めません。
+```
 
 <!-- novice-stage: review-read-only-report -->
 ## 4. 調査レポートを確認する
@@ -143,7 +182,7 @@ CLI/environment control であり追加画面ではありません。
 | 種類 | 項目 | 通常の動作 |
 | --- | --- | --- |
 | 選択可能 | Mode | 未導入なら **New Adoption**、既存導入の更新だけ **Upgrade**、書き込まず確認するなら **Dry Run**。 |
-| 起動時の証拠 | Source | 初心者向け経路は公開済み固定 release を使います。local clone/private mirror は明示的な非公開 trust path です。 |
+| 起動時の証拠 | Source | Step 3 で動的に選択した最上位の検証可能な正式 release を使い、解決した tag は今回の導入中だけ変更しません。local clone/private mirror は明示的な非公開 trust path です。 |
 | 自動検出 | Stack | Wizard が現在自動検出する信号は Python、Swift、Android です。信号なし・混在構成は `generic` になります。`--stack` はスクリプト実行用で、Wizard の質問ではありません。 |
 | 自動検出 | 基準ブランチ（base/branch） | installer がリモートと既定ブランチの根拠から判定し、New Adoption の `--create-adoption` が専用ブランチを作ります。 |
 | 固定既定値 | Make 統合 | Wizard では無効（`update_makefile=false`）。`--update-makefile` は競合確認後だけ使用します。 |
@@ -161,11 +200,31 @@ CLI/environment control であり追加画面ではありません。
 Unknown は推測せず専門家へ確認し、Wizard 実行・書き込みはしないでください。
 ```
 
-通常は New Adoption、正規の固定 public release、検出 stack（不確実なら
+通常は New Adoption、Step 3 で動的に選んだ最上位の検証可能な正式 release
+（選択した tag は今回の導入中だけ変更しない）、検出 stack（不確実なら
 `generic`）、専用 adoption branch、Make integration なし、既存 glossary 保持、optional examples なし、
 interactive review です。既存ファイルや組織ルールと衝突する場合は担当者へ確認します。
 
 保守専用は `--upgrade` と `--upgrade-with-active` です。`--dry-run` は読み取り専用です。`AI_COCKPIT_TEMPLATE_REF` は明示 ref を指定し、`AI_COCKPIT_TEMPLATE_SHA256` は追加 assertion にすぎず、公開メタデータを置き換えません。
+
+この後の手順は **New Adoption** 専用です。**Upgrade** はここで停止し、別 Work
+Item で日本語の [Upgrade guide](../reference/upgrade.ja.md) を使います。
+**Dry Run** は worktree が変わっていない表示と全計画を review して停止します。
+計画が妥当な場合だけこの表へ戻って New Adoption を選びます。Dry Run は導入証拠
+ではありません。
+
+<!-- make-entrypoint-boundary: included-makefile-or-explicit-f -->
+Wizard は Make integration を既定で無効にします。以後の `make <target>` は、
+`include Makefile.ai` を別途 review・導入済みの場合だけ使えます。それ以外は
+エージェントが `make -f Makefile.ai <target>` を使い、実際の入口を表示します。
+初心者が Makefile を編集したり command を手入力したりする必要はありません。
+
+<!-- make-composite-boundary: integration-required-before-ai-finish -->
+一つの target を直接実行する場合は明示的な `Makefile.ai` 入口を使えます。ただし
+`ai-finish` など複数処理を含む lifecycle target の前には、子処理が現在も通常の
+Make を呼ぶため、エージェントが `include Makefile.ai` を別途 review・導入する
+必要があります。未導入または競合時は複合 target の前で STOP し、build/
+repository 担当者へ連絡します。
 
 モバイル・Java プロジェクトは同じ言語の例を先に開きます:
 [iOS](examples/ios.ja.md)、[Android](examples/android.ja.md)、
@@ -174,11 +233,17 @@ interactive review です。既存ファイルや組織ルールと衝突する�
 <!-- novice-stage: review-installation-plan -->
 ## 6. 導入計画をレビューする
 
+<!-- installation-plan-release-binding: resolved-tag,metadata,asset,digest,installer,wizard -->
 ```text
-書き込まずに最終導入計画を示してください。固定 release と trust evidence、
-fetch 後の base commit、新ブランチ、stack、全 installer option、
-作成・変更・保持する全ファイル、競合、rollback、書き込み後チェックを含め、
-各選択がこのプロジェクトに合う理由を説明してください。不明は Unknown としてください。
+書き込まずに最終導入計画を示してください。動的に解決した stable release tag、
+tag-pinned metadata URL、archive asset、検証済み SHA-256、正確な installer
+entrypoint と Wizard 起動方法、fetch 後の base commit、新ブランチ、stack、全
+installer option、作成・変更・保持する全ファイル、競合、rollback、書き込み後
+check を含めてください。installer が使う tag checkout、検証済み installer
+digest、別途検証した archive asset が同じ release に binding されることを示し、
+archive を installer input と呼ばないでください。各選択がこのプロジェクトに
+合う理由を説明してください。
+不明は Unknown としてください。
 最後は scaffold の書き込みと検証だけを許可する yes/no 質問 1 件にしてください。
 commit、push、PR、merge、release、削除、Calibration activation を求めないでください。
 ```
@@ -193,7 +258,7 @@ branch の推測、隠れた競合、後続権限の一括要求があれば拒�
 
 期待する結果: 専用 adoption branch と検証レポート。commit、push、PR、merge、release はありません。
 
-承認前に対象 folder、clean worktree、fixed release evidence、fetched default
+承認前に対象 folder、clean worktree、選択した release evidence、fetched default
 commit、全変更 file、conflict、rollback を確認し、次をコピーします。
 
 ```text
@@ -209,12 +274,12 @@ activation は承認しません。書き込み後は分類済み report を示�
 「分類、path、作成/変更/保持、目的、検証」の表を依頼し、次を確認します。
 
 ```text
-導入済み scaffold を読み取り専用で、(1) agent entrypoint、(2) glossary/policy/
-guard/trust/profile、(3) adoption Contract/Summary/start receipt、(4) scripts/Make、
-(5) Cockpit Status/evidence、(6) 既存 CI と後続 configuration gap、
-(7) optional examples の順に確認してください。expected/actual path、状態、平易な
-目的、validation、conflict recovery を表にし、missing/unplanned/invalid/conflict
-で STOP。finish、commit、push、calibration はしないでください。
+導入済みのひな形を読み取り専用で、(1) エージェントが読む入口、(2) 用語・方針・
+保護・信頼・project profile、(3) adoption の Contract/Summary/start receipt、
+(4) scripts/Make、(5) Cockpit Status と根拠、(6) 既存 CI と後続 configuration の
+不足、(7) 任意 example の順に確認してください。予定 path と実際の path、状態、
+平易な目的、検証、競合からの復旧を表にし、欠落・計画外・無効・競合で STOP。
+finish、commit、push、calibration はしないでください。
 ```
 
 - `AGENTS.md` と任意の Gemini/Claude/Cursor entrypoint
@@ -245,9 +310,9 @@ PASS/STOP、リポジトリ担当者を示してください。まだ実行せ�
 yes/no 質問を 1 件示して待ってください。
 ```
 
-source repository の `templates/` と template supply-chain evidence は adopter
-payload ではありません。Scaffold 作成だけでは Calibration、project quality、
-CI、platform toolchain、production readiness を証明しません。
+配布元リポジトリの `templates/` と供給元の証拠は、導入先へコピーするファイル
+ではありません。ひな形の配置だけでは、プロジェクト調整、品質、外部 CI、
+platform toolchain、production readiness の成功を証明しません。
 
 期待する結果: 全 path が説明され adoption Work Item に所有されます。計画外・説明なしの path があれば停止します。
 
@@ -276,6 +341,10 @@ commit ID と clean worktree evidence を示して停止してください。pus
 branch 削除、closure、configuration は承認しません。
 ```
 
+PASS: local commit が 1 件だけで、worktree は clean、未レビュー path はありません。
+STOP: commit に未レビュー path が混入、または adoption 変更が残る場合は repository
+owner へ連絡します。
+
 **C. Push と PR 準備を別承認:**
 
 ```text
@@ -283,6 +352,10 @@ adopt_ai_cockpit branch だけを push し、証明済み default branch 向け 
 ことを承認します。source branch を保持し、auto-merge/provider 自動削除を無効にし、
 PR link、Head SHA、required hosted checks を示して停止。merge/closure は禁止です。
 ```
+
+PASS: PR の base と Head SHA が正しく、required checks が列挙され、source branch
+が保持されています。STOP: push rejection、base/Head SHA 不一致、required check
+不足、自動 branch 削除。repository/CI owner へ連絡します。
 
 **D. 人のレビューと merge:** GitHub の **Files changed**、**Conversation**、
 **Checks** を人が確認し、required checks 成功後に手動 merge します。
@@ -306,8 +379,9 @@ PASS: ownership、archive、commit、branch、plan が一致。STOP: 不一致�
 レビュー済み plan に従い adopt_ai_cockpit の lifecycle closure だけを承認します。
 ai-close-work-item を実行し、remote/local branch 削除、clean worktree、
 fast-forward-only 同期、local default と remote の一致を順番に示して停止。
-失敗時は branch/evidence を保持しリポジトリ担当者へ連絡してください。
-configuration は開始しません。
+失敗時は closed と報告せず、local/remote branch の実状態と残存証拠を示します。
+branch が既に存在しない場合は、merge 済み PR Head SHA と base の証拠から復旧する
+計画を提示し、リポジトリ担当者へ連絡してください。configuration は開始しません。
 ```
 
 期待する結果: adoption PR が human-merged、`adopt_ai_cockpit` が closed、
@@ -317,21 +391,41 @@ remote/local branch が削除され、local default branch が remote と一致�
 ## 9. Calibration の 10 段階をすべて完了する
 
 adoption PR の merge と lifecycle closure を確認した後だけ、別の
-`configure_ai_cockpit` Work Item を作ります。エージェントは
-`make cockpit-doctor` と `make cockpit-calibrate` を実行し、導入済みの
-`make cockpit-calibrate-session ARGS="..."` で再開可能な Session を進めます。
+`configure_ai_cockpit` Work Item を作ります。エージェントは導入済みの
+`cockpit-doctor`、`cockpit-calibrate`、`cockpit-calibrate-session` target を
+使います。review 済み Make integration がある場合だけ通常の `make`、
+ない場合は `make -f Makefile.ai` をエージェントが使います。
 `make cockpit-calibration-wizard` は template maintenance 専用で adopter には
 導入されません。初心者は下記 prompt を使い、Session command を手入力しません。
 Candidate activation 前に Reviewer と Owner の別々の確認を待ちます。
 
-回答形式は **yes/no**、正しい値を示す **alternative input**、証拠不足で readiness
+Calibration Session は Configuration Work Item 内で 10 段階の回答を保存する記録
+です。操作はエージェントが行い、利用者は command 入力や JSON 編集をしません。
+
+<!-- calibration-answer-types: yes_no,alternative_input,unknown,not_applicable -->
+<!-- calibration-yes-no: type=yes_no,values=Y-or-N -->
+回答形式は **yes/no** の machine answer type が `yes_no`、value が `Y` または
+`N`、正しい値を示す
+**alternative input**、証拠不足で readiness
 をブロックする **unknown**、理由必須の **not applicable** の 4 種類です。
+
+<!-- calibration-runtime-boundary: unknown-not-machine-blocked,confirmations-not-candidate-bound -->
+平易に言うと、Unknown でも tool はまだ自動停止しません。また確認記録は、今回
+承認する正確な設定案のデジタル指紋に結び付いていません。
+
+現在の実装境界: 回答記録（Session）は不明回答（`unknown`）も完了として保存し、
+Reviewer/Owner の確認記録（confirmation record）は、変更不能な設定案のデジタル
+指紋（immutable Candidate digest）に結び付いていません。そのため STOP は人と
+エージェントが守る必須手順で、まだ機械による強制保証ではありません。後続 runtime
+corrective の release までは、`unknown` が 1 件でも
+あれば confirm/activate を実行せず、別の activation 承認直前に永続化 Session ID
+と SHA-256 を表示・再確認します。
 
 ```text
 同期済み default branch から configure_ai_cockpit を開始し、Calibration 10 段階を
 順番に案内してください。各段階で、平易な質問、確認 files、observed evidence、
 inference、Unknown、回答 type/value、Candidate 変更 file、PASS/STOP、reviewer を
-表示します。yes/no、alternative_input、unknown、理由付き not_applicable だけを
+表示します。`yes_no`、alternative_input、unknown、理由付き not_applicable だけを
 受け付け、command を創作せず、各段階で私を待ってください。Stage 10 後に Candidate
 と inventory を示し、activation 前に Reviewer/Owner を別々に確認します。
 commit、push、PR、merge、release、closure は禁止です。
@@ -361,42 +455,157 @@ commit、push、PR、merge、release、closure は禁止です。
 各段階で次の依頼を 1 件だけコピーし、結果を見てから回答します。
 
 <!-- calibration-review-table: copy-request,example,pass,stop -->
-| 段階 | コピーする依頼と根拠の例 | 続行できる状態（PASS） | 停止条件と連絡先（STOP） |
-| --- | --- | --- | --- |
-| 1 リポジトリの役割 | 「release/deploy ファイルから、アプリ、ライブラリ、複数構成のリポジトリ、テンプレート等のどれかを説明し、公開担当者を示してください。まだ回答を記録しません。」 | 役割と公開担当者を示すファイルがあり、説明を理解できる。 | 役割または担当者が不明。リポジトリ担当者へ連絡。 |
-| 2 言語と stack | 「設定ファイル、言語版、build/package tool と preset が出発点にすぎない理由、代案を示してください。」`pom.xml` は JDK 導入済みの証明ではありません。 | 版と preset がプロジェクト内の根拠に一致する。 | 混在・特殊構成。platform 担当者へ連絡。 |
-| 3 ソース範囲 | 「保守対象ソースと vendor/generated/cache/build を分け、全包含・除外理由を説明してください。」 | 全パスに担当者と理由がある。 | 保守コードを誤って除外する恐れ。module 担当者へ連絡。 |
-| 4 テスト範囲 | 「unit、integration、UI/device、fixture、test-generated と必要環境を分けてください。」 | テスト種類と必要環境を画面上で区別できる。 | 種類または環境が不明。test/platform 担当者へ連絡。 |
-| 5 生成物 | 「生成パス、generator、正本、再生成方法、直接編集ルールを示してください。」 | generator と差分確認ルールがファイルで確認できる。 | generator 不明。build 担当者へ連絡。 |
-| 6 重要パス | 「security、release、migration、payment、identity、signing、deploy、プロジェクト固有の高リスクパスと reviewer を示してください。」 | 全重要パスに人の reviewer がいる。 | 担当者不足。security/release 担当者へ連絡。 |
-| 7 品質コマンド | 「repo/CI の根拠から正確な command をコピーし、前提、目的、成功表示、失敗対応を説明してください。」 | 全 command に出典と期待表示がある。 | command の創作または前提不足。build/CI 担当者へ連絡。 |
-| 8 レビュー要件 | 「CODEOWNERS、branch protection、required hosted checks、agent が承認できない操作を示してください。」 | 人の担当者と required checks が明確。 | provider の根拠を確認できない。repository 管理者へ連絡。 |
-| 9 リスクと不明点 | 「全未解決事項、影響、担当者、復旧を示し、Unknown を N/A にしないでください。」 | 続行を妨げる Unknown がない。 | 1 件でも blocking Unknown。記載担当者へ連絡。 |
-| 10 導入準備 | 「10 件の回答、設定案の差分、一覧、検査結果、残る制限、Reviewer/Owner の判断を示し、まだ有効化しないでください。」 | 全体検査が成功し、2 人が別々に確認している。 | 根拠の欠落・古さ・却下。該当段階へ戻る。 |
+| 段階 | コピーする依頼 | 根拠の例と平易な意味 | 続行できる状態（PASS） | 停止条件と連絡先（STOP） |
+| --- | --- | --- | --- | --- |
+| 1 リポジトリの役割 | 「release/deploy ファイルから、アプリ、ライブラリ、複数構成のリポジトリ、テンプレート等のどれかを説明し、公開担当者を示してください。まだ回答を記録しません。」 | release workflow と app manifest は application の提案根拠ですが、最終承認ではありません。 | 役割と公開担当者を示すファイルがあり、説明を理解できる。 | 役割または担当者が不明。リポジトリ担当者へ連絡。 |
+| 2 言語と stack | 「設定ファイル、言語版、build/package tool と preset が出発点にすぎない理由、代案を示してください。」 | `pom.xml` は Java/Maven を示唆しますが、必要な JDK の導入済み証明ではありません。 | 版と preset がプロジェクト内の根拠に一致する。 | 混在・特殊構成。platform 担当者へ連絡。 |
+| 3 ソース範囲 | 「保守対象ソースと vendor/generated/cache/build を分け、全包含・除外理由を説明してください。」 | `src/main/` は保守対象候補です。`build/` は project evidence が確認して初めて出力扱いです。 | 全パスに担当者と理由がある。 | 保守コードを誤って除外する恐れ。module 担当者へ連絡。 |
+| 4 テスト範囲 | 「unit、integration、UI/device、fixture、test-generated と必要環境を分けてください。」 | `src/test` と `src/androidTest` は別の根拠で、互いを代替しません。 | テスト種類と必要環境を画面上で区別できる。 | 種類または環境が不明。test/platform 担当者へ連絡。 |
+| 5 生成物 | 「生成パス、generator、正本、再生成方法、直接編集ルールを示してください。」 | schema と generator が既知なら、generated client は正本ではありません。 | generator と差分確認ルールがファイルで確認できる。 | generator 不明。build 担当者へ連絡。 |
+| 6 重要パス | 「security、release、migration、payment、identity、signing、deploy、プロジェクト固有の高リスクパスと reviewer を示してください。」 | test 成功後も signing workflow に release owner が必要な場合があります。 | 全重要パスに人の reviewer がいる。 | 担当者不足。security/release 担当者へ連絡。 |
+| 7 品質コマンド | 「repo/CI の根拠から正確な command をコピーし、前提、目的、成功表示、失敗対応を説明してください。」 | CI command はその環境での構文を示すだけで、local SDK 導入済みの証明ではありません。 | 全 command に出典と期待表示がある。 | command の創作または前提不足。build/CI 担当者へ連絡。 |
+| 8 レビュー要件 | 「CODEOWNERS、branch protection、required hosted checks、agent が承認できない操作を示してください。」 | CODEOWNERS は reviewer の手掛かりで、provider setting が enforcement を証明します。 | 人の担当者と required checks が明確。 | provider の根拠を確認できない。repository 管理者へ連絡。 |
+| 9 リスクと不明点 | 「全未解決事項、影響、担当者、復旧を示し、Unknown を N/A にしないでください。」 | required device test で device access がなければ blocking Unknown のままです。 | 続行を妨げる Unknown がない。 | 1 件でも blocking Unknown。記載担当者へ連絡。 |
+| 10 導入準備 | 「10 件の回答、proposed configuration、一覧、検査結果、残る制限、予定する Reviewer/Owner を示してください。Stage 10 の回答を保存して full self-check を実行し、confirmation phase record の作成や有効化はまだ行いません。」 | 完全な proposed configuration は reviewable evidence であり、approval ではありません。 | Stage 10 の回答が保存され、full self-check が成功し、将来の Reviewer と Owner が特定済み。 | 根拠の欠落・古さ・却下。該当段階へ戻る。 |
 
-期待する結果: Unknown を隠さない Candidate と inventory。activation 失敗時は旧
-Active configuration を保持します。enterprise compliance や runtime sandbox の証明ではありません。
+### Calibration 完了記録チェックリスト
+
+この表は人が確認する画面です。Session（回答記録）が保存するのは回答の種類と値、
+理由、段階の状態、実行履歴、検査結果だけです。Work Item（作業記録）には、根拠、
+設定案、担当者、PASS/STOP を保存します。表の他の列は Session に保存しません。
+エージェントは Work Item の保存形式（schema）が認める確認（review）、受入条件
+（acceptance）、検証結果（verification）の
+欄だけを使い、Session と Work Item の保存場所を両方示します。認められた欄がない
+場合は STOP して保存先不足を報告し、存在しない JSON field を作ったり本文書を
+手編集したりしません。
+エージェントが記入済み 1 行を review output に表示し、Session の回答保存確認後
+だけ完了表示にします。質問しただけでは完了ではありません。事実または担当者が
+不足する場合は `unknown` と STOP を選びます。
+
+<!-- calibration-session-persistence-boundary: answer-only,work-item-evidence -->
+
+governance file を探したり編集したりせず、次の prompt をコピーします。
+
+```text
+active configure_ai_cockpit Work Item と永続化済み Calibration Session を特定して
+ください。下記 10 行の確認表を使います。現在の段階について、確認した根拠
+（observed evidence）、回答の種類と値（type/value）、設定案の変更（proposed
+configuration）、責任者/確認担当者（Owner/Reviewer）、PASS/STOP を含む 1 行の
+記入案を平易な日本語で示してください。各項目には「正式名称」「日本語の意味」
+「私が今判断する内容」を併記します。Session に記録する正確な回答と設定変更を
+先に示し、私の判断を待ってください。判断後は導入済み Calibration Session
+interface で回答の種類/値と理由だけを保存します。他の列は保存形式（schema）が
+対応する Work Item の確認・受入条件・検証結果だけに対応付け、Session path、
+read-only review 結果、Work Item の保存場所を表示
+してください。対応する保存場所がない列は永続化 gap を報告して STOP し、JSON
+field を創作しません。私に JSON を手編集させないでください。unknown のまま進行、
+根拠の創作、Candidate 有効化、commit、push、PR 作成・merge、release、Work Item
+close は禁止です。
+```
+
+<!-- calibration-completion-checklist: state,evidence,answer,candidate,owner-reviewer,pass-stop -->
+| 表示用の段階名（stage label）と確認項目 | 完了状態 | 記録する確認根拠（observed evidence） | 記録する回答の種類/値（type/value） | 記録する設定案の変更（Candidate） | 記録する責任者 / 確認担当者（Owner / Reviewer） | 記録する判定 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1. repository-role — リポジトリの役割と公開責任 | [ ] | 確認した release/deploy file と観察した役割を記録：___ | `yes_no`、`alternative_input`、`unknown`、または理由付き `not_applicable` を記録：___ | Candidate の role field、または理由付き `no change` を記録：___ | Owner：___；Reviewer：___ | `PASS`—理由、または `STOP`—不足根拠、Owner、再確認手順を記録：___ |
+| 2. language-and-stack — 言語、版、tool、preset 適合 | [ ] | manifest、version file、build/package の根拠を記録：___ | 回答 type と正確な stack/version 値を記録：___ | Candidate の stack field、または理由付き `no change` を記録：___ | Owner：___；Reviewer：___ | `PASS`—理由、または `STOP`—不足根拠、Owner、再確認手順を記録：___ |
+| 3. source-boundaries — 保守対象と除外 path | [ ] | 確認した source、vendor、generated、cache、output path を記録：___ | 回答 type と正確な include/exclude 値を記録：___ | Candidate の source-boundary diff、または理由付き `no change` を記録：___ | Owner：___；Reviewer：___ | `PASS`—理由、または `STOP`—不足根拠、Owner、再確認手順を記録：___ |
+| 4. test-boundaries — Test 種別、fixture、環境 | [ ] | unit/integration/UI/device/fixture の根拠と必要環境を記録：___ | 回答 type と正確な test-boundary 値を記録：___ | Candidate の test-boundary diff、または理由付き `no change` を記録：___ | Owner：___；Reviewer：___ | `PASS`—理由、または `STOP`—不足根拠、Owner、再確認手順を記録：___ |
+| 5. generated-artifacts — Generator と再生成 rule | [ ] | generated path、source of truth、generator、再生成の根拠を記録：___ | 回答 type と正確な generator/editing rule を記録：___ | Candidate の generated-artifact diff、または理由付き `no change` を記録：___ | Owner：___；Reviewer：___ | `PASS`—理由、または `STOP`—不足根拠、Owner、再確認手順を記録：___ |
+| 6. critical-paths — 高リスク path と人の review | [ ] | security/release/migration/signing/deploy path と根拠を記録：___ | 回答 type と正確な critical-path 値を記録：___ | Candidate の critical-path diff、または理由付き `no change` を記録：___ | Owner：___；Reviewer：___ | `PASS`—理由、または `STOP`—不足根拠、Owner、再確認手順を記録：___ |
+| 7. quality-commands — 出典のある正確な command と前提 | [ ] | repo/CI 出典、正確な command、前提、期待結果を記録：___ | 回答 type と出典のある正確な command set を記録：___ | Candidate の quality-command diff、または理由付き `no change` を記録：___ | Owner：___；Reviewer：___ | `PASS`—理由、または `STOP`—不足根拠、Owner、再確認手順を記録：___ |
+| 8. review-requirements — Owner、保護、hosted checks | [ ] | CODEOWNERS/provider/CI の根拠と確認不能な provider fact を記録：___ | 回答 type と正確な review requirement を記録：___ | Candidate の review-policy diff、または理由付き `no change` を記録：___ | Owner：___；Reviewer：___ | `PASS`—理由、または `STOP`—不足根拠、Owner、再確認手順を記録：___ |
+| 9. risks-and-unknowns — 影響、担当者、復旧 | [ ] | 各 risk/Unknown、影響、owner、復旧の根拠を記録：___ | 回答 type を記録し、証拠不足を N/A に変更しない：___ | Candidate の risk/Unknown diff、または理由付き `no change` を記録：___ | Owner：___；Reviewer：___ | `PASS`—理由、または `STOP`—不足根拠、Owner、再確認手順を記録：___ |
+| 10. adoption-readiness — Proposed configuration、inventory、checks、将来の判断 | [ ] | 最新 proposed-configuration/inventory/check の根拠と残る制限を記録：___ | 有効化せず最終回答 type/value を記録：___ | proposed Candidate change と configuration 識別子を記録：___ | 予定する Owner：___；予定する Reviewer：___；まだ confirm しない | 回答が保存され full self-check が成功した後だけ `PASS`、それ以外は `STOP` を記録し、phase record は次の独立した手順で作成：___ |
+
+confirmation 前に scaffold review から引き継いだ CI gap を全件閉じます。
+
+<!-- calibration-ci-gap-boundary: plan,approval,implementation,verification -->
+```text
+close 済み adoption Work Item の CI gap list を読み、各項目の repository 根拠、
+owner、正確な Candidate diff または根拠付き no-change 理由、validation、必要な
+hosted evidence、rollback、PASS/STOP を示してください。書き込みが必要なら、
+その正確な CI diff だけを対象に yes/no で 1 件質問して待ちます。承認後はその
+diff だけを実装し local validation を示し、後続 PR で同一 commit の hosted
+evidence を取得します。required CI 項目が Unknown・未実装・未検証なら
+Calibration の confirmation/activation を行いません。
+```
+
+### Activation を別に review・承認する
+
+10 行の check は Candidate が review 可能という意味で、activation ではありません。
+Session が保存するのは `reviewer` と `owner` の phase record だけで、人物の身元を
+保存・証明しません。先に Reviewer と Owner を特定し、人物・役割の根拠を保存する
+Work Item review 位置を確認します。その後、次の prompt をコピーして 2 件の判断を
+別々に取得・記録します。
+
+<!-- calibration-confirmation-boundary: phase-records,external-actor-identity -->
+```text
+activate しないでください。現在の Session ID/path/SHA-256 と proposed
+configuration を表示します。現在の操作者である私が、確認資料を特定済み Reviewer
+へ先に渡し、その人の明示判断と本人確認の根拠をあなたへ返します。それまで待って
+ください。次に Owner へ同じ手順を別に行います。私が本人の判断を返した後だけ
+Session phase を記録します。永続化済み 2 phase record と、人物・役割分離を示す
+Work Item の外部根拠を表示してください。Session 自体は人物や Candidate digest
+を binding しないと明記し、不足・古い・却下・同一人物の判断なら STOP します。
+```
+
+次に読み取り専用 plan prompt をコピーします。
+
+<!-- calibration-activation: plan-before-approval -->
+```text
+まだ activate しないでください。永続化 Calibration Session ID/path/SHA-256、
+回答から導出する proposed configuration、現在の Active configuration、全
+`unknown`、full self-check と Governance Simulation、Reviewer/Owner の別々の
+confirmation record、activation が置換する file、atomic write、失敗時の復旧を
+示してください。現在の confirmation record は Candidate digest に machine
+binding されないことを明記してください。各事実を Observed、Inferred、Unknown
+に分け、最後に「証拠が揃い、この正確な Session hash と proposed configuration
+について別の activation 承認段階へ進むか」だけを yes/no で 1 件質問してください。
+yes は activation の承認ではないと明記します。file 変更、commit、push、PR
+作成・merge、release、Work Item close は禁止です。
+```
+
+PASS は Session hash が最新、両 confirmation record が存在、proposed
+configuration が記録済み回答と一致し、`unknown` が 0 件の状態です。runtime
+binding 実装までは manual fail-closed guard です。それ以外は STOP し、該当
+checklist row へ戻ります。PASS 後だけ、次の限定承認を別にコピーします。
+
+<!-- calibration-activation: bounded-approval -->
+```text
+直前に review した正確な Calibration Session ID、SHA-256、proposed configuration
+の activation だけを承認します。activate 直前に Session SHA-256 を再計算し、
+hash 変更または `unknown` が 1 件でもあれば STOP してください。導入済み
+Calibration Session interface だけで activate し、前後の Active configuration
+識別子、Active file 置換結果、別処理の Session 保存結果、永続化 Session review、
+validation 結果を表示して停止してください。Active file 置換前または置換中の
+失敗では旧 Active configuration が保持されたことを確認します。Active 置換後に
+Session 保存または検証が失敗した場合は Active/Session 不整合を表示して STOP と
+報告し、repository owner に連絡します。rollback 済みとは主張せず、弱い根拠で
+再試行しません。commit、push、PR 作成・merge、release、Work Item close は禁止です。
+```
+
+期待する結果: Unknown を隠さない Candidate と inventory。atomic なのは Active
+file の置換だけで、Session 保存は別処理です。両記録の整合を確認できて初めて成功
+です。enterprise compliance や runtime sandbox の証明ではありません。
+
+<!-- calibration-activation-atomicity: active-file-only,session-save-separate -->
 
 <!-- novice-stage: run-local-checks -->
 ## 10. Local check を実行する
 
-```text
-active Contract が宣言した local check だけを実行してください。
-各 check を平易に説明し、進捗を表示し、実際の pass/fail/not-run を記録し、
-失敗時は停止してください。gate の弱体化、skip、名称変更は禁止です。
-commit、push、PR、merge、release は行わないでください。
-```
-
-英語 authoritative document が固定する readiness 順序は
-`make ai-cockpit-quality` の後に `make check-ai-adoption-ready` です。
-導入済みの同じ入口を対象プロジェクトで実行し、結果を説明させます。
-
-agent が実行する順序:
+readiness 順序は、導入済み target `ai-cockpit-quality` の後に
+`check-ai-adoption-ready` を実行する順です。次の prompt だけをコピーします。
 
 <!-- public-quality-target: ai-cockpit-quality -->
+<!-- readiness-target-order: ai-cockpit-quality,check-ai-adoption-ready -->
 ```text
-make ai-cockpit-quality
-make check-ai-adoption-ready
+導入済み target ai-cockpit-quality、check-ai-adoption-ready の順で実行します。
+Make integration が別途 review・導入済みなら通常の make entrypoint、それ以外は
+Makefile.ai entrypoint を使います。active Contract が宣言した check だけを対象に
+します。実行前に正確な 2 command を表示して平易に説明し、この段階について私の
+承認を待ってください。承認後に進捗を表示し、実際の pass/fail/not-run を記録し、
+失敗時は停止します。gate の弱体化、skip、名称変更、commit、push、PR、merge、
+release は行わないでください。
 ```
 
 目的: プロジェクト品質の後に adoption evidence を検証します。成功: 両方が成功し
@@ -407,12 +616,12 @@ Summary に実結果を記録。失敗: output を保存して STOP。同じ Wor
 ## 11. Configuration Work Item を完了する
 
 エージェントは `configure_ai_cockpit` の Summary、`before_finish` checkpoint、
-`make ai-finish TASK=<task>`、Contract/Summary archive を完了し、diff と verification
+導入済み `ai-finish` target に現在の task を渡し、Contract/Summary archive を完了し、diff と verification
 を示します。人がレビューしてから archive-evidence commit を承認します。commit
 承認は push 承認ではありません。
-active Contract/Summary を渡さない場合、`make check-ai-status` は
+active Contract/Summary を渡さない場合、導入済み `check-ai-status` target は
 `Skipping status check (no active contract/summary provided)` と表示することが
-あります。その場合も `make check-ai-status-consistency` で active state がない
+あります。その場合も導入済み `check-ai-status-consistency` target で active state がない
 ことを確認します。
 
 ```text
@@ -466,7 +675,8 @@ required GitHub Job の最終 state/Head SHA を列挙し、failure/skip を隠�
 <!-- novice-stage: merge-and-close -->
 ## 13. Merge 後に lifecycle を閉じる
 
-merge 後、`make ai-close-work-item TASK=configure_ai_cockpit` を別途承認します。closure は archive
+merge 後、導入済み `ai-close-work-item` target で `configure_ai_cockpit` を
+閉じる操作を別途承認します。closure は archive
 evidence と PR ownership、fast-forward-only base sync、remote/local work branch
 削除、clean worktree、local base と remote base の一致を検証します。1 件でも失敗したら closed ではありません。
 
@@ -489,7 +699,9 @@ PASS: PR/archive/commit/branch/plan が一致。STOP: 不一致の evidence を�
 レビュー済み plan に従い configure_ai_cockpit の lifecycle closure だけを承認します。
 ai-close-work-item を実行し、remote/local configuration branch 削除、clean worktree、
 fast-forward-only 同期、local default と remote の一致を順番に示して停止。
-失敗時は branch/evidence を保持し担当者へ連絡。新 Work Item は開始しません。
+失敗時は closed と報告せず、local/remote branch の実状態と残存証拠を示します。
+branch が既に存在しない場合は merge 済み PR Head SHA と base の証拠から復旧する
+計画を提示し、担当者へ連絡します。新 Work Item は開始しません。
 ```
 
 
@@ -500,18 +712,18 @@ fast-forward-only 同期、local default と remote の一致を順番に示し�
 | --- | --- |
 | dirty worktree | 全ユーザー変更を識別・保持し、先に完了するか別 worktree を使う。 |
 | initial commit なし | owner に initial commit の作成とレビューを依頼する。 |
-| tool 不足 | 組織承認済み方法で導入し、読み取り専用調査を再実行する。 |
+| tool 不足 | Step 1 で特定した repository/build 管理者へ連絡し、review 済みの導入方法を取得してから Step 1 の読み取り専用調査を再実行する。 |
 | default remote/branch 不明 | provider と remote HEAD を確認し、推測しない。 |
 | active Work Item あり | finish/close または明示 resume。競合する active item を作らない。 |
 | managed file conflict | 差分を説明し adopter content を保持して計画を修正する。 |
 | Calibration Unknown | evidence を集めるか owner を割り当て、activate しない。 |
 | local/hosted failure | log を保持し根因を修正して同じ check を再実行する。 |
-| merge 後 closure failure | branch を保持し lifecycle state を修正する。完了報告しない。 |
+| merge 後 closure failure | closed と報告しない。local/remote branch の実状態と証拠を確認し、branch が既にない場合は担当者承認後に merge 済み PR Head SHA から復旧する。 |
 
 <!-- novice-stage: confirm-installation-success -->
 ## 15. 最終成功チェック
 
-- 固定 release と fetch base が記録済み
+- 選択した最上位の検証可能 release と fetch base が記録済み
 - adoption/configuration が別 Work Item・branch・review lifecycle
 - 全 scaffold path と conflict を説明済み
 - Calibration 10 段階と Unknown をレビュー済み
@@ -527,8 +739,8 @@ fast-forward-only 同期、local default と remote の一致を順番に示し�
 ## 参照
 
 - [Standard Adoption Guide](standard-adoption-guide.ja.md)
-- [Calibration Session](../reference/calibration-session.md)
-- [Adopter Configuration](adopter-configuration.md)
+- [Calibration Session](../reference/calibration-session.ja.md)
+- [Adopter Configuration](adopter-configuration.ja.md)
 - [Security and Release Verification](security-release-verification.ja.md)
-- [Documentation Architecture](../reference/documentation-architecture.md)
-- [Upgrade（英語の authoritative version）](../reference/upgrade.md)
+- [Documentation Architecture](../reference/documentation-architecture.ja.md)
+- [Upgrade](../reference/upgrade.ja.md)

@@ -7,18 +7,26 @@ keywords: [ai-cockpit, ios, xcode, swift, installation]
 
 # iOS インストール例
 
-[日本語インストール手順](../installation.ja.md)の Step 1～4 を完了します。
-platform 段階 1～4 は Installation Step 5～6、書き込みと Adoption の完了処理
-（lifecycle closure）は主手順 Step 7～8、段階 5 は Calibration、段階 6 は停止時、
-段階 7 は主手順 Step 13 後に使います。本ページは主 lifecycle を置き換えません。
+[日本語インストール手順](../installation.ja.md)の Step 1～4 を先に完了します。
+このページを上から一度に実行しないでください。現在位置が主手順 Step 5～6 なら
+下表の 1～4 行を一行ずつコピーし、完了後は主手順 Step 7 へ戻ります。その他の
+位置では、下の対応表に一致する一行だけを使います。
+
+表の用語: 根拠（evidence）、責任者（owner）、確認担当者（reviewer）、署名
+（signing）、設定ファイル（manifest）、テスト用データ（fixture）、完全な終了処理
+（closure）。エージェントは正式名と日本語の意味を併記します。
+
+下の setup prompt は 1 回だけコピーし、エージェントの案内方法を決めます。その
+回答後は **主操作表**から一度に 1 行だけ実行します。後半の記入例は理解用で、
+もう一つの実行手順ではありません。
 
 | 日本語主手順 | 本ページで行うこと | 完了後に戻る先 |
 | --- | --- | --- |
 | Step 1～4 | 何もしない。調査を完了 | Step 5 |
 | Step 5～6 | 表の 1～4 行を 1 行ずつコピー | Step 7 |
 | Step 7～8 | 何もしない。書き込み/Adoption closure | Step 9 |
-| Step 9 | 表の 5 行目をコピー | Step 10 |
-| 任意の STOP | 6 行目をコピー | 元の停止段階 |
+| Step 9 | Calibration 内で表の 5 行目を使う | 主手順 Step 9 の残りを完了してから Step 10 |
+| platform の 1～5 行が出した STOP | 6 行目をコピー | 元の停止した platform 段階 |
 | Step 13 後 | 7 行目を 1 回だけコピー | Step 14/15 |
 
 <!-- platform-boundary: no-toolchain-device-signing-hosted-claim -->
@@ -31,7 +39,9 @@ platform 段階 1～4 は Installation Step 5～6、書き込みと Adoption の
 Step 9 で別途承認します。Xcode/Swift 用語を平易に
 説明してください。各段階で確認した根拠、意味、Wizard/Calibration 推奨値、
 未証明事項、期待結果、STOP/連絡先を示してください。xcodebuild、scheme、
-destination、signing、simulator、CocoaPods、hosted CI を創作せず、毎回待ってください。
+destination、signing、simulator、CocoaPods、hosted CI を創作しません。今は段階 1
+を開始せず、私が主操作表の 1 行目をコピーするまで待ってください。その後も毎回
+私の回答を待ちます。
 ```
 
 例: `MyApp.xcworkspace` は Xcode workspace の存在だけを示し、Xcode や動く scheme
@@ -40,8 +50,11 @@ scheme/destination の根拠がなければ iOS 担当者へ確認します。
 
 用語: ビルド対象（scheme）、実行環境（destination）、開発ツール一式
 （toolchain）、設定案（Candidate）、生成物の未反映差分（generated drift）。
+### 主操作表
+
 各回 1 行だけコピーします。
 
+<!-- platform-stage5: proposal-only -->
 <!-- platform-step-table: copy-request,example,pass,stop -->
 | 段階 | コピーする依頼 | 例と選択 | PASS | STOP/連絡先 |
 | --- | --- | --- | --- | --- |
@@ -49,11 +62,11 @@ scheme/destination の根拠がなければ iOS 担当者へ確認します。
 | 2 開発環境 | 「Xcode/Swift 版、依存管理、scheme、destination、signing、simulator/device、hosted macOS の根拠を示してください。」 | CI の Xcode 固定はローカル利用可能性と別。 | 全ツール・環境に利用可能性の根拠。 | 版/scheme/destination/signing/host 不足。iOS/release 担当者。 |
 | 3 境界 | 「`swift`/`generic` と保守ソース、生成/vendor/出力の除外、根拠を提案してください。」 | `swift` は初期案。non-SPM command は Calibration 必須。 | 全パスを説明できる。 | 初期案が混在構成を隠す。module 担当者。 |
 | 4 コマンド | 「repo/CI 出典どおりの正確な command と scheme、destination、configuration、前提、成功/失敗を説明し、創作しないでください。」 | test と archive/signing は別の根拠。 | command と環境に出典がある。 | command/secret/device 不足。iOS/CI 担当者。 |
-<!-- platform-stage5: proposal-only -->
 | 5 Calibration | 「generator、entitlement、privacy manifest、signing、archive/release、migration、deploy、reviewer の Candidate 差分を提案し、書き込み・有効化しないでください。」 | signing は release reviewer 必須。 | 提案差分に重要/生成 path が揃う。 | owner/再生成 rule 不足。build/release owner。 |
-| 6 復旧 | 「失敗の根拠と不足事項/担当者を保持し、根拠取得後に同じ check を再実行してください。」 | 未確認 destination は作業を止める。 | 同じ要件が成功。 | 弱い代替を提案。停止。 |
-| 7 検証 | 「10 段階、local/hosted、PR Head SHA、人の merge、closure、branch 削除を対応し、欠落なら未完了としてください。」 | SPM fixture は導入先 Xcode の根拠ではない。 | 本リポジトリ/commit に一致。 | platform/lifecycle の根拠不足。repository 担当者。 |
+| 6 復旧 | 「失敗の根拠と不足事項/担当者を保持し、根拠取得後に同じ check を再実行してください。」 | 未確認 destination は作業を止める。 | 同じ要件が成功。 | 弱い代替を拒否して STOP。停止した段階に記載の担当者へ連絡し、根拠取得後に同じ段階を再実行。 |
+| 7 検証 | 「要件、根拠 path/URL、commit SHA、PASS/STOP、不足項目を列にした証拠表を 1 要件 1 行で示し、10 段階、local/hosted、PR Head SHA、人の merge、closure、branch 削除を含めてください。」 | SPM fixture は導入先 Xcode の根拠ではない。 | 全行が本リポジトリ/commit に一致し、欠落がない。 | platform/lifecycle の根拠不足。repository 担当者。 |
 
+<!-- platform-filled-example: seven-stages -->
 ### 架空の `SampleNotes` で見る回答例
 
 各行は独立した例です。STOP の行では次へ進みません。担当者の回答を得て同じ段階を
@@ -62,7 +75,7 @@ scheme/destination の根拠がなければ iOS 担当者へ確認します。
 | 段階 | エージェントの回答例 | ユーザーがコピーする回答 | 成功表示 | 停止時に渡す情報 |
 | --- | --- | --- | --- | --- |
 | 1 | 「`SampleNotes.xcworkspace`、app target、unit test target を確認。shared scheme は未確認」 | `shared scheme は Unknown。書き込まず iOS 担当者へ確認してください。` | workspace と target 一覧が表示される。 | 検出した全パスを iOS 担当者へ渡す。 |
-| 2 | 「CI は Xcode 16.2、scheme は SampleNotes、destination は iPhone 16 Simulator」 | `その 3 項目を候補として記録し、local availability は別に確認してください。` | project/CI の出典行が表示される。 | version と CI ファイル名を渡す。 |
+| 2 | 「CI は Xcode 16.2、scheme は SampleNotes、destination は iPhone 16 Simulator」 | `3 項目を候補として記録して STOP し、iOS 担当者からローカル利用可能性の根拠を得た後に段階 2 を再実行してください。` | project/CI の出典行が表示される。 | version と CI ファイル名を渡す。 |
 | 3 | 「`Sources/` は保守対象、`DerivedData/` は出力。swift preset は開始点」 | `提案に同意します。非 SPM command はまだ確定しないでください。` | 含める/除外するパスが別表示。 | 判断不能パスを module 担当者へ渡す。 |
 | 4 | 「CI から exact test command を取得。archive/signing command は未確認」 | `test command だけ記録し、archive/signing は Unknown のまま停止してください。` | command の出典、前提、成功表示が並ぶ。 | command と不足項目を CI/release 担当者へ渡す。 |
 | 5 | 「entitlement と privacy manifest は重要、signing reviewer は Release Team」 | `Candidate 差分だけを提案し、まだ書き込み・有効化しないでください。` | 提案差分に path と reviewer が表示。 | owner 不明項目を release 担当者へ渡す。 |
@@ -103,13 +116,15 @@ UI/device、archive、signing evidence を分けます。
 ## 5. Generated/critical path を校正する
 
 code/project generation、entitlement、signing、privacy manifest、release/archive、
-migration、deploy script を記録し、signing/release path に人の reviewer を指定します。
+migration、deploy script を Candidate 項目として提案し、signing/release path の
+人の reviewer も提案します。書き込み・有効化はしません。
 
 <!-- platform-stage: stop-and-recover -->
 ## 6. 停止・復旧する
 
-scheme/destination 不明、Xcode/CocoaPods 不在、signing 未解決、dirty generated
-files、CI-only secret で停止します。owner から evidence を得て Candidate を更新し、同じ check を再実行します。弱体化しません。
+ビルド対象（scheme）または実行環境（destination）が不明、Xcode/CocoaPods が
+利用不能、署名未解決、生成ファイルに未反映差分がある、CI でしか使えない秘密情報
+が必要な場合に停止します。担当者から根拠を得て Candidate を更新し、同じ check を再実行します。弱体化しません。
 
 <!-- platform-stage: verify-platform-adoption -->
 ## 7. iOS Adoption を確認する
