@@ -22,11 +22,19 @@ def test_finish_git_environment_helper_excludes_git_overrides():
 
 
 def test_finish_git_environment_helper_filters_nested_work_item_overrides(monkeypatch):
+    for name in ("AI_BASE_COMMIT", "CONTRACT", "SUMMARY", "TASK", "TITLE", "MODE"):
+        monkeypatch.setenv(name, f"outer-{name.lower()}")
     monkeypatch.setenv("MAKEOVERRIDES", "CONTRACT=outer SUMMARY=outer PROJECT_TEST=false")
+    monkeypatch.setenv(
+        "MAKEFLAGS",
+        "-- CONTRACT=outer TASK=outer PROJECT_FORMAT_CHECK=true PROJECT_LINT=true",
+    )
 
     environment = ai_common.clean_git_environment()
 
+    assert all(name not in environment for name in ai_common.MAKE_OVERRIDE_BLOCKLIST)
     assert environment["MAKEOVERRIDES"] == "PROJECT_TEST=false"
+    assert environment["MAKEFLAGS"] == "-- PROJECT_FORMAT_CHECK=true PROJECT_LINT=true"
     assert environment["PYTHONDONTWRITEBYTECODE"] == "1"
 
 

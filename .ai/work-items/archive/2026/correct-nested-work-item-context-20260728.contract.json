@@ -1,0 +1,229 @@
+{
+  "contractVersion": 2,
+  "workItemId": "correct-nested-work-item-context-20260728",
+  "mode": "code",
+  "title": "Prevent nested Work Item context leakage",
+  "baseCommit": "6908ce709c8bcf01af3302148cbba00ea22b73d4",
+  "rawUserRequest": "WI-10 完整质量门暴露出流程缺陷：外层 make ai-finish 的 Work Item 变量污染临时 adopter 仓库中的嵌套 finish。先修流程并增加脚本检查，完成独立 PR、合并、关闭和分支清理，再继续 WI-10；没有新的确认事项时继续执行。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-wi10-quality-failure-correction",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-process-first-corrective-and-continuous-execution"
+  },
+  "declaredIntent": {
+    "summary": "Prevent outer Work Item identity variables from leaking into nested Make subprocesses and add regression coverage for the real propagation path.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/correct-nested-work-item-context-20260728.contract.json",
+    ".ai/work-items/active/correct-nested-work-item-context-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_common.py",
+    "tests/test_finish_e2e.py"
+  ],
+  "outOfScope": [
+    "WI-10 installation documentation changes",
+    "Changing Make targets, verification requirements, or quality thresholds",
+    "Release metadata, tags, assets, or provider publication",
+    "Unrelated process RFEs scheduled after the WI-01 through WI-20 audit"
+  ],
+  "sources": [
+    {
+      "path": "target/quality/sessions/6908ce709c8b-local-20260728T044407Z-32737-0/logs/project-test.log",
+      "reason": "WI-10 quality evidence showing nested e2e and adopter finish commands resolve the outer WI-10 Contract."
+    },
+    {
+      "path": "scripts/ai_common.py",
+      "reason": "Defines clean_git_environment and the Work Item Make-variable blocklist used by nested governance subprocesses."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "Existing regression covers MAKEOVERRIDES filtering but not direct top-level environment entries."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Requires process defects to be corrected with executable evidence before delivery resumes."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "nested_context_isolation",
+      "work_item_identity"
+    ],
+    "reason": "Leaked Work Item identity can validate the wrong Contract or make adopter lifecycle checks fail for unrelated outer state.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized process-first correction, complete PR lifecycle, and continued execution without another pause when no new decision is needed."
+  },
+  "preReviewWarnings": [
+    "Confirm direct environment entries and encoded MAKEFLAGS/MAKEOVERRIDES entries are all sanitized.",
+    "Confirm project quality overrides remain available to nested fixture checks.",
+    "Confirm the fix is exercised under an outer CONTRACT value rather than only by a unit helper assertion."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A regression test reproduces that direct CONTRACT, SUMMARY, TASK, TITLE, MODE, and AI_BASE_COMMIT environment entries survive the current sanitizer.",
+    "clean_git_environment removes Work Item identity variables both as direct environment entries and from MAKEFLAGS or MAKEOVERRIDES while preserving project quality overrides.",
+    "The finish lifecycle e2e runs successfully when pytest itself is launched with an unrelated outer CONTRACT value.",
+    "Full local quality, archive, committed PR validation, hosted CI, merge, ai-close-work-item, branch deletion, and synchronized main complete before WI-10 resumes."
+  ],
+  "guidelines": [
+    "Fix the context at the shared subprocess environment boundary rather than weakening individual fixture assertions.",
+    "Preserve explicitly supported project quality overrides used by nested checks.",
+    "Add executable regression evidence for the actual outer-to-inner propagation path."
+  ],
+  "intent": {
+    "problem": "During WI-10 full quality, three independent lifecycle tests invoked ai-finish inside temporary repositories. Their check-ai-guards steps unexpectedly resolved the outer WI-10 Contract path, which does not exist inside those repositories. clean_git_environment filters blocked names only inside MAKEFLAGS and MAKEOVERRIDES but copies the same names when they are direct environment entries.",
+    "constraints": [
+      "Deliver this workflow defect as one isolated corrective Work Item and PR.",
+      "Do not mix WI-10 documentation edits or release work into the corrective.",
+      "Do not remove project quality overrides that tests intentionally propagate.",
+      "Use test-first red-green evidence and complete lifecycle cleanup before resuming WI-10."
+    ],
+    "rationale": "Sanitizing the shared nested-subprocess boundary prevents every current and future fixture from inheriting a foreign Work Item identity, while one regression under a real outer Contract proves the end-to-end path."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A nested finish runs while the outer process exports a different Work Item Contract and Summary.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "CONTRACT=<outer> SUMMARY=<outer> TASK=<outer> pytest -q --no-cov tests/test_finish_e2e.py",
+        "tests/test_finish_e2e.py::test_required_failure_keeps_active_and_retry_archives",
+        "tests/test_finish_e2e.py::test_archive_collision_fails_after_checks_and_preserves_active"
+      ],
+      "expected": "The nested repository resolves only its own task Contract and completes its lifecycle checks.",
+      "verificationPlan": "First run the focused e2e with an outer CONTRACT to reproduce the wrong path, then implement the shared sanitizer fix and rerun the same command."
+    },
+    {
+      "scenario": "Project-specific quality command overrides are present beside blocked Work Item identity variables.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_finish_e2e.py::test_finish_git_environment_helper_filters_nested_work_item_overrides"
+      ],
+      "expected": "PROJECT_TEST, PROJECT_FORMAT_CHECK, and PROJECT_LINT remain available while Work Item identity variables are absent.",
+      "verificationPlan": "Extend the sanitizer unit regression with direct and encoded variables, then run the focused helper and finish e2e tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 631
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/correct-nested-work-item-context-20260728.json",
+    "baseCommit": "6908ce709c8bcf01af3302148cbba00ea22b73d4",
+    "initialScopeDigest": "08f0df7dafb3ff2e5cd8914597a2ff456773b2e3a210ff42f518f43295466fa7",
+    "contractSkeletonDigest": "ea708802a834a0493692194d1818259bc5b49726ac71c69576336eca6740657e"
+  }
+}

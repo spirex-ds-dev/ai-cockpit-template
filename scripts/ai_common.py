@@ -47,6 +47,7 @@ def clean_git_environment() -> dict[str, str]:
         and not key.startswith("COV_CORE_")
         and not key.startswith("COVERAGE_")
         and key not in {"MFLAGS", "MAKELEVEL"}
+        and key not in MAKE_OVERRIDE_BLOCKLIST
     }
     if "MAKEFLAGS" in os.environ:
         flags = _clean_make_overrides(os.environ["MAKEFLAGS"])
