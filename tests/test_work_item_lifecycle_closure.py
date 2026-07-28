@@ -1,10 +1,46 @@
 from __future__ import annotations
 
 import inspect
+import os
+import subprocess
+from pathlib import Path
 
 import pytest
 
 import ai_close_work_item as closure
+
+
+def run_command(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        list(args),
+        cwd=cwd,
+        text=True,
+        capture_output=True,
+        check=True,
+        env={**os.environ, "GIT_CONFIG_NOSYSTEM": "1"},
+    )
+
+
+def repository_runner(cwd: Path) -> closure.Runner:
+    def run(args, check=False):
+        result = subprocess.run(
+            ["git", *args],
+            cwd=cwd,
+            text=True,
+            capture_output=True,
+            check=False,
+            env={**os.environ, "GIT_CONFIG_NOSYSTEM": "1"},
+        )
+        converted = closure.CommandResult(
+            result.returncode,
+            result.stdout,
+            result.stderr,
+        )
+        if check and converted.returncode != 0:
+            raise RuntimeError(converted.stderr.strip() or "git command failed")
+        return converted
+
+    return run
 
 
 def test_quality_gate_requires_at_least_85_percent_coverage() -> None:
@@ -42,6 +78,7 @@ class FakeGit:
         self.remote_check_returncode = remote_check_returncode
         self.current_branch = "codex/example"
         self.base_worktree_path = ""
+        self.work_branch_commit = "work123"
 
     def __call__(self, args: list[str] | tuple[str, ...], check: bool) -> closure.CommandResult:
         command = tuple(args)
@@ -60,6 +97,9 @@ class FakeGit:
         if normalized == ("switch", "--detach", "HEAD"):
             self.current_branch = ""
             return closure.CommandResult(0, "")
+        if normalized == ("switch", "codex/example"):
+            self.current_branch = "codex/example"
+            return closure.CommandResult(0, "")
         if normalized == ("worktree", "list", "--porcelain"):
             if self.base_worktree_path:
                 return closure.CommandResult(
@@ -69,6 +109,8 @@ class FakeGit:
             return closure.CommandResult(0, "")
         if normalized == ("status", "--porcelain", "--untracked-files=all"):
             return closure.CommandResult(0, "")
+        if normalized == ("rev-parse", "codex/example"):
+            return closure.CommandResult(0, f"{self.work_branch_commit}\n")
         if normalized[:2] == ("rev-parse", "main") or normalized[:2] == (
             "rev-parse",
             "origin/main",
@@ -93,11 +135,14 @@ def prepare(monkeypatch: pytest.MonkeyPatch, fake: FakeGit) -> None:
     monkeypatch.setattr(
         closure,
         "_verify_pr",
-        lambda _runner, _branch, _base: {"url": "https://example.test/pr/1"},
+        lambda _runner, _branch, _base, _branch_commit: {
+            "url": "https://example.test/pr/1",
+            "headRefOid": "work123",
+        },
     )
 
 
-def test_success_orders_synchronization_before_branch_deletion(
+def test_success_proves_remote_absence_before_local_branch_deletion(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     fake = FakeGit()
@@ -106,12 +151,16 @@ def test_success_orders_synchronization_before_branch_deletion(
     result = closure.close_work_item("example", fake)
 
     assert result["state"] == "closed"
-    assert fake.commands.index(("switch", "main")) < fake.commands.index(
-        ("branch", "-D", "codex/example")
+    assert result["repositoryState"] == "ready_on_base"
+    assert result["nextWorkItemReady"] is True
+    assert result["baseWorktree"] == ""
+    remote_delete = fake.commands.index(("push", "origin", "--delete", "codex/example"))
+    remote_absence = fake.commands.index(
+        ("ls-remote", "--exit-code", "--heads", "origin", "codex/example")
     )
-    assert fake.commands.index(("branch", "-D", "codex/example")) < fake.commands.index(
-        ("push", "origin", "--delete", "codex/example")
-    )
+    local_delete = fake.commands.index(("branch", "-D", "codex/example"))
+
+    assert remote_delete < remote_absence < local_delete
 
 
 def test_unmerged_pr_blocks_all_cleanup(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -155,6 +204,10 @@ def test_base_branch_worktree_occupancy_is_supported(
 
     assert ("worktree", "list", "--porcelain") in fake.commands
     assert result["state"] == "closed"
+    assert result["repositoryState"] == "closed_but_current_worktree_detached"
+    assert result["nextWorkItemReady"] is False
+    assert result["baseWorktree"] == "/tmp/base-worktree"
+    assert fake.current_branch == ""
     assert ("-C", "/tmp/base-worktree", "merge", "--ff-only", "origin/main") in fake.commands
 
 
@@ -225,10 +278,25 @@ def test_remote_deletion_failure_does_not_report_closed(monkeypatch: pytest.Monk
     with pytest.raises(RuntimeError, match="remote work branch still exists"):
         closure.close_work_item("example", fake)
 
-    assert ("branch", "-D", "codex/example") in fake.commands
-    assert fake.commands.index(("switch", "main")) < fake.commands.index(
-        ("branch", "-D", "codex/example")
-    )
+    assert ("branch", "-D", "codex/example") not in fake.commands
+    assert ("switch", "--detach", "HEAD") not in fake.commands
+    assert fake.current_branch == "codex/example"
+
+
+def test_linked_worktree_local_delete_failure_restores_checkout(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake = FakeGit(fail_on=("branch", "-D"))
+    fake.base_worktree_path = "/tmp/base-worktree"
+    prepare(monkeypatch, fake)
+
+    with pytest.raises(RuntimeError, match="restored for retry"):
+        closure.close_work_item("example", fake)
+
+    detach = fake.commands.index(("switch", "--detach", "HEAD"))
+    restore = fake.commands.index(("switch", "codex/example"))
+    assert detach < restore
+    assert fake.current_branch == "codex/example"
 
 
 def test_remote_deletion_race_is_accepted_when_postcondition_is_absent(
@@ -241,7 +309,11 @@ def test_remote_deletion_race_is_accepted_when_postcondition_is_absent(
 
     assert result["state"] == "closed"
     assert ("fetch", "origin", "--prune") in fake.commands
-    assert fake.commands[-1] == ("rev-parse", "origin/main")
+    remote_absence = fake.commands.index(
+        ("ls-remote", "--exit-code", "--heads", "origin", "codex/example")
+    )
+    local_delete = fake.commands.index(("branch", "-D", "codex/example"))
+    assert remote_absence < local_delete
 
 
 def test_remote_deletion_failure_with_unverifiable_state_fails_closed(
@@ -277,22 +349,44 @@ def test_find_archived_contract_requires_exactly_one_match(tmp_path, monkeypatch
 def test_verify_pr_rejects_malformed_adapter_responses():
     with pytest.raises(RuntimeError, match="cannot verify"):
         closure._verify_pr(
-            lambda _args, _check: closure.CommandResult(0, "not-json"), "branch", "main"
+            lambda _args, _check: closure.CommandResult(0, "not-json"),
+            "branch",
+            "main",
+            "work123",
         )
 
     def wrong_shape(_args, _check):
         return closure.CommandResult(0, "[]")
 
     with pytest.raises(RuntimeError, match="non-object"):
-        closure._verify_pr(wrong_shape, "branch", "main")
+        closure._verify_pr(wrong_shape, "branch", "main", "work123")
 
 
 def test_verify_pr_requires_merged_identity_and_timestamp():
     cases = [
         ({"state": "OPEN"}, "not merged"),
-        ({"state": "MERGED", "headRefName": "other"}, "head branch"),
-        ({"state": "MERGED", "headRefName": "branch", "baseRefName": "other"}, "base branch"),
-        ({"state": "MERGED", "headRefName": "branch", "baseRefName": "main"}, "merge commit"),
+        (
+            {"state": "MERGED", "headRefName": "other"},
+            "head branch",
+        ),
+        (
+            {
+                "state": "MERGED",
+                "headRefName": "branch",
+                "headRefOid": "work123",
+                "baseRefName": "other",
+            },
+            "base branch",
+        ),
+        (
+            {
+                "state": "MERGED",
+                "headRefName": "branch",
+                "headRefOid": "work123",
+                "baseRefName": "main",
+            },
+            "merge commit",
+        ),
     ]
     for payload, message in cases:
 
@@ -300,7 +394,25 @@ def test_verify_pr_requires_merged_identity_and_timestamp():
             return closure.CommandResult(0, __import__("json").dumps(payload))
 
         with pytest.raises(RuntimeError, match=message):
-            closure._verify_pr(runner, "branch", "main")
+            closure._verify_pr(runner, "branch", "main", "work123")
+
+
+def test_verify_pr_requires_exact_local_head_sha() -> None:
+    payload = {
+        "state": "MERGED",
+        "headRefName": "codex/example",
+        "headRefOid": "other123",
+        "baseRefName": "main",
+        "mergedAt": "2026-07-28T00:00:00Z",
+        "mergeCommit": {"oid": "merge123"},
+        "url": "https://example.test/pr/1",
+    }
+
+    def runner(_args, _check):
+        return closure.CommandResult(0, __import__("json").dumps(payload))
+
+    with pytest.raises(RuntimeError, match="Head SHA"):
+        closure._verify_pr(runner, "codex/example", "main", "work123")
 
 
 def test_external_runner_fails_closed_when_command_is_unavailable(monkeypatch):
@@ -322,3 +434,122 @@ def test_clean_worktree_and_remote_postconditions_fail_closed():
 
     with pytest.raises(RuntimeError, match="could not verify"):
         closure._remote_branch_absent(unverifiable, "origin", "branch")
+
+
+def test_main_reports_ready_only_for_ready_on_base(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(
+        closure,
+        "parse_args",
+        lambda: type("Args", (), {"task": "example"})(),
+    )
+    monkeypatch.setattr(
+        closure,
+        "close_work_item",
+        lambda *_args: {
+            "pullRequest": "https://example.test/pr/1",
+            "workBranch": "codex/example",
+            "baseRemote": "origin",
+            "baseBranch": "main",
+            "baseWorktree": "",
+            "repositoryState": "ready_on_base",
+            "nextWorkItemReady": True,
+        },
+    )
+
+    assert closure.main() == 0
+    output = capsys.readouterr().out
+    assert "Repository state: ready for next Work Item" in output
+
+
+def test_main_reports_detached_closure_as_not_ready(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(
+        closure,
+        "parse_args",
+        lambda: type("Args", (), {"task": "example"})(),
+    )
+    monkeypatch.setattr(
+        closure,
+        "close_work_item",
+        lambda *_args: {
+            "pullRequest": "https://example.test/pr/1",
+            "workBranch": "codex/example",
+            "baseRemote": "origin",
+            "baseBranch": "main",
+            "baseWorktree": "/tmp/base-worktree",
+            "repositoryState": "closed_but_current_worktree_detached",
+            "nextWorkItemReady": False,
+        },
+    )
+
+    assert closure.main() == 0
+    output = capsys.readouterr().out
+    assert "Current worktree: detached; not ready for the next Work Item" in output
+    assert "Continue from synchronized base worktree: /tmp/base-worktree" in output
+    assert "Repository state: ready for next Work Item" not in output
+
+
+def test_real_linked_worktree_closure_is_closed_but_not_ready(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    remote = tmp_path / "remote.git"
+    repository = tmp_path / "repository"
+    base_worktree = tmp_path / "base-worktree"
+
+    run_command(tmp_path, "git", "init", "--bare", str(remote))
+    run_command(tmp_path, "git", "clone", str(remote), str(repository))
+    run_command(repository, "git", "config", "user.name", "Test User")
+    run_command(repository, "git", "config", "user.email", "test@example.test")
+    run_command(repository, "git", "switch", "-c", "main")
+    (repository / "tracked.txt").write_text("base\n", encoding="utf-8")
+    run_command(repository, "git", "add", "tracked.txt")
+    run_command(repository, "git", "commit", "-m", "base")
+    run_command(repository, "git", "push", "-u", "origin", "main")
+    run_command(remote, "git", "symbolic-ref", "HEAD", "refs/heads/main")
+    run_command(repository, "git", "remote", "set-head", "origin", "-a")
+
+    run_command(repository, "git", "switch", "-c", "codex/example")
+    (repository / "tracked.txt").write_text("work\n", encoding="utf-8")
+    run_command(repository, "git", "commit", "-am", "work")
+    work_commit = run_command(repository, "git", "rev-parse", "HEAD").stdout.strip()
+    run_command(repository, "git", "push", "-u", "origin", "codex/example")
+    run_command(repository, "git", "worktree", "add", str(base_worktree), "main")
+    run_command(base_worktree, "git", "merge", "--no-ff", "codex/example", "-m", "merge")
+    run_command(base_worktree, "git", "push", "origin", "main")
+
+    monkeypatch.setattr(
+        closure,
+        "_verify_archived_evidence",
+        lambda _task: closure.PROJECT_ROOT / ".ai/work-items/archive/2026/example.contract.json",
+    )
+    monkeypatch.setattr(
+        closure,
+        "_verify_pr",
+        lambda _runner, _branch, _base, _head: {
+            "url": "https://example.test/pr/1",
+            "headRefOid": work_commit,
+        },
+    )
+
+    result = closure.close_work_item("example", repository_runner(repository))
+
+    assert result["repositoryState"] == "closed_but_current_worktree_detached"
+    assert result["nextWorkItemReady"] is False
+    assert run_command(repository, "git", "branch", "--show-current").stdout.strip() == ""
+    assert run_command(base_worktree, "git", "branch", "--show-current").stdout.strip() == "main"
+    assert (
+        run_command(base_worktree, "git", "rev-parse", "main").stdout
+        == run_command(base_worktree, "git", "rev-parse", "origin/main").stdout
+    )
+    assert run_command(repository, "git", "status", "--porcelain").stdout == ""
+    local_branches = run_command(repository, "git", "branch", "--format=%(refname:short)").stdout
+    assert "codex/example" not in local_branches.splitlines()
+    remote_heads = run_command(
+        repository,
+        "git",
+        "ls-remote",
+        "--heads",
+        "origin",
+        "codex/example",
+    ).stdout
+    assert remote_heads == ""

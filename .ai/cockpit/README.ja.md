@@ -38,7 +38,15 @@ AI Cockpit は、エージェント型開発のための協調エンジニアリ
 
 ### ライフサイクルのクローズ
 
-Work Item を archive し、対応する PR が merge された後に `make ai-close-work-item TASK=<task>` を実行します。Contract/Summary/Cockpit Status、ブランチと PR の一対一対応、fast-forward のみの base 同期、ローカル／リモートブランチ削除、clean な repository、local base と remote base の一致を検証します。どれかが失敗した場合は fail closed とし、全ての事後条件を満たすまで `ready for next Work Item` を報告しません。
+Work Item を archive し、対応する PR が merge された後に
+`make ai-close-work-item TASK=<task>` を実行します。local Work Item Head と
+merge 済み PR Head SHA を束縛し、base を同期・検証し、remote Work Item
+branch の不在を証明してから local の再試行 identity を削除します。remote
+削除が失敗した場合は Work Item checkout を保持または復元します。
+`ready_on_base` は実行元 worktree が clean な同期済み base 上にある場合だけ
+報告します。別の worktree が base を所有する場合は
+`closed_but_current_worktree_detached` を報告し、クローズ済みでも実行元では
+次の Work Item を開始できないことを明示します。
 
 Contract が未公開 commit では実行できない hosted verification を明示的に
 要求する場合に限り、Finish 前の測定 stage を利用できます。実装とローカル検証を
@@ -63,7 +71,13 @@ evidence、dirty/detached state、base branch、quality failure では fail clos
 `ai-finish`/archive、final push、PR、merge、`ai-close-work-item`、cleanup に
 戻ります。
 
-`ai-close-work-item` は worktree を考慮します。base branch が別の worktree で checkout 済みの場合、その worktree が clean であることを確認し、そこで base を fast-forward と検証した後、Work Item worktree を detached にして local／remote の Work Item branch を削除します。過去の archive 証跡は保持します。ガバナンス複雑度レポートは `trackedFiles` を引き続き記録しますが、この値は観測値であり、archive 整合性と現在の Work Item 所有権は hard gate として残ります。
+`ai-close-work-item` は worktree を考慮します。base branch が別の
+worktree で checkout 済みの場合、その worktree で base を検証・同期し、
+remote Work Item branch の不在を証明してから、実行元 Work Item worktree を
+detached にして local branch を削除します。local 削除が失敗した場合は、可能な
+限り Work Item checkout を復元します。base worktree 自体は削除せず、次の
+Work Item はコマンドが表示するその path から開始します。過去の archive 証跡は
+保持します。
 
 停止中の Work Item を corrective predecessor のクローズ後に再開する場合は、専用
 branch を取得済みの最新 remote default branch へ rebase し、

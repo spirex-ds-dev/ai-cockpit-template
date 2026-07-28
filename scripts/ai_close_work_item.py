@@ -115,7 +115,12 @@ def _discover_base(runner: Runner) -> tuple[str, str]:
     return candidates[0]
 
 
-def _verify_pr(runner: Runner, branch: str, base_branch: str) -> dict[str, object]:
+def _verify_pr(
+    runner: Runner,
+    branch: str,
+    base_branch: str,
+    branch_commit: str,
+) -> dict[str, object]:
     try:
         result = runner(
             [
@@ -123,7 +128,7 @@ def _verify_pr(runner: Runner, branch: str, base_branch: str) -> dict[str, objec
                 "pr",
                 "view",
                 "--json",
-                "state,headRefName,baseRefName,mergedAt,mergeCommit,url",
+                "state,headRefName,headRefOid,baseRefName,mergedAt,mergeCommit,url",
             ],
             True,
         )
@@ -138,6 +143,8 @@ def _verify_pr(runner: Runner, branch: str, base_branch: str) -> dict[str, objec
         raise RuntimeError("pull request is not merged; no cleanup was attempted")
     if data.get("headRefName") != branch:
         raise RuntimeError("pull request head branch does not match the current Work Item branch")
+    if data.get("headRefOid") != branch_commit:
+        raise RuntimeError("pull request Head SHA does not match the local Work Item branch")
     if data.get("baseRefName") != base_branch:
         raise RuntimeError("pull request base branch does not match the discovered repository base")
     merge_commit = data.get("mergeCommit")
@@ -204,7 +211,34 @@ def _delete_remote_branch(runner: Runner, remote: str, branch: str) -> None:
     _remote_branch_absent(runner, remote, branch)
 
 
-def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, str]:
+def _delete_local_branch(
+    runner: Runner,
+    branch: str,
+    *,
+    detach_required: bool,
+) -> None:
+    """Delete the local branch while preserving a retryable linked checkout."""
+    if not detach_required:
+        runner(["branch", "-D", branch], True)
+        return
+
+    runner(["switch", "--detach", "HEAD"], True)
+    try:
+        runner(["branch", "-D", branch], True)
+    except RuntimeError as exc:
+        restored = runner(["switch", branch], False)
+        if restored.returncode != 0:
+            raise RuntimeError(
+                "local Work Item branch deletion failed after detach; "
+                "checkout restoration also failed"
+            ) from exc
+        raise RuntimeError(
+            "local Work Item branch deletion failed after detach; "
+            "the Work Item checkout was restored for retry"
+        ) from exc
+
+
+def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
     contract_path = _verify_archived_evidence(task)
     branch_result = runner(["branch", "--show-current"], False)
     if branch_result.returncode != 0 or not branch_result.stdout.strip():
@@ -218,7 +252,10 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, str]:
             "synchronize the base and remove local/remote branches"
         )
     _require_clean_worktree(runner)
-    pr = _verify_pr(runner, work_branch, base_branch)
+    work_commit = runner(["rev-parse", work_branch], True).stdout.strip()
+    if not work_commit:
+        raise RuntimeError("cannot resolve the local Work Item branch commit")
+    pr = _verify_pr(runner, work_branch, base_branch, work_commit)
 
     base_path = _base_worktree_path(runner, base_branch)
     base_runner = _in_worktree(runner, base_path) if base_path else runner
@@ -233,12 +270,6 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, str]:
     if local_base != remote_base:
         raise RuntimeError("base branch is not synchronized with the remote after fast-forward")
 
-    # A merged PR is the authority for deleting a branch. -D is intentional here:
-    # squash and rebase merges do not make the source ref an ancestor of base.
-    if base_path:
-        runner(["switch", "--detach", "HEAD"], True)
-    runner(["branch", "-D", work_branch], True)
-    _delete_remote_branch(runner, remote, work_branch)
     final_branch = base_runner(["branch", "--show-current"], True).stdout.strip()
     if final_branch != base_branch:
         raise RuntimeError("repository is not on the synchronized base branch")
@@ -248,6 +279,28 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, str]:
     if final_local != final_remote:
         raise RuntimeError("local base branch no longer matches the remote base branch")
 
+    try:
+        _delete_remote_branch(runner, remote, work_branch)
+    except RuntimeError as exc:
+        if base_path is None:
+            restored = runner(["switch", work_branch], False)
+            if restored.returncode != 0:
+                raise RuntimeError(
+                    f"{exc}; local Work Item branch remains, but checkout restoration also failed"
+                ) from exc
+            raise RuntimeError(f"{exc}; the Work Item checkout was restored for retry") from exc
+        raise
+
+    # A merged PR is the authority for deleting a branch. -D is intentional here:
+    # squash and rebase merges do not make the source ref an ancestor of base.
+    _delete_local_branch(
+        runner,
+        work_branch,
+        detach_required=base_path is not None,
+    )
+
+    linked_base = base_path is not None
+    repository_state = "closed_but_current_worktree_detached" if linked_base else "ready_on_base"
     return {
         "task": task,
         "contract": contract_path.relative_to(PROJECT_ROOT).as_posix(),
@@ -257,7 +310,9 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, str]:
         "baseBranch": base_branch,
         "baseCommit": final_local,
         "state": "closed",
-        "repositoryState": "ready_for_next_work_item",
+        "repositoryState": repository_state,
+        "nextWorkItemReady": not linked_base,
+        "baseWorktree": base_path or "",
     }
 
 
@@ -281,7 +336,11 @@ def main() -> int:
     print(
         f"Local {result['baseBranch']}: synchronized with {result['baseRemote']}/{result['baseBranch']}"
     )
-    print("Repository state: ready for next Work Item")
+    if result["nextWorkItemReady"] is True:
+        print("Repository state: ready for next Work Item")
+    else:
+        print("Current worktree: detached; not ready for the next Work Item")
+        print(f"Continue from synchronized base worktree: {result['baseWorktree']}")
     return 0
 
 

@@ -88,7 +88,15 @@ Installation and upgrade work is committed to the adopter project's repository. 
 
 ### Lifecycle closure
 
-Use `make ai-close-work-item TASK=<task>` after the Work Item is archived and its PR is merged. The command verifies the archived Contract/Summary/Cockpit Status, the one-to-one branch/PR mapping, fast-forward-only base synchronization, local and remote branch deletion, a clean repository, and local-base equality with the remote base. It fails closed on any error and reports `ready for next Work Item` only after every postcondition passes.
+Use `make ai-close-work-item TASK=<task>` after the Work Item is archived and
+its PR is merged. The command binds the local Work Item Head to the merged PR
+Head SHA, synchronizes and verifies the base, proves remote Work Item branch
+absence, and only then deletes the local retry identity. A remote deletion
+failure retains or restores the Work Item checkout for retry. It reports
+`ready_on_base` only when the invoking worktree is clean and synchronized on
+base. If another worktree owns base, it reports
+`closed_but_current_worktree_detached`; closure succeeded, but the invoking
+worktree is not ready for the next Work Item.
 
 The required order is: latest remote base, dedicated Work Item branch, implementation, `ai-finish`/archive, push, PR, PR merge, then `ai-close-work-item`. Do not merge the feature branch into local `main` before the PR, and do not delete the Work Item branch before closure; otherwise local `main` can diverge from `origin/main` or the merged branch identity can be lost before ownership verification.
 
@@ -145,7 +153,15 @@ resume transitions must retain that branch, and every ordinary ancestry,
 predecessor, closure, manifest, and digest check still applies. The Receipt is
 never rewritten, and new Work Items cannot use this path to start on the base.
 
-`ai-close-work-item` is worktree-aware. If the base branch is checked out in another worktree, it verifies that worktree is clean, fast-forwards and validates the base there, detaches the Work Item worktree, then removes the local and remote Work Item branches. Historical archive evidence is retained. The governance complexity report still records `trackedFiles`, but that metric is observational; archive integrity and current-task ownership remain hard gates.
+`ai-close-work-item` is worktree-aware. If the base branch is checked out in
+another worktree, it verifies and fast-forwards base there, proves the remote
+Work Item branch absent, then detaches the invoking Work Item worktree and
+deletes the local branch. A failed local deletion restores the Work Item
+checkout when possible. The command does not remove the base worktree; use its
+reported path for the next Work Item. Historical archive evidence is retained.
+The governance complexity report still records `trackedFiles`, but that metric
+is observational; archive integrity and current-task ownership remain hard
+gates.
 
 1. Declare Intent (optional but recommended): Why does this work exist? What constraints must be respected? What's the rationale?
 2. Create a Work Item with `make ai-start TASK=<task> TITLE="..." MODE=code`.
@@ -154,7 +170,9 @@ never rewritten, and new Work Items cannot use this path to start on the base.
 5. Update the Summary with changed files, checks, risks, review readiness, boundary checks, known gaps, any destructive changes, and optional `intentAlignment` evidence when it exists.
 6. Run `make ai-finish TASK=<task>`; this archives the evidence but does not close the lifecycle.
 7. Push the Work Item branch, open and merge its PR, then run `make ai-close-work-item TASK=<task>`.
-8. Review the generated status and confirm the closure command reports `ready for next Work Item`.
+8. Confirm closure reports `ready_on_base` before starting the next Work Item.
+   If it reports `closed_but_current_worktree_detached`, move to the reported
+   synchronized base worktree first.
 
 If you want the startup flow to surface readiness before implementation, run `make ai-preflight`.
 That target generates the Preflight Review and then validates it. With the default enforced policy, `needs_human_confirmation`, `human_decision_recorded`, and `not_ready` fail the check; an explicit advisory policy keeps the compatibility behavior.
