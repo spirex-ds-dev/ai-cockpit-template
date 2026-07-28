@@ -168,8 +168,23 @@ def _wizard_is_executable() -> bool:
 
 
 def _status_has_japanese_view() -> bool:
-    text = _read("scripts/ai_generate_status.py")
-    return "ja" in text and ("状態" in text or "Japanese" in text)
+    generator = _read("scripts/ai_generate_status.py")
+    checker = _read("scripts/ai_check_status.py")
+    makefile = _read("Makefile")
+    rendering_tests = _read("tests/test_guards_and_status.py")
+    validation_tests = _read("tests/test_core_gates.py")
+    return all(
+        (
+            "--language" in generator,
+            ("現在の状態" in generator or "日本語" in generator),
+            "--language" in checker,
+            "generate-cockpit-status-ja:" in makefile,
+            "check-ai-status-ja:" in makefile,
+            "test_japanese_status_projection_localizes_chrome_and_preserves_machine_values"
+            in rendering_tests,
+            "test_status_check_rejects_stale_japanese_projection" in validation_tests,
+        )
+    )
 
 
 def _pr_has_japanese_view() -> bool:
@@ -272,9 +287,17 @@ def evaluate() -> dict[str, Any]:
             "Japanese Status view is derived from the same machine facts"
             if _status_has_japanese_view()
             else FINDINGS["JA-STATUS-001"]["summary"],
-            source=["scripts/ai_generate_status.py", ".ai/cockpit/current_status.md"],
-            tests=["tests/test_core_gates.py"],
-            commands=["make generate-cockpit-status"],
+            source=[
+                "scripts/ai_generate_status.py",
+                "scripts/ai_check_status.py",
+                "Makefile",
+                ".ai/cockpit/current_status.md",
+            ],
+            tests=["tests/test_guards_and_status.py", "tests/test_core_gates.py"],
+            commands=[
+                "make generate-cockpit-status-ja CONTRACT=<contract> SUMMARY=<summary>",
+                "make check-ai-status-ja CONTRACT=<contract> SUMMARY=<summary>",
+            ],
             limitation="A Japanese guide to an English Status is not output parity.",
             finding_id=None if _status_has_japanese_view() else "JA-STATUS-001",
         ),

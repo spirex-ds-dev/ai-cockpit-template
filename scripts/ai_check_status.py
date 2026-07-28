@@ -18,7 +18,9 @@ from ai_generate_status import (
     DEFAULT_LOG_PATH,
     DEFAULT_RETRY_THRESHOLD,
     apply_ownership_reconciliation,
+    localize_status_markdown,
     load_preflight_review,
+    normalize_status_language,
     project_relative,
     status_for,
 )
@@ -39,7 +41,11 @@ def required_commands(contract: dict[str, Any]) -> list[str]:
 
 
 def normalize_generated_at(text: str) -> str:
-    return re.sub(r"- Generated At: `[^`]+`", "- Generated At: `<timestamp>`", text)
+    return re.sub(
+        r"- (?:Generated At|生成日時): `[^`]+`",
+        "- Generated At: `<timestamp>`",
+        text,
+    )
 
 
 def inventory_root(contract_path: Path, status_path: Path) -> Path:
@@ -54,6 +60,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("status", nargs="?")
     parser.add_argument("--contract")
     parser.add_argument("--summary")
+    parser.add_argument("--language", default="en")
     return parser.parse_args()
 
 
@@ -64,6 +71,7 @@ def main() -> int:
         return 0
     start = time.time()
     try:
+        language = normalize_status_language(args.language)
         contract = load_json(Path(args.contract))
         summary = load_json(Path(args.summary))
         status = Path(args.status).read_text(encoding="utf-8")
@@ -108,7 +116,7 @@ def main() -> int:
         }
     inventory = (
         build_inventory(inventory_root(Path(args.contract), status_path))
-        if "## Calibration Inventory" in status
+        if "## Calibration Inventory" in status or "## 校正インベントリ" in status
         else None
     )
     expected = render_active_status(
@@ -134,7 +142,9 @@ def main() -> int:
         preflight_review=preflight_review,
         ownership_counts=ownership_counts,
         calibration_inventory=inventory,
+        task_outcome=summary.get("taskOutcome") if isinstance(summary, dict) else None,
     )
+    expected = localize_status_markdown(expected, language)
 
     if normalize_generated_at(status) != normalize_generated_at(expected):
         issues.append("status content does not match compressed governance model")

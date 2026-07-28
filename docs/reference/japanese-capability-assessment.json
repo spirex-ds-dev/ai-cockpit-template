@@ -2,12 +2,6 @@
   "assessmentVersion": 2,
   "blockingFindings": [
     {
-      "caseId": "JA-STATUS-001",
-      "correctiveWorkItem": "japanese-status-output-corrective-20260729",
-      "id": "JA-STATUS-001",
-      "summary": "Cockpit Status has no Japanese derived view or executable parity evidence."
-    },
-    {
       "caseId": "JA-PR-001",
       "correctiveWorkItem": "japanese-pr-output-corrective-20260729",
       "id": "JA-PR-001",
@@ -90,19 +84,22 @@
     {
       "area": "Cockpit Status Japanese parity",
       "commandEvidence": [
-        "make generate-cockpit-status"
+        "make generate-cockpit-status-ja CONTRACT=<contract> SUMMARY=<summary>",
+        "make check-ai-status-ja CONTRACT=<contract> SUMMARY=<summary>"
       ],
-      "digest": "sha256:7bfc8d4ba1396b1485512f32a08facb410145e5c977a5b431ba9f179033b2cc1",
-      "findingId": "JA-STATUS-001",
+      "digest": "sha256:80909f86abe4c1a66b3e8fa0d70c2d814a54abf4928236406315f58fdc5afebc",
       "id": "JA-STATUS-001",
       "limitation": "A Japanese guide to an English Status is not output parity.",
-      "observation": "Cockpit Status has no Japanese derived view or executable parity evidence.",
+      "observation": "Japanese Status view is derived from the same machine facts",
       "sourceEvidence": [
         "scripts/ai_generate_status.py",
+        "scripts/ai_check_status.py",
+        "Makefile",
         ".ai/cockpit/current_status.md"
       ],
-      "status": "block",
+      "status": "pass",
       "testEvidence": [
+        "tests/test_guards_and_status.py",
         "tests/test_core_gates.py"
       ]
     },
@@ -253,7 +250,7 @@
     "entryCount": 14,
     "path": "tests/fixtures/japanese-capability-corpus.json"
   },
-  "digest": "sha256:d988b9a345fbbecaa840fb649cd1c55d468af929c3a72b1087281b90445bf67a",
+  "digest": "sha256:be209542599c86338a4f8673221bd1315bdb6e63f103c35c55db5708d768b657",
   "limitations": [
     "This assessment does not claim general model fluency, translation quality, or provider behavior.",
     "Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking."

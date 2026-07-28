@@ -43,7 +43,7 @@ check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy template-adoption-ready \
 	check-ai-scenario-coverage check-ai-start-receipt generate-ai-preflight-review check-ai-preflight-review ai-preflight \
 	ai-prepare-hosted-verification-snapshot \
-	check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
+	check-ai-change-summary generate-cockpit-status generate-cockpit-status-ja check-ai-status check-ai-status-ja check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
 	quality-fast quality-full quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
 	check-ai-task-outcome \
@@ -556,8 +556,14 @@ check-ai-change-summary:
 generate-cockpit-status:
 	$(AI_PYTHON) scripts/ai_generate_status.py $(CONTRACT) $(STATUS_ARGS) $(ARGS)
 
+generate-cockpit-status-ja:
+	$(AI_PYTHON) scripts/ai_generate_status.py $(CONTRACT) $(STATUS_ARGS) --language ja --output target/ai_cockpit_status.ja.md
+
 check-ai-status:
 	$(AI_PYTHON) scripts/ai_check_status.py .ai/cockpit/current_status.md $(SUMMARY_ARGS) $(STATUS_ARGS)
+
+check-ai-status-ja:
+	$(AI_PYTHON) scripts/ai_check_status.py target/ai_cockpit_status.ja.md $(SUMMARY_ARGS) $(STATUS_ARGS) --language ja
 
 check-ai-status-consistency:
 	$(AI_PYTHON) scripts/ai_check_status_consistency.py

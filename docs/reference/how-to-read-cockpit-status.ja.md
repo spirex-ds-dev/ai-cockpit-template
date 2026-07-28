@@ -12,6 +12,19 @@ keywords:
 
 このページは、生成された Cockpit Status を読み、状態からレビュー判断へ最短で到達するためのガイドです。対象読者はレビュアー、保守担当者、承認担当者です。実装を始める前は必ず最新の Preflight Review を確認してください。Cockpit Status はレビュー向けの表示であり、実装前の pause を置き換えません。
 
+## 検証可能な日本語表示
+
+commit される正式な生成物は `.ai/cockpit/current_status.md` のままです。2 つ目の lifecycle 生成物を追加せず、必要なときだけ次の手順で日本語表示を生成・検証できます。
+
+```sh
+make generate-cockpit-status-ja CONTRACT=<contract.json> SUMMARY=<summary.json>
+make check-ai-status-ja CONTRACT=<contract.json> SUMMARY=<summary.json>
+```
+
+生成先は `target/ai_cockpit_status.ja.md` です。英語版と日本語表示は、同じ governance model と正式な rendering から生成されます。日本語表示が変換するのは、見出し、結論、操作ラベルなどの表示部分だけです。path、command、identifier、status、count、任意の evidence value を独自に導出・翻訳しません。backtick で囲まれた値は byte 単位で同一のまま、同じ順序で保持されます。どちらの生成物も手作業で編集しないでください。日本語用の検証 command は、古い表示や手編集された表示を拒否します。
+
+この表示が証明するのは、repository 内で限定された出力 parity です。一般的な日本語能力、adopter evidence の翻訳、commit・merge・release・外部操作の許可を証明しません。
+
 ## 読む順序
 
 1. active Work Item に表示される `Preflight Review`

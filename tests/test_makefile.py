@@ -341,3 +341,18 @@ def test_release_preflight_requires_current_japanese_capability_evidence():
     assert "check-japanese-capability:" in makefile
     assert "check-release-preflight: check-japanese-capability" in makefile
     assert "scripts/ai_japanese_capability.py --check" in makefile
+
+
+def test_makefile_exposes_paired_japanese_status_generation_and_validation():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+
+    assert "generate-cockpit-status-ja:" in makefile
+    assert (
+        "scripts/ai_generate_status.py $(CONTRACT) $(STATUS_ARGS) "
+        "--language ja --output target/ai_cockpit_status.ja.md"
+    ) in makefile
+    assert "check-ai-status-ja:" in makefile
+    assert (
+        "scripts/ai_check_status.py target/ai_cockpit_status.ja.md "
+        "$(SUMMARY_ARGS) $(STATUS_ARGS) --language ja"
+    ) in makefile

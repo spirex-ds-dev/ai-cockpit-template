@@ -1,0 +1,279 @@
+{
+  "contractVersion": 2,
+  "workItemId": "japanese-status-output-corrective-20260729",
+  "mode": "code",
+  "title": "Add a Japanese Cockpit Status derived view",
+  "baseCommit": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Japanese capability is mandatory because most adopter engineers use Japanese. Correct every issue found by the comprehensive Japanese assessment before documentation alignment or release, using a separate complete Work Item lifecycle for each issue.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-message:japanese-capability-mandatory-and-continue",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:user-authorized-japanese-capability-corrections"
+  },
+  "declaredIntent": {
+    "summary": "Generate and validate a Japanese Cockpit Status view from exactly the same governance model as the canonical English view.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+    ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "Makefile",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_check_status.py",
+    "scripts/ai_japanese_capability.py",
+    "tests/test_core_gates.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_makefile.py",
+    "tests/test_japanese_capability.py",
+    "docs/reference/how-to-read-cockpit-status.md",
+    "docs/reference/how-to-read-cockpit-status.ja.md",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Changing the canonical recommendation, governance model, verification result, ownership count, or evidence derivation.",
+    "Machine-translating Contract, Summary, decision-driver, path, command, identifier, status, or arbitrary evidence values.",
+    "Persisting a second generated status file in every repository lifecycle transaction.",
+    "Fixing JA-PR-001, JA-LIFECYCLE-001, or JA-DOC-001 in this Work Item.",
+    "Starting documentation alignment, deprecated-assets cleanup, or release."
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "JA-STATUS-001 records that Cockpit Status has no Japanese derived view or executable parity evidence."
+    },
+    {
+      "path": "scripts/ai_generate_status.py",
+      "reason": "The generator currently emits English-only active and no-active Markdown."
+    },
+    {
+      "path": "scripts/ai_check_status.py",
+      "reason": "The validator currently regenerates and compares only the canonical English representation."
+    },
+    {
+      "path": "scripts/ai_governance_compression.py",
+      "reason": "The canonical English view is rendered from one structured recommendation and evidence model."
+    },
+    {
+      "path": "docs/reference/how-to-read-cockpit-status.ja.md",
+      "reason": "Japanese interpretation guidance exists but does not provide an executable Japanese output path."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-16 requires JA-STATUS-001 to complete after the Wizard corrective and before later Japanese findings."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "derived_view_drift",
+      "evidence_value_mutation",
+      "release_gate_false_positive"
+    ],
+    "reason": "A localized view can misstate governance facts or clear the release blocker without executable parity and freshness checks.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized correction of every Japanese assessment finding and continuous execution."
+  },
+  "preReviewWarnings": [
+    "Review that Japanese output is derived from the canonical model rather than independently interpreted.",
+    "Verify every backtick-delimited machine value remains byte-identical and in the same order.",
+    "Verify active, blocked, no-active, Preflight, ownership, evidence, and recovery sections remain structurally aligned."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The status generator accepts --language en|ja for active and no-active output and rejects unsupported values before writing output.",
+    "Japanese Markdown is transformed from the canonical English rendering produced from the same governance model, not from a second fact derivation.",
+    "Japanese headings, reviewer conclusion, action guidance, Preflight, ownership, evidence, Task Outcome, calibration, decision, backtrack, and next-action chrome are readable Japanese.",
+    "All backtick-delimited machine values, paths, commands, identifiers, recommendations, statuses, counts, and evidence strings remain byte-identical and in the same order across English and Japanese views.",
+    "A Make target generates the Japanese view under target/ and a paired validation target rejects stale or hand-edited Japanese output.",
+    "Executable tests cover active, blocked, no-active, Preflight/Human Decision, ownership, Task Outcome, calibration inventory, backtrack, and unsupported-language paths.",
+    "The Japanese assessor requires generator language support, paired validation, and named executable parity tests before JA-STATUS-001 can pass.",
+    "The machine JSON and derived Markdown assessment are regenerated; JA-STATUS-001 passes while JA-PR-001, JA-LIFECYCLE-001, and JA-DOC-001 remain blocking.",
+    "English and Japanese Status reader documentation describes the on-demand derived view and preserves the no-hand-edit and non-claim boundaries.",
+    "Full local finish/archive, one PR, Hosted CI, merge, ai-close-work-item, branch cleanup, and synchronized clean main complete before JA-PR-001 begins."
+  ],
+  "guidelines": [
+    "Keep the canonical governance model and recommendation language-neutral and single-sourced.",
+    "Localize presentation chrome only; preserve every evidence-bearing value byte-for-byte.",
+    "Generate and validate Japanese output deterministically; stale or manually edited views fail closed.",
+    "Require executable active and no-active parity tests rather than keyword or documentation presence.",
+    "Record remaining Japanese blockers and do not claim general fluency or release readiness."
+  ],
+  "intent": {
+    "problem": "Japanese documentation explains Cockpit Status, but the executable generator and validator emit only English. Japanese reviewers therefore cannot obtain a validated Japanese view, and the current assessor could only report the capability missing.",
+    "constraints": [
+      "Derive both language views from one canonical governance model and one canonical English rendering.",
+      "Preserve machine facts and arbitrary evidence strings byte-for-byte.",
+      "Do not add a second persistent lifecycle artifact that expands archive and installer ownership rules.",
+      "Make stale or manually changed Japanese output fail validation.",
+      "Leave unrelated Japanese blockers active and complete this lifecycle before the next corrective."
+    ],
+    "rationale": "An on-demand, validated Japanese projection under target/ gives reviewers usable Japanese chrome without duplicating repository truth or expanding every lifecycle transaction."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "An active Work Item status contains recommendation, Preflight, ownership, evidence, Task Outcome, calibration inventory, decision drivers, and backtrack data.",
+      "expected": "The Japanese view has readable Japanese chrome and the exact same ordered machine values as the English view.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add red-first full-section parity tests comparing headings and every backtick-delimited value."
+    },
+    {
+      "scenario": "There is no active Work Item.",
+      "expected": "The Japanese no-active view preserves task/state/change-count and fail-closed ownership guidance while rendering Japanese chrome.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Generate English and Japanese no-active outputs and assert structural and machine-value parity."
+    },
+    {
+      "scenario": "A generated Japanese view is stale or manually edited.",
+      "expected": "The paired Japanese status check fails with a content-mismatch diagnostic.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Mutate an isolated Japanese output and require deterministic regeneration comparison to reject it."
+    },
+    {
+      "scenario": "A caller requests an unsupported status language.",
+      "expected": "Generation and validation fail non-zero before writing or accepting output.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add CLI parser and output-preservation regressions for an unsupported language."
+    },
+    {
+      "scenario": "Japanese labels exist in documentation or source but no paired executable parity test/validator exists.",
+      "expected": "JA-STATUS-001 remains release-blocking.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Strengthen the assessor to require generator, checker, Make targets, and named executable parity tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all Japanese capability corrections before release and continuous execution."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 659
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/japanese-status-output-corrective-20260729.json",
+    "baseCommit": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+    "initialScopeDigest": "5ab5be8db7f3527b915a56ca06a1af0f3557f758f6600fc771fb05a26c06e317",
+    "contractSkeletonDigest": "14af2eccb04cde471b5457561155710982288c3f175c54fd33a768fd5f42060c"
+  }
+}

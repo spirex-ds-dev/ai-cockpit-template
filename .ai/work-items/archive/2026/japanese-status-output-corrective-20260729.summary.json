@@ -1,0 +1,637 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "japanese-status-output-corrective-20260729",
+  "contractPath": ".ai/work-items/archive/2026/japanese-status-output-corrective-20260729.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/japanese-status-output-corrective-20260729.contract.json",
+      "reason": "Declares the bounded Japanese Status corrective, acceptance, scenarios, risks, and verification."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-status-output-corrective-20260729.summary.json",
+      "reason": "Records bidirectional implementation and verification evidence."
+    },
+    {
+      "path": ".ai/work-items/starts/japanese-status-output-corrective-20260729.json",
+      "reason": "Records the immutable start receipt from synchronized origin/main."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated the canonical governed Work Item status."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Adds paired on-demand Japanese Status generation and validation targets."
+    },
+    {
+      "path": "scripts/ai_generate_status.py",
+      "reason": "Adds strict en/ja selection and a deterministic Japanese chrome projection for active and no-active Status."
+    },
+    {
+      "path": "scripts/ai_check_status.py",
+      "reason": "Validates Japanese projection freshness against the canonical model and normalizes the localized generated-time label."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Requires generator, checker, Make targets, and named executable tests before JA-STATUS-001 passes."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Covers real timestamps and rejection of stale or hand-edited Japanese Status output."
+    },
+    {
+      "path": "tests/test_guards_and_status.py",
+      "reason": "Covers full-section Japanese chrome, machine-value preservation, no-active output, and unsupported-language fail-closed behavior."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Locks the paired Japanese Status Make entrypoints and target path."
+    },
+    {
+      "path": "tests/test_japanese_capability.py",
+      "reason": "Prevents keyword-only or missing-validator evidence from clearing JA-STATUS-001."
+    },
+    {
+      "path": "docs/reference/how-to-read-cockpit-status.md",
+      "reason": "Documents the on-demand validated Japanese projection and its non-claim boundary."
+    },
+    {
+      "path": "docs/reference/how-to-read-cockpit-status.ja.md",
+      "reason": "Provides the same Japanese projection procedure and evidence-preservation boundary in Japanese."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Regenerates machine evidence with JA-STATUS-001 passing and three remaining blockers."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Regenerates the human-readable assessment from the same machine result."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Aligns WI-16 progress, remaining serial queue, and the real Make round-trip issue."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-status-output-corrective-20260729.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/reference/japanese-capability-assessment.json",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_check_status.py",
+    "scripts/ai_governance_compression.py",
+    "docs/reference/how-to-read-cockpit-status.ja.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "An active Work Item status contains recommendation, Preflight, ownership, evidence, Task Outcome, calibration inventory, decision drivers, and backtrack data.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_guards_and_status.py::test_japanese_status_projection_localizes_chrome_and_preserves_machine_values"
+      ]
+    },
+    {
+      "scenario": "There is no active Work Item.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_guards_and_status.py::test_japanese_no_active_status_and_unsupported_language_fail_closed"
+      ]
+    },
+    {
+      "scenario": "A generated Japanese view is stale or manually edited.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_status_check_rejects_stale_japanese_projection",
+        "make check-ai-status-ja CONTRACT=.ai/work-items/active/japanese-status-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-status-output-corrective-20260729.summary.json"
+      ]
+    },
+    {
+      "scenario": "A caller requests an unsupported status language.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_guards_and_status.py::test_japanese_no_active_status_and_unsupported_language_fail_closed"
+      ]
+    },
+    {
+      "scenario": "Japanese labels exist in documentation or source but no paired executable parity test/validator exists.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_japanese_capability.py::test_status_capability_requires_generator_checker_make_and_executable_parity"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:41:20.574162+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "010053ffaed582dc4dddef69f404912a269e5956655ca715cb997cbf2cd44521",
+      "commandHash": "3e1eb9852f6c9aa1cdae58934ca8c4f0660fe224a638e43edddbe395339680f9",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "572d2b973c07f6e2708e523806c21794bbd65ba6c23a65f315c3c2aac651cc28",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "outputBytes": 264
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:41:20.720248+00:00",
+      "exitCode": 0,
+      "durationMs": 96,
+      "outputDigest": "bf03ee3406828b829cfddf2a122d867098f0cf88316300dba8bfbd377dffa844",
+      "commandHash": "bc99fa795c42ebd9dd9a35fff4cad61cca68b598f1334ef83a27e96241e01601",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "572d2b973c07f6e2708e523806c21794bbd65ba6c23a65f315c3c2aac651cc28",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json scope guard passed: 15 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json scope guard passed: 15 changed path(s) covered",
+      "outputBytes": 195
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:41:20.887121+00:00",
+      "exitCode": 0,
+      "durationMs": 118,
+      "outputDigest": "656045a4a186731280040eb5374e15f68794e62dbf4c29219b46e670fd30855b",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "572d2b973c07f6e2708e523806c21794bbd65ba6c23a65f315c3c2aac651cc28",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 322
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/japanese-status-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-status-output-corrective-20260729.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:41:21.114105+00:00",
+      "exitCode": 0,
+      "durationMs": 178,
+      "outputDigest": "84d2d0a070e8ee66e9ca364b9bc44de11784cc95a6ac47a6f95c9a698531d149",
+      "commandHash": "89d5daccf1e2aa4f43d6a4db432cb775dd4fcb9397cea08e8a8030fb45d2b45e",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "572d2b973c07f6e2708e523806c21794bbd65ba6c23a65f315c3c2aac651cc28",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `japanese-status-output-corrective-20260729` - Contract Hash: `abd3b721dd7654cc` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Co",
+      "outputTail": "cy`: not_run - `aiBacktrack`: not_run - `aiCoverage`: not_run - `aiScenarioCoverage`: not_run - `aiGuidelines`: not_run - `aiSummary`: not_run - `aiStatus`: not_run - `aiStatusCheck`: not_run - `aiStatusConsistency`: not_run - `aiDiffOwnership`: not_run - `quality`: not_run ## Review Focus - Japanese output derives only from canonical governance rendering - Backtick machine values and arbitrary evidence remain unchanged - Stale and unsupported-language paths fail closed - Only JA-STATUS-001 is cleared ## Diff Ownership Preview - active_owned: `15`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-status-output-corrective-20260729.json` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/reference/how-to-read-cockpit-status.ja.md` — covered by Contract scope - [active_owned] `docs/reference/how-to-read-cockpit-status.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `scripts/ai_check_status.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_status.py` — covered by Contract scope - [active_owned] `scripts/ai_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/test_core_gates.py` — covered by Contract scope - [active_owned] `tests/test_guards_and_status.py` — covered by Contract scope - [active_owned] `tests/test_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope ## Next Action - Run or record required verification: aiCheckpoint",
+      "outputBytes": 6614
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:41:21.264547+00:00",
+      "exitCode": 0,
+      "durationMs": 93,
+      "outputDigest": "5e63a2e7ee06c9ddd18b50d0f07607dbd7f703d6654188269d8e767ce796c79c",
+      "commandHash": "86db94b3cd4dd996549249649cce118e245da6cdb4430e2a233fbfa8e7cafdbb",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "572d2b973c07f6e2708e523806c21794bbd65ba6c23a65f315c3c2aac651cc28",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/japanese-status-output-corrective-20260729.json [review] .ai/cockpit/current_status.md [review] Makefile [review] scripts/ai_check_status.py [review] scripts/ai_generate_status.py [review] scripts/ai_japanese_capability.py review focus recorded: 4 item(s) report: target/a",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/japanese-status-output-corrective-20260729.json [review] .ai/cockpit/current_status.md [review] Makefile [review] scripts/ai_check_status.py [review] scripts/ai_generate_status.py [review] scripts/ai_japanese_capability.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 528
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:41:21.657034+00:00",
+      "exitCode": 0,
+      "durationMs": 130,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "572d2b973c07f6e2708e523806c21794bbd65ba6c23a65f315c3c2aac651cc28",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:41:21.927284+00:00",
+      "exitCode": 0,
+      "durationMs": 214,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "572d2b973c07f6e2708e523806c21794bbd65ba6c23a65f315c3c2aac651cc28",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/japanese-status-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:41:22.025771+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "80a06e935edcc9c580f1ab6ec0dca8f5f5dd0bc5aab25ab06c1263e2ef225d42",
+      "commandHash": "28039049ff3c1a2a4daca01b116f9730d1ebbf9650626f4510f3b1b5fd7a59b2",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "572d2b973c07f6e2708e523806c21794bbd65ba6c23a65f315c3c2aac651cc28",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 307
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/japanese-status-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:41:22.121468+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "7efa039c8d2e3a9b2789ea1c876729b6d59a640dc6ca4db0c0c4579f65653367",
+      "commandHash": "c0177ae4607e9a4ea941c293fa1d80d863776850ab54d273b2f817b6d4e211d1",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "572d2b973c07f6e2708e523806c21794bbd65ba6c23a65f315c3c2aac651cc28",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputBytes": 312
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:41:22.362054+00:00",
+      "exitCode": 0,
+      "durationMs": 192,
+      "outputDigest": "bc77ceeec5772d67bb26e4e831edad380b77efa2d63d6e8dde99c16707e80e92",
+      "commandHash": "ab9be866ab0b066ce0a3847866f321938037ebd5828c7ceaa19200a8075f49a6",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "572d2b973c07f6e2708e523806c21794bbd65ba6c23a65f315c3c2aac651cc28",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `15`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-status-output-corrective-20260729.json` — covered by Contract sco",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `15`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/japanese-status-output-corrective-20260729.json` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/reference/how-to-read-cockpit-status.ja.md` — covered by Contract scope - [active_owned] `docs/reference/how-to-read-cockpit-status.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `scripts/ai_check_status.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_status.py` — covered by Contract scope - [active_owned] `scripts/ai_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/test_core_gates.py` — covered by Contract scope - [active_owned] `tests/test_guards_and_status.py` — covered by Contract scope - [active_owned] `tests/test_japanese_capability.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope",
+      "outputBytes": 1626
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:45:45.495155+00:00",
+      "exitCode": 0,
+      "durationMs": 263067,
+      "outputDigest": "28e39df402b3bc6af184e59e779b68007c8da00ccafd29ba330dc6986315e53c",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "572d2b973c07f6e2708e523806c21794bbd65ba6c23a65f315c3c2aac651cc28",
+      "outputSummary": "\"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-full \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-fast-static \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"b227a2d6229a",
+      "outputTail": "l tests/test_system_invariants.py::test_system_invariants_allow_legacy_archive_summary_versions[None] 2.64s call tests/test_installer.py::test_initial_status_uses_target_repository_changes 2.63s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 2.09s call tests/test_installer.py::test_upgrade_rolls_back_when_post_copy_validation_fails 2.06s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 2.03s call tests/test_start_and_archive.py::test_ai_start_journeys 1.92s call tests/test_release_preflight.py::test_postmerge_preflight_rejects_included_content_after_candidate_merge 1423 passed, 3 warnings in 256.10s (0:04:16) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.1Z7cdB0K1L/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.1Z7cdB0K1L/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.1Z7cdB0K1L/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.1Z7cdB0K1L/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/b227a2d6229a-local-20260728T174122Z-16988-0/summary.json",
+      "outputBytes": 46559
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/japanese-status-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:45:47.158568+00:00",
+      "exitCode": 0,
+      "durationMs": 209,
+      "outputDigest": "9df76e8cd24d5a29f11b46ad787e724ddfd9082b35f51ff138337c0f9b39163b",
+      "commandHash": "e4bcf98bf90ad4c180a2ac315c7cb082fb012ef35f5dd827d3a771985c77f646",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "2e89d442b7e52624c18d3db22fede6d92de2aaa050bb9c38f17d9de28b8ea8d7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 354
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/japanese-status-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:45:47.399832+00:00",
+      "exitCode": 0,
+      "durationMs": 191,
+      "outputDigest": "5e027eb29746a3e985b7c1909218dce71a1cc9339286e3b3b6ce6ecd03509023",
+      "commandHash": "197543c70e1426d23fb52ee514616834c24c5ba2edb36d0e2aa4bb5ab5371ef1",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "2e89d442b7e52624c18d3db22fede6d92de2aaa050bb9c38f17d9de28b8ea8d7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 337
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:45:47.513561+00:00",
+      "exitCode": 0,
+      "durationMs": 65,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "2e89d442b7e52624c18d3db22fede6d92de2aaa050bb9c38f17d9de28b8ea8d7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/japanese-status-output-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:45:47.615323+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "73ea43b4266b42f7996b7e7e06a257a0f6924317cc2119770f2fd47bbbf504e6",
+      "commandHash": "54555a36898080885a7ba8376d5ed59f93daa94262eb88f5232159ab99523fc5",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "2e89d442b7e52624c18d3db22fede6d92de2aaa050bb9c38f17d9de28b8ea8d7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json --summary .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 317
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/japanese-status-output-corrective-20260729.summary.json CONTRACT=.ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T17:45:48.363709+00:00",
+      "exitCode": 0,
+      "durationMs": 93,
+      "outputDigest": "25e25a41a94e05095e51783d5c07ecb0884f71ae4899c68cc938118fb41b7b3c",
+      "commandHash": "0b88a14715612abc5390469df540865efa77984007c00b8a772106e549a7ea86",
+      "contractHash": "abd3b721dd7654cc59feb0694338b3086a27a99189f40cd4de1b13556fd5c787",
+      "commitSha": "b227a2d6229a25d519eda9fbe9d46cbe70f4564f",
+      "executionContractPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "worktreeDigest": "0150f2fe5794025f216e53f3d0781927582d3f37d39ce549253d8aea8be4c59e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json ai summary check passed: .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json --contract .ai/work-items/active/japanese-status-output-corrective-20260729.contract.json ai summary check passed: .ai/work-items/active/japanese-status-output-corrective-20260729.summary.json",
+      "outputBytes": 343
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep the canonical governance model and recommendation language-neutral and single-sourced.",
+      "compliant": true,
+      "evidence": "Both views use derive_governance_status and render_active_status; Japanese localization runs only after canonical rendering."
+    },
+    {
+      "guideline": "Localize presentation chrome only; preserve every evidence-bearing value byte-for-byte.",
+      "compliant": true,
+      "evidence": "The projection maps fixed chrome while the full-section regression proves ordered backtick values are byte-identical."
+    },
+    {
+      "guideline": "Generate and validate Japanese output deterministically; stale or manually edited views fail closed.",
+      "compliant": true,
+      "evidence": "The paired checker regenerates expected Japanese output and rejects appended hand edits."
+    },
+    {
+      "guideline": "Require executable active and no-active parity tests rather than keyword or documentation presence.",
+      "compliant": true,
+      "evidence": "Active, no-active, stale, unsupported-language, Make, and assessor regressions pass."
+    },
+    {
+      "guideline": "Record remaining Japanese blockers and do not claim general fluency or release readiness.",
+      "compliant": true,
+      "evidence": "The regenerated assessment retains JA-PR-001, JA-LIFECYCLE-001, and JA-DOC-001 plus the general-fluency limitation."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "A derived localized view can drift from canonical facts; deterministic regeneration, paired validation, and byte-preservation tests bound that risk."
+  },
+  "generatedFiles": [
+    "target/ai_cockpit_status.ja.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/cockpit/current_status.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "JA-STATUS-001",
+      "category": "japanese-status-parity",
+      "severity": "high",
+      "fact": "Cockpit Status had no executable Japanese derived view or freshness validator.",
+      "decision": "Add an on-demand projection from canonical rendering plus a paired fail-closed checker, without persisting a second lifecycle artifact.",
+      "resolution": "Active and no-active Japanese views now localize chrome, preserve machine facts, and pass executable parity and stale-output tests.",
+      "status": "resolved_locally",
+      "followUp": "Complete PR, Hosted CI, merge, closure, and branch cleanup before JA-PR-001."
+    },
+    {
+      "issueId": "WI-16-ISSUE-005",
+      "category": "localized-timestamp-validation",
+      "severity": "medium",
+      "fact": "The first real Make round-trip failed because timestamp normalization recognized only the English Generated At label; the in-memory fixture used a placeholder and missed the defect.",
+      "decision": "Normalize both canonical and Japanese labels and strengthen the Japanese stale test with a real ISO timestamp.",
+      "resolution": "The real generate/check Make pair and all focused tests pass; the plan records that fixture-only evidence is insufficient.",
+      "status": "resolved_locally",
+      "followUp": "Retain a real Make round-trip in verification for future localized generated views."
+    }
+  ],
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "The on-demand validated projection gives Japanese reviewers readable Status chrome without duplicating governance facts or lifecycle artifacts."
+  },
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "remaining-japanese-release-readiness",
+      "detail": "JA-PR-001, JA-LIFECYCLE-001, and JA-DOC-001 remain release-blocking.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    },
+    {
+      "level": "medium",
+      "area": "general-fluency",
+      "detail": "Localized Status chrome does not prove general provider/model Japanese fluency, arbitrary evidence translation, or native-human review.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Japanese output derives only from canonical governance rendering",
+      "Backtick machine values and arbitrary evidence remain unchanged",
+      "Stale and unsupported-language paths fail closed",
+      "Only JA-STATUS-001 is cleared"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "fixed Status chrome is localized; paths, commands, IDs, statuses, counts, and arbitrary evidence remain source text",
+    "persistence": "the Japanese view is generated only under ignored target/ and is not a second lifecycle artifact",
+    "localization": "strict en/ja selection rejects unsupported languages before output is accepted",
+    "generatedArtifacts": "Japanese Status and assessment Markdown are deterministic derived views",
+    "makeEntrypoints": "generate-cockpit-status-ja and check-ai-status-ja form a required pair"
+  },
+  "userCorrectionsCaptured": [
+    "Japanese capability is mandatory because most adopter engineers use Japanese.",
+    "Every Japanese finding must be corrected before documentation alignment or release.",
+    "Every corrective Work Item must complete PR, merge, closure, branch cleanup, and base synchronization."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "A Japanese guide to English Status is insufficient; executable Japanese output parity is required.",
+      "solidifiedIn": "Generator/checker language support, paired Make targets, and active/no-active executable tests."
+    },
+    {
+      "correction": "A fix must prevent recurrence rather than clear a finding by keyword presence.",
+      "solidifiedIn": "The assessor requires generator, validator, Make targets, and named executable tests."
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "abd3b721dd7654cc",
+      "acceptanceCount": 10,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "abd3b721dd7654cc",
+      "acceptanceCount": 10,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "Three independent Japanese findings remain release-blocking and require serial corrective lifecycles.",
+    "Full ai-finish/archive, PR Hosted CI, merge, ai-close-work-item, and branch cleanup remain pending for this Work Item."
+  ],
+  "overclaimPrevention": "This Work Item proves bounded Japanese Status output parity only; it does not prove general Japanese fluency, translate arbitrary evidence, clear PR/lifecycle/uninstall findings, or authorize release.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-29T02:45:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "docs/reference/japanese-capability-assessment.json"
+        ],
+        "reason": "WI-16 records JA-STATUS implementation, real round-trip issue, remaining blockers, and serial order."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/japanese-status-output-corrective-20260729.contract.json",
+          ".ai/work-items/archive/2026/japanese-status-output-corrective-20260729.summary.json",
+          "tests/test_guards_and_status.py",
+          "tests/test_core_gates.py"
+        ],
+        "reason": "Every required scenario maps to named executable evidence."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "Makefile",
+          "docs/reference/how-to-read-cockpit-status.md",
+          "docs/reference/how-to-read-cockpit-status.ja.md"
+        ],
+        "reason": "Both guides document the implemented generation/check commands and target path."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "scripts/ai_generate_status.py",
+          "tests/test_guards_and_status.py"
+        ],
+        "reason": "Japanese chrome remains semantically aligned while machine values retain exact bytes and order."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/japanese-capability-assessment.json",
+          "docs/reference/japanese-capability-assessment.md"
+        ],
+        "reason": "Only JA-STATUS-001 clears; three blockers and the general-fluency non-claim remain explicit."
+      }
+    ]
+  },
+  "archiveSequence": 647
+}

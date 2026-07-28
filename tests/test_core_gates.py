@@ -196,6 +196,71 @@ def test_status_check_main_accepts_matching_ready_status(tmp_path, monkeypatch):
     ]
 
 
+def test_status_check_rejects_stale_japanese_projection(tmp_path, monkeypatch):
+    contract = tmp_path / "task.contract.json"
+    summary = tmp_path / "task.summary.json"
+    status = tmp_path / "status.ja.md"
+    contract_data = {
+        "workItemId": "task",
+        "mode": "code",
+        "acceptance": ["specific acceptance evidence"],
+        "riskAssessment": {"level": "low", "riskTypes": [], "reason": "fixture"},
+        "verification": [{"check": "quality", "required": True}],
+    }
+    summary_data = {
+        "verification": [{"check": "quality", "result": "passed"}],
+        "reviewReadiness": {
+            "status": "ready",
+            "reason": "fixture",
+            "expectedReviewFocus": [],
+        },
+        "unknownsRemaining": [],
+        "risk": {"level": "low", "detail": "fixture"},
+        "guidelinesCompliance": [],
+        "checkpointEvidence": [],
+        "residualRisks": [],
+    }
+    contract.write_text(json.dumps(contract_data), encoding="utf-8")
+    summary.write_text(json.dumps(summary_data), encoding="utf-8")
+    model = ai_governance_compression.derive_governance_status(contract_data, summary_data)
+    english = ai_governance_compression.render_active_status(
+        model,
+        work_item_id="task",
+        mode="code",
+        contract_path=str(contract),
+        summary_path=str(summary),
+        generated_at="2026-07-29T00:00:00+00:00",
+        ownership_counts={},
+    )
+    status.write_text(
+        ai_generate_status.localize_status_markdown(english, "ja"),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        ai_check_status, "create_observability", lambda **kwargs: ObservabilityStub()
+    )
+    monkeypatch.setattr(ai_check_status, "BACKTRACK_REPORT", tmp_path / "backtrack.json")
+    monkeypatch.setattr(ai_check_status, "ownership_preview", lambda **_kwargs: [])
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_check_status.py",
+            str(status),
+            "--contract",
+            str(contract),
+            "--summary",
+            str(summary),
+            "--language",
+            "ja",
+        ],
+    )
+
+    assert ai_check_status.main() == 0
+    status.write_text(status.read_text(encoding="utf-8") + "\n手編集\n", encoding="utf-8")
+    assert ai_check_status.main() == 1
+
+
 def test_status_check_main_accepts_generated_status_with_unresolved_ownership(
     tmp_path, monkeypatch
 ):
