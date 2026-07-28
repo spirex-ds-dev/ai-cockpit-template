@@ -1,0 +1,294 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi10-installation-version-neutral",
+  "mode": "code",
+  "title": "Make WI-10 installation guidance version-neutral and expose proofreading checklists",
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "rawUserRequest": "WI-10 installation is critical to adoption and must be usable by a person with no programming experience. The user corrected that installation procedures must not be fixed to one AI Cockpit version, asked where the proofreading checklist is, and required all languages to be rechecked after prior Markdown table-format defects. Complete the supplement with visible English, Chinese, and Japanese proofreading checklists, prompt-first and version-neutral release guidance, executable anti-omission checks, bidirectional instruction-plan-implementation-acceptance evidence, and the full Contract, PR, Hosted CI, merge, closure, and branch-cleanup lifecycle. The user has already authorized continuous execution without another confirmation unless a genuine human decision is required.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:wi10-version-neutral-visible-proofreading-checklist",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:wi10-version-neutral-visible-proofreading-checklist"
+  },
+  "declaredIntent": {
+    "summary": "Make version-neutral installation and the complete proofreading standard visible in all three WI-10 guides, then enforce both against future omission or table breakage.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "baseCommit": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi10-installation-version-neutral.contract.json",
+    ".ai/work-items/active/wi10-installation-version-neutral.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/getting-started/installation.md",
+    "docs/getting-started/installation.zh-CN.md",
+    "docs/getting-started/installation.ja.md",
+    "docs/superpowers/plans/2026-07-28-wi10-prompt-first-multiplatform-installation.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "scripts/check_docs_metadata.py",
+    "tests/test_docs_metadata.py"
+  ],
+  "outOfScope": [
+    "Changing installer, calibration, uninstall, runtime, CI, release, or platform execution behavior",
+    "Hardcoding a current or future release version in installation guidance",
+    "Using moving main metadata as release authority or silently falling back to an older release",
+    "Claiming Japanese assessment, documentation alignment, deprecated-asset cleanup, or release completion",
+    "Changing Capability Truth Matrix statuses without new implementation evidence",
+    "Rewriting immutable archived WI-10 Contract, Summary, or Manifest evidence",
+    "Combining another independent Work Item into this branch"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.contract.json",
+      "reason": "Authoritative WI-10 beginner, prompt-first, multilingual, platform, and lifecycle requirements."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi10-platform-table-rendering-corrective-20260728.contract.json",
+      "reason": "Records the prior table-rendering omission, complete calibration checklist, and dynamic release-discovery requirements."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "English complete installation route and structural baseline."
+    },
+    {
+      "path": "docs/getting-started/installation.zh-CN.md",
+      "reason": "Chinese complete installation route explicitly required by the user."
+    },
+    {
+      "path": "docs/getting-started/installation.ja.md",
+      "reason": "Japanese complete installation route required for the primary adopter audience."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Executable documentation gate that already enforces dynamic tag-pinned discovery and Markdown table structure."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Existing mutation suite for WI-10 language, release, table, calibration, platform, and authority boundaries."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Machine source for bidirectional instruction-plan-implementation-acceptance evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "beginner_usability",
+      "multilingual_semantic_drift",
+      "markdown_rendering",
+      "release_truth_drift",
+      "acceptance_omission"
+    ],
+    "reason": "A hidden checklist, fixed version, broken table, or one-language omission can make the installation gateway unusable even when a shallow documentation check passes.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly identified the missing visible checklist and version-neutral boundary and authorized continuous governed implementation."
+  },
+  "preReviewWarnings": [
+    "Review rendered five-column tables in all three languages, not only marker presence.",
+    "Do not weaken the existing dynamic provider-release, tag-pinned metadata, and explicit older-release fallback boundaries.",
+    "Verify the checklist is a visible reader-facing artifact rather than only a hidden CI marker."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: docs/getting-started/installation.md, installation.zh-CN.md, and installation.ja.md each state in reader-visible language that the guide is version-neutral, prescribes no concrete AI Cockpit release number, dynamically selects the highest currently verifiable stable release, and binds only the resolved tag for that installation transaction.",
+    "A2: The existing fail-closed release boundary remains intact in all three guides: moving main metadata is not release authority, a concrete semantic version is not hardcoded, and a newer invalid stable release cannot be silently bypassed.",
+    "A3: All three installation guides contain a visible, complete eight-row proofreading checklist with the same order and safety meaning: version-neutral wording, prompt-first operation, ordered novice stages, ten-stage Calibration coverage, iOS/Android/Java coverage, table rendering, links/language parity, and full lifecycle evidence.",
+    "A4: Each proofreading checklist is a single uninterrupted GitHub-compatible five-column Markdown table with one header, one separator, and exactly eight consecutive rows; no blank line, comment, or block element splits the table.",
+    "A5: The executable documentation gate rejects a missing checklist marker, missing or extra row, interrupted table, incorrect column count, or missing language guide while retaining all existing WI-10 structural, command-evidence, release, Calibration, platform, and lifecycle checks.",
+    "A6: Mutation tests cover at least missing checklist, malformed/interrupted checklist table, and version-neutral release regression, while the complete English, Chinese, and Japanese routes pass together.",
+    "A7: The WI-10 plan, comprehensive plan, and remediation traceability source map each user correction to plan, implementation, focused acceptance evidence, and complete lifecycle evidence in both directions.",
+    "A8: Focused documentation tests, full quality, ai-finish archive, aggregate PR check, exact-Head Hosted required checks, human merge, ai-close-work-item, local/remote branch deletion, and synchronized clean main complete before final Japanese reassessment resumes.",
+    "A9: No installer/runtime/platform capability, Japanese release readiness, documentation-alignment completion, deprecated-asset cleanup, or release publication is claimed by this documentation-only supplement."
+  ],
+  "guidelines": [
+    "Write for a reader with no programming experience and keep prompt-first actions paired with expected result and STOP/recovery guidance.",
+    "Keep English, Chinese, and Japanese checklist structure, order, and safety meaning aligned; translations must be complete rather than summaries.",
+    "Use dynamic provider discovery followed by resolved-tag evidence; never prescribe a concrete release version or moving main metadata.",
+    "Validate rendered Markdown continuity and exact columns, not only marker or pipe-row counts.",
+    "Map every user-named document and requirement to implementation evidence or an explicit no-change reason.",
+    "Do not infer runtime, platform, hosted, Japanese fluency, or release capability from documentation text."
+  ],
+  "intent": {
+    "problem": "WI-10 now contains complete multilingual installation routes, but the user cannot see a single explicit proofreading checklist and the guide-level version-neutral rule is not stated prominently. Earlier table defects proved that marker presence and partial checks can still allow a reader-facing omission or malformed Markdown to be treated as complete.",
+    "constraints": [
+      "Keep the full beginner-safe, prompt-first English, Chinese, and Japanese routes complete and semantically aligned.",
+      "Do not prescribe a concrete AI Cockpit version; dynamically discover verifiable stable provider releases and bind only the selected tag for one installation.",
+      "Preserve explicit STOP before any older-release fallback and preserve moving-main rejection.",
+      "Do not replace underlying novice, Calibration, platform, link, command, and lifecycle checks with a self-referential checklist.",
+      "Keep this Work Item documentation-only and do not infer runtime, platform, Japanese fluency, or release readiness.",
+      "Complete one Contract, branch, PR, Hosted verification, merge, closure, and branch cleanup before continuing."
+    ],
+    "rationale": "A reader-visible same-structure checklist makes the acceptance standard usable by maintainers and translators, while an executable exact-table gate turns that checklist into an anti-omission control. Prominent version-neutral wording prevents future documentation from becoming stale without weakening tag-pinned release evidence."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "One language guide omits the visible proofreading checklist while hidden structural markers elsewhere remain valid.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The documentation gate rejects the exact missing language checklist.",
+      "verificationPlan": "Remove the checklist marker/table from one copied Japanese guide and assert the exact failure."
+    },
+    {
+      "scenario": "A proofreading table contains eight logical pipe rows but a blank line, HTML comment, wrong column count, missing row, or extra row breaks the rendered table.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The gate rejects the interrupted or malformed five-column table rather than accepting nonconsecutive rows.",
+      "verificationPlan": "Mutate an otherwise complete copied checklist with an interruption and malformed row and assert fail-closed diagnostics."
+    },
+    {
+      "scenario": "English, Chinese, and Japanese checklists individually render but differ in row count, order, or required safety topics.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The shared marker/topic schema and exact eight-row check reject structural drift.",
+      "verificationPlan": "Require the same canonical checklist marker/topics in all languages and mutate one language."
+    },
+    {
+      "scenario": "A guide prescribes a concrete release version, uses moving main release metadata, or implies that an older release may be selected silently.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Existing release-boundary checks reject fixed or moving authority and retain explicit STOP before older-release fallback.",
+      "verificationPlan": "Run existing moving-main/hardcoded-release mutation coverage and verify the fallback marker remains present."
+    },
+    {
+      "scenario": "The visible checklist exists but novice stages, Calibration, platform examples, links, or lifecycle evidence have drifted.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The checklist does not replace existing executable WI-10 checks; the combined gate still rejects the underlying omission.",
+      "verificationPlan": "Run the complete focused documentation suite, including existing stage, platform, link, command, and lifecycle mutations."
+    },
+    {
+      "scenario": "The PR or closure lifecycle is incomplete or does not bind Hosted checks to the reviewed Head SHA.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The Work Item remains incomplete until aggregate ownership, Hosted checks, human merge, branch cleanup, and synchronized main are proven.",
+      "verificationPlan": "Run ai-finish, check-ai-pr, inspect exact PR Head checks, merge without provider branch deletion, then run ai-close-work-item and inspect branch/base state."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized this WI-10 supplement, its plan and traceability updates, executable documentation checks, PR, merge, closure, and branch cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 654
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi10-installation-version-neutral.json",
+    "baseCommit": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+    "initialScopeDigest": "57d388b2cb476eccd5572d98a78f7fa4fdf5284fd073c7cb7a0542a0223863ea",
+    "contractSkeletonDigest": "88d8e8bf3b299b79f67349162a5c4b61e0ca56b8ed71ebdda862c498feba80d0"
+  }
+}

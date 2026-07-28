@@ -221,6 +221,20 @@ CALIBRATION_ACTIVATION_STAGES = ("plan-before-approval", "bounded-approval")
 PLATFORM_STEP_TABLE_MARKER = "<!-- platform-step-table: copy-request,example,pass,stop -->"
 PLATFORM_FILLED_EXAMPLE_MARKER = "<!-- platform-filled-example: seven-stages -->"
 PLATFORM_STAGE5_PROPOSAL_MARKER = "<!-- platform-stage5: proposal-only -->"
+INSTALLATION_PROOFREADING_CHECKLIST_MARKER = (
+    "<!-- installation-proofreading-checklist: "
+    "version-neutral,prompt-first,steps,calibration,platforms,tables,links,lifecycle -->"
+)
+INSTALLATION_VERSION_NEUTRAL_TEXT = {
+    "en": "This guide is version-neutral:",
+    "zh-CN": "本手顺与版本无关：",
+    "ja": "この手順は version-neutral です。",
+}
+INSTALLATION_PROOFREADING_HEADING = {
+    "en": "## Installation-document proofreading checklist",
+    "zh-CN": "## 安装文档校对清单",
+    "ja": "## インストール文書の校正チェックリスト",
+}
 LIFECYCLE_ORDER_MARKER = "<!-- lifecycle-order: adoption-close-before-configuration -->"
 LIFECYCLE_APPROVAL_STAGES = (
     "adoption-closure-plan",
@@ -868,6 +882,16 @@ def _executable_fence_bodies(text: str) -> list[str]:
     )
 
 
+def _installation_visible_copy_errors(text: str, *, language: str, relative: str) -> list[str]:
+    """Require reader-visible version-neutral and proofreading guidance."""
+    errors: list[str] = []
+    if INSTALLATION_VERSION_NEUTRAL_TEXT[language] not in text:
+        errors.append(f"{relative}: missing reader-visible version-neutral rule")
+    if INSTALLATION_PROOFREADING_HEADING[language] not in text:
+        errors.append(f"{relative}: missing reader-visible installation proofreading heading")
+    return errors
+
+
 def beginner_installation_errors(root: Path) -> list[str]:
     """Require complete novice-safe trilingual installation and platform routes."""
     errors: list[str] = []
@@ -943,6 +967,13 @@ def beginner_installation_errors(root: Path) -> list[str]:
                 errors.append(
                     f"{installation_relative}: missing dynamic tag-pinned release metadata boundary"
                 )
+            errors.extend(
+                _installation_visible_copy_errors(
+                    text,
+                    language=language,
+                    relative=installation_relative,
+                )
+            )
             if RELEASE_FALLBACK_APPROVAL not in text:
                 errors.append(
                     f"{installation_relative}: missing bounded older-release fallback approval"
@@ -1050,6 +1081,16 @@ def beginner_installation_errors(root: Path) -> list[str]:
                 _calibration_completion_checklist_errors(
                     text,
                     relative=installation_relative,
+                )
+            )
+            errors.extend(
+                _step_table_errors(
+                    text,
+                    marker=INSTALLATION_PROOFREADING_CHECKLIST_MARKER,
+                    expected_rows=8,
+                    relative=installation_relative,
+                    label="installation proofreading",
+                    require_copy_request=False,
                 )
             )
             errors.extend(

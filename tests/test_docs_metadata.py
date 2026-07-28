@@ -46,6 +46,89 @@ def test_wi10_beginner_installation_routes_are_complete():
     assert beginner_installation_errors(ROOT) == []
 
 
+def test_wi10_beginner_check_rejects_missing_installation_proofreading_checklist(tmp_path):
+    copy_documentation(tmp_path)
+    installation = tmp_path / "docs/getting-started/installation.ja.md"
+    installation.write_text(
+        installation.read_text(encoding="utf-8").replace(
+            "<!-- installation-proofreading-checklist: "
+            "version-neutral,prompt-first,steps,calibration,platforms,tables,links,lifecycle -->\n",
+            "",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    assert (
+        "docs/getting-started/installation.ja.md: missing installation proofreading decision table"
+        in beginner_installation_errors(tmp_path)
+    )
+
+
+def test_wi10_beginner_check_rejects_hidden_version_neutral_or_proofreading_copy(tmp_path):
+    copy_documentation(tmp_path)
+    english = tmp_path / "docs/getting-started/installation.md"
+    english.write_text(
+        english.read_text(encoding="utf-8").replace(
+            "This guide is version-neutral:",
+            "This guide selects a release:",
+            1,
+        ),
+        encoding="utf-8",
+    )
+    chinese = tmp_path / "docs/getting-started/installation.zh-CN.md"
+    chinese.write_text(
+        chinese.read_text(encoding="utf-8").replace(
+            "## 安装文档校对清单",
+            "## 安装文档",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+    assert (
+        "docs/getting-started/installation.md: missing reader-visible version-neutral rule"
+        in errors
+    )
+    assert (
+        "docs/getting-started/installation.zh-CN.md: missing reader-visible "
+        "installation proofreading heading"
+    ) in errors
+
+
+def test_wi10_beginner_check_rejects_interrupted_or_malformed_proofreading_table(tmp_path):
+    copy_documentation(tmp_path)
+    english = tmp_path / "docs/getting-started/installation.md"
+    english.write_text(
+        english.read_text(encoding="utf-8").replace(
+            "| 4 | Calibration coverage",
+            "<!-- split-proofreading-table -->\n| 4 | Calibration coverage",
+            1,
+        ),
+        encoding="utf-8",
+    )
+    japanese = tmp_path / "docs/getting-started/installation.ja.md"
+    japanese.write_text(
+        japanese.read_text(encoding="utf-8").replace(
+            "| 6 | 表の表示 |",
+            "| 6 | 表の表示 | 余分な列 |",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+    assert (
+        "docs/getting-started/installation.md: installation proofreading table "
+        "must be one uninterrupted Markdown table"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.ja.md: installation proofreading row 6 "
+        "must contain 5 columns"
+    ) in errors
+
+
 def test_wi10_beginner_check_rejects_missing_chinese_installation(tmp_path):
     copy_documentation(tmp_path)
     chinese = tmp_path / "docs/getting-started/installation.zh-CN.md"
