@@ -608,14 +608,13 @@ def validate_manifest(manifest: dict[str, Any], repository: Path) -> list[str]:
                 if not path:
                     errors.append(f"{instruction_id}: {field} contains an invalid path record")
                 elif (
-                    field == "contractPaths"
-                    and path.startswith(".ai/work-items/active/")
+                    path.startswith(".ai/work-items/active/")
                     and not (repository / path).is_file()
                     and _resolved_path(repository, path) is not None
                 ):
                     errors.append(
-                        f"{instruction_id}: stale active Contract path must use its archive path: "
-                        f"{path}"
+                        f"{instruction_id}: stale active Work Item path in {field} "
+                        f"must use its archive path: {path}"
                     )
                 elif _resolved_path(repository, path) is None:
                     errors.append(f"{instruction_id}: {field} path does not exist: {path}")

@@ -2,6 +2,7 @@ import json
 from argparse import Namespace
 
 import ai_archive_work_item
+import pytest
 
 
 def test_archive_growth_requires_projected_same_work_item_reservation():
@@ -380,3 +381,105 @@ def test_main_dry_run_validates_summary_and_current_digest(tmp_path, monkeypatch
     assert ai_archive_work_item.main() == 0
     assert contract_path.exists()
     assert summary_path.exists()
+
+
+def test_rewrite_traceability_paths_rewrites_every_archived_evidence_value():
+    active_prefix = ".ai/work-items/active/task"
+    archive_prefix = ".ai/work-items/archive/2026/task"
+    replacements = {
+        f"{active_prefix}.contract.json": f"{archive_prefix}.contract.json",
+        f"{active_prefix}.summary.json": f"{archive_prefix}.summary.json",
+        f"{active_prefix}.review.json": f"{archive_prefix}.review.json",
+        f"{active_prefix}.success.json": f"{archive_prefix}.success.json",
+        f"{active_prefix}.outcome.json": f"{archive_prefix}.outcome.json",
+    }
+    payload = {
+        "instructions": [
+            {
+                "contractPaths": [f"{active_prefix}.contract.json"],
+                "implementationEvidence": [f"{active_prefix}.review.json"],
+                "acceptanceEvidence": [
+                    f"{active_prefix}.summary.json",
+                    f"{active_prefix}.success.json",
+                    f"{active_prefix}.outcome.json",
+                ],
+            }
+        ]
+    }
+
+    rewritten, count = ai_archive_work_item._rewrite_traceability_paths(payload, replacements)
+
+    serialized = json.dumps(rewritten, sort_keys=True)
+    assert count == len(replacements)
+    assert ".ai/work-items/active/task" not in serialized
+    assert all(target in serialized for target in replacements.values())
+
+
+def test_archive_failure_rolls_back_rewritten_traceability_bytes(tmp_path, monkeypatch):
+    active = tmp_path / ".ai/work-items/active"
+    target = tmp_path / ".ai/work-items/archive/2026"
+    active.mkdir(parents=True)
+    target.mkdir(parents=True)
+    contract = active / "task.contract.json"
+    summary = active / "task.summary.json"
+    review = active / "task.review.json"
+    outcome = active / "task.outcome.json"
+    contract.write_text('{"workItemId":"task"}\n', encoding="utf-8")
+    summary.write_text('{"changedFiles":[]}\n', encoding="utf-8")
+    review.write_text("{}\n", encoding="utf-8")
+    outcome.write_text("{}\n", encoding="utf-8")
+    sources = (contract, summary, review, outcome)
+    original_source_bytes = {path: path.read_bytes() for path in sources}
+    traceability = tmp_path / "docs/reference/remediation-instruction-traceability.json"
+    traceability.parent.mkdir(parents=True)
+    traceability.write_text(
+        json.dumps(
+            {
+                "contractPaths": [".ai/work-items/active/task.contract.json"],
+                "acceptanceEvidence": [
+                    ".ai/work-items/active/task.summary.json",
+                    ".ai/work-items/active/task.outcome.json",
+                ],
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    original_traceability = traceability.read_bytes()
+
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_archive_work_item,
+        "ARCHIVE_BASE_DIR",
+        tmp_path / ".ai/work-items/archive",
+    )
+    monkeypatch.setattr(ai_archive_work_item, "_generate_status", lambda _command: None)
+    monkeypatch.setattr(
+        ai_archive_work_item,
+        "_load_archive_index",
+        lambda: (_ for _ in ()).throw(RuntimeError("post-rewrite failure")),
+    )
+
+    with pytest.raises(RuntimeError, match="post-rewrite failure"):
+        ai_archive_work_item._execute_archive_transaction(
+            contract_path=contract,
+            summary_path=summary,
+            review_path=review,
+            success_path=active / "task.success.json",
+            outcome_paths=[outcome],
+            files_to_move=[(path, target / path.name) for path in sources],
+            target_dir=target,
+            summary_tmp=target / ".task.summary.tmp",
+            manifest_target=target / "task.archive-manifest.json",
+            has_summary=True,
+            has_review=True,
+            has_success=False,
+            archive_sequence=1,
+            traceability_path=traceability,
+            traceability_backup=original_traceability,
+            traceability_payload=json.loads(original_traceability),
+        )
+
+    assert traceability.read_bytes() == original_traceability
+    assert all(path.read_bytes() == original_source_bytes[path] for path in sources)
