@@ -202,6 +202,34 @@ def test_pr_accepts_one_documented_adjacent_recovery_pair(tmp_path, monkeypatch)
     assert ai_check_pr.documented_recovery_paths(entries, "a" * 40) == {recovery}
 
 
+def test_recovery_source_accepts_exact_manifest_paired_summary(tmp_path, monkeypatch):
+    predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
+    recovery = {
+        "sources": [
+            {
+                "path": predecessor.with_name("predecessor.summary.json")
+                .relative_to(tmp_path)
+                .as_posix()
+            }
+        ]
+    }
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    assert ai_check_pr.source_references_archive_pair(recovery, predecessor)
+
+
+def test_recovery_source_rejects_an_unrelated_summary(tmp_path, monkeypatch):
+    predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
+    recovery = {
+        "sources": [
+            {"path": predecessor.with_name("older.summary.json").relative_to(tmp_path).as_posix()}
+        ]
+    }
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    assert not ai_check_pr.source_references_archive_pair(recovery, predecessor)
+
+
 def test_pr_accepts_a_fully_validated_adjacent_recovery_chain(tmp_path, monkeypatch):
     predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
     first_recovery = write_pair(

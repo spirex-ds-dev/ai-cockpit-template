@@ -232,14 +232,16 @@ def archive_base_is_compatible(contract: dict[str, Any], pr_base: str) -> bool:
     return run_git(["merge-base", "--is-ancestor", archived_base, pr_base]).returncode == 0
 
 
-def source_references_contract(contract: dict[str, Any], contract_path: Path) -> bool:
-    """Return whether a Contract declares another archived Contract as a source."""
+def source_references_archive_pair(contract: dict[str, Any], contract_path: Path) -> bool:
+    """Return whether a Contract sources the exact predecessor Contract or paired Summary."""
     try:
-        expected = contract_path.relative_to(PROJECT_ROOT).as_posix()
+        contract_source = contract_path.relative_to(PROJECT_ROOT).as_posix()
     except ValueError:
         return False
+    summary_source = contract_source.replace(".contract.json", ".summary.json")
+    expected = {contract_source, summary_source}
     return any(
-        isinstance(source, dict) and source.get("path") == expected
+        isinstance(source, dict) and source.get("path") in expected
         for source in contract.get("sources", [])
     )
 
@@ -271,7 +273,7 @@ def is_documented_pr_recovery_pair(
         and isinstance(recovery_base, str)
         and run_git(["merge-base", "--is-ancestor", predecessor_base, recovery_base]).returncode
         == 0
-        and source_references_contract(recovery_contract, predecessor_path)
+        and source_references_archive_pair(recovery_contract, predecessor_path)
         and isinstance(approval, dict)
         and approval.get("approved") is True
         and isinstance(approval.get("approvedBy"), str)
