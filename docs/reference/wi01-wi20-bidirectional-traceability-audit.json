@@ -1,7 +1,7 @@
 {
   "auditVersion": 1,
   "planPath": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
-  "status": "in_progress",
+  "status": "complete",
   "workItems": [
     {
       "workItemId": "WI-01",
@@ -124,10 +124,23 @@
       "workItemId": "WI-10",
       "instructionEvidence": [{"ref": "I-WI10", "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "locator": "### WI-10：Documentation Alignment"}],
       "planEvidence": [{"ref": "P-WI10", "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "locator": "### WI-10：Documentation Alignment"}],
-      "contractEvidence": [{"contractPath": ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.contract.json", "summaryPath": ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.summary.json", "manifestPath": ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.archive-manifest.json"}],
+      "contractEvidence": [
+        {"contractPath": ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.contract.json", "summaryPath": ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.summary.json", "manifestPath": ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.archive-manifest.json"},
+        {"contractPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.contract.json", "summaryPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.summary.json", "manifestPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.archive-manifest.json"}
+      ],
       "implementationEvidence": [
-        {"path": "docs/getting-started/installation.md", "reason": "User-named authoritative installation guide.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
-        {"path": "docs/getting-started/installation.ja.md", "reason": "Japanese installation guide.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/installation.md", "reason": "Complete prompt-first, beginner-safe English installation guide with wizard, scaffold, calibration, first Work Item, PR/CI, closure, and recovery steps.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/installation.zh-CN.md", "reason": "Complete Chinese installation guide with the same structure and operational boundaries as the English authority.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/installation.ja.md", "reason": "Complete Japanese installation guide with the same structure and operational boundaries as the English authority.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/examples/ios.md", "reason": "English iOS installation and calibration example with explicit toolchain and signing non-claims.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/examples/ios.zh-CN.md", "reason": "Complete Chinese iOS installation and calibration example.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/examples/ios.ja.md", "reason": "Complete Japanese iOS installation and calibration example.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/examples/android.md", "reason": "English Android installation and calibration example with explicit SDK/device non-claims.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/examples/android.zh-CN.md", "reason": "Complete Chinese Android installation and calibration example.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/examples/android.ja.md", "reason": "Complete Japanese Android installation and calibration example.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/examples/java.md", "reason": "English Java installation and calibration example with explicit JDK/build-tool non-claims.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/examples/java.zh-CN.md", "reason": "Complete Chinese Java installation and calibration example.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
+        {"path": "docs/getting-started/examples/java.ja.md", "reason": "Complete Japanese Java installation and calibration example.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
         {"path": "docs/getting-started/30-second-start.md", "reason": "English 30-second start guide.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
         {"path": "docs/getting-started/30-second-start.zh-CN.md", "reason": "Chinese 30-second start guide.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
         {"path": "docs/getting-started/30-second-start.ja.md", "reason": "Japanese 30-second start guide.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]},
@@ -143,11 +156,21 @@
         {"path": "docs/reference/documentation-architecture.md", "reason": "Documentation role and language architecture.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"], "sharedEvidenceReason": "Documentation Architecture is independently updated by WI-10 installation alignment and WI-17 Trust Layer authority registration."}
       ],
       "noChangeRationales": [],
-      "acceptanceEvidence": [{"path": "tests/test_docs_metadata.py", "reason": "Trilingual paths, commands, versions, links, historical context, and capability-boundary regressions.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]}],
-      "verificationEvidence": [{"command": "make ai-cockpit-quality", "result": "passed", "sourcePath": ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.summary.json", "reason": "Archived Summary records 1304 passing tests and the complete quality result.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]}],
+      "acceptanceEvidence": [{"path": "tests/test_docs_metadata.py", "reason": "Positive and deletion/mutation regressions enforce complete trilingual installation, prompt-first boundaries, seven scaffold steps, ten calibration stages, beginner decisions and recovery, and all nine iOS/Android/Java language examples.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]}],
+      "verificationEvidence": [{"command": "make ai-finish TASK=wi10-prompt-first-multiplatform-installation-20260728", "result": "passed", "sourcePath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.summary.json", "reason": "Archived corrective Summary records 1315 passing tests, 85.31% coverage, documentation alignment, five-strategy review closure, and complete local finish evidence; PR #423 subsequently passed Hosted CI and closed through ai-close-work-item.", "instructionRefs": ["I-WI10"], "planRefs": ["P-WI10"]}],
       "namedPaths": [
         {"path": "docs/getting-started/installation.md", "disposition": "implemented"},
+        {"path": "docs/getting-started/installation.zh-CN.md", "disposition": "implemented"},
         {"path": "docs/getting-started/installation.ja.md", "disposition": "implemented"},
+        {"path": "docs/getting-started/examples/ios.md", "disposition": "implemented"},
+        {"path": "docs/getting-started/examples/ios.zh-CN.md", "disposition": "implemented"},
+        {"path": "docs/getting-started/examples/ios.ja.md", "disposition": "implemented"},
+        {"path": "docs/getting-started/examples/android.md", "disposition": "implemented"},
+        {"path": "docs/getting-started/examples/android.zh-CN.md", "disposition": "implemented"},
+        {"path": "docs/getting-started/examples/android.ja.md", "disposition": "implemented"},
+        {"path": "docs/getting-started/examples/java.md", "disposition": "implemented"},
+        {"path": "docs/getting-started/examples/java.zh-CN.md", "disposition": "implemented"},
+        {"path": "docs/getting-started/examples/java.ja.md", "disposition": "implemented"},
         {"path": "docs/getting-started/30-second-start.md", "disposition": "implemented"},
         {"path": "docs/getting-started/30-second-start.zh-CN.md", "disposition": "implemented"},
         {"path": "docs/getting-started/30-second-start.ja.md", "disposition": "implemented"},
@@ -163,7 +186,7 @@
         {"path": "docs/reference/documentation-architecture.md", "disposition": "implemented"}
       ],
       "findings": ["WI10-AUDIT-001", "WI10-AUDIT-002", "WI10-AUDIT-003", "WI10-AUDIT-004"],
-      "status": "open"
+      "status": "verified"
     },
     {
       "workItemId": "WI-11",
@@ -321,64 +344,76 @@
       "workItemId": "WI-10",
       "severity": "high",
       "missingDomain": "implementation",
-      "fact": "The Chinese installation entrypoint docs/getting-started/installation.zh-CN.md does not exist, so the Chinese installation path is not equivalent to the English and Japanese installation entrypoints.",
+      "fact": "The first audit found that docs/getting-started/installation.zh-CN.md was absent, so the Chinese installation path was not equivalent to the English and Japanese installation entrypoints.",
       "evidence": [
         "docs/getting-started/installation.md",
+        "docs/getting-started/installation.zh-CN.md",
         "docs/getting-started/installation.ja.md",
-        "README.zh-CN.md"
+        "tests/test_docs_metadata.py"
       ],
-      "status": "corrective_required",
-      "releaseBlocking": true,
+      "status": "resolved",
+      "releaseBlocking": false,
       "correctiveWorkItemId": "wi10-prompt-first-multiplatform-installation-20260728",
-      "reverification": "not_run"
+      "reverification": "passed",
+      "resolution": "PR #423 added a complete Chinese guide with the same structure, authority boundaries, and tested language route as English and Japanese.",
+      "correctiveEvidence": {"contractPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.contract.json", "summaryPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.summary.json", "manifestPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.archive-manifest.json"}
     },
     {
       "findingId": "WI10-AUDIT-002",
       "workItemId": "WI-10",
       "severity": "high",
       "missingDomain": "usability",
-      "fact": "The adopter-facing installation documents expose long command-line sequences where a copy-ready agent prompt can perform the governed preparation and explain required human decisions more clearly.",
+      "fact": "The first audit found long command-line sequences where copy-ready prompts should have been the primary governed path.",
       "evidence": [
         "docs/getting-started/installation.md",
+        "docs/getting-started/installation.zh-CN.md",
         "docs/getting-started/installation.ja.md",
-        "docs/getting-started/30-second-start.zh-CN.md"
+        "tests/test_docs_metadata.py"
       ],
-      "status": "corrective_required",
-      "releaseBlocking": true,
+      "status": "resolved",
+      "releaseBlocking": false,
       "correctiveWorkItemId": "wi10-prompt-first-multiplatform-installation-20260728",
-      "reverification": "not_run"
+      "reverification": "passed",
+      "resolution": "The three authoritative guides now use copy-ready read-only, proposal, apply, verification, and lifecycle prompts; retained commands are limited to necessary bootstrap or evidence checks and include plain-language explanations.",
+      "correctiveEvidence": {"contractPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.contract.json", "summaryPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.summary.json", "manifestPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.archive-manifest.json"}
     },
     {
       "findingId": "WI10-AUDIT-003",
       "workItemId": "WI-10",
       "severity": "high",
       "missingDomain": "acceptance",
-      "fact": "The installation guidance has stack labels but no complete iOS, Android, or Java adopter examples that show prompt-first installation, project calibration, verification, and human handoff.",
+      "fact": "The first audit found stack labels but no complete iOS, Android, or Java adopter examples.",
       "evidence": [
-        "docs/getting-started/installation.md",
-        "docs/getting-started/standard-adoption-guide.md",
-        "docs/getting-started/standard-adoption-guide.ja.md"
+        "docs/getting-started/examples/ios.md",
+        "docs/getting-started/examples/android.md",
+        "docs/getting-started/examples/java.md",
+        "tests/test_docs_metadata.py"
       ],
-      "status": "corrective_required",
-      "releaseBlocking": true,
+      "status": "resolved",
+      "releaseBlocking": false,
       "correctiveWorkItemId": "wi10-prompt-first-multiplatform-installation-20260728",
-      "reverification": "not_run"
+      "reverification": "passed",
+      "resolution": "Nine complete English, Chinese, and Japanese examples now cover iOS, Android, and Java while preserving toolchain, device, signing, and hosted-evidence non-claims.",
+      "correctiveEvidence": {"contractPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.contract.json", "summaryPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.summary.json", "manifestPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.archive-manifest.json"}
     },
     {
       "findingId": "WI10-AUDIT-004",
       "workItemId": "WI-10",
       "severity": "critical",
       "missingDomain": "usability",
-      "fact": "The installation guidance is not yet a complete beginner-safe procedure: it does not explain every installation wizard step, every generated scaffold stage, the full calibration checklist, first governed Work Item, PR/CI handoff, success criteria, and recovery in language usable by a person with no programming experience.",
+      "fact": "The first audit found that the installation path did not explain every wizard, scaffold, calibration, first Work Item, PR/CI, closure, success, and recovery step at zero-programming-experience detail.",
       "evidence": [
         "docs/getting-started/installation.md",
+        "docs/getting-started/installation.zh-CN.md",
         "docs/getting-started/installation.ja.md",
-        "docs/getting-started/standard-adoption-guide.md"
+        "tests/test_docs_metadata.py"
       ],
-      "status": "corrective_required",
-      "releaseBlocking": true,
+      "status": "resolved",
+      "releaseBlocking": false,
       "correctiveWorkItemId": "wi10-prompt-first-multiplatform-installation-20260728",
-      "reverification": "not_run"
+      "reverification": "passed",
+      "resolution": "The trilingual procedure now defines every required term, seven scaffold steps, ten calibration stages, visible checkpoints, human decisions, failure stops, recovery, and the complete first governed lifecycle.",
+      "correctiveEvidence": {"contractPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.contract.json", "summaryPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.summary.json", "manifestPath": ".ai/work-items/archive/2026/wi10-prompt-first-multiplatform-installation-20260728.archive-manifest.json"}
     }
   ]
 }

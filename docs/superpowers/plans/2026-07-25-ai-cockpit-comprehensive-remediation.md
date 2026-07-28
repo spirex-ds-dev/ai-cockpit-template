@@ -254,6 +254,8 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 
 `AUDIT-PROCESS-002-CHECKPOINT-001`：第二次完整 `ai-finish` 已通过 1320 个项目测试、coverage、Bandit、status 和项目质量，最终 Agent Risk 检查发现 `before_edit` checkpoint 仍绑定早期 Contract 哈希 `1cc0c481af4f8424`，而最终评审 Contract 为 `39fc538468c0d0f6`。不得复用该轮部分成功证据；先把两个 checkpoint 重新绑定稳定 Contract、定点通过 Agent Risk，再从头执行完整事务 finish。
 
+**WI-01～WI-20 全量双向追踪审计结果：** 机器事实源 `docs/reference/wi01-wi20-bidirectional-traceability-audit.json` 已建立恰好 20 行的“指示—计划—实现—验收”双向绑定，并以 `docs/reference/wi01-wi20-bidirectional-traceability-audit.md` 提供同事实的人类报告。WI-01～WI-17 与 WI-20 均为 `verified`；WI-18 发布与 WI-19 当前周期计划清理因固定串行顺序标记为 `deferred`，不是缺少证据，也不得提前执行。WI-10 的四条 release-blocking finding 已由 PR #423 对应的 `wi10-prompt-first-multiplatform-installation-20260728` 归档三件套精确闭合并重新验证；当前 open finding 为 0。Checker 现要求 resolved corrective finding 必须绑定 archive index 中同 Work Item 的 Contract/Summary/Manifest，单独修改完成状态不能解除发布冻结。审计工单本身仍须完成 full quality、独立 PR、Hosted CI、merge、`ai-close-work-item` 和分支清理后，才能进入“其他流程问题与 RFE-ISSUE-082”阶段。
+
 ### WI-11：Enterprise Governance Boundary
 
 **范围：** 明确可声明的 repository-local evidence、SDLC 控制支持和审计准备能力；明确禁止 SOC 2、ISO 27001、完整注入防御、身份不可抵赖、生产权限隔离、无漏洞、完整 SLSA 等无外部证据声明；建立 adopter checklist。

@@ -121,8 +121,50 @@ def test_audit_rejects_finding_linked_from_the_wrong_work_item() -> None:
     assert any("WI-01: finding WI10-AUDIT-001 belongs to WI-10" in error for error in errors)
 
 
+def test_resolved_finding_requires_indexed_corrective_archive_triple() -> None:
+    audit = load_audit()
+    finding = audit["findings"][0]
+    finding["status"] = "resolved"
+    finding["correctiveEvidence"] = {
+        "contractPath": (
+            ".ai/work-items/archive/2026/"
+            "wi10-prompt-first-multiplatform-installation-20260728.contract.json"
+        ),
+        "summaryPath": (
+            ".ai/work-items/archive/2026/"
+            "wi10-prompt-first-multiplatform-installation-20260728.summary.json"
+        ),
+        "manifestPath": ".ai/work-items/archive/2026/not-the-corrective-manifest.json",
+    }
+    errors = validate_audit(audit, ROOT)
+    assert any(
+        "correctiveEvidence does not match one archive index entry" in error for error in errors
+    )
+
+
+def test_resolved_finding_rejects_missing_corrective_and_finding_evidence() -> None:
+    audit = load_audit()
+    audit["findings"][0].pop("correctiveEvidence")
+    errors = validate_audit(audit, ROOT)
+    assert any("correctiveEvidence must be an archive triple" in error for error in errors)
+
+    audit = load_audit()
+    audit["findings"][0]["evidence"] = ["docs/reference/not-present-audit-evidence.md"]
+    errors = validate_audit(audit, ROOT)
+    assert any("evidence path does not exist" in error for error in errors)
+
+
 def test_current_traceability_manifest_passes() -> None:
     assert validate_manifest(load_manifest(), ROOT) == []
+
+
+def test_traceability_rejects_archived_contract_through_active_fallback() -> None:
+    manifest = load_manifest()
+    manifest["instructions"][0]["contractPaths"] = [
+        ".ai/work-items/active/ai-cockpit-comprehensive-review-plan.contract.json"
+    ]
+    errors = validate_manifest(manifest, ROOT)
+    assert any("stale active Contract path" in error for error in errors)
 
 
 def test_unmapped_instruction_fails_closed() -> None:
@@ -269,30 +311,28 @@ def test_archive_index_digest_drift_fails_closed(tmp_path: Path):
     assert any("digest mismatch" in error for error in errors)
 
 
-def test_archived_contract_path_resolves_when_manifest_keeps_active_reference(tmp_path: Path):
+def test_archived_contract_path_rejects_stale_active_manifest_reference(tmp_path: Path):
     archive = tmp_path / ".ai/work-items/archive/2026"
     archive.mkdir(parents=True)
     (archive / "example.contract.json").write_text("{}", encoding="utf-8")
     (tmp_path / "plan.md").write_text("WI-1", encoding="utf-8")
     (archive / "example.summary.json").write_text("{}", encoding="utf-8")
-    assert (
-        validate_manifest(
-            {
-                "schemaVersion": 1,
-                "planPath": "plan.md",
-                "instructions": [
-                    {
-                        "id": "I1",
-                        "summary": "x",
-                        "planWorkItems": ["WI-1"],
-                        "contractPaths": [".ai/work-items/active/example.contract.json"],
-                        "implementationEvidence": [".ai/work-items/active/example.contract.json"],
-                        "acceptanceEvidence": [".ai/work-items/active/example.summary.json"],
-                        "verificationCommands": ["make check"],
-                    }
-                ],
-            },
-            tmp_path,
-        )
-        == []
+    errors = validate_manifest(
+        {
+            "schemaVersion": 1,
+            "planPath": "plan.md",
+            "instructions": [
+                {
+                    "id": "I1",
+                    "summary": "x",
+                    "planWorkItems": ["WI-1"],
+                    "contractPaths": [".ai/work-items/active/example.contract.json"],
+                    "implementationEvidence": [".ai/work-items/active/example.contract.json"],
+                    "acceptanceEvidence": [".ai/work-items/active/example.summary.json"],
+                    "verificationCommands": ["make check"],
+                }
+            ],
+        },
+        tmp_path,
     )
+    assert any("stale active Contract path" in error for error in errors)

@@ -1,3 +1,14 @@
+---
+author: Ray
+title: "WI-01 through WI-20 Bidirectional Traceability Audit Implementation Plan"
+description: Test-driven execution plan for the complete instruction, plan, implementation, and acceptance audit.
+keywords:
+  - implementation-plan
+  - traceability
+  - work-items
+  - audit
+---
+
 # WI-01 through WI-20 Bidirectional Traceability Audit Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
@@ -95,11 +106,11 @@
 
   Resolve repository paths without following evidence outside the repository, bind archive triples through index paths and SHA-256 values, and require each `namedPaths[].path` to appear exactly in `implementationEvidence` or in one `noChangeRationales` entry with non-empty `reason` and `evidence`.
 
-- [ ] **Step 4: Populate exact evidence for all twenty rows**
+- [x] **Step 4: Populate exact evidence for all twenty rows**
 
   Read each cited archived Contract and Summary; record concrete implementation and acceptance paths from those artifacts. Do not copy broad `scope` globs into implementation evidence. Record any unsupported claim as an open finding instead of setting the row to verified.
 
-- [ ] **Step 5: Run the checker and focused tests**
+- [x] **Step 5: Run the checker and focused tests**
 
   Run: `make check-instruction-traceability`
 
@@ -118,25 +129,25 @@
 - Consumes: validated twenty-row evidence
 - Produces: reverse-ownership map for implementation and acceptance paths plus fail-closed audit/finding status
 
-- [ ] **Step 1: Add reverse-coverage and false-completion tests**
+- [x] **Step 1: Add reverse-coverage and false-completion tests**
 
   Add mutations for orphan implementation evidence, orphan acceptance evidence, duplicate ownership without an explicit shared-evidence reason, an open finding under `status: complete`, and a verified row containing an open finding.
 
-- [ ] **Step 2: Confirm the mutations fail**
+- [x] **Step 2: Confirm the mutations fail**
 
   Run: `.venv/bin/python -m pytest -q tests/test_instruction_traceability.py`
 
   Expected: FAIL before reverse-coverage and finding-state validation is implemented.
 
-- [ ] **Step 3: Implement reverse coverage**
+- [x] **Step 3: Implement reverse coverage**
 
   Build exact path ownership from the twenty rows. Every implementation and acceptance path must resolve to at least one instruction locator and one plan locator in its owning row. Shared paths require `sharedEvidenceReason`; duplicate ownership without it is an error.
 
-- [ ] **Step 4: Implement closure-state rules**
+- [x] **Step 4: Implement closure-state rules**
 
   Permit top-level `complete` only when all twenty rows are `verified`, all findings are `resolved` or `not_applicable`, and every corrective-required finding cites a closed archived corrective Contract/Summary/Manifest triple.
 
-- [ ] **Step 5: Run focused validation**
+- [x] **Step 5: Run focused validation**
 
   Run: `.venv/bin/python -m pytest -q tests/test_instruction_traceability.py && make check-instruction-traceability`
 
@@ -156,19 +167,19 @@
 - Consumes: machine-readable audit rows and findings
 - Produces: one human table with WI, status, exact evidence, finding IDs, corrective IDs, residual limits, and next action
 
-- [ ] **Step 1: Summarize all twenty rows without adding facts**
+- [x] **Step 1: Summarize all twenty rows without adding facts**
 
   The Markdown report must state that archived implementation evidence proves repository history, not current adopter, provider, enterprise, or release readiness.
 
-- [ ] **Step 2: Record every finding**
+- [x] **Step 2: Record every finding**
 
   Each finding contains `findingId`, `workItemId`, `severity`, `missingDomain`, `fact`, `evidence`, `status`, `releaseBlocking`, `correctiveWorkItemId`, and `reverification`.
 
-- [ ] **Step 3: Route confirmed omissions**
+- [x] **Step 3: Route confirmed omissions**
 
   If no findings are open, continue to Task 5. If any finding is open, leave this audit Work Item active, start exactly one dedicated corrective at a time from current `origin/main`, complete its entire lifecycle, resume this audit through `make ai-resume-work-item`, and reverify the affected rows.
 
-- [ ] **Step 4: Align the authoritative plan and directive registry**
+- [x] **Step 4: Align the authoritative plan and directive registry**
 
   Record the audit result and corrective state without changing the eight-stage order or claiming later stages complete.
 
@@ -185,7 +196,7 @@
 - Consumes: complete audit, zero open findings, focused evidence, and all closed corrective lineages
 - Produces: archived audit evidence, independent PR, Hosted CI, merged PR, closed lifecycle, deleted branches, synchronized `main`
 
-- [ ] **Step 1: Run focused checks**
+- [x] **Step 1: Run focused checks**
 
   Run: `.venv/bin/python -m pytest -q tests/test_instruction_traceability.py`
 

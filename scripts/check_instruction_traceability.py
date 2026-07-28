@@ -167,6 +167,134 @@ def _archive_entries(repository: Path) -> dict[str, dict[str, Any]]:
     }
 
 
+def _audit_locator_errors(
+    repository: Path,
+    work_item_id: str,
+    evidence: tuple[tuple[str, list[dict[str, Any]]], ...],
+) -> list[str]:
+    errors: list[str] = []
+    for field, records in evidence:
+        for index, record in enumerate(records):
+            locator = record.get("locator")
+            reference = record.get("ref")
+            if not isinstance(reference, str) or not reference:
+                errors.append(f"{work_item_id}: {field}[{index}].ref must be non-empty")
+            if not isinstance(locator, str) or not locator:
+                errors.append(f"{work_item_id}: {field}[{index}].locator must be non-empty")
+                continue
+            resolved = _resolved_path(repository, str(record["path"]))
+            if resolved is None:
+                continue
+            try:
+                text = resolved.read_text(encoding="utf-8")
+            except (OSError, UnicodeDecodeError):
+                errors.append(f"{work_item_id}: {field}[{index}] is not readable text")
+            else:
+                if locator not in text:
+                    errors.append(f"{work_item_id}: {field}[{index}] locator is missing: {locator}")
+    return errors
+
+
+def _audit_contract_evidence_errors(
+    repository: Path,
+    work_item_id: str,
+    contracts: Any,
+    archive_entries: dict[str, dict[str, Any]],
+) -> list[str]:
+    if not isinstance(contracts, list) or not contracts:
+        return [f"{work_item_id}: contractEvidence must be a non-empty list"]
+    errors: list[str] = []
+    for index, record in enumerate(contracts):
+        prefix = f"{work_item_id}: contractEvidence[{index}]"
+        if not isinstance(record, dict):
+            errors.append(f"{prefix} must be an object")
+            continue
+        contract_path = record.get("contractPath")
+        summary_path = record.get("summaryPath")
+        manifest_path = record.get("manifestPath")
+        for key, value in (
+            ("contractPath", contract_path),
+            ("summaryPath", summary_path),
+            ("manifestPath", manifest_path),
+        ):
+            if not isinstance(value, str) or _resolved_path(repository, value) is None:
+                errors.append(f"{prefix}.{key} path does not exist: {value}")
+        indexed = archive_entries.get(str(contract_path))
+        if (
+            indexed is None
+            or indexed.get("summaryPath") != summary_path
+            or indexed.get("manifestPath") != manifest_path
+        ):
+            errors.append(f"{prefix} does not match one archive index entry")
+    return errors
+
+
+def _audit_finding_errors(
+    findings: list[Any],
+    archive_entries: dict[str, dict[str, Any]],
+    repository: Path,
+) -> tuple[list[str], list[dict[str, Any]]]:
+    errors: list[str] = []
+    open_findings: list[dict[str, Any]] = []
+    required = (
+        "findingId",
+        "workItemId",
+        "severity",
+        "missingDomain",
+        "fact",
+        "evidence",
+        "status",
+        "releaseBlocking",
+        "correctiveWorkItemId",
+        "reverification",
+    )
+    valid_statuses = {"open", "corrective_required", "resolved", "not_applicable"}
+    for index, finding in enumerate(findings):
+        prefix = f"findings[{index}]"
+        if not isinstance(finding, dict):
+            errors.append(f"{prefix} must be an object")
+            continue
+        missing_fields = [key for key in required if key not in finding]
+        if missing_fields:
+            errors.append(f"{prefix} missing fields: {', '.join(missing_fields)}")
+        if finding.get("status") not in valid_statuses:
+            errors.append(f"{prefix}.status is invalid")
+        if finding.get("workItemId") not in EXPECTED_AUDIT_WORK_ITEMS:
+            errors.append(f"{prefix}.workItemId is invalid")
+        evidence = finding.get("evidence")
+        if not isinstance(evidence, list) or not evidence:
+            errors.append(f"{prefix}.evidence must be a non-empty list")
+        else:
+            for evidence_path in evidence:
+                if (
+                    not isinstance(evidence_path, str)
+                    or _resolved_path(repository, evidence_path) is None
+                ):
+                    errors.append(f"{prefix} evidence path does not exist: {evidence_path}")
+        if (
+            finding.get("status") == "resolved"
+            and str(finding.get("correctiveWorkItemId", "")).strip()
+        ):
+            corrective = finding.get("correctiveEvidence")
+            indexed = (
+                archive_entries.get(str(corrective.get("contractPath")))
+                if isinstance(corrective, dict)
+                else None
+            )
+            if not isinstance(corrective, dict):
+                errors.append(f"{prefix}.correctiveEvidence must be an archive triple")
+            elif (
+                indexed is None
+                or indexed.get("workItemId") != finding.get("correctiveWorkItemId")
+                or indexed.get("summaryPath") != corrective.get("summaryPath")
+                or indexed.get("manifestPath") != corrective.get("manifestPath")
+            ):
+                errors.append(f"{prefix}.correctiveEvidence does not match one archive index entry")
+        if finding.get("status") not in {"resolved", "not_applicable"}:
+            open_findings.append(finding)
+    return errors, open_findings
+
+
 def validate_audit(audit: dict[str, Any], repository: Path) -> list[str]:
     """Validate the canonical WI-01 through WI-20 bidirectional audit."""
     errors: list[str] = []
@@ -184,8 +312,8 @@ def validate_audit(audit: dict[str, Any], repository: Path) -> list[str]:
     if not isinstance(rows, list):
         return errors + ["audit workItems must be a list"]
 
-    row_ids = [
-        row.get("workItemId")
+    row_ids: list[str] = [
+        str(row["workItemId"])
         for row in rows
         if isinstance(row, dict) and isinstance(row.get("workItemId"), str)
     ]
@@ -247,56 +375,24 @@ def validate_audit(audit: dict[str, Any], repository: Path) -> list[str]:
             for record in plan_records
             if isinstance(record.get("ref"), str) and record.get("ref")
         }
-        for field, records in (
-            ("instructionEvidence", instruction_records),
-            ("planEvidence", plan_records),
-        ):
-            for index, record in enumerate(records):
-                locator = record.get("locator")
-                reference = record.get("ref")
-                if not isinstance(reference, str) or not reference:
-                    errors.append(f"{work_item_id}: {field}[{index}].ref must be non-empty")
-                if not isinstance(locator, str) or not locator:
-                    errors.append(f"{work_item_id}: {field}[{index}].locator must be non-empty")
-                    continue
-                resolved = _resolved_path(repository, str(record["path"]))
-                if resolved is not None:
-                    try:
-                        text = resolved.read_text(encoding="utf-8")
-                    except (OSError, UnicodeDecodeError):
-                        errors.append(f"{work_item_id}: {field}[{index}] is not readable text")
-                    else:
-                        if locator not in text:
-                            errors.append(
-                                f"{work_item_id}: {field}[{index}] locator is missing: {locator}"
-                            )
-
-        contracts = row.get("contractEvidence")
-        if not isinstance(contracts, list) or not contracts:
-            errors.append(f"{work_item_id}: contractEvidence must be a non-empty list")
-        else:
-            for index, record in enumerate(contracts):
-                prefix = f"{work_item_id}: contractEvidence[{index}]"
-                if not isinstance(record, dict):
-                    errors.append(f"{prefix} must be an object")
-                    continue
-                contract_path = record.get("contractPath")
-                summary_path = record.get("summaryPath")
-                manifest_path = record.get("manifestPath")
-                for key, value in (
-                    ("contractPath", contract_path),
-                    ("summaryPath", summary_path),
-                    ("manifestPath", manifest_path),
-                ):
-                    if not isinstance(value, str) or _resolved_path(repository, value) is None:
-                        errors.append(f"{prefix}.{key} path does not exist: {value}")
-                indexed = archive_entries.get(str(contract_path))
-                if (
-                    indexed is None
-                    or indexed.get("summaryPath") != summary_path
-                    or indexed.get("manifestPath") != manifest_path
-                ):
-                    errors.append(f"{prefix} does not match one archive index entry")
+        errors.extend(
+            _audit_locator_errors(
+                repository,
+                work_item_id,
+                (
+                    ("instructionEvidence", instruction_records),
+                    ("planEvidence", plan_records),
+                ),
+            )
+        )
+        errors.extend(
+            _audit_contract_evidence_errors(
+                repository,
+                work_item_id,
+                row.get("contractEvidence"),
+                archive_entries,
+            )
+        )
 
         reverse_records: dict[str, list[dict[str, Any]]] = {}
         for field in ("implementationEvidence", "acceptanceEvidence"):
@@ -436,38 +532,8 @@ def validate_audit(audit: dict[str, Any], repository: Path) -> list[str]:
                 f"{path} ({owner_names})"
             )
 
-    open_findings = []
-    for index, finding in enumerate(top_findings):
-        prefix = f"findings[{index}]"
-        if not isinstance(finding, dict):
-            errors.append(f"{prefix} must be an object")
-            continue
-        required = (
-            "findingId",
-            "workItemId",
-            "severity",
-            "missingDomain",
-            "fact",
-            "evidence",
-            "status",
-            "releaseBlocking",
-            "correctiveWorkItemId",
-            "reverification",
-        )
-        missing_fields = [key for key in required if key not in finding]
-        if missing_fields:
-            errors.append(f"{prefix} missing fields: {', '.join(missing_fields)}")
-        if finding.get("status") not in {
-            "open",
-            "corrective_required",
-            "resolved",
-            "not_applicable",
-        }:
-            errors.append(f"{prefix}.status is invalid")
-        if finding.get("workItemId") not in EXPECTED_AUDIT_WORK_ITEMS:
-            errors.append(f"{prefix}.workItemId is invalid")
-        if finding.get("status") not in {"resolved", "not_applicable"}:
-            open_findings.append(finding)
+    finding_errors, open_findings = _audit_finding_errors(top_findings, archive_entries, repository)
+    errors.extend(finding_errors)
     if status == "complete":
         incomplete_rows = [
             str(row.get("workItemId"))
@@ -541,6 +607,16 @@ def validate_manifest(manifest: dict[str, Any], repository: Path) -> list[str]:
                 path = _path(value)
                 if not path:
                     errors.append(f"{instruction_id}: {field} contains an invalid path record")
+                elif (
+                    field == "contractPaths"
+                    and path.startswith(".ai/work-items/active/")
+                    and not (repository / path).is_file()
+                    and _resolved_path(repository, path) is not None
+                ):
+                    errors.append(
+                        f"{instruction_id}: stale active Contract path must use its archive path: "
+                        f"{path}"
+                    )
                 elif _resolved_path(repository, path) is None:
                     errors.append(f"{instruction_id}: {field} path does not exist: {path}")
 

@@ -1,0 +1,327 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi01-wi20-bidirectional-traceability-audit-20260728",
+  "mode": "code",
+  "title": "Audit WI-01 through WI-20 bidirectional traceability",
+  "baseCommit": "f9e2f94c31fcfd2038b438f3ec43542dd062c606",
+  "predecessorWorkItem": {
+    "workItemId": "fix-resume-base-branch-binding-20260728",
+    "status": "closed",
+    "pr": {
+      "number": 424,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/424",
+      "mergeCommit": "f9e2f94c31fcfd2038b438f3ec43542dd062c606"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/fix-resume-base-branch-binding-20260728.archive-manifest.json"
+    }
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi01-wi20-bidirectional-traceability-audit-20260728.contract.json",
+    ".ai/work-items/active/wi01-wi20-bidirectional-traceability-audit-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/superpowers/plans/2026-07-28-wi01-wi20-bidirectional-traceability-audit.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/wi01-wi20-bidirectional-traceability-audit.json",
+    "docs/reference/wi01-wi20-bidirectional-traceability-audit.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/instruction-traceability.md",
+    "scripts/check_instruction_traceability.py",
+    "tests/test_instruction_traceability.py"
+  ],
+  "outOfScope": [
+    "Implementing a missing WI-01 through WI-20 requirement inside the audit Work Item; each confirmed gap requires a separate corrective lifecycle",
+    "Resolving RFE-ISSUE-082, RFE-ISSUE-147, or other process issues reserved for the next stage",
+    "Performing or claiming the mandatory Japanese capability assessment",
+    "Trust Layer publication alignment, release identity changes, tags, assets, or provider publication",
+    "Deleting execution plans, design records, or immutable archived evidence"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative captured user instruction, WI-01 through WI-20 scope and acceptance, exact eight-stage order, and known issue ledger."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Current machine-readable directive mapping whose completeness and reverse coverage must be audited."
+    },
+    {
+      "path": "docs/reference/instruction-traceability.md",
+      "reason": "Defines the instruction-plan-implementation-acceptance bidirectional mechanism and named-path boundary."
+    },
+    {
+      "path": "scripts/check_instruction_traceability.py",
+      "reason": "Current executable gate; it validates directives but does not yet prove one complete row for every WI-01 through WI-20."
+    },
+    {
+      "path": "tests/test_instruction_traceability.py",
+      "reason": "Current positive and fail-closed traceability regressions to extend for the full audit."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Canonical archive inventory and digest binding for exact Contract and Summary evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/full-remediation-acceptance.summary.json",
+      "reason": "Prior WI-15 issue overview and known-gap baseline; completion wording must be rechecked against exact evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.summary.json",
+      "reason": "Immediate predecessor proves the named-file omission pattern and requires the WI-01 through WI-20 re-audit."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/fix-resume-base-branch-binding-20260728.summary.json",
+      "reason": "Immediate closed corrective records AUDIT-PROCESS-002, prevents future default-branch starts, and authorizes only the narrowly bound compatibility resume used by this paused audit."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "instruction_omission",
+      "false_completion",
+      "evidence_drift",
+      "release_gate_bypass"
+    ],
+    "reason": "A missing or stale link between user instructions, plan rows, implementation paths, and acceptance evidence can incorrectly mark remediation complete and allow later release stages to proceed.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized the eight-stage sequence and required a full WI-01 through WI-20 bidirectional audit immediately after WI-10."
+  },
+  "preReviewWarnings": [
+    "Do not treat archived status, a broad scope glob, or prior full-acceptance wording as proof of exact instruction coverage.",
+    "A confirmed gap blocks audit closure and must be delivered through a separate corrective Work Item before this audit can finish."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The machine-readable audit contains exactly one row for each WI-01 through WI-20 and no duplicate, missing, or unknown WI identifier.",
+    "Every row binds the captured user instruction and authoritative plan section to exact archived Contract/Summary evidence, implementation paths or a specific no-change rationale, acceptance evidence, and verification commands/results.",
+    "Reverse coverage proves every claimed implementation path and acceptance artifact maps back to a WI instruction and plan locator; broad globs and completion labels cannot satisfy an exact named-path evidence rule.",
+    "The checker rejects missing evidence paths, invalid archive pairs/digests, empty evidence domains, duplicate ownership, unregistered no-change rationales, and a complete status with any open finding.",
+    "The human-readable audit is generated from or demonstrably aligned with the machine-readable facts and lists resolved, open, and corrective-required findings without capability or release overstatement.",
+    "Every confirmed omission is recorded with severity, exact evidence gap, release-blocking state, and corrective Work Item identity; the audit cannot archive until all such corrective Work Items are closed and the affected row is reverified.",
+    "The authoritative remediation plan and directive traceability manifest record the audit status, issue findings, and unchanged eight-stage order.",
+    "Focused red/green regressions, instruction traceability, full quality, documentation alignment, PR/Hosted checks, merge, ai-close-work-item, branch cleanup, and main synchronization pass before the process-issues stage starts."
+  ],
+  "guidelines": [
+    "Use archive manifests and index digests as evidence; never rewrite immutable archived Contract or Summary files.",
+    "Require exact file evidence or an explicit, evidence-backed no-change rationale for every user-named path.",
+    "Keep instruction-to-acceptance and acceptance-to-instruction coverage equally enforceable.",
+    "Separate audit findings from corrective implementation and from later process, Japanese, documentation-alignment, release, and cleanup stages.",
+    "Do not infer current capability, adopter readiness, or release readiness from historical completion wording."
+  ],
+  "intent": {
+    "problem": "The prior plan marked WI-01 through WI-20 complete in stages, but WI-10 proved that broad scope and archived completion wording can coexist with an omitted user-named file. Without a row-by-row bidirectional audit, other original instructions may also lack implementation or acceptance evidence while later release gates assume completion.",
+    "constraints": [
+      "Audit all twenty Work Items; do not sample or stop at previously reported completion.",
+      "Preserve immutable archives and use exact paths, manifests, digests, and command evidence.",
+      "Do not implement confirmed omissions in this audit branch; create and close dedicated corrective Work Items first.",
+      "Do not advance to process issues, Japanese assessment, documentation alignment, release, or cleanup until this audit closes.",
+      "The user has already authorized continuous execution unless a genuine new human decision is required."
+    ],
+    "rationale": "A canonical twenty-row audit plus an executable fail-closed checker makes omissions visible in both directions and prevents a future Summary or plan label from substituting for exact instruction and acceptance evidence."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Audit every WI-01 through WI-20 instruction bidirectionally and block closure on any unmapped implementation or acceptance evidence.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "rawUserRequest": "After the deep performance Work Item and WI-10 close, audit every WI-01 through WI-20 using the instruction-plan-implementation-acceptance bidirectional mechanism. Do not rely on previous completion labels. If any omission is found, record it, complete a separate corrective Work Item through PR, merge, close, and branch cleanup, then re-audit before proceeding. Continue automatically unless a genuine human decision is required.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-eight-stage-order-and-full-wi01-wi20-audit",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-approved-full-wi01-wi20-bidirectional-audit"
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A WI is marked complete but one explicit user-named file has neither implementation evidence nor a specific no-change rationale.",
+      "expected": "The audit row and executable gate remain incomplete and release-blocking.",
+      "required": true,
+    "status": "verified",
+    "evidence": [
+      "tests/test_instruction_traceability.py::test_audit_named_path_requires_exact_disposition"
+    ],
+      "verificationPlan": "Add a mutation regression that removes a required named-path mapping from one audit row and assert the checker reports the exact WI and path."
+    },
+    {
+      "scenario": "An implementation or acceptance path appears in the audit but does not exist or is not bound by the cited archive manifest.",
+      "expected": "The checker rejects the stale or fabricated evidence reference.",
+      "required": true,
+    "status": "verified",
+    "evidence": [
+      "tests/test_instruction_traceability.py::test_audit_rejects_missing_implementation_and_acceptance_paths",
+      "tests/test_instruction_traceability.py::test_audit_rejects_archive_triple_mismatch",
+      "tests/test_instruction_traceability.py::test_resolved_finding_requires_indexed_corrective_archive_triple"
+    ],
+      "verificationPlan": "Add negative fixtures for missing paths, mismatched archive pair identity, and incorrect manifest digest references."
+    },
+    {
+      "scenario": "The forward mapping is present but an implementation or acceptance artifact cannot be traced back to one WI instruction and plan row.",
+      "expected": "Reverse coverage fails with the unowned evidence path.",
+      "required": true,
+    "status": "verified",
+    "evidence": [
+      "tests/test_instruction_traceability.py::test_audit_rejects_missing_reverse_instruction_reference",
+      "tests/test_instruction_traceability.py::test_audit_rejects_duplicate_ownership_without_shared_reason"
+    ],
+      "verificationPlan": "Add a mutation regression with an orphan implementation and orphan acceptance path and require exact reverse-coverage errors."
+    },
+    {
+      "scenario": "One or more audit findings remain open while the top-level audit status is complete.",
+      "expected": "The checker fails closed and identifies the open corrective-required finding.",
+      "required": true,
+    "status": "verified",
+    "evidence": [
+      "tests/test_instruction_traceability.py::test_complete_audit_rejects_open_finding"
+    ],
+      "verificationPlan": "Add a negative fixture that sets complete with an open finding and assert closure is rejected."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized the full audit, plan and traceability updates, executable checks, issue recording, and complete Work Item lifecycle."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 645
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi01-wi20-bidirectional-traceability-audit-20260728.json",
+    "baseCommit": "062b318a8fd6c6dc8e4ca14e6b6f71b3c6dd8106",
+    "initialScopeDigest": "4e4a59963f8c6476b45d065f3cc9435161c1acdfe0546f898981a18ad3142e58",
+    "contractSkeletonDigest": "69216db468138a11edb90fe3d9b4e2b49279821bc235d4647e1a78707e9e838e"
+  },
+  "resumeHistory": [
+    {
+      "resumeVersion": 1,
+      "fromBaseCommit": "062b318a8fd6c6dc8e4ca14e6b6f71b3c6dd8106",
+      "toBaseCommit": "f9e2f94c31fcfd2038b438f3ec43542dd062c606",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/wi01-wi20-bidirectional-traceability-audit-20260728",
+      "recordedAt": "2026-07-28T08:42:00.195468+00:00",
+      "priorContractDigest": "6f152ac026dcbadfa0f747c80b7eb3ce47010cf3dfb676f2676e701667b9a168",
+      "predecessorWorkItemId": "fix-resume-base-branch-binding-20260728",
+      "predecessorMergeCommit": "f9e2f94c31fcfd2038b438f3ec43542dd062c606",
+      "predecessorManifestPath": ".ai/work-items/archive/2026/fix-resume-base-branch-binding-20260728.archive-manifest.json",
+      "predecessorClosure": {
+        "statusClosed": true,
+        "prMerged": true,
+        "closureSucceeded": true,
+        "localBranchDeleted": true,
+        "remoteBranchDeleted": true,
+        "baseSynchronized": true
+      }
+    }
+  ]
+}
