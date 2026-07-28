@@ -56,6 +56,24 @@ keywords:
 
 「Repository」は Git が管理するプロジェクトフォルダー、「Worktree」は現在表示されているファイル、「PR」は変更案を人がレビューするページです。分からない用語は、先に平易な言葉で説明させてください。
 
+この手順は version-neutral です。特定の AI Cockpit 公開版を固定しません。導入ごとに、読み取り専用の調査 prompt が、その時点で根拠を検証できる最新の正式版を動的に選びます。この導入 transaction に固定するのは解決した tag だけです。この手順から固定 tag をコピーしないでください。
+
+## インストール文書の校正チェックリスト
+
+<!-- installation-proofreading-checklist: version-neutral,prompt-first,steps,calibration,platforms,tables,links,lifecycle -->
+この手順または翻訳を変更した後は、次の表で校正します。各行に根拠があることを確認してから文書変更を受け入れます。
+
+| 番号 | 校正項目 | 確認する根拠 | PASS | STOP/連絡先 |
+| --- | --- | --- | --- | --- |
+| 1 | version-neutral の公開表現 | 特定の公開版を固定せず、調査が検証可能な最新正式版を動的に選ぶ。 | 将来の公開版にも手順を再利用できる。 | 固定版または moving main の公開根拠。release 担当者。 |
+| 2 | prompt-first 操作 | command の前に目的、期待結果、失敗時の対応を含む prompt がある。 | 初心者が command を創作せず次の依頼をコピーできる。 | command だけ、または説明不足。文書担当者。 |
+| 3 | 導入段階の順序 | novice の全段階が一度ずつ正しい順序で存在する。 | 調査から closure まで順番に進められる。 | 段階の欠落・順序違い。導入担当者。 |
+| 4 | Calibration の網羅 | 10 段階、Candidate 境界、Unknown のブロッキング、人による確認がある。 | 根拠と承認条件が明確。 | 段階または権限境界の欠落。governance 担当者。 |
+| 5 | platform の網羅 | 同じ言語版に iOS、Android、Java の例がある。 | 各 platform に固有の根拠と STOP 経路がある。 | platform 欠落または要約だけ。platform 担当者。 |
+| 6 | 表の表示 | 各 decision table に header、separator、連続した正しい列数の行がある。 | Markdown の行結合・列ずれがない。 | 行/列の形式不良。文書担当者。 |
+| 7 | link と三言語の整合 | README、関連手順、内部 link、英中日三言語の構成を確認する。 | link が有効で章順と意味が一致する。 | link 切れまたは翻訳 drift。文書担当者。 |
+| 8 | lifecycle の根拠 | local/hosted check、PR Head SHA、人の merge、closure、branch cleanup が要求される。 | 全 lifecycle の根拠なしに導入完了としない。 | 根拠欠落または自動 merge の主張。repository 担当者。 |
+
 <!-- novice-stage: before-you-start -->
 ## 1. 始める前
 

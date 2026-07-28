@@ -63,6 +63,28 @@ At each numbered stage:
 files currently visible in that folder. “PR” means pull request: a review page
 for proposed changes.
 
+This guide is version-neutral: it never fixes an AI Cockpit release number. At
+each installation, the read-only discovery prompt selects the highest
+verifiable stable release available at that time. Only the resolved tag is
+bound to that one installation transaction; do not copy a tag from this guide.
+
+## Installation-document proofreading checklist
+
+<!-- installation-proofreading-checklist: version-neutral,prompt-first,steps,calibration,platforms,tables,links,lifecycle -->
+Use this checklist when reviewing a change to this guide or its translations.
+Every row must be evidenced before the documentation change is accepted.
+
+| No. | Check | Evidence to inspect | PASS | STOP/contact |
+| --- | --- | --- | --- | --- |
+| 1 | Version-neutral release wording | No concrete release number is prescribed; discovery resolves a current verifiable stable release. | The guide is reusable for future releases. | Fixed or moving-main release claim; release owner. |
+| 2 | Prompt-first operation | Prompts precede any command and explain purpose, result, and failure action. | A beginner can copy the next request without inventing commands. | Command-only or unexplained step; documentation owner. |
+| 3 | Ordered installation stages | All novice stages appear once and in order. | The sequence can be followed from inspection to closure. | Missing or reordered stage; installation owner. |
+| 4 | Calibration coverage | Ten calibration stages, Candidate boundary, Unknown blocking, and human confirmations are present. | Calibration evidence and approvals are explicit. | Missing stage or authority boundary; governance owner. |
+| 5 | Platform coverage | iOS, Android, and Java examples exist in the same language. | Each platform has its own evidence and STOP path. | Missing or summary-only platform route; platform owner. |
+| 6 | Table rendering | Every decision table has one header, one separator, and uninterrupted rows with the declared column count. | Markdown renders without rows joining or splitting. | Broken row/column layout; documentation owner. |
+| 7 | Links and language parity | README, related guides, internal links, and English/Chinese/Japanese structure are aligned. | Links resolve and section order/meaning match. | Broken link or translation drift; documentation owner. |
+| 8 | Lifecycle evidence | Local checks, hosted checks, PR Head SHA, human merge, closure, and branch cleanup are required. | Installation is not called complete without the full lifecycle. | Missing evidence or automatic-merge claim; repository owner. |
+
 <!-- novice-stage: before-you-start -->
 ## 1. Before you start
 

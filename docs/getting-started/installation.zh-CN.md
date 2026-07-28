@@ -46,6 +46,24 @@ keywords:
 
 “仓库”是由 Git 管理的工程目录；“工作区”是当前看到的文件；“PR”是让人审核拟议修改的页面。遇到不懂的词，要求代理先用日常语言解释。
 
+本手顺与版本无关：不会固定任何 AI Cockpit 发布版本。每次安装时，先由只读调查提示词动态选择当时证据完整、可验证的最新正式版本。只有本次安装解析出的 tag 会绑定到这一次安装交易；不要从本手顺复制固定 tag。
+
+## 安装文档校对清单
+
+<!-- installation-proofreading-checklist: version-neutral,prompt-first,steps,calibration,platforms,tables,links,lifecycle -->
+修改本手顺或其翻译后，用下面清单进行校对。每一行都必须有证据，才能接受文档修改。
+
+| 编号 | 校对项 | 要检查的证据 | PASS | STOP/联系 |
+| --- | --- | --- | --- | --- |
+| 1 | 与版本无关的发布表述 | 没有写死具体版本；调查会动态选择当前可验证的正式版本。 | 文档可以用于未来版本。 | 写死版本或使用 moving main 的发布证据；联系 release owner。 |
+| 2 | Prompt 优先 | 每个命令前都有提示词，并说明用途、预期结果和失败处理。 | 初学者可以复制下一条请求，不必自己编命令。 | 只有命令或没有解释；联系文档 owner。 |
+| 3 | 安装阶段顺序 | 所有 novice 阶段都存在且顺序正确。 | 可以从检查一直按顺序走到 closure。 | 阶段缺失或顺序错；联系安装 owner。 |
+| 4 | 校准覆盖 | 十个校准阶段、Candidate 边界、Unknown 阻断和人工确认都存在。 | 校准证据与批准要求明确。 | 缺阶段或权限边界；联系治理 owner。 |
+| 5 | 平台覆盖 | 同一语言下都有 iOS、Android、Java 示例。 | 每个平台都有独立证据和 STOP 路径。 | 平台缺失或只有摘要；联系平台 owner。 |
+| 6 | 表格渲染 | 每个决策表都有一个表头、一个分隔行，数据行连续且列数正确。 | Markdown 渲染不会串行或拆列。 | 行/列格式损坏；联系文档 owner。 |
+| 7 | 链接与三语对齐 | README、相关手顺、内部链接及英中日结构保持一致。 | 链接有效，章节顺序和含义一致。 | 链接损坏或翻译漂移；联系文档 owner。 |
+| 8 | Lifecycle 证据 | 要求 local/hosted 检查、PR Head SHA、人工 merge、closure 和分支清理。 | 没有完整 lifecycle 证据就不能称为安装完成。 | 缺证据或声称自动 merge；联系 repo owner。 |
+
 <!-- novice-stage: before-you-start -->
 ## 1. 开始前
 

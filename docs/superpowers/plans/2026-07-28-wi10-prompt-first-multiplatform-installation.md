@@ -207,6 +207,26 @@ Run documentation tests, `make check-docs-metadata`,
 `make check-instruction-traceability`, and `make quality-fast`.
 Expected: PASS.
 
+The first supplement `quality-fast` stopped at `project-lint` because the two
+new reader-visible checks raised `beginner_installation_errors` complexity from
+49 to 51 while the enforced maximum is 50 (`WI-10-ISSUE-028`). The corrective
+keeps the budget and acceptance intact: extract those checks into a focused
+helper, prove the mutation test and `make project-lint`, then rerun
+`quality-fast` from its beginning.
+
+That rerun then stopped earlier at `project-format-check`: Ruff required a
+deterministic line wrap in the extracted helper (`WI-10-ISSUE-029`). Only the
+affected script is formatted, and the full fast gate must restart again; the
+parallel lint success from the failed run is not treated as a complete gate.
+
+Post-Finish review then found that archive processing rewrote the Contract
+path but left the Summary path stale while traceability fallback hid the
+error (`WI-10-ISSUE-030`). WI-10 stayed frozen until process corrective PR
+#448 passed Hosted checks, merged as `221e214d`, closed, and cleaned both
+branches. After rebasing on that corrected main, regenerate the no-active
+status and complete archive index, migrate this already-archived Summary to
+its exact durable path, and rerun traceability plus PR/Hosted verification.
+
 - [ ] **Step 3: Run complete finish verification**
 
 Run the Contract checks, `before_finish` checkpoint, full `make quality`, and
@@ -223,3 +243,35 @@ synchronize local main to origin/main.
 Rebase the preserved audit branch on the new main, mark WI-10 corrective
 evidence without claiming the remaining audit is complete, and continue the
 approved sequence.
+
+### Supplement: version-neutral installation and proofreading gate
+
+This user-confirmed supplement is part of WI-10 acceptance. The installation
+guides must remain reusable across future releases: they must not prescribe a
+concrete AI Cockpit release number or use moving `main` metadata as release
+evidence. The read-only discovery prompt dynamically selects the highest
+verifiable stable release for each installation, and only that transaction's
+resolved tag is bound to the installation.
+
+**Instruction → plan → implementation → acceptance mapping:**
+
+| Instruction | Plan | Implementation evidence | Acceptance evidence |
+| --- | --- | --- | --- |
+| Installation must not be fixed to one version. | Add a reader-visible version-neutral release rule to all three guides and retain tag-pinned verification. | `docs/getting-started/installation.md`, `docs/getting-started/installation.zh-CN.md`, `docs/getting-started/installation.ja.md`; `INSTALLATION_VERSION_NEUTRAL_TEXT`; existing release metadata boundary and hardcoded-version checker. | `test_wi10_beginner_check_rejects_hidden_version_neutral_or_proofreading_copy`; `test_wi10_beginner_check_rejects_moving_or_hardcoded_release_metadata`. |
+| The proofreading checklist must be visible and prevent omissions. | Add one same-structure eight-row checklist and language-specific visible heading to each guide and make both executable. | `installation-proofreading-checklist` marker/table; `INSTALLATION_PROOFREADING_HEADING`; `scripts/check_docs_metadata.py`. | Positive trilingual route check; missing-marker and missing-visible-heading mutation tests. |
+| Table layout must remain renderable in all languages. | Require uninterrupted five-column Markdown decision rows through the documentation gate. | `_step_table_errors` applied to the new checklist; existing scaffold/calibration/platform table checks remain active. | `test_wi10_beginner_check_rejects_interrupted_or_malformed_proofreading_table`; full `tests/test_docs_metadata.py`. |
+
+- [x] Add version-neutral wording to English, Chinese, and Japanese installation routes.
+- [x] Add the visible proofreading checklist to all three routes.
+- [x] Add regression gates for missing marker, hidden reader-visible wording, interrupted table, and malformed columns.
+- [x] Verify the five focused WI-10 route, visibility, rendering, and release-boundary tests.
+- [ ] Record the final result in `wi10-installation-version-neutral` Summary and complete full quality, archive, PR, Hosted CI, merge, closure, and branch cleanup.
+
+The first start attempt correctly rejected the six pre-Contract patch paths as
+unowned. The patch was preserved in Git stash, the Work Item was created from a
+clean latest `origin/main`, its skeleton `not_ready` report was replaced with
+the exact nine-item acceptance and six-scenario Contract, and the patch was
+restored only after Preflight became `ready` and the `before_edit` checkpoint
+was recorded. The linked worktree has no private `.venv`; focused tests use the
+main workspace's ignored, lockfile-backed virtual environment without changing
+repository dependencies.
