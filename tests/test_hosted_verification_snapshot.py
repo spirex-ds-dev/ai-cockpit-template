@@ -1,7 +1,9 @@
 import hashlib
 import json
 import subprocess
+import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -102,6 +104,134 @@ def passing_quality(_root: Path) -> dict[str, str]:
 def test_active_summary_path_rejects_a_non_contract_filename(tmp_path):
     with pytest.raises(hosted.HostedVerificationError, match="must end with .contract.json"):
         hosted.active_summary_path(tmp_path / "not-a-contract.json")
+
+
+def test_json_and_git_helpers_fail_closed(tmp_path, monkeypatch):
+    invalid = tmp_path / "invalid.json"
+    invalid.write_text("{", encoding="utf-8")
+    with pytest.raises(hosted.HostedVerificationError, match="cannot read JSON evidence"):
+        hosted.load_object(invalid)
+    array = tmp_path / "array.json"
+    array.write_text("[]\n", encoding="utf-8")
+    with pytest.raises(hosted.HostedVerificationError, match="must be an object"):
+        hosted.load_object(array)
+    with pytest.raises(hosted.HostedVerificationError, match="not a git repository"):
+        hosted.git(tmp_path, "rev-parse", "HEAD")
+
+    monkeypatch.setenv("GIT_DIR", "/must/not/escape")
+    monkeypatch.setenv("AI_BASE_COMMIT", "must-not-leak")
+    environment = hosted.git_environment()
+    assert "GIT_DIR" not in environment
+    assert "AI_BASE_COMMIT" not in environment
+
+
+@pytest.mark.parametrize(
+    ("contract_change", "summary_change", "message"),
+    [
+        ({"acceptance": []}, {}, "explicitly require hosted"),
+        ({"riskAssessment": {"riskTypes": []}}, {}, "risk does not declare hosted"),
+        ({}, {"hostedPerformanceEvidence": None}, "evidence is missing"),
+        (
+            {},
+            {"hostedPerformanceEvidence": {"status": "complete", "scenarios": []}},
+            "already complete",
+        ),
+        (
+            {},
+            {"hostedPerformanceEvidence": {"status": "unexpected", "scenarios": []}},
+            "status is invalid",
+        ),
+        (
+            {},
+            {"hostedPerformanceEvidence": {"status": "partial", "scenarios": []}},
+            "pending hosted scenario",
+        ),
+    ],
+)
+def test_hosted_requirement_rejects_incomplete_evidence(contract_change, summary_change, message):
+    contract = {
+        "acceptance": ["Collect hosted evidence."],
+        "riskAssessment": {"riskTypes": ["hosted_verification"]},
+    }
+    summary = {
+        "hostedPerformanceEvidence": {
+            "status": "partial",
+            "scenarios": [{"status": "not_run", "reason": "Pending hosted CI."}],
+        }
+    }
+    contract.update(contract_change)
+    summary.update(summary_change)
+
+    with pytest.raises(hosted.HostedVerificationError, match=message):
+        hosted.validate_hosted_requirement(contract, summary)
+
+
+def test_release_intent_requires_an_explicit_non_release_operation():
+    with pytest.raises(hosted.HostedVerificationError, match="requestedOperation is required"):
+        hosted.validate_no_release_intent({})
+    with pytest.raises(hosted.HostedVerificationError, match="publication intent"):
+        hosted.validate_no_release_intent(
+            {"requestedOperation": {"target": "repository", "action": "deploy"}}
+        )
+
+
+def test_cli_reports_a_fail_closed_snapshot_error(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_prepare_hosted_verification.py",
+            "--root",
+            str(tmp_path),
+            "--contract",
+            ".ai/work-items/active/missing.contract.json",
+        ],
+    )
+
+    assert hosted.main() == 1
+    assert "hosted verification snapshot rejected" in capsys.readouterr().err
+
+
+def test_default_quality_runner_binds_the_current_session(tmp_path, monkeypatch):
+    session_id = "commit-run-attempt"
+    session = tmp_path / "target" / "quality" / "sessions" / session_id
+    session.mkdir(parents=True)
+    (tmp_path / "target" / "quality" / "current-session.txt").write_text(
+        session_id + "\n", encoding="utf-8"
+    )
+    write_json(session / "summary.json", {"decision": "PASS"})
+    monkeypatch.setattr(
+        hosted.subprocess,
+        "run",
+        lambda *_args, **_kwargs: SimpleNamespace(returncode=0),
+    )
+
+    result = hosted.default_quality_runner(tmp_path)
+
+    assert result["sessionId"] == session_id
+    assert result["decision"] == "PASS"
+    assert result["summaryDigest"].startswith("sha256:")
+
+
+def test_default_quality_runner_rejects_failed_or_unbound_quality(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        hosted.subprocess,
+        "run",
+        lambda *_args, **_kwargs: SimpleNamespace(returncode=1),
+    )
+    assert hosted.default_quality_runner(tmp_path) == {
+        "sessionId": "unknown",
+        "decision": "FAIL",
+        "summaryDigest": "",
+    }
+
+    monkeypatch.setattr(
+        hosted.subprocess,
+        "run",
+        lambda *_args, **_kwargs: SimpleNamespace(returncode=0),
+    )
+    with pytest.raises(hosted.HostedVerificationError, match="session pointer is missing"):
+        hosted.default_quality_runner(tmp_path)
 
 
 def test_prepare_snapshot_binds_evidence_without_mutating_governed_state(tmp_path):
@@ -217,6 +347,55 @@ def test_prepare_snapshot_rejects_failed_quality_and_malformed_hosted_evidence(t
             output=output,
             quality_runner=passing_quality,
         )
+
+
+def test_prepare_snapshot_rejects_invalid_identity_base_and_quality_receipt(tmp_path):
+    root, contract_path = fixture_repository(tmp_path)
+    summary_path = Path(str(contract_path).replace(".contract.json", ".summary.json"))
+    output = root / "target" / "receipt.json"
+
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    contract["contractVersion"] = 1
+    write_json(contract_path, contract)
+    git(root, "add", ".")
+    git(root, "commit", "-qm", "invalid identity")
+    with pytest.raises(hosted.HostedVerificationError, match="identity is invalid"):
+        hosted.prepare_snapshot(
+            root=root,
+            contract_path=contract_path,
+            output=output,
+            quality_runner=passing_quality,
+        )
+
+    contract["contractVersion"] = 2
+    contract["baseCommit"] = "short"
+    write_json(contract_path, contract)
+    git(root, "add", ".")
+    git(root, "commit", "-qm", "invalid base")
+    with pytest.raises(hosted.HostedVerificationError, match="baseCommit is invalid"):
+        hosted.prepare_snapshot(
+            root=root,
+            contract_path=contract_path,
+            output=output,
+            quality_runner=passing_quality,
+        )
+
+    contract["baseCommit"] = git(root, "rev-parse", "HEAD~2")
+    write_json(contract_path, contract)
+    git(root, "add", ".")
+    git(root, "commit", "-qm", "valid base")
+    with pytest.raises(hosted.HostedVerificationError, match="quality evidence is incomplete"):
+        hosted.prepare_snapshot(
+            root=root,
+            contract_path=contract_path,
+            output=output,
+            quality_runner=lambda _root: {
+                "sessionId": "",
+                "decision": "PASS",
+                "summaryDigest": "",
+            },
+        )
+    assert summary_path.is_file()
 
 
 def test_repository_exposes_and_documents_the_narrow_make_target():

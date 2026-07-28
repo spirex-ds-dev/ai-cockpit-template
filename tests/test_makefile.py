@@ -70,7 +70,7 @@ def test_project_test_uses_stricter_coverage_floor():
     )
 
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "--cov-fail-under=85" in result.stdout
+    assert "--cov-fail-under=85.10" in result.stdout
 
 
 def test_coverage_floor_rejects_a_result_that_only_rounds_to_85(tmp_path):
@@ -129,7 +129,7 @@ def test_quality_runs_static_tests_and_evidence_as_explicit_phases():
     assert "check-critical-domain-guards" in makefile
     assert "check-decision-protocol" in makefile
     assert "check-baseline-evidence" in makefile
-    assert "--cov-fail-under=85" in makefile
+    assert "--cov-fail-under=85.10" in makefile
 
 
 def test_project_governance_make_targets_are_public():

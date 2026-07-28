@@ -283,18 +283,22 @@ def is_documented_pr_recovery_pair(
 def documented_recovery_paths(
     entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]], pr_base: str
 ) -> set[Path]:
-    """Return the sole recovery Contract eligible for the narrow exception."""
-    new_entries = [
-        entry
-        for entry in entries
-        if isinstance(entry[2].get("archiveSequence"), int)
-        and entry[2].get("archiveSequence", 0) >= NEW_WORK_ITEM_SEQUENCE
-        and entry[1].get("workItemId")
-    ]
-    if len(new_entries) == 2 and is_documented_pr_recovery_pair(
-        new_entries[0], new_entries[1], pr_base
+    """Return recovery Contracts only when every adjacent chain link is auditable."""
+    new_entries = sorted(
+        [
+            entry
+            for entry in entries
+            if isinstance(entry[2].get("archiveSequence"), int)
+            and entry[2].get("archiveSequence", 0) >= NEW_WORK_ITEM_SEQUENCE
+            and entry[1].get("workItemId")
+        ],
+        key=lambda entry: entry[3],
+    )
+    if len(new_entries) >= 2 and all(
+        is_documented_pr_recovery_pair(predecessor, recovery, pr_base)
+        for predecessor, recovery in zip(new_entries, new_entries[1:])
     ):
-        return {new_entries[1][0]}
+        return {entry[0] for entry in new_entries[1:]}
     return set()
 
 
