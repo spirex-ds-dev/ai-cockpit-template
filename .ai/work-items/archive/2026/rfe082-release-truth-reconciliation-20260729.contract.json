@@ -1,0 +1,318 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe082-release-truth-reconciliation-20260729",
+  "mode": "code",
+  "title": "Reconcile release truth and reserved tag progression",
+  "baseCommit": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.contract.json",
+    ".ai/work-items/active/rfe082-release-truth-reconciliation-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    "scripts/check_release_distribution.py",
+    "scripts/check_release_state_consistency.py",
+    "tests/test_release_distribution.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_ci_release_evidence.sh",
+    "docs/reference/distribution.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/specs/2026-07-29-rfe082-release-truth-design.md",
+    "docs/superpowers/plans/2026-07-29-rfe082-release-truth-reconciliation.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Creating, deleting, moving, or publishing any immutable semantic-version tag or GitHub Release.",
+    "Publishing v0.5.45 or generating its final freeze, archive, digest, SBOM, provenance, or provider evidence.",
+    "Reusing, cherry-picking, merging, or modifying the archived Work Items in the unmerged PR #401.",
+    "Declaring v0.5.43 or tag-only v0.5.44 to be a verified installable release without valid public evidence.",
+    "Starting the Japanese assessment, documentation-alignment, deprecated-assets cleanup, or final release Work Items."
+  ],
+  "sources": [
+    {
+      "path": "release.json",
+      "reason": "Repository published projection still identifies v0.5.42 and must remain distinct from reserved-tag sequence truth."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "The current v0.5.44 candidate reuses an existing immutable tag and therefore cannot be published."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Canonical state currently binds the stale v0.5.44 candidate and a drifted published metadata digest."
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "The current checker labels the highest Git tag as the highest public release and uses one fact for two different decisions."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/recover-v0-5-45-release-candidate-20260727.contract.json",
+      "reason": "The archived, unmerged #401 recovery records the prior v0.5.45 intent and process constraint; it is evidence only and must not be reused as implementation."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/401",
+      "reason": "Provider evidence shows the obsolete recovery PR is still open and its local and remote branch still exist."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases",
+      "reason": "Current provider facts show v0.5.43 is the latest stable GitHub Release while v0.5.44 exists only as a Git tag."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative user-approved order and RFE-ISSUE-082 history require this correction before Japanese assessment and release."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release_identity",
+      "provider_fact_classification",
+      "stale_recovery_path",
+      "supply_chain_claim"
+    ],
+    "reason": "Conflating immutable tags, stable GitHub Releases, verified published projections, and candidates can reuse a reserved version or publish against stale evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous execution, v0.5.45 progression, permanent process correction, and removal of obsolete paths before release."
+  },
+  "preReviewWarnings": [
+    "A Git tag reserves a semantic version but does not prove that a stable GitHub Release or valid release asset exists.",
+    "Closing obsolete PR #401 and deleting its work branch preserves the provider PR audit record but removes the accidentally reusable execution path.",
+    "This Work Item prepares repository truth only; it must not publish v0.5.45 or refresh final source-bound release evidence early."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Provider discovery and diagnostics distinguish immutable semantic tags, stable published GitHub Releases, and repository published projection instead of calling every tag public.",
+    "Candidate progression is computed from the highest reserved semantic version; v0.5.43 and tag-only v0.5.44 cannot be reused, so next-release.json and canonical candidate state advance to v0.5.45 while release.json remains the last repository published projection.",
+    "release-state.json records reserved/quarantined sequence facts deterministically, rejects candidate reuse, and has metadata digests aligned to the actual projections.",
+    "Tests cover a stable published release, a prerelease/draft exclusion, a tag-only reserved version, stale projection diagnostics, v0.5.45 progression, malformed provider payloads, and duplicate/reused reserved tags.",
+    "The obsolete unmerged PR #401 is closed with a replacement explanation; exact local and remote branch codex/fix-draft-release-asset-verification-20260727 are deleted, while the closed PR remains as audit evidence.",
+    "Distribution documentation, the comprehensive plan, and machine-readable bidirectional traceability distinguish Tag, Release, projection, candidate, quarantine, and final publication boundaries.",
+    "No provider tag, Release, or release asset is created, deleted, edited, or published by this Work Item.",
+    "Full local finish/archive, one PR, Hosted CI, merge, ai-close-work-item, branch cleanup, and synchronized clean main complete before Japanese assessment begins."
+  ],
+  "guidelines": [
+    "Use provider evidence and deterministic classification; do not infer publication from the existence of a Git tag.",
+    "Advance candidates after every immutable reserved semantic version without rewriting or deleting historical tags.",
+    "Treat the archived #401 implementation as evidence only; implement independently from current origin/main.",
+    "Keep final source-bound freeze/digest generation in the later release Work Item, not this corrective.",
+    "Record instruction-plan-implementation-acceptance bindings and every discovered process issue in the Summary."
+  ],
+  "intent": {
+    "problem": "RFE-ISSUE-082 remains release-blocking because release.json identifies v0.5.42, next-release.json reuses immutable tag v0.5.44, release-state metadata has drifted, and the distribution checker calls the highest Git tag the highest public release. Provider facts now show v0.5.43 is the latest stable GitHub Release while v0.5.44 is tag-only. The obsolete #401 recovery PR and branch remain open, so an agent could accidentally revive archived, unmerged implementation.",
+    "constraints": [
+      "Start from the latest synchronized origin/main and create one independent replacement Work Item.",
+      "Do not cherry-pick, merge, or modify the archived #401 Work Items.",
+      "Do not mutate any existing semantic-version tag, stable Release, or public asset.",
+      "Do not generate final v0.5.45 freeze/digest/provider evidence before the later release source is known.",
+      "Preserve fail-closed checks and explicit non-claims for unverified v0.5.43/v0.5.44 distribution."
+    ],
+    "rationale": "Separating provider publication facts from immutable version reservation lets the repository retain a truthful historical projection, permanently skip unusable versions, prepare v0.5.45 without stale evidence, and eliminate the obsolete execution path that caused the earlier lifecycle loop."
+  },
+  "rawUserRequest": "Complete the remaining process issues and RFE-ISSUE-082 before Japanese assessment and release. The next candidate may be v0.5.45, but the process defect must be permanently fixed so it cannot recur. All old paths that could be invoked again must be cleaned up. Continue without another confirmation unless a genuine human decision is required, and complete Contract, implementation, verification, PR, Hosted CI, merge, ai-close-work-item, and branch cleanup.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-27-to-2026-07-29-rfe082-authorized-release-reconciliation",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:rfe082-user-authorized-v0.5.45-process-fix-and-obsolete-path-cleanup"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:rfe082-continuous-execution-and-old-path-cleanup",
+    "scope": "Implement the permanent v0.5.45 release-truth correction, close obsolete unmerged PR #401, delete its exact local/remote branch, and complete the replacement Work Item lifecycle; no tag, Release, or asset mutation is authorized."
+  },
+  "declaredIntent": {
+    "summary": "Separate reserved tags from published release truth, advance the candidate to v0.5.45, and retire the obsolete #401 path without publishing.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A semantic Git tag exists without a stable GitHub Release.",
+      "expected": "The version is reserved for candidate progression but is not described or validated as published.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_release_distribution.py::test_provider_facts_separate_stable_releases_from_reserved_tags",
+        "tests/test_release_distribution.py::test_release_identity_diagnostic_names_projection_release_and_reserved_tag"
+      ],
+      "verificationPlan": "Add provider-fact parsing and main-path regression coverage for tag-only v0.5.44."
+    },
+    {
+      "scenario": "A stable GitHub Release exists but its distribution evidence is quarantined or does not match the repository projection.",
+      "expected": "Diagnostics name the stable Release/projection mismatch and do not silently promote or claim verified installation.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "make check-release-distribution",
+        "tests/test_release_distribution.py::test_release_identity_diagnostic_names_projection_release_and_reserved_tag"
+      ],
+      "verificationPlan": "Cover stable v0.5.43 with a v0.5.42 projection and explicit quarantine facts."
+    },
+    {
+      "scenario": "The candidate tries to reuse an immutable reserved tag.",
+      "expected": "State and distribution checks fail closed; v0.5.45 succeeds after v0.5.43 and v0.5.44 are unavailable.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_release_distribution.py::test_candidate_progression_uses_reserved_versions_without_calling_them_published",
+        "tests/test_release_state_consistency.py::test_candidate_must_not_reuse_or_skip_reserved_version",
+        "AI_RELEASE_PREPARATION=1 make check-release-distribution"
+      ],
+      "verificationPlan": "Add state and candidate progression tests for reuse, duplicates, malformed tags, and exact next patch."
+    },
+    {
+      "scenario": "An agent attempts to continue through obsolete PR #401 or its branch.",
+      "expected": "The PR is closed, both exact branches are absent, and the new Work Item references the old artifacts only as audit evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/401",
+        "git branch --list codex/fix-draft-release-asset-verification-20260727",
+        "git branch -r --list origin/codex/fix-draft-release-asset-verification-20260727"
+      ],
+      "verificationPlan": "Record provider PR state plus local/remote branch absence in the Summary before replacement PR handoff."
+    },
+    {
+      "scenario": "Final v0.5.45 source-bound evidence is requested during this corrective.",
+      "expected": "The Work Item keeps publication and final freeze/digests out of scope and leaves release preflight fail closed until the later release lifecycle.",
+      "required": true,
+      "status": "not_applicable",
+      "reason": "This corrective prepares truthful repository state but does not know the later final release source commit.",
+      "evidence": [
+        "Contract outOfScope",
+        "scripts/check_release_preflight.py"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": [
+      "github-pr:spirex-ds-dev/ai-cockpit-template#401:close",
+      "git-branch:codex/fix-draft-release-asset-verification-20260727:delete"
+    ],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "user",
+      "reason": "The user explicitly required obsolete callable paths to be cleaned up so later agents cannot reuse them."
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized the release-state, governance-plan, traceability, and exact obsolete-branch corrections before release."
+  },
+  "rollbackNote": "Revert the replacement Work Item diff. The closed #401 audit record remains recoverable on GitHub; do not recreate or merge its obsolete branch without a new explicit decision.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 656
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe082-release-truth-reconciliation-20260729.json",
+    "baseCommit": "067f8776c7d606bc60b2d6dda3628f35eb95c51b",
+    "initialScopeDigest": "e0476aae69b71eb52164a571731fdd8d9f23db26e5eb4c7361430db7ef4304a7",
+    "contractSkeletonDigest": "f2102b9287a0d293f47fbf9af73857e7856b00b4be41fdc447d9f7694f853239"
+  }
+}
