@@ -265,8 +265,11 @@ def test_smoke_quality_failure_publishes_detailed_gate_logs():
     workflow = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
 
     assert "Publish failed quality gate logs" in workflow
-    assert "target/quality/timing/*.json" in workflow
-    assert "target/quality/logs" in workflow
+    assert "target/quality/current-session.txt" in workflow
+    assert "target/quality/sessions/$(cat target/quality/current-session.txt)" in workflow
+    assert "$session_root/logs" in workflow
+    assert "Upload quality diagnostics" in workflow
+    assert "target/quality/sessions/**" in workflow
     assert "failure log:" in workflow
     assert "if: failure()" in workflow
     assert workflow.index("Run repository quality gates") < workflow.index(

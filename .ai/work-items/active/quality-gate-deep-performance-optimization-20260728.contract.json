@@ -1,0 +1,373 @@
+{
+  "contractVersion": 2,
+  "workItemId": "quality-gate-deep-performance-optimization-20260728",
+  "mode": "code",
+  "title": "Optimize project-test and hosted quality critical path",
+  "baseCommit": "5e7c9d2d6da099a167177493a86f8dd053cba664",
+  "predecessorWorkItem": {
+    "workItemId": "recovery-chain-source-evidence-20260728",
+    "status": "closed",
+    "pr": {
+      "number": 418,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/418",
+      "mergeCommit": "5e7c9d2d6da099a167177493a86f8dd053cba664"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/recovery-chain-source-evidence-20260728.archive-manifest.json"
+    }
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.contract.json",
+    ".ai/work-items/active/quality-gate-deep-performance-optimization-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    "Makefile",
+    ".github/workflows/smoke.yml",
+    "install.sh",
+    "scripts/run_quality_gate.py",
+    "scripts/summarize_quality_gates.py",
+    "scripts/**install**.py",
+    "tests/conftest.py",
+    "tests/**install**.py",
+    "tests/test_ci_quality_orchestration.py",
+    "tests/test_quality_gate_*.py",
+    "tests/test_quality_telemetry.py",
+    "tests/test_workflows.py",
+    "docs/operations/quality-gates.md",
+    "docs/operations/quality-gates.zh-CN.md",
+    "docs/operations/quality-gates.ja.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    "release.json"
+  ],
+  "outOfScope": [
+    "Removing, skipping, or weakening required tests, coverage, security, SBOM, provenance, installer, compatibility, or release evidence",
+    "Claiming performance improvement from one run, local-only timing, or unlike-for-like scenarios",
+    "Publishing a release, changing release identity, or modifying Branch Protection",
+    "Using unsafe high concurrency before proving test isolation",
+    "Deleting authoritative archived Work Item evidence from repository history"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/quality-gate-performance-completion-20260727.summary.json",
+      "reason": "RFE-ISSUE-110 and hosted run 30280375075 provide the accepted pre-optimization baseline and diagnostic gaps."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/preflight-planned-scenario-transition-20260728.summary.json",
+      "reason": "PR #412 provides the legal planned-verification Preflight transition used by this resumed Work Item."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/no-active-archive-status-diagnostic-20260728.summary.json",
+      "reason": "PR #413 closes the post-archive status diagnostic prerequisite before performance work resumes."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative user-approved sequence, performance root-cause findings, and lifecycle requirements."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Current quality graph, project-test ownership, and parallelization boundaries."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Hosted quality critical path, Job dependencies, and evidence publication behavior."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Installer payload construction whose historical evidence copying is a measured structural bottleneck."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "quality_gate_regression",
+      "test_isolation",
+      "installer_compatibility",
+      "performance_evidence"
+    ],
+    "reason": "Changing installer payload, test fixtures, parallel ownership, and telemetry can hide regressions unless fail-closed equivalence and adopter lifecycle coverage are retained.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly approved prioritizing this corrective performance Work Item and continuous serial execution; release remains deferred."
+  },
+  "preReviewWarnings": [
+    "Do not confuse telemetry improvements with runtime improvements.",
+    "Installer payload exclusions require adopter upgrade, adoption, and lifecycle regression evidence.",
+    "Hosted acceptance requires at least three like-for-like runs and reports median/p95 without overclaiming."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Each quality invocation uses a run-isolated timing directory bound to commit and run/session identity; success, failure, cancellation, and timeout preserve timing, JUnit/slow-test evidence, and logs as hosted artifacts.",
+    "Gate subprocess output is streamed sufficiently to identify the active test/gate while preserving bounded machine-readable output tails and digests.",
+    "Installer payload excludes template-maintenance history that adopters do not require, while runtime skeleton, policies, baselines, adoption, upgrade, and full governance journey behavior remain covered by regression tests.",
+    "Repeated installer/lifecycle tests reuse a proven immutable package or fixture without cross-test mutation; any test sharding or parallelism is enabled only after isolation regressions pass.",
+    "template-smoke and installation-smoke execute independently where semantics permit, and a terminal aggregate Job requires all governed results without duplicate full-quality execution.",
+    "At least three like-for-like hosted post-change runs are compared with run 30280375075 and recent baselines; median and p95 are reported, with first-stage target quality p95 below 15 minutes or an explicit fail result and corrective follow-up.",
+    "English, Chinese, and Japanese quality documentation, the comprehensive plan, Summary, and instruction traceability state the same implementation, limits, measurements, and unresolved issues.",
+    "The complete Contract→preflight/checkpoint→implementation→verification→Summary→PR/CI→merge→archive→ai-close→branch cleanup→main synchronization lifecycle succeeds before the next Work Item starts."
+  ],
+  "guidelines": [
+    "Do not trade evidence completeness, deterministic isolation, or coverage for speed.",
+    "Optimize measured structural costs before adding concurrency.",
+    "Treat archived template-maintenance history separately from adopter runtime payload and document the boundary.",
+    "Use source-bound, like-for-like hosted evidence and record failed performance targets honestly."
+  ],
+  "intent": {
+    "problem": "WI-21 proved the CI workflow can complete reliably, but hosted run 30280375075 still spent about 21 minutes 21 seconds in make quality. project-test is dominated by installer/governance journey tests that repeatedly copy and scan growing template history, while timing sessions are not run-isolated, gate output remains buffered, and timing/JUnit/slow-test evidence is not uploaded on all outcomes.",
+    "constraints": [
+      "Preserve every required quality, security, supply-chain, installer, compatibility, and release evidence gate.",
+      "Use run 30280375075 as a source-bound pre-optimization hosted baseline and require at least three comparable post-change runs.",
+      "Do not directly enable high pytest concurrency until temporary-directory and output isolation are proven.",
+      "Do not publish or change a release; release remains after performance, omission, process, RFE, Japanese, and Trust Layer work.",
+      "Record every discovered implementation or workflow issue in the Summary and comprehensive plan before proceeding."
+    ],
+    "rationale": "The next release should not inherit a quality path whose cost grows with template history. Structural payload and fixture improvements, reliable diagnostics, and repeatable hosted evidence address the root cause rather than merely making a long run more observable."
+  },
+  "rawUserRequest": "优先插入并执行完整的 make quality 与 GitHub Actions 深度性能优化工单：修复证据可靠性和实时诊断，缩小安装发行面，复用安装 fixture，安全拆分测试和并行 Job，并用至少三次同类型 hosted run 验收；所有工单继续按“指示—计划—实现—验收”双向追踪和完整 PR/合并/关闭/分支清理流程执行，发布延后。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-27-deep-performance-root-cause-priority",
+    "capturedAt": "2026-07-27",
+    "digest": "sha256:user-approved-deep-performance-before-release"
+  },
+  "declaredIntent": {
+    "summary": "Reduce the measured make quality critical path by addressing installer-history amplification, repeated fixtures, and hosted evidence gaps without weakening any gate.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Installer history is excluded but an adopter requires a runtime governance file.",
+      "expected": "Install, upgrade, adoption, and journey regressions fail closed before merge.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run installer, upgrade, adoption, and governance journey regressions against the reduced payload and assert every required runtime file remains installed."
+    },
+    {
+      "scenario": "A reused fixture or test shard leaks mutations between tests.",
+      "expected": "Isolation regressions detect changed files, shared outputs, or order-dependent results and parallelism remains disabled.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add mutation and order-isolation regressions for any reused fixture, then run serial and proposed shard paths before enabling concurrency."
+    },
+    {
+      "scenario": "A quality gate fails, times out, or is cancelled.",
+      "expected": "Terminal evidence and uploaded timing/log/JUnit artifacts identify the exact gate and preserve a bounded diagnostic tail.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Exercise success, failure, and timeout gate paths and statically verify hosted artifact upload uses always() with run-isolated paths."
+    },
+    {
+      "scenario": "One fast hosted run appears to meet the target.",
+      "expected": "No improvement claim is made until at least three like-for-like runs support median and p95 comparison.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Collect at least three like-for-like hosted runs and compute median and p95 against run 30280375075 without using a single run as proof."
+    },
+    {
+      "scenario": "Parallel Job restructuring causes a required downstream result to be skipped.",
+      "expected": "The always-run terminal aggregate records skipped/failure accurately and fails closed.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run workflow architecture regressions for success, failure, cancellation, and skipped dependencies, then validate a real terminal ci-evidence job."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly approved continuing the deep performance Work Item, including its declared Makefile, CI workflow, and AI governance evidence scope, before release."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 629
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/quality-gate-deep-performance-optimization-20260728.json",
+    "baseCommit": "f00ac8b3a86816c5fa541955603aee9ca12a9beb",
+    "initialScopeDigest": "0761fcd8533fdb5a92c38176e701b43ab3024ab193202b7d99b40c072e2ef29f",
+    "contractSkeletonDigest": "6eb70b89b5209b6b26c5a65fd1f296ea27432d2b88c09705bcbad428ffd62019"
+  },
+  "resumeHistory": [
+    {
+      "resumeVersion": 1,
+      "fromBaseCommit": "f00ac8b3a86816c5fa541955603aee9ca12a9beb",
+      "toBaseCommit": "fffccd17a328399718b7734c276ac91b3321e510",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/quality-gate-deep-performance-optimization-20260728",
+      "recordedAt": "2026-07-27T22:17:01.345980+00:00",
+      "priorContractDigest": "5a14bca50a9aa5374d1ab97fe73b09cc0c9f11569571d4e1277f696342594437",
+      "predecessorWorkItemId": "documentation-alignment-hosted-recovery-20260728",
+      "predecessorMergeCommit": "fffccd17a328399718b7734c276ac91b3321e510",
+      "predecessorManifestPath": ".ai/work-items/archive/2026/documentation-alignment-hosted-recovery-20260728.archive-manifest.json",
+      "predecessorClosure": {
+        "statusClosed": true,
+        "prMerged": true,
+        "closureSucceeded": true,
+        "localBranchDeleted": true,
+        "remoteBranchDeleted": true,
+        "baseSynchronized": true
+      }
+    },
+    {
+      "resumeVersion": 1,
+      "fromBaseCommit": "fffccd17a328399718b7734c276ac91b3321e510",
+      "toBaseCommit": "9deb1e53b32ec703c3ee7a6be19442eb908d7b73",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/quality-gate-deep-performance-optimization-20260728",
+      "recordedAt": "2026-07-27T23:01:02.258586+00:00",
+      "priorContractDigest": "63cba1019532d2fef9544a16c7cc7be34c60651b61feea6e0710f7506d296995",
+      "predecessorWorkItemId": "resume-history-contract-schema-20260728",
+      "predecessorMergeCommit": "9deb1e53b32ec703c3ee7a6be19442eb908d7b73",
+      "predecessorManifestPath": ".ai/work-items/archive/2026/resume-history-contract-schema-20260728.archive-manifest.json",
+      "predecessorClosure": {
+        "statusClosed": true,
+        "prMerged": true,
+        "closureSucceeded": true,
+        "localBranchDeleted": true,
+        "remoteBranchDeleted": true,
+        "baseSynchronized": true
+      }
+    },
+    {
+      "resumeVersion": 1,
+      "fromBaseCommit": "9deb1e53b32ec703c3ee7a6be19442eb908d7b73",
+      "toBaseCommit": "5e7c9d2d6da099a167177493a86f8dd053cba664",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/quality-gate-deep-performance-optimization-20260728",
+      "recordedAt": "2026-07-28T02:35:16.598108+00:00",
+      "priorContractDigest": "8c5b49764b7d56a385fb19f90c7f351d1849112e1ba0655d7e3e881e5af1f73e",
+      "predecessorWorkItemId": "recovery-chain-source-evidence-20260728",
+      "predecessorMergeCommit": "5e7c9d2d6da099a167177493a86f8dd053cba664",
+      "predecessorManifestPath": ".ai/work-items/archive/2026/recovery-chain-source-evidence-20260728.archive-manifest.json",
+      "predecessorClosure": {
+        "statusClosed": true,
+        "prMerged": true,
+        "closureSucceeded": true,
+        "localBranchDeleted": true,
+        "remoteBranchDeleted": true,
+        "baseSynchronized": true
+      }
+    }
+  ]
+}

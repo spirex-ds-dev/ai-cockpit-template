@@ -27,17 +27,36 @@ and release preparation uses `make quality-release`.
 - Compatibility jobs validate the interpreter/platform matrix and do not run
   the full quality graph.
 - Hosted smoke has explicit `template-smoke` (the single full-quality owner),
-  `installation-smoke`, and `release-evidence` jobs. The latter two depend on
-  the quality owner and never invoke the full graph again.
+  `installation-smoke`, and `release-evidence` jobs. These jobs start
+  independently, never invoke the full graph twice, and feed an `always()`
+  terminal `ci-evidence` job that fails closed on failure, cancellation, or
+  skip.
+- The adopter distribution contains runtime skeletons, policies, and required
+  baselines, but not template-maintenance Work Item starts, decision history,
+  or archive history. The installer prunes those trees before traversal and
+  reuses an immutable per-invocation source inventory.
 
 ## Evidence and failure behavior
 
-`scripts/run_quality_gate.py` records one JSON timing record and one log per
-gate, including the command, commit, duration, exit code, timeout state,
-cache status, and output digest. `scripts/summarize_quality_gates.py` writes
-JSON and Markdown summaries with wall time, total gate time, parallel
-efficiency, slowest gate, failures, failure tails, skips, and the final decision. Missing
-timing evidence is an error; a cache hit is not final evidence.
+Each `make quality` invocation creates a fresh directory under
+`target/quality/sessions/`, bound to the commit, hosted run/attempt, or a
+unique local identity. `scripts/run_quality_gate.py` streams gate output while
+recording one JSON timing record and one complete log per gate, including the
+session/run identity, command, commit, duration, exit code, timeout or
+cancellation state, cache status, output digest, and bounded tail.
+The top-level invocation rebinds `current-session.txt` on exit, so a nested
+dry-run or test fixture cannot become the session selected by hosted
+publication. Valid Make jobserver descriptors are preserved through the
+telemetry wrapper; invalid or unavailable descriptors are not forwarded.
+`project-test` also writes JUnit evidence and the log contains its slowest-test
+report. `scripts/summarize_quality_gates.py` writes JSON and Markdown summaries
+with wall time, total gate time, parallel efficiency, slowest gate, failures,
+failure tails, skips, and the final decision.
+
+Hosted CI uploads the complete session directory and wrapper log with
+`if: always()`, so success, failure, cancellation, and timeout retain
+diagnostics. Missing timing or artifact evidence is an error; a cache hit is
+not final evidence.
 
 Hosted before/after timing is an evidence claim, not an assumption. If a WI-20
 baseline or a hosted run cannot be retrieved, record a structured `not-run`

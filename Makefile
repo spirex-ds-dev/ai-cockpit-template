@@ -15,6 +15,12 @@ AI_PYTHON = PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
 # temporary lockfile directory.
 PYTHON_EXECUTABLE = $(if $(findstring /,$(PYTHON)),$(abspath $(PYTHON)),$(shell command -v "$(PYTHON)" 2>/dev/null))
 AI_PREFLIGHT_VALIDATE_CONTRACT ?= true
+QUALITY_SESSION_ID ?= legacy
+QUALITY_RUN_ID ?= $(if $(GITHUB_RUN_ID),$(GITHUB_RUN_ID),local)
+QUALITY_TIMING_DIR ?= target/quality/timing
+QUALITY_LOG_DIR ?= target/quality/logs
+QUALITY_JUNIT_DIR ?= target/quality/junit
+QUALITY_SUMMARY_DIR ?= target/quality
 
 .PHONY: help \
 	test project-format-check project-test project-lint diff-check quality quality-gates \
@@ -119,7 +125,8 @@ check-instruction-traceability:
 	$(AI_PYTHON) scripts/check_instruction_traceability.py
 
 project-test:
-	$(AI_PYTHON) -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85.10
+	mkdir -p "$(QUALITY_JUNIT_DIR)"
+	$(AI_PYTHON) -m pytest -q --cov=scripts --cov-report=term-missing --cov-report=json:target/coverage.json --cov-fail-under=85.10 --junitxml="$(QUALITY_JUNIT_DIR)/project-test.xml" --durations=25 --durations-min=1
 	bash tests/test_installer_boundaries.sh
 	$(AI_PYTHON) scripts/check_critical_coverage.py
 	bash tests/test_ci_release_evidence.sh
@@ -279,7 +286,7 @@ QUALITY_PROJECT_CONSISTENCY_GATES := check-quality-architecture check-deprecated
 QUALITY_MAKE := $(shell command -v make)
 
 define RUN_QUALITY_GATE
-	+$(AI_PYTHON) scripts/run_quality_gate.py --gate $(1) --category $(2) --output target/quality/timing/$(1).json --log target/quality/logs/$(1).log -- $(QUALITY_MAKE) --no-print-directory $(1)
+	+$(AI_PYTHON) scripts/run_quality_gate.py --gate $(1) --category $(2) --session-id "$(QUALITY_SESSION_ID)" --run-id "$(QUALITY_RUN_ID)" --output "$(QUALITY_TIMING_DIR)/$(1).json" --log "$(QUALITY_LOG_DIR)/$(1).log" -- $(QUALITY_MAKE) --no-print-directory $(1)
 endef
 
 # Fast is intentionally narrower than Full.  It never implies release readiness.
@@ -363,11 +370,22 @@ qg-check-instruction-traceability:
 	$(call RUN_QUALITY_GATE,check-instruction-traceability,project-consistency)
 
 quality-full:
-	@mkdir -p target/quality/timing target/quality/logs
-	+rm -f target/quality/timing/*.json target/quality/logs/*.log
-	+$(QUALITY_MAKE) --no-print-directory quality-fast
-	+$(QUALITY_MAKE) --no-print-directory quality-heavy
-	+$(AI_PYTHON) scripts/summarize_quality_gates.py --input target/quality/timing --json-output target/quality/summary.json --markdown-output target/quality/summary.md
+	+@set -eu; \
+		commit=$$(git rev-parse --short=12 HEAD 2>/dev/null || printf unknown); \
+		run_id="$${GITHUB_RUN_ID:-local}"; \
+		attempt="$${GITHUB_RUN_ATTEMPT:-0}"; \
+		nonce="$${GITHUB_RUN_ID:-local}-$$(date -u +%Y%m%dT%H%M%SZ)-$$$$"; \
+		session_id="$$commit-$$nonce-$$attempt"; \
+		session_root="target/quality/sessions/$$session_id"; \
+		timing="$$session_root/timing"; logs="$$session_root/logs"; junit="$$session_root/junit"; \
+		mkdir -p "$$timing" "$$logs" "$$junit"; \
+		trap 'printf "%s\n" "$$session_id" > target/quality/current-session.txt' EXIT; \
+		printf '%s\n' "$$session_id" > target/quality/current-session.txt; \
+		$(QUALITY_MAKE) --no-print-directory quality-fast QUALITY_SESSION_ID="$$session_id" QUALITY_RUN_ID="$$run_id" QUALITY_TIMING_DIR="$$timing" QUALITY_LOG_DIR="$$logs" QUALITY_JUNIT_DIR="$$junit"; \
+		$(QUALITY_MAKE) --no-print-directory quality-heavy QUALITY_SESSION_ID="$$session_id" QUALITY_RUN_ID="$$run_id" QUALITY_TIMING_DIR="$$timing" QUALITY_LOG_DIR="$$logs" QUALITY_JUNIT_DIR="$$junit"; \
+		$(AI_PYTHON) scripts/summarize_quality_gates.py --input "$$timing" --json-output "$$session_root/summary.json" --markdown-output "$$session_root/summary.md"; \
+		cp "$$session_root/summary.json" target/quality/summary.json; \
+		cp "$$session_root/summary.md" target/quality/summary.md
 
 # Backward-compatible aliases.  These names are compatibility/debug views of
 # the new ownership graph; none invokes the removed duplicate gate graph.

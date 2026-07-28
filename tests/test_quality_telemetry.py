@@ -1,6 +1,9 @@
 import json
+import os
+import signal
 import subprocess
 import sys
+import time
 from argparse import Namespace
 from pathlib import Path
 
@@ -57,12 +60,67 @@ def test_runner_function_covers_relative_output_and_cache_metadata(tmp_path):
         timeout_seconds=None,
         cache_applicable=True,
         cache_hit=True,
+        session_id="abc123-hosted-42-1",
+        run_id="42",
         command=["--", sys.executable, "-c", "print('direct')"],
     )
     assert run_quality_gate.run_gate(args) == 0
     evidence = json.loads(output.read_text(encoding="utf-8"))
     assert evidence["cache"] == {"applicable": True, "hit": True}
     assert evidence["logPath"] == str(log)
+    assert evidence["sessionId"] == "abc123-hosted-42-1"
+    assert evidence["runId"] == "42"
+
+
+def test_runner_preserves_valid_make_jobserver_descriptors(monkeypatch):
+    read_fd, write_fd = os.pipe()
+    try:
+        monkeypatch.setenv("MAKEFLAGS", f" --jobserver-auth={read_fd},{write_fd} -j")
+        assert run_quality_gate.inherited_jobserver_fds() == (read_fd, write_fd)
+    finally:
+        os.close(read_fd)
+        os.close(write_fd)
+    assert run_quality_gate.inherited_jobserver_fds() == ()
+
+
+def test_runner_streams_output_before_the_gate_finishes(tmp_path, monkeypatch):
+    class RecordingStream:
+        def __init__(self):
+            self.events = []
+
+        def write(self, value):
+            self.events.append((time.monotonic(), value))
+            return len(value)
+
+        def flush(self):
+            return None
+
+    stream = RecordingStream()
+    monkeypatch.setattr(sys, "stdout", stream)
+    args = Namespace(
+        repository=str(ROOT),
+        output=str(tmp_path / "timing.json"),
+        log=str(tmp_path / "gate.log"),
+        gate="streaming",
+        category="test",
+        timeout_seconds=None,
+        cache_applicable=False,
+        cache_hit=False,
+        session_id="local-stream",
+        run_id="local",
+        command=[
+            "--",
+            sys.executable,
+            "-c",
+            "import time; print('first', flush=True); time.sleep(0.5); print('last', flush=True)",
+        ],
+    )
+    started = time.monotonic()
+    assert run_quality_gate.run_gate(args) == 0
+    finished = time.monotonic()
+    first_at = next(at for at, value in stream.events if "first" in value)
+    assert first_at - started < 0.3
+    assert finished - first_at >= 0.3
 
 
 def test_runner_rejects_missing_command_and_preserves_timeout_directly(tmp_path):
@@ -75,6 +133,8 @@ def test_runner_rejects_missing_command_and_preserves_timeout_directly(tmp_path)
         timeout_seconds=None,
         cache_applicable=False,
         cache_hit=False,
+        session_id="local-missing",
+        run_id="local",
         command=[],
     )
     try:
@@ -92,6 +152,8 @@ def test_runner_rejects_missing_command_and_preserves_timeout_directly(tmp_path)
         timeout_seconds=1,
         cache_applicable=False,
         cache_hit=False,
+        session_id="local-timeout",
+        run_id="local",
         command=[sys.executable, "-c", "import time; time.sleep(2)"],
     )
     assert run_quality_gate.run_gate(timeout) == 124
@@ -183,6 +245,45 @@ def test_runner_preserves_failure_and_timeout_evidence(tmp_path):
     evidence = json.loads(output.read_text(encoding="utf-8"))
     assert evidence["result"] == "timeout"
     assert evidence["timedOut"] is True
+
+
+def test_runner_preserves_cancellation_evidence(tmp_path):
+    output = tmp_path / "timing" / "gate.json"
+    log = tmp_path / "logs" / "gate.log"
+    process = subprocess.Popen(
+        [
+            sys.executable,
+            str(RUNNER),
+            "--gate",
+            "cancel",
+            "--category",
+            "test",
+            "--repository",
+            str(ROOT),
+            "--output",
+            str(output),
+            "--log",
+            str(log),
+            "--",
+            sys.executable,
+            "-c",
+            "import time; print('started', flush=True); time.sleep(30)",
+        ],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    deadline = time.monotonic() + 5
+    while (
+        not log.exists() or "started" not in log.read_text(encoding="utf-8")
+    ) and time.monotonic() < deadline:
+        time.sleep(0.01)
+    assert "started" in log.read_text(encoding="utf-8")
+    os.kill(process.pid, signal.SIGTERM)
+    assert process.wait(timeout=15) == 128 + signal.SIGTERM
+    evidence = json.loads(output.read_text(encoding="utf-8"))
+    assert evidence["result"] == "cancelled"
+    assert evidence["timedOut"] is False
 
 
 def test_summarizer_reports_decision_and_slowest_gate(tmp_path):

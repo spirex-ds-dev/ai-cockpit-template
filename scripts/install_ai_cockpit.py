@@ -100,6 +100,8 @@ RESERVED_MAKE_TARGETS = {
     "ai-cockpit-diff-check",
     "ai-cockpit-quality",
 }
+_DISTRIBUTION_ROOT = Path(__file__).resolve().parents[1]
+_IMMUTABLE_SOURCE_INVENTORIES: dict[tuple[Path, str], tuple[Path, ...]] = {}
 
 
 Action = TransactionAction
@@ -224,6 +226,7 @@ class Installer:
         self.source_classification = classify_source(self.source)
         self.write_plan = WritePlan([])
         self.lock = InstallerLock(self.target / ".ai" / "cockpit" / ".install.lock")
+        self._tree_copy_cache: dict[str, tuple[Path, ...]] = {}
 
     def install(self) -> int:
         if not self.source.exists():
@@ -353,12 +356,38 @@ class Installer:
     def tree_copy_pairs(self, relative: str) -> list[tuple[Path, Path]]:
         src = self.source / relative
         dst = self.target / relative
+        cached = self._tree_copy_cache.get(relative)
+        if cached is None and self.source == _DISTRIBUTION_ROOT:
+            cached = _IMMUTABLE_SOURCE_INVENTORIES.get((self.source, relative))
+        if cached is not None:
+            self._tree_copy_cache[relative] = cached
+            return [(src / item, dst / item) for item in cached]
         if not src.exists():
             return []
         pairs: list[tuple[Path, Path]] = []
-        for item in src.rglob("*"):
-            if item.is_dir():
-                continue
+        pruned_roots = (
+            {
+                Path("work-items/active"),
+                Path("work-items/archive"),
+                Path("work-items/starts"),
+                Path("decisions"),
+            }
+            if relative == ".ai"
+            else set()
+        )
+        for pruned in sorted(pruned_roots):
+            keep = src / pruned / ".gitkeep"
+            if keep.is_file():
+                pairs.append((keep, dst / pruned / ".gitkeep"))
+        items: list[Path] = []
+        for current, directories, filenames in os.walk(src):
+            current_path = Path(current)
+            current_relative = current_path.relative_to(src)
+            directories[:] = sorted(
+                name for name in directories if current_relative / name not in pruned_roots
+            )
+            items.extend(current_path / name for name in sorted(filenames))
+        for item in items:
             rel = item.relative_to(src)
             if relative == ".ai" and rel.as_posix() in {
                 "cockpit/current_status.md",
@@ -369,26 +398,17 @@ class Installer:
                 continue
             if (
                 relative == ".ai"
-                and len(rel.parts) >= 3
-                and rel.parts[:2] == ("work-items", "active")
-                and rel.name != ".gitkeep"
-            ):
-                continue
-            if (
-                relative == ".ai"
-                and len(rel.parts) >= 3
-                and rel.parts[:2] == ("work-items", "archive")
-                and rel.name != ".gitkeep"
-            ):
-                continue
-            if (
-                relative == ".ai"
                 and len(rel.parts) >= 2
                 and rel.parts[:2] in TEMPLATE_SUPPLY_CHAIN_BASELINES
             ):
                 continue
             pairs.append((item, dst / rel))
-        return pairs
+        pairs.sort(key=lambda pair: pair[0].relative_to(src).as_posix())
+        inventory = tuple(source.relative_to(src) for source, _ in pairs)
+        self._tree_copy_cache[relative] = inventory
+        if self.source == _DISTRIBUTION_ROOT:
+            _IMMUTABLE_SOURCE_INVENTORIES[(self.source, relative)] = inventory
+        return [(src / item, dst / item) for item in inventory]
 
     def managed_copy_pairs(self) -> list[tuple[Path, Path]]:
         pairs = [*self.tree_copy_pairs(".ai"), *self.tree_copy_pairs(".cursor")]

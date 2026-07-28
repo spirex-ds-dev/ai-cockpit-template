@@ -21,11 +21,14 @@ AI Cockpit は `make quality` の後方互換性を維持します。`make quali
 - `quality-full` は完全なテスト、証拠、サプライチェーン、プロジェクト整合性を追加します。個別の Trust テストはデバッグ用の独立 target として残し、完全な pytest 後に再実行しません。
 - `quality-release` はインストールとリリース証拠を追加します。Fast の結果やキャッシュ結果はリリース証拠の代わりになりません。
 - Compatibility job は Python/platform matrix の検証だけを行い、完全な quality graph は実行しません。
-- Hosted smoke は `template-smoke`（完全な quality の唯一の所有者）、`installation-smoke`、`release-evidence` の独立 Job に分かれます。後二者は quality 所有者に依存し、完全な graph を再実行しません。
+- Hosted smoke は `template-smoke`（完全な quality の唯一の所有者）、`installation-smoke`、`release-evidence` の Job に分かれます。三つの Job は独立して開始し、完全な graph を重複実行せず、`always()` を指定した末端の `ci-evidence` Job に集約されます。failure、cancel、skip のいずれも fail-closed です。
+- Adopter 向け配布物には runtime skeleton、policy、必要な baseline を含めますが、template 保守用の Work Item starts、decision 履歴、archive 履歴は含めません。Installer は走査前にそれらの tree を除外し、一回の install 中では不変の source inventory を再利用します。
 
 ## 証拠と fail-closed
 
-`scripts/run_quality_gate.py` は各 Gate について、command、commit、所要時間、終了コード、timeout、cache 状態、出力 digest、失敗時の末尾を含む JSON timing と log を記録します。`scripts/summarize_quality_gates.py` は wall time、Gate 合計時間、parallel efficiency、最長 Gate、失敗末尾、skip、最終判定を JSON と Markdown に出力します。timing 証拠がない場合は fail-closed とし、cache hit を最終証拠にはしません。
+`make quality` の各実行は `target/quality/sessions/` 配下に新しい directory を作成し、commit、Hosted run/attempt、または一意な local identity に結び付けます。`scripts/run_quality_gate.py` は Gate 出力をリアルタイムに stream しながら、各 Gate の完全な log と JSON timing を記録します。証拠には session/run identity、command、commit、所要時間、終了コード、timeout または cancel 状態、cache 状態、出力 digest、長さを制限した末尾が含まれます。Top-level invocation は終了時に `current-session.txt` を自分の session へ再バインドするため、nested dry-run や test fixture が Hosted 公開対象として選ばれることはありません。Telemetry wrapper は検証済みで開いている Make jobserver descriptor だけを引き継ぎ、無効または利用不能な descriptor は転送しません。`project-test` は JUnit 証拠も書き出し、log には最も遅い test の report が含まれます。`scripts/summarize_quality_gates.py` は wall time、Gate 合計時間、parallel efficiency、最長 Gate、失敗末尾、skip、最終判定を JSON と Markdown に出力します。
+
+Hosted CI は `if: always()` で session directory 全体と wrapper log を upload するため、success、failure、cancel、timeout のいずれでも診断証拠を保持します。timing または artifact 証拠がない場合は fail-closed とし、cache hit を最終証拠にはしません。
 
 Hosted の前後 timing は推測ではなく証拠です。WI-20 の baseline または hosted run を取得できない場合は、構造化した `not-run` 理由、run ID、制限を記録し、改善を主張してはいけません。
 
