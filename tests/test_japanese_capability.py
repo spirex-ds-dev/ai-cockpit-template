@@ -12,7 +12,6 @@ from ai_japanese_capability import (
 
 
 EXPECTED_FINDINGS = {
-    "JA-LIFECYCLE-001": "japanese-lifecycle-fixture-corrective-20260729",
     "JA-DOC-001": "japanese-uninstall-documentation-corrective-20260729",
 }
 
@@ -102,6 +101,37 @@ def test_pr_capability_requires_language_wiring_and_executable_safety_parity(tmp
         encoding="utf-8",
     )
     assert ai_japanese_capability._pr_has_japanese_view() is True
+
+
+def test_lifecycle_capability_requires_named_install_calibration_recovery_and_removal_tests(
+    tmp_path, monkeypatch
+):
+    tests = tmp_path / "tests"
+    tests.mkdir()
+    fixture = tests / "test_japanese_adopter_lifecycle.py"
+    fixture.write_text(
+        "def test_japanese_adopter_installs_with_real_wizard_and_release_binding(): pass\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_japanese_capability, "ROOT", tmp_path)
+
+    assert ai_japanese_capability._lifecycle_fixture_exists() is False
+
+    fixture.write_text(
+        "def run_wizard(): pass\n"
+        "def plan_rollback(): pass\n"
+        "def execute_rollback(): pass\n"
+        "def build_proposal(): pass\n"
+        "def prepare_detached_removal(): pass\n"
+        'ENTRYPOINT = "cockpit-calibrate-session"\n'
+        "def test_japanese_adopter_installs_with_real_wizard_and_release_binding(): pass\n"
+        "def test_japanese_adopter_calibration_pauses_and_resumes(): pass\n"
+        "def test_japanese_adopter_recovery_is_confirmation_gated_and_preserves_project(): pass\n"
+        "def test_japanese_adopter_removal_blocks_unknown_ownership_and_preserves_evidence(): pass\n",
+        encoding="utf-8",
+    )
+
+    assert ai_japanese_capability._lifecycle_fixture_exists() is True
 
 
 def test_independent_corpus_covers_every_required_japanese_input_domain():

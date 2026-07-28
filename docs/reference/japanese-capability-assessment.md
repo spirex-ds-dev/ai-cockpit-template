@@ -9,9 +9,9 @@ description: Comprehensive, bounded, evidence-backed Japanese repository-governa
 > This is a release gate, not a claim of general Japanese model fluency.
 
 - Work Item: `japanese-assessment-depth-corrective-20260729`
-- Assessment digest: `sha256:52fc7db389b076392311865b52aa8e1ad13bdf6184e1a55a1322a00670e5b7a6`
+- Assessment digest: `sha256:12569b4a0edf886ffce887bc8531c0e40129fa556f9141cbd58a7763fe0733c3`
 - Corpus: `tests/fixtures/japanese-capability-corpus.json` (`14` entries)
-- Blocking findings: `2`
+- Blocking findings: `1`
 
 ## Evidence boundary
 
@@ -27,7 +27,7 @@ The matrix evaluates current repository behavior, executable evidence, and Japan
 | `JA-STATUS-001` | Cockpit Status Japanese parity | **pass** | Japanese Status view is derived from the same machine facts | `scripts/ai_generate_status.py`; `scripts/ai_check_status.py`; `Makefile`; `.ai/cockpit/current_status.md`; `tests/test_guards_and_status.py`; `tests/test_core_gates.py`; `make generate-cockpit-status-ja CONTRACT=<contract> SUMMARY=<summary>`; `make check-ai-status-ja CONTRACT=<contract> SUMMARY=<summary>` |
 | `JA-PR-001` | Task Outcome PR summary Japanese parity | **pass** | Japanese PR chrome preserves the approved field set | `scripts/ai_render_task_outcome_pr.py`; `Makefile`; `tests/test_task_outcome_pr_summary.py`; `PYTHONPATH=scripts:. .venv/bin/pytest -q tests/test_task_outcome_pr_summary.py`; `make render-task-outcome-pr OUTCOME=<outcome> PROFILE=<profile> LANGUAGE=ja` |
 | `JA-TASK-OUTCOME-001` | Task Outcome Japanese derived view | **pass** | Japanese Task Outcome chrome is derived from unchanged machine facts | `scripts/ai_render_task_outcome_multilingual.py`; `tests/test_task_outcome_multilingual.py`; `PYTHONPATH=. .venv/bin/pytest -q tests/test_task_outcome_multilingual.py` |
-| `JA-LIFECYCLE-001` | Executable Japanese adopter lifecycle | **block** | No executable Japanese adopter fixture covers the governed lifecycle. | `docs/getting-started/installation.ja.md`; `tests/test_japanese_adopter_lifecycle.py`; `PYTHONPATH=. .venv/bin/pytest -q tests/test_japanese_adopter_lifecycle.py` |
+| `JA-LIFECYCLE-001` | Executable Japanese adopter lifecycle | **pass** | Isolated Japanese adopter fixture executes supported installation, calibration, recovery, and evidence-preserving removal authorities | `docs/getting-started/installation.ja.md`; `scripts/ai_calibrate.py`; `scripts/ai_rollback.py`; `scripts/ai_uninstall_proposal.py`; `scripts/ai_detached_uninstaller.py`; `tests/test_japanese_adopter_lifecycle.py`; `PYTHONPATH=. .venv/bin/pytest -q tests/test_japanese_adopter_lifecycle.py` |
 | `JA-DOC-001` | Japanese installation, calibration, upgrade, rollback, uninstall, and recovery path | **block** | The Japanese engineer path lacks an actionable uninstall procedure. | `README.ja.md`; `docs/overview.ja.md`; `docs/getting-started/installation.ja.md`; `docs/getting-started/first-work-item.ja.md`; `docs/reference/how-to-read-cockpit-status.ja.md`; `docs/reference/repository-workflow.ja.md`; `docs/reference/work-item-lifecycle-closure.ja.md`; `docs/reference/troubleshooting.ja.md`; `docs/reference/upgrade.ja.md`; `docs/reference/distribution.ja.md`; `docs/reference/calibration-session.ja.md`; `tests/test_docs_metadata.py`; `make check-docs-metadata` |
 | `JA-DOC-STRUCTURE-001` | Japanese document metadata and three-language structure | **pass** | Required Japanese engineer entry documents exist and remain under metadata checks | `README.ja.md`; `docs/overview.ja.md`; `docs/getting-started/installation.ja.md`; `docs/getting-started/first-work-item.ja.md`; `docs/reference/how-to-read-cockpit-status.ja.md`; `docs/reference/repository-workflow.ja.md`; `docs/reference/work-item-lifecycle-closure.ja.md`; `docs/reference/troubleshooting.ja.md`; `docs/reference/upgrade.ja.md`; `docs/reference/distribution.ja.md`; `docs/reference/calibration-session.ja.md`; `tests/test_docs_metadata.py`; `tests/test_trust_layer_docs.py`; `make check-docs-metadata`; `make check-trust-layer-docs` |
 | `JA-RELEASE-GATE-001` | Mandatory pre-release Japanese evidence gate | **pass** | check-release-preflight requires the current Japanese assessment | `Makefile`; `scripts/ai_japanese_capability.py`; `tests/test_makefile.py`; `tests/test_japanese_capability.py`; `make check-japanese-capability`; `make check-release-preflight` |
@@ -35,7 +35,6 @@ The matrix evaluates current repository behavior, executable evidence, and Japan
 
 ## Blocking findings
 
-- `JA-LIFECYCLE-001`: No executable Japanese adopter fixture covers the governed lifecycle. Corrective Work Item: `japanese-lifecycle-fixture-corrective-20260729`.
 - `JA-DOC-001`: The Japanese engineer path lacks an actionable uninstall procedure. Corrective Work Item: `japanese-uninstall-documentation-corrective-20260729`.
 
 Each blocker requires its own Contract, implementation, verification, PR, Hosted CI, merge, `make ai-close-work-item`, branch cleanup, and a fresh assessment. A blocker cannot be cleared by editing this report.

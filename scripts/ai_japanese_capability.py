@@ -211,7 +211,24 @@ def _task_outcome_has_japanese_view() -> bool:
 
 
 def _lifecycle_fixture_exists() -> bool:
-    return (ROOT / "tests/test_japanese_adopter_lifecycle.py").is_file()
+    fixture = _read("tests/test_japanese_adopter_lifecycle.py")
+    required_tests = (
+        "test_japanese_adopter_installs_with_real_wizard_and_release_binding",
+        "test_japanese_adopter_calibration_pauses_and_resumes",
+        "test_japanese_adopter_recovery_is_confirmation_gated_and_preserves_project",
+        "test_japanese_adopter_removal_blocks_unknown_ownership_and_preserves_evidence",
+    )
+    required_authorities = (
+        "run_wizard(",
+        '"cockpit-calibrate-session"',
+        "plan_rollback(",
+        "execute_rollback(",
+        "build_proposal(",
+        "prepare_detached_removal(",
+    )
+    return all(f"def {name}(" in fixture for name in required_tests) and all(
+        authority in fixture for authority in required_authorities
+    )
 
 
 def _uninstall_path_exists() -> bool:
@@ -345,13 +362,23 @@ def evaluate() -> dict[str, Any]:
             "JA-LIFECYCLE-001",
             "Executable Japanese adopter lifecycle",
             "pass" if _lifecycle_fixture_exists() else "block",
-            "Japanese adopter fixture covers installation through recovery and removal"
+            "Isolated Japanese adopter fixture executes supported installation, calibration, "
+            "recovery, and evidence-preserving removal authorities"
             if _lifecycle_fixture_exists()
             else FINDINGS["JA-LIFECYCLE-001"]["summary"],
-            source=["docs/getting-started/installation.ja.md"],
+            source=[
+                "docs/getting-started/installation.ja.md",
+                "scripts/ai_calibrate.py",
+                "scripts/ai_rollback.py",
+                "scripts/ai_uninstall_proposal.py",
+                "scripts/ai_detached_uninstaller.py",
+            ],
             tests=["tests/test_japanese_adopter_lifecycle.py"],
             commands=["PYTHONPATH=. .venv/bin/pytest -q tests/test_japanese_adopter_lifecycle.py"],
-            limitation="English lifecycle fixtures cannot be used to infer Japanese operator usability.",
+            limitation=(
+                "The fixture proves bounded repository behavior and Japanese evidence handling; "
+                "it does not prove general fluency, provider operations, or real adopter platform quality."
+            ),
             finding_id=None if _lifecycle_fixture_exists() else "JA-LIFECYCLE-001",
         ),
         _case(
