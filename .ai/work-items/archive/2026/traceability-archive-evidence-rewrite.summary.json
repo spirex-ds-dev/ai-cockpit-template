@@ -1,0 +1,781 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "traceability-archive-evidence-rewrite",
+  "contractPath": ".ai/work-items/archive/2026/traceability-archive-evidence-rewrite.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/traceability-archive-evidence-rewrite.contract.json",
+      "reason": "Defines the complete-rewrite, stale-path, rollback, historical cleanup, and lifecycle boundaries."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/traceability-archive-evidence-rewrite.summary.json",
+      "reason": "Records red/green evidence, historical debt, decisions, acceptance mappings, and residual limits."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated active Work Item decision view."
+    },
+    {
+      "path": ".ai/work-items/starts/traceability-archive-evidence-rewrite.json",
+      "reason": "Binds the corrective branch to the latest origin/main base."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Applies the complete Contract/Summary/review/success/outcome replacement map inside the archive transaction."
+    },
+    {
+      "path": "scripts/check_instruction_traceability.py",
+      "reason": "Rejects archive-resolvable stale active Work Item paths in every traceability evidence field."
+    },
+    {
+      "path": "tests/test_ai_archive_work_item.py",
+      "reason": "Proves complete exact-value rewrite and byte-identical rollback after a post-rewrite failure."
+    },
+    {
+      "path": "tests/test_instruction_traceability.py",
+      "reason": "Proves stale Contract, Summary, and review rejection while retaining valid current active evidence."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Migrates all four validator-enumerated historical stale Summary references to verified archive paths."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registers the corrective plan as current instruction after the first policy Gate identified the missing context."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-29-traceability-archive-evidence-rewrite.md",
+      "reason": "Records root cause, execution order, bidirectional mapping, problem log, and WI-10 resume boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/traceability-archive-evidence-rewrite.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/archive/2026/traceability-archive-evidence-rewrite.contract.json",
+    "scripts/ai_archive_work_item.py",
+    "scripts/check_instruction_traceability.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_instruction_traceability.py",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A traceability record contains exact active Contract and Summary paths when the Work Item archives.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_archive_work_item.py::test_rewrite_traceability_paths_rewrites_every_archived_evidence_value",
+        "scripts/ai_archive_work_item.py::_rewrite_traceability_paths"
+      ]
+    },
+    {
+      "scenario": "Traceability references active review, success, or outcome evidence archived in the same transaction.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_archive_work_item.py::test_rewrite_traceability_paths_rewrites_every_archived_evidence_value"
+      ]
+    },
+    {
+      "scenario": "A later archive operation fails after traceability has been rewritten.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_archive_work_item.py::test_archive_failure_rolls_back_rewritten_traceability_bytes"
+      ]
+    },
+    {
+      "scenario": "A removed active Summary path resolves to an archived Summary through fallback.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_instruction_traceability.py::test_archived_summary_path_rejects_stale_active_acceptance_reference"
+      ]
+    },
+    {
+      "scenario": "A traceability record points at an active Work Item file that still exists.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_instruction_traceability.py::test_current_active_work_item_evidence_remains_valid"
+      ]
+    },
+    {
+      "scenario": "Historical traceability records already contain stale active Summary paths hidden by fallback.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/reference/remediation-instruction-traceability.json",
+        "make check-instruction-traceability"
+      ]
+    },
+    {
+      "scenario": "The corrective or the frozen WI-10 lifecycle is incomplete.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/superpowers/plans/2026-07-29-traceability-archive-evidence-rewrite.md#status-and-order",
+        ".ai/cockpit/README.md#lifecycle-closure"
+      ]
+    }
+  ],
+  "acceptanceEvidence": [
+    {
+      "acceptanceId": "A1",
+      "kind": "bug_fix",
+      "failureScenario": "Only the Contract reference is rewritten and Summary or auxiliary evidence remains stale.",
+      "evidence": [
+        {
+          "type": "implementation",
+          "path": "scripts/ai_archive_work_item.py",
+          "locator": "_rewrite_traceability_paths and archive transaction call",
+          "verification": "quality"
+        },
+        {
+          "type": "test",
+          "path": "tests/test_ai_archive_work_item.py",
+          "locator": "complete archived evidence value rewrite",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A2",
+      "kind": "bug_fix",
+      "failureScenario": "A later archive failure leaves traceability rewritten while active evidence is restored.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_ai_archive_work_item.py",
+          "locator": "post-rewrite failure rollback",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A3",
+      "kind": "bug_fix",
+      "failureScenario": "A removed active Summary or review path is silently accepted through archive fallback.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_instruction_traceability.py",
+          "locator": "stale Contract, Summary, and review regressions",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A4",
+      "kind": "compatibility",
+      "failureScenario": "The stronger rule rejects a valid current active Work Item evidence path.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_instruction_traceability.py",
+          "locator": "current active Work Item evidence remains valid",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A5",
+      "kind": "bug_fix",
+      "failureScenario": "The observed false negative is discussed but not captured by executable regressions.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_ai_archive_work_item.py",
+          "locator": "rewrite and rollback regressions",
+          "verification": "quality"
+        },
+        {
+          "type": "test",
+          "path": "tests/test_instruction_traceability.py",
+          "locator": "stale active evidence regressions",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A6",
+      "kind": "migration",
+      "failureScenario": "New code is correct but four known fallback-hidden paths remain in the repository manifest.",
+      "evidence": [
+        {
+          "type": "traceability",
+          "path": "docs/reference/remediation-instruction-traceability.json",
+          "locator": "PLAN-DIRECTIVE-032, 033, 034, and 036 archived Summary evidence",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A7",
+      "evidence": [
+        {
+          "type": "plan",
+          "path": "docs/superpowers/plans/2026-07-29-traceability-archive-evidence-rewrite.md",
+          "locator": "root cause, bidirectional mapping, tasks, and problem log",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A8",
+      "kind": "lifecycle",
+      "failureScenario": "The frozen WI-10 branch resumes before corrective Hosted verification and closure.",
+      "evidence": [
+        {
+          "type": "lifecycle-plan",
+          "path": "docs/superpowers/plans/2026-07-29-traceability-archive-evidence-rewrite.md",
+          "locator": "Status and order",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A9",
+      "evidence": [
+        {
+          "type": "boundary",
+          "path": ".ai/work-items/archive/2026/traceability-archive-evidence-rewrite.contract.json",
+          "locator": "outOfScope and Intent constraints",
+          "verification": "aiWorkItem"
+        }
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:37:10.659824+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "36f42d384122e94ae95a9efb071ba3a3630869447dc7e43ee652a8409ef70d4c",
+      "commandHash": "c2b4481e9e124264a9d240a42f92ad658d7af62b7fbdc4ab21eceb604ea9c568",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "cb9b130861fbb3e24e609331b1d68df9ffd194dfa0311461cba6ed3bb2e91316",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json work item contract check passed: .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json work item contract check passed: .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "outputBytes": 254
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:37:10.984312+00:00",
+      "exitCode": 0,
+      "durationMs": 242,
+      "outputDigest": "c85caa6e308c280a2fdc74bb5af6ef5b28e507a3f6172dd0cc5e23bb4f04c424",
+      "commandHash": "fa3a33004f02d5f960dee4dc3ec8b1edc6e951420e63ad215af0218b5acffd29",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "cb9b130861fbb3e24e609331b1d68df9ffd194dfa0311461cba6ed3bb2e91316",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json scope guard passed: 9 changed path(s) covered",
+      "outputBytes": 189
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:37:11.222652+00:00",
+      "exitCode": 0,
+      "durationMs": 146,
+      "outputDigest": "8f591442b6ce5d4659cf6507c32ca3fe68d6e6af7ebbcbe09c886281d4eea605",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "cb9b130861fbb3e24e609331b1d68df9ffd194dfa0311461cba6ed3bb2e91316",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 227
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/traceability-archive-evidence-rewrite.contract.json SUMMARY=.ai/work-items/active/traceability-archive-evidence-rewrite.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:37:11.572567+00:00",
+      "exitCode": 0,
+      "durationMs": 274,
+      "outputDigest": "e3a67ea61a8bbfe9430a8fd6d691e45283e68ff759735a3dc09c7b36e735cdeb",
+      "commandHash": "0d1797ee25122ae1149e7397be9a85303fe32f195f2e94d27745bfa38a0bdf8c",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "cb9b130861fbb3e24e609331b1d68df9ffd194dfa0311461cba6ed3bb2e91316",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `traceability-archive-evidence-rewrite` - Contract Hash: `c6942150fea1d1d3` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `9` - Unkn",
+      "outputTail": "finish archive, aggregate PR verification, exact-Head Hosted checks, human merge, ai-close-work-item, local/remote branch deletion, and synchronized clean main complete before WI-10 resumes. - A9: No WI-10 installation-content completion, Japanese readiness, documentation alignment, cleanup, or release completion is claimed by this process corrective. ## Required Verification - `aiWorkItem`: passed - `aiScope`: passed - `aiGuards`: passed - `aiCheckpoint`: passed - `aiAgentRisk`: passed - `aiReviewPolicy`: passed - `aiBacktrack`: passed - `aiCoverage`: passed - `aiScenarioCoverage`: passed - `aiGuidelines`: passed - `aiSummary`: failed - `aiStatus`: passed - `aiStatusCheck`: passed - `aiStatusConsistency`: passed - `aiDiffOwnership`: passed - `quality`: passed ## Review Focus - Complete replacement-map application - Rollback after post-rewrite failure - No stale active fallback false negatives - Exact four-record historical migration ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/traceability-archive-evidence-rewrite.json` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-traceability-archive-evidence-rewrite.md` — covered by Contract scope - [active_owned] `scripts/ai_archive_work_item.py` — covered by Contract scope - [active_owned] `scripts/check_instruction_traceability.py` — covered by Contract scope - [active_owned] `tests/test_ai_archive_work_item.py` — covered by Contract scope - [active_owned] `tests/test_instruction_traceability.py` — covered by Contract scope ## Next Action - Run or record required verification: aiSummary",
+      "outputBytes": 6480
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:37:11.780372+00:00",
+      "exitCode": 0,
+      "durationMs": 123,
+      "outputDigest": "b205f469c420e55fb5b67b656a0190ad73a713d2ef8f16932e06921ead61d477",
+      "commandHash": "6a425f6f0eea2052c84725dcefe21aefcb24db691cfc19710019f9f3880b7244",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "cb9b130861fbb3e24e609331b1d68df9ffd194dfa0311461cba6ed3bb2e91316",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/traceability-archive-evidence-rewrite.json [review] .ai/cockpit/current_status.md [review] scripts/ai_archive_work_item.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json review policy matched 3 path(s) [review] .ai/work-items/starts/traceability-archive-evidence-rewrite.json [review] .ai/cockpit/current_status.md [review] scripts/ai_archive_work_item.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 423
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:37:11.998715+00:00",
+      "exitCode": 0,
+      "durationMs": 139,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "cb9b130861fbb3e24e609331b1d68df9ffd194dfa0311461cba6ed3bb2e91316",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:37:12.217089+00:00",
+      "exitCode": 0,
+      "durationMs": 142,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "cb9b130861fbb3e24e609331b1d68df9ffd194dfa0311461cba6ed3bb2e91316",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/traceability-archive-evidence-rewrite.contract.json SUMMARY=.ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:37:12.342344+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "6a365fa11eb7d6a384c825b0bc8328e9439e5561a3a7e1dc37c83d1c7174c4d9",
+      "commandHash": "6dd75dce116765eae0111145fae687709fac6833aa61a92d421523dbcb245f63",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "cb9b130861fbb3e24e609331b1d68df9ffd194dfa0311461cba6ed3bb2e91316",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 297
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/traceability-archive-evidence-rewrite.contract.json SUMMARY=.ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:37:12.468558+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "eaca84cd04b62a1d876fe5479b937dd2a9249495ea1822a1db2ac7560abc8d0e",
+      "commandHash": "099707574cba91646c5acdca1b1bf8ba396efda7272ca3ec9060d934685ad4ad",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "cb9b130861fbb3e24e609331b1d68df9ffd194dfa0311461cba6ed3bb2e91316",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json guidelines compliance check passed: 6 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json guidelines compliance check passed: 6 guideline(s) verified",
+      "outputBytes": 302
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:37:12.899836+00:00",
+      "exitCode": 0,
+      "durationMs": 353,
+      "outputDigest": "1905de7ddf9cc9ffb646e85f494360877cba800273d5f2c3aee2dc5d754c61d2",
+      "commandHash": "ebf59a9daef14f6802a3427b34f8f5a511b3cca19a89ed54d9509a2711f1c565",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "cb9b130861fbb3e24e609331b1d68df9ffd194dfa0311461cba6ed3bb2e91316",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/traceability-archive-evidence-rewrite.json` — covered by Contract scope - [activ",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json ## Diff Ownership Preview - active_owned: `9`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/traceability-archive-evidence-rewrite.json` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-traceability-archive-evidence-rewrite.md` — covered by Contract scope - [active_owned] `scripts/ai_archive_work_item.py` — covered by Contract scope - [active_owned] `scripts/check_instruction_traceability.py` — covered by Contract scope - [active_owned] `tests/test_ai_archive_work_item.py` — covered by Contract scope - [active_owned] `tests/test_instruction_traceability.py` — covered by Contract scope",
+      "outputBytes": 1171
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:42:55.492380+00:00",
+      "exitCode": 0,
+      "durationMs": 342488,
+      "outputDigest": "f6931225d99e9bd376c83608cecef0b38cb25cf1a96b6438b15723e3ff8685ab",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "cb9b130861fbb3e24e609331b1d68df9ffd194dfa0311461cba6ed3bb2e91316",
+      "outputSummary": "\"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-full \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-fast-static \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"3dd1d7f3c134",
+      "outputTail": "ure.py::test_typescript_fixture_executes_build_test_lint_and_format 4.08s call tests/test_system_invariants.py::test_system_invariants_allow_legacy_archive_summary_versions[None] 3.89s call tests/test_instruction_traceability.py::test_current_traceability_manifest_passes 2.67s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 2.44s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[False-True] 2.32s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 2.28s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[True-False] 1456 passed, 3 warnings in 332.86s (0:05:32) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DVsaRTni7K/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DVsaRTni7K/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DVsaRTni7K/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DVsaRTni7K/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/3dd1d7f3c134-local-20260728T213712Z-23607-0/summary.json",
+      "outputBytes": 46963
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/traceability-archive-evidence-rewrite.contract.json SUMMARY=.ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:42:57.261809+00:00",
+      "exitCode": 0,
+      "durationMs": 277,
+      "outputDigest": "b03e1dca6d4a0d9e1db7f5e07549231414395048964e66e1b843e51731ba7cdc",
+      "commandHash": "5af68c0c5039db16244d046786aa860a4c289961fe53bc025c7345ca647a0d5b",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "39d848793c85260e282fd3ad31d84349c1ea4b6daea1ff41c0332ebfca95ced9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 357
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/traceability-archive-evidence-rewrite.contract.json SUMMARY=.ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:42:57.617722+00:00",
+      "exitCode": 0,
+      "durationMs": 281,
+      "outputDigest": "70943047144ddc1e68df88ed14211a8105550b8d645a6cd989233138001143a9",
+      "commandHash": "7c2fe42b8ff0c7dc88f35ae3688d5db5ab77ed54405c9f44c32887ec26f206e1",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "39d848793c85260e282fd3ad31d84349c1ea4b6daea1ff41c0332ebfca95ced9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 327
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:42:57.734406+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "39d848793c85260e282fd3ad31d84349c1ea4b6daea1ff41c0332ebfca95ced9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/traceability-archive-evidence-rewrite.contract.json SUMMARY=.ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:42:58.264715+00:00",
+      "exitCode": 0,
+      "durationMs": 285,
+      "outputDigest": "308e70efd387c503d5926f0f2a5c28c3b9713cd8c18e505d1a702d2cf512608a",
+      "commandHash": "d27e5ed21b12f1ead2ca80a116a9fe0bd130d49b1367244c3d0b07d95c5687a1",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "39d848793c85260e282fd3ad31d84349c1ea4b6daea1ff41c0332ebfca95ced9",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json --summary .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 307
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/traceability-archive-evidence-rewrite.summary.json CONTRACT=.ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T21:42:59.345104+00:00",
+      "exitCode": 0,
+      "durationMs": 120,
+      "outputDigest": "85338e65d5d188c611742a8dcc54d6408915a5ac3b6c8de976c2edec39024acd",
+      "commandHash": "957984797cbd47f5c4ee2ab813ede95d9ed3fb18a85e4725db79c10dbefde110",
+      "contractHash": "c6942150fea1d1d3e50fb184b813c32fc87fc34df768933ffd697670f83124a6",
+      "commitSha": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+      "executionContractPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "worktreeDigest": "f0da1bf54b5c3d84ec8c87c2bb3836f6eaf09438c44be5cbd4a6fccbd514ff1f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json ai summary check passed: .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json --contract .ai/work-items/active/traceability-archive-evidence-rewrite.contract.json ai summary check passed: .ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+      "outputBytes": 328
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Fix the reusable archive and validation flow; do not hand-edit only the observed WI-10 record.",
+      "compliant": true,
+      "evidence": "Archive code, validator, both suites, and all four pre-existing manifest records are covered."
+    },
+    {
+      "guideline": "Use exact path-value replacement and preserve the archive transaction's rollback boundary.",
+      "compliant": true,
+      "evidence": "_rewrite_traceability_paths composes the existing exact-string primitive and the transaction retains byte rollback."
+    },
+    {
+      "guideline": "Fail closed for stale active Work Item evidence in every traceability path field while preserving existing active files.",
+      "compliant": true,
+      "evidence": "Validator rule and Contract/Summary/review/live-active regressions."
+    },
+    {
+      "guideline": "Add mutation and transaction tests before implementation and retain exact diagnostics.",
+      "compliant": true,
+      "evidence": "Both red-first tests failed before implementation; focused suites now pass with field-specific diagnostics."
+    },
+    {
+      "guideline": "Keep the Work Item isolated from WI-10 content, release, and language changes.",
+      "compliant": true,
+      "evidence": "Changed paths are limited to archive/traceability process, tests, plan, and generated Work Item evidence."
+    },
+    {
+      "guideline": "Record discovered process problems and their evidence in the corrective plan and Summary.",
+      "compliant": true,
+      "evidence": "TRACE-ARCHIVE-ISSUE-001 through 003 are recorded in both artifacts."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Archive mutation is governance-critical; complete-map tests, rollback injection, current-active compatibility, and full quality bound the risk."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "issueId": "TRACE-ARCHIVE-ISSUE-001",
+      "category": "partial-archive-rewrite",
+      "severity": "high",
+      "fact": "The archive transaction computed all evidence replacements but applied only the Contract replacement to the traceability payload.",
+      "decision": "Apply the complete replacement map through one exact-value helper inside the existing transaction.",
+      "resolution": "Contract, Summary, review, success, and outcome values are all covered by the helper and regression.",
+      "status": "resolved_locally",
+      "followUp": "Require full quality, Hosted checks, and real WI-10 archive-path verification after merge."
+    },
+    {
+      "issueId": "TRACE-ARCHIVE-ISSUE-002",
+      "category": "validator-false-negative",
+      "severity": "high",
+      "fact": "The validator rejected stale active Contract paths but accepted stale Summary and review evidence through archive fallback.",
+      "decision": "Use one field-aware stale active Work Item rule for all three traceability path fields.",
+      "resolution": "Stale Contract, Summary, and review tests pass; a current active evidence fixture remains valid.",
+      "status": "resolved_locally",
+      "followUp": "Keep exact field diagnostics in Hosted regression coverage."
+    },
+    {
+      "issueId": "TRACE-ARCHIVE-ISSUE-003",
+      "category": "historical-traceability-debt",
+      "severity": "medium",
+      "fact": "The strengthened Gate enumerated four earlier stale active Summary references hidden by fallback.",
+      "decision": "Verify every archive target exists and migrate the complete enumerated set in this corrective.",
+      "resolution": "PLAN-DIRECTIVE-032, 033, 034, and 036 now explicitly name their archive Summary paths and the repository Gate passes.",
+      "status": "resolved_locally",
+      "followUp": "Do not retain fallback-hidden active Work Item evidence."
+    },
+    {
+      "issueId": "TRACE-ARCHIVE-ISSUE-004",
+      "category": "documentation-context-registration",
+      "severity": "low",
+      "fact": "The first quality-fast passed static checks and stopped because the new corrective plan was absent from the Documentation Context Registry.",
+      "decision": "Add the registry to Contract scope, register the plan as current_instruction, refresh readiness evidence, and restart quality-fast.",
+      "resolution": "The required registry entry is present; no failed-run partial result is treated as a complete Gate.",
+      "status": "resolved_locally",
+      "followUp": "Require a fresh complete quality-fast and Finish."
+    },
+    {
+      "issueId": "TRACE-ARCHIVE-ISSUE-005",
+      "category": "summary-schema",
+      "severity": "low",
+      "fact": "The first full Finish passed 1456 tests at 85.61% coverage, then Summary validation rejected the intentAlignment shape, date-only checkedAt value, and non-path documentation evidence.",
+      "decision": "Use the enforced intent booleans/rationale, an offset-aware timestamp, and repository file paths only; rerun Finish from the beginning.",
+      "resolution": "Summary fields now match the version 2 schema without changing implementation or acceptance meaning.",
+      "status": "resolved_locally",
+      "followUp": "Do not reuse the failed Finish quality result as complete lifecycle evidence."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "external-manifests",
+      "detail": "The archive transaction rewrites the registered remediation traceability manifest; unrelated external evidence stores remain outside repository authority.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Complete replacement-map application",
+      "Rollback after post-rewrite failure",
+      "No stale active fallback false negatives",
+      "Exact four-record historical migration"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "not_applicable",
+    "makeEntrypoints": "not_applicable"
+  },
+  "userCorrectionsCaptured": [
+    "Archived traceability paths must be rewritten or resolved without leaving old active references.",
+    "Discovered process problems must be fixed before continuing the blocked Work Item.",
+    "Old paths must be cleaned so later agents cannot keep calling them."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Do not leave stale active Work Item paths after archive.",
+      "mechanism": "Complete archive replacement map plus validator rejection across every traceability evidence field.",
+      "evidence": [
+        "scripts/ai_archive_work_item.py",
+        "scripts/check_instruction_traceability.py",
+        "tests/test_ai_archive_work_item.py",
+        "tests/test_instruction_traceability.py"
+      ]
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "c6942150fea1d1d3",
+      "acceptanceCount": 9,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "c6942150fea1d1d3",
+      "acceptanceCount": 9,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "Corrective PR, Hosted checks, merge, closure, and branch cleanup remain pending.",
+    "Frozen WI-10 still requires rebase and real archive-path verification after this corrective merges."
+  ],
+  "overclaimPrevention": "This corrective proves repository archive/traceability behavior only; it does not complete WI-10, Japanese readiness, documentation alignment, cleanup, or release.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-29T06:36:47+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-29-traceability-archive-evidence-rewrite.md"
+        ],
+        "reason": "Plan contains root cause, bidirectional mapping, tasks, problem log, and lifecycle order."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/traceability-archive-evidence-rewrite.contract.json",
+          ".ai/work-items/archive/2026/traceability-archive-evidence-rewrite.summary.json"
+        ],
+        "reason": "Nine acceptance items and seven scenarios map to exact implementation and tests."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "scripts/ai_archive_work_item.py",
+          "scripts/check_instruction_traceability.py",
+          "tests/test_ai_archive_work_item.py",
+          "tests/test_instruction_traceability.py"
+        ],
+        "reason": "Commands and behavior match the implemented archive and validator capabilities."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "No localized user documentation changes are in scope."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-29-traceability-archive-evidence-rewrite.md",
+          ".ai/work-items/archive/2026/traceability-archive-evidence-rewrite.summary.json"
+        ],
+        "reason": "All three issues, residual external-store limit, and frozen WI-10 boundary are explicit."
+      }
+    ]
+  },
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "The reusable archive transaction now applies its complete evidence replacement map, the validator rejects every fallback-hidden stale Work Item path, rollback and live-active compatibility are tested, and all enumerated historical debt is removed without modifying WI-10 content or release behavior."
+  },
+  "archiveSequence": 653
+}

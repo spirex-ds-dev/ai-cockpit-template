@@ -170,7 +170,10 @@ def test_traceability_rejects_archived_contract_through_active_fallback() -> Non
         ".ai/work-items/active/ai-cockpit-comprehensive-review-plan.contract.json"
     ]
     errors = validate_manifest(manifest, ROOT)
-    assert any("stale active Contract path" in error for error in errors)
+    assert any(
+        "stale active Work Item path in contractPaths must use its archive path" in error
+        for error in errors
+    )
 
 
 def test_unmapped_instruction_fails_closed() -> None:
@@ -483,4 +486,105 @@ def test_archived_contract_path_rejects_stale_active_manifest_reference(tmp_path
         },
         tmp_path,
     )
-    assert any("stale active Contract path" in error for error in errors)
+    assert any(
+        "stale active Work Item path in contractPaths must use its archive path" in error
+        for error in errors
+    )
+
+
+def test_archived_summary_path_rejects_stale_active_acceptance_reference(tmp_path: Path):
+    archive = tmp_path / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True)
+    (archive / "example.contract.json").write_text("{}", encoding="utf-8")
+    (archive / "example.summary.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "plan.md").write_text("WI-1", encoding="utf-8")
+    implementation = tmp_path / "implementation.py"
+    implementation.write_text("# evidence\n", encoding="utf-8")
+
+    errors = validate_manifest(
+        {
+            "schemaVersion": 1,
+            "planPath": "plan.md",
+            "instructions": [
+                {
+                    "id": "I1",
+                    "summary": "x",
+                    "planWorkItems": ["WI-1"],
+                    "contractPaths": [".ai/work-items/archive/2026/example.contract.json"],
+                    "implementationEvidence": ["implementation.py"],
+                    "acceptanceEvidence": [".ai/work-items/active/example.summary.json"],
+                    "verificationCommands": ["make check"],
+                }
+            ],
+        },
+        tmp_path,
+    )
+
+    assert any(
+        "I1: stale active Work Item path in acceptanceEvidence must use its archive path" in error
+        for error in errors
+    )
+
+
+def test_archived_review_path_rejects_stale_active_implementation_reference(
+    tmp_path: Path,
+):
+    archive = tmp_path / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True)
+    for name in ("example.contract.json", "example.summary.json", "example.review.json"):
+        (archive / name).write_text("{}", encoding="utf-8")
+    (tmp_path / "plan.md").write_text("WI-1", encoding="utf-8")
+
+    errors = validate_manifest(
+        {
+            "schemaVersion": 1,
+            "planPath": "plan.md",
+            "instructions": [
+                {
+                    "id": "I1",
+                    "summary": "x",
+                    "planWorkItems": ["WI-1"],
+                    "contractPaths": [".ai/work-items/archive/2026/example.contract.json"],
+                    "implementationEvidence": [".ai/work-items/active/example.review.json"],
+                    "acceptanceEvidence": [".ai/work-items/archive/2026/example.summary.json"],
+                    "verificationCommands": ["make check"],
+                }
+            ],
+        },
+        tmp_path,
+    )
+
+    assert any(
+        "I1: stale active Work Item path in implementationEvidence must use its archive path"
+        in error
+        for error in errors
+    )
+
+
+def test_current_active_work_item_evidence_remains_valid(tmp_path: Path):
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    for name in ("example.contract.json", "example.summary.json", "example.review.json"):
+        (active / name).write_text("{}", encoding="utf-8")
+    (tmp_path / "plan.md").write_text("WI-1", encoding="utf-8")
+
+    errors = validate_manifest(
+        {
+            "schemaVersion": 1,
+            "planPath": "plan.md",
+            "instructions": [
+                {
+                    "id": "I1",
+                    "summary": "x",
+                    "planWorkItems": ["WI-1"],
+                    "contractPaths": [".ai/work-items/active/example.contract.json"],
+                    "implementationEvidence": [".ai/work-items/active/example.review.json"],
+                    "acceptanceEvidence": [".ai/work-items/active/example.summary.json"],
+                    "verificationCommands": ["make check"],
+                }
+            ],
+        },
+        tmp_path,
+    )
+
+    assert not any("stale active Work Item path" in error for error in errors)

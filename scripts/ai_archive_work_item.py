@@ -181,6 +181,20 @@ def _rewrite_exact_string(value: Any, source: str, target: str) -> tuple[Any, in
     return value, 0
 
 
+def _rewrite_traceability_paths(
+    payload: dict[str, Any], replacements: dict[str, str]
+) -> tuple[dict[str, Any], int]:
+    """Rewrite every exact active evidence path to its archive destination."""
+    rewritten: Any = payload
+    replacement_count = 0
+    for source, target in replacements.items():
+        rewritten, count = _rewrite_exact_string(rewritten, source, target)
+        replacement_count += count
+    if not isinstance(rewritten, dict):
+        raise ValueError("rewritten traceability manifest must remain an object")
+    return rewritten, replacement_count
+
+
 def _load_registered_traceability() -> tuple[Path, bytes | None, dict[str, Any] | None]:
     """Read the mutable traceability manifest before any archive mutation."""
     path = PROJECT_ROOT / TRACEABILITY_MANIFEST
@@ -607,14 +621,10 @@ def _execute_archive_transaction(
                     (target_dir / path.name).relative_to(PROJECT_ROOT).as_posix()
                 )
             if traceability_payload is not None:
-                rewritten_traceability, replacement_count = _rewrite_exact_string(
-                    traceability_payload,
-                    contract_path.relative_to(PROJECT_ROOT).as_posix(),
-                    archived_contract,
+                rewritten_traceability, replacement_count = _rewrite_traceability_paths(
+                    traceability_payload, replacements
                 )
                 if replacement_count:
-                    if not isinstance(rewritten_traceability, dict):
-                        raise ValueError("rewritten traceability manifest must remain an object")
                     _atomic_save_json(traceability_path, rewritten_traceability)
                     traceability_changed = True
             summary = redact_machine_paths_in_data(load_json(target_dir / summary_path.name))
@@ -658,8 +668,8 @@ def _execute_archive_transaction(
                         {
                             "path": traceability_rel,
                             "reason": (
-                                "Archive transaction migrated the current Work Item Contract "
-                                "reference to durable traceability evidence."
+                                "Archive transaction migrated current Work Item evidence "
+                                "references to durable traceability paths."
                             ),
                         }
                     )

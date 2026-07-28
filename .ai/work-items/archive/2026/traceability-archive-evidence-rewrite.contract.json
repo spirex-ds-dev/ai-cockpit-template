@@ -1,0 +1,290 @@
+{
+  "contractVersion": 2,
+  "workItemId": "traceability-archive-evidence-rewrite",
+  "mode": "code",
+  "title": "traceability-archive-evidence-rewrite",
+  "rawUserRequest": "The user requires every Work Item to use bidirectional instruction-plan-implementation-acceptance traceability and explicitly required that archived Work Items automatically rewrite or resolve traceability paths so old active paths cannot remain as a latent omission. During the WI-10 version-neutral supplement, ai-finish rewrote contractPaths to the archive but left acceptanceEvidence pointing at the removed active Summary; check-instruction-traceability still passed through archive fallback. The user has already authorized correcting discovered process problems before resuming the blocked Work Item and release sequence.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:archive-traceability-paths-must-not-remain-stale",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:archive-traceability-paths-must-not-remain-stale"
+  },
+  "declaredIntent": {
+    "summary": "Make archive transactions rewrite every exact active Work Item evidence path and make the traceability validator reject any stale active Work Item path that only resolves through archive fallback.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/traceability-archive-evidence-rewrite.contract.json",
+    ".ai/work-items/active/traceability-archive-evidence-rewrite.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_archive_work_item.py",
+    "scripts/check_instruction_traceability.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_instruction_traceability.py",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/plans/2026-07-29-traceability-archive-evidence-rewrite.md"
+  ],
+  "outOfScope": [
+    "Changing immutable evidence inside previously archived Work Items",
+    "Manually patching the blocked WI-10 traceability record as a substitute for fixing the archive transaction",
+    "Weakening archive fallback used by non-Work-Item repository paths",
+    "Changing release, installer, Calibration, Japanese language, or documentation content",
+    "Combining the blocked WI-10 content changes into this corrective branch"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Archive transaction currently builds all path replacements but rewrites only the exact active Contract string in the traceability manifest."
+    },
+    {
+      "path": "scripts/check_instruction_traceability.py",
+      "reason": "Validator currently rejects stale active Contract paths but silently resolves stale active Summary evidence through archive fallback."
+    },
+    {
+      "path": "tests/test_ai_archive_work_item.py",
+      "reason": "Archive regression suite lacks a transaction test proving Contract, Summary, review, and outcome traceability references are all rewritten and rolled back together."
+    },
+    {
+      "path": "tests/test_instruction_traceability.py",
+      "reason": "Traceability regressions cover stale active Contract but not stale active Summary, review, success, or outcome evidence."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Observed WI-10 evidence: PLAN-DIRECTIVE-037 contains an archived Contract path and a stale active Summary path after a successful archive transaction."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Required registry for the corrective plan's current-instruction context."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "archive_atomicity",
+      "evidence_path_integrity",
+      "validator_false_negative",
+      "rollback_integrity"
+    ],
+    "reason": "A partial rewrite or permissive archive fallback can make deleted active evidence appear aligned and allow every future Work Item to close with stale traceability.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized process corrections before resuming WI-10 and requires stale traceability paths to be eliminated rather than tolerated."
+  },
+  "preReviewWarnings": [
+    "Verify every exact active-to-archive replacement, not only Contract paths.",
+    "Verify transaction rollback restores the traceability manifest when a later archive step fails.",
+    "Do not reject legitimate non-Work-Item implementation paths merely because they contain the word active."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: The archive transaction rewrites every exact active Work Item Contract, Summary, review, success, and outcome path found anywhere in the registered remediation traceability payload to its actual archive destination.",
+    "A2: All traceability path rewrites occur inside the existing archive transaction and are rolled back to byte-identical pre-archive content if a later archive step fails.",
+    "A3: check-instruction-traceability rejects a stale .ai/work-items/active path in contractPaths, implementationEvidence, or acceptanceEvidence whenever the active file is absent but an archive fallback exists; diagnostics identify the field and require the durable archive path.",
+    "A4: The validator continues to accept current active Work Item evidence that actually exists and durable archive evidence that is explicitly named.",
+    "A5: Red-first tests reproduce the observed stale active Summary false negative before implementation and then prove Contract/Summary/review/outcome rewrite, stale-path rejection across traceability fields, and rollback.",
+    "A6: Every pre-existing stale active Work Item evidence path enumerated by the strengthened validator is migrated to its exact existing archive path; the current repository manifest passes without fallback-hidden debt.",
+    "A7: A corrective plan records the root cause, user requirement, frozen WI-10 state, implementation mapping, verification, PR lifecycle, and the rule for resuming WI-10 only after this corrective is merged and cleaned.",
+    "A8: Full quality, ai-finish archive, aggregate PR verification, exact-Head Hosted checks, human merge, ai-close-work-item, local/remote branch deletion, and synchronized clean main complete before WI-10 resumes.",
+    "A9: No WI-10 installation-content completion, Japanese readiness, documentation alignment, cleanup, or release completion is claimed by this process corrective."
+  ],
+  "guidelines": [
+    "Fix the reusable archive and validation flow; do not hand-edit only the observed WI-10 record.",
+    "Use exact path-value replacement and preserve the archive transaction's rollback boundary.",
+    "Fail closed for stale active Work Item evidence in every traceability path field while preserving existing active files.",
+    "Add mutation and transaction tests before implementation and retain exact diagnostics.",
+    "Keep the Work Item isolated from WI-10 content, release, and language changes.",
+    "Record discovered process problems and their evidence in the corrective plan and Summary."
+  ],
+  "intent": {
+    "problem": "After WI-10 ai-finish, PLAN-DIRECTIVE-037 correctly referenced the archived Contract but still referenced the removed active Summary. The archive code had already computed Summary and auxiliary evidence replacements, yet applied only the Contract replacement to traceability. The validator then hid the stale Summary through archive fallback, so the official Gate reported alignment even though an obsolete path remained.",
+    "constraints": [
+      "Do not manually repair only PLAN-DIRECTIVE-037; make the fix apply to all future Work Items.",
+      "Keep all traceability mutations inside the atomic archive transaction and preserve rollback.",
+      "Reject stale active evidence consistently across contractPaths, implementationEvidence, and acceptanceEvidence.",
+      "Do not reject an active Work Item path while the active file genuinely exists.",
+      "Do not mutate immutable archived Work Item content.",
+      "Complete this corrective lifecycle before rebasing and resuming the frozen WI-10 branch."
+    ],
+    "rationale": "Applying the complete replacement map during archive and refusing fallback for removed active Work Item evidence makes the stored path itself truthful. Transaction and validator tests prevent the same omission from recurring under a different evidence field."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A traceability record contains exact active Contract and Summary paths when the Work Item archives.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Both values are atomically rewritten to their exact archive destinations.",
+      "verificationPlan": "Add a red-first archive transaction test containing both paths and assert no active Work Item reference remains."
+    },
+    {
+      "scenario": "Traceability references active review, success, or outcome evidence archived in the same transaction.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Every exact auxiliary path is rewritten using the already computed replacement map.",
+      "verificationPlan": "Exercise review/success/outcome files in the archive transaction fixture and assert each archive path."
+    },
+    {
+      "scenario": "A later archive operation fails after traceability has been rewritten.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Rollback restores the traceability file byte-for-byte along with active Work Item files.",
+      "verificationPlan": "Inject a post-rewrite failure and compare original traceability bytes after rollback."
+    },
+    {
+      "scenario": "A removed active Summary path resolves to an archived Summary through fallback.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The validator rejects the stale stored path and requires the archive path.",
+      "verificationPlan": "Add a red-first validator regression mirroring PLAN-DIRECTIVE-037."
+    },
+    {
+      "scenario": "A traceability record points at an active Work Item file that still exists.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The validator accepts the current active path.",
+      "verificationPlan": "Create an active evidence fixture with no archive-only fallback and assert no stale-path error."
+    },
+    {
+      "scenario": "Historical traceability records already contain stale active Summary paths hidden by fallback.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Every validator-enumerated path is changed to its exact existing archive file and the repository manifest passes.",
+      "verificationPlan": "Run the strengthened validator before migration to enumerate the finite set, verify each archive target exists, migrate all entries, and rerun the full manifest check."
+    },
+    {
+      "scenario": "The corrective or the frozen WI-10 lifecycle is incomplete.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "WI-10 remains frozen until this corrective passes Hosted checks, merges, closes, and cleans its branch.",
+      "verificationPlan": "Record corrective PR/Head evidence and ai-close output before resuming WI-10."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 654
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/traceability-archive-evidence-rewrite.json",
+    "baseCommit": "3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
+    "initialScopeDigest": "943a8f0c6df64927a19197bdd7527f4e8d5f4af7d6dbbdedb06d8cd735f8f089",
+    "contractSkeletonDigest": "bb22cc2ce086b2ea3f39a2b17585c59085f637d9f369ab292e8e32af71f27821"
+  }
+}
