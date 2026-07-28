@@ -165,10 +165,12 @@ Item branch during this phase.
 2. Fetch with prune.
 3. Require `ls-remote --heads` to prove the branch is absent.
 
-If deletion fails and the ref still exists, stop. The invoking worktree remains
-on the original Work Item branch in the linked-worktree case, and the local
-branch remains available in every case. If the provider already deleted the
-branch, verified absence is idempotent success.
+If deletion fails or remains unverifiable, preserve the local ref. In the
+linked-worktree case the invoking worktree is still on the Work Item branch. In
+the normal case, switch the invoking worktree back from base to the Work Item
+branch before reporting failure. If checkout restoration also fails, report
+that distinct recovery failure while retaining the local ref. If the provider
+already deleted the branch, verified absence is idempotent success.
 
 ### Phase 4: delete the local retry identity
 
@@ -207,7 +209,7 @@ the base worktree path. Do not remove or alter that worktree.
 | --- | --- | --- |
 | Evidence, PR, Head SHA, clean-state, or base discovery | Original Work Item checkout and refs | Correct evidence and rerun |
 | Fetch or fast-forward | Local Work Item ref remains | Correct base/worktree state and rerun |
-| Remote delete with ref still present | Local Work Item ref remains; linked invocation remains checked out | Correct permissions/provider state and rerun |
+| Remote delete with ref still present or unverifiable | Local Work Item ref remains; invoking checkout is retained or restored | Correct permissions/provider state and rerun |
 | Remote delete request fails but ref is absent | Continue as idempotent success | No manual branch reconstruction |
 | Detach succeeds but local delete fails | Restore Work Item checkout when ref exists | Correct local ref/worktree condition and rerun |
 | Final invariant fails before local deletion | Local Work Item ref remains | Correct invariant and rerun |
