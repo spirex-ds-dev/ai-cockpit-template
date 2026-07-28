@@ -78,6 +78,24 @@ def test_fact_reads_are_deterministic_and_canonical(tmp_path):
     assert canonical_json(first) == canonical_json(second)
 
 
+def test_manifest_preserves_readmes_and_excludes_transient_install_lock(tmp_path):
+    source, target = make_install_tree(tmp_path)
+    (source / "README.md").write_text("template\n", encoding="utf-8")
+    (target / "README.md").write_text("adopter\n", encoding="utf-8")
+    lock = target / ".ai" / "cockpit" / ".install.lock"
+    lock.write_text("transient\n", encoding="utf-8")
+
+    facts = write_fact_bundle(
+        source=source,
+        target=target,
+        distribution_version={"distributionVersion": 2, "contractSchema": 2},
+    )
+
+    entries = {item["path"]: item for item in facts["manifest"]["files"]}
+    assert entries["README.md"]["ownership"] == "project"
+    assert ".ai/cockpit/.install.lock" not in entries
+
+
 @pytest.mark.parametrize("mutation", ["missing", "malformed", "tampered"])
 def test_invalid_fact_bundle_fails_closed(tmp_path, mutation):
     source, target = make_install_tree(tmp_path)

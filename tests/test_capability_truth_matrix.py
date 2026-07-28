@@ -47,9 +47,11 @@ def test_remaining_review_gaps_and_completed_evidence_are_explicit() -> None:
     assert capabilities["ownership_manifest_and_managed_regions"]["status"] == "adopter_installed"
     assert capabilities["governed_update_and_uninstall"]["status"] == "adopter_installed"
     uninstall = capabilities["governed_update_and_uninstall"]
-    assert "proposal" in uninstall["claim"]
-    assert "public detached" in uninstall["limitations"]
-    assert "not installed" in uninstall["limitations"]
+    assert "proposalDigest" in uninstall["claim"]
+    assert "detached filesystem removal" in uninstall["claim"]
+    assert "Purge" in uninstall["limitations"]
+    assert "not implemented" in uninstall["limitations"]
+    assert "tests/test_japanese_adopter_lifecycle.py" in uninstall["testEvidence"]
 
 
 def test_matrix_document_points_to_machine_readable_source_and_plan() -> None:

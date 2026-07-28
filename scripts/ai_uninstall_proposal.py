@@ -3,12 +3,45 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
-from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
 MODES = ("disable", "preserve-evidence", "purge")
+PROPOSAL_SCHEMA_VERSION = 1
+
+
+def _canonical(value: Any) -> bytes:
+    return (
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+    ).encode()
+
+
+def proposal_digest(proposal: dict[str, Any]) -> str:
+    payload = {key: value for key, value in proposal.items() if key != "proposalDigest"}
+    return "sha256:" + hashlib.sha256(_canonical(payload)).hexdigest()
+
+
+def validate_proposal(proposal: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(proposal, dict) or proposal.get("schemaVersion") != PROPOSAL_SCHEMA_VERSION:
+        return ["unsupported_proposal_schema"]
+    if proposal.get("proposalDigest") != proposal_digest(proposal):
+        errors.append("proposal_digest_mismatch")
+    for field in ("repositoryIdentity", "installationId", "sessionId"):
+        if not isinstance(proposal.get(field), str) or not proposal[field]:
+            errors.append(f"missing_{field}")
+    for field in ("deletionList", "preservePaths"):
+        value = proposal.get(field)
+        if not isinstance(value, list) or any(not isinstance(item, str) for item in value):
+            errors.append(f"invalid_{field}")
+    receipt_path = proposal.get("receiptPath")
+    if not isinstance(receipt_path, str) or not receipt_path or receipt_path.startswith("/"):
+        errors.append("invalid_receipt_path")
+    if proposal.get("mode") not in MODES:
+        errors.append("invalid_mode")
+    return errors
 
 
 def build_proposal(
@@ -17,6 +50,12 @@ def build_proposal(
     """Return Phase A evidence without mutating repository state."""
     if mode not in MODES:
         return {"state": "blocked", "reason": "invalid_mode", "writes": []}
+    if mode == "disable":
+        return {
+            "state": "blocked",
+            "reason": "use_disable_entrypoint",
+            "writes": [],
+        }
     if facts.get("drift") or facts.get("unknownOwnership"):
         return {
             "state": "blocked",
@@ -32,27 +71,39 @@ def build_proposal(
         "complexity_baseline",
         "audit",
     ]
-    deletion = [
-        item for item in facts.get("runtimeFiles", []) if item not in facts.get("projectOwned", [])
-    ]
+    deletion = sorted(
+        item["path"] if isinstance(item, dict) else item
+        for item in facts.get("runtimeFiles", [])
+        if (item["path"] if isinstance(item, dict) else item) not in facts.get("projectOwned", [])
+    )
+    preserve_paths = sorted(set(facts.get("preservePaths", [])) | set(facts.get("preserve", [])))
+    session_id = facts.get("sessionId", "pending")
     proposal = {
+        "schemaVersion": PROPOSAL_SCHEMA_VERSION,
         "state": "confirmed" if confirmed else "needs_human_confirmation",
         "mode": mode,
-        "phase": "A",
+        "phase": "proposal",
         "writes": [],
         "deletionList": deletion,
+        "preservePaths": preserve_paths,
+        "repositoryIdentity": facts.get("repositoryIdentity", "unknown"),
+        "installationId": facts.get("installationId", "unknown"),
+        "sessionId": session_id,
+        "receiptPath": f".ai/upgrade/uninstall-evidence/{session_id}.receipt.json",
         "preserveEvidence": evidence,
         "evidenceExport": {
             "required": True,
-            "bundle": f".ai/upgrade/uninstall-evidence/{facts.get('sessionId', 'pending')}.json",
+            "bundle": f".ai/upgrade/uninstall-evidence/{session_id}.json",
         },
-        "detachedUninstaller": {"required": True, "sessionId": facts.get("sessionId", "pending")},
+        "detachedUninstaller": {"required": True, "sessionId": session_id},
         "receipt": {"required": True, "state": "pending"},
     }
-    if mode == "purge" and not confirmed:
-        proposal["state"] = "needs_human_confirmation"
-        proposal["warning"] = "purge is destructive and evidence export must complete first"
-    return deepcopy(proposal)
+    if mode == "purge":
+        proposal["state"] = "blocked"
+        proposal["reason"] = "purge_not_supported_by_uninstall_executor"
+        proposal["resumeCondition"] = "use a separately approved purge workflow"
+    proposal["proposalDigest"] = proposal_digest(proposal)
+    return proposal
 
 
 def main() -> int:

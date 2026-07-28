@@ -282,6 +282,19 @@ def _public_uninstall_executor_exists() -> bool:
     )
 
 
+def _installed_uninstall_lifecycle_exists() -> bool:
+    fixture = _read("tests/test_japanese_adopter_lifecycle.py")
+    required = (
+        "test_japanese_adopter_executes_installed_uninstall_lifecycle",
+        "ai-cockpit-uninstall-facts",
+        "ai-cockpit-uninstall-propose",
+        "ai-cockpit-uninstall-execute",
+        "execute_proposal",
+        "Makefile.ai",
+    )
+    return all(value in fixture for value in required)
+
+
 def _documents_present() -> tuple[bool, list[str]]:
     missing = [relative for relative in REQUIRED_JA_DOCS if not (ROOT / relative).is_file()]
     return not missing, missing
@@ -401,10 +414,10 @@ def evaluate() -> dict[str, Any]:
         ),
         _case(
             "JA-LIFECYCLE-001",
-            "Executable Japanese adopter lifecycle through uninstall proposal and model boundary",
+            "Executable Japanese adopter lifecycle through installed uninstall execution",
             "pass" if _lifecycle_fixture_exists() else "block",
             "Isolated Japanese adopter fixture executes installation, calibration, recovery, "
-            "uninstall proposal, and detached-removal model boundaries"
+            "uninstall facts, digest-bound proposal, detached removal, and receipt verification"
             if _lifecycle_fixture_exists()
             else FINDINGS["JA-LIFECYCLE-001"]["summary"],
             source=[
@@ -417,9 +430,9 @@ def evaluate() -> dict[str, Any]:
             tests=["tests/test_japanese_adopter_lifecycle.py"],
             commands=["PYTHONPATH=. .venv/bin/pytest -q tests/test_japanese_adopter_lifecycle.py"],
             limitation=(
-                "The fixture proves bounded repository behavior and Japanese evidence handling; "
-                "it does not prove filesystem removal, general fluency, provider operations, "
-                "or real adopter platform quality."
+                "The fixture proves bounded preserve-evidence filesystem removal and Japanese "
+                "evidence handling; it does not prove purge, general fluency, provider "
+                "operations, or real adopter platform quality."
             ),
             finding_id=None if _lifecycle_fixture_exists() else "JA-LIFECYCLE-001",
         ),
@@ -442,12 +455,15 @@ def evaluate() -> dict[str, Any]:
         _case(
             "JA-UNINSTALL-RUNTIME-001",
             "Installed public detached uninstall execution",
-            "pass" if _public_uninstall_executor_exists() else "block",
-            "The installed repository exposes a public detached removal entrypoint"
-            if _public_uninstall_executor_exists()
+            "pass"
+            if _public_uninstall_executor_exists() and _installed_uninstall_lifecycle_exists()
+            else "block",
+            "The installed repository exposes a public detached removal entrypoint and a clean-adopter lifecycle test"
+            if _public_uninstall_executor_exists() and _installed_uninstall_lifecycle_exists()
             else FINDINGS["JA-UNINSTALL-RUNTIME-001"]["summary"],
             source=[
                 "templates/make/Makefile.ai",
+                "scripts/ai_uninstall_facts.py",
                 "scripts/ai_uninstall_proposal.py",
                 "scripts/ai_detached_uninstaller.py",
                 "scripts/ai_installer_catalog.json",
@@ -461,11 +477,13 @@ def evaluate() -> dict[str, Any]:
                 "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_japanese_adopter_lifecycle.py"
             ],
             limitation=(
-                "A proposal or in-memory model is not filesystem-removal evidence; "
-                "provider permissions and platform locks remain adopter responsibilities."
+                "The installed executor is limited to preserve-evidence Runtime-file removal; "
+                "purge, provider permissions, and platform locks remain outside this evidence."
             ),
             finding_id=(
-                None if _public_uninstall_executor_exists() else "JA-UNINSTALL-RUNTIME-001"
+                None
+                if _public_uninstall_executor_exists() and _installed_uninstall_lifecycle_exists()
+                else "JA-UNINSTALL-RUNTIME-001"
             ),
         ),
         _case(

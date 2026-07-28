@@ -125,14 +125,14 @@
     {
       "id": "governed_update_and_uninstall",
       "status": "adopter_installed",
-      "claim": "Installed update proposal/apply and uninstall proposal/state-output boundaries expose reviewable Work Item, snapshot, migration, recalibration, PR handoff, rollback, disable-result, deletion-list, evidence-retention, and receipt-requirement evidence; they do not expose detached filesystem removal or purge execution.",
-      "evidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_disable_enable.py", "scripts/ai_uninstall_proposal.py", "scripts/ai_installer_catalog.json", "docs/reference/installed-lifecycle.md"],
-      "verification": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_disable_enable.py", "tests/test_uninstall_proposal.py", "tests/test_japanese_capability.py"],
-      "sourceEvidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_disable_enable.py", "scripts/ai_uninstall_proposal.py", "scripts/ai_installer_catalog.json", "docs/reference/installed-lifecycle.md"],
-      "testEvidence": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_disable_enable.py", "tests/test_uninstall_proposal.py", "tests/test_japanese_capability.py"],
+      "claim": "Installed update proposal/apply and preserve-evidence uninstall facts/proposal/execution boundaries expose reviewable Work Item, snapshot, migration, recalibration, PR handoff, rollback, disable-result, deterministic ownership facts, proposalDigest binding, detached filesystem removal, truthful receipt, and post-state verification evidence.",
+      "evidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_disable_enable.py", "scripts/ai_uninstall_facts.py", "scripts/ai_uninstall_proposal.py", "scripts/ai_detached_uninstaller.py", "scripts/ai_installer_catalog.json", "templates/make/Makefile.ai", "docs/reference/installed-lifecycle.md"],
+      "verification": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_disable_enable.py", "tests/test_uninstall_facts.py", "tests/test_uninstall_proposal.py", "tests/test_detached_uninstaller.py", "tests/test_installed_runtime_parity.py", "tests/test_japanese_adopter_lifecycle.py", "tests/test_japanese_capability.py"],
+      "sourceEvidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_disable_enable.py", "scripts/ai_uninstall_facts.py", "scripts/ai_uninstall_proposal.py", "scripts/ai_detached_uninstaller.py", "scripts/ai_installer_catalog.json", "templates/make/Makefile.ai", "docs/reference/installed-lifecycle.md"],
+      "testEvidence": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_disable_enable.py", "tests/test_uninstall_facts.py", "tests/test_uninstall_proposal.py", "tests/test_detached_uninstaller.py", "tests/test_installed_runtime_parity.py", "tests/test_japanese_adopter_lifecycle.py", "tests/test_japanese_capability.py"],
       "commandEvidence": ["make quality"],
-      "limitations": "Uninstall proposal and disable write result JSON but do not delete Runtime or update canonical installed state. No public uninstall-facts builder or proposal-digest binding exists. Detached-removal and purge models are not installed; no public detached filesystem-removal or purge entrypoint exists. Target-repository receipts remain required.",
-      "digest": "sha256:713a9cfd07a4bb098686909a87611cde2f37fa420193b21ba46be32461c2137f"
+      "limitations": "The installed executor implements preserve-evidence Runtime-file removal only. Purge filesystem removal is not implemented. Disable writes a result JSON but does not independently update canonical installed state. Empty directory cleanup, external identity, sandboxing, immutable audit, and enterprise compliance are not claimed; the target-repository receipt and human review remain required.",
+      "digest": "sha256:3f57c745e99a165ee3eade61fa758066bda8cf87aaa24e9cdea50947a6a328ed"
     },
     {
       "id": "quick_install_release_archive_digest",

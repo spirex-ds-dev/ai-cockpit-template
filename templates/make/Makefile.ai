@@ -26,7 +26,7 @@ PROJECT_LINT ?= printf '%s\n' 'ERROR: no project linter configured. Set PROJECT_
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
 	ai-start ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy \
-	check-ai-preflight-review generate-ai-preflight-review ai-preflight check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge template-adoption-ready check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable ai-cockpit-uninstall-propose
+	check-ai-preflight-review generate-ai-preflight-review ai-preflight check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge template-adoption-ready check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
 
 ai-help:
 	@printf '%s\n' 'AI Cockpit commands:'
@@ -95,7 +95,15 @@ ai-cockpit-enable:
 
 ai-cockpit-uninstall-propose:
 	@test -n "$(FACTS)" || (echo "FACTS is required" >&2; exit 2)
-	$(AI_PYTHON) scripts/ai_uninstall_proposal.py --facts "$(FACTS)" --mode "$(or $(MODE),preserve-evidence)" --output "$(OUTPUT)"
+	$(AI_PYTHON) scripts/ai_uninstall_proposal.py --facts "$(FACTS)" --mode "$(or $(UNINSTALL_MODE),preserve-evidence)" --output "$(OUTPUT)"
+
+ai-cockpit-uninstall-facts:
+	@test -n "$(ROOT)" -a -n "$(SESSION_ID)" -a -n "$(OUTPUT)" || (echo "ROOT, SESSION_ID, and OUTPUT are required" >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_uninstall_facts.py --root "$(ROOT)" --session-id "$(SESSION_ID)" --output "$(OUTPUT)"
+
+ai-cockpit-uninstall-execute:
+	@test -n "$(ROOT)" -a -n "$(PROPOSAL)" -a -n "$(CONFIRM_DIGEST)" || (echo "ROOT, PROPOSAL, and CONFIRM_DIGEST are required" >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_detached_uninstaller.py --root "$(ROOT)" --proposal "$(PROPOSAL)" --confirm-digest "$(CONFIRM_DIGEST)"
 
 -include Makefile.ai.stack
 

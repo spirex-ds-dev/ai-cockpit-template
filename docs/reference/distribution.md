@@ -81,7 +81,7 @@ Without `--update-makefile`, the installer writes `Makefile.ai` and `Makefile.ai
 
 ## Installed Runtime Surface
 
-The installed artifact contains the version-bound lifecycle scripts required by `Makefile.ai`: `ai_install_status.py`, `ai_lifecycle_facts.py`, `ai_upgrade_proposal.py`, `ai_upgrade_apply.py`, `ai_rollback.py`, `ai_disable_enable.py`, and `ai_uninstall_proposal.py`. The matching targets are read-only status/facts, governed update proposal/apply, rollback proposal, disable/enable state transition proposal, and preserve-evidence uninstall proposal. A clean Adopter Fixture is the authority for whether the surface is actually installed; source-tree presence alone is not an installed capability claim.
+The installed artifact contains the version-bound lifecycle scripts required by `Makefile.ai`: `ai_install_status.py`, `ai_lifecycle_facts.py`, `ai_upgrade_proposal.py`, `ai_upgrade_apply.py`, `ai_rollback.py`, `ai_disable_enable.py`, `ai_uninstall_facts.py`, `ai_uninstall_proposal.py`, and `ai_detached_uninstaller.py`. The matching targets are read-only status/facts, governed update proposal/apply, rollback proposal, disable/enable state transition proposal, and preserve-evidence uninstall facts/proposal/digest-confirmed detached execution. Purge is not implemented by this executor. A clean Adopter Fixture is the authority for whether the surface is actually installed and executable; source-tree presence alone is not an installed capability claim.
 
 ## Local Install
 

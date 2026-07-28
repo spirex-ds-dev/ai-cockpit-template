@@ -1,13 +1,6 @@
 {
   "assessmentVersion": 2,
-  "blockingFindings": [
-    {
-      "caseId": "JA-UNINSTALL-RUNTIME-001",
-      "correctiveWorkItem": "installed-detached-uninstaller-runtime-corrective-20260729",
-      "id": "JA-UNINSTALL-RUNTIME-001",
-      "summary": "The installed runtime has a proposal/state-output surface but no public uninstall facts builder, proposal-digest binding, or installed detached removal entrypoint that performs and verifies filesystem removal."
-    }
-  ],
+  "blockingFindings": [],
   "cases": [
     {
       "area": "Japanese register, mixed technical language, encoded input, Unicode, and paths",
@@ -128,14 +121,14 @@
       ]
     },
     {
-      "area": "Executable Japanese adopter lifecycle through uninstall proposal and model boundary",
+      "area": "Executable Japanese adopter lifecycle through installed uninstall execution",
       "commandEvidence": [
         "PYTHONPATH=. .venv/bin/pytest -q tests/test_japanese_adopter_lifecycle.py"
       ],
-      "digest": "sha256:1359a5c807f6185dc95daa3190d06225ff3a367ea1d1537c5422d2db43dae55a",
+      "digest": "sha256:c2f1a428fbb5e45d09d43e98a816a03861dfd95972b9ba13ce6829dc0cbcd588",
       "id": "JA-LIFECYCLE-001",
-      "limitation": "The fixture proves bounded repository behavior and Japanese evidence handling; it does not prove filesystem removal, general fluency, provider operations, or real adopter platform quality.",
-      "observation": "Isolated Japanese adopter fixture executes installation, calibration, recovery, uninstall proposal, and detached-removal model boundaries",
+      "limitation": "The fixture proves bounded preserve-evidence filesystem removal and Japanese evidence handling; it does not prove purge, general fluency, provider operations, or real adopter platform quality.",
+      "observation": "Isolated Japanese adopter fixture executes installation, calibration, recovery, uninstall facts, digest-bound proposal, detached removal, and receipt verification",
       "sourceEvidence": [
         "docs/getting-started/installation.ja.md",
         "scripts/ai_calibrate.py",
@@ -180,19 +173,19 @@
       "commandEvidence": [
         "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_japanese_adopter_lifecycle.py"
       ],
-      "digest": "sha256:dbe16b6b939419564873c3f997dddb5c441e7139f5e4ab54b4dee2899f0d521a",
-      "findingId": "JA-UNINSTALL-RUNTIME-001",
+      "digest": "sha256:bb32efdca0b252a0293cba29a6cec09000f948d2f071ab6f7f77134621212631",
       "id": "JA-UNINSTALL-RUNTIME-001",
-      "limitation": "A proposal or in-memory model is not filesystem-removal evidence; provider permissions and platform locks remain adopter responsibilities.",
-      "observation": "The installed runtime has a proposal/state-output surface but no public uninstall facts builder, proposal-digest binding, or installed detached removal entrypoint that performs and verifies filesystem removal.",
+      "limitation": "The installed executor is limited to preserve-evidence Runtime-file removal; purge, provider permissions, and platform locks remain outside this evidence.",
+      "observation": "The installed repository exposes a public detached removal entrypoint and a clean-adopter lifecycle test",
       "sourceEvidence": [
         "templates/make/Makefile.ai",
+        "scripts/ai_uninstall_facts.py",
         "scripts/ai_uninstall_proposal.py",
         "scripts/ai_detached_uninstaller.py",
         "scripts/ai_installer_catalog.json",
         "docs/reference/installed-lifecycle.md"
       ],
-      "status": "block",
+      "status": "pass",
       "testEvidence": [
         "tests/test_japanese_capability.py",
         "tests/test_japanese_adopter_lifecycle.py"
@@ -264,7 +257,7 @@
     "entryCount": 14,
     "path": "tests/fixtures/japanese-capability-corpus.json"
   },
-  "digest": "sha256:de27786c58c2f7240b13dd5c3658c1f03739f0bb0b0dd8a0d85582e43c335eee",
+  "digest": "sha256:cc9af076c2e3811191ebab519357805d6e474313ba76cf557079b5dc12ef3c0b",
   "limitations": [
     "This assessment does not claim general model fluency, translation quality, or provider behavior.",
     "Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking."
