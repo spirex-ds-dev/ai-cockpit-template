@@ -42,6 +42,7 @@ class FakeGit:
         self.remote_check_returncode = remote_check_returncode
         self.current_branch = "codex/example"
         self.base_worktree_path = ""
+        self.work_branch_commit = "work123"
 
     def __call__(self, args: list[str] | tuple[str, ...], check: bool) -> closure.CommandResult:
         command = tuple(args)
@@ -69,6 +70,8 @@ class FakeGit:
             return closure.CommandResult(0, "")
         if normalized == ("status", "--porcelain", "--untracked-files=all"):
             return closure.CommandResult(0, "")
+        if normalized == ("rev-parse", "codex/example"):
+            return closure.CommandResult(0, f"{self.work_branch_commit}\n")
         if normalized[:2] == ("rev-parse", "main") or normalized[:2] == (
             "rev-parse",
             "origin/main",
@@ -93,7 +96,10 @@ def prepare(monkeypatch: pytest.MonkeyPatch, fake: FakeGit) -> None:
     monkeypatch.setattr(
         closure,
         "_verify_pr",
-        lambda _runner, _branch, _base: {"url": "https://example.test/pr/1"},
+        lambda _runner, _branch, _base, _branch_commit: {
+            "url": "https://example.test/pr/1",
+            "headRefOid": "work123",
+        },
     )
 
 
@@ -277,22 +283,44 @@ def test_find_archived_contract_requires_exactly_one_match(tmp_path, monkeypatch
 def test_verify_pr_rejects_malformed_adapter_responses():
     with pytest.raises(RuntimeError, match="cannot verify"):
         closure._verify_pr(
-            lambda _args, _check: closure.CommandResult(0, "not-json"), "branch", "main"
+            lambda _args, _check: closure.CommandResult(0, "not-json"),
+            "branch",
+            "main",
+            "work123",
         )
 
     def wrong_shape(_args, _check):
         return closure.CommandResult(0, "[]")
 
     with pytest.raises(RuntimeError, match="non-object"):
-        closure._verify_pr(wrong_shape, "branch", "main")
+        closure._verify_pr(wrong_shape, "branch", "main", "work123")
 
 
 def test_verify_pr_requires_merged_identity_and_timestamp():
     cases = [
         ({"state": "OPEN"}, "not merged"),
-        ({"state": "MERGED", "headRefName": "other"}, "head branch"),
-        ({"state": "MERGED", "headRefName": "branch", "baseRefName": "other"}, "base branch"),
-        ({"state": "MERGED", "headRefName": "branch", "baseRefName": "main"}, "merge commit"),
+        (
+            {"state": "MERGED", "headRefName": "other"},
+            "head branch",
+        ),
+        (
+            {
+                "state": "MERGED",
+                "headRefName": "branch",
+                "headRefOid": "work123",
+                "baseRefName": "other",
+            },
+            "base branch",
+        ),
+        (
+            {
+                "state": "MERGED",
+                "headRefName": "branch",
+                "headRefOid": "work123",
+                "baseRefName": "main",
+            },
+            "merge commit",
+        ),
     ]
     for payload, message in cases:
 
@@ -300,7 +328,25 @@ def test_verify_pr_requires_merged_identity_and_timestamp():
             return closure.CommandResult(0, __import__("json").dumps(payload))
 
         with pytest.raises(RuntimeError, match=message):
-            closure._verify_pr(runner, "branch", "main")
+            closure._verify_pr(runner, "branch", "main", "work123")
+
+
+def test_verify_pr_requires_exact_local_head_sha() -> None:
+    payload = {
+        "state": "MERGED",
+        "headRefName": "codex/example",
+        "headRefOid": "other123",
+        "baseRefName": "main",
+        "mergedAt": "2026-07-28T00:00:00Z",
+        "mergeCommit": {"oid": "merge123"},
+        "url": "https://example.test/pr/1",
+    }
+
+    def runner(_args, _check):
+        return closure.CommandResult(0, __import__("json").dumps(payload))
+
+    with pytest.raises(RuntimeError, match="Head SHA"):
+        closure._verify_pr(runner, "codex/example", "main", "work123")
 
 
 def test_external_runner_fails_closed_when_command_is_unavailable(monkeypatch):

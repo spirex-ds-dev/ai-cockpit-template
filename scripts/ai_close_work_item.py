@@ -115,7 +115,12 @@ def _discover_base(runner: Runner) -> tuple[str, str]:
     return candidates[0]
 
 
-def _verify_pr(runner: Runner, branch: str, base_branch: str) -> dict[str, object]:
+def _verify_pr(
+    runner: Runner,
+    branch: str,
+    base_branch: str,
+    branch_commit: str,
+) -> dict[str, object]:
     try:
         result = runner(
             [
@@ -123,7 +128,7 @@ def _verify_pr(runner: Runner, branch: str, base_branch: str) -> dict[str, objec
                 "pr",
                 "view",
                 "--json",
-                "state,headRefName,baseRefName,mergedAt,mergeCommit,url",
+                "state,headRefName,headRefOid,baseRefName,mergedAt,mergeCommit,url",
             ],
             True,
         )
@@ -138,6 +143,8 @@ def _verify_pr(runner: Runner, branch: str, base_branch: str) -> dict[str, objec
         raise RuntimeError("pull request is not merged; no cleanup was attempted")
     if data.get("headRefName") != branch:
         raise RuntimeError("pull request head branch does not match the current Work Item branch")
+    if data.get("headRefOid") != branch_commit:
+        raise RuntimeError("pull request Head SHA does not match the local Work Item branch")
     if data.get("baseRefName") != base_branch:
         raise RuntimeError("pull request base branch does not match the discovered repository base")
     merge_commit = data.get("mergeCommit")
@@ -218,7 +225,10 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, str]:
             "synchronize the base and remove local/remote branches"
         )
     _require_clean_worktree(runner)
-    pr = _verify_pr(runner, work_branch, base_branch)
+    work_commit = runner(["rev-parse", work_branch], True).stdout.strip()
+    if not work_commit:
+        raise RuntimeError("cannot resolve the local Work Item branch commit")
+    pr = _verify_pr(runner, work_branch, base_branch, work_commit)
 
     base_path = _base_worktree_path(runner, base_branch)
     base_runner = _in_worktree(runner, base_path) if base_path else runner
