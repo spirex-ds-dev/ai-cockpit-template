@@ -185,6 +185,7 @@ def test_pr_accepts_one_documented_adjacent_recovery_pair(tmp_path, monkeypatch)
     )
     recovery.write_text(json.dumps(data))
     monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
     monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
     entries = []
     for path in (predecessor, recovery):
@@ -233,7 +234,18 @@ def test_pr_accepts_a_fully_validated_adjacent_recovery_chain(tmp_path, monkeypa
         )
         path.write_text(json.dumps(data))
     monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
+
+    def ancestry_result(args):
+        if args[:2] != ["merge-base", "--is-ancestor"]:
+            return fake_git_result(returncode=0)
+        ancestor, descendant = args[2:]
+        valid_edges = {
+            ("a" * 40, "b" * 40),
+            ("b" * 40, "c" * 40),
+        }
+        return fake_git_result(returncode=0 if (ancestor, descendant) in valid_edges else 1)
+
+    monkeypatch.setattr(ai_check_pr, "run_git", ancestry_result)
     entries = []
     for path in paths:
         summary_path = path.with_name(path.name.replace(".contract", ".summary"))

@@ -248,6 +248,8 @@ def is_documented_pr_recovery_pair(
     predecessor: tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]],
     recovery: tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]],
     pr_base: str,
+    *,
+    require_pr_base_compatibility: bool = True,
 ) -> bool:
     """Accept only one auditable, immediately sequential recovery relationship."""
     predecessor_path, predecessor_contract, predecessor_summary, _ = predecessor
@@ -261,7 +263,10 @@ def is_documented_pr_recovery_pair(
         isinstance(predecessor_summary.get("archiveSequence"), int)
         and isinstance(recovery_summary.get("archiveSequence"), int)
         and recovery_summary["archiveSequence"] == predecessor_summary["archiveSequence"] + 1
-        and archive_base_is_compatible(predecessor_contract, pr_base)
+        and (
+            not require_pr_base_compatibility
+            or archive_base_is_compatible(predecessor_contract, pr_base)
+        )
         and isinstance(predecessor_base, str)
         and isinstance(recovery_base, str)
         and run_git(["merge-base", "--is-ancestor", predecessor_base, recovery_base]).returncode
@@ -294,9 +299,21 @@ def documented_recovery_paths(
         ],
         key=lambda entry: entry[3],
     )
-    if len(new_entries) >= 2 and all(
-        is_documented_pr_recovery_pair(predecessor, recovery, pr_base)
-        for predecessor, recovery in zip(new_entries, new_entries[1:])
+    root_is_compatible = bool(
+        new_entries and archive_base_is_compatible(new_entries[0][1], pr_base)
+    )
+    if (
+        len(new_entries) >= 2
+        and root_is_compatible
+        and all(
+            is_documented_pr_recovery_pair(
+                predecessor,
+                recovery,
+                pr_base,
+                require_pr_base_compatibility=False,
+            )
+            for predecessor, recovery in zip(new_entries, new_entries[1:])
+        )
     ):
         return {entry[0] for entry in new_entries[1:]}
     return set()

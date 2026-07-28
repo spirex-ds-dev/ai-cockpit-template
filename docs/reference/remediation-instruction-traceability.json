@@ -178,6 +178,15 @@
       "implementationEvidence": ["scripts/ai_check_summary.py", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
       "acceptanceEvidence": ["tests/test_ai_check_summary.py", ".ai/work-items/archive/2026/hosted-coverage-margin-recovery-20260728.summary.json"],
       "verificationCommands": ["make ai-preflight", "make check-ai-change-summary", "make check-instruction-traceability", "make ai-finish TASK=archive-sequence-prediction-guard-20260728", "make ai-close-work-item TASK=archive-sequence-prediction-guard-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-020",
+      "summary": "Validate the recovery-chain root against the PR merge-base and validate each later archive only against its immediate predecessor using realistic directed Git ancestry.",
+      "planWorkItems": ["WI-20", "recovery-chain-base-compatibility-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/recovery-chain-base-compatibility-20260728.contract.json"],
+      "implementationEvidence": ["scripts/ai_check_pr.py", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
+      "acceptanceEvidence": ["tests/test_pr_aggregate.py"],
+      "verificationCommands": ["make ai-preflight", "make check-ai-pr AI_BASE_COMMIT=9deb1e53b32ec703c3ee7a6be19442eb908d7b73", "make check-instruction-traceability", "make ai-finish TASK=recovery-chain-base-compatibility-20260728", "make ai-close-work-item TASK=recovery-chain-base-compatibility-20260728"]
     }
   ]
 }
