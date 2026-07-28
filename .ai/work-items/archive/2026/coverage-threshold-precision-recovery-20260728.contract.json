@@ -1,0 +1,192 @@
+{
+  "contractVersion": 2,
+  "workItemId": "coverage-threshold-precision-recovery-20260728",
+  "mode": "code",
+  "title": "Enforce exact coverage threshold precision",
+  "baseCommit": "b6b27c29222e86915f5e8bde600f6408c430099c",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "The user requires discovered process defects to be fixed before dependent work continues and requires quality performance work to retain rigorous, non-misleading evidence.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-continue-deep-performance-process-first",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-quality-gate-corrective"
+  },
+  "declaredIntent": {
+    "summary": "Recover the archived hosted snapshot corrective by making the 85 percent coverage floor use explicit two-decimal comparison and by testing the actual pytest exit boundary.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/coverage-threshold-precision-recovery-20260728.contract.json",
+    ".ai/work-items/active/coverage-threshold-precision-recovery-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    "pyproject.toml",
+    "tests/test_makefile.py",
+    "tests/test_hosted_verification_snapshot.py",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Lowering the 85 percent coverage floor",
+    "Rounding sub-threshold coverage upward to pass",
+    "Changing the hosted snapshot implementation or its archived evidence; focused recovery coverage may test an existing fail-closed branch",
+    "Changing performance implementation, publishing a release, or weakening any other quality gate"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/hosted-verification-snapshot-lifecycle-20260728.contract.json",
+      "reason": "The immediately preceding archived Work Item was incorrectly accepted after project-test logged 84.99 percent coverage below the declared floor."
+    },
+    {
+      "path": "Makefile",
+      "reason": "The canonical project-test command declares the 85 percent floor consumed by pytest-cov."
+    },
+    {
+      "path": "pyproject.toml",
+      "reason": "Coverage run configuration currently omits report precision, so coverage.py compares the floor at default zero-decimal precision."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "The existing regression checks only that --cov-fail-under=85 appears, not that a just-below-threshold result exits nonzero."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "intent": {
+    "problem": "coverage.py rounds 84.994669 percent to 85 at its default precision zero, while pytest-cov prints a sub-threshold failure line but returns zero; the quality summary therefore reports PASS for evidence below the declared 85 percent floor.",
+    "constraints": [
+      "Keep the floor at 85 and compare at two decimal places.",
+      "Prove the real pytest-cov process exits nonzero for a deterministic below-threshold fixture.",
+      "Preserve the preceding archive bytes and use the repository's documented adjacent recovery pair.",
+      "Do not claim the hosted snapshot corrective valid until recovery quality and hosted CI pass."
+    ],
+    "rationale": "Explicit precision plus an executable exit-code regression aligns human-visible coverage output, process status, and Gate evidence without increasing test scope or hiding uncovered code."
+  },
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "quality_gate",
+      "coverage_evidence",
+      "adjacent_recovery"
+    ],
+    "reason": "Coverage is a release-blocking quality claim and the recovery must preserve immutable predecessor evidence while tightening, not weakening, the gate.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous corrective execution and required process defects to be fixed before performance resumes."
+  },
+  "preReviewWarnings": [
+    "Review the real subprocess exit-code regression rather than relying only on configuration text."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "A release-blocking quality boundary and adjacent recovery require final-hash checkpoints."
+  },
+  "acceptance": [
+    "Coverage report precision is explicitly two decimal places while the fail-under floor remains 85.",
+    "A deterministic pytest-cov subprocess whose coverage is below 85 exits nonzero under repository configuration.",
+    "Existing Make project-test and quality entrypoints retain --cov-fail-under=85 and no gate is removed or skipped.",
+    "RFE-ISSUE-139 and traceability map the contradictory evidence, root cause, implementation, regression, and recovery lifecycle.",
+    "The recovery source-references the immediately preceding archived Contract, has explicit restricted-write approval, and archives at the next sequence so aggregate PR validation accepts only this adjacent pair.",
+    "Full quality passes at a true two-decimal coverage result of at least 85, followed by PR, hosted CI, merge, ai-close-work-item, branch cleanup, and synchronized main before performance resumes."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Measured coverage is 84.994669 percent with an 85 percent floor.",
+      "expected": "The pytest-cov subprocess exits nonzero instead of rounding to a passing integer.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run a temporary-module pytest-cov subprocess using repository pyproject.toml and assert nonzero below the floor."
+    },
+    {
+      "scenario": "Repository coverage is at least 85.00 percent under two-decimal precision.",
+      "expected": "Full project-test and quality pass with consistent output and exit evidence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run full quality and inspect target/coverage.json plus project-test timing exitCode."
+    },
+    {
+      "scenario": "The recovery accidentally changes the predecessor archive or lowers/skips coverage.",
+      "expected": "Scope, immutable archive, Make regression, and aggregate PR checks reject the change.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Verify predecessor archive is unchanged, Make dry-run retains the floor, and check-ai-pr accepts exactly the adjacent pair."
+    }
+  ],
+  "guidelines": [
+    "Test the actual coverage subprocess exit behavior, not only the presence of a command-line string.",
+    "Tighten comparison precision without lowering the floor or deleting tests.",
+    "Preserve immutable predecessor evidence and complete the adjacent recovery lifecycle before resuming performance."
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuation-authorization-2026-07-28",
+    "reason": "The user requires every discovered process problem to be solved before performance and release work continue."
+  },
+  "rollbackNote": "Revert the precision setting and regression only after restoring an equally strict, executable coverage boundary.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 625
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/coverage-threshold-precision-recovery-20260728.json",
+    "baseCommit": "b6b27c29222e86915f5e8bde600f6408c430099c",
+    "initialScopeDigest": "1a693d132ce675dd71283113f48fe88af63b761732f19ef4adf5fd348afada16",
+    "contractSkeletonDigest": "03f03ddbb8b1e383a0d0e1227d9bd5a7879786ec17461894714a425deb8bb55d"
+  }
+}

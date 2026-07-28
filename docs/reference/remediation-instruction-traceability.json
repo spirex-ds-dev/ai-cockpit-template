@@ -151,6 +151,15 @@
       "implementationEvidence": ["AGENTS.md", "Makefile", "scripts/ai_prepare_hosted_verification.py", ".ai/guards/coverage_policy.yaml", ".ai/cockpit/README.md", ".ai/cockpit/README.ja.md", "docs/reference/repository-workflow.md", "docs/reference/ai-cockpit-work-item-lifecycle.md"],
       "acceptanceEvidence": ["tests/test_hosted_verification_snapshot.py"],
       "verificationCommands": ["make ai-preflight", "make ai-prepare-hosted-verification-snapshot", "make check-instruction-traceability", "make ai-finish TASK=hosted-verification-snapshot-lifecycle-20260728", "make ai-close-work-item TASK=hosted-verification-snapshot-lifecycle-20260728"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-017",
+      "summary": "Make the 85 percent coverage floor compare at explicit two-decimal precision and prove the actual pytest-cov exit boundary so contradictory failure text can never be summarized as PASS.",
+      "planWorkItems": ["WI-20", "coverage-threshold-precision-recovery-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/coverage-threshold-precision-recovery-20260728.contract.json"],
+      "implementationEvidence": ["pyproject.toml"],
+      "acceptanceEvidence": ["tests/test_makefile.py", "tests/test_hosted_verification_snapshot.py"],
+      "verificationCommands": ["make ai-preflight", "make project-test", "make check-instruction-traceability", "make ai-finish TASK=coverage-threshold-precision-recovery-20260728", "make ai-close-work-item TASK=coverage-threshold-precision-recovery-20260728"]
     }
   ]
 }

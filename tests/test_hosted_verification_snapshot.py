@@ -99,6 +99,11 @@ def passing_quality(_root: Path) -> dict[str, str]:
     }
 
 
+def test_active_summary_path_rejects_a_non_contract_filename(tmp_path):
+    with pytest.raises(hosted.HostedVerificationError, match="must end with .contract.json"):
+        hosted.active_summary_path(tmp_path / "not-a-contract.json")
+
+
 def test_prepare_snapshot_binds_evidence_without_mutating_governed_state(tmp_path):
     root, contract_path = fixture_repository(tmp_path)
     summary_path = Path(str(contract_path).replace(".contract.json", ".summary.json"))
