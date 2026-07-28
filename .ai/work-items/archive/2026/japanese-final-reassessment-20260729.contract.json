@@ -1,0 +1,296 @@
+{
+  "contractVersion": 2,
+  "workItemId": "japanese-final-reassessment-20260729",
+  "mode": "code",
+  "title": "Complete the final Japanese capability reassessment",
+  "baseCommit": "26e8fb635d69260a2eb44e8408a5ca829cb88835",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/japanese-final-reassessment-20260729.contract.json",
+    ".ai/work-items/active/japanese-final-reassessment-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_japanese_capability.py",
+    "tests/test_japanese_capability.py",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/plans/2026-07-29-japanese-final-reassessment.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Claiming general provider/model Japanese fluency or native-human translation quality.",
+    "Repairing a newly discovered Japanese capability blocker inside this final assessment; every blocker requires a separate corrective Work Item.",
+    "Starting documentation alignment, deprecated code/logic/document cleanup, release publication, or plan cleanup.",
+    "Changing runtime security, identity, isolation, signing, branch protection, enterprise compliance, release metadata, tags, or GitHub Releases.",
+    "Reusing the closed source-binding corrective lifecycle as proof that this fresh final reassessment itself completed."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "WI-16 makes Japanese capability mandatory before release and requires separate corrective Work Items for every finding."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/japanese-assessment-source-binding-corrective-20260729.summary.json",
+      "reason": "Proves the assessment-definition source-binding corrective completed PR, Hosted, merge, closure, and cleanup before this fresh reassessment."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Canonical deterministic 12-domain Japanese evaluator and exact-source gate."
+    },
+    {
+      "path": "tests/test_japanese_capability.py",
+      "reason": "Executable coverage for corpus, output parity, lifecycle, report drift, source binding, and limitations."
+    },
+    {
+      "path": "tests/fixtures/japanese-capability-corpus.json",
+      "reason": "Independent versioned Japanese corpus covering language, injection, Unicode, encoding, paths, and high-risk requests."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Current machine-readable assessment baseline to be regenerated as the final reassessment."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.md",
+      "reason": "The only authority for current implemented capability status; assessment philosophy cannot promote capability claims."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release_gate_false_positive",
+      "localization_overclaim",
+      "stale_assessment",
+      "source_identity_mismatch"
+    ],
+    "reason": "A false or stale final Japanese pass could authorize release for the repository's primary Japanese-speaking adopter audience.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous serial execution and explicitly made Japanese capability a mandatory pre-release gate."
+  },
+  "preReviewWarnings": [
+    "Zero blockers proves only the bounded repository-governance matrix, not general Japanese fluency or translation quality.",
+    "The report must identify this fresh final reassessment, not the closed assessment-definition corrective.",
+    "Every newly discovered blocker must stop this Work Item and receive an independent corrective lifecycle.",
+    "Exact-source validation must use the committed PR Head before Hosted evidence is accepted."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Bind the high-risk final assessment definition and final evidence to one stable Contract."
+  },
+  "acceptance": [
+    "A1: The canonical report identifies japanese-final-reassessment-20260729 with workItemRole final_reassessment, and Markdown labels it as the final reassessment rather than an assessment-definition corrective.",
+    "A2: The complete 12-case Japanese repository-governance matrix is regenerated from the synchronized post-corrective main, binds every declared stable evidence file by SHA-256, and has zero blockingFindings.",
+    "A3: Japanese input trust, injection, Unicode/encoding/path handling, Wizard/CLI, Cockpit Status, PR/Task Outcome, installation/calibration/upgrade/rollback/uninstall lifecycle, and multilingual documentation evidence all remain executable and passing.",
+    "A4: The checked-in JSON and derived Markdown are deterministic, mutually aligned, stale on any bound-byte drift, stable on unrelated drift, and accepted only when every bound file matches the asserted exact source commit.",
+    "A5: General provider/model Japanese fluency and native-human translation quality remain explicit limitations and are never promoted to passed capability claims.",
+    "A6: Every non-zero blocker, if discovered, is recorded with a stable finding ID and receives a separate corrective Work Item before this reassessment can complete; a zero-blocker result is supported by direct machine evidence rather than inference.",
+    "A7: PLAN-DIRECTIVE-039, the comprehensive plan, Contract, implementation, reports, tests, Summary, and acceptance evidence map bidirectionally without deleting historical corrective identities.",
+    "A8: Full quality, ai-finish archive, aggregate PR verification, exact-Head Hosted checks, merge, ai-close-work-item, local/remote branch deletion, detached worktree removal, and synchronized clean main complete before documentation alignment starts.",
+    "A9: This Work Item changes no capability truth status, Japanese product behavior beyond assessment identity, release metadata, tag, GitHub Release, or later-stage completion state."
+  ],
+  "guidelines": [
+    "Japanese-speaking engineers are a required audience; do not infer Japanese capability from English-only behavior.",
+    "Evidence over self-declaration: every pass must remain bound to source, test, command, and exact-source evidence.",
+    "Treat missing, stale, ambiguous, English-inferred, or non-executable Japanese evidence as blocking.",
+    "Keep general Japanese model fluency and native-human translation quality as explicit non-claims.",
+    "Do not combine a newly discovered capability remediation with this final assessment.",
+    "Preserve the Capability Truth Matrix as the sole authority for current implementation status."
+  ],
+  "rawUserRequest": "Continue the approved serial plan. Japanese capability is mandatory before release. Complete a comprehensive Japanese evaluation after every corrective closes; if any problem is found, record and correct it through a separate complete Work Item lifecycle before continuing.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continue-fresh-final-japanese-reassessment",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:continue-fresh-final-japanese-reassessment-after-correctives"
+  },
+  "declaredIntent": {
+    "summary": "Complete the fresh exact-source final Japanese capability reassessment and close WI-16 before documentation alignment.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation",
+      "software_design"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "intent": {
+    "problem": "All Japanese capability and assessment-process correctives are closed, but the canonical report still identifies the last source-binding corrective as its Work Item. Release readiness requires a fresh final reassessment on the synchronized post-corrective main, with exact-source evidence and a distinct lifecycle.",
+    "constraints": [
+      "Use deterministic repository evidence and the independent Japanese corpus; do not claim provider/model fluency.",
+      "Do not hide, downgrade, or repair a newly discovered blocker inside this assessment Work Item.",
+      "Keep documentation alignment, deprecated cleanup, publication, and plan cleanup in later independent Work Items.",
+      "Require the committed PR Head to match every bound evidence byte before accepting Hosted evidence.",
+      "Complete PR, merge, closure, branch cleanup, and main synchronization before starting documentation alignment."
+    ],
+    "rationale": "A fresh final-assessment identity and lifecycle distinguish current release evidence from the historical corrective that merely defined the gate, while preserving fail-closed source binding and bounded claims."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The final report is regenerated after all Japanese correctives from the exact synchronized post-corrective main.",
+      "expected": "The report names this Work Item, uses final_reassessment role, binds stable evidence bytes, and contains zero blockers.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a red-first identity test, regenerate both reports, and run the exact-source gate on the committed PR Head."
+    },
+    {
+      "scenario": "Japanese corpus inputs exercise polite/plain language, technical mixtures, hidden instructions, Unicode controls, encoded content, paths, unknowns, and absurd/high-risk requests.",
+      "expected": "Authority boundaries and STOP/human-decision behavior remain fail closed in every required corpus domain.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run the Japanese capability, input-trust, and corpus suites and cite their exact test nodes."
+    },
+    {
+      "scenario": "Japanese engineers use Wizard/CLI, Cockpit Status, PR/Task Outcome, and the full adopter lifecycle.",
+      "expected": "Every supported surface has executable Japanese evidence and no English-inferred pass.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run Japanese CLI, Status, PR, adopter lifecycle, uninstall, and documentation evidence tests."
+    },
+    {
+      "scenario": "A bound evidence file differs from the asserted release source or the report is stale.",
+      "expected": "The gate fails before accepting zero blockers; unrelated repository drift does not produce a false stale result.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run source mismatch, dirty bound evidence, stale JSON/Markdown, and unrelated-drift regressions plus committed-Head validation."
+    },
+    {
+      "scenario": "General Japanese model fluency or human translation quality is requested as a release claim.",
+      "expected": "The report retains an explicit limitation and never labels that external capability as passed.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run the general-fluency non-claim regression and inspect both canonical reports."
+    },
+    {
+      "scenario": "The regenerated final matrix contains any blocking finding.",
+      "expected": "This reassessment stops and names a separate corrective Work Item; later stages remain pending.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Inspect blockingFindings directly and record either the named corrective queue or the machine-proved empty list."
+    },
+    {
+      "scenario": "The final reassessment has not completed PR, Hosted, merge, closure, and cleanup.",
+      "expected": "Documentation alignment and release remain blocked.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Record archive manifest, PR Head, Hosted checks, merge commit, closure output, branch absence, worktree removal, and synchronized main."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User",
+    "reason": "The user explicitly authorized continuous execution of the ordered plan and made final Japanese capability a mandatory pre-release requirement."
+  },
+  "rollbackNote": "Revert this final-assessment PR; retain all historical corrective archives and keep documentation alignment and release blocked until a fresh reassessment completes.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 657
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/japanese-final-reassessment-20260729.json",
+    "baseCommit": "26e8fb635d69260a2eb44e8408a5ca829cb88835",
+    "initialScopeDigest": "c4a482149bf2592b974202fb88e2f1cd6529f9886c8d6fd67a2b39c3a83eb31c",
+    "contractSkeletonDigest": "564be6d3c1605d540eb8ae57cbfebec8275050101a2af1207b05de7c24b6a2f8"
+  }
+}

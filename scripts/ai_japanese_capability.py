@@ -23,6 +23,8 @@ from ai_input_trust import SourceType, assess_input, re_evaluate_high_risk_opera
 
 
 ROOT = Path(__file__).resolve().parents[1]
+ASSESSMENT_WORK_ITEM_ID = "japanese-final-reassessment-20260729"
+ASSESSMENT_WORK_ITEM_ROLE = "final_reassessment"
 CORPUS_PATH = ROOT / "tests/fixtures/japanese-capability-corpus.json"
 JSON_REPORT_PATH = ROOT / "docs/reference/japanese-capability-assessment.json"
 MARKDOWN_REPORT_PATH = ROOT / "docs/reference/japanese-capability-assessment.md"
@@ -670,8 +672,8 @@ def evaluate() -> dict[str, Any]:
     evidence_paths.add("scripts/ai_japanese_capability.py")
     result: dict[str, Any] = {
         "assessmentVersion": 3,
-        "workItemId": "japanese-assessment-source-binding-corrective-20260729",
-        "workItemRole": "assessment_definition",
+        "workItemId": ASSESSMENT_WORK_ITEM_ID,
+        "workItemRole": ASSESSMENT_WORK_ITEM_ROLE,
         "scope": "bounded repository-governance Japanese handling",
         "evidenceSource": build_evidence_source(evidence_paths),
         "corpus": {
@@ -706,7 +708,7 @@ def render_markdown(result: dict[str, Any]) -> str:
         "",
         "> This is a release gate, not a claim of general Japanese model fluency.",
         "",
-        f"- Assessment definition Work Item: `{result['workItemId']}`",
+        f"- Final reassessment Work Item: `{result['workItemId']}`",
         f"- Assessment digest: `{result['digest']}`",
         f"- Evidence source: `{result['evidenceSource']['digest']}` "
         f"({result['evidenceSource']['fileCount']} files; "

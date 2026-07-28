@@ -8,9 +8,9 @@ description: Comprehensive, bounded, evidence-backed Japanese repository-governa
 
 > This is a release gate, not a claim of general Japanese model fluency.
 
-- Assessment definition Work Item: `japanese-assessment-source-binding-corrective-20260729`
-- Assessment digest: `sha256:50a69e9aec53d90666a30fcd05dcb209b67056611df0d10c84e24d3b6e9c28e3`
-- Evidence source: `sha256:abb4eff67df888f5dda91844c80b73abcb65dbb5ffa0779ccc21a1bcb131fce5` (45 files; `sha256-canonical-json-v1`)
+- Final reassessment Work Item: `japanese-final-reassessment-20260729`
+- Assessment digest: `sha256:8241bd8c7024b9f58e1509e503e33b40440fccdf13a2741709898c83fbacd354`
+- Evidence source: `sha256:33bbd2c1dedc37b6211ebd213e997c7944bc660e842989b285ae1ad56155fdc6` (45 files; `sha256-canonical-json-v1`)
 - Corpus: `tests/fixtures/japanese-capability-corpus.json` (`14` entries)
 - Blocking findings: `0`
 

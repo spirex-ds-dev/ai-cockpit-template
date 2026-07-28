@@ -397,6 +397,8 @@ def test_comprehensive_matrix_is_evidence_bound_and_reports_current_blockers():
     result = evaluate()
 
     assert result["assessmentVersion"] == 3
+    assert result["workItemId"] == "japanese-final-reassessment-20260729"
+    assert result["workItemRole"] == "final_reassessment"
     assert result["scope"] == "bounded repository-governance Japanese handling"
     assert len(result["cases"]) >= 10
     for case in result["cases"]:
@@ -445,6 +447,8 @@ def test_json_and_markdown_are_deterministic_views_of_one_result():
     assert render_json(first) == render_json(second)
     markdown = render_markdown(first)
     assert first["digest"] in markdown
+    assert "- Final reassessment Work Item: `japanese-final-reassessment-20260729`" in markdown
+    assert "Assessment definition Work Item" not in markdown
     assert "JA-CLI-001" in markdown
     status_case = next(case for case in first["cases"] if case["id"] == "JA-STATUS-001")
     pr_case = next(case for case in first["cases"] if case["id"] == "JA-PR-001")
