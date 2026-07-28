@@ -10,6 +10,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
+import re
+
+# The executable and every argument list are fixed below.
+import subprocess  # nosec B404
 import sys
 from pathlib import Path
 from typing import Any
@@ -82,9 +87,134 @@ JAPANESE_UNINSTALL_MARKERS = (
 )
 
 
+class JapaneseCapabilityError(ValueError):
+    """Raised when Japanese assessment evidence cannot be trusted."""
+
+
 def _digest(value: Any) -> str:
     encoded = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
     return "sha256:" + hashlib.sha256(encoded).hexdigest()
+
+
+def build_evidence_source(
+    paths: list[str] | set[str] | tuple[str, ...], *, root: Path = ROOT
+) -> dict[str, Any]:
+    """Build a deterministic identity for repository evidence file bytes."""
+    root = root.resolve()
+    files: list[dict[str, str]] = []
+    normalized_paths: set[str] = set()
+    for raw_path in paths:
+        relative = Path(raw_path)
+        if relative.is_absolute():
+            raise JapaneseCapabilityError(
+                f"Japanese evidence path must be repository-relative: {raw_path}"
+            )
+        if ".." in relative.parts:
+            raise JapaneseCapabilityError(f"Japanese evidence path escapes repository: {raw_path}")
+        normalized_paths.add(relative.as_posix())
+    for normalized_path in sorted(normalized_paths):
+        relative = Path(normalized_path)
+        unresolved = root / relative
+        path_cursor = unresolved
+        while path_cursor != root:
+            if path_cursor.is_symlink():
+                raise JapaneseCapabilityError(
+                    f"Japanese evidence path must not contain a symbolic link: {normalized_path}"
+                )
+            path_cursor = path_cursor.parent
+        candidate = unresolved.resolve()
+        try:
+            candidate.relative_to(root)
+        except ValueError as exc:
+            raise JapaneseCapabilityError(
+                f"Japanese evidence path escapes repository: {normalized_path}"
+            ) from exc
+        if not candidate.exists():
+            raise JapaneseCapabilityError(f"Japanese evidence file is missing: {normalized_path}")
+        if not candidate.is_file():
+            raise JapaneseCapabilityError(
+                f"Japanese evidence path must be a regular file: {normalized_path}"
+            )
+        files.append(
+            {
+                "path": relative.as_posix(),
+                "sha256": hashlib.sha256(candidate.read_bytes()).hexdigest(),
+            }
+        )
+    identity: dict[str, Any] = {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": len(files),
+        "files": files,
+    }
+    identity["digest"] = _digest(identity)
+    return identity
+
+
+def _resolve_git_commit(root: Path, ref: str) -> str:
+    try:
+        result = subprocess.run(  # nosec B603 B607
+            ["git", "-C", str(root), "rev-parse", f"{ref}^{{commit}}"],
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise JapaneseCapabilityError(
+            f"Japanese assessment source cannot be resolved: {ref}"
+        ) from exc
+    commit = result.stdout.strip()
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        raise JapaneseCapabilityError(
+            f"Japanese assessment source did not resolve to a commit: {ref}"
+        )
+    return commit
+
+
+def _git_file_sha256(root: Path, commit: str, relative: str) -> str:
+    try:
+        result = subprocess.run(  # nosec B603 B607
+            ["git", "-C", str(root), "show", f"{commit}:{relative}"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise JapaneseCapabilityError(
+            f"Japanese evidence file cannot be read from expected source: {relative}"
+        ) from exc
+    return hashlib.sha256(result.stdout).hexdigest()
+
+
+def validate_expected_source(
+    root: Path,
+    expected_ref: str,
+    *,
+    evidence_source: dict[str, Any] | None = None,
+) -> str:
+    """Require the asserted release source to equal checked-out HEAD."""
+    expected = _resolve_git_commit(root, expected_ref)
+    head = _resolve_git_commit(root, "HEAD")
+    if head != expected:
+        raise JapaneseCapabilityError(
+            f"Japanese assessment HEAD {head} does not match expected source {expected}"
+        )
+    if evidence_source is not None:
+        files = evidence_source.get("files")
+        if not isinstance(files, list):
+            raise JapaneseCapabilityError("Japanese evidence source files are missing")
+        for entry in files:
+            if not isinstance(entry, dict):
+                raise JapaneseCapabilityError("Japanese evidence source entry is invalid")
+            relative = entry.get("path")
+            digest = entry.get("sha256")
+            if not isinstance(relative, str) or not isinstance(digest, str):
+                raise JapaneseCapabilityError("Japanese evidence source entry is invalid")
+            if _git_file_sha256(root, expected, relative) != digest:
+                raise JapaneseCapabilityError(
+                    f"Japanese evidence file {relative} bytes do not match expected source {expected}"
+                )
+    return head
 
 
 def _read(relative: str) -> str:
@@ -374,7 +504,6 @@ def evaluate() -> dict[str, Any]:
                 "scripts/ai_generate_status.py",
                 "scripts/ai_check_status.py",
                 "Makefile",
-                ".ai/cockpit/current_status.md",
             ],
             tests=["tests/test_guards_and_status.py", "tests/test_core_gates.py"],
             commands=[
@@ -532,10 +661,19 @@ def evaluate() -> dict[str, Any]:
                     **FINDINGS[finding_id],
                 }
             )
+    evidence_paths = {
+        path
+        for case in cases
+        for field in ("sourceEvidence", "testEvidence")
+        for path in case[field]
+    }
+    evidence_paths.add("scripts/ai_japanese_capability.py")
     result: dict[str, Any] = {
-        "assessmentVersion": 2,
-        "workItemId": "japanese-assessment-depth-corrective-20260729",
+        "assessmentVersion": 3,
+        "workItemId": "japanese-assessment-source-binding-corrective-20260729",
+        "workItemRole": "assessment_definition",
         "scope": "bounded repository-governance Japanese handling",
+        "evidenceSource": build_evidence_source(evidence_paths),
         "corpus": {
             "path": str(CORPUS_PATH.relative_to(ROOT)),
             "digest": _digest(_load_corpus()),
@@ -568,8 +706,11 @@ def render_markdown(result: dict[str, Any]) -> str:
         "",
         "> This is a release gate, not a claim of general Japanese model fluency.",
         "",
-        f"- Work Item: `{result['workItemId']}`",
+        f"- Assessment definition Work Item: `{result['workItemId']}`",
         f"- Assessment digest: `{result['digest']}`",
+        f"- Evidence source: `{result['evidenceSource']['digest']}` "
+        f"({result['evidenceSource']['fileCount']} files; "
+        f"`{result['evidenceSource']['algorithm']}`)",
         f"- Corpus: `{result['corpus']['path']}` (`{result['corpus']['entryCount']}` entries)",
         f"- Blocking findings: `{len(result['blockingFindings'])}`",
         "",
@@ -640,8 +781,27 @@ def main() -> int:
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--write", action="store_true", help="write JSON and Markdown reports")
     mode.add_argument("--check", action="store_true", help="verify checked-in reports")
+    parser.add_argument(
+        "--source-commit",
+        help="require the asserted source commit to equal checked-out HEAD",
+    )
     args = parser.parse_args()
-    result = evaluate()
+    try:
+        source_commit = args.source_commit
+        if source_commit is None:
+            source_commit = os.environ.get("RELEASE_PREFLIGHT_SOURCE_COMMIT") or None
+        if source_commit is not None and not source_commit.strip():
+            raise JapaneseCapabilityError("Japanese assessment source commit must not be empty")
+        result = evaluate()
+        if source_commit is not None:
+            validate_expected_source(
+                ROOT,
+                source_commit,
+                evidence_source=result["evidenceSource"],
+            )
+    except JapaneseCapabilityError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
     if args.write:
         JSON_REPORT_PATH.write_text(render_json(result), encoding="utf-8")
         MARKDOWN_REPORT_PATH.write_text(render_markdown(result), encoding="utf-8")

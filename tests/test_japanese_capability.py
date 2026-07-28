@@ -1,6 +1,10 @@
+import copy
 import json
+import subprocess
 import sys
+from pathlib import Path
 
+import pytest
 import ai_japanese_capability
 from ai_japanese_capability import (
     CORPUS_PATH,
@@ -12,6 +16,169 @@ from ai_japanese_capability import (
 
 
 EXPECTED_FINDINGS = {}
+
+
+def _git(root: Path, *args: str) -> str:
+    result = subprocess.run(
+        ["git", *args],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    return result.stdout.strip()
+
+
+def test_evidence_source_identity_changes_when_bound_file_bytes_change(tmp_path):
+    (tmp_path / "docs").mkdir()
+    first = tmp_path / "docs/first.md"
+    second = tmp_path / "docs/second.md"
+    first.write_text("alpha\n", encoding="utf-8")
+    second.write_text("beta\n", encoding="utf-8")
+
+    before = ai_japanese_capability.build_evidence_source(
+        ["docs/second.md", "docs/first.md"], root=tmp_path
+    )
+    first.write_text("alpha \n", encoding="utf-8")
+    after = ai_japanese_capability.build_evidence_source(
+        ["docs/second.md", "docs/first.md"], root=tmp_path
+    )
+
+    assert before["files"] == [
+        {
+            "path": "docs/first.md",
+            "sha256": "b6a98d9ce9a2d9149288fa3df42d377c3e42737afdcdaf714e33c0a100b51060",
+        },
+        {
+            "path": "docs/second.md",
+            "sha256": "f2c82decdd7181cf98945929a62598db7e6b477e11f6e0eb0ae97020eff151ad",
+        },
+    ]
+    assert after["files"][0] == {
+        "path": "docs/first.md",
+        "sha256": "94282539899bace79ab7110cb3e34b89cbe2bc965c3a9023d229baec25a555ea",
+    }
+    assert before["digest"] != after["digest"]
+
+
+def test_evidence_source_normalizes_aliases_before_deduplicating(tmp_path):
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "docs/evidence.md").write_text("evidence\n", encoding="utf-8")
+
+    result = ai_japanese_capability.build_evidence_source(
+        ["docs/evidence.md", "docs/./evidence.md"],
+        root=tmp_path,
+    )
+
+    assert result["fileCount"] == 1
+    assert [entry["path"] for entry in result["files"]] == ["docs/evidence.md"]
+
+
+def test_evidence_source_rejects_symbolic_links(tmp_path):
+    target = tmp_path / "target.md"
+    target.write_text("target\n", encoding="utf-8")
+    (tmp_path / "alias.md").symlink_to(target)
+
+    with pytest.raises(
+        ai_japanese_capability.JapaneseCapabilityError,
+        match="symbolic link",
+    ):
+        ai_japanese_capability.build_evidence_source(["alias.md"], root=tmp_path)
+
+
+@pytest.mark.parametrize(
+    ("relative", "setup", "diagnostic"),
+    [
+        ("missing.md", "missing", "missing"),
+        ("directory", "directory", "regular file"),
+        ("/absolute.md", "none", "repository-relative"),
+        ("../escape.md", "none", "escapes repository"),
+    ],
+)
+def test_evidence_source_identity_rejects_unbound_paths(tmp_path, relative, setup, diagnostic):
+    if setup == "directory":
+        (tmp_path / relative).mkdir()
+
+    with pytest.raises(
+        ai_japanese_capability.JapaneseCapabilityError,
+        match=diagnostic,
+    ):
+        ai_japanese_capability.build_evidence_source([relative], root=tmp_path)
+
+
+def test_assessment_inventory_binds_stable_evidence_not_transient_status():
+    result = evaluate()
+    paths = {entry["path"] for entry in result["evidenceSource"]["files"]}
+    case_paths = {
+        path
+        for case in result["cases"]
+        for field in ("sourceEvidence", "testEvidence")
+        for path in case[field]
+    }
+
+    assert "scripts/ai_japanese_capability.py" in paths
+    assert ".ai/cockpit/current_status.md" not in case_paths
+    assert ".ai/cockpit/current_status.md" not in paths
+    assert case_paths <= paths
+
+
+def test_expected_source_rejects_a_different_checked_out_head(tmp_path):
+    _git(tmp_path, "init", "-q")
+    _git(tmp_path, "config", "user.email", "test@example.invalid")
+    _git(tmp_path, "config", "user.name", "Test User")
+    tracked = tmp_path / "tracked.txt"
+    tracked.write_text("first\n", encoding="utf-8")
+    _git(tmp_path, "add", "tracked.txt")
+    _git(tmp_path, "commit", "-q", "-m", "first")
+    first = _git(tmp_path, "rev-parse", "HEAD")
+    tracked.write_text("second\n", encoding="utf-8")
+    _git(tmp_path, "commit", "-q", "-am", "second")
+    second = _git(tmp_path, "rev-parse", "HEAD")
+
+    with pytest.raises(
+        ai_japanese_capability.JapaneseCapabilityError,
+        match=f"HEAD {second} does not match expected source {first}",
+    ):
+        ai_japanese_capability.validate_expected_source(tmp_path, first)
+
+
+def test_expected_source_accepts_the_exact_checked_out_head(tmp_path):
+    _git(tmp_path, "init", "-q")
+    _git(tmp_path, "config", "user.email", "test@example.invalid")
+    _git(tmp_path, "config", "user.name", "Test User")
+    (tmp_path / "tracked.txt").write_text("only\n", encoding="utf-8")
+    _git(tmp_path, "add", "tracked.txt")
+    _git(tmp_path, "commit", "-q", "-m", "only")
+    head = _git(tmp_path, "rev-parse", "HEAD")
+    evidence_source = ai_japanese_capability.build_evidence_source(["tracked.txt"], root=tmp_path)
+
+    assert (
+        ai_japanese_capability.validate_expected_source(
+            tmp_path, head, evidence_source=evidence_source
+        )
+        == head
+    )
+
+
+def test_expected_source_rejects_dirty_bound_evidence_at_the_same_head(tmp_path):
+    _git(tmp_path, "init", "-q")
+    _git(tmp_path, "config", "user.email", "test@example.invalid")
+    _git(tmp_path, "config", "user.name", "Test User")
+    tracked = tmp_path / "tracked.txt"
+    tracked.write_text("committed\n", encoding="utf-8")
+    _git(tmp_path, "add", "tracked.txt")
+    _git(tmp_path, "commit", "-q", "-m", "committed")
+    head = _git(tmp_path, "rev-parse", "HEAD")
+    tracked.write_text("dirty\n", encoding="utf-8")
+    evidence_source = ai_japanese_capability.build_evidence_source(["tracked.txt"], root=tmp_path)
+
+    with pytest.raises(
+        ai_japanese_capability.JapaneseCapabilityError,
+        match="tracked.txt bytes do not match expected source",
+    ):
+        ai_japanese_capability.validate_expected_source(
+            tmp_path, head, evidence_source=evidence_source
+        )
 
 
 def test_status_capability_requires_generator_checker_make_and_executable_parity(
@@ -229,7 +396,7 @@ def test_independent_corpus_covers_every_required_japanese_input_domain():
 def test_comprehensive_matrix_is_evidence_bound_and_reports_current_blockers():
     result = evaluate()
 
-    assert result["assessmentVersion"] == 2
+    assert result["assessmentVersion"] == 3
     assert result["scope"] == "bounded repository-governance Japanese handling"
     assert len(result["cases"]) >= 10
     for case in result["cases"]:
@@ -306,6 +473,55 @@ def test_report_drift_rejects_stale_json_and_markdown(tmp_path):
     assert report_drift(result, json_path=json_path, markdown_path=markdown_path) == [
         f"stale Japanese assessment Markdown: {markdown_path}"
     ]
+
+
+def test_bound_evidence_byte_drift_stales_both_reports_without_unrelated_false_positive(
+    tmp_path,
+):
+    bound = tmp_path / "bound.md"
+    unrelated = tmp_path / "unrelated.md"
+    bound.write_text("bound\n", encoding="utf-8")
+    unrelated.write_text("unrelated\n", encoding="utf-8")
+    result = copy.deepcopy(evaluate())
+    result["evidenceSource"] = ai_japanese_capability.build_evidence_source(
+        ["bound.md"], root=tmp_path
+    )
+    result.pop("digest", None)
+    result["digest"] = ai_japanese_capability._digest(result)
+    json_path = tmp_path / "assessment.json"
+    markdown_path = tmp_path / "assessment.md"
+    json_path.write_text(render_json(result), encoding="utf-8")
+    markdown_path.write_text(render_markdown(result), encoding="utf-8")
+
+    unrelated.write_text("unrelated changed\n", encoding="utf-8")
+    unchanged = copy.deepcopy(result)
+    unchanged["evidenceSource"] = ai_japanese_capability.build_evidence_source(
+        ["bound.md"], root=tmp_path
+    )
+    unchanged.pop("digest", None)
+    unchanged["digest"] = ai_japanese_capability._digest(unchanged)
+    assert report_drift(unchanged, json_path=json_path, markdown_path=markdown_path) == []
+
+    bound.write_text("bound changed\n", encoding="utf-8")
+    changed = copy.deepcopy(result)
+    changed["evidenceSource"] = ai_japanese_capability.build_evidence_source(
+        ["bound.md"], root=tmp_path
+    )
+    changed.pop("digest", None)
+    changed["digest"] = ai_japanese_capability._digest(changed)
+    assert report_drift(changed, json_path=json_path, markdown_path=markdown_path) == [
+        f"stale Japanese assessment JSON: {json_path}",
+        f"stale Japanese assessment Markdown: {markdown_path}",
+    ]
+
+
+def test_cli_rejects_an_explicit_empty_source_commit(monkeypatch, capsys):
+    monkeypatch.setattr(
+        sys, "argv", ["ai_japanese_capability.py", "--check", "--source-commit", ""]
+    )
+
+    assert ai_japanese_capability.main() == 2
+    assert "source commit must not be empty" in capsys.readouterr().err
 
 
 def test_cli_writes_both_reports_without_blocking_after_installed_lifecycle(

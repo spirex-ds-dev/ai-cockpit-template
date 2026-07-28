@@ -1239,6 +1239,43 @@
         "make check-ai-pr AI_BASE_COMMIT=3dd1d7f3c134a5398bfc7ab9c10fa4c4ce7d66fa",
         "make ai-close-work-item TASK=wi10-installation-version-neutral"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-038",
+      "summary": "Fix the Japanese release assessment source-binding false positive before final reassessment: bind all stable evidence bytes, reject missing or escaping inputs, verify the asserted release source equals HEAD, and preserve the bounded Japanese capability non-claim.",
+      "planWorkItems": [
+        "WI-16",
+        "RFE-ISSUE-154",
+        "japanese-assessment-source-binding-corrective-20260729"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/japanese-assessment-source-binding-corrective-20260729.contract.json"
+      ],
+      "implementationEvidence": [
+        "Makefile",
+        "scripts/ai_japanese_capability.py",
+        "scripts/check_release_preflight.py",
+        "docs/reference/japanese-capability-assessment.json",
+        "docs/reference/japanese-capability-assessment.md",
+        "docs/superpowers/plans/2026-07-29-japanese-assessment-source-binding-corrective.md",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_japanese_capability.py",
+        "tests/test_makefile.py",
+        ".ai/work-items/archive/2026/japanese-assessment-source-binding-corrective-20260729.summary.json",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        "PYTHONPATH=scripts:. .venv/bin/pytest -q tests/test_japanese_capability.py tests/test_makefile.py",
+        "PYTHONPATH=scripts:. .venv/bin/python scripts/ai_japanese_capability.py --check",
+        "make -n check-release-preflight RELEASE_PREFLIGHT_SOURCE_COMMIT=$(git rev-parse HEAD) and executable environment-propagation regression in tests/test_makefile.py",
+        "make check-instruction-traceability",
+        "make quality",
+        "make ai-finish TASK=japanese-assessment-source-binding-corrective-20260729",
+        "make check-ai-pr AI_BASE_COMMIT=83ba616981a1003342b37220b958823d53b85410",
+        "make ai-close-work-item TASK=japanese-assessment-source-binding-corrective-20260729"
+      ]
     }
   ]
 }

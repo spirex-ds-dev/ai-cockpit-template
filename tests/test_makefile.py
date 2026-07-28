@@ -1,7 +1,8 @@
-import subprocess
+import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -335,12 +336,48 @@ def test_distributed_makefile_no_active_branch_requires_pr_gate():
     assert 'check-ai-pr AI_BASE_COMMIT="$(AI_BASE_COMMIT)"' in template
 
 
-def test_release_preflight_requires_current_japanese_capability_evidence():
-    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+def test_release_preflight_requires_current_japanese_capability_evidence(tmp_path):
+    marker = tmp_path / "injected"
+    source_commit = f'bad"; touch {marker}; #'
+    probe = tmp_path / "probe.py"
+    probe.write_text(
+        "#!/usr/bin/env python3\n"
+        "import json, os, sys\n"
+        "print(json.dumps({'argv': sys.argv[1:], "
+        "'source': os.environ.get('RELEASE_PREFLIGHT_SOURCE_COMMIT')}))\n",
+        encoding="utf-8",
+    )
+    probe.chmod(0o755)
+    result = subprocess.run(
+        [
+            "make",
+            "check-release-preflight",
+            f"RELEASE_PREFLIGHT_SOURCE_COMMIT={source_commit}",
+            f"PYTHON={probe}",
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
 
-    assert "check-japanese-capability:" in makefile
-    assert "check-release-preflight: check-japanese-capability" in makefile
-    assert "scripts/ai_japanese_capability.py --check" in makefile
+    assert result.returncode == 0, result.stdout + result.stderr
+    records = [
+        json.loads(line)
+        for line in result.stdout.splitlines()
+        if line.startswith("{") and '"argv"' in line
+    ]
+    assert records == [
+        {
+            "argv": ["scripts/ai_japanese_capability.py", "--check"],
+            "source": source_commit,
+        },
+        {
+            "argv": ["scripts/check_release_preflight.py", "--root", "."],
+            "source": source_commit,
+        },
+    ]
+    assert not marker.exists()
 
 
 def test_makefile_exposes_paired_japanese_status_generation_and_validation():
