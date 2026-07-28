@@ -10,6 +10,10 @@ keywords:
 
 # Standard Adoption Guide
 
+This lifecycle summary assumes you are following the complete beginner-safe
+[Installation](installation.md); do not infer a missing
+scaffold or calibration step from this shorter page.
+
 <!-- semantic-domain: north-star -->
 <!-- semantic-domain: product-boundary -->
 AI Cockpit is a Repository Governance Layer for calibrated Human-Agent Trust. It
@@ -30,10 +34,26 @@ Install from a published release into the target repository, finish
 Installation places the governance runtime; it does not complete project
 adaptation.
 
+Beginners should use the copy-ready prompts in Installation. The command blocks
+below are advanced-operator references and must not be run as an unattended
+script. Ask the agent to explain and execute only the current governed phase.
+
+```text
+Follow Installation’s Adoption closure prompts one decision at a time. First
+finish/archive locally and show evidence. Then wait separately for commit,
+push/PR, human merge, and closure decisions. Do not execute the block below as
+one script and do not start configuration before Adoption closure.
+```
+
 <!-- command-evidence: adopter_required -->
 ```sh
 make ai-finish TASK=adopt_ai_cockpit
-# Stop for approval before the archive-bundle commit.
+```
+
+Stop, show the archive/diff, and obtain separate commit approval. Only then:
+
+<!-- command-evidence: adopter_required -->
+```sh
 git add .
 git commit -m "adopt AI Cockpit governance"
 make check-ai-pr AI_BASE_COMMIT='<pre-adoption-commit>'
@@ -53,7 +73,7 @@ make ai-close-work-item TASK=adopt_ai_cockpit
 ```
 
 Closure verifies base synchronization and deletes the local and remote Work Item
-branch. See [Installation — Adoption](installation.md#phase-3-adoption) for the
+branch. See [Installation — close Adoption](installation.md#close-the-adoption-work-item-before-calibration) for the
 full stop conditions.
 
 <!-- doc-domain: calibration -->
@@ -62,6 +82,12 @@ full stop conditions.
 Use a separate `configure_ai_cockpit` Work Item to review Project Profile,
 Guard, quality-command, Coverage, and CI evidence. Unknown or stale evidence
 blocks readiness.
+
+```text
+Follow Installation’s ten Calibration stages one at a time. Explain evidence,
+sample meaning, safe answer choices, PASS/STOP, and owner before recording each
+answer. Do not copy or activate the proposed Profile as approval.
+```
 
 <!-- command-evidence: adopter_required -->
 ```sh
@@ -94,6 +120,12 @@ risk rather than reporting only success.
 Fetch full Git history and require both the public project quality target and
 `check-ai-pr`. Hosted template fixtures do not prove the adopter's commands.
 
+```text
+Read the Contract’s remote/default branch and CI requirements. Show the exact
+base, required jobs, and command provenance before running checks. Stop on
+Unknown, shallow history, skipped jobs, wrong Head SHA, or any failure.
+```
+
 <!-- command-evidence: adopter_required -->
 ```sh
 ADOPTER_REMOTE="${ADOPTER_REMOTE:?use the remote recorded in the Contract}"
@@ -108,7 +140,7 @@ make check-ai-pr AI_BASE_COMMIT="$(git merge-base HEAD "$ADOPTER_REMOTE/$ADOPTER
 
 In an adopter project, stop for separate human decisions before commit, push,
 merge, and `ai-close-work-item`, as defined in
-[Installation — Adoption](installation.md#phase-3-adoption).
+[Installation — close Adoption](installation.md#close-the-adoption-work-item-before-calibration).
 Automatic merge or provider-side branch deletion must not bypass lifecycle
 closure.
 

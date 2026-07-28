@@ -54,6 +54,22 @@ Runtime 安装不等于校准完成。当前 `configure_ai_cockpit` 主要生成
 
 AI Cockpit 不是业务技能或 Agent Runtime，而是 Human-Agent Trust Layer：使用可复核证据判断智能体何时可以继续、何时必须由人类决策、何时必须停止治理路径。阅读[Human-Agent Trust Layer](docs/trust-layer.zh-CN.md)。
 
+## 交互入口
+
+在 TTY 中无参数执行 `./install.sh`，或使用 `--interactive`，会进入八步
+Installation Wizard。它只接受一个数字 mode（`1` New Adoption、`2` Upgrade、
+`3` Dry Run），展示写入计划，并在明确确认前不写入；不会 commit、push、创建 PR
+或 merge。当前底层 selector 本身不显示这些标签，因此 prompt-first 安装手顺提供
+数字对应表与审核上下文；非交互的无参数执行 fail closed，明确的 legacy flags
+继续保持其 deterministic 行为。安装后由代理使用已安装的
+`make cockpit-calibrate-session ARGS="..."` 进行可暂停/恢复的十阶段校准。
+`make cockpit-calibration-wizard` 只存在于模板维护仓库，不会安装到采用方工程。
+Unknown 或 stale 证据会阻断，Candidate 激活必须分别得到 Reviewer 和 Owner 确认。
+
+移动端实例是 evidence fixture 与文档场景。Hosted 验证目前只覆盖最小 Swift
+Package 和 Android smoke；Xcode project/workspace、CocoaPods、工程特定 Gradle
+variant、host JDK 和 instrumented execution 必须由采用方校准，Wizard 不作保证。
+
 ## 什么是 AI Cockpit？
 
 **AI Cockpit 是面向 AI 辅助软件开发的代码仓库治理层。** 这是实现上述使命的具体产品边界。
@@ -113,6 +129,19 @@ Review 从上下文开始。
 
 ## 安装最新公开运行时
 
+初学者先把下面提示词复制给已打开目标工程的代理：
+
+```text
+请严格按照完整中文安装手顺为这个工程安装 AI Cockpit。先只读检查前置条件和工程，
+逐步解释术语，只使用权威公开固定 release（除非我提供已验证 private mirror）。
+每一步必须显示证据、预期结果、PASS/STOP 和应联系的人。写入、commit、push、
+准备 PR、人工 merge、lifecycle closure、configuration 必须分别向我确认。
+绝不能把后续步骤放进一个连续 shell block 自动执行。
+```
+
+以下是**高级手工备用命令**，不是初学者首选。只执行到本地 finish/archive 后停止：
+
+<!-- command-evidence: adopter_required -->
 ```sh
 STACK="${STACK:-generic}" # generic、python、go、rust、typescript、java、android、kotlin、flutter、swift、ruby、php 或 csharp
 PUBLIC_REPOSITORY="${AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY:-https://github.com/spirex-ds-dev/ai-cockpit-template.git}"
@@ -123,18 +152,39 @@ trap 'rm -f "$INSTALLER"' EXIT
 curl -fsSL "${RAW_BASE}/${RELEASE_TAG}/install.sh" -o "$INSTALLER"
 AI_COCKPIT_TEMPLATE_REPO="$PUBLIC_REPOSITORY" \
   AI_COCKPIT_TEMPLATE_REF="$RELEASE_TAG" sh "$INSTALLER" --stack "$STACK" --update-makefile --create-adoption
-ADOPTION_BASE="$(git rev-parse HEAD)" # installer 已从远程默认分支创建采用分支
 make ai-finish TASK=adopt_ai_cockpit
+```
+
+停止并审核 archive/diff。另行取得人工 commit 批准后：
+
+<!-- command-evidence: adopter_required -->
+```sh
+ADOPTION_CONTRACT="$(python3 -c 'import json; entries=[item for item in json.load(open(".ai/work-items/archive/index.json"))["entries"] if item["workItemId"]=="adopt_ai_cockpit"]; assert len(entries)==1; print(entries[0]["contractPath"])')"
+ADOPTION_BASE="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["baseCommit"])' "$ADOPTION_CONTRACT")"
 git add .
 git commit -m "adopt AI Cockpit governance"
 make check-ai-pr AI_BASE_COMMIT="$ADOPTION_BASE"
+```
+
+停止。另行批准 push、创建 PR、通过 hosted CI，并由人 merge。再次取得 lifecycle
+closure 批准后，才单独执行：
+
+<!-- command-evidence: adopter_required -->
+```sh
+make ai-close-work-item TASK=adopt_ai_cockpit
+```
+
+closure 同步默认分支以后，另行开始 configuration：
+
+<!-- command-evidence: adopter_required -->
+```sh
 CONFIG_BASE="$(git rev-parse HEAD)"
 make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this project" MODE=code
 ```
 
 对于对象工程，完成本地 finish/archive 后必须先人工允许 `git commit`，再单独人工允许 `git push`。PR 可以由工具准备，但合并必须人工完成。PR 手动合并后，还必须再次人工允许 `make ai-close-work-item TASK=<task>`；不得启用自动合并或自动删除分支。该保守门禁只适用于安装和升级的对象工程，模版工程自身维护流程保持不变。
 
-该命令优先读取公开的 `release.json`；在发布元数据尚未上线的过渡期，则选择远程最高语义化版本标签。远程 tag 本身不等于平台发布证据。随后只下载并执行解析出的固定标签安装器。公开版本的能力可能落后于源码树；创建首次采用 PR 前请先阅读[安装文档](docs/getting-started/installation.md)。
+该命令优先读取公开的 `release.json`；在发布元数据尚未上线的过渡期，则选择远程最高语义化版本标签。远程 tag 本身不等于平台发布证据。随后只下载并执行解析出的固定标签安装器。公开版本的能力可能落后于源码树；创建首次采用 PR 前请先阅读[完整中文安装手顺](docs/getting-started/installation.zh-CN.md)。
 如果发布元数据或标签并非公开可访问，就不要把这条快速安装流程当成匿名安装路径。`AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY` 和 `AI_COCKPIT_TEMPLATE_RAW_BASE` 只用于解析 release tag 和获取安装器，而安装器本身仍会通过 `AI_COCKPIT_TEMPLATE_REPO` 和 `AI_COCKPIT_TEMPLATE_SOURCE` 选择 clone / source。此时应改用本地克隆或显式配置的源码来源。
 
 先审阅并扩展生成的配置 Contract scope，再修改 Project Profile、Guard、质量命令和 CI。然后在启用阻断型门禁前，根据目标工程校准治理运行时：
@@ -151,6 +201,12 @@ make check-ai-project-profile
 make check-ai-guard-calibration
 make check-ai-adoption-ready
 make ai-finish TASK=configure_ai_cockpit
+```
+
+停止并审核 configuration archive/diff。另行批准 commit 后：
+
+<!-- command-evidence: adopter_required -->
+```sh
 git add .
 git commit -m "configure AI Cockpit for this project"
 make check-ai-pr AI_BASE_COMMIT="$CONFIG_BASE"
@@ -233,7 +289,8 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 <!-- stack-tiers: verified=python,go,rust,typescript,java,kotlin,ruby,php,csharp,flutter,android,swift; workflow-implemented=; preset-only=generic -->
 
 - **Hosted CI 已验证：** `python`、`go`、`rust`、`typescript` 在 `real-stack-quality` 中运行；`java`、`kotlin`、`ruby`、`php`、`csharp` 在 `extended-real-stack-quality` 中运行；`flutter`、`android`、`swift` 在 `mobile-stack-quality` 中对最小工程执行 `make ai-cockpit-quality`。
-- **Swift 验证范围：** `mobile-stack-quality` 仅覆盖最小 Swift Package Manager fixture，不包含 Xcode 工程、workspace 或 CocoaPods；这些布局需在安装后进行 Project Calibration。详见 [Installation](docs/getting-started/installation.md) 与 [Swift Adaptation Example](examples/swift/README.md)。
+- **Swift 验证范围：** 这里只验证一个最小 Swift 软件包，不代表真实 iPhone/iPad 工程、Xcode workspace 或 CocoaPods 依赖已经可用；这些布局必须在安装后完成工程校准。
+- **初学者平台手顺：** 从[完整中文安装手顺](docs/getting-started/installation.zh-CN.md)进入 [iOS](docs/getting-started/examples/ios.zh-CN.md)、[Android](docs/getting-started/examples/android.zh-CN.md)或 [Java](docs/getting-started/examples/java.zh-CN.md)实例。发现平台文件只说明“可能是哪种工程”，不能证明开发工具、设备、签名凭据或云端 CI 已工作。
 - **仅预设：** `generic` 在完成配置前会按设计失败关闭。
 - **不支持的运行环境：** 原生 Windows shell。请使用 WSL 或其他 POSIX 环境。
 
@@ -264,7 +321,7 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 
 ## 进阶文档
 
-- [安装](docs/getting-started/installation.md)
+- [完整中文安装手顺](docs/getting-started/installation.zh-CN.md)
 - [概念导读（日文）](docs/overview.ja.md)
 - [路线图 (V1〜V4)](docs/roadmap.md)
 - [字段说明手册](docs/contract-fields.md)

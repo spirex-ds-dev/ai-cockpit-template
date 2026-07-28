@@ -10,10 +10,28 @@ keywords:
 
 # 30 秒开始
 
+前提条件、Wizard 全部选项、脚手架检查、十阶段校准、第一个 PR、故障恢复与平台实例，请继续阅读[完整中文安装手顺](installation.zh-CN.md)。
+
 <!-- doc-domain: wizard-start -->
 ## 启动 Wizard
 
-在已有初始提交、工作区干净的对象工程中，解析公开 tag、下载该 tag 的 installer，再启动 Installation Wizard。可直接复制的默认值指向权威公开仓库；只有明确验证过其他来源时才覆盖。私有仓库或镜像请改用[安装指南](installation.md#choose-an-entrypoint)，不要猜测下载地址。
+推荐初学者把下面提示词复制给已经打开对象工程的 AI 编程代理：
+
+```text
+请帮助我从权威公开仓库
+https://github.com/spirex-ds-dev/ai-cockpit-template.git
+开始安装 AI Cockpit。先只读确认：这是目标 Git 工程、已有初始 commit、
+工作区干净，且 Python 3.10+、Git、GNU Make、curl 可用。
+读取公开 release.json，解析固定发布 tag，并用日常语言解释 release、tag、
+digest 证据。展示精确计划并得到我只针对安装步骤的批准前，不要下载或执行。
+不得 commit、push、创建/合并 PR、删除或发布。
+```
+
+预期结果：平易的前提/固定 release 报告和一个有限批准问题。私有仓库或镜像必须继续按[完整中文安装手顺](installation.zh-CN.md)，向 source owner 索取信任证据，不能猜 URL。
+
+### 高级手动备用方式
+
+下面代码块只供无法使用代理的有经验 operator 在对象工程终端执行。成功标志是 Wizard 打开；任意错误都立即停止，并按完整安装手顺的恢复表处理。
 
 <!-- command-evidence: adopter_required -->
 ```sh

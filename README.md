@@ -53,9 +53,9 @@ AI Cockpit is not a business skill or an agent runtime. It is a Human-Agent Trus
 
 ## Interactive entrypoints
 
-Use `./install.sh` with a TTY and no arguments, or pass `--interactive`, for the eight-step Installation Wizard. It detects the target repository, presents New Adoption, Upgrade, and Dry Run choices, shows the complete write plan, and waits for explicit confirmation before writing. Non-interactive no-argument use fails closed; explicit legacy flags keep their deterministic behavior. The wizard never commits, pushes, opens a PR, or merges.
+Use `./install.sh` with a TTY and no arguments, or pass `--interactive`, for the eight-step Installation Wizard. It detects the target repository, accepts one numeric mode input (`1` New Adoption, `2` Upgrade, `3` Dry Run), shows the complete write plan, and waits for explicit confirmation before writing. The current low-level selector does not render those labels itself, so the prompt-first Installation guide supplies the mapping and review context. Non-interactive no-argument use fails closed; explicit legacy flags keep their deterministic behavior. The wizard never commits, pushes, opens a PR, or merges.
 
-After installation, run `make cockpit-calibration-wizard` for the resumable ten-stage Calibration Wizard. It reuses the persisted Calibration Session, supports Back/Pause/Resume and stale revalidation, blocks on Unknown or stale evidence, and requires separate Reviewer and Owner confirmations before atomic Candidate activation. The persisted Session schema currently records Japanese as its language; this does not claim that every visible Wizard string is localized.
+After installation, the agent uses the installed `make cockpit-calibrate-session ARGS="..."` interface for the resumable ten-stage Calibration Session. It supports Back/Pause/Resume and stale revalidation, blocks on Unknown or stale evidence, and requires separate Reviewer and Owner confirmations before atomic Candidate activation. The friendlier `make cockpit-calibration-wizard` command is template-maintenance-only and is not installed into adopter projects. The persisted Session schema currently records Japanese as its language; this does not claim that every visible string is localized.
 
 The mobile examples are evidence fixtures and documented scenarios. Hosted verification currently covers a minimal Swift Package and Android smoke paths; Xcode projects/workspaces, CocoaPods, project-specific Gradle variants, host JDK selection, and instrumented execution require adopter calibration and are not implied by the wizard.
 
@@ -127,6 +127,22 @@ Version history and capability evolution are maintained in the [Roadmap](docs/ro
 Use this when you want the shortest path to a fresh adoption install. For the full lifecycle and page map, read [Installation](docs/getting-started/installation.md), [Adopter Configuration](docs/getting-started/adopter-configuration.md), and [Documentation Architecture](docs/reference/documentation-architecture.md).
 The quick-install flow resolves the documented release metadata from the public release source first. `AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY` and `AI_COCKPIT_TEMPLATE_RAW_BASE` are used only to resolve the release tag and fetch the installer; the installer itself still honors `AI_COCKPIT_TEMPLATE_REPO` and `AI_COCKPIT_TEMPLATE_SOURCE` for its own clone or source selection. If your repository or release artifacts are private, use a local clone or configured source instead of relying on the quick-install bootstrap path.
 
+Beginner route—paste this into the agent with your project open:
+
+```text
+Follow the complete English Installation guide for this project. Begin with
+read-only prerequisites and discovery. Explain every term and use the
+canonical fixed public release unless I provide a verified private mirror.
+At every step show evidence, expected result, PASS/STOP, and who to contact.
+Ask for a separate decision before write, commit, push, PR preparation, human
+merge, lifecycle closure, and configuration. Never run later steps from one
+continuous shell block.
+```
+
+The block below is an **advanced manual fallback**, not the beginner route.
+Run only through local finish/archive, then stop:
+
+<!-- command-evidence: adopter_required -->
 ```sh
 STACK="${STACK:-generic}" # generic, python, go, rust, typescript, java, android, kotlin, flutter, swift, ruby, php, or csharp
 PUBLIC_REPOSITORY="${AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY:-https://github.com/spirex-ds-dev/ai-cockpit-template.git}"
@@ -137,11 +153,33 @@ trap 'rm -f "$INSTALLER"' EXIT
 curl -fsSL "${RAW_BASE}/${RELEASE_TAG}/install.sh" -o "$INSTALLER"
 AI_COCKPIT_TEMPLATE_REPO="$PUBLIC_REPOSITORY" \
   AI_COCKPIT_TEMPLATE_REF="$RELEASE_TAG" sh "$INSTALLER" --stack "$STACK" --update-makefile --create-adoption
-ADOPTION_BASE="$(git rev-parse HEAD)" # installer created adopt/ai-cockpit from the remote default branch
 make ai-finish TASK=adopt_ai_cockpit
+```
+
+Stop and review the archive/diff. After separate human commit approval:
+
+<!-- command-evidence: adopter_required -->
+```sh
+ADOPTION_CONTRACT="$(python3 -c 'import json; entries=[item for item in json.load(open(".ai/work-items/archive/index.json"))["entries"] if item["workItemId"]=="adopt_ai_cockpit"]; assert len(entries)==1; print(entries[0]["contractPath"])')"
+ADOPTION_BASE="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["baseCommit"])' "$ADOPTION_CONTRACT")"
 git add .
 git commit -m "adopt AI Cockpit governance"
 make check-ai-pr AI_BASE_COMMIT="$ADOPTION_BASE"
+```
+
+Stop. Obtain push approval, open the PR, pass hosted CI, and have a human
+merge. Only after separate lifecycle-closure approval run:
+
+<!-- command-evidence: adopter_required -->
+```sh
+make ai-close-work-item TASK=adopt_ai_cockpit
+```
+
+Only after closure synchronizes the default branch, separately begin
+configuration:
+
+<!-- command-evidence: adopter_required -->
+```sh
 CONFIG_BASE="$(git rev-parse HEAD)"
 make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this project" MODE=code
 ```
@@ -164,6 +202,12 @@ make check-ai-project-profile
 make check-ai-guard-calibration
 make check-ai-adoption-ready
 make ai-finish TASK=configure_ai_cockpit
+```
+
+Stop and review the configuration archive/diff. After separate commit approval:
+
+<!-- command-evidence: adopter_required -->
+```sh
 git add .
 git commit -m "configure AI Cockpit for this project"
 make check-ai-pr AI_BASE_COMMIT="$CONFIG_BASE"
@@ -311,6 +355,7 @@ Compatibility levels:
 
 - **Hosted verification recorded:** `python`, `go`, `rust`, and `typescript` run minimal-project jobs in `real-stack-quality`. `java`, `kotlin`, `ruby`, `php`, and `csharp` run the same gate in `extended-real-stack-quality`. `flutter`, `android`, and `swift` run the same gate in `mobile-stack-quality`.
 - **Swift verified scope:** `mobile-stack-quality` exercises a minimal Swift Package Manager fixture only. Hosted verification does **not** cover Xcode projects, workspaces, or CocoaPods; those layouts require Project Calibration after installation.
+- **Beginner platform routes:** use the complete [Installation](docs/getting-started/installation.md), then follow the [iOS](docs/getting-started/examples/ios.md), [Android](docs/getting-started/examples/android.md), or [Java](docs/getting-started/examples/java.md) example. Finding platform project files identifies only a likely layout; it does not confirm that development tools, devices, signing credentials, or cloud CI work.
 - **Preset only:** `generic` intentionally fails closed until its formatter, test, and lint commands are configured.
 - **Unsupported runtime/platform:** native Windows shells. Use WSL or another POSIX environment.
 

@@ -1,0 +1,339 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi10-prompt-first-multiplatform-installation-20260728",
+  "mode": "code",
+  "title": "Make WI-10 installation prompt-first, beginner-safe, and multiplatform",
+  "baseCommit": "062b318a8fd6c6dc8e4ca14e6b6f71b3c6dd8106",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi10-prompt-first-multiplatform-installation-20260728.contract.json",
+    ".ai/work-items/active/wi10-prompt-first-multiplatform-installation-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    "README.md",
+    "README.zh-CN.md",
+    "README.ja.md",
+    "docs/getting-started/**",
+    "docs/reference/calibration-session.md",
+    "docs/reference/documentation-architecture.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/**",
+    "docs/superpowers/specs/**",
+    "scripts/check_docs_metadata.py",
+    "tests/test_docs_metadata.py"
+  ],
+  "outOfScope": [
+    "Changing installer, calibration, runtime, security, or capability implementation behavior",
+    "Publishing a release, changing release identity, creating a tag, or modifying provider state",
+    "Claiming that Xcode, Android SDK, Gradle, Maven, a JDK, a device, or a hosted CI environment is installed or operational without adopter evidence",
+    "Claiming that the later comprehensive Japanese assessment has passed",
+    "Changing capability statuses without new implementation evidence",
+    "Deleting or rewriting immutable archived Work Item evidence",
+    "Closing the WI-01 through WI-20 audit, process-issue stage, RFE-ISSUE-082, documentation alignment, release, or plan-cleanup stages"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.contract.json",
+      "reason": "The prior corrective WI-10 Contract records the intended three-language installation lifecycle and executable documentation checks."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi10-installation-documentation-completion-20260728.summary.json",
+      "reason": "The prior Summary is the implementation claim now being corrected because beginner usability, Chinese installation guidance, and platform examples remained incomplete."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "The approved comprehensive plan defines WI-10, bidirectional traceability, and the serial execution order."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Current English installation guide and authoritative baseline for this corrective."
+    },
+    {
+      "path": "docs/getting-started/installation.ja.md",
+      "reason": "Current Japanese installation guide whose full semantics must remain aligned."
+    },
+    {
+      "path": "docs/getting-started/30-second-start.md",
+      "reason": "Current shortest entrypoint, which must become genuinely prompt-first and novice-safe."
+    },
+    {
+      "path": "docs/getting-started/standard-adoption-guide.md",
+      "reason": "Current complete lifecycle guide, including scaffold, calibration, Work Item, PR, CI, and closure boundaries."
+    },
+    {
+      "path": "docs/reference/calibration-session.md",
+      "reason": "Authoritative ten-stage calibration behavior and answer semantics."
+    },
+    {
+      "path": "scripts/ai_calibrate.py",
+      "reason": "Executable source for calibration stage identifiers, answer types, confirmation boundaries, and generated configuration."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Executable documentation drift gate to extend with beginner-flow, prompt, language, and platform checks."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "beginner_usability",
+      "documentation_truth_drift",
+      "multilingual_semantic_drift",
+      "platform_overclaim",
+      "prompt_authority_boundary"
+    ],
+    "reason": "Installation is the adoption gateway. An incomplete step, unexplained command, unsafe prompt, language gap, or platform overclaim can prevent first-time users from adopting the project or cause an agent to cross a human decision boundary.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly approved this corrective and instructed continuous execution. The required content and safety boundaries are concrete and locally verifiable."
+  },
+  "preReviewWarnings": [
+    "A translated summary is not a complete Chinese or Japanese installation guide.",
+    "Prompt-first does not mean granting an agent authority to write, commit, push, open or merge a PR, publish, or select unknown project commands without a human checkpoint.",
+    "Platform examples must distinguish repository detection from verified toolchain, simulator/device, signing, and hosted-CI evidence.",
+    "A short happy path is insufficient: prerequisites, every scaffold and calibration stage, stop/recovery behavior, and final success checks must remain visible to a novice.",
+    "Commands may remain only where the human must bootstrap the agent or directly inspect evidence; every retained command must be labeled and explained in plain language."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "docs/getting-started/installation.md, docs/getting-started/installation.zh-CN.md, and docs/getting-started/installation.ja.md exist as complete same-structure guides; Chinese and Japanese are not summaries.",
+    "A person with no programming experience can follow the installation hand sequence from prerequisites through final success without needing to infer a missing action, term, expected result, decision, or recovery step.",
+    "The primary path is copy-ready agent prompts: the agent first performs read-only discovery, explains findings in plain language, proposes a plan, stops on unknowns or unsafe state, and requests explicit human confirmation before repository writes.",
+    "All retained command-line blocks are necessary human bootstrap or evidence checks, carry a conservative command-evidence label, and explain what to copy, what the command does, what success looks like, and what to do on failure.",
+    "The guide documents every Installation Wizard choice and generated scaffold category, shows a checkpoint after each phase, and does not claim that creating files alone completes adoption.",
+    "The guide explains all ten calibration stages—repository role, language and stack, source boundaries, test boundaries, generated artifacts, critical paths, quality commands, review obligations, risks and unknowns, and adoption readiness—including yes/no, alternative input, unknown, and not-applicable-with-reason answers.",
+    "The guide continues through the first governed Work Item, local checks, finish/archive, commit, PR, hosted CI, human review/merge, lifecycle closure, branch cleanup, and final verification while preserving each human authority boundary.",
+    "Complete English, Chinese, and Japanese iOS, Android, and Java examples explain project detection, likely configuration choices, test/build command discovery, platform-specific evidence limits, failure stops, and target-project calibration without assuming a toolchain, device, signing setup, or default remote branch.",
+    "README and same-language getting-started layers lead users to the complete installation guide and platform examples without duplicating or contradicting the authoritative procedure.",
+    "Executable documentation checks and mutation tests fail when a language guide, novice stage, prompt safety boundary, calibration stage, platform example, command explanation, or same-language link is missing.",
+    "The instruction-plan-implementation-acceptance trace contains implementation and acceptance evidence for WI10-AUDIT-001 through WI10-AUDIT-004; full local quality, PR/hosted checks, merge, archive, ai-close-work-item, branch deletion, and main synchronization complete before the WI-01 through WI-20 audit resumes."
+  ],
+  "guidelines": [
+    "Write for a reader with no programming experience: define every term before use and pair every action with an expected result and failure response.",
+    "Prefer a copy-ready agent prompt over a command whenever an agent can safely perform the action under the repository workflow.",
+    "Keep prompts fail closed: read-only discovery first, no invented facts, explicit unknowns, plan review before writes, and no commit, push, PR, merge, release, or deletion without the corresponding governed human decision.",
+    "Keep English, Chinese, and Japanese structure, section identifiers, safety meaning, links, and completeness aligned.",
+    "Map every user-named file and requirement to implementation evidence or an explicit no-change reason.",
+    "Do not infer platform capability, tool installation, hosted execution, or production readiness from documentation intent.",
+    "Capability Truth Matrix and executable repository evidence remain authoritative for current capability status."
+  ],
+  "intent": {
+    "problem": "The merged WI-10 documentation is still too difficult to use as an adoption gateway. There is no complete Chinese installation.md equivalent, the guides expose command lines where copy-ready prompts should be the primary path, iOS/Android/Java walkthroughs are absent, and scaffold/calibration/lifecycle steps are not detailed enough for a person with no programming experience. Because installation difficulty directly prevents promotion, the prior completion claim must be corrected before release.",
+    "constraints": [
+      "Preserve the repository's one-Work-Item/one-branch/one-PR lifecycle and human authority boundaries.",
+      "Do not alter runtime or installer behavior in a documentation corrective.",
+      "Do not claim platform tools, devices, signing, hosted CI, or enterprise controls have been verified without evidence.",
+      "Do not weaken or omit content in Chinese or Japanese.",
+      "Keep command-line usage minimal but do not hide commands that a human must execute to bootstrap the process or inspect direct evidence.",
+      "Continue the approved serial plan only after this corrective is fully merged and closed."
+    ],
+    "rationale": "A prompt-first, checkpointed, multilingual hand sequence reduces the largest adoption barrier while executable structure and mutation checks prevent the same omissions from being archived as complete again."
+  },
+  "rawUserRequest": "Correct WI-10 before release. Add a complete Chinese installation guide; use prompts wherever possible because command lines are difficult to understand; add iOS, Android, and Java examples; make installation extremely simple but document every scaffold step, the complete calibration checklist, and the entire governed lifecycle so that a person with no programming experience can install successfully. This is critical to adoption. The user has authorized continuous execution without another confirmation unless a genuine human decision is required.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-wi10-beginner-prompt-first-multiplatform-correction",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-approved-wi10-prompt-first-beginner-multiplatform-corrective"
+  },
+  "declaredIntent": {
+    "summary": "Make WI-10 a complete, prompt-first, beginner-safe, trilingual installation path with iOS, Android, and Java examples and enforceable anti-omission checks.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The Chinese installation guide is missing, shortened, structurally different, or linked to the English guide instead of a complete same-language path.",
+      "expected": "The documentation gate fails and identifies the missing file, section, or same-language link.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_docs_metadata.py",
+        "docs/getting-started/installation.zh-CN.md"
+      ],
+      "verificationPlan": "Add exact trilingual installation section identifiers, same-language links, and mutation tests that delete or shorten the Chinese guide."
+    },
+    {
+      "scenario": "The primary installation path regresses to command-first instructions or a retained command lacks a plain-language purpose, success signal, failure response, or evidence label.",
+      "expected": "The documentation gate fails with the affected file and missing prompt or command explanation.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_docs_metadata.py",
+        "docs/getting-started/30-second-start.md",
+        "docs/getting-started/installation.md"
+      ],
+      "verificationPlan": "Add prompt-first markers, retained-command explanation markers, and mutation tests for missing prompt and command metadata."
+    },
+    {
+      "scenario": "A beginner flow omits prerequisites, read-only discovery, a Wizard choice, a scaffold phase, one of ten calibration stages, the first Work Item/PR/CI lifecycle, a checkpoint, recovery guidance, or the final success checklist.",
+      "expected": "The documentation gate fails with the missing novice-flow stage.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_docs_metadata.py",
+        "docs/getting-started/installation.md",
+        "docs/getting-started/installation.zh-CN.md",
+        "docs/getting-started/installation.ja.md"
+      ],
+      "verificationPlan": "Define required beginner-flow and calibration identifiers and remove each class in focused mutation tests."
+    },
+    {
+      "scenario": "An iOS, Android, or Java example is absent in any language or implies that a toolchain, device, signing setup, default branch, command, or hosted result is already known.",
+      "expected": "The documentation gate fails or the example explicitly stops and asks the adopter for evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_docs_metadata.py",
+        "docs/getting-started/examples/ios.md",
+        "docs/getting-started/examples/android.md",
+        "docs/getting-started/examples/java.md"
+      ],
+      "verificationPlan": "Require nine platform-language documents with platform and non-claim markers; mutate one file and one boundary at a time."
+    },
+    {
+      "scenario": "A copy-ready prompt authorizes writes before plan confirmation or authorizes commit, push, PR creation, merge, release, deletion, or invented project commands.",
+      "expected": "The prompt-safety check rejects the guide and names the violated human authority boundary.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_docs_metadata.py",
+        "scripts/check_docs_metadata.py"
+      ],
+      "verificationPlan": "Add required safety markers and prohibited-authority regression fixtures for the authoritative prompt blocks."
+    },
+    {
+      "scenario": "A user-named WI-10 requirement is described in the Contract or plan but lacks implementation and acceptance evidence.",
+      "expected": "Bidirectional traceability remains incomplete and release remains blocked.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/reference/remediation-instruction-traceability.json",
+        "tests/test_docs_metadata.py"
+      ],
+      "verificationPlan": "Update the remediation traceability record and add exact evidence for all four WI-10 audit findings before closure."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized this full WI-10 corrective, its plans, traceability, documentation checks, governance evidence, PR, merge, and branch cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 634
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi10-prompt-first-multiplatform-installation-20260728.json",
+    "baseCommit": "062b318a8fd6c6dc8e4ca14e6b6f71b3c6dd8106",
+    "initialScopeDigest": "f30b43c29162c50776e967328ca2d64df2cb9a18ce79d8c8a693ed4ab0996866",
+    "contractSkeletonDigest": "671233660608f0011b4a219c73cd52cf88db5e39913cfbee9b23793836c78eba"
+  }
+}
