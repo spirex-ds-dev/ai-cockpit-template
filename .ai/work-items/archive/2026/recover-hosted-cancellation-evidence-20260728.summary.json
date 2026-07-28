@@ -1,0 +1,521 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "recover-hosted-cancellation-evidence-20260728",
+  "contractPath": ".ai/work-items/archive/2026/recover-hosted-cancellation-evidence-20260728.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "reason": "Defines the immutable predecessor recovery relationship, hosted root cause, strict acceptance, and executed scenarios."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "reason": "Records the hosted failure, synchronization-race root cause, red-green evidence, and recovery readiness."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated lifecycle status for the recovery Work Item."
+    },
+    {
+      "path": ".ai/work-items/starts/recover-hosted-cancellation-evidence-20260728.json",
+      "reason": "Binds recovery identity and base to the archived predecessor commit."
+    },
+    {
+      "path": "tests/test_quality_telemetry.py",
+      "reason": "Makes the cancellation readiness marker impossible to match in the pre-handler command preamble while preserving strict cancellation assertions."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/recover-hosted-cancellation-evidence-20260728.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/archive/2026/correct-nested-work-item-context-20260728.contract.json",
+    ".ai/work-items/archive/2026/correct-nested-work-item-context-20260728.summary.json",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30330970172",
+    "tests/test_quality_telemetry.py",
+    "scripts/run_quality_gate.py"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:24:38.783129+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "bbd5c81e9ea70437e2a143cefc00f1c61bd0c4c113d688b98a567709cc207809",
+      "commandHash": "a9bd50bd626ce4c2abd07fa17cf22b3317b4fb8321f55eb5f2d3ba898c612968",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "244bfc2b714c17d79235ecc51f4b15b18c28eb0917de1bf221b55145fcddc604",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json work item contract check passed: .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_work_item.py .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json work item contract check passed: .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "outputBytes": 327
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:24:39.077462+00:00",
+      "exitCode": 0,
+      "durationMs": 192,
+      "outputDigest": "b870ed68f88db25dd9f253666c9c56edfc58da362f345253cad2d0f81a954424",
+      "commandHash": "ea2ed5c9d8258dd4987ca5de98f48ce04a2ca9e7d9b225bb7f16a91c19d1eaf6",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "244bfc2b714c17d79235ecc51f4b15b18c28eb0917de1bf221b55145fcddc604",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json scope guard passed: 3 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scope.py .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json scope guard passed: 3 changed path(s) covered",
+      "outputBytes": 254
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:24:39.602627+00:00",
+      "exitCode": 0,
+      "durationMs": 441,
+      "outputDigest": "24ea5d1f9a9b7034bb0d797e2c43d61bed333d03f63c1b623742d25c5dd3fa72",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "244bfc2b714c17d79235ecc51f4b15b18c28eb0917de1bf221b55145fcddc604",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guards.py --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json guard check completed: 0 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 292
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json SUMMARY=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:24:40.053760+00:00",
+      "exitCode": 0,
+      "durationMs": 341,
+      "outputDigest": "01dc6bb015b475719d3b7ec62edbc9a179c0b6529819f195496cb915a75cd089",
+      "commandHash": "907fa6569eee05e424db883cc5612d64a4deb4bd52b8e0a2d7139a9abdf9b036",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "244bfc2b714c17d79235ecc51f4b15b18c28eb0917de1bf221b55145fcddc604",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_checkpoint.py --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `recover-hosted-cancellation-evidence-20260728` - Contract Hash: `505e08e64c48d8af` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptan",
+      "outputTail": "ssets, or provider publication ## Unknowns - none ## Acceptance - The cancellation test waits for a marker that can only be relayed after run_quality_gate installs SIGINT and SIGTERM handlers; the command preamble cannot satisfy the wait. - The regression still requires process return code 143, evidence result cancelled, timedOut false, and the relayed marker in the log. - Ten consecutive focused cancellation runs pass locally without changing production cancellation behavior. - The recovery cites the exact predecessor archive and failed hosted run, archives immediately after it, and aggregate PR validation accepts only the source-linked, human-approved consecutive adjacent pair. - Replacement Hosted CI passes template-smoke, installation-smoke, release-evidence, ci-evidence, compatibility, and CodeQL before merge. - After merge, ai-close-work-item deletes the recovery branches and synchronizes main before WI-10 resumes. ## Required Verification - `aiWorkItem`: passed - `aiScope`: passed - `aiGuards`: passed - `aiCheckpoint`: not_run - `aiAgentRisk`: not_run - `aiReviewPolicy`: not_run - `aiBacktrack`: not_run - `aiCoverage`: not_run - `aiScenarioCoverage`: not_run - `aiGuidelines`: not_run - `aiSummary`: not_run - `aiStatus`: not_run - `aiStatusCheck`: not_run - `aiStatusConsistency`: not_run - `aiDiffOwnership`: not_run - `quality`: not_run ## Review Focus - Ready marker absence from command preamble - Preserved 143 and cancelled evidence semantics - Immutable adjacent recovery relationship ## Diff Ownership Preview - active_owned: `3`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/recover-hosted-cancellation-evidence-20260728.json` — covered by Contract scope - [active_owned] `tests/test_quality_telemetry.py` — covered by Contract scope ## Next Action - Run or record required verification: aiCheckpoint",
+      "outputBytes": 4503
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:24:40.302961+00:00",
+      "exitCode": 0,
+      "durationMs": 164,
+      "outputDigest": "e89f4d41bae852896a872e42b86266beb33bece5c30a87f53625e1020cfe4b8a",
+      "commandHash": "426d5b76f4367b10e7b06b73e48eb5a163fe7ad61b740de3b80151782a859f8a",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "244bfc2b714c17d79235ecc51f4b15b18c28eb0917de1bf221b55145fcddc604",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json review policy matched 2 path(s) [review] .ai/work-items/starts/recover-hosted-cancellation-evidence-20260728.json [review] .ai/cockpit/current_status.md review focus recorded: 3 item(s) report: target/ai_review_policy_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_review_policy.py --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json review policy matched 2 path(s) [review] .ai/work-items/starts/recover-hosted-cancellation-evidence-20260728.json [review] .ai/cockpit/current_status.md review focus recorded: 3 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 455
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:24:40.534772+00:00",
+      "exitCode": 0,
+      "durationMs": 148,
+      "outputDigest": "470f5fb6f6e2bd7a8461008724d0dd9532731afaa7087c10a452e024987897d1",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "244bfc2b714c17d79235ecc51f4b15b18c28eb0917de1bf221b55145fcddc604",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 197
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:24:40.765618+00:00",
+      "exitCode": 0,
+      "durationMs": 140,
+      "outputDigest": "bf0eeab5d1f9c6e35a2d4a984d1cacedcdb4fd6c3bfa6d43d0ddcd1c4e00b2d5",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "244bfc2b714c17d79235ecc51f4b15b18c28eb0917de1bf221b55145fcddc604",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 206
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json SUMMARY=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:24:40.918800+00:00",
+      "exitCode": 0,
+      "durationMs": 68,
+      "outputDigest": "6b8e2f3be1d20765187d846cbad960ff6b10d3b7932c8f651aaf166f7e471918",
+      "commandHash": "1ca9f0e40a4acbaecebbb215e5f1626038ca7742e2f88b02b0a01b5b5422b3bc",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "244bfc2b714c17d79235ecc51f4b15b18c28eb0917de1bf221b55145fcddc604",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 370
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json SUMMARY=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:24:41.091812+00:00",
+      "exitCode": 0,
+      "durationMs": 70,
+      "outputDigest": "ba7296e2617ef1485c4e6f77c119d68069c32da7976b3f176bfa917621914f23",
+      "commandHash": "5f650ec637bcca065d65d4cff786fd68fe95f25caf044236ebbc8343497eac05",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "244bfc2b714c17d79235ecc51f4b15b18c28eb0917de1bf221b55145fcddc604",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guidelines.py --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_guidelines.py --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json guidelines compliance check passed: 3 guideline(s) verified",
+      "outputBytes": 375
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:24:41.509711+00:00",
+      "exitCode": 0,
+      "durationMs": 331,
+      "outputDigest": "f334005b7e3fb94c30a93a781402e7b729e458635671cb69ca9ce1794aea54e7",
+      "commandHash": "cbf6ebe7ab2089bef33c719d7297625b1fd74198d7ada364ab89e8fbb6f01518",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "244bfc2b714c17d79235ecc51f4b15b18c28eb0917de1bf221b55145fcddc604",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json ## Diff Ownership Preview - active_owned: `3`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/recover-hosted-cancellation-evidence-20260728.json` — covered by Contract sc",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json ## Diff Ownership Preview - active_owned: `3`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/work-items/starts/recover-hosted-cancellation-evidence-20260728.json` — covered by Contract scope - [active_owned] `tests/test_quality_telemetry.py` — covered by Contract scope",
+      "outputBytes": 651
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:29:53.935077+00:00",
+      "exitCode": 0,
+      "durationMs": 312300,
+      "outputDigest": "a53c8317273164d9669badee00b6bad22f49b35f75c881d0ec54acfe1a5519e2",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "244bfc2b714c17d79235ecc51f4b15b18c28eb0917de1bf221b55145fcddc604",
+      "outputSummary": "/usr/bin/make --no-print-directory quality-full /usr/bin/make --no-print-directory quality-fast-static /usr/bin/make --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"dcd27cd32e01-local-20260728T052441Z-73759-0\" --run-id \"local\" --output \"target/quality/sessions/dcd27cd32e01-local-20260728T052441Z-73759-0/timing/project-format-check.json\" --log \"target/quality/sessions/",
+      "outputTail": "ft 2.68s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 2.63s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 2.52s call tests/test_installer.py::test_upgrade_rolls_back_when_post_copy_validation_fails 2.46s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[True-False] 2.43s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 2.43s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 2.35s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[False-True] 1293 passed, 3 warnings in 298.81s (0:04:58) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.sVbpBBVEBs/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.sVbpBBVEBs/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.sVbpBBVEBs/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.sVbpBBVEBs/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/dcd27cd32e01-local-20260728T052441Z-73759-0/summary.json",
+      "outputBytes": 46202
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json SUMMARY=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:29:56.081913+00:00",
+      "exitCode": 0,
+      "durationMs": 371,
+      "outputDigest": "faeb882a0eb3d481972fd4829d46c2811f786d232028d8049de8e2705f0a693e",
+      "commandHash": "af9890ecf339a45e6d45deb83ea35bbf01e024eaeea55d78672844ee824f19f4",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "26d029a6d3f4d2c7364eb35d0b79d5439ac3abb13932e9ee649b41782a2d5923",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_generate_status.py .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_generate_status.py .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 470
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json SUMMARY=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:29:56.528865+00:00",
+      "exitCode": 0,
+      "durationMs": 367,
+      "outputDigest": "a597682efd8c5edb62279fe78b8bac5747da1fa9a1e3799143ded300c4266b88",
+      "commandHash": "f364f437365763d9d2d8f1fe03441fd201d89368d6d2ae0f8ca131ab82c52e1a",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "26d029a6d3f4d2c7364eb35d0b79d5439ac3abb13932e9ee649b41782a2d5923",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 400
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:29:56.665019+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "b187d28fe830a2b09f5c02be6f1905679b26cfaced00e9e8422e60d2d6c20ec5",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "26d029a6d3f4d2c7364eb35d0b79d5439ac3abb13932e9ee649b41782a2d5923",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 174
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json SUMMARY=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:29:56.849633+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "c36a10b8a99e45f05ab5ad2912f3cf5e1fcae867ba7b5eefe20dd6cb48c6085f",
+      "commandHash": "7fb38823b88f06f062b295d35b14d2239a81c943aefd92ef39b075fa9f2184bc",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "26d029a6d3f4d2c7364eb35d0b79d5439ac3abb13932e9ee649b41782a2d5923",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_agent_risk.py --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_agent_risk.py --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json --summary .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 380
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json CONTRACT=.ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-28T05:29:58.222851+00:00",
+      "exitCode": 0,
+      "durationMs": 217,
+      "outputDigest": "4f16daa74a62335cc1a738fd50d6e27c077d26b37569a23c39360bb7f22cbf21",
+      "commandHash": "01a0ba61da13e28077a359c9152e0b13fe302f7643fce566830516dfbbf5feaa",
+      "contractHash": "505e08e64c48d8af548eb9b6a4d4f6da72c766f5c8a2b84eb81468ebaea51c6d",
+      "commitSha": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+      "executionContractPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "worktreeDigest": "4c5b6e4dd384bf6800f175335f2b553005260ca1cafafe8248b4560958f918d2",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_summary.py .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json ai summary check passed: .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 <LOCAL_PATH> scripts/ai_check_summary.py .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json --contract .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json ai summary check passed: .ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+      "outputBytes": 409
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Never rewrite immutable predecessor archive evidence; recover through one documented adjacent pair.",
+      "compliant": true,
+      "evidence": "The predecessor archive pair is byte-identical to dcd27cd3; recovery uses a new Contract, Summary, and Start Receipt."
+    },
+    {
+      "guideline": "Synchronize tests on observable post-handler behavior rather than scheduler timing.",
+      "compliant": true,
+      "evidence": "The child code contains only the hex-encoded marker; the readable marker can enter the log only through the relay started after handler installation."
+    },
+    {
+      "guideline": "Do not weaken cancellation evidence or normalize away a genuine signal-handling regression.",
+      "compliant": true,
+      "evidence": "The test still requires return code 143, result cancelled, timedOut false, and the relayed marker."
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "The command preamble is visible before cancellation handlers are installed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_quality_telemetry.py::test_runner_preserves_cancellation_evidence asserts ready_marker not in child_code"
+      ]
+    },
+    {
+      "scenario": "SIGTERM arrives after the relayed readiness marker.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "10 consecutive focused cancellation runs"
+      ]
+    },
+    {
+      "scenario": "The replacement PR contains predecessor and recovery archive pairs.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_pr_accepts_one_documented_adjacent_recovery_pair",
+        "predecessor archive byte comparison against dcd27cd3"
+      ]
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Local deterministic evidence removes the false-ready race; replacement Hosted Linux remains required before merge."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/recover-hosted-cancellation-evidence-20260728.json"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "id": "HOSTED-ISSUE-CANCELLATION-READY-RACE-20260728",
+      "status": "resolved_locally",
+      "detail": "The cancellation test treated a marker embedded in the runner's logged command preamble as proof that signal handlers were installed, allowing Linux to SIGTERM the wrapper under its default handler.",
+      "resolution": "Encode the child output marker in the command and assert the readable marker is absent from the command preamble before waiting for relayed output."
+    },
+    {
+      "id": "HOSTED-RUN-30330970172",
+      "status": "preserved_failure_evidence",
+      "detail": "template-smoke failed only test_runner_preserves_cancellation_evidence: expected 143, observed -15; 1292 other tests passed and ci-evidence correctly recorded template-smoke:failure.",
+      "resolution": "Closed PR #420 as superseded and retained the run as the recovery source."
+    }
+  ],
+  "residualRisks": [],
+  "reviewReadiness": {
+    "status": "ready",
+    "reason": "All required verification passed and no residual risk remains.",
+    "expectedReviewFocus": [
+      "Ready marker absence from command preamble",
+      "Preserved 143 and cancelled evidence semantics",
+      "Immutable adjacent recovery relationship"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable: production runner unchanged",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "verified: cancellation timing JSON semantics remain asserted",
+    "localization": "not_applicable",
+    "generatedArtifacts": "verified: predecessor archive unchanged; recovery artifacts generated separately",
+    "makeEntrypoints": "verified: project-test and aggregate PR recovery regressions are in scope"
+  },
+  "userCorrectionsCaptured": [
+    "Process defects discovered during delivery must be corrected before WI-10 resumes.",
+    "Fixes must become executable regression checks rather than one-off reruns.",
+    "Continue without pausing when no new user decision is required."
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Do not repeat long hosted reruns without a root cause.",
+      "plan": "Use the retained failed gate log to trace the exact Linux-only race.",
+      "implementation": "Synchronize on relayed output that cannot occur in the pre-handler command preamble.",
+      "acceptanceEvidence": "Red failure, green focused run, ten consecutive runs, full telemetry suite, and replacement Hosted Linux."
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "505e08e64c48d8af",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "505e08e64c48d8af",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 3
+    }
+  ],
+  "knownGaps": [
+    "Replacement Hosted Linux template-smoke and aggregate ci-evidence are pending until the recovery archive is committed and pushed."
+  ],
+  "overclaimPrevention": "Local repeated runs establish deterministic synchronization behavior but do not claim Hosted Linux recovery until the replacement PR passes every required job.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-28T05:30:00Z",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "No current product plan changed; the recovery is fully captured by governed Contract and Summary evidence."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/recover-hosted-cancellation-evidence-20260728.contract.json",
+          ".ai/work-items/archive/2026/recover-hosted-cancellation-evidence-20260728.summary.json"
+        ],
+        "reason": "The failed run, root cause, strict acceptance, implementation, and scenarios map bidirectionally."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "No production command, public capability, or runtime behavior changed."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "No user-facing documentation changed."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/recover-hosted-cancellation-evidence-20260728.contract.json",
+          ".ai/work-items/archive/2026/recover-hosted-cancellation-evidence-20260728.summary.json"
+        ],
+        "reason": "The superseded PR, failed run, pending hosted proof, and immutable predecessor boundary remain explicit."
+      }
+    ]
+  },
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "The test now waits on relayed post-handler output without changing production cancellation semantics or predecessor archive evidence."
+  },
+  "archiveSequence": 631
+}

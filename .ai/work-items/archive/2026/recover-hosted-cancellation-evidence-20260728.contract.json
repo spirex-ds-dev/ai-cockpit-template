@@ -1,0 +1,246 @@
+{
+  "contractVersion": 2,
+  "workItemId": "recover-hosted-cancellation-evidence-20260728",
+  "mode": "code",
+  "title": "Recover hosted cancellation evidence regression",
+  "baseCommit": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+  "rawUserRequest": "继续执行已授权整改顺序。correct-nested-work-item-context corrective 的 PR #420 在 Hosted Linux 暴露 cancellation telemetry 测试竞态；不得改写已归档证据，使用 adjacent recovery Work Item 根治测试同步协议，完成 replacement PR、CI、合并、关闭和分支清理后再恢复 WI-10。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-continuous-process-first-recovery",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-authorized-continuous-adjacent-hosted-recovery"
+  },
+  "declaredIntent": {
+    "summary": "Recover the archived nested-context corrective without rewriting it by removing a Linux scheduling race from cancellation telemetry verification.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.contract.json",
+    ".ai/work-items/active/recover-hosted-cancellation-evidence-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "tests/test_quality_telemetry.py"
+  ],
+  "outOfScope": [
+    "Editing the immutable archived predecessor Contract, Summary, or archive manifest",
+    "Changing scripts/run_quality_gate.py cancellation or exit-code behavior",
+    "Weakening cancellation evidence assertions",
+    "WI-10 documentation, release metadata, tags, assets, or provider publication"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/correct-nested-work-item-context-20260728.contract.json",
+      "reason": "Immutable predecessor Contract required by the adjacent recovery-pair rule."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/correct-nested-work-item-context-20260728.summary.json",
+      "reason": "Preserves the predecessor implementation, local quality, and first finish failure evidence."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30330970172",
+      "reason": "Hosted Linux source evidence: one cancellation telemetry test failed with runner return code -15 while all other 1292 tests passed."
+    },
+    {
+      "path": "tests/test_quality_telemetry.py",
+      "reason": "The test searches the log for a marker already present in the command preamble, allowing SIGTERM before the runner installs handlers."
+    },
+    {
+      "path": "scripts/run_quality_gate.py",
+      "reason": "Reference implementation writes the command before spawning, then installs handlers before starting the output relay."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "hosted_only_failure",
+      "signal_race",
+      "immutable_recovery"
+    ],
+    "reason": "A test-only scheduling race blocks hosted delivery and can mask whether cancellation evidence is actually preserved; recovery must retain strict cancellation assertions.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous process-first correction and complete recovery delivery without another pause when no new decision is required."
+  },
+  "preReviewWarnings": [
+    "Confirm the ready marker cannot occur in the logged command preamble.",
+    "Confirm SIGTERM still yields shell-compatible 143 plus cancelled evidence.",
+    "Confirm predecessor archive bytes remain unchanged and aggregate PR accepts exactly one adjacent recovery pair.",
+    "Confirm failed PR #420 and run 30330970172 remain explicit historical evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The cancellation test waits for a marker that can only be relayed after run_quality_gate installs SIGINT and SIGTERM handlers; the command preamble cannot satisfy the wait.",
+    "The regression still requires process return code 143, evidence result cancelled, timedOut false, and the relayed marker in the log.",
+    "Ten consecutive focused cancellation runs pass locally without changing production cancellation behavior.",
+    "The recovery cites the exact predecessor archive and failed hosted run, archives immediately after it, and aggregate PR validation accepts only the source-linked, human-approved consecutive adjacent pair.",
+    "Replacement Hosted CI passes template-smoke, installation-smoke, release-evidence, ci-evidence, compatibility, and CodeQL before merge.",
+    "After merge, ai-close-work-item deletes the recovery branches and synchronizes main before WI-10 resumes."
+  ],
+  "guidelines": [
+    "Never rewrite immutable predecessor archive evidence; recover through one documented adjacent pair.",
+    "Synchronize tests on observable post-handler behavior rather than scheduler timing.",
+    "Do not weaken cancellation evidence or normalize away a genuine signal-handling regression."
+  ],
+  "intent": {
+    "problem": "PR #420 Hosted Linux failed because test_runner_preserves_cancellation_evidence looked for the word started in the log. run_quality_gate writes the full child command to that log before installing its signal handlers, and that command itself contains print('started'). On a fast Linux runner the test observes this false-ready marker and sends SIGTERM while the default handler is still active, so the wrapper exits -15 instead of recording and returning 143. Local macOS scheduling happened to install handlers first.",
+    "constraints": [
+      "Preserve the predecessor archive and failed hosted run as immutable evidence.",
+      "Do not change production runner behavior without evidence of a production defect.",
+      "Keep strict assertions for cancellation result, timeout state, and exit code.",
+      "Use one documented adjacent recovery pair in a replacement PR.",
+      "Do not resume WI-10 until hosted CI, merge, closure, and branch cleanup complete."
+    ],
+    "rationale": "Making the child output marker absent from the command preamble means the relay can publish it only after handlers are installed. The test then synchronizes on the property it intends to verify and remains capable of catching real cancellation evidence loss."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The command preamble is visible before cancellation handlers are installed.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_quality_telemetry.py::test_runner_preserves_cancellation_evidence asserts ready_marker not in child_code"
+      ],
+      "expected": "The readiness predicate remains false for the command preamble and becomes true only after relayed child output.",
+      "verificationPlan": "Add an explicit assertion that the command text lacks the marker, then run the focused cancellation test repeatedly."
+    },
+    {
+      "scenario": "SIGTERM arrives after the relayed readiness marker.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "10 consecutive focused runs of tests/test_quality_telemetry.py::test_runner_preserves_cancellation_evidence"
+      ],
+      "expected": "The wrapper exits 143 and writes result=cancelled, timedOut=false evidence with the marker retained in the log.",
+      "verificationPlan": "Run the real subprocess test locally and in replacement Hosted Linux template-smoke."
+    },
+    {
+      "scenario": "The replacement PR contains predecessor and recovery archive pairs.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_pr_aggregate.py::test_pr_accepts_one_documented_adjacent_recovery_pair",
+        "git diff --exit-code dcd27cd3 -- predecessor archive pair"
+      ],
+      "expected": "Only the human-authorized source-linked consecutive recovery pair is accepted by aggregate PR validation.",
+      "verificationPlan": "Archive the recovery, commit both pairs, and run check-ai-pr from the original origin/main base."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user authorization in current task",
+    "reason": "The user authorized continuous process correction, executable checks, replacement PR delivery, and completion without another pause when no new decision is needed."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 632
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/recover-hosted-cancellation-evidence-20260728.json",
+    "baseCommit": "dcd27cd32e0163d31a3f814da6453efea22eb225",
+    "initialScopeDigest": "c75c4375472b0e9e3495cda91b72e923bf453b1b69692deb9fa3f97794081522",
+    "contractSkeletonDigest": "949883c8f8d893979c2fe23798165aa20cbecea85922f7bb42f40b66c180ac3a"
+  }
+}

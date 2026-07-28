@@ -250,6 +250,13 @@ def test_runner_preserves_failure_and_timeout_evidence(tmp_path):
 def test_runner_preserves_cancellation_evidence(tmp_path):
     output = tmp_path / "timing" / "gate.json"
     log = tmp_path / "logs" / "gate.log"
+    ready_marker = "runner-handler-ready"
+    child_code = (
+        "import time; "
+        f"print(bytes.fromhex('{ready_marker.encode().hex()}').decode(), flush=True); "
+        "time.sleep(30)"
+    )
+    assert ready_marker not in child_code
     process = subprocess.Popen(
         [
             sys.executable,
@@ -267,7 +274,7 @@ def test_runner_preserves_cancellation_evidence(tmp_path):
             "--",
             sys.executable,
             "-c",
-            "import time; print('started', flush=True); time.sleep(30)",
+            child_code,
         ],
         text=True,
         stdout=subprocess.PIPE,
@@ -275,10 +282,10 @@ def test_runner_preserves_cancellation_evidence(tmp_path):
     )
     deadline = time.monotonic() + 5
     while (
-        not log.exists() or "started" not in log.read_text(encoding="utf-8")
+        not log.exists() or ready_marker not in log.read_text(encoding="utf-8")
     ) and time.monotonic() < deadline:
         time.sleep(0.01)
-    assert "started" in log.read_text(encoding="utf-8")
+    assert ready_marker in log.read_text(encoding="utf-8")
     os.kill(process.pid, signal.SIGTERM)
     assert process.wait(timeout=15) == 128 + signal.SIGTERM
     evidence = json.loads(output.read_text(encoding="utf-8"))
