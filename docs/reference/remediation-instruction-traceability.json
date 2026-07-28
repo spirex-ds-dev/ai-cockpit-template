@@ -246,6 +246,15 @@
       "implementationEvidence": ["docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
       "acceptanceEvidence": ["docs/reference/remediation-instruction-traceability.json", "docs/reference/wi01-wi20-bidirectional-traceability-audit.json", "docs/reference/wi01-wi20-bidirectional-traceability-audit.md"],
       "verificationCommands": ["make check-instruction-traceability", ".venv/bin/python -m pytest -q tests/test_instruction_traceability.py"]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-024",
+      "summary": "Recover the immutable WI-01 through WI-20 audit after Hosted Linux exposes insufficient portable coverage margin; retain the 85.10 percent threshold and require meaningful fail-closed tests plus a complete replacement lifecycle.",
+      "planWorkItems": ["WI-01", "WI-02", "WI-03", "WI-04", "WI-05", "WI-06", "WI-07", "WI-08", "WI-09", "WI-10", "WI-11", "WI-12", "WI-13", "WI-14", "WI-15", "WI-16", "WI-17", "WI-18", "WI-19", "WI-20", "wi01-wi20-hosted-coverage-recovery-20260728"],
+      "contractPaths": [".ai/work-items/archive/2026/wi01-wi20-bidirectional-traceability-audit-20260728.contract.json", ".ai/work-items/archive/2026/wi01-wi20-hosted-coverage-recovery-20260728.contract.json"],
+      "implementationEvidence": ["tests/test_instruction_traceability.py", "docs/superpowers/plans/2026-07-28-wi01-wi20-hosted-coverage-recovery.md", "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
+      "acceptanceEvidence": [".ai/work-items/archive/2026/wi01-wi20-bidirectional-traceability-audit-20260728.summary.json", "docs/reference/wi01-wi20-bidirectional-traceability-audit.json", "tests/test_instruction_traceability.py"],
+      "verificationCommands": [".venv/bin/python -m pytest -q tests/test_instruction_traceability.py", "make check-instruction-traceability", "make quality", "make ai-finish TASK=wi01-wi20-hosted-coverage-recovery-20260728", "make ai-close-work-item TASK=wi01-wi20-hosted-coverage-recovery-20260728"]
     }
   ]
 }

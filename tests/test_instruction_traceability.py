@@ -6,7 +6,13 @@ import sys
 from pathlib import Path
 
 from check_instruction_traceability import (
+    _archive_entries,
+    _audit_contract_evidence_errors,
+    _audit_locator_errors,
+    _audit_path_errors,
+    _audit_reverse_ref_errors,
     _path,
+    _resolved_path,
     _validate_archive_integrity,
     main,
     validate_audit,
@@ -309,6 +315,148 @@ def test_archive_index_digest_drift_fails_closed(tmp_path: Path):
     )
     errors = _validate_archive_integrity(tmp_path)
     assert any("digest mismatch" in error for error in errors)
+
+
+def test_archive_integrity_rejects_unreadable_index_and_invalid_entries(tmp_path: Path) -> None:
+    archive_root = tmp_path / ".ai/work-items/archive"
+    archive_root.mkdir(parents=True)
+    index = archive_root / "index.json"
+    index.write_text("{not-json", encoding="utf-8")
+    assert any(
+        "archive index cannot be read" in error for error in _validate_archive_integrity(tmp_path)
+    )
+
+    index.write_text(json.dumps({"entries": {}}), encoding="utf-8")
+    assert _validate_archive_integrity(tmp_path) == ["archive index entries must be a list"]
+
+    index.write_text(json.dumps({"entries": ["not-an-object"]}), encoding="utf-8")
+    assert _validate_archive_integrity(tmp_path) == ["archive index contains a non-object entry"]
+
+
+def test_archive_integrity_rejects_missing_paths_and_malformed_manifest(tmp_path: Path) -> None:
+    archive = tmp_path / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True)
+    manifest = archive / "task.archive-manifest.json"
+    manifest.write_text("{not-json", encoding="utf-8")
+    (tmp_path / ".ai/work-items/archive/index.json").write_text(
+        json.dumps(
+            {
+                "entries": [
+                    {
+                        "contractPath": ".ai/work-items/archive/2026/missing.contract.json",
+                        "contractSha256": "unused",
+                        "summaryPath": ".ai/work-items/archive/2026/missing.summary.json",
+                        "summarySha256": "unused",
+                        "manifestPath": (".ai/work-items/archive/2026/task.archive-manifest.json"),
+                        "manifestSha256": "unused",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    errors = _validate_archive_integrity(tmp_path)
+    assert any("archive index contract path does not exist" in error for error in errors)
+    assert any("archive index summary path does not exist" in error for error in errors)
+    assert any("archive index manifest digest mismatch" in error for error in errors)
+    assert any("archive manifest cannot be read" in error for error in errors)
+
+
+def test_audit_helpers_reject_malformed_path_reverse_and_locator_evidence(
+    tmp_path: Path,
+) -> None:
+    readable = tmp_path / "evidence.md"
+    readable.write_text("known locator\n", encoding="utf-8")
+
+    errors, records = _audit_path_errors(
+        tmp_path,
+        "WI-01",
+        "implementationEvidence",
+        [None, {"path": ""}, {"path": "missing.md"}, {"path": "evidence.md"}],
+    )
+    assert any("implementationEvidence[0] must be an object" in error for error in errors)
+    assert any("implementationEvidence[1].path must be non-empty" in error for error in errors)
+    assert any("implementationEvidence[2] path does not exist" in error for error in errors)
+    assert records == [{"path": "missing.md"}, {"path": "evidence.md"}]
+
+    reverse_errors = _audit_reverse_ref_errors(
+        "WI-01",
+        "implementationEvidence",
+        [{"path": "evidence.md", "reason": "", "instructionRefs": [], "planRefs": ["wrong"]}],
+        {"instruction"},
+        {"plan"},
+    )
+    assert any(".reason must be non-empty" in error for error in reverse_errors)
+    assert any(".instructionRefs must reference" in error for error in reverse_errors)
+    assert any(".planRefs must reference" in error for error in reverse_errors)
+
+    locator_errors = _audit_locator_errors(
+        tmp_path,
+        "WI-01",
+        (
+            (
+                "instructionEvidence",
+                [
+                    {"path": "evidence.md", "ref": "", "locator": ""},
+                    {"path": "evidence.md", "ref": "I1", "locator": "absent locator"},
+                    {"path": "missing.md", "ref": "I2", "locator": "ignored"},
+                ],
+            ),
+        ),
+    )
+    assert any(".ref must be non-empty" in error for error in locator_errors)
+    assert any(".locator must be non-empty" in error for error in locator_errors)
+    assert any("locator is missing: absent locator" in error for error in locator_errors)
+
+
+def test_audit_helpers_reject_malformed_contract_archive_relationships(tmp_path: Path) -> None:
+    assert _archive_entries(tmp_path) == {}
+    assert _audit_contract_evidence_errors(tmp_path, "WI-01", [], {}) == [
+        "WI-01: contractEvidence must be a non-empty list"
+    ]
+
+    errors = _audit_contract_evidence_errors(
+        tmp_path,
+        "WI-01",
+        [
+            None,
+            {
+                "contractPath": "missing.contract.json",
+                "summaryPath": "missing.summary.json",
+                "manifestPath": "missing.manifest.json",
+            },
+        ],
+        {},
+    )
+    assert any("contractEvidence[0] must be an object" in error for error in errors)
+    assert sum("path does not exist" in error for error in errors) == 3
+    assert any("does not match one archive index entry" in error for error in errors)
+
+
+def test_resolved_finding_rejects_corrective_work_item_identity_mismatch() -> None:
+    audit = load_audit()
+    finding = audit["findings"][0]
+    finding["correctiveWorkItemId"] = "different-corrective-work-item"
+    errors = validate_audit(audit, ROOT)
+    assert any(
+        "correctiveEvidence does not match one archive index entry" in error for error in errors
+    )
+
+
+def test_resolved_path_requires_exact_or_unique_archive_fallback(tmp_path: Path) -> None:
+    archive_2025 = tmp_path / ".ai/work-items/archive/2025"
+    archive_2026 = tmp_path / ".ai/work-items/archive/2026"
+    archive_2025.mkdir(parents=True)
+    archive_2026.mkdir(parents=True)
+    archived_name = "task.contract.json"
+    (archive_2025 / archived_name).write_text("{}", encoding="utf-8")
+    active_path = f".ai/work-items/active/{archived_name}"
+
+    assert _resolved_path(tmp_path, active_path) == archive_2025 / archived_name
+    assert _resolved_path(tmp_path, "docs/missing.md") is None
+
+    (archive_2026 / archived_name).write_text("{}", encoding="utf-8")
+    assert _resolved_path(tmp_path, active_path) is None
 
 
 def test_archived_contract_path_rejects_stale_active_manifest_reference(tmp_path: Path):
