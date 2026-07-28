@@ -12,6 +12,10 @@ keywords:
 
 # Documentation Architecture
 
+This page is for documentation maintainers. It defines authoritative ownership,
+language mapping, and current-versus-historical context; adopters normally enter
+through their language README and installation guide.
+
 日本語の主要入口は、[日本語 README](../../README.ja.md)、[インストール](../getting-started/installation.ja.md)、[最初の Work Item](../getting-started/first-work-item.ja.md)、[設定](../configuration.ja.md)、[アーキテクチャ](../architecture.ja.md) です。詳細な英語リファレンスへ進む必要がある場合は、各日本語ページの対応リンクを使用してください。
 
 ## Authoritative entry points
@@ -33,6 +37,9 @@ This page describes the stable documentation split for AI Cockpit. It keeps the 
 | --- | --- | --- |
 | [README.md](../../README.md) | Entry page | What is this, and how do I start quickly? |
 | [docs/getting-started/installation.md](../getting-started/installation.md) | Getting started | How do I install and adopt AI Cockpit? |
+| [30-Second Start](../getting-started/30-second-start.md) | Guided entry | What is the shortest wizard path, and what remains afterward? |
+| [Standard Adoption Guide](../getting-started/standard-adoption-guide.md) | Adoption lifecycle | How do calibration, Work Items, CI, human approval, and target-project adaptation fit together? |
+| [Security and Release Verification](../getting-started/security-release-verification.md) | External evidence boundary | Which release, supply-chain, trust-root, mirror, and enterprise evidence must be verified? |
 | [docs/getting-started/first-work-item.md](../getting-started/first-work-item.md) | Getting started | How do I start the first governed task? |
 | [docs/philosophy/design-philosophy.md](../philosophy/design-philosophy.md) | Philosophy | Why does AI Cockpit exist, and how does it calibrate trust? |
 | [docs/trust-layer.md](../trust-layer.md) | Human-Agent Trust Layer | Why AI Cockpit is needed, what the Human-Agent Trust Layer governs, and how evidence, fail-closed control, trusted chains, supply-chain evidence, and human decisions work together. |
@@ -44,6 +51,7 @@ This page describes the stable documentation split for AI Cockpit. It keeps the 
 | [docs/reference/troubleshooting.md](troubleshooting.md) | Recovery guide | What failed, and how do I recover? |
 | [docs/reference/calibration-session.md](calibration-session.md) | Calibration reference | How do the ten stages, confirmations, stale checks, and activation boundary work? |
 | [docs/reference/capability-truth-matrix.md](capability-truth-matrix.md) | Truth evidence | Which claims are implemented, template-only, adopter-installed, or planned? |
+| [Documentation Context Registry](documentation-context-registry.json) | Context truth | Which plans and design records are current instructions, historical records, implementation records, or immutable archive evidence? |
 | [docs/installation.md](../installation.md) | Compatibility entry | Where do old installation links land now? |
 | [docs/upgrade.md](../upgrade.md) | Compatibility entry | Where do old upgrade links land now? |
 | [docs/distribution.md](../distribution.md) | Compatibility entry | Where do old distribution links land now? |
@@ -59,11 +67,20 @@ The Human-Agent Trust Layer is the authoritative Why / What / How explanation. I
 - Capability Truth Matrix: current implementation status; capability must not be inferred from concepts.
 - Enterprise Control Checklist: adopter and external-control responsibilities.
 
+## Multilingual adoption map
+
+| Layer | English | 中文 | 日本語 |
+| --- | --- | --- | --- |
+| Shortest wizard path | [30-Second Start](../getting-started/30-second-start.md) | [30 秒开始](../getting-started/30-second-start.zh-CN.md) | [30 秒で開始](../getting-started/30-second-start.ja.md) |
+| Adoption lifecycle | [Standard Adoption Guide](../getting-started/standard-adoption-guide.md) | [标准采用指南](../getting-started/standard-adoption-guide.zh-CN.md) | [標準導入ガイド](../getting-started/standard-adoption-guide.ja.md) |
+| Security/release evidence | [Security and Release Verification](../getting-started/security-release-verification.md) | [安全与发布验证](../getting-started/security-release-verification.zh-CN.md) | [セキュリティとリリース検証](../getting-started/security-release-verification.ja.md) |
+
 ## Split Rules
 
 - Keep the README short enough that a reader can reach the installer in one glance.
 - Use README for five-minute positioning, the shortest governance loop, and the Quick Install entry; do not turn it into a complete feature catalogue or Release Reference.
 - Keep `docs/getting-started/installation.md` focused on the adoption lifecycle and validation.
+- Keep the 30-Second Start, Standard Adoption Guide, and Security and Release Verification complete and semantically aligned in English, Chinese, and Japanese; README entrypoints link to their own language.
 - Keep `docs/getting-started/first-work-item.md` focused on the first governed task.
 - Keep Philosophy authoritative for why AI Cockpit exists and how calibrated trust, evidence, and responsibility boundaries shape the design.
 - Keep the Human-Agent Trust Layer authoritative for Why / What / How, evidence semantics, fail-closed recovery, human decision records, trusted chains, supply-chain evidence, and non-goals.
@@ -73,6 +90,12 @@ The Human-Agent Trust Layer is the authoritative Why / What / How explanation. I
 - Keep stack and guard specifics in `docs/configuration.md`, where they can be reused by the install guide without duplicating the full reference.
 - Preserve version-neutral guidance where possible, and keep release-specific notes out of the main installation flow.
 - Use compatibility entry pages when an older path must continue to resolve.
+- Classify every plan and design record in
+  [documentation-context-registry.json](documentation-context-registry.json).
+  Mutable non-current records display “Historical Record / Not Current Product
+  Documentation / Do Not Use As Runtime Instruction.” Immutable Work Item
+  archives are classified by the `.ai/work-items/archive/**` registry entry and
+  are never rewritten for presentation.
 
 ## Intended Navigation
 

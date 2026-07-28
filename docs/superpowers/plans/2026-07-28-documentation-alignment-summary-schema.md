@@ -9,6 +9,10 @@ keywords:
   - tdd
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Documentation Alignment Summary Schema Implementation Plan
 
 **Work Item:** `documentation-alignment-summary-schema-20260728`

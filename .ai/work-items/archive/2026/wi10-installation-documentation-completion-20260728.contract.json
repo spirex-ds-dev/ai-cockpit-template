@@ -1,0 +1,358 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi10-installation-documentation-completion-20260728",
+  "mode": "code",
+  "title": "Complete WI-10 installation documentation alignment",
+  "baseCommit": "db8ea3f3bd685dd8af5f13331445a30ce011b859",
+  "predecessorWorkItem": {
+    "workItemId": "recover-hosted-cancellation-evidence-20260728",
+    "status": "closed",
+    "pr": {
+      "number": 421,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/421",
+      "mergeCommit": "db8ea3f3bd685dd8af5f13331445a30ce011b859"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/recover-hosted-cancellation-evidence-20260728.archive-manifest.json"
+    }
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi10-installation-documentation-completion-20260728.contract.json",
+    ".ai/work-items/active/wi10-installation-documentation-completion-20260728.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/decisions/**",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/getting-started/**",
+    "docs/reference/documentation-architecture.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/features/task-outcome-report-self-check.md",
+    "docs/superpowers/plans/**",
+    "docs/superpowers/specs/**",
+    "scripts/check_docs_metadata.py",
+    "scripts/check_system_invariants.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_instruction_traceability.py",
+    "tests/test_system_invariants.py",
+    "docs/reference/remediation-instruction-traceability.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json"
+  ],
+  "outOfScope": [
+    "Publishing a release, changing release identity, changing tags, or modifying provider state",
+    "Changing runtime, installer, calibration, security, or capability implementation behavior",
+    "Claiming Japanese capability assessment, enterprise compliance, provider identity, sandboxing, or production readiness",
+    "Deleting or rewriting immutable archived Work Item evidence",
+    "Deleting execution plans or design records; final plan cleanup remains the last dedicated stage",
+    "Fixing RFE-ISSUE-147 detached-ready lifecycle reporting inside this documentation Work Item"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/documentation-alignment-20260726.contract.json",
+      "reason": "The original WI-10 Contract declares the three documentation layers and multilingual/system-invariant acceptance."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/documentation-alignment-20260726.summary.json",
+      "reason": "The original WI-10 Summary shows the delivered files and exposes that installation.md and complete trilingual layered documents were omitted."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative approved remediation plan, exact WI-10 requirements, bidirectional tracking rule, and eight-stage execution order."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "PLAN-DIRECTIVE-003 records docs/getting-started/installation.md as an explicit release-blocking WI-10 gap."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "User-named authoritative English installation guide that must be explicitly modified or carry a justified no-change mapping."
+    },
+    {
+      "path": "docs/getting-started/installation.ja.md",
+      "reason": "Existing Japanese installation entry whose semantics must remain aligned."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Current executable release/version/ref/command/path/environment/capability/stack documentation checks."
+    },
+    {
+      "path": "docs/superpowers/plans/README.md",
+      "reason": "Existing plan index and historical retention policy that must gain machine-checkable context classification."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "documentation_truth_drift",
+      "multilingual_semantic_drift",
+      "release_claim_overstatement",
+      "historical_context_precedence"
+    ],
+    "reason": "Installation and release documentation can misdirect adopters or overstate capability if commands, versions, language variants, and historical context are not checked together.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized the eight-stage serial plan and required WI-10 to follow the original detailed installation-documentation instructions before the full audit."
+  },
+  "preReviewWarnings": [
+    "A translated summary is not equivalent to a complete language variant when the authoritative command or stop boundary differs.",
+    "Command labels must describe evidence actually available; syntax checks cannot be promoted to hosted or adopter execution.",
+    "Historical classification must not mutate immutable archives or hide still-current instructions.",
+    "No documentation statement may infer capability implementation from design intent."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "docs/getting-started/installation.md is explicitly modified and bidirectionally mapped to the user instruction; English and Japanese installation entrypoints plus Chinese navigation state the same install, adoption, calibration, human approval, CI, target-project adaptation, and stop boundaries.",
+    "The 30-Second Start exists in complete English, Chinese, and Japanese versions and only explains how to start the Wizard, what it does, what it does not do, and what remains after installation.",
+    "The Standard Adoption Guide exists in complete English, Chinese, and Japanese versions and covers Adoption, Calibration, Work Item, CI, human approval, and target-project adaptation.",
+    "Security and Release Verification exists in complete English, Chinese, and Japanese versions and covers release metadata, digest, provenance, SBOM, trust root, private mirror, local source, and enterprise boundary without publishing or overstating a capability.",
+    "Executable checks bind release version, install.sh default ref behavior, release.json, all three READMEs, installation guidance, command names, Make targets, file paths, options, environment variables, capability status, and supported stack lists; drift blocks the release-quality path.",
+    "Every executable command example in the WI-10 authoritative installation/documentation set carries exactly one of syntax_tested, fixture_executed, hosted_executed, adopter_required, or illustrative_only, and the checker rejects missing or unknown labels.",
+    "Semantic checks cover North Star, product boundary, installation flow, human confirmation, security limits, Prompt Injection limits, enterprise compliance boundary, supported scope, release version semantics, and Task Outcome fields across English, Chinese, and Japanese entrypoints.",
+    "Historical plans and old design records are classified by a machine-readable context registry; mutable historical documents use the exact Historical Record / Not Current Product Documentation / Do Not Use As Runtime Instruction marker, while immutable archives are path-classified without byte mutation.",
+    "README language entrypoints link to same-language layered guidance and do not duplicate or contradict the authoritative installation lifecycle.",
+    "Focused red/green documentation regressions, full quality, instruction traceability, documentation alignment, PR/hosted checks, merge, archive, ai-close-work-item, branch cleanup, and main synchronization all pass before WI-01 through WI-20 audit starts."
+  ],
+  "guidelines": [
+    "Map every user-named file to implementation evidence or a specific no-change rationale; do not let a broad glob stand in for the named path.",
+    "Use evidence labels conservatively and never promote syntax or fixture execution to hosted/adopter proof.",
+    "Keep English, Chinese, and Japanese structure, commands, stop conditions, and non-claims semantically aligned.",
+    "Preserve immutable archive bytes and separate current instructions from historical evidence through explicit, machine-readable context.",
+    "Capability Truth Matrix and release metadata remain the only current capability/version facts; documentation cannot create capability truth."
+  ],
+  "intent": {
+    "problem": "The archived WI-10 added three short English pages and README links but omitted the user-named docs/getting-started/installation.md, did not provide complete Chinese/Japanese layered documents, and did not mechanically enforce command evidence labels, ten-domain multilingual semantics, or historical-context precedence. This allows an archived 'complete' claim while the adopter-facing installation improvement remains incomplete.",
+    "constraints": [
+      "Follow the user's original detailed WI-10 instruction rather than the archived Summary's completion wording.",
+      "Do not publish or change a release and do not claim the later Japanese assessment has passed.",
+      "Do not modify immutable archive evidence; use current corrective evidence and path/registry classification.",
+      "Do not change runtime behavior or capability statuses without implementation evidence.",
+      "Record RFE-ISSUE-147 for the later process stage: ai-close can report ready while leaving the current worktree detached when main is checked out in a stale worktree."
+    ],
+    "rationale": "Complete trilingual layered guidance plus executable fact, command-label, semantic, and historical-context checks closes the exact omission and prevents future documentation completion claims from bypassing named-path evidence."
+  },
+  "rawUserRequest": "After the deep performance Work Item closes, complete WI-10 according to the original detailed installation-documentation instruction. Use the instruction-plan-implementation-acceptance bidirectional mechanism for every named file and all Work Items; do not omit docs/getting-started/installation.md. The required order is deep performance, WI-10, WI-01 through WI-20 audit, remaining process issues and RFE-ISSUE-082, Japanese assessment and corrections, documentation alignment, release, then plan cleanup. The user has already authorized continuous execution without another confirmation unless a true human decision is required.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-28-wi10-original-detailed-instruction-and-eight-stage-order",
+    "capturedAt": "2026-07-28",
+    "digest": "sha256:user-approved-wi10-complete-installation-documentation-corrective"
+  },
+  "declaredIntent": {
+    "summary": "Close every original WI-10 installation-documentation requirement with trilingual content, named-path evidence, executable drift checks, and historical context isolation.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A user-named installation file is inside a broad scope glob but is not changed or justified.",
+      "expected": "Instruction traceability remains incomplete and release stays blocked.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/reference/remediation-instruction-traceability.json",
+        "tests/test_instruction_traceability.py::test_named_path_requires_evidence_or_explicit_no_change_rationale",
+        "tests/test_instruction_traceability.py::test_named_path_can_be_satisfied_by_implementation_evidence"
+      ],
+      "verificationPlan": "Add an exact requiredNamedPaths mapping and regression proving docs/getting-started/installation.md must appear in implementation evidence or a specific no-change rationale."
+    },
+    {
+      "scenario": "One language omits or weakens a command, human stop, security limit, or enterprise non-claim.",
+      "expected": "The multilingual semantic check fails with the missing domain and language path.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_docs_metadata.py::test_wi10_check_rejects_missing_language_layer",
+        "tests/test_docs_metadata.py::test_wi10_check_rejects_semantic_domain_or_capability_truth_drift"
+      ],
+      "verificationPlan": "Create trilingual section/domain markers and mutation tests for each of the ten required semantic domains."
+    },
+    {
+      "scenario": "An executable documentation block has no evidence label or claims stronger evidence than registered.",
+      "expected": "Documentation metadata checks reject the block and identify its file and line.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_docs_metadata.py::test_wi10_check_rejects_unlabeled_authoritative_command",
+        "tests/test_docs_metadata.py::test_wi10_check_rejects_unknown_or_duplicate_command_evidence"
+      ],
+      "verificationPlan": "Add negative fixtures for missing, unknown, duplicate, and structurally misplaced command evidence labels, plus positive coverage for all authoritative WI-10 pages."
+    },
+    {
+      "scenario": "Release metadata, installer ref, command, option, environment variable, capability status, or stack list drifts from implementation.",
+      "expected": "System/documentation invariants fail before release preparation.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_docs_metadata.py::test_wi10_check_rejects_installer_option_or_environment_drift",
+        "tests/test_docs_metadata.py::test_wi10_check_rejects_coverage_base_or_lifecycle_fact_drift",
+        "tests/test_docs_metadata.py::test_wi10_check_rejects_ui_localization_or_published_tag_overclaim",
+        "tests/test_docs_metadata.py::test_check_rejects_public_quality_target_drift",
+        "tests/test_docs_metadata.py::test_check_rejects_supported_stack_drift",
+        "tests/test_system_invariants.py"
+      ],
+      "verificationPlan": "Extend mutation tests across release.json, install.sh, Makefile targets, installer options/environment variables, capability matrix references, and canonical stack lists."
+    },
+    {
+      "scenario": "A historical plan, old design, or immutable archive is surfaced as current runtime instruction.",
+      "expected": "Context classification fails closed; immutable archive bytes remain unchanged.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/reference/documentation-context-registry.json",
+        "tests/test_docs_metadata.py::test_wi10_check_rejects_historical_record_without_boundary_marker"
+      ],
+      "verificationPlan": "Add a machine-readable context registry, exact marker checks for mutable historical documents, path classification for archives, and negative current/historical precedence tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized the complete WI-10 corrective, including current governance evidence, plan, traceability, documentation checks, and full lifecycle execution."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 642
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi10-installation-documentation-completion-20260728.json",
+    "baseCommit": "6908ce709c8bcf01af3302148cbba00ea22b73d4",
+    "initialScopeDigest": "0ce42e9b4f88e551b1c75f535188710ba4d14866e09ada482b8a8201c313c677",
+    "contractSkeletonDigest": "13c47ba37f879b60dbc48e0d119c71d4c0d8c575e18ca14c6a5226bb0ab6bc56"
+  },
+  "resumeHistory": [
+    {
+      "resumeVersion": 1,
+      "fromBaseCommit": "6908ce709c8bcf01af3302148cbba00ea22b73d4",
+      "toBaseCommit": "db8ea3f3bd685dd8af5f13331445a30ce011b859",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/wi10-installation-documentation-completion-20260728",
+      "recordedAt": "2026-07-28T05:38:16.999238+00:00",
+      "priorContractDigest": "266e612934cbc23c67f47da3f7a42fa394481361e3ded617a41de2ba8af54486",
+      "predecessorWorkItemId": "recover-hosted-cancellation-evidence-20260728",
+      "predecessorMergeCommit": "db8ea3f3bd685dd8af5f13331445a30ce011b859",
+      "predecessorManifestPath": ".ai/work-items/archive/2026/recover-hosted-cancellation-evidence-20260728.archive-manifest.json",
+      "predecessorClosure": {
+        "statusClosed": true,
+        "prMerged": true,
+        "closureSucceeded": true,
+        "localBranchDeleted": true,
+        "remoteBranchDeleted": true,
+        "baseSynchronized": true
+      }
+    }
+  ]
+}

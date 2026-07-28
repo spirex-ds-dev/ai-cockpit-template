@@ -5,6 +5,10 @@ description: Historical closure index for completed governance hardening.
 keywords: [governance, historical]
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # AI Cockpit Governance Hardening Closure
 
 **Status:** HISTORICAL / completed. Do not launch new Work Items from this plan.

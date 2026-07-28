@@ -4,6 +4,10 @@ title: "Preflight Planned Scenario Transition Implementation Plan"
 description: Task-by-task implementation and verification plan for planned scenario readiness and atomic ai-start failure.
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Preflight Planned Scenario Transition Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

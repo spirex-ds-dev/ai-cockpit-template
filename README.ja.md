@@ -29,7 +29,7 @@ Quality Gate の責任範囲、timing 証拠、Work Item の追跡手順は[Qual
 
 企業向け統制の境界については、[Enterprise Control Boundary Checklist](docs/reference/enterprise-control-checklist.md) と [status matrix](docs/reference/enterprise-control-matrix.json) を参照してください。リポジトリ内の証拠は外部統制の検証を意味しません。公開前には必須の WI-16 日本語能力評価を完了する必要があります。
 
-現行の導入案内は、[30 秒で開始](docs/getting-started/30-second-start.md)、[標準導入ガイド](docs/getting-started/standard-adoption-guide.md)、[セキュリティとリリース検証](docs/getting-started/security-release-verification.md)の三層です。履歴計画とアーカイブ記録は現在の手順ではなく、証拠のコンテキストとして扱います。
+現行の導入案内は、[30 秒で開始](docs/getting-started/30-second-start.ja.md)、[標準導入ガイド](docs/getting-started/standard-adoption-guide.ja.md)、[セキュリティとリリース検証](docs/getting-started/security-release-verification.ja.md)の三層です。履歴計画とアーカイブ記録は現在の手順ではなく、証拠のコンテキストとして扱います。
 
 [English](README.md) | [中文](README.zh-CN.md)
 
@@ -58,7 +58,7 @@ AI Cockpit は業務スキルや Agent Runtime ではなく、Human-Agent Trust 
 
 TTY で引数なしの `./install.sh` を実行するか `--interactive` を指定すると、8 段階の Installation Wizard が起動します。対象リポジトリ、New Adoption / Upgrade / Dry Run、書き込み計画を表示し、明示的な確認まで書き込みません。非対話の引数なし実行は fail closed になり、既存の明示的な CLI オプションの動作は変わりません。Wizard は commit、push、PR 作成、merge を行いません。
 
-インストール後は `make cockpit-calibration-wizard` で再開可能な 10 段階の Calibration Wizard を実行します。永続化された Calibration Session を再利用し、Back / Pause / Resume と stale 再検証に対応します。Unknown または stale な証拠がある場合は停止し、Candidate 有効化には Reviewer と Owner の別々の確認が必要です。Wizard の表示言語と導入先プロジェクトの文書言語は独立しており、既定の Wizard 言語は日本語です。
+インストール後は `make cockpit-calibration-wizard` で再開可能な 10 段階の Calibration Wizard を実行します。永続化された Calibration Session を再利用し、Back / Pause / Resume と stale 再検証に対応します。Unknown または stale な証拠がある場合は停止し、Candidate 有効化には Reviewer と Owner の別々の確認が必要です。永続 Session schema は現在 `language: ja` を記録しますが、表示文字列がすべて日本語化済みという主張ではありません。
 
 モバイル例は証拠 fixture とシナリオです。ホステッド検証は最小 Swift Package と Android smoke path が中心で、Xcode project/workspace、CocoaPods、導入先固有の Gradle variant、ホスト JDK の選択、instrumented test 実行を Wizard が保証するものではありません。これらは導入先で校正してください。
 
@@ -122,18 +122,16 @@ Cockpit が更新される。
 ## 最新の公開ランタイムをインストール
 
 ```sh
-ADOPTION_BASE="$(git rev-parse HEAD)"
 STACK="${STACK:-generic}" # generic、python、go、rust、typescript、java、android、kotlin、flutter、swift、ruby、php、csharp
-: "${AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY:?このリリースの公開 Git remote を設定してください}"
-: "${AI_COCKPIT_TEMPLATE_RAW_BASE:?対応する raw-content base を設定してください}"
-PUBLIC_REPOSITORY="$AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY"
-RAW_BASE="$AI_COCKPIT_TEMPLATE_RAW_BASE"
+PUBLIC_REPOSITORY="${AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY:-https://github.com/spirex-ds-dev/ai-cockpit-template.git}"
+RAW_BASE="${AI_COCKPIT_TEMPLATE_RAW_BASE:-https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template}"
 RELEASE_TAG="$(curl -fsSL "${RAW_BASE}/main/release.json" 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin)["releaseTag"])' 2>/dev/null || git ls-remote --tags --refs "$PUBLIC_REPOSITORY" 'v*' | python3 -c 'import re,sys; tags=[m.group(1) for line in sys.stdin for m in [re.search(r"refs/tags/(v\d+\.\d+\.\d+)$", line)] if m]; print(max(tags, key=lambda tag: tuple(map(int, tag[1:].split(".")))))')"
 INSTALLER="$(mktemp)"
 trap 'rm -f "$INSTALLER"' EXIT
 curl -fsSL "${RAW_BASE}/${RELEASE_TAG}/install.sh" -o "$INSTALLER"
 AI_COCKPIT_TEMPLATE_REPO="$PUBLIC_REPOSITORY" \
   AI_COCKPIT_TEMPLATE_REF="$RELEASE_TAG" sh "$INSTALLER" --stack "$STACK" --update-makefile --create-adoption
+ADOPTION_BASE="$(git rev-parse HEAD)" # installer が remote default branch から adoption branch を作成済み
 make ai-finish TASK=adopt_ai_cockpit
 git add .
 git commit -m "adopt AI Cockpit governance"
@@ -144,7 +142,7 @@ make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this pro
 
 導入先プロジェクトでは、ローカルの finish/archive 後に `git commit` を実行する前に人の許可を取り、さらに `git push` の前にも別の許可を取ります。PR の準備はツールで行えても、merge は人が手動で実行します。手動 merge 後、`make ai-close-work-item TASK=<task>` の実行にも明示的な許可を必要とし、自動 merge と自動 branch 削除は有効にしません。この保守的な gate は導入・upgrade の導入先プロジェクトにだけ適用し、template repository 自身の保守フローは変更しません。
 
-このコマンドは公開済みの `release.json` を優先し、メタデータ移行中にファイルが存在しない場合は、公開済みのセマンティックバージョンタグから最新のものを選びます。その後、解決したタグのインストーラーのみをダウンロードして実行します。公開版の機能はソースツリーより遅れる場合があるため、初回導入 PR を作成する前に[インストール手順](docs/getting-started/installation.ja.md)を確認してください。
+このコマンドは公開済みの `release.json` を優先し、メタデータ移行中にファイルが存在しない場合は、remote の最新 semantic-version tag を選びます。remote tag だけでは provider の公開証拠になりません。その後、解決したタグのインストーラーのみをダウンロードして実行します。公開版の機能はソースツリーより遅れる場合があるため、初回導入 PR を作成する前に[インストール手順](docs/getting-started/installation.ja.md)を確認してください。
 リリース元のメタデータやタグ付きインストーラーが公開されていない場合、このクイックインストールを匿名導入の前提として扱わないでください。`AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY` と `AI_COCKPIT_TEMPLATE_RAW_BASE` はリリースタグの解決とインストーラーの取得にだけ使われ、インストーラー自体は `AI_COCKPIT_TEMPLATE_REPO` と `AI_COCKPIT_TEMPLATE_SOURCE` で clone / source の選択を行います。その場合はローカル clone か、明示的に設定した source を使ってください。
 
 生成された設定用 Contract の変更範囲を確認・拡張してから、Project Profile、Guard、品質コマンド、CI を変更します。その後、ブロッキングゲートを有効にする前に実行系を対象プロジェクトへ適合させます。
@@ -267,7 +265,7 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 - POSIX 準拠のシェルおよび GNU Make 実行環境。
 - Linux および macOS は、ローカル実行および CI 用として公式にサポートされています。ネイティブの Windows シェルはサポートされていないため、WSL (Windows Subsystem for Linux) または他の POSIX ターミナルで実行してください。
 
-リポジトリの `make quality` は、スクリプトカバレッジ全体の下限 80% とライフサイクル上重要な各スクリプトの回帰防止下限、`scripts/` と `tests/` への Ruff、すべてのガバナンススクリプトへの Mypy、中・高重要度を対象とする Bandit、Python コンパイル、差分検査、ドキュメント整合性検査を実行します。
+リポジトリの `make quality` は、スクリプトカバレッジ全体の下限 85.10% とライフサイクル上重要な各スクリプトの回帰防止下限、`scripts/` と `tests/` への Ruff、すべてのガバナンススクリプトへの Mypy、レビュー済み low-risk baseline との完全一致および未登録の中・高リスク finding がないことを確認する Bandit、Python コンパイル、差分検査、ドキュメント整合性検査を実行します。
 
 ## 詳細ドキュメント
 

@@ -9,6 +9,10 @@ keywords:
   - review-remediation
   - work-item-lifecycle
 ---
+
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
 # Conditional GO 全面评审整改执行计划
 > **Historical status:** Finalized by `conditional_go_final_release_preflight_v2`; retained for audit and must not launch new Work Items.
 

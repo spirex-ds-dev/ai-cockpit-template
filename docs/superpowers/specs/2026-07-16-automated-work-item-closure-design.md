@@ -9,6 +9,10 @@ keywords:
   - automation
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Automated Work Item Lifecycle Closure Design
 
 ## Problem and boundary

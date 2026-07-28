@@ -96,7 +96,7 @@ keywords:
 严格执行以下八阶段顺序；任何阶段都必须完成独立 Work Item 的 Contract→实现→验收→PR→merge→archive→`ai-close-work-item`→本地/远程分支清理→main 同步，才允许进入下一阶段：
 
 1. 深度性能工单：完成 `quality-gate-deep-performance-optimization-20260728`；
-2. WI-10：按用户原始详细安装文档指示补齐全部点名文件、三语语义、命令证据和 no-change rationale；
+2. WI-10：按用户原始详细安装文档指示补齐全部点名文件、三语语义、命令证据；点名文件必须有实现证据，只有确实无需改动时才允许具体的 no-change rationale；
 3. WI-01～WI-20 全量双向追踪审计：逐项核对“指示—计划—实现—验收”，任何遗漏必须先建立 corrective Work Item 并完成；
 4. 其他流程问题与 `RFE-ISSUE-082`：处理所有已记录未解决流程问题，再完成发布阶段发现的 `RFE-ISSUE-082`；
 5. 日语评估及整改：执行全面日语能力评估，任何问题必须完成 corrective Work Item 并重新评估；
@@ -238,9 +238,11 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 
 **必须验证：** docs metadata/link/command/version/capability/multilingual checks。完成后逐项记录本计划与所有已完成 Work Item 文档的对齐结果。
 
-**WI-10 当前实现边界：** 新增 `docs/getting-started/30-second-start.md`、`standard-adoption-guide.md` 和 `security-release-verification.md`，并在三语 README 中提供入口；文档明确证据标签、安装/采用边界、发布证据约束和历史内容优先级。`scripts/check_docs_metadata.py`、`scripts/check_system_invariants.py` 及其测试验证 metadata、系统不变量和多语言/历史语义；本工单不执行发布，也不提前声明 WI-16 日语能力评估通过。
+**WI-10 当前实现边界：** corrective `wi10-installation-documentation-completion-20260728` 明确修改用户点名的 `docs/getting-started/installation.md`，并建立 30 秒开始、标准采用、安全与发布验证各自完整的英中日三语版本；三语 README 只保留同语言入口。命令证据标签、安装选项/环境变量、Capability Truth Matrix 链接、十个语义域、历史上下文登记及不可变 archive 分类由 `scripts/check_docs_metadata.py` 和负向回归 fail closed 验证；本工单不执行发布，也不提前声明 WI-16 日语能力评估通过。
 
-**WI-10 流程问题记录：** `WI-10-ISSUE-001`：请求的短任务 ID `documentation-alignment` 已存在历史记录，`make ai-start` fail-closed 地分配实际 ID `documentation-alignment-20260726`，避免复用历史 Contract/分支；后续 PR、归档、关闭均使用该实际 ID。`WI-10-ISSUE-002`：初始 Contract 骨架触发 `not_ready`；已补全 scope、outOfScope、sources、acceptance、verification、intent、原始请求和 scenario coverage，并在用户已授权的串行执行范围内继续；完成最终 Contract 后必须重新运行 preflight 与 checkpoint，不复用旧证据。
+**WI-10 流程问题记录：** `WI-10-ISSUE-001`：请求的短任务 ID `documentation-alignment` 已存在历史记录，`make ai-start` fail-closed 地分配实际 ID `documentation-alignment-20260726`，避免复用历史 Contract/分支。`WI-10-ISSUE-002`：初始 Contract 骨架触发 `not_ready`；已补全 scope、outOfScope、sources、acceptance、verification、intent、原始请求和 scenario coverage，并重新运行 Preflight 与 checkpoint，不复用旧证据。`WI-10-ISSUE-003`：原 WI-10 虽有宽泛 scope 与 no-change rationale，却遗漏用户点名的 `installation.md` 实改；corrective `wi10-installation-documentation-completion-20260728` 已把该路径改为实现证据，增加双向追踪和负向测试。`WI-10-ISSUE-004`：日语风格检查曾扫描中文文件并把“阻断”误判为日语问题；检查范围已限定为 `README.ja.md` 与 `*.ja.md`，既有日语负例继续通过。`WI-10-ISSUE-005`：五策略文档审查发现原自动检查未覆盖的事实漂移：中日 README 在 installer 建立远程基线分支前捕获 `ADOPTION_BASE`、覆盖率仍写 80% 而实现为 85.10%、remote tag 被误称为 provider published、Wizard 可见 UI 被过度声明为日语默认、Standard Adoption 在 archive commit 前调用 PR check，并硬编码 `origin/main`。已修正文档、补全日文主流程，并把 coverage/base/lifecycle/UI/tag/remote 边界加入 fail-closed 文档事实回归。`WI-10-ISSUE-006`：首次 `ai-finish` 在约 4 秒的 fast-static 阶段被 Mypy 阻止，因为新 checker 的局部 `paths` 缺少 `list[Path]` 类型标注；已补类型并要求从头重跑 Finish，不复用失败运行。
+
+`WI-10-ISSUE-007`：完整质量中的 nested finish/adopter 测试继承了外层 WI-10 的直接 `CONTRACT`、`TASK` 等环境变量，现有清理只处理编码在 Make flags 中的值；WI-10 立即暂停，独立 corrective 与 Hosted recovery 通过 PR #421 合并，直接环境键和编码键均被 fail-closed 清理，1293 个本地测试及 35 个 Hosted 检查通过，两个分支和临时 worktree 均已清理，WI-10 再通过 `ai-resume-work-item` 续接到该 merge commit。`WI-10-ISSUE-008`：恢复后的质量架构把文档 checker 用于比较 Markdown 的 `../reference/...` 文本误判为文件系统 path traversal；保留原路径逃逸规则和负例，只使用 `PurePosixPath` 分段构造权威相对链接，red-first 回归、路径逃逸负例及 40 个 WI-10 文档/追踪测试均通过。
 
 ### WI-11：Enterprise Governance Boundary
 
@@ -589,5 +591,6 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 - `RFE-ISSUE-144`（文档 Make 命令解析，低）：深度性能 measurement snapshot 的首次 fast policy 在约十秒内把计划中的 ``make -n quality`` 错误识别为缺失 target `-n`。先以集成回归复现，再让 system-invariant parser 识别 `-n`、`--dry-run`、`--just-print`、`--recon` 这组无参数 dry-run 选项后提取真实 target；不通过改写文档隐藏解析缺陷。聚焦回归和真实 `make check-ai-system-invariants` 已通过，measurement candidate 必须包含该修复后重新生成。
 - `RFE-ISSUE-145`（Snapshot 子 Make 环境隔离，高）：第二次 measurement snapshot 的完整 pytest 中 1290 项通过、coverage 85.21%，但三个 adopter lifecycle 测试共同失败；snapshot 入口的命令行 `CONTRACT=<performance>` 经 GNU Make 的 `MAKEFLAGS`/`MAKEOVERRIDES` 传入 pytest，再泄漏到临时安装工程的嵌套 `make ai-finish TASK=e2e`，使 adopter 错用模板 active Contract。已用 red-first runner 回归要求独立 quality 子进程清除 `MAKEFLAGS`、`MAKEOVERRIDES`、`MFLAGS`、`GNUMAKEFLAGS`、`CONTRACT`、`SUMMARY`、`TASK`、`AI_BASE_COMMIT`，同时保留其他 CI/session 环境；原三个失败测试与环境单测聚焦重验均通过。不得以测试特判或复制模板 Contract 到 adopter 绕过。
 - `RFE-ISSUE-146`（Manual smoke intent 边界，高）：首个 source-bound hosted run `30324321071` 的 `template-smoke` 成功，quality step 为 10 分 53 秒，`installation-smoke` 15 秒，但整体失败；所有 `workflow_dispatch` 被旧表达式无条件视为 release preparation，导致非发布 measurement branch 执行历史 release-state consistency 并失败，末端 evidence 正确记录 `release-evidence:failure`。Workflow 现要求显式 `purpose` choice：`release_preparation` 保持严格默认和发布证据检查，`hosted_measurement` 只声明性能测量且 release-evidence Job 以 not-applicable 成功退出；三语质量文档给出精确 dispatch 命令，静态 Workflow 回归禁止重新合并两种 intent。该失败 run 只作为诊断/初始 timing，不计入三次成功验收样本。
+- `RFE-ISSUE-147`（Worktree/关闭状态，中）：深度性能工单的 `ai-close-work-item` 在另一个 stale worktree 占用 `main` 时，为避免破坏该 worktree 会让当前工作区停留在 detached HEAD，但最终仍报告 repository ready，容易使下一工单误以为已处于同步后的本地默认分支。现场已通过只读核对、移除两个 clean stale worktree 并切回同步 `main` 恢复；流程根因不得混入 WI-10，必须在“其他流程问题”阶段建立独立 corrective，使 closure 最终状态明确区分 ready-on-base 与 ready-but-detached，并以多 worktree 回归阻止再次误报。
 - `PLAN-006`（用户顺序确认/发布门禁，高）：用户最终确认后续严格顺序为“深度性能工单 → WI-10 → WI-01～WI-20 全量双向追踪审计 → 其他流程问题与 RFE-ISSUE-082 → 日语评估及整改 → 文档对齐 → 发布 → 清理计划文档”。该顺序已替换旧五阶段概括；发布不得越过任一前置阶段，任何阶段发现遗漏或流程问题都必须先完成对应 corrective Work Item 的完整生命周期。
 - 深度性能工单在提交 `f9e1b7e41ec282de2704497369a9db4a7ac8db6c` 上取得三次串行、同类型、同 SHA 的成功 hosted measurement：run `30325316583`、`30325920850`、`30326505323` 的 quality step 分别为 650、655、653 秒，median 653 秒，按小样本 nearest-rank 的保守 p95 为 655 秒；`project-test` 分别为 637.117、642.422、640.607 秒，median 640.607 秒，p95 642.422 秒。相对 run `30280375075` 的 1281 秒基线，quality p95 缩短约 48.9%，达到第一阶段 p95 <15 分钟目标。该结果证明结构性改善，但重测试绝对耗时仍约 11 分钟，`project-test` 仍是后续性能改进的主要残余瓶颈。

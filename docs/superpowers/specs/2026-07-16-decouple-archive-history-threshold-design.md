@@ -8,6 +8,10 @@ keywords:
   - complexity
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Decouple Immutable Archive History from Complexity Thresholds
 
 ## Problem

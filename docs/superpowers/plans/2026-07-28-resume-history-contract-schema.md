@@ -9,6 +9,10 @@ keywords:
   - contract
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Resume History Contract Schema Corrective
 
 ## Problem

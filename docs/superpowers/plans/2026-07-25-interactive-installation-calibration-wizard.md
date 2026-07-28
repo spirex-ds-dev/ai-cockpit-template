@@ -9,6 +9,10 @@ keywords:
   - work-item-lifecycle
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Interactive Installation and Calibration Wizard Implementation Plan
 
 > **Lifecycle status (2026-07-25):** WI0–WI11 completed, merged, archived, and closed. WI12 is the controlled historical-document cleanup; the canonical plan remains retained for audit and the final verification report is [archive-backed](../../../.ai/work-items/archive/2026/wizard-final-verification-and-user-report.summary.json).

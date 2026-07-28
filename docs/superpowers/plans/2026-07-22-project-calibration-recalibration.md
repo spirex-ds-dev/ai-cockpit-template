@@ -5,6 +5,10 @@ description: "已完成项目校准整改计划的历史关闭索引。"
 keywords: [project-calibration, recalibration, historical]
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Project Calibration and Update Recalibration Closure
 
 **Status:** HISTORICAL / completed. Do not launch new Work Items from this plan.

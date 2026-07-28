@@ -9,6 +9,10 @@ keywords:
   - release
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Supply-Chain SBOM and Release Trust Design
 
 ## Goal

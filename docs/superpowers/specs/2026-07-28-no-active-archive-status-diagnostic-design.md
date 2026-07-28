@@ -4,6 +4,10 @@ title: "No-Active Archive Status Diagnostic Design"
 description: Narrow ownership design for a start receipt in a pre-commit archive bundle.
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # No-Active Archive Status Diagnostic Design
 
 ## Problem

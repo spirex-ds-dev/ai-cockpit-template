@@ -4,6 +4,10 @@ title: "Preflight Planned Scenario Transition Design"
 description: Fail-closed design for implementation-ready scenario plans and atomic ai-start failure.
 ---
 
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 # Preflight Planned Scenario Transition Design
 
 ## Problem

@@ -2,7 +2,13 @@ import json
 import shutil
 from pathlib import Path
 
-from check_docs_metadata import check_repository
+from check_docs_metadata import (
+    check_repository,
+    command_evidence_errors,
+    documentation_fact_errors,
+    historical_context_errors,
+    multilingual_layer_errors,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,10 +24,180 @@ def copy_documentation(target: Path) -> None:
     shutil.copy2(ROOT / ".ai" / "glossary.md", target / ".ai" / "glossary.md")
     shutil.copy2(ROOT / "release.json", target / "release.json")
     shutil.copy2(ROOT / "install.sh", target / "install.sh")
+    shutil.copy2(ROOT / "Makefile", target / "Makefile")
 
 
 def test_repository_documentation_metadata_is_consistent():
     assert check_repository(ROOT) == []
+
+
+def test_wi10_layered_documents_are_complete_and_trilingual():
+    assert multilingual_layer_errors(ROOT) == []
+
+
+def test_wi10_authoritative_command_examples_have_evidence_labels():
+    assert command_evidence_errors(ROOT) == []
+
+
+def test_historical_context_registry_is_complete_and_non_authoritative():
+    assert historical_context_errors(ROOT) == []
+
+
+def test_wi10_check_rejects_missing_language_layer(tmp_path):
+    copy_documentation(tmp_path)
+    (tmp_path / "docs/getting-started/30-second-start.ja.md").unlink()
+
+    errors = multilingual_layer_errors(tmp_path)
+    assert (
+        "docs/getting-started/30-second-start.ja.md: required WI-10 language document is missing"
+    ) in errors
+
+
+def test_wi10_check_rejects_unlabeled_authoritative_command(tmp_path):
+    copy_documentation(tmp_path)
+    installation = tmp_path / "docs/getting-started/installation.md"
+    installation.write_text(
+        installation.read_text(encoding="utf-8").replace(
+            "<!-- command-evidence: adopter_required -->\n```sh",
+            "```sh",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    assert any(
+        "executable command fence is missing command-evidence" in error
+        for error in command_evidence_errors(tmp_path)
+    )
+
+
+def test_wi10_check_rejects_unknown_or_duplicate_command_evidence(tmp_path):
+    copy_documentation(tmp_path)
+    start = tmp_path / "docs/getting-started/30-second-start.md"
+    text = start.read_text(encoding="utf-8")
+    text = text.replace(
+        "<!-- command-evidence: adopter_required -->",
+        "<!-- command-evidence: illustrative_only -->\n<!-- command-evidence: adopter_required -->",
+        1,
+    )
+    start.write_text(text, encoding="utf-8")
+    chinese = tmp_path / "docs/getting-started/30-second-start.zh-CN.md"
+    chinese.write_text(
+        chinese.read_text(encoding="utf-8").replace(
+            "<!-- command-evidence: adopter_required -->",
+            "<!-- command-evidence: unsupported_claim -->",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    errors = command_evidence_errors(tmp_path)
+    assert any("unknown command evidence label: unsupported_claim" in error for error in errors)
+    assert any(
+        "command-evidence is not attached to an executable fence" in error for error in errors
+    )
+
+
+def test_wi10_check_rejects_semantic_domain_or_capability_truth_drift(tmp_path):
+    copy_documentation(tmp_path)
+    adoption = tmp_path / "docs/getting-started/standard-adoption-guide.zh-CN.md"
+    adoption.write_text(
+        adoption.read_text(encoding="utf-8").replace("<!-- semantic-domain: north-star -->", "", 1),
+        encoding="utf-8",
+    )
+    security = tmp_path / "docs/getting-started/security-release-verification.zh-CN.md"
+    security.write_text(
+        security.read_text(encoding="utf-8").replace(
+            "../reference/capability-truth-matrix.md", "missing-capability-source"
+        ),
+        encoding="utf-8",
+    )
+
+    errors = multilingual_layer_errors(tmp_path)
+    assert "README.zh-CN.md: missing semantic domain: north-star" in errors
+    assert "README.zh-CN.md: layered guidance must link Capability Truth Matrix" in errors
+
+
+def test_wi10_check_rejects_installer_option_or_environment_drift(tmp_path):
+    copy_documentation(tmp_path)
+    installation = tmp_path / "docs/getting-started/installation.md"
+    installation.write_text(
+        installation.read_text(encoding="utf-8")
+        .replace("--upgrade-with-active", "--removed-active-upgrade")
+        .replace("AI_COCKPIT_TEMPLATE_SHA256", "REMOVED_TEMPLATE_SHA256"),
+        encoding="utf-8",
+    )
+
+    errors = check_repository(tmp_path)
+    assert (
+        "docs/getting-started/installation.md: "
+        "implemented installer option is undocumented: --upgrade-with-active"
+    ) in errors
+    assert (
+        "docs/getting-started/installation.md: "
+        "installer environment variable is undocumented: AI_COCKPIT_TEMPLATE_SHA256"
+    ) in errors
+
+
+def test_wi10_check_rejects_coverage_base_or_lifecycle_fact_drift(tmp_path):
+    copy_documentation(tmp_path)
+    readme = tmp_path / "README.ja.md"
+    text = readme.read_text(encoding="utf-8")
+    text = text.replace("85.10%", "80%", 1)
+    base = 'ADOPTION_BASE="$(git rev-parse HEAD)"'
+    text = text.replace(f"{base} # installer", "# installer", 1)
+    text = text.replace('STACK="${STACK:-generic}"', f'{base}\nSTACK="${{STACK:-generic}}"', 1)
+    readme.write_text(text, encoding="utf-8")
+
+    adoption = tmp_path / "docs/getting-started/standard-adoption-guide.ja.md"
+    adoption.write_text(
+        adoption.read_text(encoding="utf-8").replace(
+            'git commit -m "adopt AI Cockpit governance"\n', "", 1
+        ),
+        encoding="utf-8",
+    )
+
+    errors = documentation_fact_errors(tmp_path)
+    assert "README.ja.md: documented coverage floor differs from Makefile: 85.10%" in errors
+    assert "README.ja.md: adoption base must be captured after installer branch creation" in errors
+    assert any(
+        "adoption lifecycle must commit archive evidence before PR check and closure" in error
+        for error in errors
+    )
+
+
+def test_wi10_check_rejects_ui_localization_or_published_tag_overclaim(tmp_path):
+    copy_documentation(tmp_path)
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        readme.read_text(encoding="utf-8")
+        + "\nJapanese is the default UI locale; use the highest published semantic-version tag.\n",
+        encoding="utf-8",
+    )
+
+    errors = documentation_fact_errors(tmp_path)
+    assert any("Japanese is the default UI locale" in error for error in errors)
+    assert any("highest published semantic-version tag" in error for error in errors)
+
+
+def test_wi10_check_rejects_historical_record_without_boundary_marker(tmp_path):
+    copy_documentation(tmp_path)
+    plan = tmp_path / "docs/superpowers/plans/2026-07-14-review-remediation-loop.md"
+    plan.write_text(
+        plan.read_text(encoding="utf-8").replace(
+            "> **Historical Record**\n"
+            "> **Not Current Product Documentation**\n"
+            "> **Do Not Use As Runtime Instruction**\n",
+            "",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    assert (
+        "docs/superpowers/plans/2026-07-14-review-remediation-loop.md: "
+        "missing historical context marker"
+    ) in historical_context_errors(tmp_path)
 
 
 def test_quick_install_examples_match_installer_contract():
@@ -29,6 +205,8 @@ def test_quick_install_examples_match_installer_contract():
         text = (ROOT / name).read_text(encoding="utf-8")
         assert 'AI_COCKPIT_TEMPLATE_REPO="$PUBLIC_REPOSITORY"' in text
         assert "AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY" in text
+        assert "https://github.com/spirex-ds-dev/ai-cockpit-template.git" in text
+        assert "https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template" in text
         if name != "README.md":
             assert "<owner>/<repo>" not in text
 

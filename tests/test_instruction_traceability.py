@@ -40,8 +40,14 @@ def test_missing_acceptance_evidence_fails_closed() -> None:
 
 
 def test_named_path_requires_evidence_or_explicit_no_change_rationale() -> None:
-    manifest = load_manifest()
-    manifest["instructions"][2]["requiredNamedPaths"][0].pop("noChangeRationale")
+    manifest = copy.deepcopy(load_manifest())
+    instruction = manifest["instructions"][2]
+    instruction["implementationEvidence"] = [
+        path
+        for path in instruction["implementationEvidence"]
+        if path != "docs/getting-started/installation.md"
+    ]
+    instruction["requiredNamedPaths"][0].pop("noChangeRationale", None)
     errors = validate_manifest(manifest, ROOT)
     assert any("required named path lacks implementation evidence" in error for error in errors)
 
@@ -49,8 +55,9 @@ def test_named_path_requires_evidence_or_explicit_no_change_rationale() -> None:
 def test_named_path_can_be_satisfied_by_implementation_evidence() -> None:
     manifest = copy.deepcopy(load_manifest())
     instruction = manifest["instructions"][2]
-    instruction["implementationEvidence"].append("docs/getting-started/installation.md")
-    instruction["requiredNamedPaths"][0].pop("noChangeRationale")
+    if "docs/getting-started/installation.md" not in instruction["implementationEvidence"]:
+        instruction["implementationEvidence"].append("docs/getting-started/installation.md")
+    instruction["requiredNamedPaths"][0].pop("noChangeRationale", None)
     assert validate_manifest(manifest, ROOT) == []
 
 
