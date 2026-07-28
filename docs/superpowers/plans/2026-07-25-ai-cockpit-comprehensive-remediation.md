@@ -248,6 +248,12 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 
 `WI-10-ISSUE-014`：本 corrective 首次完整 `ai-finish` 的 1315 项项目测试中有 1313 项通过，日语能力评估 2 项失败；根因是日文安装指南虽完整说明所有异常均停止，但翻译优化删除了评估要求保留的规范术语 `fail closed`。未弱化或绕过日语发布 Gate：在零经验读者可理解的“安全侧で停止”旁恢复规范术语，并要求先跑日语聚焦回归，再从头重跑事务性 `ai-finish`。
 
+`AUDIT-PROCESS-002`：WI-10 corrective 完整关闭后，WI-01～WI-20 审计分支 rebase 成功，但 `ai-resume-work-item` 发现其不可变 Start Receipt 记录 `baseBranch=main`，而 writer/validator 只接受该值等于当前专用分支，导致标准恢复 fail closed。根因包含启动与恢复两端：`ai-start` 未阻止在可识别的默认分支上创建 Work Item；恢复测试只覆盖先切分支再生成 Receipt 的理想路径。发布和审计继续冻结，先以独立 corrective 落地默认分支启动前置阻断、严格兼容恢复、单一 work-branch 谱系和真实 Git lifecycle 回归，完成 PR/merge/closure/branch cleanup 后再恢复审计。
+
+`AUDIT-PROCESS-002-QUALITY-001`：该 corrective 首次完整 `ai-finish` 的 1320 个项目测试和 coverage 均通过，但新增的固定 `git` list-form 子进程触发 Bandit B603/B607，使低风险 finding 数量偏离批准基线。没有扩大或重生成基线；仅在固定可执行文件、内部常量参数调用点使用现有精确 `nosec` 形式，focused Bandit baseline gate 已恢复通过，完整事务质量门必须从头重跑。
+
+`AUDIT-PROCESS-002-CHECKPOINT-001`：第二次完整 `ai-finish` 已通过 1320 个项目测试、coverage、Bandit、status 和项目质量，最终 Agent Risk 检查发现 `before_edit` checkpoint 仍绑定早期 Contract 哈希 `1cc0c481af4f8424`，而最终评审 Contract 为 `39fc538468c0d0f6`。不得复用该轮部分成功证据；先把两个 checkpoint 重新绑定稳定 Contract、定点通过 Agent Risk，再从头执行完整事务 finish。
+
 ### WI-11：Enterprise Governance Boundary
 
 **范围：** 明确可声明的 repository-local evidence、SDLC 控制支持和审计准备能力；明确禁止 SOC 2、ISO 27001、完整注入防御、身份不可抵赖、生产权限隔离、无漏洞、完整 SLSA 等无外部证据声明；建立 adopter checklist。

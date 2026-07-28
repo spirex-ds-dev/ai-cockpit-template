@@ -9,12 +9,19 @@ description: Deterministic serial execution, budget, and release-evidence rules 
 The default execution unit is one Work Item, one dedicated branch, and one PR. Work Items in a plan are executed serially:
 
 ```text
-remote base → Contract/Preflight → dedicated branch → implement → ai-finish/archive
+remote base → dedicated branch → Contract/Preflight → implement → ai-finish/archive
   → push → PR/review → merge → ai-close-work-item → synchronize and clean base
   → next Work Item
 ```
 
 The next Work Item must not start until the predecessor has evidence for all of the following: PR merged, archive succeeded, local branch deleted, remote branch deleted, and local base synchronized with the remote base. A successor Contract may record this evidence in `predecessorWorkItem`; `make check-ai-serial-order` fails closed when any field is absent or false.
+
+Create the dedicated Work Item branch before running `make ai-start`.
+When one remote default branch can be identified, `ai-start` rejects execution
+from that base branch before it writes a Contract, Summary, Start Receipt,
+Cockpit Status, or task event. Repositories without one discoverable remote
+default branch retain fixture/bootstrap behavior, but that absence is not
+evidence that the current branch is safe.
 
 ## Pre-finish hosted verification snapshot
 
@@ -62,6 +69,15 @@ one `resumeHistory` edge and advances Contract `baseCommit`. Repeated corrective
 cycles append edges; they do not rewrite prior edges. Direct edits, broken
 chains, or incomplete closure evidence fail closed. Afterward, rerun Preflight
 and every verification made stale by the new baseline.
+
+Version-1 Start Receipts created before the dedicated-branch start guard may
+truthfully record the remote default branch in `baseBranch`. They are not
+rewritten. A bounded compatibility resume accepts such evidence only when the
+requested base branch equals the Receipt value, the current non-base branch is
+exactly `codex/<work-item-id>`, every resume edge retains that same work branch,
+and all ordinary ancestry, predecessor, archive-manifest,
+digest, and closure checks pass. This recovery is not the normal start path and
+does not permit new Work Items to start on the default branch.
 
 ## Contract readiness
 
