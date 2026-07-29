@@ -663,7 +663,9 @@ def parse_args() -> argparse.Namespace:
         cmd = sub.add_parser(name)
         if name != "refresh":
             cmd.add_argument(
-                "--write", action="store_true", help="Write the computed evidence to the baseline file."
+                "--write",
+                action="store_true",
+                help="Write the computed evidence to the baseline file.",
             )
         cmd.add_argument("--source-commit", default=None)
     assets = sub.add_parser(

@@ -456,7 +456,9 @@ def test_refresh_candidate_evidence_synchronizes_local_release_projection(tmp_pa
     monkeypatch.setattr(check_supply_chain, "RELEASE_JSON", release)
     monkeypatch.setattr(check_supply_chain, "SBOM_BASELINE", cockpit / "sbom.json")
     monkeypatch.setattr(check_supply_chain, "PROVENANCE_BASELINE", cockpit / "provenance.json")
-    monkeypatch.setattr(check_supply_chain, "RELEASE_DIGESTS_BASELINE", cockpit / "release-digests.json")
+    monkeypatch.setattr(
+        check_supply_chain, "RELEASE_DIGESTS_BASELINE", cockpit / "release-digests.json"
+    )
     monkeypatch.setattr(
         check_supply_chain,
         "build_sbom",
@@ -476,10 +478,17 @@ def test_refresh_candidate_evidence_synchronizes_local_release_projection(tmp_pa
     assert refreshed["releaseArchive"] == original["releaseArchive"]
     assert refreshed["publicContract"] == original["publicContract"]
     assert refreshed["capabilities"] == original["capabilities"]
-    assert refreshed["supplyChain"]["requirementsLockDigest"] == original["supplyChain"]["requirementsLockDigest"]
+    assert (
+        refreshed["supplyChain"]["requirementsLockDigest"]
+        == original["supplyChain"]["requirementsLockDigest"]
+    )
     assert refreshed["supplyChain"]["secretScanning"] is True
-    assert refreshed["supplyChain"]["sbomDigest"] == check_release_distribution.file_digest(cockpit / "sbom.json")
-    assert refreshed["supplyChain"]["provenanceDigest"] == check_release_distribution.file_digest(cockpit / "provenance.json")
+    assert refreshed["supplyChain"]["sbomDigest"] == check_release_distribution.file_digest(
+        cockpit / "sbom.json"
+    )
+    assert refreshed["supplyChain"]["provenanceDigest"] == check_release_distribution.file_digest(
+        cockpit / "provenance.json"
+    )
     assert check_release_distribution.supply_chain_issues(refreshed, root=tmp_path) == []
 
 
