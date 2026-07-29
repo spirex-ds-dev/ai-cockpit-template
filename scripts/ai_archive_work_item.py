@@ -567,6 +567,23 @@ def _validate_archive_inputs(
     return issues
 
 
+def archive_text_whitespace_issues(paths: list[Path]) -> list[str]:
+    """Reject whitespace that would make newly archived evidence uncommittable."""
+    issues: list[str] = []
+    for path in paths:
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except (OSError, UnicodeDecodeError) as exc:
+            issues.append(f"{path.relative_to(PROJECT_ROOT)}: cannot read archive artifact: {exc}")
+            continue
+        for line_number, line in enumerate(lines, start=1):
+            if line.endswith((" ", "\t")):
+                issues.append(
+                    f"{path.relative_to(PROJECT_ROOT)}:{line_number}: trailing whitespace"
+                )
+    return issues
+
+
 def _execute_archive_transaction(
     *,
     contract_path: Path,
@@ -859,6 +876,16 @@ def main() -> int:
     manifest_target = target_dir / contract_path.name.replace(
         ".contract.json", ".archive-manifest.json"
     )
+
+    whitespace_issues = archive_text_whitespace_issues([source for source, _ in files_to_move])
+    if whitespace_issues:
+        for issue in whitespace_issues:
+            print(f"[ERROR] {issue}", file=sys.stderr)
+        print(
+            "ERROR: archive mutation blocked until active evidence is whitespace-clean.",
+            file=sys.stderr,
+        )
+        return 1
 
     for _, target in files_to_move:
         if target.exists():

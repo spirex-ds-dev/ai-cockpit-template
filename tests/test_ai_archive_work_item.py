@@ -113,6 +113,17 @@ def test_next_archive_sequence_prefers_existing_index(tmp_path, monkeypatch):
     assert ai_archive_work_item._next_archive_sequence() == 42
 
 
+def test_archive_preflight_rejects_trailing_whitespace_in_active_artifacts(tmp_path, monkeypatch):
+    monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
+    artifact = tmp_path / ".ai/work-items/active/task.contract.json"
+    artifact.parent.mkdir(parents=True)
+    artifact.write_text('{"workItemId": "task"} \n', encoding="utf-8")
+
+    assert ai_archive_work_item.archive_text_whitespace_issues([artifact]) == [
+        ".ai/work-items/active/task.contract.json:1: trailing whitespace"
+    ]
+
+
 def test_archive_manifest_is_stable_and_excludes_generated_status(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
     contract = tmp_path / "task.contract.json"

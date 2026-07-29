@@ -1630,6 +1630,35 @@
         "make ai-finish TASK=rfe-106-installation-smoke-lifecycle-20260730",
         "make ai-close-work-item TASK=rfe-106-installation-smoke-lifecycle-20260730"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-050",
+      "summary": "Prevent delayed archived Work Items from colliding with newer archive sequence or traceability identifiers during recovery; preserve predecessor evidence and require a successor Work Item instead of rewriting history.",
+      "planWorkItems": [
+        "RFE-ISSUE-107",
+        "rfe-107-derived-record-collision-20260730"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/rfe-107-derived-record-collision-20260730.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_check_archive_recovery.py",
+        "scripts/ai_archive_work_item.py",
+        "Makefile",
+        "docs/superpowers/plans/2026-07-30-rfe-107-derived-record-collision-20260730.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_ai_check_archive_recovery.py",
+        "tests/test_ai_archive_work_item.py",
+        "tests/test_instruction_traceability.py",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        "PYTHONPATH=. pytest -q tests/test_ai_check_archive_recovery.py tests/test_instruction_traceability.py",
+        "make check-ai-archive-recovery ARGS=\"--target origin/main\"",
+        "make quality",
+        "make ai-finish TASK=rfe-107-derived-record-collision-20260730"
+      ]
     }
   ]
 }

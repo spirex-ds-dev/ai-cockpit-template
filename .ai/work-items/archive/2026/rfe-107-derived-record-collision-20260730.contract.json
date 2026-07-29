@@ -1,0 +1,248 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe-107-derived-record-collision-20260730",
+  "mode": "code",
+  "title": "rfe-107-derived-record-collision-20260730",
+  "baseCommit": "33670a4ec79421c2d03fecb5881b0bd23b92f7df",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe-107-derived-record-collision-20260730.contract.json",
+    ".ai/work-items/active/rfe-107-derived-record-collision-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_check_archive_recovery.py",
+    "scripts/ai_check_pr.py",
+    "scripts/check_instruction_traceability.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_ai_check_archive_recovery.py",
+    "tests/test_pr_aggregate.py",
+    "tests/test_instruction_traceability.py",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "Makefile",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-30-rfe-107-derived-record-collision-20260730.md"
+  ],
+  "outOfScope": [
+    "Rewriting or deleting existing archived Work Item evidence.",
+    "Merging, closing, or deleting the blocked RFE-104 pull request or branch.",
+    "Changing runtime installation behavior unrelated to archive/recovery evidence."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Allocates archive sequences and rewrites traceability during archive."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Validates archive sequences in pull-request evidence."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Current authoritative instruction identifiers that collided during RFE-104 recovery."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Current repository record of the RFE-104/RFE-106 collision and successor-only recovery boundary."
+    }
+  ],
+  "rawUserRequest": "When a process problem is found, fix the process before resuming the blocked Work Item; do not leave recurrence risks or overwrite archive evidence.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-goal:process-fix-before-resuming-rfe104",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:continuing-authorization-derived-record-collision"
+  },
+  "declaredIntent": {
+    "summary": "Implement fail-closed detection and recovery guidance for stale-branch archive-sequence and traceability-ID collisions.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_integrity",
+      "process_recurrence"
+    ],
+    "reason": "Concurrent or delayed Work Items can allocate identical derived identifiers on divergent bases; recovery must detect the collision before history is rewritten or a PR is merged.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User granted continuing authorization for plan Work Items and explicitly required process corrections before resuming blocked work."
+  },
+  "preReviewWarnings": [
+    "Preserve immutable predecessor archives; do not implement a silent renumbering that changes archived evidence without an explicit recovery lineage."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Archive-recovery preflight compares the branch evidence with the target base before a rebase and refuses colliding archive sequences or traceability IDs with successor-Work-Item guidance.",
+    "Archive transaction scans every active artifact it will move and refuses trailing whitespace before generating an immutable archive manifest.",
+    "PR validation rejects duplicate traceability identifiers and archive sequences with actionable, distinct diagnostics.",
+    "Regression tests cover stale archive allocation, duplicated traceability IDs, and a valid sequential recovery record.",
+    "The remediation plan and traceability evidence record this process correction and its RFE-104 dependency."
+  ],
+  "guidelines": [
+    "Keep evidence validation deterministic and fail closed.",
+    "Do not mutate historic archive artifacts to make a recovery appear clean.",
+    "Keep user-visible reports distinct from machine-readable evidence."
+  ],
+  "intent": {
+    "problem": "RFE-104 and RFE-106 independently allocated archive sequence 666 and traceability ID PLAN-DIRECTIVE-049 from divergent bases. Rebasing RFE-104 after RFE-106 therefore conflicts in derived evidence and can tempt unsafe manual overwrites.",
+    "constraints": [
+      "Preserve existing RFE-104 and RFE-106 archives byte-for-byte.",
+      "Do not weaken archive integrity, PR, traceability, or coverage gates.",
+      "Record an explicit successor/recovery lineage rather than silently changing prior evidence."
+    ],
+    "rationale": "The prevention belongs in the process so future parallel or delayed Work Items fail before producing colliding evidence."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Work Item created on an older base compares its derived archive evidence with a target base that already owns its archive sequence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The read-only recovery preflight rejects the collision and directs delivery through a successor Work Item.",
+      "verificationPlan": "Add a target-base collision fixture to tests/test_ai_check_archive_recovery.py."
+    },
+    {
+      "scenario": "A traceability manifest contains two entries with the same identifier.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Validation fails with the duplicate identifier named.",
+      "verificationPlan": "Add a target-base duplicate-ID fixture to tests/test_ai_check_archive_recovery.py."
+    },
+    {
+      "scenario": "A governed recovery record is sequential and uniquely identified.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Validation accepts it without modifying predecessor evidence.",
+      "verificationPlan": "Add a unique target-base recovery case to tests/test_ai_check_archive_recovery.py."
+    },
+    {
+      "scenario": "Any ignored active artifact contains trailing whitespace when archive is requested.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Archive stops before manifest, index, status, or evidence mutation and names the offending file and line.",
+      "verificationPlan": "Add an active-artifact whitespace fixture to tests/test_ai_archive_work_item.py."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user granted continuing authorization to fix discovered process defects before resuming blocked Work Items; this approval is limited to the archive-recovery Make target and its exact reviewed Bandit low-risk baseline declared in scope."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 668
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe-107-derived-record-collision-20260730.json",
+    "baseCommit": "33670a4ec79421c2d03fecb5881b0bd23b92f7df",
+    "initialScopeDigest": "38c16e44706dea27c6b9aa68463869dee7e2968a9c5e901359f2ef8476cc5699",
+    "contractSkeletonDigest": "28460f2b4ed8519a21707abfbc89781949d93d2ca024ce02a9bf355463efd69f"
+  }
+}

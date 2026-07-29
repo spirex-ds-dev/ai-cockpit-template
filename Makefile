@@ -42,7 +42,7 @@ check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	ai-verify-focused ai-verify-full \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy template-adoption-ready \
-	check-ai-scenario-coverage check-ai-start-receipt generate-ai-preflight-review check-ai-preflight-review ai-preflight ai-prepare-implementation \
+	check-ai-scenario-coverage check-ai-start-receipt check-ai-archive-recovery generate-ai-preflight-review check-ai-preflight-review ai-preflight ai-prepare-implementation \
 	ai-prepare-hosted-verification-snapshot \
 	check-ai-change-summary generate-cockpit-status generate-cockpit-status-ja check-ai-status check-ai-status-ja check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
 	quality-fast quality-full quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
@@ -57,6 +57,9 @@ check-ai-diff-ownership:
 check-ai-start-receipt:
 	$(AI_PYTHON) scripts/ai_start_receipt.py --contract "$(CONTRACT)" $(if $(RECEIPT),--receipt "$(RECEIPT)",)
 
+check-ai-archive-recovery:
+	$(AI_PYTHON) scripts/ai_check_archive_recovery.py $(ARGS)
+
 ai-pre-merge:
 	@set -e; \
 		echo 'Content quality:'; env -u AI_BASE_COMMIT -u AI_COCKPIT_EXECUTION_MODE -u MAKEFLAGS -u MAKEOVERRIDES $(AI_NESTED_MAKE) quality || { echo 'ALLOW COMMIT / MERGE: no (content quality failed)'; exit 1; }; \
@@ -69,6 +72,7 @@ help:
 	@printf '%s\n' 'AI Cockpit template commands:'
 	@printf '%s\n' '  make ai-start TASK=<task> TITLE="..." MODE=code'
 	@printf '%s\n' '  make ai-resume-work-item CONTRACT=<contract.json> BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>'
+	@printf '%s\n' '  make check-ai-archive-recovery ARGS="--target origin/main"  # run before rebasing archived evidence'
 	@printf '%s\n' '  make ai-onboard [PHASE=1|2|3]'
 	@printf '%s\n' '  make ai-doctor'
 	@printf '%s\n' '  make check-ai-adoption-ready'
