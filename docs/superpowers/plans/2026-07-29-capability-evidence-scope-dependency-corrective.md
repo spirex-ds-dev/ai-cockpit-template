@@ -205,7 +205,7 @@ correct; the missing edge is Contract- and diff-level dependency discovery.
 - [ ] **Step 3: Update bidirectional traceability**
 
   Add one directive mapping the user instruction and observed failure to the
-  Contract, this plan, all implementation paths, focused commands, and A1–A8.
+  Contract, this plan, all implementation paths, focused commands, and A1–A9.
   Register the plan in the documentation context registry.
 
 - [ ] **Step 4: Record the issue and scenario evidence**
