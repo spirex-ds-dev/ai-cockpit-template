@@ -17,6 +17,9 @@ from typing import Any
 from ai_common import nested_make_command
 
 
+CODEX_AUDIT_REF_PREFIX = "refs/codex/turn-diffs/"
+
+
 class HostedVerificationError(ValueError):
     """A hosted-verification snapshot does not satisfy the narrow lifecycle boundary."""
 
@@ -55,6 +58,16 @@ def git(root: Path, *args: str, check: bool = True) -> str:
     if check and result.returncode != 0:
         raise HostedVerificationError(result.stderr.strip() or f"git {' '.join(args)} failed")
     return result.stdout.strip()
+
+
+def governed_refs(root: Path) -> str:
+    """Return project-owned refs, excluding Codex's local audit-only turn diffs."""
+    refs = git(root, "show-ref")
+    return "\n".join(
+        line
+        for line in refs.splitlines()
+        if not line.partition(" ")[2].startswith(CODEX_AUDIT_REF_PREFIX)
+    )
 
 
 def active_summary_path(contract_path: Path) -> Path:
@@ -204,7 +217,7 @@ def prepare_snapshot(
     if ancestor.returncode != 0:
         raise HostedVerificationError("Contract baseCommit is not an ancestor of HEAD")
 
-    refs_before = git(root, "show-ref")
+    refs_before = governed_refs(root)
     quality = quality_runner(root)
     if quality.get("decision") != "PASS":
         raise HostedVerificationError("local quality did not pass")
@@ -212,7 +225,7 @@ def prepare_snapshot(
         "sha256:"
     ):
         raise HostedVerificationError("local quality evidence is incomplete")
-    if git(root, "show-ref") != refs_before:
+    if governed_refs(root) != refs_before:
         raise HostedVerificationError("local quality mutated Git refs")
     if git(root, "status", "--porcelain", "--untracked-files=all"):
         raise HostedVerificationError("local quality left the worktree dirty")

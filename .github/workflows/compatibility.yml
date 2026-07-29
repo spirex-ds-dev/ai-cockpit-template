@@ -78,6 +78,7 @@ jobs:
         if: matrix.stack == 'go'
         with:
           go-version: "1.24.4"
+          cache: false
       - uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9
         if: matrix.stack == 'rust'
         with:
@@ -382,6 +383,9 @@ jobs:
               ./gradlew spotlessApply
               ;;
             swift)
+              if brew tap | grep -Fxq 'aws/tap'; then
+                brew untap aws/tap
+              fi
               brew install swift-format
               mkdir -p Sources/AiCockpitSmoke Tests/AiCockpitSmokeTests
               cat > Package.swift <<'EOF'
@@ -449,6 +453,7 @@ jobs:
         if: matrix.stack == 'go'
         with:
           go-version: stable
+          cache: false
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         if: matrix.stack == 'typescript'
         with:
@@ -467,6 +472,9 @@ jobs:
         if: matrix.stack == 'swift'
         run: |
           swift --version
+          if brew tap | grep -Fxq 'aws/tap'; then
+            brew untap aws/tap
+          fi
           brew install swift-format
           swift format --version
       - name: Probe current toolchain

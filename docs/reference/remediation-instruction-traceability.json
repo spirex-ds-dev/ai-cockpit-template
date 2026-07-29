@@ -1474,6 +1474,40 @@
         "make check-ai-pr AI_BASE_COMMIT=ad528ebf3136c7cf06ac4331784a8b35c170ce42",
         "make ai-close-work-item TASK=japanese-final-reassessment-after-documentation-truth-20260729"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-045",
+      "summary": "Before release, eliminate the diagnosed Node.js artifact runtime, temporary Go-module cache, and unrelated Homebrew tap warnings; receive overlapping Dependabot PR #443 without weakening trust controls.",
+      "planWorkItems": [
+        "CI-WARN-001",
+        "DEPENDABOT-INTAKE-001",
+        "github-actions-warning-corrective-20260729"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/github-actions-warning-corrective-20260729.contract.json"
+      ],
+      "implementationEvidence": [
+        ".github/workflows/smoke.yml",
+        ".github/workflows/compatibility.yml",
+        "docs/superpowers/plans/2026-07-29-github-actions-warning-corrective.md",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_quality_gate_architecture.py",
+        "tests/test_workflows.py",
+        ".ai/work-items/archive/2026/github-actions-warning-corrective-20260729.summary.json",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/bin/pytest -q tests/test_quality_gate_architecture.py tests/test_workflows.py",
+        "make check-docs-metadata",
+        "make check-instruction-traceability",
+        "make quality",
+        "make ai-finish TASK=github-actions-warning-corrective-20260729",
+        "make check-ai-pr AI_BASE_COMMIT=5845a03a9b1c3ce742fdc469d0bd8b66e55e0459",
+        "verify exact-Head Hosted logs omit the three recorded warning signatures",
+        "make ai-close-work-item TASK=github-actions-warning-corrective-20260729"
+      ]
     }
   ]
 }

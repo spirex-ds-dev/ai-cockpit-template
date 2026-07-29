@@ -67,6 +67,39 @@ def test_latest_compatibility_probe_uses_distinct_current_tool_commands():
     assert "fixed compatibility baseline is the blocking release gate" in report
 
 
+def test_go_fixture_setup_disables_cache_until_temporary_modules_exist():
+    workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
+    setup_blocks = workflow.split("uses: actions/setup-go@")[1:]
+    assert len(setup_blocks) == 2
+    for block in setup_blocks:
+        action_step = block.split("\n      - ", 1)[0]
+        assert "with:" in action_step
+        assert "cache: false" in action_step
+        assert "cache-dependency-path:" not in action_step
+
+
+def test_swift_homebrew_steps_remove_only_unrelated_aws_tap_before_install():
+    workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
+    narrow_guard = (
+        "if brew tap | grep -Fxq 'aws/tap'; then\n"
+        "                brew untap aws/tap\n"
+        "              fi\n"
+        "              brew install swift-format"
+    )
+    probe_guard = (
+        "if brew tap | grep -Fxq 'aws/tap'; then\n"
+        "            brew untap aws/tap\n"
+        "          fi\n"
+        "          brew install swift-format"
+    )
+    assert narrow_guard in workflow
+    assert probe_guard in workflow
+    assert workflow.count("brew untap aws/tap") == 2
+    assert "brew trust aws/tap" not in workflow
+    assert "HOMEBREW_NO_REQUIRE_TAP_TRUST" not in workflow
+    assert "|| true" not in "\n".join(line for line in workflow.splitlines() if "aws/tap" in line)
+
+
 def test_release_documentation_requires_one_verified_commit():
     documentation = (ROOT / "docs" / "reference" / "distribution.md").read_text(encoding="utf-8")
     assert "Both `smoke` and `compatibility`" in documentation
