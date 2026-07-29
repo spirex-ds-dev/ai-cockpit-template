@@ -274,6 +274,14 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
     assert install.returncode == 0, install.stdout + install.stderr
     finish = run(project, "make", "ai-finish", "TASK=adopt_ai_cockpit", f"PYTHON={sys.executable}")
     assert finish.returncode == 0, finish.stdout + finish.stderr
+    archive = run(
+        project,
+        "make",
+        "archive-work-item",
+        "CONTRACT=.ai/work-items/active/adopt_ai_cockpit.contract.json",
+        f"PYTHON={sys.executable}",
+    )
+    assert archive.returncode == 0, archive.stdout + archive.stderr
     run(project, "git", "add", ".")
     assert run(project, "git", "commit", "-qm", "adopt cockpit").returncode == 0
 
@@ -329,6 +337,14 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
         project, "make", "ai-finish", "TASK=configure_ai_cockpit", f"PYTHON={sys.executable}"
     )
     assert finish.returncode == 0, finish.stdout + finish.stderr
+    archive = run(
+        project,
+        "make",
+        "archive-work-item",
+        "CONTRACT=.ai/work-items/active/configure_ai_cockpit.contract.json",
+        f"PYTHON={sys.executable}",
+    )
+    assert archive.returncode == 0, archive.stdout + archive.stderr
     run(project, "git", "add", ".")
     assert run(project, "git", "commit", "-qm", "calibrate boundaries").returncode == 0
 
@@ -349,6 +365,14 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
     prepare_work_item(project, "normal_change", ["src/app.py", "tests/test_app.py"])
     finish = run(project, "make", "ai-finish", "TASK=normal_change", f"PYTHON={sys.executable}")
     assert finish.returncode == 0, finish.stdout + finish.stderr
+    archive = run(
+        project,
+        "make",
+        "archive-work-item",
+        "CONTRACT=.ai/work-items/active/normal_change.contract.json",
+        f"PYTHON={sys.executable}",
+    )
+    assert archive.returncode == 0, archive.stdout + archive.stderr
     run(project, "git", "add", ".")
     assert run(project, "git", "commit", "-qm", "normal governed change").returncode == 0
     pr = run(project, "make", "check-ai-pr", f"AI_BASE_COMMIT={base}", f"PYTHON={sys.executable}")

@@ -38,6 +38,33 @@ def _item_text(item: Any) -> str:
     return str(item)
 
 
+def _item_lines(item: Any) -> list[str]:
+    if not isinstance(item, Mapping):
+        return [f"- {_item_text(item)}"]
+    lines = [f"- {_item_text(item)}"]
+    facts = []
+    for label, key in (("Category", "category"), ("Severity", "severity"), ("State", "state")):
+        value = item.get(key)
+        if isinstance(value, str) and value:
+            facts.append(f"{label}: {value}")
+    if facts:
+        lines.append(f"  {'; '.join(facts)}")
+    for key in ("description", "reason", "action", "verification", "result", "coverage", "limits"):
+        value = item.get(key)
+        if isinstance(value, str) and value:
+            lines.append(f"  {value}")
+    evidence = item.get("evidence")
+    if isinstance(evidence, list):
+        for ref in evidence:
+            if not isinstance(ref, Mapping):
+                continue
+            source = ref.get("source")
+            subject = ref.get("subject")
+            if isinstance(source, str) and isinstance(subject, str) and source and subject:
+                lines.append(f"  Evidence: {source} — {subject}")
+    return lines
+
+
 def render_task_outcome(outcome: Mapping[str, Any]) -> str:
     """Render all machine sections without modifying the input mapping."""
 
@@ -51,7 +78,8 @@ def render_task_outcome(outcome: Mapping[str, Any]) -> str:
         if key in {"outcomeSummary", "taskOverview"}:
             lines.append(value if isinstance(value, str) and value else "None")
         elif isinstance(value, list) and value:
-            lines.extend(f"- {_item_text(item)}" for item in value)
+            for item in value:
+                lines.extend(_item_lines(item))
         else:
             lines.append("None")
         lines.append("")

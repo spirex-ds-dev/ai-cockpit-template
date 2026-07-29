@@ -36,6 +36,20 @@ from ai_observability import create_observability, elapsed_ms
 
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
+REPORT_BOUNDARY_TEXT = {
+    "en": (
+        "## Task Outcome Report (active; relay to the human before archive)",
+        "Next lifecycle action: archive is explicit and must follow the direct human report.",
+    ),
+    "zh-CN": (
+        "## 工单结果报告（active；归档前必须直接告知相关人员）",
+        "下一生命周期动作：归档必须显式执行，并且只能在直接报告之后进行。",
+    ),
+    "ja": (
+        "## タスク結果レポート（active。アーカイブ前に直接人へ報告してください）",
+        "次のライフサイクル操作：アーカイブは明示的に実行し、直接報告の後にのみ行います。",
+    ),
+}
 
 
 def _git_output(args: list[str]) -> str:
@@ -328,6 +342,10 @@ def _sha256_json(value: Any) -> str:
     ).hexdigest()
 
 
+def _safe_text(value: Any, default: str) -> str:
+    return value.strip() if isinstance(value, str) and value.strip() else default
+
+
 def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path) -> dict[str, Any]:
     """Derive truthful Outcome evidence before a provider PR can exist."""
     contract = load_json(contract_path)
@@ -344,13 +362,89 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
         for item in changed
         if isinstance(item, dict) and isinstance(item.get("path"), str)
     ]
+    verification = summary.get("verification", [])
+    if isinstance(verification, list):
+        delivered.extend(
+            f"{item['check']}: {item['result']}"
+            for item in verification
+            if isinstance(item, dict)
+            and isinstance(item.get("check"), str)
+            and isinstance(item.get("result"), str)
+        )
+    guidelines = summary.get("guidelinesCompliance", [])
+    if isinstance(guidelines, list):
+        delivered.extend(
+            f"Guideline complied: {item['guideline']}"
+            for item in guidelines
+            if isinstance(item, dict)
+            and item.get("compliant") is True
+            and isinstance(item.get("guideline"), str)
+        )
     warnings = [item for item in summary.get("knownGaps", []) if isinstance(item, str)]
     human_decisions = [
-        item["instruction"]
+        item["request"]
         for item in summary.get("userCorrectionsCaptured", [])
-        if isinstance(item, dict) and isinstance(item.get("instruction"), str)
+        if isinstance(item, dict) and isinstance(item.get("request"), str)
     ]
-    verification = summary.get("verification", [])
+    events: list[dict[str, Any]] = []
+    for issue in summary.get("observedIssues", []):
+        if not isinstance(issue, dict):
+            continue
+        category = _safe_text(issue.get("category"), "other")
+        issue_id = _safe_text(issue.get("id"), "Summary finding")
+        issue_state = _safe_text(issue.get("state"), "unresolved")
+        issue_evidence = [
+            {
+                "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+                "subject": issue_id,
+            }
+        ]
+        events.append(
+            {
+                "eventId": issue_id,
+                "eventType": "finding",
+                "findingFingerprint": issue_id,
+                "category": "process" if category == "process_issue" else "other",
+                "severity": _safe_text(issue.get("severity"), "medium"),
+                "stage": _safe_text(issue.get("stage"), "summary"),
+                "title": issue_id,
+                "description": _safe_text(issue.get("description"), "Recorded Summary finding"),
+                "state": issue_state,
+                "evidence": issue_evidence,
+            }
+        )
+        if issue_state in {"resolved", "mitigated"} and isinstance(issue.get("resolution"), str):
+            events.append(
+                {
+                    "eventId": f"{issue_id}-resolution",
+                    "eventType": "resolution",
+                    "problem": _safe_text(issue.get("description"), "Recorded Summary finding"),
+                    "action": issue["resolution"],
+                    "verification": "Recorded Summary verification",
+                    "state": issue_state,
+                    "evidence": issue_evidence,
+                }
+            )
+    for index, risk in enumerate(summary.get("residualRisks", [])):
+        if not isinstance(risk, dict):
+            continue
+        events.append(
+            {
+                "eventId": f"summary-residual-risk-{index}",
+                "eventType": "risk",
+                "kind": "potential_risk",
+                "severity": _safe_text(risk.get("level"), "medium"),
+                "title": _safe_text(risk.get("area"), "Residual risk"),
+                "description": _safe_text(risk.get("detail"), "Recorded residual risk"),
+                "state": "unresolved",
+                "evidence": [
+                    {
+                        "source": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+                        "subject": _safe_text(risk.get("area"), "Residual risk"),
+                    }
+                ],
+            }
+        )
     return {
         "taskId": task,
         "bindings": {
@@ -377,6 +471,7 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
                 {"source": summary_path.relative_to(PROJECT_ROOT).as_posix(), "subject": "Summary"},
             ],
         },
+        "events": events,
     }
 
 
@@ -389,7 +484,9 @@ def _write_and_validate_pre_merge_outcome(
 
     try:
         payload = _pre_merge_outcome_input(task, contract_path, summary_path)
-        outcome = generate_outcome(task, payload["bindings"], evidence=payload["evidence"])
+        outcome = generate_outcome(
+            task, payload["bindings"], events=payload["events"], evidence=payload["evidence"]
+        )
         markdown = render_task_outcome(outcome)
         report = validate_outcome(outcome, markdown, expected_task_id=task)
         if not report.valid:
@@ -506,10 +603,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--archive",
         action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Archive Work Item after successful checks.",
+        default=False,
+        help="Archive only after the agent has relayed the active Task Outcome to the human.",
+    )
+    parser.add_argument(
+        "--language",
+        default="en",
+        help="Conversation language for the direct human report (en, zh-CN, or ja).",
     )
     return parser.parse_args()
+
+
+def isolate_report_language_from_nested_commands() -> None:
+    """Keep the explicit report locale out of child Make and pytest processes."""
+    os.environ.pop("REPORT_LANGUAGE", None)
+    for name in ("MAKEFLAGS", "MAKEOVERRIDES"):
+        value = os.environ.get(name, "")
+        if "REPORT_LANGUAGE" in value or "${-*-command-variables-*-}" in value:
+            os.environ.pop(name, None)
 
 
 def run_declared_checks(
@@ -637,6 +748,7 @@ def run_declared_checks(
 
 def main() -> int:
     args = parse_args()
+    isolate_report_language_from_nested_commands()
     contract, summary = task_paths(args.task)
     if not (PROJECT_ROOT / contract).exists():
         print(f"ERROR: Contract does not exist: {contract}", file=sys.stderr)
@@ -865,6 +977,18 @@ def main() -> int:
     )
 
     print("Work Item finish checks passed")
+    outcome_json, _outcome_markdown = _outcome_paths(args.task)
+    from ai_render_task_outcome_multilingual import normalize_locale, render_localized_outcome
+
+    try:
+        report_locale = normalize_locale(args.language)
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+    report_heading, next_action = REPORT_BOUNDARY_TEXT[report_locale]
+    print(report_heading)
+    print(render_localized_outcome(load_json(outcome_json), report_locale), end="")
+    print(next_action)
     if args.archive:
         archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
         cmd_str = " ".join(archive_command)

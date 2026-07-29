@@ -95,7 +95,7 @@ help:
 	@printf '%s\n' '  make check-ai-status CONTRACT=<contract.json> SUMMARY=<summary.json>'
 	@printf '%s\n' '  make check-ai-status-consistency'
 	@printf '%s\n' '  make repair-ai-status'
-	@printf '%s\n' '  make ai-finish TASK=<task>'
+	@printf '%s\n' '  make ai-finish TASK=<task>  # keeps active Outcome; report it before explicit archive'
 	@printf '%s\n' '  make check-ai'
 	@printf '%s\n' '  make quality'
 	@printf '%s\n' '  make test'
@@ -646,4 +646,4 @@ check-ai-pr:
 		$(AI_NESTED_MAKE) check-ai-pr-core AI_BASE_COMMIT="$(AI_BASE_COMMIT)"
 
 ai-finish:
-	$(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)"
+	REPORT_LANGUAGE= $(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)" $(if $(filter true,$(ARCHIVE)),--archive) $(if $(REPORT_LANGUAGE),--language "$(REPORT_LANGUAGE)")

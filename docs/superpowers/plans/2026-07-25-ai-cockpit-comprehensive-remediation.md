@@ -667,6 +667,7 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 | RFE-ISSUE-093/094 候选发布证据与检查点纠偏 | `rfe-094-checkpoint-enforcement-20260729` 已完成、合并、关闭并清理 |
 | RFE-ISSUE-096 恢复后验证证据代际纠偏 | `rfe-096-resume-verification-generation-corrective-20260729` 已完成、合并、关闭并清理；RFE-094 关闭后恢复 #441 时，旧 Summary 验证记录被 canonical before_edit 误计为当前通过项。RFE-096 以最新可信 `resumeHistory.recordedAt` 划分代际，RFE-095 脏调查现场保留但不合并。 |
 | RFE-ISSUE-097 工单完结报告纠偏 | 当前执行 `rfe-097-mandatory-task-outcome-report-20260729`；RFE-096 显示 Task Outcome 仍由 `taskOutcomeInput` opt-in，导致归档虽存在但用户可见报告缺失。先将 pre-merge Outcome 与 post-merge Closure Receipt 变为 fail-closed 必需证据，关闭后才恢复 #441。 |
+| RFE-ISSUE-101 归档前人工 Outcome 门 | 当前独立替代 Work Item `rfe-104-independent-prearchive-outcome-20260729`：RFE-100 的默认 `ai-finish` 已在对话报告前归档；RFE-101/102 联合草稿不得合并。该独立 corrective 必须默认保留 active Outcome、输出可转述的证据绑定报告，并要求 archive 为明确后续动作。它同时修复生成器遗漏 Summary Findings/Residual Risks 的人机界面缺口。 |
 | Dependabot 发布前接收 | 用户新增；RFE-ISSUE-096 关闭后，恢复 #441 并重跑当前代际全部验证，随后 #442、#444、#445 各自按独立 Work Item、PR、Hosted、merge、close、分支清理流程接收 |
 | 文档对齐 | `pre-release-documentation-alignment-20260729` 已暂停；待纠偏和全新日语评估关闭后 rebase/resume 并完成 |
 | 发布前过期资产清理 | 待文档对齐关闭后执行 |

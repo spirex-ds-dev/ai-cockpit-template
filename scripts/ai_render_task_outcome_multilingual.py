@@ -35,7 +35,8 @@ CHROME = {
         "status": "状態",
         "summary": "概要",
         "overview": "タスク概要",
-        "none": "None",
+        "none": "なし",
+        "facts": {"category": "分類", "severity": "重大度", "state": "状態"},
         "sections": {
             "deliveredChanges": "変更内容",
             "findings": "検出事項",
@@ -57,6 +58,7 @@ CHROME = {
         "summary": "Outcome Summary",
         "overview": "Task Overview",
         "none": "None",
+        "facts": {"category": "Category", "severity": "Severity", "state": "State"},
         "sections": {
             "deliveredChanges": "Delivered Changes",
             "findings": "Findings",
@@ -77,7 +79,8 @@ CHROME = {
         "status": "状态",
         "summary": "结果摘要",
         "overview": "任务概览",
-        "none": "None",
+        "none": "无",
+        "facts": {"category": "类别", "severity": "严重性", "state": "状态"},
         "sections": {
             "deliveredChanges": "交付变更",
             "findings": "发现",
@@ -161,6 +164,34 @@ def _item_text(item: Any, none: str) -> str:
     return none
 
 
+def _item_lines(item: Any, chrome: Mapping[str, Any]) -> list[str]:
+    none = str(chrome["none"])
+    if not isinstance(item, Mapping):
+        return [f"- {_item_text(item, none)}"]
+    lines = [f"- {_item_text(item, none)}"]
+    labels = chrome["facts"]
+    facts = [
+        f"{labels[key]}: {item[key]}"
+        for key in ("category", "severity", "state")
+        if isinstance(item.get(key), str) and item[key]
+    ]
+    if facts:
+        lines.append(f"  {'; '.join(facts)}")
+    for key in ("description", "reason", "action", "verification", "result", "coverage", "limits"):
+        value = item.get(key)
+        if isinstance(value, str) and value:
+            lines.append(f"  {value}")
+    evidence = item.get("evidence")
+    if isinstance(evidence, list):
+        for ref in evidence:
+            if not isinstance(ref, Mapping):
+                continue
+            source, subject = ref.get("source"), ref.get("subject")
+            if isinstance(source, str) and isinstance(subject, str) and source and subject:
+                lines.append(f"  Evidence: {source} — {subject}")
+    return lines
+
+
 def render_localized_outcome(outcome: Mapping[str, Any], locale: str) -> str:
     """Render one locale without mutating or changing Outcome machine keys."""
 
@@ -187,7 +218,8 @@ def render_localized_outcome(outcome: Mapping[str, Any], locale: str) -> str:
         lines.append(f"## {chrome['sections'][key]}")
         values = sections.get(key, [])
         if isinstance(values, list) and values:
-            lines.extend(f"- {_item_text(item, chrome['none'])}" for item in values)
+            for item in values:
+                lines.extend(_item_lines(item, chrome))
         else:
             lines.append(chrome["none"])
         lines.append("")

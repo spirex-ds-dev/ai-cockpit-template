@@ -1,0 +1,286 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe-104-independent-prearchive-outcome-20260729",
+  "mode": "code",
+  "title": "Deliver pre-archive Outcome report on an independent PR",
+  "baseCommit": "addb6da81aaa2fcc93710a4e034f5713be2abace",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe-104-independent-prearchive-outcome-20260729.contract.json",
+    ".ai/work-items/active/rfe-104-independent-prearchive-outcome-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/guards/coverage_policy.yaml",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_common.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_render_task_outcome.py",
+    "scripts/ai_render_task_outcome_multilingual.py",
+    "scripts/ai_installer_catalog.json",
+    "tests/test_finish_e2e.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_task_outcome_multilingual.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_adoption_e2e.py",
+    "tests/test_core_gates.py",
+    "tests/test_project_governance_journey.py",
+    "tests/test_installer.py",
+    "docs/superpowers/plans/2026-07-29-rfe-104-independent-prearchive-outcome.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "Merging or mutating the superseded combined draft PR #462 and its immutable archives.",
+    "Changing release, provider, identity, or security-sandbox behavior.",
+    "Weakening quality, coverage, archive, or review gates."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Defines the one Work Item/one branch/one PR lifecycle and closure requirements."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Current finish behavior archives automatically and must become active-Outcome-first."
+    },
+    {
+      "path": "tests/test_finish_e2e.py",
+      "reason": "End-to-end lifecycle regressions prove active preservation and explicit archive behavior."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Tracks the user requirement for direct, conversation-language reporting before archive."
+    }
+  ],
+  "rawUserRequest": "Continue the authorized plan. Every Work Item must report directly in the current conversation language while it is active, before archive; then complete PR and branch cleanup. Process defects must be repaired before subsequent delivery.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:user-authorized-continuation-prearchive-report",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:rfe-104-prearchive-report-request"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Make direct, localized pre-archive Outcome reporting an enforceable default while preserving explicit archival and evidence integrity.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_process",
+      "evidence_reporting",
+      "installer_lifecycle"
+    ],
+    "reason": "The finish/archival boundary governs the human decision point and installed adopter lifecycle.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user granted continuous authorization for planned remediation and its prerequisite process repairs."
+  },
+  "preReviewWarnings": [
+    "Do not treat stdout or an Outcome file as proof that the agent relayed the direct report; report delivery remains an agent responsibility."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Default ai-finish validates and writes a complete active Outcome but does not archive Contract, Summary, or Outcome; archival remains an explicit separate command.",
+    "ai-finish emits a clearly delimited, safe-to-relay direct report whose chrome follows English, Chinese, or Japanese conversation locale without inventing evidence prose.",
+    "Executable regressions cover active preservation, explicit archival, report ordering, structured risk/finding projection, localization chrome, and the adopter/core/journey lifecycle.",
+    "Plan, traceability, Capability Truth, and Japanese assessment are regenerated and aligned without altering immutable archived evidence."
+  ],
+  "guidelines": [
+    "Preserve evidence integrity: do not claim generated stdout proves human-visible conversation delivery.",
+    "Make automatic archival impossible in the ordinary finish command and retain explicit archive validation."
+  ],
+  "intent": {
+    "problem": "Current main automatically archives a Work Item during ai-finish. That bypasses the required active-state human Outcome report and made RFE-103 invalid for the user-mandated report-before-archive boundary.",
+    "constraints": [
+      "Default finish must preserve active Contract, Summary, and Outcome.",
+      "Archive must remain a separate explicit action.",
+      "Do not alter immutable prior archives.",
+      "Direct-report localization may not translate or invent arbitrary evidence prose.",
+      "Keep schema validation, redaction, evidence binding, and no-score restrictions."
+    ],
+    "rationale": "A durable human decision point must exist before archive; a structured evidence-derived report makes that boundary operational while explicit archival preserves audit integrity."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized continuous remediation and process fixes, including governed workflow and policy artifacts."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Default finish produces a complete active Outcome and a localized direct-report payload without archive.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "Protects the required human decision boundary.",
+      "expected": "Active Contract/Summary/Outcome remain until explicit archive succeeds.",
+      "verificationPlan": "Run focused lifecycle, Outcome, localization, adopter, and full quality regressions."
+    },
+    {
+      "scenario": "Explicit archive after active Outcome produces archive evidence and no-active status.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "Preserves the audit closure path.",
+      "expected": "Archive succeeds only through the separate explicit command.",
+      "verificationPlan": "Run archive and journey regressions."
+    }
+  ],
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 666
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe-104-independent-prearchive-outcome-20260729.json",
+    "baseCommit": "8b20fafb817d85e7f932a0997e00ed5140598afb",
+    "initialScopeDigest": "a11a0e4090b8f15e2167c33c9ad32496e0a0783686f7756fe06f205cc2a274dd",
+    "contractSkeletonDigest": "970dada52090ae24007ecf4023df5358bf7b608b3d4b33c66ea1a38c8e35a162"
+  },
+  "predecessorWorkItem": {
+    "workItemId": "rfe-105-quality-process-cleanup-20260729",
+    "status": "closed",
+    "pr": {
+      "number": 463,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/463",
+      "mergeCommit": "addb6da81aaa2fcc93710a4e034f5713be2abace"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/rfe-105-quality-process-cleanup-20260729.archive-manifest.json"
+    }
+  },
+  "resumeHistory": [
+    {
+      "resumeVersion": 1,
+      "fromBaseCommit": "8b20fafb817d85e7f932a0997e00ed5140598afb",
+      "toBaseCommit": "addb6da81aaa2fcc93710a4e034f5713be2abace",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/rfe-104-independent-prearchive-outcome-20260729",
+      "recordedAt": "2026-07-29T15:50:43.489289+00:00",
+      "priorContractDigest": "9b5bcb57d5314aefe162446a6bb1774a1528e997dac90ec61a683ce7f9045c3a",
+      "predecessorWorkItemId": "rfe-105-quality-process-cleanup-20260729",
+      "predecessorMergeCommit": "addb6da81aaa2fcc93710a4e034f5713be2abace",
+      "predecessorManifestPath": ".ai/work-items/archive/2026/rfe-105-quality-process-cleanup-20260729.archive-manifest.json",
+      "predecessorClosure": {
+        "statusClosed": true,
+        "prMerged": true,
+        "closureSucceeded": true,
+        "localBranchDeleted": true,
+        "remoteBranchDeleted": true,
+        "baseSynchronized": true
+      }
+    }
+  ]
+}

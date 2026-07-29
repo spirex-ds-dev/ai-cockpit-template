@@ -20,7 +20,15 @@ def outcome() -> dict[str, object]:
             "outcomeSummary": "One source summary.",
             "taskOverview": "The same fact source.",
             "deliveredChanges": [{"title": "Added renderer"}],
-            "findings": [],
+            "findings": [
+                {
+                    "title": "Evidence gap",
+                    "category": "evidence",
+                    "severity": "medium",
+                    "state": "unresolved",
+                    "description": "A human must decide.",
+                }
+            ],
             "risks": [],
             "warnings": ["Review remains bounded."],
             "interventions": [],
@@ -75,7 +83,12 @@ def test_three_languages_have_localized_chrome_and_shared_facts() -> None:
     assert "## 结果摘要" in rendered["zh-CN"]
     for text in rendered.values():
         assert "One source summary." in text
-        assert "None" in text
+        assert "A human must decide." in text
+    assert "Category: evidence; Severity: medium; State: unresolved" in rendered["en"]
+    assert "分類: evidence; 重大度: medium; 状態: unresolved" in rendered["ja"]
+    assert "类别: evidence; 严重性: medium; 状态: unresolved" in rendered["zh-CN"]
+    assert "なし" in rendered["ja"]
+    assert "无" in rendered["zh-CN"]
     assert rendered["ja"] != rendered["en"] != rendered["zh-CN"]
 
 

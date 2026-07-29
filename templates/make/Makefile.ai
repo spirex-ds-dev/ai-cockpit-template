@@ -51,7 +51,7 @@ ai-help:
 	@printf '%s\n' '  make check-ai-pr AI_BASE_COMMIT=<merge-base-sha>'
 	@printf '%s\n' '  make check-ai-diff-ownership [AI_BASE_COMMIT=<merge-base-sha>]'
 	@printf '%s\n' '  make ai-pre-merge AI_BASE_COMMIT=<merge-base-sha>'
-	@printf '%s\n' '  make ai-finish TASK=<task>'
+	@printf '%s\n' '  make ai-finish TASK=<task>  # keeps active Outcome; report it before explicit archive'
 	@printf '%s\n' '  make ai-close-work-item TASK=<task>'
 	@printf '%s\n' '  make ai-cockpit-quality'
 
@@ -273,4 +273,4 @@ check-ai-pr:
 	$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
 
 ai-finish:
-	$(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)"
+	REPORT_LANGUAGE= $(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)" $(if $(filter true,$(ARCHIVE)),--archive) $(if $(REPORT_LANGUAGE),--language "$(REPORT_LANGUAGE)")
