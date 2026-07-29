@@ -499,6 +499,8 @@ def main() -> int:
                 ".ai/cockpit/current_status.md",
                 ".ai/work-items/starts/**",
                 ".ai/work-items/archive/**",
+                f".ai/work-items/active/{task}.outcome.json",
+                f".ai/work-items/active/{task}.outcome.md",
             ],
             "outOfScope": out_of_scope_list,
             "sources": [{"path": contract_rel, "reason": "Initial Work Item skeleton."}],

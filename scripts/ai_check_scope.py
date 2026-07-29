@@ -76,6 +76,14 @@ def main() -> int:
     receipt_binding = contract.get("startReceipt")
     if isinstance(receipt_binding, dict) and isinstance(receipt_binding.get("path"), str):
         scope.append(receipt_binding["path"])
+    work_item_id = contract.get("workItemId")
+    if isinstance(work_item_id, str) and work_item_id:
+        scope.extend(
+            [
+                f".ai/work-items/active/{work_item_id}.outcome.json",
+                f".ai/work-items/active/{work_item_id}.outcome.md",
+            ]
+        )
     out_of_scope = string_list(contract, "outOfScope")
     policy_lists = simple_yaml_lists(SCOPE_POLICY)
     allow_patterns = policy_lists.get("allowAlways", [])

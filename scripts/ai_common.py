@@ -26,6 +26,8 @@ MAKE_OVERRIDE_BLOCKLIST = {
     "TASK",
     "TITLE",
     "MODE",
+    "REPORT_LANGUAGE",
+    "ARCHIVE",
 }
 MAKE_ENTRYPOINT_ENV = "AI_COCKPIT_MAKE_ENTRYPOINT"
 SUPPORTED_MAKEFILE_NAMES = {"GNUmakefile", "makefile", "Makefile", "Makefile.ai"}

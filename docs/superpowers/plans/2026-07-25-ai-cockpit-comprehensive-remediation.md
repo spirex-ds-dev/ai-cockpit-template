@@ -666,7 +666,7 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 | GitHub Actions 警告纠偏 | `github-actions-warning-corrective-20260729` 已完成、合并并清理；接收 Dependabot #443，并以 workflow 回归和精确 Head Hosted 日志验收 Node/Go/Homebrew 三类警告消失 |
 | RFE-ISSUE-093/094 候选发布证据与检查点纠偏 | `rfe-094-checkpoint-enforcement-20260729` 已完成、合并、关闭并清理 |
 | RFE-ISSUE-096 恢复后验证证据代际纠偏 | `rfe-096-resume-verification-generation-corrective-20260729` 已完成、合并、关闭并清理；RFE-094 关闭后恢复 #441 时，旧 Summary 验证记录被 canonical before_edit 误计为当前通过项。RFE-096 以最新可信 `resumeHistory.recordedAt` 划分代际，RFE-095 脏调查现场保留但不合并。 |
-| RFE-ISSUE-097 工单完结报告纠偏 | 当前执行 `rfe-097-mandatory-task-outcome-report-20260729`；RFE-096 显示 Task Outcome 仍由 `taskOutcomeInput` opt-in，导致归档虽存在但用户可见报告缺失。先将 pre-merge Outcome 与 post-merge Closure Receipt 变为 fail-closed 必需证据，关闭后才恢复 #441。 |
+| RFE-ISSUE-097 工单完结报告纠偏 | `rfe-097-mandatory-task-outcome-report-20260729` 已完成、合并、关闭并清理；其后发现“Outcome 仅存文件、而非归档前对话报告”这一未闭环行为。当前执行其独立 successor `rfe-108-prearchive-outcome-successor-20260730`：默认 `ai-finish` 只生成并直接呈现 active Outcome，归档必须显式执行；RFE-104 归档未合并证据与 PR #464 保持只读审计状态。 |
 | Dependabot 发布前接收 | 用户新增；RFE-ISSUE-096 关闭后，恢复 #441 并重跑当前代际全部验证，随后 #442、#444、#445 各自按独立 Work Item、PR、Hosted、merge、close、分支清理流程接收 |
 | 文档对齐 | `pre-release-documentation-alignment-20260729` 已暂停；待纠偏和全新日语评估关闭后 rebase/resume 并完成 |
 | 发布前过期资产清理 | 待文档对齐关闭后执行 |
@@ -675,7 +675,7 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 | WI-18 发布新版本 | 待所有前置阶段关闭；候选版本、provider Release、tag、asset、projection 分别验证 |
 | WI-19 清理计划文档 | 发布完整关闭后最后执行 |
 
-当前唯一允许的顺序是：GitHub Actions Node/Go/Homebrew 警告纠偏并接收 #443 → RFE-ISSUE-093/094 检查点与候选发布证据纠偏 → RFE-ISSUE-096 恢复后验证证据代际纠偏 → RFE-ISSUE-097 强制 Task Outcome 与 Closure Receipt → 恢复并完成 #441 → 分别接收 Dependabot #442、#444、#445 → 以最新 `main` 重做 #403 的计划完成证据审计并关闭旧 PR/分支 → 按用户最新反馈重构三语安装文档的信息架构 → 恢复并关闭文档对齐 → 过期代码/逻辑/文档清理 → 三语真实荒诞与注入攻击评估及整改 → 对全部最终源再做一次零 blocker 日语 `final_reassessment` → WI-18 发布 → WI-19 清理当前周期计划。每一项都必须完成 Contract → Preflight → 实现/验收 → `ai-finish`/archive → push → PR → merge → `make ai-close-work-item` → 本地/远端分支清理 → main 同步；不得从 detached closed worktree 直接进入下一项。
+当前唯一允许的顺序是：GitHub Actions Node/Go/Homebrew 警告纠偏并接收 #443 → RFE-ISSUE-093/094 检查点与候选发布证据纠偏 → RFE-ISSUE-096 恢复后验证证据代际纠偏 → RFE-ISSUE-097 强制 Task Outcome 与 Closure Receipt → RFE-108 归档前 active Outcome 直接对话报告 successor → 恢复并完成 #441 → 分别接收 Dependabot #442、#444、#445 → 以最新 `main` 重做 #403 的计划完成证据审计并关闭旧 PR/分支 → 按用户最新反馈重构三语安装文档的信息架构 → 恢复并关闭文档对齐 → 过期代码/逻辑/文档清理 → 三语真实荒诞与注入攻击评估及整改 → 对全部最终源再做一次零 blocker 日语 `final_reassessment` → WI-18 发布 → WI-19 清理当前周期计划。每一项都必须完成 Contract → Preflight → 实现/验收 → `ai-finish`/archive → push → PR → merge → `make ai-close-work-item` → 本地/远端分支清理 → main 同步；不得从 detached closed worktree 直接进入下一项。
 
 ### 本计划工单已发现的问题
 

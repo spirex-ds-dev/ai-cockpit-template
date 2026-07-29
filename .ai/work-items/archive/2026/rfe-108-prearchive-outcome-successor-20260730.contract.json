@@ -1,0 +1,234 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe-108-prearchive-outcome-successor-20260730",
+  "mode": "code",
+  "title": "Redeliver pre-archive task outcome reporting",
+  "baseCommit": "c459bb972cc776645752d1ae99001570d1a077c0",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe-108-prearchive-outcome-successor-20260730.contract.json",
+    ".ai/work-items/active/rfe-108-prearchive-outcome-successor-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/guards/coverage_policy.yaml",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_common.py",
+    "scripts/ai_check_scope.py",
+    "scripts/ai_check_diff_ownership.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/ai_render_task_outcome.py",
+    "scripts/ai_render_task_outcome_multilingual.py",
+    "scripts/ai_start.py",
+    "tests/test_adoption_e2e.py",
+    "tests/test_core_gates.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_installer.py",
+    "tests/test_project_governance_journey.py",
+    "tests/test_makefile.py",
+    "tests/test_diff_ownership.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_task_outcome_multilingual.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-30-rfe-108-prearchive-outcome-successor-20260730.md"
+  ],
+  "outOfScope": [
+    "Rebasing, merging, rewriting, or deleting the archived-unmerged RFE-104 evidence or pull request.",
+    "Changing release publication behavior.",
+    "Claiming that a machine can authenticate the human recipient of a chat report."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Current finish lifecycle and active Outcome integration boundary."
+    },
+    {
+      "path": "scripts/ai_render_task_outcome.py",
+      "reason": "Current deterministic Task Outcome rendering boundary."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Executable regression coverage for pre-archive Outcome behavior."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative serial plan and RFE-104 successor-only recovery requirement."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe-107-derived-record-collision-20260730.contract.json",
+      "reason": "Records why the archived, unmerged RFE-104 branch must be redelivered by a fresh successor."
+    }
+  ],
+  "rawUserRequest": "Every Work Item must report its Outcome directly in the current conversation after ai-finish and before archive, in the language of the conversation; the user has continuing authorization to proceed through the planned lifecycle without a confirmation stop.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-goal:mandatory-active-outcome-report",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:rfe104-successor-current-main"
+  },
+  "declaredIntent": {
+    "summary": "Redeliver the pre-archive direct human Task Outcome reporting boundary on current main without reviving the blocked predecessor branch.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["human_handoff", "evidence_integrity", "process_recurrence"],
+    "reason": "A premature archive or file-only report prevents a human from reviewing the active Work Item; lifecycle changes must preserve fail-closed archive and PR evidence. The repository cannot cryptographically prove that a particular human received, read, or approved a chat report; this is a documented limitation, not an open unknown.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user granted continuing authorization for planned Work Items; the implementation remains bounded to the active-report lifecycle."
+  },
+  "preReviewWarnings": [
+    "Review the exact order: ai-finish succeeds, a direct Outcome is available while the Work Item remains active, and archive/PR/closure remain separate later steps."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ai-finish generates and reports a concise Task Outcome while Contract, Summary, and Outcome are still active; it does not archive, commit, push, create a PR, merge, close, or delete branches.",
+    "The direct Outcome contains delivery, verification, risks and next lifecycle state, and is renderable in English, Chinese, and Japanese according to the current conversation language boundary.",
+    "Archive requires an explicit human-confirmed transition after the active Outcome, while continuing plan authorization can drive the separately authorized archive/PR lifecycle.",
+    "Template and installed Runtime entrypoints preserve the same pre-archive Outcome boundary.",
+    "Regression coverage proves successful active reporting, failed verification staying active, multilingual rendering, installer parity, and no automatic archive side effect.",
+    "Traceability, capability truth, Japanese assessment, and documentation alignment state the bounded behavior without claiming chat identity authentication."
+  ],
+  "guidelines": [
+    "Keep user-visible reports distinct from machine-readable evidence and surface the report directly in the conversation.",
+    "Do not treat continuing execution authority as evidence that a particular human reviewed an Outcome.",
+    "Preserve the canonical archive → PR → merge → closure sequence after the active reporting point."
+  ],
+  "intent": {
+    "problem": "Prior Outcome artifacts existed only as files and the blocked predecessor could not be merged because its delayed archive evidence collided with newer records. A human needs a direct, active-state report before irreversible archive transitions.",
+    "constraints": [
+      "Implement from current origin/main; do not revive, rebase, or modify RFE-104 archived evidence.",
+      "Do not weaken quality, archive, PR, coverage, or lifecycle gates.",
+      "Keep reports language-aligned with the human conversation but never claim language output authenticates identity or approval."
+    ],
+    "rationale": "Direct active-state reporting makes human review possible before archive while preserving machine evidence and the established one-Work-Item lifecycle."
+  },
+  "scenarioCoverage": [
+    {"scenario": "A successful code Work Item reaches ai-finish.", "required": true, "status": "unverified", "evidence": [], "expected": "A direct active Outcome is generated before archive and the Work Item remains active.", "verificationPlan": "Exercise ai-finish integration tests and inspect no archive side effect."},
+    {"scenario": "A required verification fails.", "required": true, "status": "unverified", "evidence": [], "expected": "No success Outcome, archive, PR, or closure is reported; active evidence remains available for repair.", "verificationPlan": "Exercise failed-finish regression coverage."},
+    {"scenario": "The conversation language is English, Chinese, or Japanese.", "required": true, "status": "unverified", "evidence": [], "expected": "The deterministic Outcome view uses the corresponding supported presentation language without translating arbitrary evidence prose.", "verificationPlan": "Exercise multilingual Outcome rendering tests."},
+    {"scenario": "The Runtime is installed into an adopter project.", "required": true, "status": "unverified", "evidence": [], "expected": "The installed Make entrypoint retains the pre-archive Outcome boundary.", "verificationPlan": "Exercise installer and adopter lifecycle regression coverage."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User granted continuing authorization for planned process corrections; approval is limited to the scoped Makefile, template Runtime, policy, and governance evidence updates."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 669
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe-108-prearchive-outcome-successor-20260730.json",
+    "baseCommit": "c459bb972cc776645752d1ae99001570d1a077c0",
+    "initialScopeDigest": "e23ad72702a4e2ef3cf32376e5a204ba8dfec83829711b301135595bc4a9c496",
+    "contractSkeletonDigest": "8e67741df7ec60c727d4539ff7c87017e4ed9359c39dd2fca8577c702add3051"
+  }
+}

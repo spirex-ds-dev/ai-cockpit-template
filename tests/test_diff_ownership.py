@@ -31,6 +31,14 @@ def test_start_receipt_binding_implicitly_owns_receipt_path():
     assert ownership.covers(owner, ".ai/work-items/starts/receipt.json") == (True, False)
 
 
+def test_active_owner_implicitly_owns_its_outcome_paths():
+    owner = ownership.Owner("active", "task", contract([]), None)
+
+    assert ownership.covers(owner, ".ai/work-items/active/task.outcome.json") == (True, False)
+    assert ownership.covers(owner, ".ai/work-items/active/task.outcome.md") == (True, False)
+    assert ownership.covers(owner, ".ai/work-items/active/other.outcome.json") == (False, False)
+
+
 def test_covers_requires_archived_summary_and_approval_is_explicit():
     archived_without_summary = ownership.Owner(
         "archived", "missing-summary", contract(["docs/**"]), None

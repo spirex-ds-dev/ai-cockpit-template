@@ -650,4 +650,6 @@ check-ai-pr:
 		$(AI_NESTED_MAKE) check-ai-pr-core AI_BASE_COMMIT="$(AI_BASE_COMMIT)"
 
 ai-finish:
-	$(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)"
+	@# ARCHIVE is a one-shot lifecycle request. Do not let Make propagate it into
+	@# nested project/test invocations, where it could archive an unrelated Work Item.
+	env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES REPORT_LANGUAGE= $(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)" $(if $(filter true,$(ARCHIVE)),--archive) $(if $(REPORT_LANGUAGE),--language "$(REPORT_LANGUAGE)")

@@ -290,6 +290,28 @@ def test_nested_make_keeps_bytecode_suppression_when_ai_python_is_in_environment
     assert "/ambient/python scripts/ai_finish.py" not in result.stdout
 
 
+def test_ai_finish_forwards_explicit_report_language_without_implicit_archive():
+    result = subprocess.run(
+        ["make", "-n", "ai-finish", "TASK=example", "REPORT_LANGUAGE=zh-CN"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert '--language "zh-CN"' in result.stdout
+    assert "--archive" not in result.stdout
+    assert "env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES" in result.stdout
+
+
+def test_ai_finish_keeps_archive_one_shot_in_both_make_entrypoints():
+    for path in (ROOT / "Makefile", ROOT / "templates" / "make" / "Makefile.ai"):
+        text = path.read_text(encoding="utf-8")
+        finish_recipe = text.split("ai-finish:\n", 1)[1].split("\n\n", 1)[0]
+        assert "env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES" in finish_recipe
+        assert "$(if $(filter true,$(ARCHIVE)),--archive)" in finish_recipe
+
+
 def test_make_entrypoint_is_exported_and_all_recursive_calls_use_it():
     for path in (ROOT / "Makefile", ROOT / "templates" / "make" / "Makefile.ai"):
         text = path.read_text(encoding="utf-8")

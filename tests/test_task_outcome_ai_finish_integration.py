@@ -1,4 +1,5 @@
 import json
+import sys
 
 import ai_finish
 from ai_governance_compression import render_active_status
@@ -160,6 +161,25 @@ def test_finish_execution_priority_runs_summary_after_mandatory_outcome_and_qual
     assert ai_finish.finish_execution_priority(
         {"check": "aiSummary"}
     ) > ai_finish.finish_execution_priority({"check": "quality"})
+
+
+def test_finish_defaults_to_active_outcome_and_accepts_conversation_language(monkeypatch):
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "example-task"])
+
+    args = ai_finish.parse_args()
+
+    assert args.archive is False
+    assert args.language == "en"
+
+
+def test_direct_outcome_report_is_localized_and_explicit_about_archive_boundary():
+    outcome = _outcome("example-task")
+
+    report = ai_finish.render_direct_outcome_report(outcome, "zh-CN")
+
+    assert "工单结果报告" in report
+    assert "任务结果: example-task" in report
+    assert "归档必须显式执行" in report
 
 
 def test_status_contains_only_outcome_link_count_and_status_not_full_report():
