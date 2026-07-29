@@ -101,3 +101,10 @@ def test_quality_full_uses_commit_and_run_bound_session_directories():
     assert "--run-id" in text
     assert "trap 'printf" in text
     assert "target/quality/current-session.txt' EXIT" in text
+
+
+def test_quality_full_uses_owned_phase_cleanup_helper():
+    full = _target_block("quality-full")
+    assert "scripts/run_quality_session.py" in full
+    assert "quality-fast" in full
+    assert "quality-heavy" in full
