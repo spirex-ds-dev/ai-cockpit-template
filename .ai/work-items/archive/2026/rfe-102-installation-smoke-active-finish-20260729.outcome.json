@@ -1,0 +1,169 @@
+{
+  "format": "ai-cockpit-task-outcome",
+  "schemaVersion": 1,
+  "workItemId": "rfe-102-installation-smoke-active-finish-20260729",
+  "status": "completed_with_warnings",
+  "bindings": {
+    "taskId": "rfe-102-installation-smoke-active-finish-20260729",
+    "contractDigest": "a66172c2565e35f316fd4343910d4cc471470ac4077c4275f234d8a38e21801b",
+    "summaryDigest": "b4d79f4ebfcaf6ce9435f2cbcdeb09a4963705171f43828bf4ef2e90c1f694f0",
+    "verificationDigest": "4bc97fd32654a147fd71afd893957ae9c88cc057a4587b4c7def21a82ac6071b",
+    "baseCommit": "3ad72ac7650a5f95407c1e0da28a0a7346665245",
+    "headCommit": "3ad72ac7650a5f95407c1e0da28a0a7346665245",
+    "lifecycleStage": "pre_merge",
+    "pullRequest": {
+      "state": "not_created"
+    },
+    "aiCockpitVersion": "repository-governance",
+    "generatorVersion": "1.0"
+  },
+  "sections": {
+    "outcomeSummary": "Task rfe-102-installation-smoke-active-finish-20260729 generated an evidence-derived outcome with status completed_with_warnings.",
+    "taskOverview": "Governed Work Item: rfe-102-installation-smoke-active-finish-20260729",
+    "deliveredChanges": [
+      ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.contract.json",
+      ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+      ".github/workflows/smoke.yml",
+      "tests/test_quality_gate_architecture.py",
+      "docs/reference/documentation-context-registry.json",
+      "docs/reference/capability-truth-matrix.json",
+      "docs/reference/japanese-capability-assessment.json",
+      "docs/reference/japanese-capability-assessment.md",
+      "docs/superpowers/plans/2026-07-29-rfe-102-installation-smoke-active-finish.md",
+      "aiAgentRisk: not_run",
+      "aiSummary: not_run",
+      "aiStatus: not_run",
+      "aiStatusCheck: not_run",
+      "aiStatusConsistency: not_run",
+      "aiWorkItem: passed",
+      "aiScope: passed",
+      "aiGuards: passed",
+      "aiCheckpoint: passed",
+      "aiReviewPolicy: passed",
+      "aiBacktrack: passed",
+      "aiCoverage: passed",
+      "aiScenarioCoverage: passed",
+      "aiGuidelines: passed",
+      "aiDiffOwnership: passed",
+      "quality: passed",
+      "Guideline complied: Do not weaken a guard to pass installation smoke; repair lifecycle order instead.",
+      "Guideline complied: Keep the installed adopter lifecycle explicit and evidence-bound."
+    ],
+    "findings": [
+      {
+        "findingFingerprint": "RFE-ISSUE-106",
+        "category": "process",
+        "severity": "medium",
+        "title": "RFE-ISSUE-106",
+        "state": "resolved",
+        "description": "The initial RFE-102 full quality run detected that the capability truth row binding smoke.yml was stale after the corrective workflow edit.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+            "subject": "RFE-ISSUE-106"
+          }
+        ]
+      },
+      {
+        "findingFingerprint": "RFE-ISSUE-107",
+        "category": "process",
+        "severity": "medium",
+        "title": "RFE-ISSUE-107",
+        "state": "resolved",
+        "description": "Refreshing Capability Truth evidence made the derived Japanese final reassessment stale, which the release-level Japanese gate correctly rejected.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+            "subject": "RFE-ISSUE-107"
+          }
+        ]
+      }
+    ],
+    "risks": [
+      {
+        "kind": "potential_risk",
+        "severity": "medium",
+        "title": "scope",
+        "state": "unresolved",
+        "description": "Hosted runner behavior remains unverified until PR checks rerun.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+            "subject": "scope"
+          }
+        ]
+      }
+    ],
+    "warnings": [
+      "Hosted installation-smoke has not yet rerun after the corrective change."
+    ],
+    "interventions": [],
+    "forcedStops": [],
+    "resolutions": [
+      {
+        "problem": "The initial RFE-102 full quality run detected that the capability truth row binding smoke.yml was stale after the corrective workflow edit.",
+        "action": "The official ai_capability_truth generator now refreshes exact source and test evidence digests before the final quality run; the matrix validator regressions pass.",
+        "verification": "Recorded Summary verification",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+            "subject": "RFE-ISSUE-106"
+          }
+        ]
+      },
+      {
+        "problem": "Refreshing Capability Truth evidence made the derived Japanese final reassessment stale, which the release-level Japanese gate correctly rejected.",
+        "action": "The official ai_japanese_capability generator refreshes both JSON and Markdown assessment projections after all bound evidence updates; the final-reassessment check is rerun before delivery.",
+        "verification": "Recorded Summary verification",
+        "result": "resolved",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+            "subject": "RFE-ISSUE-107"
+          }
+        ]
+      }
+    ],
+    "recurrencePrevention": [],
+    "avoidedImpact": [],
+    "residualRisks": [
+      {
+        "kind": "potential_risk",
+        "severity": "medium",
+        "title": "scope",
+        "state": "unresolved",
+        "description": "Hosted runner behavior remains unverified until PR checks rerun.",
+        "evidence": [
+          {
+            "source": ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+            "subject": "scope"
+          }
+        ]
+      }
+    ],
+    "humanDecisions": [],
+    "evidence": [
+      {
+        "source": ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.contract.json",
+        "subject": "Contract"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+        "subject": "Summary"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+        "subject": "RFE-ISSUE-106"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+        "subject": "RFE-ISSUE-107"
+      },
+      {
+        "source": ".ai/work-items/archive/2026/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+        "subject": "scope"
+      }
+    ]
+  }
+}

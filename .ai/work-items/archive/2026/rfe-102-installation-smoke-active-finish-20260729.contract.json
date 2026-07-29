@@ -1,0 +1,165 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe-102-installation-smoke-active-finish-20260729",
+  "mode": "code",
+  "title": "Fix installation smoke for active finish lifecycle",
+  "baseCommit": "3ad72ac7650a5f95407c1e0da28a0a7346665245",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe-102-installation-smoke-active-finish-20260729.contract.json",
+    ".ai/work-items/active/rfe-102-installation-smoke-active-finish-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".github/workflows/smoke.yml",
+    "tests/test_quality_gate_architecture.py",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/superpowers/plans/2026-07-29-rfe-102-installation-smoke-active-finish.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": ["Weakening coverage guard policy", "Mutating archived RFE-101 evidence", "Changing runtime installation payload"],
+  "sources": [
+    {"path": ".github/workflows/smoke.yml", "reason": "Hosted installation-smoke failed because its lifecycle assumes ai-finish archives by default."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30456676336/job/90591913676", "reason": "Provider failure evidence identifies coverage guard after default active finish."},
+    {"path": "conversation:2026-07-29-continuous-authorization", "reason": "User authorized corrective work and continuation without redundant pauses."}
+  ],
+  "rawUserRequest": "Continue authorized remediation. When a workflow process defect is found, fix the process before resuming delivery.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-29-continuous-authorization", "capturedAt": "2026-07-29", "digest": "sha256:continuous-authorized-remediation"},
+  "declaredIntent": {"summary": "Restore installation smoke compatibility with explicit pre-archive reporting without weakening the coverage guard.", "requestedCapabilities": ["ai_governance", "test_automation", "software_design"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["governance_bypass", "hosted_ci"],
+    "reason": "A smoke-only workaround could weaken the guard rather than repair lifecycle ordering.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Hosted CI provides a bounded, reproducible workflow defect and the user authorized correction."
+  },
+  "preReviewWarnings": ["Do not set coverage guard reportOnly or remove its post-install verification; explicit archive is the required lifecycle repair."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "installation-smoke explicitly archives the reported active Work Item before committing installed Runtime and running coverage/pr checks.",
+    "The coverage guard remains blocking and detects missing test-diff associations outside the installation-baseline path.",
+    "Static workflow regression verifies the smoke lifecycle includes the explicit archive boundary.",
+    "Focused and full local verification pass, and rerun hosted installation-smoke passes."
+  ],
+  "guidelines": [
+    "Do not weaken a guard to pass installation smoke; repair lifecycle order instead.",
+    "Keep the installed adopter lifecycle explicit and evidence-bound."
+  ],
+  "intent": {
+    "problem": "PR #462 installation-smoke runs make ai-finish under the new active-by-default semantics, then commits before archive; its active Contract still compares to the pre-install base and coverage guard misclassifies the installed Runtime baseline as an untested product diff.",
+    "constraints": ["Archive RFE-102 separately from immutable RFE-101 evidence.", "Keep coverage guard blocking.", "Do not alter installer payload or adopt a silent baseline exemption."],
+    "rationale": "The smoke fixture must mirror the documented lifecycle: report active Outcome, explicit archive, then commit and run post-install checks."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Installed generic adopter finishes active Outcome, explicitly archives it, then commits and passes coverage/pr guards.", "required": true, "status": "unverified", "evidence": [], "reason": "Reproduces the failed hosted path.", "expected": "No Runtime baseline files are classified as the active Work Item diff.", "verificationPlan": "Update smoke workflow and its static architecture regression, then run focused local checks and hosted installation-smoke."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized continuous corrective remediation and workflow-process fixes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 667
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe-102-installation-smoke-active-finish-20260729.json",
+    "baseCommit": "3ad72ac7650a5f95407c1e0da28a0a7346665245",
+    "initialScopeDigest": "77a5957139332aa64c37dc84e05e0bf1421f35d358c244d675b606d6ad2aa7dc",
+    "contractSkeletonDigest": "247e99cdfa2c57d1c70450f65acd7a6016f6a0503cfdaed6cb1e7d63a4019358"
+  }
+}
