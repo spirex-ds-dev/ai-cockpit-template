@@ -1604,6 +1604,37 @@
         "make ai-finish TASK=rfe-097-mandatory-task-outcome-report-20260729",
         "make ai-close-work-item TASK=rfe-097-mandatory-task-outcome-report-20260729"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-049",
+      "summary": "Require every default finish to preserve the active, evidence-bound Outcome for direct human reporting; archive only by a later explicit action, and project recorded findings and residual risks into the report.",
+      "planWorkItems": [
+        "RFE-ISSUE-101",
+        "rfe-101-prearchive-outcome-gate-20260729"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/rfe-101-prearchive-outcome-gate-20260729.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_finish.py",
+        "scripts/ai_generate_task_outcome.py",
+        "scripts/ai_render_task_outcome.py",
+        "Makefile",
+        "docs/superpowers/plans/2026-07-29-rfe-101-prearchive-outcome-gate.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_finish_e2e.py",
+        "tests/test_task_outcome_ai_finish_integration.py",
+        "tests/test_task_outcome_generator.py",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        "make ai-prepare-implementation CONTRACT=.ai/work-items/active/rfe-101-prearchive-outcome-gate-20260729.contract.json SUMMARY=.ai/work-items/active/rfe-101-prearchive-outcome-gate-20260729.summary.json",
+        "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q tests/test_finish_e2e.py tests/test_task_outcome_ai_finish_integration.py tests/test_task_outcome_generator.py",
+        "make quality",
+        "make ai-finish TASK=rfe-101-prearchive-outcome-gate-20260729",
+        "make archive-work-item CONTRACT=.ai/work-items/active/rfe-101-prearchive-outcome-gate-20260729.contract.json"
+      ]
     }
   ]
 }

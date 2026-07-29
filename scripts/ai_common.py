@@ -26,6 +26,7 @@ MAKE_OVERRIDE_BLOCKLIST = {
     "TASK",
     "TITLE",
     "MODE",
+    "REPORT_LANGUAGE",
 }
 MAKE_ENTRYPOINT_ENV = "AI_COCKPIT_MAKE_ENTRYPOINT"
 SUPPORTED_MAKEFILE_NAMES = {"GNUmakefile", "makefile", "Makefile", "Makefile.ai"}
@@ -33,6 +34,10 @@ SUPPORTED_MAKEFILE_NAMES = {"GNUmakefile", "makefile", "Makefile", "Makefile.ai"
 
 def _clean_make_overrides(value: str) -> str:
     """Keep project command overrides while dropping nested Work Item context."""
+    if "${-*-command-variables-*-}" in value:
+        # GNU Make expands this marker using the parent command line.  It can
+        # reintroduce Work Item-only variables after filtering, so fail closed.
+        return ""
     kept: list[str] = []
     for token in shlex.split(value):
         name = token.split("=", 1)[0]
@@ -49,7 +54,7 @@ def clean_git_environment() -> dict[str, str]:
         if not key.startswith(GIT_ENV_PREFIX)
         and not key.startswith("COV_CORE_")
         and not key.startswith("COVERAGE_")
-        and key not in {"GNUMAKEFLAGS", "MFLAGS", "MAKELEVEL"}
+        and key not in {"GNUMAKEFLAGS", "MAKEFLAGS", "MAKEOVERRIDES", "MFLAGS", "MAKELEVEL"}
         and key not in MAKE_OVERRIDE_BLOCKLIST
     }
     if "MAKEFLAGS" in os.environ:

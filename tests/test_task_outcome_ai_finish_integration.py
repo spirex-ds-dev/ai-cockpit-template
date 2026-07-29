@@ -1,6 +1,10 @@
 import json
+import os
+import sys
 
 import ai_finish
+from scripts.ai_generate_task_outcome import generate_outcome
+from scripts.ai_render_task_outcome import render_task_outcome
 from ai_governance_compression import render_active_status
 
 
@@ -160,6 +164,132 @@ def test_finish_execution_priority_runs_summary_after_mandatory_outcome_and_qual
     assert ai_finish.finish_execution_priority(
         {"check": "aiSummary"}
     ) > ai_finish.finish_execution_priority({"check": "quality"})
+
+
+def test_finish_defaults_to_active_outcome_and_requires_explicit_archive(monkeypatch):
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "example-task"])
+    assert ai_finish.parse_args().archive is False
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "example-task", "--archive"])
+    assert ai_finish.parse_args().archive is True
+
+
+def test_finish_accepts_an_explicit_conversation_report_language(monkeypatch):
+    monkeypatch.setattr(
+        sys, "argv", ["ai_finish.py", "--task", "example-task", "--language", "zh-CN"]
+    )
+
+    assert ai_finish.parse_args().language == "zh-CN"
+    assert "工单结果报告" in ai_finish.REPORT_BOUNDARY_TEXT["zh-CN"][0]
+    assert "タスク結果レポート" in ai_finish.REPORT_BOUNDARY_TEXT["ja"][0]
+    assert "Task Outcome Report" in ai_finish.REPORT_BOUNDARY_TEXT["en"][0]
+
+
+def test_finish_removes_report_language_make_context_before_nested_commands(monkeypatch):
+    monkeypatch.setenv("REPORT_LANGUAGE", "zh-CN")
+    monkeypatch.setenv("MAKEFLAGS", "REPORT_LANGUAGE=zh-CN")
+    monkeypatch.setenv("MAKEOVERRIDES", "${-*-command-variables-*-}")
+
+    ai_finish.isolate_report_language_from_nested_commands()
+
+    assert "REPORT_LANGUAGE" not in os.environ
+    assert "MAKEFLAGS" not in os.environ
+    assert "MAKEOVERRIDES" not in os.environ
+
+
+def test_pre_merge_outcome_projects_summary_issues_risks_and_human_corrections(
+    tmp_path, monkeypatch
+):
+    task = "example-task"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": task, "baseCommit": "a" * 40, "verification": []}),
+        encoding="utf-8",
+    )
+    summary_path.write_text(
+        json.dumps(
+            {
+                "verification": [],
+                "changedFiles": [],
+                "observedIssues": [
+                    {
+                        "id": "RFE-100",
+                        "category": "process_issue",
+                        "severity": "high",
+                        "stage": "finish",
+                        "description": "Finish archived before human report.",
+                        "state": "resolved",
+                        "resolution": "Default finish now preserves the active Outcome.",
+                    }
+                ],
+                "residualRisks": [
+                    {
+                        "level": "medium",
+                        "area": "hosted_ci",
+                        "detail": "Exact-Head hosted CI remains required.",
+                    }
+                ],
+                "userCorrectionsCaptured": [
+                    {"request": "Report before archive.", "action": "Require explicit archive."}
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+
+    payload = ai_finish._pre_merge_outcome_input(task, contract_path, summary_path)
+    outcome = generate_outcome(
+        task, payload["bindings"], events=payload["events"], evidence=payload["evidence"]
+    )
+    assert outcome["sections"]["findings"][0]["findingFingerprint"] == "RFE-100"
+    assert outcome["sections"]["findings"][0]["state"] == "resolved"
+    assert (
+        outcome["sections"]["resolutions"][0]["action"]
+        == "Default finish now preserves the active Outcome."
+    )
+    assert outcome["sections"]["residualRisks"][0]["title"] == "hosted_ci"
+    assert outcome["sections"]["humanDecisions"] == ["Report before archive."]
+
+
+def test_rendered_outcome_keeps_human_decision_details_and_evidence_context():
+    outcome = {
+        "workItemId": "example-task",
+        "status": "completed_with_warnings",
+        "sections": {
+            "outcomeSummary": "A process issue was detected and remains partially verified.",
+            "taskOverview": "Governed corrective.",
+            "deliveredChanges": ["scripts/ai_finish.py"],
+            "findings": [
+                {
+                    "title": "RFE-100",
+                    "category": "process",
+                    "severity": "high",
+                    "state": "unresolved",
+                    "description": "Finish archived before human report.",
+                    "evidence": [{"source": "summary.json", "subject": "RFE-100"}],
+                }
+            ],
+            "risks": [],
+            "warnings": [],
+            "interventions": [],
+            "forcedStops": [],
+            "resolutions": [],
+            "recurrencePrevention": [],
+            "avoidedImpact": [],
+            "residualRisks": [],
+            "humanDecisions": ["Report before archive."],
+            "evidence": [{"source": "summary.json", "subject": "Summary"}],
+        },
+    }
+
+    rendered = render_task_outcome(outcome)
+
+    assert "Category: process; Severity: high; State: unresolved" in rendered
+    assert "Finish archived before human report." in rendered
+    assert "Evidence: summary.json — RFE-100" in rendered
+    assert "Report before archive." in rendered
 
 
 def test_status_contains_only_outcome_link_count_and_status_not_full_report():

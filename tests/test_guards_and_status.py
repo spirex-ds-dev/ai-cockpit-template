@@ -117,6 +117,24 @@ def test_default_coverage_policy_rejects_cross_module_test(monkeypatch):
     assert [item.path for item in items] == ["src/auth.rs"]
 
 
+def test_default_coverage_policy_associates_outcome_renderer_with_integration_report_test(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        ai_check_coverage_guard, "POLICY", ROOT / ".ai" / "guards" / "coverage_policy.yaml"
+    )
+
+    assert (
+        ai_check_coverage_guard.detect(
+            [
+                "scripts/ai_render_task_outcome.py",
+                "tests/test_task_outcome_ai_finish_integration.py",
+            ]
+        )
+        == []
+    )
+
+
 def test_checkpoint_next_action_stops_on_unknowns():
     contract = {"notCodable": False, "unknowns": ["decision"], "verification": []}
     assert ai_checkpoint.next_action(contract, None).startswith("Stop coding")

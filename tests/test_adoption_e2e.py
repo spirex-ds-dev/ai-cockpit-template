@@ -96,6 +96,15 @@ def test_first_adoption_finishes_and_passes_complete_pr_check(tmp_path):
         f"PYTHON={sys.executable}",
     )
     assert finish.returncode == 0, finish.stdout + finish.stderr
+    assert contract.exists()
+    archive = run(
+        tmp_path,
+        "make",
+        "archive-work-item",
+        "CONTRACT=.ai/work-items/active/adopt_ai_cockpit.contract.json",
+        f"PYTHON={sys.executable}",
+    )
+    assert archive.returncode == 0, archive.stdout + archive.stderr
     # Model the actual PR boundary: archived Work Item evidence must be committed
     # before aggregate PR validation, including in an adopter repository.
     assert run(tmp_path, "git", "add", "-A").returncode == 0

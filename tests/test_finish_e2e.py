@@ -22,7 +22,15 @@ def test_finish_git_environment_helper_excludes_git_overrides():
 
 
 def test_finish_git_environment_helper_filters_nested_work_item_overrides(monkeypatch):
-    for name in ("AI_BASE_COMMIT", "CONTRACT", "SUMMARY", "TASK", "TITLE", "MODE"):
+    for name in (
+        "AI_BASE_COMMIT",
+        "CONTRACT",
+        "SUMMARY",
+        "TASK",
+        "TITLE",
+        "MODE",
+        "REPORT_LANGUAGE",
+    ):
         monkeypatch.setenv(name, f"outer-{name.lower()}")
     monkeypatch.setenv("MAKEOVERRIDES", "CONTRACT=outer SUMMARY=outer PROJECT_TEST=false")
     monkeypatch.setenv(
@@ -36,6 +44,16 @@ def test_finish_git_environment_helper_filters_nested_work_item_overrides(monkey
     assert environment["MAKEOVERRIDES"] == "PROJECT_TEST=false"
     assert environment["MAKEFLAGS"] == "-- PROJECT_FORMAT_CHECK=true PROJECT_LINT=true"
     assert environment["PYTHONDONTWRITEBYTECODE"] == "1"
+
+
+def test_finish_git_environment_helper_rejects_dynamic_make_command_overrides(monkeypatch):
+    monkeypatch.setenv("MAKEOVERRIDES", "${-*-command-variables-*-}")
+    monkeypatch.setenv("MAKEFLAGS", "REPORT_LANGUAGE=zh-CN")
+
+    environment = ai_common.clean_git_environment()
+
+    assert "MAKEOVERRIDES" not in environment
+    assert "MAKEFLAGS" not in environment
 
 
 def run(root: Path, *args: str, env=None):
@@ -239,6 +257,19 @@ def test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry(tm
         "PROJECT_TEST=true",
     )
     assert retried.returncode == 0, retried.stdout + retried.stderr
+    assert contract_path.exists()
+    assert "Task Outcome Report" in retried.stdout
+    assert "工单结果报告" not in retried.stdout
+    archived = run(
+        tmp_path,
+        "make",
+        "-f",
+        "Makefile.ai",
+        "archive-work-item",
+        f"CONTRACT={contract_path.relative_to(tmp_path)}",
+        f"PYTHON={sys.executable}",
+    )
+    assert archived.returncode == 0, archived.stdout + archived.stderr
     assert not contract_path.exists()
     assert list((tmp_path / ".ai/work-items/archive").rglob("e2e.contract.json"))
 
@@ -255,14 +286,20 @@ def test_required_failure_keeps_active_and_retry_archives(tmp_path):
         tmp_path, "make", "ai-finish", "TASK=e2e", f"PYTHON={sys.executable}", "PROJECT_TEST=true"
     )
     assert retried.returncode == 0, retried.stdout + retried.stderr
-    assert not contract_path.exists()
-    assert list((tmp_path / ".ai/work-items/archive").rglob("e2e.contract.json"))
+    assert contract_path.exists()
+    assert "Task Outcome Report" in retried.stdout
 
 
 def test_archive_collision_fails_after_checks_and_preserves_active(tmp_path):
     contract_path, collision_path = prepare_work_item(tmp_path, archive_collision=True)
     result = run(
-        tmp_path, "make", "ai-finish", "TASK=e2e", f"PYTHON={sys.executable}", "PROJECT_TEST=true"
+        tmp_path,
+        "make",
+        "ai-finish",
+        "TASK=e2e",
+        f"PYTHON={sys.executable}",
+        "PROJECT_TEST=true",
+        "ARCHIVE=true",
     )
     assert result.returncode != 0
     assert "Target already exists" in result.stdout + result.stderr

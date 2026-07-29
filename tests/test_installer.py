@@ -87,6 +87,7 @@ def test_installed_distribution_contains_pr_and_approval_wiring(tmp_path):
         "ai_check_task_outcome.py",
         "ai_generate_task_outcome.py",
         "ai_render_task_outcome.py",
+        "ai_render_task_outcome_multilingual.py",
     ):
         assert (tmp_path / "scripts" / script).is_file()
 
