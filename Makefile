@@ -45,6 +45,7 @@ check-docs-metadata check-trust-layer-docs check-governance-complexity \
 	check-ai-scenario-coverage check-ai-start-receipt check-ai-archive-recovery generate-ai-preflight-review check-ai-preflight-review ai-preflight ai-prepare-implementation \
 	ai-prepare-hosted-verification-snapshot \
 	check-ai-change-summary generate-cockpit-status generate-cockpit-status-ja check-ai-status check-ai-status-ja check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
+	ai-assess-provider-merge-state-recovery \
 	quality-fast quality-full quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
 	check-ai-task-outcome \
@@ -116,6 +117,7 @@ help:
 	@printf '%s\n' '  make check-decision-protocol'
 	@printf '%s\n' '  make archive-work-item CONTRACT=<contract.json> [ARGS="--dry-run"]'
 	@printf '%s\n' '  make ai-close-work-item TASK=<task>  # verify merge, synchronize base, and clean branches'
+	@printf '%s\n' '  make ai-assess-provider-merge-state-recovery ARGS="--evidence <json> --human-confirmed"  # assess an exceptional provider inconsistency; never cleans branches'
 	@printf '%s\n' ''
 	@printf '%s\n' 'Customize project-format-check, project-test, and project-lint for your stack.'
 
@@ -611,6 +613,9 @@ archive-work-item:
 
 ai-close-work-item:
 	$(AI_PYTHON) scripts/ai_close_work_item.py --task "$(TASK)"
+
+ai-assess-provider-merge-state-recovery:
+	$(AI_PYTHON) scripts/ai_provider_merge_state_recovery.py $(ARGS)
 
 check-ai:
 	@if [ -n "$(CONTRACT)" ]; then \

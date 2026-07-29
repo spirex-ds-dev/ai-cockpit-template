@@ -68,3 +68,26 @@ branch を保持し、通常の worktree では元の Work Item checkout へ戻�
 - `closed_but_current_worktree_detached`: Work Item のクローズは完了しましたが、
   実行元 worktree は detached であり、次の Work Item を開始できません。
   コマンドが表示する同期済み base worktree へ移動して続行します。
+
+## Provider merge 状態が不整合な場合の例外評価
+
+`ai-close-work-item` には、`OPEN`、`CLOSED`、`skipped` などの PR を通常の
+merge として扱う fallback はありません。通常の closure は引き続き provider の
+`MERGED`、一致する branch/Head SHA、merge commit、merge timestamp を必要とし、
+通常の open PR の branch cleanup を防ぎます。
+
+まれに provider の部分成功が、base に存在する GitHub 検証済み・署名済みの
+二親 merge commit と、`OPEN` のままで通常の merge facts がない PR API という
+矛盾を残すことがあります。その場合だけ、読み取り専用の別境界を評価します。
+
+```sh
+make ai-assess-provider-merge-state-recovery \
+  ARGS="--evidence provider-anomaly.json --human-confirmed --output target/provider-recovery.md"
+```
+
+evidence は元 PR の番号、URL、branch/Head SHA、観測済み base SHA、正確な
+`[base, head]` 親、GitHub signature verification、base 到達性、およびその Head
+に紐付く required hosted job 全件の成功を結び付けます。出力される receipt は
+provider の不整合状態と通常の merge facts が利用不能であることを明記します。
+この評価は branch 削除、PR 変更、PR の `MERGED` 化を一切行いません。後続の
+recovery action には別の明示的人間判断と、この receipt の監査保持が必要です。
