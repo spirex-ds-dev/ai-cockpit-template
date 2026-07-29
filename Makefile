@@ -391,8 +391,7 @@ quality-full:
 		mkdir -p "$$timing" "$$logs" "$$junit"; \
 		trap 'printf "%s\n" "$$session_id" > target/quality/current-session.txt' EXIT; \
 		printf '%s\n' "$$session_id" > target/quality/current-session.txt; \
-		$(QUALITY_MAKE) --no-print-directory quality-fast QUALITY_SESSION_ID="$$session_id" QUALITY_RUN_ID="$$run_id" QUALITY_TIMING_DIR="$$timing" QUALITY_LOG_DIR="$$logs" QUALITY_JUNIT_DIR="$$junit"; \
-		$(QUALITY_MAKE) --no-print-directory quality-heavy QUALITY_SESSION_ID="$$session_id" QUALITY_RUN_ID="$$run_id" QUALITY_TIMING_DIR="$$timing" QUALITY_LOG_DIR="$$logs" QUALITY_JUNIT_DIR="$$junit"; \
+		$(AI_PYTHON) scripts/run_quality_session.py --phase quality-fast --phase quality-heavy -- $(QUALITY_MAKE) --no-print-directory QUALITY_SESSION_ID="$$session_id" QUALITY_RUN_ID="$$run_id" QUALITY_TIMING_DIR="$$timing" QUALITY_LOG_DIR="$$logs" QUALITY_JUNIT_DIR="$$junit"; \
 		$(AI_PYTHON) scripts/summarize_quality_gates.py --input "$$timing" --json-output "$$session_root/summary.json" --markdown-output "$$session_root/summary.md"; \
 		cp "$$session_root/summary.json" target/quality/summary.json; \
 		cp "$$session_root/summary.md" target/quality/summary.md

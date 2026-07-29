@@ -1,0 +1,177 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe-105-quality-process-cleanup-20260729",
+  "mode": "code",
+  "title": "Fail closed and clean quality child processes",
+  "baseCommit": "8b20fafb817d85e7f932a0997e00ed5140598afb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe-105-quality-process-cleanup-20260729.contract.json",
+    ".ai/work-items/active/rfe-105-quality-process-cleanup-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    "Makefile",
+    "scripts/run_quality_session.py",
+    "tests/test_quality_session.py",
+    "tests/test_quality_gate_architecture.py",
+    "docs/superpowers/plans/2026-07-29-rfe-105-quality-process-cleanup.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": ["Changing quality gate membership, thresholds, or parallelism policy.", "Changing application test behavior or suppressing quality failures.", "Killing processes outside the quality session created by this Work Item."],
+  "sources": [
+    {
+      "path": "Makefile",
+      "reason": "quality-full currently launches fast and heavy phases without session-owned descendant cleanup."
+    },
+    {"path": "scripts/run_quality_gate.py", "reason": "Existing per-gate evidence writer establishes the session and process boundary context."},
+    {"path": "tests/test_quality_gate_architecture.py", "reason": "Existing quality ownership architecture tests are the correct regression location."}
+  ],
+  "rawUserRequest": "Continue. If a process issue is found during a Work Item, repair the process before proceeding. Quality evidence must be reliable and no old test process may remain to contaminate a retry.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:quality-child-cleanup-process-finding", "capturedAt": "2026-07-29", "digest": "sha256:rfe-105-quality-cleanup-request"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Make each quality invocation own and terminate only its phase process group so failed attempts cannot contaminate later evidence.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "verification_reliability",
+      "process_cleanup",
+      "quality_evidence"
+    ],
+    "reason": "A failed quality invocation must not retain test descendants that overwrite shared artifacts during retries.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized process repairs before continuing governed delivery."
+  },
+  "preReviewWarnings": [
+    "Only the process group created for this quality phase may be terminated; unrelated processes must remain untouched."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "quality-full runs fast and heavy phases as separately owned process groups and waits for each phase result.",
+    "If any phase fails or the parent is interrupted, the helper terminates and reaps only that owned process group before returning failure.",
+    "The helper preserves the existing gate list, session/run/timing/log/JUnit bindings, and failure status; it does not turn a failed quality run into success.",
+    "Unit regressions prove success sequencing, failure cleanup, interruption cleanup, and Makefile integration; full quality then passes with one clean session."
+  ],
+  "guidelines": [
+    "Terminate only process groups created by the quality-session helper and preserve unrelated processes.",
+    "Fail closed: preserve phase exit failures and diagnostics while ensuring no owned descendant remains."
+  ],
+  "intent": {
+    "problem": "A quality-fast failure returned an error while a project-test child from the same quality invocation remained alive. A retry then ran concurrently and shared coverage output, so neither session was reliable evidence.",
+    "constraints": ["Do not alter gate membership, thresholds, or parallelism.", "Create a dedicated process group per fast/heavy phase.", "Terminate and reap only the created group on failure or interruption.", "Keep existing session artifact paths and provider-visible diagnostics."],
+    "rationale": "An explicit owned process group gives the quality parent a bounded cleanup target, preventing failed attempts from contaminating a retry without touching unrelated user processes."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized process repairs and continued execution."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Fast phase failure terminates and reaps its owned group before the command returns failure.", "required": true, "status": "unverified", "evidence": [], "reason": "Prevents retry contamination.", "expected": "No owned child remains and the original nonzero exit is returned.", "verificationPlan": "Unit-test helper with controlled process mocks and run full quality."},
+    {"scenario": "Fast success then heavy success preserves ordered execution and produces the ordinary session evidence.", "required": true, "status": "unverified", "evidence": [], "reason": "Preserves normal quality semantics.", "expected": "Fast completes before heavy and exit is zero only when both succeed.", "verificationPlan": "Unit-test order and Makefile integration, then run full quality."}
+  ],
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 666
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe-105-quality-process-cleanup-20260729.json",
+    "baseCommit": "8b20fafb817d85e7f932a0997e00ed5140598afb",
+    "initialScopeDigest": "33af8bfe4e3b661a06866e6f126b3158c2e2e34a6b133c37aa6f73a059c2fdbc",
+    "contractSkeletonDigest": "b431d034ea834c14b54221dedfcad756c0aa2851722ba902f8ec6ac0450c9e51"
+  }
+}
