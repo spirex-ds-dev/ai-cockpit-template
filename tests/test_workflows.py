@@ -8,6 +8,15 @@ def test_compatibility_runs_on_main_pushes_and_pull_requests():
     assert "  push:\n    branches:\n      - main" in workflow
     assert "  pull_request:" in workflow
     assert "  workflow_dispatch:" in workflow
+
+
+def test_csharp_compatibility_uses_dependabot_setup_dotnet_600_pin():
+    workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
+    csharp_setup = workflow.split("uses: actions/setup-dotnet@", 1)[1].split("\n      - ", 1)[0]
+
+    assert csharp_setup.startswith("a98b56852c35b8e3190ac28c8c2271da59106c68")
+    assert "if: matrix.stack == 'csharp'" in workflow
+    assert 'dotnet-version: "9.0.305"' in csharp_setup
     assert "  compatibility-gate:" in workflow
     assert "needs:\n      - shellcheck" in workflow
     assert 'test "$result" = success' in workflow

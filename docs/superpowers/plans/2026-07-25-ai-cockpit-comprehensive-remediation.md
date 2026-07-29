@@ -666,8 +666,8 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 | GitHub Actions 警告纠偏 | `github-actions-warning-corrective-20260729` 已完成、合并并清理；接收 Dependabot #443，并以 workflow 回归和精确 Head Hosted 日志验收 Node/Go/Homebrew 三类警告消失 |
 | RFE-ISSUE-093/094 候选发布证据与检查点纠偏 | `rfe-094-checkpoint-enforcement-20260729` 已完成、合并、关闭并清理 |
 | RFE-ISSUE-096 恢复后验证证据代际纠偏 | `rfe-096-resume-verification-generation-corrective-20260729` 已完成、合并、关闭并清理；RFE-094 关闭后恢复 #441 时，旧 Summary 验证记录被 canonical before_edit 误计为当前通过项。RFE-096 以最新可信 `resumeHistory.recordedAt` 划分代际，RFE-095 脏调查现场保留但不合并。 |
-| RFE-ISSUE-097 工单完结报告纠偏 | `rfe-097-mandatory-task-outcome-report-20260729` 已完成、合并、关闭并清理；其后发现“Outcome 仅存文件、而非归档前对话报告”这一未闭环行为。当前执行其独立 successor `rfe-108-prearchive-outcome-successor-20260730`：默认 `ai-finish` 只生成并直接呈现 active Outcome，归档必须显式执行；RFE-104 归档未合并证据与 PR #464 保持只读审计状态。 |
-| Dependabot 发布前接收 | 用户新增；RFE-ISSUE-096 关闭后，恢复 #441 并重跑当前代际全部验证，随后 #442、#444、#445 各自按独立 Work Item、PR、Hosted、merge、close、分支清理流程接收 |
+| RFE-ISSUE-097 工单完结报告纠偏 | `rfe-097-mandatory-task-outcome-report-20260729` 已完成、合并、关闭并清理；其后发现“Outcome 仅存文件、而非归档前对话报告”这一未闭环行为。successor `rfe-108-prearchive-outcome-successor-20260730` 已完成、PR #467 合并、关闭并清理：默认 `ai-finish` 只生成并直接呈现 active Outcome，归档必须显式执行；RFE-104 归档未合并证据与 PR #464 保持只读审计状态。 |
+| Dependabot 发布前接收 | 用户新增；当前执行 `dependabot-441-setup-dotnet-20260730`，从最新 main 重建 #441 的 setup-dotnet 6.0.0 pin、流程恢复和当前代际验证。其后 #442、#444、#445 各自按独立 Work Item、PR、Hosted、merge、close、分支清理流程接收。 |
 | 文档对齐 | `pre-release-documentation-alignment-20260729` 已暂停；待纠偏和全新日语评估关闭后 rebase/resume 并完成 |
 | 发布前过期资产清理 | 待文档对齐关闭后执行 |
 | 发布前真实荒诞与注入攻击评估 | 用户新增；待过期资产清理关闭后执行三语 12 案例评估及必要整改 |

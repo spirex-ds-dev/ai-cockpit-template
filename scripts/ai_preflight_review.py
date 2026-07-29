@@ -1301,9 +1301,12 @@ def policy_issues(report: dict[str, Any], policy: dict[str, Any]) -> list[str]:
 def report_is_blocked(report: dict[str, Any], policy: dict[str, Any]) -> bool:
     if not policy["gateEnabled"]:
         return False
-    if report.get("status") in set(policy["blockedStatuses"]):
-        return True
     if report.get("status") == "human_decision_recorded":
+        return not (
+            report.get("decisionState") == "human_decision_recorded"
+            and not report.get("decisionEvidenceIssues")
+        )
+    if report.get("status") in set(policy["blockedStatuses"]):
         return True
     return report.get("decisionState") == "invalid" and report.get("status") != "ready"
 

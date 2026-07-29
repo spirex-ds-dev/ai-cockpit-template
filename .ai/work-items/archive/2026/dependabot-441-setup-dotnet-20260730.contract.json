@@ -1,0 +1,249 @@
+{
+  "contractVersion": 2,
+  "workItemId": "dependabot-441-setup-dotnet-20260730",
+  "mode": "code",
+  "title": "Refresh actions setup-dotnet to 6.0.0",
+  "baseCommit": "73bd8083545a028f57190d7ac1ca9f12c52ab8ee",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/dependabot-441-setup-dotnet-20260730.contract.json",
+    ".ai/work-items/active/dependabot-441-setup-dotnet-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    ".ai/decisions/**",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/dependabot-441-setup-dotnet-20260730.outcome.json",
+    ".ai/work-items/active/dependabot-441-setup-dotnet-20260730.outcome.md",
+    ".github/workflows/compatibility.yml",
+    "tests/test_workflows.py",
+    "scripts/ai_preflight_review.py",
+    ".ai/guards/preflight_review_policy.yaml",
+    "tests/test_preflight_review.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": [
+    "Any dependency update other than actions/setup-dotnet in compatibility.yml.",
+    "Merging, rebasing, or modifying Dependabot PRs #442, #444, and #445.",
+    "Release publication, tags, and assets."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/441",
+      "reason": "User-directed Dependabot source update and its historical CI context."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Current pinned setup-dotnet use in the C# compatibility path."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Static workflow regression coverage."
+    },
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "Deterministically derives the workflow-action SBOM evidence required by the quality gate."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative serial order requires #441 before #442, #444, #445, and #403."
+    }
+  ],
+  "rawUserRequest": "#441、#442、#444、#445、#403 处理完以后；开放的 Dependabot PR 在发布之前接收；当前顺序要求先恢复并完成 #441。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:dependabot-intake-441-20260730",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:dependabot-441-user-authorization"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Refresh the C# compatibility action pin from Dependabot PR #441 and re-establish current verification evidence before later dependency intake resumes.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "ci_dependency_update",
+      "workflow_pinning",
+      "hosted_verification"
+    ],
+    "reason": "A pinned CI action upgrade can affect the C# compatibility job; static pin regression, full local quality, and fresh Hosted CI are required."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the serial Dependabot intake; scope is limited to the current #441 action pin. Hosted evidence remains explicitly unverified until the replacement PR completes and must not be inferred early."
+  },
+  "preReviewWarnings": [
+    "Verify the SHA is the #441 actions/setup-dotnet 6.0.0 revision and retains the C#-only conditional and pinned-action policy."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "compatibility.yml upgrades only the pinned actions/setup-dotnet reference from the current 5.4.0 SHA to the #441 6.0.0 SHA, retaining the C# condition and dotnet version.",
+    "Static workflow regression coverage rejects the old SHA and requires the new pinned SHA in the C# compatibility job.",
+    "The complete local quality and governance gates pass, and current-branch Hosted CI provides fresh C# compatibility and aggregate evidence.",
+    "The serial plan and bidirectional traceability record #441 as completed without claiming #442, #444, #445, or #403 are complete."
+  ],
+  "guidelines": [
+    "Keep the dependency update minimal, immutable-SHA pinned, and confined to the declared workflow step.",
+    "Do not reuse historical PR checks as current evidence; rely on current branch verification."
+  ],
+  "intent": {
+    "problem": "Dependabot PR #441 is stale against current main and its historical template-smoke failure cannot be treated as current evidence, while the plan requires receiving it before later Dependabot updates and release.",
+    "constraints": [
+      "Use the exact action SHA from Dependabot PR #441.",
+      "Do not alter other dependency updates, release behavior, or the next Dependabot PRs.",
+      "Do not merge until fresh Hosted checks pass."
+    ],
+    "rationale": "Recreating the one-line upgrade on latest main supplies auditable current evidence and preserves one-Work-Item-per-PR lifecycle boundaries."
+  },
+  "problemStatement": "Refresh the C# compatibility workflow to the reviewed setup-dotnet 6.0.0 SHA and prove the current repository still verifies it.",
+  "scenarioCoverage": [
+    {
+      "scenario": "C# compatibility workflow selects the setup-dotnet 6.0.0 immutable SHA only for the C# matrix entry",
+      "required": true,
+      "status": "unverified",
+      "evidence": [
+        "tests/test_workflows.py"
+      ]
+    },
+    {
+      "scenario": "Current main plus the dependency change passes local quality and Hosted C# compatibility evidence",
+      "required": true,
+      "status": "unverified",
+      "evidence": [
+        "make quality",
+        "Hosted PR checks"
+      ]
+    },
+    {
+      "scenario": "Unrelated Dependabot updates remain unmodified",
+      "required": true,
+      "status": "unverified",
+      "evidence": [
+        "git diff --check",
+        "ai scope and diff ownership checks"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human",
+    "reason": "The user authorized continuing all planned Work Items and explicitly required that discovered process problems be fixed before dependent work continues."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 670
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/dependabot-441-setup-dotnet-20260730.json",
+    "baseCommit": "73bd8083545a028f57190d7ac1ca9f12c52ab8ee",
+    "initialScopeDigest": "43b58cb8f7692d4a8100be4313ddb0f71a884ea9962ab5aceca195321b12d3bb",
+    "contractSkeletonDigest": "261bccafb7128cb6480d2cee61ded2bb23bf91b01e55a3b8045d50450751ed32"
+  }
+}
