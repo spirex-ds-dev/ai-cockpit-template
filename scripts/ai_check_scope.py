@@ -11,10 +11,16 @@ from pathlib import Path
 from typing import Any
 
 from ai_common import changed_paths, included, load_json, simple_yaml_lists, matches
+from ai_evidence_dependencies import (
+    EvidenceDependencyError,
+    changed_path_dependency_issues,
+    load_capability_evidence_dependencies,
+)
 from ai_observability import create_observability, elapsed_ms
 
 
-SCOPE_POLICY = Path(__file__).resolve().parents[1] / ".ai" / "guards" / "scope_policy.yaml"
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SCOPE_POLICY = PROJECT_ROOT / ".ai" / "guards" / "scope_policy.yaml"
 
 
 def string_list(data: dict[str, Any], key: str) -> list[str]:
@@ -109,6 +115,28 @@ def main() -> int:
         else:
             if args.verbose:
                 print(f"[DEBUG] {path} is covered by scope pattern: '{matched_scope[0]}'")
+
+    try:
+        dependencies = load_capability_evidence_dependencies(PROJECT_ROOT)
+    except EvidenceDependencyError as exc:
+        issue = str(exc)
+        issues.append(issue)
+        obs.guard_violation(
+            check_id="aiScope",
+            severity="error",
+            path="capabilityEvidenceDependencies",
+            detail=issue,
+        )
+    else:
+        if dependencies:
+            for issue in changed_path_dependency_issues(paths, dependencies):
+                issues.append(issue)
+                obs.guard_violation(
+                    check_id="aiScope",
+                    severity="error",
+                    path="capabilityEvidenceDependencies",
+                    detail=issue,
+                )
 
     for issue in dependency_scope_issues(contract, paths, policy_lists):
         issues.append(issue)

@@ -1,3 +1,6 @@
+import json
+import sys
+
 import pytest
 
 import ai_check_guards
@@ -106,6 +109,86 @@ def test_adoption_bootstrap_paths_only_bypass_companion_rule_for_adoption():
 
     assert ai_check_scope.dependency_scope_issues(contract, paths, policy) == []
     assert ai_check_scope.dependency_scope_issues({}, paths, policy)
+
+
+def test_scope_guard_requires_changed_matrix_for_changed_capability_evidence(
+    tmp_path, monkeypatch, capsys
+):
+    contract_path = tmp_path / "task.contract.json"
+    contract_path.write_text(
+        json.dumps(
+            {
+                "workItemId": "task",
+                "scope": [
+                    "docs/getting-started/installation.md",
+                    "docs/reference/capability-truth-matrix.json",
+                ],
+                "outOfScope": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        ai_check_scope,
+        "changed_paths",
+        lambda _contract: ["docs/getting-started/installation.md"],
+    )
+    monkeypatch.setattr(sys, "argv", ["ai_check_scope.py", str(contract_path)])
+
+    assert ai_check_scope.main() == 1
+    assert (
+        "Capability Truth evidence dependency requires a changed "
+        "docs/reference/capability-truth-matrix.json: "
+        "docs/getting-started/installation.md is bound to capabilities "
+        "[bootstrap_wizard_lifecycle, interactive_installation_wizard, "
+        "project_calibration_profile_proposal, ten_stage_calibration_session]"
+    ) in capsys.readouterr().err
+
+
+@pytest.mark.parametrize(
+    "paths",
+    [
+        [
+            "docs/getting-started/installation.md",
+            "docs/reference/capability-truth-matrix.json",
+        ],
+        ["docs/reference/capability-truth-matrix.json"],
+        ["docs/reference/unrelated.md"],
+    ],
+)
+def test_scope_guard_accepts_matrix_and_unrelated_changed_path_controls(
+    tmp_path, monkeypatch, paths
+):
+    contract_path = tmp_path / "task.contract.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": "task", "scope": ["docs/**"], "outOfScope": []}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_check_scope, "changed_paths", lambda _contract: paths)
+    monkeypatch.setattr(sys, "argv", ["ai_check_scope.py", str(contract_path)])
+
+    assert ai_check_scope.main() == 0
+
+
+def test_scope_guard_fails_closed_when_configured_dependency_matrix_is_malformed(
+    tmp_path, monkeypatch, capsys
+):
+    matrix_path = tmp_path / "docs/reference/capability-truth-matrix.json"
+    matrix_path.parent.mkdir(parents=True)
+    matrix_path.write_text("{not JSON", encoding="utf-8")
+    contract_path = tmp_path / "task.contract.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": "task", "scope": ["docs/**"], "outOfScope": []}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_check_scope, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_scope, "changed_paths", lambda _contract: ["docs/unrelated.md"])
+    monkeypatch.setattr(sys, "argv", ["ai_check_scope.py", str(contract_path)])
+
+    assert ai_check_scope.main() == 1
+    assert "docs/reference/capability-truth-matrix.json: cannot load JSON matrix" in (
+        capsys.readouterr().err
+    )
 
 
 def test_adoption_bootstrap_paths_are_restricted_to_installer_work_item():
