@@ -116,9 +116,9 @@ make ai-close-work-item TASK=<task>
 
 - [Design Philosophy](philosophy/design-philosophy.md) — North Star 与设计原则。
 - [Architecture](architecture.md) — 组件、证据归属与数据流。
-- [Security and Release Verification](getting-started/security-release-verification.md) — 发布级外部证据要求。
+- [安全与发布验证](getting-started/security-release-verification.zh-CN.md) — 发布级外部证据要求。
 - [Capability Truth Matrix](reference/capability-truth-matrix.md) — 当前实现状态的唯一事实来源。
 - [Enterprise Control Checklist](reference/enterprise-control-checklist.md) — 采用方与外部控制责任。
-- [Documentation Architecture](reference/documentation-architecture.md) — 权威角色地图。
+- [Documentation Architecture](reference/documentation-architecture.md) — 权威角色地图（当前中文完整路线由本页及中文入口提供）。
 
 README 是短入口；本文档是完整的 Trust Layer 权威说明。两者都不能替代产生证据的工具和外部控制。

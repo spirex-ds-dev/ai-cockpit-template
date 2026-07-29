@@ -1,0 +1,344 @@
+{
+  "contractVersion": 2,
+  "workItemId": "pre-release-documentation-truth-corrective-20260729",
+  "mode": "code",
+  "title": "pre-release-documentation-truth-corrective-20260729",
+  "baseCommit": "aa749b675fe7203db901eb836f787b74d7fcb5ad",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue the approved serial remediation plan without stopping when no confirmation is needed. Every named instruction must map bidirectionally to plan, implementation, and acceptance. If a process problem is discovered, fix the process first. The five-strategy pre-release documentation audit found release-blocking drift in Capability Truth, Japanese source binding, public-release resolution, release-identity guidance, plan state/order, and multilingual routes; complete an independent corrective before resuming documentation alignment or release.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:fix-process-and-documentation-findings-before-release",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:fix-documentation-truth-process-findings-before-alignment-release"
+  },
+  "declaredIntent": {
+    "summary": "Correct the release-facing documentation truth and source-binding process exposed by the five-strategy audit, then require a separate fresh Japanese reassessment.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation",
+      "software_design"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/pre-release-documentation-truth-corrective-20260729.contract.json",
+    ".ai/work-items/active/pre-release-documentation-truth-corrective-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "Makefile",
+    "README.md",
+    "README.zh-CN.md",
+    "README.ja.md",
+    "docs/trust-layer.md",
+    "docs/trust-layer.zh-CN.md",
+    "docs/trust-layer.ja.md",
+    "docs/reference/documentation-architecture.md",
+    "docs/reference/documentation-architecture.ja.md",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/getting-started/security-release-verification.md",
+    "docs/getting-started/security-release-verification.zh-CN.md",
+    "docs/getting-started/security-release-verification.ja.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-review.json",
+    "scripts/ai_capability_truth.py",
+    "scripts/ai_japanese_capability.py",
+    "scripts/check_docs_metadata.py",
+    "tests/test_capability_truth_matrix.py",
+    "tests/test_absurd_capability_truth.py",
+    "tests/test_japanese_capability.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_makefile.py",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/plans/2026-07-29-pre-release-documentation-truth-corrective.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Creating, editing, publishing, deleting, or reclassifying a Git tag, GitHub Release, provider asset, release freeze, release.json, next-release.json, or release-state evidence.",
+    "Claiming the corrected Japanese report is the required fresh final reassessment; that is a later independent Work Item.",
+    "Changing runtime identity, isolation, signing, branch protection, enterprise controls, or compliance.",
+    "Deleting deprecated assets or implemented plan documents.",
+    "Resuming the paused final documentation-alignment Work Item or publishing a new version before this corrective and the fresh Japanese reassessment close."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Defines the serial plan, fix-process-first rule, documentation-alignment stage, and publication boundary."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Current capability authority containing the verified Quick Install mechanism drift."
+    },
+    {
+      "path": "scripts/ai_capability_truth.py",
+      "reason": "Current row-only digest implementation that does not bind referenced evidence bytes."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Current 45-file exact-source inventory that omits three Japanese authority documents."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Japanese report generator and source inventory owner."
+    },
+    {
+      "path": "release.json",
+      "reason": "Published projection evidence declaring verified archive SHA256 behavior; read-only in this Work Item."
+    },
+    {
+      "path": "install.sh",
+      "reason": "Runtime Quick Install verifier invocation evidence; read-only in this Work Item."
+    },
+    {
+      "path": "scripts/verify_quick_install_release.py",
+      "reason": "Implementation evidence for release archive identity and SHA256 verification; read-only in this Work Item."
+    },
+    {
+      "path": "README.md",
+      "reason": "English public installation and release-contract claim surface."
+    },
+    {
+      "path": "docs/getting-started/security-release-verification.md",
+      "reason": "Authoritative release-evidence responsibility and non-proof boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release_truth_overclaim",
+      "capability_evidence_staleness",
+      "japanese_source_binding_gap",
+      "unsafe_public_install_resolution",
+      "serial_process_bypass"
+    ],
+    "reason": "These defects can misclassify implementation as publication, keep stale Japanese evidence green, or direct beginners to an unverifiable tag.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous remediation and explicitly required process defects to be corrected before continuing."
+  },
+  "preReviewWarnings": [
+    "Changing README.ja.md, Japanese evaluation code, or bound tests makes the current final report stale.",
+    "The corrective report must be labeled corrective_validation and must not satisfy the final-reassessment release prerequisite.",
+    "Capability implementation truth and provider publication availability are orthogonal and must not be collapsed into one status.",
+    "release.json and provider state are evidence inputs only; no publication mutation is authorized."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Capability Truth row validation binds normalized repository-relative sourceEvidence and testEvidence file bytes with per-file SHA-256 plus aggregate digest; missing, duplicate, escaping, symlinked, or changed evidence fails closed.",
+    "A2: Capability Truth documentation accurately limits the row digest to row metadata plus the recorded evidence-source digest, and every row is regenerated and current.",
+    "A3: The quick_install_release_archive_digest row has the status value required for a present capability, names install.sh, scripts/verify_quick_install_release.py, release.json, and tests/test_quick_install_release.py as direct evidence, and states that this status does not prove latest provider publication or candidate availability.",
+    "A4: The three READMEs stop guessing the highest tag when the authoritative public release projection is unavailable; provider record, tag-pinned metadata, source, installer, archive asset, and digest evidence are mandatory or the flow stops.",
+    "A5: The three security/release guides distinguish published projection, candidate metadata, tag reservation, provider stable/draft release, assets, and release freeze; adopter and maintainer actions and non-proof boundaries are explicit and version-neutral.",
+    "A6: Japanese assessment source evidence directly binds all three Trust Layer documents, all three READMEs, all three security/release guides, English and Japanese Documentation Architecture, and Capability Truth JSON/Markdown used by multilingual claims.",
+    "A7: The canonical Japanese report generated by this corrective is labeled workItemRole corrective_validation and cannot satisfy the final-reassessment prerequisite; release remains blocked until a later final_reassessment report exists on the corrected exact source.",
+    "A8: Japanese, Chinese, and English navigation prefers available same-language Trust Layer, security/release, calibration, troubleshooting, architecture, and assessment routes; minimum governance semantics and localization limitations remain equivalent.",
+    "A9: The comprehensive plan has one current-state section, labels the 2026-07-25 statement as historical, uses archive-before-push/PR lifecycle order, distinguishes ready_on_base from a detached closed worktree, and requires documentation alignment plus deprecated cleanup before WI-18.",
+    "A10: The structured five-strategy review evidence records all eight consensus findings and maps each to this corrective implementation and verification without treating in-progress checks as passed.",
+    "A11: The corrected files, report, tests, PLAN-DIRECTIVE-041, Contract, Summary, and acceptance evidence map bidirectionally; no named file is omitted.",
+    "A12: Full quality, ai-finish archive, aggregate PR verification, exact-Head Hosted checks, merge, ai-close-work-item, local/remote branch deletion, detached worktree removal, and synchronized clean main complete before a fresh Japanese final reassessment starts.",
+    "A13: This Work Item does not publish, alter provider state, clean deprecated assets, resume final alignment, or claim final Japanese release readiness."
+  ],
+  "guidelines": [
+    "Evidence over self-declaration: implementation status and publication availability require separate authorities.",
+    "Bind evidence bytes, not only path strings or row metadata.",
+    "Fail closed when public release identity or provider evidence is unavailable.",
+    "Keep all language routes actionable and semantically equivalent.",
+    "Label corrective Japanese evidence truthfully and require a later independent final reassessment.",
+    "Preserve immutable historical archives and provider evidence."
+  ],
+  "intent": {
+    "problem": "The pre-release five-strategy audit found that Capability Truth contradicts the present Quick Install verification mechanism and overstates digest freshness, the final Japanese report omits key authority documents, public README fallback guesses the highest tag, release identity guidance collapses projection/tag/provider concepts, and the current serial plan contains stale state and conflicting order. Existing structural gates pass despite these facts.",
+    "constraints": [
+      "Use red-first tests for every source-binding, release-resolution, report classification, and multilingual boundary.",
+      "Do not mutate release or provider state.",
+      "Do not call corrective_validation a final Japanese reassessment.",
+      "Keep release-facing guidance version-neutral and beginner-actionable.",
+      "Preserve Capability Truth as implementation authority while explicitly delegating availability to release/provider evidence.",
+      "Complete this corrective lifecycle before starting a fresh final reassessment."
+    ],
+    "rationale": "One corrective closes the shared root cause: release-facing claims are not consistently bound to exact evidence and authority boundaries. Atomic code, schema, documentation, and tests prevent another green structural check from masking stale or contradictory release truth."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Capability Truth source or test file changes while its path remains unchanged.",
+      "expected": "Matrix validation reports evidence_stale until evidence digests and row digest are regenerated.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add byte-drift and unrelated-file regressions around evidence-source digests."
+    },
+    {
+      "scenario": "A matrix evidence path is missing, duplicated through an alias, escaping, or symlinked.",
+      "expected": "Validation fails before accepting the capability row.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add negative path inventory tests."
+    },
+    {
+      "scenario": "The public release projection cannot be fetched but a higher tag exists.",
+      "expected": "Every README flow stops instead of selecting the tag.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add trilingual metadata checks that forbid git-ls-remote semantic-tag fallback."
+    },
+    {
+      "scenario": "A Japanese Trust Layer, security/release, architecture, README, or Capability Truth file changes.",
+      "expected": "The Japanese report becomes stale because the file is directly source-bound.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add direct inventory assertions and representative byte-drift tests."
+    },
+    {
+      "scenario": "The corrective Japanese report is presented to release preflight.",
+      "expected": "Release preflight rejects corrective_validation and requires final_reassessment.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add script and Make prerequisite role regressions."
+    },
+    {
+      "scenario": "A reader confuses release.json, next-release.json, tag, draft/stable provider release, freeze, or assets.",
+      "expected": "Trilingual release-truth tables state what each proves and cannot prove, with adopter and maintainer routes.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add trilingual semantic marker and link checks."
+    },
+    {
+      "scenario": "A Japanese or Chinese page links to English although a same-language authority exists.",
+      "expected": "Documentation checks reject the route and require the available same-language target.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add route mapping regressions for Trust Layer, security, architecture, calibration, troubleshooting, and assessment."
+    },
+    {
+      "scenario": "An executor reads the comprehensive plan after prior stages closed.",
+      "expected": "One current-state section and canonical lifecycle/order identify this corrective, fresh reassessment, resumed alignment, cleanup, release, and plan cleanup without stale current claims.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add exact plan state/order markers to instruction traceability and focused tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User",
+    "reason": "The user explicitly authorized continuous remediation, process-first corrections, and all required documentation and governance evidence changes before release."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 658
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/pre-release-documentation-truth-corrective-20260729.json",
+    "baseCommit": "aa749b675fe7203db901eb836f787b74d7fcb5ad",
+    "initialScopeDigest": "c8b8bcfea917c0e207e2e8bfe5e662e3c6e9925e38ebec55f7089b224623a1ef",
+    "contractSkeletonDigest": "f60a285a6b0ebe3d802874a3c7dea4224e21afc66c708c10c2576786d631d20c"
+  }
+}

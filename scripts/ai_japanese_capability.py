@@ -23,14 +23,26 @@ from ai_input_trust import SourceType, assess_input, re_evaluate_high_risk_opera
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSESSMENT_WORK_ITEM_ID = "japanese-final-reassessment-20260729"
-ASSESSMENT_WORK_ITEM_ROLE = "final_reassessment"
+ASSESSMENT_WORK_ITEM_ID = "pre-release-documentation-truth-corrective-20260729"
+ASSESSMENT_WORK_ITEM_ROLE = "corrective_validation"
 CORPUS_PATH = ROOT / "tests/fixtures/japanese-capability-corpus.json"
 JSON_REPORT_PATH = ROOT / "docs/reference/japanese-capability-assessment.json"
 MARKDOWN_REPORT_PATH = ROOT / "docs/reference/japanese-capability-assessment.md"
 
 REQUIRED_JA_DOCS = (
+    "README.md",
+    "README.zh-CN.md",
     "README.ja.md",
+    "docs/trust-layer.md",
+    "docs/trust-layer.zh-CN.md",
+    "docs/trust-layer.ja.md",
+    "docs/getting-started/security-release-verification.md",
+    "docs/getting-started/security-release-verification.zh-CN.md",
+    "docs/getting-started/security-release-verification.ja.md",
+    "docs/reference/documentation-architecture.md",
+    "docs/reference/documentation-architecture.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
     "docs/overview.ja.md",
     "docs/getting-started/installation.ja.md",
     "docs/getting-started/first-work-item.ja.md",
@@ -437,7 +449,7 @@ def _release_gate_is_wired() -> bool:
     return (
         "check-japanese-capability:" in makefile
         and "scripts/ai_japanese_capability.py --check" in makefile
-        and "check-release-preflight: check-japanese-capability" in makefile
+        and "scripts/ai_japanese_capability.py --check --require-final-reassessment" in makefile
     )
 
 
@@ -708,13 +720,15 @@ def render_markdown(result: dict[str, Any]) -> str:
         "",
         "> This is a release gate, not a claim of general Japanese model fluency.",
         "",
-        f"- Final reassessment Work Item: `{result['workItemId']}`",
+        f"- Assessment Work Item: `{result['workItemId']}`",
+        f"- Work Item role: `{result['workItemRole']}`",
         f"- Assessment digest: `{result['digest']}`",
         f"- Evidence source: `{result['evidenceSource']['digest']}` "
         f"({result['evidenceSource']['fileCount']} files; "
         f"`{result['evidenceSource']['algorithm']}`)",
         f"- Corpus: `{result['corpus']['path']}` (`{result['corpus']['entryCount']}` entries)",
         f"- Blocking findings: `{len(result['blockingFindings'])}`",
+        "- [Machine-readable assessment](japanese-capability-assessment.json)",
         "",
         "## Evidence boundary",
         "",
@@ -787,6 +801,11 @@ def main() -> int:
         "--source-commit",
         help="require the asserted source commit to equal checked-out HEAD",
     )
+    parser.add_argument(
+        "--require-final-reassessment",
+        action="store_true",
+        help="require the checked report to be an independent final reassessment",
+    )
     args = parser.parse_args()
     try:
         source_commit = args.source_commit
@@ -807,6 +826,13 @@ def main() -> int:
     if args.write:
         JSON_REPORT_PATH.write_text(render_json(result), encoding="utf-8")
         MARKDOWN_REPORT_PATH.write_text(render_markdown(result), encoding="utf-8")
+    if args.require_final_reassessment and result.get("workItemRole") != "final_reassessment":
+        print(
+            "release requires workItemRole=final_reassessment; "
+            f"found {result.get('workItemRole', 'missing')}",
+            file=sys.stderr,
+        )
+        return 2
     if args.check:
         errors = report_drift(
             result, json_path=JSON_REPORT_PATH, markdown_path=MARKDOWN_REPORT_PATH

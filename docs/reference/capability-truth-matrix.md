@@ -25,13 +25,15 @@ AI Cockpit is a Repository Governance Layer. It is not an Agent Runtime, Workflo
 
 Documentation may claim a capability as current only when the corresponding matrix row is `implemented` or `adopter_installed` and its evidence paths are independently verifiable. `template_only` describes available template material, not a completed target-repository result. `planned` rows must remain visibly future work until their dedicated Work Item supplies commands, tests, and evidence.
 
-The matrix deliberately records the remaining gaps around verified Quick Install archive digests. Bootstrap lifecycle, ten-stage calibration, Candidate activation, shared Calibration Inventory, and independent CI/Release Evidence are implemented; remaining gaps are addressed by later Work Items in the [Conditional GO remediation plan](../superpowers/plans/2026-07-22-conditional-go-review-remediation.md).
+The Quick Install archive-binding mechanism, bootstrap lifecycle, ten-stage calibration, Candidate activation, shared Calibration Inventory, and independent CI/Release Evidence are implemented in this repository. That status does not prove that the projected release is the provider's latest stable publication, that provider assets are public, or that a future candidate is available. Provider publication and availability require separate release evidence.
+
+The byte-binding and release-truth correction is recorded in the [pre-release documentation truth corrective](../superpowers/plans/2026-07-29-pre-release-documentation-truth-corrective.md).
 
 For exact row-level evidence, status vocabulary, and missing-evidence reasons, use the JSON source rather than inferring status from prose.
 
 ## Evidence binding
 
-Every capability row is bound to `sourceEvidence`, `testEvidence`, `commandEvidence`, `limitations`, and a deterministic `digest`. A changed or mismatched digest is `evidence_stale`; it cannot support an implemented or release claim until the row is regenerated and re-verified. A passing test, source-tree presence, or template installation alone is not proof that an adopter has the capability.
+Every capability row is bound to `sourceEvidence`, `testEvidence`, `commandEvidence`, `limitations`, and an `evidenceSource` inventory containing each bound file's SHA-256 plus a canonical aggregate digest. The row `digest` binds that inventory and the row metadata. Missing files, duplicate aliases, escaping paths, symbolic links, changed bytes, or a mismatched row digest produce `evidence_stale`/validation failure; the row cannot support an implementation claim until it is regenerated and re-verified. A passing test, source-tree presence, or template installation alone is not proof that an adopter has the capability.
 
 The WI-06 absurd corpus is intentionally negative and offline. L1 structural, L2 behavioral, L3 adversarial, and L4 recovery cases for unsupported world facts, forged evidence, impossible completion, unavailable APIs/toolchains, secrets, protected-branch writes, and production operations return `blocked`/`not_ready` with an explicit safe alternative. These cases demonstrate the repository boundary; they do not claim general hallucination prevention.
 

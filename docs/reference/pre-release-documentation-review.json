@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "reviewId": "pre-release-documentation-alignment-five-strategy-20260729",
+  "strategyCount": 5,
+  "strategies": [
+    "accuracy",
+    "completeness",
+    "consistency",
+    "clarity",
+    "audience"
+  ],
+  "correctiveWorkItem": "pre-release-documentation-truth-corrective-20260729",
+  "consensusFindings": [
+    {
+      "findingId": "DOC-ALIGN-FINDING-001",
+      "severity": "high",
+      "title": "Capability Truth conflicted with implemented Quick Install archive verification",
+      "status": "resolved",
+      "implementationEvidence": ["docs/reference/capability-truth-matrix.json", "docs/reference/capability-truth-matrix.md"],
+      "verificationEvidence": ["tests/test_capability_truth_matrix.py"]
+    },
+    {
+      "findingId": "DOC-ALIGN-FINDING-002",
+      "severity": "high",
+      "title": "Capability Truth row digest did not bind referenced evidence bytes",
+      "status": "resolved",
+      "implementationEvidence": ["scripts/ai_capability_truth.py", "docs/reference/capability-truth-matrix.json"],
+      "verificationEvidence": ["tests/test_capability_truth_matrix.py", "tests/test_absurd_capability_truth.py"]
+    },
+    {
+      "findingId": "DOC-ALIGN-FINDING-003",
+      "severity": "high",
+      "title": "Japanese final assessment omitted Japanese authority documents",
+      "status": "resolved_corrective_fresh_final_reassessment_required",
+      "implementationEvidence": ["scripts/ai_japanese_capability.py", "docs/reference/japanese-capability-assessment.json"],
+      "verificationEvidence": ["tests/test_japanese_capability.py"],
+      "remainingBoundary": "A separate final_reassessment Work Item is mandatory after this corrective closes."
+    },
+    {
+      "findingId": "DOC-ALIGN-FINDING-004",
+      "severity": "high",
+      "title": "README fallback confused highest tag with verified public release",
+      "status": "resolved",
+      "implementationEvidence": ["README.md", "README.zh-CN.md", "README.ja.md"],
+      "verificationEvidence": ["tests/test_docs_metadata.py"]
+    },
+    {
+      "findingId": "DOC-ALIGN-FINDING-005",
+      "severity": "high",
+      "title": "Execution plan contained stale state and conflicting lifecycle order",
+      "status": "resolved",
+      "implementationEvidence": ["docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"],
+      "verificationEvidence": ["docs/reference/remediation-instruction-traceability.json"]
+    },
+    {
+      "findingId": "DOC-ALIGN-FINDING-006",
+      "severity": "high",
+      "title": "Release guidance did not separate projection, candidate, tag, and provider publication",
+      "status": "resolved",
+      "implementationEvidence": ["docs/getting-started/security-release-verification.md", "docs/getting-started/security-release-verification.zh-CN.md", "docs/getting-started/security-release-verification.ja.md"],
+      "verificationEvidence": ["tests/test_docs_metadata.py"]
+    },
+    {
+      "findingId": "DOC-ALIGN-FINDING-007",
+      "severity": "medium",
+      "title": "Multilingual navigation and governance semantics were not equivalent",
+      "status": "resolved",
+      "implementationEvidence": ["docs/trust-layer.zh-CN.md", "docs/trust-layer.ja.md", "docs/reference/documentation-architecture.ja.md"],
+      "verificationEvidence": ["tests/test_trust_layer_docs.py", "tests/test_docs_metadata.py"]
+    },
+    {
+      "findingId": "DOC-ALIGN-FINDING-008",
+      "severity": "high",
+      "title": "Alignment checker self-declared review success",
+      "status": "resolved_alignment_resume_must_consume_record",
+      "implementationEvidence": ["docs/reference/pre-release-documentation-review.json"],
+      "verificationEvidence": ["pre-release-documentation-alignment-20260729 must consume this record after resume"],
+      "remainingBoundary": "The paused alignment Work Item remains blocked until this corrective and a fresh final reassessment close."
+    }
+  ]
+}

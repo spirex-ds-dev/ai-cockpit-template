@@ -120,6 +120,21 @@ def test_assessment_inventory_binds_stable_evidence_not_transient_status():
     assert ".ai/cockpit/current_status.md" not in case_paths
     assert ".ai/cockpit/current_status.md" not in paths
     assert case_paths <= paths
+    assert {
+        "README.md",
+        "README.zh-CN.md",
+        "README.ja.md",
+        "docs/trust-layer.md",
+        "docs/trust-layer.zh-CN.md",
+        "docs/trust-layer.ja.md",
+        "docs/getting-started/security-release-verification.md",
+        "docs/getting-started/security-release-verification.zh-CN.md",
+        "docs/getting-started/security-release-verification.ja.md",
+        "docs/reference/documentation-architecture.md",
+        "docs/reference/documentation-architecture.ja.md",
+        "docs/reference/capability-truth-matrix.json",
+        "docs/reference/capability-truth-matrix.md",
+    } <= paths
 
 
 def test_expected_source_rejects_a_different_checked_out_head(tmp_path):
@@ -397,8 +412,8 @@ def test_comprehensive_matrix_is_evidence_bound_and_reports_current_blockers():
     result = evaluate()
 
     assert result["assessmentVersion"] == 3
-    assert result["workItemId"] == "japanese-final-reassessment-20260729"
-    assert result["workItemRole"] == "final_reassessment"
+    assert result["workItemId"] == "pre-release-documentation-truth-corrective-20260729"
+    assert result["workItemRole"] == "corrective_validation"
     assert result["scope"] == "bounded repository-governance Japanese handling"
     assert len(result["cases"]) >= 10
     for case in result["cases"]:
@@ -447,7 +462,11 @@ def test_json_and_markdown_are_deterministic_views_of_one_result():
     assert render_json(first) == render_json(second)
     markdown = render_markdown(first)
     assert first["digest"] in markdown
-    assert "- Final reassessment Work Item: `japanese-final-reassessment-20260729`" in markdown
+    assert (
+        "- Assessment Work Item: `pre-release-documentation-truth-corrective-20260729`" in markdown
+    )
+    assert "- Work Item role: `corrective_validation`" in markdown
+    assert "[Machine-readable assessment](japanese-capability-assessment.json)" in markdown
     assert "Assessment definition Work Item" not in markdown
     assert "JA-CLI-001" in markdown
     status_case = next(case for case in first["cases"] if case["id"] == "JA-STATUS-001")
@@ -556,3 +575,14 @@ def test_cli_check_rejects_report_drift_before_reporting_blockers(tmp_path, monk
 
     assert ai_japanese_capability.main() == 2
     assert "stale Japanese assessment Markdown" in capsys.readouterr().err
+
+
+def test_release_requirement_rejects_corrective_validation_report(monkeypatch, capsys):
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["ai_japanese_capability.py", "--check", "--require-final-reassessment"],
+    )
+
+    assert ai_japanese_capability.main() == 2
+    assert "requires workItemRole=final_reassessment" in capsys.readouterr().err

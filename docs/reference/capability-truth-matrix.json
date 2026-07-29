@@ -1,175 +1,895 @@
 {
   "schemaVersion": 1,
-  "statusVocabulary": ["implemented", "template_only", "adopter_installed", "planned"],
+  "statusVocabulary": [
+    "implemented",
+    "template_only",
+    "adopter_installed",
+    "planned"
+  ],
   "capabilities": [
     {
       "id": "repository_governance_layer",
       "status": "implemented",
       "claim": "Contract, Preflight, verification, Summary, archive, PR, close, and base-sync governance exists in this repository.",
-      "evidence": [".ai/cockpit/README.md", "scripts/ai_start.py", "scripts/ai_finish.py", "scripts/ai_close_work_item.py", "Makefile"],
-      "verification": ["tests/test_start_and_archive.py", "tests/test_finish_e2e.py"],
-      "sourceEvidence": [".ai/cockpit/README.md", "scripts/ai_start.py", "scripts/ai_finish.py", "scripts/ai_close_work_item.py", "Makefile"],
-      "testEvidence": ["tests/test_start_and_archive.py", "tests/test_finish_e2e.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        ".ai/cockpit/README.md",
+        "scripts/ai_start.py",
+        "scripts/ai_finish.py",
+        "scripts/ai_close_work_item.py",
+        "Makefile"
+      ],
+      "verification": [
+        "tests/test_start_and_archive.py",
+        "tests/test_finish_e2e.py"
+      ],
+      "sourceEvidence": [
+        ".ai/cockpit/README.md",
+        "scripts/ai_start.py",
+        "scripts/ai_finish.py",
+        "scripts/ai_close_work_item.py",
+        "Makefile"
+      ],
+      "testEvidence": [
+        "tests/test_start_and_archive.py",
+        "tests/test_finish_e2e.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "Repository evidence describes this template; it does not prove an adopter executed the lifecycle.",
-      "digest": "sha256:f69a7eae9235a8a405f839436d05b8314cb2ec23b5a8f46750d9e49f5cabbd46"
+      "digest": "sha256:c2121a51f13e07be2f783ac332ee1c154634669aeadbf22601485a82ef185802",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 7,
+        "files": [
+          {
+            "path": ".ai/cockpit/README.md",
+            "sha256": "df94d0a762724911bfc60c9d56101d38360fb979c6778466608ef4caeb87d9c9"
+          },
+          {
+            "path": "Makefile",
+            "sha256": "9d3ba11c57994627f02348c9429eccbfad991832ddbce330c3acea2b37e6ffe8"
+          },
+          {
+            "path": "scripts/ai_close_work_item.py",
+            "sha256": "59698eb3a5bf3384575ef8f674f4e3fd1d8d90686cd1f26b23c7ab1215b27fc6"
+          },
+          {
+            "path": "scripts/ai_finish.py",
+            "sha256": "1c3e3cfdf083bfb8e1a9c101b9ba2923ee1c2c743ae1693ccb1cd05ddfab3d0a"
+          },
+          {
+            "path": "scripts/ai_start.py",
+            "sha256": "1d3518366f8a386aac4ea7763b6cb7ebc54b69ac8954abac0788d7d4543d6489"
+          },
+          {
+            "path": "tests/test_finish_e2e.py",
+            "sha256": "19fa784ac4eab2e56fbd8fd126d7938594269ab9788e482430c0977257c94039"
+          },
+          {
+            "path": "tests/test_start_and_archive.py",
+            "sha256": "c7e47694c04673dad6b0a9538d8c0ae518961fc1f590aa08bddd4f679de20e45"
+          }
+        ],
+        "digest": "sha256:2c95c3c4217c577b6ee0225ca5d70c708f5a98cd32bbe6bfd2281758715116fb"
+      }
     },
     {
       "id": "project_calibration_profile_proposal",
       "status": "template_only",
       "claim": "The template can inspect project facts and create a profile proposal; it does not prove completed adopter calibration.",
-      "evidence": ["scripts/ai_project_doctor.py", "scripts/ai_calibrate.py", "docs/getting-started/installation.md"],
-      "verification": ["tests/test_project_governance.py", "tests/test_ai_onboard.py"],
-      "sourceEvidence": ["scripts/ai_project_doctor.py", "scripts/ai_calibrate.py", "docs/getting-started/installation.md"],
-      "testEvidence": ["tests/test_project_governance.py", "tests/test_ai_onboard.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        "scripts/ai_project_doctor.py",
+        "scripts/ai_calibrate.py",
+        "docs/getting-started/installation.md"
+      ],
+      "verification": [
+        "tests/test_project_governance.py",
+        "tests/test_ai_onboard.py"
+      ],
+      "sourceEvidence": [
+        "scripts/ai_project_doctor.py",
+        "scripts/ai_calibrate.py",
+        "docs/getting-started/installation.md"
+      ],
+      "testEvidence": [
+        "tests/test_project_governance.py",
+        "tests/test_ai_onboard.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "Template evidence does not prove completed adopter calibration.",
-      "digest": "sha256:7a15ce940e834e8e5ce6fd9ff209a7fed5aae2d192f1c12eea355880f112d61b"
+      "digest": "sha256:4ba276de14bd9dab87eecb23ec970dc3aba40c0c66fa7986cacb0cb8fac5c632",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 5,
+        "files": [
+          {
+            "path": "docs/getting-started/installation.md",
+            "sha256": "02131bb723ee75ffecacaba256a3c736c1d40cf228410072d24065c5251a4241"
+          },
+          {
+            "path": "scripts/ai_calibrate.py",
+            "sha256": "d569cc00a052a8e13f34e407959f9ae0c99a490dfc9bc0dfed24af284aa82d8e"
+          },
+          {
+            "path": "scripts/ai_project_doctor.py",
+            "sha256": "6589067dbfd1e195d2dba326159dd0cdf226d5a10e22522ff0b3cc7c908368e0"
+          },
+          {
+            "path": "tests/test_ai_onboard.py",
+            "sha256": "7b5b3453d56aca46e47e8fc7c346d545ef80f652e6b6c2d85e525f05737df39d"
+          },
+          {
+            "path": "tests/test_project_governance.py",
+            "sha256": "3c119c0a6b4973af9b5ded6e851d63446e2f9063a666b52b50d4d99633012d17"
+          }
+        ],
+        "digest": "sha256:478522e83bce44d93eaf2ddfffef75efffc3c20d412cff389671d72598775d32"
+      }
     },
     {
       "id": "installed_runtime_entrypoints",
       "status": "adopter_installed",
       "claim": "An adopter receives the governed entrypoints when the installer completes; installed availability must be checked in the adopter repository.",
-      "evidence": ["scripts/install_ai_cockpit.py", "templates/make/Makefile.ai", "scripts/ai_install_facts.py"],
-      "verification": ["tests/test_installation.py", "tests/test_installed_lifecycle_e2e.py"],
-      "sourceEvidence": ["scripts/install_ai_cockpit.py", "templates/make/Makefile.ai", "scripts/ai_install_facts.py"],
-      "testEvidence": ["tests/test_installation.py", "tests/test_installed_lifecycle_e2e.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        "scripts/install_ai_cockpit.py",
+        "templates/make/Makefile.ai",
+        "scripts/ai_install_facts.py"
+      ],
+      "verification": [
+        "tests/test_install_entrypoint.py",
+        "tests/test_installed_lifecycle_e2e.py"
+      ],
+      "sourceEvidence": [
+        "scripts/install_ai_cockpit.py",
+        "templates/make/Makefile.ai",
+        "scripts/ai_install_facts.py"
+      ],
+      "testEvidence": [
+        "tests/test_install_entrypoint.py",
+        "tests/test_installed_lifecycle_e2e.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "Installed capability must be verified in the adopter repository.",
-      "digest": "sha256:bf058cf860f86a1f16b4b7c56ca0c46a1da791dbfcf678743af295f31d651ea5"
+      "digest": "sha256:fb7b3c7f128c083170ffca71814958352e4512cd2fec1d3a7b913490ba226445",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 5,
+        "files": [
+          {
+            "path": "scripts/ai_install_facts.py",
+            "sha256": "9d6887dc8c27a4d6db1133c9cc3f533932a841ee6703490d229ac20ecdc5448d"
+          },
+          {
+            "path": "scripts/install_ai_cockpit.py",
+            "sha256": "0ce54b225d1862a0a346a57e8108f8dcddf080019dc58143c404d0c3fe38476c"
+          },
+          {
+            "path": "templates/make/Makefile.ai",
+            "sha256": "08f1d496c27e6ea363c99f28dcde719892662bc28ceee8eb620a3bb01650a2dc"
+          },
+          {
+            "path": "tests/test_install_entrypoint.py",
+            "sha256": "f8575539dfdd0b1ea5953ed78a81bea151b02078320542a46316cf294b18bce7"
+          },
+          {
+            "path": "tests/test_installed_lifecycle_e2e.py",
+            "sha256": "93e3aa0c712e6179f10f985f2b76f3b4ad5e18c3800ce3ff65999f9d1d400171"
+          }
+        ],
+        "digest": "sha256:2d48cbe82f13dd7ef39335b781012cf5d0862bd4a072fa57a6984ba6ce6f0b84"
+      }
     },
     {
       "id": "ten_stage_calibration_session",
       "status": "implemented",
       "claim": "The Runtime provides an adopter-executable, Japanese-default ten-stage calibration Session with pause/resume, review, checks, evidence, and fail-closed Candidate activation.",
-      "evidence": ["scripts/ai_calibrate.py", "templates/make/Makefile.ai", "docs/reference/calibration-session.md", "docs/getting-started/installation.md"],
-      "verification": ["tests/test_calibration_session.py", "tests/test_project_governance_journey.py"],
-      "sourceEvidence": ["scripts/ai_calibrate.py", "templates/make/Makefile.ai", "docs/reference/calibration-session.md", "docs/getting-started/installation.md"],
-      "testEvidence": ["tests/test_calibration_session.py", "tests/test_project_governance_journey.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        "scripts/ai_calibrate.py",
+        "templates/make/Makefile.ai",
+        "docs/reference/calibration-session.md",
+        "docs/getting-started/installation.md"
+      ],
+      "verification": [
+        "tests/test_calibration_session.py",
+        "tests/test_project_governance_journey.py"
+      ],
+      "sourceEvidence": [
+        "scripts/ai_calibrate.py",
+        "templates/make/Makefile.ai",
+        "docs/reference/calibration-session.md",
+        "docs/getting-started/installation.md"
+      ],
+      "testEvidence": [
+        "tests/test_calibration_session.py",
+        "tests/test_project_governance_journey.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "Template execution evidence does not prove an adopter completed calibration or approval.",
-      "digest": "sha256:4d436c511e0cc41ebcf8d91eff2a53c3098e76df4bf58d06363297e840cdb437"
+      "digest": "sha256:e3ffeb713a1bc80abeccdf0e8fd171decce1f792ed8d00815f8c092108f14c4d",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 6,
+        "files": [
+          {
+            "path": "docs/getting-started/installation.md",
+            "sha256": "02131bb723ee75ffecacaba256a3c736c1d40cf228410072d24065c5251a4241"
+          },
+          {
+            "path": "docs/reference/calibration-session.md",
+            "sha256": "7802b01659e067d47800212a59fe94a2f8831ae9de0bd0d1476eec07cb8b1327"
+          },
+          {
+            "path": "scripts/ai_calibrate.py",
+            "sha256": "d569cc00a052a8e13f34e407959f9ae0c99a490dfc9bc0dfed24af284aa82d8e"
+          },
+          {
+            "path": "templates/make/Makefile.ai",
+            "sha256": "08f1d496c27e6ea363c99f28dcde719892662bc28ceee8eb620a3bb01650a2dc"
+          },
+          {
+            "path": "tests/test_calibration_session.py",
+            "sha256": "17e5749b23b9a2322f8c44451458514374993614ffe5ba6b5cfd01e47848adf8"
+          },
+          {
+            "path": "tests/test_project_governance_journey.py",
+            "sha256": "bc72327226fec6f6623ee3bb314f37f20b8b6f1292427b362c282cf3b08f0bd0"
+          }
+        ],
+        "digest": "sha256:d41595c3ff2b891a7a785bc29b75603e41adf66715d21253a6956cbe34f459d3"
+      }
     },
     {
       "id": "interactive_installation_wizard",
       "status": "implemented",
       "claim": "The template provides a confirmation-gated Installation Wizard for repository detection, New Adoption, Upgrade, Dry Run, and mobile or mixed-stack planning; it does not commit, push, create a PR, or merge.",
-      "evidence": ["install.sh", "scripts/ai_install_wizard.py", "scripts/ai_install_plan.py", "docs/getting-started/installation.md"],
-      "verification": ["tests/test_install_wizard.py", "tests/test_install_plan.py", "tests/test_wizard_fixtures.py"],
-      "sourceEvidence": ["install.sh", "scripts/ai_install_wizard.py", "scripts/ai_install_plan.py", "docs/getting-started/installation.md"],
-      "testEvidence": ["tests/test_install_wizard.py", "tests/test_install_plan.py", "tests/test_wizard_fixtures.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        "install.sh",
+        "scripts/ai_install_wizard.py",
+        "scripts/ai_install_plan.py",
+        "docs/getting-started/installation.md"
+      ],
+      "verification": [
+        "tests/test_install_wizard.py",
+        "tests/test_install_plan.py",
+        "tests/test_wizard_fixtures.py"
+      ],
+      "sourceEvidence": [
+        "install.sh",
+        "scripts/ai_install_wizard.py",
+        "scripts/ai_install_plan.py",
+        "docs/getting-started/installation.md"
+      ],
+      "testEvidence": [
+        "tests/test_install_wizard.py",
+        "tests/test_install_plan.py",
+        "tests/test_wizard_fixtures.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "The wizard does not itself commit, push, create a PR, or merge.",
-      "digest": "sha256:d6d05c4e64d30b57edaac42383af6e62f996cd070465f6d17a7cb932db4f5051"
+      "digest": "sha256:75fea775c5f77c5ac32e302ee4459edc694d3a12f17aadea76662e3210c90347",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 7,
+        "files": [
+          {
+            "path": "docs/getting-started/installation.md",
+            "sha256": "02131bb723ee75ffecacaba256a3c736c1d40cf228410072d24065c5251a4241"
+          },
+          {
+            "path": "install.sh",
+            "sha256": "56fc6487fcdb09211ef79e209654ac60ea9915788372b5acf3f26b6a1f53afd7"
+          },
+          {
+            "path": "scripts/ai_install_plan.py",
+            "sha256": "3b22cc56e8c6eac7e746e2d15a7bfcec8f398410d5c5e892cee648176a9ead25"
+          },
+          {
+            "path": "scripts/ai_install_wizard.py",
+            "sha256": "72315e619a92842d3f9a954925b4f4c08f9cec659bbe801872edcba07694d9cd"
+          },
+          {
+            "path": "tests/test_install_plan.py",
+            "sha256": "ee401757e4a7c53a7fa555749136f41e5250d5efd8a9b8ebbac5dd841f7d1105"
+          },
+          {
+            "path": "tests/test_install_wizard.py",
+            "sha256": "69f6da55d193c0fe24678e4de45da8ee94e0b8068bbf7b626446934636423beb"
+          },
+          {
+            "path": "tests/test_wizard_fixtures.py",
+            "sha256": "7790bbdb9cb0164461d00b76f2ccce12db9bd52ddfc26ed2338ceb847bd7d0bd"
+          }
+        ],
+        "digest": "sha256:d7852ffe3557e38f9f3c1fc0b3bfec3b1dbcf21255c9e607edd61d9b8661a7c1"
+      }
     },
     {
       "id": "interactive_calibration_wizard",
       "status": "implemented",
       "claim": "The template provides a resumable Calibration Wizard adapter over the ten-stage persisted Session with blocking Unknown and stale evidence, separate human confirmations, and atomic Candidate activation; adopter execution remains required.",
-      "evidence": ["scripts/ai_calibration_wizard.py", "scripts/ai_calibrate.py", "docs/reference/calibration-session.md"],
-      "verification": ["tests/test_calibration_wizard.py", "tests/test_calibration_session.py"],
-      "sourceEvidence": ["scripts/ai_calibration_wizard.py", "scripts/ai_calibrate.py", "docs/reference/calibration-session.md"],
-      "testEvidence": ["tests/test_calibration_wizard.py", "tests/test_calibration_session.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        "scripts/ai_calibration_wizard.py",
+        "scripts/ai_calibrate.py",
+        "docs/reference/calibration-session.md"
+      ],
+      "verification": [
+        "tests/test_calibration_wizard.py",
+        "tests/test_calibration_session.py"
+      ],
+      "sourceEvidence": [
+        "scripts/ai_calibration_wizard.py",
+        "scripts/ai_calibrate.py",
+        "docs/reference/calibration-session.md"
+      ],
+      "testEvidence": [
+        "tests/test_calibration_wizard.py",
+        "tests/test_calibration_session.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "Adopter toolchain execution and project-owned approval remain separate evidence.",
-      "digest": "sha256:bdc991f473cdfd88a2f8ba05a3400a2190f95155dd0fd3975d0adf6d5eefc53c"
+      "digest": "sha256:6a03a89733256c2cd7fc1e6fa14f8e74fa19994fa165cbaded3b09ad6486b733",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 5,
+        "files": [
+          {
+            "path": "docs/reference/calibration-session.md",
+            "sha256": "7802b01659e067d47800212a59fe94a2f8831ae9de0bd0d1476eec07cb8b1327"
+          },
+          {
+            "path": "scripts/ai_calibrate.py",
+            "sha256": "d569cc00a052a8e13f34e407959f9ae0c99a490dfc9bc0dfed24af284aa82d8e"
+          },
+          {
+            "path": "scripts/ai_calibration_wizard.py",
+            "sha256": "d4d1bed69d7d9648d1fe61ab8ce370cc099c99c1ba6183984e08fa613b6710fa"
+          },
+          {
+            "path": "tests/test_calibration_session.py",
+            "sha256": "17e5749b23b9a2322f8c44451458514374993614ffe5ba6b5cfd01e47848adf8"
+          },
+          {
+            "path": "tests/test_calibration_wizard.py",
+            "sha256": "dfd1b0e081c20ead44c265a75cab8c1dfd0fd2d23d2bc5f105cdcca7b18dff86"
+          }
+        ],
+        "digest": "sha256:cdc81fc4da31ccd31e58188b2424dc06fbbd913bc7fa99e810f9dcd92a3ebc97"
+      }
     },
     {
       "id": "calibration_inventory_status_matrix",
       "status": "implemented",
       "claim": "Calibration and readiness consumers share a conservative ten-boundary Inventory with explicit status, provenance, confirmation, staleAt, owner, and blocking reason fields.",
-      "evidence": ["scripts/ai_calibration_inventory.py", "scripts/ai_readiness_policy.py", "scripts/ai_generate_status.py", "docs/reference/calibration-inventory.md"],
-      "verification": ["tests/test_calibration_inventory.py", "tests/test_readiness_policy.py"],
-      "sourceEvidence": ["scripts/ai_calibration_inventory.py", "scripts/ai_readiness_policy.py", "scripts/ai_generate_status.py", "docs/reference/calibration-inventory.md"],
-      "testEvidence": ["tests/test_calibration_inventory.py", "tests/test_readiness_policy.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        "scripts/ai_calibration_inventory.py",
+        "scripts/ai_readiness_policy.py",
+        "scripts/ai_generate_status.py",
+        "docs/reference/calibration-inventory.md"
+      ],
+      "verification": [
+        "tests/test_calibration_inventory.py",
+        "tests/test_readiness_policy.py"
+      ],
+      "sourceEvidence": [
+        "scripts/ai_calibration_inventory.py",
+        "scripts/ai_readiness_policy.py",
+        "scripts/ai_generate_status.py",
+        "docs/reference/calibration-inventory.md"
+      ],
+      "testEvidence": [
+        "tests/test_calibration_inventory.py",
+        "tests/test_readiness_policy.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "Inventory status is evidence compression, not external project execution proof.",
-      "digest": "sha256:0d3797d2e1171c22b1e54d7284a07641cd3f4b49eefb0060593d7cc0edfdc22f"
+      "digest": "sha256:73a6cddee9c997abe23f4483247a24c36cd1c5e96dc7de5231387d5117810802",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 6,
+        "files": [
+          {
+            "path": "docs/reference/calibration-inventory.md",
+            "sha256": "610604812638b3260c5828894aec686224b488d6adef4df7aea6b40f725ebc62"
+          },
+          {
+            "path": "scripts/ai_calibration_inventory.py",
+            "sha256": "862a6e439c4b33cde1b57e43f64c876760c98b943ef2fb1c8aacd921df24a54d"
+          },
+          {
+            "path": "scripts/ai_generate_status.py",
+            "sha256": "2cbdf535688c1d96f6b46011b34840e6ce910106720b03f1869a2e3cbf8571e7"
+          },
+          {
+            "path": "scripts/ai_readiness_policy.py",
+            "sha256": "ff51f6034a01d38d10e33724c82c30ea57e1a4e7df045eb0f67570e16da52a28"
+          },
+          {
+            "path": "tests/test_calibration_inventory.py",
+            "sha256": "7cec06e9db13b0c7defbd0fa794ec338d3891ab7edb0c5dd0f23d9ea3c5581dd"
+          },
+          {
+            "path": "tests/test_readiness_policy.py",
+            "sha256": "22c2bb0407629d6083889e291501ce58416e67e63c88fcccccdcfe44bb158b57"
+          }
+        ],
+        "digest": "sha256:ec9ce1e8a0222d9002ef7029795a481de30d5c4e4610f30d28884a9761168c79"
+      }
     },
     {
       "id": "candidate_activation_and_active_preservation",
       "status": "implemented",
       "claim": "Calibration Candidate activation is atomic and preserves the previous Active configuration when activation fails.",
-      "evidence": ["scripts/ai_calibrate.py", "docs/reference/calibration-session.md"],
-      "verification": ["tests/test_calibration_session.py"],
-      "sourceEvidence": ["scripts/ai_calibrate.py", "docs/reference/calibration-session.md"],
-      "testEvidence": ["tests/test_calibration_session.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        "scripts/ai_calibrate.py",
+        "docs/reference/calibration-session.md"
+      ],
+      "verification": [
+        "tests/test_calibration_session.py"
+      ],
+      "sourceEvidence": [
+        "scripts/ai_calibrate.py",
+        "docs/reference/calibration-session.md"
+      ],
+      "testEvidence": [
+        "tests/test_calibration_session.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "Atomic activation evidence does not prove a particular adopter activated a Candidate.",
-      "digest": "sha256:1599dbbf329b7e7a33d6d48cf9c57b3dbb55bacc620b445f46ff86e1aaef46de"
+      "digest": "sha256:c2b192f818ced844e20472e77c6c3f0cf944a41b7b6af0489c1de27d0de54d1d",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 3,
+        "files": [
+          {
+            "path": "docs/reference/calibration-session.md",
+            "sha256": "7802b01659e067d47800212a59fe94a2f8831ae9de0bd0d1476eec07cb8b1327"
+          },
+          {
+            "path": "scripts/ai_calibrate.py",
+            "sha256": "d569cc00a052a8e13f34e407959f9ae0c99a490dfc9bc0dfed24af284aa82d8e"
+          },
+          {
+            "path": "tests/test_calibration_session.py",
+            "sha256": "17e5749b23b9a2322f8c44451458514374993614ffe5ba6b5cfd01e47848adf8"
+          }
+        ],
+        "digest": "sha256:ec396103ffd4deb739ecfa5f7ed4faa225015c2556b5345b84cfefbb493d9c29"
+      }
     },
     {
       "id": "bootstrap_wizard_lifecycle",
       "status": "implemented",
       "claim": "Bootstrap Adoption has an explicit resumable lifecycle schema, confirmation-gated write phase, and a fail-closed not_claimed readiness boundary.",
-      "evidence": ["scripts/bootstrap_wizard.py", "scripts/ai_lifecycle_facts.py", "docs/getting-started/installation.md"],
-      "verification": ["tests/test_bootstrap_wizard.py", "tests/test_lifecycle_facts.py", "tests/test_bootstrap_write_boundary.py"],
-      "sourceEvidence": ["scripts/bootstrap_wizard.py", "scripts/ai_lifecycle_facts.py", "docs/getting-started/installation.md"],
-      "testEvidence": ["tests/test_bootstrap_wizard.py", "tests/test_lifecycle_facts.py", "tests/test_bootstrap_write_boundary.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        "scripts/bootstrap_wizard.py",
+        "scripts/ai_lifecycle_facts.py",
+        "docs/getting-started/installation.md"
+      ],
+      "verification": [
+        "tests/test_bootstrap_wizard.py",
+        "tests/test_lifecycle_facts.py",
+        "tests/test_bootstrap_write_boundary.py"
+      ],
+      "sourceEvidence": [
+        "scripts/bootstrap_wizard.py",
+        "scripts/ai_lifecycle_facts.py",
+        "docs/getting-started/installation.md"
+      ],
+      "testEvidence": [
+        "tests/test_bootstrap_wizard.py",
+        "tests/test_lifecycle_facts.py",
+        "tests/test_bootstrap_write_boundary.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "Bootstrap evidence remains template-local until an adopter records installation facts.",
-      "digest": "sha256:f0b21288c602433adae94272edfb267f27cb84975397ef6534ad48534f914c40"
+      "digest": "sha256:973e0cc35b9ff5532efe7663d7005683d25f792300fe46edd45b75fc48fa651a",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 6,
+        "files": [
+          {
+            "path": "docs/getting-started/installation.md",
+            "sha256": "02131bb723ee75ffecacaba256a3c736c1d40cf228410072d24065c5251a4241"
+          },
+          {
+            "path": "scripts/ai_lifecycle_facts.py",
+            "sha256": "cd6de6a83ccf41907a84591be76b06cda62ce7a5a9f70d8ce9a90d43bf92ac2e"
+          },
+          {
+            "path": "scripts/bootstrap_wizard.py",
+            "sha256": "5dcc9b0cb03e25d8ffb63960d85328d4586ce615fedd20e099c13d9efaea90b7"
+          },
+          {
+            "path": "tests/test_bootstrap_wizard.py",
+            "sha256": "49530f7fe7106472a12963fde873399148de50d795062d4113063d1d05f242b8"
+          },
+          {
+            "path": "tests/test_bootstrap_write_boundary.py",
+            "sha256": "d11ff72a447dd1c3545cdbd9faf87f79d88922f5cb50a90c1240a3e5c10a15d0"
+          },
+          {
+            "path": "tests/test_lifecycle_facts.py",
+            "sha256": "f41d52daf1228faf2a057d32267d61049ca315a1b0d4f9701b231782ca81f6fc"
+          }
+        ],
+        "digest": "sha256:4665d7efea11b7d3acefc10d93f2b4d4558b2a04475bc5060d4647fe08a70f07"
+      }
     },
     {
       "id": "ownership_manifest_and_managed_regions",
       "status": "adopter_installed",
       "claim": "An adopter receives a bound per-file ownership manifest with installed/current digests, project modification facts, managed-region evidence, and rollback baseline consumed by the installed lifecycle.",
-      "evidence": ["scripts/ai_ownership.py", "scripts/ai_install_facts.py", "scripts/ai_install_status.py", "docs/reference/installed-lifecycle.md"],
-      "verification": ["tests/test_ownership.py", "tests/test_install_facts.py", "tests/test_installed_lifecycle_e2e.py"],
-      "sourceEvidence": ["scripts/ai_ownership.py", "scripts/ai_install_facts.py", "scripts/ai_install_status.py", "docs/reference/installed-lifecycle.md"],
-      "testEvidence": ["tests/test_ownership.py", "tests/test_install_facts.py", "tests/test_installed_lifecycle_e2e.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        "scripts/ai_ownership.py",
+        "scripts/ai_install_facts.py",
+        "scripts/ai_install_status.py",
+        "docs/reference/installed-lifecycle.md"
+      ],
+      "verification": [
+        "tests/test_ownership.py",
+        "tests/test_install_facts.py",
+        "tests/test_installed_lifecycle_e2e.py"
+      ],
+      "sourceEvidence": [
+        "scripts/ai_ownership.py",
+        "scripts/ai_install_facts.py",
+        "scripts/ai_install_status.py",
+        "docs/reference/installed-lifecycle.md"
+      ],
+      "testEvidence": [
+        "tests/test_ownership.py",
+        "tests/test_install_facts.py",
+        "tests/test_installed_lifecycle_e2e.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "Adopter-installed status requires evidence from the target repository.",
-      "digest": "sha256:3bb78c4815a06bdede450f4f815f1c587980e310dba24482ab75b43e8025263f"
+      "digest": "sha256:c1defad6e4d588be1b7c0095809e703359c5e527c953f544bd9bec0391face61",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 7,
+        "files": [
+          {
+            "path": "docs/reference/installed-lifecycle.md",
+            "sha256": "97cc84f4b1ee2d9c79f5e5f9409e020d5fb23cca779f16f92fa1a2dcde920c80"
+          },
+          {
+            "path": "scripts/ai_install_facts.py",
+            "sha256": "9d6887dc8c27a4d6db1133c9cc3f533932a841ee6703490d229ac20ecdc5448d"
+          },
+          {
+            "path": "scripts/ai_install_status.py",
+            "sha256": "ed102d82913ae1c45879953b02e80989a0e9eb374c8757759b0813015e9edbac"
+          },
+          {
+            "path": "scripts/ai_ownership.py",
+            "sha256": "0fae4b83b710c0ec77d4ff6ac013ef13f933527197d9dbf1b2a3e09eebb197c4"
+          },
+          {
+            "path": "tests/test_install_facts.py",
+            "sha256": "0ba85719fe8e69902d1eaa6f53be756db29e97e9caffef2ab3ae1e7793f7763e"
+          },
+          {
+            "path": "tests/test_installed_lifecycle_e2e.py",
+            "sha256": "93e3aa0c712e6179f10f985f2b76f3b4ad5e18c3800ce3ff65999f9d1d400171"
+          },
+          {
+            "path": "tests/test_ownership.py",
+            "sha256": "d839e73791fb2bf3de863d36c78ffc6969b856b744c1074d7eeca9ac1194508b"
+          }
+        ],
+        "digest": "sha256:bd3095e0a3c752b1c421036cb18e76ed3886c79b53416058b1cb8f1e5b6b00d9"
+      }
     },
     {
       "id": "governed_update_and_uninstall",
       "status": "adopter_installed",
       "claim": "Installed update proposal/apply and preserve-evidence uninstall facts/proposal/execution boundaries expose reviewable Work Item, snapshot, migration, recalibration, PR handoff, rollback, disable-result, deterministic ownership facts, proposalDigest binding, detached filesystem removal, truthful receipt, and post-state verification evidence.",
-      "evidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_disable_enable.py", "scripts/ai_uninstall_facts.py", "scripts/ai_uninstall_proposal.py", "scripts/ai_detached_uninstaller.py", "scripts/ai_installer_catalog.json", "templates/make/Makefile.ai", "docs/reference/installed-lifecycle.md"],
-      "verification": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_disable_enable.py", "tests/test_uninstall_facts.py", "tests/test_uninstall_proposal.py", "tests/test_detached_uninstaller.py", "tests/test_installed_runtime_parity.py", "tests/test_japanese_adopter_lifecycle.py", "tests/test_japanese_capability.py"],
-      "sourceEvidence": ["scripts/ai_upgrade_proposal.py", "scripts/ai_upgrade_apply.py", "scripts/ai_disable_enable.py", "scripts/ai_uninstall_facts.py", "scripts/ai_uninstall_proposal.py", "scripts/ai_detached_uninstaller.py", "scripts/ai_installer_catalog.json", "templates/make/Makefile.ai", "docs/reference/installed-lifecycle.md"],
-      "testEvidence": ["tests/test_upgrade_proposal.py", "tests/test_upgrade_apply.py", "tests/test_disable_enable.py", "tests/test_uninstall_facts.py", "tests/test_uninstall_proposal.py", "tests/test_detached_uninstaller.py", "tests/test_installed_runtime_parity.py", "tests/test_japanese_adopter_lifecycle.py", "tests/test_japanese_capability.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        "scripts/ai_upgrade_proposal.py",
+        "scripts/ai_upgrade_apply.py",
+        "scripts/ai_disable_enable.py",
+        "scripts/ai_uninstall_facts.py",
+        "scripts/ai_uninstall_proposal.py",
+        "scripts/ai_detached_uninstaller.py",
+        "scripts/ai_installer_catalog.json",
+        "templates/make/Makefile.ai",
+        "docs/reference/installed-lifecycle.md"
+      ],
+      "verification": [
+        "tests/test_upgrade_proposal.py",
+        "tests/test_upgrade_apply.py",
+        "tests/test_disable_enable.py",
+        "tests/test_uninstall_facts.py",
+        "tests/test_uninstall_proposal.py",
+        "tests/test_detached_uninstaller.py",
+        "tests/test_installed_runtime_parity.py",
+        "tests/test_japanese_adopter_lifecycle.py",
+        "tests/test_japanese_capability.py"
+      ],
+      "sourceEvidence": [
+        "scripts/ai_upgrade_proposal.py",
+        "scripts/ai_upgrade_apply.py",
+        "scripts/ai_disable_enable.py",
+        "scripts/ai_uninstall_facts.py",
+        "scripts/ai_uninstall_proposal.py",
+        "scripts/ai_detached_uninstaller.py",
+        "scripts/ai_installer_catalog.json",
+        "templates/make/Makefile.ai",
+        "docs/reference/installed-lifecycle.md"
+      ],
+      "testEvidence": [
+        "tests/test_upgrade_proposal.py",
+        "tests/test_upgrade_apply.py",
+        "tests/test_disable_enable.py",
+        "tests/test_uninstall_facts.py",
+        "tests/test_uninstall_proposal.py",
+        "tests/test_detached_uninstaller.py",
+        "tests/test_installed_runtime_parity.py",
+        "tests/test_japanese_adopter_lifecycle.py",
+        "tests/test_japanese_capability.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "The installed executor implements preserve-evidence Runtime-file removal only. Purge filesystem removal is not implemented. Disable writes a result JSON but does not independently update canonical installed state. Empty directory cleanup, external identity, sandboxing, immutable audit, and enterprise compliance are not claimed; the target-repository receipt and human review remain required.",
-      "digest": "sha256:3f57c745e99a165ee3eade61fa758066bda8cf87aaa24e9cdea50947a6a328ed"
+      "digest": "sha256:7e23d2a4a9eae73e2d3d8cf601043d47c9f72786773cb8138e666c657c1457fb",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 18,
+        "files": [
+          {
+            "path": "docs/reference/installed-lifecycle.md",
+            "sha256": "97cc84f4b1ee2d9c79f5e5f9409e020d5fb23cca779f16f92fa1a2dcde920c80"
+          },
+          {
+            "path": "scripts/ai_detached_uninstaller.py",
+            "sha256": "68c384d329320d8695031ca744a5d1b1a1b8f897dde78766691729cd51368627"
+          },
+          {
+            "path": "scripts/ai_disable_enable.py",
+            "sha256": "0db5aa83e59bf37f00dc67eb43f02dab3dc05d62491ad6880cfbd8f65da364ba"
+          },
+          {
+            "path": "scripts/ai_installer_catalog.json",
+            "sha256": "3c472d64a6f1692cd89ad2371513458e579f56e20133cae247b37cca51161cd8"
+          },
+          {
+            "path": "scripts/ai_uninstall_facts.py",
+            "sha256": "f3798bcea45507807f55db4799b7bcdd0f6571d177f1ce695080c6b714f6128d"
+          },
+          {
+            "path": "scripts/ai_uninstall_proposal.py",
+            "sha256": "99107b52c96bdc3598849753a80693fb20d3d079b93d7b7dd43585f43fdc10d0"
+          },
+          {
+            "path": "scripts/ai_upgrade_apply.py",
+            "sha256": "d196d9620eb0991ca80f2bec6a2833951d08480903750954f02675b2a501741e"
+          },
+          {
+            "path": "scripts/ai_upgrade_proposal.py",
+            "sha256": "bb0b790c95539b81d65dc1016bd658f756d9a857ffff9a00ca2f1e3b603c0795"
+          },
+          {
+            "path": "templates/make/Makefile.ai",
+            "sha256": "08f1d496c27e6ea363c99f28dcde719892662bc28ceee8eb620a3bb01650a2dc"
+          },
+          {
+            "path": "tests/test_detached_uninstaller.py",
+            "sha256": "fcc7d7fca8e94ee6df5d801333ccc386cac0420c1dc1bb82c39ea5061296bbbf"
+          },
+          {
+            "path": "tests/test_disable_enable.py",
+            "sha256": "4b78ef73d4ef915702e0cad7022e721604ee440c2844052073d2b42ea1573098"
+          },
+          {
+            "path": "tests/test_installed_runtime_parity.py",
+            "sha256": "ec78c6233872ebfaa5243ad7b8d66654e4a393bfaced4ba0615776ba623e3b68"
+          },
+          {
+            "path": "tests/test_japanese_adopter_lifecycle.py",
+            "sha256": "4398b67834a0b7985bafb10330e5bf4f73ab98ff5e2a28390c61c528f8d1f0de"
+          },
+          {
+            "path": "tests/test_japanese_capability.py",
+            "sha256": "c01171c90d5ae1dcd06a8b4d0baf4de03fde28b44d8bf8355b387ebab366c5f0"
+          },
+          {
+            "path": "tests/test_uninstall_facts.py",
+            "sha256": "67c6ba80f835e1329a595cbab20fe580963beefcedf4a48f6ef18800d12bea68"
+          },
+          {
+            "path": "tests/test_uninstall_proposal.py",
+            "sha256": "b9c40c9fbfbf66d3369aaf2b57f5187d2c0774bf333856e93d45399cae1b45cf"
+          },
+          {
+            "path": "tests/test_upgrade_apply.py",
+            "sha256": "17de7c4a26c8241ec85e181fa79219aa32d8729cb46ef23dc3e405f770f3af49"
+          },
+          {
+            "path": "tests/test_upgrade_proposal.py",
+            "sha256": "449e48f52eb3522cabd8e15bd4538b7b09304bb74745835324be174d728262fe"
+          }
+        ],
+        "digest": "sha256:e5c9d878b3f03bd6e5d94e5ae96c6eb901788e40820f89680140389b660b260e"
+      }
     },
     {
       "id": "quick_install_release_archive_digest",
-      "status": "planned",
-      "claim": "Quick Install does not yet default to independently verified Release Archive SHA256 evidence.",
-      "evidence": ["README.md", "docs/getting-started/installation.md", "release.json"],
-      "verification": [],
-      "sourceEvidence": ["README.md", "docs/getting-started/installation.md", "release.json"],
-      "testEvidence": ["tests/test_quick_install_release.py"],
-      "commandEvidence": ["make check-release-preflight"],
-      "limitations": "A source-bound release archive digest check and clean/anonymous install output are not yet recorded.",
-      "digest": "sha256:4133a9e380a8dcc9d1f2e1eb6bbb7a2c1ed80c6dbca6794c2bf2e14e0d0aa1bd",
-      "missingEvidence": "A source-bound release archive digest check and clean/anonymous install output are not yet recorded."
+      "status": "implemented",
+      "claim": "Quick Install binds the fixed release tag, source commit, installer SHA256, release archive asset, and archive SHA256 and fails closed on a missing or mismatched binding.",
+      "evidence": [
+        "install.sh",
+        "scripts/verify_quick_install_release.py",
+        "release.json"
+      ],
+      "verification": [
+        "tests/test_quick_install_release.py"
+      ],
+      "sourceEvidence": [
+        "install.sh",
+        "scripts/verify_quick_install_release.py",
+        "release.json"
+      ],
+      "testEvidence": [
+        "tests/test_quick_install_release.py"
+      ],
+      "commandEvidence": [
+        "make check-release-preflight"
+      ],
+      "limitations": "Implemented repository verification does not prove that the projected release is the latest provider publication, that a provider Release is stable rather than draft, that its assets are publicly downloadable, or that a future candidate is available.",
+      "digest": "sha256:04b1b0b95fdd5ed73dd8ff614d5083e0d87ab4f15399b1304c1f694a83e90926",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 4,
+        "files": [
+          {
+            "path": "install.sh",
+            "sha256": "56fc6487fcdb09211ef79e209654ac60ea9915788372b5acf3f26b6a1f53afd7"
+          },
+          {
+            "path": "release.json",
+            "sha256": "265ca881a86e76151fee9f098d98d5c0292353fddef606ebb26b39673946d290"
+          },
+          {
+            "path": "scripts/verify_quick_install_release.py",
+            "sha256": "c0e966060bab5fee75263b42eacfb6f606be80015b474370897d7016fd260a0f"
+          },
+          {
+            "path": "tests/test_quick_install_release.py",
+            "sha256": "d7f9123601295660f47a726126e9ec257b83f03e95b951971e93a154bf354a27"
+          }
+        ],
+        "digest": "sha256:c156c929309be0f6202cbca4cb2e5e625892c7b8b43a663e2dc8f1cfa2f261c2"
+      }
     },
     {
       "id": "independent_ci_release_evidence",
       "status": "implemented",
       "claim": "Release and PR claims require independently bound provider Workflow Run, Head SHA, Required Job Names, Conclusions, failure reasons, and artifact evidence before being called verified.",
-      "evidence": ["scripts/check_ci_release_evidence.sh", "scripts/check_release_state_consistency.py", ".github/workflows/smoke.yml", ".github/workflows/release.yml", "docs/reference/ci-release-evidence.md"],
-      "verification": ["tests/test_ci_release_evidence.py", "tests/test_release_state_consistency.py", "tests/test_workflows.py"],
-      "sourceEvidence": ["scripts/check_ci_release_evidence.sh", "scripts/check_release_state_consistency.py", ".github/workflows/smoke.yml", ".github/workflows/release.yml", "docs/reference/ci-release-evidence.md"],
-      "testEvidence": ["tests/test_ci_release_evidence.py", "tests/test_release_state_consistency.py", "tests/test_workflows.py"],
-      "commandEvidence": ["make check-release-preflight"],
+      "evidence": [
+        "scripts/check_ci_release_evidence.sh",
+        "scripts/check_release_state_consistency.py",
+        ".github/workflows/smoke.yml",
+        ".github/workflows/release.yml",
+        "docs/reference/ci-release-evidence.md"
+      ],
+      "verification": [
+        "tests/test_ci_release_evidence.sh",
+        "tests/test_release_state_consistency.py",
+        "tests/test_workflows.py"
+      ],
+      "sourceEvidence": [
+        "scripts/check_ci_release_evidence.sh",
+        "scripts/check_release_state_consistency.py",
+        ".github/workflows/smoke.yml",
+        ".github/workflows/release.yml",
+        "docs/reference/ci-release-evidence.md"
+      ],
+      "testEvidence": [
+        "tests/test_ci_release_evidence.sh",
+        "tests/test_release_state_consistency.py",
+        "tests/test_workflows.py"
+      ],
+      "commandEvidence": [
+        "make check-release-preflight"
+      ],
       "limitations": "Provider evidence is required for a specific run; repository workflow presence alone is not a published release.",
-      "digest": "sha256:067ec38c415455ccd2f3b0af665731ae12249296c9d94bbadb7666929e360553"
+      "digest": "sha256:486da47d3fe0f26c9d6cac8ed618b58e21cafbe0ff28d3dc415e8752d26bcaba",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 8,
+        "files": [
+          {
+            "path": ".github/workflows/release.yml",
+            "sha256": "2b31e92212dfdd59dde1e7397d9a973e9be44c7ef7b447bab00cc29da75479f7"
+          },
+          {
+            "path": ".github/workflows/smoke.yml",
+            "sha256": "bdd905ed21d7cc874752db65cf51d34970925d346b8cb10f2ec4c25300cd4f35"
+          },
+          {
+            "path": "docs/reference/ci-release-evidence.md",
+            "sha256": "e4e73161c4ddd4bca403ce8250a26581a271ad18a8392ef4ed34b73d088213d4"
+          },
+          {
+            "path": "scripts/check_ci_release_evidence.sh",
+            "sha256": "15d29325285dd45647b58b80167e9b2a82465f398a2df7f48b1f822fed2d9f2c"
+          },
+          {
+            "path": "scripts/check_release_state_consistency.py",
+            "sha256": "1d2683e8db13da32dbfa953e4a94a8ef335ccbefe894fc3c11f98dc8619ba898"
+          },
+          {
+            "path": "tests/test_ci_release_evidence.sh",
+            "sha256": "bcd533603be7b739c95a5aa7c77c7148e8153eeb5aa1f69f4e508ae6d86d2c90"
+          },
+          {
+            "path": "tests/test_release_state_consistency.py",
+            "sha256": "36bcafadcbef8a9bb6a414318cd690fae7fcc6f328396f84026a65a8b1e472ef"
+          },
+          {
+            "path": "tests/test_workflows.py",
+            "sha256": "d6ba07cfd6a47e0b1ef94633dc9bc3ee71f82e653740d95d544f3a2e151b772a"
+          }
+        ],
+        "digest": "sha256:dd27a9be07673c751d17476e2cbb5cc05d37f2da84a03491aa91f6264ff1469a"
+      }
     },
     {
       "id": "enterprise_security_assurance",
       "status": "template_only",
       "claim": "Enterprise identity, authorization, isolation, immutable audit, and compliance assurance remain outside AI Cockpit evidence.",
-      "evidence": ["docs/enterprise-security-boundary.md"],
-      "verification": ["tests/test_project_governance.py"],
-      "sourceEvidence": ["docs/enterprise-security-boundary.md"],
-      "testEvidence": ["tests/test_project_governance.py"],
-      "commandEvidence": ["make quality"],
+      "evidence": [
+        "docs/enterprise-security-boundary.md"
+      ],
+      "verification": [
+        "tests/test_project_governance.py"
+      ],
+      "sourceEvidence": [
+        "docs/enterprise-security-boundary.md"
+      ],
+      "testEvidence": [
+        "tests/test_project_governance.py"
+      ],
+      "commandEvidence": [
+        "make quality"
+      ],
       "limitations": "Enterprise identity, isolation, immutable audit, and compliance assurance remain outside this repository evidence.",
-      "digest": "sha256:6de5b428e4dc3e8a0ebe1a433fa021be6aecde6519506f03189d47559c145ef9"
+      "digest": "sha256:92b562d9f4686b128b5c34f8beee50e8015fa075a5c12af4a36b8cd209c81a64",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 2,
+        "files": [
+          {
+            "path": "docs/enterprise-security-boundary.md",
+            "sha256": "37e80e101b005f0fbddaa1e8cef1acaa6b12056a008a307b1bf5e58cfdd9d1cd"
+          },
+          {
+            "path": "tests/test_project_governance.py",
+            "sha256": "3c119c0a6b4973af9b5ded6e851d63446e2f9063a666b52b50d4d99633012d17"
+          }
+        ],
+        "digest": "sha256:85b91d22ad62935ff122206cd67b378b675177bae069e29139466f79f423b17a"
+      }
     }
   ]
 }

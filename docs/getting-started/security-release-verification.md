@@ -28,6 +28,32 @@ containment, identity, isolation, or safe execution.
 not interchangeable with it. The exact tag, source commit, installer, archive
 asset, and checksums must agree.
 
+The projection is a repository claim, not independent proof that a provider
+Release is public. Keep these records separate:
+
+| Record | What it proves | What it does not prove |
+| --- | --- | --- |
+| `release.json` | The version projected by the repository as published | A provider Release exists, is stable, or has downloadable assets |
+| `next-release.json` | The intended next candidate and version | Publication, tag creation, or release readiness |
+| Git tag | An immutable source reference exists | A provider Release or its assets were published |
+| Provider draft Release | A provider-side draft record exists | Public stable availability |
+| Provider stable Release and assets | The provider exposes the release record and named assets | Digest or source correctness without independent verification |
+| Release freeze evidence | Candidate facts were frozen for review | Publication or post-publish verification |
+
+### Adopter route
+
+Use only the authoritative public projection or a separately verified private
+mirror. Stop unless the stable provider Release, tag-pinned metadata, source,
+installer, archive asset, and digests agree. Do not select the highest tag as a
+substitute.
+
+### Maintainer route
+
+Validate the candidate and freeze evidence first. After provider publication,
+perform a separate post-publish check of the stable Release and downloadable
+assets before changing the public projection. Candidate, publication, and
+post-publish verification are distinct states.
+
 <!-- doc-domain: digest -->
 ## Digest
 
@@ -104,6 +130,8 @@ and follow [Troubleshooting](../reference/troubleshooting.md); do not relabel th
 result as an adopter or local-source verification. See
 [Distribution](../reference/distribution.md) for inputs and artifact ownership.
 
-The comprehensive Japanese capability assessment remains a separate mandatory
-pre-release stage. This page neither publishes a version nor marks that
-assessment complete.
+The [comprehensive Japanese capability assessment](../reference/japanese-capability-assessment.md)
+remains a separate mandatory pre-release stage. Its digest binds exact file
+bytes; any bound edit makes it stale, and only a `final_reassessment` produced
+after all correctives can satisfy release preflight. This page neither
+publishes a version nor marks that assessment complete.
