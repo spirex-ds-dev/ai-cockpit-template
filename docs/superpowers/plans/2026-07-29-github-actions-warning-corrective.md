@@ -19,6 +19,7 @@ Before release, remove the reported GitHub Actions warnings and receive the open
 5. Run focused tests, fast and full quality, archive, PR, exact-Head Hosted checks, merge, lifecycle closure, branch deletion, worktree cleanup, and main synchronization.
 6. Inspect exact-Head Hosted logs for the three original warning signatures. A green job without log inspection is not acceptance.
 7. After merge, close Dependabot PR #443 as superseded by the governed replacement. Do not alter the other dependency PRs in this Work Item.
+8. Refresh source-bound supply-chain and Japanese evidence after this plan/Capability Truth change. This maintenance does not replace the final Japanese reassessment that must run after every remaining pre-release modification.
 
 ## Instruction → Plan → Implementation → Acceptance
 
@@ -45,3 +46,5 @@ The reverse Acceptance → Implementation → Plan → Instruction check must re
 ## Current state
 
 Implementation is in progress. Red-first workflow tests reproduced all three missing protections; the narrow workflow corrections now pass the focused tests. Full governance, Hosted warning absence, merge, closure, and #443 provider cleanup remain pending.
+
+The first full snapshot attempt correctly stopped because SBOM and Japanese assessment bytes were stale. This exposed a sequencing defect: a final Japanese assessment cannot remain final while later Work Items mutate its bound sources. The comprehensive plan now requires another independent final reassessment after all remaining pre-release changes.
