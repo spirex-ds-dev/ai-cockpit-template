@@ -130,6 +130,7 @@ def record_checkpoint(
     evidence = summary.get("checkpointEvidence", [])
     if not isinstance(evidence, list):
         evidence = []
+    statuses = verification_status(summary, contract)
     record = {
         "stage": stage,
         "recorded": True,
@@ -137,12 +138,18 @@ def record_checkpoint(
         "acceptanceCount": len(contract.get("acceptance", [])),
         "unknownCount": len(contract.get("unknowns", [])),
         "requiredChecks": len(required_verification(contract)),
-        "requiredChecksPassed": len(
-            [
-                item
-                for item in required_verification(contract)
-                if verification_status(summary, contract).get(item) == "passed"
-            ]
+        # A before_edit checkpoint is a phase boundary, not a progress
+        # snapshot.  Scope corrections may require a fresh implementation
+        # checkpoint after a failed attempt has already recorded verification;
+        # carrying those results forward would falsely place this checkpoint
+        # after verification and correctly trigger the agent-risk fail-closed
+        # guard.  Later checkpoint stages retain their progress snapshot.
+        "requiredChecksPassed": (
+            0
+            if stage == "before_edit"
+            else len(
+                [item for item in required_verification(contract) if statuses.get(item) == "passed"]
+            )
         ),
     }
     summary["checkpointEvidence"] = [

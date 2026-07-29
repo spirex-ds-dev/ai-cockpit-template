@@ -793,6 +793,44 @@ def test_summary_validator_accepts_optional_task_outcome_input():
     assert not any("taskOutcomeInput" in issue for issue in issues)
 
 
+def test_summary_validator_accepts_mandatory_task_outcome_state():
+    summary = {
+        "summaryVersion": 2,
+        "workItemId": "task",
+        "contractPath": ".ai/work-items/active/task.contract.json",
+        "changedFiles": [
+            {"path": "scripts/app.py", "reason": "changed"},
+            {"path": ".ai/work-items/active/task.outcome.json", "reason": "Outcome"},
+            {"path": ".ai/work-items/active/task.outcome.md", "reason": "Outcome"},
+        ],
+        "sourcesUsed": ["spec"],
+        "verification": [{"check": "quality", "result": "passed"}],
+        "unknownsRemaining": [],
+        "risk": {"level": "low", "detail": "fixture"},
+        "generatedFiles": [],
+        "destructiveChanges": [],
+        "observedIssues": [],
+        "taskOutcome": {
+            "status": "completed",
+            "jsonPath": ".ai/work-items/active/task.outcome.json",
+            "markdownPath": ".ai/work-items/active/task.outcome.md",
+            "rawEvidencePath": "derived:pre_merge",
+            "evidenceCount": 2,
+        },
+    }
+    issues = ai_check_summary.validate_summary(
+        summary,
+        {
+            "contractVersion": 2,
+            "workItemId": "task",
+            "verification": [{"check": "quality", "required": True}],
+        },
+        summary_path=".ai/work-items/active/task.summary.json",
+    )
+
+    assert not any("taskOutcome" in issue for issue in issues)
+
+
 def test_summary_validator_accepts_positive_archive_sequence_and_rejects_invalid_value():
     summary = {
         "summaryVersion": 2,

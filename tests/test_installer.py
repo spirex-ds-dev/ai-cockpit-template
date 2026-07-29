@@ -81,6 +81,14 @@ def test_installed_distribution_contains_pr_and_approval_wiring(tmp_path):
     assert (tmp_path / ".ai" / "README.md").is_file()
     assert (tmp_path / "scripts" / "ai_doctor.py").is_file()
     assert (tmp_path / "scripts" / "ai_onboard.py").is_file()
+    # ai-finish invokes this dependency closure for every code-mode Work Item;
+    # omit any member and an adopter cannot finish its first Work Item.
+    for script in (
+        "ai_check_task_outcome.py",
+        "ai_generate_task_outcome.py",
+        "ai_render_task_outcome.py",
+    ):
+        assert (tmp_path / "scripts" / script).is_file()
 
 
 def test_installer_source_context_ignores_candidate_metadata(tmp_path):

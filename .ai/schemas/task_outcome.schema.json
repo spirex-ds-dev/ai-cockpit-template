@@ -17,7 +17,7 @@
   "$defs": {
     "taskId": {
       "type": "string",
-      "pattern": "^[a-z0-9][a-z0-9-]{2,127}$"
+      "pattern": "^[a-z0-9][a-z0-9_-]{2,127}$"
     },
     "sha256": {
       "type": "string",
@@ -73,7 +73,7 @@
     "bindings": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["taskId", "contractDigest", "summaryDigest", "verificationDigest", "baseCommit", "headCommit", "pullRequest", "aiCockpitVersion", "generatorVersion"],
+      "required": ["taskId", "contractDigest", "summaryDigest", "verificationDigest", "baseCommit", "headCommit", "lifecycleStage", "pullRequest", "aiCockpitVersion", "generatorVersion"],
       "properties": {
         "taskId": {"$ref": "#/$defs/taskId"},
         "contractDigest": {"$ref": "#/$defs/sha256"},
@@ -81,11 +81,12 @@
         "verificationDigest": {"$ref": "#/$defs/sha256"},
         "baseCommit": {"$ref": "#/$defs/commit"},
         "headCommit": {"$ref": "#/$defs/commit"},
+        "lifecycleStage": {"type": "string", "enum": ["pre_merge", "post_pr"]},
         "pullRequest": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["number", "url"],
           "properties": {
+            "state": {"type": "string", "enum": ["not_created"]},
             "number": {"type": "integer", "minimum": 1},
             "url": {"type": "string", "format": "uri", "pattern": "^https://.+"},
             "mergeCommit": {"$ref": "#/$defs/commit"}

@@ -26,6 +26,7 @@ from ai_common import (
 ARCHIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 STATUS_PATH = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
+CLOSURE_RECEIPTS_DIR = PROJECT_ROOT / "target" / "task-closure-receipts"
 
 
 @dataclass(frozen=True)
@@ -75,6 +76,84 @@ def _find_archived_contract(task: str) -> Path:
             f"expected exactly one archived Contract for {task}, found {len(matches)}"
         )
     return matches[0]
+
+
+def _archived_outcome_path(contract_path: Path) -> Path:
+    outcome_path = contract_path.with_name(
+        contract_path.name.replace(".contract.json", ".outcome.json")
+    )
+    if not outcome_path.is_file():
+        raise RuntimeError(
+            f"archived Task Outcome is missing: {outcome_path.relative_to(PROJECT_ROOT)}"
+        )
+    return outcome_path
+
+
+def generate_closure_receipt(
+    task: str,
+    contract_path: Path,
+    pr: dict[str, object],
+    *,
+    work_branch: str,
+    base_remote: str,
+    base_branch: str,
+    base_commit: str,
+    base_worktree: str | None,
+) -> Path:
+    """Write a human-readable receipt only from verified closure facts."""
+    outcome_path = _archived_outcome_path(contract_path)
+    merge = pr.get("mergeCommit")
+    merge_commit = merge.get("oid") if isinstance(merge, dict) else None
+    if not isinstance(merge_commit, str) or len(merge_commit) != 40:
+        raise RuntimeError("Closure Receipt requires authoritative merge commit")
+    url = pr.get("url")
+    if not isinstance(url, str) or not url.startswith("https://"):
+        raise RuntimeError("Closure Receipt requires authoritative pull request URL")
+    receipt_path = CLOSURE_RECEIPTS_DIR / f"{task}.closure.md"
+    receipt_path.parent.mkdir(parents=True, exist_ok=True)
+    next_worktree = base_worktree or PROJECT_ROOT.as_posix()
+    receipt_path.write_text(
+        "\n".join(
+            [
+                f"# Work Item Closure Receipt: {task}",
+                "",
+                "## Evidence",
+                f"- Archived Task Outcome: `{outcome_path.relative_to(PROJECT_ROOT).as_posix()}`",
+                f"- Pull Request: {url}",
+                f"- Merge Commit: `{merge_commit}`",
+                "",
+                "## Closure facts",
+                f"- Work branch scheduled for cleanup: `{work_branch}`",
+                f"- Base synchronized: `{base_remote}/{base_branch}` at `{base_commit}`",
+                f"- Continue from: `{next_worktree}`",
+                "",
+                "Branch cleanup is performed only after this receipt is written.",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    return receipt_path
+
+
+def validate_closure_receipt(receipt_path: Path, task: str) -> None:
+    """Reject a missing or incomplete user-visible receipt before cleanup."""
+    if not receipt_path.is_file():
+        raise RuntimeError("Closure Receipt is invalid: file is missing")
+    text = receipt_path.read_text(encoding="utf-8")
+    required = (
+        f"# Work Item Closure Receipt: {task}",
+        "## Evidence",
+        "- Archived Task Outcome:",
+        "- Pull Request: https://",
+        "- Merge Commit: `",
+        "## Closure facts",
+        "- Work branch scheduled for cleanup:",
+        "- Base synchronized:",
+        "- Continue from:",
+    )
+    if any(marker not in text for marker in required):
+        raise RuntimeError("Closure Receipt is invalid: required closure facts are missing")
 
 
 def _verify_archived_evidence(task: str) -> Path:
@@ -279,6 +358,18 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
     if final_local != final_remote:
         raise RuntimeError("local base branch no longer matches the remote base branch")
 
+    receipt_path = generate_closure_receipt(
+        task,
+        contract_path,
+        pr,
+        work_branch=work_branch,
+        base_remote=remote,
+        base_branch=base_branch,
+        base_commit=final_local,
+        base_worktree=base_path,
+    )
+    validate_closure_receipt(receipt_path, task)
+
     try:
         _delete_remote_branch(runner, remote, work_branch)
     except RuntimeError as exc:
@@ -309,6 +400,7 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
         "baseRemote": remote,
         "baseBranch": base_branch,
         "baseCommit": final_local,
+        "closureReceipt": str(receipt_path),
         "state": "closed",
         "repositoryState": repository_state,
         "nextWorkItemReady": not linked_base,
@@ -331,6 +423,10 @@ def main() -> int:
         return 1
     print("Work Item lifecycle: closed")
     print(f"Pull request: merged ({result['pullRequest']})")
+    print(
+        f"Archived Task Outcome: {Path(str(result['contract'])).with_name(Path(str(result['contract'])).name.replace('.contract.json', '.outcome.md'))}"
+    )
+    print(f"Closure Receipt: {result['closureReceipt']}")
     print(f"Local work branch: deleted ({result['workBranch']})")
     print(f"Remote work branch: deleted ({result['workBranch']})")
     print(

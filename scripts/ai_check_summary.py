@@ -67,6 +67,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "intentAlignment",
     "decisionEvidence",
     "taskOutcomeInput",
+    "taskOutcome",
     "hostedPerformanceEvidence",
     "documentationAlignment",
 }

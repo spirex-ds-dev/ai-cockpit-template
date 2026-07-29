@@ -1,0 +1,347 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe-097-mandatory-task-outcome-report-20260729",
+  "mode": "code",
+  "title": "Require a visible Task Outcome for every closed Work Item",
+  "baseCommit": "1f98bf6218c2442508bacc06f4a24e0b691cccad",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe-097-mandatory-task-outcome-report-20260729.contract.json",
+    ".ai/work-items/active/rfe-097-mandatory-task-outcome-report-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_task_outcome.py",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_checkpoint.py",
+    "scripts/ai_generate_task_outcome.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_close_work_item.py",
+    "scripts/ai_installer_catalog.json",
+    ".ai/schemas/task_outcome.schema.json",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_task_outcome_schema.py",
+    "tests/test_task_outcome_validator.py",
+    "tests/test_task_outcome_generator.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "tests/test_installer.py",
+    "tests/test_adoption_e2e.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_project_governance_journey.py",
+    "tests/test_ai_check_summary.py",
+    "tests/test_core_gates.py",
+    "tests/test_ai_checkpoint.py",
+    "docs/features/task-outcome-report.md",
+    "docs/features/task-outcome-report-self-check.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-29-rfe-097-mandatory-task-outcome-report.md"
+  ],
+  "outOfScope": [
+    "Rewriting, regenerating, or claiming completion reports for already archived Work Items, including RFE-096.",
+    "Resuming, merging, or closing Dependabot PR #441 before this corrective Work Item is merged and closed.",
+    "Changing release candidates, tags, provider Releases, public assets, or publication state.",
+    "Changing the existing multilingual report locale policy or silently translating user-provided evidence."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Current Task Outcome generation is opt-in through taskOutcomeInput and can complete a Work Item without producing an Outcome artifact."
+    },
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Closure already has authoritative merged-PR, base synchronization, and branch-cleanup facts but does not emit a durable human-readable receipt."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Mandatory Outcomes cite active Contract and Summary evidence; archive must rewrite those exact paths transactionally so archived reports remain resolvable."
+    },
+    {
+      "path": "scripts/ai_check_task_outcome.py",
+      "reason": "The validator currently requires a PR binding before ai-finish, even though the PR has not yet been created at that lifecycle stage."
+    },
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "ai-finish now has mandatory Outcome runtime dependencies; the installer catalog must distribute the complete dependency closure to adopter repositories."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "The Summary validator must recognize the mandatory Outcome link and require its generated artifacts to be accounted for in changedFiles."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Core finish lifecycle fixtures must carry the now-required base Commit provenance so they exercise stabilization rather than fail before it."
+    },
+    {
+      "path": "scripts/ai_checkpoint.py",
+      "reason": "A renewed before_edit checkpoint must remain before verification even when a Contract scope update follows a failed or partial finish attempt."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "The current documentation calls Outcome generation optional, which conflicts with the user-required report-on-every-Work-Item rule."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "The authoritative execution plan requires corrective process defects to close before Dependabot intake and release work resume."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "workflow_process",
+      "archive_evidence",
+      "lifecycle_cleanup"
+    ],
+    "reason": "This corrective changes the required evidence produced before archive and the fail-closed condition before branch cleanup. Incorrect ordering could produce an unbound report or delete the retry branch after report generation failure.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly required a report for every Work Item and authorized continuous corrective execution before subsequent Work Items continue."
+  },
+  "preReviewWarnings": [
+    "An archived Task Outcome cannot claim a merged PR before provider evidence exists; distinguish the pre-merge Outcome from the post-merge Closure Receipt instead of inventing PR facts.",
+    "Outcome or Closure Receipt validation must occur before any local or remote Work Item branch deletion, so a failure leaves a retryable branch.",
+    "Do not mutate an existing archive manifest after closure; outcome artifacts must be created and bound during ai-finish/archive."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Every code-mode Work Item generates, validates, renders, and archives a Task Outcome during ai-finish without requiring Summary.taskOutcomeInput opt-in.",
+    "The mandatory pre-merge Outcome has deterministic Contract, Summary, verification, base, and head bindings; it explicitly represents that PR/merge facts are not yet available instead of inventing them.",
+    "A malformed or missing mandatory Outcome fails ai-finish before archive, and the active evidence remains retryable.",
+    "Archive transaction rewrites exact active Contract/Summary Outcome evidence paths to their archived destinations before manifest digests are created.",
+    "ai-close-work-item generates and validates a human-readable Closure Receipt from authoritative merged PR, synchronized base, and cleanup facts before deleting either Work Item branch.",
+    "A Closure Receipt generation or validation failure blocks remote and local branch deletion and reports the exact reason.",
+    "An installed adopter repository receives the full mandatory Task Outcome dependency closure and can finish a no-opt-in code Work Item without import failures.",
+    "The Summary validator accepts the mandatory Outcome state only when its generated JSON and Markdown are fully accounted for as Work Item changes.",
+    "A renewed before_edit checkpoint always records zero required checks passed, so Contract-scope corrections cannot make the agent-risk gate reject a valid retry.",
+    "Successful closure output contains the archived Outcome path and the Closure Receipt path together with PR URL, branch-cleanup fact, base synchronization fact, and next-worktree guidance.",
+    "Regression tests cover mandatory no-opt-in generation, pre-merge binding shape, malformed Outcome failure, successful closure receipt, and receipt failure before deletion.",
+    "Task Outcome documentation and the authoritative remediation plan state the two-stage report boundary without claiming historical Work Items were backfilled.",
+    "This corrective Work Item itself completes Contract, Preflight, implementation, verification, archive, PR, Hosted CI, merge, ai-close-work-item, user-visible report, and branch cleanup before #441 resumes."
+  ],
+  "guidelines": [
+    "Use red-first behavioral tests for report presence, bindings, and cleanup ordering; do not rely only on source-text assertions.",
+    "Keep the report model minimal and evidence-derived: pre-merge Outcome plus post-merge Closure Receipt, with no invented provider or release facts.",
+    "Fail closed before branch cleanup whenever required report evidence cannot be generated or validated.",
+    "Preserve immutable archive manifests and do not backfill historical Work Items in this corrective change.",
+    "Keep instruction-plan-implementation-acceptance traceability bidirectional and record any newly discovered workflow defect before continuing dependent Work Items."
+  ],
+  "intent": {
+    "problem": "Although Contract, Summary, archive, PR, merge, and closure are required, the Task Outcome generator remains opt-in through Summary.taskOutcomeInput. RFE-096 therefore completed without an Outcome artifact, and the user did not receive the expected per-Work-Item closing report. The current validator also requires PR data before ai-finish, when no PR exists, so making the old form mandatory would force fabricated provider evidence.",
+    "constraints": [
+      "Generate and archive a complete pre-merge Outcome before archive without fabricating PR or merge facts.",
+      "Generate a separate Closure Receipt only after ai-close-work-item has verified the merged PR and synchronized base.",
+      "Validate both outputs and stop before remote/local branch deletion if the closure-stage receipt is absent or invalid.",
+      "Do not alter historical archives, release state, #441, or report locale policy in this Work Item."
+    ],
+    "rationale": "A two-stage report aligns evidence with when it is actually authoritative: implementation facts exist at finish/archive, while merged PR and cleanup facts exist only at closure. Making both stages mandatory prevents silent report omission without weakening archive immutability or provider-truth boundaries."
+  },
+  "rawUserRequest": "这个报告不是一定会出的么？继续。每个工单关闭后必须有可见报告。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:mandatory-visible-work-item-report",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:3ec5c6a9e4ea147d7729e63ccac0d9ac8c5d1e699c4c257ce623d087fd7fa5ea"
+  },
+  "declaredIntent": {
+    "summary": "Make the Outcome and closure report mandatory, validated, archived or emitted at the authoritative lifecycle stage, and visible to the user before dependent Work Items proceed.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A normal code-mode Work Item has no taskOutcomeInput in its Summary.",
+      "expected": "ai-finish derives, validates, renders, and records an Outcome rather than reporting optional skip.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Call the Outcome pipeline with a Contract/Summary fixture that lacks taskOutcomeInput and assert generated JSON, Markdown, and Summary links."
+    },
+    {
+      "scenario": "Finish occurs before a provider PR exists.",
+      "expected": "The Outcome binds local evidence and explicitly marks PR/merge facts as unavailable at pre-merge stage.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Validate the generated no-PR binding fixture and assert the Markdown does not claim merge completion."
+    },
+    {
+      "scenario": "Outcome generation or validation fails.",
+      "expected": "ai-finish fails before archive and retains active Contract/Summary evidence for retry.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Inject a generator or validator failure and assert the pipeline returns failure without archive mutation."
+    },
+    {
+      "scenario": "A mandatory Outcome cites active Contract and Summary paths before archive.",
+      "expected": "The archived Outcome cites the corresponding archived paths and the archive manifest binds the rewritten bytes.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Archive an active Outcome fixture containing exact active Contract/Summary source references; assert the moved Outcome JSON contains only archived replacements."
+    },
+    {
+      "scenario": "A merged PR is ready for closure.",
+      "expected": "Closure creates a validated receipt containing PR, archive Outcome, cleanup, base, and next-worktree facts before deleting branches.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use the existing fake lifecycle runner with archived Outcome fixture and assert receipt generation precedes remote/local deletion."
+    },
+    {
+      "scenario": "Closure Receipt generation or validation fails.",
+      "expected": "Closure fails closed and neither remote nor local Work Item branch deletion is attempted.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Inject receipt failure in the fake lifecycle runner and assert no delete/push commands occur."
+    },
+    {
+      "scenario": "An adopter installs AI Cockpit and finishes a no-opt-in code Work Item.",
+      "expected": "The installed scripts include the Outcome generator, validator, and renderer required by ai-finish, so finish does not fail with a missing module import.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Assert the installer catalog and a real installed-project lifecycle test distribute and execute the mandatory Outcome dependency closure."
+    },
+    {
+      "scenario": "Mandatory Outcome generation modifies the active Work Item state.",
+      "expected": "Summary validation accepts the structured Outcome link and requires both generated report files in changedFiles before archive.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Validate a Summary with a taskOutcome link and exact Outcome files; remove one path and assert Summary validation fails closed."
+    },
+    {
+      "scenario": "A Work Item renews its before_edit checkpoint after partial verification and a Contract correction.",
+      "expected": "The renewed checkpoint records current Contract facts but zero passed required checks, preserving the before-edit ordering invariant for the retry.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Seed passed verification in a Summary, record before_edit, and assert requiredChecksPassed remains zero while current Contract counts are retained."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized continuous corrective execution and required every Work Item to produce a visible report before the next Work Item proceeds."
+  },
+  "rollbackNote": "Revert this corrective Work Item as one change; retain historical archives and do not resume #441 until a corrected report-closure lifecycle is merged and closed.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 665
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe-097-mandatory-task-outcome-report-20260729.json",
+    "baseCommit": "1f98bf6218c2442508bacc06f4a24e0b691cccad",
+    "initialScopeDigest": "a4d22a9b7cf133a2fe9ec8a197634c2d3cdd4647d3175ad1dbf23ca185163f88",
+    "contractSkeletonDigest": "d070222744a7716b13507ec5dfe662f1c7d8a94bb76979a652728c1ad705dec2"
+  }
+}

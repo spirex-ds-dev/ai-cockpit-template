@@ -90,13 +90,58 @@ def test_outcome_pipeline_failure_preserves_raw_evidence_and_records_structured_
     assert "error" in state
 
 
-def test_outcome_pipeline_without_input_is_compatible(tmp_path):
+def test_outcome_pipeline_without_contract_fails_closed(tmp_path):
     summary_path = tmp_path / "summary.json"
     summary_path.write_text("{}", encoding="utf-8")
     assert ai_finish.run_task_outcome_pipeline("example-task", summary_path) == (
-        True,
-        "Outcome integration not requested: no taskOutcomeInput",
+        False,
+        "mandatory Task Outcome requires the active Contract",
     )
+
+
+def test_outcome_pipeline_without_opt_in_derives_a_pre_merge_report(tmp_path, monkeypatch):
+    task = "example-task"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(
+        json.dumps(
+            {
+                "workItemId": task,
+                "baseCommit": "a" * 40,
+                "verification": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    summary_path.write_text(
+        json.dumps(
+            {
+                "verification": [],
+                "changedFiles": [{"path": "fixture.txt", "reason": "fixture"}],
+                "observedIssues": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    json_path = tmp_path / "outcome.json"
+    markdown_path = tmp_path / "outcome.md"
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _: (json_path, markdown_path))
+
+    ok, _ = ai_finish.run_task_outcome_pipeline(task, summary_path, contract_path)
+
+    assert ok
+    outcome = json.loads(json_path.read_text(encoding="utf-8"))
+    assert outcome["bindings"]["lifecycleStage"] == "pre_merge"
+    assert outcome["bindings"]["pullRequest"] == {"state": "not_created"}
+    assert markdown_path.exists()
+    recorded_summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert recorded_summary["taskOutcome"]["markdownPath"] == "outcome.md"
+    assert {item["path"] for item in recorded_summary["changedFiles"]} == {
+        "fixture.txt",
+        "outcome.json",
+        "outcome.md",
+    }
 
 
 def test_outcome_pipeline_missing_input_fails_closed(tmp_path, monkeypatch):
@@ -108,13 +153,13 @@ def test_outcome_pipeline_missing_input_fails_closed(tmp_path, monkeypatch):
     assert "does not exist" in message
 
 
-def test_finish_execution_priority_moves_summary_before_status_only_for_opt_in():
+def test_finish_execution_priority_runs_summary_after_mandatory_outcome_and_quality():
     assert ai_finish.finish_execution_priority(
         {"check": "aiSummary"}
-    ) < ai_finish.finish_execution_priority({"check": "aiStatus"})
-    assert ai_finish.verification_priority(
+    ) > ai_finish.finish_execution_priority({"check": "aiStatus"})
+    assert ai_finish.finish_execution_priority(
         {"check": "aiSummary"}
-    ) > ai_finish.verification_priority({"check": "aiStatus"})
+    ) > ai_finish.finish_execution_priority({"check": "quality"})
 
 
 def test_status_contains_only_outcome_link_count_and_status_not_full_report():
