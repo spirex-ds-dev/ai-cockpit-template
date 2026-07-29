@@ -62,6 +62,27 @@ def test_supply_chain_checks_are_exposed_as_make_targets():
     assert "scripts/check_supply_chain.py vulnerabilities" in result.stdout
 
 
+def test_makefile_exposes_ordered_pre_edit_preparation_entrypoint():
+    result = subprocess.run(
+        [
+            "make",
+            "-n",
+            "ai-prepare-implementation",
+            "CONTRACT=.ai/work-items/active/example.contract.json",
+            "SUMMARY=.ai/work-items/active/example.summary.json",
+        ],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    preflight = result.stdout.index("ai-preflight")
+    checkpoint = result.stdout.index("ai-checkpoint")
+    assert preflight < checkpoint
+    assert 'STAGE="before_edit"' in result.stdout
+
+
 def test_project_test_uses_stricter_coverage_floor():
     result = subprocess.run(
         ["make", "-n", "project-test"],

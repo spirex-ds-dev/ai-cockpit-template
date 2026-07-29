@@ -98,7 +98,7 @@ def test_agent_risk_accepts_complete_gates_and_checkpoints():
                 "acceptanceCount": 1,
                 "unknownCount": 0,
                 "requiredChecks": len(gates),
-                "requiredChecksPassed": len(gates),
+                "requiredChecksPassed": 0 if stage == "before_edit" else len(gates),
             }
             for stage in ("before_edit", "before_finish")
         ],
@@ -107,6 +107,37 @@ def test_agent_risk_accepts_complete_gates_and_checkpoints():
         ai_check_agent_risk.validate_agent_risks(contract, summary, expected_contract_hash="hash")
         == []
     )
+
+
+def test_agent_risk_rejects_before_edit_checkpoint_recorded_after_verification_started():
+    contract = {
+        "verification": [{"check": "quality", "required": True}],
+        "acceptance": ["concrete acceptance evidence"],
+        "unknowns": [],
+        "checkpointPolicy": {
+            "requiredBeforeFinish": True,
+            "requiredStages": ["before_edit"],
+        },
+    }
+    summary = {
+        "checkpointEvidence": [
+            {
+                "stage": "before_edit",
+                "recorded": True,
+                "contractHash": "hash",
+                "acceptanceCount": 1,
+                "unknownCount": 0,
+                "requiredChecks": 1,
+                "requiredChecksPassed": 1,
+            }
+        ]
+    }
+
+    issues = ai_check_agent_risk.validate_agent_risks(
+        contract, summary, expected_contract_hash="hash"
+    )
+
+    assert "before_edit checkpoint must be recorded before required verification" in issues
 
 
 def test_agent_risk_accepts_checkpoint_full_hash_when_expected_hash_is_short():

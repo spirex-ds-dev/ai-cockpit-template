@@ -435,6 +435,35 @@ def build_release_digests(
     return manifest
 
 
+def write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def synchronize_release_supply_chain_digests() -> None:
+    """Bind the local release projection to the already-written candidate evidence."""
+    release = load_json(RELEASE_JSON)
+    supply_chain = release.get("supplyChain")
+    if not isinstance(supply_chain, dict):
+        raise ValueError("release.json is missing supplyChain release evidence")
+    for key in ("sbomDigest", "provenanceDigest"):
+        if not isinstance(supply_chain.get(key), str):
+            raise ValueError(f"release.json supplyChain.{key} is missing")
+    supply_chain["sbomDigest"] = sha256_bytes(SBOM_BASELINE.read_bytes())
+    supply_chain["provenanceDigest"] = sha256_bytes(PROVENANCE_BASELINE.read_bytes())
+    write_json(RELEASE_JSON, release)
+
+
+def refresh_candidate_evidence(source_commit: str | None = None) -> None:
+    """Write dependent candidate evidence and its local release projection in order."""
+    sbom = build_sbom(source_commit)
+    provenance = build_provenance(sbom, source_commit)
+    write_json(SBOM_BASELINE, sbom)
+    write_json(PROVENANCE_BASELINE, provenance)
+    synchronize_release_supply_chain_digests()
+    write_json(RELEASE_DIGESTS_BASELINE, build_release_digests(sbom, provenance))
+
+
 def write_release_assets(
     output_dir: Path,
     source_commit: str,
@@ -630,11 +659,14 @@ def scan_vulnerabilities() -> list[str]:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
-    for name in ("sbom", "provenance", "release"):
+    for name in ("sbom", "provenance", "release", "refresh"):
         cmd = sub.add_parser(name)
-        cmd.add_argument(
-            "--write", action="store_true", help="Write the computed evidence to the baseline file."
-        )
+        if name != "refresh":
+            cmd.add_argument(
+                "--write",
+                action="store_true",
+                help="Write the computed evidence to the baseline file.",
+            )
         cmd.add_argument("--source-commit", default=None)
     assets = sub.add_parser(
         "release-assets",
@@ -653,7 +685,10 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     try:
-        if args.command == "sbom":
+        if args.command == "refresh":
+            refresh_candidate_evidence(args.source_commit)
+            issues = []
+        elif args.command == "sbom":
             issues = compare_or_write(
                 SBOM_BASELINE, build_sbom(args.source_commit), write=bool(args.write)
             )

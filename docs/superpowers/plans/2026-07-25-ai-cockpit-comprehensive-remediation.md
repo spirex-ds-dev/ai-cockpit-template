@@ -663,8 +663,9 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 | 日语评估及整改 | 文档事实纠偏已由 PR #452 合并并完整关闭；随后发现的 `JA-DOC-FACT-002` 也已由 PR #454 合并、关闭并清理 |
 | 日语校准证据文档纠偏 | 已完成；三语 Session 七列证据、Work Item 治理边界及 reviewer/owner 标签限制已对齐，并由机器检查防止复发 |
 | 全新日语最终评估 | `japanese-final-reassessment-after-documentation-truth-20260729` 已完成；PR #455 全部 Hosted 检查通过、已合并、关闭并清理 |
-| GitHub Actions 警告纠偏 | 当前执行 `github-actions-warning-corrective-20260729`；接收 Dependabot #443，并以 workflow 回归和精确 Head Hosted 日志验收 Node/Go/Homebrew 三类警告消失 |
-| Dependabot 发布前接收 | 用户新增；警告纠偏关闭后，#441、#442、#444、#445 各自按独立 Work Item、PR、Hosted、merge、close、分支清理流程接收 |
+| GitHub Actions 警告纠偏 | `github-actions-warning-corrective-20260729` 已完成、合并并清理；接收 Dependabot #443，并以 workflow 回归和精确 Head Hosted 日志验收 Node/Go/Homebrew 三类警告消失 |
+| RFE-ISSUE-093/094 候选发布证据与检查点纠偏 | 当前执行 `rfe-094-checkpoint-enforcement-20260729`；先使 before_edit 检查点成为可执行且拒绝晚到记录的流程，再将 SBOM、Provenance、`release.json` 两个本地摘要投影和 release-digests 固化为一个原子 refresh；关闭后才恢复 #441 |
+| Dependabot 发布前接收 | 用户新增；RFE-ISSUE-093/094 关闭后，#441、#442、#444、#445 各自按独立 Work Item、PR、Hosted、merge、close、分支清理流程接收 |
 | 文档对齐 | `pre-release-documentation-alignment-20260729` 已暂停；待纠偏和全新日语评估关闭后 rebase/resume 并完成 |
 | 发布前过期资产清理 | 待文档对齐关闭后执行 |
 | 发布前真实荒诞与注入攻击评估 | 用户新增；待过期资产清理关闭后执行三语 12 案例评估及必要整改 |
@@ -672,7 +673,7 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 | WI-18 发布新版本 | 待所有前置阶段关闭；候选版本、provider Release、tag、asset、projection 分别验证 |
 | WI-19 清理计划文档 | 发布完整关闭后最后执行 |
 
-当前唯一允许的顺序是：GitHub Actions Node/Go/Homebrew 警告纠偏并接收 #443 → 分别接收 Dependabot #441、#442、#444、#445 → 恢复并关闭文档对齐 → 过期代码/逻辑/文档清理 → 三语真实荒诞与注入攻击评估及整改 → 对全部最终源再做一次零 blocker 日语 `final_reassessment` → WI-18 发布 → WI-19 清理当前周期计划。每一项都必须完成 Contract → Preflight → 实现/验收 → `ai-finish`/archive → push → PR → merge → `make ai-close-work-item` → 本地/远端分支清理 → main 同步；不得从 detached closed worktree 直接进入下一项。
+当前唯一允许的顺序是：GitHub Actions Node/Go/Homebrew 警告纠偏并接收 #443 → RFE-ISSUE-093/094 检查点与候选发布证据纠偏 → 分别接收 Dependabot #441、#442、#444、#445 → 以最新 `main` 重做 #403 的计划完成证据审计并关闭旧 PR/分支 → 恢复并关闭文档对齐 → 过期代码/逻辑/文档清理 → 三语真实荒诞与注入攻击评估及整改 → 对全部最终源再做一次零 blocker 日语 `final_reassessment` → WI-18 发布 → WI-19 清理当前周期计划。每一项都必须完成 Contract → Preflight → 实现/验收 → `ai-finish`/archive → push → PR → merge → `make ai-close-work-item` → 本地/远端分支清理 → main 同步；不得从 detached closed worktree 直接进入下一项。
 
 ### 本计划工单已发现的问题
 
