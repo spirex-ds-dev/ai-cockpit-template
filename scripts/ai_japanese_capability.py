@@ -23,8 +23,8 @@ from ai_input_trust import SourceType, assess_input, re_evaluate_high_risk_opera
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSESSMENT_WORK_ITEM_ID = "pre-release-documentation-truth-corrective-20260729"
-ASSESSMENT_WORK_ITEM_ROLE = "corrective_validation"
+ASSESSMENT_WORK_ITEM_ID = "japanese-final-reassessment-after-documentation-truth-20260729"
+ASSESSMENT_WORK_ITEM_ROLE = "final_reassessment"
 CORPUS_PATH = ROOT / "tests/fixtures/japanese-capability-corpus.json"
 JSON_REPORT_PATH = ROOT / "docs/reference/japanese-capability-assessment.json"
 MARKDOWN_REPORT_PATH = ROOT / "docs/reference/japanese-capability-assessment.md"
@@ -75,6 +75,13 @@ FINDINGS = {
     "JA-DOC-001": {
         "correctiveWorkItem": "japanese-uninstall-documentation-corrective-20260729",
         "summary": "The Japanese engineer path lacks an actionable uninstall procedure.",
+    },
+    "JA-DOC-FACT-002": {
+        "correctiveWorkItem": "japanese-calibration-session-evidence-doc-corrective-20260729",
+        "summary": (
+            "The Japanese installation guide understates the calibration Session evidence "
+            "persisted by record-evidence and can misdirect evidence ownership."
+        ),
     },
     "JA-UNINSTALL-RUNTIME-001": {
         "correctiveWorkItem": "installed-detached-uninstaller-runtime-corrective-20260729",
@@ -411,6 +418,18 @@ def _uninstall_path_exists() -> bool:
     )
 
 
+def _calibration_session_evidence_boundary_is_truthful() -> bool:
+    installation = _read("docs/getting-started/installation.ja.md")
+    return (
+        "<!-- calibration-session-evidence-boundary: "
+        "combined-stage-seven-column-record,labels-not-actor-proof -->"
+        in installation
+        and "checklistEvidence" in installation
+        and "本人確認" in installation
+        and "役割分離" in installation
+    )
+
+
 def _public_uninstall_executor_exists() -> bool:
     makefile = _read("templates/make/Makefile.ai")
     executor = _read("scripts/ai_detached_uninstaller.py")
@@ -456,6 +475,14 @@ def _release_gate_is_wired() -> bool:
 def evaluate() -> dict[str, Any]:
     corpus_pass, high_risk_pass, corpus_observation = _evaluate_corpus()
     docs_pass, missing_docs = _documents_present()
+    japanese_doc_path_pass = docs_pass and _uninstall_path_exists()
+    japanese_doc_fact_pass = _calibration_session_evidence_boundary_is_truthful()
+    if not japanese_doc_path_pass:
+        japanese_doc_finding_id = "JA-DOC-001"
+    elif not japanese_doc_fact_pass:
+        japanese_doc_finding_id = "JA-DOC-FACT-002"
+    else:
+        japanese_doc_finding_id = None
     cases = [
         _case(
             "JA-INPUT-001",
@@ -582,18 +609,20 @@ def evaluate() -> dict[str, Any]:
         _case(
             "JA-DOC-001",
             "Japanese installation, calibration, upgrade, rollback, uninstall, and recovery path",
-            "pass" if docs_pass and _uninstall_path_exists() else "block",
-            "All required Japanese documents and an actionable uninstall path are present"
-            if docs_pass and _uninstall_path_exists()
+            "pass" if japanese_doc_path_pass and japanese_doc_fact_pass else "block",
+            "Required Japanese documents, the uninstall path, and calibration evidence ownership are current"
+            if japanese_doc_path_pass and japanese_doc_fact_pass
             else (
                 FINDINGS["JA-DOC-001"]["summary"]
                 + (f"; missing documents: {', '.join(missing_docs)}" if missing_docs else "")
+                if not japanese_doc_path_pass
+                else FINDINGS["JA-DOC-FACT-002"]["summary"]
             ),
             source=list(REQUIRED_JA_DOCS),
-            tests=["tests/test_docs_metadata.py"],
+            tests=["tests/test_docs_metadata.py", "tests/test_japanese_capability.py"],
             commands=["make check-docs-metadata"],
             limitation="Structure and terminology checks do not replace native technical editing.",
-            finding_id=None if docs_pass and _uninstall_path_exists() else "JA-DOC-001",
+            finding_id=japanese_doc_finding_id,
         ),
         _case(
             "JA-UNINSTALL-RUNTIME-001",

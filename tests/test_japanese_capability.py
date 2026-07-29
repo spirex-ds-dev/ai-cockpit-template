@@ -412,8 +412,8 @@ def test_comprehensive_matrix_is_evidence_bound_and_reports_current_blockers():
     result = evaluate()
 
     assert result["assessmentVersion"] == 3
-    assert result["workItemId"] == "pre-release-documentation-truth-corrective-20260729"
-    assert result["workItemRole"] == "corrective_validation"
+    assert result["workItemId"] == "japanese-final-reassessment-after-documentation-truth-20260729"
+    assert result["workItemRole"] == "final_reassessment"
     assert result["scope"] == "bounded repository-governance Japanese handling"
     assert len(result["cases"]) >= 10
     for case in result["cases"]:
@@ -445,6 +445,42 @@ def test_japanese_corpus_preserves_authority_and_high_risk_stop_boundaries():
     assert by_id["JA-RELEASE-GATE-001"]["status"] == "pass"
 
 
+def test_japanese_installation_session_evidence_boundary_is_current():
+    result = evaluate()
+    by_id = {case["id"]: case for case in result["cases"]}
+    findings = {finding["id"] for finding in result["blockingFindings"]}
+
+    assert by_id["JA-DOC-001"]["status"] == "pass"
+    assert "JA-DOC-FACT-002" not in findings
+
+
+def test_japanese_installation_session_evidence_boundary_fails_closed(tmp_path, monkeypatch):
+    installation = tmp_path / "docs/getting-started/installation.ja.md"
+    installation.parent.mkdir(parents=True)
+    complete = (
+        "<!-- calibration-session-evidence-boundary: "
+        "combined-stage-seven-column-record,labels-not-actor-proof -->\n"
+        "`checklistEvidence`\n"
+        "本人確認\n"
+        "役割分離\n"
+    )
+    installation.write_text(complete, encoding="utf-8")
+    monkeypatch.setattr(ai_japanese_capability, "ROOT", tmp_path)
+
+    assert ai_japanese_capability._calibration_session_evidence_boundary_is_truthful()
+    for required in (
+        "combined-stage-seven-column-record,labels-not-actor-proof",
+        "checklistEvidence",
+        "本人確認",
+        "役割分離",
+    ):
+        installation.write_text(complete.replace(required, ""), encoding="utf-8")
+        assert (
+            ai_japanese_capability._calibration_session_evidence_boundary_is_truthful() is False
+        ), required
+        installation.write_text(complete, encoding="utf-8")
+
+
 def test_general_fluency_remains_a_limitation_not_a_pass():
     result = evaluate()
     by_id = {case["id"]: case for case in result["cases"]}
@@ -463,9 +499,10 @@ def test_json_and_markdown_are_deterministic_views_of_one_result():
     markdown = render_markdown(first)
     assert first["digest"] in markdown
     assert (
-        "- Assessment Work Item: `pre-release-documentation-truth-corrective-20260729`" in markdown
+        "- Assessment Work Item: "
+        "`japanese-final-reassessment-after-documentation-truth-20260729`" in markdown
     )
-    assert "- Work Item role: `corrective_validation`" in markdown
+    assert "- Work Item role: `final_reassessment`" in markdown
     assert "[Machine-readable assessment](japanese-capability-assessment.json)" in markdown
     assert "Assessment definition Work Item" not in markdown
     assert "JA-CLI-001" in markdown
@@ -577,12 +614,12 @@ def test_cli_check_rejects_report_drift_before_reporting_blockers(tmp_path, monk
     assert "stale Japanese assessment Markdown" in capsys.readouterr().err
 
 
-def test_release_requirement_rejects_corrective_validation_report(monkeypatch, capsys):
+def test_release_requirement_accepts_fresh_final_reassessment(monkeypatch, capsys):
     monkeypatch.setattr(
         sys,
         "argv",
         ["ai_japanese_capability.py", "--check", "--require-final-reassessment"],
     )
 
-    assert ai_japanese_capability.main() == 2
-    assert "requires workItemRole=final_reassessment" in capsys.readouterr().err
+    assert ai_japanese_capability.main() == 0
+    assert "requires workItemRole=final_reassessment" not in capsys.readouterr().err

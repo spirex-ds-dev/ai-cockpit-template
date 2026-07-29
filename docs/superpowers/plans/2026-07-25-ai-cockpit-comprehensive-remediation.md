@@ -660,25 +660,30 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 | WI-10 安装文档整改 | 已完成、PR #422 已合并、关闭并清理 |
 | WI-01～WI-20 双向追踪审计 | 已完成；发现项及 corrective 均按 archive 追踪 |
 | 其他流程问题与 RFE-ISSUE-082 | 已完成、合并、关闭并清理 |
-| 日语评估及整改 | 文档事实纠偏已由 PR #452 合并并完整关闭；全新最终评估已启动，但五策略复核发现 `JA-DOC-FACT-002`，当前按流程暂停 |
-| 日语校准证据文档纠偏 | 当前执行 `japanese-calibration-session-evidence-doc-corrective-20260729`；修正三语 Session 七列证据、Work Item 治理边界及 reviewer/owner 标签限制 |
-| 全新日语最终评估 | `japanese-final-reassessment-after-documentation-truth-20260729` 保留在独立暂停分支；只在当前纠偏完整关闭后 rebase/resume，并以零 blocker 的 `final_reassessment` 满足发布门禁 |
+| 日语评估及整改 | 文档事实纠偏已由 PR #452 合并并完整关闭；随后发现的 `JA-DOC-FACT-002` 也已由 PR #454 合并、关闭并清理 |
+| 日语校准证据文档纠偏 | 已完成；三语 Session 七列证据、Work Item 治理边界及 reviewer/owner 标签限制已对齐，并由机器检查防止复发 |
+| 全新日语最终评估 | 当前恢复执行 `japanese-final-reassessment-after-documentation-truth-20260729`；从 PR #454 后的精确主线重新生成并要求零 blocker 的 `final_reassessment` |
+| GitHub Actions 警告纠偏 | 用户新增；待全新日语最终评估关闭后，升级 Node 24 artifact action、关闭无依赖文件的 Go fixture 缓存，并移除 Swift Job 中无关的未信任 `aws/tap`，以 workflow 回归和 Hosted 日志验收 |
 | 文档对齐 | `pre-release-documentation-alignment-20260729` 已暂停；待纠偏和全新日语评估关闭后 rebase/resume 并完成 |
 | 发布前过期资产清理 | 待文档对齐关闭后执行 |
 | 发布前真实荒诞与注入攻击评估 | 用户新增；待过期资产清理关闭后执行三语 12 案例评估及必要整改 |
 | WI-18 发布新版本 | 待所有前置阶段关闭；候选版本、provider Release、tag、asset、projection 分别验证 |
 | WI-19 清理计划文档 | 发布完整关闭后最后执行 |
 
-当前唯一允许的顺序是：`JA-DOC-FACT-002` 独立纠偏 → 恢复并完成全新日语 `final_reassessment` → 恢复并关闭文档对齐 → 过期代码/逻辑/文档清理 → 三语真实荒诞与注入攻击评估及整改 → WI-18 发布 → WI-19 清理当前周期计划。每一项都必须完成 Contract → Preflight → 实现/验收 → `ai-finish`/archive → push → PR → merge → `ai-close-work-item` → 本地/远端分支清理 → main 同步；不得从 detached closed worktree 直接进入下一项。
+当前唯一允许的顺序是：`JA-DOC-FACT-002` 独立纠偏 → 恢复并完成全新日语 `final_reassessment` → GitHub Actions Node/Go/Homebrew 警告纠偏 → 恢复并关闭文档对齐 → 过期代码/逻辑/文档清理 → 三语真实荒诞与注入攻击评估及整改 → WI-18 发布 → WI-19 清理当前周期计划。每一项都必须完成 Contract → Preflight → 实现/验收 → `ai-finish`/archive → push → PR → merge → `ai-close-work-item` → 本地/远端分支清理 → main 同步；不得从 detached closed worktree 直接进入下一项。
 
 ### 本计划工单已发现的问题
 
+- `CI-WARN-001`（GitHub Actions 依赖/日志质量，发布前必须纠偏）：PR #454 smoke 的 `actions/upload-artifact@ea165f8...` 仍基于 Node.js 20；main push run `30421167605` 的两个 Go fixture Job 因仓库根目录不存在 `go.mod` 而产生无效 cache restore 警告；Swift macOS Job 在安装 `swift-format` 时读取 runner 预置、未信任且本 Job 不需要的 `aws/tap`。独立 corrective 必须升级并固定 Node 24 artifact action SHA，为两个临时 Go fixture setup 显式关闭缓存，只在存在时移除无关 `aws/tap`，禁止用全局关闭 Homebrew trust 的方式压制告警；本地 workflow 测试和精确 PR Head Hosted 日志都必须证明三类告警消失。
 - `JA-DOC-FACT-002`（日语评估/校准证据事实，高）：全新日语最终评估的独立 Accuracy 与 Clarity 策略一致确认，英中日三份安装文档的 Calibration 完成记录前段仍声称 Session 只保存回答/运行状态、其余七列由 Work Item 保存；但 `scripts/ai_calibrate.py record-evidence` 已把 observed evidence、Candidate change、owner/reviewer、PASS/STOP、reason/retry 持久化到每阶段 `checklistEvidence`，同一文档后段也描述完整七列记录。既有 checker 只验证宽泛 marker，未拒绝内部矛盾。最终评估已暂停；独立 corrective `japanese-calibration-session-evidence-doc-corrective-20260729` 以三语统一事实、Work Item 治理/外部证据边界、标签不证明本人性或独立角色分离及 mutation gate 完整闭环后，才允许恢复评估。
 - `DOC-ALIGN-FINDING-001`～`008`（文档事实/流程，发布阻断）：五策略审查一致发现 Capability Truth 与 Quick Install 实现冲突、row digest 未绑定证据字节、日语最终报告漏绑权威文档、README 以最高 tag 回退、计划状态与生命周期顺序漂移、发布身份边界混淆、多语言路线不等价，以及对齐检查器自我声明审查成功。已暂停文档对齐，建立 `pre-release-documentation-truth-corrective-20260729` 原子修复代码、测试、三语文档和结构化审查证据；修复后必须重新执行独立日语最终评估，再恢复文档对齐。
 - `DOC-TRUTH-ISSUE-001`（Preflight 词法误报，中）：纠偏 Contract 中用于报告分类和权威边界的普通词 `role` 被 Critical Domain Guard 按权限操作命中，尽管 `requestedOperation` 明确是 repository governance 且无外部权限变更。当前 Contract 用“report classification / authority boundary”精确表达后 Preflight 为 ready；该误报保留为流程问题，后续流程工单应让结构化 operation 优先于无上下文词法匹配，不能靠静默忽略。
 - `DOC-TRUTH-ISSUE-002`（Capability Truth 旧证据路径，高）：首次启用证据字节绑定时，矩阵中 `tests/test_installation.py` 与 `tests/test_ci_release_evidence.py` 已不存在，但旧 row-only digest 仍为绿色。已替换为真实的 `tests/test_install_entrypoint.py` 与 `tests/test_ci_release_evidence.sh`，并以 missing-file fail-closed 回归防止再次漂移。
 - `DOC-TRUTH-ISSUE-004`（Coverage 关联，中）：纠偏首次 `ai-finish` 在重测试前停止，因为 `capabilityTruth` 的既有 production→test 关联只登记 absurd corpus，未登记本次新增字节/路径回归所在的 `tests/test_capability_truth_matrix.py`。已将精确测试文件加入同一关联，扩展 Contract scope，并要求重新 Preflight、重建两个 checkpoint 后从头执行 Finish；未使用 `tests/**` 宽泛匹配。
 - `DOC-TRUTH-ISSUE-005`（安全扫描器/检测实现，中）：下一次完整质量的 1480 项测试与 85.63% Coverage 均通过，但 Quality Architecture 把 Capability Truth 校验器自身用于拒绝 parent-path 的字面量识别为不安全路径。未豁免该脚本；改为对 normalized `Path.parts` 判断同一越界条件，保留 escape red test，并重新生成两个字节绑定报告后要求完整 Finish 重跑。
+- `PROCESS-SKILL-ENTRYPOINT-001`（Agent Skill / Make 入口，中，已解决）：本机 `ai-cockpit` 技能曾假定根目录缺少 `Makefile.ai` 就必须停止，遗漏模板源码仓库由根 `Makefile` 直接实现 lifecycle targets 的合法形态。PR #452 关闭前探测因此先停止，但没有状态变更。已在当前生效技能中加入确定性入口解析脚本及 5 个回归场景，覆盖模板根 Makefile、reviewed include、未 include 的采用方、缺失入口和不完整直接目标，并经独立 Sol 前向测试确认模板仓库选择 `make`。
+- `JA-FINAL-ISSUE-001`（本地命令构造，低，已解决）：创建全新日语评估 worktree 的首个命令使用 zsh 特殊变量 `path`，导致 `PATH` 在第一条 Git 命令前被覆盖；没有创建分支、目录或仓库变更。改用 `worktree_dir`/`branch_name` 后从 `origin/main` 精确创建并验证。
+- `JA-DOC-FACT-002`（日文文档事实，高，发布阻断）：独立五策略日语复核在 `docs/getting-started/installation.ja.md` 的 Session/Work Item 保存边界处取得 Accuracy + Clarity 共识。文档称 Session 只保存回答与执行状态，但 `ai_calibrate.py record-evidence` 还持久化结构化 `checklistEvidence`（根拠、Candidate 变更、Owner、Reviewer、PASS/STOP、理由、再确认手顺）。最终评估已把该项写入 `blockingFindings` 并 fail closed；先执行 `japanese-calibration-session-evidence-doc-corrective-20260729`，补齐三语事实边界和自动回归，再 resume 最终评估。
 - `PLAN-001`（流程/记录，低）：初始 Contract 使用了本机绝对路径，Summary 仍是骨架。已在本计划工单内改为可移植的用户请求来源标识，并补齐 Summary；Contract、范围、文档 metadata、Status 和一致性检查随后通过。
 - `PLAN-002`（质量/发布证据，待后续工单处理）：本计划工单运行 `make quality` 时，pytest 1058 passed、coverage 85.04%、ruff/mypy/bandit/文档/系统不变量等检查通过，但 `check-release-evidence` 的 release supply-chain 检查发现 1 个问题，导致 `make quality` 退出码 2。该问题属于发布证据域，应在 WI-17 或其明确的前置 corrective Work Item 中按流程处理；本计划不绕过或修复它。
 - 现有 governance complexity 与 archive growth 仅报告 warning（当前 archive growth 超过 policy warning 阈值），不在本计划工单中擅自抬高阈值；应由后续相关 Work Item 按预算/偿还规则处理。
