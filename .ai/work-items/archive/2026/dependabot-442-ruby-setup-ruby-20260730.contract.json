@@ -1,0 +1,186 @@
+{
+  "contractVersion": 2,
+  "workItemId": "dependabot-442-ruby-setup-ruby-20260730",
+  "mode": "code",
+  "title": "Refresh ruby/setup-ruby to 1.321.0",
+  "baseCommit": "5d873b20e2bf25a9c0ce04b5b079196a9c67f3c7",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/dependabot-442-ruby-setup-ruby-20260730.contract.json",
+    ".ai/work-items/active/dependabot-442-ruby-setup-ruby-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/dependabot-442-ruby-setup-ruby-20260730.outcome.json",
+    ".ai/work-items/active/dependabot-442-ruby-setup-ruby-20260730.outcome.md",
+    ".github/workflows/compatibility.yml",
+    "tests/test_workflows.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": [
+    "Any dependency update other than ruby/setup-ruby in compatibility.yml.",
+    "Merging, rebasing, or modifying Dependabot PRs #444, #445, and #403.",
+    "Release publication, tags, and assets."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/442",
+      "reason": "User-directed Dependabot source update for ruby/setup-ruby 1.321.0."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Current pinned ruby/setup-ruby uses in the Ruby compatibility paths."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Static workflow regression coverage for immutable action pins and conditions."
+    },
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "Deterministically derives workflow-action SBOM evidence required by quality."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative serial order requires #442 after #441 and before release."
+    }
+  ],
+  "rawUserRequest": "#441、#442、#444、#445、#403 处理完以后；开放的 Dependabot PR 在发布之前接收；当前顺序要求先完成 #441，再逐项继续。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:dependabot-intake-442-20260730",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:dependabot-442-user-authorization"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Refresh the Ruby compatibility action pin from Dependabot PR #442 on current main, preserve immutable pinning, and collect current verification evidence before later dependency intake resumes.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "ci_dependency_update",
+      "workflow_pinning",
+      "hosted_verification"
+    ],
+    "reason": "A pinned CI action upgrade affects Ruby compatibility jobs; static pin regression, full local quality, and fresh hosted CI are required.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the serial Dependabot intake. Scope is restricted to the current #442 pin; hosted evidence must be newly produced and is not inferred from Dependabot history."
+  },
+  "preReviewWarnings": [
+    "Verify both Ruby workflow uses adopt the #442 immutable SHA, retain Ruby-only conditions and inputs, and do not alter another dependency pin."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": ["before_edit", "before_finish"],
+    "reason": "Record checkpoints before editing and finish to reduce task drift."
+  },
+  "acceptance": [
+    "compatibility.yml upgrades only the two pinned ruby/setup-ruby references from 1.320.0 SHA to the #442 1.321.0 SHA, retaining their Ruby-only conditions and inputs.",
+    "Static workflow regression coverage rejects the old SHA and requires the new immutable SHA at both Ruby compatibility locations.",
+    "The regenerated source-bound supply-chain and capability-truth artifacts contain the final Ruby action SHA, and the serial plan and bidirectional traceability identify this Work Item as the #442 replacement.",
+    "The replacement branch passes all 16 local governance checks and the full quality suite; before merge, its own hosted Ruby compatibility, template-smoke, installation-smoke, and ci-evidence checks pass while the diff contains no #444, #445, or #403 dependency pin."
+  ],
+  "guidelines": [
+    "Keep the dependency update minimal, immutable-SHA pinned, and confined to declared Ruby workflow steps.",
+    "Do not reuse historical PR checks as current evidence; use the current replacement branch verification.",
+    "Record every user-named PR as implementation evidence or an explicit out-of-scope boundary."
+  ],
+  "intent": {
+    "problem": "Dependabot PR #442 is stale relative to current main, but its Ruby setup action update must be received before release and must not inherit unverified historical CI evidence.",
+    "constraints": [
+      "Use the exact ruby/setup-ruby SHA from Dependabot PR #442.",
+      "Change both current Ruby uses only; do not modify other dependency updates or release behavior.",
+      "Do not merge until fresh hosted checks pass."
+    ],
+    "rationale": "Recreating the narrow update from latest main produces reviewable current evidence while preserving one Work Item and PR per dependency update."
+  },
+  "problemStatement": "Refresh Ruby compatibility workflow pins to the reviewed ruby/setup-ruby 1.321.0 SHA and prove current repository verification remains green.",
+  "scenarioCoverage": [
+    {
+      "scenario": "Both Ruby compatibility workflow steps select the 1.321.0 immutable SHA only for Ruby matrix entries",
+      "required": true,
+      "status": "unverified",
+      "expected": "Both Ruby matrix workflow steps use only 95ef2b042f9d7a56d8268cba8559e2842e2ad01b and preserve their current condition and inputs.",
+      "verificationPlan": "Add and run focused tests in tests/test_workflows.py that assert both locations, their Ruby-only conditions, and the absence of the former SHA.",
+      "evidence": []
+    },
+    {
+      "scenario": "Current main plus dependency update passes local quality and hosted Ruby compatibility evidence",
+      "required": true,
+      "status": "unverified",
+      "expected": "The branch passes complete local quality and its own hosted Ruby compatibility, template-smoke, installation-smoke, and ci-evidence checks.",
+      "verificationPlan": "Run make ai-finish before archive, then wait for and inspect all checks on the replacement PR before merge.",
+      "evidence": []
+    },
+    {
+      "scenario": "Unrelated Dependabot updates remain unmodified",
+      "required": true,
+      "status": "unverified",
+      "expected": "The final diff changes only the declared #442 pin, regression coverage, generated evidence, and lifecycle records.",
+      "verificationPlan": "Run git diff --check, make check-ai-scope, make check-ai-diff-ownership, and make check-ai-pr against the recorded base.",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human",
+    "reason": "The user authorized continuation of all planned Work Items, including receiving Dependabot PRs before release."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore the former Ruby action pins and regenerated evidence.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 671}},
+  "startReceipt": {
+    "path": ".ai/work-items/starts/dependabot-442-ruby-setup-ruby-20260730.json",
+    "baseCommit": "5d873b20e2bf25a9c0ce04b5b079196a9c67f3c7",
+    "initialScopeDigest": "536e6bd1770a79defeb0992624703a0e2fc451280fb8bf544e8f2d0a8be7776d",
+    "contractSkeletonDigest": "0a227d480bcefb12ee8de58bd08cce8a6d18facae81a0a88c4a91cce7b537c59"
+  }
+}
