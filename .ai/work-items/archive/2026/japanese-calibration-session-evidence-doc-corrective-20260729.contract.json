@@ -1,0 +1,318 @@
+{
+  "contractVersion": 2,
+  "workItemId": "japanese-calibration-session-evidence-doc-corrective-20260729",
+  "mode": "code",
+  "title": "Correct multilingual calibration Session evidence documentation",
+  "baseCommit": "e0f80ea3099d523778cf3bfcbaa57a575c96cd08",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Japanese capability is mandatory before release. If the comprehensive Japanese assessment finds a problem, record it, correct it in a separate complete Work Item, and only then resume the assessment. Every Work Item must use instruction-plan-implementation-acceptance traceability and complete PR, merge, closure, and branch cleanup.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:japanese-mandatory-fix-every-finding-before-release",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:japanese-calibration-session-evidence-doc-corrective-20260729"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Correct the trilingual calibration Session evidence-storage boundary and enforce it with executable documentation checks.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "scope": [
+    ".ai/work-items/active/japanese-calibration-session-evidence-doc-corrective-20260729.contract.json",
+    ".ai/work-items/active/japanese-calibration-session-evidence-doc-corrective-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/getting-started/installation.md",
+    "docs/getting-started/installation.zh-CN.md",
+    "docs/getting-started/installation.ja.md",
+    "scripts/check_docs_metadata.py",
+    "tests/test_docs_metadata.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/plans/2026-07-29-japanese-calibration-session-evidence-doc-corrective.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Changing calibration runtime persistence, Session schema, record-evidence behavior, activation, or rollback behavior.",
+    "Editing the paused final Japanese assessment implementation or reports.",
+    "Treating labels such as reviewer as proof of who performed review or that duties were independently separated.",
+    "Resuming documentation alignment, publishing a release, changing release metadata/tags/provider assets, or cleaning plan documents.",
+    "Applying every single-strategy readability suggestion from the Japanese review; only the consensus factual blocker is corrected here."
+  ],
+  "sources": [
+    {
+      "path": "docs/getting-started/installation.ja.md",
+      "reason": "Contains the Japanese factual contradiction identified by independent Accuracy and Clarity review."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "English peer contains the same early narrow storage claim and later full seven-column statement."
+    },
+    {
+      "path": "docs/getting-started/installation.zh-CN.md",
+      "reason": "Chinese peer contains the same internal contradiction and must remain semantically aligned."
+    },
+    {
+      "path": "scripts/ai_calibrate.py",
+      "reason": "Runtime fact source showing record-evidence persists the structured checklistEvidence object in each stage; read-only in this Work Item."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Executable multilingual documentation regression surface."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Documentation metadata gate where the trilingual evidence-boundary marker and semantics can be enforced."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Defines fix-process-first, Japanese mandatory capability, and complete corrective lifecycle order."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Authoritative byte-bound inventory that must be regenerated because the installation guides and documentation regression are capability evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.archive-manifest.json",
+      "reason": "Closed predecessor evidence proving the reusable scope dependency correction landed before this Work Item resumed."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "japanese_documentation_factual_error",
+      "multilingual_semantic_drift",
+      "evidence_ownership_misdirection",
+      "release_gate_false_positive"
+    ],
+    "reason": "Incorrect storage guidance can cause adopters to omit or duplicate evidence and would let a mandatory Japanese release assessment pass a false claim.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user already instructed separate correction of every Japanese assessment finding before release."
+  },
+  "predecessorWorkItem": {
+    "workItemId": "capability-evidence-scope-dependency-corrective-20260729",
+    "status": "closed",
+    "pr": {
+      "number": 453,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/453",
+      "mergeCommit": "e0f80ea3099d523778cf3bfcbaa57a575c96cd08"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.archive-manifest.json"
+    }
+  },
+  "preReviewWarnings": [
+    "Keep runtime behavior unchanged and derive documentation from ai_calibrate.py.",
+    "Do not claim reviewer labels prove who performed review or that duties were independently separated.",
+    "Keep English, Chinese, and Japanese storage semantics equivalent."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record checkpoints before implementation and finish to prevent multilingual or runtime-truth drift."
+  },
+  "acceptance": [
+    "A1: English, Chinese, and Japanese installation guides no longer claim that Session stores only answers or execution state; all three explicitly state that the combined stage record persists every schema-supported field needed for the seven-column review row, with answer fields and checklistEvidence stored in their schema-defined locations.",
+    "A2: All three guides distinguish Session facts from Work Item governance/external review context without claiming reviewer labels prove who performed review or that duties were independently separated.",
+    "A3: The contradictory early and later paragraphs are consolidated into one same-meaning storage-boundary explanation in each language, with a shared machine-readable marker.",
+    "A4: check_docs_metadata rejects a missing marker, a missing checklistEvidence boundary, a narrow Session-only claim in supported natural word orders, a missing reviewer-label limitation, or a prompt that loses the answer versus record-evidence storage split in any language.",
+    "A5: Focused multilingual documentation tests and metadata checks pass while calibration runtime files and behavior remain unchanged.",
+    "A6: PLAN-DIRECTIVE-043 lists the exact active Contract and Summary, all three installation guides, the metadata checker, its regression test, this corrective plan, and the comprehensive plan; make check-instruction-traceability passes before archive.",
+    "A7: The closed capability-evidence predecessor is source-bound in resumeHistory, docs/reference/capability-truth-matrix.json is in Contract scope and regenerated in the actual diff, and matrix regeneration is not treated as proof of Japanese capability behavior."
+  ],
+  "guidelines": [
+    "Document runtime truth from executable evidence, not from a simplified mental model.",
+    "Keep trilingual storage semantics equivalent and actionable.",
+    "Separate persisted labels from external proof of the reviewer and independent duty separation.",
+    "Add an executable regression so the contradiction cannot recur.",
+    "Preserve the paused final assessment and later serial stages."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A language says Session stores only answers or execution state.",
+      "expected": "Documentation metadata validation fails before merge or release.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add red-first fixtures for the current narrow claims in English, Chinese, and Japanese."
+    },
+    {
+      "scenario": "A guide lists reviewer or owner labels without explaining their trust boundary.",
+      "expected": "The guide states that labels do not prove who performed review or that duties were independently separated; missing boundaries fail validation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Require shared semantic markers and language-specific reviewer-label limitation statements."
+    },
+    {
+      "scenario": "The corrective accidentally changes calibration runtime behavior.",
+      "expected": "Scope and diff ownership reject runtime changes; existing calibration tests remain green.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run scope/ownership and focused calibration/documentation tests with scripts/ai_calibrate.py unchanged."
+    },
+    {
+      "scenario": "The corrective has not completed its full lifecycle.",
+      "expected": "The paused final Japanese assessment, documentation alignment, and release remain blocked.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Require archive, exact PR Head, Hosted success, merge, closure, branch absence, and synchronized main before resume."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "intent": {
+    "problem": "The mandatory Japanese final assessment found that all three installation guides understate Session persistence in an early paragraph even though later text and ai_calibrate.py show the combined stage record stores answer fields plus structured checklistEvidence. The contradiction can misdirect evidence ownership and invalidate a zero-blocker Japanese result.",
+    "constraints": [
+      "Change documentation and its checks only; do not modify calibration runtime behavior.",
+      "Keep English, Chinese, and Japanese meaning aligned.",
+      "Do not infer who performed review or independent duty separation from persisted labels.",
+      "Correct only the consensus factual blocker; retain other review suggestions for the later alignment Work Item.",
+      "Complete the corrective lifecycle before resuming the paused final assessment."
+    ],
+    "rationale": "One explicit trilingual storage contract plus executable metadata regressions removes the current contradiction and prevents the same Japanese release blocker from returning."
+  },
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "No restricted policy path is required."
+  },
+  "rollbackNote": "Revert the three documentation paragraphs, metadata check, tests, traceability, and plan changes; calibration runtime remains untouched.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 659
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/japanese-calibration-session-evidence-doc-corrective-20260729.json",
+    "baseCommit": "4a78169e7c82b575d93f830b8acbddaee70b6288",
+    "initialScopeDigest": "c3185cfcdaefbc9d6ed88a2b906e9752b56d468f57fc64167070f67bfc96a98c",
+    "contractSkeletonDigest": "1e86247d8ba2b879f895fe5afc0accbd5e6083d7576dab2a65bad9e26e6e39e0"
+  },
+  "resumeHistory": [
+    {
+      "resumeVersion": 1,
+      "fromBaseCommit": "4a78169e7c82b575d93f830b8acbddaee70b6288",
+      "toBaseCommit": "e0f80ea3099d523778cf3bfcbaa57a575c96cd08",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/japanese-calibration-session-evidence-doc-corrective-20260729",
+      "recordedAt": "2026-07-29T03:44:56.740398+00:00",
+      "priorContractDigest": "b46def7d3b7f56d11e1750549267b64f7d403bc26ee6d2f2f74c86c41f829b8b",
+      "predecessorWorkItemId": "capability-evidence-scope-dependency-corrective-20260729",
+      "predecessorMergeCommit": "e0f80ea3099d523778cf3bfcbaa57a575c96cd08",
+      "predecessorManifestPath": ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.archive-manifest.json",
+      "predecessorClosure": {
+        "statusClosed": true,
+        "prMerged": true,
+        "closureSucceeded": true,
+        "localBranchDeleted": true,
+        "remoteBranchDeleted": true,
+        "baseSynchronized": true
+      }
+    }
+  ]
+}

@@ -201,6 +201,105 @@ CALIBRATION_SESSION_PERSISTENCE_BOUNDARY = (
     "<!-- calibration-session-persistence-boundary: "
     "structured-checklist-evidence,candidate-bound -->"
 )
+CALIBRATION_SESSION_EVIDENCE_BOUNDARY = (
+    "<!-- calibration-session-evidence-boundary: "
+    "combined-stage-seven-column-record,labels-not-actor-proof -->"
+)
+CALIBRATION_SESSION_COMPLETE_CLAIM = {
+    "en": (
+        "The Session persists all schema-supported data needed for the complete "
+        "seven-column review row in the combined stage record."
+    ),
+    "zh-CN": ("Session 会在合并后的阶段记录中持久化完整七列审核行所需的全部 schema 支持数据。"),
+    "ja": ("Session は、7 列の確認表に必要な全項目を、段階ごとの記録として保存します。"),
+}
+CALIBRATION_WORK_ITEM_EVIDENCE_BOUNDARY = {
+    "en": (
+        "The Work Item keeps governance rationale, acceptance, owner decisions, "
+        "and links to external review evidence; it does not replace the Session facts."
+    ),
+    "zh-CN": (
+        "Work Item 保存治理理由、验收、Owner 决定及外部审核证据链接；"
+        "它不会替代 Session 中的事实记录。"
+    ),
+    "ja": (
+        "Work Item には、ガバナンス上の理由、受入条件、Owner の判断、"
+        "外部レビューの根拠へのリンクを記録します。"
+        "Session の事実記録を置き換えるものではありません。"
+    ),
+}
+CALIBRATION_REVIEWER_LABEL_LIMITATION = {
+    "en": (
+        "Recorded `reviewer` and `owner` labels do not prove who performed the review "
+        "or that duties were independently separated."
+    ),
+    "zh-CN": (
+        "记录下来的 `reviewer` 和 `owner` 标签不能证明实际由谁完成审核，"
+        "也不能证明职责已经独立分离。"
+    ),
+    "ja": (
+        "保存された `reviewer` / `owner` ラベルは文字列にすぎず、"
+        "レビュー実施者の本人確認も、"
+        "独立した役割分離が成立したことも証明しません。"
+    ),
+}
+CALIBRATION_COMMAND_STORAGE_BOUNDARY = {
+    "en": (
+        "After I decide, use `answer` to persist the answer fields and resulting stage "
+        "completion state. Use `record-evidence` to persist observed evidence, the "
+        "Candidate change, Owner/Reviewer labels, and PASS/STOP decision details in "
+        "`checklistEvidence`."
+    ),
+    "zh-CN": (
+        "我决定后，用 `answer` 保存回答字段及由此产生的阶段完成状态；用 "
+        "`record-evidence` 将观察证据、Candidate change、Owner/Reviewer 标签和 "
+        "PASS/STOP 判定详情保存到 `checklistEvidence`。"
+    ),
+    "ja": (
+        "判断後は、`answer` で回答項目と、それに伴う段階の完了状態を保存します。"
+        "`record-evidence` では、確認した根拠、Candidate の変更案、"
+        "Owner/Reviewer ラベル、PASS/STOP と判断内容を `checklistEvidence` "
+        "に保存します。"
+    ),
+}
+CALIBRATION_NARROW_SESSION_PATTERNS = {
+    "en": (
+        re.compile(r"\bSession\s+(?:stores|persists)\s+only\b", re.IGNORECASE),
+        re.compile(r"\bSession\b[^.]{0,300}\bauthoritative\s+only\b", re.IGNORECASE),
+        re.compile(
+            r"\bonly\b[^.]{0,200}\b(?:persisted|stored)\s+in\s+the\s+Session\b",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"\bSession\b[^.]{0,160}\b(?:answer|answers|stage\s+state)\b"
+            r"[^.;]{0,80}\bonly\b",
+            re.IGNORECASE,
+        ),
+        re.compile(
+            r"\b(?:it|Session)\s+does\s+not\s+store\s+(?:the\s+)?other\s+"
+            r"checklist\s+columns\b",
+            re.IGNORECASE,
+        ),
+    ),
+    "zh-CN": (
+        re.compile(r"Session\s*(?:中)?(?:只|仅)(?:保存|持久化|对)"),
+        re.compile(r"(?:它|Session)[^。；\n]{0,120}不保存(?:清单中的)?其他列"),
+    ),
+    "ja": (
+        re.compile(
+            r"Session[^。\n]*(?:保存するのは|が保存するのは)"
+            r"[^。\n]*(?:だけ|のみ)(?:です|。)"
+        ),
+        re.compile(r"Session\s*には[^。\n]*(?:しか保存され|しか記録され)"),
+        re.compile(r"Session\s*は[^。\n]{0,120}のみを(?:保存|記録)"),
+        re.compile(r"表の他の列は\s*Session\s*に保存しません"),
+    ),
+}
+CALIBRATION_COMPLETION_HEADING = {
+    "en": "### Calibration completion checklist",
+    "zh-CN": "### 校准完成记录清单",
+    "ja": "### Calibration 完了記録チェックリスト",
+}
 CALIBRATION_ACTIVATION_ATOMICITY_BOUNDARY = (
     "<!-- calibration-activation-atomicity: "
     "active-session-rollback-transaction,candidate-digest-bound -->"
@@ -892,6 +991,41 @@ def _installation_visible_copy_errors(text: str, *, language: str, relative: str
     return errors
 
 
+def _calibration_session_evidence_errors(text: str, *, language: str, relative: str) -> list[str]:
+    """Require the complete trilingual Session and Work Item evidence boundary."""
+    errors: list[str] = []
+    heading = CALIBRATION_COMPLETION_HEADING[language]
+    start = text.find(heading)
+    section_end = text.find("\n### ", start + len(heading)) if start >= 0 else -1
+    section = text[start : section_end if section_end >= 0 else None] if start >= 0 else ""
+    section_without_comments = re.sub(r"<!--.*?-->", "", section, flags=re.DOTALL)
+    visible_section = re.sub(r"```.*?```", "", section_without_comments, flags=re.DOTALL)
+    boundary_position = section.find(CALIBRATION_SESSION_EVIDENCE_BOUNDARY)
+    prompt_start = section.find("```text\n", boundary_position) if boundary_position >= 0 else -1
+    prompt_end = section.find("\n```", prompt_start + len("```text\n")) if prompt_start >= 0 else -1
+    prompt = (
+        section[prompt_start + len("```text\n") : prompt_end]
+        if prompt_start >= 0 and prompt_end >= 0
+        else ""
+    )
+
+    if CALIBRATION_SESSION_EVIDENCE_BOUNDARY not in section:
+        errors.append(f"{relative}: missing complete Session evidence boundary marker")
+    if CALIBRATION_SESSION_COMPLETE_CLAIM[language] not in visible_section:
+        errors.append(f"{relative}: Session persistence claim omits complete checklistEvidence")
+    if any(
+        pattern.search(visible_section) for pattern in CALIBRATION_NARROW_SESSION_PATTERNS[language]
+    ):
+        errors.append(f"{relative}: Session persistence claim omits complete checklistEvidence")
+    if CALIBRATION_WORK_ITEM_EVIDENCE_BOUNDARY[language] not in visible_section:
+        errors.append(f"{relative}: missing Work Item governance and external-evidence boundary")
+    if CALIBRATION_REVIEWER_LABEL_LIMITATION[language] not in visible_section:
+        errors.append(f"{relative}: missing reviewer/owner label limitation")
+    if CALIBRATION_COMMAND_STORAGE_BOUNDARY[language] not in prompt:
+        errors.append(f"{relative}: missing answer/checklistEvidence command storage boundary")
+    return errors
+
+
 def beginner_installation_errors(root: Path) -> list[str]:
     """Require complete novice-safe trilingual installation and platform routes."""
     errors: list[str] = []
@@ -1043,6 +1177,13 @@ def beginner_installation_errors(root: Path) -> list[str]:
                 errors.append(
                     f"{installation_relative}: missing Session checklist-persistence boundary"
                 )
+            errors.extend(
+                _calibration_session_evidence_errors(
+                    text,
+                    language=language,
+                    relative=installation_relative,
+                )
+            )
             if CALIBRATION_ACTIVATION_ATOMICITY_BOUNDARY not in text:
                 errors.append(f"{installation_relative}: missing Active/Session atomicity boundary")
             for runtime_term in CALIBRATION_TRANSACTION_RUNTIME_TERMS:

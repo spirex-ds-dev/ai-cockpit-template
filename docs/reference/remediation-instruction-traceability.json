@@ -1221,12 +1221,14 @@
         "docs/getting-started/installation.md",
         "docs/getting-started/installation.zh-CN.md",
         "docs/getting-started/installation.ja.md",
+        "docs/reference/capability-truth-matrix.json",
         "scripts/check_docs_metadata.py",
         "docs/superpowers/plans/2026-07-28-wi10-prompt-first-multiplatform-installation.md",
         "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
       ],
       "acceptanceEvidence": [
         "tests/test_docs_metadata.py",
+        "docs/reference/capability-truth-matrix.json",
         ".ai/work-items/archive/2026/wi10-installation-version-neutral.summary.json",
         "docs/reference/remediation-instruction-traceability.json"
       ],
@@ -1400,6 +1402,44 @@
         "make ai-finish TASK=capability-evidence-scope-dependency-corrective-20260729",
         "make check-ai-pr AI_BASE_COMMIT=4a78169e7c82b575d93f830b8acbddaee70b6288",
         "make ai-close-work-item TASK=capability-evidence-scope-dependency-corrective-20260729"
+      ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-043",
+      "summary": "Correct JA-DOC-FACT-002 before resuming the mandatory Japanese final reassessment: align the trilingual Calibration Session evidence-storage boundary, distinguish Work Item governance evidence, and enforce that reviewer/owner labels are not actor or duty-separation proof.",
+      "planWorkItems": [
+        "WI-16",
+        "JA-DOC-FACT-002",
+        "japanese-calibration-session-evidence-doc-corrective-20260729"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/japanese-calibration-session-evidence-doc-corrective-20260729.contract.json"
+      ],
+      "implementationEvidence": [
+        "docs/getting-started/installation.md",
+        "docs/getting-started/installation.zh-CN.md",
+        "docs/getting-started/installation.ja.md",
+        "scripts/check_docs_metadata.py",
+        "docs/superpowers/plans/2026-07-29-japanese-calibration-session-evidence-doc-corrective.md",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_docs_metadata.py",
+        ".ai/work-items/archive/2026/japanese-calibration-session-evidence-doc-corrective-20260729.summary.json",
+        "docs/reference/remediation-instruction-traceability.json",
+        "docs/superpowers/plans/2026-07-29-japanese-calibration-session-evidence-doc-corrective.md"
+      ],
+      "verificationCommands": [
+        "PYTHONPATH=scripts .venv/bin/pytest -q tests/test_docs_metadata.py",
+        "make check-docs-metadata",
+        "make check-instruction-traceability",
+        "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_capability_truth.py",
+        "git diff --exit-code -- scripts/ai_calibrate.py",
+        "make quality",
+        "make ai-finish TASK=japanese-calibration-session-evidence-doc-corrective-20260729",
+        "make check-ai-pr AI_BASE_COMMIT=e0f80ea3099d523778cf3bfcbaa57a575c96cd08",
+        "verify provider required checks are success on the exact PR Head before merge",
+        "make ai-close-work-item TASK=japanese-calibration-session-evidence-doc-corrective-20260729"
       ]
     }
   ]

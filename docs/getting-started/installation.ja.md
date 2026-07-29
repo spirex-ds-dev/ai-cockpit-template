@@ -499,19 +499,24 @@ commit、push、PR、merge、release、closure は禁止です。
 
 ### Calibration 完了記録チェックリスト
 
-この表は人が確認する画面です。Session（回答記録）が保存するのは回答の種類と値、
-理由、段階の状態、実行履歴、検査結果だけです。Work Item（作業記録）には、根拠、
-設定案、担当者、PASS/STOP を保存します。表の他の列は Session に保存しません。
-エージェントは Work Item の保存形式（schema）が認める確認（review）、受入条件
-（acceptance）、検証結果（verification）の
-欄だけを使い、Session と Work Item の保存場所を両方示します。認められた欄がない
-場合は STOP して保存先不足を報告し、存在しない JSON field を作ったり本文書を
-手編集したりしません。
-エージェントが記入済み 1 行を review output に表示し、Session の回答保存確認後
-だけ完了表示にします。質問しただけでは完了ではありません。事実または担当者が
-不足する場合は `unknown` と STOP を選びます。
+この表は人が確認する画面です。
+Session は、7 列の確認表に必要な全項目を、段階ごとの記録として保存します。
+回答の種類・値・理由は `answer` で保存します。確認した根拠、Candidate の変更案、
+`owner` / `reviewer` ラベル、PASS/STOP、判断理由、必要な再確認手順は
+`record-evidence` により `checklistEvidence` へ保存します。この 2 つを合わせた
+段階ごとの記録が、スキーマで対応する確認項目の正本です。
+
+Work Item には、ガバナンス上の理由、受入条件、Owner の判断、外部レビューの根拠へのリンクを記録します。Session の事実記録を置き換えるものではありません。
+保存された `reviewer` / `owner` ラベルは文字列にすぎず、レビュー実施者の本人確認も、独立した役割分離が成立したことも証明しません。
+レビュー実施者の本人確認と、独立した役割分離の根拠は Session の外に保存し、
+Work Item から参照できるようにします。必要な事実を保存するためのスキーマの正式な
+フィールドがない場合は STOP して保存先不足を報告し、存在しない Summary key を
+作ったり本文書を手編集したりしません。永続化済み Session で回答と構造化された
+根拠の両方を確認した後だけ、その行を完了表示にします。質問しただけでは完了では
+ありません。事実または担当者が不足する場合は `unknown` と STOP を選びます。
 
 <!-- calibration-session-persistence-boundary: structured-checklist-evidence,candidate-bound -->
+<!-- calibration-session-evidence-boundary: combined-stage-seven-column-record,labels-not-actor-proof -->
 
 governance file を探したり編集したりせず、次の prompt をコピーします。
 
@@ -521,9 +526,9 @@ active configure_ai_cockpit Work Item と永続化済み Calibration Session を
 回答 type/value/reason、proposed Candidate change、予定 Owner/Reviewer、理由と
 再確認手順を含む PASS/STOP の 1 行案を平易な日本語で示してください。各項目には
 「正式名称」「日本語の意味」「私が今判断する内容」を併記し、正確な Session
-record を先に示して私の判断を待ちます。判断後は導入済み Calibration Session
-interface の `answer` で回答を、`record-evidence` で他の全列を保存します。
-Session path と read-only review を表示して schema 対応を証明してください。
+record を先に示して私の判断を待ちます。
+判断後は、`answer` で回答項目と、それに伴う段階の完了状態を保存します。`record-evidence` では、確認した根拠、Candidate の変更案、Owner/Reviewer ラベル、PASS/STOP と判断内容を `checklistEvidence` に保存します。
+導入済み Calibration Session interface を使い、Session path と read-only review を表示して schema 対応を証明してください。
 field 不足、STOP、Unknown なら停止します。JSON の手編集、根拠の創作、Candidate
 prepare/activate、commit、push、PR 作成・merge、release、Work Item close は
 禁止です。

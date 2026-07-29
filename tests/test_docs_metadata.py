@@ -364,12 +364,291 @@ def test_wi10_beginner_check_requires_release_make_confirmation_and_ci_boundarie
     ) in errors
 
 
+def test_wi10_beginner_check_requires_complete_session_evidence_marker_in_every_language(
+    tmp_path,
+):
+    copy_documentation(tmp_path)
+    marker = (
+        "<!-- calibration-session-evidence-boundary: "
+        "combined-stage-seven-column-record,labels-not-actor-proof -->"
+    )
+
+    for suffix in ("", ".zh-CN", ".ja"):
+        installation = tmp_path / f"docs/getting-started/installation{suffix}.md"
+        text = installation.read_text(encoding="utf-8")
+        assert marker in text
+        installation.write_text(
+            text.replace(marker, "", 1),
+            encoding="utf-8",
+        )
+
+    errors = beginner_installation_errors(tmp_path)
+    for suffix in ("", ".zh-CN", ".ja"):
+        relative = f"docs/getting-started/installation{suffix}.md"
+        assert f"{relative}: missing complete Session evidence boundary marker" in errors
+
+
+def test_wi10_beginner_check_rejects_narrow_session_persistence_claim_in_every_language(
+    tmp_path,
+):
+    copy_documentation(tmp_path)
+    contradictions = {
+        "": (
+            "The Session is authoritative only for answers and stage state. "
+            "It does not store the other checklist columns."
+        ),
+        ".zh-CN": ("Session 只对回答和阶段状态构成权威记录；它不保存清单中的其他列。"),
+        ".ja": (
+            "Session が保存するのは回答と段階の状態だけです。表の他の列は Session に保存しません。"
+        ),
+    }
+
+    for suffix, contradiction in contradictions.items():
+        installation = tmp_path / f"docs/getting-started/installation{suffix}.md"
+        text = installation.read_text(encoding="utf-8")
+        boundary = (
+            "<!-- calibration-session-persistence-boundary: "
+            "structured-checklist-evidence,candidate-bound -->"
+        )
+        assert boundary in text
+        installation.write_text(
+            text.replace(boundary, f"{contradiction}\n\n{boundary}", 1),
+            encoding="utf-8",
+        )
+
+    errors = beginner_installation_errors(tmp_path)
+    for suffix in contradictions:
+        relative = f"docs/getting-started/installation{suffix}.md"
+        assert f"{relative}: Session persistence claim omits complete checklistEvidence" in errors
+
+
+def test_wi10_beginner_check_rejects_narrow_session_word_order_variants_in_every_language(
+    tmp_path,
+):
+    copy_documentation(tmp_path)
+    contradictions = {
+        "": (
+            "Only answers and stage state are persisted in the Session; "
+            "the remaining checklist fields are not."
+        ),
+        ".zh-CN": "Session 中仅持久化回答和阶段状态，其他清单列不会保存。",
+        ".ja": ("Session には回答と段階の状態しか保存されず、その他の確認表項目は保存されません。"),
+    }
+    boundary = (
+        "<!-- calibration-session-persistence-boundary: "
+        "structured-checklist-evidence,candidate-bound -->"
+    )
+
+    for suffix, contradiction in contradictions.items():
+        installation = tmp_path / f"docs/getting-started/installation{suffix}.md"
+        text = installation.read_text(encoding="utf-8")
+        assert boundary in text
+        installation.write_text(
+            text.replace(boundary, f"{contradiction}\n\n{boundary}", 1),
+            encoding="utf-8",
+        )
+
+    errors = beginner_installation_errors(tmp_path)
+    for suffix in contradictions:
+        relative = f"docs/getting-started/installation{suffix}.md"
+        assert f"{relative}: Session persistence claim omits complete checklistEvidence" in errors
+
+
+def test_wi10_beginner_check_rejects_postpositive_only_session_claims_in_every_language(
+    tmp_path,
+):
+    copy_documentation(tmp_path)
+    contradictions = {
+        "": "The Session persists answers and stage state only; other checklist fields are absent.",
+        ".zh-CN": "Session 仅保存回答和阶段状态，其他清单列缺失。",
+        ".ja": "Session は回答と段階の状態のみを保存し、その他の確認表項目は保存しません。",
+    }
+    boundary = (
+        "<!-- calibration-session-persistence-boundary: "
+        "structured-checklist-evidence,candidate-bound -->"
+    )
+
+    for suffix, contradiction in contradictions.items():
+        installation = tmp_path / f"docs/getting-started/installation{suffix}.md"
+        text = installation.read_text(encoding="utf-8")
+        assert boundary in text
+        installation.write_text(
+            text.replace(boundary, f"{contradiction}\n\n{boundary}", 1),
+            encoding="utf-8",
+        )
+
+    errors = beginner_installation_errors(tmp_path)
+    for suffix in contradictions:
+        relative = f"docs/getting-started/installation{suffix}.md"
+        assert f"{relative}: Session persistence claim omits complete checklistEvidence" in errors
+
+
+def test_wi10_beginner_check_requires_work_item_governance_boundary_in_every_language(
+    tmp_path,
+):
+    copy_documentation(tmp_path)
+    required_copy = {
+        "": (
+            "The Work Item keeps governance rationale, acceptance, owner decisions, "
+            "and links to external review evidence; it does not replace the Session facts."
+        ),
+        ".zh-CN": (
+            "Work Item 保存治理理由、验收、Owner 决定及外部审核证据链接；"
+            "它不会替代 Session 中的事实记录。"
+        ),
+        ".ja": (
+            "Work Item には、ガバナンス上の理由、受入条件、Owner の判断、"
+            "外部レビューの根拠へのリンクを記録します。"
+            "Session の事実記録を置き換えるものではありません。"
+        ),
+    }
+
+    for suffix, copy in required_copy.items():
+        installation = tmp_path / f"docs/getting-started/installation{suffix}.md"
+        text = installation.read_text(encoding="utf-8")
+        assert copy in text
+        installation.write_text(
+            text.replace(copy, "", 1),
+            encoding="utf-8",
+        )
+
+    errors = beginner_installation_errors(tmp_path)
+    for suffix in required_copy:
+        relative = f"docs/getting-started/installation{suffix}.md"
+        assert f"{relative}: missing Work Item governance and external-evidence boundary" in errors
+
+
+def test_wi10_beginner_check_requires_reviewer_label_limitation_in_every_language(tmp_path):
+    copy_documentation(tmp_path)
+    required_copy = {
+        "": (
+            "Recorded `reviewer` and `owner` labels do not prove who performed the review "
+            "or that duties were independently separated."
+        ),
+        ".zh-CN": (
+            "记录下来的 `reviewer` 和 `owner` 标签不能证明实际由谁完成审核，"
+            "也不能证明职责已经独立分离。"
+        ),
+        ".ja": (
+            "保存された `reviewer` / `owner` ラベルは文字列にすぎず、"
+            "レビュー実施者の本人確認も、"
+            "独立した役割分離が成立したことも証明しません。"
+        ),
+    }
+
+    for suffix, copy in required_copy.items():
+        installation = tmp_path / f"docs/getting-started/installation{suffix}.md"
+        text = installation.read_text(encoding="utf-8")
+        assert copy in text
+        installation.write_text(
+            text.replace(copy, "", 1),
+            encoding="utf-8",
+        )
+
+    errors = beginner_installation_errors(tmp_path)
+    for suffix in required_copy:
+        relative = f"docs/getting-started/installation{suffix}.md"
+        assert f"{relative}: missing reviewer/owner label limitation" in errors
+
+
+def test_wi10_beginner_check_rejects_required_session_boundaries_hidden_in_comments(
+    tmp_path,
+):
+    copy_documentation(tmp_path)
+    required_copy = {
+        "": (
+            "The Session persists all schema-supported data needed for the complete "
+            "seven-column review row in the combined stage record.",
+            "The Work Item keeps governance rationale, acceptance, owner decisions, "
+            "and links to external review evidence; it does not replace the Session facts.",
+            "Recorded `reviewer` and `owner` labels do not prove who performed the review "
+            "or that duties were independently separated.",
+        ),
+        ".zh-CN": (
+            "Session 会在合并后的阶段记录中持久化完整七列审核行所需的全部 schema 支持数据。",
+            "Work Item 保存治理理由、验收、Owner 决定及外部审核证据链接；"
+            "它不会替代 Session 中的事实记录。",
+            "记录下来的 `reviewer` 和 `owner` 标签不能证明实际由谁完成审核，"
+            "也不能证明职责已经独立分离。",
+        ),
+        ".ja": (
+            "Session は、7 列の確認表に必要な全項目を、段階ごとの記録として保存します。",
+            "Work Item には、ガバナンス上の理由、受入条件、Owner の判断、"
+            "外部レビューの根拠へのリンクを記録します。"
+            "Session の事実記録を置き換えるものではありません。",
+            "保存された `reviewer` / `owner` ラベルは文字列にすぎず、"
+            "レビュー実施者の本人確認も、"
+            "独立した役割分離が成立したことも証明しません。",
+        ),
+    }
+
+    for suffix, copies in required_copy.items():
+        installation = tmp_path / f"docs/getting-started/installation{suffix}.md"
+        text = installation.read_text(encoding="utf-8")
+        for copy in copies:
+            assert copy in text
+            text = text.replace(copy, f"<!-- {copy} -->", 1)
+        installation.write_text(text, encoding="utf-8")
+
+    errors = beginner_installation_errors(tmp_path)
+    for suffix in required_copy:
+        relative = f"docs/getting-started/installation{suffix}.md"
+        assert f"{relative}: Session persistence claim omits complete checklistEvidence" in errors
+        assert f"{relative}: missing Work Item governance and external-evidence boundary" in errors
+        assert f"{relative}: missing reviewer/owner label limitation" in errors
+
+
+def test_wi10_beginner_check_requires_answer_and_record_evidence_storage_split_in_prompts(
+    tmp_path,
+):
+    copy_documentation(tmp_path)
+    required_copy = {
+        "": (
+            "After I decide, use `answer` to persist the answer fields and resulting stage "
+            "completion state. Use `record-evidence` to persist observed evidence, the "
+            "Candidate change, Owner/Reviewer labels, and PASS/STOP decision details in "
+            "`checklistEvidence`."
+        ),
+        ".zh-CN": (
+            "我决定后，用 `answer` 保存回答字段及由此产生的阶段完成状态；用 "
+            "`record-evidence` 将观察证据、Candidate change、Owner/Reviewer 标签和 "
+            "PASS/STOP 判定详情保存到 `checklistEvidence`。"
+        ),
+        ".ja": (
+            "判断後は、`answer` で回答項目と、それに伴う段階の完了状態を保存します。"
+            "`record-evidence` では、確認した根拠、Candidate の変更案、"
+            "Owner/Reviewer ラベル、PASS/STOP と判断内容を `checklistEvidence` "
+            "に保存します。"
+        ),
+    }
+
+    for suffix, copy in required_copy.items():
+        installation = tmp_path / f"docs/getting-started/installation{suffix}.md"
+        text = installation.read_text(encoding="utf-8")
+        assert copy in text
+        table_marker = (
+            "<!-- calibration-completion-checklist: "
+            "state,evidence,answer,candidate,owner-reviewer,pass-stop -->"
+        )
+        assert table_marker in text
+        text = text.replace(copy, "", 1)
+        installation.write_text(
+            text.replace(table_marker, f"{copy}\n\n{table_marker}", 1),
+            encoding="utf-8",
+        )
+
+    errors = beginner_installation_errors(tmp_path)
+    for suffix in required_copy:
+        relative = f"docs/getting-started/installation{suffix}.md"
+        assert f"{relative}: missing answer/checklistEvidence command storage boundary" in errors
+
+
 def test_wi10_beginner_check_requires_transaction_runtime_terms(tmp_path):
     copy_documentation(tmp_path)
     japanese = tmp_path / "docs/getting-started/installation.ja.md"
     text = japanese.read_text(encoding="utf-8")
     for runtime_term in ("`record-evidence`", "`prepare-candidate`", "consistency unproved"):
-        text = text.replace(runtime_term, "", 1)
+        text = text.replace(runtime_term, "")
     japanese.write_text(text, encoding="utf-8")
 
     errors = beginner_installation_errors(tmp_path)

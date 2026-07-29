@@ -568,21 +568,27 @@ after the user decides.
 
 ### Calibration completion checklist
 
-Use this table as the human review view. In plain language, the Session stores
-your answer, answer type, reason, and stage execution state; the Work Item
-stores supporting evidence, proposed changes, responsible people, and
-PASS/STOP. The persisted JSON Calibration Session
-is authoritative only for the answer type, answer value, reason, stage state,
-events, and checks that its schema stores. It does not store the other checklist
-columns. Record those only in schema-supported Work Item review, acceptance, or
-verification evidence and show both locations. If no valid schema field exists,
-STOP and report a persistence gap; never invent a Summary key or hand-edit this
-document. The agent displays a filled copy of one row in its review output and
-marks it complete only after the persisted Session confirms the answer. A
-question alone is not completion. Use `unknown` and STOP when a fact or
-responsible person is missing.
+Use this table as the human review view.
+The Session persists all schema-supported data needed for the complete seven-column review row in the combined stage record.
+The answer
+type, value, and reason are stored by `answer`; observed evidence, proposed
+Candidate change, `owner` / `reviewer` labels, PASS/STOP decision, decision
+reason, and any retry step are stored by `record-evidence`. Together, the
+persisted stage record is the authoritative Session fact for every review
+column supported by its schema.
+
+The Work Item keeps governance rationale, acceptance, owner decisions, and links to external review evidence; it does not replace the Session facts.
+Recorded `reviewer` and `owner` labels do not prove who performed the review or that duties were independently separated.
+Keep identity and independent
+separation evidence outside the Session and link it from the Work Item. If a
+required fact has no valid schema field, STOP and report a persistence gap;
+never invent a Summary key or hand-edit this document. The agent marks a row
+complete only after the persisted Session confirms both its answer and
+structured evidence. A question alone is not completion. Use `unknown` and
+STOP when a fact or responsible person is missing.
 
 <!-- calibration-session-persistence-boundary: structured-checklist-evidence,candidate-bound -->
+<!-- calibration-session-evidence-boundary: combined-stage-seven-column-record,labels-not-actor-proof -->
 
 Copy this prompt so you do not need to locate or edit a governance file:
 
@@ -592,9 +598,9 @@ Session. Use the ten-row checklist below as the review format. For the current
 stage, show one filled row in plain language: observed evidence, answer
 type/value/reason, proposed Candidate change, intended Owner/Reviewer, and
 PASS/STOP with reason/retry. Show the exact Session record, then wait for my
-decision. After I decide, persist the answer through `answer` and all other
-columns through `record-evidence` using the installed Calibration Session
-interface. Show the Session path and read-only review output proving the
+decision.
+After I decide, use `answer` to persist the answer fields and resulting stage completion state. Use `record-evidence` to persist observed evidence, the Candidate change, Owner/Reviewer labels, and PASS/STOP decision details in `checklistEvidence`.
+Use the installed Calibration Session interface. Show the Session path and read-only review output proving the
 schema-supported record. STOP if any field is missing, the decision is STOP,
 or the answer is Unknown. Do not ask me to edit JSON, invent evidence, prepare
 or activate the Candidate, commit, push, create or merge a PR, release, or
