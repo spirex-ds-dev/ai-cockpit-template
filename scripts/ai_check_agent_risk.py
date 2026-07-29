@@ -12,7 +12,14 @@ import time
 from pathlib import Path
 from typing import Any
 
-from ai_common import PROJECT_ROOT, load_json, non_empty_string, simple_yaml_lists, verification_key
+from ai_common import (
+    PROJECT_ROOT,
+    load_json,
+    non_empty_string,
+    simple_yaml_lists,
+    verification_key,
+    verification_status_for_generation,
+)
 from ai_observability import create_observability, elapsed_ms
 
 
@@ -37,18 +44,10 @@ def matching_required_commands(commands: list[str], required_prefix: str) -> lis
     return [command for command in commands if command == required_prefix]
 
 
-def summary_status(summary: dict[str, Any] | None) -> dict[str, str]:
-    if not isinstance(summary, dict):
-        return {}
-    statuses: dict[str, str] = {}
-    for item in summary.get("verification", []):
-        if (
-            isinstance(item, dict)
-            and verification_key(item)
-            and isinstance(item.get("result"), str)
-        ):
-            statuses[verification_key(item)] = str(item["result"])
-    return statuses
+def summary_status(
+    summary: dict[str, Any] | None, contract: dict[str, Any] | None = None
+) -> dict[str, str]:
+    return verification_status_for_generation(summary, contract or {})
 
 
 def checkpoint_evidence(summary: dict[str, Any] | None) -> list[dict[str, Any]]:
@@ -67,7 +66,11 @@ def validate_agent_risks(
     policy_lists = simple_yaml_lists(POLICY)
     required_gates = policy_lists.get("risks.promptIsAdvice.requiredVerification", [])
     commands = command_prefixes(contract)
-    statuses = summary_status(summary)
+    try:
+        statuses = summary_status(summary, contract)
+    except ValueError as exc:
+        issues.append(str(exc))
+        statuses = {}
     for required in required_gates:
         if not has_required_gate(commands, required):
             issues.append(f"missing required AI hard gate verification: {required}")

@@ -1,0 +1,273 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe-096-resume-verification-generation-corrective-20260729",
+  "mode": "code",
+  "title": "Bind verification evidence to the latest resume generation",
+  "baseCommit": "49b1d726b4cf158208dbab11f5c81d9e1a3408fa",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe-096-resume-verification-generation-corrective-20260729.contract.json",
+    ".ai/work-items/active/rfe-096-resume-verification-generation-corrective-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    "scripts/ai_common.py",
+    "scripts/ai_checkpoint.py",
+    "scripts/ai_check_agent_risk.py",
+    "tests/test_ai_checkpoint.py",
+    "tests/test_ai_check_agent_risk.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-29-rfe-096-resume-verification-generation-corrective.md"
+  ],
+  "outOfScope": [
+    "Adding contractRevisionHistory, an ai-revise-work-item command, or any general Contract revision state machine.",
+    "Reusing, committing, merging, or deleting the dirty RFE-095 investigation worktree before this replacement lifecycle is closed.",
+    "Resuming, merging, or closing Dependabot PR #441 before this corrective Work Item is merged and closed.",
+    "Changing dependency versions, release candidates, tags, provider Releases, archives, public assets, or publication state.",
+    "Weakening checkpoint, agent-risk, preflight, quality, or lifecycle validation."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_checkpoint.py",
+      "reason": "Checkpoint counts currently read every Summary verification result, including records executed before the latest trusted resume transition."
+    },
+    {
+      "path": "scripts/ai_check_agent_risk.py",
+      "reason": "The final risk gate currently accepts pre-resume passed records as current required-gate evidence and therefore cannot consistently enforce the resumed generation."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe-094-checkpoint-enforcement-20260729.contract.json",
+      "reason": "The predecessor established canonical before_edit enforcement and explicitly paused #441 until corrective lifecycle closure."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe-094-checkpoint-enforcement-20260729.summary.json",
+      "reason": "The archived evidence documents why before_edit must contain zero current-generation passes and why workflow defects precede resumed delivery."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "The authoritative execution plan requires process defects to close before #441 and release work continue."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "workflow_process",
+      "evidence_freshness",
+      "resume_lineage"
+    ],
+    "reason": "The change controls which verification records may satisfy governance gates after a trusted resume transition; an incorrect cutoff could accept stale evidence or discard valid current evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user reviewed the Sol root-cause plan, switched execution back to Terra, and explicitly instructed continuation."
+  },
+  "preReviewWarnings": [
+    "The latest valid resumeHistory transition is the only generation boundary; do not infer freshness from file order, commit age, or current wall-clock time.",
+    "Malformed non-empty resumeHistory timestamps must fail closed rather than silently restoring pre-resume evidence.",
+    "The non-resumed Work Item path must remain backward compatible."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "The replacement must prove its own before_edit record was created before tests or production changes and that final evidence belongs to the same Contract."
+  },
+  "acceptance": [
+    "A resumed Work Item with passed or failed verification records executed before its latest resumeHistory.recordedAt produces before_edit requiredChecksPassed equal to zero.",
+    "A verification record executed after the latest resumeHistory.recordedAt is current-generation evidence; recording before_edit after that record produces a nonzero count and remains rejected by the agent-risk gate.",
+    "When resumeHistory contains multiple valid transitions, only the latest transition defines the active verification generation.",
+    "A non-empty resumeHistory with a malformed latest recordedAt fails closed in checkpoint and agent-risk behavior rather than trusting historical verification.",
+    "A Work Item without resumeHistory preserves the existing verification-status and checkpoint behavior.",
+    "Checkpoint display, next-action selection, checkpoint recording, and agent-risk required-gate validation use one shared generation-aware interpretation instead of divergent duplicate logic.",
+    "English and Japanese governance guidance explains that resumed historical verification remains audit history but cannot satisfy current-generation gates.",
+    "Instruction-plan-implementation-acceptance traceability maps this failure, the rejected RFE-095 overdesign, the executable regressions, and lifecycle evidence without claiming #441 is complete.",
+    "Before #441 resumes, this Work Item has archived Contract/Summary evidence, a PR whose exact Head SHA passes required Hosted CI, a merged PR, successful ai-close-work-item evidence, and local/remote corrective branch cleanup."
+  ],
+  "guidelines": [
+    "Use red-first tests that reproduce observable checkpoint and agent-risk behavior; do not assert only source text.",
+    "Keep the implementation minimal and deterministic; reuse validated resumeHistory evidence and do not add a second Contract lifecycle model.",
+    "Treat malformed generation evidence as an explicit error and preserve ordinary non-resumed behavior.",
+    "Do not weaken, skip, or remove any existing required verification gate.",
+    "Record the failed RFE-095 path and replacement lifecycle through bidirectional instruction-plan-implementation-acceptance traceability."
+  ],
+  "intent": {
+    "problem": "Dependabot #441 was correctly resumed after RFE-094, but its existing Summary still contained verification records from the earlier attempt. The canonical before_edit checkpoint counted those stale records as already passed and the final agent-risk gate then rejected the Work Item after expensive quality execution. RFE-095 identified this cause but expanded into an unsupported Contract revision system and created invalid future-dated evidence.",
+    "constraints": [
+      "Preserve RFE-095 untouched as failed investigation evidence until this clean replacement closes.",
+      "Do not add Contract revision history, a new lifecycle command, or a generalized migration framework.",
+      "Use only the latest trusted resumeHistory transition as the current verification-generation cutoff.",
+      "Fail closed on malformed non-empty generation evidence.",
+      "Complete the corrective PR, Hosted CI, merge, closure, and cleanup before resuming #441."
+    ],
+    "rationale": "Filtering verification records at both checkpoint and risk-gate consumers by the latest trusted resume timestamp repairs the root cause at the evidence boundary. It is smaller and safer than adding another Contract mutation protocol, and it makes every future resume automatically invalidate stale gate results."
+  },
+  "rawUserRequest": "Switch back to Terra, acknowledge the Sol plan, and continue. Fix the recurring process root cause before resuming #441; make the correction durable in the process and executable checks.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:terra-continue-after-sol-audit",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:cff623d4dc05fc4aeb26a49e4bb3c43adb920c71b04cf58a3a10be4a373046ca"
+  },
+  "declaredIntent": {
+    "summary": "Make resumed Work Items consume only current-generation verification evidence, close the corrective lifecycle, and then safely resume #441.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A resumed Work Item retains pre-resume passed and failed verification records.",
+      "expected": "The canonical before_edit checkpoint counts zero current-generation passes.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Create a real Contract/Summary fixture with an old verification timestamp and a later resume transition, call record_checkpoint, and assert requiredChecksPassed is zero."
+    },
+    {
+      "scenario": "A resumed Work Item records verification before the new before_edit checkpoint.",
+      "expected": "The checkpoint exposes the late execution with a nonzero count and agent-risk rejects it.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Create a post-resume passed verification fixture, record before_edit, and validate the exact agent-risk rejection."
+    },
+    {
+      "scenario": "A Work Item has been resumed more than once.",
+      "expected": "Only records executed at or after the latest transition are eligible.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use two ordered transitions and verification records around both boundaries; assert only the final generation is returned."
+    },
+    {
+      "scenario": "The latest resume transition has an invalid recordedAt value.",
+      "expected": "Checkpoint and agent-risk fail closed with a precise generation-evidence error.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use malformed non-empty resumeHistory and assert the public script/validator behavior rejects it."
+    },
+    {
+      "scenario": "A normal Work Item has never been resumed.",
+      "expected": "Existing verification status and checkpoint counting remain unchanged.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run the existing non-resume test corpus plus a compatibility fixture without resumeHistory."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized continuous process correction and instructed Terra to continue the reviewed Sol plan."
+  },
+  "rollbackNote": "Revert this replacement Work Item diff; leave the preserved RFE-095 investigation and paused #441 unchanged.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 664
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe-096-resume-verification-generation-corrective-20260729.json",
+    "baseCommit": "49b1d726b4cf158208dbab11f5c81d9e1a3408fa",
+    "initialScopeDigest": "da53722d4873ebbfc22feff2eef8aa1f1868a123871aea9e22131e0978e9ef89",
+    "contractSkeletonDigest": "81e610b2ab5e7674c00c557f180e1efecc969ef8a6fd1c60da4f80baa226f3d1"
+  }
+}

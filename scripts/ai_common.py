@@ -10,6 +10,7 @@ import os
 import re
 import subprocess
 import shlex
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable
 
@@ -151,6 +152,59 @@ def load_json(path: Path) -> dict[str, Any]:
 def save_json(path: Path, data: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def _aware_iso_datetime(value: Any, *, error: str) -> datetime:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(error)
+    try:
+        parsed = datetime.fromisoformat(value)
+    except ValueError as exc:
+        raise ValueError(error) from exc
+    if parsed.utcoffset() is None:
+        raise ValueError(error)
+    return parsed
+
+
+def verification_status_for_generation(
+    summary: dict[str, Any] | None, contract: dict[str, Any]
+) -> dict[str, str]:
+    """Return verification statuses eligible for the active resume generation."""
+    if not isinstance(summary, dict):
+        return {}
+
+    history = contract.get("resumeHistory")
+    cutoff: datetime | None = None
+    if history is not None:
+        if not isinstance(history, list) or not history or not isinstance(history[-1], dict):
+            raise ValueError("latest resumeHistory.recordedAt is invalid")
+        cutoff = _aware_iso_datetime(
+            history[-1].get("recordedAt"),
+            error="latest resumeHistory.recordedAt is invalid",
+        )
+
+    statuses: dict[str, str] = {}
+    verification = summary.get("verification", [])
+    if not isinstance(verification, list):
+        return statuses
+    for item in verification:
+        if (
+            not isinstance(item, dict)
+            or not verification_key(item)
+            or not isinstance(item.get("result"), str)
+        ):
+            continue
+        if cutoff is not None:
+            if item["result"] == "not_run" and not item.get("executedAt"):
+                continue
+            executed_at = _aware_iso_datetime(
+                item.get("executedAt"),
+                error="verification record executedAt is required after resume",
+            )
+            if executed_at < cutoff:
+                continue
+        statuses[verification_key(item)] = str(item["result"])
+    return statuses
 
 
 def canonical_json_hash(value: Any, *, length: int = 16) -> str:
