@@ -8,6 +8,7 @@ from ai_common import validate_scenario_coverage
 
 
 def write_contract(path: Path, data: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data), encoding="utf-8")
 
 
@@ -90,6 +91,124 @@ def conservative_contract() -> dict:
 
 def signal_map(report: dict) -> dict[str, str]:
     return {item["name"]: item["value"] for item in report["signals"]}
+
+
+def write_capability_truth_matrix(root: Path) -> None:
+    """Create the interrupted installation evidence shape in a temporary project."""
+    installation = root / "docs/getting-started/installation.md"
+    installation.parent.mkdir(parents=True)
+    installation.write_text("installation guidance\n", encoding="utf-8")
+    test_evidence = root / "tests/test_installation.py"
+    test_evidence.parent.mkdir(parents=True)
+    test_evidence.write_text("def test_installation():\n    pass\n", encoding="utf-8")
+    matrix_path = root / "docs/reference/capability-truth-matrix.json"
+    matrix_path.parent.mkdir(parents=True)
+    (matrix_path.with_suffix(".md")).write_text("# Capability Truth Matrix\n", encoding="utf-8")
+    matrix_path.write_text(
+        json.dumps(
+            {
+                "capabilities": [
+                    {
+                        "id": identifier,
+                        "sourceEvidence": ["docs/getting-started/installation.md"],
+                        "testEvidence": ["tests/test_installation.py"],
+                    }
+                    for identifier in (
+                        "project_calibration_profile_proposal",
+                        "ten_stage_calibration_session",
+                        "interactive_installation_wizard",
+                        "bootstrap_wizard_lifecycle",
+                    )
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def capability_contract_path(root: Path) -> Path:
+    return root / ".ai/work-items/active/task.contract.json"
+
+
+def capability_contract() -> dict:
+    contract = ready_contract()
+    contract["outOfScope"] = ["scripts/**"]
+    return contract
+
+
+def test_preflight_rejects_installation_scope_without_capability_matrix(tmp_path):
+    write_capability_truth_matrix(tmp_path)
+    contract = capability_contract()
+    contract["scope"] = ["docs/getting-started/installation.md"]
+    path = capability_contract_path(tmp_path)
+    write_contract(path, contract)
+
+    report = ai_preflight_review.derive_report(
+        contract, contract_path=path, policy_path=tmp_path / "preflight_review_policy.yaml"
+    )
+
+    assert report["status"] == "not_ready"
+    signal = next(item for item in report["signals"] if item["name"] == "Evidence Dependency")
+    assert signal["value"] == "Inconsistent"
+    assert signal["evidence"] == [
+        "Capability Truth evidence dependency requires Contract scope coverage for "
+        "docs/reference/capability-truth-matrix.json: "
+        "docs/getting-started/installation.md is bound to capabilities "
+        "[bootstrap_wizard_lifecycle, interactive_installation_wizard, "
+        "project_calibration_profile_proposal, ten_stage_calibration_session]"
+    ]
+
+
+@pytest.mark.parametrize(
+    ("scope", "expected"),
+    [
+        (
+            [
+                "docs/getting-started/installation.md",
+                "docs/reference/capability-truth-matrix.json",
+            ],
+            "Ready",
+        ),
+        (["docs/unrelated.md"], "Not Applicable"),
+        (["docs/reference/capability-truth-matrix.json"], "Ready"),
+        (["docs/**"], "Ready"),
+    ],
+)
+def test_preflight_capability_dependency_negative_controls(tmp_path, scope, expected):
+    write_capability_truth_matrix(tmp_path)
+    contract = capability_contract()
+    contract["scope"] = scope
+    path = capability_contract_path(tmp_path)
+    write_contract(path, contract)
+
+    report = ai_preflight_review.derive_report(
+        contract, contract_path=path, policy_path=tmp_path / "preflight_review_policy.yaml"
+    )
+
+    assert report["status"] == "ready"
+    assert signal_map(report)["Evidence Dependency"] == expected
+
+
+def test_preflight_rejects_malformed_configured_capability_matrix(tmp_path):
+    matrix_path = tmp_path / "docs/reference/capability-truth-matrix.json"
+    matrix_path.parent.mkdir(parents=True)
+    matrix_path.write_text("{", encoding="utf-8")
+    matrix_path.with_suffix(".md").write_text("# Capability Truth Matrix\n", encoding="utf-8")
+    contract = capability_contract()
+    path = capability_contract_path(tmp_path)
+    write_contract(path, contract)
+
+    report = ai_preflight_review.derive_report(
+        contract, contract_path=path, policy_path=tmp_path / "preflight_review_policy.yaml"
+    )
+
+    assert report["status"] == "not_ready"
+    signal = next(item for item in report["signals"] if item["name"] == "Evidence Dependency")
+    assert signal["value"] == "Inconsistent"
+    assert signal["evidence"] == [
+        "docs/reference/capability-truth-matrix.json: cannot load JSON matrix: "
+        "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+    ]
 
 
 def test_scenario_verification_plan_rejects_empty_value():
@@ -199,6 +318,7 @@ def test_preflight_signals_expose_shared_protocol_envelope(tmp_path):
         "Unknowns": "Ready",
         "Acceptance": "Ready",
         "Sources": "Ready",
+        "Evidence Dependency": "Not Applicable",
         "Scenario Coverage": "Ready",
         "Verification": "Ready",
         "Critical Domain Guard": "Ready",
