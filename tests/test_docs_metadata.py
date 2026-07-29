@@ -1342,7 +1342,7 @@ def test_check_rejects_missing_front_matter_field(tmp_path):
 def test_check_rejects_prerequisites_after_install_command(tmp_path):
     copy_documentation(tmp_path)
     readme = tmp_path / "README.md"
-    marker = "<!-- install-prerequisites: python3.10,git-initial-commit,curl,gnu-make,posix -->"
+    marker = "<!-- install-prerequisites: python3.11,git-initial-commit,curl,gnu-make,posix -->"
     text = readme.read_text(encoding="utf-8").replace(marker, "") + f"\n{marker}\n"
     readme.write_text(text, encoding="utf-8")
 

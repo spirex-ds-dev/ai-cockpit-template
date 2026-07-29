@@ -21,7 +21,7 @@ keywords:
 正規 public repository
 https://github.com/spirex-ds-dev/ai-cockpit-template.git
 から AI Cockpit 導入を始めたいです。最初は読み取り専用で、対象 Git リポジトリ、
-initial commit、clean worktree、Python 3.10+、Git、GNU Make、curl を確認してください。
+initial commit、clean worktree、Python 3.11+、Git、GNU Make、curl を確認してください。
 public release.json から固定 published tag を解決し、release/tag/digest evidence を
 平易な日本語で説明してください。正確な計画を示し、この install step だけを
 私が承認するまで download/execute しないでください。

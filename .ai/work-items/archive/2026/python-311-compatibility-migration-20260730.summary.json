@@ -1,0 +1,662 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "python-311-compatibility-migration-20260730",
+  "contractPath": ".ai/work-items/archive/2026/python-311-compatibility-migration-20260730.contract.json",
+  "changedFiles": [
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Removes Python 3.10 from blocking compatibility and uses Python 3.11 for lockfile reproduction."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Makes Python 3.11 the canonical lockfile compiler baseline."
+    },
+    {
+      "path": "pyproject.toml",
+      "reason": "Raises Ruff and Mypy targets to Python 3.11."
+    },
+    {
+      "path": "requirements-dev.lock",
+      "reason": "Regenerated deterministically on Python 3.11 while retaining stevedore 5.8.0."
+    },
+    {
+      "path": "scripts/ai_doctor.py",
+      "reason": "Rejects runtimes below Python 3.11."
+    },
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "Synchronizes a changed requirements lockfile digest into release.json during supply-chain refresh."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Validates the Python 3.11 public prerequisite marker."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Covers the hosted matrix, canonical lockfile baseline, and deferred stevedore boundary."
+    },
+    {
+      "path": "tests/test_supply_chain.py",
+      "reason": "Regresses the changed-lockfile supply-chain refresh path."
+    },
+    {
+      "path": "tests/test_ci_quality_orchestration.py",
+      "reason": "Covers the Python 3.11 and 3.14 compatibility matrix."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Covers the new public prerequisite marker."
+    },
+    {
+      "path": "tests/test_doctor.py",
+      "reason": "Covers rejection below and acceptance at Python 3.11."
+    },
+    {
+      "path": "README.md",
+      "reason": "Updates the English prerequisite."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Updates the Chinese prerequisite."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Updates the Japanese prerequisite."
+    },
+    {
+      "path": "docs/getting-started/30-second-start.md",
+      "reason": "Updates the English quick-start prerequisite."
+    },
+    {
+      "path": "docs/getting-started/30-second-start.zh-CN.md",
+      "reason": "Updates the Chinese quick-start prerequisite."
+    },
+    {
+      "path": "docs/getting-started/30-second-start.ja.md",
+      "reason": "Updates the Japanese quick-start prerequisite."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Updates the English installation prerequisite."
+    },
+    {
+      "path": "docs/getting-started/installation.zh-CN.md",
+      "reason": "Updates the Chinese installation prerequisite."
+    },
+    {
+      "path": "docs/getting-started/installation.ja.md",
+      "reason": "Updates the Japanese installation prerequisite."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Aligns release-blocking distribution compatibility."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records the migration-before-#444 serial order."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Records the directive-to-Work-Item and #444 dependency relation."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated cockpit status."
+    },
+    {
+      "path": ".ai/cockpit/sbom.json",
+      "reason": "Regenerated supply-chain evidence."
+    },
+    {
+      "path": ".ai/cockpit/provenance.json",
+      "reason": "Regenerated supply-chain evidence."
+    },
+    {
+      "path": ".ai/cockpit/release-digests.json",
+      "reason": "Regenerated release evidence."
+    },
+    {
+      "path": "release.json",
+      "reason": "Regenerated release evidence."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Regenerated capability evidence."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Regenerated Japanese capability evidence."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Regenerated Japanese capability evidence."
+    },
+    {
+      "path": ".ai/work-items/starts/python-311-compatibility-migration-20260730.json",
+      "reason": "Work Item start receipt."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/python-311-compatibility-migration-20260730.contract.json",
+      "reason": "Governing Contract."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/python-311-compatibility-migration-20260730.summary.json",
+      "reason": "Change summary and verification handoff."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/python-311-compatibility-migration-20260730.outcome.json",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/python-311-compatibility-migration-20260730.outcome.md",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/python-311-compatibility-migration-20260730.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "conversation:python-311-authorized-20260730",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/444",
+    "requirements-dev.in",
+    "requirements-dev.lock",
+    ".github/workflows/compatibility.yml",
+    "README.md",
+    "docs/reference/distribution.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:50:53.916184+00:00",
+      "exitCode": 0,
+      "durationMs": 38,
+      "outputDigest": "75af26f0c5a236057faa915e2829c84f3f00127c3657d22dc97b67fed3ea64da",
+      "commandHash": "ac1637641578851f5bc65ac3fb3798209ae63454cfbae916bf8072c55724ecbc",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "f16013442c6846f2a4d312061142f675e21aed83382faa2ee99891af011518bc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_work_item.py .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json work item contract check passed: .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_work_item.py .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json work item contract check passed: .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "outputBytes": 257
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:50:54.237815+00:00",
+      "exitCode": 0,
+      "durationMs": 243,
+      "outputDigest": "d19f5a8446e01cc6c893c0b769307223870dd9f6c701d097c873a0eafb113732",
+      "commandHash": "d708c24a09588c728b3dcb37412a2cdc462240b2a050494d277ed14e966de41b",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "f16013442c6846f2a4d312061142f675e21aed83382faa2ee99891af011518bc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scope.py .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json scope guard passed: 33 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scope.py .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json scope guard passed: 33 changed path(s) covered",
+      "outputBytes": 187
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:50:54.483552+00:00",
+      "exitCode": 0,
+      "durationMs": 162,
+      "outputDigest": "21d0ba405aa812075b0d26ce35b96e65d6b76a8d92365b7bccf994d0034ce538",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "f16013442c6846f2a4d312061142f675e21aed83382faa2ee99891af011518bc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guards.py --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/compatibility.y",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guards.py --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json [warning] restricted_write: .ai/cockpit/provenance.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/release-digests.json (.ai/**) - AI governance configuration. [warning] restricted_write: .ai/cockpit/sbom.json (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/compatibility.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 5 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 717
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/python-311-compatibility-migration-20260730.contract.json SUMMARY=.ai/work-items/active/python-311-compatibility-migration-20260730.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:50:54.831529+00:00",
+      "exitCode": 0,
+      "durationMs": 272,
+      "outputDigest": "286ddfee3203557409623aba67693444aca9342de52b880b4cf4ce5984fc6536",
+      "commandHash": "ae5268f1c84d4ec1d986bb4984899240bf5bc1d79f1f4116b1b55f6eb936f824",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "f16013442c6846f2a4d312061142f675e21aed83382faa2ee99891af011518bc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_checkpoint.py --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `python-311-compatibility-migration-20260730` - Contract Hash: `8ec5ee8ddce7593e` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `",
+      "outputTail": "` — covered by Contract scope - [active_owned] `docs/getting-started/30-second-start.ja.md` — covered by Contract scope - [active_owned] `docs/getting-started/30-second-start.md` — covered by Contract scope - [active_owned] `docs/getting-started/30-second-start.zh-CN.md` — covered by Contract scope - [active_owned] `docs/getting-started/installation.ja.md` — covered by Contract scope - [active_owned] `docs/getting-started/installation.md` — covered by Contract scope - [active_owned] `docs/getting-started/installation.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/distribution.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `pyproject.toml` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `requirements-dev.lock` — covered by Contract scope - [active_owned] `scripts/ai_doctor.py` — covered by Contract scope - [active_owned] `scripts/check_docs_metadata.py` — covered by Contract scope - [active_owned] `scripts/check_supply_chain.py` — covered by Contract scope - [active_owned] `tests/test_ci_quality_orchestration.py` — covered by Contract scope - [active_owned] `tests/test_docs_metadata.py` — covered by Contract scope - [active_owned] `tests/test_doctor.py` — covered by Contract scope - [active_owned] `tests/test_supply_chain.py` — covered by Contract scope - [active_owned] `tests/test_workflows.py` — covered by Contract scope ## Next Action - Run or record required verification: aiSummary",
+      "outputBytes": 7778
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:50:55.047274+00:00",
+      "exitCode": 0,
+      "durationMs": 130,
+      "outputDigest": "677ae898cdde38638da11bc73db7e47d51d2e700977ed6af4166ab6cecbd25ec",
+      "commandHash": "3550073a6a77e35cb41f5a5c0a08d737a7d2f2491da9ec337948768dc8e133f0",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "f16013442c6846f2a4d312061142f675e21aed83382faa2ee99891af011518bc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_review_policy.py --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json review policy matched 8 path(s) [review] .ai/work-items/starts/python-311-compatibility-migration-20260730.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json [review] .github/workflows/compatibility.yml [review] Makefile [review] scripts/ai",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_review_policy.py --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json review policy matched 8 path(s) [review] .ai/work-items/starts/python-311-compatibility-migration-20260730.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/provenance.json [review] .ai/cockpit/release-digests.json [review] .ai/cockpit/sbom.json [review] .github/workflows/compatibility.yml [review] Makefile [review] scripts/ai_doctor.py review focus recorded: 3 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 588
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:50:55.261921+00:00",
+      "exitCode": 0,
+      "durationMs": 137,
+      "outputDigest": "7129fb431d5d59c569f22fa9d6ff9b30876753d23ac690d93f14eed56841f07c",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "f16013442c6846f2a4d312061142f675e21aed83382faa2ee99891af011518bc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 131
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:50:55.464333+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "a2e66935f0b5b56e7ea492a898b6ab49413746bdde21a6663eaa1d889cb54e56",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "f16013442c6846f2a4d312061142f675e21aed83382faa2ee99891af011518bc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/python-311-compatibility-migration-20260730.contract.json SUMMARY=.ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:50:55.589859+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "ab2a1e64bb830a2d77628bf71a5e1f8264644104bb18a16a0506c6e6da260341",
+      "commandHash": "6fe5d702778a09e70d471a181405523f8640fda8dd36c6debf4527d5522114bd",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "f16013442c6846f2a4d312061142f675e21aed83382faa2ee99891af011518bc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json [warning] missing_scenario_coverage: - scenario coverage is missing for medium/high risk report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 390
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/python-311-compatibility-migration-20260730.contract.json SUMMARY=.ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:50:55.965169+00:00",
+      "exitCode": 0,
+      "durationMs": 274,
+      "outputDigest": "9f64d8e9201e61260f23cbb7571764ab1a294fcecc35032534de1d2060e70b40",
+      "commandHash": "d341b9905fd6a8bd23e019d1654a9277ae9883b5f84dd272af9aa06edc299c58",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "f16013442c6846f2a4d312061142f675e21aed83382faa2ee99891af011518bc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guidelines.py --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guidelines.py --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputBytes": 305
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:50:56.334726+00:00",
+      "exitCode": 0,
+      "durationMs": 289,
+      "outputDigest": "e16f6b1e486512f613ce1dcf8d9cdf9110a134db4812bae0049e71e8a11bf37b",
+      "commandHash": "351694bd67494098b20c37123221d0dc2ec5f40bb745ce2b4b2c7a6ec61cea78",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "f16013442c6846f2a4d312061142f675e21aed83382faa2ee99891af011518bc",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json ## Diff Ownership Preview - active_owned: `33`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/provenance.json` — covered by Contract scope - [active_owned] `.ai/cockpit/release-digests.j",
+      "outputTail": "d` — covered by Contract scope - [active_owned] `README.zh-CN.md` — covered by Contract scope - [active_owned] `docs/getting-started/30-second-start.ja.md` — covered by Contract scope - [active_owned] `docs/getting-started/30-second-start.md` — covered by Contract scope - [active_owned] `docs/getting-started/30-second-start.zh-CN.md` — covered by Contract scope - [active_owned] `docs/getting-started/installation.ja.md` — covered by Contract scope - [active_owned] `docs/getting-started/installation.md` — covered by Contract scope - [active_owned] `docs/getting-started/installation.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/distribution.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `pyproject.toml` — covered by Contract scope - [active_owned] `release.json` — covered by Contract scope - [active_owned] `requirements-dev.lock` — covered by Contract scope - [active_owned] `scripts/ai_doctor.py` — covered by Contract scope - [active_owned] `scripts/check_docs_metadata.py` — covered by Contract scope - [active_owned] `scripts/check_supply_chain.py` — covered by Contract scope - [active_owned] `tests/test_ci_quality_orchestration.py` — covered by Contract scope - [active_owned] `tests/test_docs_metadata.py` — covered by Contract scope - [active_owned] `tests/test_doctor.py` — covered by Contract scope - [active_owned] `tests/test_supply_chain.py` — covered by Contract scope - [active_owned] `tests/test_workflows.py` — covered by Contract scope",
+      "outputBytes": 3013
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:57:07.585786+00:00",
+      "exitCode": 0,
+      "durationMs": 371139,
+      "outputDigest": "a2f759d2dc15f027bd239db13cd49c496a323bd73d8eb226c9566d85b6972025",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "f16013442c6846f2a4d312061142f675e21aed83382faa2ee99891af011518bc",
+      "outputSummary": "\"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-full \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-fast-static \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 python3 scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"6e19abce623d-local-20",
+      "outputTail": "d_test_lint_and_format 5.13s call tests/test_system_invariants.py::test_system_invariants_allow_legacy_archive_summary_versions[None] 4.15s call tests/test_start_and_archive.py::test_ai_start_journeys 2.49s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 2.46s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 2.34s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 2.33s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 2.31s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[True-False] 1569 passed, 3 warnings in 359.88s (0:05:59) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 python3 scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.Tl426TZIXP/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.Tl426TZIXP/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.Tl426TZIXP/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.Tl426TZIXP/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/6e19abce623d-local-20260729T215056Z-31746-0/summary.json",
+      "outputBytes": 48824
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/python-311-compatibility-migration-20260730.contract.json SUMMARY=.ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:57:07.987899+00:00",
+      "exitCode": 0,
+      "durationMs": 290,
+      "outputDigest": "483cfff8e3a8d0bda770ae81bf7fef60a925d6d89cd384894d400e558c38dddf",
+      "commandHash": "1ca3e560a3d23e1c83c18ff5bfb03fb854772ae53f900dda12a2d0742031fe8b",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "fac21a216e1d14a2f4073a99967644143e7e665f0dbfd60e6cd209385cb82de7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_generate_status.py .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_generate_status.py .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 402
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/python-311-compatibility-migration-20260730.contract.json SUMMARY=.ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:57:08.894608+00:00",
+      "exitCode": 0,
+      "durationMs": 275,
+      "outputDigest": "deeb1775c9887951fd6aa1f3303eeda36f40c1e155b90bc30ae9da77e0296fcb",
+      "commandHash": "db480320d862a1f63bb3cedc7e10f5796b092b1246e08ca6f98c147e374a404b",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "3fe978ac583be704ceee074e9889974a1e409921a65818a84283b3c05480a9d1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 330
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:57:09.297804+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "1156c9e1bf158b3423d353f4c44540bca1436905785abef51a57014ed23ad1e4",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "c6756bed659309052a1cc2fef19159bc4716c3200174560d9d2bfdfe4c45ae3a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 108
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/python-311-compatibility-migration-20260730.contract.json SUMMARY=.ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:57:09.426992+00:00",
+      "exitCode": 0,
+      "durationMs": 50,
+      "outputDigest": "57f40db1b21f1f20b3db612720b9f524ab33b6226ea91170c77d8d4a76b4060d",
+      "commandHash": "997c5a6fb9fbaeb8d5edce543dec714b8d846b83e3ecc8ddd556c515ff74d92d",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "c6756bed659309052a1cc2fef19159bc4716c3200174560d9d2bfdfe4c45ae3a",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_agent_risk.py --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_agent_risk.py --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json --summary .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 310
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/python-311-compatibility-migration-20260730.summary.json CONTRACT=.ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T21:57:10.643584+00:00",
+      "exitCode": 0,
+      "durationMs": 116,
+      "outputDigest": "96ee10f42ae1cb435d3c2dd6e4576bd13a2a532726bdd11ebeab1b8087cc6c06",
+      "commandHash": "0b9639fb1b3bf4a482e35381ce0046f665ec4e212ca3bedd2d99b647c079730d",
+      "contractHash": "8ec5ee8ddce7593ebe8f0c064924868487c6d293747bdbc1a122767e47e024e9",
+      "commitSha": "6e19abce623dd8a1ad15cd03ba8f243c18acb171",
+      "executionContractPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "worktreeDigest": "46d4b5f5550e8a948855a2c8edadde2348e4921ce42930738f7900c27b6283b7",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_summary.py .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json ai summary check passed: .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_summary.py .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json --contract .ai/work-items/active/python-311-compatibility-migration-20260730.contract.json ai summary check passed: .ai/work-items/active/python-311-compatibility-migration-20260730.summary.json",
+      "outputBytes": 337
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Treat the Python 3.11 minimum as a public compatibility contract, not a local tooling preference.",
+      "compliant": true,
+      "evidence": "Runtime diagnostic, static targets, CI, lockfile normalization, distribution documentation, and three public languages were updated together."
+    },
+    {
+      "guideline": "Regenerate lockfile and source-bound evidence with their declared commands; do not hand-edit generated data.",
+      "compliant": true,
+      "evidence": "Lockfile was compiled under Python 3.11; supply-chain, capability-truth, and Japanese evidence used their declared refresh/write commands."
+    },
+    {
+      "guideline": "Preserve historical archive evidence and keep #444's stevedore change on its own Work Item branch.",
+      "compliant": true,
+      "evidence": "No archived evidence was edited and requirements-dev.lock retains stevedore 5.8.0."
+    },
+    {
+      "guideline": "Keep English, Chinese, and Japanese prerequisites semantically aligned.",
+      "compliant": true,
+      "evidence": "All README, quick-start, and installation variants state Python 3.11+."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "Intentional public removal of Python 3.10 support; hosted CI remains the required external confirmation before merge."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "severity": "resolved",
+      "detail": "The local host lacked Python 3.11; an attested Python 3.11.15 toolchain and isolated temporary pip-tools environment were used only to regenerate and reproduce the lockfile."
+    },
+    {
+      "severity": "resolved",
+      "detail": "Supply-chain refresh did not synchronize requirementsLockDigest after a lockfile change. The refresh implementation and a changed-lockfile regression test now bind release.json to the refreshed lock digest."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "high",
+      "area": "compatibility",
+      "detail": "Consumers running Python 3.10 can no longer use the new baseline; this is the explicitly authorized migration and requires release-note visibility.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Confirm intentional Python 3.10 support removal.",
+      "Confirm #444 is absent and stevedore remains 5.8.0.",
+      "Review CI matrix and multilingual public prerequisite alignment."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "updated and tested",
+    "userVisibleOutput": "three public languages aligned",
+    "persistence": "not_applicable",
+    "localization": "English, Chinese, and Japanese prerequisites aligned",
+    "generatedArtifacts": "regenerated by declared commands",
+    "makeEntrypoints": "lockfile reproduction verified under Python 3.11"
+  },
+  "userCorrectionsCaptured": [
+    {
+      "correction": "Raise the minimum Python version to 3.11 in an independent migration before merging #444.",
+      "evidence": "conversation:python-311-authorized-20260730"
+    }
+  ],
+  "userCorrectionSolidification": [
+    {
+      "mechanism": "Dedicated Contract, serial plan entry, traceability directive, regression tests, and lockfile pin assertion.",
+      "status": "implemented"
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "8ec5ee8ddce7593e",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "8ec5ee8ddce7593e",
+      "acceptanceCount": 5,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [],
+  "overclaimPrevention": "This Work Item proves local compatibility migration evidence only. Full quality must be rerun after the supply-chain refresh corrective change, and hosted CI and review are still required; it does not claim #444 has been merged.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-30T00:00:00Z",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+        ],
+        "reason": "Serial order inserts this migration before #444."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/python-311-compatibility-migration-20260730.contract.json",
+          ".ai/work-items/archive/2026/python-311-compatibility-migration-20260730.summary.json"
+        ],
+        "reason": "Scope, implementation, verification, and #444 boundary match."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "Makefile",
+          "README.md",
+          "README.zh-CN.md",
+          "README.ja.md",
+          "docs/getting-started/30-second-start.md",
+          "docs/getting-started/30-second-start.zh-CN.md",
+          "docs/getting-started/30-second-start.ja.md",
+          "docs/getting-started/installation.md",
+          "docs/getting-started/installation.zh-CN.md",
+          "docs/getting-started/installation.ja.md",
+          "docs/reference/distribution.md",
+          "docs/reference/japanese-capability-assessment.md",
+          "scripts/ai_doctor.py",
+          "scripts/check_docs_metadata.py"
+        ],
+        "reason": "Public prerequisite and enforced minimum are Python 3.11+."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "README.md",
+          "README.zh-CN.md",
+          "README.ja.md",
+          "docs/getting-started/installation.md",
+          "docs/getting-started/installation.zh-CN.md",
+          "docs/getting-started/installation.ja.md"
+        ],
+        "reason": "All three languages make the same minimum-version claim."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "requirements-dev.lock",
+          "docs/reference/remediation-instruction-traceability.json"
+        ],
+        "reason": "The #444 update remains deferred, historical archives remain unchanged, and the intentional Python 3.10 removal is recorded."
+      }
+    ]
+  },
+  "taskOutcome": {
+    "status": "completed",
+    "jsonPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.outcome.json",
+    "markdownPath": ".ai/work-items/active/python-311-compatibility-migration-20260730.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2
+  },
+  "archiveSequence": 671
+}

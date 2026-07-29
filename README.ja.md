@@ -113,9 +113,9 @@ Cockpit が更新される。
 レビューは文脈から始まる。
 ```
 
-<!-- install-prerequisites: python3.10,git-initial-commit,curl,gnu-make,posix -->
+<!-- install-prerequisites: python3.11,git-initial-commit,curl,gnu-make,posix -->
 
-**前提条件:** POSIX シェルを利用できる Linux、macOS、または WSL、Python 3.10 以上、Git、curl、GNU Make、および 1 件以上のコミットがあるクリーンな Git リポジトリが必要です。選択したスタックのフォーマッター、テストランナー、SDK、ビルドプラグインも事前にインストールしてください。
+**前提条件:** POSIX シェルを利用できる Linux、macOS、または WSL、Python 3.11 以上、Git、curl、GNU Make、および 1 件以上のコミットがあるクリーンな Git リポジトリが必要です。選択したスタックのフォーマッター、テストランナー、SDK、ビルドプラグインも事前にインストールしてください。
 
 バージョン履歴と能力の進化は、この短い入口ページではなく [ロードマップ](docs/roadmap.md) で管理します。
 
@@ -309,7 +309,7 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 
 ## 動作環境要件
 
-- Python 3.10 以上。
+- Python 3.11 以上。
 - merge-base および three-dot diff (`...`) をサポートする Git 環境。
 - POSIX 準拠のシェルおよび GNU Make 実行環境。
 - Linux および macOS は、ローカル実行および CI 用として公式にサポートされています。ネイティブの Windows シェルはサポートされていないため、WSL (Windows Subsystem for Linux) または他の POSIX ターミナルで実行してください。

@@ -77,7 +77,7 @@ keywords:
 <!-- novice-stage: before-you-start -->
 ## 1. 始める前
 
-必要なものは、対象プロジェクト、対象フォルダーを読める AI コーディングエージェント、Git、Python 3.10 以上、GNU Make、既存の Git commit 1 件以上、およびブランチと PR を作成する権限です。AI Cockpit テンプレートリポジトリへ誤って導入しないでください。失えないローカルデータは先にバックアップします。
+必要なものは、対象プロジェクト、対象フォルダーを読める AI コーディングエージェント、Git、Python 3.11 以上、GNU Make、既存の Git commit 1 件以上、およびブランチと PR を作成する権限です。AI Cockpit テンプレートリポジトリへ誤って導入しないでください。失えないローカルデータは先にバックアップします。
 
 Git は変更履歴、commit は確認済みの履歴 snapshot、Python と GNU Make は
 AI Cockpit の local check に使います。導入済みか分からなくても自分で install
@@ -138,7 +138,7 @@ digest、archive asset、SHA-256 evidence を検証してください。不足�
 1. repository root、現在のブランチ、worktree の状態、initial commit の有無
 2. remote HEAD が示す default remote/default branch と fetch 後の最新 commit
    （origin/main と仮定しない）
-3. Python 3.10+、Git、GNU Make、curl の有無
+3. Python 3.11+、Git、GNU Make、curl の有無
 4. 検出した言語・build system と最適な AI Cockpit stack
 5. AGENTS.md、GEMINI.md、CLAUDE.md、Makefile、CI、SECURITY.md、
    CODEOWNERS、active .ai Work Item

@@ -446,9 +446,10 @@ def synchronize_release_supply_chain_digests() -> None:
     supply_chain = release.get("supplyChain")
     if not isinstance(supply_chain, dict):
         raise ValueError("release.json is missing supplyChain release evidence")
-    for key in ("sbomDigest", "provenanceDigest"):
+    for key in ("requirementsLockDigest", "sbomDigest", "provenanceDigest"):
         if not isinstance(supply_chain.get(key), str):
             raise ValueError(f"release.json supplyChain.{key} is missing")
+    supply_chain["requirementsLockDigest"] = sha256_text(read_text(LOCK_FILE))
     supply_chain["sbomDigest"] = sha256_bytes(SBOM_BASELINE.read_bytes())
     supply_chain["provenanceDigest"] = sha256_bytes(PROVENANCE_BASELINE.read_bytes())
     write_json(RELEASE_JSON, release)

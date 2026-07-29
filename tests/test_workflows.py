@@ -41,7 +41,7 @@ def test_compatibility_runs_lockfile_reproducibility_on_clean_runner():
     lockfile = workflow.split("  lockfile-reproducibility:", 1)[1].split(
         "  real-stack-quality:", 1
     )[0]
-    assert 'python-version: "3.10"' in lockfile
+    assert 'python-version: "3.11"' in lockfile
     assert (
         "python -m pip install --disable-pip-version-check pip-tools==7.6.0 typing-extensions==4.16.0"
         in lockfile
@@ -49,12 +49,13 @@ def test_compatibility_runs_lockfile_reproducibility_on_clean_runner():
     assert "make check-lockfile-reproducibility" in lockfile
 
 
-def test_lockfile_input_pin_matches_python_310_compatible_lock_output():
+def test_lockfile_input_pin_matches_python_311_compatible_lock_output():
     requirements = (ROOT / "requirements-dev.in").read_text(encoding="utf-8")
     lockfile = (ROOT / "requirements-dev.lock").read_text(encoding="utf-8")
     assert "stevedore==5.8.0" in requirements
     assert "stevedore==5.8.0" in lockfile
     assert "stevedore==5.9.0" not in requirements
+    assert "canonical Python 3.11" in lockfile
 
 
 def test_compatibility_separates_blocking_baseline_from_latest_probes():

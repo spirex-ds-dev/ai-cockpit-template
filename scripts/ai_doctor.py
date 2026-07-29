@@ -47,10 +47,10 @@ def diagnose(root: Path) -> tuple[list[str], list[str], list[str]]:
     warnings: list[str] = []
     failures: list[str] = []
 
-    if sys.version_info >= (3, 10):
-        passed.append(f"Python {sys.version_info.major}.{sys.version_info.minor} satisfies 3.10+")
+    if sys.version_info >= (3, 11):
+        passed.append(f"Python {sys.version_info.major}.{sys.version_info.minor} satisfies 3.11+")
     else:
-        failures.append("Python 3.10 or newer is required")
+        failures.append("Python 3.11 or newer is required")
     for command in ("git", "make"):
         (passed if shutil.which(command) else failures).append(
             f"{command} is available" if shutil.which(command) else f"{command} is required on PATH"

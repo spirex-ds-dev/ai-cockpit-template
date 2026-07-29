@@ -67,7 +67,7 @@ keywords:
 <!-- novice-stage: before-you-start -->
 ## 1. 开始前
 
-准备：电脑上的目标工程、能读取该目录的 AI 编程代理、Git、Python 3.10
+准备：电脑上的目标工程、能读取该目录的 AI 编程代理、Git、Python 3.11
 以上、GNU Make、至少一个已有 Git commit，以及创建分支和 PR 的权限。
 不要误装到 AI Cockpit 模板仓库。先备份无法替代的本地资料。
 
@@ -126,7 +126,7 @@ digest、archive asset 和 SHA-256。证据缺失或不一致立即停止。
 1. 仓库根目录、当前分支、工作区状态，以及是否已有初始 commit；
 2. 由 remote HEAD 证明的默认 remote、默认分支和最新 fetch 后的 commit，
    不要假设是 origin 或 main；
-3. Python 3.10+、Git、GNU Make 和 curl 是否存在；
+3. Python 3.11+、Git、GNU Make 和 curl 是否存在；
 4. 检测到的语言、构建系统和最合适的 AI Cockpit stack；
 5. 已有的 AGENTS.md、GEMINI.md、CLAUDE.md、Makefile、CI、SECURITY.md、
    CODEOWNERS 和进行中的 .ai Work Item；
