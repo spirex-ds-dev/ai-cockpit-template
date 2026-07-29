@@ -10,7 +10,12 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from ai_common import load_json, save_json, verification_key
+from ai_common import (
+    load_json,
+    save_json,
+    verification_key,
+    verification_status_for_generation,
+)
 from ai_check_diff_ownership import format_preview, preview
 
 
@@ -26,18 +31,10 @@ def contract_hash(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()[:16]
 
 
-def verification_status(summary: dict[str, Any] | None) -> dict[str, str]:
-    if not isinstance(summary, dict):
-        return {}
-    statuses: dict[str, str] = {}
-    for item in summary.get("verification", []):
-        if (
-            isinstance(item, dict)
-            and verification_key(item)
-            and isinstance(item.get("result"), str)
-        ):
-            statuses[verification_key(item)] = str(item["result"])
-    return statuses
+def verification_status(
+    summary: dict[str, Any] | None, contract: dict[str, Any] | None = None
+) -> dict[str, str]:
+    return verification_status_for_generation(summary, contract or {})
 
 
 def review_focus(summary: dict[str, Any] | None) -> list[str]:
@@ -99,7 +96,7 @@ def next_action(contract: dict[str, Any], summary: dict[str, Any] | None) -> str
     missing = [
         command
         for command in required_verification(contract)
-        if verification_status(summary).get(command) != "passed"
+        if verification_status(summary, contract).get(command) != "passed"
     ]
     if missing:
         return f"Run or record required verification: {missing[0]}"
@@ -144,7 +141,7 @@ def record_checkpoint(
             [
                 item
                 for item in required_verification(contract)
-                if verification_status(summary).get(item) == "passed"
+                if verification_status(summary, contract).get(item) == "passed"
             ]
         ),
     }
@@ -181,7 +178,7 @@ def main() -> int:
     )
     unknowns = contract.get("unknowns", []) if isinstance(contract.get("unknowns"), list) else []
     required = required_verification(contract)
-    status = verification_status(summary)
+    status = verification_status(summary, contract)
     passed_required = [command for command in required if status.get(command) == "passed"]
     print(f"- Acceptance Count: `{len(acceptance)}`")
     print(f"- Unknown Count: `{len(unknowns)}`")

@@ -140,6 +140,97 @@ def test_agent_risk_rejects_before_edit_checkpoint_recorded_after_verification_s
     assert "before_edit checkpoint must be recorded before required verification" in issues
 
 
+def _resumed_gate_contract(recorded_at: str) -> dict:
+    gates = ["aiWorkItem", "aiScope", "aiAgentRisk", "aiSummary", "aiStatus", "aiStatusCheck"]
+    return {
+        "mode": "code",
+        "unknowns": [],
+        "notCodable": False,
+        "executionDecision": {"status": "continue"},
+        "agentCapability": {"canImplement": True, "needsHumanDecision": False},
+        "verification": [{"check": gate, "required": True} for gate in gates],
+        "acceptance": ["Use current-generation verification."],
+        "resumeHistory": [{"recordedAt": recorded_at}],
+    }
+
+
+def _checkpoint_record(required_checks: int, passed: int) -> dict:
+    return {
+        "stage": "before_edit",
+        "recorded": True,
+        "contractHash": "hash",
+        "acceptanceCount": 1,
+        "unknownCount": 0,
+        "requiredChecks": required_checks,
+        "requiredChecksPassed": passed,
+    }
+
+
+def test_agent_risk_rejects_pre_resume_passes_as_stale():
+    contract = _resumed_gate_contract("2026-07-29T07:30:00+00:00")
+    gates = [item["check"] for item in contract["verification"]]
+    summary = {
+        "verification": [
+            {
+                "check": gate,
+                "result": "passed",
+                "executedAt": "2026-07-29T07:00:00+00:00",
+            }
+            for gate in gates
+        ],
+        "checkpointEvidence": [_checkpoint_record(len(gates), 0)],
+    }
+
+    issues = ai_check_agent_risk.validate_agent_risks(
+        contract, summary, expected_contract_hash="hash"
+    )
+
+    assert "required AI hard gate is not passed in Summary: aiWorkItem" in issues
+
+
+def test_agent_risk_accepts_post_resume_gate_results():
+    contract = _resumed_gate_contract("2026-07-29T07:30:00+00:00")
+    gates = [item["check"] for item in contract["verification"]]
+    summary = {
+        "verification": [
+            {
+                "check": gate,
+                "result": "passed",
+                "executedAt": "2026-07-29T07:31:00+00:00",
+            }
+            for gate in gates
+        ],
+        "checkpointEvidence": [_checkpoint_record(len(gates), 0)],
+    }
+
+    assert (
+        ai_check_agent_risk.validate_agent_risks(contract, summary, expected_contract_hash="hash")
+        == []
+    )
+
+
+def test_agent_risk_fails_closed_for_invalid_latest_resume_timestamp():
+    contract = _resumed_gate_contract("not-a-timestamp")
+    gates = [item["check"] for item in contract["verification"]]
+    summary = {
+        "verification": [
+            {
+                "check": gate,
+                "result": "passed",
+                "executedAt": "2026-07-29T07:31:00+00:00",
+            }
+            for gate in gates
+        ],
+        "checkpointEvidence": [_checkpoint_record(len(gates), 0)],
+    }
+
+    issues = ai_check_agent_risk.validate_agent_risks(
+        contract, summary, expected_contract_hash="hash"
+    )
+
+    assert "latest resumeHistory.recordedAt is invalid" in issues
+
+
 def test_agent_risk_accepts_checkpoint_full_hash_when_expected_hash_is_short():
     contract = {
         "verification": [

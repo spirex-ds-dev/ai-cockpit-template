@@ -1541,6 +1541,38 @@
         "make ai-finish TASK=rfe-094-checkpoint-enforcement-20260729",
         "make ai-close-work-item TASK=rfe-094-checkpoint-enforcement-20260729"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-047",
+      "summary": "After RFE-094 closed, prevent resumed Work Items from satisfying checkpoints or gates with pre-resume Summary verification; reject the RFE-095 Contract-revision overdesign and deliver the bounded evidence-generation correction before resuming #441.",
+      "planWorkItems": [
+        "RFE-ISSUE-096",
+        "rfe-096-resume-verification-generation-corrective-20260729"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/rfe-096-resume-verification-generation-corrective-20260729.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_common.py",
+        "scripts/ai_checkpoint.py",
+        "scripts/ai_check_agent_risk.py",
+        "docs/superpowers/plans/2026-07-29-rfe-096-resume-verification-generation-corrective.md",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_ai_checkpoint.py",
+        "tests/test_ai_check_agent_risk.py",
+        ".ai/work-items/archive/2026/rfe-096-resume-verification-generation-corrective-20260729.summary.json",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        "make ai-prepare-implementation CONTRACT=.ai/work-items/active/rfe-096-resume-verification-generation-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/rfe-096-resume-verification-generation-corrective-20260729.summary.json",
+        "PYTHONPATH=scripts .venv/bin/python -m pytest -q tests/test_ai_checkpoint.py tests/test_ai_check_agent_risk.py",
+        "make quality",
+        "make ai-finish TASK=rfe-096-resume-verification-generation-corrective-20260729",
+        "make check-ai-pr AI_BASE_COMMIT=49b1d726b4cf158208dbab11f5c81d9e1a3408fa",
+        "make ai-close-work-item TASK=rfe-096-resume-verification-generation-corrective-20260729"
+      ]
     }
   ]
 }
