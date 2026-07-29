@@ -127,6 +127,7 @@ def test_loader_rejects_missing_json_when_markdown_configures_document_set(
         ([], MATRIX_PATH),
         ({}, "capabilities"),
         ({"capabilities": {}}, "capabilities"),
+        ({"capabilities": []}, "capabilities must be a non-empty list"),
         ({"capabilities": ["not-an-object"]}, "capabilities[0]"),
         (
             {
@@ -171,6 +172,22 @@ def test_loader_rejects_missing_json_when_markdown_configures_document_set(
                 ]
             },
             "capabilities[0].testEvidence",
+        ),
+        (
+            {
+                "capabilities": [
+                    capability("empty-source-list", source=[]),
+                ]
+            },
+            "capabilities[0].sourceEvidence must be a non-empty list",
+        ),
+        (
+            {
+                "capabilities": [
+                    capability("empty-test-list", tests=[]),
+                ]
+            },
+            "capabilities[0].testEvidence must be a non-empty list",
         ),
         (
             {

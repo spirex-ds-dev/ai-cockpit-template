@@ -113,8 +113,8 @@ def load_capability_evidence_dependencies(
 
     matrix = _load_matrix(matrix_path)
     rows = matrix.get("capabilities")
-    if not isinstance(rows, list):
-        raise _matrix_error("capabilities must be a list")
+    if not isinstance(rows, list) or not rows:
+        raise _matrix_error("capabilities must be a non-empty list")
 
     capability_ids: set[str] = set()
     capability_ids_by_path: dict[str, set[str]] = {}
@@ -138,8 +138,8 @@ def load_capability_evidence_dependencies(
         ):
             values = row.get(field)
             field_location = f"{row_location}.{field}"
-            if not isinstance(values, list):
-                raise _matrix_error(f"{field_location} must be a list")
+            if not isinstance(values, list) or not values:
+                raise _matrix_error(f"{field_location} must be a non-empty list")
             for path_index, raw_path in enumerate(values):
                 location = f"{field_location}[{path_index}]"
                 if not isinstance(raw_path, str):
