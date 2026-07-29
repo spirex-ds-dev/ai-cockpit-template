@@ -28,6 +28,10 @@
       "reason": "Regenerates candidate evidence digests without changing release identity or publication state."
     },
     {
+      "path": "release.json",
+      "reason": "Synchronizes the existing published supply-chain projection with regenerated SBOM and provenance bytes; no version, tag, asset, or publication field changes."
+    },
+    {
       "path": ".ai/work-items/starts/github-actions-warning-corrective-20260729.json",
       "reason": "Preserves the immutable Work Item start receipt."
     },
@@ -427,6 +431,21 @@
       "resolution": "Canonical writers regenerated all stale evidence and the two failed nodes plus 63 related workflow/traceability tests pass.",
       "status": "resolved",
       "followUp": "The second source-bound snapshot must rerun full quality; no result from the failed attempt counts as acceptance."
+    },
+    {
+      "issueId": "CI-WARN-EVIDENCE-002",
+      "category": "source-bound-evidence",
+      "severity": "medium",
+      "stage": "hosted-snapshot-local-quality",
+      "fact": "The second snapshot passed SBOM/provenance checks and 1529 of 1530 tests, but release distribution rejected stale release.json supplyChain digests because the canonical evidence writer does not update that separate published projection.",
+      "evidence": [
+        "tests/test_release_distribution.py::test_release_preparation_evidence_matches_local_metadata",
+        "target/quality/sessions/0fa2eae7b126-local-20260729T044117Z-49075-0/logs/project-test.log"
+      ],
+      "decision": "Extend exact scope and synchronize only the two computed supply-chain digest fields; retain all release identity and publication fields unchanged.",
+      "resolution": "Focused release-distribution, SBOM, provenance, and Japanese-report checks pass after synchronizing only the two computed fields.",
+      "status": "resolved",
+      "followUp": "A future process Work Item should consider a single explicit writer for baseline and release projection, but this corrective must first restore the current validated projection."
     }
   ],
   "residualRisks": [
@@ -476,7 +495,7 @@
     {
       "stage": "before_edit",
       "recorded": true,
-      "contractHash": "3db398602aecfb5f",
+      "contractHash": "59cb97b591ce7ca4",
       "acceptanceCount": 9,
       "unknownCount": 0,
       "requiredChecks": 16,
