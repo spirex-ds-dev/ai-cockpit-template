@@ -63,3 +63,29 @@ worktree path printed by the command. Closure never removes that worktree.
 Archived evidence has one immutable root: `archive-manifest.json` is generated only after the Contract and Summary are frozen, and records their SHA-256 digests. The Summary does not hash itself, and generated `current_status.md` is excluded from this chain. The archive index records the manifest path and digest; records predating this protocol remain readable as legacy evidence.
 
 The repository's remote name and default branch are discovered from Git's remote HEAD. Adopter projects therefore do not need to use `origin/main`.
+
+## Exceptional provider merge-state recovery
+
+`ai-close-work-item` has no fallback for an open, closed, skipped, or otherwise
+incomplete provider PR. It continues to require the provider's authoritative
+`MERGED` state, matching branch and Head SHA, merge commit, and merge timestamp.
+That normal rule prevents ordinary open PRs from being cleaned up.
+
+If a provider has demonstrably performed a partial transaction — for example,
+an exact GitHub-verified signed two-parent merge commit is on the base but the
+PR API remains `OPEN` with no normal merge facts — use the separate, read-only
+assessment boundary:
+
+```sh
+make ai-assess-provider-merge-state-recovery \
+  ARGS="--evidence provider-anomaly.json --human-confirmed --output target/provider-recovery.md"
+```
+
+The evidence must bind the original PR number, URL, branch and Head SHA; the
+observed base SHA; the exact merge parents `[base, head]`; GitHub signature
+verification; base reachability; and each required hosted job succeeding on
+that Head. The assessment emits a recovery-specific receipt which explicitly
+records the provider's inconsistent state and unavailable normal merge facts.
+It never deletes a branch, changes the PR, or turns the PR into `MERGED`.
+A later recovery action needs a separate explicit human decision and must keep
+the receipt as audit evidence.

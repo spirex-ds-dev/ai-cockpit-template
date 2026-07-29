@@ -1775,6 +1775,36 @@
         "Hosted compatibility, template-smoke, installation-smoke, and ci-evidence checks on the migration PR",
         "Resume #444 only after migration PR merge and lifecycle closure"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-054",
+      "summary": "When provider merge state contradicts an exact GitHub-verified merge commit, fix the lifecycle process before resuming Python 3.11 closure; preserve normal MERGED-only closure and require explicit exceptional evidence.",
+      "planWorkItems": [
+        "provider-merge-state-recovery-20260730",
+        "python-311-compatibility-migration-20260730",
+        "dependabot-444-stevedore-20260730"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/python-311-compatibility-migration-20260730.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_provider_merge_state_recovery.py",
+        "Makefile",
+        "docs/reference/work-item-lifecycle-closure.md",
+        "docs/reference/work-item-lifecycle-closure.ja.md",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_provider_merge_state_recovery.py",
+        "tests/test_work_item_lifecycle_closure.py",
+        "docs/reference/capability-truth-matrix.json"
+      ],
+      "verificationCommands": [
+        "PYTHONPATH=scripts python3 -m pytest -q tests/test_provider_merge_state_recovery.py tests/test_work_item_lifecycle_closure.py",
+        "make ai-assess-provider-merge-state-recovery ARGS=\"--evidence <captured-evidence.json> --human-confirmed\"",
+        "make quality",
+        "Complete the corrective PR lifecycle before attempting Python 3.11 recovery"
+      ]
     }
   ]
 }
