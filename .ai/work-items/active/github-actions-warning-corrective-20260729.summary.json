@@ -446,6 +446,21 @@
       "resolution": "Focused release-distribution, SBOM, provenance, and Japanese-report checks pass after synchronizing only the two computed fields.",
       "status": "resolved",
       "followUp": "A future process Work Item should consider a single explicit writer for baseline and release projection, but this corrective must first restore the current validated projection."
+    },
+    {
+      "issueId": "CI-WARN-EVIDENCE-003",
+      "category": "source-bound-evidence",
+      "severity": "low",
+      "stage": "hosted-snapshot-local-quality",
+      "fact": "After release.json was synchronized to regenerated SBOM and provenance bytes, check-release-evidence correctly rejected the stale release.json digest recorded in .ai/cockpit/release-digests.json.",
+      "evidence": [
+        "target/quality/sessions/b5031110f397-local-20260729T045037Z-60773-0/logs/check-release-evidence.log",
+        "scripts/check_supply_chain.py release --write"
+      ],
+      "decision": "Run the existing release evidence writer after the release projection changes; do not hand-edit its digest output.",
+      "resolution": "The canonical release writer regenerated .ai/cockpit/release-digests.json and its subsequent release check passed.",
+      "status": "resolved",
+      "followUp": "The same source-bound snapshot is rerun from the fully synchronized candidate; failed snapshot results remain invalid acceptance evidence."
     }
   ],
   "residualRisks": [
