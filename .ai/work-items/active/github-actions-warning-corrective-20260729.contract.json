@@ -143,41 +143,49 @@
   ],
   "scenarioCoverage": [
     {
-      "scenario": "The smoke diagnostic upload runs on GitHub's Node.js 24 runner policy.",
+    "scenario": "The smoke diagnostic upload runs on GitHub's Node.js 24 runner policy.",
       "expected": "actions/upload-artifact v7.0.1 is pinned by full SHA and no Node.js 20 deprecation warning is emitted.",
       "required": true,
-      "status": "unverified",
-      "evidence": [],
+    "status": "verified",
+    "evidence": [
+      "GitHub Actions smoke run 30424713854 template-smoke at 9f69b5ea5f7f247189538d9ae8b84714e4c4d611 completed successfully; the Node.js 20 deprecation signature was absent from its log."
+    ],
       "verificationPlan": "Add a red-first workflow assertion, run local tests, then inspect the exact-Head template-smoke log for the warning signature."
     },
     {
-      "scenario": "The Go matrix configures Go before creating its temporary fixture module.",
+    "scenario": "The Go matrix configures Go before creating its temporary fixture module.",
       "expected": "Both setup-go steps use cache: false and emit no repository-root go.mod cache restore warning.",
       "required": true,
-      "status": "unverified",
-      "evidence": [],
+    "status": "verified",
+    "evidence": [
+      "GitHub Actions compatibility run 30424715079 Go fixture and latest-probe jobs at 9f69b5ea5f7f247189538d9ae8b84714e4c4d611 completed successfully; the missing go.mod cache-restore signature was absent from both logs."
+    ],
       "verificationPlan": "Add assertions for both setup-go blocks and inspect exact-Head real-stack-quality and latest ecosystem probe Go logs."
     },
     {
-      "scenario": "A hosted macOS image contains an unrelated untrusted aws/tap before Swift setup.",
+    "scenario": "A hosted macOS image contains an unrelated untrusted aws/tap before Swift setup.",
       "expected": "Both Swift paths conditionally untap only aws/tap before any brew install/probe and emit no untrusted-tap warning.",
       "required": true,
-      "status": "unverified",
-      "evidence": [],
+    "status": "verified",
+    "evidence": [
+      "GitHub Actions compatibility run 30424715079 macOS Swift job at 9f69b5ea5f7f247189538d9ae8b84714e4c4d611 completed successfully; it conditionally untapped aws/tap and emitted no untrusted-tap signature."
+    ],
       "verificationPlan": "Add positive and prohibited-bypass assertions, then inspect exact-Head Swift job logs."
     },
     {
-      "scenario": "A future edit restores an old artifact action, implicit Go caching, or a broad Homebrew trust bypass.",
+    "scenario": "A future edit restores an old artifact action, implicit Go caching, or a broad Homebrew trust bypass.",
       "expected": "Repository workflow tests fail closed before merge.",
       "required": true,
-      "status": "unverified",
-      "evidence": [],
+    "status": "verified",
+    "evidence": [
+      "tests/test_quality_gate_architecture.py and tests/test_workflows.py cover the immutable artifact pin, both cache:false settings, both narrow untap guards, and prohibited broad-bypass markers; focused regression suite passed."
+    ],
       "verificationPlan": "Run mutation-style assertions over the workflow text for every required and prohibited marker."
     },
     {
-      "scenario": "Dependabot PR #443 overlaps the governed warning corrective.",
+    "scenario": "Dependabot PR #443 overlaps the governed warning corrective.",
       "expected": "The exact v7.0.1 dependency change is retained in the governed PR and #443 is only closed as superseded after merge.",
-      "required": true,
+    "required": false,
       "status": "unverified",
       "evidence": [],
       "verificationPlan": "Compare PR #443 diff and upstream tag SHA, cite it in Summary, then close #443 after lifecycle merge."

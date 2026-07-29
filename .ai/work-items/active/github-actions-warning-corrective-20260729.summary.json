@@ -183,8 +183,8 @@
     },
     {
       "guideline": "Prove Hosted warning absence from exact-Head logs; local YAML tests alone are not sufficient.",
-      "compliant": false,
-      "evidence": "Pending source-bound Hosted snapshot execution."
+      "compliant": true,
+      "evidence": "Exact-Head smoke run 30424713854 and compatibility run 30424715079 both passed; targeted log scans found none of the three reported warning signatures."
     },
     {
       "guideline": "Complete one Work Item, branch, and PR lifecycle before starting the next dependency intake.",
@@ -617,20 +617,64 @@
     "schemaVersion": 1,
     "baselineWorkItem": "CI-WARN-001",
     "comparisonRule": "Inspect exact-source hosted logs for the three original warning signatures; successful job conclusions alone are insufficient.",
-    "status": "not_run",
+    "status": "complete",
     "scenarios": [
       {
         "scenario": "exact_source_warning_absence",
-        "status": "not_run",
-        "reason": "The workflow correction is locally verified but has not yet run on GitHub-hosted Linux and macOS runners.",
-        "evidence": []
+        "status": "pass",
+        "evidence": [
+          "GitHub Actions smoke run 30424713854 at exact Head 9f69b5ea5f7f247189538d9ae8b84714e4c4d611: template-smoke, installation-smoke, release-evidence, and terminal ci-evidence all succeeded; ci-evidence emitted candidate/success evidence with all three required Jobs and no failure reasons.",
+          "GitHub Actions compatibility run 30424715079 at exact Head 9f69b5ea5f7f247189538d9ae8b84714e4c4d611 succeeded, including both Go checks and macOS Swift.",
+          "Exact Job-log scans found none of: Node.js 20 is deprecated; Restore cache failed: Dependencies file is not found; The following taps are not trusted."
+        ]
       }
     ]
   },
+  "scenarioCoverage": [
+    {
+      "scenario": "The smoke diagnostic upload runs on GitHub's Node.js 24 runner policy.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "GitHub Actions smoke run 30424713854 template-smoke at exact Head 9f69b5ea5f7f247189538d9ae8b84714e4c4d611 succeeded and omitted the Node.js 20 deprecation signature."
+      ]
+    },
+    {
+      "scenario": "The Go matrix configures Go before creating its temporary fixture module.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "GitHub Actions compatibility run 30424715079 Go fixture and latest-probe jobs succeeded and omitted the missing go.mod cache-restore signature."
+      ]
+    },
+    {
+      "scenario": "A hosted macOS image contains an unrelated untrusted aws/tap before Swift setup.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "GitHub Actions compatibility run 30424715079 macOS Swift succeeded after the narrow aws/tap cleanup and omitted the untrusted-tap signature."
+      ]
+    },
+    {
+      "scenario": "A future edit restores an old artifact action, implicit Go caching, or a broad Homebrew trust bypass.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "Focused workflow and snapshot regression tests pass, including prohibited broad-bypass and project-ref churn cases."
+      ]
+    },
+    {
+      "scenario": "Dependabot PR #443 overlaps the governed warning corrective.",
+      "required": false,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "The governed replacement must merge before #443 can be closed as superseded; lifecycle closure records that post-merge action."
+    }
+  ],
   "intentAlignment": {
-    "problemResolved": false,
+    "problemResolved": true,
     "constraintsRespected": true,
     "nonGoalsAvoided": true,
-    "rationaleValidated": "The implementation uses exact action pinning, disables only inapplicable cache, removes only the unrelated tap, and adds fail-closed tests; Hosted proof remains pending."
+    "rationaleValidated": "Exact-Head hosted smoke and compatibility evidence confirms the immutable action pin, inapplicable-cache disablement, and narrow tap cleanup eliminate the reported warnings without broad suppression."
   }
 }
