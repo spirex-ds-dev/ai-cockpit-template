@@ -17,6 +17,18 @@ def test_csharp_compatibility_uses_dependabot_setup_dotnet_600_pin():
     assert csharp_setup.startswith("a98b56852c35b8e3190ac28c8c2271da59106c68")
     assert "if: matrix.stack == 'csharp'" in workflow
     assert 'dotnet-version: "9.0.305"' in csharp_setup
+
+
+def test_ruby_compatibility_uses_dependabot_setup_ruby_13210_pin_at_both_locations():
+    workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
+    old_sha = "a30dfa457ad68707b8b910ac3a244714b61c0626"
+    new_sha = "95ef2b042f9d7a56d8268cba8559e2842e2ad01b"
+
+    assert old_sha not in workflow
+    assert workflow.count(f"uses: ruby/setup-ruby@{new_sha}") == 2
+    assert workflow.count("if: matrix.stack == 'ruby'") >= 2
+    assert 'ruby-version: "3.4.2"' in workflow
+    assert "ruby-version: ruby-head" in workflow
     assert "  compatibility-gate:" in workflow
     assert "needs:\n      - shellcheck" in workflow
     assert 'test "$result" = success' in workflow
