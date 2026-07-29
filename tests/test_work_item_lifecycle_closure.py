@@ -10,6 +10,53 @@ import pytest
 import ai_close_work_item as closure
 
 
+def closure_result(*, ready: bool) -> dict[str, object]:
+    return {
+        "task": "example",
+        "contract": ".ai/work-items/archive/2026/example.contract.json",
+        "pullRequest": "https://example.test/pr/1",
+        "mergeCommit": "b" * 40,
+        "workBranch": "codex/example",
+        "baseRemote": "origin",
+        "baseBranch": "main",
+        "baseCommit": "a" * 40,
+        "closureReceipt": "target/task-closure-receipts/example.closure.md",
+        "state": "closed",
+        "repositoryState": "ready_on_base" if ready else "closed_but_current_worktree_detached",
+        "nextWorkItemReady": ready,
+        "baseWorktree": "" if ready else "/tmp/base-worktree",
+    }
+
+
+def test_human_completion_report_leads_with_verified_decision_facts() -> None:
+    report = closure.render_human_completion_report(closure_result(ready=True))
+
+    assert report.index("## Human completion report") < report.index("## Optional audit evidence")
+    assert "Work Item: `example`" in report
+    assert "Local governance evidence: verified by archived Work Item validation." in report
+    assert "Merged pull request: https://example.test/pr/1" in report
+    assert "Merge commit: `" + "b" * 40 + "`." in report
+    assert "Cleanup: local and remote branch `codex/example` deleted." in report
+    assert "Base synchronization: `origin/main` at `" + "a" * 40 + "`." in report
+    assert "Repository state: ready for the next Work Item." in report
+
+
+def test_human_completion_report_names_synchronized_base_worktree_when_detached() -> None:
+    report = closure.render_human_completion_report(closure_result(ready=False))
+
+    assert "Current worktree: detached; do not start the next Work Item here." in report
+    assert "Continue from synchronized base worktree: `/tmp/base-worktree`." in report
+    assert "Repository state: ready for the next Work Item." not in report
+
+
+def test_human_completion_report_rejects_missing_verified_fact() -> None:
+    result = closure_result(ready=True)
+    result.pop("baseCommit")
+
+    with pytest.raises(RuntimeError, match="Human completion report requires baseCommit"):
+        closure.render_human_completion_report(result)
+
+
 def run_command(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         list(args),
@@ -138,6 +185,7 @@ def prepare(monkeypatch: pytest.MonkeyPatch, fake: FakeGit) -> None:
         lambda _runner, _branch, _base, _branch_commit: {
             "url": "https://example.test/pr/1",
             "headRefOid": "work123",
+            "mergeCommit": {"oid": "b" * 40},
         },
     )
     monkeypatch.setattr(
@@ -497,23 +545,14 @@ def test_main_reports_ready_only_for_ready_on_base(monkeypatch, capsys) -> None:
     monkeypatch.setattr(
         closure,
         "close_work_item",
-        lambda *_args: {
-            "contract": ".ai/work-items/archive/2026/example.contract.json",
-            "closureReceipt": "target/example.closure.md",
-            "pullRequest": "https://example.test/pr/1",
-            "workBranch": "codex/example",
-            "baseRemote": "origin",
-            "baseBranch": "main",
-            "baseWorktree": "",
-            "repositoryState": "ready_on_base",
-            "nextWorkItemReady": True,
-        },
+        lambda *_args: closure_result(ready=True),
     )
 
     assert closure.main() == 0
     output = capsys.readouterr().out
-    assert "Closure Receipt: target/example.closure.md" in output
-    assert "Repository state: ready for next Work Item" in output
+    assert "## Human completion report" in output
+    assert "## Optional audit evidence" in output
+    assert "Repository state: ready for the next Work Item." in output
 
 
 def test_main_reports_detached_closure_as_not_ready(monkeypatch, capsys) -> None:
@@ -525,24 +564,14 @@ def test_main_reports_detached_closure_as_not_ready(monkeypatch, capsys) -> None
     monkeypatch.setattr(
         closure,
         "close_work_item",
-        lambda *_args: {
-            "contract": ".ai/work-items/archive/2026/example.contract.json",
-            "closureReceipt": "target/example.closure.md",
-            "pullRequest": "https://example.test/pr/1",
-            "workBranch": "codex/example",
-            "baseRemote": "origin",
-            "baseBranch": "main",
-            "baseWorktree": "/tmp/base-worktree",
-            "repositoryState": "closed_but_current_worktree_detached",
-            "nextWorkItemReady": False,
-        },
+        lambda *_args: closure_result(ready=False),
     )
 
     assert closure.main() == 0
     output = capsys.readouterr().out
-    assert "Current worktree: detached; not ready for the next Work Item" in output
-    assert "Continue from synchronized base worktree: /tmp/base-worktree" in output
-    assert "Repository state: ready for next Work Item" not in output
+    assert "Current worktree: detached; do not start the next Work Item here." in output
+    assert "Continue from synchronized base worktree: `/tmp/base-worktree`." in output
+    assert "Repository state: ready for the next Work Item." not in output
 
 
 def test_real_linked_worktree_closure_is_closed_but_not_ready(
@@ -585,6 +614,7 @@ def test_real_linked_worktree_closure_is_closed_but_not_ready(
         lambda _runner, _branch, _base, _head: {
             "url": "https://example.test/pr/1",
             "headRefOid": work_commit,
+            "mergeCommit": {"oid": "b" * 40},
         },
     )
     monkeypatch.setattr(

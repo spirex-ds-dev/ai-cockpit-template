@@ -1,0 +1,259 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe-098-human-visible-completion-report-20260729",
+  "mode": "code",
+  "title": "Require human-visible completion summaries after Work Item closure",
+  "baseCommit": "8b20fafb817d85e7f932a0997e00ed5140598afb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe-098-human-visible-completion-report-20260729.contract.json",
+    ".ai/work-items/active/rfe-098-human-visible-completion-report-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "AGENTS.md",
+    "scripts/ai_close_work_item.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "docs/features/task-outcome-report.md",
+    "docs/superpowers/specs/2026-07-29-human-visible-completion-report-design.md",
+    "docs/superpowers/plans/2026-07-29-rfe-098-human-visible-completion-report.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Changing historic Outcome or Closure Receipt artifacts.",
+    "Changing provider pull request, release, tag, or branch-cleanup mechanics already governed by RFE-097.",
+    "Changing Dependabot #441, #442, #444, #445, or #403 before this corrective closes.",
+    "Claiming that a repository script can itself deliver a message to an external chat interface."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Closure verifies facts but its CLI output centers evidence file paths instead of a concise human decision summary."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Existing lifecycle tests cover Receipt creation and cleanup ordering; they are the direct regression boundary for human-visible closure output."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Repository operating rules define the required handoff from verified closure output to the human collaborator."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Current documentation says the assistant must surface the Receipt but does not define a decision-oriented direct report."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "This authority binds the closure implementation and regression test as current capability evidence."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "New current-instruction plan and implementation-record design documents must be registered before documentation metadata validation can accept them."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "The final Japanese reassessment binds its evidence to current repository documentation; it must be regenerated when this Work Item changes governed documents."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Human-readable companion of the current Japanese final reassessment and generated from the same evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "human_decision_interface",
+      "workflow_process",
+      "lifecycle_cleanup"
+    ],
+    "reason": "The change defines which verified closure facts humans receive first. A misleading report could imply hosted success, merge, or cleanup that has not occurred, so it must derive only from the already verified closure result and be tested against ready and detached outcomes.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly approved the proposed direct-report protocol and authorized continued remediation; the output, rule, and test boundaries are concrete."
+  },
+  "preReviewWarnings": [
+    "The report must lead with decision-relevant facts, not paths or internal artifact names.",
+    "A report must never claim hosted verification, PR merge, branch cleanup, or ready-on-base unless the close result has already verified that fact.",
+    "The repository can produce canonical text but cannot independently send chat messages; AGENTS.md must make executor delivery to the conversation an explicit mandatory final action."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A successful ai-close-work-item output contains a titled human completion report before evidence paths and states delivered scope, verified local archive evidence, verified merged-PR identity, branch cleanup, base synchronization, residual-risk status, and next-work guidance from verified closure data.",
+    "The report renders a detached-worktree result as a truthful handoff to the synchronized base worktree rather than claiming the invoking worktree can start another Work Item.",
+    "Focused lifecycle tests fail when the human completion report is absent, path-first, missing a required verified fact, or claims a fact unavailable from the close result; they pass for ready and detached results.",
+    "AGENTS.md and Task Outcome documentation require the executor to send the report text directly in the human conversation after closure, include the exact-head Hosted CI conclusion it independently verified before merge, and retain archive paths only as optional audit links.",
+    "RFE-098 itself completes Contract, Preflight, before-edit checkpoint, verification, archive, PR, exact-head Hosted CI, merge, Closure Receipt, user-visible direct report, and branch cleanup before #441 resumes."
+  ],
+  "guidelines": [
+    "Derive human-facing text exclusively from the closure result after its provider, base, and cleanup verification has succeeded.",
+    "Use a fixed concise report shape that answers human decision questions before listing audit evidence paths.",
+    "Test ready-on-base and detached handoff output behavior with real closure result fixtures, not source-text-only assertions.",
+    "Treat direct conversation delivery as an executor responsibility documented in repository rules; do not make false claims about scripts controlling external chat delivery.",
+    "Keep instruction-design-plan-implementation-acceptance traceability bidirectional and pause dependent Work Items until this process defect is closed."
+  ],
+  "intent": {
+    "problem": "The user rejected RFE-097's completion message because it centered the paths of the archived Outcome and Closure Receipt. Those paths are necessary audit evidence but force a human to open files to learn the result. This violates the repository's Calibrated Human-Agent Trust North Star: evidence should compress into a decision-relevant human report rather than export the reading burden to the human.",
+    "constraints": [
+      "Keep Outcome and Closure Receipt files as immutable auditable evidence, but make them secondary optional links in the direct report.",
+      "Use only facts verified by ai-close-work-item; never infer or manufacture provider, hosted CI, merge, cleanup, or readiness claims.",
+      "Represent detached-worktree closure honestly and name the actual synchronized continuation worktree.",
+      "Require the executor to place the direct report into the human conversation, while honestly documenting that a repository script cannot send an external chat message itself.",
+      "Complete this corrective before resuming the paused Dependabot #441 Work Item."
+    ],
+    "rationale": "A canonical concise report transforms existing lifecycle evidence into the immediate human decision surface. Validated report content prevents regression to path-only handoff, while a documented executor obligation closes the final interface boundary that repository code alone cannot control."
+  },
+  "rawUserRequest": "归档 Outcome 和 Closure Receipt 这样的报告是希望人去看文件么？不符合 CHI 和我们的 North Star，应该是总结，输出到对话框直接告诉人。继续。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:chi-direct-completion-report",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:061cf9f4e86380d0ce25c01dc7f0663e951f4232375aa749f8e8f9902f4a7d86"
+  },
+  "declaredIntent": {
+    "summary": "Make the verified Work Item closure result a concise human decision report delivered directly to the conversation, with Outcome and Receipt artifacts retained only as supporting audit evidence.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A successful closure runs from a Work Item worktree while another worktree owns the synchronized base.",
+      "expected": "The direct report states the completed PR, cleanup, base synchronization, and exact continuation worktree without claiming the detached Work Item checkout is ready.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use the existing detached closure fixture and assert each direct-report fact is derived from its closure result."
+    },
+    {
+      "scenario": "A successful closure can continue from its invoking base worktree.",
+      "expected": "The direct report states ready for the next Work Item only when close_work_item returned nextWorkItemReady true.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use a ready-on-base closure fixture and assert the report contains the ready state plus required review facts."
+    },
+    {
+      "scenario": "An incomplete report construction is attempted before emitting close output.",
+      "expected": "The renderer rejects the missing verified fact rather than printing a path-only or partial handoff as successful closure.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a focused renderer test with a closure result missing one required field and assert a deterministic error."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly approved the direct human-completion-report corrective, including its repository operating-rule requirement."
+  },
+  "rollbackNote": "Revert the RFE-098 PR to restore the prior closure output and rules; do not edit historical RFE-097 archive evidence.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 666
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe-098-human-visible-completion-report-20260729.json",
+    "baseCommit": "8b20fafb817d85e7f932a0997e00ed5140598afb",
+    "initialScopeDigest": "ca6568cac18a2a6e8c97432361d2c4ccb3f188e756f8fbb525854500c4aba4e4",
+    "contractSkeletonDigest": "ef6e2930297747e06c12de713ac2410dc5ab624e3e536ed3e021bd13246791d3"
+  }
+}

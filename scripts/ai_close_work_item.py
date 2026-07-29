@@ -317,6 +317,81 @@ def _delete_local_branch(
         ) from exc
 
 
+def render_human_completion_report(result: dict[str, object]) -> str:
+    """Compress verified closure facts into the executor's human handoff text."""
+    required_strings = (
+        "task",
+        "contract",
+        "pullRequest",
+        "mergeCommit",
+        "workBranch",
+        "baseRemote",
+        "baseBranch",
+        "baseCommit",
+        "closureReceipt",
+        "repositoryState",
+    )
+    values: dict[str, str] = {}
+    for key in required_strings:
+        value = result.get(key)
+        if not isinstance(value, str) or not value:
+            raise RuntimeError(f"Human completion report requires {key}")
+        values[key] = value
+    if result.get("state") != "closed":
+        raise RuntimeError("Human completion report requires a closed Work Item")
+    if not isinstance(result.get("nextWorkItemReady"), bool):
+        raise RuntimeError("Human completion report requires nextWorkItemReady")
+    base_worktree = result.get("baseWorktree")
+    if not isinstance(base_worktree, str):
+        raise RuntimeError("Human completion report requires baseWorktree")
+    if not values["pullRequest"].startswith("https://"):
+        raise RuntimeError("Human completion report requires an HTTPS pullRequest")
+    if len(values["mergeCommit"]) != 40:
+        raise RuntimeError("Human completion report requires a full mergeCommit")
+    if len(values["baseCommit"]) != 40:
+        raise RuntimeError("Human completion report requires a full baseCommit")
+
+    ready = result["nextWorkItemReady"] is True
+    expected_state = "ready_on_base" if ready else "closed_but_current_worktree_detached"
+    if values["repositoryState"] != expected_state:
+        raise RuntimeError("Human completion report repository state is inconsistent")
+    if ready:
+        if base_worktree:
+            raise RuntimeError("Human completion report ready state must not name a base worktree")
+        next_work = "Repository state: ready for the next Work Item."
+    else:
+        if not base_worktree:
+            raise RuntimeError("Human completion report requires baseWorktree")
+        next_work = "\n".join(
+            (
+                "Current worktree: detached; do not start the next Work Item here.",
+                f"Continue from synchronized base worktree: `{base_worktree}`.",
+            )
+        )
+
+    outcome_path = Path(values["contract"]).with_name(
+        Path(values["contract"]).name.replace(".contract.json", ".outcome.md")
+    )
+    return "\n".join(
+        (
+            "## Human completion report",
+            f"- Work Item: `{values['task']}`",
+            "- Result: completed and lifecycle-closed.",
+            "- Local governance evidence: verified by archived Work Item validation.",
+            f"- Merged pull request: {values['pullRequest']}",
+            f"- Merge commit: `{values['mergeCommit']}`.",
+            f"- Cleanup: local and remote branch `{values['workBranch']}` deleted.",
+            f"- Base synchronization: `{values['baseRemote']}/{values['baseBranch']}` at `{values['baseCommit']}`.",
+            "- Residual closure risk: none recorded; release and future Work Items retain their own gates.",
+            f"- {next_work}",
+            "",
+            "## Optional audit evidence",
+            f"- Task Outcome: `{outcome_path.as_posix()}`",
+            f"- Closure Receipt: `{values['closureReceipt']}`",
+        )
+    )
+
+
 def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
     contract_path = _verify_archived_evidence(task)
     branch_result = runner(["branch", "--show-current"], False)
@@ -335,6 +410,10 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
     if not work_commit:
         raise RuntimeError("cannot resolve the local Work Item branch commit")
     pr = _verify_pr(runner, work_branch, base_branch, work_commit)
+    merge = pr.get("mergeCommit")
+    merge_commit = merge.get("oid") if isinstance(merge, dict) else None
+    if not isinstance(merge_commit, str) or len(merge_commit) != 40:
+        raise RuntimeError("verified pull request has no full merge commit")
 
     base_path = _base_worktree_path(runner, base_branch)
     base_runner = _in_worktree(runner, base_path) if base_path else runner
@@ -396,6 +475,7 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
         "task": task,
         "contract": contract_path.relative_to(PROJECT_ROOT).as_posix(),
         "pullRequest": str(pr.get("url", "")),
+        "mergeCommit": merge_commit,
         "workBranch": work_branch,
         "baseRemote": remote,
         "baseBranch": base_branch,
@@ -421,22 +501,7 @@ def main() -> int:
     except (OSError, RuntimeError, ValueError) as exc:
         print(f"Work Item lifecycle: not closed\nReason: {exc}", file=sys.stderr)
         return 1
-    print("Work Item lifecycle: closed")
-    print(f"Pull request: merged ({result['pullRequest']})")
-    print(
-        f"Archived Task Outcome: {Path(str(result['contract'])).with_name(Path(str(result['contract'])).name.replace('.contract.json', '.outcome.md'))}"
-    )
-    print(f"Closure Receipt: {result['closureReceipt']}")
-    print(f"Local work branch: deleted ({result['workBranch']})")
-    print(f"Remote work branch: deleted ({result['workBranch']})")
-    print(
-        f"Local {result['baseBranch']}: synchronized with {result['baseRemote']}/{result['baseBranch']}"
-    )
-    if result["nextWorkItemReady"] is True:
-        print("Repository state: ready for next Work Item")
-    else:
-        print("Current worktree: detached; not ready for the next Work Item")
-        print(f"Continue from synchronized base worktree: {result['baseWorktree']}")
+    print(render_human_completion_report(result))
     return 0
 
 

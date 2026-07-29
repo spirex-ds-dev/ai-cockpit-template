@@ -1604,6 +1604,39 @@
         "make ai-finish TASK=rfe-097-mandatory-task-outcome-report-20260729",
         "make ai-close-work-item TASK=rfe-097-mandatory-task-outcome-report-20260729"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-049",
+      "summary": "Make each closed Work Item report its verified outcome directly to the human conversation, with Outcome and Closure Receipt paths retained only as secondary audit evidence and exact-head Hosted CI stated only after independent verification.",
+      "planWorkItems": [
+        "RFE-ISSUE-098",
+        "rfe-098-human-visible-completion-report-20260729"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/rfe-098-human-visible-completion-report-20260729.contract.json"
+      ],
+      "implementationEvidence": [
+        "AGENTS.md",
+        "scripts/ai_close_work_item.py",
+        "docs/features/task-outcome-report.md",
+        "docs/superpowers/specs/2026-07-29-human-visible-completion-report-design.md",
+        "docs/superpowers/plans/2026-07-29-rfe-098-human-visible-completion-report.md",
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_work_item_lifecycle_closure.py",
+        "docs/reference/capability-truth-matrix.json",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        "make ai-prepare-implementation CONTRACT=.ai/work-items/active/rfe-098-human-visible-completion-report-20260729.contract.json SUMMARY=.ai/work-items/active/rfe-098-human-visible-completion-report-20260729.summary.json",
+        "PYTHONDONTWRITEBYTECODE=1 .venv/bin/pytest -q tests/test_work_item_lifecycle_closure.py",
+        "make check-docs-metadata",
+        "make check-instruction-traceability",
+        "make quality",
+        "make ai-finish TASK=rfe-098-human-visible-completion-report-20260729",
+        "make ai-close-work-item TASK=rfe-098-human-visible-completion-report-20260729"
+      ]
     }
   ]
 }
