@@ -642,7 +642,7 @@ def test_valid_report_structure_accepts_decision_protocol_fields(tmp_path):
     )
     gate = {"gateEnabled": True, "blockedStatuses": ["needs_human_confirmation"]}
     assert ai_preflight_review.report_is_blocked(
-        {**report, "status": "human_decision_recorded"}, gate
+        {**report, "status": "human_decision_recorded", "decisionState": "invalid"}, gate
     )
     assert ai_preflight_review.report_is_blocked(
         {**report, "status": "needs_human_confirmation"}, gate
@@ -772,9 +772,23 @@ def test_repository_default_policy_is_fail_closed_for_all_blocked_statuses():
     assert policy["gateEnabled"] is True
     assert policy["blockedStatuses"] == [
         "needs_human_confirmation",
-        "human_decision_recorded",
         "not_ready",
     ]
+
+
+def test_enforced_policy_allows_only_a_valid_recorded_human_decision_to_resume():
+    policy = ai_preflight_review.load_policy(ai_preflight_review.DEFAULT_POLICY)
+    report = {
+        "status": "human_decision_recorded",
+        "decisionState": "human_decision_recorded",
+        "decisionEvidenceIssues": [],
+    }
+
+    assert not ai_preflight_review.report_is_blocked(report, policy)
+    assert ai_preflight_review.report_is_blocked(
+        {**report, "decisionEvidenceIssues": ["contract hash is stale"]}, policy
+    )
+    assert ai_preflight_review.report_is_blocked({**report, "decisionState": "invalid"}, policy)
 
 
 def test_repository_default_policy_blocks_non_ready_preflight(tmp_path, monkeypatch):
