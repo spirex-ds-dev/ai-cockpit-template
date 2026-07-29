@@ -36,6 +36,20 @@ from ai_observability import create_observability, elapsed_ms
 
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
+REPORT_BOUNDARY_TEXT = {
+    "en": (
+        "## Task Outcome Report (active; relay to the human before archive)",
+        "Next lifecycle action: archive is explicit and must follow the direct human report.",
+    ),
+    "zh-CN": (
+        "## 工单结果报告（active；归档前必须直接告知相关人员）",
+        "下一生命周期动作：归档必须显式执行，并且只能在直接报告之后进行。",
+    ),
+    "ja": (
+        "## タスク結果レポート（active。アーカイブ前に直接人へ報告してください）",
+        "次のライフサイクル操作：アーカイブは明示的に実行し、直接報告の後にのみ行います。",
+    ),
+}
 
 
 def _git_output(args: list[str]) -> str:
@@ -506,10 +520,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--archive",
         action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Archive Work Item after successful checks.",
+        default=False,
+        help="Archive only after the agent has relayed the active Task Outcome to the human.",
+    )
+    parser.add_argument(
+        "--language",
+        default="en",
+        help="Conversation language for the direct human report (en, zh-CN, or ja).",
     )
     return parser.parse_args()
+
+
+def render_direct_outcome_report(outcome: dict[str, Any], language: str) -> str:
+    """Render the active Outcome and the explicit archive boundary for the human."""
+    from ai_render_task_outcome_multilingual import normalize_locale, render_localized_outcome
+
+    locale = normalize_locale(language)
+    heading, next_action = REPORT_BOUNDARY_TEXT[locale]
+    return f"{heading}\n{render_localized_outcome(outcome, locale)}{next_action}\n"
 
 
 def run_declared_checks(
@@ -865,6 +893,12 @@ def main() -> int:
     )
 
     print("Work Item finish checks passed")
+    outcome_json, _outcome_markdown = _outcome_paths(args.task)
+    try:
+        print(render_direct_outcome_report(load_json(outcome_json), args.language), end="")
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
     if args.archive:
         archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
         cmd_str = " ".join(archive_command)

@@ -723,6 +723,37 @@ def test_scope_guard_adds_bound_receipt_path(monkeypatch):
     assert ai_check_scope.main() == 0
 
 
+def test_scope_guard_adds_bound_active_outcome_paths(monkeypatch):
+    class Observation:
+        def check_passed(self, **_kwargs):
+            return None
+
+        def check_failed(self, **_kwargs):
+            return None
+
+        def guard_violation(self, **_kwargs):
+            return None
+
+    contract = {"workItemId": "outcome_task", "scope": [], "outOfScope": []}
+    monkeypatch.setattr(ai_check_scope, "load_json", lambda _path: contract)
+    monkeypatch.setattr(
+        ai_check_scope,
+        "changed_paths",
+        lambda _contract: [
+            ".ai/work-items/active/outcome_task.outcome.json",
+            ".ai/work-items/active/outcome_task.outcome.md",
+        ],
+    )
+    monkeypatch.setattr(ai_check_scope, "simple_yaml_lists", lambda _path: {})
+    monkeypatch.setattr(ai_check_scope, "create_observability", lambda **_kwargs: Observation())
+    monkeypatch.setattr(ai_check_scope, "elapsed_ms", lambda _start: 1)
+    monkeypatch.setattr(sys, "argv", ["ai_check_scope.py", "contract.json"])
+    assert ai_check_scope.main() == 0
+
+    contract["outOfScope"] = [".ai/work-items/active/**"]
+    assert ai_check_scope.main() == 1
+
+
 def test_start_receipt_missing_fields_fails_closed():
     contract = {"workItemId": "receipt_task", "baseCommit": "a" * 40, "scope": []}
     issues = validate_receipt(contract, {})
@@ -1010,6 +1041,8 @@ def test_ai_start_default_contains_agent_risk_gate(tmp_path, monkeypatch):
     assert contract["baseCommit"] == "a" * 40
     assert contract["checkpointPolicy"]["requiredStages"] == ["before_edit", "before_finish"]
     assert ".ai/cockpit/current_status.md" in contract["scope"]
+    assert ".ai/work-items/active/sample.outcome.json" in contract["scope"]
+    assert ".ai/work-items/active/sample.outcome.md" in contract["scope"]
     assert summary["documentationAlignment"]["status"] == "not_checked"
     assert {item["area"] for item in summary["documentationAlignment"]["checks"]} == {
         "plan",

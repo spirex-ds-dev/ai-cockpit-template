@@ -943,7 +943,7 @@ def test_finish_refuses_repository_base_branch_before_running_checks(tmp_path, m
         )
 
     monkeypatch.setattr(ai_finish, "ensure_work_item_branch", reject_base_branch)
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task"])
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--archive"])
 
     assert ai_finish.main() == 2
     assert "dedicated Work Item branch" in capsys.readouterr().err
@@ -1253,7 +1253,7 @@ def test_finish_main_fails_when_archive_step_fails(tmp_path, monkeypatch):
 
     monkeypatch.setattr(ai_finish, "run", run)
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
-    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task"])
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--archive"])
 
     assert ai_finish.main() == 5
 
