@@ -286,6 +286,39 @@ def test_prepare_snapshot_binds_evidence_without_mutating_governed_state(tmp_pat
     assert git(root, "status", "--porcelain") == ""
 
 
+def test_prepare_snapshot_ignores_codex_turn_diff_audit_refs(tmp_path):
+    root, contract_path = fixture_repository(tmp_path)
+
+    def quality_with_codex_audit_ref(candidate: Path) -> dict[str, str]:
+        git(candidate, "update-ref", "refs/codex/turn-diffs/captures/test/base", "HEAD")
+        return passing_quality(candidate)
+
+    receipt = hosted.prepare_snapshot(
+        root=root,
+        contract_path=contract_path,
+        output=root / "target" / "receipt.json",
+        quality_runner=quality_with_codex_audit_ref,
+    )
+
+    assert receipt["quality"]["decision"] == "PASS"
+
+
+def test_prepare_snapshot_rejects_project_ref_churn_from_quality(tmp_path):
+    root, contract_path = fixture_repository(tmp_path)
+
+    def quality_with_project_ref(candidate: Path) -> dict[str, str]:
+        git(candidate, "update-ref", "refs/heads/codex/unauthorized-quality-ref", "HEAD")
+        return passing_quality(candidate)
+
+    with pytest.raises(hosted.HostedVerificationError, match="local quality mutated Git refs"):
+        hosted.prepare_snapshot(
+            root=root,
+            contract_path=contract_path,
+            output=root / "target" / "receipt.json",
+            quality_runner=quality_with_project_ref,
+        )
+
+
 @pytest.mark.parametrize(
     ("mutation", "message"),
     [
