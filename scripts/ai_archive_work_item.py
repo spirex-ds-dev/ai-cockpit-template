@@ -620,6 +620,13 @@ def _execute_archive_transaction(
                 replacements[path.relative_to(PROJECT_ROOT).as_posix()] = (
                     (target_dir / path.name).relative_to(PROJECT_ROOT).as_posix()
                 )
+            for path in outcome_paths:
+                if path.name.endswith(".outcome.json"):
+                    outcome_target = target_dir / path.name
+                    outcome = _rewrite_archived_path_references(
+                        load_json(outcome_target), replacements
+                    )
+                    save_json(outcome_target, outcome)
             if traceability_payload is not None:
                 rewritten_traceability, replacement_count = _rewrite_traceability_paths(
                     traceability_payload, replacements

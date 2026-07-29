@@ -1235,7 +1235,27 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
         ),
         encoding="utf-8",
     )
-    outcome.write_text('{"workItemId":"task"}\n', encoding="utf-8")
+    outcome.write_text(
+        json.dumps(
+            {
+                "workItemId": "task",
+                "sections": {
+                    "evidence": [
+                        {
+                            "source": ".ai/work-items/active/task.contract.json",
+                            "subject": "Contract",
+                        },
+                        {
+                            "source": ".ai/work-items/active/task.summary.json",
+                            "subject": "Summary",
+                        },
+                    ]
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     markdown.write_text("# Task Outcome: task\n", encoding="utf-8")
     events.write_text('{"eventType":"completed"}\n', encoding="utf-8")
     monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
@@ -1257,10 +1277,14 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     assert ai_archive_work_item.main() == 0
     archived_summary = next(archive.glob("*/task.summary.json"))
     assert next(archive.glob("*/task.success.json")).exists()
-    assert (
+    archived_outcome = json.loads(
         next(archive.glob("*/task.outcome.json")).read_text(encoding="utf-8")
-        == '{"workItemId":"task"}\n'
     )
+    outcome_sources = [item["source"] for item in archived_outcome["sections"]["evidence"]]
+    assert outcome_sources == [
+        ".ai/work-items/archive/2026/task.contract.json",
+        ".ai/work-items/archive/2026/task.summary.json",
+    ]
     assert next(archive.glob("*/task.outcome.md")).exists()
     assert next(archive.glob("*/task.events.jsonl")).exists()
     data = json.loads(archived_summary.read_text(encoding="utf-8"))

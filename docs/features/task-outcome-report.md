@@ -10,7 +10,7 @@ Task Outcome answers “what value and evidence did AI Cockpit provide for this 
 
 ## Sources and structure
 
-Machine truth is `.ai/work-items/active/<task>.outcome.json`. Its Markdown view is derived at `.ai/work-items/active/<task>.outcome.md`; archived Work Items retain the corresponding `outcome.json` and `outcome.md`. The report is rebuilt from the Contract, Summary, verification, guards, risks, checkpoints, human confirmations, stops/resumes, changed files, tests, reviews, commit/PR binding, and archive manifest.
+Machine truth is `.ai/work-items/active/<task>.outcome.json`. Its Markdown view is derived at `.ai/work-items/active/<task>.outcome.md`; archived Work Items retain the corresponding `outcome.json` and `outcome.md`. The pre-merge Outcome is rebuilt from Contract, Summary, verification, guards, risks, checkpoints, human confirmations, stops/resumes, changed files, tests, and archive evidence. It binds the exact base and Work Item head, and explicitly records that provider PR facts do not yet exist.
 
 The report contains these sections: Outcome Summary, Task Overview, Delivered Changes, Findings, Risks, Warnings, Interventions, Forced Stops, Resolutions, Recurrence Prevention, Avoided Impact, Residual Risks, Human Decisions, and Evidence. Empty sections say `None`. Findings are evidence-backed and categorized; risks distinguish observed problems, potential risks, and prevented events. A Resolution links Problem → Action → Verification → Result.
 
@@ -26,6 +26,10 @@ Project Profile `reporting.defaultLanguage` selects the default locale. `reporti
 
 ## Lifecycle
 
-`ai-finish` performs final verification, Summary validation, optional Outcome generation/validation, Markdown rendering, Status generation, and presentation before archive. Archive moves Outcome artifacts transactionally with the Work Item. Event corrections are append-only. A completed report does not itself close a Work Item: the PR must merge before `make ai-close-work-item TASK=<task>` can verify ownership, branch cleanup, and base synchronization.
+`ai-finish` performs final verification, Summary validation, mandatory Outcome generation/validation, Markdown rendering, Status generation, and presentation before archive. Archive moves Outcome artifacts transactionally with the Work Item. Event corrections are append-only.
+
+After the PR has merged, `make ai-close-work-item TASK=<task>` verifies provider ownership, base synchronization, and cleanup facts, then generates and validates a separate Closure Receipt before either Work Item branch is deleted. The receipt names the archived Outcome, merged PR, merge commit, final base commit, cleanup intent, and the worktree from which the next Work Item may continue. A missing or invalid Outcome/Receipt fails closed. The assistant must surface that receipt in its Work Item completion report; it is not a replacement for provider evidence.
+
+This rule applies prospectively. Historical archive bundles are not rewritten merely to add a newer report format.
 
 See [Task Outcome Report Self-Check](task-outcome-report-self-check.md) for the current implementation boundary and known gaps.

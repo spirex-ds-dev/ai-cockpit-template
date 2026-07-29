@@ -76,6 +76,7 @@ def minimum_report() -> dict[str, Any]:
             "verificationDigest": "c" * 64,
             "baseCommit": "1" * 40,
             "headCommit": "2" * 40,
+            "lifecycleStage": "post_pr",
             "pullRequest": {"number": 351, "url": "https://github.com/example/repo/pull/351"},
             "aiCockpitVersion": "0.1.0",
             "generatorVersion": "1",

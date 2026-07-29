@@ -140,6 +140,12 @@ def prepare(monkeypatch: pytest.MonkeyPatch, fake: FakeGit) -> None:
             "headRefOid": "work123",
         },
     )
+    monkeypatch.setattr(
+        closure,
+        "generate_closure_receipt",
+        lambda *_args, **_kwargs: closure.PROJECT_ROOT / "target/example.closure.md",
+    )
+    monkeypatch.setattr(closure, "validate_closure_receipt", lambda *_args, **_kwargs: None)
 
 
 def test_success_proves_remote_absence_before_local_branch_deletion(
@@ -161,6 +167,52 @@ def test_success_proves_remote_absence_before_local_branch_deletion(
     local_delete = fake.commands.index(("branch", "-D", "codex/example"))
 
     assert remote_delete < remote_absence < local_delete
+
+
+def test_success_emits_closure_receipt_before_remote_branch_deletion(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    fake = FakeGit()
+    prepare(monkeypatch, fake)
+    receipt_path = tmp_path / "example.closure.md"
+    monkeypatch.setattr(
+        closure,
+        "generate_closure_receipt",
+        lambda *_args, **_kwargs: receipt_path,
+    )
+
+    result = closure.close_work_item("example", fake)
+
+    assert result["closureReceipt"] == str(receipt_path)
+    remote_delete = fake.commands.index(("push", "origin", "--delete", "codex/example"))
+    assert remote_delete > 0
+
+
+def test_closure_receipt_failure_blocks_all_branch_deletion(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake = FakeGit()
+    prepare(monkeypatch, fake)
+    monkeypatch.setattr(
+        closure,
+        "generate_closure_receipt",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(RuntimeError("Closure Receipt invalid")),
+    )
+
+    with pytest.raises(RuntimeError, match="Closure Receipt invalid"):
+        closure.close_work_item("example", fake)
+
+    assert not any(command[:3] == ("push", "origin", "--delete") for command in fake.commands)
+    assert not any(command[:2] == ("branch", "-D") for command in fake.commands)
+
+
+def test_closure_receipt_validation_rejects_missing_required_facts(tmp_path: Path) -> None:
+    receipt = tmp_path / "example.closure.md"
+    receipt.write_text("# Work Item Closure Receipt: example\n", encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="Closure Receipt is invalid"):
+        closure.validate_closure_receipt(receipt, "example")
 
 
 def test_unmerged_pr_blocks_all_cleanup(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -446,6 +498,8 @@ def test_main_reports_ready_only_for_ready_on_base(monkeypatch, capsys) -> None:
         closure,
         "close_work_item",
         lambda *_args: {
+            "contract": ".ai/work-items/archive/2026/example.contract.json",
+            "closureReceipt": "target/example.closure.md",
             "pullRequest": "https://example.test/pr/1",
             "workBranch": "codex/example",
             "baseRemote": "origin",
@@ -458,6 +512,7 @@ def test_main_reports_ready_only_for_ready_on_base(monkeypatch, capsys) -> None:
 
     assert closure.main() == 0
     output = capsys.readouterr().out
+    assert "Closure Receipt: target/example.closure.md" in output
     assert "Repository state: ready for next Work Item" in output
 
 
@@ -471,6 +526,8 @@ def test_main_reports_detached_closure_as_not_ready(monkeypatch, capsys) -> None
         closure,
         "close_work_item",
         lambda *_args: {
+            "contract": ".ai/work-items/archive/2026/example.contract.json",
+            "closureReceipt": "target/example.closure.md",
             "pullRequest": "https://example.test/pr/1",
             "workBranch": "codex/example",
             "baseRemote": "origin",
@@ -530,6 +587,12 @@ def test_real_linked_worktree_closure_is_closed_but_not_ready(
             "headRefOid": work_commit,
         },
     )
+    monkeypatch.setattr(
+        closure,
+        "generate_closure_receipt",
+        lambda *_args, **_kwargs: repository / "target/example.closure.md",
+    )
+    monkeypatch.setattr(closure, "validate_closure_receipt", lambda *_args, **_kwargs: None)
 
     result = closure.close_work_item("example", repository_runner(repository))
 

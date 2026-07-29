@@ -11,6 +11,7 @@ def bindings() -> dict[str, object]:
         "verificationDigest": "c" * 64,
         "baseCommit": "1" * 40,
         "headCommit": "2" * 40,
+        "lifecycleStage": "post_pr",
         "pullRequest": {"number": 15, "url": "https://example.test/pull/15"},
         "aiCockpitVersion": "1.0",
         "generatorVersion": "1.0",

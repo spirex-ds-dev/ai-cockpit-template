@@ -34,7 +34,11 @@ SECTIONS = {
 SECRET_KEY = re.compile(r"(password|passwd|secret|token|api[_-]?key|private[_-]?key)", re.I)
 UNSUPPORTED_KEY = re.compile(r"(score|hours?|money|percentage|percent|productivity|savings)", re.I)
 CONDITIONAL = ("if not detected", "could have", "如果未被发现", "可能导致")
-TASK_ID = re.compile(r"^[a-z0-9][a-z0-9-]{2,127}$")
+# Work Item Contracts historically use both hyphenated and underscore task IDs
+# (for example, the installed first-adoption Contract is adopt_ai_cockpit).
+# Outcome validation must bind that canonical Contract ID rather than reject a
+# valid lifecycle purely because its separator differs.
+TASK_ID = re.compile(r"^[a-z0-9][a-z0-9_-]{2,127}$")
 SHA256 = re.compile(r"^[a-f0-9]{64}$")
 COMMIT = re.compile(r"^[0-9a-f]{40}$")
 
@@ -99,6 +103,7 @@ def _validate_bindings(
         "verificationDigest",
         "baseCommit",
         "headCommit",
+        "lifecycleStage",
         "pullRequest",
         "aiCockpitVersion",
         "generatorVersion",
@@ -114,15 +119,22 @@ def _validate_bindings(
     for key in ("baseCommit", "headCommit"):
         if not isinstance(bindings.get(key), str) or not COMMIT.fullmatch(bindings[key]):
             _error(errors, "binding", f"{key} is not a commit object ID")
+    stage = bindings.get("lifecycleStage")
     pull = bindings.get("pullRequest")
-    if (
-        not isinstance(pull, dict)
-        or not isinstance(pull.get("number"), int)
-        or pull.get("number", 0) < 1
-        or not isinstance(pull.get("url"), str)
-        or not pull["url"].startswith("https://")
-    ):
-        _error(errors, "provenance", "pullRequest binding is invalid")
+    if stage == "pre_merge":
+        if pull != {"state": "not_created"}:
+            _error(errors, "provenance", "pre_merge pullRequest binding must be not_created")
+    elif stage == "post_pr":
+        if (
+            not isinstance(pull, dict)
+            or not isinstance(pull.get("number"), int)
+            or pull.get("number", 0) < 1
+            or not isinstance(pull.get("url"), str)
+            or not pull["url"].startswith("https://")
+        ):
+            _error(errors, "provenance", "post_pr pullRequest binding is invalid")
+    else:
+        _error(errors, "provenance", "lifecycleStage is invalid")
 
 
 def _validate_sections(sections: Any, errors: list[ValidationError]) -> None:

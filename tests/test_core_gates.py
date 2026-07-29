@@ -1054,6 +1054,7 @@ def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
             {
                 "contractVersion": 2,
                 "workItemId": "task",
+                "baseCommit": "b" * 40,
                 "verification": [{"check": "quality", "required": True}],
             }
         ),
@@ -1062,6 +1063,7 @@ def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
         ai_finish,
@@ -1078,8 +1080,11 @@ def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
     assert ai_finish.main() == 0
-    assert len(executed) == 10
+    # Status is regenerated before each status-derived assertion so persisted
+    # verification evidence cannot invalidate the projection it is checking.
+    assert len(executed) == 12
     assert executed[0] == ["make", "quality"]
+    assert sum(command[:2] == ["make", "generate-cockpit-status"] for command in executed) == 4
     assert executed[-1][:2] == ["make", "check-ai-change-summary"]
     recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
     assert all(item["result"] == "passed" for item in recorded)
@@ -1096,6 +1101,7 @@ def test_finish_main_demotes_readiness_when_final_status_check_fails(tmp_path, m
             {
                 "contractVersion": 2,
                 "workItemId": "task",
+                "baseCommit": "b" * 40,
                 "verification": [{"check": "quality", "required": True}],
             }
         ),
@@ -1104,6 +1110,7 @@ def test_finish_main_demotes_readiness_when_final_status_check_fails(tmp_path, m
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
         ai_finish,
@@ -1222,6 +1229,7 @@ def test_finish_main_fails_when_archive_step_fails(tmp_path, monkeypatch):
             {
                 "contractVersion": 2,
                 "workItemId": "task",
+                "baseCommit": "b" * 40,
                 "verification": [{"check": "quality", "required": True}],
             }
         ),
@@ -1230,6 +1238,7 @@ def test_finish_main_fails_when_archive_step_fails(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
         ai_finish,
@@ -1259,6 +1268,7 @@ def test_finish_main_fails_when_stabilization_check_fails(tmp_path, monkeypatch)
             {
                 "contractVersion": 2,
                 "workItemId": "task",
+                "baseCommit": "b" * 40,
                 "verification": [{"check": "quality", "required": True}],
             }
         ),
@@ -1267,6 +1277,7 @@ def test_finish_main_fails_when_stabilization_check_fails(tmp_path, monkeypatch)
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
         ai_finish,
@@ -1296,6 +1307,7 @@ def test_finish_main_allows_optional_check_failure(tmp_path, monkeypatch):
             {
                 "contractVersion": 2,
                 "workItemId": "task",
+                "baseCommit": "b" * 40,
                 "verification": [
                     {"check": "quality", "required": True},
                     {"check": "aiReviewPolicy", "required": False},
@@ -1307,6 +1319,7 @@ def test_finish_main_allows_optional_check_failure(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
         ai_finish,
@@ -1379,6 +1392,7 @@ def test_finish_main_archives_on_success(tmp_path, monkeypatch):
             {
                 "contractVersion": 2,
                 "workItemId": "task",
+                "baseCommit": "b" * 40,
                 "verification": [{"check": "quality", "required": True}],
             }
         ),
@@ -1387,6 +1401,7 @@ def test_finish_main_archives_on_success(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
         ai_finish,

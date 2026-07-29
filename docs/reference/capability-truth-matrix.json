@@ -20,7 +20,9 @@
       ],
       "verification": [
         "tests/test_start_and_archive.py",
-        "tests/test_finish_e2e.py"
+        "tests/test_finish_e2e.py",
+        "tests/test_task_outcome_ai_finish_integration.py",
+        "tests/test_work_item_lifecycle_closure.py"
       ],
       "sourceEvidence": [
         ".ai/cockpit/README.md",
@@ -31,16 +33,18 @@
       ],
       "testEvidence": [
         "tests/test_start_and_archive.py",
-        "tests/test_finish_e2e.py"
+        "tests/test_finish_e2e.py",
+        "tests/test_task_outcome_ai_finish_integration.py",
+        "tests/test_work_item_lifecycle_closure.py"
       ],
       "commandEvidence": [
         "make quality"
       ],
       "limitations": "Repository evidence describes this template; it does not prove an adopter executed the lifecycle.",
-      "digest": "sha256:7d62ca3b3c9ae4dfd09e891ad09588160d18592bdb7146dd6f1ec2e6e59c8a30",
+      "digest": "sha256:495a2210cc71cfa60ade4fe9eb8c9befb785c53d6268003ee27463d1aa5bf899",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
-        "fileCount": 7,
+        "fileCount": 9,
         "files": [
           {
             "path": ".ai/cockpit/README.md",
@@ -52,11 +56,11 @@
           },
           {
             "path": "scripts/ai_close_work_item.py",
-            "sha256": "59698eb3a5bf3384575ef8f674f4e3fd1d8d90686cd1f26b23c7ab1215b27fc6"
+            "sha256": "10ec1b146d7f2a80018f3bb1b86f26d5046071d0ca3f20bc3c4b1992ea639f46"
           },
           {
             "path": "scripts/ai_finish.py",
-            "sha256": "1c3e3cfdf083bfb8e1a9c101b9ba2923ee1c2c743ae1693ccb1cd05ddfab3d0a"
+            "sha256": "4ad8c0852984d999368b38ad410b361edaf3b6310a3374f3bf97a87ba08c1b6d"
           },
           {
             "path": "scripts/ai_start.py",
@@ -68,10 +72,18 @@
           },
           {
             "path": "tests/test_start_and_archive.py",
-            "sha256": "c7e47694c04673dad6b0a9538d8c0ae518961fc1f590aa08bddd4f679de20e45"
+            "sha256": "67740dd0dccb12664150f4db7e54092f29777b7c1cf0986f5f6c1dbe33c2e242"
+          },
+          {
+            "path": "tests/test_task_outcome_ai_finish_integration.py",
+            "sha256": "140e6b5cdadb81130dd3ddc3418ea7bc4449acd7a26f3171a2a9ae71655d44fb"
+          },
+          {
+            "path": "tests/test_work_item_lifecycle_closure.py",
+            "sha256": "55aafbfda69617456ddfbe5f59f5ba6840454ea216530835532f019b5e65550a"
           }
         ],
-        "digest": "sha256:41d19a7cd9d4bf645abff05308abe1dff9876c7e6391834f403711adde267f63"
+        "digest": "sha256:54501d21287b071f50354124046a0b092bbbcaf006e14c91dc0b0c74c9882e31"
       }
     },
     {
@@ -651,7 +663,7 @@
         "make quality"
       ],
       "limitations": "The installed executor implements preserve-evidence Runtime-file removal only. Purge filesystem removal is not implemented. Disable writes a result JSON but does not independently update canonical installed state. Empty directory cleanup, external identity, sandboxing, immutable audit, and enterprise compliance are not claimed; the target-repository receipt and human review remain required.",
-      "digest": "sha256:4289c5769d61cae385d7d74f37281a9090ca19029f1b8340a99d66d0994d151d",
+      "digest": "sha256:2d5ee3099aa1c5a4464ee0c274897316009353b00854e918c43969ab41281ede",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 18,
@@ -670,7 +682,7 @@
           },
           {
             "path": "scripts/ai_installer_catalog.json",
-            "sha256": "3f1ecb0b0f4c1704254dd19687c4c9cf40c6c57b9339053a56597a61f4a7db60"
+            "sha256": "3ac81b3411bdb3758f73ff95ae58396b6efae367ef5fbec4ef7669e985208719"
           },
           {
             "path": "scripts/ai_uninstall_facts.py",
@@ -729,7 +741,7 @@
             "sha256": "449e48f52eb3522cabd8e15bd4538b7b09304bb74745835324be174d728262fe"
           }
         ],
-        "digest": "sha256:224f82b961d025cd340a42604b5573a81609d542166caf50a2300b0c26846261"
+        "digest": "sha256:f28685035ecc6972cc1287749a0089ee6aa67ae344587793d4a2203b27698d66"
       }
     },
     {

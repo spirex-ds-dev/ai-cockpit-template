@@ -12,6 +12,7 @@ def bindings() -> dict[str, object]:
         "verificationDigest": "c" * 64,
         "baseCommit": "1" * 40,
         "headCommit": "2" * 40,
+        "lifecycleStage": "post_pr",
         "pullRequest": {"number": 16, "url": "https://example.test/pull/16"},
         "aiCockpitVersion": "1.0",
         "generatorVersion": "1.0",
@@ -36,6 +37,17 @@ def test_valid_empty_outcome_passes_and_all_statuses_are_allowed() -> None:
             candidate, render_markdown(candidate), expected_task_id="task-outcome-validator"
         )
         assert report.valid, report.errors
+
+
+def test_contract_style_underscore_work_item_id_is_valid() -> None:
+    task_id = "adopt_ai_cockpit"
+    candidate_bindings = bindings()
+    candidate_bindings["taskId"] = task_id
+    candidate = generate_outcome(task_id, candidate_bindings)
+
+    report = validate_outcome(candidate, render_markdown(candidate), expected_task_id=task_id)
+
+    assert report.valid, report.errors
 
 
 def test_schema_binding_and_provenance_fail_closed() -> None:
