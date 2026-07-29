@@ -461,6 +461,22 @@
       "resolution": "The canonical release writer regenerated .ai/cockpit/release-digests.json and its subsequent release check passed.",
       "status": "resolved",
       "followUp": "The same source-bound snapshot is rerun from the fully synchronized candidate; failed snapshot results remain invalid acceptance evidence."
+    },
+    {
+      "issueId": "CI-WARN-EVIDENCE-004",
+      "category": "process-ordering",
+      "severity": "medium",
+      "stage": "hosted-snapshot-local-quality",
+      "fact": "Capability Truth row quick_install_release_archive_digest binds release.json. The release projection was corrected after the matrix and Japanese assessment had been regenerated, so matrix evidence and the assessment that binds it became stale.",
+      "evidence": [
+        "tests/test_capability_truth_matrix.py::test_machine_matrix_evidence_binding_is_valid",
+        "tests/test_absurd_capability_truth.py::test_capability_matrix_has_bound_evidence_and_valid_digests",
+        "tests/test_absurd_capability_truth.py::test_cli_reports_success_and_invalid_matrix"
+      ],
+      "decision": "Regenerate source-bound artifacts in dependency order: release.json, release-digests, Capability Truth, then Japanese assessment. Record the missing composite orchestration as a later flow corrective rather than falsely treating an earlier final assessment as current.",
+      "resolution": "Canonical Capability Truth and Japanese assessment writers were rerun after their direct evidence was stable; their direct checks pass.",
+      "status": "resolved",
+      "followUp": "Before release, add and verify a composite source-bound evidence regeneration/order check so future Work Items cannot repeat this manual ordering error."
     }
   ],
   "residualRisks": [
