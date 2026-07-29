@@ -1,0 +1,251 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe-094-checkpoint-enforcement-20260729",
+  "mode": "code",
+  "title": "Enforce pre-edit checkpoint evidence before implementation",
+  "baseCommit": "03c0d2c4a221665d1f480c4833fb6ed6efbbbc96",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe-094-checkpoint-enforcement-20260729.contract.json",
+    ".ai/work-items/active/rfe-094-checkpoint-enforcement-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "scripts/ai_checkpoint.py",
+    "scripts/ai_check_agent_risk.py",
+    "Makefile",
+    "AGENTS.md",
+    "tests/test_ai_checkpoint.py",
+    "tests/test_ai_check_agent_risk.py",
+    "tests/test_makefile.py",
+    "tests/test_supply_chain.py",
+    "tests/test_release_distribution.py",
+    "scripts/check_supply_chain.py",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-29-rfe-094-checkpoint-enforcement.md"
+  ],
+  "outOfScope": [
+    "Changing a release tag, next-release candidate, provider release, archive, public assets, or publication state.",
+    "Resuming, merging, or closing Dependabot #441; it remains paused until this Work Item closes.",
+    "Weakening quality, supply-chain, release-distribution, or checkpoint validation.",
+    "Changing unrelated dependencies, workflows, installer behavior, or external release assets."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_checkpoint.py",
+      "reason": "The checkpoint recorder currently accepts a before_edit record without distinguishing a late record after completed verification."
+    },
+    {
+      "path": "scripts/ai_check_agent_risk.py",
+      "reason": "The risk gate detected the missing checkpoint but only at ai-finish, after the expensive quality gate had completed."
+    },
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "The paused RFE-093 fix must be repeated under an honest before_edit checkpoint and validates the source-bound evidence transaction."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "The canonical plan records RFE-ISSUE-093 and requires process correction before later release work resumes."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "workflow_process",
+      "supply_chain_evidence",
+      "release_metadata_consistency"
+    ],
+    "reason": "The Work Item modifies governance entrypoints and source-bound local evidence, but must preserve release identity and provider state.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous work; the failed lifecycle identifies a bounded process defect and the source-bound evidence fix is already characterized by a red-first regression."
+  },
+  "preReviewWarnings": [
+    "A before_edit checkpoint must be produced by the canonical preparation command before source, test, or generated-evidence changes.",
+    "Only the two computed release.json supplyChain digests may change during candidate evidence refresh."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "A pre-edit checkpoint must be both recorded before validation results and structurally distinguishable from a late completion record."
+  },
+  "acceptance": [
+    "A canonical make entrypoint runs a ready preflight and writes the before_edit checkpoint to the active Summary before implementation begins.",
+    "The agent-risk gate rejects a before_edit checkpoint whose requiredChecksPassed proves it was recorded after verification began, with a red-first regression.",
+    "The instructions and generated command help point code Work Items to the canonical preparation entrypoint without relaxing ai-finish's independent verification.",
+    "The RFE-093 transaction has a red-first release-projection regression and writes SBOM, provenance, the two release.json digest fields, and release-digests in that dependency order.",
+    "Release identity, publication, security, archive, and provider fields remain unchanged; source-bound evidence, Capability Truth, and Japanese assessment are regenerated from the final Work Item source.",
+    "Before #441 resumes, this Work Item has archived Contract/Summary evidence, a PR whose exact head passes required Hosted CI, a merged PR, and a successful ai-close-work-item record proving local/remote branch cleanup."
+  ],
+  "guidelines": [
+    "Do not fabricate a before_edit event after implementation; make the record's timing evidence reviewable and fail closed.",
+    "Keep the preparation command deterministic and local; it must not query or mutate provider release state.",
+    "Preserve release identity and publication fields; synchronize only the computed local digest projection.",
+    "Keep validation gates fail closed; no test, check, or release constraint may be removed or relaxed.",
+    "Record the execution-process deviation and replacement lifecycle in bidirectional instruction-plan-implementation-acceptance traceability."
+  ],
+  "intent": {
+    "problem": "A required before_edit checkpoint was omitted and was detected only after a full five-minute quality run. Recording it after the fact would falsify the lifecycle, while the paused RFE-093 source-bound evidence fix must be delivered without repeating the omission.",
+    "constraints": [
+      "Do not manufacture or backdate checkpoint evidence.",
+      "Do not weaken ai-finish, agent-risk, quality, or release-distribution gates.",
+      "Do not change release identity, tag, archive, provider state, or public assets.",
+      "Keep the Work Item bounded to checkpoint process enforcement and the dependent RFE-093 corrective replay."
+    ],
+    "rationale": "A canonical preparatory entrypoint plus a regression that rejects late evidence moves detection before costly implementation and prevents an agent from converting a missed lifecycle step into an apparently valid completion record."
+  },
+  "rawUserRequest": "Continue without stopping unless confirmation is genuinely required. When a process problem is found, fix the process before resuming work; prevent omissions through instruction-plan-implementation-acceptance traceability.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continue-and-fix-process-first",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:db9f6ddf4ee910627c222c48cdcf9c8d4a9b9f7f0c1dc2632d29e6a8e9a41f63"
+  },
+  "declaredIntent": {
+    "summary": "Prevent late or fabricated pre-edit checkpoint evidence and replay the linked source-bound release-projection corrective under the repaired process.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A ready code Work Item has no before_edit checkpoint.",
+      "expected": "The canonical preparation command records before_edit immediately after preflight and before source, tests, or generated evidence change.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use a temporary Contract/Summary regression that invokes the preparation command and asserts the checkpoint record is present with zero completed required checks."
+    },
+    {
+      "scenario": "An agent attempts to record before_edit only after verification has completed.",
+      "expected": "The agent-risk gate rejects the late record instead of allowing ai-finish/archive to continue.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Write a red-first agent-risk unit test with requiredChecksPassed greater than zero for before_edit."
+    },
+    {
+      "scenario": "A workflow/dependency pin changes source-bound SBOM and provenance.",
+      "expected": "One refresh updates local evidence and release.json digest projection without changing release identity/publication fields.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Replay the RFE-093 temporary-path unit regression and focused release-distribution tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized continuous process corrective work before resuming #441."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 663
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe-094-checkpoint-enforcement-20260729.json",
+    "baseCommit": "03c0d2c4a221665d1f480c4833fb6ed6efbbbc96",
+    "initialScopeDigest": "e4956fe41b1e3e35e86a59d33a3cc681869d7913e076d1dd93003117d6d8d437",
+    "contractSkeletonDigest": "3d3723ee4a1e33073a02f7bbfeba4f2578c7b5805feb001a0d3a0939703ea3dd"
+  }
+}
