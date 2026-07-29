@@ -83,6 +83,15 @@ def test_smoke_assigns_quality_installation_and_release_to_distinct_jobs():
     assert smoke.count("make quality") == 1
 
 
+def test_smoke_uses_node24_upload_artifact_release_for_quality_diagnostics():
+    smoke = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    upload = smoke.split("- name: Upload quality diagnostics", 1)[1].split(
+        "- name: Run template AI checks", 1
+    )[0]
+    assert "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a" in upload
+    assert "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02" not in smoke
+
+
 def test_quality_full_uses_commit_and_run_bound_session_directories():
     text = MAKEFILE.read_text(encoding="utf-8")
     assert "target/quality/sessions" in text

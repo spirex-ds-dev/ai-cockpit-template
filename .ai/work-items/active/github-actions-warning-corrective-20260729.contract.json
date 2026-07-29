@@ -1,0 +1,277 @@
+{
+  "contractVersion": 2,
+  "workItemId": "github-actions-warning-corrective-20260729",
+  "mode": "code",
+  "title": "Remove GitHub Actions runtime, cache, and Homebrew trust warnings",
+  "baseCommit": "5845a03a9b1c3ce742fdc469d0bd8b66e55e0459",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Fix the GitHub Actions warnings before release: upgrade the Node.js-20 upload-artifact action; stop setup-go cache restore warnings caused by the intentionally absent repository-root go.mod; remove the unrelated untrusted aws/tap before Swift Homebrew operations without disabling trust checks; receive Dependabot PR #443 in this governed corrective; verify the warnings are absent in exact-Head Hosted runs; then continue without stopping.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:github-actions-warning-corrective-and-dependabot-intake",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:c470cf721e4485868a7ee77fff97fcdcc2bc09f6135820ea265d3f66eb5c9de6"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Remove three diagnosed GitHub Actions warning classes with durable workflow assertions and exact-Head Hosted evidence before release.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "scope": [
+    ".ai/work-items/active/github-actions-warning-corrective-20260729.contract.json",
+    ".ai/work-items/active/github-actions-warning-corrective-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".github/workflows/smoke.yml",
+    ".github/workflows/compatibility.yml",
+    "tests/test_workflows.py",
+    "tests/test_quality_gate_architecture.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/plans/2026-07-29-github-actions-warning-corrective.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Disabling GitHub Actions Node runtime enforcement or Homebrew tap trust globally.",
+    "Adding a fake repository-root go.mod solely to satisfy setup-go caching.",
+    "Trusting the entire aws/tap or any unrelated third-party Homebrew tap.",
+    "Changing supported language/toolchain versions except the pinned actions/upload-artifact update already proposed by Dependabot PR #443.",
+    "Merging Dependabot PRs #441, #442, #444, or #445; each remains a later independent governed Work Item.",
+    "Publishing a release, changing release metadata, creating a tag, or changing a GitHub Release."
+  ],
+  "sources": [
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Contains the upload-artifact v4 SHA that emitted the Node.js 20 deprecation warning in Actions run 30420914133."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "Contains the two setup-go fixture steps and two Swift Homebrew operations that emitted warnings in Actions run 30421167605."
+    },
+    {
+      "path": "tests/test_workflows.py",
+      "reason": "Existing executable workflow-contract tests for compatibility jobs and pinned tool behavior."
+    },
+    {
+      "path": "tests/test_quality_gate_architecture.py",
+      "reason": "Existing executable assertions for the smoke diagnostic artifact path."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative serial pre-release plan and instruction-plan-implementation-acceptance traceability context."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Sole authority for current implementation status and generated source binding when workflows or tests change."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "ci_supply_chain",
+      "hosted_environment_drift",
+      "hosted_verification",
+      "warning_regression",
+      "dependency_intake"
+    ],
+    "reason": "Workflow action pins and hosted runner bootstrap behavior affect every PR and release evidence run; a broad trust bypass or false local-only success would leave the release path exposed.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly approved fixing the reported Actions warnings and receiving Dependabot PRs before release."
+  },
+  "preReviewWarnings": [
+    "A successful job is insufficient: inspect exact-Head Hosted logs and prove each named warning string is absent.",
+    "Keep action references pinned to immutable full commit SHAs and bind the upload-artifact pin to Dependabot PR #443.",
+    "Do not disable Homebrew trust enforcement or invent dependency manifests to silence warnings."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: smoke.yml pins actions/upload-artifact v7.0.1 commit 043fb46d1a93c77aae656e7c1c64a875d1fc6a0a, preserving diagnostic upload behavior and explicitly recording that this receives Dependabot PR #443.",
+    "A2: both setup-go fixture/probe steps disable setup-go dependency caching because their go.mod is created later inside a temporary project; no fake root go.mod or cache-dependency-path workaround is introduced.",
+    "A3: both Swift Homebrew paths remove only aws/tap when it is present before invoking brew; the workflow does not trust aws/tap, disable tap trust checks, or ignore untap failures.",
+    "A4: executable regression tests fail if the upload action regresses, either Go step re-enables implicit caching, either Swift path omits the narrow untap guard, or a prohibited broad trust bypass appears.",
+    "A5: local focused workflow tests, quality-fast, full quality, ai-finish archive, and aggregate PR verification pass.",
+    "A6: exact-Head Hosted smoke and compatibility runs pass; their logs contain none of the Node.js 20/upload-artifact, missing go.mod cache restore, or untrusted aws/tap warning signatures reported by the user.",
+    "A7: the user instruction, plan, Contract, workflow changes, tests, Summary, hosted evidence, and acceptance IDs are bidirectionally traceable; Capability Truth remains the implementation-status authority.",
+    "A8: PR merge, ai-close-work-item, local/remote branch deletion, worktree cleanup, and synchronized clean main complete before the next Dependabot Work Item starts.",
+    "A9: Dependabot PR #443 is closed as superseded only after the governed replacement is merged; #441, #442, #444, and #445 remain unchanged and queued before release."
+  ],
+  "guidelines": [
+    "Use immutable full-SHA GitHub Action pins and record the upstream version represented by each changed pin.",
+    "Fix the actual runner/bootstrap mismatch instead of suppressing warning systems.",
+    "Apply the narrowest Homebrew cleanup: remove only the unrelated aws/tap when present.",
+    "Prove Hosted warning absence from exact-Head logs; local YAML tests alone are not sufficient.",
+    "Complete one Work Item, branch, and PR lifecycle before starting the next dependency intake."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "The smoke diagnostic upload runs on GitHub's Node.js 24 runner policy.",
+      "expected": "actions/upload-artifact v7.0.1 is pinned by full SHA and no Node.js 20 deprecation warning is emitted.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a red-first workflow assertion, run local tests, then inspect the exact-Head template-smoke log for the warning signature."
+    },
+    {
+      "scenario": "The Go matrix configures Go before creating its temporary fixture module.",
+      "expected": "Both setup-go steps use cache: false and emit no repository-root go.mod cache restore warning.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add assertions for both setup-go blocks and inspect exact-Head real-stack-quality and latest ecosystem probe Go logs."
+    },
+    {
+      "scenario": "A hosted macOS image contains an unrelated untrusted aws/tap before Swift setup.",
+      "expected": "Both Swift paths conditionally untap only aws/tap before any brew install/probe and emit no untrusted-tap warning.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add positive and prohibited-bypass assertions, then inspect exact-Head Swift job logs."
+    },
+    {
+      "scenario": "A future edit restores an old artifact action, implicit Go caching, or a broad Homebrew trust bypass.",
+      "expected": "Repository workflow tests fail closed before merge.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run mutation-style assertions over the workflow text for every required and prohibited marker."
+    },
+    {
+      "scenario": "Dependabot PR #443 overlaps the governed warning corrective.",
+      "expected": "The exact v7.0.1 dependency change is retained in the governed PR and #443 is only closed as superseded after merge.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Compare PR #443 diff and upstream tag SHA, cite it in Summary, then close #443 after lifecycle merge."
+    }
+  ],
+  "intent": {
+    "problem": "Successful GitHub Actions runs still emit three warning classes: an upload-artifact release targeting Node.js 20, setup-go cache restoration before temporary Go modules exist, and an unrelated untrusted aws/tap on hosted macOS. These warnings hide future actionable failures and are on the pre-release path.",
+    "constraints": [
+      "Preserve immutable action pinning and accept the exact upload-artifact v7.0.1 SHA proposed by Dependabot PR #443.",
+      "Do not add a fake root go.mod; the jobs intentionally create disposable modules after toolchain setup.",
+      "Do not trust aws/tap or disable Homebrew trust checks; remove only that unrelated tap when present.",
+      "Require exact-Head Hosted log evidence, not successful conclusions alone.",
+      "Do not modify or merge the other four Dependabot PRs in this Work Item."
+    ],
+    "rationale": "Narrow workflow corrections plus fail-closed regression assertions eliminate the diagnosed causes without weakening supply-chain controls or changing project toolchain support."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly requested correcting the named GitHub Actions warnings and receiving Dependabot PR #443 before release."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 662
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/github-actions-warning-corrective-20260729.json",
+    "baseCommit": "5845a03a9b1c3ce742fdc469d0bd8b66e55e0459",
+    "initialScopeDigest": "3212339d1175bb568128bf47481b0cb7de7e73fb2940f59cd2fff79f7f2c174e",
+    "contractSkeletonDigest": "0b2a92326dba4382a2ad9f14afa15b51814b7f473eaf226525aef6f7a59602b5"
+  }
+}
