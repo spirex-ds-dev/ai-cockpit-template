@@ -83,6 +83,24 @@ def test_smoke_assigns_quality_installation_and_release_to_distinct_jobs():
     assert smoke.count("make quality") == 1
 
 
+def test_installation_smoke_archives_active_outcome_before_commit_and_guards():
+    smoke = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
+    installation = smoke.split("  installation-smoke:", 1)[1].split("\n  release-evidence:", 1)[0]
+    finish = "make ai-finish TASK=adopt_ai_cockpit"
+    archive = "make archive-work-item CONTRACT=.ai/work-items/active/adopt_ai_cockpit.contract.json"
+    active = "if test -f .ai/work-items/active/adopt_ai_cockpit.contract.json; then"
+    archived = "test -f .ai/work-items/archive/2026/adopt_ai_cockpit.contract.json"
+    assert finish in installation
+    assert archive in installation
+    assert active in installation
+    assert archived in installation
+    assert installation.index(finish) < installation.index(active) < installation.index(archive)
+    assert (
+        installation.index(archive) < installation.index(archived) < installation.index("git add .")
+    )
+    assert installation.index(archived) < installation.index("make check-ai-coverage-guard")
+
+
 def test_smoke_uses_node24_upload_artifact_release_for_quality_diagnostics():
     smoke = (ROOT / ".github" / "workflows" / "smoke.yml").read_text(encoding="utf-8")
     upload = smoke.split("- name: Upload quality diagnostics", 1)[1].split(
