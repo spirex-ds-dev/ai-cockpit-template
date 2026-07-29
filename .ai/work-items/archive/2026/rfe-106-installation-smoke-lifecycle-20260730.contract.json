@@ -1,0 +1,231 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe-106-installation-smoke-lifecycle-20260730",
+  "mode": "code",
+  "title": "Fix installation smoke lifecycle after active Outcome",
+  "baseCommit": "addb6da81aaa2fcc93710a4e034f5713be2abace",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe-106-installation-smoke-lifecycle-20260730.contract.json",
+    ".ai/work-items/active/rfe-106-installation-smoke-lifecycle-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".github/workflows/smoke.yml",
+    "tests/test_quality_gate_architecture.py",
+    "docs/superpowers/plans/2026-07-30-rfe-106-installation-smoke-lifecycle-20260730.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Changing the installed Runtime coverage policy to advisory.",
+    "Changing production installer payload or release behavior.",
+    "Merging or relying on the superseded RFE-101/RFE-102 branch evidence."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Defines the governed branch, PR, closure, and explicit archive lifecycle."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Contains the failing installed-adopter lifecycle."
+    },
+    {
+      "path": "/tmp/rfe104-installation-smoke.XXXXXX.zip",
+      "reason": "Hosted installation-smoke failure log: strict coverage guard rejects installed Runtime files before their install commit."
+    },
+    {
+      "path": "71e3649d",
+      "reason": "Unmerged historical reference only; its workflow diff identifies the prior corrective ordering without serving as delivery evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_process",
+      "software_design",
+      "installer_lifecycle"
+    ],
+    "reason": "The fixture validates an adopter lifecycle and must not bypass strict coverage or human-report boundaries.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continued planned remediation and explicit repair of discovered workflow defects."
+  },
+  "preReviewWarnings": [
+    "The workflow fixture may validate order mechanically, but must not claim a human saw a CI log; the real agent must relay the active Outcome before archive."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "installation-smoke conditionally runs explicit archive when ai-finish retains an active Contract, then proves an archive exists before git add/commit and post-install governance guards.",
+    "A static regression test rejects any workflow that moves archive after install commit or coverage guard.",
+    "The correction leaves strict coverage enforcement enabled and does not copy template tests into adopter payload merely to silence the guard.",
+    "Focused and full local verification pass; hosted installation-smoke passes on the corrective PR."
+  ],
+  "guidelines": [
+    "Keep installed-adopter lifecycle evidence truthful: the fixture asserts command order, not human conversation delivery.",
+    "Fix the lifecycle boundary rather than weakening coverage enforcement or inflating the installer payload."
+  ],
+  "intent": {
+    "problem": "RFE-104 hosted CI installation-smoke failed because the temporary adopter invoked ai-finish, which now retains an active Outcome, then ran strict coverage guard against the pre-install baseline before its install commit. The guard correctly treated installed Runtime files as untested production changes.",
+    "constraints": [
+      "Keep coverage guard blocking.",
+      "Keep the active Outcome report-before-archive behavior.",
+      "Archive explicitly before the installer fixture commits the Runtime.",
+      "Do not modify immutable predecessor evidence or merge the superseded historical branch."
+    ],
+    "rationale": "An installer smoke test must model the same explicit archival transition required in real governed work; committing first erases the intended lifecycle boundary and makes first-install checks structurally impossible."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User granted continuing authority for planned corrective Work Items, PRs, merges, and lifecycle closure."
+  },
+  "rollbackNote": "Revert this Work Item diff; this restores the previous fixture failure rather than weakening installed Runtime policy.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 667
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe-106-installation-smoke-lifecycle-20260730.json",
+    "baseCommit": "addb6da81aaa2fcc93710a4e034f5713be2abace",
+    "initialScopeDigest": "44fff43b95e13d221e2342b87de78c40c6240d87b70f02b12046c6a447997333",
+    "contractSkeletonDigest": "6f8e3994469c91432c459ddeb95eaf1a092cbeecb91968e92784654ad627400c"
+  },
+  "rawUserRequest": "Continue the authorized plan. Repair discovered process problems before release; every Work Item must report directly while active before archive, then complete PR, CI, merge, and cleanup.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continuous-authorization-and-process-repair",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:rfe-106-installation-smoke-lifecycle"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Repair the installed-adopter smoke fixture so it explicitly archives the active Outcome before committing the installed Runtime and evaluating post-install guards.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Fresh temporary adopter completes ai-finish, explicit archive, install commit, then status/backtrack/coverage/ownership/PR guards.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "Proves the lifecycle transition establishes the correct baseline for strict guards.",
+      "expected": "Hosted installation-smoke completes successfully without advisory policy changes.",
+      "verificationPlan": "Add static ordering regression and run the hosted workflow."
+    },
+    {
+      "scenario": "Workflow ordering is changed so archive is after git add or coverage guard.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "reason": "Prevents recurrence of the bypassed active-to-archive boundary.",
+      "expected": "Static test fails.",
+      "verificationPlan": "Mutation-oriented source-order assertion."
+    }
+  ]
+}

@@ -236,6 +236,10 @@ jobs:
               exit 1
             fi
             make ai-finish TASK=adopt_ai_cockpit
+            if test -f .ai/work-items/active/adopt_ai_cockpit.contract.json; then
+              make archive-work-item CONTRACT=.ai/work-items/active/adopt_ai_cockpit.contract.json
+            fi
+            test -f .ai/work-items/archive/2026/adopt_ai_cockpit.contract.json
             git add .
             git commit -m 'install template'
             make check-ai-status-consistency
