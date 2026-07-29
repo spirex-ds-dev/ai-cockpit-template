@@ -1,0 +1,311 @@
+{
+  "contractVersion": 2,
+  "workItemId": "capability-evidence-scope-dependency-corrective-20260729",
+  "mode": "code",
+  "title": "Fail fast when a Work Item changes capability-bound evidence without owning its matrix",
+  "baseCommit": "4a78169e7c82b575d93f830b8acbddaee70b6288",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+    ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/guards/governance_complexity_policy.yaml",
+    "scripts/ai_evidence_dependencies.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/ai_preflight_review.py",
+    "scripts/ai_check_scope.py",
+    "tests/test_evidence_dependencies.py",
+    "tests/test_preflight_review.py",
+    "tests/test_contract_and_policy.py",
+    "tests/test_installed_runtime_parity.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/plans/2026-07-29-capability-evidence-scope-dependency-corrective.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Changing capability statuses, claims, limitations, command evidence, or runtime behavior.",
+    "Regenerating the current Japanese documentation Work Item's capability matrix before this corrective is merged and closed.",
+    "Resuming the paused Japanese final assessment or documentation-alignment Work Item.",
+    "Publishing a release, changing release metadata, creating or moving a semantic version tag, or cleaning execution plans.",
+    "Weakening byte-bound capability evidence validation or treating a stale matrix as valid."
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Authoritative machine-readable inventory whose sourceEvidence and testEvidence paths define the dependency graph."
+    },
+    {
+      "path": "scripts/ai_capability_truth.py",
+      "reason": "Current byte-binding validator and deterministic matrix regeneration implementation."
+    },
+    {
+      "path": "scripts/ai_check_scope.py",
+      "reason": "Current changed-path dependency rules run only after edits and do not derive matrix dependencies."
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "reason": "Implementation-readiness gate where missing dependent-artifact ownership must fail before editing."
+    },
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "Authoritative installer payload inventory; every module imported by installed governance entrypoints must be distributed."
+    },
+    {
+      "path": "tests/test_installed_runtime_parity.py",
+      "reason": "Existing installed-runtime boundary where dependency closure must be asserted."
+    },
+    {
+      "path": "tests/test_capability_truth_matrix.py",
+      "reason": "Existing regression proves stale evidence bytes fail and regeneration repairs the matrix, but does not cover Contract scope."
+    },
+    {
+      "path": "target/quality/sessions/4a78169e7c82-local-20260729T015655Z-26085-0/logs/project-test.log",
+      "reason": "Failure evidence showing four matrix rows became stale only after the full project-test path."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Requires process defects to be corrected with executable checks before the interrupted Work Item resumes."
+    },
+    {
+      "path": "conversation:2026-07-29-current-adopter-absurd-injection-baseline",
+      "reason": "User-supplied reference assessment for the future real absurd/injection Work Item; it distinguishes post-write repository governance, request-time semantic classification, and out-of-scope runtime sandbox controls."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "governance_preflight_false_ready",
+      "capability_evidence_staleness",
+      "contract_scope_omission",
+      "late_quality_failure"
+    ],
+    "reason": "A Work Item can currently receive a ready Preflight while its declared scope guarantees that byte-bound capability evidence will become stale, delaying a deterministic ownership error until the expensive full test path.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous execution and explicitly requires discovered workflow defects to be fixed before dependent Work Items continue."
+  },
+  "preReviewWarnings": [
+    "Review dynamic dependency discovery against the matrix rather than an installation.md special case.",
+    "Confirm Preflight rejects missing matrix ownership before edits and Scope Guard rejects missing matrix regeneration after edits.",
+    "Confirm unrelated scopes remain ready and malformed dependency manifests fail closed.",
+    "Do not alter capability status or weaken existing byte-level evidence validation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Bind the final dependency semantics, scope, tests, and verification evidence before implementation and archive."
+  },
+  "acceptance": [
+    "A1: Preflight returns not_ready before implementation when Contract scope covers any Capability Truth sourceEvidence or testEvidence path but does not also cover docs/reference/capability-truth-matrix.json; the diagnostic names the triggering evidence path and affected capability row.",
+    "A2: Scope Guard fails immediately when an actual diff changes a Capability Truth sourceEvidence or testEvidence file without also changing docs/reference/capability-truth-matrix.json, even when both paths are declared in Contract scope.",
+    "A3: Dependency discovery is derived from every current matrix row, deduplicates shared evidence paths, supports exact and glob Contract scope patterns, and does not hardcode installation.md or require the matrix for unrelated paths.",
+    "A4: Missing, malformed, escaping, duplicate, or non-string matrix evidence paths fail closed with deterministic diagnostics; valid matrix-only and unrelated Work Items remain accepted.",
+    "A5: Red-first tests reproduce the interrupted Japanese Work Item shape, prove the old Preflight false-ready and late Scope behavior, then prove both new fail-fast boundaries and the valid regeneration path.",
+    "A6: The Capability Truth documentation explains the Contract ownership and regeneration sequence without changing capability claims or statuses.",
+    "A7: The comprehensive plan, corrective plan, instruction traceability, Contract, Summary, implementation files, and acceptance evidence remain bidirectionally aligned before archive.",
+    "A8: Full local quality, archive, one PR, exact-Head Hosted checks, merge, ai-close-work-item, local and remote branch cleanup, and synchronized main complete before the Japanese corrective resumes.",
+    "A9: The comprehensive plan records the user's current-adopter absurd/injection assessment only as a future Work Item baseline: registered-case corpus success is not generalized semantic capability, policy-level blocking is not runtime sandbox enforcement, and each of the 12 cases retains its stated condition or external-control dependency.",
+    "A10: The installer payload includes ai_evidence_dependencies.py, a focused installed-runtime regression proves dependency closure, and fresh installation validation can import ai_preflight_review.py and ai_check_scope.py without relying on host-repository scripts."
+  ],
+  "guidelines": [
+    "Use the matrix inventory as the single dependency source; do not duplicate its evidence path list in policy or code.",
+    "Fail before editing when Contract ownership is incomplete and fail before finish when the generated matrix was not actually refreshed.",
+    "Keep diagnostics actionable by naming the artifact, evidence path, and capability identifier.",
+    "Do not add third-party dependencies or weaken existing evidence validation.",
+    "Use red-green-refactor and record every discovered issue in the Summary and corrective plan."
+  ],
+  "intent": {
+    "problem": "The Japanese Session documentation corrective changed docs/getting-started/installation.md, which is byte-bound by four Capability Truth rows. Its Contract omitted the matrix, Preflight reported ready, focused tests and quality-fast passed, and only the five-minute full project-test path reported four stale evidenceSource failures.",
+    "constraints": [
+      "Correct the reusable process before resuming the interrupted Japanese Work Item.",
+      "Derive dependency edges from the authoritative matrix rather than a file-specific exception.",
+      "Preserve fail-closed evidence semantics and current capability statuses.",
+      "Keep the corrective isolated in one branch, one Work Item, and one PR.",
+      "Do not resume Japanese assessment, documentation alignment, cleanup, or release until this lifecycle closes."
+    ],
+    "nonGoals": [
+      "Changing the substance of installation guidance.",
+      "Changing Capability Truth claims or marking new capabilities implemented.",
+      "Optimizing the full quality runtime in this corrective.",
+      "Publishing or preparing a release."
+    ],
+    "rationale": "A dependency-aware Preflight plus changed-path Scope Guard turns an expensive late digest failure into an actionable ownership decision before editing and automatically follows future matrix inventory changes."
+  },
+  "rawUserRequest": "Continue the ordered remediation. Every discovered workflow problem must be solved before release so the same omission does not recur; all Work Items use instruction-plan-implementation-acceptance traceability and the complete PR, merge, closure, branch-cleanup lifecycle.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continue-and-fix-process-before-resuming-japanese-corrective",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:capability-evidence-scope-dependency-corrective-20260729"
+  },
+  "declaredIntent": {
+    "summary": "Add dynamic fail-fast ownership and regeneration checks for Capability Truth evidence dependencies.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Contract owns installation.md but omits the capability matrix.",
+      "expected": "Preflight is not_ready before implementation and identifies the four affected capability rows.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a red-first Preflight regression using a temporary matrix and a Contract matching the interrupted Japanese Work Item."
+    },
+    {
+      "scenario": "A bound evidence file changes but the matrix file does not.",
+      "expected": "Scope Guard fails with an explicit regeneration requirement before the full project test begins.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a red-first changed-path regression for evidence-only and then evidence-plus-matrix diffs."
+    },
+    {
+      "scenario": "A Work Item changes an unrelated file or only the matrix.",
+      "expected": "Preflight and Scope Guard do not invent a dependency or require unrelated changes.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add negative-control cases using unrelated docs and matrix-only changes."
+    },
+    {
+      "scenario": "The dependency matrix is missing, malformed, duplicated, escaping, or contains non-string evidence.",
+      "expected": "Dependency discovery fails closed with a deterministic path-specific diagnostic.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add parameterized malformed-manifest tests before implementing the loader."
+    },
+    {
+      "scenario": "The corrective lifecycle is incomplete.",
+      "expected": "The interrupted Japanese corrective remains paused and no release-stage Work Item starts.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Require archive, PR exact-Head Hosted success, merge, closure, branch absence, and synchronized main before resume."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized correcting discovered workflow defects before resuming the dependent remediation sequence; this approval is limited to the declared guard policy and process files."
+  },
+  "rollbackNote": "Revert this corrective PR; the prior late byte-digest failure remains fail closed and the interrupted Japanese Work Item stays paused.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 659
+    },
+    "approved": true,
+    "repaymentWorkItem": "final-execution-plan-cleanup",
+    "repaymentRecords": [
+      "capability-evidence-scope-dependency-corrective-20260729|archiveGrowth|658|659|user|2026-07-29|Add one required process-corrective archive; repay cumulative plan and archive growth only through the authorized final cleanup without rewriting immutable evidence."
+    ]
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/capability-evidence-scope-dependency-corrective-20260729.json",
+    "baseCommit": "4a78169e7c82b575d93f830b8acbddaee70b6288",
+    "initialScopeDigest": "7865e78cdcfc13b9646fca810ad4f5411ab530d5c4ae9aa09759b3ef85da1da3",
+    "contractSkeletonDigest": "b028663d5d8e7265b5ce431a65060ad3793b5c2f8ea73985a61b66a4e021c127"
+  }
+}

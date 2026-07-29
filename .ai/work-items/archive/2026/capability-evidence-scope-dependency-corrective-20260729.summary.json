@@ -1,0 +1,852 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "capability-evidence-scope-dependency-corrective-20260729",
+  "contractPath": ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "reason": "Defines the corrective scope, acceptance A1-A10, dependency sources, installed-runtime closure, and release-blocking boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "reason": "Records root cause, reviewed implementation evidence, documentation alignment, verification state, and residual risk."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated Work Item status surface; retained as lifecycle output and not manually edited by this Task."
+    },
+    {
+      "path": ".ai/work-items/starts/capability-evidence-scope-dependency-corrective-20260729.json",
+      "reason": "Untracked start receipt for this active Work Item; retained for its lifecycle evidence."
+    },
+    {
+      "path": "scripts/ai_evidence_dependencies.py",
+      "reason": "Derives and validates Capability Truth source/test evidence dependencies from the matrix."
+    },
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "Distributes the new dependency module with every installed Preflight and Scope Guard runtime."
+    },
+    {
+      "path": "scripts/ai_preflight_review.py",
+      "reason": "Adds the fail-closed Evidence Dependency signal before implementation."
+    },
+    {
+      "path": "scripts/ai_check_scope.py",
+      "reason": "Rejects actual bound-evidence diffs that omit the regenerated matrix."
+    },
+    {
+      "path": "tests/test_evidence_dependencies.py",
+      "reason": "Covers dependency parsing, normalization, fail-closed invalid manifests, and scope/diff helpers."
+    },
+    {
+      "path": "tests/test_preflight_review.py",
+      "reason": "Covers the interrupted Japanese Work Item scope shape and Preflight negative controls."
+    },
+    {
+      "path": "tests/test_contract_and_policy.py",
+      "reason": "Covers Scope Guard evidence-only, valid regeneration, unrelated, and malformed-matrix cases."
+    },
+    {
+      "path": "tests/test_installed_runtime_parity.py",
+      "reason": "Proves the installer payload contains the new imported module and fresh installed validation remains host-independent."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Regenerates byte-bound governed update/uninstall evidence after the installer catalog and installed-runtime regression changed."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.md",
+      "reason": "Documents separate Contract ownership and actual regeneration requirements without claiming capability proof."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Registers scripts/ai_evidence_dependencies.py with tests/test_evidence_dependencies.py."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Adds PLAN-DIRECTIVE-042 with instruction-to-implementation-to-acceptance mapping."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registers the corrective plan as mutable current instruction context."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-29-capability-evidence-scope-dependency-corrective.md",
+      "reason": "Provides the task-by-task corrective implementation plan and root-cause record."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Preserves the ordered future absurd/injection baseline and places its independent Work Item after deprecated cleanup and before release."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/superpowers/plans/2026-07-29-capability-evidence-scope-dependency-corrective.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "conversation:2026-07-29-current-adopter-absurd-injection-baseline"
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:27:15.123666+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "72604648760f0ccd5a129322f6567e16a5a9aabc9f6a1a643c69ba71cafe637d",
+      "commandHash": "2baee4560ffe763fd834bd7666b6ce5438eb85fff24b9d79063c110589bdd2db",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "3ff53115aa4cc384659f9ef3e389b358150b9ac8dea20aed728f1f1afa301f8e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json work item contract check passed: .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "outputBytes": 292
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:27:15.355645+00:00",
+      "exitCode": 0,
+      "durationMs": 156,
+      "outputDigest": "33ecc56bbcbafab99fbba513b0334b246b07bc9fdd2af95ac87eefd66fa17f07",
+      "commandHash": "4dd5a41e79e8e0bad85fc8f09bd76020c89a29c4c3c7f28c319f363e4283d9db",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "3ff53115aa4cc384659f9ef3e389b358150b9ac8dea20aed728f1f1afa301f8e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json scope guard passed: 17 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json scope guard passed: 17 changed path(s) covered",
+      "outputBytes": 209
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:27:15.584173+00:00",
+      "exitCode": 0,
+      "durationMs": 150,
+      "outputDigest": "01b91ee91894624f91c579675b71726667c961b554a6058d9e59121be3d1b20e",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "3ff53115aa4cc384659f9ef3e389b358150b9ac8dea20aed728f1f1afa301f8e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json [warning] restricted_write: .ai/guards/coverage_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json [warning] restricted_write: .ai/guards/coverage_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 415
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:27:15.945583+00:00",
+      "exitCode": 0,
+      "durationMs": 281,
+      "outputDigest": "4a287c0a2acdea9bc8b379241ef857acf28170506b5595e0ab2689963d9ac0d2",
+      "commandHash": "13c57a177296c7d32562a5fb1b60445551c538a7708df79a94202713a5734d32",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "3ff53115aa4cc384659f9ef3e389b358150b9ac8dea20aed728f1f1afa301f8e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `capability-evidence-scope-dependency-corrective-20260729` - Contract Hash: `cd818461203b0071` - Mode: `code` - notCodable: `False` - Exec",
+      "outputTail": "d ## Review Focus - Preflight Contract ownership versus Scope Guard actual-diff boundary - fail-closed empty and malformed matrix handling - coverage registration exactness - future absurd/injection baseline non-claim and ordering ## Diff Ownership Preview - active_owned: `17`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/coverage_policy.yaml` — covered by Contract scope - [active_owned] `.ai/work-items/starts/capability-evidence-scope-dependency-corrective-20260729.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.md` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-capability-evidence-scope-dependency-corrective.md` — covered by Contract scope - [active_owned] `scripts/ai_check_scope.py` — covered by Contract scope - [active_owned] `scripts/ai_evidence_dependencies.py` — covered by Contract scope - [active_owned] `scripts/ai_installer_catalog.json` — covered by Contract scope - [active_owned] `scripts/ai_preflight_review.py` — covered by Contract scope - [active_owned] `tests/test_contract_and_policy.py` — covered by Contract scope - [active_owned] `tests/test_evidence_dependencies.py` — covered by Contract scope - [active_owned] `tests/test_installed_runtime_parity.py` — covered by Contract scope - [active_owned] `tests/test_preflight_review.py` — covered by Contract scope ## Next Action - Run or record required verification: aiSummary",
+      "outputBytes": 8051
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:27:16.238757+00:00",
+      "exitCode": 0,
+      "durationMs": 197,
+      "outputDigest": "d16ba2449c3c52e310eefb42bc25a79e5cea5f6536a7bf72034e08169899a728",
+      "commandHash": "f44089d5a3d8a094fae8af5c05cd2b5585725249bf1c05b211483da7f52872d9",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "3ff53115aa4cc384659f9ef3e389b358150b9ac8dea20aed728f1f1afa301f8e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/capability-evidence-scope-dependency-corrective-20260729.json [review] scripts/ai_evidence_dependencies.py [review] .ai/cockpit/current_status.md [review] .ai/guards/coverage_policy.yaml [review] scripts/ai_check_scope.py [review] scripts/ai_preflight_review",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/capability-evidence-scope-dependency-corrective-20260729.json [review] scripts/ai_evidence_dependencies.py [review] .ai/cockpit/current_status.md [review] .ai/guards/coverage_policy.yaml [review] scripts/ai_check_scope.py [review] scripts/ai_preflight_review.py review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 581
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:27:16.437009+00:00",
+      "exitCode": 0,
+      "durationMs": 122,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "3ff53115aa4cc384659f9ef3e389b358150b9ac8dea20aed728f1f1afa301f8e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:27:16.642528+00:00",
+      "exitCode": 0,
+      "durationMs": 125,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "3ff53115aa4cc384659f9ef3e389b358150b9ac8dea20aed728f1f1afa301f8e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:27:16.777748+00:00",
+      "exitCode": 0,
+      "durationMs": 59,
+      "outputDigest": "f4ba9b78ad7642ad808beb4bab43cade86cf4ec39ecf060beefbf2a158321df9",
+      "commandHash": "0603bb994e7c5ad41ad1a31569c7a6183654cd9bab2d9e2f0749ff799b93cb29",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "3ff53115aa4cc384659f9ef3e389b358150b9ac8dea20aed728f1f1afa301f8e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 335
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:27:16.906064+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "18a5d001a8558b92492ef1367a8fa94e14971a8592830486ec3382ca4cfc254e",
+      "commandHash": "873d017179bb161f7e07417e74a41f041cf979980938ed63f8292b121856e728",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "3ff53115aa4cc384659f9ef3e389b358150b9ac8dea20aed728f1f1afa301f8e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputBytes": 340
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:27:17.279551+00:00",
+      "exitCode": 0,
+      "durationMs": 294,
+      "outputDigest": "1870308f87976351ce16b3cf621e2346e3404540b043abb7f7b61504b379300b",
+      "commandHash": "e5a074cbe8a4361a567b34465127c096d88021a38580a520d50483e49808489c",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "3ff53115aa4cc384659f9ef3e389b358150b9ac8dea20aed728f1f1afa301f8e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `17`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/coverage_policy.yaml` — covered by Contract scope - [active_owned] `.ai",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json ## Diff Ownership Preview - active_owned: `17`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/coverage_policy.yaml` — covered by Contract scope - [active_owned] `.ai/work-items/starts/capability-evidence-scope-dependency-corrective-20260729.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.md` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/remediation-instruction-traceability.json` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-07-29-capability-evidence-scope-dependency-corrective.md` — covered by Contract scope - [active_owned] `scripts/ai_check_scope.py` — covered by Contract scope - [active_owned] `scripts/ai_evidence_dependencies.py` — covered by Contract scope - [active_owned] `scripts/ai_installer_catalog.json` — covered by Contract scope - [active_owned] `scripts/ai_preflight_review.py` — covered by Contract scope - [active_owned] `tests/test_contract_and_policy.py` — covered by Contract scope - [active_owned] `tests/test_evidence_dependencies.py` — covered by Contract scope - [active_owned] `tests/test_installed_runtime_parity.py` — covered by Contract scope - [active_owned] `tests/test_preflight_review.py` — covered by Contract scope",
+      "outputBytes": 1923
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:34:05.180138+00:00",
+      "exitCode": 0,
+      "durationMs": 407792,
+      "outputDigest": "abcccf73d71609875930892d06c5477da6b4f039a8714705c3c103b5e3a2b022",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "3ff53115aa4cc384659f9ef3e389b358150b9ac8dea20aed728f1f1afa301f8e",
+      "outputSummary": "\"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-full \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory quality-fast-static \"/Applications/Xcode 26.2.app/Contents/Developer/usr/bin/make\" -f \"Makefile\" --no-print-directory -j2 quality-fast-static-gates PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/run_quality_gate.py --gate project-format-check --category static --session-id \"c3df487d9f04",
+      "outputTail": "ing_archive_summary_version 6.85s call tests/test_adoption_e2e.py::test_first_adoption_finishes_and_passes_complete_pr_check 2.86s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 2.81s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 2.76s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 2.59s call tests/test_installer.py::test_reinstall_preserves_project_glossary_by_default[False-True] 2.58s call tests/test_start_and_archive.py::test_ai_start_journeys 2.58s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 1517 passed, 3 warnings in 384.08s (0:06:24) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DoNJoAadl9/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DoNJoAadl9/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DoNJoAadl9/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.DoNJoAadl9/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/c3df487d9f04-local-20260729T032717Z-86196-0/summary.json",
+      "outputBytes": 47414
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:34:06.981550+00:00",
+      "exitCode": 0,
+      "durationMs": 302,
+      "outputDigest": "828fe36efb09321449dc3ddb165766adc9e26c92947cf3314e78e66afb091601",
+      "commandHash": "1bb34a4ac806fabd36f285ee7d867421ef6cd422ab597fc905e584958813448a",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "c5d0e11435481e1749c157775c7dc1a275f05aae31ba3575baf820c78cd91d5c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 450
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:34:07.356785+00:00",
+      "exitCode": 0,
+      "durationMs": 296,
+      "outputDigest": "4de43470945fd68274a5b48acc1b2157f875703518f5fd4e9936b61f86bf8859",
+      "commandHash": "45c3b48c4f69cab75646348cbb02ee771d20c6887d538082c910cc895edb03f8",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "c5d0e11435481e1749c157775c7dc1a275f05aae31ba3575baf820c78cd91d5c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 365
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:34:07.480586+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "c5d0e11435481e1749c157775c7dc1a275f05aae31ba3575baf820c78cd91d5c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json SUMMARY=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:34:07.614406+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "7e0121b39aefc6ded6091d23ea4253b78a39c7c01500d27e23c89ba2b2d343b2",
+      "commandHash": "191a810db4864938906119664b908d4adfd274f4a359075b7743f4a05a24f983",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "c5d0e11435481e1749c157775c7dc1a275f05aae31ba3575baf820c78cd91d5c",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json --summary .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 345
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json CONTRACT=.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-29T03:34:08.680439+00:00",
+      "exitCode": 0,
+      "durationMs": 126,
+      "outputDigest": "8b0987e42b67bafca8b066da2ce651d8adb2e6c67fb38d49737fc4c0ef4ab3de",
+      "commandHash": "afa3f93206ef501a0ae95145c4bc72890ebb7cad5a3c87a3855ab6188a0251fa",
+      "contractHash": "cd818461203b007190f5dc82cc062ad5952fc8d42a9b431a16c783e7ccb820c4",
+      "commitSha": "c3df487d9f04e39d344fd7ba28ce0faf6c71e4ca",
+      "executionContractPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "worktreeDigest": "aa875a3d913234f77b32c775e4c164db08ce85656c64fbdc9842a457423c1747",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json ai summary check passed: .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json --contract .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.contract.json ai summary check passed: .ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json",
+      "outputBytes": 385
+    }
+  ],
+  "acceptanceEvidence": [
+    {
+      "acceptanceId": "A1",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly authorized fixing discovered process defects before resuming the ordered Work Items."
+      },
+      "kind": "bug_fix",
+      "failureScenario": "A Contract could own byte-bound installation evidence without owning the capability matrix and still receive a ready Preflight.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_preflight_review.py",
+          "locator": "Capability Truth evidence dependency Preflight regressions",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A2",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly authorized fixing discovered process defects before resuming the ordered Work Items."
+      },
+      "kind": "bug_fix",
+      "failureScenario": "A bound evidence file could change without an actual regenerated matrix diff.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_contract_and_policy.py",
+          "locator": "evidence-only and evidence-plus-matrix Scope Guard regressions",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A3",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly authorized fixing discovered process defects before resuming the ordered Work Items."
+      },
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_evidence_dependencies.py",
+          "locator": "derived shared evidence paths, exact scope, glob scope, and unrelated scope",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A4",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly authorized fixing discovered process defects before resuming the ordered Work Items."
+      },
+      "kind": "bug_fix",
+      "failureScenario": "Invalid or empty matrix inventories could be interpreted as harmless dependency graphs.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_evidence_dependencies.py",
+          "locator": "missing, malformed, empty, duplicate, escaping, symlink, and non-string cases",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A5",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly authorized fixing discovered process defects before resuming the ordered Work Items."
+      },
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_preflight_review.py",
+          "locator": "interrupted Japanese Work Item regression",
+          "verification": "quality"
+        },
+        {
+          "type": "test",
+          "path": "tests/test_contract_and_policy.py",
+          "locator": "late Scope Guard regression",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A6",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly authorized fixing discovered process defects before resuming the ordered Work Items."
+      },
+      "evidence": [
+        {
+          "type": "documentation",
+          "path": "docs/reference/capability-truth-matrix.md",
+          "locator": "Contract ownership and actual regeneration boundary",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A7",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly authorized fixing discovered process defects before resuming the ordered Work Items."
+      },
+      "evidence": [
+        {
+          "type": "documentation",
+          "path": "docs/reference/remediation-instruction-traceability.json",
+          "locator": "PLAN-DIRECTIVE-042",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A8",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly authorized the complete PR, merge, closure, branch-cleanup lifecycle and continuous execution."
+      },
+      "evidence": [
+        {
+          "type": "lifecycle",
+          "path": ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+          "locator": "archive, exact-Head Hosted checks, merge, closure, and cleanup requirement",
+          "verification": "aiCheckpoint"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A9",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User supplied the adopter assessment as reference input and authorized inserting its future Work Item."
+      },
+      "evidence": [
+        {
+          "type": "documentation",
+          "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "locator": "future real absurd/injection baseline and twelve conditional cases",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A10",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "User explicitly authorized fixing discovered process defects before resuming the ordered Work Items."
+      },
+      "kind": "bug_fix",
+      "failureScenario": "Installed Preflight and Scope scripts imported ai_evidence_dependencies.py while the installer payload omitted it.",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_installed_runtime_parity.py",
+          "locator": "installer payload dependency closure and fresh installed validation",
+          "verification": "quality"
+        },
+        {
+          "type": "implementation",
+          "path": "scripts/ai_installer_catalog.json",
+          "locator": "ai_evidence_dependencies.py",
+          "verification": "quality"
+        }
+      ]
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Use the matrix inventory as the single dependency source; do not duplicate its evidence path list in policy or code.",
+      "compliant": true,
+      "evidence": "scripts/ai_evidence_dependencies.py derives sourceEvidence and testEvidence edges from docs/reference/capability-truth-matrix.json; coverage policy records only the production/test ownership pair."
+    },
+    {
+      "guideline": "Fail before editing when Contract ownership is incomplete and fail before finish when the generated matrix was not actually refreshed.",
+      "compliant": true,
+      "evidence": "scripts/ai_preflight_review.py adds the Evidence Dependency signal, and scripts/ai_check_scope.py checks actual changed paths."
+    },
+    {
+      "guideline": "Keep diagnostics actionable by naming the artifact, evidence path, and capability identifier.",
+      "compliant": true,
+      "evidence": "Focused regression assertions name docs/reference/capability-truth-matrix.json, docs/getting-started/installation.md, and all four affected capability IDs."
+    },
+    {
+      "guideline": "Do not add third-party dependencies or weaken existing evidence validation.",
+      "compliant": true,
+      "evidence": "The dependency module uses the Python standard library and leaves scripts/ai_capability_truth.py byte/digest validation intact."
+    },
+    {
+      "guideline": "Use red-green-refactor and record every discovered issue in the Summary and corrective plan.",
+      "compliant": true,
+      "evidence": "The corrective plan records Task 1-3 RED/GREEN steps; this Summary records the empty-inventory review finding and the late-stale-evidence root cause."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "high",
+    "detail": "The dependency boundaries and installed-runtime closure are documented and focused regression execution passes, but the corrected full quality run, archival, Hosted checks, merge, and closure remain unverified in this active Work Item."
+  },
+  "generatedFiles": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generator-owned current status output retained as an active Work Item path."
+    }
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "id": "CESD-ROOT-001",
+      "severity": "high",
+      "detail": "Root cause: the paused Japanese corrective changed docs/getting-started/installation.md, which is byte-bound by project_calibration_profile_proposal, ten_stage_calibration_session, interactive_installation_wizard, and bootstrap_wizard_lifecycle. Its Contract omitted docs/reference/capability-truth-matrix.json; Preflight and fast checks were ready/pass, then the expensive project-test reported stale evidence. The existing byte gate was correct; the missing reusable control was dependency discovery before edits and against the actual diff."
+    },
+    {
+      "id": "CESD-TASK1-REVIEW-001",
+      "severity": "medium",
+      "detail": "Task 1 review finding and fix: an empty capabilities inventory could otherwise be treated as a configured but harmless dependency graph. scripts/ai_evidence_dependencies.py now rejects a configured matrix unless capabilities is a non-empty list, preserving fail-closed behavior; tests/test_evidence_dependencies.py covers the invalid inventory."
+    },
+    {
+      "id": "CESD-INSTALL-001",
+      "severity": "high",
+      "detail": "The first full quality run reached 1478 passed but 34 installer/adoption tests failed and five Japanese lifecycle tests errored because installed ai_preflight_review.py and ai_check_scope.py imported ai_evidence_dependencies.py while the authoritative installer catalog omitted that module. A RED installed-runtime assertion reproduced the missing payload; the catalog now distributes the module, Capability Truth bytes were regenerated, and the six-file focused suite passes 120 tests."
+    },
+    {
+      "id": "CESD-FINISH-ORDER-001",
+      "severity": "medium",
+      "detail": "The corrected full quality gate passed 1517 tests in 354.56 seconds, then ai-finish rejected the Summary's unsupported verificationEvidence field and missing acceptanceEvidence. Because ai-finish does not reuse a still-valid passed quality result after a Summary-only correction, canonical completion requires repeating the heavy gate. Preserve this as input to the later workflow/process corrective; do not bypass ai-finish in this Work Item."
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Contract owns installation.md but omits the matrix.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_preflight_review.py"
+      ],
+      "reason": "The focused suite passed and proves that the historical installation.md-without-matrix Contract shape is now not_ready before editing.",
+      "verificationPlan": "Covered by the recorded 114-test focused command; retain the full quality and lifecycle gates before completion."
+    },
+    {
+      "scenario": "A bound evidence file changes but the matrix does not.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_contract_and_policy.py"
+      ],
+      "reason": "The focused suite passed and proves that ordinary Contract scope ownership cannot substitute for an actual regenerated matrix diff.",
+      "verificationPlan": "Covered by the recorded 114-test focused command; retain the full quality and lifecycle gates before completion."
+    },
+    {
+      "scenario": "A Work Item changes an unrelated file or only the matrix.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_preflight_review.py",
+        "tests/test_contract_and_policy.py"
+      ],
+      "reason": "The focused suite passed the unrelated-file and matrix-only negative controls.",
+      "verificationPlan": "Covered by the recorded 114-test focused command; retain the full quality and lifecycle gates before completion."
+    },
+    {
+      "scenario": "The dependency matrix is missing, malformed, duplicated, escaping, or contains non-string evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_evidence_dependencies.py",
+        "tests/test_preflight_review.py",
+        "tests/test_contract_and_policy.py"
+      ],
+      "reason": "The focused suite passed the missing, malformed, empty, duplicated, escaping, and non-string evidence cases.",
+      "verificationPlan": "Covered by the recorded 114-test focused command; retain the full quality and lifecycle gates before completion."
+    },
+    {
+      "scenario": "The corrective lifecycle is incomplete.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "reason": "The Contract and PLAN-DIRECTIVE-042 prove the required safety condition for this pre-archive stage: the Japanese corrective remains paused and no release-stage Work Item has started. Archive, PR, Hosted, merge, closure, and cleanup remain lifecycle acceptance work after ai-finish.",
+      "verificationPlan": "Complete ai-finish, exact-Head PR checks, Hosted verification, merge, ai-close-work-item, and branch cleanup before resuming the Japanese corrective."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "high",
+      "area": "verification and lifecycle",
+      "detail": "Focused dependency tests and fast gates passed; Contract gates, full quality, archive, PR, Hosted checks, merge, closure, and branch cleanup remain.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    },
+    {
+      "level": "medium",
+      "area": "future absurd/injection assessment",
+      "detail": "The supplied percentages and twelve conditional conclusions are reference input only. They do not establish current Capability Truth, generalized semantic recognition, physical sandboxing, or release readiness.",
+      "reviewRecommended": true,
+      "followUpCandidate": true
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Preflight Contract ownership versus Scope Guard actual-diff boundary",
+      "fail-closed empty and malformed matrix handling",
+      "coverage registration exactness",
+      "future absurd/injection baseline non-claim and ordering"
+    ]
+  },
+  "intentAlignment": {
+    "problemResolved": true,
+    "constraintsRespected": true,
+    "nonGoalsAvoided": true,
+    "rationaleValidated": "The reviewed implementation derives dependencies from the authoritative matrix, fails before edit and before finish at separate boundaries, preserves matrix byte validation, and documents that digest regeneration is maintenance rather than capability proof."
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "not_applicable",
+    "persistence": "not_applicable",
+    "localization": "not_applicable",
+    "generatedArtifacts": "reviewed",
+    "makeEntrypoints": "reviewed"
+  },
+  "userCorrectionsCaptured": [
+    {
+      "request": "Use PLAN-DIRECTIVE-042; order deprecated cleanup, independent real absurd/injection assessment/remediation, release, then plan cleanup; retain the supplied percentages and twelve cases only as future baseline estimates and conditional conclusions.",
+      "action": "Added PLAN-DIRECTIVE-042, corrected the comprehensive plan order, and recorded the three-layer boundary, estimates, twelve conditions, and non-generalization rule without altering Capability Truth."
+    },
+    {
+      "request": "State that matrix regeneration does not prove capability behavior and never include the local attachment path.",
+      "action": "Capability Truth documentation and this Summary distinguish byte-inventory refresh from behavior, adopter, security, or generalized semantic proof; no local attachment path is recorded."
+    }
+  ],
+  "userCorrectionSolidification": [
+    {
+      "correction": "Capability-bound source/test changes require both Contract matrix ownership and an actual regenerated matrix diff.",
+      "solidifiedIn": [
+        "scripts/ai_evidence_dependencies.py",
+        "scripts/ai_preflight_review.py",
+        "scripts/ai_check_scope.py",
+        "docs/reference/capability-truth-matrix.md",
+        "docs/reference/remediation-instruction-traceability.json"
+      ]
+    },
+    {
+      "correction": "Future absurd/injection estimates are conditional baseline input, not present capability evidence.",
+      "solidifiedIn": [
+        "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+        ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.summary.json"
+      ]
+    }
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "cd818461203b0071",
+      "acceptanceCount": 10,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 10
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "cd818461203b0071",
+      "acceptanceCount": 10,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "Focused tests, documentation metadata, coverage mapping, instruction traceability, and quality-fast passed. Run all required Contract gates, full quality, and the archive/PR/Hosted/merge/closure lifecycle before declaring the corrective complete.",
+    "The future real absurd/injection Work Item has not been implemented or assessed here; its current-adopter estimates and twelve cases remain conditional baseline input."
+  ],
+  "overclaimPrevention": "Do not treat committed tests, matrix digest regeneration, fixed-corpus results, policy-level detection, or repository-local governance as proof of exercised capability behavior, generalized semantic attack recognition, adopter installation, physical sandboxing, or external provider controls.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-29T00:00:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-07-29-capability-evidence-scope-dependency-corrective.md",
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          "docs/reference/remediation-instruction-traceability.json"
+        ],
+        "reason": "Corrective and comprehensive plans, directive mapping, ordered future baseline, and acceptance A1-A10 describe the same boundaries."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.contract.json",
+          ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.summary.json"
+        ],
+        "reason": "The active Contract scope and acceptance are reflected in the complete Summary handoff."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/capability-truth-matrix.md",
+          "docs/reference/remediation-instruction-traceability.json",
+          "docs/reference/documentation-context-registry.json",
+          "docs/superpowers/plans/2026-07-29-capability-evidence-scope-dependency-corrective.md",
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+        ],
+        "reason": "Documentation distinguishes ownership, regeneration, and capability proof while traceability names exact focused and lifecycle commands."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "This corrective changes no localized user-facing document; it preserves the paused Japanese Work Item boundary rather than resuming it."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/capability-truth-matrix.md",
+          "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+          ".ai/work-items/archive/2026/capability-evidence-scope-dependency-corrective-20260729.summary.json"
+        ],
+        "reason": "The byte-binding limitation, future baseline conditions, Repository Governance Layer boundary, and pending verification/lifecycle gaps remain explicit."
+      }
+    ]
+  },
+  "archiveSequence": 658
+}

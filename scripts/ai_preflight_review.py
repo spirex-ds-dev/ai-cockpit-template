@@ -16,10 +16,16 @@ from ai_common import (
     PROJECT_ROOT,
     canonical_json_hash,
     load_json,
+    matches,
     save_json,
     simple_yaml_lists,
     simple_yaml_scalars,
     validate_scenario_coverage,
+)
+from ai_evidence_dependencies import (
+    EvidenceDependencyError,
+    contract_scope_dependency_issues,
+    load_capability_evidence_dependencies,
 )
 from ai_readiness_policy import has_explicit_blocker
 from ai_trust_guards import trust_signals
@@ -259,6 +265,54 @@ def scope_signal(contract: dict[str, Any]) -> Signal:
         "Ready",
         [f"scope declares {len(scope_paths)} path pattern(s)"],
         ["contract.scope"],
+    )
+
+
+def evidence_dependency_signal(contract: dict[str, Any], *, root: Path) -> Signal:
+    """Derive whether scoped Capability Truth evidence also owns its matrix."""
+    try:
+        dependencies = load_capability_evidence_dependencies(root)
+    except EvidenceDependencyError as exc:
+        return Signal(
+            "Evidence Dependency",
+            "Inconsistent",
+            [str(exc)],
+            ["contract.scope", "docs/reference/capability-truth-matrix.json"],
+        )
+    if dependencies is None:
+        return Signal(
+            "Evidence Dependency",
+            "Not Applicable",
+            ["Capability Truth document set is not configured"],
+            ["contract.scope"],
+        )
+
+    scope = _string_list(contract.get("scope"))
+    matrix_in_scope = any(matches(pattern, dependencies.matrix_path) for pattern in scope)
+    evidence_in_scope = any(
+        matches(pattern, path) for pattern in scope for path in dependencies.capability_ids_by_path
+    )
+    if not matrix_in_scope and not evidence_in_scope:
+        return Signal(
+            "Evidence Dependency",
+            "Not Applicable",
+            ["Contract scope does not include Capability Truth evidence"],
+            ["contract.scope", dependencies.matrix_path],
+        )
+
+    issues = contract_scope_dependency_issues(scope, dependencies)
+    if issues:
+        return Signal(
+            "Evidence Dependency",
+            "Inconsistent",
+            issues,
+            ["contract.scope", dependencies.matrix_path],
+        )
+    return Signal(
+        "Evidence Dependency",
+        "Ready",
+        ["Contract scope owns required Capability Truth matrix dependencies"],
+        ["contract.scope", dependencies.matrix_path],
     )
 
 
@@ -869,6 +923,7 @@ def derive_report(
         unknowns_signal(contract),
         acceptance_signal(contract),
         sources_signal(contract),
+        evidence_dependency_signal(contract, root=project_root_for(contract_path)),
         scenario_coverage_signal(contract),
         verification_signal(contract),
     ]
@@ -1100,6 +1155,7 @@ def validate_report_structure(report: dict[str, Any]) -> list[str]:
                 "Unknowns",
                 "Acceptance",
                 "Sources",
+                "Evidence Dependency",
                 "Scenario Coverage",
                 "Verification",
                 "Capability",
