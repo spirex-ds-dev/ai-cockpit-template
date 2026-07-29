@@ -162,6 +162,10 @@ def validate_agent_risks(
                 for key, expected in expected_counts.items():
                     if item.get(key) != expected:
                         issues.append(f"checkpointEvidence[{item.get('stage')}].{key} is stale")
+                if item.get("stage") == "before_edit" and item.get("requiredChecksPassed") != 0:
+                    issues.append(
+                        "before_edit checkpoint must be recorded before required verification"
+                    )
 
     return issues
 

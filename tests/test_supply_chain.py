@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import check_supply_chain
+import check_release_distribution
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -424,6 +425,62 @@ def test_release_assets_write_source_bound_evidence_outside_baselines(tmp_path, 
     assert json.loads((output_dir / "sbom.json").read_text(encoding="utf-8")) == sbom
     assert json.loads((output_dir / "provenance.json").read_text(encoding="utf-8")) == provenance
     assert json.loads((output_dir / "release-digests.json").read_text(encoding="utf-8")) == digests
+
+
+def test_refresh_candidate_evidence_synchronizes_local_release_projection(tmp_path, monkeypatch):
+    cockpit = tmp_path / ".ai" / "cockpit"
+    cockpit.mkdir(parents=True)
+    lock = tmp_path / "requirements-dev.lock"
+    installer = tmp_path / "install.sh"
+    release = tmp_path / "release.json"
+    lock.write_text("lock\n", encoding="utf-8")
+    installer.write_text("installer\n", encoding="utf-8")
+    original = {
+        "releaseTag": "v0.5.42",
+        "releaseEvidenceAuthority": "release-assets-v1",
+        "installerDigest": check_release_distribution.file_digest(installer),
+        "releaseArchive": {"assetName": "v0.5.42.tar.gz"},
+        "publicContract": {"projectQualityTarget": "ai-cockpit-quality"},
+        "capabilities": {"sha256ArchiveVerification": {"supported": True}},
+        "supplyChain": {
+            "requirementsLockDigest": check_release_distribution.file_digest(lock),
+            "sbomDigest": "stale-sbom",
+            "provenanceDigest": "stale-provenance",
+            "secretScanning": True,
+        },
+    }
+    release.write_text(json.dumps(original, indent=2) + "\n", encoding="utf-8")
+    monkeypatch.setattr(check_supply_chain, "ROOT", tmp_path)
+    monkeypatch.setattr(check_supply_chain, "LOCK_FILE", lock)
+    monkeypatch.setattr(check_supply_chain, "INSTALLER", installer)
+    monkeypatch.setattr(check_supply_chain, "RELEASE_JSON", release)
+    monkeypatch.setattr(check_supply_chain, "SBOM_BASELINE", cockpit / "sbom.json")
+    monkeypatch.setattr(check_supply_chain, "PROVENANCE_BASELINE", cockpit / "provenance.json")
+    monkeypatch.setattr(check_supply_chain, "RELEASE_DIGESTS_BASELINE", cockpit / "release-digests.json")
+    monkeypatch.setattr(
+        check_supply_chain,
+        "build_sbom",
+        lambda _source: {"bomFormat": "CycloneDX", "serialNumber": "candidate-sbom"},
+    )
+    monkeypatch.setattr(
+        check_supply_chain,
+        "build_provenance",
+        lambda _sbom, _source: {"commitSha": "source", "releaseTag": "v0.5.42"},
+    )
+
+    check_supply_chain.refresh_candidate_evidence("source")
+
+    refreshed = json.loads(release.read_text(encoding="utf-8"))
+    assert refreshed["releaseTag"] == original["releaseTag"]
+    assert refreshed["releaseEvidenceAuthority"] == original["releaseEvidenceAuthority"]
+    assert refreshed["releaseArchive"] == original["releaseArchive"]
+    assert refreshed["publicContract"] == original["publicContract"]
+    assert refreshed["capabilities"] == original["capabilities"]
+    assert refreshed["supplyChain"]["requirementsLockDigest"] == original["supplyChain"]["requirementsLockDigest"]
+    assert refreshed["supplyChain"]["secretScanning"] is True
+    assert refreshed["supplyChain"]["sbomDigest"] == check_release_distribution.file_digest(cockpit / "sbom.json")
+    assert refreshed["supplyChain"]["provenanceDigest"] == check_release_distribution.file_digest(cockpit / "provenance.json")
+    assert check_release_distribution.supply_chain_issues(refreshed, root=tmp_path) == []
 
 
 def test_sbom_reports_generated_direct_transitive_and_hash_coverage(tmp_path, monkeypatch):

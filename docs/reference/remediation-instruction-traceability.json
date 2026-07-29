@@ -1508,6 +1508,15 @@
         "verify exact-Head Hosted logs omit the three recorded warning signatures",
         "make ai-close-work-item TASK=github-actions-warning-corrective-20260729"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-046",
+      "summary": "Fix the missed pre-edit checkpoint process before replaying the recurrent local release-projection digest correction and before resuming Dependabot #441.",
+      "planWorkItems": ["RFE-ISSUE-093", "RFE-ISSUE-094", "rfe-094-checkpoint-enforcement-20260729"],
+      "contractPaths": [".ai/work-items/active/rfe-094-checkpoint-enforcement-20260729.contract.json"],
+      "implementationEvidence": ["AGENTS.md", "Makefile", "scripts/ai_check_agent_risk.py", "scripts/check_supply_chain.py", "docs/superpowers/plans/2026-07-29-rfe-094-checkpoint-enforcement.md"],
+      "acceptanceEvidence": ["tests/test_ai_check_agent_risk.py", "tests/test_makefile.py", "tests/test_supply_chain.py", "tests/test_release_distribution.py", "docs/reference/remediation-instruction-traceability.json"],
+      "verificationCommands": ["make ai-prepare-implementation CONTRACT=<contract> SUMMARY=<summary>", "make refresh-candidate-release-evidence SOURCE_COMMIT=HEAD", "make quality", "make ai-finish TASK=rfe-094-checkpoint-enforcement-20260729", "make ai-close-work-item TASK=rfe-094-checkpoint-enforcement-20260729"]
     }
   ]
 }

@@ -50,13 +50,14 @@ Before changing code, docs, CI, build files, or AI governance files:
    Contract is both delegation and description: it assigns task boundaries and makes the intended work legible before implementation.
    - **Intent (recommended)**: If the Contract contains an `intent` section, read it before implementing. If you have sufficient context, fill in at least `intent.problem` (detailed background), `intent.constraints` (constraints to respect), and `intent.rationale` (why this approach). All fields are optional — do not invent content when context is not provided.
 3. Read `.ai/glossary.md` to align terminology and architectural boundaries before implementing.
-4. Adhere strictly to the guidelines defined in the `guidelines` section of the Contract, and record compliance evidence in the Summary's `guidelinesCompliance` section.
-5. Do not edit files outside the declared scope unless you first update the Contract.
-6. Do not remove tests, snapshots, or Work Item records without documenting the reason in the Summary.
-7. Update the AI Change Summary before finishing.
+4. For a `MODE=code` Work Item whose Preflight Review is `ready`, run `make ai-prepare-implementation CONTRACT=<contract> SUMMARY=<summary>` before changing implementation files. This is the only canonical way to record the required `before_edit` checkpoint; do not add it after verification has started.
+5. Adhere strictly to the guidelines defined in the `guidelines` section of the Contract, and record compliance evidence in the Summary's `guidelinesCompliance` section.
+6. Do not edit files outside the declared scope unless you first update the Contract.
+7. Do not remove tests, snapshots, or Work Item records without documenting the reason in the Summary.
+8. Update the AI Change Summary before finishing.
    Summary is not only an audit artifact; it is also the handoff record for reviewers and the next collaborator.
-8. Run the AI checks and project checks declared in the Contract.
-9. When `make ai-start ... MODE=code` or `make ai-preflight` reports `needs_human_confirmation` or `not_ready`, pause and report the Preflight Review to the user before coding continues. Advisory mode means the command may exit successfully; it does not permit silent implementation.
+9. Run the AI checks and project checks declared in the Contract.
+10. When `make ai-start ... MODE=code` or `make ai-preflight` reports `needs_human_confirmation` or `not_ready`, pause and report the Preflight Review to the user before coding continues. Advisory mode means the command may exit successfully; it does not permit silent implementation.
 
 `unknowns` and `notCodable` are valid outputs when the task is not ready for coding. `make ai-checkpoint` is environment support against long-task drift, not paperwork.
 
