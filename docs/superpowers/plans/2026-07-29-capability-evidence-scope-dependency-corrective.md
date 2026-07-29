@@ -271,6 +271,10 @@ correct; the missing edge is Contract- and diff-level dependency discovery.
   make ai-finish TASK=capability-evidence-scope-dependency-corrective-20260729
   ```
 
+  If a late Summary-only failure follows a passed heavy quality gate, record
+  the missing evidence-reuse/order behavior as a process issue. Do not bypass
+  canonical Finish; route the optimization to the later process corrective.
+
 - [ ] **Step 3: Validate and publish one PR**
 
   Commit the archive bundle, run `make check-ai-pr` against base
