@@ -182,6 +182,9 @@ correct; the missing edge is Contract- and diff-level dependency discovery.
 - Modify: `docs/reference/remediation-instruction-traceability.json`
 - Modify: `docs/reference/documentation-context-registry.json`
 - Modify: `docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md`
+- Modify: `scripts/ai_installer_catalog.json`
+- Modify: `tests/test_installed_runtime_parity.py`
+- Regenerate: `docs/reference/capability-truth-matrix.json`
 - Modify: `.ai/work-items/active/capability-evidence-scope-dependency-corrective-20260729.summary.json`
 
 **Interfaces:**
@@ -205,7 +208,7 @@ correct; the missing edge is Contract- and diff-level dependency discovery.
 - [ ] **Step 3: Update bidirectional traceability**
 
   Add one directive mapping the user instruction and observed failure to the
-  Contract, this plan, all implementation paths, focused commands, and A1–A9.
+  Contract, this plan, all implementation paths, focused commands, and A1–A10.
   Register the plan in the documentation context registry.
 
 - [ ] **Step 4: Record the issue and scenario evidence**
@@ -224,10 +227,18 @@ correct; the missing edge is Contract- and diff-level dependency discovery.
   and state that near-complete fixed-corpus results do not prove generalized
   semantic attack recognition. Do not implement that future Work Item here.
 
-- [ ] **Step 6: Run focused and fast verification**
+- [ ] **Step 6: Close the installed-runtime dependency**
+
+  Record the full-quality failure caused by the missing installed module. Add a
+  RED installed-runtime assertion for `ai_evidence_dependencies.py`, include
+  it in the authoritative installer catalog, regenerate the Capability Truth
+  matrix, and prove fresh installed imports do not rely on host scripts.
+
+- [ ] **Step 7: Run focused and fast verification**
 
   ```bash
   PYTHONDONTWRITEBYTECODE=1 .venv/bin/pytest -q \
+    tests/test_installed_runtime_parity.py \
     tests/test_evidence_dependencies.py \
     tests/test_preflight_review.py \
     tests/test_contract_and_policy.py \
@@ -283,8 +294,8 @@ correct; the missing edge is Contract- and diff-level dependency discovery.
 
 ## Plan self-review
 
-- Spec coverage: A1–A9 map respectively to Tasks 2, 3, 1, 1–3, 1–3, 4, 4,
-  5, and Task 4 Step 5.
+- Spec coverage: A1–A10 map respectively to Tasks 2, 3, 1, 1–3, 1–3, 4, 4,
+  5, Task 4 Step 5, and Task 4 Step 6.
 - Placeholder scan: no implementation step contains TBD/TODO or deferred error
   handling.
 - Type consistency: all consumers use the same `EvidenceDependencies`,
