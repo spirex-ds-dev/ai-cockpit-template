@@ -119,7 +119,7 @@ Cockpit が更新される。
 
 バージョン履歴と能力の進化は、この短い入口ページではなく [ロードマップ](docs/roadmap.md) で管理します。
 
-## 最新の公開ランタイムをインストール
+## 正規の公開 projection が指すランタイムをインストール
 
 初心者は、対象プロジェクトを開いたエージェントへ先に次をコピーします。
 
@@ -140,7 +140,7 @@ local finish/archive まで実行したら停止します。
 STACK="${STACK:-generic}" # generic、python、go、rust、typescript、java、android、kotlin、flutter、swift、ruby、php、csharp
 PUBLIC_REPOSITORY="${AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY:-https://github.com/spirex-ds-dev/ai-cockpit-template.git}"
 RAW_BASE="${AI_COCKPIT_TEMPLATE_RAW_BASE:-https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template}"
-RELEASE_TAG="$(curl -fsSL "${RAW_BASE}/main/release.json" 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin)["releaseTag"])' 2>/dev/null || git ls-remote --tags --refs "$PUBLIC_REPOSITORY" 'v*' | python3 -c 'import re,sys; tags=[m.group(1) for line in sys.stdin for m in [re.search(r"refs/tags/(v\d+\.\d+\.\d+)$", line)] if m]; print(max(tags, key=lambda tag: tuple(map(int, tag[1:].split(".")))))')"
+RELEASE_TAG="$(curl -fsSL "${RAW_BASE}/main/release.json" | python3 -c 'import json,sys; value=json.load(sys.stdin)["releaseTag"]; assert isinstance(value,str) and value; print(value)')"
 INSTALLER="$(mktemp)"
 trap 'rm -f "$INSTALLER"' EXIT
 curl -fsSL "${RAW_BASE}/${RELEASE_TAG}/install.sh" -o "$INSTALLER"
@@ -178,7 +178,7 @@ make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this pro
 
 導入先プロジェクトでは、ローカルの finish/archive 後に `git commit` を実行する前に人の許可を取り、さらに `git push` の前にも別の許可を取ります。PR の準備はツールで行えても、merge は人が手動で実行します。手動 merge 後、`make ai-close-work-item TASK=<task>` の実行にも明示的な許可を必要とし、自動 merge と自動 branch 削除は有効にしません。この保守的な gate は導入・upgrade の導入先プロジェクトにだけ適用し、template repository 自身の保守フローは変更しません。
 
-このコマンドは公開済みの `release.json` を優先し、メタデータ移行中にファイルが存在しない場合は、remote の最新 semantic-version tag を選びます。remote tag だけでは provider の公開証拠になりません。その後、解決したタグのインストーラーのみをダウンロードして実行します。公開版の機能はソースツリーより遅れる場合があるため、初回導入 PR を作成する前に[インストール手順](docs/getting-started/installation.ja.md)を確認してください。
+このコマンドは正規の公開 `release.json` projection を必須とし、そこに記録された固定 tag の installer だけを取得します。projection が取得不能または不正なら停止し、最大の tag から version を推測しません。検証済み public release と扱う前に、provider Release が stable かつ draft でないこと、tag 固定 metadata と source commit、取得可能な installer/archive Asset、各 digest がすべて一致することも確認します。tag または repository 内の `release.json` だけでは provider 公開の証拠になりません。公開版の機能はソースツリーより遅れる場合があるため、初回導入 PR を作成する前に[インストール手順](docs/getting-started/installation.ja.md)を確認してください。
 リリース元のメタデータやタグ付きインストーラーが公開されていない場合、このクイックインストールを匿名導入の前提として扱わないでください。`AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY` と `AI_COCKPIT_TEMPLATE_RAW_BASE` はリリースタグの解決とインストーラーの取得にだけ使われ、インストーラー自体は `AI_COCKPIT_TEMPLATE_REPO` と `AI_COCKPIT_TEMPLATE_SOURCE` で clone / source の選択を行います。その場合はローカル clone か、明示的に設定した source を使ってください。
 
 生成された設定用 Contract の変更範囲を確認・拡張してから、Project Profile、Guard、品質コマンド、CI を変更します。その後、ブロッキングゲートを有効にする前に実行系を対象プロジェクトへ適合させます。

@@ -127,7 +127,7 @@ Review 从上下文开始。
 
 版本历史与能力演进在[路线图](docs/roadmap.md)中维护，而不是放在这个简短入口页中。
 
-## 安装最新公开运行时
+## 安装权威公开投影所指向的运行时
 
 初学者先把下面提示词复制给已打开目标工程的代理：
 
@@ -146,7 +146,7 @@ Review 从上下文开始。
 STACK="${STACK:-generic}" # generic、python、go、rust、typescript、java、android、kotlin、flutter、swift、ruby、php 或 csharp
 PUBLIC_REPOSITORY="${AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY:-https://github.com/spirex-ds-dev/ai-cockpit-template.git}"
 RAW_BASE="${AI_COCKPIT_TEMPLATE_RAW_BASE:-https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template}"
-RELEASE_TAG="$(curl -fsSL "${RAW_BASE}/main/release.json" 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin)["releaseTag"])' 2>/dev/null || git ls-remote --tags --refs "$PUBLIC_REPOSITORY" 'v*' | python3 -c 'import re,sys; tags=[m.group(1) for line in sys.stdin for m in [re.search(r"refs/tags/(v\d+\.\d+\.\d+)$", line)] if m]; print(max(tags, key=lambda tag: tuple(map(int, tag[1:].split(".")))))')"
+RELEASE_TAG="$(curl -fsSL "${RAW_BASE}/main/release.json" | python3 -c 'import json,sys; value=json.load(sys.stdin)["releaseTag"]; assert isinstance(value,str) and value; print(value)')"
 INSTALLER="$(mktemp)"
 trap 'rm -f "$INSTALLER"' EXIT
 curl -fsSL "${RAW_BASE}/${RELEASE_TAG}/install.sh" -o "$INSTALLER"
@@ -184,7 +184,7 @@ make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this pro
 
 对于对象工程，完成本地 finish/archive 后必须先人工允许 `git commit`，再单独人工允许 `git push`。PR 可以由工具准备，但合并必须人工完成。PR 手动合并后，还必须再次人工允许 `make ai-close-work-item TASK=<task>`；不得启用自动合并或自动删除分支。该保守门禁只适用于安装和升级的对象工程，模版工程自身维护流程保持不变。
 
-该命令优先读取公开的 `release.json`；在发布元数据尚未上线的过渡期，则选择远程最高语义化版本标签。远程 tag 本身不等于平台发布证据。随后只下载并执行解析出的固定标签安装器。公开版本的能力可能落后于源码树；创建首次采用 PR 前请先阅读[完整中文安装手顺](docs/getting-started/installation.zh-CN.md)。
+该命令强制读取权威公开 `release.json` 投影，并只下载其中固定 tag 的安装器。投影不可访问或无效时立即停止，绝不从最高 tag 猜测版本。将其视为已验证公开版本前，还必须同时确认平台 Release 稳定且非 draft、tag 固定 metadata 与 source commit 一致、installer 和 archive asset 可下载、digest 全部一致。单独的 tag 或仓库内 `release.json` 都不构成平台发布证据。公开版本的能力可能落后于源码树；创建首次采用 PR 前请先阅读[完整中文安装手顺](docs/getting-started/installation.zh-CN.md)。
 如果发布元数据或标签并非公开可访问，就不要把这条快速安装流程当成匿名安装路径。`AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY` 和 `AI_COCKPIT_TEMPLATE_RAW_BASE` 只用于解析 release tag 和获取安装器，而安装器本身仍会通过 `AI_COCKPIT_TEMPLATE_REPO` 和 `AI_COCKPIT_TEMPLATE_SOURCE` 选择 clone / source。此时应改用本地克隆或显式配置的源码来源。
 
 先审阅并扩展生成的配置 Contract scope，再修改 Project Profile、Guard、质量命令和 CI。然后在启用阻断型门禁前，根据目标工程校准治理运行时：

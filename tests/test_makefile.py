@@ -369,7 +369,11 @@ def test_release_preflight_requires_current_japanese_capability_evidence(tmp_pat
     ]
     assert records == [
         {
-            "argv": ["scripts/ai_japanese_capability.py", "--check"],
+            "argv": [
+                "scripts/ai_japanese_capability.py",
+                "--check",
+                "--require-final-reassessment",
+            ],
             "source": source_commit,
         },
         {

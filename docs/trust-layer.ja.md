@@ -116,9 +116,9 @@ make ai-close-work-item TASK=<task>
 
 - [Design Philosophy](philosophy/design-philosophy.md) — North Star と設計原則。
 - [Architecture](architecture.md) — コンポーネント、証拠の所有、データフロー。
-- [Security and Release Verification](getting-started/security-release-verification.md) — リリースレベルの外部証拠要件。
+- [セキュリティとリリース検証](getting-started/security-release-verification.ja.md) — リリースレベルの外部証拠要件。
 - [Capability Truth Matrix](reference/capability-truth-matrix.md) — 現在の実装状態の唯一の事実源。
 - [Enterprise Control Checklist](reference/enterprise-control-checklist.md) — 導入先と外部統制の責任。
-- [Documentation Architecture](reference/documentation-architecture.md) — 権威ある役割の地図。
+- [Documentation Architecture](reference/documentation-architecture.ja.md) — 権威ある役割の地図。
 
 README は短い入口です。この文書は完全な Trust Layer の権威説明です。どちらも証拠を生成するツールや外部統制の代わりにはなりません。

@@ -23,6 +23,25 @@ keywords:
 
 `release.json` 是公开发布事实的投影（published projection）；候选记录和历史记录不能替代它。Tag、source commit、installer、archive asset 和 checksum 必须一致。
 
+该投影是仓库声明，不是平台 Release 已公开的独立证明。必须分开理解：
+
+| 记录 | 能证明什么 | 不能证明什么 |
+| --- | --- | --- |
+| `release.json` | 仓库投影为已发布的版本 | 平台 Release 存在、稳定或 asset 可下载 |
+| `next-release.json` | 预定的下一候选版本 | 已发布、已建 tag 或已可发布 |
+| Git tag | 不可变源码引用存在 | 平台 Release 或 asset 已发布 |
+| 平台 draft Release | 平台侧草稿记录存在 | 已稳定公开 |
+| 平台 stable Release 与 asset | 平台公开了版本记录和指定 asset | 未经独立校验的 digest 或源码正确性 |
+| Release freeze 证据 | 候选事实已冻结供审核 | 已发布或已完成发布后验证 |
+
+### 采用方路径
+
+只使用权威公开投影或另行验证的私有镜像。平台 stable Release、tag 固定 metadata、source、installer、archive asset 和 digest 任一不一致都必须停止；不得用最高 tag 代替。
+
+### 维护者路径
+
+先验证 candidate 和 freeze 证据。平台发布后，再单独验证 stable Release 与可下载 asset，之后才能改变公开投影。候选、发布、发布后验证是三个不同状态。
+
 <!-- doc-domain: digest -->
 ## Digest
 
@@ -80,4 +99,4 @@ make check-dependency-vulnerabilities
 
 所有检查必须针对同一准确候选来源成功。证据缺失、陈旧或冲突时，停止发布准备并保留失败证据，按照[故障排查](../reference/troubleshooting.md)恢复；不得改称对象工程验证或本地源码验证。输入和产物责任见[分发参考](../reference/distribution.md)。
 
-全面日语能力评估仍是独立的发布前强制阶段；本页不发布版本，也不把该评估标记为完成。
+[全面日语能力评估](../reference/japanese-capability-assessment.md)仍是独立的发布前强制阶段。其 digest 绑定准确文件字节；任一绑定文件变更都会使报告过期，只有全部纠偏后的 `final_reassessment` 才能满足发布门禁。本页不发布版本，也不把该评估标记为完成。

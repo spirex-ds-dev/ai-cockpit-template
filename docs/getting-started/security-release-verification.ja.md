@@ -23,6 +23,25 @@ keywords:
 
 `release.json` が公開済み事実の投影（published projection）です。候補記録と履歴記録は代替できません。tag、source commit、installer、archive asset、checksum を一致させます。
 
+この projection は repository の主張であり、provider Release の公開を独立して証明するものではありません。次を分離します。
+
+| 記録 | 証明すること | 証明しないこと |
+| --- | --- | --- |
+| `release.json` | repository が公開済みとして投影する version | provider Release の存在、stable 状態、Asset の取得可能性 |
+| `next-release.json` | 次の candidate と予定 version | 公開、tag 作成、release readiness |
+| Git tag | 不変な source reference の存在 | provider Release または Asset の公開 |
+| provider draft Release | provider 側の draft record の存在 | stable な公開 |
+| provider stable Release と Asset | provider が release record と指定 Asset を公開したこと | 独立検証なしの digest/source 正当性 |
+| Release freeze 証拠 | candidate fact を review 用に固定したこと | 公開または post-publish 検証 |
+
+### 導入先の経路
+
+正規の公開 projection または別途検証した private mirror だけを使います。stable provider Release、tag 固定 metadata、source、installer、archive Asset、digest のいずれかが一致しなければ停止します。最大の tag を代替にしてはいけません。
+
+### Maintainer の経路
+
+candidate と freeze 証拠を先に検証します。provider 公開後、stable Release と取得可能な Asset を別途 post-publish 検証してから公開 projection を変更します。candidate、publication、post-publish verification は別の状態です。
+
 <!-- doc-domain: digest -->
 ## Digest
 
@@ -78,6 +97,6 @@ make check-secret-scanning
 make check-dependency-vulnerabilities
 ```
 
-すべての check は同一の正確な candidate source に対して成功する必要があります。証拠が欠落、stale、または矛盾する場合は release preparation を停止し、失敗証拠を保持して[トラブルシューティング](../reference/troubleshooting.md)に従います。導入先検証や local-source 検証へ読み替えてはなりません。入力と artifact ownership は[配布リファレンス](../reference/distribution.ja.md)を参照してください。
+すべての check は同一の正確な candidate source に対して成功する必要があります。証拠が欠落、stale、または矛盾する場合は release preparation を停止し、失敗証拠を保持して[トラブルシューティング](../reference/troubleshooting.ja.md)に従います。導入先検証や local-source 検証へ読み替えてはなりません。入力と artifact ownership は[配布リファレンス](../reference/distribution.ja.md)を参照してください。
 
-包括的な日本語能力評価は別の必須公開前段階です。このページは version を公開せず、その評価を完了扱いにしません。
+[包括的な日本語能力評価](../reference/japanese-capability-assessment.md)は別の必須公開前段階です。digest は正確な file bytes を bind し、対象 file の変更で stale になります。すべての corrective 後に生成した `final_reassessment` だけが release preflight を満たします。このページは version を公開せず、その評価を完了扱いにしません。

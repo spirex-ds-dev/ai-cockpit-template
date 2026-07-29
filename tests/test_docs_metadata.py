@@ -1180,3 +1180,35 @@ def test_check_rejects_known_japanese_style_regressions(tmp_path):
 
     errors = check_repository(tmp_path)
     assert sum("Japanese style:" in error for error in errors) == 3
+
+
+def test_trilingual_public_install_never_guesses_release_from_highest_tag():
+    for name in ("README.md", "README.zh-CN.md", "README.ja.md"):
+        text = (ROOT / name).read_text(encoding="utf-8")
+        assert "git ls-remote --tags" not in text
+        assert "RAW_BASE}/main/release.json" in text
+        assert "highest remote semantic-version tag" not in text
+        assert "最高语义化版本标签" not in text
+        assert "最新 semantic-version tag" not in text
+
+
+def test_trilingual_release_guides_separate_release_identity_and_reader_routes():
+    guides = [
+        ROOT / "docs/getting-started/security-release-verification.md",
+        ROOT / "docs/getting-started/security-release-verification.zh-CN.md",
+        ROOT / "docs/getting-started/security-release-verification.ja.md",
+    ]
+    for path in guides:
+        text = path.read_text(encoding="utf-8")
+        for marker in (
+            "release.json",
+            "next-release.json",
+            "Git tag",
+            "draft Release",
+            "stable Release",
+            "Release freeze",
+        ):
+            assert marker in text, f"{path}: missing {marker}"
+    japanese = guides[-1].read_text(encoding="utf-8")
+    assert "../reference/troubleshooting.ja.md" in japanese
+    assert "../reference/troubleshooting.md)" not in japanese

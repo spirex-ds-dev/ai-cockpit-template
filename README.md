@@ -147,7 +147,7 @@ Run only through local finish/archive, then stop:
 STACK="${STACK:-generic}" # generic, python, go, rust, typescript, java, android, kotlin, flutter, swift, ruby, php, or csharp
 PUBLIC_REPOSITORY="${AI_COCKPIT_TEMPLATE_PUBLIC_REPOSITORY:-https://github.com/spirex-ds-dev/ai-cockpit-template.git}"
 RAW_BASE="${AI_COCKPIT_TEMPLATE_RAW_BASE:-https://raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template}"
-RELEASE_TAG="$(curl -fsSL "${RAW_BASE}/main/release.json" 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin)["releaseTag"])' 2>/dev/null || git ls-remote --tags --refs "$PUBLIC_REPOSITORY" 'v*' | python3 -c 'import re,sys; tags=[m.group(1) for line in sys.stdin for m in [re.search(r"refs/tags/(v\d+\.\d+\.\d+)$", line)] if m]; print(max(tags, key=lambda tag: tuple(map(int, tag[1:].split(".")))))')"
+RELEASE_TAG="$(curl -fsSL "${RAW_BASE}/main/release.json" | python3 -c 'import json,sys; value=json.load(sys.stdin)["releaseTag"]; assert isinstance(value,str) and value; print(value)')"
 INSTALLER="$(mktemp)"
 trap 'rm -f "$INSTALLER"' EXIT
 curl -fsSL "${RAW_BASE}/${RELEASE_TAG}/install.sh" -o "$INSTALLER"
@@ -186,7 +186,7 @@ make ai-start TASK=configure_ai_cockpit TITLE="Configure AI Cockpit for this pro
 
 For adopter repositories, stop after local finish/archive and obtain explicit human approval before `git commit`, then a separate approval before `git push`. PR creation may prepare review, but PR merge must be manual. After manual merge, obtain explicit approval before `make ai-close-work-item TASK=<task>`; do not enable automatic merge or branch deletion. This conservative gate applies to installation and upgrade in adopter projects only; the template repository keeps its own maintenance workflow.
 
-The command resolves a tagged installer from `release.json` when possible and falls back to the highest remote semantic-version tag during the metadata rollout. A remote tag alone is not provider publication evidence. The command then downloads and executes only the resolved tagged installer.
+The command requires the authoritative public `release.json` projection and then downloads only that fixed tag's installer. It stops if the projection is unavailable or invalid; it never guesses from the highest tag. Before treating the projection as a verified public release, also require a stable (not draft) provider Release, matching tag-pinned metadata and source commit, a downloadable installer and archive asset, and matching digests. A tag or repository `release.json` alone is not provider publication evidence.
 
 Review and extend the generated configuration Contract scope before changing Project Profile, Guard, quality-command, or CI files. Then calibrate the installed runtime before enabling blocking gates:
 

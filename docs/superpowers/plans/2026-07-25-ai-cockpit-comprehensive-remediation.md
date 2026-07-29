@@ -11,9 +11,9 @@ keywords:
 
 # AI Cockpit 全面整改执行计划
 
-> **计划状态（2026-07-25）：** 已根据用户提供的《AI Cockpit 全面整改开发指示》完成收查、确认和计划编制。本文件是执行入口，不代表任何整改工单已经开始、完成、合并或发布。用户确认本计划前，禁止启动下面列出的整改工单。
+> **2026-07-25 历史快照（不是当前状态）：** 当时只完成了《AI Cockpit 全面整改开发指示》的收查、确认和计划编制，尚未开始整改。后续工单状态只以本文“当前执行状态”和不可变 Work Item archive 为准。
 
-> **For agentic workers:** 每个任务都是一个独立 Work Item。必须按顺序执行；每个任务完成自己的 PR、合并、归档、关闭、分支清理、默认分支同步和文档对齐后，才允许进入下一个任务。
+> **For agentic workers:** 每个任务都是一个独立 Work Item。必须按顺序执行；每个任务完成实现与验证、`ai-finish`/归档、push、PR、合并、`ai-close-work-item`、分支清理、默认分支同步和文档对齐后，才允许进入下一个任务。
 
 **目标：** 将 AI Cockpit 收敛为坚固、干净、可信任的 Repository Governance Layer：有证据时允许合理依赖，证据不足或冲突时安全停止，未知和人工决策清楚可见，任务结束后可审查地说明完成内容、发现的问题、避免的风险和剩余风险。
 
@@ -62,7 +62,7 @@ keywords:
 3. 归档前确认：一个 PR 只包含一个 Work Item，PR diff 与 Contract scope 一致，formatter、复杂度、预算、release digest 和 required checks 已通过。
 4. 推送专用分支并创建 PR；PR 描述引用 Contract、Summary、Task Outcome、验证结果和问题记录。required checks pending、失败、证据过期或 review 未完成时不得 merge。
 5. PR 合并后才执行 `make ai-close-work-item TASK=<task>`。该命令必须证明 archive pair 完整、PR/branch ownership 正确、远端默认分支已包含 merge、默认分支可 fast-forward 同步、local/remote Work Item 分支已清理、worktree 干净、local base 等于 remote base。
-6. 关闭后生成/检查 Cockpit Status，确认显示 `ready for next Work Item`；保留历史归档证据。
+6. 关闭后生成/检查 Cockpit Status。位于已同步默认分支时应为 `ready_on_base`；已关闭但仍位于待移除 detached worktree 时必须明确显示 detached/closed 状态，不能用含糊的 `ready for next Work Item` 合并二者。保留历史归档证据。
 7. 重新对齐本计划、相关文档、Capability Truth Matrix、版本/命令/路径引用和多语言关键语义；若需要修改，修改必须属于当前 Work Item scope 并重新验证。
 
 ## 二、工单总表与串行顺序
@@ -605,10 +605,31 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 
 ### 当前执行状态
 
-用户已明确授权继续执行当前计划的全部工单，并要求遇到流程问题时先记录、修正流程再继续。因此本计划不在计划文档完成后停留；当前计划工单的 PR、合并、归档、关闭、分支清理和 base 同步完成后，按 WI-01 至 WI-19 串行执行，直到全部工单完成。
+更新时间：2026-07-29。用户已授权连续执行；遇到流程问题必须先记录并纠偏。
+
+| 阶段 | 当前事实 |
+| --- | --- |
+| 深度性能工单 | 已完成、合并、关闭并清理 |
+| WI-10 安装文档整改 | 已完成、PR #422 已合并、关闭并清理 |
+| WI-01～WI-20 双向追踪审计 | 已完成；发现项及 corrective 均按 archive 追踪 |
+| 其他流程问题与 RFE-ISSUE-082 | 已完成、合并、关闭并清理 |
+| 日语评估及整改 | 首次最终评估已关闭；五策略文档审查随后发现漏绑日语权威文档，因此当前最终证据已失效 |
+| 文档事实纠偏 | 当前执行 `pre-release-documentation-truth-corrective-20260729`；修复 Capability Truth 字节绑定、日语证据源、公开安装解析、发布身份说明、计划状态和多语言路线 |
+| 全新日语最终评估 | 待纠偏完整关闭后，以 corrected main 独立执行；只有 `final_reassessment` 可满足发布门禁 |
+| 文档对齐 | `pre-release-documentation-alignment-20260729` 已暂停；待纠偏和全新日语评估关闭后 rebase/resume 并完成 |
+| 发布前过期资产清理 | 待文档对齐关闭后执行 |
+| WI-18 发布新版本 | 待所有前置阶段关闭；候选版本、provider Release、tag、asset、projection 分别验证 |
+| WI-19 清理计划文档 | 发布完整关闭后最后执行 |
+
+当前唯一允许的顺序是：文档事实纠偏 → 全新日语 `final_reassessment` → 恢复并关闭文档对齐 → 过期代码/逻辑/文档清理 → WI-18 发布 → WI-19 清理当前周期计划。每一项都必须完成 Contract → Preflight → 实现/验收 → `ai-finish`/archive → push → PR → merge → `ai-close-work-item` → 本地/远端分支清理 → main 同步；不得从 detached closed worktree 直接进入下一项。
 
 ### 本计划工单已发现的问题
 
+- `DOC-ALIGN-FINDING-001`～`008`（文档事实/流程，发布阻断）：五策略审查一致发现 Capability Truth 与 Quick Install 实现冲突、row digest 未绑定证据字节、日语最终报告漏绑权威文档、README 以最高 tag 回退、计划状态与生命周期顺序漂移、发布身份边界混淆、多语言路线不等价，以及对齐检查器自我声明审查成功。已暂停文档对齐，建立 `pre-release-documentation-truth-corrective-20260729` 原子修复代码、测试、三语文档和结构化审查证据；修复后必须重新执行独立日语最终评估，再恢复文档对齐。
+- `DOC-TRUTH-ISSUE-001`（Preflight 词法误报，中）：纠偏 Contract 中用于报告分类和权威边界的普通词 `role` 被 Critical Domain Guard 按权限操作命中，尽管 `requestedOperation` 明确是 repository governance 且无外部权限变更。当前 Contract 用“report classification / authority boundary”精确表达后 Preflight 为 ready；该误报保留为流程问题，后续流程工单应让结构化 operation 优先于无上下文词法匹配，不能靠静默忽略。
+- `DOC-TRUTH-ISSUE-002`（Capability Truth 旧证据路径，高）：首次启用证据字节绑定时，矩阵中 `tests/test_installation.py` 与 `tests/test_ci_release_evidence.py` 已不存在，但旧 row-only digest 仍为绿色。已替换为真实的 `tests/test_install_entrypoint.py` 与 `tests/test_ci_release_evidence.sh`，并以 missing-file fail-closed 回归防止再次漂移。
+- `DOC-TRUTH-ISSUE-004`（Coverage 关联，中）：纠偏首次 `ai-finish` 在重测试前停止，因为 `capabilityTruth` 的既有 production→test 关联只登记 absurd corpus，未登记本次新增字节/路径回归所在的 `tests/test_capability_truth_matrix.py`。已将精确测试文件加入同一关联，扩展 Contract scope，并要求重新 Preflight、重建两个 checkpoint 后从头执行 Finish；未使用 `tests/**` 宽泛匹配。
+- `DOC-TRUTH-ISSUE-005`（安全扫描器/检测实现，中）：下一次完整质量的 1480 项测试与 85.63% Coverage 均通过，但 Quality Architecture 把 Capability Truth 校验器自身用于拒绝 parent-path 的字面量识别为不安全路径。未豁免该脚本；改为对 normalized `Path.parts` 判断同一越界条件，保留 escape red test，并重新生成两个字节绑定报告后要求完整 Finish 重跑。
 - `PLAN-001`（流程/记录，低）：初始 Contract 使用了本机绝对路径，Summary 仍是骨架。已在本计划工单内改为可移植的用户请求来源标识，并补齐 Summary；Contract、范围、文档 metadata、Status 和一致性检查随后通过。
 - `PLAN-002`（质量/发布证据，待后续工单处理）：本计划工单运行 `make quality` 时，pytest 1058 passed、coverage 85.04%、ruff/mypy/bandit/文档/系统不变量等检查通过，但 `check-release-evidence` 的 release supply-chain 检查发现 1 个问题，导致 `make quality` 退出码 2。该问题属于发布证据域，应在 WI-17 或其明确的前置 corrective Work Item 中按流程处理；本计划不绕过或修复它。
 - 现有 governance complexity 与 archive growth 仅报告 warning（当前 archive growth 超过 policy warning 阈值），不在本计划工单中擅自抬高阈值；应由后续相关 Work Item 按预算/偿还规则处理。

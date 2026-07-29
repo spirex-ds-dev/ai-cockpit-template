@@ -185,7 +185,8 @@ check-release-state-consistency:
 check-japanese-capability:
 	$(AI_PYTHON) scripts/ai_japanese_capability.py --check
 
-check-release-preflight: check-japanese-capability
+check-release-preflight:
+	$(AI_PYTHON) scripts/ai_japanese_capability.py --check --require-final-reassessment
 	$(AI_PYTHON) scripts/check_release_preflight.py --root .
 
 finalize-release-freeze:
