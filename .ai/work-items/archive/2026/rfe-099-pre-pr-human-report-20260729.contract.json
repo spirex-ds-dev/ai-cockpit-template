@@ -1,0 +1,252 @@
+{
+  "contractVersion": 2,
+  "workItemId": "rfe-099-pre-pr-human-report-20260729",
+  "mode": "code",
+  "title": "Require direct human report before every archive",
+  "baseCommit": "8b20fafb817d85e7f932a0997e00ed5140598afb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/rfe-099-pre-pr-human-report-20260729.contract.json",
+    ".ai/work-items/active/rfe-099-pre-pr-human-report-20260729.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "AGENTS.md",
+    "scripts/ai_finish.py",
+    "scripts/ai_archive_work_item.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_adoption_e2e.py",
+    "tests/test_core_gates.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_project_governance_journey.py",
+    "docs/features/task-outcome-report.md",
+    "docs/superpowers/specs/2026-07-29-pre-pr-human-report-design.md",
+    "docs/superpowers/plans/2026-07-29-rfe-099-pre-pr-human-report.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Merging, rebasing, or changing the superseded draft PR #460.",
+    "Provider PR approval, merge, branch-deletion, or release mechanics.",
+    "Claiming that a repository script can itself post into an external conversation."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/rfe-099-pre-pr-human-report-20260729.contract.json",
+      "reason": "Records the user's correction that every human-facing Work Item report occurs while active and before archive, regardless of whether later PR creation is manual or explicitly authorized automation."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "ai-finish is the completed-local-verification, active-state pre-archive boundary that can render a truthful report."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Outcome integration, core finish, adopter lifecycle, and journey tests provide the direct regression boundary for a report generated after verification and before any provider PR exists."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Operating rules must require conversation delivery before push/PR regardless of the authorized PR-creation method."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Documents the distinct PR-preparation human report and post-merge closure evidence roles."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "human_decision_interface",
+      "workflow_process",
+      "provider_authority_boundary"
+    ],
+    "reason": "A report emitted after push or PR violates the user-required decision point, while a report that implies provider state before it exists would mislead. The report must be derived only from verified local Outcome/Summary facts and label provider PR state as not created.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly corrected the timing rule and directed continued implementation; the ai-finish, rule, documentation, and test boundaries are concrete."
+  },
+  "preReviewWarnings": [
+    "Do not infer that a push, PR, approval, merge, or Hosted CI exists at the pre-PR report point.",
+    "Do not make PR creation conditional on report-path reading; the direct text must be delivered in the conversation first.",
+    "The rule applies identically to manual PR creation and explicitly authorized automation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A successful ai-finish emits a titled Human pre-archive report after local verification and mandatory pre-merge Outcome generation, leaves the Work Item active, and does not permit archive, push, or PR creation.",
+    "The report directly states Work Item, delivered local changes, verified local evidence, residual risks or none, Provider PR state not created, and next action/authority boundary; Outcome paths are optional audit links after the decision facts.",
+    "Focused integration tests fail when the report is absent, path-first, emitted before verified Outcome state, missing required local facts, claims provider PR state other than not_created, or permits archive without the separate confirmation gate; they pass for a valid active-state result.",
+    "AGENTS.md and Task Outcome documentation require the executor to send the pre-archive report to the human conversation, wait for human confirmation, and only then archive before any push or PR creation, whether that later creation is manual or separately permitted automation.",
+    "RFE-099 completes Contract, Preflight, before-edit checkpoint, verification, direct human report and confirmation, archive, PR, exact-head Hosted CI, merge, Closure Receipt, and branch cleanup before #441 resumes."
+  ],
+  "guidelines": [
+    "Derive the pre-archive report exclusively from verified local Contract, Summary, and Outcome facts; state provider PR as not created.",
+    "Use a fixed concise report shape that answers human decision questions before optional audit paths.",
+    "Test report timing and facts through ai-finish integration behavior, not source-text-only assertions.",
+    "Document conversation delivery as executor responsibility and make no false claim that repository code controls external chat or provider action.",
+    "Keep instruction-design-plan-implementation-acceptance traceability bidirectional and keep #441 paused until this corrective closes."
+  ],
+  "intent": {
+    "problem": "The user corrected the report lifecycle boundary: both template and adopter projects need the direct human report after implementation and verification but while the Work Item remains active, before archive. Whether a later PR is manually opened or opened by a separately permitted automation must not alter the report timing. The unmerged RFE-098 draft instead added a post-merge direct report, so it must not merge as the solution.",
+    "constraints": [
+      "Generate the report only after local verification and pre-merge Outcome evidence exist, while the Work Item remains active and before archive, push, or PR creation.",
+      "State that provider PR facts do not yet exist; do not infer Hosted CI, approval, merge, or cleanup.",
+      "Require executor delivery to the human conversation and explicit human archive confirmation before archive, push/PR for both manual and separately permitted automated PR workflows.",
+      "Keep Outcome and Closure Receipt as auditable evidence rather than requiring people to read them for the decision summary.",
+      "Do not mutate archived RFE-098 evidence or merge its draft PR."
+    ],
+    "rationale": "A pre-archive report makes the human decision surface occur at the common control point before immutable archival or provider-facing change. It preserves separate post-merge lifecycle evidence without confusing it with the report that authorizes reviewable external change."
+  },
+  "rawUserRequest": "对象工程是手动PR，报告是否应该是PR前报告？我觉得，模版工程和对象工程，时间点都应该是PR之前。模版工程的自动PR是因为得到了我的授权。所以不应该区分模版工程和对象工程。流程上应该是一样的时间点。我又想了下，应该是在归档前。Agent工单完成，此时是active状态。先报告，人确认以后，如果有问题，可以根据报告继续补充。继续。当前的计划执行，我已经授权确认和继续，不需要停止。对计划中的工单，也都是已授权。所以按照目标进行。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:unified-pre-pr-human-report",
+    "capturedAt": "2026-07-29",
+    "digest": "sha256:0a6935dc83ff6692d5e059656351bedeb9e42d6ab890082c17668caf7a3ba75d"
+  },
+  "declaredIntent": {
+    "summary": "Require one direct, decision-first human report while every completed Work Item remains active and before archive, independent of the later authorized PR-creation method.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A normal verified Work Item remains active before any provider PR exists.",
+      "expected": "ai-finish emits a direct Human pre-archive report with local decision facts and Provider PR state not created, and requires human confirmation before archive.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add an ai-finish integration test that uses a verified Outcome state and asserts ordered output."
+    },
+    {
+      "scenario": "A report is constructed without verified pre-merge Outcome facts or with a provider claim.",
+      "expected": "The renderer fails closed rather than emitting a partial report or claiming provider facts before PR creation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add focused rejection coverage for missing/invalid report facts and Provider PR state."
+    },
+    {
+      "scenario": "PR creation is manual or explicitly user-authorized automation.",
+      "expected": "The operating rule requires the same conversation report before either path; it does not change report timing.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Test renderer/provider boundary and assert rule/documentation wording for both creation methods."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized continued execution of the planned lifecycle, including the required AGENTS.md correction and post-report archive, push, PR, CI, merge, and cleanup steps."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 666
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/rfe-099-pre-pr-human-report-20260729.json",
+    "baseCommit": "8b20fafb817d85e7f932a0997e00ed5140598afb",
+    "initialScopeDigest": "2fd0d7d4f14bc39c72168c7d27cf7191f1f68973d2387d8febce8f9bc7c59f15",
+    "contractSkeletonDigest": "0bd33674035e04c0922ee07c1920ef2558e129340eb4fc92c0628a394501cfb0"
+  }
+}

@@ -239,6 +239,17 @@ def test_explicit_makefile_entrypoint_survives_start_finish_failure_and_retry(tm
         "PROJECT_TEST=true",
     )
     assert retried.returncode == 0, retried.stdout + retried.stderr
+    archived = run(
+        tmp_path,
+        "make",
+        "-f",
+        "Makefile.ai",
+        "archive-work-item",
+        f"CONTRACT={contract_path.relative_to(tmp_path)}",
+        "ARGS=--human-confirmed",
+        f"PYTHON={sys.executable}",
+    )
+    assert archived.returncode == 0, archived.stdout + archived.stderr
     assert not contract_path.exists()
     assert list((tmp_path / ".ai/work-items/archive").rglob("e2e.contract.json"))
 
@@ -255,6 +266,15 @@ def test_required_failure_keeps_active_and_retry_archives(tmp_path):
         tmp_path, "make", "ai-finish", "TASK=e2e", f"PYTHON={sys.executable}", "PROJECT_TEST=true"
     )
     assert retried.returncode == 0, retried.stdout + retried.stderr
+    archived = run(
+        tmp_path,
+        "make",
+        "archive-work-item",
+        f"CONTRACT={contract_path.relative_to(tmp_path)}",
+        "ARGS=--human-confirmed",
+        f"PYTHON={sys.executable}",
+    )
+    assert archived.returncode == 0, archived.stdout + archived.stderr
     assert not contract_path.exists()
     assert list((tmp_path / ".ai/work-items/archive").rglob("e2e.contract.json"))
 
@@ -264,7 +284,16 @@ def test_archive_collision_fails_after_checks_and_preserves_active(tmp_path):
     result = run(
         tmp_path, "make", "ai-finish", "TASK=e2e", f"PYTHON={sys.executable}", "PROJECT_TEST=true"
     )
-    assert result.returncode != 0
-    assert "Target already exists" in result.stdout + result.stderr
+    assert result.returncode == 0, result.stdout + result.stderr
     assert contract_path.exists()
     assert collision_path.exists()
+    archive = run(
+        tmp_path,
+        "make",
+        "archive-work-item",
+        f"CONTRACT={contract_path.relative_to(tmp_path)}",
+        "ARGS=--human-confirmed",
+        f"PYTHON={sys.executable}",
+    )
+    assert archive.returncode != 0
+    assert "Target already exists" in archive.stdout + archive.stderr

@@ -267,6 +267,66 @@ def archive_next_steps(task: str) -> str:
     )
 
 
+def render_human_pre_archive_report(result: dict[str, Any]) -> str:
+    """Render verified active-Work-Item facts before archive or provider action."""
+    task = result.get("task")
+    outcome = result.get("outcome")
+    changed_files = result.get("changedFiles")
+    verification = result.get("verification")
+    residual_risks = result.get("residualRisks")
+    provider_pr = result.get("providerPullRequest")
+    if not isinstance(task, str) or not task:
+        raise RuntimeError("Human pre-archive report requires task")
+    if not isinstance(outcome, dict) or outcome.get("status") not in {
+        "completed",
+        "completed_with_warnings",
+    }:
+        raise RuntimeError("Human pre-archive report requires completed Outcome")
+    markdown_path = outcome.get("markdownPath")
+    if not isinstance(markdown_path, str) or not markdown_path:
+        raise RuntimeError("Human pre-archive report requires Outcome markdownPath")
+    if not isinstance(changed_files, list) or not all(
+        isinstance(path, str) and path for path in changed_files
+    ):
+        raise RuntimeError("Human pre-archive report requires changedFiles")
+    if (
+        not isinstance(verification, list)
+        or not verification
+        or not all(isinstance(check, str) and check for check in verification)
+    ):
+        raise RuntimeError("Human pre-archive report requires verification")
+    if not isinstance(residual_risks, list):
+        raise RuntimeError("Human pre-archive report requires residualRisks")
+    if not isinstance(provider_pr, dict) or provider_pr.get("state") != "not_created":
+        raise RuntimeError("Human pre-archive report requires Provider PR state not_created")
+    changes = (
+        "none recorded" if not changed_files else ", ".join(f"`{path}`" for path in changed_files)
+    )
+    risks = (
+        "none recorded"
+        if not residual_risks
+        else "; ".join(
+            str(item.get("detail", item)) if isinstance(item, dict) else str(item)
+            for item in residual_risks
+        )
+    )
+    return "\n".join(
+        (
+            "## Human pre-archive report",
+            f"- Work Item: `{task}`",
+            "- Local result: verified and still active; not archived.",
+            f"- Delivered local changes: {changes}.",
+            f"- Verified local evidence: {', '.join(f'`{check}`' for check in verification)}.",
+            f"- Residual risks: {risks}.",
+            "- Provider PR: not created.",
+            "- Archive, push, and PR creation: stopped pending human confirmation.",
+            "",
+            "## Optional audit evidence",
+            f"- Task Outcome: `{markdown_path}`",
+        )
+    )
+
+
 def verification_priority(item: dict[str, Any]) -> int:
     check_id = verification_key(item)
     if check_id == "aiStatus":
@@ -506,8 +566,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--archive",
         action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Archive Work Item after successful checks.",
+        default=False,
+        help="Archive Work Item after successful checks and explicit human confirmation.",
     )
     return parser.parse_args()
 
@@ -808,6 +868,10 @@ def main() -> int:
     # evidence after the status has been generated.
     summary_data = load_json(summary_path)
     summary_data["reviewReadiness"] = promote_review_readiness(summary_data, contract_data)
+    task_outcome = summary_data.get("taskOutcome")
+    if isinstance(task_outcome, dict):
+        task_outcome["humanPreArchiveReport"] = {"state": "reported_pending_confirmation"}
+        summary_data["taskOutcome"] = task_outcome
     save_json(summary_path, summary_data)
     final_status_checks = [
         ["make", "generate-cockpit-status", f"CONTRACT={contract}", f"SUMMARY={summary}"],
@@ -864,18 +928,44 @@ def main() -> int:
         ),
     )
 
+    final_summary = load_json(summary_path)
+    task_outcome = final_summary.get("taskOutcome")
+    changed_files = [
+        item["path"]
+        for item in final_summary.get("changedFiles", [])
+        if isinstance(item, dict) and isinstance(item.get("path"), str)
+    ]
+    verified_checks = [
+        verification_key(item)
+        for item in final_summary.get("verification", [])
+        if isinstance(item, dict) and item.get("result") == "passed" and verification_key(item)
+    ]
     print("Work Item finish checks passed")
+    print(
+        render_human_pre_archive_report(
+            {
+                "task": args.task,
+                "outcome": task_outcome,
+                "changedFiles": changed_files,
+                "verification": verified_checks,
+                "residualRisks": final_summary.get("residualRisks", []),
+                "providerPullRequest": {"state": "not_created"},
+            }
+        )
+    )
     if args.archive:
-        archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
-        cmd_str = " ".join(archive_command)
-        obs.check_started(check_id="archive-work-item", command=cmd_str)
-        code, duration, _ = run(archive_command)
-        if code != 0:
-            obs.check_failed(check_id="archive-work-item", command=cmd_str, duration_ms=duration)
-            obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-            return code
-        obs.check_passed(check_id="archive-work-item", command=cmd_str, duration_ms=duration)
-        print(archive_next_steps(args.task))
+        print(
+            "ERROR: ai-finish never archives a Work Item. Deliver the Human "
+            "pre-archive report, wait for explicit human confirmation, then run "
+            f"make archive-work-item CONTRACT={contract} ARGS=--human-confirmed.",
+            file=sys.stderr,
+        )
+        obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+        return 2
+    print(
+        "Work Item remains active. Deliver the Human pre-archive report and wait "
+        "for explicit human confirmation before archive, push, or PR creation."
+    )
     obs.work_item_finished(result="passed", duration_ms=elapsed_ms(total_start))
     return 0
 

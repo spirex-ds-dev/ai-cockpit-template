@@ -1,4 +1,7 @@
 import json
+import sys
+
+import pytest
 
 import ai_finish
 from ai_governance_compression import render_active_status
@@ -160,6 +163,92 @@ def test_finish_execution_priority_runs_summary_after_mandatory_outcome_and_qual
     assert ai_finish.finish_execution_priority(
         {"check": "aiSummary"}
     ) > ai_finish.finish_execution_priority({"check": "quality"})
+
+
+def test_human_pre_archive_report_leads_with_active_decision_facts():
+    report = ai_finish.render_human_pre_archive_report(
+        {
+            "task": "example-task",
+            "outcome": {
+                "status": "completed",
+                "markdownPath": ".ai/work-items/active/example-task.outcome.md",
+            },
+            "changedFiles": ["scripts/example.py"],
+            "verification": ["quality", "aiSummary"],
+            "residualRisks": [],
+            "providerPullRequest": {"state": "not_created"},
+        }
+    )
+
+    assert report.index("## Human pre-archive report") < report.index("## Optional audit evidence")
+    assert "Work Item: `example-task`" in report
+    assert "Provider PR: not created." in report
+    assert "Archive, push, and PR creation: stopped pending human confirmation." in report
+    assert "scripts/example.py" in report
+
+
+def test_human_pre_archive_report_rejects_provider_claim_or_missing_outcome():
+    result = {
+        "task": "example-task",
+        "outcome": {"status": "completed", "markdownPath": "outcome.md"},
+        "changedFiles": ["scripts/example.py"],
+        "verification": ["quality"],
+        "residualRisks": [],
+        "providerPullRequest": {"state": "created"},
+    }
+
+    with pytest.raises(RuntimeError, match="Provider PR state not_created"):
+        ai_finish.render_human_pre_archive_report(result)
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("task", "", "requires task"),
+        (
+            "outcome",
+            {"status": "failed", "markdownPath": "outcome.md"},
+            "requires completed Outcome",
+        ),
+        ("outcome", {"status": "completed"}, "requires Outcome markdownPath"),
+        ("changedFiles", [""], "requires changedFiles"),
+        ("verification", [], "requires verification"),
+        ("residualRisks", "unknown", "requires residualRisks"),
+    ],
+)
+def test_human_pre_archive_report_rejects_missing_decision_facts(field, value, message):
+    result = {
+        "task": "example-task",
+        "outcome": {"status": "completed_with_warnings", "markdownPath": "outcome.md"},
+        "changedFiles": [],
+        "verification": ["quality"],
+        "residualRisks": [],
+        "providerPullRequest": {"state": "not_created"},
+    }
+    result[field] = value
+
+    with pytest.raises(RuntimeError, match=message):
+        ai_finish.render_human_pre_archive_report(result)
+
+
+def test_human_pre_archive_report_accepts_completed_with_warnings_and_empty_change_set():
+    report = ai_finish.render_human_pre_archive_report(
+        {
+            "task": "example-task",
+            "outcome": {"status": "completed_with_warnings", "markdownPath": "outcome.md"},
+            "changedFiles": [],
+            "verification": ["quality"],
+            "residualRisks": [],
+            "providerPullRequest": {"state": "not_created"},
+        }
+    )
+
+    assert "Delivered local changes: none recorded." in report
+
+
+def test_finish_defaults_to_active_pre_archive_state(monkeypatch):
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "example-task"])
+    assert ai_finish.parse_args().archive is False
 
 
 def test_status_contains_only_outcome_link_count_and_status_not_full_report():

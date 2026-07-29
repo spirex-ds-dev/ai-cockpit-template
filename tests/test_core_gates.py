@@ -1219,7 +1219,7 @@ def test_finish_main_reports_unknown_check_id(tmp_path, monkeypatch):
     assert ai_finish.main() == 2
 
 
-def test_finish_main_fails_when_archive_step_fails(tmp_path, monkeypatch):
+def test_finish_main_does_not_attempt_archive_after_active_report(tmp_path, monkeypatch):
     active = tmp_path / ".ai" / "work-items" / "active"
     active.mkdir(parents=True)
     contract = active / "task.contract.json"
@@ -1246,8 +1246,12 @@ def test_finish_main_fails_when_archive_step_fails(tmp_path, monkeypatch):
         lambda check, **_kwargs: (f"make {check}", ["make", check]),
     )
 
+    archive_attempted = False
+
     def run(command, **_kwargs):
+        nonlocal archive_attempted
         if command[:2] == ["make", "archive-work-item"]:
+            archive_attempted = True
             return 5, 3, "archive failed"
         return 0, 1, "passed"
 
@@ -1255,7 +1259,39 @@ def test_finish_main_fails_when_archive_step_fails(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task"])
 
-    assert ai_finish.main() == 5
+    assert ai_finish.main() == 0
+    assert not archive_attempted
+
+
+def test_finish_main_rejects_archive_flag_after_emitting_active_report(tmp_path, monkeypatch):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    (active / "task.contract.json").write_text(
+        json.dumps(
+            {
+                "contractVersion": 2,
+                "workItemId": "task",
+                "baseCommit": "b" * 40,
+                "verification": [{"check": "quality", "required": True}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (active / "task.summary.json").write_text(json.dumps({"verification": []}), encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(
+        ai_finish,
+        "render_check_command",
+        lambda check, **_kwargs: (f"make {check}", ["make", check]),
+    )
+    monkeypatch.setattr(ai_finish, "run", lambda command, **_kwargs: (0, 1, "passed"))
+    monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--archive"])
+
+    assert ai_finish.main() == 2
 
 
 def test_finish_main_fails_when_stabilization_check_fails(tmp_path, monkeypatch):

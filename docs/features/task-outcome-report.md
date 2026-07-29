@@ -26,7 +26,7 @@ Project Profile `reporting.defaultLanguage` selects the default locale. `reporti
 
 ## Lifecycle
 
-`ai-finish` performs final verification, Summary validation, mandatory Outcome generation/validation, Markdown rendering, Status generation, and presentation before archive. Archive moves Outcome artifacts transactionally with the Work Item. Event corrections are append-only.
+`ai-finish` performs final verification, Summary validation, mandatory Outcome generation/validation, Markdown rendering, and Status generation while the Work Item remains active. It then emits a **Human pre-archive report**: delivered local changes, verified local evidence, residual risks, and `Provider PR: not created`, followed only by optional Outcome paths. The executor must send that report to the human and wait for confirmation. Only then may `archive-work-item --human-confirmed` move Outcome artifacts transactionally; push and PR creation occur after archive. This timing is the same for manual PR creation and separately permitted automation. Event corrections are append-only.
 
 After the PR has merged, `make ai-close-work-item TASK=<task>` verifies provider ownership, base synchronization, and cleanup facts, then generates and validates a separate Closure Receipt before either Work Item branch is deleted. The receipt names the archived Outcome, merged PR, merge commit, final base commit, cleanup intent, and the worktree from which the next Work Item may continue. A missing or invalid Outcome/Receipt fails closed. The assistant must surface that receipt in its Work Item completion report; it is not a replacement for provider evidence.
 

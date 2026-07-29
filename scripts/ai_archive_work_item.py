@@ -91,6 +91,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dry-run", action="store_true", help="Print actions without modifying files."
     )
+    parser.add_argument(
+        "--human-confirmed",
+        action="store_true",
+        help="Confirm that the active Work Item's pre-archive report was delivered and approved by a human.",
+    )
     return parser.parse_args()
 
 
@@ -814,6 +819,17 @@ def main() -> int:
         except Exception as exc:
             print(f"ERROR: Failed to read summary: {exc}", file=sys.stderr)
             return 1
+
+    if has_summary and isinstance(summary, dict):
+        outcome = summary.get("taskOutcome")
+        report = outcome.get("humanPreArchiveReport") if isinstance(outcome, dict) else None
+        if isinstance(report, dict) and report.get("state") == "reported_pending_confirmation":
+            if not args.dry_run and not args.human_confirmed:
+                print(
+                    "ERROR: pre-archive human confirmation is required; deliver the report, obtain confirmation, then rerun with --human-confirmed.",
+                    file=sys.stderr,
+                )
+                return 1
 
     issues = _validate_archive_inputs(
         contract_path, contract, summary_path if has_summary else None, summary

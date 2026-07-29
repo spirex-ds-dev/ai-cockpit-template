@@ -1726,3 +1726,19 @@ def test_ai_start_rolls_back_pair_when_status_generation_fails(tmp_path, monkeyp
     assert ai_start.main() == 1
     assert not list(active.glob("status_task.*.json"))
     assert status.read_text(encoding="utf-8") == "previous status\n"
+
+
+def test_archive_requires_human_confirmation_after_pre_archive_report(
+    tmp_path, monkeypatch, capsys
+):
+    contract, summary, archive, _traceability = prepare_archive_transaction(tmp_path, monkeypatch)
+    payload = json.loads(summary.read_text(encoding="utf-8"))
+    payload["taskOutcome"] = {"humanPreArchiveReport": {"state": "reported_pending_confirmation"}}
+    summary.write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", ["ai_archive_work_item.py", str(contract)])
+
+    assert ai_archive_work_item.main() == 1
+    assert "pre-archive human confirmation is required" in capsys.readouterr().err
+    assert contract.exists()
+    assert summary.exists()
+    assert not list(archive.glob("*/task.contract.json"))
