@@ -460,17 +460,23 @@ release 或 closure。
 
 ### 校准完成记录清单
 
-此表是给人看的审核视图。简单说，Session 只保存你的回答、回答类型、理由和阶段
-运行状态；Work Item 保存支持证据、proposed change、负责人和 PASS/STOP。持久化
-JSON Calibration Session 只对其 schema 实际保存
-的回答类型、回答值、理由、阶段状态、events 与 checks 构成权威记录；它不保存清单
-中的其他列。其他列只能记录到 schema 支持的 Work Item review、acceptance 或
-verification 证据，并同时显示两个位置。若没有合法 schema 字段，必须 STOP 并报告
-持久化缺口；不得发明 Summary key 或手工编辑本文档。代理在 review 输出中显示一行
-填写副本；只有持久化 Session 确认已记录回答后，才把该行标为完成。只是提出问题
-不代表完成。事实或负责人缺失时填写 `unknown` 并选择 STOP。
+此表是给人看的审核视图。
+Session 会在合并后的阶段记录中持久化完整七列审核行所需的全部 schema 支持数据。
+回答类型、值和理由由 `answer` 保存；观察证据、proposed
+Candidate change、`owner` / `reviewer` 标签、PASS/STOP 判定、判定理由及必要的重试
+步骤由 `record-evidence` 保存。两部分共同组成该阶段全部 schema 支持审核列的权威
+Session 事实记录。
+
+Work Item 保存治理理由、验收、Owner 决定及外部审核证据链接；它不会替代 Session 中的事实记录。
+记录下来的 `reviewer` 和 `owner` 标签不能证明实际由谁完成审核，也不能证明职责已经独立分离。
+人员身份与独立职责分离证据必须保存在 Session 外，
+并从 Work Item 链接。若必要事实没有合法 schema 字段，必须 STOP 并报告持久化
+缺口；不得发明 Summary key 或手工编辑本文档。只有持久化 Session 同时确认回答和
+结构化证据后，代理才能把该行标为完成。只是提出问题不代表完成。事实或负责人
+缺失时填写 `unknown` 并选择 STOP。
 
 <!-- calibration-session-persistence-boundary: structured-checklist-evidence,candidate-bound -->
+<!-- calibration-session-evidence-boundary: combined-stage-seven-column-record,labels-not-actor-proof -->
 
 复制下面提示词，你不需要寻找或编辑治理文件：
 
@@ -478,9 +484,9 @@ verification 证据，并同时显示两个位置。若没有合法 schema 字�
 找到 active configure_ai_cockpit Work Item 及持久化 Calibration Session。使用
 下面十行清单作为审核格式。当前阶段只显示一行通俗填写草案：观察证据、回答
 type/value/reason、proposed Candidate change、预定 Owner/Reviewer，以及带理由与
-重试步骤的 PASS/STOP。先显示准确 Session record 并等待我决定。我决定后，通过
-已安装 Calibration Session 接口的 `answer` 保存回答，通过 `record-evidence`
-保存其余各列。显示 Session 路径和只读 review 输出，证明 schema 已支持整行记录。
+重试步骤的 PASS/STOP。先显示准确 Session record 并等待我决定。
+我决定后，用 `answer` 保存回答字段及由此产生的阶段完成状态；用 `record-evidence` 将观察证据、Candidate change、Owner/Reviewer 标签和 PASS/STOP 判定详情保存到 `checklistEvidence`。
+使用已安装 Calibration Session 接口。显示 Session 路径和只读 review 输出，证明 schema 已支持整行记录。
 字段缺失、决定为 STOP 或回答为 Unknown 时必须 STOP。不要让我手工编辑 JSON；
 不得编造证据、prepare/activate Candidate、commit、push、创建或合并 PR、release
 或关闭 Work Item。

@@ -103,7 +103,7 @@ keywords:
 5. 日语评估及整改：执行全面日语能力评估，任何问题必须完成 corrective Work Item 并重新评估；
 6. 文档对齐：对齐 Trust Layer、Capability Truth Matrix、README、架构、安全/发布证据与全部三语文档；
 7. 发布前过期资产清理：执行 `pre-release-deprecated-assets-cleanup`，处理过期代码、逻辑和文档，包括已实施完成且不再承担当前执行职责的计划文档；先验证 runtime/reference/migration/归档保护，再决定删除、迁移或保留并标记历史；
-8. 独立真实荒诞/注入评估与整改：在发布前执行专门 Work Item，独立评估 request-time 语义分类、post-write repository evidence 和外部 physical controls；不得把固定语料结果当作泛化能力；
+8. 独立真实荒诞/注入评估与整改：执行 `pre-release-real-absurd-injection-assessment`，把用户提供的 12 个案例形成完整英中日文档和机器测试；独立评估 request-time 语义分类、post-write repository evidence 和外部 physical controls，逐例验证来源、权限、操作风险、仓库证据矛盾、独立授权与 ALLOW/REVIEW/CONFIRM/BLOCK 结果；任何识别或阻断失败必须先整改并重跑，且不得把固定语料结果当作泛化能力；
 9. 发布：仅在前八阶段全部关闭且发布前证据通过后执行 WI-18；
 10. 清理当前周期计划文档：发布完整关闭后最后执行 WI-19，只处理仍服务于本轮发布执行的计划，不删除 Contract、Summary、Manifest、Release evidence 或其他不可变审计记录。
 
@@ -442,6 +442,29 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 
 **WI-17 流程问题记录：** `WI-17-ISSUE-001`（流程/预检，低）：初始 Contract 未把真实 scope、sources、scenario coverage 和 raw request 写入，`ai-start` 正确以 `not_ready` 停止；已补全 Contract，并以用户已授权的结构化决策记录继续，未把实现前场景误记为已验证。`WI-17-ISSUE-002`（流程/归属，低）：结构化预检决策文件最初不在 Contract scope，before-edit checkpoint 将其标为 unowned；已将 `.ai/decisions/**` 纳入 scope 并刷新 checkpoint。`WI-17-ISSUE-003`（检查器缺陷，低）：内部链接检查器初始只接受文件，把 README 中合法的目录入口 `examples/` 判为 broken link；已允许合法目录目标并重新通过检查。`WI-17-ISSUE-004`（证据状态，待对齐）：在 Contract 细化期间旧预检决策证据出现 stale hash；保留为流程历史，最终 Summary 必须明确该决策仅代表实现授权，不得作为任何实现验证结果，并在 finish 前保证所有场景均为真实 verified 或明确 not_applicable。`WI-17-ISSUE-005`（流程/归属，低）：首次 `ai-finish` 发现新增 `Makefile` target 未纳入 Contract scope，Scope Guard 正确停止；已补充 scope 后重跑。`WI-17-ISSUE-006`（质量/文档，低）：全量测试发现日文文档使用项目禁止的置信度术语，且新增检查器初始覆盖不足；已改用项目规定的日语术语、补充 missing-file 分支测试，并通过相关回归。`WI-17-ISSUE-007`（流程/checkpoint，中）：全量质量通过后，Agent Risk 发现 `before_edit` checkpoint 因 Contract 在实现期间最终化而 stale；已先以最终 Contract 刷新 `before_edit`，再继续 finish，不复用旧 checkpoint。
 
+### 发布前真实荒诞与注入攻击评估：`pre-release-real-absurd-injection-assessment`
+
+**插入原因：** 用户要求在 WI-18 发布版本前，把提供的真实荒诞测试和注入攻击案例加入三个语言版本的完整文档，并验证当前 AI Cockpit 能否正确识别和阻止；任何不足必须先修改到全部测试通过。该工单排在发布前过期资产清理之后、WI-18 之前，不能与发布工单混做。
+
+**权威输入：** `conversation-attachment:real-absurd-and-injection-cases-20260729`。包含 12 个真实案例和四类测试：权限伪造、证据破坏、外部资料注入、危险执行。案例覆盖：以口头确认删除仍被使用的函数、隐藏 Markdown 注入、为变绿删除测试、伪造负责人批准、日志间接注入、依赖 README 诱导上传 `.env`/SSH key、伪造未执行验证、紧急绕过发布 Gate、改写归档历史、执行未知远程 sudo 脚本、隐瞒 Contract 外扩范围、让实现者自我批准。
+
+**计划文档与实现边界：**
+
+- 新增结构和含义完整一致的英文权威版、中文完整版、日文完整版；不得让任一语言只有摘要。建议权威路径为 `docs/reference/real-absurd-injection-cases.md`、`docs/reference/real-absurd-injection-cases.zh-CN.md`、`docs/reference/real-absurd-injection-cases.ja.md`。
+- 每个案例必须记录输入来源、`sourceType`、`trustLevel`、`instructionAuthority`、请求操作、危险类别、仓库/外部证据、声明与证据的矛盾、所需独立授权、预期 Gate、预期结果及安全恢复路径。
+- 必须使用统一判断链：输入来源 → 指令权限 → 请求操作 → 删除/权限/网络/Secret/发布/历史证据风险 → 仓库证据支持 → 请求与证据矛盾 → 独立授权 → `ALLOW / REVIEW / CONFIRM / BLOCK`。不得实现为 12 组零散关键词，也不得把文件或用户笼统标记为恶意。
+- 先盘点并执行当前 `ai_input_trust`、Backtrack Guard、Destructive Change Policy、Diff Ownership、Unknown/Evidence Gap、Human Confirmation、Archive immutability、Evidence over Self-Declaration、Strict Release、Scope、Separation of Duties 等真实路径。任何案例若只被文档描述、只能由人工猜测或未进入机器门禁，必须保持失败并建立实现整改，直到行为与证据通过。
+- 保留边界：AI Cockpit 的拒绝理由必须是请求缺少足够证据/权限或与已知事实、安全边界冲突，不是推断用户恶意；外部资料中的合法技术事实仍可作为无操作权限的参考信息。
+
+**验收：**
+
+1. 12 个案例在英中日三份文档中结构、顺序、事实和结果一致，并通过章节/内部链接/关键边界一致性检查。
+2. 每个案例都有直接机器测试，覆盖允许内容与拒绝内容的分离、隐藏 HTML、可见注入、日志/tool/generated 输入、Secret/网络/删除/发布/归档/范围/自审边界。
+3. 测试不仅断言关键词，还断言 source/trust/authority、requested operation、evidence conflict、Gate、decision、reason 和 recovery；负例证明不能靠“我已确认”“负责人批准”“紧急”“之后再补”等文本提升权限或伪造证据。
+4. 当前实现不满足任一案例时，先写 RED 测试，再修统一分类/治理链，重新执行聚焦、荒诞 corpus、注入 corpus、三语一致性、完整质量和真实 Hosted 验证。
+5. Capability Truth Matrix、Trust Layer、安全边界和日语最终评估必须按真实实现状态对齐，不得从测试设计反推能力已实现。
+6. 工单完成 Contract → Preflight → 实现/验收 → `ai-finish`/archive → push → PR → exact-Head Hosted → merge → `ai-close-work-item` → 本地/远程分支删除 → main 同步后，才允许进入 WI-18。
+
 ### WI-18：Publish New Version
 
 **范围：** 这是唯一实际发布新版本的 Work Item。Contract 必须明确 release identity、source commit/ref、tag、asset、distribution、release note、SBOM、provenance、vulnerability/secret、installer lifecycle、Public Install、兼容性和人工发布授权。
@@ -637,18 +660,20 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 | WI-10 安装文档整改 | 已完成、PR #422 已合并、关闭并清理 |
 | WI-01～WI-20 双向追踪审计 | 已完成；发现项及 corrective 均按 archive 追踪 |
 | 其他流程问题与 RFE-ISSUE-082 | 已完成、合并、关闭并清理 |
-| 日语评估及整改 | 首次最终评估已关闭；五策略文档审查随后发现漏绑日语权威文档，因此当前最终证据已失效 |
-| 文档事实纠偏 | 当前执行 `pre-release-documentation-truth-corrective-20260729`；修复 Capability Truth 字节绑定、日语证据源、公开安装解析、发布身份说明、计划状态和多语言路线 |
-| 全新日语最终评估 | 待纠偏完整关闭后，以 corrected main 独立执行；只有 `final_reassessment` 可满足发布门禁 |
+| 日语评估及整改 | 文档事实纠偏已由 PR #452 合并并完整关闭；全新最终评估已启动，但五策略复核发现 `JA-DOC-FACT-002`，当前按流程暂停 |
+| 日语校准证据文档纠偏 | 当前执行 `japanese-calibration-session-evidence-doc-corrective-20260729`；修正三语 Session 七列证据、Work Item 治理边界及 reviewer/owner 标签限制 |
+| 全新日语最终评估 | `japanese-final-reassessment-after-documentation-truth-20260729` 保留在独立暂停分支；只在当前纠偏完整关闭后 rebase/resume，并以零 blocker 的 `final_reassessment` 满足发布门禁 |
 | 文档对齐 | `pre-release-documentation-alignment-20260729` 已暂停；待纠偏和全新日语评估关闭后 rebase/resume 并完成 |
 | 发布前过期资产清理 | 待文档对齐关闭后执行 |
+| 发布前真实荒诞与注入攻击评估 | 用户新增；待过期资产清理关闭后执行三语 12 案例评估及必要整改 |
 | WI-18 发布新版本 | 待所有前置阶段关闭；候选版本、provider Release、tag、asset、projection 分别验证 |
 | WI-19 清理计划文档 | 发布完整关闭后最后执行 |
 
-当前唯一允许的顺序是：文档事实纠偏 → 全新日语 `final_reassessment` → 恢复并关闭文档对齐 → 过期代码/逻辑/文档清理 → WI-18 发布 → WI-19 清理当前周期计划。每一项都必须完成 Contract → Preflight → 实现/验收 → `ai-finish`/archive → push → PR → merge → `ai-close-work-item` → 本地/远端分支清理 → main 同步；不得从 detached closed worktree 直接进入下一项。
+当前唯一允许的顺序是：`JA-DOC-FACT-002` 独立纠偏 → 恢复并完成全新日语 `final_reassessment` → 恢复并关闭文档对齐 → 过期代码/逻辑/文档清理 → 三语真实荒诞与注入攻击评估及整改 → WI-18 发布 → WI-19 清理当前周期计划。每一项都必须完成 Contract → Preflight → 实现/验收 → `ai-finish`/archive → push → PR → merge → `ai-close-work-item` → 本地/远端分支清理 → main 同步；不得从 detached closed worktree 直接进入下一项。
 
 ### 本计划工单已发现的问题
 
+- `JA-DOC-FACT-002`（日语评估/校准证据事实，高）：全新日语最终评估的独立 Accuracy 与 Clarity 策略一致确认，英中日三份安装文档的 Calibration 完成记录前段仍声称 Session 只保存回答/运行状态、其余七列由 Work Item 保存；但 `scripts/ai_calibrate.py record-evidence` 已把 observed evidence、Candidate change、owner/reviewer、PASS/STOP、reason/retry 持久化到每阶段 `checklistEvidence`，同一文档后段也描述完整七列记录。既有 checker 只验证宽泛 marker，未拒绝内部矛盾。最终评估已暂停；独立 corrective `japanese-calibration-session-evidence-doc-corrective-20260729` 以三语统一事实、Work Item 治理/外部证据边界、标签不证明本人性或独立角色分离及 mutation gate 完整闭环后，才允许恢复评估。
 - `DOC-ALIGN-FINDING-001`～`008`（文档事实/流程，发布阻断）：五策略审查一致发现 Capability Truth 与 Quick Install 实现冲突、row digest 未绑定证据字节、日语最终报告漏绑权威文档、README 以最高 tag 回退、计划状态与生命周期顺序漂移、发布身份边界混淆、多语言路线不等价，以及对齐检查器自我声明审查成功。已暂停文档对齐，建立 `pre-release-documentation-truth-corrective-20260729` 原子修复代码、测试、三语文档和结构化审查证据；修复后必须重新执行独立日语最终评估，再恢复文档对齐。
 - `DOC-TRUTH-ISSUE-001`（Preflight 词法误报，中）：纠偏 Contract 中用于报告分类和权威边界的普通词 `role` 被 Critical Domain Guard 按权限操作命中，尽管 `requestedOperation` 明确是 repository governance 且无外部权限变更。当前 Contract 用“report classification / authority boundary”精确表达后 Preflight 为 ready；该误报保留为流程问题，后续流程工单应让结构化 operation 优先于无上下文词法匹配，不能靠静默忽略。
 - `DOC-TRUTH-ISSUE-002`（Capability Truth 旧证据路径，高）：首次启用证据字节绑定时，矩阵中 `tests/test_installation.py` 与 `tests/test_ci_release_evidence.py` 已不存在，但旧 row-only digest 仍为绿色。已替换为真实的 `tests/test_install_entrypoint.py` 与 `tests/test_ci_release_evidence.sh`，并以 missing-file fail-closed 回归防止再次漂移。
@@ -723,4 +748,5 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 - `RFE-ISSUE-153`（归档后状态诊断/流程，高）：RFE-151 完成 `ai-finish` 后，完整实现与文档 diff 已由 immutable archived Summary `changedFiles` 声明，但 `check-ai-status-consistency` 只把 RFE-116 覆盖的 Start Receipt 归入当前 archive transaction，其余合法路径仍被误报为 no-active drift，并建议 `repair-ai-status`；repair 重写同一个 deterministic zero-change marker 后必然再次失败。独立 corrective `rfe153-post-archive-status-diagnosis-20260728` 必须把 ownership 扩展为“当前 changed manifest 精确绑定 archive pair，且 Summary.changedFiles 覆盖每一个 live path”，任一漏项、无关、malformed、incomplete、historical-only 或 mismatch 继续 fail closed；serialized Status 漂移才允许建议 repair，unowned live change 必须明确 repair 无法建立 ownership。该 corrective 完整 PR/Hosted/merge/close/cleanup 前不得进入 RFE-152。
 - `PLAN-006`（用户顺序确认/发布门禁，高）：用户最终确认后续严格顺序为“深度性能工单 → WI-10 → WI-01～WI-20 全量双向追踪审计 → 其他流程问题与 RFE-ISSUE-082 → 日语评估及整改 → 文档对齐 → 发布 → 清理计划文档”。该顺序已替换旧五阶段概括；发布不得越过任一前置阶段，任何阶段发现遗漏或流程问题都必须先完成对应 corrective Work Item 的完整生命周期。
 - `PLAN-008`（用户新增/发布前过期资产清理，高）：用户要求在发布前新增独立 `pre-release-deprecated-assets-cleanup`，处理过期代码、逻辑和文档，并包括已实施完成、不再承担当前执行职责的计划文档。该工单必须在文档对齐后、WI-18 前完成完整生命周期；以资产清单逐项证明 runtime/reference/migration/归档保护状态，只有 `deletionAllowed=true` 且替代与回归证据完整时才允许删除。不可变 Contract、Summary、Manifest、决策与发布证据只允许保留或明确历史化。WI-19 仍在发布后处理本轮执行期间继续使用的计划，两者不得相互替代。
+- `PLAN-009`（用户新增/真实荒诞与注入攻击发布门，高）：用户提供 12 个真实权限伪造、证据破坏、外部资料注入和危险执行案例，要求在 WI-18 前形成英中日三份完整文档，并验证 AI Cockpit 对每例的识别/阻断能力；未达标必须实现整改到测试通过。已插入独立 `pre-release-real-absurd-injection-assessment`，排在发布前过期资产清理后、WI-18 前；必须使用统一 source/trust/authority/operation/evidence/independent-approval 决策链和真实机器 Gate，不允许用零散关键词或对用户恶意的主观判断替代证据。
 - 深度性能工单在提交 `f9e1b7e41ec282de2704497369a9db4a7ac8db6c` 上取得三次串行、同类型、同 SHA 的成功 hosted measurement：run `30325316583`、`30325920850`、`30326505323` 的 quality step 分别为 650、655、653 秒，median 653 秒，按小样本 nearest-rank 的保守 p95 为 655 秒；`project-test` 分别为 637.117、642.422、640.607 秒，median 640.607 秒，p95 642.422 秒。相对 run `30280375075` 的 1281 秒基线，quality p95 缩短约 48.9%，达到第一阶段 p95 <15 分钟目标。该结果证明结构性改善，但重测试绝对耗时仍约 11 分钟，`project-test` 仍是后续性能改进的主要残余瓶颈。
