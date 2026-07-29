@@ -24,7 +24,7 @@ your target project open:
 Help me begin AI Cockpit installation from the canonical public repository
 https://github.com/spirex-ds-dev/ai-cockpit-template.git. Work read-only first.
 Verify that this is the intended Git project, it has an initial commit, its
-worktree is clean, and Python 3.10+, Git, GNU Make, and curl are available.
+worktree is clean, and Python 3.11+, Git, GNU Make, and curl are available.
 Read the public release.json, resolve a fixed published tag, and explain the
 release/tag/digest evidence in plain language. Do not download or execute
 anything until you show the exact plan and I approve only that installation

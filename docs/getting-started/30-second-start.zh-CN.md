@@ -21,7 +21,7 @@ keywords:
 请帮助我从权威公开仓库
 https://github.com/spirex-ds-dev/ai-cockpit-template.git
 开始安装 AI Cockpit。先只读确认：这是目标 Git 工程、已有初始 commit、
-工作区干净，且 Python 3.10+、Git、GNU Make、curl 可用。
+工作区干净，且 Python 3.11+、Git、GNU Make、curl 可用。
 读取公开 release.json，解析固定发布 tag，并用日常语言解释 release、tag、
 digest 证据。展示精确计划并得到我只针对安装步骤的批准前，不要下载或执行。
 不得 commit、push、创建/合并 PR、删除或发布。

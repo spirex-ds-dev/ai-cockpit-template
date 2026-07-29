@@ -121,9 +121,9 @@ Cockpit 已更新。
 Review 从上下文开始。
 ```
 
-<!-- install-prerequisites: python3.10,git-initial-commit,curl,gnu-make,posix -->
+<!-- install-prerequisites: python3.11,git-initial-commit,curl,gnu-make,posix -->
 
-**前置条件：**支持 POSIX shell 的 Linux、macOS 或 WSL；Python 3.10+；Git、curl 和 GNU Make；以及至少已有一个提交且工作树干净的 Git 仓库。所选 stack 的 formatter、测试运行器、SDK 和构建插件也必须预先安装。
+**前置条件：**支持 POSIX shell 的 Linux、macOS 或 WSL；Python 3.11+；Git、curl 和 GNU Make；以及至少已有一个提交且工作树干净的 Git 仓库。所选 stack 的 formatter、测试运行器、SDK 和构建插件也必须预先安装。
 
 版本历史与能力演进在[路线图](docs/roadmap.md)中维护，而不是放在这个简短入口页中。
 
@@ -307,7 +307,7 @@ generic, rust, flutter, typescript, python, go, java, android, kotlin, swift, ru
 
 ## 运行环境要求
 
-- Python 3.10 或更高版本。
+- Python 3.11 或更高版本。
 - 具有 merge-base 和 three-dot 差分（`...`）支持的 Git 环境。
 - 兼容 POSIX shell 和 GNU Make 的命令执行环境。
 - 官方支持 Linux 和 macOS 运行和 CI。原生 Windows shell 暂不支持，请在 WSL (Windows Subsystem for Linux) 或其他 POSIX 终端中运行。

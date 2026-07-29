@@ -89,7 +89,7 @@ Every row must be evidenced before the documentation change is accepted.
 ## 1. Before you start
 
 You need the project on your computer, an AI coding agent that can inspect that
-folder, Git, Python 3.10 or newer, GNU Make, and at least one existing Git
+folder, Git, Python 3.11 or newer, GNU Make, and at least one existing Git
 commit. You also need permission to create a branch and PR in the project.
 
 Git keeps the project's change history. A commit is one reviewed snapshot in
@@ -163,7 +163,7 @@ Inspect and explain in plain language:
    commit exists;
 2. the remote whose HEAD identifies the default branch, that branch name, and
    its latest fetched commit—do not assume origin or main;
-3. whether Python 3.10+, Git, GNU Make, and curl are available;
+3. whether Python 3.11+, Git, GNU Make, and curl are available;
 4. the detected languages/build systems and the best AI Cockpit stack choice;
 5. existing AGENTS.md, GEMINI.md, CLAUDE.md, Makefiles, CI workflows, security
    policy, CODEOWNERS, and active .ai Work Items;
@@ -206,7 +206,7 @@ Check these lines one by one:
 - the worktree is clean, or every existing change is understood and preserved;
 - an initial commit exists;
 - the remote/default branch came from evidence, not an `origin/main` guess;
-- Python is at least 3.10 and Git, Make, and curl were found;
+- Python is at least 3.11 and Git, Make, and curl were found;
 - the stack recommendation matches the project;
 - unknowns are visible rather than guessed.
 

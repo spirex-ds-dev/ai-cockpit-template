@@ -21,6 +21,22 @@ def test_doctor_passes_hard_prerequisites_for_repository():
     assert any("role=template maintenance" in item for item in passed)
 
 
+def test_doctor_requires_python_311_or_newer(monkeypatch, tmp_path):
+    class VersionInfo(tuple):
+        major = 3
+        minor = 10
+
+    monkeypatch.setattr(
+        ai_doctor.sys,
+        "version_info",
+        VersionInfo((3, 10, 14, "final", 0)),
+    )
+
+    _, _, failures = ai_doctor.diagnose(tmp_path)
+
+    assert "Python 3.11 or newer is required" in failures
+
+
 def test_doctor_fails_without_git_repository_or_initial_commit(tmp_path):
     result = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "ai_doctor.py"), "--root", str(tmp_path)],

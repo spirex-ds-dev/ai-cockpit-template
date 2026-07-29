@@ -18,7 +18,7 @@ REQUIRED_FRONT_MATTER = ("author", "title", "description")
 README_FILES = ("README.md", "README.ja.md", "README.zh-CN.md")
 README_CAPABILITY_MARKER = "<!-- release-capabilities: auditable-adoption,sha256-verification -->"
 README_PREREQUISITE_MARKER = (
-    "<!-- install-prerequisites: python3.10,git-initial-commit,curl,gnu-make,posix -->"
+    "<!-- install-prerequisites: python3.11,git-initial-commit,curl,gnu-make,posix -->"
 )
 VERIFIED_STACKS: tuple[str, ...] = (
     "python",

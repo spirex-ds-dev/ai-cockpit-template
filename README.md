@@ -118,9 +118,9 @@ Review starts from context.
 
 Version history and capability evolution are maintained in the [Roadmap](docs/roadmap.md), not in this short entry page.
 
-<!-- install-prerequisites: python3.10,git-initial-commit,curl,gnu-make,posix -->
+<!-- install-prerequisites: python3.11,git-initial-commit,curl,gnu-make,posix -->
 
-**Prerequisites:** Linux, macOS, or WSL with a POSIX shell; Python 3.10+; Git, curl, and GNU Make; and a clean Git repository with at least one commit. The selected stack's formatter, test runner, SDK, and build plugins must already be installed.
+**Prerequisites:** Linux, macOS, or WSL with a POSIX shell; Python 3.11+; Git, curl, and GNU Make; and a clean Git repository with at least one commit. The selected stack's formatter, test runner, SDK, and build plugins must already be installed.
 
 ## Quick Install
 
@@ -372,7 +372,7 @@ The public release contract includes auditable first-adoption bootstrap and stri
 
 ## Runtime Requirements
 
-- Python 3.10 or higher.
+- Python 3.11 or higher.
 - Git environment with support for merge-base and three-dot diffs (`...`).
 - POSIX-compliant shell and GNU Make execution environment.
 - Linux and macOS are officially supported for local execution and CI. Native Windows shells are not supported; please run inside WSL (Windows Subsystem for Linux) or another POSIX terminal.

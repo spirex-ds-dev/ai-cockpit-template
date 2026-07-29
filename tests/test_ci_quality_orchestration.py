@@ -115,7 +115,7 @@ def test_python_matrix_uses_lightweight_compatibility_command():
     workflow = COMPATIBILITY.read_text(encoding="utf-8")
 
     assert "os: [ubuntu-latest, macos-latest]" in workflow
-    assert 'python: ["3.10", "3.11", "3.14"]' in workflow
+    assert 'python: ["3.11", "3.14"]' in workflow
     assert "Run Python compatibility tests" in workflow
     assert "run: make compatibility-test" in workflow
     assert "run: make quality" not in workflow

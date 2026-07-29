@@ -450,6 +450,7 @@ def test_refresh_candidate_evidence_synchronizes_local_release_projection(tmp_pa
         },
     }
     release.write_text(json.dumps(original, indent=2) + "\n", encoding="utf-8")
+    lock.write_text("updated lock\n", encoding="utf-8")
     monkeypatch.setattr(check_supply_chain, "ROOT", tmp_path)
     monkeypatch.setattr(check_supply_chain, "LOCK_FILE", lock)
     monkeypatch.setattr(check_supply_chain, "INSTALLER", installer)
@@ -478,9 +479,12 @@ def test_refresh_candidate_evidence_synchronizes_local_release_projection(tmp_pa
     assert refreshed["releaseArchive"] == original["releaseArchive"]
     assert refreshed["publicContract"] == original["publicContract"]
     assert refreshed["capabilities"] == original["capabilities"]
+    assert refreshed["supplyChain"][
+        "requirementsLockDigest"
+    ] == check_release_distribution.file_digest(lock)
     assert (
         refreshed["supplyChain"]["requirementsLockDigest"]
-        == original["supplyChain"]["requirementsLockDigest"]
+        != original["supplyChain"]["requirementsLockDigest"]
     )
     assert refreshed["supplyChain"]["secretScanning"] is True
     assert refreshed["supplyChain"]["sbomDigest"] == check_release_distribution.file_digest(

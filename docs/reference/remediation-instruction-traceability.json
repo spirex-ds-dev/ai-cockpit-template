@@ -1733,6 +1733,48 @@
         "make quality",
         "Hosted PR checks for the current replacement branch"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-053",
+      "summary": "Raise the minimum supported Python version to 3.11 in a dedicated compatibility migration before resuming Dependabot #444, because stevedore 5.9.0 cannot resolve on the formerly supported Python 3.10 baseline.",
+      "planWorkItems": [
+        "python-311-compatibility-migration-20260730",
+        "dependabot-444-stevedore-20260730"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/python-311-compatibility-migration-20260730.contract.json"
+      ],
+      "implementationEvidence": [
+        ".github/workflows/compatibility.yml",
+        "Makefile",
+        "pyproject.toml",
+        "requirements-dev.lock",
+        "scripts/ai_doctor.py",
+        "README.md",
+        "README.zh-CN.md",
+        "README.ja.md",
+        "docs/getting-started/30-second-start.md",
+        "docs/getting-started/30-second-start.zh-CN.md",
+        "docs/getting-started/30-second-start.ja.md",
+        "docs/getting-started/installation.md",
+        "docs/getting-started/installation.zh-CN.md",
+        "docs/getting-started/installation.ja.md",
+        "docs/reference/distribution.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_workflows.py",
+        "tests/test_ci_quality_orchestration.py",
+        "tests/test_docs_metadata.py",
+        "tests/test_doctor.py",
+        "docs/reference/capability-truth-matrix.json",
+        "docs/reference/japanese-capability-assessment.json"
+      ],
+      "verificationCommands": [
+        "PYTHON=<Python 3.11 interpreter> make check-lockfile-reproducibility",
+        "make quality",
+        "Hosted compatibility, template-smoke, installation-smoke, and ci-evidence checks on the migration PR",
+        "Resume #444 only after migration PR merge and lifecycle closure"
+      ]
     }
   ]
 }
