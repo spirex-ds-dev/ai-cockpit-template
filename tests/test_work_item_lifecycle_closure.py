@@ -660,6 +660,43 @@ def test_main_reports_ready_only_for_ready_on_base(monkeypatch, capsys) -> None:
     assert "Repository state: ready for next Work Item" in output
 
 
+def test_main_uses_registered_explicit_worktree(monkeypatch, capsys) -> None:
+    target_runner = object()
+    monkeypatch.setattr(
+        closure,
+        "parse_args",
+        lambda: type("Args", (), {"task": "example", "worktree": "/tmp/child"})(),
+    )
+    monkeypatch.setattr(
+        closure,
+        "_registered_target_worktree",
+        lambda path: target_runner if path == "/tmp/child" else None,
+    )
+    observed = {}
+
+    def close(task, runner):
+        observed.update({"task": task, "runner": runner})
+        return {
+            "state": "closed",
+            "pullRequest": 474,
+            "contract": ".ai/work-items/archive/2026/example.contract.json",
+            "workBranch": "codex/example",
+            "baseRemote": "origin",
+            "baseBranch": "main",
+            "baseWorktree": None,
+            "receipt": ".ai/work-items/archive/example.closure.md",
+            "closureReceipt": ".ai/work-items/archive/example.closure.md",
+            "repositoryState": "ready_on_base",
+            "nextWorkItemReady": True,
+        }
+
+    monkeypatch.setattr(closure, "close_work_item", close)
+
+    assert closure.main() == 0
+    assert observed == {"task": "example", "runner": target_runner}
+    assert "Repository state: ready for next Work Item" in capsys.readouterr().out
+
+
 def test_main_reports_detached_closure_as_not_ready(monkeypatch, capsys) -> None:
     monkeypatch.setattr(
         closure,
