@@ -94,9 +94,19 @@ SHA-256 digests, archive sequence, base commit, and the PR merge-base.
 
 The checker recomputes every binding and each base-commit ancestry edge. It
 accepts only the receipt's exact compatible prefix; subsequent entries must
-still meet the ordinary adjacent-source recovery rule. A missing, reordered,
-incompatible, or unrelated entry leaves the default one-new-Work-Item-per-PR
-rule in force.
+still meet the ordinary adjacent-source recovery rule.
+
+An already merged child Work Item may also appear after that immutable prefix,
+but only when repository history proves all of the following: its canonical
+Start Receipt remains valid; its Contract and Summary were added together in
+one immutable archive commit; and that commit entered the checked parent-PR
+history through the second parent of a two-parent merge after the parent PR
+base. Reachability from `HEAD`, a task name, a local Closure Receipt, or a
+direct addition to the parent branch is not enough. This permits a real child
+PR without letting it hide independent Work Items in the parent PR.
+
+A missing, reordered, incompatible, unmerged, or unrelated entry leaves the
+default one-new-Work-Item-per-PR rule in force.
 
 Archived evidence has one immutable root: `archive-manifest.json` is generated only after the Contract and Summary are frozen, and records their SHA-256 digests. The Summary does not hash itself, and generated `current_status.md` is excluded from this chain. The archive index records the manifest path and digest; records predating this protocol remain readable as legacy evidence.
 
