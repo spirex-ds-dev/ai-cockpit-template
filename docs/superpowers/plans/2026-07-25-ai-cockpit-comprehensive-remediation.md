@@ -668,7 +668,7 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 | RFE-ISSUE-096 恢复后验证证据代际纠偏 | `rfe-096-resume-verification-generation-corrective-20260729` 已完成、合并、关闭并清理；RFE-094 关闭后恢复 #441 时，旧 Summary 验证记录被 canonical before_edit 误计为当前通过项。RFE-096 以最新可信 `resumeHistory.recordedAt` 划分代际，RFE-095 脏调查现场保留但不合并。 |
 | RFE-ISSUE-097 工单完结报告纠偏 | `rfe-097-mandatory-task-outcome-report-20260729` 已完成、合并、关闭并清理；其后发现“Outcome 仅存文件、而非归档前对话报告”这一未闭环行为。successor `rfe-108-prearchive-outcome-successor-20260730` 已完成、PR #467 合并、关闭并清理：默认 `ai-finish` 只生成并直接呈现 active Outcome，归档必须显式执行；RFE-104 归档未合并证据与 PR #464 保持只读审计状态。 |
 | Dependabot 发布前接收 | `dependabot-441-setup-dotnet-20260730` 已由 PR #468、`dependabot-442-ruby-setup-ruby-20260730` 已由 PR #469 分别合并、关闭并清理。`dependabot-444-stevedore-20260730` 的 stevedore 5.9.0 要求 Python 3.11+，与原 Python 3.10 基线冲突；用户已授权先执行独立的 `python-311-compatibility-migration-20260730`。其 PR #470 出现 provider merge-state 不一致：`origin/main` 含 GitHub 签名的精确二亲 merge commit `dca16f0`，但 GitHub PR API 仍为 OPEN，故普通 closure 正确 fail-closed。先完成 `provider-merge-state-recovery-20260730` 的显式评估门与完整生命周期，再以单独人类决策恢复 Python 3.11 closure，之后才恢复 #444。#445 和 #403 仍各自按独立 Work Item、PR、Hosted、merge、close、分支清理流程接收。 |
-| 文档对齐 | `pre-release-documentation-alignment-20260729` 已暂停；待纠偏和全新日语评估关闭后 rebase/resume 并完成 |
+| 文档对齐 | 历史 `pre-release-documentation-alignment-20260729` 停在旧基线且未交付；当前 `pre-release-documentation-alignment-resume-20260730` 从最新 `origin/main` 重新执行源绑定审计与对齐证据。 |
 | 发布前过期资产清理 | 待文档对齐关闭后执行 |
 | 发布前真实荒诞与注入攻击评估 | 用户新增；待过期资产清理关闭后执行三语 12 案例评估及必要整改 |
 | 发布前最终日语复验 | 后续任何 Capability Truth、计划或日语权威源变更都会使既有精确源报告过期；所有发布前修改关闭后必须再生成一次零 blocker 的 `final_reassessment` |
