@@ -326,6 +326,7 @@ def finish_execution_priority(item: dict[str, Any]) -> int:
 STABILIZATION_CHECKS = frozenset(
     {"aiStatus", "aiStatusCheck", "aiStatusConsistency", "aiAgentRisk", "aiSummary"}
 )
+MANDATORY_EVIDENCE_CHECKS = ("sourceBoundEvidence",)
 
 
 def _outcome_paths(task: str) -> tuple[Path, Path]:
@@ -682,6 +683,50 @@ def run_declared_checks(
     return 0
 
 
+def run_mandatory_evidence_checks(
+    *,
+    contract: str,
+    summary: str,
+    contract_data: dict[str, Any],
+    contract_path: Path,
+    summary_path: Path,
+    contract_hash: str,
+    commit_sha: str,
+    obs: Any,
+) -> int:
+    """Fail closed on source-bound evidence before outcome generation or archive."""
+    for check_id in MANDATORY_EVIDENCE_CHECKS:
+        try:
+            cmd_str, command = render_check_command(
+                check_id, contract_path=contract, summary_path=summary
+            )
+        except ValueError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
+        obs.check_started(check_id=check_id, command=cmd_str)
+        code, duration, output = run(command)
+        record_result(
+            summary_path,
+            evidence(
+                check_id,
+                cmd_str,
+                code,
+                duration,
+                output,
+                contract_hash=contract_hash,
+                commit_sha=commit_sha,
+                execution_contract_path=contract,
+                execution_summary_path=summary,
+                worktree_digest=worktree_digest(changed_paths(contract_data)),
+            ),
+        )
+        if code != 0:
+            obs.check_failed(check_id=check_id, command=cmd_str, duration_ms=duration)
+            return code
+        obs.check_passed(check_id=check_id, command=cmd_str, duration_ms=duration)
+    return 0
+
+
 def main() -> int:
     args = parse_args()
     contract, summary = task_paths(args.task)
@@ -740,6 +785,19 @@ def main() -> int:
             file=sys.stderr,
         )
         return 1
+    code = run_mandatory_evidence_checks(
+        contract=contract,
+        summary=summary,
+        contract_data=contract_data,
+        contract_path=contract_path,
+        summary_path=summary_path,
+        contract_hash=contract_hash,
+        commit_sha=commit_sha,
+        obs=obs,
+    )
+    if code:
+        obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+        return code
     code = run_declared_checks(
         declared_items,
         args=args,

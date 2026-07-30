@@ -1,0 +1,203 @@
+{
+  "contractVersion": 2,
+  "workItemId": "source-bound-evidence-finalization-20260731",
+  "mode": "code",
+  "title": "Finalize and revalidate source-bound evidence before PR review",
+  "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/source-bound-evidence-finalization-20260731.contract.json",
+    ".ai/work-items/active/source-bound-evidence-finalization-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/source-bound-evidence-finalization-20260731.outcome.json",
+    ".ai/work-items/active/source-bound-evidence-finalization-20260731.outcome.md",
+    ".ai/cockpit/checks.yaml",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_finish.py",
+    "scripts/ai_capability_truth.py",
+    "scripts/ai_japanese_capability.py",
+    "scripts/check_pre_release_documentation_alignment.py",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_core_gates.py",
+    "tests/test_finish_readiness.py",
+    "tests/test_makefile.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_capability_truth_matrix.py",
+    "tests/test_japanese_capability.py",
+    "tests/test_pre_release_documentation_alignment.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Release publication, tags, release-state identity, and provider assets.",
+    "Modification of archived evidence or source code from failed PRs #514, #515, #517, and #518.",
+    "Unrelated quality-performance optimization."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30581287713/job/91001868727",
+      "reason": "Hosted template-smoke for PR #518 proves source-bound Capability Truth evidence can become stale after local PR validation."
+    },
+    {"path":"Makefile","reason":"The local final PR gate currently omits current source-bound evidence validation."},
+    {"path":"scripts/ai_capability_truth.py","reason":"Canonical Capability Truth source-byte validator."},
+    {"path":"scripts/ai_japanese_capability.py","reason":"Canonical Japanese assessment generator and validator."},
+    {"path":"scripts/check_pre_release_documentation_alignment.py","reason":"Canonical documentation-alignment generator and validator."},
+    {"path":"tests/test_capability_truth_matrix.py","reason":"Existing source-binding regression coverage."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_staleness",
+      "release_governance"
+    ],
+    "reason": "The corrective changes final PR and finish evidence boundaries, but does not publish a release or weaken any gate.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized continuous corrective delivery, PR merge, closure, and cleanup."
+  },
+  "preReviewWarnings": [
+    "Use one composite final evidence gate rather than duplicating hash logic in multiple callers.",
+    "The final PR gate must validate after formatting and before PR ownership acceptance."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A canonical source-bound evidence gate validates Capability Truth, Japanese assessment, and documentation-alignment artifacts against current sources.",
+    "ai-finish runs the canonical final evidence gate before Outcome generation or archive.",
+    "check-ai-pr runs the same gate after formatting and before PR ownership acceptance.",
+    "Focused regressions prove stale source-bound evidence fails both finish and PR validation, while regenerated evidence passes.",
+    "The installed Makefile exposes the same gate and runtime-parity coverage proves it.",
+    "Focused checks and hosted CI pass before merge."
+  ],
+  "guidelines": [
+    "Use existing canonical validators; do not reimplement their digest logic.",
+    "Generated evidence is regenerated only by its supported commands, never hand-edited.",
+    "Fail closed on stale evidence and preserve all existing release gates.",
+    "Keep the corrective as one Work Item and one PR from current main."
+  ],
+  "intent": {
+    "problem": "PR #518 changed a test after Capability Truth evidence generation; check-ai-pr did not revalidate the source-bound artifact, so hosted full quality was the first failure detector.",
+    "constraints": ["Start from the merged #513 mainline, not any failed stacked branch.", "Retain failed PRs as immutable audit evidence.", "Use focused local checks under the temporary user efficiency exception; hosted CI remains mandatory.", "Do not claim publication or modify release identity."],
+    "rationale": "A single final evidence gate shared by ai-finish, check-ai-pr, and installed runtime prevents the same ordering defect from recurring across Capability Truth, Japanese assessment, and documentation alignment."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user efficiency authorization permits focused local verification; complete hosted PR CI remains mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized the plan, corrective implementation, PR merge, closure, and cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 707
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/source-bound-evidence-finalization-20260731.json",
+    "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+    "initialScopeDigest": "6b8181721ace8c651a9012e366911dedc0897858e7874fec2fae65e6958bfe98",
+    "contractSkeletonDigest": "7ae4b8d325b25e8b0d9395a816557a83bf849c5a11a3664776a587c54f768c11"
+  },
+  "rawUserRequest":"需要停下来，整理下么？分析下问题在哪里，整理下给出方案。继续。",
+  "rawRequestSource":{"type":"human","reference":"conversation:2026-07-31-source-bound-evidence-root-cause","capturedAt":"2026-07-31","digest":"sha256:source-bound-evidence-finalization"},
+  "requestedOperation":{"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "declaredIntent":{"summary":"Permanently enforce final source-bound evidence validation before finish and PR review, based on the observed #518 failure.","requestedCapabilities":["ai_governance","documentation","test_automation"]},
+  "scenarioCoverage":[
+    {"scenario":"A bound source file changes after generated evidence was written.","expected":"The shared final evidence gate and check-ai-pr fail before a PR is accepted.","verificationPlan":"Focused stale-artifact regressions for canonical gate, finish path, and Makefile PR path.","required":true,"status":"unverified","evidence":["tests/test_capability_truth_matrix.py","tests/test_finish_readiness.py","tests/test_makefile.py"]},
+    {"scenario":"All source-bound artifacts are regenerated after final formatting.","expected":"The shared gate, ai-finish, and hosted CI accept the final tree.","verificationPlan":"Supported generation commands followed by focused validators and hosted CI.","required":true,"status":"unverified","evidence":["scripts/ai_capability_truth.py","scripts/ai_japanese_capability.py","scripts/check_pre_release_documentation_alignment.py"]}
+  ]
+}

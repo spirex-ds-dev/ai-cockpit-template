@@ -24,6 +24,33 @@ def test_check_ai_pr_uses_aggregate_validator():
     )
 
 
+def test_check_ai_pr_revalidates_source_bound_evidence_after_formatting():
+    result = subprocess.run(
+        ["make", "-n", "check-ai-pr", "AI_BASE_COMMIT=abc123"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    format_position = result.stdout.index("project-format-check")
+    evidence_position = result.stdout.index("check-source-bound-evidence")
+    ownership_position = result.stdout.index("check-ai-pr-core")
+    assert format_position < evidence_position < ownership_position
+
+
+def test_ai_finish_exposes_contract_guarded_skip_quality_option():
+    result = subprocess.run(
+        ["make", "-n", "ai-finish", "TASK=example", "SKIP_QUALITY=true"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "--skip-quality" in result.stdout
+
+
 def test_project_format_check_runs_ruff_format_check():
     result = subprocess.run(
         ["make", "-n", "project-format-check"],
