@@ -52,9 +52,12 @@ def test_compatibility_runs_lockfile_reproducibility_on_clean_runner():
 def test_lockfile_input_pin_matches_python_311_compatible_lock_output():
     requirements = (ROOT / "requirements-dev.in").read_text(encoding="utf-8")
     lockfile = (ROOT / "requirements-dev.lock").read_text(encoding="utf-8")
-    assert "stevedore==5.8.0" in requirements
-    assert "stevedore==5.8.0" in lockfile
-    assert "stevedore==5.9.0" not in requirements
+    assert "ruff==0.16.0" in requirements
+    assert "ruff==0.16.0" in lockfile
+    assert "stevedore==5.9.0" in requirements
+    assert "stevedore==5.9.0" in lockfile
+    assert "ruff==0.15.21" not in requirements
+    assert "stevedore==5.8.0" not in requirements
     assert "canonical Python 3.11" in lockfile
 
 

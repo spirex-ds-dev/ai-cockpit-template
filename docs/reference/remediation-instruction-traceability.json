@@ -1805,6 +1805,50 @@
         "make quality",
         "Complete the corrective PR lifecycle before attempting Python 3.11 recovery"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-055",
+      "summary": "Replace stale Dependabot #444 and #445 from current Python 3.11 main with one current-base dependency refresh: update only stevedore to 5.9.0 and ruff to 0.16.0, regenerate the hash-locked development and candidate supply-chain evidence, and require fresh hosted verification before the old PRs are closed as superseded.",
+      "planWorkItems": [
+        "DEPENDABOT-INTAKE-001"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/python311-dependency-refresh-20260730.contract.json"
+      ],
+      "implementationEvidence": [
+        "requirements-dev.in",
+        "requirements-dev.lock",
+        "tests/test_workflows.py",
+        ".ai/cockpit/sbom.json",
+        ".ai/cockpit/provenance.json",
+        ".ai/cockpit/release-digests.json",
+        "release.json",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_workflows.py",
+        "scripts/check_supply_chain.py",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        "PYTHONPATH=. pytest -q tests/test_workflows.py",
+        "PYTHON=<isolated Python 3.11 pip-tools interpreter> make check-lockfile-reproducibility",
+        "make check-sbom",
+        "make check-provenance",
+        "make check-release-evidence",
+        "Fresh hosted required checks on the replacement PR before merge"
+      ],
+      "requiredNamedPaths": [
+        {
+          "path": "requirements-dev.in"
+        },
+        {
+          "path": "requirements-dev.lock"
+        },
+        {
+          "path": "tests/test_workflows.py"
+        }
+      ]
     }
   ]
 }
