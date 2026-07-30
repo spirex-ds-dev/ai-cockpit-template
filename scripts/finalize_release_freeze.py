@@ -260,10 +260,11 @@ def main(
     release_path.write_text(
         json.dumps(release, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    try:
-        regenerate_capability_truth(root)
-    except (OSError, ValueError, json.JSONDecodeError) as exc:
-        return _fail(f"Capability Truth Matrix regeneration failed: {exc}")
+    if runtime_source_commit is None:
+        try:
+            regenerate_capability_truth(root)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            return _fail(f"Capability Truth Matrix regeneration failed: {exc}")
     metadata_digests["published"] = sha256_text(release_path.read_text(encoding="utf-8"))
     release_state_path.write_text(
         json.dumps(release_state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

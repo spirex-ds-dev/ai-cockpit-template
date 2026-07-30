@@ -1,0 +1,249 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-runtime-japanese-evidence-corrective-20260731",
+  "mode": "code",
+  "title": "Correct runtime Japanese evidence and stale active-record handling",
+  "baseCommit": "e15b440bfaa0fb04b796f88101a8a7e39d455f87",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-runtime-japanese-evidence-corrective-20260731.contract.json",
+    ".ai/work-items/active/release-runtime-japanese-evidence-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-runtime-japanese-evidence-corrective-20260731.outcome.json",
+    ".ai/work-items/active/release-runtime-japanese-evidence-corrective-20260731.outcome.md",
+    ".github/workflows/release.yml",
+    "scripts/finalize_release_freeze.py",
+    "scripts/ai_japanese_capability.py",
+    "scripts/ai_start.py",
+    "tests/test_release_workflow.py",
+    "tests/test_release_preflight.py",
+    "tests/test_japanese_capability.py",
+    "tests/test_start_and_archive.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Release tag creation, provider Release creation, and uploaded release assets.",
+    "Weakening or bypassing the Japanese evidence, release preflight, or active Work Item fail-closed controls.",
+    "Removing any active Contract or Summary that lacks complete matching archived evidence."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30575268768",
+      "reason": "Failed v0.5.45 provider release: exact source e15b440 is rejected because runtime freeze rewrote the matrix after the Japanese report was generated."
+    },
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "Runtime freeze regenerates capability-truth-matrix.json before release preflight."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Japanese assessment validates every evidence-source file against the asserted exact release source."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "The linked-worktree active-record gate blocked this corrective because the base worktree retained an ignored Summary after its complete archive existed."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Existing release-workflow ordering regression coverage."
+    },
+    {
+      "path": "tests/test_release_preflight.py",
+      "reason": "Existing runtime-freeze fixture and release-preflight behavior coverage."
+    },
+    {
+      "path": "tests/test_start_and_archive.py",
+      "reason": "Existing lifecycle regression coverage for start/archive behavior."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_process",
+      "evidence_integrity",
+      "work_item_lifecycle"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "The correction changes release-runtime evidence generation and a fail-closed linked-worktree guard; a false pass could publish stale evidence, while an over-broad cleanup could hide a live Work Item."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized all planned Work Items and discovered process corrections before publication; the failed hosted log and local reproduction determine the scope."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Runtime release freeze does not rewrite the source-bound Capability Truth Matrix, so the exact-source Japanese assessment remains coherent without weakening source binding.",
+    "A focused regression reproduces the former runtime-freeze matrix rewrite and proves the runtime path preserves source-bound evidence.",
+    "The release workflow labels the gate as runtime preflight, not committed-source preflight, and its ordering regression remains executable.",
+    "The linked-worktree start gate ignores only an ignored Summary orphan whose same task has complete archived Contract, Summary, Outcome, and Manifest evidence; any other malformed pair remains blocking.",
+    "Focused release, Japanese-capability, and start/archive regressions pass; the Contract-required governance checks pass; full quality is recorded as optional and not run under the temporary authorized efficiency agreement."
+  ],
+  "guidelines": [
+    "Preserve fail-closed exact-source and Japanese evidence validation; regenerate evidence rather than skipping validation.",
+    "Keep runtime-generated evidence distinct from immutable source/archive bytes and describe that boundary accurately.",
+    "Ignore a malformed active record only when complete same-task archived lifecycle evidence proves it is stale; otherwise retain blocking behavior.",
+    "Use focused regression tests and do not run full quality under the user-authorized temporary efficiency agreement."
+  ],
+  "intent": {
+    "problem": "Release v0.5.45 run 30575268768 correctly failed before projection because runtime freeze regenerated docs/reference/capability-truth-matrix.json while the checked Japanese assessment still carried the source-bound digest. Regenerating the assessment would still fail because its newly recorded matrix bytes would not equal the immutable source commit. The same resumption attempt exposed an ignored, orphaned active Summary in the base worktree, even though its archive bundle was complete; the start guard correctly rejected it but had no safe stale-record distinction.",
+    "constraints": [
+      "Do not create, move, or delete the v0.5.45 tag or any provider Release/asset in this Work Item.",
+      "Do not weaken check-release-preflight, Japanese source binding, or active-record fail-closed behavior.",
+      "Do not remove non-archived or incompletely archived active records.",
+      "Use the temporary focused-verification agreement only for this non-release correction; hosted CI remains required before merge."
+    ],
+    "rationale": "Runtime metadata is not part of the immutable source archive, so runtime freeze must not regenerate source-bound capability evidence. Preserving that evidence keeps the Japanese gate meaningful and allows it to verify the exact source. A narrow archived-bundle predicate repairs historical local residue without allowing a genuine active Work Item to be bypassed. Both changes move detection before provider publication retry."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized continuous execution of the full plan and discovered process corrections, including governed active/archive records, before release."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 703
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-runtime-japanese-evidence-corrective-20260731.json",
+    "baseCommit": "e15b440bfaa0fb04b796f88101a8a7e39d455f87",
+    "initialScopeDigest": "11415a65ab3fa3dcfa1ac48bdfddbc55521c41fda0b0894ee51d2d8352e54fa3",
+    "contractSkeletonDigest": "833e571b9a8339d15b6eedd7a4f5bb4455fd834352442afebeaf06654554d11c"
+  },
+  "rawUserRequest": "需要的时候，自己查看Actions结果，目标计划全部完成前不要停止。发现流程问题时先修正流程，再继续发布。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-continuous-plan-authorization",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:continuous-authorized-release-and-cleanup"
+  },
+  "declaredIntent": {
+    "summary": "Correct runtime Japanese evidence regeneration and archived-orphan active-record detection before resuming v0.5.45 publication.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Runtime freeze attempts to rewrite a Japanese assessment evidence-source file before release preflight.",
+      "expected": "Runtime freeze changes only runtime release metadata and leaves source-bound Capability Truth and Japanese evidence unchanged, then exact-source validation remains meaningful.",
+      "verificationPlan": "Create a failing focused regression that invokes runtime freeze with a tracked matrix regeneration hook and verifies the hook is not called.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A linked worktree retains only an ignored Summary for a task whose complete archive bundle exists.",
+      "expected": "Starting a new Work Item is not blocked by that stale residue.",
+      "verificationPlan": "Create a focused start/archive regression with complete archive evidence and an orphan summary.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A linked worktree has a malformed active Contract/Summary pair without complete matching archive evidence.",
+      "expected": "The start gate remains fail-closed.",
+      "verificationPlan": "Extend the same focused regression to assert the diagnostic remains blocking.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ]
+}

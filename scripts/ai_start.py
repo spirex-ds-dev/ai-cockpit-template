@@ -164,6 +164,21 @@ def linked_worktree_records(*, root: Path = PROJECT_ROOT) -> list[tuple[Path, st
     return records
 
 
+def has_complete_archived_work_item(worktree: Path, task: str) -> bool:
+    """Return whether an active-record orphan is fully represented in its archive."""
+    archive_root = worktree / ".ai" / "work-items" / "archive"
+    required = ("contract.json", "summary.json", "outcome.json", "archive-manifest.json")
+    return (
+        any(
+            all((year / f"{task}.{suffix}").is_file() for suffix in required)
+            for year in archive_root.iterdir()
+            if year.is_dir()
+        )
+        if archive_root.is_dir()
+        else False
+    )
+
+
 def linked_worktree_active_issue(*, root: Path = PROJECT_ROOT) -> str | None:
     """Fail closed when another branch owns an active Contract/Summary pair."""
     try:
@@ -183,6 +198,12 @@ def linked_worktree_active_issue(*, root: Path = PROJECT_ROOT) -> str | None:
         summaries = {
             path.name.removesuffix(".summary.json") for path in active_dir.glob("*.summary.json")
         }
+        stale_summary_orphans = {
+            task
+            for task in summaries - contracts
+            if has_complete_archived_work_item(worktree, task)
+        }
+        summaries -= stale_summary_orphans
         if not contracts and not summaries:
             continue
         if contracts != summaries:

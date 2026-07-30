@@ -85,6 +85,30 @@ def test_linked_worktree_malformed_active_pair_fails_closed(tmp_path, monkeypatc
     )
 
 
+def test_linked_worktree_ignores_summary_orphan_with_complete_archive(tmp_path, monkeypatch):
+    current = tmp_path / "current"
+    other = tmp_path / "other"
+    task = "closed-task"
+    for root in (current, other):
+        (root / ".ai" / "work-items" / "active").mkdir(parents=True)
+    (other / ".ai" / "work-items" / "active" / f"{task}.summary.json").write_text(
+        "{}", encoding="utf-8"
+    )
+    archive = other / ".ai" / "work-items" / "archive" / "2026"
+    archive.mkdir(parents=True)
+    for suffix in ("contract.json", "summary.json", "outcome.json", "archive-manifest.json"):
+        (archive / f"{task}.{suffix}").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", current)
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", current / ".ai" / "work-items" / "active")
+    monkeypatch.setattr(
+        ai_start,
+        "linked_worktree_records",
+        lambda **_kwargs: [(other, "main")],
+    )
+
+    assert ai_start.linked_worktree_active_issue() is None
+
+
 def test_linked_worktree_check_ignores_detached_or_empty_worktrees(tmp_path, monkeypatch):
     current = tmp_path / "current"
     detached = tmp_path / "detached"

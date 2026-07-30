@@ -33,9 +33,7 @@ def test_published_projection_is_not_promoted_in_repository():
 def test_release_preflight_runs_before_runtime_projection():
     workflow = WORKFLOW.read_text(encoding="utf-8")
     runtime_freeze = workflow.index("name: Materialize exact-source runtime release freeze")
-    preflight = workflow.index(
-        "name: Validate committed source release preflight before projection"
-    )
+    preflight = workflow.index("name: Validate exact-source release preflight after runtime freeze")
     projection = workflow.index("name: Create source-bound runtime release projection")
     assert runtime_freeze < preflight < projection
     assert 'make finalize-release-freeze-runtime RUNTIME_SOURCE_COMMIT="$SOURCE_COMMIT"' in workflow
