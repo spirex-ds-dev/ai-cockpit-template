@@ -73,10 +73,14 @@ make ai-close-work-item TASK=<child-task> ARGS="--worktree /absolute/path/to/chi
 
 This is a narrow recovery command, not a general branch-deletion interface. It
 accepts only an existing Git-worktree root registered in the same repository.
-Git operations are scoped to that child checkout; provider `gh` evidence stays
-bound to the current policy checkout. All normal merged-PR, Head-SHA,
-parent-retention, clean-worktree, receipt, and remote-absence checks remain
-mandatory.
+`ARGS` is forwarded unchanged by the Makefile. Before any provider query,
+receipt write, base switch, or branch mutation, the CLI requires the selected
+worktree to be checked out on exactly `codex/<child-task>`. A task/worktree
+mismatch stops fail closed; it cannot create a receipt for one Work Item while
+using another Work Item's PR or branch. Git operations are scoped to that child
+checkout; provider `gh` evidence stays bound to the current policy checkout.
+All normal merged-PR, Head-SHA, parent-retention, clean-worktree, receipt, and
+remote-absence checks remain mandatory.
 
 ## Historical stacked-PR chain receipt
 

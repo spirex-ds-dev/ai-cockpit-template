@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess  # nosec B404 - used only for fixed list-form Git tracking interrogation
 import sys
 import time
 from datetime import datetime, timezone
@@ -591,7 +592,19 @@ def _documentation_surface(path: str) -> bool:
     )
 
 
-def _valid_repository_evidence_path(path: str) -> str | None:
+def _active_contract_owns_untracked_evidence(path: str, contract: dict[str, Any] | None) -> bool:
+    """Allow only current Work Item scope to supply pre-commit evidence."""
+    if not isinstance(contract, dict) or contract.get("contractVersion") != 2:
+        return False
+    scope = contract.get("scope")
+    return isinstance(scope, list) and included(
+        path, [item for item in scope if isinstance(item, str)]
+    )
+
+
+def _valid_repository_evidence_path(
+    path: str, contract: dict[str, Any] | None = None
+) -> str | None:
     if "://" in path:
         return "must be a repository-relative path, not a URL"
     candidate = Path(path)
@@ -601,11 +614,31 @@ def _valid_repository_evidence_path(path: str) -> str | None:
         return "must be a normalized repository-relative path"
     if not (PROJECT_ROOT / candidate).exists():
         return "does not exist"
+    if not _is_git_tracked_repository_path(path) and not _active_contract_owns_untracked_evidence(
+        path, contract
+    ):
+        return "must be a Git-tracked repository file or an active Contract-scoped file"
     return None
 
 
+def _is_git_tracked_repository_path(path: str) -> bool:
+    """Return whether a path can be present in a clean repository checkout."""
+    result = subprocess.run(  # nosec B603 B607 - fixed list-form Git interrogation
+        ["git", "ls-files", "--error-unmatch", "--", path],
+        cwd=PROJECT_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return result.returncode == 0
+
+
 def validate_documentation_alignment(
-    summary: dict[str, Any], *, legacy_archive: bool = False, required: bool = True
+    summary: dict[str, Any],
+    contract: dict[str, Any] | None = None,
+    *,
+    legacy_archive: bool = False,
+    required: bool = True,
 ) -> list[str]:
     """Validate source-bound close-out alignment without rewriting old archives."""
     value = summary.get("documentationAlignment")
@@ -675,7 +708,7 @@ def validate_documentation_alignment(
             issues.append(f"{prefix}.evidence must be empty when not_applicable")
         for path in evidence:
             aligned_evidence.add(path)
-            path_issue = _valid_repository_evidence_path(path)
+            path_issue = _valid_repository_evidence_path(path, contract)
             if path_issue:
                 issues.append(f"{prefix}.evidence path {path!r} {path_issue}")
             elif path not in declared_paths:
@@ -768,6 +801,7 @@ def validate_summary(
     issues.extend(
         validate_documentation_alignment(
             summary,
+            contract,
             legacy_archive=legacy_archive,
             required=contract is None or contract.get("contractVersion") == 2,
         )

@@ -63,10 +63,14 @@ make ai-close-work-item TASK=<child-task> ARGS="--worktree /absolute/path/to/chi
 ```
 
 これは一般的な branch 削除 API ではありません。同じ repository に登録済みの Git
-worktree root だけを受け付けます。Git 操作だけが子 checkout に限定され、provider の
-`gh` 証拠は現在の policy checkout に束縛されたままです。通常の merged PR、Head
-SHA、親 branch への merge 保持、clean worktree、receipt、remote 不在の検証はすべて
-必須です。
+worktree root だけを受け付けます。Makefile は `ARGS` を変更せず CLI へ渡します。
+provider 問い合わせ、receipt の書き込み、base の切り替え、branch 操作より前に、CLI
+は選択された worktree の branch が厳密に `codex/<child-task>` であることを要求します。
+task と worktree が一致しなければ fail closed で停止し、ある Work Item の receipt に
+別 Work Item の PR や branch を結び付けることはできません。Git 操作だけが子 checkout
+に限定され、provider の `gh` 証拠は現在の policy checkout に束縛されたままです。通常の
+merged PR、Head SHA、親 branch への merge 保持、clean worktree、receipt、remote 不在の
+検証はすべて必須です。
 
 ## 過去の stacked PR チェーン receipt
 

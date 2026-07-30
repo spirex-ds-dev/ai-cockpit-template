@@ -612,7 +612,7 @@ archive-work-item:
 	$(AI_PYTHON) scripts/ai_archive_work_item.py $(CONTRACT) $(ARGS)
 
 ai-close-work-item:
-	$(AI_PYTHON) scripts/ai_close_work_item.py --task "$(TASK)"
+	$(AI_PYTHON) scripts/ai_close_work_item.py --task "$(TASK)" $(ARGS)
 
 ai-assess-provider-merge-state-recovery:
 	$(AI_PYTHON) scripts/ai_provider_merge_state_recovery.py $(ARGS)

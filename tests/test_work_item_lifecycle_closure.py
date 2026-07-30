@@ -49,6 +49,27 @@ def test_quality_gate_requires_at_least_85_percent_coverage() -> None:
     assert "--cov-fail-under=85" in makefile
 
 
+def test_make_close_work_item_forwards_explicit_worktree_argument() -> None:
+    result = subprocess.run(
+        [
+            "make",
+            "-n",
+            "ai-close-work-item",
+            "TASK=example",
+            "ARGS=--worktree /tmp/registered-child",
+        ],
+        cwd=closure.PROJECT_ROOT,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+
+    assert (
+        'scripts/ai_close_work_item.py --task "example" --worktree /tmp/registered-child'
+        in result.stdout
+    )
+
+
 def test_archived_evidence_uses_strict_summary_validation() -> None:
     source = inspect.getsource(closure._verify_archived_evidence)
     assert "legacy_archive=False" in source
@@ -199,6 +220,31 @@ def prepare(monkeypatch: pytest.MonkeyPatch, fake: FakeGit) -> None:
         lambda *_args, **_kwargs: closure.PROJECT_ROOT / "target/example.closure.md",
     )
     monkeypatch.setattr(closure, "validate_closure_receipt", lambda *_args, **_kwargs: None)
+
+
+def test_task_branch_mismatch_stops_before_provider_or_cleanup(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake = FakeGit()
+    provider_calls: list[tuple[str, ...]] = []
+    monkeypatch.setattr(
+        closure,
+        "_verify_archived_evidence",
+        lambda _task: closure.PROJECT_ROOT / ".ai/work-items/archive/2026/example.contract.json",
+    )
+    monkeypatch.setattr(closure, "_discover_base", lambda _runner: ("origin", "main"))
+    monkeypatch.setattr(
+        closure,
+        "_verify_pr",
+        lambda *_args, **_kwargs: provider_calls.append(("gh", "pr", "view")),
+    )
+
+    with pytest.raises(RuntimeError, match="requested Work Item does not match"):
+        closure.close_work_item("different-task", fake)
+
+    assert provider_calls == []
+    assert not any(command[:2] == ("push", "origin") for command in fake.commands)
+    assert not any(command[:2] == ("branch", "-D") for command in fake.commands)
 
 
 def test_success_proves_remote_absence_before_local_branch_deletion(
