@@ -21,12 +21,8 @@ def load_records(directory: Path) -> list[dict[str, Any]]:
 
 def summarize(records: list[dict[str, Any]]) -> dict[str, Any]:
     durations = [int(record.get("durationMs", 0)) for record in records]
-    starts = [
-        datetime.fromisoformat(record["startedAt"].replace("Z", "+00:00")) for record in records
-    ]
-    finishes = [
-        datetime.fromisoformat(record["finishedAt"].replace("Z", "+00:00")) for record in records
-    ]
+    starts = [datetime.fromisoformat(record["startedAt"]) for record in records]
+    finishes = [datetime.fromisoformat(record["finishedAt"]) for record in records]
     wall = int((max(finishes) - min(starts)).total_seconds() * 1000) if records else 0
     total = sum(durations)
     failed = [record for record in records if record.get("result") not in {"passed", "skipped"}]

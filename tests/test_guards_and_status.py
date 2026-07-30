@@ -4,15 +4,13 @@ import re
 from pathlib import Path
 from types import SimpleNamespace
 
-import pytest
-
 import ai_check_backtrack
 import ai_check_coverage_guard
 import ai_check_status_consistency
 import ai_checkpoint
 import ai_generate_status
 import ai_preflight_review
-
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -613,22 +611,11 @@ def test_japanese_no_active_status_and_unsupported_language_fail_closed(tmp_path
 def test_status_consistency_rejects_live_no_active_changes(tmp_path, monkeypatch):
     status = tmp_path / "status.md"
     status.write_text(
-        "\n".join(
-            [
-                "# AI Cockpit Current Status",
-                "",
-                "- State: `no_active_work_item`",
-                "",
-                "## Changed Files",
-                "",
-                "- none",
-                "",
-            ]
-        ),
+        "# AI Cockpit Current Status\n\n- State: `no_active_work_item`\n\n## Changed Files\n\n- none\n",
         encoding="utf-8",
     )
-    monkeypatch.setattr(ai_check_status_consistency, "active_contracts", lambda: [])
-    monkeypatch.setattr(ai_check_status_consistency, "active_summaries", lambda: [])
+    monkeypatch.setattr(ai_check_status_consistency, "active_contracts", list)
+    monkeypatch.setattr(ai_check_status_consistency, "active_summaries", list)
 
     def fake_run(command, **_kwargs):
         if command[:3] == ["git", "rev-parse", "--verify"]:
@@ -644,9 +631,11 @@ def test_status_consistency_rejects_live_no_active_changes(tmp_path, monkeypatch
     issues = ai_check_status_consistency.validate_status_consistency(status)
 
     assert issues == [
-        "no active Work Item has uncommitted paths outside a complete current archive "
-        "transaction: src/app.py; repair-ai-status cannot establish ownership; "
-        "restore the paths or create/resume a Work Item"
+        (
+            "no active Work Item has uncommitted paths outside a complete current archive "
+            "transaction: src/app.py; repair-ai-status cannot establish ownership; "
+            "restore the paths or create/resume a Work Item"
+        )
     ]
 
 
@@ -684,8 +673,8 @@ def test_status_repair_restores_original_bytes_when_generator_fails(tmp_path, mo
     status.parent.mkdir(parents=True)
     original = b"- State: `no_active_work_item`\n"
     status.write_bytes(original)
-    monkeypatch.setattr(ai_check_status_consistency, "active_contracts", lambda: [])
-    monkeypatch.setattr(ai_check_status_consistency, "active_summaries", lambda: [])
+    monkeypatch.setattr(ai_check_status_consistency, "active_contracts", list)
+    monkeypatch.setattr(ai_check_status_consistency, "active_summaries", list)
     monkeypatch.setattr(
         ai_check_status_consistency,
         "live_no_active_changed_files",

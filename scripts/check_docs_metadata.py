@@ -6,12 +6,10 @@ from __future__ import annotations
 import json
 import re
 import sys
-from pathlib import Path
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 from typing import cast
 
 from install_ai_cockpit import STACKS
-
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_FRONT_MATTER = ("author", "title", "description")
@@ -1422,9 +1420,12 @@ def historical_context_errors(root: Path) -> list[str]:
         if not candidate.is_file():
             errors.append(f"documentation context path does not exist: {path}")
             continue
-        if context != "current_instruction" and mutable is True:
-            if HISTORICAL_MARKER not in candidate.read_text(encoding="utf-8"):
-                errors.append(f"{path}: missing historical context marker")
+        if (
+            context != "current_instruction"
+            and mutable is True
+            and HISTORICAL_MARKER not in candidate.read_text(encoding="utf-8")
+        ):
+            errors.append(f"{path}: missing historical context marker")
 
     governed = [
         *sorted((root / "docs" / "superpowers" / "plans").glob("*.md")),

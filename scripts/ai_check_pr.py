@@ -8,13 +8,12 @@ import hashlib
 import json
 import os
 import sys
+from itertools import pairwise
 from pathlib import Path
 from typing import Any
 
 from ai_check_summary import changed_file_paths, validate_summary
 from ai_check_work_item import validate_contract
-from ai_start_receipt import validate_receipt
-from ai_start_receipt import validate_resume_history_structure
 from ai_common import (
     PROJECT_ROOT,
     changed_name_status,
@@ -27,7 +26,7 @@ from ai_common import (
     run_git,
     simple_yaml_lists,
 )
-
+from ai_start_receipt import validate_receipt, validate_resume_history_structure
 
 SCOPE_POLICY = PROJECT_ROOT / ".ai" / "guards" / "scope_policy.yaml"
 OWNERSHIP_POLICY = PROJECT_ROOT / ".ai" / "guards" / "file_ownership.yaml"
@@ -225,9 +224,12 @@ def archive_base_is_compatible(contract: dict[str, Any], pr_base: str) -> bool:
         return False
     if receipt_base != archived_base and validate_resume_history_structure(contract, receipt_base):
         return False
-    if receipt_base == archived_base and contract.get("resumeHistory") is not None:
-        if validate_resume_history_structure(contract, receipt_base):
-            return False
+    if (
+        receipt_base == archived_base
+        and contract.get("resumeHistory") is not None
+        and validate_resume_history_structure(contract, receipt_base)
+    ):
+        return False
     if archived_base == pr_base:
         return True
     return run_git(["merge-base", "--is-ancestor", archived_base, pr_base]).returncode == 0
@@ -315,7 +317,7 @@ def documented_recovery_paths(
                 pr_base,
                 require_pr_base_compatibility=False,
             )
-            for predecessor, recovery in zip(new_entries, new_entries[1:])
+            for predecessor, recovery in pairwise(new_entries)
         )
     ):
         return {entry[0] for entry in new_entries[1:]}
@@ -382,7 +384,7 @@ def historical_recovery_receipt_paths(
         return set()
     if not archive_base_is_compatible(prefix[0][1], pr_base):
         return set()
-    for predecessor, recovery in zip(prefix, prefix[1:]):
+    for predecessor, recovery in pairwise(prefix):
         predecessor_contract, predecessor_summary = predecessor[1], predecessor[2]
         recovery_contract, recovery_summary = recovery[1], recovery[2]
         predecessor_sequence = predecessor_summary.get("archiveSequence")
@@ -415,7 +417,7 @@ def extend_documented_recovery_paths(
     """Extend a verified historical prefix only through normal adjacent links."""
     ordered = sorted(entries, key=lambda entry: entry[3])
     trusted = set(trusted_paths)
-    for predecessor, recovery in zip(ordered, ordered[1:]):
+    for predecessor, recovery in pairwise(ordered):
         if predecessor[0] in trusted and is_documented_pr_recovery_pair(
             predecessor, recovery, pr_base, require_pr_base_compatibility=False
         ):

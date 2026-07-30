@@ -6,7 +6,6 @@ import json
 from pathlib import Path
 from typing import Any
 
-
 POLICY = "unsupported-claim-evidence-policy"
 NEGATIVE_CASES = (
     "confident_without_evidence",

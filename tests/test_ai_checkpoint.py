@@ -1,9 +1,8 @@
 import json
 from pathlib import Path
 
-import pytest
-
 import ai_checkpoint
+import pytest
 from ai_check_diff_ownership import Ownership
 
 

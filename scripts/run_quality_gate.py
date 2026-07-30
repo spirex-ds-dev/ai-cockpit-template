@@ -13,13 +13,13 @@ import subprocess
 import sys
 import threading
 from collections import deque
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 
 def now() -> str:
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    return datetime.now(UTC).isoformat().replace("+00:00", "Z")
 
 
 def digest(path: Path) -> str:

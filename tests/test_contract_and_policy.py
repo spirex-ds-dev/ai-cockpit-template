@@ -1,13 +1,12 @@
 import json
 import sys
 
-import pytest
-
-import ai_check_guards
 import ai_check_agent_risk
-import ai_check_summary
+import ai_check_guards
 import ai_check_scope
+import ai_check_summary
 import ai_check_work_item
+import pytest
 from ai_common import load_json
 
 

@@ -10,10 +10,11 @@ import re
 import subprocess  # nosec B404 - used only for fixed list-form Git tracking interrogation
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from ai_acceptance_policy import validate_acceptance_evidence
 from ai_common import (
     PROJECT_ROOT,
     changed_paths,
@@ -23,12 +24,10 @@ from ai_common import (
     non_empty_string,
     render_check_command,
     simple_yaml_lists,
-    verification_key,
     validate_scenario_coverage,
+    verification_key,
 )
-from ai_acceptance_policy import validate_acceptance_evidence
 from ai_observability import create_observability, elapsed_ms
-
 
 SCOPE_POLICY = PROJECT_ROOT / ".ai" / "guards" / "scope_policy.yaml"
 REQUIRED_FIELDS = (
@@ -155,10 +154,7 @@ def complete_generated_documentation_alignment(
     multilingual = [
         path
         for path in documentation
-        if path.endswith(".ja.md")
-        or path.endswith(".zh-CN.md")
-        or "/ja/" in path
-        or "/zh-CN/" in path
+        if path.endswith((".ja.md", ".zh-CN.md")) or "/ja/" in path or "/zh-CN/" in path
     ]
 
     def check(
@@ -178,7 +174,7 @@ def complete_generated_documentation_alignment(
     return {
         "schemaVersion": 1,
         "status": "aligned",
-        "checkedAt": datetime.now(timezone.utc).isoformat(),
+        "checkedAt": datetime.now(UTC).isoformat(),
         "checks": [
             check(
                 "plan",
@@ -420,15 +416,18 @@ def _validate_summary_metadata(summary: dict[str, Any]) -> list[str]:
             issues.append(f"{key} must be a list")
 
     known_gaps = summary.get("knownGaps")
-    if summary.get("archiveSequence") is None and isinstance(known_gaps, list):
-        if any(
+    if (
+        summary.get("archiveSequence") is None
+        and isinstance(known_gaps, list)
+        and any(
             isinstance(item, str)
             and re.search(r"\barchive[\s_-]+sequence\s+#?\d+\b", item, re.IGNORECASE)
             for item in known_gaps
-        ):
-            issues.append(
-                "knownGaps must not predict a numeric archive sequence before the generator allocates it"
-            )
+        )
+    ):
+        issues.append(
+            "knownGaps must not predict a numeric archive sequence before the generator allocates it"
+        )
 
     checkpoints = summary.get("checkpointEvidence")
     if checkpoints is not None:
@@ -574,7 +573,7 @@ def _offset_aware_iso_timestamp(value: Any) -> bool:
     if not non_empty_string(value):
         return False
     try:
-        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        parsed = datetime.fromisoformat(str(value))
     except ValueError:
         return False
     return parsed.tzinfo is not None and parsed.utcoffset() is not None

@@ -5,7 +5,6 @@ from pathlib import Path
 
 import yaml
 
-
 ROOT = Path(__file__).resolve().parents[1]
 COMPATIBILITY = ROOT / ".github" / "workflows" / "compatibility.yml"
 SMOKE = ROOT / ".github" / "workflows" / "smoke.yml"

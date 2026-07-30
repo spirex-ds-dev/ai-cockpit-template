@@ -6,8 +6,7 @@ from __future__ import annotations
 def classify_path(path: str) -> str:
     """Return the first applicable verification impact domain for *path*."""
     normalized = path.replace("\\", "/")
-    if normalized.startswith("./"):
-        normalized = normalized[2:]
+    normalized = normalized.removeprefix("./")
     if normalized.startswith(("docs/", "README", "CHANGELOG")) or normalized.endswith(".md"):
         return "docs"
     if normalized.startswith(("tests/", "test/")) or normalized.endswith(("_test.py", ".test.py")):

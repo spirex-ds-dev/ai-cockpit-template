@@ -10,13 +10,13 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from ai_check_diff_ownership import format_preview, preview
 from ai_common import (
     load_json,
     save_json,
     verification_key,
     verification_status_for_generation,
 )
-from ai_check_diff_ownership import format_preview, preview
 
 
 def required_verification(contract: dict[str, Any]) -> list[str]:

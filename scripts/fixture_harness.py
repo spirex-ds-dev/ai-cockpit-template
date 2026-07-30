@@ -5,9 +5,8 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-
 
 PHASES = (
     "Install",
@@ -77,7 +76,7 @@ def main() -> int:
     ]
     bundle = {
         "schemaVersion": 1,
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "generatedAt": datetime.now(UTC).isoformat(),
         "fixtures": results,
         "evidenceBoundary": "Local deterministic harness evidence is not platform, identity, sandbox, or compliance proof.",
     }

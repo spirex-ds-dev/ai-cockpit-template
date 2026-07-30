@@ -14,8 +14,9 @@ import locale
 import os
 import re
 import sys
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from ai_calibrate import (
     ANSWER_TYPES,
@@ -29,7 +30,6 @@ from ai_calibrate import (
 )
 from ai_project_doctor import scan_project
 from ai_wizard_localization import format_message, load_messages, resolve_language
-
 
 STAGES = CALIBRATION_STAGES
 ANSWER_PROMPT_KEYS = {
@@ -98,9 +98,8 @@ class CalibrationWizard:
         if not report_path.is_file():
             self.doctor_report()
         proposal = self.root / ".ai" / "project_profile.proposed.yaml"
-        if not proposal.exists():
-            if generate(self.root, report_path, proposal) != 0:
-                raise CalibrationError("failed to generate calibration proposal")
+        if not proposal.exists() and generate(self.root, report_path, proposal) != 0:
+            raise CalibrationError("failed to generate calibration proposal")
         return proposal
 
     def answer(

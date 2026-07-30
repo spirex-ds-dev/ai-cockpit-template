@@ -13,7 +13,6 @@ from typing import Any
 
 from ai_common import matches
 
-
 MATRIX_PATH = "docs/reference/capability-truth-matrix.json"
 MARKDOWN_PATH = "docs/reference/capability-truth-matrix.md"
 

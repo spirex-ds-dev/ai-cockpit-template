@@ -1,5 +1,6 @@
 import hashlib
 import json
+
 from scripts import check_release_state_consistency
 
 

@@ -10,12 +10,11 @@ import os
 import re
 import subprocess
 import sys
-import urllib.parse
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any
-
 
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 COMMIT = re.compile(r"^[0-9a-f]{40}$")

@@ -5,7 +5,6 @@ from pathlib import Path
 
 from install_ai_cockpit import Installer
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 

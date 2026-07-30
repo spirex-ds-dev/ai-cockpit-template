@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from ai_common import InvalidDataShapeError
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "docs" / "reference" / "deprecated-assets-registry.json"
@@ -32,7 +33,7 @@ def _date(value: Any) -> dt.date | None:
     if value == "never":
         return None
     if not isinstance(value, str):
-        raise ValueError("date must be ISO YYYY-MM-DD or 'never'")
+        raise InvalidDataShapeError("date must be ISO YYYY-MM-DD or 'never'")
     return dt.date.fromisoformat(value)
 
 
@@ -44,7 +45,7 @@ def validate_registry(root: Path, payload: Any, *, today: dt.date | None = None)
     if not isinstance(entries, list) or not entries:
         return ["registry entries must be a non-empty list"]
     seen: set[str] = set()
-    today = today or dt.date.today()
+    today = today or dt.datetime.now(dt.UTC).date()
     for index, entry in enumerate(entries):
         prefix = f"entries[{index}]"
         if not isinstance(entry, dict):

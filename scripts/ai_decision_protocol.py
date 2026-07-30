@@ -4,12 +4,12 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from ai_common import InvalidDataShapeError
 from ai_trust_schema import ValidationError, validate_payload
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -26,7 +26,7 @@ def request_id(report: dict[str, Any]) -> str:
 def _request_payload(report: dict[str, Any]) -> dict[str, Any]:
     request = report.get("humanDecisionRequest")
     if not isinstance(request, dict):
-        raise ValueError("a structured human decision request is required")
+        raise InvalidDataShapeError("a structured human decision request is required")
     signals = report.get("signals", [])
     evidence = [
         {"type": "preflight_signal", "reference": f"{item.get('name')}: {evidence_item}"}
@@ -101,7 +101,7 @@ def record_evidence(
         "selectedOption": selected_option,
         "decision": decision,
         "decidedBy": decided_by,
-        "decidedAt": datetime.now(timezone.utc).isoformat(),
+        "decidedAt": datetime.now(UTC).isoformat(),
         "rationale": rationale,
         "source": source,
         "supersedes": None,

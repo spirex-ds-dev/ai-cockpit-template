@@ -8,7 +8,6 @@ import json
 import sys
 from pathlib import Path
 
-
 CRITICAL_MINIMUMS = {
     "scripts/ai_checkpoint.py": 85.0,
     "scripts/ai_finish.py": 85.0,

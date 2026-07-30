@@ -8,13 +8,12 @@ import json
 import sys
 import time
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from ai_common import PROJECT_ROOT, load_json, simple_yaml_lists, validate_scenario_coverage
 from ai_observability import create_observability, elapsed_ms
-
 
 POLICY = PROJECT_ROOT / ".ai" / "guards" / "scenario_coverage_policy.yaml"
 REPORT_PATH = PROJECT_ROOT / "target" / "ai_scenario_coverage_report.json"
@@ -207,7 +206,7 @@ def main() -> int:
     findings = detect(contract, summary)
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
     report = {
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "generatedAt": datetime.now(UTC).isoformat(),
         "status": "error"
         if any(item.severity == "error" for item in findings)
         else ("warning" if findings else "none"),

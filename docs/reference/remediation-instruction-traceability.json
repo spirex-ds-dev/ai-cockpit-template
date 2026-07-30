@@ -1805,6 +1805,151 @@
         "make quality",
         "Complete the corrective PR lifecycle before attempting Python 3.11 recovery"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-055",
+      "summary": "Replace stale Dependabot #444 and #445 from current Python 3.11 main with one current-base dependency refresh: update only stevedore to 5.9.0 and ruff to 0.16.0, regenerate the hash-locked development and candidate supply-chain evidence, and require fresh hosted verification before the old PRs are closed as superseded.",
+      "planWorkItems": [
+        "DEPENDABOT-INTAKE-001"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/python311-dependency-refresh-20260730.contract.json"
+      ],
+      "implementationEvidence": [
+        "requirements-dev.in",
+        "requirements-dev.lock",
+        "tests/test_workflows.py",
+        ".ai/cockpit/sbom.json",
+        ".ai/cockpit/provenance.json",
+        ".ai/cockpit/release-digests.json",
+        "release.json",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_workflows.py",
+        "scripts/check_supply_chain.py",
+        "docs/reference/remediation-instruction-traceability.json"
+      ],
+      "verificationCommands": [
+        "PYTHONPATH=. pytest -q tests/test_workflows.py",
+        "PYTHON=<isolated Python 3.11 pip-tools interpreter> make check-lockfile-reproducibility",
+        "make check-sbom",
+        "make check-provenance",
+        "make check-release-evidence",
+        "Fresh hosted required checks on the replacement PR before merge"
+      ],
+      "requiredNamedPaths": [
+        {
+          "path": "requirements-dev.in"
+        },
+        {
+          "path": "requirements-dev.lock"
+        },
+        {
+          "path": "tests/test_workflows.py"
+        }
+      ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-056",
+      "summary": "Correct the ruff 0.16.0 compatibility failure exposed by replacement PR #481 without changing the dependency pin, Python 3.11 baseline, or lint policy. Preserve existing ValueError and RuntimeError contracts for malformed external data while adding TypeError semantics, and retain only the seven individually explained rollback, fail-closed read, and optional-observability exception boundaries.",
+      "planWorkItems": [
+        "DEPENDABOT-INTAKE-001"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/ruff016-lint-compatibility-20260730.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_common.py",
+        "scripts/ai_archive_work_item.py",
+        "scripts/ai_calibrate.py",
+        "scripts/ai_observability.py",
+        "docs/reference/capability-truth-matrix.json"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_work_item_lifecycle_closure.py",
+        "tests/test_release_distribution.py",
+        "tests/test_supply_chain.py",
+        "tests/test_capability_truth_matrix.py"
+      ],
+      "verificationCommands": [
+        "uvx ruff@0.16.0 check scripts tests",
+        "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q tests/test_work_item_lifecycle_closure.py tests/test_release_distribution.py tests/test_supply_chain.py tests/test_capability_truth_matrix.py",
+        "Fresh hosted required checks on the corrective PR and then on #481 before merge"
+      ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-057",
+      "summary": "Correct the mypy-only UTC reference failure found by fresh hosted template-smoke for the ruff 0.16 compatibility PR. Keep the archived predecessor immutable, import the module-level UTC constant in ai_start.py, preserve local-date Work Item ID semantics, and require fresh hosted checks on this corrective PR and then #482's updated exact head.",
+      "planWorkItems": [
+        "DEPENDABOT-INTAKE-001"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/ruff016-mypy-utc-corrective-20260730.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_start.py",
+        "tests/test_start_and_archive.py",
+        "docs/reference/capability-truth-matrix.json"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_start_and_archive.py",
+        "scripts/ai_start.py"
+      ],
+      "verificationCommands": [
+        "PYTHONDONTWRITEBYTECODE=1 python3 -m mypy scripts/ai_start.py",
+        "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q tests/test_start_and_archive.py",
+        "Fresh hosted required checks on the corrective PR and then on #482 before merge"
+      ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-058",
+      "summary": "Resolve the three inherited template-smoke failures exposed by PR #483 without weakening release evidence: enforce Python 3.11 in doctor output, regenerate the final Japanese assessment from current evidence, and preserve scan coverage by constructing intentional test fixtures at runtime rather than embedding leak-like literals in the tracked test source.",
+      "planWorkItems": [
+        "DEPENDABOT-INTAKE-001"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/python311-release-baseline-corrective-20260730.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_doctor.py",
+        "tests/test_supply_chain.py",
+        "docs/reference/japanese-capability-assessment.json",
+        "docs/reference/japanese-capability-assessment.md"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_doctor.py",
+        "tests/test_japanese_capability.py",
+        "tests/test_supply_chain.py",
+        "scripts/check_supply_chain.py"
+      ],
+      "verificationCommands": [
+        "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q tests/test_doctor.py::test_doctor_requires_python_311_or_newer tests/test_japanese_capability.py::test_release_requirement_accepts_fresh_final_reassessment tests/test_supply_chain.py",
+        "PYTHONDONTWRITEBYTECODE=1 python3 scripts/check_supply_chain.py secrets",
+        "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_japanese_capability.py --check --require-final-reassessment",
+        "Fresh hosted required checks on the corrective PR, then #483 and #482 exact updated heads before merge"
+      ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-059",
+      "summary": "Correct the formatter-only template-smoke failure on archived PR #484 through a new immutable corrective Work Item; apply only ruff's target-file formatting output and retain the same supply-chain fixture behavior.",
+      "planWorkItems": [
+        "DEPENDABOT-INTAKE-001"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/supply-chain-fixture-format-corrective-20260730.contract.json"
+      ],
+      "implementationEvidence": [
+        "tests/test_supply_chain.py"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_supply_chain.py"
+      ],
+      "verificationCommands": [
+        "PYTHONDONTWRITEBYTECODE=1 python3 -m ruff format --check tests/test_supply_chain.py",
+        "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q tests/test_supply_chain.py::test_repository_uses_in_and_lock_without_redundant_txt",
+        "Fresh hosted required checks on the corrective PR and then #484 exact updated head before merge"
+      ]
     }
   ]
 }

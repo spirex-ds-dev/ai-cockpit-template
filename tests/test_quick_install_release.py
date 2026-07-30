@@ -4,9 +4,7 @@ import sys
 from pathlib import Path
 
 import pytest
-
 import verify_quick_install_release as verifier
-
 
 SOURCE_COMMIT = "a" * 40
 

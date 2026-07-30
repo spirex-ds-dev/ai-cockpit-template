@@ -1,5 +1,4 @@
-from ai_acceptance_policy import acceptance_signal
-from ai_acceptance_policy import validate_acceptance_evidence
+from ai_acceptance_policy import acceptance_signal, validate_acceptance_evidence
 
 
 def test_acceptance_policy_covers_missing_verification_and_ready():

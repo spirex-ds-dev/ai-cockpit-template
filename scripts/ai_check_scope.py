@@ -10,14 +10,13 @@ import time
 from pathlib import Path
 from typing import Any
 
-from ai_common import changed_paths, included, load_json, simple_yaml_lists, matches
+from ai_common import changed_paths, included, load_json, matches, simple_yaml_lists
 from ai_evidence_dependencies import (
     EvidenceDependencyError,
     changed_path_dependency_issues,
     load_capability_evidence_dependencies,
 )
 from ai_observability import create_observability, elapsed_ms
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCOPE_POLICY = PROJECT_ROOT / ".ai" / "guards" / "scope_policy.yaml"

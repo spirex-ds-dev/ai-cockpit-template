@@ -1,9 +1,8 @@
-import pytest
-
 import ai_check_summary
 import ai_check_work_item
 import ai_common
 import ai_finish
+import pytest
 
 
 def test_plain_passed_string_is_not_execution_evidence():
@@ -230,7 +229,7 @@ def test_summary_validator_rejects_filename_and_work_item_mismatches():
 
 
 def test_summary_diff_coverage_reports_missing_and_git_failure(monkeypatch):
-    monkeypatch.setattr(ai_check_summary, "summary_exempt_patterns", lambda: [])
+    monkeypatch.setattr(ai_check_summary, "summary_exempt_patterns", list)
     monkeypatch.setattr(
         ai_check_summary, "changed_paths", lambda _contract: ["src/app.py", "tests/test_app.py"]
     )

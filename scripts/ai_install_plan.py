@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass
-from typing import Mapping
 
 from ai_installer_detection import InstallationDetection
-
 
 STEP_NAMES = (
     "Target Repository",

@@ -1,16 +1,15 @@
 from pathlib import Path
 
 import pytest
-
 from ai_check_registry import CheckerRegistry, CheckResult
 from ai_impact_classifier import classify_path
+from ai_verification_context import build_context
 from ai_verify import (
     evaluate_trend,
     run_verification,
     verification_scope,
     verify_stage,
 )
-from ai_verification_context import build_context
 
 
 def test_impact_classifier_covers_known_domains_and_unknown():

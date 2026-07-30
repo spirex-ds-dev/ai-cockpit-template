@@ -12,7 +12,6 @@ from ai_check_guard_calibration import calibration_issues
 from ai_project_profile import load_profile
 from ai_readiness_policy import readiness_evidence, readiness_state
 
-
 PLACEHOLDER_MARKERS = ("configure PROJECT_", "No project")
 QUALITY_VARIABLES = ("PROJECT_FORMAT_CHECK", "PROJECT_TEST", "PROJECT_LINT")
 TRIVIAL_COMMANDS = {":", "true", "/bin/true"}
@@ -92,7 +91,7 @@ def readiness_failures(root: Path) -> list[str]:
             "set repositoryRole: adopted after migration (or template with explicit template_maintenance execution mode); missing role is fail-closed"
         )
     if not profile_issues and profile.get("repositoryRole") == "template":
-        exempt, evidence = template_exemption(profile, root)
+        exempt, _evidence = template_exemption(profile, root)
         if exempt:
             return []
         failures.append(

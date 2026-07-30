@@ -1,5 +1,4 @@
 import pytest
-
 from ai_input_trust import InjectionOutcome, SourceType, assess_input
 
 

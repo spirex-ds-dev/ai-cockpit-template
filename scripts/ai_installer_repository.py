@@ -97,13 +97,13 @@ def read_repository_facts(target: Path) -> RepositoryFacts:
         )
     )
     remote = _git_output(root, ["remote"]).splitlines()
-    remote_name = sorted(remote)[0] if remote else None
+    remote_name = min(remote) if remote else None
     remote_url = (
         _git_output(root, ["remote", "get-url", remote_name]).strip() if remote_name else None
     )
     remote_head = (
         _git_output(
-            root, ["symbolic-ref", "--quiet", "--short", "refs/remotes/{}/HEAD".format(remote_name)]
+            root, ["symbolic-ref", "--quiet", "--short", f"refs/remotes/{remote_name}/HEAD"]
         ).strip()
         if remote_name
         else ""

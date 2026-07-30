@@ -1,9 +1,8 @@
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
-
 from ai_calibration_inventory import (
     INVENTORY_KEYS,
     STATUS_VALUES,
@@ -82,7 +81,7 @@ def test_inventory_rejects_unknown_evidence_kind(tmp_path: Path):
 
 
 def test_inventory_marks_missing_and_stale_evidence_fail_closed(tmp_path: Path):
-    stale_at = (datetime.now(timezone.utc) - timedelta(minutes=1)).isoformat()
+    stale_at = (datetime.now(UTC) - timedelta(minutes=1)).isoformat()
     inventory = build_inventory(
         tmp_path,
         command_evidence={

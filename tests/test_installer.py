@@ -3,12 +3,10 @@ import re
 import subprocess
 from pathlib import Path
 
-import pytest
-
 import install_ai_cockpit as installer_mod
+import pytest
 from ai_installer_repository import clean_git_environment
 from install_ai_cockpit import Installer
-
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -370,7 +368,7 @@ def test_managed_installation_validation_checks_imports_and_make_entrypoint(tmp_
         update_makefile=True,
     )
     assert installer.install() == 0
-    monkeypatch.setattr(installer, "managed_copy_pairs", lambda: [])
+    monkeypatch.setattr(installer, "managed_copy_pairs", list)
 
     doctor = tmp_path / "scripts" / "ai_doctor.py"
     original_doctor = doctor.read_text(encoding="utf-8")

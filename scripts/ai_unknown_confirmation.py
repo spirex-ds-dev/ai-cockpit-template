@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 STATES = {"known", "unknown", "needs_human_confirmation", "not_applicable"}
@@ -91,8 +91,8 @@ def validate_confirmation(
     if record.get("decision") not in {"approved", "rejected"}:
         errors.append("decision is required")
     try:
-        expiry = datetime.fromisoformat(str(record.get("expiresAt", "")).replace("Z", "+00:00"))
-        if expiry <= (now or datetime.now(timezone.utc)):
+        expiry = datetime.fromisoformat(str(record.get("expiresAt", "")))
+        if expiry <= (now or datetime.now(UTC)):
             errors.append("confirmation is expired")
     except ValueError:
         errors.append("expiresAt is invalid")

@@ -8,18 +8,17 @@ Rendering helpers are kept separate so the model can be tested directly.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
-from ai_common import PROJECT_ROOT, non_empty_string, simple_yaml_lists, verification_key
-from ai_scenario_policy import has_risk_ack, is_hard_risk, scenario_items
-from ai_risk_policy import residual_risk_signal
-from ai_review_readiness_policy import review_readiness_signal
-from ai_verification_policy import verification_signal
 from ai_acceptance_policy import acceptance_signal
-from ai_intent_policy import intent_alignment_signal
 from ai_calibration_inventory import STATUS_VALUES
-
+from ai_common import PROJECT_ROOT, non_empty_string, simple_yaml_lists, verification_key
+from ai_intent_policy import intent_alignment_signal
+from ai_review_readiness_policy import review_readiness_signal
+from ai_risk_policy import residual_risk_signal
+from ai_scenario_policy import has_risk_ack, is_hard_risk, scenario_items
+from ai_verification_policy import verification_signal
 
 RECOMMENDATIONS = {
     "ready_for_review",
@@ -584,17 +583,19 @@ def _recommendation(
         signals["Verification"]["value"] == "failed" or signals["Guidelines"]["value"] == "violated"
     ):
         recommendation = "blocked"
-    elif any(
-        signal["value"] in {"incomplete", "unknown", "open"}
-        for name, signal in signals.items()
-        if name
-        in {"Acceptance", "Unknowns", "Verification", "Checkpoints", "Residual Risk", "Intent"}
-    ) or review["status"] in {"unknown", "not_ready"}:
-        recommendation = "needs_investigation"
     elif (
-        signals["Scenario Coverage"]["value"] == "incomplete"
-        and _scenario_coverage_hard_risk(contract)
-        and not _scenario_coverage_explicit_risk_ack(summary)
+        any(
+            signal["value"] in {"incomplete", "unknown", "open"}
+            for name, signal in signals.items()
+            if name
+            in {"Acceptance", "Unknowns", "Verification", "Checkpoints", "Residual Risk", "Intent"}
+        )
+        or review["status"] in {"unknown", "not_ready"}
+        or (
+            signals["Scenario Coverage"]["value"] == "incomplete"
+            and _scenario_coverage_hard_risk(contract)
+            and not _scenario_coverage_explicit_risk_ack(summary)
+        )
     ):
         recommendation = "needs_investigation"
     elif (
@@ -725,7 +726,7 @@ def render_active_status(
     task_outcome: dict[str, Any] | None = None,
 ) -> str:
     """Render compressed governance signals and optional Outcome link metadata."""
-    timestamp = generated_at or datetime.now(timezone.utc).isoformat()
+    timestamp = generated_at or datetime.now(UTC).isoformat()
     signal = human_signal(model)
     lines = [
         "---",

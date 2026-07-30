@@ -6,7 +6,6 @@ from pathlib import Path
 import install_ai_cockpit as installer_mod
 from install_ai_cockpit import Installer, adoption_preflight_warnings
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 

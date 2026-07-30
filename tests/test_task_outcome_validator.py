@@ -1,7 +1,7 @@
 """Focused tests for fail-closed Task Outcome validation."""
 
-from scripts.ai_generate_task_outcome import generate_outcome, render_markdown
 from scripts.ai_check_task_outcome import validate_outcome
+from scripts.ai_generate_task_outcome import generate_outcome, render_markdown
 
 
 def bindings() -> dict[str, object]:

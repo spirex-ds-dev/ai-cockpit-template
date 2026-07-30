@@ -8,12 +8,12 @@ import json
 import os
 import sys
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from ai_check_summary import changed_file_paths
 from ai_check_pr import _is_no_op_restore, archive_evidence_changes, archive_pair_rank
+from ai_check_summary import changed_file_paths
 from ai_common import (
     PROJECT_ROOT,
     changed_name_status,
@@ -22,7 +22,6 @@ from ai_common import (
     load_json,
     parse_simple_manifest,
 )
-
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 ARCHIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
@@ -372,7 +371,7 @@ def main() -> int:
         print(f"diff ownership preview failed: {exc}", file=sys.stderr)
         return 1
     report = {
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "generatedAt": datetime.now(UTC).isoformat(),
         "base": args.base or None,
         "counts": counts(values),
         "items": [asdict(item) for item in values],

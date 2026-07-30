@@ -9,7 +9,6 @@ import pytest
 
 from scripts import ai_prepare_hosted_verification as hosted
 
-
 TASK = "performance-task"
 
 

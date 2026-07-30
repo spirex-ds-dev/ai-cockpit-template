@@ -5,7 +5,6 @@ from pathlib import Path
 
 import check_bandit_baseline
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 

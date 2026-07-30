@@ -9,11 +9,11 @@ from __future__ import annotations
 
 import argparse
 import json
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 from ai_common import parse_yaml
-
 
 LOCALES = ("ja", "en", "zh-CN")
 ALIASES = {

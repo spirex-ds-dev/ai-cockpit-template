@@ -2,7 +2,6 @@ from pathlib import Path
 
 import cross_stack_long_cycle
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 

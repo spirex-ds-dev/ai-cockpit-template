@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 SCHEMA_VERSION = 1
@@ -40,7 +40,7 @@ def validate_document(document: dict[str, Any], *, now: datetime | None = None) 
     ):
         return [*errors, "evidence, events and claims must be arrays"]
 
-    now = now or datetime.now(timezone.utc)
+    now = now or datetime.now(UTC)
     ids: set[str] = set()
     fact_keys: dict[tuple[str, str], str] = {}
     for item in evidence:
@@ -67,7 +67,7 @@ def validate_document(document: dict[str, Any], *, now: datetime | None = None) 
             errors.append(f"{item_id}: invalid status")
         if isinstance(item.get("expiresAt"), str):
             try:
-                expiry = datetime.fromisoformat(item["expiresAt"].replace("Z", "+00:00"))
+                expiry = datetime.fromisoformat(item["expiresAt"])
                 if expiry <= now:
                     errors.append(f"{item_id}: evidence is stale")
             except ValueError:

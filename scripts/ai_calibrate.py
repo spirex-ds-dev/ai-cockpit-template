@@ -8,14 +8,14 @@ import copy
 import hashlib
 import json
 import os
-import tempfile
 import sys
-from datetime import datetime, timezone
+import tempfile
+from collections.abc import Callable
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from ai_project_profile import BOUNDARY_KEYS, FACT_KEYS, load_profile
-
 
 CALIBRATION_STAGES = (
     "repository_role",
@@ -36,7 +36,7 @@ CHECKLIST_DECISIONS = ("PASS", "STOP")
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _evidence(kind: str, detail: str, *, status: str = "passed") -> dict[str, str]:
@@ -85,7 +85,7 @@ class CalibrationSession:
         self.data = data
 
     @classmethod
-    def start(cls, session_id: str) -> "CalibrationSession":
+    def start(cls, session_id: str) -> CalibrationSession:
         if not session_id:
             raise CalibrationError("session_id must not be empty")
         stages: list[dict[str, Any]] = [
@@ -686,7 +686,7 @@ def persist_activation(
                     content,
                     replace_fn=replace_fn,
                 )
-            except Exception as rollback_exc:
+            except Exception as rollback_exc:  # noqa: BLE001 - rollback must retain every recovery failure
                 rollback_errors.append(f"{path}: {rollback_exc}")
         session.data = before_data
         if rollback_errors:

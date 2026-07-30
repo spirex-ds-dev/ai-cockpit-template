@@ -1,0 +1,241 @@
+{
+  "contractVersion": 2,
+  "workItemId": "ruff016-lint-compatibility-20260730",
+  "mode": "code",
+  "title": "Restore ruff 0.16 lint compatibility",
+  "baseCommit": "d7360d9d48f3b410f7f23af1489af77afe312dcb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/ruff016-lint-compatibility-20260730.contract.json",
+    ".ai/work-items/active/ruff016-lint-compatibility-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/ruff016-lint-compatibility-20260730.outcome.json",
+    ".ai/work-items/active/ruff016-lint-compatibility-20260730.outcome.md",
+    "scripts/**",
+    "tests/**",
+    "pyproject.toml",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    ".ai/guards/coverage_policy.yaml"
+  ],
+  "outOfScope": [
+    "Changing the ruff 0.16.0 dependency pin, Python 3.11 baseline, runtime behavior, release state, or the dependency-refresh Work Item evidence.",
+    "Applying unsafe ruff fixes, weakening lint rules, or suppressing errors without a separately evidenced compatibility rationale; only the seven named rollback, fail-closed read, and optional-observability boundaries may retain a documented per-line BLE001 exception.",
+    "Merging, closing, rebasing, or deleting PR #481 or the stale Dependabot PRs during this corrective Work Item."
+  ],
+  "sources": [
+    {
+      "path": "requirements-dev.in",
+      "reason": "The parent replacement Work Item introduced the ruff 0.16.0 direct development pin."
+    },
+    {
+      "path": "pyproject.toml",
+      "reason": "Defines the repository lint configuration and must not be weakened as a shortcut."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "PR #481 template-smoke ran make quality and reported the lint failure."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records the serial Dependabot intake and pre-release remediation order."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Provides the bidirectional record for the parent dependency-refresh Work Item."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "compatibility_regression",
+      "broad_mechanical_change",
+      "hosted_ci_failure"
+    ],
+    "reason": "ruff 0.16.0 exposes 430 existing lint errors across scripts and tests on the parent PR; automatic fixes can be broad and must remain behavior-preserving and separately reviewable.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous corrective work; the observed hosted lint failure defines a bounded compatibility repair."
+  },
+  "preReviewWarnings": [
+    "Review that every mechanical change is a ruff 0.16.0-compatible lint correction and that no unsafe fix, rule suppression, or behavior change is introduced."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ruff 0.16.0 project-lint completes with no errors using the existing repository configuration, without unsafe fixes or rule suppression.",
+    "Each changed script or test is a behavior-preserving lint or format compatibility correction; focused regression tests covering modified modules pass.",
+    "The corrective Contract, Summary, Capability Truth evidence, and instruction traceability record the hosted root cause and independent remediation without changing capability statuses.",
+    "A deterministic ruff 0.16 compatibility regression test is explicitly associated with every lint-corrected module that has no module-specific test-diff association; the coverage guard remains fail-closed and no generic test wildcard is added.",
+    "A fresh hosted run of the remediation PR has every required check successful, and then the parent #481 branch has every required check successful on its exact current Head before merge."
+  ],
+  "guidelines": [
+    "Use only safe ruff fixes or explicit equivalent edits; do not use --unsafe-fixes or add blanket noqa/ignore suppressions. A per-line BLE001 annotation is allowed only for a named fail-safe rollback, fail-closed read, or optional-observability boundary where narrowing the caught exception would lose recovery or diagnostics.",
+    "Keep the correction behavior-preserving and limited to files reported by ruff 0.16.0; add or update focused tests if an edit changes executable logic.",
+    "Do not treat the parent PR's failed hosted run as successful evidence; require fresh hosted evidence for both the corrective and parent PRs."
+  ],
+  "intent": {
+    "problem": "PR #481 updated ruff to 0.16.0 and its required template-smoke failed because project-lint reports 430 pre-existing style and modernization errors. The failure is a direct compatibility consequence of the new tool version, not evidence that the dependency update is invalid.",
+    "constraints": [
+      "Retain ruff 0.16.0, the existing Python 3.11 baseline, and the repository's lint policy; do not weaken rules to make CI green.",
+      "Use safe mechanical fixes only and preserve runtime behavior; do not use --unsafe-fixes, broad exclusions, or blanket noqa/ignore entries. The seven identified BLE001 boundaries may use narrowly documented per-line annotations because their recovery and diagnostic guarantees require catching every ordinary exception.",
+      "Do not run local make quality or full pytest under the user's temporary focused-verification direction; run targeted ruff and affected tests locally, while hosted required checks remain mandatory.",
+      "Keep this as an independent corrective Work Item and PR stacked onto #481; do not modify the archived dependency Work Item."
+    ],
+    "rationale": "A separate corrective record makes the tool-upgrade compatibility work reviewable, prevents disguising a broad source rewrite as a dependency bump, and preserves the parent dependency Work Item's evidence boundary."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human conversation authorization",
+    "reason": "The user authorized the scoped corrective Work Item and its evidence updates after the observed hosted failure."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 683
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/ruff016-lint-compatibility-20260730.json",
+    "baseCommit": "d7360d9d48f3b410f7f23af1489af77afe312dcb",
+    "initialScopeDigest": "1a2732cf9f3419a355ed1e1a2cd362f6371650d984bcd6aa3835f766f41fe489",
+    "contractSkeletonDigest": "dd30706703c9c3aef51f420c010ff6e1ce9857ad74a84c80fa258b11032506c0"
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The ruff 0.16.0 failure is reproduced from the parent PR baseline and identified as lint compatibility rather than a smoke workflow defect.",
+      "required": true,
+      "status": "unverified",
+      "expected": "ruff check reports the same baseline classes of errors and the focused corrective test records the compatibility boundary.",
+      "verificationPlan": "Run the ruff 0.16.0 project-lint command before and after the correction, preserving the failed-run evidence in the Summary.",
+      "evidence": []
+    },
+    {
+      "scenario": "Safe lint and formatting corrections leave affected behavior covered by focused tests.",
+      "required": true,
+      "status": "unverified",
+      "expected": "ruff format --check and ruff check pass, and focused tests for every executable module changed by the correction pass.",
+      "verificationPlan": "Classify changed files, run ruff checks, and run the corresponding focused test groups after edits.",
+      "evidence": []
+    },
+    {
+      "scenario": "The corrective PR and its parent use fresh hosted evidence instead of the failed parent run or old Dependabot checks.",
+      "required": true,
+      "status": "unverified",
+      "expected": "The corrective PR passes its hosted checks, then #481 is re-run and passes on the parent branch's updated Head.",
+      "verificationPlan": "Inspect both provider runs by PR Head SHA before either PR is merged.",
+      "evidence": []
+    }
+  ],
+  "rawUserRequest": "修复以后不需要跑全量测试，只针对修复做确认就行；绕不开的，按规则走；完成日语、文档、依赖与过期资产整改之前加入负例对应工单；持续执行无需停下。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:ruff016-hosted-lint-corrective-20260730",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:ruff016-lint-corrective-user-authorization"
+  },
+  "declaredIntent": {
+    "summary": "Repair the ruff 0.16.0 compatibility regression revealed by fresh hosted CI without weakening evidence, lint, or release governance.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  }
+}

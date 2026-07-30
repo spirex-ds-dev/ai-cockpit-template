@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 
 import pytest
-
 from ai_install_facts import (
     InstallFactsError,
     canonical_json,

@@ -7,9 +7,9 @@ executor performs no I/O unless confirmation and an optional drift check pass.
 
 from __future__ import annotations
 
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Mapping
 
 
 class BoundaryError(RuntimeError):

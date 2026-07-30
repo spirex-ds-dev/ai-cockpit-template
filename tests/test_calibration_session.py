@@ -3,9 +3,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
 import ai_calibrate
-
+import pytest
 from ai_calibrate import (
     CALIBRATION_STAGES,
     CalibrationError,

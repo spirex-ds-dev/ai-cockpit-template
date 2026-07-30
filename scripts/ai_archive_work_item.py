@@ -10,7 +10,7 @@ import json
 import shutil
 import subprocess
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -18,19 +18,19 @@ from ai_check_summary import validate_summary
 from ai_check_work_item import validate_contract
 from ai_common import (
     PROJECT_ROOT,
+    InvalidDataShapeError,
     changed_paths,
     clean_git_environment,
     load_json,
     non_empty_string,
     numeric_value,
-    path_fingerprint,
     parse_yaml,
+    path_fingerprint,
     redact_machine_paths_in_data,
     save_json,
     verification_key,
 )
 from ai_observability import AiEvent, AiEventLevel, AiEventType, create_observability
-
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 ARCHIVE_BASE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
@@ -191,7 +191,7 @@ def _rewrite_traceability_paths(
         rewritten, count = _rewrite_exact_string(rewritten, source, target)
         replacement_count += count
     if not isinstance(rewritten, dict):
-        raise ValueError("rewritten traceability manifest must remain an object")
+        raise InvalidDataShapeError("rewritten traceability manifest must remain an object")
     return rewritten, replacement_count
 
 
@@ -206,7 +206,7 @@ def _load_registered_traceability() -> tuple[Path, bytes | None, dict[str, Any] 
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError(f"registered traceability manifest cannot be read: {exc}") from exc
     if not isinstance(payload, dict):
-        raise ValueError("registered traceability manifest must contain a JSON object")
+        raise InvalidDataShapeError("registered traceability manifest must contain a JSON object")
     return path, original, payload
 
 
@@ -308,19 +308,19 @@ def validate_archive_growth_reservation(
                 "archiveGrowth reservation is required: budgetImpact.expectedMetrics.archiveGrowth "
                 f"must equal projected archive count {projected}"
             )
-    elif expected != projected:
-        if not warning_mode:
-            issues.append(
-                "archiveGrowth reservation is stale: "
-                f"expected {expected}, projected archive count is {projected}"
-            )
-    if future is not None and (
-        not isinstance(future, int) or isinstance(future, bool) or future < projected
+    elif expected != projected and not warning_mode:
+        issues.append(
+            "archiveGrowth reservation is stale: "
+            f"expected {expected}, projected archive count is {projected}"
+        )
+    if (
+        future is not None
+        and (not isinstance(future, int) or isinstance(future, bool) or future < projected)
+        and not warning_mode
     ):
-        if not warning_mode:
-            issues.append(
-                "reservedFutureMetrics.archiveGrowth must be an integer at least the current projected archive count"
-            )
+        issues.append(
+            "reservedFutureMetrics.archiveGrowth must be an integer at least the current projected archive count"
+        )
     if isinstance(limit, int) and projected > limit and not warning_mode:
         issues.append(f"projected archiveGrowth={projected} exceeds configured maximum {limit}")
     if (
@@ -715,7 +715,7 @@ def _execute_archive_transaction(
         index = _load_archive_index()
         entries = index.get("entries")
         if not isinstance(entries, list):
-            raise ValueError("archive index entries must be a list")
+            raise InvalidDataShapeError("archive index entries must be a list")
         new_entry = _archive_entry(
             contract_path=contract_path,
             summary_path=summary_path if has_summary else None,
@@ -746,12 +746,12 @@ def _execute_archive_transaction(
             _restore_files(files_to_move)
             for source, content in active_file_backups.items():
                 _restore_original_bytes(source, content)
-        except Exception as rollback_exc:
+        except Exception as rollback_exc:  # noqa: BLE001 - rollback must retain every recovery failure
             print(f"ERROR: Failed to roll back archive files: {rollback_exc}", file=sys.stderr)
         if traceability_changed and traceability_backup is not None:
             try:
                 _restore_original_bytes(traceability_path, traceability_backup)
-            except Exception as rollback_exc:
+            except Exception as rollback_exc:  # noqa: BLE001 - rollback must retain every recovery failure
                 print(
                     f"ERROR: Failed to roll back traceability manifest: {rollback_exc}",
                     file=sys.stderr,
@@ -798,7 +798,7 @@ def main() -> int:
 
     try:
         contract = load_json(contract_path)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 - unreadable Contract must fail closed with its diagnostic
         print(f"ERROR: Failed to read contract: {exc}", file=sys.stderr)
         return 1
 
@@ -828,7 +828,7 @@ def main() -> int:
     if has_summary:
         try:
             summary = load_json(summary_path)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - unreadable Summary must fail closed with its diagnostic
             print(f"ERROR: Failed to read summary: {exc}", file=sys.stderr)
             return 1
 
@@ -863,7 +863,7 @@ def main() -> int:
         )
         return 1
 
-    target_dir = ARCHIVE_BASE_DIR / str(datetime.now().year)
+    target_dir = ARCHIVE_BASE_DIR / str(datetime.now(UTC).astimezone().year)
     files_to_move: list[tuple[Path, Path]] = [(contract_path, target_dir / contract_path.name)]
     if has_summary:
         files_to_move.append((summary_path, target_dir / summary_path.name))
@@ -935,7 +935,7 @@ def main() -> int:
             traceability_backup=traceability_backup,
             traceability_payload=traceability_payload,
         )
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 - archive mutation failures must fail closed with their diagnostic
         print(f"ERROR: Failed to archive Work Item: {exc}", file=sys.stderr)
         return 1
 

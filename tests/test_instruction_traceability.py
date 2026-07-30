@@ -19,7 +19,6 @@ from check_instruction_traceability import (
     validate_manifest,
 )
 
-
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "docs/reference/remediation-instruction-traceability.json"
 AUDIT = ROOT / "docs/reference/wi01-wi20-bidirectional-traceability-audit.json"

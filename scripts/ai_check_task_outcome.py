@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, Mapping, Sequence
-
+from typing import Any
 
 STATUSES = {
     "completed",
@@ -31,8 +31,12 @@ SECTIONS = {
     "humanDecisions",
     "evidence",
 }
-SECRET_KEY = re.compile(r"(password|passwd|secret|token|api[_-]?key|private[_-]?key)", re.I)
-UNSUPPORTED_KEY = re.compile(r"(score|hours?|money|percentage|percent|productivity|savings)", re.I)
+SECRET_KEY = re.compile(
+    r"(password|passwd|secret|token|api[_-]?key|private[_-]?key)", re.IGNORECASE
+)
+UNSUPPORTED_KEY = re.compile(
+    r"(score|hours?|money|percentage|percent|productivity|savings)", re.IGNORECASE
+)
 CONDITIONAL = ("if not detected", "could have", "如果未被发现", "可能导致")
 # Work Item Contracts historically use both hyphenated and underscore task IDs
 # (for example, the installed first-adoption Contract is adopt_ai_cockpit).
@@ -193,9 +197,9 @@ def _validate_claims(sections: Mapping[str, Any], errors: list[ValidationError])
         )
     )
     if (
-        re.search(r"\bscore\s*[:=]", rendered_text, re.I)
+        re.search(r"\bscore\s*[:=]", rendered_text, re.IGNORECASE)
         or re.search(r"\b\d+(?:\.\d+)?\s*%", rendered_text)
-        or re.search(r"\b\d+(?:\.\d+)?\s*(?:hours?|percent|money)\b", rendered_text, re.I)
+        or re.search(r"\b\d+(?:\.\d+)?\s*(?:hours?|percent|money)\b", rendered_text, re.IGNORECASE)
     ):
         _error(
             errors, "unsupported_quantification", "unsupported quantitative claim in report text"

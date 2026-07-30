@@ -12,6 +12,7 @@ import subprocess
 import sys
 from pathlib import Path
 from typing import Any
+
 from release_archive import canonical_archive_sha, canonical_source_tree
 
 
@@ -35,8 +36,7 @@ def source_file_sha256(root: Path, source_commit: str, path: str) -> str:
         result = subprocess.run(  # nosec B603 B607
             ["git", "-C", str(root), "show", f"{source_commit}:{path}"],
             check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
         )
     except (OSError, subprocess.CalledProcessError) as exc:
         raise ReleasePreflightError(
@@ -112,8 +112,7 @@ def resolve_source_commit(root: Path, source_ref: str) -> str:
         result = subprocess.run(  # nosec B603 B607
             ["git", "-C", str(root), "rev-parse", f"{source_ref}^{{commit}}"],
             check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             text=True,
         )
     except (OSError, subprocess.CalledProcessError) as exc:
@@ -203,9 +202,12 @@ def validate_release_preflight(
     declared = release.get("releaseArchive", {}).get("sha256")
     if declared != actual_archive_sha:
         issues.append("release.json releaseArchive.sha256 does not match regenerated archive")
-    if release_digests is not None and source_commit is not None:
-        if release_digests.get("sourceCommit") != source_commit:
-            issues.append("release-digests sourceCommit does not match candidate source commit")
+    if (
+        release_digests is not None
+        and source_commit is not None
+        and release_digests.get("sourceCommit") != source_commit
+    ):
+        issues.append("release-digests sourceCommit does not match candidate source commit")
     return issues
 
 

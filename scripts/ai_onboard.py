@@ -13,7 +13,6 @@ from ai_common import clean_git_environment, nested_make_command
 from ai_doctor import diagnose
 from ai_readiness_policy import readiness_state
 
-
 PHASE_LABELS = {
     "en": {
         1: "Environment",

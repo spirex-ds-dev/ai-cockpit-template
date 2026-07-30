@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
-from typing import Callable, Iterable
 
 STATUSES = {"passed", "failed", "warning", "skipped", "needs_human_confirmation"}
 GATES = {"hard", "soft", "informational"}
@@ -26,15 +26,15 @@ class CheckResult:
             raise ValueError("skipped checks require a reason code")
 
     @classmethod
-    def passed(cls, checker_id: str, *, gate: str = "hard", detail: str = "") -> "CheckResult":
+    def passed(cls, checker_id: str, *, gate: str = "hard", detail: str = "") -> CheckResult:
         return cls(checker_id, "passed", gate, "", detail)
 
     @classmethod
-    def failed(cls, checker_id: str, *, gate: str = "hard", detail: str = "") -> "CheckResult":
+    def failed(cls, checker_id: str, *, gate: str = "hard", detail: str = "") -> CheckResult:
         return cls(checker_id, "failed", gate, "", detail)
 
     @classmethod
-    def skipped(cls, checker_id: str, reason_code: str, *, detail: str = "") -> "CheckResult":
+    def skipped(cls, checker_id: str, reason_code: str, *, detail: str = "") -> CheckResult:
         return cls(checker_id, "skipped", "informational", reason_code, detail)
 
     @classmethod
@@ -45,7 +45,7 @@ class CheckResult:
         gate: str = "soft",
         reason_code: str = "",
         detail: str = "",
-    ) -> "CheckResult":
+    ) -> CheckResult:
         return cls(checker_id, "warning", gate, reason_code, detail)
 
 

@@ -9,7 +9,6 @@ import sys
 from pathlib import Path
 from typing import Any
 
-
 SCHEMA_DIR = Path(__file__).resolve().parents[1] / ".ai" / "trust" / "schema"
 SCHEMA_NAMES = {
     "repository_capabilities",

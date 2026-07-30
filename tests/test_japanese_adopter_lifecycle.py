@@ -5,13 +5,12 @@ import sys
 from pathlib import Path
 
 import pytest
-
 from ai_calibrate import CALIBRATION_STAGES
 from ai_install_wizard import run_wizard
 from ai_rollback import build_snapshot, execute_rollback, plan_rollback
 from ai_uninstall_proposal import build_proposal
-from scripts.ai_detached_uninstaller import prepare as prepare_detached_removal
 
+from scripts.ai_detached_uninstaller import prepare as prepare_detached_removal
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -159,7 +158,7 @@ def test_japanese_adopter_recovery_is_confirmation_gated_and_preserves_project(
 def test_japanese_adopter_removal_blocks_unknown_ownership_and_preserves_evidence(
     japanese_adopter,
 ):
-    target, _ = japanese_adopter
+    _target, _ = japanese_adopter
     facts = {
         "sessionId": "日本語-removal-1",
         "runtimeFiles": ["scripts/ai_common.py", "README.md"],

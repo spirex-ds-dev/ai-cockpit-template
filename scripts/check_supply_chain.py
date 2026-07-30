@@ -4,25 +4,25 @@
 from __future__ import annotations
 
 import argparse
-from copy import deepcopy
 import hashlib
 import json
 import os
 import re
 import subprocess
 import sys
-from pathlib import Path
 import uuid
-from datetime import datetime, timezone
+from copy import deepcopy
+from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 
+from ai_common import InvalidDataShapeError
 from cyclonedx.model import ExternalReference, ExternalReferenceType, HashAlgorithm, HashType, XsUri
 from cyclonedx.model.bom import Bom, BomMetaData
 from cyclonedx.model.component import Component, ComponentType
 from cyclonedx.model.tool import Tool
 from cyclonedx.output.json import JsonV1Dot5
 from packageurl import PackageURL
-
 
 ROOT = Path(__file__).resolve().parents[1]
 SBOM_BASELINE = ROOT / ".ai" / "cockpit" / "sbom.json"
@@ -49,7 +49,7 @@ CONTROLLED_COMMIT_REF = re.compile(r"^origin/[A-Za-z0-9._/-]+$")
 def load_json(path: Path) -> dict[str, Any]:
     data = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
-        raise ValueError(f"{path}: root must be a JSON object")
+        raise InvalidDataShapeError(f"{path}: root must be a JSON object")
     return data
 
 
@@ -169,7 +169,7 @@ def lock_semantics(path: Path) -> dict[str, Any]:
             continue
         if "--hash=sha256:" in line:
             current["hashed"] = True
-        if line.startswith("# via") or line.startswith("#   "):
+        if line.startswith(("# via", "#   ")):
             current["hasVia"] = True
             if "requirements-dev.in" in line:
                 current["direct"] = True
@@ -335,7 +335,7 @@ def build_sbom(source_commit: str | None = None) -> dict[str, Any]:
         serial_number=uuid.uuid5(uuid.NAMESPACE_URL, f"ai-cockpit-template:{resolved_commit}"),
         metadata=BomMetaData(
             component=app,
-            timestamp=datetime(1970, 1, 1, tzinfo=timezone.utc),
+            timestamp=datetime(1970, 1, 1, tzinfo=UTC),
             tools=[Tool(name="check_supply_chain", version=resolved_commit)],
         ),
     )
@@ -445,10 +445,10 @@ def synchronize_release_supply_chain_digests() -> None:
     release = load_json(RELEASE_JSON)
     supply_chain = release.get("supplyChain")
     if not isinstance(supply_chain, dict):
-        raise ValueError("release.json is missing supplyChain release evidence")
+        raise InvalidDataShapeError("release.json is missing supplyChain release evidence")
     for key in ("requirementsLockDigest", "sbomDigest", "provenanceDigest"):
         if not isinstance(supply_chain.get(key), str):
-            raise ValueError(f"release.json supplyChain.{key} is missing")
+            raise InvalidDataShapeError(f"release.json supplyChain.{key} is missing")
     supply_chain["requirementsLockDigest"] = sha256_text(read_text(LOCK_FILE))
     supply_chain["sbomDigest"] = sha256_bytes(SBOM_BASELINE.read_bytes())
     supply_chain["provenanceDigest"] = sha256_bytes(PROVENANCE_BASELINE.read_bytes())

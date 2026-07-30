@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -53,9 +53,9 @@ def classify_path(relative: str) -> str:
         return "project"
     if relative.startswith(".ai/work-items/archive/"):
         return "historical"
-    if relative.startswith(".ai/cockpit/") or relative.startswith(".ai/install/"):
+    if relative.startswith((".ai/cockpit/", ".ai/install/")):
         return "generated"
-    if relative.startswith(".ai/guards/") or relative.startswith(".cursor/"):
+    if relative.startswith((".ai/guards/", ".cursor/")):
         return "shared"
     if relative.startswith(".ai/project") or relative == ".ai/glossary.md":
         return "project"
@@ -103,9 +103,7 @@ def build_manifest(
                 "ownershipClass": ownership_label(classify_path(relative)),
             }
         )
-    installed_at = (
-        datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-    )
+    installed_at = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     return {
         "schemaVersion": 1,
         "installationId": str(uuid.uuid4()),

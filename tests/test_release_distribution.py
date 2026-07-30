@@ -1,26 +1,25 @@
 import importlib
-import os
 import json
+import os
 import shutil
 from pathlib import Path
 from types import SimpleNamespace
 
-import pytest
-
 import check_release_distribution as release_distribution
+import pytest
+from ai_common import discover_remote_default_candidates, remote_default_branch_from_symref
 from check_release_distribution import (
+    candidate_release_issues,
     exercise_installer,
     exercise_public_distribution,
     highest_semver_tag,
     is_next_patch_release,
-    candidate_release_issues,
+    release_claims,
     release_identity_diagnostic,
     release_provider_facts,
-    release_claims,
     stable_release_tags,
     supply_chain_issues,
 )
-from ai_common import discover_remote_default_candidates, remote_default_branch_from_symref
 
 
 class _Response:
@@ -92,13 +91,7 @@ def test_candidate_release_accepts_next_patch_after_quarantined_public_tag():
 
 
 def test_provider_facts_separate_stable_releases_from_reserved_tags():
-    refs = "\n".join(
-        [
-            "a refs/tags/v0.5.43",
-            "b refs/tags/v0.5.44",
-            "c refs/tags/v0.5.45",
-        ]
-    )
+    refs = "a refs/tags/v0.5.43\nb refs/tags/v0.5.44\nc refs/tags/v0.5.45"
     releases = [
         {"tag_name": "v0.5.43", "draft": False, "prerelease": False},
         {"tag_name": "v0.5.44", "draft": True, "prerelease": False},
@@ -1092,7 +1085,7 @@ def test_list_remote_tags_runs_outside_repo_root(monkeypatch):
     def fake_run_command(command, *, cwd, env=None):
         seen["command"] = command
         seen["cwd"] = cwd
-        if command[:7] == [
+        if command == [
             "git",
             "-c",
             "credential.helper=",
@@ -1100,14 +1093,12 @@ def test_list_remote_tags_runs_outside_repo_root(monkeypatch):
             "http.extraHeader=",
             "-c",
             "core.askPass=",
+            "ls-remote",
+            "--tags",
+            "--refs",
+            "https://github.com/spirex-ds-dev/ai-cockpit-template.git",
         ]:
-            if command[7:] == [
-                "ls-remote",
-                "--tags",
-                "--refs",
-                "https://github.com/spirex-ds-dev/ai-cockpit-template.git",
-            ]:
-                return SimpleNamespace(returncode=0, stdout="a refs/tags/v0.5.22\n", stderr="")
+            return SimpleNamespace(returncode=0, stdout="a refs/tags/v0.5.22\n", stderr="")
         raise AssertionError(f"unexpected command: {command!r}")
 
     monkeypatch.setattr(release_distribution, "run_command", fake_run_command)
@@ -1126,7 +1117,7 @@ def test_fetch_tagged_installer_uses_plain_git_without_checkout_auth(monkeypatch
     def fake_run_command(command, *, cwd, env=None):
         seen["command"] = command
         seen["cwd"] = cwd
-        if command[:7] == [
+        if command == [
             "git",
             "-c",
             "credential.helper=",
@@ -1134,29 +1125,25 @@ def test_fetch_tagged_installer_uses_plain_git_without_checkout_auth(monkeypatch
             "http.extraHeader=",
             "-c",
             "core.askPass=",
+            "clone",
+            "--depth",
+            "1",
+            "--branch",
+            "v0.5.22",
+            "--single-branch",
+            release_distribution.PUBLIC_REPOSITORY,
+            str(cwd / "repo"),
         ]:
-            if command[7:] == [
-                "clone",
-                "--depth",
-                "1",
-                "--branch",
-                "v0.5.22",
-                "--single-branch",
-                release_distribution.PUBLIC_REPOSITORY,
-                str(cwd / "repo"),
-            ]:
-                installer = cwd / "repo" / "install.sh"
-                installer.parent.mkdir(parents=True, exist_ok=True)
-                installer.write_bytes(b"#!/bin/sh\nexit 0\n")
-                source_root = release_distribution.ROOT
-                (cwd / "repo" / "release.json").write_bytes(
-                    (source_root / "release.json").read_bytes()
-                )
-                for source in release_distribution.SUPPLY_CHAIN_FILES.values():
-                    target = cwd / "repo" / source.relative_to(source_root)
-                    target.parent.mkdir(parents=True, exist_ok=True)
-                    target.write_bytes(source.read_bytes())
-                return SimpleNamespace(returncode=0, stdout="", stderr="")
+            installer = cwd / "repo" / "install.sh"
+            installer.parent.mkdir(parents=True, exist_ok=True)
+            installer.write_bytes(b"#!/bin/sh\nexit 0\n")
+            source_root = release_distribution.ROOT
+            (cwd / "repo" / "release.json").write_bytes((source_root / "release.json").read_bytes())
+            for source in release_distribution.SUPPLY_CHAIN_FILES.values():
+                target = cwd / "repo" / source.relative_to(source_root)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(source.read_bytes())
+            return SimpleNamespace(returncode=0, stdout="", stderr="")
         raise AssertionError(f"unexpected command: {command!r}")
 
     monkeypatch.setattr(release_distribution, "run_command", fake_run_command)
@@ -1166,13 +1153,7 @@ def test_fetch_tagged_installer_uses_plain_git_without_checkout_auth(monkeypatch
 
 
 def test_highest_semver_tag_uses_numeric_version_order():
-    refs = "\n".join(
-        [
-            "a refs/tags/v0.5.9",
-            "b refs/tags/v0.5.10",
-            "c refs/tags/not-a-release",
-        ]
-    )
+    refs = "a refs/tags/v0.5.9\nb refs/tags/v0.5.10\nc refs/tags/not-a-release"
     assert highest_semver_tag(refs) == "v0.5.10"
 
 
