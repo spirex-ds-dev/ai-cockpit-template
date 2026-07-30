@@ -16,12 +16,25 @@ def test_check_ai_pr_uses_aggregate_validator():
         capture_output=True,
         check=False,
     )
-
     assert result.returncode == 0, result.stdout + result.stderr
     assert 'check-ai-pr-core AI_BASE_COMMIT="abc123"' in result.stdout
     assert 'scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"' in (ROOT / "Makefile").read_text(
         encoding="utf-8"
     )
+
+
+def test_check_ai_pr_runs_static_lint_before_aggregate_validation():
+    result = subprocess.run(
+        ["make", "-n", "check-ai-pr", "AI_BASE_COMMIT=abc123"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    lint = result.stdout.index("project-lint")
+    aggregate = result.stdout.index("check-ai-pr-core")
+    assert lint < aggregate
 
 
 def test_project_format_check_runs_ruff_format_check():

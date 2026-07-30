@@ -1,0 +1,246 @@
+{
+  "contractVersion": 2,
+  "workItemId": "finish-readiness-import-order-corrective-20260731",
+  "mode": "code",
+  "title": "Correct hosted lint regression in finish readiness test",
+  "rawUserRequest": "Continue the planned Work Items with the temporary efficiency authorization: do not run full local quality when focused verification and all governance gates provide sufficient evidence, but do not weaken quality. Diagnose and permanently correct repeated release and CI process failures.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-hosted-ci-root-cause-and-continue",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:user-authorized-corrective-source-bound-replacement-and-efficient-verification"
+  },
+  "declaredIntent": {
+    "summary": "Replace archived unmerged PR #520 with a source-bound evidence implementation that also proves the lightweight local path runs static lint before PR creation.",
+    "requestedCapabilities": ["ai_governance", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/finish-readiness-import-order-corrective-20260731.contract.json",
+    ".ai/work-items/active/finish-readiness-import-order-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/finish-readiness-import-order-corrective-20260731.outcome.json",
+    ".ai/work-items/active/finish-readiness-import-order-corrective-20260731.outcome.md",
+    ".ai/cockpit/checks.yaml",
+    "Makefile",
+    "scripts/ai_finish.py",
+    "scripts/install_ai_cockpit.py",
+    "templates/make/Makefile.ai",
+    "templates/stacks/generic.mk",
+    "tests/test_core_gates.py",
+    "tests/test_finish_readiness.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_installer.py",
+    "tests/test_makefile.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Mutating the archived records or branch of PR #520.",
+    "Removing or weakening project lint, formatter, source-bound evidence, hosted CI, or aggregation gates.",
+    "Running or publishing a release."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30589970959/job/91029883333",
+      "reason": "Hosted template-smoke proves the archived #520 branch fails only because ruff reports unsorted imports in tests/test_finish_readiness.py."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/520",
+      "reason": "Archived replacement implementation that cannot be mutated after ai-finish."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Current local PR gate runs only project-format-check, which allowed the static lint regression to escape."
+    },
+    {
+      "path": "tests/test_finish_readiness.py",
+      "reason": "Target regression test and lint failure location."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_gate",
+      "installer_runtime"
+    ],
+    "reason": "The correction touches root and installed Runtime PR gates. It must preserve fail-closed evidence while keeping an intentionally unconfigured generic formatter optional.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The hosted error is deterministic and the complete replacement scope preserves every required gate."
+  },
+  "preReviewWarnings": [
+    "Do not amend #520 archive evidence or relax static lint to make the replacement pass.",
+    "The generic stack may skip only its explicitly unconfigured optional formatter; lint and source-bound evidence remain mandatory."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The source-bound evidence implementation from #520 is independently recreated from origin/main without changing #520's archive.",
+    "The root check-ai-pr path runs both formatting and static lint before source-bound evidence and PR aggregation.",
+    "The installed generic Runtime does not fail because its intentionally unconfigured placeholder formatter is optional, while source-bound evidence remains enforced.",
+    "Focused regression tests, project formatter, project lint, source-bound evidence, required governance gates, and hosted CI pass."
+  ],
+  "guidelines": [
+    "Keep evidence and lint gates fail closed for configured projects.",
+    "Preserve template and installed Runtime command parity.",
+    "Keep the correction minimal and do not modify immutable archive records."
+  ],
+  "intent": {
+    "problem": "PR #520's source-bound solution was archived before hosted CI exposed an unsorted import. The temporary local-quality exception had skipped project lint, while check-ai-pr ran formatting only. The archived work cannot receive a post-finish commit.",
+    "constraints": [
+      "Use a new Work Item and PR rather than altering archived #520 evidence.",
+      "No full local make quality; run formatter, lint, focused tests, source-bound evidence, and all governance gates.",
+      "Hosted CI remains mandatory before merge."
+    ],
+    "rationale": "Recreating the implementation on a new branch preserves immutable audit history. Making lint mandatory in the lightweight PR path prevents the exact class of local-versus-hosted regression without restoring slow full quality."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized efficiency exception: run focused tests, formatter, lint, source-bound evidence, all governance gates, and mandatory hosted CI instead."
+    },
+    {
+      "check": "projectLint",
+      "required": true
+    },
+    {
+      "check": "projectFormat",
+      "required": true
+    },
+    {
+      "check": "docsMetadata",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user continuously authorized all planned corrective Work Items and explicitly requested permanent process correction without weakening quality."
+  },
+  "rollbackNote": "Revert this replacement Work Item as one unit; retain #520 and this Work Item's archived evidence.",
+  "scenarioCoverage": [
+    {
+      "scenario": "A newly added test has a ruff import-order violation while full local quality is intentionally skipped.",
+      "expected": "The lightweight check-ai-pr path fails through project-lint before a PR can be created.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a regression assertion for project lint in the PR gate and run it against the recreated test."
+    },
+    {
+      "scenario": "An installed generic adopter has no configured formatter command.",
+      "expected": "The optional formatter is skipped while source-bound evidence and PR checks remain active and pass.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run the installed generic Runtime regression and confirm the hosted installation-smoke job passes."
+    }
+  ],
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 705
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/finish-readiness-import-order-corrective-20260731.json",
+    "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+    "initialScopeDigest": "a7604517f21eaae03f2c171b220162501df0728b2a62cb7df1387e9eb1be875f",
+    "contractSkeletonDigest": "94de2a1b190100c81bd6456b858ecc1ed2a2766e11b6661a090db85677767810"
+  }
+}

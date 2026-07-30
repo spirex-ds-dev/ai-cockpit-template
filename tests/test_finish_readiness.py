@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import ai_finish
 
 
@@ -80,6 +82,36 @@ def test_finish_archive_message_is_not_lifecycle_closure():
 
     assert "lifecycle is not closed" in output
     assert "make ai-close-work-item TASK=example" in output
+
+
+def test_source_bound_evidence_gate_is_fail_closed_before_finish(monkeypatch, tmp_path):
+    summary_path = tmp_path / "summary.json"
+    summary_path.write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "run", lambda *_a, **_k: (1, 1, "stale"))
+    calls = []
+    observer = type(
+        "Observer",
+        (),
+        {
+            "check_started": lambda *_a, **_k: calls.append("started"),
+            "check_failed": lambda *_a, **_k: calls.append("failed"),
+            "check_passed": lambda *_a, **_k: None,
+        },
+    )()
+    assert (
+        ai_finish.run_mandatory_evidence_checks(
+            contract="contract.json",
+            summary="summary.json",
+            contract_data={"scope": []},
+            contract_path=Path("contract.json"),
+            summary_path=summary_path,
+            contract_hash="a" * 64,
+            commit_sha="b" * 40,
+            obs=observer,
+        )
+        == 1
+    )
+    assert calls == ["started", "failed"]
 
 
 def test_promote_review_readiness_does_not_override_failed_stabilization_evidence():
