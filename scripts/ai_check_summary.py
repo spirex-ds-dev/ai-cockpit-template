@@ -7,7 +7,7 @@ import argparse
 import hashlib
 import json
 import re
-import subprocess
+import subprocess  # nosec B404 - used only for fixed list-form Git tracking interrogation
 import sys
 import time
 from datetime import datetime, timezone
