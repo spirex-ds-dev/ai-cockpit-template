@@ -1,5 +1,4 @@
 import pytest
-
 from ai_adoption_evidence import build_runtime_verification, validate_runtime_verification
 
 

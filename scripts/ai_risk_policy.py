@@ -2,6 +2,7 @@
 # mypy: disable-error-code=arg-type
 
 from __future__ import annotations
+
 from typing import Any
 
 LEVELS = {"low": 1, "medium": 2, "high": 3}

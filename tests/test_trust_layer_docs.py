@@ -8,7 +8,6 @@ from check_trust_layer_docs import (
     section_ids,
 )
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 

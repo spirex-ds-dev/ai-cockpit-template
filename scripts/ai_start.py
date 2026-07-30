@@ -3,19 +3,23 @@
 
 from __future__ import annotations
 
-import contextlib
 import argparse
-import hashlib
+import contextlib
 import fcntl
+import hashlib
 import json
 import os
 import re
 import subprocess
 import sys
 import tempfile
+from collections.abc import Iterator
 from datetime import datetime
 from pathlib import Path
-from typing import Iterator
+
+from ai_check_diff_ownership import format_preview, preview
+from ai_check_status_consistency import DEFAULT_STATUS, validate_status_consistency
+from ai_check_summary import documentation_alignment_skeleton
 from ai_common import (
     PROJECT_ROOT,
     capture_dirty_baseline,
@@ -25,17 +29,10 @@ from ai_common import (
     nested_make_command,
     save_json,
 )
-from ai_check_status_consistency import DEFAULT_STATUS, validate_status_consistency
-from ai_check_diff_ownership import format_preview, preview
-from ai_check_summary import documentation_alignment_skeleton
 from ai_generate_status import write_active_status, write_no_active_status
 from ai_observability import create_observability
 from ai_readiness_policy import readiness_state
-from ai_start_receipt import build_receipt
-from ai_start_receipt import current_branch
-from ai_start_receipt import receipt_binding
-from ai_start_receipt import receipt_path
-
+from ai_start_receipt import build_receipt, current_branch, receipt_binding, receipt_path
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 START_LOCK_FILENAME = ".ai-start.lock"
@@ -194,7 +191,7 @@ def linked_worktree_active_issue(*, root: Path = PROJECT_ROOT) -> str | None:
                 f"{branch}: {worktree} (contract/summary pair required)"
             )
         return (
-            f"ERROR: linked worktree has active Work Item {sorted(contracts)[0]} on branch "
+            f"ERROR: linked worktree has active Work Item {min(contracts)} on branch "
             f"{branch}: {worktree}"
         )
     return None
@@ -211,7 +208,7 @@ def next_available_task_id(task: str, occupied_ids: set[str], *, date: str | Non
     """Choose a deterministic collision-free ID without overwriting history."""
     if task not in occupied_ids:
         return task
-    stamp = date or datetime.now().strftime("%Y%m%d")
+    stamp = date or datetime.now(datetime.UTC).astimezone().strftime("%Y%m%d")
     candidate = f"{task}-{stamp}"
     if candidate not in occupied_ids:
         return candidate

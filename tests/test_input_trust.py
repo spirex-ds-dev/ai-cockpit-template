@@ -1,6 +1,6 @@
 from ai_input_trust import (
-    InstructionAuthority,
     InjectionOutcome,
+    InstructionAuthority,
     SourceType,
     TrustLevel,
     assess_input,

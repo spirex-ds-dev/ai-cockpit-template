@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 import os
 import re
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Mapping
 
 SUPPORTED_LANGUAGES = ("ja", "en", "zh-CN")
 _PLACEHOLDER = re.compile(r"\{([A-Za-z_][A-Za-z0-9_]*)\}")
@@ -34,9 +34,12 @@ def resolve_language(
     environment_value = environ if environ is not None else os.environ.get("AI_COCKPIT_LANGUAGE")
     if environment_value and environment_value.strip():
         return normalize_language(environment_value)
-    if system_locale and system_locale.strip():
-        if system_locale.strip().upper() not in {"C", "POSIX"}:
-            return normalize_language(system_locale)
+    if (
+        system_locale
+        and system_locale.strip()
+        and system_locale.strip().upper() not in {"C", "POSIX"}
+    ):
+        return normalize_language(system_locale)
     return "ja"
 
 

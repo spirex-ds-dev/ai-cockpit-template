@@ -10,10 +10,9 @@ import argparse
 import hashlib
 import json
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-
 
 EVENT_TYPES = {
     "finding",
@@ -30,7 +29,9 @@ EVENT_TYPES = {
     "cancelled",
 }
 IDENTIFIER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
-SECRET_KEY = re.compile(r"(password|passwd|secret|token|api[_-]?key|private[_-]?key)", re.I)
+SECRET_KEY = re.compile(
+    r"(password|passwd|secret|token|api[_-]?key|private[_-]?key)", re.IGNORECASE
+)
 
 
 class EventLogError(ValueError):
@@ -38,7 +39,7 @@ class EventLogError(ValueError):
 
 
 def _utc_now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def finding_fingerprint(
@@ -100,11 +101,10 @@ def validate_event(event: dict[str, Any], existing: list[dict[str, Any]] | None 
     if event["eventType"] in {"event_corrected", "event_superseded"}:
         raise EventLogError("correction uses a normal event with explicit relationship fields")
     relation = event.get("correctsEventId") or event.get("supersedesEventId")
-    if relation is not None:
-        if not isinstance(relation, str) or not any(
-            row.get("eventId") == relation for row in existing
-        ):
-            raise EventLogError("correction/supersession must reference an existing eventId")
+    if relation is not None and (
+        not isinstance(relation, str) or not any(row.get("eventId") == relation for row in existing)
+    ):
+        raise EventLogError("correction/supersession must reference an existing eventId")
 
 
 def read_events(path: Path) -> list[dict[str, Any]]:

@@ -21,7 +21,6 @@ from typing import Any
 
 from ai_input_trust import SourceType, assess_input, re_evaluate_high_risk_operation
 
-
 ROOT = Path(__file__).resolve().parents[1]
 ASSESSMENT_WORK_ITEM_ID = "japanese-final-reassessment-after-documentation-truth-20260729"
 ASSESSMENT_WORK_ITEM_ROLE = "final_reassessment"
@@ -177,8 +176,7 @@ def _resolve_git_commit(root: Path, ref: str) -> str:
             ["git", "-C", str(root), "rev-parse", f"{ref}^{{commit}}"],
             check=True,
             text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
         )
     except (OSError, subprocess.CalledProcessError) as exc:
         raise JapaneseCapabilityError(
@@ -197,8 +195,7 @@ def _git_file_sha256(root: Path, commit: str, relative: str) -> str:
         result = subprocess.run(  # nosec B603 B607
             ["git", "-C", str(root), "show", f"{commit}:{relative}"],
             check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
         )
     except (OSError, subprocess.CalledProcessError) as exc:
         raise JapaneseCapabilityError(
@@ -764,9 +761,11 @@ def render_markdown(result: dict[str, Any]) -> str:
         f"- Assessment Work Item: `{result['workItemId']}`",
         f"- Work Item role: `{result['workItemRole']}`",
         f"- Assessment digest: `{result['digest']}`",
-        f"- Evidence source: `{result['evidenceSource']['digest']}` "
-        f"({result['evidenceSource']['fileCount']} files; "
-        f"`{result['evidenceSource']['algorithm']}`)",
+        (
+            f"- Evidence source: `{result['evidenceSource']['digest']}` "
+            f"({result['evidenceSource']['fileCount']} files; "
+            f"`{result['evidenceSource']['algorithm']}`)"
+        ),
         f"- Corpus: `{result['corpus']['path']}` (`{result['corpus']['entryCount']}` entries)",
         f"- Blocking findings: `{len(result['blockingFindings'])}`",
         "- [Machine-readable assessment](japanese-capability-assessment.json)",

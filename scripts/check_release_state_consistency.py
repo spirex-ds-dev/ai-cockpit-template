@@ -155,9 +155,10 @@ def check_repository(root: Path) -> list[str]:
     if state_name in {"development", "candidate_prepared"}:
         if evidence_status != expected_status or evidence_digest is not None:
             issues.append(f"{state_name} must have {expected_status} evidence and null digest")
-    elif state_name in {"candidate_verified", "release_published"}:
-        if evidence_status != expected_status or not digest_valid:
-            issues.append(f"{state_name} must have {expected_status} evidence and a SHA-256 digest")
+    elif state_name in {"candidate_verified", "release_published"} and (
+        evidence_status != expected_status or not digest_valid
+    ):
+        issues.append(f"{state_name} must have {expected_status} evidence and a SHA-256 digest")
     check_ci_evidence(state, source_commit, issues)
     published_tag = published.get("releaseTag")
     candidate_tag = candidate.get("releaseTag")

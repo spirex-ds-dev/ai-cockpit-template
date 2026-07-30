@@ -9,6 +9,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from ai_common import InvalidDataShapeError
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ".ai/work-items/archive/index.json"
@@ -65,19 +66,19 @@ def recovery_collisions(
 def _load_current(path: str) -> dict[str, Any]:
     value = json.loads((ROOT / path).read_text(encoding="utf-8"))
     if not isinstance(value, dict):
-        raise ValueError(f"{path} must be a JSON object")
+        raise InvalidDataShapeError(f"{path} must be a JSON object")
     return value
 
 
 def _load_target(ref: str, path: str) -> dict[str, Any]:
     result = subprocess.run(
-        ["git", "show", f"{ref}:{path}"], cwd=ROOT, capture_output=True, text=True
+        ["git", "show", f"{ref}:{path}"], cwd=ROOT, capture_output=True, text=True, check=False
     )
     if result.returncode:
         raise ValueError(f"cannot read target evidence {ref}:{path}: {result.stderr.strip()}")
     value = json.loads(result.stdout)
     if not isinstance(value, dict):
-        raise ValueError(f"target evidence {ref}:{path} must be a JSON object")
+        raise InvalidDataShapeError(f"target evidence {ref}:{path} must be a JSON object")
     return value
 
 

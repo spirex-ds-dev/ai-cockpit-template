@@ -4,8 +4,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
 import ai_japanese_capability
+import pytest
 from ai_japanese_capability import (
     CORPUS_PATH,
     evaluate,
@@ -13,7 +13,6 @@ from ai_japanese_capability import (
     render_markdown,
     report_drift,
 )
-
 
 EXPECTED_FINDINGS = {}
 

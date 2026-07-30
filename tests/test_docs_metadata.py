@@ -14,7 +14,6 @@ from check_docs_metadata import (
     stack_errors,
 )
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 

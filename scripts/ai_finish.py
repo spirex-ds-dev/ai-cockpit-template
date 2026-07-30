@@ -10,10 +10,12 @@ import os
 import subprocess
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from ai_acceptance_policy import validate_acceptance_evidence
+from ai_check_diff_ownership import format_preview, preview
 from ai_common import (
     PROJECT_ROOT,
     changed_paths,
@@ -30,10 +32,7 @@ from ai_common import (
     save_json,
     verification_key,
 )
-from ai_acceptance_policy import validate_acceptance_evidence
-from ai_check_diff_ownership import format_preview, preview
 from ai_observability import create_observability, elapsed_ms
-
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 REPORT_BOUNDARY_TEXT = {
@@ -149,7 +148,7 @@ def evidence(
         "command": command,
         "result": "passed" if code == 0 else "failed",
         "runner": "ai_finish",
-        "executedAt": datetime.now(timezone.utc).isoformat(),
+        "executedAt": datetime.now(UTC).isoformat(),
         "exitCode": code,
         "durationMs": duration,
         "outputDigest": hashlib.sha256(output.encode("utf-8")).hexdigest(),

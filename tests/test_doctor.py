@@ -2,9 +2,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-import ai_doctor
 import ai_common
-
+import ai_doctor
 
 ROOT = Path(__file__).resolve().parents[1]
 

@@ -1,30 +1,31 @@
-import json
-import runpy
-import sys
-import subprocess
 import fcntl
 import hashlib
+import json
+import runpy
+import subprocess
+import sys
 from pathlib import Path
 
-import pytest
 import ai_archive_work_item
 import ai_check_pr
-import ai_common
 import ai_check_scope
+import ai_common
 import ai_resume_work_item
 import ai_start
 import ai_start_receipt
+import pytest
 from ai_acceptance_policy import validate_acceptance_evidence
-from ai_resume_work_item import ResumeError
-from ai_resume_work_item import resume_contract
-from ai_start_receipt import build_receipt
-from ai_start_receipt import current_branch
-from ai_start_receipt import receipt_path
-from ai_start_receipt import receipt_binding
-from ai_start_receipt import skeleton_digest
-from ai_start_receipt import scope_digest
-from ai_start_receipt import validate_receipt
-from ai_start_receipt import validate_resume_history
+from ai_resume_work_item import ResumeError, resume_contract
+from ai_start_receipt import (
+    build_receipt,
+    current_branch,
+    receipt_binding,
+    receipt_path,
+    scope_digest,
+    skeleton_digest,
+    validate_receipt,
+    validate_resume_history,
+)
 
 
 def test_start_and_archive_use_clean_git_environment():
@@ -1025,7 +1026,7 @@ def test_ai_start_refreshes_only_stale_no_active_status(monkeypatch):
     )
     calls = []
     monkeypatch.setattr(ai_start, "write_no_active_status", lambda path: calls.append(path))
-    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
 
     assert ai_start.refresh_stale_no_active_status([stale]) == []
     assert calls == [ai_start.DEFAULT_STATUS]
@@ -1081,9 +1082,9 @@ def test_ai_start_default_contains_agent_risk_gate(tmp_path, monkeypatch):
     active.mkdir(parents=True)
     monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
-    monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     stub_active_status(monkeypatch)
     monkeypatch.setattr(
         ai_start,
@@ -1125,9 +1126,9 @@ def test_ai_start_fails_closed_when_preflight_gate_blocks(tmp_path, monkeypatch)
     active.mkdir(parents=True)
     monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
-    monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     monkeypatch.setattr(ai_start, "write_active_status", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(ai_start, "run_make", lambda *_args, **_kwargs: (1, "gate blocked"))
     monkeypatch.setattr(
@@ -1146,7 +1147,7 @@ def test_ai_start_requires_initial_commit(tmp_path, monkeypatch):
     active.mkdir(parents=True)
     monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(ai_start, "current_head", lambda: "")
     stub_active_status(monkeypatch)
     monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "sample"])
@@ -1176,7 +1177,7 @@ def test_ai_start_refuses_discovered_remote_default_branch_before_writes(tmp_pat
     monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_start, "PROJECT_ROOT", root)
     monkeypatch.setattr(ai_start, "DEFAULT_STATUS", status)
-    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "must-not-start"])
 
     assert ai_start.main() == 1
@@ -1212,9 +1213,9 @@ def test_ai_start_refuses_when_an_active_work_item_already_exists(tmp_path, monk
     )
     monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
-    monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     stub_active_status(monkeypatch)
     monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "sample"])
 
@@ -1232,9 +1233,9 @@ def test_ai_start_refuses_when_start_lock_is_held(tmp_path, monkeypatch):
     lock_handle = lock_path.open("a+", encoding="utf-8")
     fcntl.flock(lock_handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
 
-    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
-    monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     stub_active_status(monkeypatch)
     monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "sample"])
 
@@ -1281,7 +1282,6 @@ def test_archive_dry_run_and_successful_review_item(tmp_path, monkeypatch):
 
     def fake_run(cmd, cwd=None, check=False, **kwargs):
         calls.append(cmd)
-        return None
 
     observer = type("Obs", (), {"record": lambda *_args, **_kwargs: None})()
     monkeypatch.setattr(ai_archive_work_item, "create_observability", lambda **_kwargs: observer)
@@ -1629,7 +1629,6 @@ def test_archive_rolls_back_when_status_regeneration_fails(tmp_path, monkeypatch
     def fake_run(cmd, cwd=None, check=False):
         if any(str(part).endswith("ai_generate_status.py") for part in cmd):
             raise subprocess.CalledProcessError(returncode=1, cmd=cmd)
-        return None
 
     monkeypatch.setattr(ai_archive_work_item.subprocess, "run", fake_run)
     monkeypatch.setattr(
@@ -1731,9 +1730,9 @@ def test_ai_start_journeys(tmp_path, monkeypatch):
     active.mkdir(parents=True)
     monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
-    monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     stub_active_status(monkeypatch)
     monkeypatch.setattr(
         ai_start,
@@ -1779,9 +1778,9 @@ def test_ai_start_generates_active_status(tmp_path, monkeypatch):
     generated = []
     monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
-    monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     monkeypatch.setattr(
         ai_start,
         "write_active_status",
@@ -1810,9 +1809,9 @@ def test_ai_start_rolls_back_pair_when_status_generation_fails(tmp_path, monkeyp
     status.write_text("previous status\n", encoding="utf-8")
     monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_start, "PROJECT_ROOT", tmp_path)
-    monkeypatch.setattr(ai_start, "validate_status_consistency", lambda: [])
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
     monkeypatch.setattr(ai_start, "current_head", lambda: "a" * 40)
-    monkeypatch.setattr(ai_start, "capture_dirty_baseline", lambda: [])
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
     monkeypatch.setattr(
         ai_start,
         "write_active_status",

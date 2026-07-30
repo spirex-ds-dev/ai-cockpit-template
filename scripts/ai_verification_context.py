@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import json
 import subprocess  # nosec B404 - the executable and argument list are fixed below
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from types import MappingProxyType
-from typing import Any, Callable, Mapping
+from typing import Any
 
 from ai_common import parse_yaml
 from ai_impact_classifier import classify_path

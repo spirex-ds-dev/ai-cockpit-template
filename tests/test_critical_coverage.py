@@ -1,5 +1,5 @@
-from check_critical_coverage import CRITICAL_MINIMUMS, coverage_failures
 import check_critical_coverage
+from check_critical_coverage import CRITICAL_MINIMUMS, coverage_failures
 
 
 def report_with(percent: float) -> dict:

@@ -9,9 +9,9 @@ from __future__ import annotations
 import argparse
 import json
 import re
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Mapping, Sequence
-
+from typing import Any
 
 GENERATOR_VERSION = "1.0"
 FINAL_STATUSES = {
@@ -37,7 +37,9 @@ SECTION_TITLES = {
     "humanDecisions": "Human Decisions",
     "evidence": "Evidence",
 }
-SECRET_KEY = re.compile(r"(password|passwd|secret|token|api[_-]?key|private[_-]?key)", re.I)
+SECRET_KEY = re.compile(
+    r"(password|passwd|secret|token|api[_-]?key|private[_-]?key)", re.IGNORECASE
+)
 
 
 def _safe_text(value: Any, default: str = "") -> str:

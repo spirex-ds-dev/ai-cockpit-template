@@ -9,7 +9,6 @@ from typing import Any
 from ai_install_facts import InstallFactsError, digest_file, validate_fact_bundle
 from ai_ownership import OwnershipError, parse_managed_regions
 
-
 CLASSIFICATIONS = frozenset(
     {
         "unchanged_template_file",
@@ -50,7 +49,7 @@ def _candidate_files(root: Path) -> dict[str, str]:
         relative = path.relative_to(root).as_posix()
         if relative.startswith(".git/") or relative in {".gitignore"}:
             continue
-        if relative.startswith(".ai/work-items/active/") or relative.startswith(".ai/install/"):
+        if relative.startswith((".ai/work-items/active/", ".ai/install/")):
             continue
         files[relative] = digest_file(path)
     return files

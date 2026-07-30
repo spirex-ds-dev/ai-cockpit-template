@@ -151,11 +151,13 @@ def test_preflight_rejects_installation_scope_without_capability_matrix(tmp_path
     signal = next(item for item in report["signals"] if item["name"] == "Evidence Dependency")
     assert signal["value"] == "Inconsistent"
     assert signal["evidence"] == [
-        "Capability Truth evidence dependency requires Contract scope coverage for "
-        "docs/reference/capability-truth-matrix.json: "
-        "docs/getting-started/installation.md is bound to capabilities "
-        "[bootstrap_wizard_lifecycle, interactive_installation_wizard, "
-        "project_calibration_profile_proposal, ten_stage_calibration_session]"
+        (
+            "Capability Truth evidence dependency requires Contract scope coverage for "
+            "docs/reference/capability-truth-matrix.json: "
+            "docs/getting-started/installation.md is bound to capabilities "
+            "[bootstrap_wizard_lifecycle, interactive_installation_wizard, "
+            "project_calibration_profile_proposal, ten_stage_calibration_session]"
+        )
     ]
 
 
@@ -206,8 +208,10 @@ def test_preflight_rejects_malformed_configured_capability_matrix(tmp_path):
     signal = next(item for item in report["signals"] if item["name"] == "Evidence Dependency")
     assert signal["value"] == "Inconsistent"
     assert signal["evidence"] == [
-        "docs/reference/capability-truth-matrix.json: cannot load JSON matrix: "
-        "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+        (
+            "docs/reference/capability-truth-matrix.json: cannot load JSON matrix: "
+            "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+        )
     ]
 
 

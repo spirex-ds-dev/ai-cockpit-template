@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import subprocess
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -43,7 +43,7 @@ def capture_baseline(
     return {
         "schemaVersion": 1,
         "commit": resolved,
-        "capturedAt": datetime.now(timezone.utc).isoformat(),
+        "capturedAt": datetime.now(UTC).isoformat(),
         "test": test
         if test is not None
         else {"status": "unavailable", "reason": "No historical test result was supplied."},

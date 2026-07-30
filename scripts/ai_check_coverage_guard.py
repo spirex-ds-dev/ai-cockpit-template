@@ -7,11 +7,11 @@ import json
 import sys
 import time
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import PurePosixPath
+
 from ai_common import PROJECT_ROOT, changed_paths, included, simple_yaml_lists, simple_yaml_scalars
 from ai_observability import create_observability, elapsed_ms
-
 
 POLICY = PROJECT_ROOT / ".ai" / "guards" / "coverage_policy.yaml"
 REPORT_PATH = PROJECT_ROOT / "target" / "ai_coverage_guard_report.json"
@@ -112,7 +112,7 @@ def main() -> int:
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
     report_only = simple_yaml_scalars(POLICY).get("reportOnly", "true").lower() == "true"
     report = {
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "generatedAt": datetime.now(UTC).isoformat(),
         "status": "warning" if items else "none",
         "reportOnly": report_only,
         "changedPaths": paths,

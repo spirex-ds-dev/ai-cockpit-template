@@ -3,7 +3,6 @@ from __future__ import annotations
 import signal
 
 import pytest
-
 import run_quality_session
 
 

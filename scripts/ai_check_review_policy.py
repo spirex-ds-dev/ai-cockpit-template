@@ -21,7 +21,6 @@ from ai_common import (
 )
 from ai_observability import create_observability, elapsed_ms
 
-
 POLICY = PROJECT_ROOT / ".ai" / "guards" / "ai_review_policy.yaml"
 REPORT = PROJECT_ROOT / "target" / "ai_review_policy_report.json"
 

@@ -1,19 +1,18 @@
-import json
 import hashlib
+import json
 import sys
 from types import SimpleNamespace
 
-import pytest
-
 import ai_check_review_policy
-import ai_common
 import ai_check_scope
 import ai_check_status
 import ai_check_status_consistency
 import ai_checkpoint
+import ai_common
 import ai_finish
 import ai_generate_status
 import ai_governance_compression
+import pytest
 
 
 def test_governance_entrypoints_can_clean_ambient_git_environment():
@@ -392,9 +391,11 @@ def test_status_consistency_rejects_live_no_active_changes(tmp_path, monkeypatch
     issues = ai_check_status_consistency.validate_status_consistency(status)
 
     assert issues == [
-        "no active Work Item has uncommitted paths outside a complete current archive "
-        "transaction: src/app.py; repair-ai-status cannot establish ownership; "
-        "restore the paths or create/resume a Work Item"
+        (
+            "no active Work Item has uncommitted paths outside a complete current archive "
+            "transaction: src/app.py; repair-ai-status cannot establish ownership; "
+            "restore the paths or create/resume a Work Item"
+        )
     ]
 
 
@@ -580,9 +581,11 @@ def test_status_consistency_rejects_summary_omitted_path_without_false_repair(
     issues = ai_check_status_consistency.validate_status_consistency(status)
 
     assert issues == [
-        "no active Work Item has uncommitted paths outside a complete current archive "
-        "transaction: src/unowned.py; repair-ai-status cannot establish ownership; "
-        "restore the paths or create/resume a Work Item"
+        (
+            "no active Work Item has uncommitted paths outside a complete current archive "
+            "transaction: src/unowned.py; repair-ai-status cannot establish ownership; "
+            "restore the paths or create/resume a Work Item"
+        )
     ]
     assert ai_check_status_consistency.repair_status(status) == 1
     assert status.read_text(encoding="utf-8") == original
@@ -971,7 +974,7 @@ def test_finish_branch_discovery_handles_remote_head_and_no_remote_head(monkeypa
         "run_git",
         lambda args: SimpleNamespace(
             returncode=0,
-            stdout="" if args == ["remote"] else "",
+            stdout="",
             stderr="",
         ),
     )

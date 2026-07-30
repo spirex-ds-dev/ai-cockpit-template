@@ -6,15 +6,18 @@ import subprocess
 import sys
 from pathlib import Path
 from types import SimpleNamespace
+
 import pytest
 
 import scripts.check_release_preflight as preflight
 import scripts.finalize_release_freeze as finalizer
-from scripts.check_release_preflight import ReleasePreflightError
-from scripts.check_release_preflight import _load_object
-from scripts.check_release_preflight import resolve_release_identity_ref
-from scripts.check_release_preflight import validate_release_preflight
-from scripts.check_release_preflight import validate_release_identity
+from scripts.check_release_preflight import (
+    ReleasePreflightError,
+    _load_object,
+    resolve_release_identity_ref,
+    validate_release_identity,
+    validate_release_preflight,
+)
 
 
 def _fixture(**overrides):

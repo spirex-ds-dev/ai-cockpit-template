@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import datetime, timezone
-from typing import Any, Mapping, Sequence
+from collections.abc import Mapping, Sequence
+from datetime import UTC, datetime
+from typing import Any
 
 from ai_start_receipt import receipt_binding
-
 
 TEMPLATE_OWNED = {
     ".ai/cockpit/sbom.json",
@@ -58,7 +58,7 @@ def build_runtime_verification(
         "receiptBinding": receipt_binding(dict(receipt)),
         "sourceReleaseTag": source_release_tag or "unknown",
         "sourceRepository": source_repository or "unknown",
-        "verifiedAt": verified_at or datetime.now(timezone.utc).isoformat(),
+        "verifiedAt": verified_at or datetime.now(UTC).isoformat(),
         "checks": normalized,
         "projectQualityState": "not_configured",
         "readiness": "not_ready",

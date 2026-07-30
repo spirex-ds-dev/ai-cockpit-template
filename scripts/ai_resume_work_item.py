@@ -9,17 +9,19 @@ import json
 import os
 import subprocess
 import tempfile
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from ai_start_receipt import PROJECT_ROOT
-from ai_start_receipt import RESUME_SCHEMA_VERSION
-from ai_start_receipt import predecessor_closure_snapshot
-from ai_start_receipt import receipt_path
-from ai_start_receipt import validate_receipt
-from ai_start_receipt import validate_resume_history
-from ai_start_receipt import work_branch_identifies_work_item
+from ai_start_receipt import (
+    PROJECT_ROOT,
+    RESUME_SCHEMA_VERSION,
+    predecessor_closure_snapshot,
+    receipt_path,
+    validate_receipt,
+    validate_resume_history,
+    work_branch_identifies_work_item,
+)
 
 
 class ResumeError(ValueError):
@@ -174,7 +176,7 @@ def resume_contract(
         "baseRemote": base_remote,
         "baseBranch": base_branch,
         "workBranch": work_branch,
-        "recordedAt": timestamp or datetime.now(timezone.utc).isoformat(),
+        "recordedAt": timestamp or datetime.now(UTC).isoformat(),
         "priorContractDigest": hashlib.sha256(original_bytes).hexdigest(),
         **predecessor_fields,
     }

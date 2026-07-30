@@ -1,12 +1,11 @@
-import json
 import hashlib
+import json
 import sys
 from pathlib import Path
 from types import SimpleNamespace
 
-import pytest
-
 import check_governance_complexity
+import pytest
 
 
 def test_generated_current_status_is_not_persistent_markdown_complexity(monkeypatch, tmp_path):

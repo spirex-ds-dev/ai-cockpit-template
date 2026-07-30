@@ -11,23 +11,23 @@ import time
 from pathlib import Path
 from typing import Any
 
+from ai_calibration_inventory import build_inventory
+from ai_check_diff_ownership import counts as ownership_counts_for
+from ai_check_diff_ownership import preview as ownership_preview
 from ai_common import load_json, verification_key
-from ai_observability import create_observability, elapsed_ms
 from ai_generate_status import (
     BACKTRACK_REPORT,
     DEFAULT_LOG_PATH,
     DEFAULT_RETRY_THRESHOLD,
     apply_ownership_reconciliation,
-    localize_status_markdown,
     load_preflight_review,
+    localize_status_markdown,
     normalize_status_language,
     project_relative,
     status_for,
 )
 from ai_governance_compression import derive_governance_status, render_active_status
-from ai_check_diff_ownership import counts as ownership_counts_for, preview as ownership_preview
-from ai_calibration_inventory import build_inventory
-
+from ai_observability import create_observability, elapsed_ms
 
 REQUIRED_FIELDS = ("workItemId", "mode")
 

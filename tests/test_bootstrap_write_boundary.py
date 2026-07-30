@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-
 from bootstrap_write_boundary import BoundaryError, build_plan, execute_plan
 
 

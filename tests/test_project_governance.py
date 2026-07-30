@@ -11,7 +11,6 @@ from ai_check_guard_calibration import calibration_issues
 from ai_project_profile import load_profile, validate_profile
 from check_system_invariants import invariant_issues
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 

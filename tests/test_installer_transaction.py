@@ -3,14 +3,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
-
 import ai_installer_transaction as transaction
+import pytest
 from ai_installer_transaction import (
     InstallerLock,
     SourceMode,
-    WritePlan,
     TransactionAction,
+    WritePlan,
     classify_source,
 )
 

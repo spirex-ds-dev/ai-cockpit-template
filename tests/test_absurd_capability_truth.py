@@ -9,7 +9,6 @@ from pathlib import Path
 
 import ai_capability_truth
 
-
 ROOT = Path(__file__).resolve().parents[1]
 MATRIX_PATH = ROOT / "docs/reference/capability-truth-matrix.json"
 

@@ -9,7 +9,6 @@ import json
 from pathlib import Path
 from typing import Any
 
-
 REQUIRED_FIELDS = (
     "id",
     "summary",

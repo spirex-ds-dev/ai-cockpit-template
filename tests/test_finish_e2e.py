@@ -5,10 +5,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-from install_ai_cockpit import Installer
-import ai_common
 import ai_check_summary
-
+import ai_common
+from install_ai_cockpit import Installer
 
 ROOT = Path(__file__).resolve().parents[1]
 

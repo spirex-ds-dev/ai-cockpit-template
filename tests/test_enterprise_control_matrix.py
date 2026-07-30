@@ -3,7 +3,6 @@ from pathlib import Path
 
 import pytest
 
-
 ROOT = Path(__file__).resolve().parents[1]
 MATRIX = ROOT / "docs/reference/enterprise-control-matrix.json"
 ALLOWED = {

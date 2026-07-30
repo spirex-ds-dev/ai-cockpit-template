@@ -4,7 +4,6 @@ import json
 import subprocess
 from pathlib import Path
 
-
 FIXTURE = Path(__file__).parents[1] / "examples/fixtures/java-multimodule"
 
 

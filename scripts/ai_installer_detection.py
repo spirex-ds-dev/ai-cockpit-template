@@ -4,12 +4,11 @@ from __future__ import annotations
 
 import json
 import shutil
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable
 
 from ai_installer_repository import RepositoryFacts, read_repository_facts
-
 
 REQUIRED_TOOLS = ("git", "python", "make", "curl", "sh")
 

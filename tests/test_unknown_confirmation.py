@@ -1,7 +1,6 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
-
 from ai_unknown_confirmation import (
     build_confirmation_request,
     validate_assessment,
@@ -71,7 +70,7 @@ def test_confirmation_rejects_expiry_scope_digest_and_ok_only():
         object_id="work-item",
         scope_digest="sha256:" + "2" * 64,
         evidence_digest="sha256:" + "3" * 64,
-        now=datetime(2026, 7, 25, tzinfo=timezone.utc),
+        now=datetime(2026, 7, 25, tzinfo=UTC),
         critical=True,
     )
     assert {

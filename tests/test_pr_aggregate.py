@@ -3,10 +3,8 @@ import sys
 from pathlib import Path
 
 import ai_check_pr
-from ai_start_receipt import build_receipt
-from ai_start_receipt import receipt_binding
-from ai_start_receipt import validate_receipt
 import pytest
+from ai_start_receipt import build_receipt, receipt_binding, validate_receipt
 
 
 def write_pair(root, name, scope, changed, *, approved=False):

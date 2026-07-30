@@ -1,6 +1,7 @@
 """Pure, deterministic verification selection, caching, and escalation policies."""
 
 from __future__ import annotations
+
 import hashlib
 import json
 from typing import Any

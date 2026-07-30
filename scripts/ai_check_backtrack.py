@@ -3,16 +3,15 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 import time
-import argparse
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from ai_common import PROJECT_ROOT, changed_name_status, included, simple_yaml_scalars
 from ai_observability import create_observability, elapsed_ms
-
 
 REPORT_PATH = PROJECT_ROOT / "target" / "ai_backtrack_report.json"
 POLICY_PATH = PROJECT_ROOT / ".ai" / "guards" / "backtrack_policy.yaml"
@@ -88,7 +87,7 @@ def main() -> int:
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
     report_only = simple_yaml_scalars(POLICY_PATH).get("reportOnly", "true").lower() == "true"
     report = {
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "generatedAt": datetime.now(UTC).isoformat(),
         "status": "warning" if items else "none",
         "reportOnly": report_only,
         "items": [asdict(item) for item in items],

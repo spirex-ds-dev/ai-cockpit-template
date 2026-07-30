@@ -5,17 +5,16 @@ from __future__ import annotations
 
 import argparse
 import ast
-from collections import Counter, defaultdict
 import hashlib
 import json
 import os
 import subprocess
 import sys
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
-from ai_common import parse_yaml
-
+from ai_common import InvalidDataShapeError, parse_yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_POLICY = ROOT / ".ai" / "guards" / "governance_complexity_policy.yaml"
@@ -360,9 +359,9 @@ def repository_shape_metrics(
 def load_policy(path: Path) -> tuple[dict[str, float], dict[str, float], list[str]]:
     raw = parse_yaml(path)
     if not isinstance(raw, dict) or not isinstance(raw.get("max"), dict):
-        raise ValueError("policy must contain a max mapping")
+        raise InvalidDataShapeError("policy must contain a max mapping")
     values = raw["max"]
-    metrics = tuple(metric for metric in values.keys() if metric != "trackedFiles")
+    metrics = tuple(metric for metric in values if metric != "trackedFiles")
     result: dict[str, float] = {}
     for metric in metrics:
         value = values[metric]

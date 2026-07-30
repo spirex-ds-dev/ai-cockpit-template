@@ -1849,6 +1849,34 @@
           "path": "tests/test_workflows.py"
         }
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-056",
+      "summary": "Correct the ruff 0.16.0 compatibility failure exposed by replacement PR #481 without changing the dependency pin, Python 3.11 baseline, or lint policy. Preserve existing ValueError and RuntimeError contracts for malformed external data while adding TypeError semantics, and retain only the seven individually explained rollback, fail-closed read, and optional-observability exception boundaries.",
+      "planWorkItems": [
+        "DEPENDABOT-INTAKE-001"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/ruff016-lint-compatibility-20260730.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_common.py",
+        "scripts/ai_archive_work_item.py",
+        "scripts/ai_calibrate.py",
+        "scripts/ai_observability.py",
+        "docs/reference/capability-truth-matrix.json"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_work_item_lifecycle_closure.py",
+        "tests/test_release_distribution.py",
+        "tests/test_supply_chain.py",
+        "tests/test_capability_truth_matrix.py"
+      ],
+      "verificationCommands": [
+        "uvx ruff@0.16.0 check scripts tests",
+        "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q tests/test_work_item_lifecycle_closure.py tests/test_release_distribution.py tests/test_supply_chain.py tests/test_capability_truth_matrix.py",
+        "Fresh hosted required checks on the corrective PR and then on #481 before merge"
+      ]
     }
   ]
 }

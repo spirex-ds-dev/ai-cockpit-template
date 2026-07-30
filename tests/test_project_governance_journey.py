@@ -6,11 +6,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-import ai_check_summary  # noqa: E402
+import ai_check_summary
 
 
 def run(cwd: Path, *command: str, env=None) -> subprocess.CompletedProcess[str]:

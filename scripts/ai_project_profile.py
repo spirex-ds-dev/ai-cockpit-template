@@ -8,7 +8,6 @@ from typing import Any
 
 from ai_common import non_empty_string, parse_yaml
 
-
 FACT_KEYS = ("languages", "frameworks", "buildSystems", "infrastructure")
 BOUNDARY_KEYS = ("productionRoots", "featureRoots", "testRoots", "generatedPaths", "criticalPaths")
 REQUIRED_KEYS = {

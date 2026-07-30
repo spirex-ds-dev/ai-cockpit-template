@@ -2,10 +2,12 @@
 
 # mypy: ignore-errors
 from __future__ import annotations
-from typing import Any
+
 from pathlib import Path
-from ai_common import parse_yaml
+from typing import Any
+
 from ai_calibration_inventory import build_inventory
+from ai_common import parse_yaml
 
 
 def readiness_evidence(root: Path) -> dict[str, Any]:

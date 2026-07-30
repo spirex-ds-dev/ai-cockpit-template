@@ -3,13 +3,14 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
-import argparse
 import sys
 from pathlib import Path
 from typing import Any
 
+from ai_common import InvalidDataShapeError
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE = ROOT / ".ai" / "cockpit" / "bandit_low_risk_baseline.json"
@@ -18,7 +19,7 @@ BASELINE = ROOT / ".ai" / "cockpit" / "bandit_low_risk_baseline.json"
 def load_baseline(path: Path) -> dict[str, Any]:
     data = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
-        raise ValueError("baseline must be a JSON object")
+        raise InvalidDataShapeError("baseline must be a JSON object")
     return data
 
 
@@ -29,7 +30,7 @@ def current_digest(input_path: Path) -> tuple[int, str]:
         )
     data = json.loads(input_path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
-        raise ValueError("Bandit evidence must be a JSON object")
+        raise InvalidDataShapeError("Bandit evidence must be a JSON object")
     items = [
         {
             "testId": item["test_id"],

@@ -5,12 +5,12 @@ It does not decide whether a source is trusted; callers must classify the source
 before acquiring a write lock.
 """
 
-from dataclasses import dataclass
-from enum import Enum
 import json
 import os
-from pathlib import Path
 import subprocess  # nosec B404 - invokes fixed git executable with fixed arguments
+from dataclasses import dataclass
+from enum import Enum
+from pathlib import Path
 
 
 @dataclass(frozen=True)

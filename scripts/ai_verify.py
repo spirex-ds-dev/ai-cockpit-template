@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import argparse
 import json
-from dataclasses import asdict
 from collections.abc import Mapping
+from dataclasses import asdict
 
 from ai_check_registry import CheckerRegistry, CheckResult
 from ai_verification_context import build_context

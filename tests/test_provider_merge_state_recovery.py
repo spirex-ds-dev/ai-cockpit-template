@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import copy
 
-import pytest
-
 import ai_provider_merge_state_recovery as recovery
+import pytest
 
 
 def valid_evidence() -> dict[str, object]:
