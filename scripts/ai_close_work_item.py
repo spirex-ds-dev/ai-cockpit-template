@@ -208,6 +208,7 @@ def _verify_pr(
                 "gh",
                 "pr",
                 "view",
+                branch,
                 "--json",
                 "state,headRefName,headRefOid,baseRefName,mergedAt,mergeCommit,url",
             ],
