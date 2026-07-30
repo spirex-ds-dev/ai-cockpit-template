@@ -212,6 +212,43 @@ def test_historical_recovery_receipt_accepts_only_the_exact_consecutive_prefix(
     assert ai_check_pr.historical_recovery_receipt_paths(entries, "a" * 40, receipt) == set()
 
 
+def test_historical_recovery_receipt_requires_human_authorization(tmp_path, monkeypatch):
+    first = write_pair(tmp_path, "first", ["src/a.py"], ["src/a.py"])
+    second = write_pair(tmp_path, "second", ["src/b.py"], ["src/b.py"])
+    entries = []
+    for path, sequence in ((first, 74), (second, 75)):
+        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
+        summary = json.loads(summary_path.read_text())
+        summary["archiveSequence"] = sequence
+        summary_path.write_text(json.dumps(summary))
+        contract = json.loads(path.read_text())
+        contract["startReceipt"] = {"baseCommit": "a" * 40, "path": "receipt.json"}
+        path.write_text(json.dumps(contract))
+        entries.append((path, contract, summary, ai_check_pr.archive_pair_rank(path, summary_path)))
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
+    receipt = {
+        "receiptVersion": 1,
+        "prBaseCommit": "a" * 40,
+        "humanAuthorization": {"type": "agent", "reference": "forged"},
+        "archives": [ai_check_pr.recovery_receipt_entry(entry) for entry in entries],
+    }
+
+    assert ai_check_pr.historical_recovery_receipt_paths(entries, "a" * 40, receipt) == set()
+
+
+def test_historical_recovery_receipts_load_only_json_files(tmp_path, monkeypatch):
+    directory = tmp_path / ".ai" / "work-items" / "recovery-receipts"
+    directory.mkdir(parents=True)
+    (directory / "chain.json").write_text('{"receiptVersion": 1}', encoding="utf-8")
+    (directory / "note.txt").write_text("ignored", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    assert ai_check_pr.historical_recovery_receipts() == [
+        (".ai/work-items/recovery-receipts/chain.json", {"receiptVersion": 1})
+    ]
+
+
 def test_pr_accepts_one_documented_adjacent_recovery_pair(tmp_path, monkeypatch):
     predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
     recovery = write_pair(tmp_path, "recovery", ["src/b.py"], ["src/b.py"], approved=True)
