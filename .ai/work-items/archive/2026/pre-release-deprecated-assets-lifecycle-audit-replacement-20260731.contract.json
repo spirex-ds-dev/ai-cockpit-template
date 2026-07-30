@@ -1,0 +1,226 @@
+{
+  "contractVersion": 2,
+  "workItemId": "pre-release-deprecated-assets-lifecycle-audit-replacement-20260731",
+  "mode": "code",
+  "title": "Re-establish governed lifecycle evidence for pre-release deprecated-assets audit",
+  "baseCommit": "0e0233aedefc77b87a295efb579e61fa0ce27207",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/pre-release-deprecated-assets-lifecycle-audit-replacement-20260731.contract.json",
+    ".ai/work-items/active/pre-release-deprecated-assets-lifecycle-audit-replacement-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/pre-release-deprecated-assets-lifecycle-audit-replacement-20260731.outcome.json",
+    ".ai/work-items/active/pre-release-deprecated-assets-lifecycle-audit-replacement-20260731.outcome.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/deprecated-assets-registry.json",
+    "docs/reference/deprecated-assets.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/reference/capability-truth-matrix.json",
+    "scripts/check_deprecated_assets.py",
+    "tests/test_deprecated_assets.py"
+  ],
+  "outOfScope": [
+    "Deleting or rewriting immutable archived Contracts, Summaries, Outcomes, Manifests, Start Receipts, decision evidence, release evidence, semantic version tags, or provider Releases.",
+    "Deleting a file that still has runtime use, unresolved references, migration duty, no exact replacement, or no recovery rationale.",
+    "Release publication, the real absurd/injection assessment, final Japanese reassessment, and final current-cycle plan cleanup."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative execution order requires the audit after documentation alignment and before the real absurd/injection assessment and release."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/pre-release-deprecated-assets-cleanup-20260730.contract.json",
+      "reason": "Historical direct-main cleanup record; it documents prior intended scope but cannot be retroactively converted into a PR lifecycle."
+    },
+    {
+      "path": "docs/reference/deprecated-assets-registry.json",
+      "reason": "Machine-readable candidate, retention, protection, and deletion boundary."
+    },
+    {
+      "path": "docs/reference/deprecated-assets.md",
+      "reason": "Published fail-closed rule: registry validation alone does not authorize deletion."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "PLAN-DIRECTIVE-026 records the user instruction and its implementation/acceptance evidence."
+    },
+    {
+      "path": "scripts/check_deprecated_assets.py",
+      "reason": "Current deterministic validator for registry schema, references, dates, and protected archive paths."
+    }
+  ],
+  "rawUserRequest": "发布前，加个工单，处理过期的代码、逻辑、文档（包括已经实现了的计划文档）。最后发版本之前，将远端、本地的分支都整理干净。所有工单按指示—计划—实现—验收双向追踪，发现流程问题先解决再继续。除发布版本和各工单 PR 外，尽可能不跑全量测试，完整门禁；临时许可只写入 Contract，不写工程规则。需要的时候，自己查看 Actions 结果，目标计划全部完成前不要停止。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:pre-release-deprecated-assets-lifecycle-replacement", "capturedAt": "2026-07-31", "digest": "sha256:pre-release-deprecated-assets-lifecycle-replacement-authorized"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["accidental_deletion", "stale_reference", "archive_integrity", "documentation_governance"],
+    "reason": "Removing live, referenced, or audit-protected evidence would damage the repository. This replacement must distinguish historic direct-main facts from newly governed proof and fail closed for every unproven deletion.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the full planned lifecycle. This Contract limits deletion and preserves historic evidence rather than inferring authority from the prior direct-main change."
+  },
+  "preReviewWarnings": [
+    "The previous cleanup record may remain historical evidence only; it cannot prove PR, hosted CI, merge, or closure.",
+    "A current registry pass proves validation only, not that a deleted asset is safe.",
+    "Focused local verification is temporarily authorized, but all governance gates and fresh hosted PR CI remain required."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Code, logic, documentation, and completed-plan asset classes each have a Summary row with either a current evidence-backed decision or a precise no-change reason.",
+    "A2: The replacement audit reports that the historic direct-main cleanup cannot be retroactively claimed as a complete lifecycle; immutable historic archive evidence remains unchanged.",
+    "A3: The registry, reference, documentation metadata, plan-traceability, and generated documentation-alignment evidence are current and pass deterministic verification.",
+    "A4: No asset is deleted unless it has explicit candidate data, no runtime/reference/migration/protection blocker, an exact replacement, and recovery rationale; otherwise it is retained with the blocker recorded.",
+    "A5: The active Outcome is directly reported in Chinese before archive; then archive, one dedicated PR, fresh hosted CI, merge, closure, exact branch cleanup, and synchronized main complete before later release stages."
+  ],
+  "guidelines": [
+    "Preserve immutable archived evidence; record historical limitations rather than rewriting the past.",
+    "Do not infer deletion safety: require explicit registry decision, reference check, replacement, and recovery rationale.",
+    "Keep this audit distinct from release publication, final plan cleanup, and the later attack assessment.",
+    "Record any discovered workflow issue in the Summary; do not modify repository governance rules for this temporary focused-verification authorization."
+  ],
+  "intent": {
+    "problem": "A previous deprecated-assets cleanup was committed directly to main and has an archived record, but its PR/hosted/closure lifecycle was never independently established. The repository must not represent that historic fact as a fully governed delivery before release.",
+    "constraints": ["Preserve immutable archive, decision, release, tag, and provider evidence.", "Do not delete based on inference; unresolved candidates remain retained.", "Do not alter repository rules to make the temporary focused local-verification policy permanent.", "Use one dedicated branch and complete PR, fresh hosted CI, merge, and closure before the next stage."],
+    "rationale": "A release-ready repository must distinguish present verification from historical implementation facts. The replacement audit establishes current, reviewable lifecycle evidence without concealing the older direct-main limitation."
+  },
+  "declaredIntent": {
+    "summary": "Establish current, reviewable evidence for the pre-release deprecated-assets decision without representing the older direct-main work as a completed governed lifecycle.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A candidate is unreferenced, non-runtime, non-protected, has an exact replacement and recovery rationale.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The Summary records the exact current decision and focused evidence; deletion or historicalization occurs only within scope.",
+      "verificationPlan": "Inspect registry fields and repository references, then run deprecated-assets, metadata, traceability, and generated-artifact checks."
+    },
+    {
+      "scenario": "A candidate is protected, runtime-used, migration-required, referenced, or lacks an exact replacement/recovery path.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The asset remains retained and the Summary records the precise blocker without a deletion claim.",
+      "verificationPlan": "Validate the registry and protected prefixes and cite the current reference or archive boundary in the Summary."
+    },
+    {
+      "scenario": "A historic direct-main cleanup has no independently provable PR, hosted CI, merge, or closure lifecycle.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The historic record stays immutable; the replacement Contract and Outcome explicitly report the limitation while providing a new governed lifecycle for current audit evidence.",
+      "verificationPlan": "Compare the historic archive to current Git/provider state and verify this replacement's own PR/hosted/closure evidence after delivery."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {"check": "quality", "required": false, "reason": "Temporary user authorization for the current plan excludes local full quality/full pytest for non-release Work Items. Focused checks and all governance gates remain mandatory; fresh hosted PR CI remains required."}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": false,
+    "allowPatterns": ["docs/superpowers/plans/**", "docs/reference/**", "scripts/**", "tests/**"],
+    "reason": "The user authorized continuous pre-release cleanup. Any deletion is still constrained by acceptance A4 and the registry/protection evidence."
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized continuous planned Work Item execution and lifecycle actions."
+  },
+  "rollbackNote": "Revert only this replacement audit's committed changes if its current classification proves incorrect. Never rewrite immutable archive, decision, tag, or provider-release evidence; create a corrective Work Item instead.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 694
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/pre-release-deprecated-assets-lifecycle-audit-replacement-20260731.json",
+    "baseCommit": "0e0233aedefc77b87a295efb579e61fa0ce27207",
+    "initialScopeDigest": "16d9f265187404cd09c22477dbc69f0c1eb7ee2e56f61026c58ca33b512bfc17",
+    "contractSkeletonDigest": "eb5ae6de5967a96f14457914cbd609de76ded51a6a150e50cdc96c0ae0f4dcca"
+  }
+}

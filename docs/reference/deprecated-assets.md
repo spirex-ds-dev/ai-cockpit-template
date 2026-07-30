@@ -24,3 +24,13 @@ Contracts, Summaries, Events, Manifests, release evidence, decision evidence,
 and other historical records remain preserved. Any future deletion requires a
 separate Work Item with explicit scope, recovery path, replacement evidence,
 PR review, merge, and lifecycle closure.
+
+## Current pre-release audit boundary
+
+The earlier historicalization commit is retained as a historical repository
+fact. It did not establish a standalone pull-request, hosted-verification, and
+lifecycle-closure record, so it must not be described as a completed governed
+delivery. The replacement audit
+`pre-release-deprecated-assets-lifecycle-audit-replacement-20260731` records
+the current classification and creates that new reviewable lifecycle without
+rewriting the older archive evidence.
