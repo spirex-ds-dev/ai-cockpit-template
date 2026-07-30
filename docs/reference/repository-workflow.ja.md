@@ -23,6 +23,21 @@ keywords:
 6. Summary を更新し、`before_finish` checkpoint を記録して `make ai-finish TASK=<task>` を実行する。
 7. archived Contract/Summary と生成 Status を確認し、ブランチを push して PR を作成する。
 
+## リポジトリ全体の active Work Item 境界
+
+`ai-start` は Contract、Summary、Start Receipt、Cockpit Status を書き込む前に、
+linked Git worktree を列挙します。別の非 detached worktree に active
+Contract/Summary の組があれば、開始を停止し、worktree のパス、ブランチ、Work
+Item ID を表示します。Contract または Summary だけの壊れた組も履歴ノイズとして
+無視せず、fail closed にします。これにより、serial Work Item の規則は現在の
+ディレクトリだけでなくリポジトリ全体に適用されます。
+
+後から作られた replacement delivery が、先の active Work Item を暗黙に終了させる
+ことはありません。replacement の archive/PR 証跡を保持し、predecessor と cleanup
+の決定を専用 corrective Work Item に記録してから、承認された境界でだけ stale な
+ローカル identity を清掃します。チェックを通すために archive を書き換えたり、stale
+branch を merge したり、ユーザーの変更を捨てたりしてはいけません。
+
 ## 禁止されるショートカット
 
 - PR 前に feature branch をローカル `main` へ merge しない。

@@ -68,6 +68,21 @@ closed for a missing, malformed, digest-mismatched, base-mismatched, or
 untracked Receipt. The Receipt proves creation-time lifecycle state only; it
 does not prove implementation success, review approval, or merge status.
 
+### Repository-wide active Work Item boundary
+
+Before `ai-start` writes a Contract, Summary, Start Receipt, or Cockpit Status,
+it enumerates linked Git worktrees. A different non-detached worktree with an
+active Contract/Summary pair blocks the start and identifies its path, branch,
+and Work Item ID. A malformed one-sided pair also blocks; it is not ignored as
+historical noise. This makes the serial Work Item rule repository-wide rather
+than merely a property of the current directory.
+
+A later replacement delivery does not silently retire an earlier active Work
+Item. Preserve the replacement's archived PR evidence, record the predecessor
+and cleanup decision in a dedicated corrective Work Item, and clean the stale
+local identity only within that authorized boundary. Do not rewrite an archive,
+merge the stale branch, or discard user changes to make the check pass.
+
 If a mandatory corrective Work Item closes while another Work Item is paused,
 rebase the paused dedicated branch and use `make ai-resume-work-item
 CONTRACT=<active-contract> BASE_REMOTE=<remote>
