@@ -43,3 +43,13 @@ def test_release_preflight_runs_before_runtime_projection():
         'make check-release-preflight RELEASE_PREFLIGHT_SOURCE_COMMIT="$SOURCE_COMMIT"'
         in workflow[preflight:projection]
     )
+
+
+def test_lifecycle_guide_keeps_premerge_metadata_and_runtime_preflight_separate():
+    lifecycle = (ROOT / "docs" / "reference" / "ai-cockpit-work-item-lifecycle.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "Do not run `make check-release-preflight` on the premerge metadata commit." in lifecycle
+    assert "The gate runs only after runtime" in lifecycle
+    assert "exact merged `SOURCE_COMMIT`" in lifecycle

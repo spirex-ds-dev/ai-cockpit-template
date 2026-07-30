@@ -41,6 +41,26 @@ def test_promote_review_readiness_remains_not_ready_for_incomplete_evidence():
     assert unknown["status"] == "not_ready"
 
 
+def test_promote_review_readiness_allows_only_contract_optional_not_run_checks():
+    candidate = summary()
+    candidate["verification"] = [
+        {"check": "scope", "result": "passed"},
+        {"check": "quality", "result": "not_run"},
+    ]
+    contract = {
+        "contractVersion": 2,
+        "acceptance": ["Optional verification is declared in the Contract."],
+        "verification": [
+            {"check": "scope", "required": True},
+            {"check": "quality", "required": False},
+        ],
+    }
+
+    result = ai_finish.promote_review_readiness(candidate, contract)
+
+    assert result["status"] == "ready"
+
+
 def test_promote_review_readiness_requires_acceptance_evidence_for_v2():
     result = ai_finish.promote_review_readiness(
         summary(),

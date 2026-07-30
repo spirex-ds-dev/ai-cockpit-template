@@ -226,13 +226,33 @@ def promote_review_readiness(
     """Derive review readiness from recorded verification and residual risk."""
     verification = summary.get("verification")
     unknowns = summary.get("unknownsRemaining")
-    complete = (
-        isinstance(verification, list)
-        and bool(verification)
-        and all(isinstance(item, dict) and item.get("result") == "passed" for item in verification)
-        and isinstance(unknowns, list)
-        and not unknowns
-    )
+    required_checks: set[str] | None = None
+    if isinstance(contract, dict) and contract.get("contractVersion") == 2:
+        declared = contract.get("verification")
+        if isinstance(declared, list):
+            required_checks = {
+                item["check"]
+                for item in declared
+                if isinstance(item, dict)
+                and isinstance(item.get("check"), str)
+                and item.get("required", True) is True
+            }
+    if isinstance(verification, list) and required_checks is not None:
+        passed_required_checks = {
+            item.get("check")
+            for item in verification
+            if isinstance(item, dict) and item.get("result") == "passed"
+        }
+        verification_complete = required_checks <= passed_required_checks
+    else:
+        verification_complete = (
+            isinstance(verification, list)
+            and bool(verification)
+            and all(
+                isinstance(item, dict) and item.get("result") == "passed" for item in verification
+            )
+        )
+    complete = verification_complete and isinstance(unknowns, list) and not unknowns
     existing = summary.get("reviewReadiness")
     expected_focus = (
         existing.get("expectedReviewFocus", [])
