@@ -1,0 +1,178 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-capability-truth-format-corrective-20260731",
+  "mode": "code",
+  "title": "Format release capability truth regression",
+  "baseCommit": "c794b237111537ef5de23f9769c656fd0f3db0eb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-capability-truth-format-corrective-20260731.contract.json",
+    ".ai/work-items/active/release-capability-truth-format-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-capability-truth-format-corrective-20260731.outcome.json",
+    ".ai/work-items/active/release-capability-truth-format-corrective-20260731.outcome.md",
+    "scripts/finalize_release_freeze.py",
+    "tests/test_release_preflight.py"
+  ],
+  "outOfScope": ["Changing release policy, release workflow logic, capability claims, archived Work Item evidence, tags, or provider Releases."],
+  "sources": [
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "The pre-merge freeze updates release.json and must refresh its Capability Truth dependency."
+    },
+    {
+      "path": "tests/test_release_preflight.py",
+      "reason": "Regression test and the exact file rejected by the PR format gate."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30567092238/job/90954221996",
+      "reason": "PR #507 evidence that release finalization left capabilities[11] stale."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "generated_evidence_integrity"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "This independent replacement applies a deterministic evidence refresh and exact formatter output only."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized continuous corrective Work Items and release continuation."
+  },
+  "preReviewWarnings": [
+    "Do not amend the archived unmerged prior corrective; this Work Item is its independent replacement."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Pre-merge finalization regenerates Capability Truth evidence after it updates release.json, without changing capability claims.",
+    "The stale evidence condition reported by PR #507 is covered by a real finalization regression test.",
+    "tests/test_release_preflight.py is formatted and the focused test, Capability Truth validator, and required governed checks pass.",
+    "This replacement PR is independently merged and closed before a fresh release Work Item begins."
+  ],
+  "guidelines": [
+    "Use the existing Capability Truth generator and validator; do not duplicate evidence logic.",
+    "Keep the archived prior corrective immutable and deliver an independent replacement.",
+    "Apply the repository formatter to the final test file before PR validation."
+  ],
+  "intent": {
+    "problem": "The prior corrective was correctly rejected before PR creation because the test file was not formatted; the underlying release-finalization fix must be redelivered independently because its original Work Item is archived.",
+    "constraints": ["Do not modify the archived prior corrective or release/provider state.", "Use focused local verification; hosted PR CI remains mandatory.", "Do not weaken formatting or governance checks."],
+    "rationale": "A new self-contained replacement preserves immutable failure evidence while delivering both the root-cause fix and its formatter-compliant regression."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "User temporary efficiency authorization permits focused local verification; hosted PR CI remains mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized continuous corrective lifecycle, PRs, merges, hosted verification, and release continuation."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 698
+    }
+  },
+  "rawUserRequest": "Continue the authorized plan, repair release-blocking process defects, inspect Actions as needed, and do not stop before release completion.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-31-continuous-plan-authorization", "capturedAt": "2026-07-31", "digest": "sha256:continuous-authorized-release-corrective"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Deliver a formatter-clean independent replacement for the release Capability Truth correction.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "scenarioCoverage": [
+    {"scenario": "Finalization changes release.json after prior matrix generation.", "expected": "The regression would detect stale capability evidence without the correction.", "verificationPlan": "Run the focused real-finalization regression after implementation.", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "Finalization refreshes the matrix and the test is formatter-clean.", "expected": "The focused regression and ruff format check pass.", "verificationPlan": "Run pytest, ai_capability_truth, and ruff format --check on the final test file.", "required": true, "status": "unverified", "evidence": []}
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-capability-truth-format-corrective-20260731.json",
+    "baseCommit": "c794b237111537ef5de23f9769c656fd0f3db0eb",
+    "initialScopeDigest": "4e2ed4ba5d4fd0aa72f473477476e88a0bda3d8dcfe8436015c95f7c5833cf04",
+    "contractSkeletonDigest": "1f5a12fdf2b4009727f29a04b67ac63a646204cb887ead7384e1d433fc876642"
+  }
+}

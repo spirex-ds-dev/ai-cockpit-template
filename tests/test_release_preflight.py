@@ -9,6 +9,7 @@ from types import SimpleNamespace
 
 import pytest
 
+import scripts.ai_capability_truth as capability_truth
 import scripts.check_release_preflight as preflight
 import scripts.finalize_release_freeze as finalizer
 from scripts.check_release_preflight import (
@@ -475,6 +476,48 @@ def test_finalize_release_freeze_writes_post_close_lifecycle_evidence(monkeypatc
         "release.json": hashlib.sha256((tmp_path / "release.json").read_bytes()).hexdigest(),
         "install.sh": hashlib.sha256((tmp_path / "install.sh").read_bytes()).hexdigest(),
     }
+
+
+def test_finalizer_regenerates_capability_truth_after_updating_release_metadata(
+    monkeypatch, tmp_path
+):
+    """Catch the PR #507 regression: release.json changes must not leave evidence stale."""
+    _configure_finalizer(monkeypatch, tmp_path)
+    evidence = tmp_path / "tests" / "release_evidence.py"
+    evidence.parent.mkdir()
+    evidence.write_text("# release evidence\n", encoding="utf-8")
+    matrix_path = tmp_path / "docs" / "reference" / "capability-truth-matrix.json"
+    _write_json(
+        matrix_path,
+        {
+            "statusVocabulary": [
+                "implemented",
+                "template_only",
+                "adopter_installed",
+                "planned",
+            ],
+            "capabilities": [
+                {
+                    "id": "quick_install_release_archive_digest",
+                    "status": "implemented",
+                    "claim": "Release metadata is evidence-bound.",
+                    "limitations": "Fixture only.",
+                    "sourceEvidence": ["release.json"],
+                    "testEvidence": ["tests/release_evidence.py"],
+                    "commandEvidence": ["make check-release-preflight"],
+                    "evidenceSource": capability_truth.build_evidence_source(
+                        ["release.json"], ["tests/release_evidence.py"], root=tmp_path
+                    ),
+                }
+            ],
+        },
+    )
+    matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
+    matrix["capabilities"][0]["digest"] = capability_truth.row_digest(matrix["capabilities"][0])
+    _write_json(matrix_path, matrix)
+
+    assert finalizer.main(source_commit="a" * 40, tag_target="a" * 40) == 0
+    assert capability_truth.validate_matrix(matrix_path, root=tmp_path) == []
 
 
 def test_finalize_release_freeze_runtime_mode_binds_exact_detached_source(monkeypatch, tmp_path):

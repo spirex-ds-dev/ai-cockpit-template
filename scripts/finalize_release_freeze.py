@@ -23,6 +23,23 @@ def _fail(message: str) -> int:
     return 1
 
 
+def regenerate_capability_truth(root) -> None:
+    """Refresh matrix evidence after release finalization changes release.json."""
+    matrix_path = root / "docs" / "reference" / "capability-truth-matrix.json"
+    if not matrix_path.is_file():
+        return
+    from ai_capability_truth import regenerate_matrix, validate_matrix
+
+    matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
+    regenerated = regenerate_matrix(matrix, root=root)
+    matrix_path.write_text(
+        json.dumps(regenerated, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    errors = validate_matrix(matrix_path, root=root)
+    if errors:
+        raise ValueError("; ".join(errors))
+
+
 def main(
     candidate_task: str | None = None,
     premerge_task: str | None = None,
@@ -243,6 +260,10 @@ def main(
     release_path.write_text(
         json.dumps(release, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
+    try:
+        regenerate_capability_truth(root)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        return _fail(f"Capability Truth Matrix regeneration failed: {exc}")
     metadata_digests["published"] = sha256_text(release_path.read_text(encoding="utf-8"))
     release_state_path.write_text(
         json.dumps(release_state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
