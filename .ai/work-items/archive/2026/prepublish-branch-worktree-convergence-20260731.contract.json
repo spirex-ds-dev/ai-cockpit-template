@@ -1,0 +1,230 @@
+{
+  "contractVersion": 2,
+  "workItemId": "prepublish-branch-worktree-convergence-20260731",
+  "mode": "code",
+  "title": "prepublish-branch-worktree-convergence-20260731",
+  "baseCommit": "76f523c5450a97fabcb3a7146a488eeb215d8079",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/prepublish-branch-worktree-convergence-20260731.contract.json",
+    ".ai/work-items/active/prepublish-branch-worktree-convergence-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/prepublish-branch-worktree-convergence-20260731.outcome.json",
+    ".ai/work-items/active/prepublish-branch-worktree-convergence-20260731.outcome.md"
+  ],
+  "outOfScope": [
+    "Deleting semantic-version tags, changing source code, modifying release metadata, publishing a provider Release, or preserving a replacement branch after the final audited cleanup."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Authoritative lifecycle and branch-cleanup rules."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Authoritative repository terminology for Work Item closure and evidence."
+    },
+    {
+      "path": "git worktree list --porcelain and git status --porcelain audit on 2026-07-31",
+      "reason": "Read-only inventory proves the exact historical worktree and dirty-state population before removal."
+    },
+    {
+      "path": "git for-each-ref refs/remotes/origin/codex audit on 2026-07-31",
+      "reason": "Read-only inventory proves the seven exact unmerged remote historical branches before removal."
+    },
+    {
+      "path": "conversation:2026-07-31",
+      "reason": "Explicit user authorization: before publication, remote must retain only main and local must retain only remote-synchronized main."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "destructive_cleanup",
+      "unmerged_historical_branch",
+      "dirty_worktree"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "The exact remote branches are unmerged and eleven historical worktrees are dirty, but the user explicitly directed a pre-publication state with only synchronized main remaining; inventory and postconditions must be recorded before removal."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the exact final convergence target; execute only after recording the target inventory and proving every postcondition."
+  },
+  "preReviewWarnings": [
+    "Verify each destructive target against the recorded inventory; do not delete semantic tags or the active cleanup worktree before lifecycle closure."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The Summary records every exact remote and local branch/worktree target, its pre-removal SHA or dirty-state evidence, and the user authorization basis.",
+    "All remote branches other than origin/main are removed after their exact names are recorded; semantic-version tags remain untouched.",
+    "All historical local worktrees and local branches other than the synchronized main base and the active cleanup Work Item are removed only after inventory capture; active cleanup lifecycle removal occurs through ai-close-work-item.",
+    "After closure and final pruning, git worktree list contains only the synchronized main worktree and git branch -r contains only origin/main and origin/HEAD.",
+    "Focused governance checks and aggregate PR/hosted CI evidence pass without a full local quality rerun under the temporary authorized efficiency policy."
+  ],
+  "guidelines": [
+    "Treat every destructive Git target as an exact, pre-inventoried path or ref; do not use broad glob deletes.",
+    "Preserve semantic-version tags and provider release artifacts.",
+    "Record pre-state and post-state evidence in the Summary before archiving.",
+    "Use focused verification under the user-authorized temporary efficiency agreement; do not weaken hosted PR checks."
+  ],
+  "intent": {
+    "problem": "The repository retains seven unmerged remote historical branches, many stale local branches, and dozens of historical worktrees, including eleven with uncommitted changes. This conflicts with the user's required pre-publication state: remote only main and local only the remote-synchronized main.",
+    "constraints": [
+      "Delete only recorded exact refs and worktree paths; do not use broad recursive deletion.",
+      "Do not delete semantic-version tags, provider Releases, or current main.",
+      "Do not remove the active cleanup worktree before its PR, merge, and ai-close-work-item lifecycle completes.",
+      "Use focused local checks; full local quality is explicitly optional for this non-release cleanup Work Item."
+    ],
+    "rationale": "A single audited convergence Work Item makes the destructive final cleanup reviewable and leaves publication with one unambiguous, synchronized base identity."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": [
+      "exact pre-inventoried git refs",
+      "exact pre-inventoried git worktree paths"
+    ],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "user",
+      "reason": "Explicit authorization covers removal of all remote branches other than main and all local worktrees/branches other than remote-synchronized main before publication."
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly required that before publication remote retain only main and local retain only remote-synchronized main."
+  },
+  "rollbackNote": "No deleted historical branch/worktree is recreated automatically. The Summary records pre-removal SHA and path evidence so a human can deliberately recover from Git object retention or a separate authorized restoration procedure.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 702
+    }
+  },
+  "rawUserRequest": "最后发版本之前，将远端、本地的分支都整理干净。远端只有 main，本地也只有远端同步一致的 main。需要的时候，自己查看 Actions 结果，目标计划全部完成前不要停止。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-prepublication-cleanup-authorization",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:remote-and-local-main-only-authorized"
+  },
+  "declaredIntent": {
+    "summary": "Converge the repository to a single synchronized main base before provider publication.",
+    "requestedCapabilities": ["ai_governance", "software_design"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A clean historical worktree and its local branch are obsolete.",
+      "expected": "Its exact path and ref are recorded, then removed without affecting synchronized main.",
+      "verificationPlan": "Capture pre-state inventory and prove absence from git worktree list and git branch after cleanup.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A dirty historical worktree and an unmerged remote historical branch remain before publication.",
+      "expected": "The user-authorized exact target inventory is preserved in the Summary before forced removal; semantic tags remain untouched.",
+      "verificationPlan": "Record dirty paths and SHA/ref state, then prove remote and local branch/worktree convergence after closure.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/prepublish-branch-worktree-convergence-20260731.json",
+    "baseCommit": "76f523c5450a97fabcb3a7146a488eeb215d8079",
+    "initialScopeDigest": "63d81564e17085122eddf3e1378c46d9b61806bc2dbd45fd8f7049ff78a63242",
+    "contractSkeletonDigest": "093de4168bcd6be000868a314b2eafdeaa91f8b5ccb6ab2b9105784bc86f5970"
+  }
+}
