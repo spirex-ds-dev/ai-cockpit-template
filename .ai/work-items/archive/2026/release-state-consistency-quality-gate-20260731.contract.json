@@ -1,0 +1,280 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-state-consistency-quality-gate-20260731",
+  "mode": "code",
+  "title": "Require canonical release state consistency in full quality",
+  "baseCommit": "567b9ed400d4ee7f75fd52ed95e575c368464f2b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-state-consistency-quality-gate-20260731.contract.json",
+    ".ai/work-items/active/release-state-consistency-quality-gate-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-state-consistency-quality-gate-20260731.outcome.json",
+    ".ai/work-items/active/release-state-consistency-quality-gate-20260731.outcome.md",
+    "Makefile",
+    "release-state.json",
+    "tests/test_quality_gate_architecture.py",
+    "tests/test_release_state_consistency.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing release.json, next-release.json, the v0.5.45 candidate, release.yml, installer behavior, tags, GitHub Releases, or provider state.",
+    "Weakening the canonical release-state checker, its metadata-digest checks, or any existing quality/release gate.",
+    "Publishing, deleting, moving, or retargeting an immutable version tag or public release asset."
+  ],
+  "sources": [
+    {
+      "path": "Makefile",
+      "reason": "Current full quality graph omits check-release-state-consistency while quality-release contains it."
+    },
+    {
+      "path": "scripts/check_release_state_consistency.py",
+      "reason": "Canonical checker that already detects stale published/candidate metadata digests."
+    },
+    {
+      "path": "release.json",
+      "reason": "The d7360d9d supply-chain refresh changed this published projection without refreshing the canonical state digest."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Canonical projection currently declares stale metadataDigests.published and must be aligned to release.json bytes."
+    },
+    {
+      "path": "tests/test_quality_gate_architecture.py",
+      "reason": "Regression coverage for the bounded full-quality gate graph."
+    },
+    {
+      "path": "tests/test_release_state_consistency.py",
+      "reason": "Deterministic unit coverage for canonical release projection drift."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Byte-bound evidence inventory for the Makefile and release-state regression must be regenerated after their change without changing capability status or claims."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Generated alignment evidence binds the changed Makefile and Capability Truth matrix and must be refreshed rather than left stale."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "The final Japanese reassessment byte-binds the changed Makefile and Capability Truth matrix, so its generated evidence must be refreshed before documentation alignment can be recomputed."
+    },
+    {
+      "path": "conversation:2026-07-31-release-flow-defect-first",
+      "reason": "User requires discovered process defects to be corrected before the paused release can continue."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release_governance",
+      "quality_gate_omission",
+      "metadata_integrity"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "A stale canonical release metadata digest can evade ordinary quality and reach release preparation; this corrective must fail closed without broadening publication authority."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized correcting discovered workflow defects before resuming release, while retaining fail-closed checks and the later full PR lifecycle."
+  },
+  "preReviewWarnings": [
+    "This Work Item must add a quality-path regression, not merely repair the current stale digest.",
+    "The release state repair must change only metadataDigests.published to the SHA-256 of current release.json bytes.",
+    "The paused v0.5.45 release branch remains out of this Work Item and may resume only after this corrective is merged and closed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The current release-state.json metadataDigests.published exactly equals the SHA-256 of the current release.json bytes, while every other release identity field remains unchanged.",
+    "make quality includes a named, timed check-release-state-consistency gate in its normal full-quality graph; it is not limited to quality-release.",
+    "A regression test proves the full-quality graph contains the gate and a repository-level test fails when a real canonical metadata digest drifts.",
+    "The Capability Truth matrix is regenerated from the changed source/test evidence without changing capability status, claim scope, or limitations.",
+    "The generated pre-release documentation alignment evidence is refreshed and remains semantically aligned after the bounded quality-gate change.",
+    "The final Japanese reassessment is regenerated from the same current source bytes and retains zero blocking findings; this does not claim new Japanese capability beyond the existing assessment boundary.",
+    "Focused tests and checks prove the corrected state passes, a mutated digest fails, and the added gate remains in the quality graph without introducing parallel write conflicts.",
+    "The corrective completes ai-finish, direct active report, archive, one PR, hosted verification, merge, ai-close-work-item, branch deletion, and synchronized main before the paused release is resumed."
+  ],
+  "guidelines": [
+    "Repair the process as well as the current state: no metadata-only fix without an executable quality-path regression.",
+    "Keep release identity and external publication entirely out of scope.",
+    "Use the canonical checker as the release-state authority; do not duplicate its validation logic in Makefile.",
+    "Preserve the paused release Contract and immutable archived evidence unchanged."
+  ],
+  "intent": {
+    "problem": "d7360d9d updated release.json supply-chain evidence without updating release-state.json.metadataDigests.published. The canonical checker detects the resulting drift, but normal make quality omitted that checker, so the inconsistent state could pass ordinary quality and block only late in release preparation.",
+    "constraints": [
+      "Do not alter release identity, candidate v0.5.45, provider workflow, installer, tags, assets, or GitHub Release state.",
+      "Add the existing canonical checker to the normal full-quality graph as a separate timed gate.",
+      "Prove both actual-repository state alignment and a negative metadata-drift case.",
+      "Do not resume or modify the paused release Work Item in this corrective."
+    ],
+    "rationale": "Running the canonical state checker in ordinary full quality prevents release projection drift from surviving unrelated supply-chain refreshes and moves the failure to the earliest shared verification boundary."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "User's temporary efficiency authorization permits focused local verification for corrective Work Items; the focused quality-graph and release-state checks remain required, and hosted PR checks still provide independent full-quality evidence."
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A release.json byte change leaves release-state metadataDigests.published stale.",
+      "expected": "The canonical checker fails with a metadata digest error.",
+      "verificationPlan": "Use the repository-level checker regression with a deliberately altered published projection/digest relationship.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "The current canonical projection is aligned after the narrow repair.",
+      "expected": "check-release-state-consistency passes and only metadataDigests.published changes in release-state.json.",
+      "verificationPlan": "Compute the SHA-256 of current release.json, update only the declared digest, then run the checker and exact diff inspection.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Normal full quality executes canonical release-state consistency.",
+      "expected": "quality-evidence-group includes a named qg-check-release-state-consistency wrapper alongside the existing release-evidence gate.",
+      "verificationPlan": "Assert the Makefile graph in a focused architecture test and inspect make -n quality output.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "The corrective does not change release identity or external publication state.",
+      "expected": "release.json, next-release.json, workflows, tags, and provider Releases remain untouched.",
+      "verificationPlan": "Inspect the final diff, git tag/ref inventory, and GitHub Release state before finish.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "rawUserRequest": "Before release, fix any discovered process problem rather than repeatedly attempting the release. Continue the authorized plan without unnecessary stops; each Work Item still needs Contract, verification, direct report, archive, PR, hosted CI, merge, closure, and branch cleanup.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-release-flow-defect-first",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:user-authorized-process-corrective-before-resuming-v0.5.45-release"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Make canonical release-state projection integrity a normal full-quality gate, repair the observed digest drift, and keep release publication paused until the independent corrective closes.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized continuous plan",
+    "reason": "The user explicitly authorized fixing discovered process defects before release and continuing through the full governed corrective lifecycle, without weakening any release or quality gate."
+  },
+  "rollbackNote": "Revert the Makefile gate and regression tests together if they cause an unrelated verified regression; never revert to a stale canonical state digest or alter release identity as a rollback shortcut.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 697
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-state-consistency-quality-gate-20260731.json",
+    "baseCommit": "567b9ed400d4ee7f75fd52ed95e575c368464f2b",
+    "initialScopeDigest": "94be6f63a88433e81588fb6a57ee43f7fb1f0f5d9bfaadb9259bbaf264366e79",
+    "contractSkeletonDigest": "ade828c226f7938982a317833c9a95efee63ed258e35fb01a97b6ae3b61985e0"
+  }
+}
