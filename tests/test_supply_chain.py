@@ -141,8 +141,14 @@ def test_secret_scanning_keeps_private_key_fixture_exemption(tmp_path, monkeypat
     fixture = repo / "tests" / "test_core_gates.py"
     fixture.parent.mkdir(parents=True)
     fixture.write_text(
-        "-" * 5 + "BEGIN PRIVATE KEY" + "-" * 5 + "\nabc\n" + "-" * 5
-        + "END PRIVATE KEY" + "-" * 5 + "\n",
+        "-" * 5
+        + "BEGIN PRIVATE KEY"
+        + "-" * 5
+        + "\nabc\n"
+        + "-" * 5
+        + "END PRIVATE KEY"
+        + "-" * 5
+        + "\n",
         encoding="utf-8",
     )
     subprocess.run(["git", "add", "tests/test_core_gates.py"], cwd=repo, check=True)
