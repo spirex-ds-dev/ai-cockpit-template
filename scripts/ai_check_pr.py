@@ -385,9 +385,14 @@ def historical_recovery_receipt_paths(
     for predecessor, recovery in zip(prefix, prefix[1:]):
         predecessor_contract, predecessor_summary = predecessor[1], predecessor[2]
         recovery_contract, recovery_summary = recovery[1], recovery[2]
-        if (
-            recovery_summary.get("archiveSequence")
-            != predecessor_summary.get("archiveSequence") + 1
+        predecessor_sequence = predecessor_summary.get("archiveSequence")
+        recovery_sequence = recovery_summary.get("archiveSequence")
+        if not (
+            isinstance(predecessor_sequence, int)
+            and not isinstance(predecessor_sequence, bool)
+            and isinstance(recovery_sequence, int)
+            and not isinstance(recovery_sequence, bool)
+            and recovery_sequence == predecessor_sequence + 1
         ):
             return set()
         predecessor_base = predecessor_contract.get("baseCommit")
