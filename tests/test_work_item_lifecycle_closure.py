@@ -64,7 +64,10 @@ def test_make_close_work_item_forwards_explicit_worktree_argument() -> None:
         check=True,
     )
 
-    assert 'scripts/ai_close_work_item.py --task "example" --worktree /tmp/registered-child' in result.stdout
+    assert (
+        'scripts/ai_close_work_item.py --task "example" --worktree /tmp/registered-child'
+        in result.stdout
+    )
 
 
 def test_archived_evidence_uses_strict_summary_validation() -> None:
