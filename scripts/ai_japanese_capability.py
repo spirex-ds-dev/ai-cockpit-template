@@ -406,6 +406,18 @@ def _lifecycle_fixture_exists() -> bool:
 
 def _uninstall_path_exists() -> bool:
     installation = _read("docs/getting-started/installation.ja.md")
+    troubleshooting = _read("docs/troubleshooting/installation.ja.md")
+    uninstall = _read("docs/troubleshooting/uninstall.ja.md")
+    troubleshooting_link = (Path("..") / "troubleshooting" / "installation.ja.md").as_posix()
+    if uninstall:
+        positions = [uninstall.find(marker) for marker in JAPANESE_UNINSTALL_MARKERS]
+        return (
+            troubleshooting_link in installation
+            and "uninstall.ja.md" in troubleshooting
+            and "アンインストール" in uninstall
+            and all(position >= 0 for position in positions)
+            and positions == sorted(positions)
+        )
     positions = [installation.find(marker) for marker in JAPANESE_UNINSTALL_MARKERS]
     return (
         "アンインストール" in installation
@@ -419,7 +431,7 @@ def _uninstall_path_exists() -> bool:
 
 
 def _calibration_session_evidence_boundary_is_truthful() -> bool:
-    installation = _read("docs/getting-started/installation.ja.md")
+    installation = _read("docs/reference/calibration-session-model.ja.md")
     return (
         "<!-- calibration-session-evidence-boundary: "
         "combined-stage-seven-column-record,labels-not-actor-proof -->"

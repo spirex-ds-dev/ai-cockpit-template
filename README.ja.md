@@ -29,7 +29,7 @@ Quality Gate の責任範囲、timing 証拠、Work Item の追跡手順は[Qual
 
 企業向け統制の境界については、[Enterprise Control Boundary Checklist](docs/reference/enterprise-control-checklist.md) と [status matrix](docs/reference/enterprise-control-matrix.json) を参照してください。リポジトリ内の証拠は外部統制の検証を意味しません。公開前には必須の WI-16 日本語能力評価を完了する必要があります。
 
-現行の導入案内は、[30 秒で開始](docs/getting-started/30-second-start.ja.md)、[標準導入ガイド](docs/getting-started/standard-adoption-guide.ja.md)、[セキュリティとリリース検証](docs/getting-started/security-release-verification.ja.md)の三層です。履歴計画とアーカイブ記録は現在の手順ではなく、証拠のコンテキストとして扱います。
+初めての人は[インストール手順](docs/getting-started/installation.ja.md)から始めてください。六つの短いプロンプトで進め、プロジェクト校正は独立した Work Item に引き渡します。[30 秒で開始](docs/getting-started/30-second-start.ja.md)、[標準導入ガイド](docs/getting-started/standard-adoption-guide.ja.md)、[セキュリティとリリース検証](docs/getting-started/security-release-verification.ja.md)は詳細な経路として残ります。セキュリティ担当者は[厳格なインストールとサプライチェーン検証](docs/getting-started/installation-security.ja.md)を使えます。校正とトラブルシューティングにも専用ガイドがあります。履歴計画とアーカイブ記録は現在の手順ではなく、証拠のコンテキストとして扱います。
 
 [English](README.md) | [中文](README.zh-CN.md)
 

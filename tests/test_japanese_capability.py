@@ -338,6 +338,28 @@ def test_uninstall_capability_rejects_keyword_only_and_requires_complete_actiona
     assert ai_japanese_capability._uninstall_path_exists() is True
 
 
+def test_uninstall_capability_accepts_a_dedicated_recovery_route_not_the_beginner_home(
+    tmp_path, monkeypatch
+):
+    installation = tmp_path / "docs/getting-started/installation.ja.md"
+    installation.parent.mkdir(parents=True)
+    installation.write_text(
+        "[トラブルシューティング](../troubleshooting/installation.ja.md)\n",
+        encoding="utf-8",
+    )
+    troubleshooting = tmp_path / "docs/troubleshooting/installation.ja.md"
+    troubleshooting.parent.mkdir(parents=True)
+    troubleshooting.write_text("[アンインストール](uninstall.ja.md)\n", encoding="utf-8")
+    uninstall = tmp_path / "docs/troubleshooting/uninstall.ja.md"
+    uninstall.write_text(
+        "# アンインストール\n" + "\n".join(ai_japanese_capability.JAPANESE_UNINSTALL_MARKERS),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_japanese_capability, "ROOT", tmp_path)
+
+    assert ai_japanese_capability._uninstall_path_exists() is True
+
+
 def test_uninstall_capability_rejects_each_missing_actionable_step(tmp_path, monkeypatch):
     installation = tmp_path / "docs/getting-started/installation.ja.md"
     installation.parent.mkdir(parents=True)
@@ -455,7 +477,7 @@ def test_japanese_installation_session_evidence_boundary_is_current():
 
 
 def test_japanese_installation_session_evidence_boundary_fails_closed(tmp_path, monkeypatch):
-    installation = tmp_path / "docs/getting-started/installation.ja.md"
+    installation = tmp_path / "docs/reference/calibration-session-model.ja.md"
     installation.parent.mkdir(parents=True)
     complete = (
         "<!-- calibration-session-evidence-boundary: "
