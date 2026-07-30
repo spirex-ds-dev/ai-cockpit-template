@@ -1,0 +1,147 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-state-consistency-final-ruff-corrective-20260731",
+  "mode": "code",
+  "title": "Deliver final lint-verified release-state quality corrective",
+  "baseCommit": "567b9ed400d4ee7f75fd52ed95e575c368464f2b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-state-consistency-final-ruff-corrective-20260731.contract.json",
+    ".ai/work-items/active/release-state-consistency-final-ruff-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-state-consistency-final-ruff-corrective-20260731.outcome.json",
+    ".ai/work-items/active/release-state-consistency-final-ruff-corrective-20260731.outcome.md", "Makefile", "release-state.json", "tests/test_quality_gate_architecture.py", "tests/test_release_state_consistency.py", "docs/reference/capability-truth-matrix.json", "docs/reference/capability-truth-matrix.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Changing release identity, workflow, installer, tags, GitHub Releases, or provider state.", "Reusing, altering, or merging failed archived PR #504 or #505.", "Weakening Ruff, the canonical checker, normal quality, or hosted verification."],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/release-state-consistency-final-ruff-corrective-20260731.contract.json",
+      "reason": "Lifecycle evidence."
+    }, {"path":"Makefile","reason":"Normal quality graph to receive the existing canonical checker."}, {"path":"scripts/check_release_state_consistency.py","reason":"Canonical authority."}, {"path":"release.json","reason":"Exact metadata-digest input."}, {"path":"tests/test_release_state_consistency.py","reason":"Hosted failure identified an exact I001 blank-line fix."}, {"path":"https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30563181878/job/90941120705","reason":"Hosted failure evidence."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high", "riskTypes": ["release_governance","ci_regression","metadata_integrity"], "unknownsReviewComplete": true,
+    "reason": "Two immutable archived attempts failed hosted lint; this replacement must prove exact final-file lint and release-state behavior."
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue", "reason": "User authorized the continuous plan and full corrective lifecycle."
+  },
+  "preReviewWarnings": [
+    "Run exact Ruff I001 verification after the final source change and before archive; #504/#505 remain audit evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Normal make quality includes a named timed check-release-state-consistency gate that delegates to scripts/check_release_state_consistency.py.", "release-state.json metadataDigests.published equals SHA-256 of current release.json without other release identity changes.", "The exact two test modules pass python3 -m ruff check --select I001 and python3 -m ruff format --check immediately before ai-finish.", "Focused release-state and quality-graph tests pass; capability, Japanese, and pre-release alignment artifacts are regenerated without expanding claims."
+  ],
+  "guidelines": [
+    "Use an independent replacement and preserve #504/#505 immutable archive evidence.", "Fix only the observed blank-line import-order cause; do not weaken lint.", "Use the existing canonical checker; do not duplicate validation.", "Keep publication and version identity out of scope."
+  ],
+  "intent": {
+    "problem": "Hosted template-smoke rejected #505 only because test_release_state_consistency.py retained one extra blank line between its local import and ROOT. Its archive cannot be altered.", "constraints": ["Start from origin/main and independently deliver the bounded release-state corrective.", "Do not mutate #504/#505 or release/provider state.", "Run exact final-file Ruff I001 and format checks locally; hosted CI remains mandatory."], "rationale": "A source-identical replacement with the exact deterministic formatting correction retains audit integrity and moves release-state drift detection into normal quality."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false, "reason": "User temporary efficiency authorization permits focused local verification; hosted PR CI remains mandatory."
+    }
+  ],
+  "scenarioCoverage": [{"scenario":"Exact final source import layout is hosted-Ruff clean.","expected":"No I001 and no format diff.","verificationPlan":"Run Ruff I001 and format checks after the last edit.","required":true,"status":"unverified","evidence":[]},{"scenario":"Normal quality includes release-state consistency.","expected":"Named timed gate appears.","verificationPlan":"Focused architecture test and make -n quality.","required":true,"status":"unverified","evidence":[]},{"scenario":"Published state is aligned and drift remains rejected.","expected":"Checker and negative coverage behave fail-closed.","verificationPlan":"Focused release-state tests and checker.","required":true,"status":"unverified","evidence":[]},{"scenario":"No release/provider identity changes occur.","expected":"Diff excludes them.","verificationPlan":"Inspect final diff and tags.","required":true,"status":"unverified","evidence":[]}],
+  "rawUserRequest":"Continue the authorized plan, repair discovered process defects before release, retain PR lifecycle, and avoid unnecessary local full quality.",
+  "rawRequestSource":{"type":"human","reference":"conversation:2026-07-31-continuous-plan-authorization","capturedAt":"2026-07-31","digest":"sha256:continuous-plan-authorized"},
+  "requestedOperation":{"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "declaredIntent":{"summary":"Deliver a final lint-verified independent replacement of the release-state quality corrective.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true, "approvedBy": "user-authorized continuous plan", "reason": "User authorized correction and release continuation without weakening gates."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 697
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-state-consistency-final-ruff-corrective-20260731.json",
+    "baseCommit": "567b9ed400d4ee7f75fd52ed95e575c368464f2b",
+    "initialScopeDigest": "a146f77b121458bd976146fd8562ebf845b841918d86a3bf491822475a938a14",
+    "contractSkeletonDigest": "928ab25bc982e4d1bf0832f7fe47464a4725500309d572f1ed03c3a0b193112f"
+  }
+}
