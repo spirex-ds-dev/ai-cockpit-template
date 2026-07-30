@@ -37,6 +37,18 @@ def test_project_format_check_runs_ruff_format_check():
     assert "git diff --check" in result.stdout
 
 
+def test_makefile_exposes_real_absurd_injection_document_alignment_check():
+    result = subprocess.run(
+        ["make", "-n", "check-real-absurd-injection-docs"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "scripts/check_real_absurd_injection_docs.py" in result.stdout
+
+
 def test_supply_chain_checks_are_exposed_as_make_targets():
     result = subprocess.run(
         [

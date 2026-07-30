@@ -79,6 +79,8 @@ These are repository-local implementation facts. They do not prove universal sem
 
 The gates cover a finite vocabulary of known, reviewable cases: missing or stale evidence, unsupported claims, invalid Work Item state, scope violations, raw-request and operation mismatches, selected prompt-injection indicators, unsafe critical-domain effects, and required human confirmation. They are fail-closed for the cases they recognize.
 
+The [real absurd and injection assessment](reference/real-absurd-injection-cases.md) records twelve concrete negative cases and their current result. It distinguishes the five input-trust cases directly covered today from seven repository/lifecycle evidence gaps that require review; it does not infer malicious intent or turn an unbound gate into a protection claim.
+
 They do not detect an agent's internal state, understand every language nuance, provide universal prompt-injection defense, or establish that an external control is configured. Capability Truth Matrix is the only source of current implementation status; a concept in this document cannot upgrade a capability from planned, template-only, adopter-installed, or externally required to implemented.
 
 <!-- section-id: machine-readable-evidence -->
