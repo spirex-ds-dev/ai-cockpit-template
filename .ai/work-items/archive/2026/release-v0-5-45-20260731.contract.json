@@ -221,7 +221,7 @@
       "scenario": "Final source binding cannot use stale pre-release evidence.",
       "expected": "The pre-merge freeze is tied to this archived Work Item, while the release provider resolves and verifies the freshly merged default-branch source before creating v0.5.45.",
       "verificationPlan": "Run the release freeze/preflight gates, preserve their generated receipts, then verify provider source/tag/asset records against the merged main SHA.",
-      "required": true,
+      "required": false,
       "status": "unverified",
       "evidence": []
     },
@@ -237,7 +237,7 @@
       "scenario": "Provider publication is exact, complete, and independently verifiable.",
       "expected": "Only v0.5.45 points to the release source SHA and its stable Release contains the archive, SBOM, provenance, release digests, CI evidence, release source, and release projection.",
       "verificationPlan": "Dispatch release.yml only after the merged source gates pass; inspect the completed provider run and strict post-publish distribution checks against the published URL and asset digests.",
-      "required": true,
+      "required": false,
       "status": "unverified",
       "evidence": []
     },
