@@ -1,0 +1,179 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-evidence-convergence-final-corrective-20260731",
+  "mode": "code",
+  "title": "Converge release evidence finish gate after installer parity repair",
+  "baseCommit": "c407259048e8a993e4da95a5068899eb9a0a7f26",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-evidence-convergence-final-corrective-20260731.contract.json",
+    ".ai/work-items/active/release-evidence-convergence-final-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-evidence-convergence-final-corrective-20260731.outcome.json",
+    ".ai/work-items/active/release-evidence-convergence-final-corrective-20260731.outcome.md",
+    ".ai/cockpit/checks.yaml",
+    "Makefile",
+    "scripts/ai_finish.py",
+    "tests/test_finish_readiness.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Publishing a release, creating tags or provider assets, modifying the already-archived #515 evidence, and weakening hosted verification."],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30578747334/job/90993413410",
+      "reason": "Hosted failure proves stale Capability Truth escaped the old finish path."
+    },
+    {"path": "scripts/ai_finish.py", "reason": "Canonical finish flow requiring the deterministic pre-Outcome gate."},
+    {"path": "scripts/ai_capability_truth.py", "reason": "Canonical deterministic generator and validator."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/515", "reason": "Failed archived replacement retained as audit evidence and not rewritten."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "generated_evidence_integrity"
+    ],
+    "reason": "This is an independent replacement from the repaired base, preserving the failed archived branch as audit evidence."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized corrective Work Items, their PR lifecycle, and release preparation."
+  },
+  "preReviewWarnings": [
+    "Do not revive or alter archived PR #515; this Work Item is the fresh, one-PR-one-Work-Item replacement."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "One replacement PR based on the repaired #513 base contains the Capability Truth finish gate and exactly one new Work Item.",
+    "ai-finish runs the deterministic Capability Truth check before Outcome creation even when quality is explicitly skipped.",
+    "The stale-matrix regression and focused Capability Truth, Japanese assessment, and documentation-alignment checks pass.",
+    "Hosted CI remains mandatory before release work resumes."
+  ],
+  "guidelines": [
+    "Use only the canonical deterministic Capability Truth validator; do not add a duplicate rule engine.",
+    "Preserve fail-closed behavior and do not regenerate evidence silently during finish.",
+    "Regenerate dependent evidence in matrix, Japanese assessment, documentation-alignment order."
+  ],
+  "intent": {
+    "problem": "The original #515 archive cannot be rebased over the installer corrective because that would stack archived Work Items and duplicate archive sequence evidence.",
+    "constraints": ["Deliver from repaired #513 head without inheriting or rewriting #515 archive records.", "Do not weaken hosted verification; local broad quality remains skipped only under the user's temporary efficiency allowance.", "Retain failed #515 as audit evidence until final documented cleanup."],
+    "rationale": "A fresh replacement Work Item is independently reviewable and structurally eligible for the PR gate."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user efficiency authorization permits focused local verification; hosted PR CI remains mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized the full corrective, PR, merge, closure, cleanup, and release plan."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 706
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-evidence-convergence-final-corrective-20260731.json",
+    "baseCommit": "c407259048e8a993e4da95a5068899eb9a0a7f26",
+    "initialScopeDigest": "3e080901978e243da253bcbeab5e2bd364fba301268a5ed86c2581dee6b63954",
+    "contractSkeletonDigest": "dfa611b82bdb433ea018c56708b88f50da53e5cf372888c38e4c26ccfd4eaa95"
+  },
+  "rawUserRequest": "继续执行所有已授权的纠正工单；需要时自行查看 Actions；在全部目标计划完成前不要停止。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-31-continuous-plan-authorization", "capturedAt": "2026-07-31", "digest": "sha256:final-release-evidence-convergence"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Replace the archived failed release-evidence delivery with one structurally valid freshness-gate Work Item from the repaired base.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "scenarioCoverage": [
+    {"scenario": "Capability Truth is stale while broad quality is skipped.", "expected": "Finish stops before Outcome generation.", "verificationPlan": "Focused ai_finish regression.", "required": true, "status": "verified", "evidence": ["tests/test_finish_readiness.py"]},
+    {"scenario": "Replacement branch is compared to the repaired #513 base.", "expected": "PR aggregate sees exactly one new Work Item.", "verificationPlan": "Run check-ai-pr with the recorded repaired base.", "required": true, "status": "verified", "evidence": [".ai/work-items/starts/release-evidence-convergence-final-corrective-20260731.json"]}
+  ]
+}

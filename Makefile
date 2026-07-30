@@ -36,6 +36,7 @@ check-docs-metadata check-trust-layer-docs check-real-absurd-injection-docs chec
 	check-lockfile-reproducibility \
 	check-quality-architecture \
 	check-deprecated-assets \
+	check-capability-truth \
 	check-instruction-traceability \
 	check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence \
 	ai-start ai-resume-work-item ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
@@ -130,6 +131,9 @@ check-quality-architecture:
 
 check-deprecated-assets:
 	$(AI_PYTHON) scripts/check_deprecated_assets.py
+
+check-capability-truth:
+	$(AI_PYTHON) scripts/ai_capability_truth.py
 
 check-instruction-traceability:
 	$(AI_PYTHON) scripts/check_instruction_traceability.py
