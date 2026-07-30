@@ -1,0 +1,185 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-alignment-generated-artifact-replacement-20260730",
+  "mode": "code",
+  "title": "Fail closed for stale documentation-alignment generated artifacts",
+  "baseCommit": "e6cced1d473e601bc747f75fcf394cb657a84ba1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-alignment-generated-artifact-replacement-20260730.contract.json",
+    ".ai/work-items/active/documentation-alignment-generated-artifact-replacement-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-alignment-generated-artifact-replacement-20260730.outcome.json",
+    ".ai/work-items/active/documentation-alignment-generated-artifact-replacement-20260730.outcome.md",
+    "scripts/check_pre_release_documentation_alignment.py",
+    "scripts/check_docs_metadata.py",
+    "tests/test_pre_release_documentation_alignment.py",
+    "docs/reference/capability-truth-matrix.json"
+  ],
+  "outOfScope": ["Editing closed PR #498/#499 or archived evidence.", "Changing Japanese assessment, release state, or substantive Trust Layer claims."],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30552983573",
+      "reason": "PR #498 exposed stale report artifacts after a plan update."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30554439110",
+      "reason": "PR #499 exposed Ruff 0.16-only import-order and ISC004 violations in the initial regression test."
+    },
+    {
+      "path": "scripts/check_pre_release_documentation_alignment.py",
+      "reason": "Derives current documentation-alignment evidence and owns generated artifacts."
+    },
+    {
+      "path": "tests/test_pre_release_documentation_alignment.py",
+      "reason": "Owns direct regression coverage for generated-artifact drift."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "generated_artifact_drift",
+      "ci_lint_version_drift"
+    ],
+    "reason": "Stale source-derived artifacts can misstate release documentation alignment; CI-version drift can hide lint failures locally.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous corrective execution and the two failed hosted runs define a bounded repair path."
+  },
+  "preReviewWarnings": [
+    "Use the same Ruff 0.16 binary as hosted CI for changed Python files; verify stale artifacts fail through the normal documentation metadata command."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The checker fails closed when generated JSON or Markdown is stale and supplies the explicit regeneration command.",
+    "The existing documentation metadata command runs that freshness check.",
+    "Regression tests cover stale JSON, stale Markdown, and metadata-command integration, and pass CI Ruff 0.16.",
+    "Focused checks and required governance gates pass locally; hosted template-smoke passes before merge."
+  ],
+  "guidelines": [
+    "Preserve fail-closed evidence semantics and historical failure evidence.",
+    "Keep the repair limited to generated-artifact verification and direct tests.",
+    "Use CI-equivalent Ruff 0.16 before publishing the replacement PR."
+  ],
+  "intent": {
+    "problem": "PR #498 changed a source-bound execution plan without regenerating the checked-in alignment reports. PR #499 added a repair but hosted Ruff 0.16 rejected its regression-test formatting, which local Ruff did not detect.",
+    "constraints": ["Do not rewrite closed PR or archive evidence.", "Do not modify Japanese-bound source surfaces before the scheduled reassessment.", "Use the user-approved focused local verification exception; hosted CI remains mandatory."],
+    "rationale": "A report must fail before being treated as current. Integrating exact artifact comparison into the normal metadata command removes the manual step, while CI-equivalent lint prevents a repeat of #499."
+  },
+  "rawUserRequest": "Continue the full plan. Inspect Actions failures, correct root causes permanently, preserve evidence, and do not stop before the plan is complete.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:continue-plan-and-inspect-actions-results", "capturedAt": "2026-07-31", "digest": "sha256:continuous-plan-actions-inspection-20260731"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Repair stale generated-artifact detection and validate the replacement against CI Ruff.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "scenarioCoverage": [
+    {"scenario": "A source changes but alignment JSON or Markdown remains stale.", "expected": "The metadata command blocks with an actionable regeneration command.", "required": true, "status": "unverified", "evidence": ["tests/test_pre_release_documentation_alignment.py"], "verificationPlan": "Exercise controlled stale JSON and Markdown fixtures."},
+    {"scenario": "The replacement test uses formatting accepted by hosted Ruff 0.16.", "expected": "Direct Ruff 0.16 check passes before PR creation.", "required": true, "status": "unverified", "evidence": ["tests/test_pre_release_documentation_alignment.py"], "verificationPlan": "Install and execute Ruff 0.16 binary directly against changed Python files."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-approved focused-verification exception; hosted template-smoke remains required."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 693
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-alignment-generated-artifact-replacement-20260730.json",
+    "baseCommit": "e6cced1d473e601bc747f75fcf394cb657a84ba1",
+    "initialScopeDigest": "9fb86db89ed17fca9d9a8893d90f87d0eb4c47d8346792ca8e6e0f2f9bea2727",
+    "contractSkeletonDigest": "d0bfb9434e44dabcb4eafceb2eb4bd86246c8329be3ef3cbeffb3312832338b8"
+  }
+}
