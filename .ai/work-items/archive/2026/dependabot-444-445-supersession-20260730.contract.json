@@ -1,0 +1,229 @@
+{
+  "contractVersion": 2,
+  "workItemId": "dependabot-444-445-supersession-20260730",
+  "mode": "code",
+  "title": "dependabot-444-445-supersession-20260730",
+  "baseCommit": "2dd7e85655de725d857db49b5f72604756662f4a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/dependabot-444-445-supersession-20260730.contract.json",
+    ".ai/work-items/active/dependabot-444-445-supersession-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/dependabot-444-445-supersession-20260730.outcome.json",
+    ".ai/work-items/active/dependabot-444-445-supersession-20260730.outcome.md",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": [
+    "Changing dependency pins, lockfiles, source code, CI configuration, release metadata, tags, Releases, or published assets.",
+    "Closing, merging, rebasing, or modifying PR #403, #441, or #442.",
+    "Deleting any Git branch or worktree."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/python311-dependency-refresh-20260730.contract.json",
+      "reason": "Defines #481 as the current-main replacement for stale Dependabot PRs #444 and #445, with fresh hosted verification required before they are closed as superseded."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/python311-dependency-refresh-20260730.outcome.md",
+      "reason": "Records the completed replacement delivery and its bounded dependency scope."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Maps PLAN-DIRECTIVE-055 to the replacement delivery and requires old #444/#445 to be closed only as superseded after fresh hosted verification."
+    },
+    {
+      "path": "GitHub PR #444 and #445 state queried 2026-07-30",
+      "reason": "Both PRs remain OPEN while their exact dependency changes are already present in merged replacement PR #481."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "external_state_change",
+      "stale_branch_confusion"
+    ],
+    "reason": "Closing provider PRs changes external review state. The risk is bounded because #444 and #445 are stale, their exact two pins were delivered through merged #481, and no branch deletion is in scope.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user's explicit direction covers continuous planned Work Items and Dependabot handling before release. #481 is merged with fresh full hosted evidence, so only #444/#445 will be retired as superseded."
+  },
+  "preReviewWarnings": [
+    "Verify both target PR numbers, their open state, and their replacement evidence before provider mutation; do not close #403, #441, or #442."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "GitHub PR #444 is closed with a clear superseded-by-#481 reason after its current state and replacement evidence are verified.",
+    "GitHub PR #445 is closed with a clear superseded-by-#481 reason after its current state and replacement evidence are verified.",
+    "No source, dependency, release, tag, asset, branch, or worktree change is made by this Work Item.",
+    "PLAN-DIRECTIVE-055 records the separate closure evidence so the replacement and old-path retirement remain bidirectionally traceable."
+  ],
+  "guidelines": [
+    "Treat #481's fresh hosted checks as the only implementation evidence; never reuse or merge stale Dependabot branches.",
+    "Close only the two explicitly scoped PRs and leave their branches intact unless a separate lifecycle authority governs deletion.",
+    "Record the provider URLs and closure reasons in the Summary; do not claim the external PR action is locally testable."
+  ],
+  "intent": {
+    "problem": "Merged replacement PR #481 delivered ruff 0.16.0 and stevedore 5.9.0 from current Python 3.11 main, but stale Dependabot PRs #444 and #445 remain open and could later be mistaken for eligible delivery paths.",
+    "constraints": [
+      "Close only #444 and #445, each as superseded by merged PR #481.",
+      "Do not modify repository files other than the Work Item lifecycle artifacts and traceability record.",
+      "Do not run local full quality or full pytest under the user's temporary focused-verification direction; verify exact provider state and #481's already-passing fresh hosted evidence instead.",
+      "Do not delete remote or local branches; final branch/worktree cleanup remains a separate pre-release Work Item."
+    ],
+    "rationale": "Retiring obsolete provider review paths prevents accidental reuse while retaining their audit history. It is the smallest safe completion of the user-requested Dependabot intake before release."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "User's temporary plan-wide authorization excludes local full quality and full pytest for non-release Work Items. This provider-state-only task uses exact GitHub state verification, required governance gates, and the already-passed fresh hosted checks on merged #481."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human",
+    "reason": "The user authorized continuous execution of planned Work Items and the required Contract, Summary, status, archive, and traceability lifecycle evidence."
+  },
+  "rollbackNote": "Reopen #444 or #445 only if the recorded replacement evidence is later found incorrect; repository changes can be reverted through this Work Item's PR before merge.",
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "rawUserRequest": "#441、#442、#444、#445、#403 处理完以后，远端 main 以外的分支是否可以删除；Dependabot 的 PR 放在发布之前处理。所有计划工单已授权继续。临时方案：除发布版本和各个工单 PR 外，尽可能不走本地全量测试和完整门禁；将授权写入 Contract，但不要写入工程规则。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:dependabot-intake-and-temporary-focused-verification-2026-07-30",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:dependabot-444-445-supersession-user-direction"
+  },
+  "declaredIntent": {
+    "summary": "Retire stale Dependabot provider review paths only after their replacement delivery has been independently merged and verified.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Both targets are still the original stale, open Dependabot PRs and their exact changes are present in merged #481.",
+      "required": true,
+      "status": "verified",
+      "expected": "#444 and #445 are OPEN against main; #481 is MERGED, contains the two dependency updates, and all its current hosted checks succeeded.",
+      "verificationPlan": "Query GitHub PR state and #481 check state immediately before closure.",
+      "evidence": [
+        "GitHub query 2026-07-30: #481 MERGED at 2dd7e85655de725d857db49b5f72604756662f4a; every current PR check SUCCESS.",
+        "GitHub query 2026-07-30: #444 and #445 identified as the original Dependabot PRs against main."
+      ]
+    },
+    {
+      "scenario": "Only #444 and #445 are retired as superseded without source, branch, release, or unrelated PR mutation.",
+      "required": true,
+      "status": "verified",
+      "expected": "Both target PRs are CLOSED with a supersession reason; #403, #441, and #442 retain their prior states.",
+      "verificationPlan": "Query all five PR states after the two provider closure calls and record the results.",
+      "evidence": [
+        "GitHub query 2026-07-30: #444 CLOSED at 2026-07-30T09:44:32Z and #445 CLOSED at 2026-07-30T09:44:40Z by Dependabot up-to-date notices.",
+        "GitHub query 2026-07-30: #403 remained OPEN; #441 and #442 remained CLOSED."
+      ]
+    }
+  ],
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 687
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/dependabot-444-445-supersession-20260730.json",
+    "baseCommit": "2dd7e85655de725d857db49b5f72604756662f4a",
+    "initialScopeDigest": "9e2b6562ca93e39df284b5f11fc0748e877c0c6dab146f086fefad4d73be2fa7",
+    "contractSkeletonDigest": "d0b581be9a3c849fb07dd968918b89fb5a608c8f27318f2b25e5d1d762fabf27"
+  }
+}

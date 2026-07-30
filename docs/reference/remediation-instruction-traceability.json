@@ -1810,10 +1810,12 @@
       "id": "PLAN-DIRECTIVE-055",
       "summary": "Replace stale Dependabot #444 and #445 from current Python 3.11 main with one current-base dependency refresh: update only stevedore to 5.9.0 and ruff to 0.16.0, regenerate the hash-locked development and candidate supply-chain evidence, and require fresh hosted verification before the old PRs are closed as superseded.",
       "planWorkItems": [
-        "DEPENDABOT-INTAKE-001"
+        "DEPENDABOT-INTAKE-001",
+        "DEPENDABOT-INTAKE-001-SUPERSESSION-CLOSURE"
       ],
       "contractPaths": [
-        ".ai/work-items/archive/2026/python311-dependency-refresh-20260730.contract.json"
+        ".ai/work-items/archive/2026/python311-dependency-refresh-20260730.contract.json",
+        ".ai/work-items/archive/2026/dependabot-444-445-supersession-20260730.contract.json"
       ],
       "implementationEvidence": [
         "requirements-dev.in",
@@ -1828,7 +1830,8 @@
       "acceptanceEvidence": [
         "tests/test_workflows.py",
         "scripts/check_supply_chain.py",
-        "docs/reference/remediation-instruction-traceability.json"
+        "docs/reference/remediation-instruction-traceability.json",
+        ".ai/work-items/archive/2026/dependabot-444-445-supersession-20260730.summary.json"
       ],
       "verificationCommands": [
         "PYTHONPATH=. pytest -q tests/test_workflows.py",
@@ -1836,7 +1839,8 @@
         "make check-sbom",
         "make check-provenance",
         "make check-release-evidence",
-        "Fresh hosted required checks on the replacement PR before merge"
+        "Fresh hosted required checks on the replacement PR before merge",
+        "GitHub provider verification that #444 and #445 are closed as superseded by #481"
       ],
       "requiredNamedPaths": [
         {
