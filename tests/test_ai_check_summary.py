@@ -236,7 +236,26 @@ def test_documentation_alignment_rejects_untrusted_evidence_paths(tmp_path, monk
 
     issues = ai_check_summary.validate_documentation_alignment(summary)
 
-    assert any("must be a Git-tracked repository file" in issue for issue in issues)
+    assert any(
+        "must be a Git-tracked repository file or an active Contract-scoped file" in issue
+        for issue in issues
+    )
+
+
+def test_documentation_alignment_accepts_untracked_active_contract_scope(tmp_path, monkeypatch):
+    evidence = ".ai/cockpit/README.md"
+    (tmp_path / evidence).parent.mkdir(parents=True)
+    (tmp_path / evidence).write_text("runtime documentation", encoding="utf-8")
+    monkeypatch.setattr(ai_check_summary, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_summary, "_is_git_tracked_repository_path", lambda _path: False)
+
+    assert (
+        ai_check_summary.validate_documentation_alignment(
+            aligned_documentation_summary(evidence=evidence),
+            {"contractVersion": 2, "scope": [".ai/cockpit/**"]},
+        )
+        == []
+    )
 
 
 def test_documentation_alignment_reverse_maps_changed_documentation_surfaces():
