@@ -36,7 +36,11 @@ This page describes the stable documentation split for AI Cockpit. It keeps the 
 | Page | Role | Reader question |
 | --- | --- | --- |
 | [README.md](../../README.md) | Entry page | What is this, and how do I start quickly? |
-| [Complete trilingual Installation](../getting-started/installation.md) | Beginner adoption source route | What exact prompt, choice, scaffold checkpoint, calibration stage, PR/CI decision, recovery, and closure step comes next? |
+| [Trilingual Installation](../getting-started/installation.md) | Beginner adoption source route | Where do I start, what short prompt do I copy, what result should I see, and when do I stop? |
+| [Strict Installation and Supply-Chain Verification](../getting-started/installation-security.md) | Security-owner route | How are release metadata, assets, SHA-256, mirrors, and exceptions verified? |
+| [Project Calibration Guide](../getting-started/calibration.md) | Project-calibrator route | Which plain-language project questions must a calibration Work Item answer? |
+| [Calibration Session Model](calibration-session-model.md) | Maintainer/auditor route | How are persisted facts, proposals, confirmation, and activation bounded? |
+| [Installation Troubleshooting](../troubleshooting/installation.md) | Recovery route | Which symptom stops the path, and who owns recovery? |
 | [iOS / Android / Java examples](../getting-started/examples/ios.md) | Platform calibration | Which repository evidence and platform boundaries must be collected without claiming a toolchain, device, signing setup, or hosted run? |
 | [30-Second Start](../getting-started/30-second-start.md) | Guided entry | What is the shortest wizard path, and what remains afterward? |
 | [Standard Adoption Guide](../getting-started/standard-adoption-guide.md) | Adoption lifecycle | How do calibration, Work Items, CI, human approval, and target-project adaptation fit together? |
@@ -72,7 +76,10 @@ The Human-Agent Trust Layer is the authoritative Why / What / How explanation. I
 
 | Layer | English | 中文 | 日本語 |
 | --- | --- | --- | --- |
-| Complete beginner installation | [Installation](../getting-started/installation.md) | [安装](../getting-started/installation.zh-CN.md) | [インストール](../getting-started/installation.ja.md) |
+| Beginner installation | [Installation](../getting-started/installation.md) | [安装](../getting-started/installation.zh-CN.md) | [インストール](../getting-started/installation.ja.md) |
+| Strict security route | [Strict verification](../getting-started/installation-security.md) | [严格验证](../getting-started/installation-security.zh-CN.md) | [厳格な検証](../getting-started/installation-security.ja.md) |
+| Calibration guide | [Calibration](../getting-started/calibration.md) | [校准](../getting-started/calibration.zh-CN.md) | [校正](../getting-started/calibration.ja.md) |
+| Installation recovery | [Troubleshooting](../troubleshooting/installation.md) | [故障排除](../troubleshooting/installation.zh-CN.md) | [トラブルシューティング](../troubleshooting/installation.ja.md) |
 | Shortest wizard path | [30-Second Start](../getting-started/30-second-start.md) | [30 秒开始](../getting-started/30-second-start.zh-CN.md) | [30 秒で開始](../getting-started/30-second-start.ja.md) |
 | Adoption lifecycle | [Standard Adoption Guide](../getting-started/standard-adoption-guide.md) | [标准采用指南](../getting-started/standard-adoption-guide.zh-CN.md) | [標準導入ガイド](../getting-started/standard-adoption-guide.ja.md) |
 | Security/release evidence | [Security and Release Verification](../getting-started/security-release-verification.md) | [安全与发布验证](../getting-started/security-release-verification.zh-CN.md) | [セキュリティとリリース検証](../getting-started/security-release-verification.ja.md) |
@@ -84,7 +91,8 @@ The Human-Agent Trust Layer is the authoritative Why / What / How explanation. I
 
 - Keep the README short enough that a reader can reach the installer in one glance.
 - Use README for five-minute positioning, the shortest governance loop, and the Quick Install entry; do not turn it into a complete feature catalogue or Release Reference.
-- Keep all three Installation guides complete, prompt-first, beginner-safe, and machine-aligned across the full adoption lifecycle. Shorter layers link to them and do not replace missing steps.
+- Keep all three Installation home pages thin, prompt-first, beginner-safe, and semantically aligned: map, prerequisites, six steps, completion, and routes. The first installation ends by starting calibration in a Work Item; an already-installed project starts its needed Work Item directly.
+- Keep supply-chain evidence, internal calibration mechanics, recovery variants, and the installation-document maintenance checklist outside the beginner home page.
 - Keep iOS, Android, and Java examples complete in all three languages. Detection must never be promoted to toolchain, device, signing, or hosted execution evidence.
 - Keep the 30-Second Start, Standard Adoption Guide, and Security and Release Verification complete and semantically aligned in English, Chinese, and Japanese; README entrypoints link to their own language.
 - Keep `docs/getting-started/first-work-item.md` focused on the first governed task.

@@ -1,0 +1,237 @@
+{
+  "contractVersion": 2,
+  "workItemId": "stacked-pr-archive-baseline-corrective-20260730",
+  "mode": "code",
+  "title": "Accept only verified merged child archives in stacked PR validation",
+  "baseCommit": "c4e49570c2227dd138ad08329e46a2cbb8f8b0e8",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/stacked-pr-archive-baseline-corrective-20260730.contract.json",
+    ".ai/work-items/active/stacked-pr-archive-baseline-corrective-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/stacked-pr-archive-baseline-corrective-20260730.outcome.json",
+    ".ai/work-items/active/stacked-pr-archive-baseline-corrective-20260730.outcome.md",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/reference/work-item-lifecycle-closure.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Relaxing direct PR archive-base validation.",
+    "Accepting an archive by task name, local worktree path, or mutable Closure Receipt.",
+    "Changing release state, installation content, or unrelated Work Item lifecycle behavior."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "The aggregate PR validator currently accepts only the receipt-bound historical prefix or source-linked recoveries, so it rejects valid later child PR archives merged into the active parent branch."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Regression coverage establishes the existing one-new-Work-Item and historical-receipt fail-closed boundaries."
+    },
+    {
+      "path": ".ai/work-items/recovery-receipts/wi10-stacked-pr-chain-20260730.json",
+      "reason": "The immutable receipt binds only archive sequences 674–676 and exposes why later merged children cannot be inferred through the adjacent-source rule."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/closure-hosted-evidence-replacement-20260730.contract.json",
+      "reason": "A real later child Contract with a valid Start Receipt must be accepted only when its archive pair is proven to have entered parent ancestry through a merge commit."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.md",
+      "reason": "The authoritative lifecycle reference already documents exceptional stacked closure and historical recovery boundaries that this validator must preserve."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "stacked_pr_provenance",
+      "archive_integrity"
+    ],
+    "reason": "An overly broad exception could let arbitrary unrelated archive pairs bypass the one-Work-Item PR boundary; acceptance must bind a valid Start Receipt, immutable Contract/Summary pair, and a two-parent merge in the parent branch ancestry.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly directed process-defect correction before release and permitted focused verification without a full test run for this repair."
+  },
+  "preReviewWarnings": [
+    "Review the proof that each accepted child archive entered the parent ancestry through a two-parent merge, rather than merely being reachable from HEAD."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A PR may exempt an archived child Work Item from the one-new-Work-Item count only when its Contract/Summary pair, Start Receipt binding, archive-addition commit, and a later two-parent merge into the checked parent ancestry are all verified.",
+    "The actual #473 archive chain passes aggregate PR validation without changing any immutable archived Contract, Summary, or historical recovery receipt.",
+    "An archive with a missing or invalid Start Receipt, no archive-addition commit, no qualifying merge, or a direct/non-merged addition remains rejected and cannot suppress the one-new-Work-Item error.",
+    "The existing exact historical-receipt and source-linked recovery paths remain fail closed, and English/Japanese lifecycle references describe the additional verified-merged-child boundary."
+  ],
+  "guidelines": [
+    "Preserve one Work Item, one branch, and one PR as the default; accept stacked child evidence only after deterministic Git and receipt proof.",
+    "Do not use task-name allowlists, mutable local Closure Receipts, or a broad reachability-only exception.",
+    "Use focused regression and validator commands under the user's temporary no-full-test authorization."
+  ],
+  "intent": {
+    "problem": "PR #473 contains WI-10 and later corrective child Work Items that were separately merged into its active parent branch. The aggregate PR validator validates a historical receipt only through archive sequence 676, then rejects the later children because their immutable Contracts cannot retroactively cite a predecessor source. This blocks the parent PR despite valid child PR merges and Start Receipts.",
+    "constraints": [
+      "Keep direct PR validation and the normal one-Work-Item-per-PR boundary fail closed.",
+      "Do not rewrite archived evidence or extend the historical receipt by hand.",
+      "Require valid Start Receipt binding, paired archive provenance, and a qualifying two-parent parent-branch merge for every exception.",
+      "Run focused tests and checks only; do not run full quality or full pytest under the user's temporary instruction."
+    ],
+    "rationale": "The repair must model the actual nested-PR lifecycle in verifiable repository history, so future corrective children neither block their parent PR nor create an unreviewed archive bypass."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Repair stacked parent-PR archive validation using deterministic repository evidence while preserving direct-PR and archive-integrity fail-closed boundaries.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "rawUserRequest": "Continue; fix the discovered workflow defect before release. For this repair, do not run the full test suite: confirm only the focused fix and necessary governance checks.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-30 continuous authorization plus temporary focused-verification permission",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:stacked-pr-archive-baseline-corrective-focused-verification"
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A separately merged corrective child archive appears after a historical receipt-bound prefix in an active parent PR.",
+      "expected": "The aggregate validator accepts the child only after proving its paired archive, valid Start Receipt, archive-addition commit, and qualifying two-parent merge in the parent ancestry.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused regression creates a valid merged-child fixture and an integration validation of the #473 archive chain."
+    },
+    {
+      "scenario": "An archive lacks receipt validity or qualifying merged provenance.",
+      "expected": "The validator leaves it untrusted and retains the base incompatibility and one-new-Work-Item failures.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused regression tests missing receipt, invalid archive provenance, and direct/non-merged addition."
+    },
+    {
+      "scenario": "A normal direct PR has multiple independently added archive pairs.",
+      "expected": "The existing one-new-Work-Item rule remains enforced.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run the existing focused aggregate test for multiple newly maintained Work Items."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 681
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/stacked-pr-archive-baseline-corrective-20260730.json",
+    "baseCommit": "c4e49570c2227dd138ad08329e46a2cbb8f8b0e8",
+    "initialScopeDigest": "e333e89031199e390127400c9dcd4ef0d66cc1a25e56f8ca784d293c602b8f53",
+    "contractSkeletonDigest": "b5a9e86f0b5b152365b4db048f29355c20be0b2629bd6768bed1b37e4444a8c7"
+  }
+}

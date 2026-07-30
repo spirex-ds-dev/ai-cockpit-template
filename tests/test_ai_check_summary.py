@@ -213,7 +213,7 @@ def test_documentation_alignment_reports_malformed_nested_structure():
     )
 
 
-def test_documentation_alignment_rejects_untrusted_evidence_paths():
+def test_documentation_alignment_rejects_untrusted_evidence_paths(tmp_path, monkeypatch):
     summary = aligned_documentation_summary()
     evidence = summary["documentationAlignment"]["checks"][0]["evidence"]
 
@@ -226,6 +226,36 @@ def test_documentation_alignment_rejects_untrusted_evidence_paths():
         evidence[0] = invalid
         issues = ai_check_summary.validate_documentation_alignment(summary)
         assert any(expected in issue for issue in issues), (invalid, issues)
+
+    local_only = "target/local-closure-receipt.md"
+    (tmp_path / local_only).parent.mkdir()
+    (tmp_path / local_only).write_text("local receipt", encoding="utf-8")
+    monkeypatch.setattr(ai_check_summary, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_summary, "_is_git_tracked_repository_path", lambda _path: False)
+    evidence[0] = local_only
+
+    issues = ai_check_summary.validate_documentation_alignment(summary)
+
+    assert any(
+        "must be a Git-tracked repository file or an active Contract-scoped file" in issue
+        for issue in issues
+    )
+
+
+def test_documentation_alignment_accepts_untracked_active_contract_scope(tmp_path, monkeypatch):
+    evidence = ".ai/cockpit/README.md"
+    (tmp_path / evidence).parent.mkdir(parents=True)
+    (tmp_path / evidence).write_text("runtime documentation", encoding="utf-8")
+    monkeypatch.setattr(ai_check_summary, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_summary, "_is_git_tracked_repository_path", lambda _path: False)
+
+    assert (
+        ai_check_summary.validate_documentation_alignment(
+            aligned_documentation_summary(evidence=evidence),
+            {"contractVersion": 2, "scope": [".ai/cockpit/**"]},
+        )
+        == []
+    )
 
 
 def test_documentation_alignment_reverse_maps_changed_documentation_surfaces():

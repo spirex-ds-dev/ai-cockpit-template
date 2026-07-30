@@ -1,0 +1,224 @@
+{
+  "contractVersion": 2,
+  "workItemId": "closure-provider-pr-context-corrective-20260730",
+  "mode": "code",
+  "title": "closure-provider-pr-context-corrective-20260730",
+  "baseCommit": "18a30dd41750fb448387cc3af78300c5ba8dd44e",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/closure-provider-pr-context-corrective-20260730.contract.json",
+    ".ai/work-items/active/closure-provider-pr-context-corrective-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/closure-provider-pr-context-corrective-20260730.outcome.json",
+    ".ai/work-items/active/closure-provider-pr-context-corrective-20260730.outcome.md",
+    "scripts/ai_close_work_item.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/reference/work-item-lifecycle-closure.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Rewriting closed PR #474, #477, or #478 archive evidence.",
+    "Deleting any branch until the corrected closure command verifies the exact merged PR.",
+    "Changing release behavior, installer behavior, or provider merge authority."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "The --worktree adapter scopes Git commands but currently leaves gh PR discovery in the invoking worktree."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Executable closure regressions establish side-effect and provider-query expectations."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/474",
+      "reason": "Authoritative provider record: the target branch is merged, despite unscoped gh discovery reporting otherwise."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.md",
+      "reason": "Authoritative user-facing closure behavior and stop conditions."
+    }
+  ],
+  "rawUserRequest": "Continue the authorized plan. A merged Work Item closure was blocked because the selected worktree was not used for GitHub PR discovery. Fix workflow defects before release, with executable regression protection and full governed lifecycle.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-30-continue-closure-provider-context",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:closure-provider-pr-context-corrective"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Bind GitHub pull-request discovery to the selected Work Item branch during exceptional worktree closure.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["workflow_integrity", "branch_cleanup"],
+    "reason": "An incorrect PR lookup could block a valid closure or, if weakened, target the wrong provider record and branch.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuing planned corrective Work Items, PR lifecycle, and cleanup without per-item pauses."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: When --worktree is supplied, PR discovery queries the selected worktree's head branch rather than the invoking worktree branch.",
+    "A2: The selected branch and PR Head SHA must exactly match; a missing, open, or mismatched PR stops before receipt generation or cleanup.",
+    "A3: Regression tests cover a merged child Work Item whose invoking worktree is on a different branch, proving the provider query uses the child branch.",
+    "A4: English and Japanese closure guidance preserve the selected-worktree PR binding and fail-closed boundary.",
+    "A5: The closure provider command deterministically selects `codex/<task>` before checking the authoritative merged PR result; the post-merge #474 closure remains a separate lifecycle action."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The worktree adapter only prefixes Git commands with -C. It leaves gh pr view unscoped, so a closure invoked from a synchronized parent worktree inspects that parent PR rather than the requested child Work Item PR. This falsely reports a merged child PR as unmerged and prevents required cleanup.",
+    "constraints": [
+      "Do not weaken PR state, branch, Head SHA, base, receipt, or cleanup verification.",
+      "Do not rewrite closed archive evidence or delete a branch without provider-verified merged ownership.",
+      "Keep GitHub CLI use explicit and deterministic for the selected branch."
+    ],
+    "rationale": "Provider verification must bind to the exact selected Work Item branch; otherwise closure is not a reliable lifecycle control."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A merged child Work Item is closed with --worktree while the invoking worktree is checked out on its parent branch.",
+      "expected": "The provider adapter queries the child's branch and accepts the merged child PR only when branch and Head SHA exactly match.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a lifecycle regression that captures the gh command and asserts it supplies the selected branch explicitly."
+    },
+    {
+      "scenario": "The selected child branch has no merged PR, or its provider Head SHA differs from the local branch.",
+      "expected": "Closure stops before receipt generation, remote deletion, or local branch deletion.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Retain and run existing fail-closed PR verification regressions alongside the new selected-branch regression."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 680
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/closure-provider-pr-context-corrective-20260730.json",
+    "baseCommit": "18a30dd41750fb448387cc3af78300c5ba8dd44e",
+    "initialScopeDigest": "932f23e571d3a5c838a7747278c1f4412d1455074a29e903c16562d1716eedd3",
+    "contractSkeletonDigest": "76fe56881e38317257a3a3a68db4fe18d4ab1d00e25080f16a0d81bf441a1811"
+  }
+}

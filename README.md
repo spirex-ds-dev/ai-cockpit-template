@@ -28,7 +28,7 @@ keywords:
 For quality-gate ownership, timing evidence, and the required Work Item
 traceability lifecycle, see [Quality Gate Operations](docs/operations/quality-gates.md).
 
-Current adoption guidance is layered: [30-Second Start](docs/getting-started/30-second-start.md), [Standard Adoption Guide](docs/getting-started/standard-adoption-guide.md), and [Security and Release Verification](docs/getting-started/security-release-verification.md). Historical plans and archived records are evidence context, not current instructions.
+Start with the beginner [Installation](docs/getting-started/installation.md): it uses six short prompts, then hands project calibration to a separate Work Item. The adjacent [30-Second Start](docs/getting-started/30-second-start.md), [Standard Adoption Guide](docs/getting-started/standard-adoption-guide.md), and [Security and Release Verification](docs/getting-started/security-release-verification.md) remain available for deeper paths. Security owners can use [Strict Installation and Supply-Chain Verification](docs/getting-started/installation-security.md); calibration and recovery have their own guides. Historical plans and archived records are evidence context, not current instructions.
 
 [中文](README.zh-CN.md) | [日本語](README.ja.md)
 

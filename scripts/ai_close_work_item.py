@@ -199,6 +199,8 @@ def _verify_pr(
     branch: str,
     base_branch: str,
     branch_commit: str,
+    *,
+    allow_stacked_base: bool = False,
 ) -> dict[str, object]:
     try:
         result = runner(
@@ -206,6 +208,7 @@ def _verify_pr(
                 "gh",
                 "pr",
                 "view",
+                branch,
                 "--json",
                 "state,headRefName,headRefOid,baseRefName,mergedAt,mergeCommit,url",
             ],
@@ -224,7 +227,7 @@ def _verify_pr(
         raise RuntimeError("pull request head branch does not match the current Work Item branch")
     if data.get("headRefOid") != branch_commit:
         raise RuntimeError("pull request Head SHA does not match the local Work Item branch")
-    if data.get("baseRefName") != base_branch:
+    if not allow_stacked_base and data.get("baseRefName") != base_branch:
         raise RuntimeError("pull request base branch does not match the discovered repository base")
     merge_commit = data.get("mergeCommit")
     if not isinstance(merge_commit, dict) or not merge_commit.get("oid"):
@@ -232,6 +235,45 @@ def _verify_pr(
     if not data.get("mergedAt"):
         raise RuntimeError("merged pull request has no merge timestamp")
     return data
+
+
+def _verify_stacked_base(
+    runner: Runner,
+    *,
+    remote: str,
+    default_branch: str,
+    stacked_base: str,
+    merge_commit: str,
+) -> None:
+    """Verify the narrow parent-Work-Item exception to default-base closure.
+
+    A merged corrective may target an open parent Work Item branch, but no other
+    arbitrary base is eligible for branch deletion. The parent must have
+    archived evidence, remain unclosed, still exist remotely, and still retain
+    the authoritative corrective merge commit. The latter direction matters:
+    the parent branch can legitimately advance after the corrective PR merges.
+    """
+    if stacked_base == default_branch:
+        return
+    if not stacked_base.startswith("codex/") or not stacked_base.removeprefix("codex/"):
+        raise RuntimeError("stacked pull request base is not a Work Item branch")
+    parent_task = stacked_base.removeprefix("codex/")
+    parent_contract_path = _find_archived_contract(parent_task)
+    parent_contract = load_json(parent_contract_path)
+    if parent_contract.get("workItemId") != parent_task:
+        raise RuntimeError("stacked pull request base does not match its archived Work Item")
+    parent_receipt = CLOSURE_RECEIPTS_DIR / f"{parent_task}.closure.md"
+    if parent_receipt.exists():
+        raise RuntimeError("stacked pull request parent Work Item is already closed")
+    remote_parent = runner(["ls-remote", "--exit-code", "--heads", remote, stacked_base], False)
+    if remote_parent.returncode != 0:
+        raise RuntimeError("stacked pull request parent Work Item branch is absent from remote")
+    runner(["fetch", remote, stacked_base], True)
+    ancestry = runner(
+        ["merge-base", "--is-ancestor", merge_commit, f"{remote}/{stacked_base}"], False
+    )
+    if ancestry.returncode != 0:
+        raise RuntimeError("stacked pull request merge commit is not retained by its parent branch")
 
 
 def _require_clean_worktree(runner: Runner) -> None:
@@ -270,9 +312,31 @@ def _in_worktree(runner: Runner, path: str) -> Runner:
     """Run Git commands against a designated worktree without changing branches."""
 
     def scoped(args: Sequence[str], check: bool = False) -> CommandResult:
+        if args and args[0] == "gh":
+            return runner(args, check)
         return runner(["-C", path, *args], check)
 
     return scoped
+
+
+def _registered_target_worktree(path: str) -> Runner:
+    """Return a runner for a registered worktree in this repository only."""
+    target = Path(path).expanduser().resolve()
+    if not target.is_dir():
+        raise RuntimeError("target worktree path does not exist")
+    runner = _in_worktree(_default_runner, str(target))
+    top_level = runner(["rev-parse", "--show-toplevel"], False)
+    if top_level.returncode != 0 or not top_level.stdout.strip():
+        raise RuntimeError("target path is not a Git worktree")
+    if Path(top_level.stdout.strip()).resolve() != target:
+        raise RuntimeError("target path is not the root of a Git worktree")
+    worktrees = runner(["worktree", "list", "--porcelain"], False)
+    if worktrees.returncode != 0:
+        raise RuntimeError("cannot inspect target Git worktrees")
+    source_root = PROJECT_ROOT.resolve().as_posix()
+    if f"worktree {source_root}" not in worktrees.stdout.splitlines():
+        raise RuntimeError("target worktree is not registered in this repository")
+    return runner
 
 
 def _remote_branch_absent(runner: Runner, remote: str, branch: str) -> None:
@@ -330,31 +394,59 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
             "run ai-close-work-item from the merged Work Item branch before deleting it, then let closure "
             "synchronize the base and remove local/remote branches"
         )
+    expected_branch = f"codex/{task}"
+    if work_branch != expected_branch:
+        raise RuntimeError(
+            "requested Work Item does not match the selected worktree branch; "
+            f"expected {expected_branch}, found {work_branch}"
+        )
     _require_clean_worktree(runner)
     work_commit = runner(["rev-parse", work_branch], True).stdout.strip()
     if not work_commit:
         raise RuntimeError("cannot resolve the local Work Item branch commit")
-    pr = _verify_pr(runner, work_branch, base_branch, work_commit)
+    pr = _verify_pr(
+        runner,
+        work_branch,
+        base_branch,
+        work_commit,
+        allow_stacked_base=True,
+    )
+    pr_base = pr.get("baseRefName")
+    if not isinstance(pr_base, str) or not pr_base:
+        raise RuntimeError("merged pull request has no authoritative base branch")
+    merge = pr.get("mergeCommit")
+    merge_commit = merge.get("oid") if isinstance(merge, dict) else None
+    if not isinstance(merge_commit, str) or not merge_commit:
+        raise RuntimeError("merged pull request has no authoritative merge commit")
+    if pr_base != base_branch:
+        _verify_stacked_base(
+            runner,
+            remote=remote,
+            default_branch=base_branch,
+            stacked_base=pr_base,
+            merge_commit=merge_commit,
+        )
+    closure_base = pr_base
 
-    base_path = _base_worktree_path(runner, base_branch)
+    base_path = _base_worktree_path(runner, closure_base)
     base_runner = _in_worktree(runner, base_path) if base_path else runner
     if base_path:
         _require_clean_worktree(base_runner)
     else:
-        runner(["switch", base_branch], True)
+        runner(["switch", closure_base], True)
     base_runner(["fetch", remote, "--prune"], True)
-    base_runner(["merge", "--ff-only", f"{remote}/{base_branch}"], True)
-    local_base = base_runner(["rev-parse", base_branch], True).stdout.strip()
-    remote_base = runner(["rev-parse", f"{remote}/{base_branch}"], True).stdout.strip()
+    base_runner(["merge", "--ff-only", f"{remote}/{closure_base}"], True)
+    local_base = base_runner(["rev-parse", closure_base], True).stdout.strip()
+    remote_base = runner(["rev-parse", f"{remote}/{closure_base}"], True).stdout.strip()
     if local_base != remote_base:
         raise RuntimeError("base branch is not synchronized with the remote after fast-forward")
 
     final_branch = base_runner(["branch", "--show-current"], True).stdout.strip()
-    if final_branch != base_branch:
+    if final_branch != closure_base:
         raise RuntimeError("repository is not on the synchronized base branch")
     _require_clean_worktree(base_runner)
-    final_local = base_runner(["rev-parse", base_branch], True).stdout.strip()
-    final_remote = runner(["rev-parse", f"{remote}/{base_branch}"], True).stdout.strip()
+    final_local = base_runner(["rev-parse", closure_base], True).stdout.strip()
+    final_remote = runner(["rev-parse", f"{remote}/{closure_base}"], True).stdout.strip()
     if final_local != final_remote:
         raise RuntimeError("local base branch no longer matches the remote base branch")
 
@@ -364,7 +456,7 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
         pr,
         work_branch=work_branch,
         base_remote=remote,
-        base_branch=base_branch,
+        base_branch=closure_base,
         base_commit=final_local,
         base_worktree=base_path,
     )
@@ -398,7 +490,7 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
         "pullRequest": str(pr.get("url", "")),
         "workBranch": work_branch,
         "baseRemote": remote,
-        "baseBranch": base_branch,
+        "baseBranch": closure_base,
         "baseCommit": final_local,
         "closureReceipt": str(receipt_path),
         "state": "closed",
@@ -411,13 +503,21 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Close a completed Work Item safely.")
     parser.add_argument("--task", required=True)
+    parser.add_argument(
+        "--worktree",
+        help="registered child Work Item worktree for exceptional stacked-PR closure",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
     try:
-        result = close_work_item(args.task, _default_runner)
+        target_worktree = getattr(args, "worktree", None)
+        runner = (
+            _registered_target_worktree(target_worktree) if target_worktree else _default_runner
+        )
+        result = close_work_item(args.task, runner)
     except (OSError, RuntimeError, ValueError) as exc:
         print(f"Work Item lifecycle: not closed\nReason: {exc}", file=sys.stderr)
         return 1
