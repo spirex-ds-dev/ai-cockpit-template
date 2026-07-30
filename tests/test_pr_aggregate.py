@@ -807,6 +807,7 @@ def test_aggregate_pr_accepts_archive_bound_release_metadata(tmp_path, monkeypat
     release_paths = [
         ".ai/cockpit/release-digests.json",
         ".ai/cockpit/release-freeze.json",
+        "docs/reference/capability-truth-matrix.json",
         "release-state.json",
         "release.json",
     ]
@@ -840,6 +841,34 @@ def test_aggregate_pr_rejects_archive_bound_metadata_without_premerge_marker(tmp
         [path],
         [".ai/work-items/archive/index.json"],
     )
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    patch_changes(
+        monkeypatch,
+        [
+            path,
+            pair.relative_to(tmp_path).as_posix(),
+            str(pair.relative_to(tmp_path)).replace(".contract", ".summary"),
+        ],
+    )
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [pair])
+    assert any("lacks paired ownership" in issue and path in issue for issue in issues)
+
+
+def test_aggregate_pr_rejects_capability_truth_without_contract_ownership(tmp_path, monkeypatch):
+    path = "docs/reference/capability-truth-matrix.json"
+    pair = write_pair(
+        tmp_path,
+        "archive_bound_matrix_unowned",
+        ["release.json"],
+        [".ai/work-items/archive/index.json"],
+    )
+    freeze = tmp_path / ".ai" / "cockpit" / "release-freeze.json"
+    freeze.parent.mkdir(parents=True, exist_ok=True)
+    freeze.write_text(json.dumps({"lifecycle": {"state": "premerge_finalized"}}), encoding="utf-8")
     policy = tmp_path / "scope.yaml"
     policy.write_text("allowAlways:\n", encoding="utf-8")
     monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)

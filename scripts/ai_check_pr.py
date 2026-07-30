@@ -46,6 +46,7 @@ ARCHIVE_BOUND_RELEASE_METADATA = frozenset(
     {
         ".ai/cockpit/release-digests.json",
         ".ai/cockpit/release-freeze.json",
+        "docs/reference/capability-truth-matrix.json",
         "release-state.json",
         "release.json",
     }

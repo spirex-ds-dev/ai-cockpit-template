@@ -1,0 +1,163 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-capability-truth-archive-ownership-corrective-20260731",
+  "mode": "code",
+  "title": "Allow owned capability truth regeneration during release freeze",
+  "baseCommit": "ecf387fa4129af1934351fe3b5ae63ac6a275a5b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-capability-truth-archive-ownership-corrective-20260731.contract.json",
+    ".ai/work-items/active/release-capability-truth-archive-ownership-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-capability-truth-archive-ownership-corrective-20260731.outcome.json",
+    ".ai/work-items/active/release-capability-truth-archive-ownership-corrective-20260731.outcome.md",
+    "scripts/ai_check_pr.py",
+    "tests/test_pr_aggregate.py"
+  ],
+  "outOfScope": [
+    "Changing release-finalization logic, release workflow logic, capability claims, archived Work Item evidence, tags, provider Releases, or the generic post-archive ownership policy."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Defines the narrowly scoped pre-merge freeze exemption for archive-bound release metadata."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Contains aggregate PR ownership regression coverage for post-archive release metadata."
+    },
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "PR #508 now regenerates the Capability Truth matrix after release.json changes, creating the derived path that must be attributable."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/508",
+      "reason": "Merged corrective that exposes the remaining ownership gap before a replacement v0.5.45 release."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_evidence_ownership"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "The change affects only validation of a generated release-derived document; it remains fail closed unless the archived Contract owns the exact path and the freeze is finalized."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized continuous corrective Work Items, PRs, merges, and release continuation."
+  },
+  "preReviewWarnings": [
+    "Do not turn this into a broad exemption: the test must prove that missing freeze state or missing Contract scope still rejects the matrix path."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "An archived release Contract that explicitly owns docs/reference/capability-truth-matrix.json is accepted only after a premerge_finalized freeze.",
+    "The same derived matrix path remains rejected when freeze evidence is absent or when no archived Contract owns it.",
+    "Existing release metadata exemption behavior remains covered and focused aggregate PR tests pass.",
+    "The corrective is independently merged and closed before a fresh v0.5.45 replacement release starts."
+  ],
+  "guidelines": [
+    "Keep post-archive exemptions to the minimum deterministic set of release-derived evidence paths.",
+    "Require both finalized freeze state and Contract scope ownership; never infer ownership from a changed file alone.",
+    "Use real aggregate PR validation tests for both acceptance and rejection paths."
+  ],
+  "intent": {
+    "problem": "PR #508 correctly makes release finalization regenerate the Capability Truth matrix after release.json changes, but ai_check_pr recognizes only four post-archive release metadata files. A future correct matrix regeneration would therefore fail paired ownership before the release could be reviewed.",
+    "constraints": [
+      "Do not broaden ordinary post-archive mutations.",
+      "Do not change release/provider state or archived evidence.",
+      "Use focused local verification under the user's temporary efficiency instruction; hosted PR CI remains mandatory."
+    ],
+    "rationale": "The derived matrix is valid release evidence only within an explicit finalized freeze and an archived Contract that declared its ownership. Encoding both conditions prevents the same release workflow issue from recurring."
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": false, "reason": "User temporary efficiency authorization permits focused local verification for non-release corrective Work Items; hosted PR CI remains mandatory."}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized continuous corrective lifecycle, PRs, merges, hosted verification, and release continuation."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 699}},
+  "rawUserRequest": "Continue the authorized plan, repair release-blocking process defects before release, inspect Actions when useful, and do not stop before the full goal is complete.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-continuous-plan-authorization",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:continuous-authorized-release-corrective"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Preserve fail-closed ownership while permitting the release-derived Capability Truth matrix after an explicit finalized freeze.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A finalized release freeze changes release.json and its archived Contract owns the regenerated Capability Truth matrix.",
+      "expected": "Aggregate PR validation accepts the matrix as archive-bound release evidence.",
+      "verificationPlan": "Add and run a real aggregate PR acceptance regression using freeze state and an owned matrix path.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "The same matrix path lacks finalized freeze state or Contract scope ownership.",
+      "expected": "Aggregate PR validation rejects the path for lacking paired ownership.",
+      "verificationPlan": "Add and run rejection regressions for missing freeze and missing scope ownership.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-capability-truth-archive-ownership-corrective-20260731.json",
+    "baseCommit": "ecf387fa4129af1934351fe3b5ae63ac6a275a5b",
+    "initialScopeDigest": "279a7f7333b98ca4c5310de3e12399093db0b2348398d875e4a3aa3c52fed7ee",
+    "contractSkeletonDigest": "943691d65784b719e4883ac3005466c59a7544e7bad198a9048cb65db048ad6c"
+  }
+}
