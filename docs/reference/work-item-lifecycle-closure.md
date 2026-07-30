@@ -60,6 +60,39 @@ worktree path printed by the command. Closure never removes that worktree.
 
 `make ai-finish TASK=<task>` is an archive milestone, not lifecycle closure. Its successful output explicitly directs the operator to push the Work Item branch, open and merge the PR, and then run `ai-close-work-item`. Historical local branches or detached worktrees outside the current Work Item are not deleted automatically because their ownership cannot be established safely from a branch name alone; audit and remove them only with explicit operator authorization.
 
+## Exceptional stacked-PR executor
+
+Normally, run closure from the merged Work Item branch. If a corrective child PR
+was merged into an active parent Work Item branch and the child worktree still
+contains an older closure implementation, run the current parent-branch policy
+against that exact registered child worktree:
+
+```sh
+make ai-close-work-item TASK=<child-task> ARGS="--worktree /absolute/path/to/child-worktree"
+```
+
+This is a narrow recovery command, not a general branch-deletion interface. It
+accepts only an existing Git-worktree root registered in the same repository.
+Git operations are scoped to that child checkout; provider `gh` evidence stays
+bound to the current policy checkout. All normal merged-PR, Head-SHA,
+parent-retention, clean-worktree, receipt, and remote-absence checks remain
+mandatory.
+
+## Historical stacked-PR chain receipt
+
+An archive is immutable. If a corrective Work Item was already archived without
+an explicit predecessor source, the aggregate PR check does not permit editing
+that archive or using a task-name exception. A narrowly scoped append-only
+receipt under `.ai/work-items/recovery-receipts/` may instead bind the exact
+consecutive archive prefix: each Work Item ID, Contract and Summary paths,
+SHA-256 digests, archive sequence, base commit, and the PR merge-base.
+
+The checker recomputes every binding and each base-commit ancestry edge. It
+accepts only the receipt's exact compatible prefix; subsequent entries must
+still meet the ordinary adjacent-source recovery rule. A missing, reordered,
+incompatible, or unrelated entry leaves the default one-new-Work-Item-per-PR
+rule in force.
+
 Archived evidence has one immutable root: `archive-manifest.json` is generated only after the Contract and Summary are frozen, and records their SHA-256 digests. The Summary does not hash itself, and generated `current_status.md` is excluded from this chain. The archive index records the manifest path and digest; records predating this protocol remain readable as legacy evidence.
 
 The repository's remote name and default branch are discovered from Git's remote HEAD. Adopter projects therefore do not need to use `origin/main`.

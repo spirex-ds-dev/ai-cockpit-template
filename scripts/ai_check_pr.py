@@ -35,6 +35,7 @@ OWNERSHIP_POLICY = PROJECT_ROOT / ".ai" / "guards" / "file_ownership.yaml"
 
 ARCHIVE_PREFIX = ".ai/work-items/archive/"
 ARCHIVE_SUFFIXES = (".contract.json", ".summary.json", ".review.json")
+RECOVERY_RECEIPT_PREFIX = ".ai/work-items/recovery-receipts/"
 # Worktree-bound verification evidence became mandatory at this migration point.
 # Archives created before it remain immutable historical evidence.
 WORKTREE_DIGEST_INTRODUCED_AT = "63ec6fcd3c8f945b379966d43457e44ccaeba258"
@@ -321,6 +322,117 @@ def documented_recovery_paths(
     return set()
 
 
+def recovery_receipt_entry(
+    entry: tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]],
+) -> dict[str, Any]:
+    """Return the immutable archive identity recorded by a recovery receipt."""
+    contract_path, contract, summary, _rank = entry
+    summary_path = Path(str(contract_path).replace(".contract.json", ".summary.json"))
+    return {
+        "workItemId": contract.get("workItemId"),
+        "contractPath": contract_path.relative_to(PROJECT_ROOT).as_posix(),
+        "summaryPath": summary_path.relative_to(PROJECT_ROOT).as_posix(),
+        "baseCommit": contract.get("baseCommit"),
+        "archiveSequence": summary.get("archiveSequence"),
+        "contractDigest": hashlib.sha256(contract_path.read_bytes()).hexdigest(),
+        "summaryDigest": hashlib.sha256(summary_path.read_bytes()).hexdigest(),
+    }
+
+
+def historical_recovery_receipt_paths(
+    entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]],
+    pr_base: str,
+    receipt: Any,
+) -> set[Path]:
+    """Return only receipt-bound historical recovery entries.
+
+    An archive cannot be rewritten merely to add a predecessor source.  This
+    narrow path instead requires an append-only receipt that exactly reproduces
+    a consecutive prefix of the current PR's archive identities and ancestry.
+    """
+    if not isinstance(receipt, dict) or receipt.get("receiptVersion") != 1:
+        return set()
+    if receipt.get("prBaseCommit") != pr_base:
+        return set()
+    authorization = receipt.get("humanAuthorization")
+    if not (
+        isinstance(authorization, dict)
+        and authorization.get("type") == "human"
+        and isinstance(authorization.get("reference"), str)
+        and authorization["reference"].strip()
+    ):
+        return set()
+    recorded = receipt.get("archives")
+    if not isinstance(recorded, list) or len(recorded) < 2:
+        return set()
+    new_entries = sorted(
+        [
+            entry
+            for entry in entries
+            if isinstance(entry[2].get("archiveSequence"), int)
+            and entry[2].get("archiveSequence", 0) >= NEW_WORK_ITEM_SEQUENCE
+            and entry[1].get("workItemId")
+        ],
+        key=lambda entry: entry[3],
+    )
+    prefix = new_entries[: len(recorded)]
+    if len(prefix) != len(recorded) or recorded != [
+        recovery_receipt_entry(entry) for entry in prefix
+    ]:
+        return set()
+    if not archive_base_is_compatible(prefix[0][1], pr_base):
+        return set()
+    for predecessor, recovery in zip(prefix, prefix[1:]):
+        predecessor_contract, predecessor_summary = predecessor[1], predecessor[2]
+        recovery_contract, recovery_summary = recovery[1], recovery[2]
+        if (
+            recovery_summary.get("archiveSequence")
+            != predecessor_summary.get("archiveSequence") + 1
+        ):
+            return set()
+        predecessor_base = predecessor_contract.get("baseCommit")
+        recovery_base = recovery_contract.get("baseCommit")
+        if not (
+            isinstance(predecessor_base, str)
+            and isinstance(recovery_base, str)
+            and run_git(["merge-base", "--is-ancestor", predecessor_base, recovery_base]).returncode
+            == 0
+        ):
+            return set()
+    return {entry[0] for entry in prefix[1:]}
+
+
+def extend_documented_recovery_paths(
+    entries: list[tuple[Path, dict[str, Any], dict[str, Any], tuple[int, str, str]]],
+    pr_base: str,
+    trusted_paths: set[Path],
+) -> set[Path]:
+    """Extend a verified historical prefix only through normal adjacent links."""
+    ordered = sorted(entries, key=lambda entry: entry[3])
+    trusted = set(trusted_paths)
+    for predecessor, recovery in zip(ordered, ordered[1:]):
+        if predecessor[0] in trusted and is_documented_pr_recovery_pair(
+            predecessor, recovery, pr_base, require_pr_base_compatibility=False
+        ):
+            trusted.add(recovery[0])
+    return trusted
+
+
+def historical_recovery_receipts() -> list[tuple[str, Any]]:
+    """Load append-only receipts; invalid content is returned for fail-closed validation."""
+    directory = PROJECT_ROOT / RECOVERY_RECEIPT_PREFIX
+    if not directory.is_dir():
+        return []
+    receipts: list[tuple[str, Any]] = []
+    for path in sorted(directory.glob("*.json")):
+        relative = path.relative_to(PROJECT_ROOT).as_posix()
+        try:
+            receipts.append((relative, load_json(path)))
+        except (OSError, json.JSONDecodeError, ValueError) as exc:
+            receipts.append((relative, {"_loadError": str(exc)}))
+    return receipts
+
+
 def machine_path_issues(value: Any, location: str = "root") -> list[str]:
     issues: list[str] = []
     if isinstance(value, str) and contains_machine_path(value):
@@ -452,6 +564,30 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
 
     archive_entries.sort(key=lambda entry: entry[3])
     recovery_paths = documented_recovery_paths(archive_entries, base)
+    historical_paths: set[Path] = set()
+    for receipt_path, receipt in historical_recovery_receipts():
+        # Receipts are immutable historical evidence.  They apply only to the
+        # exact PR base and archive set they name; an old recovery must not
+        # affect unrelated future PRs.
+        if not isinstance(receipt, dict) or receipt.get("prBaseCommit") != base:
+            continue
+        recorded = receipt.get("archives")
+        recorded_ids = (
+            {entry.get("workItemId") for entry in recorded if isinstance(entry, dict)}
+            if isinstance(recorded, list)
+            else set()
+        )
+        entry_ids = {entry[1].get("workItemId") for entry in archive_entries}
+        if not recorded_ids or not recorded_ids.issubset(entry_ids):
+            continue
+        candidate = historical_recovery_receipt_paths(archive_entries, base, receipt)
+        if not candidate:
+            issues.append(
+                f"{receipt_path}: historical recovery receipt does not exactly bind a consecutive compatible archive prefix"
+            )
+            continue
+        historical_paths.update(candidate)
+    recovery_paths.update(extend_documented_recovery_paths(archive_entries, base, historical_paths))
 
     for contract_path, contract, summary, _rank in archive_entries:
         if (

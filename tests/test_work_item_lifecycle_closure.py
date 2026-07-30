@@ -54,6 +54,29 @@ def test_archived_evidence_uses_strict_summary_validation() -> None:
     assert "legacy_archive=False" in source
 
 
+def test_explicit_worktree_scopes_git_but_not_provider_queries() -> None:
+    commands: list[tuple[str, ...]] = []
+
+    def runner(args, _check):
+        commands.append(tuple(args))
+        return closure.CommandResult(0, "")
+
+    scoped = closure._in_worktree(runner, "/tmp/child-worktree")
+
+    scoped(["status", "--porcelain"], False)
+    scoped(["gh", "pr", "view", "474"], False)
+
+    assert commands == [
+        ("-C", "/tmp/child-worktree", "status", "--porcelain"),
+        ("gh", "pr", "view", "474"),
+    ]
+
+
+def test_registered_target_worktree_rejects_missing_path(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError, match="does not exist"):
+        closure._registered_target_worktree(str(tmp_path / "missing"))
+
+
 def test_close_branch_discovery_uses_remote_identity_for_duplicate_branch_names() -> None:
     with pytest.raises(RuntimeError, match="could not uniquely discover"):
         closure._discover_base(

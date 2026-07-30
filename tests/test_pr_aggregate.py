@@ -167,6 +167,51 @@ def test_pr_rejects_multiple_newly_maintained_work_items(tmp_path, monkeypatch):
     assert any("exactly one newly maintained Work Item" in issue for issue in issues)
 
 
+def test_historical_recovery_receipt_accepts_only_the_exact_consecutive_prefix(
+    tmp_path, monkeypatch
+):
+    first = write_pair(tmp_path, "first", ["src/a.py"], ["src/a.py"])
+    second = write_pair(tmp_path, "second", ["src/b.py"], ["src/b.py"])
+    third = write_pair(tmp_path, "third", ["src/c.py"], ["src/c.py"])
+    paths = (first, second, third)
+    for path, sequence, base in zip(paths, (74, 75, 76), ("a" * 40, "b" * 40, "c" * 40)):
+        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        summary["archiveSequence"] = sequence
+        summary_path.write_text(json.dumps(summary), encoding="utf-8")
+        contract = json.loads(path.read_text(encoding="utf-8"))
+        contract.update(
+            {
+                "baseCommit": base,
+                "startReceipt": {"baseCommit": base, "path": f".ai/work-items/starts/{path.stem}"},
+            }
+        )
+        path.write_text(json.dumps(contract), encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "run_git", lambda *_args: fake_git_result(returncode=0))
+    entries = []
+    for path in paths:
+        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
+        entries.append(
+            (
+                path,
+                json.loads(path.read_text()),
+                json.loads(summary_path.read_text()),
+                ai_check_pr.archive_pair_rank(path, summary_path),
+            )
+        )
+    receipt = {
+        "receiptVersion": 1,
+        "prBaseCommit": "a" * 40,
+        "humanAuthorization": {"type": "human", "reference": "conversation"},
+        "archives": [ai_check_pr.recovery_receipt_entry(entry) for entry in entries[:2]],
+    }
+
+    assert ai_check_pr.historical_recovery_receipt_paths(entries, "a" * 40, receipt) == {second}
+    receipt["archives"][1]["archiveSequence"] = 76
+    assert ai_check_pr.historical_recovery_receipt_paths(entries, "a" * 40, receipt) == set()
+
+
 def test_pr_accepts_one_documented_adjacent_recovery_pair(tmp_path, monkeypatch):
     predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
     recovery = write_pair(tmp_path, "recovery", ["src/b.py"], ["src/b.py"], approved=True)
