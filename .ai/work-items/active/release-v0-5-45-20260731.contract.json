@@ -1,0 +1,286 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-45-20260731",
+  "mode": "code",
+  "title": "Publish source-bound v0.5.45 release",
+  "baseCommit": "567b9ed400d4ee7f75fd52ed95e575c368464f2b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0-5-45-20260731.contract.json",
+    ".ai/work-items/active/release-v0-5-45-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-45-20260731.outcome.json",
+    ".ai/work-items/active/release-v0-5-45-20260731.outcome.md",
+    "release.json",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/release-freeze.json",
+    ".ai/cockpit/release-digests.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    "docs/releases/v0.5.45.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md"
+  ],
+  "outOfScope": [
+    "Changing the release workflow, release verification implementation, installer implementation, or branch-protection policy.",
+    "Rewriting, deleting, retargeting, or publishing any existing immutable semantic-version tag or GitHub Release, including v0.5.42, v0.5.43, and v0.5.44.",
+    "Publishing any release tag other than v0.5.45.",
+    "Claiming enterprise compliance, general model safety, or public-install success without the exact provider and post-publication evidence required by this Contract."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Canonical Work Item, PR, merge, closure, and branch-cleanup order."
+    },
+    {
+      "path": "release.json",
+      "reason": "Last published v0.5.42 installer projection that remains historical until external v0.5.45 publication succeeds."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Unpublished v0.5.45 candidate and its sequential relationship to v0.5.42."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Canonical candidate_prepared state, reserved-tag history, and deferred final source binding."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Exact-source provider publication, draft verification, asset evidence, and final publication authority."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Repository documentation for candidate, immutable tag, provider release, and public-distribution boundaries."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/rfe082-release-truth-reconciliation-20260729.contract.json",
+      "reason": "Records why v0.5.45 is the next permitted candidate after unavailable v0.5.43 and v0.5.44."
+    },
+    {
+      "path": "conversation:2026-07-31-continuous-plan-authorization",
+      "reason": "User authorized continuing all planned Work Items through publication and final cleanup without an unnecessary pause."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release_identity",
+      "external_publication",
+      "supply_chain_evidence",
+      "irreversible_tag"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "Publishing an immutable tag and provider Release is externally visible and irreversible; source, tag, archive, installer, evidence, and post-publication verification must stay exact and fail closed."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous execution of the complete plan, including v0.5.45 publication, while retaining every fail-closed gate and the required PR/merge/closure sequence."
+  },
+  "preReviewWarnings": [
+    "Do not derive final source identity from this worktree before the release PR merges; the provider workflow must resolve the current remote default-branch commit itself.",
+    "A tag is not a published release: provider Release, assets, source-bound evidence, and post-publication distribution checks must all pass before reporting publication.",
+    "If the provider workflow fails before publication, preserve the failure evidence and do not retry until the failing gate is diagnosed."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "v0.5.45 remains the only candidate, exactly one patch after the highest reserved v0.5.44; release.json continues to represent the historical v0.5.42 published projection until provider publication completes.",
+    "The release preparation PR contains only this Work Item's source-bound candidate metadata, generated pre-merge freeze/digest/SBOM/provenance evidence, release notes, and governed lifecycle evidence; no stale v0.5.42 freeze or digest is claimed as v0.5.45 evidence.",
+    "All required local release gates, full quality, PR governance gates, and hosted smoke/compatibility evidence for the merged source pass before the release workflow is dispatched.",
+    "The release workflow resolves the freshly merged remote default-branch SHA, creates only immutable tag v0.5.45 at that SHA, verifies its draft assets and evidence, and publishes only after its internal strict checks pass.",
+    "Post-publication verification proves the v0.5.45 tag target, stable GitHub Release URL, required assets and digests, release evidence subjects, and strict public distribution/install contract; failures remain explicit and do not become success claims.",
+    "Before final cleanup, the Work Item completes ai-finish, active-state direct report, archive, one PR, merge, ai-close-work-item, exact work-branch deletion, and synchronized clean main."
+  ],
+  "guidelines": [
+    "Preserve the distinction between a candidate, a Git tag, a stable GitHub Release, and verified public distribution evidence.",
+    "Generate release freeze, archive, digest, SBOM, provenance, and status artifacts only through repository commands or the controlled provider workflow; never hand-author evidence.",
+    "Do not retry a failed external release path until its specific failing gate and evidence are recorded and diagnosed.",
+    "Do not report release success before provider-bound post-publication evidence is verified."
+  ],
+  "intent": {
+    "problem": "All pre-release corrective, security, documentation, Japanese-capability, and process Work Items are merged, while v0.5.45 is intentionally only a deferred-source candidate. The repository needs one new verifiable public release without repeating the prior stale-freeze or archived-branch release failure.",
+    "constraints": [
+      "Start from origin/main commit 567b9ed400d4ee7f75fd52ed95e575c368464f2b and keep final source binding deferred until the release PR is merged.",
+      "Use v0.5.45 only; v0.5.43 and v0.5.44 are reserved/unavailable and must not be reused or altered.",
+      "Use the existing exact-source release workflow; do not bypass required hosted checks, branch protection, draft verification, or post-publication validation.",
+      "Create no unrelated implementation changes and do not mutate archived Work Item evidence.",
+      "After this Work Item closes, leave final repository/worktree cleanup to the following dedicated cleanup Work Item."
+    ],
+    "rationale": "The release workflow binds publication to the freshly merged default-branch commit and its provider-generated evidence. A dedicated Work Item makes the preparation PR auditable, preserves the candidate/publication separation, and allows the final cleanup to operate only after the external release truth is known."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Candidate identity remains sequential and does not reuse unavailable tags.",
+      "expected": "v0.5.45 remains candidate_prepared based on v0.5.42; v0.5.43 and v0.5.44 stay reserved/unavailable.",
+      "verificationPlan": "Run check-release-state-consistency and inspect the candidate, canonical state, provider tag inventory, and prior RFE-ISSUE-082 evidence before preparation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Final source binding cannot use stale pre-release evidence.",
+      "expected": "The pre-merge freeze is tied to this archived Work Item, while the release provider resolves and verifies the freshly merged default-branch source before creating v0.5.45.",
+      "verificationPlan": "Run the release freeze/preflight gates, preserve their generated receipts, then verify provider source/tag/asset records against the merged main SHA.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Every required local and hosted gate succeeds before external publication.",
+      "expected": "Full quality, PR governance, smoke, compatibility, and release-evidence jobs are successful for the exact merged source.",
+      "verificationPlan": "Run Contract-required local checks, inspect GitHub Actions by run ID and exact SHA after the PR, and let the release workflow collect its own exact-source dependencies.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Provider publication is exact, complete, and independently verifiable.",
+      "expected": "Only v0.5.45 points to the release source SHA and its stable Release contains the archive, SBOM, provenance, release digests, CI evidence, release source, and release projection.",
+      "verificationPlan": "Dispatch release.yml only after the merged source gates pass; inspect the completed provider run and strict post-publish distribution checks against the published URL and asset digests.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A failed or incomplete provider operation remains a failure rather than a release claim.",
+      "expected": "No success report is emitted without a completed provider run and post-publication evidence; failure logs identify the next corrective action.",
+      "verificationPlan": "Record provider job result, artifacts, and diagnostics in the Summary; stop retrying if a gate fails until an independent corrective is completed.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "rawUserRequest": "Continue the authorized AI Cockpit plan without stopping before all plan goals are complete. Publish the new version only after every corrective, Japanese assessment, documentation alignment, and governance issue is complete; inspect GitHub Actions when needed; then clean remote and local branches/worktrees so only synchronized main remains.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-continue-through-complete-plan",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:user-authorized-continuous-plan-through-v0.5.45-release-and-final-cleanup"
+  },
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-07-31-continue-through-complete-plan",
+    "scope": "Publish only one source-bound v0.5.45 public release after every mandatory local, hosted, provider, and post-publication verification gate passes; no gate bypass, retry without diagnosis, or mutation of existing immutable tags/Releases is authorized."
+  },
+  "declaredIntent": {
+    "summary": "Publish only the source-bound v0.5.45 candidate after verified PR, hosted, provider, and public-distribution evidence, preserving prior release truth and all fail-closed boundaries.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized continuous plan",
+    "reason": "The user explicitly authorized uninterrupted execution through every plan Work Item, including final v0.5.45 publication, PRs, merges, hosted verification, closure, branch cleanup, and final main-only convergence; no gate bypass is authorized."
+  },
+  "rollbackNote": "Before provider publication, revert the release-preparation PR and preserve its diagnostics. After tag or provider Release creation, never rewrite immutable identity; record the failed state and create a subsequent corrective candidate only when evidence supports it.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 697
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-45-20260731.json",
+    "baseCommit": "567b9ed400d4ee7f75fd52ed95e575c368464f2b",
+    "initialScopeDigest": "fb55b2729b54ebe8ffe3476234ad0de1fb88b67c060d91a92172ed817c3e883a",
+    "contractSkeletonDigest": "5d7848d46aa78098d6e87cf2887646d5a7cd3bc3edbd34e945afaa42bc38f6ca"
+  }
+}
