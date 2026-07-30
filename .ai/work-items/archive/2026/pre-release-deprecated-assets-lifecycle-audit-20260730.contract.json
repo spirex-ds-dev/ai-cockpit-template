@@ -1,0 +1,163 @@
+{
+  "contractVersion": 2,
+  "workItemId": "pre-release-deprecated-assets-lifecycle-audit-20260730",
+  "mode": "code",
+  "title": "Audit and close pre-release deprecated asset cleanup lifecycle",
+  "baseCommit": "e6cced1d473e601bc747f75fcf394cb657a84ba1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/pre-release-deprecated-assets-lifecycle-audit-20260730.contract.json",
+    ".ai/work-items/active/pre-release-deprecated-assets-lifecycle-audit-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/pre-release-deprecated-assets-lifecycle-audit-20260730.outcome.json",
+    ".ai/work-items/active/pre-release-deprecated-assets-lifecycle-audit-20260730.outcome.md",
+    "docs/reference/deprecated-assets-registry.json",
+    "docs/reference/deprecated-assets.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/README.md",
+    "scripts/check_deprecated_assets.py",
+    "tests/test_deprecated_assets.py"
+  ],
+  "outOfScope": ["Do not rewrite historical archive evidence, delete assets, change release behavior, or retroactively invent a PR for the direct-main historical cleanup."],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/pre-release-deprecated-assets-lifecycle-audit-20260730.contract.json",
+      "reason": "Current audit Contract."
+    },
+    {"path": ".ai/work-items/archive/2026/pre-release-deprecated-assets-cleanup-20260730.summary.json", "reason": "Historical cleanup content and its missing PR lifecycle."},
+    {"path": "docs/reference/deprecated-assets-registry.json", "reason": "Current candidate/protection evidence."},
+    {"path": "docs/reference/documentation-context-registry.json", "reason": "Current historical-plan classifications."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["archive_integrity", "stale_reference", "lifecycle_evidence"],
+    "reason": "Historical content exists on main but its direct-main delivery has no PR lifecycle; audit must distinguish current asset truth from missing historical provider evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue", "reason": "User authorized continuous plan execution."
+  },
+  "preReviewWarnings": ["Historical direct-main PR absence must remain an explicit limitation."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Re-run current deprecated asset, reference, and documentation context checks against main.",
+    "A2: Record whether any current asset is safely deletable; preserve all assets if evidence is incomplete.",
+    "A3: Explicitly record that the historical cleanup PR lifecycle cannot be retroactively proven or recreated.",
+    "A4: Report active Outcome, then complete a dedicated PR, hosted CI, merge, closure, and cleanup for this audit."
+  ],
+  "guidelines": [
+    "Preserve historical archive evidence.", "Do not infer deletion from a registry row.", "Do not claim historical PR evidence that does not exist."
+  ],
+  "intent": {
+    "problem": "The historical cleanup changed main directly, so its content exists but its required PR/hosted/closure lifecycle is unproven.",
+    "constraints": ["No rewrite of historical evidence.", "No deletion without new current proof.", "Use focused local verification; hosted CI remains mandatory."],
+    "rationale": "A fresh audit can prove current asset safety and establish a governed lifecycle without fabricating historical provider evidence."
+  },
+  "rawUserRequest": "Before release clean obsolete code, logic, documentation and completed plans; every Work Item needs instruction-plan-implementation-acceptance traceability and PR lifecycle; continue autonomously.",
+  "rawRequestSource": {"type":"human","reference":"conversation continuation","capturedAt":"2026-07-30","digest":"sha256:deprecated-assets-lifecycle-audit-authorized"},
+  "declaredIntent": {"summary":"Audit current deprecated asset safety and close the missing lifecycle boundary.","requestedCapabilities":["ai_governance","documentation","test_automation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "scenarioCoverage": [{"scenario":"Current registry/context checks pass while historical PR absence remains explicitly recorded.","required":true,"status":"unverified","evidence":[],"expected":"No protected asset is deleted and historical limitation is visible.","verificationPlan":"Run focused deprecated-assets tests and checks, then review archive evidence."}],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality", "required": false, "reason": "Temporary user authorization permits focused local verification; hosted CI remains required."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 693
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/pre-release-deprecated-assets-lifecycle-audit-20260730.json",
+    "baseCommit": "e6cced1d473e601bc747f75fcf394cb657a84ba1",
+    "initialScopeDigest": "ea6653d5a3ff6ae11835d8bc8e77a2d439d49a0efd32ff93963eeaf1dd98eba2",
+    "contractSkeletonDigest": "2470c938544064148cf7a49cff74718805d63b20ee95fe0597e70259b451cc28"
+  }
+}
