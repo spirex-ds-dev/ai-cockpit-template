@@ -79,6 +79,8 @@ Human Decision and Recovery には、何が起きたか、なぜ重要か、選�
 
 ゲートは、欠落・失効した証拠、根拠のない主張、不正な Work Item 状態、範囲違反、raw request と操作の不一致、選択された prompt injection 指示、不安全な重要領域効果、人間確認が必要なシナリオを対象とします。認識できるケースでは fail-closed です。
 
+[実在する不合理要求と注入ケースの評価](reference/real-absurd-injection-cases.ja.md) は、12 件の具体的な負例と現在の結果を記録します。現在直接カバーされる 5 件の入力信頼ケースと、レビューが必要な 7 件のリポジトリ/ライフサイクル証拠不足を区別します。依頼者や文書が悪意を持つとは推断せず、束縛されていないゲートを防護済みとは主張しません。
+
 エージェントの内部状態、すべての言語のニュアンス、普遍的な prompt injection 防御、外部統制の設定済み状態を証明するものではありません。Capability Truth Matrix が現在の実装状態の唯一の事実源です。この文書の理念から、planned、template-only、adopter-installed、externally required を implemented に格上げしてはいけません。
 
 <!-- section-id: machine-readable-evidence -->

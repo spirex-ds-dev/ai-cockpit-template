@@ -45,7 +45,7 @@
         "make quality"
       ],
       "limitations": "Repository evidence describes this template; it does not prove an adopter executed the lifecycle.",
-      "digest": "sha256:dfe7246553cd9ab1197423c89bca26b86ed4aecc7f7e35e6bf5d2fd182ac07f2",
+      "digest": "sha256:5bab0112b973fd0c8a4fb84321f7acc1023f1daae42b0188dbf3f4ec45f38295",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 11,
@@ -56,7 +56,7 @@
           },
           {
             "path": "Makefile",
-            "sha256": "901722ba99396af8df27cce8ce73ac9d9ae702e8c37dd9f20e77f0d95f51c14d"
+            "sha256": "38ef8ffde430678bf3d6eaefac764835be0beaaf57ae56171e0212bbc9af1229"
           },
           {
             "path": "scripts/ai_close_work_item.py",
@@ -95,7 +95,7 @@
             "sha256": "6b155e79fd7a6c3fb012c7a40dc5affc0a03a09d34e485cac2047887c946287a"
           }
         ],
-        "digest": "sha256:5d72c366c1a37a82fe0c9f5006c2e38e049333f26ae2d4ec08a5a95d0365ff2d"
+        "digest": "sha256:520b58e4f498cf1b5506e9b9562fd7f1622794a61cf1ba4de602380386a4c124"
       }
     },
     {
@@ -876,6 +876,85 @@
           }
         ],
         "digest": "sha256:92d3a18d33355e4d608c26cd89188b326584641876b0c317a0c8aca1b7a15ed8"
+      }
+    },
+    {
+      "id": "real_absurd_injection_input_trust",
+      "status": "implemented",
+      "claim": "The deterministic input-trust evaluator directly blocks or contains five documented input-origin cases (RAI-02, RAI-04, RAI-05, RAI-06, and RAI-10) without granting authority from untrusted content.",
+      "evidence": [
+        "scripts/ai_input_trust.py",
+        "scripts/check_real_absurd_injection_docs.py",
+        "docs/reference/real-absurd-injection-cases.md",
+        "docs/reference/real-absurd-injection-cases.zh-CN.md",
+        "docs/reference/real-absurd-injection-cases.ja.md"
+      ],
+      "verification": [
+        "tests/test_real_absurd_injection.py",
+        "tests/test_real_absurd_injection_docs.py",
+        "tests/test_input_trust.py",
+        "tests/test_input_trust_corpus.py"
+      ],
+      "sourceEvidence": [
+        "scripts/ai_input_trust.py",
+        "scripts/check_real_absurd_injection_docs.py",
+        "docs/reference/real-absurd-injection-cases.md",
+        "docs/reference/real-absurd-injection-cases.zh-CN.md",
+        "docs/reference/real-absurd-injection-cases.ja.md"
+      ],
+      "testEvidence": [
+        "tests/test_real_absurd_injection.py",
+        "tests/test_real_absurd_injection_docs.py",
+        "tests/test_input_trust.py",
+        "tests/test_input_trust_corpus.py"
+      ],
+      "commandEvidence": [
+        "python3 -m pytest -q tests/test_real_absurd_injection.py tests/test_input_trust.py tests/test_input_trust_corpus.py tests/test_real_absurd_injection_docs.py"
+      ],
+      "limitations": "RAI-01, RAI-03, RAI-07, RAI-08, RAI-09, RAI-11, and RAI-12 require repository, verification, archive, release, scope, or independent-review facts that this evaluator does not collect; they remain review/evidence_gap outcomes.",
+      "digest": "sha256:7e47a714e9f6649978f975daaf3449c1ab8dff5ff37f5c2b88dda2ddd5e19f68",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 9,
+        "files": [
+          {
+            "path": "docs/reference/real-absurd-injection-cases.ja.md",
+            "sha256": "d700989e6df3fcd6fa3209be22d86c0e0eed6839e69f0053afe9cb9939daa3e7"
+          },
+          {
+            "path": "docs/reference/real-absurd-injection-cases.md",
+            "sha256": "a4027cc7fc857f7242b36ebbdedd0bb4a90e771da5bd58586a2a8eeaf760d820"
+          },
+          {
+            "path": "docs/reference/real-absurd-injection-cases.zh-CN.md",
+            "sha256": "838867d3407a9a49b2c086055d7bad435001a6a7224dd742d52db3fb4c1dcc2d"
+          },
+          {
+            "path": "scripts/ai_input_trust.py",
+            "sha256": "53070284082b3f7721f2aacfae58f32716f09646de6251005adf8a94f3fbd28e"
+          },
+          {
+            "path": "scripts/check_real_absurd_injection_docs.py",
+            "sha256": "fe3742bf8d5bb364967e4586c19fb25cc0d8a765faa176771cf196d613503a21"
+          },
+          {
+            "path": "tests/test_input_trust.py",
+            "sha256": "5fc72a69ce0539cd5791c956cd29f68b7647dc4a14b3599eec7314455a3372f3"
+          },
+          {
+            "path": "tests/test_input_trust_corpus.py",
+            "sha256": "a5196c1965c10dc84bb8641cef0128c928d67d506ec2be10a40c5df3f5265dde"
+          },
+          {
+            "path": "tests/test_real_absurd_injection.py",
+            "sha256": "d4c723e9a8bf617f427b0b087c673879c0e7382031d0f1acda8ebb01f56d8dd0"
+          },
+          {
+            "path": "tests/test_real_absurd_injection_docs.py",
+            "sha256": "cfe7531ce9d76e5da5b5ad3a645f0408b6e88a8b27147d179575001a9db1c29f"
+          }
+        ],
+        "digest": "sha256:90ecdecedf001419273a1a646bee40862842954c2f9294f3f6012c4c54e91481"
       }
     },
     {
