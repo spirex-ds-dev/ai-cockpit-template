@@ -1,0 +1,190 @@
+{
+  "contractVersion": 2,
+  "workItemId": "pre-release-real-absurd-injection-assessment-replacement-20260731",
+  "mode": "code",
+  "title": "Verify real absurd and injection controls with evidence-based refusal",
+  "baseCommit": "6b5619f951ba3a64c897041a1e6af2cd9ae936b5",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/pre-release-real-absurd-injection-assessment-replacement-20260731.contract.json",
+    ".ai/work-items/active/pre-release-real-absurd-injection-assessment-replacement-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/pre-release-real-absurd-injection-assessment-replacement-20260731.outcome.json",
+    ".ai/work-items/active/pre-release-real-absurd-injection-assessment-replacement-20260731.outcome.md",
+    "scripts/ai_input_trust.py",
+    "scripts/ai_critical_domain_guards.py",
+    "scripts/check_real_absurd_injection_docs.py",
+    "tests/test_real_absurd_injection.py",
+    "tests/test_real_absurd_injection_docs.py",
+    "tests/test_input_trust.py",
+    "tests/test_input_trust_corpus.py",
+    "tests/test_critical_domain_guards.py",
+    "tests/test_pr_aggregate.py",
+    "docs/reference/real-absurd-injection-cases.md",
+    "docs/reference/real-absurd-injection-cases.zh-CN.md",
+    "docs/reference/real-absurd-injection-cases.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/trust-layer.md",
+    "docs/trust-layer.zh-CN.md",
+    "docs/trust-layer.ja.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": ["Publishing a release or changing provider-side reviewer identity controls.", "Claiming general malicious-intent detection, runtime sandboxing, or external identity verification.", "Rewriting failed unmerged Work Item archives."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative twelve-case release-blocking scope and acceptance requirements."
+    },
+    {"path":"scripts/ai_input_trust.py","reason":"Current deterministic source/trust/authority and traffic-light implementation."},
+    {"path":"tests/test_real_absurd_injection.py","reason":"Current direct twelve-case executable evidence."},
+    {"path":"scripts/check_real_absurd_injection_docs.py","reason":"Trilingual result-alignment checker."},
+    {"path":"docs/reference/real-absurd-injection-cases.md","reason":"English authority document for current results."},
+    {"path":".ai/work-items/archive/2026/pre-release-real-absurd-injection-assessment-20260730.outcome.md","reason":"Unmerged predecessor retained only as immutable audit evidence."}
+  ],
+  "rawUserRequest": "在发布前加入真实荒诞与注入攻击评估：三个语言版本加入 12 案例，确认 AI Cockpit 能正确识别并阻止；能力不足必须整改。不能声称看穿用户恶意。信号灯：🟢允许自动下一步，🟡风险需人工承认，🔴证据不足或边界冲突则阻止。当前工单及完整计划均已授权持续执行。",
+  "rawRequestSource": {"type":"human","reference":"conversation:real-absurd-injection-and-traffic-lights","capturedAt":"2026-07-31","digest":"sha256:real-absurd-injection-traffic-light-authorized"},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level":"high",
+    "riskTypes":["security","prompt_injection","release","documentation_truth"],
+    "reason":"Incorrectly treating missing repository or identity evidence as permission would undermine release governance. Each result must remain bounded to executable evidence.",
+    "unknownsReviewComplete":true
+  },
+  "agentCapability": {
+    "canImplement":true,"canVerify":true,"needsHumanDecision":false,"blockedReason":""
+  },
+  "executionDecision": {
+    "status":"continue","reason":"The user authorized this release-blocking assessment and its full lifecycle; missing evidence still blocks individual operations."
+  },
+  "preReviewWarnings": [
+    "Use evidence/authority conflicts, never an inference about requester intent.",
+    "RAI-01 remains unproven unless caller/test/monitoring facts are collected.",
+    "Name actual gate and precondition for every full-repository result."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: All 12 cases have direct executable evidence and semantically aligned English, Chinese, and Japanese records including source/trust/authority/operation/conflict/gate/decision/recovery.",
+    "A2: Every non-allow result has a traffic light and evidence-based refusal record; only a bounded evidence-backed allow may proceed automatically.",
+    "A3: Capability documents distinguish direct input-trust coverage, repository-gate coverage, external-control limits, and the unresolved RAI-01 evidence gap.",
+    "A4: Any mismatch is corrected through a shared decision chain, not case-specific keyword exceptions; focused tests, full quality, and fresh Hosted CI pass.",
+    "A5: Active Outcome is reported in Chinese before archive, then dedicated PR, merge, closure, and branch cleanup complete before final Japanese reassessment."
+  ],
+  "guidelines": [
+    "Never label a requester or source as malicious; state the evidence, authority, scope, or safety conflict.",
+    "Do not turn a fixed corpus into a universal semantic-defense claim.",
+    "Keep three language documents aligned with executable evidence and explicit limitations.",
+    "Run full local quality for this high-risk release prerequisite and preserve failed predecessor evidence."
+  ],
+  "intent": {
+    "problem":"Current main contains the twelve-case implementation, but earlier unmerged delivery does not prove current release readiness. The plan requires a fresh assessment distinguishing direct input controls, real repository gates, and unresolved evidence gaps.",
+    "constraints":["Retain failed predecessor archives unchanged.","Do not claim malicious-intent detection or external physical controls.","Missing evidence must block or require review, never imply that work may proceed.","Run full local quality and fresh Hosted CI before merge."],
+    "rationale":"A trustworthy refusal system lets an agent say no with concrete evidence and recovery while remaining honest about facts it cannot establish."
+  },
+  "declaredIntent":{"summary":"Re-verify the full multilingual twelve-case assessment from current main with truthful traffic-light refusal behavior.","requestedCapabilities":["ai_governance","documentation","software_design","test_automation"]},
+  "scenarioCoverage":[
+    {"scenario":"Twelve cases are consistent across English, Chinese, Japanese, evaluator records, and full-repository boundaries.","required":true,"status":"unverified","evidence":[],"expected":"All case records and direct tests state the same bounded results.","verificationPlan":"Run real-case, input-trust corpus, guard, and trilingual document tests."},
+    {"scenario":"Evidence/authority conflicts produce a refusal rather than automatic continuation.","required":true,"status":"unverified","evidence":[],"expected":"Every non-allow decision reports signal, reason, missing evidence, and recovery.","verificationPlan":"Run direct evaluator tests and inspect the documentation checker."},
+    {"scenario":"An unresolved repository fact is not falsely promoted to a block or allow.","required":true,"status":"unverified","evidence":[],"expected":"RAI-01 stays not_proven/review until actual repository analysis is available.","verificationPlan":"Run direct case tests and validate Capability Truth limitations."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": false,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized continuous execution of all planned Work Items and their governed lifecycle actions."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 695
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/pre-release-real-absurd-injection-assessment-replacement-20260731.json",
+    "baseCommit": "6b5619f951ba3a64c897041a1e6af2cd9ae936b5",
+    "initialScopeDigest": "035de1f2134f34fbb53f8e49f4053c7aa71afdacefc6ef7dff02095139f3a955",
+    "contractSkeletonDigest": "38dcaf965a4b603361b5c3763a396cfea6db231eeffffd452933c83eb89c1897"
+  }
+}
