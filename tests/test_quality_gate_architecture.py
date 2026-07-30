@@ -1,3 +1,4 @@
+import subprocess
 from pathlib import Path
 
 import yaml
@@ -125,3 +126,16 @@ def test_quality_full_uses_owned_phase_cleanup_helper():
     assert "scripts/run_quality_session.py" in full
     assert "quality-fast" in full
     assert "quality-heavy" in full
+
+
+def test_full_quality_runs_canonical_release_state_consistency_gate():
+    result = subprocess.run(
+        ["make", "-n", "quality"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "--gate check-release-state-consistency" in result.stdout

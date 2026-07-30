@@ -1,7 +1,11 @@
 import hashlib
 import json
+from pathlib import Path
 
 from scripts import check_release_state_consistency
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def write_metadata(tmp_path, *, state=None, published=None, candidate=None):
@@ -48,6 +52,10 @@ def write_metadata(tmp_path, *, state=None, published=None, candidate=None):
 def test_consistent_canonical_state_passes(tmp_path):
     write_metadata(tmp_path)
     assert check_release_state_consistency.check_repository(tmp_path) == []
+
+
+def test_repository_published_metadata_digest_is_current():
+    assert check_release_state_consistency.check_repository(ROOT) == []
 
 
 def test_previous_release_and_candidate_conflicts_are_rejected(tmp_path):

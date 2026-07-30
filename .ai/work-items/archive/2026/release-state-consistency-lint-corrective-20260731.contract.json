@@ -1,0 +1,217 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-state-consistency-lint-corrective-20260731",
+  "mode": "code",
+  "title": "Deliver release-state quality corrective with lint-compliant tests",
+  "baseCommit": "567b9ed400d4ee7f75fd52ed95e575c368464f2b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-state-consistency-lint-corrective-20260731.contract.json",
+    ".ai/work-items/active/release-state-consistency-lint-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-state-consistency-lint-corrective-20260731.outcome.json",
+    ".ai/work-items/active/release-state-consistency-lint-corrective-20260731.outcome.md",
+    "Makefile",
+    "release-state.json",
+    "tests/test_quality_gate_architecture.py",
+    "tests/test_release_state_consistency.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing release identity, next-release candidate, workflow behavior, installer behavior, tags, GitHub Releases, or provider state.",
+    "Reusing, altering, or merging failed archived Work Item PR #504.",
+    "Weakening Ruff, the canonical release-state checker, normal quality, or hosted verification."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/release-state-consistency-lint-corrective-20260731.contract.json",
+      "reason": "Work Item Contract and lifecycle evidence."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30562547751/job/90938975400",
+      "reason": "Hosted template-smoke failure identifies only Ruff I001 import ordering in the two new replacement tests."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Original corrective must be independently delivered with normal quality executing the existing release-state checker."
+    },
+    {
+      "path": "scripts/check_release_state_consistency.py",
+      "reason": "Canonical release projection consistency authority."
+    },
+    {
+      "path": "release.json",
+      "reason": "Published projection whose exact SHA-256 binds release-state metadataDigests.published."
+    },
+    {
+      "path": "tests/test_quality_gate_architecture.py",
+      "reason": "Replacement regression test file; imports must satisfy Ruff before hosted validation."
+    },
+    {
+      "path": "tests/test_release_state_consistency.py",
+      "reason": "Replacement repository-state regression test file; imports must satisfy Ruff before hosted validation."
+    },
+    {
+      "path": "conversation:2026-07-31-continuous-plan-authorization",
+      "reason": "User authorized continuing corrective Work Items, PR lifecycle, and release without an additional stop."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release_governance",
+      "ci_regression",
+      "metadata_integrity"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "An archived corrective failed hosted lint before merge. The replacement must reproduce the functional correction under a new immutable Work Item and prove lint plus release-state behavior."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the complete plan and its corrective PR lifecycles; the failure is fully evidenced and bounded."
+  },
+  "preReviewWarnings": [
+    "PR #504 remains failed audit evidence and must not be merged; only this replacement Work Item may carry the corrective forward.",
+    "Do not add a second implementation mechanism; use the existing canonical checker and fresh generated evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Normal make quality includes a named timed check-release-state-consistency gate that delegates to scripts/check_release_state_consistency.py.",
+    "release-state.json metadataDigests.published equals the SHA-256 of current release.json, with no other release identity change.",
+    "The replacement tests prove the normal quality graph and actual canonical repository state; both test files pass Ruff I001.",
+    "Capability Truth, Japanese assessment, and pre-release documentation alignment artifacts are regenerated from current bytes without expanding claims.",
+    "python3 -m ruff check tests/test_quality_gate_architecture.py tests/test_release_state_consistency.py and the named release-state focused tests pass locally; the replacement PR's required hosted checks pass before merge."
+  ],
+  "guidelines": [
+    "Deliver the release-state corrective as an independent replacement; preserve the failed archived Work Item and PR as audit evidence.",
+    "Fix the actual lint cause using standard-library import order only; do not weaken lint or skip hosted verification.",
+    "Use the existing canonical checker rather than reimplementing release-state validation.",
+    "Keep release publication and all version identity changes out of scope."
+  ],
+  "intent": {
+    "problem": "PR #504 archived the release-state quality corrective but template-smoke rejected its two new test modules with Ruff I001 because standard-library imports were ordered after from imports. Its source changes cannot be amended without violating immutable archive and one-Work-Item/one-PR rules.",
+    "constraints": ["Start from current origin/main and deliver the necessary original release-state corrective plus only the standard import-order fix in a new Work Item.", "Do not alter failed PR #504, its archived evidence, release identity, provider state, or workflow.", "Run focused local verification under the user-approved temporary efficiency policy; hosted PR CI is still mandatory."],
+    "rationale": "A clean replacement retains truthful immutable failure history, eliminates the exact lint defect, and ensures future normal quality detects release-state metadata drift before release preparation."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "User's temporary efficiency authorization permits focused local verification for corrective Work Items; hosted PR CI remains mandatory."
+    }
+  ],
+  "scenarioCoverage": [
+    {"scenario": "The two replacement test modules use Ruff-compliant import ordering.", "expected": "project-lint passes with no I001 errors.", "verificationPlan": "Run python3 -m ruff check on both exact files before finish and rely on hosted template-smoke as independent validation.", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "Normal full quality includes canonical release-state consistency.", "expected": "make -n quality contains the named timed check-release-state-consistency gate.", "verificationPlan": "Run focused architecture regression and inspect make -n quality output.", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "The canonical published state is aligned and metadata drift is fail-closed.", "expected": "Repository check passes and existing negative regression fails altered metadata.", "verificationPlan": "Run release-state test module and make check-release-state-consistency.", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "No release identity or provider state changes occur.", "expected": "Diff excludes release.json, next-release.json, workflows, tags, and GitHub Releases.", "verificationPlan": "Inspect final diff and provider release/tag inventory before finish.", "required": true, "status": "unverified", "evidence": []}
+  ],
+  "rawUserRequest": "Continue the authorized plan until all objectives complete. Fix discovered process defects before release, retain full PR lifecycle, and avoid unnecessary local full quality under the temporary efficiency authorization.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-31-continuous-plan-authorization", "capturedAt": "2026-07-31", "digest": "sha256:continuous-plan-authorized"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Deliver a lint-clean independent replacement for the failed release-state quality corrective without weakening gates or mutating its archive.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized continuous plan",
+    "reason": "The user authorized the complete corrective lifecycle and release continuation, retaining all gates and hosted verification."
+  },
+  "rollbackNote": "Revert this replacement Work Item as a single unit if it causes a verified regression; never restore the stale digest, weaken lint, or alter archived #504 evidence.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 697
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-state-consistency-lint-corrective-20260731.json",
+    "baseCommit": "567b9ed400d4ee7f75fd52ed95e575c368464f2b",
+    "initialScopeDigest": "a5fcac971e8875ca13e7f2c148e17319cabfcf5cc7de73d2eee37481bff75580",
+    "contractSkeletonDigest": "242f74179931e0c742ac890e1961188473bb6d9aa71013b858af21c02db289ed"
+  }
+}
