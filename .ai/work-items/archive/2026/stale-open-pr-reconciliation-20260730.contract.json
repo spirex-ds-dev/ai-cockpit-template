@@ -1,0 +1,66 @@
+{
+  "contractVersion": 2,
+  "workItemId": "stale-open-pr-reconciliation-20260730",
+  "mode": "code",
+  "title": "Reconcile obsolete open pull requests before release",
+  "baseCommit": "55d19295f68862166e2dc5873e991e2971c920f2",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/stale-open-pr-reconciliation-20260730.contract.json",
+    ".ai/work-items/active/stale-open-pr-reconciliation-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/stale-open-pr-reconciliation-20260730.outcome.json",
+    ".ai/work-items/active/stale-open-pr-reconciliation-20260730.outcome.md"
+  ],
+  "outOfScope": [
+    "Merging, rebasing, or editing code from historical PR #403, #460, #461, #462, #464, or #486.",
+    "Publishing a release, changing release metadata, dependency pins, CI, tests, documentation, or governance rules.",
+    "Deleting a local worktree or branch unless a completed provider-PR reconciliation explicitly proves it is the exact obsolete PR branch and preserves its archive evidence."
+  ],
+  "sources": [
+    {"path":".ai/work-items/archive/2026/dependabot-supersession-plan-membership-corrective-20260730.summary.json","reason":"Records the replacement of failed PR #486 and the required later obsolete-PR cleanup boundary."},
+    {"path":".ai/work-items/archive/2026/wi01-wi20-bidirectional-traceability-audit-20260728.summary.json","reason":"Records the prior completed audit and the requirement not to treat historical open PRs as current Work Items."},
+    {"path":"docs/reference/wi01-wi20-bidirectional-traceability-audit.json","reason":"Current machine-readable WI-01 through WI-20 completion facts; WI-18 and WI-19 remain deferred."},
+    {"path":"docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md","reason":"Authoritative plan order requires process and obsolete-path correction before release."}
+  ],
+  "rawUserRequest":"发布前将远端、本地分支整理干净；远端只保留 main，本地只保留与远端同步的 main。#441、#442、#444、#445、#403 需要处理；所有工单按完整流程，发现流程问题先修正。所有计划工单持续执行。",
+  "rawRequestSource":{"type":"human","reference":"conversation:pre-release-branch-and-pr-convergence","capturedAt":"2026-07-30","digest":"sha256:open-pr-reconciliation-authorized"},
+  "requestedOperation":{"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment":{"level":"medium","riskTypes":["provider_pr_state","branch_cleanup","historical_evidence"],"reason":"Closing a still-useful PR or deleting the wrong branch would lose review context. Each provider mutation must be preceded by exact PR-head, archive, and current-main replacement evidence.","unknownsReviewComplete":true},
+  "agentCapability":{"canImplement":true,"canVerify":true,"needsHumanDecision":false,"blockedReason":""},
+  "executionDecision":{"status":"continue","reason":"The user explicitly authorized continuous planned execution and release-preparation convergence. This Work Item only closes PRs after read-only evidence proves they are obsolete; any non-obsolete PR remains open with a documented follow-up."},
+  "preReviewWarnings":["Provider PR closure is irreversible for the review path; verify the exact Head SHA, archived evidence, and current-main replacement before each close.","A historical branch or worktree is not itself proof of safe deletion.","No local full quality or full pytest is required under the temporary plan-wide authorization; the Work Item PR still requires complete hosted CI."],
+  "checkpointPolicy":{"requiredBeforeFinish":true,"requiredStages":["before_edit","before_finish"],"reason":"Record checkpoints around the provider-state reconciliation and its archive evidence."},
+  "acceptance":[
+    "A1: A Summary reconciliation matrix records PR #403, #460, #461, #462, #464, and #486 with exact head identity, current provider state, archived Work Item evidence, and a merge-versus-close decision.",
+    "A2: A provider PR is closed only when read-only evidence proves that current main has a completed replacement or its required behavior already merged; no historical branch is merged, rebased, or edited.",
+    "A3: Each closed PR has a recorded exact closure reason and its remote branch deletion outcome; any unresolved PR remains open and blocks final branch-convergence claims.",
+    "A4: The current reconciliation Work Item completes focused provider/archive verification, all required governance gates, active Outcome report, archive, its own PR, full hosted CI, merge, closure, and its own branch cleanup before the next planned delivery.",
+    "A5: Local full quality and full pytest are explicitly not run only under the temporary user authorization; this does not weaken hosted PR verification or release criteria."
+  ],
+  "guidelines":[
+    "Preserve immutable archived evidence and historical failed PRs; never rewrite them to make closure easier.",
+    "Close only exact obsolete provider PRs backed by current-main replacement evidence; never infer replacement from a similarly named branch.",
+    "Keep a clear separation between reconciliation evidence and release claims.",
+    "Record all discovered lifecycle/process gaps in the Summary and do not change repository rules for the temporary local-verification authorization."
+  ],
+  "intent":{"problem":"Six historical PRs remain open even though several are known failed, superseded, or represent earlier iterations of the human-visible Outcome process. They create ambiguous branch and review state before release and conflict with the user's final convergence goal. The prior correction #487 proved that historical PR #486 must remain immutable as failure evidence while a replacement closes through current main.","constraints":["Begin from current origin/main and keep all historical archive files immutable.","Use GitHub read-only evidence before each provider mutation; close only the exact PRs proven obsolete.","Do not delete any worktree or branch outside the exact closed PR identity in this Work Item.","Keep local verification focused under the user's temporary plan-wide direction, while requiring fresh hosted CI for this Work Item PR."],"rationale":"A review queue is part of repository governance. Reconciliation must be evidence-backed and explicit so final remote/local branch cleanup is a verifiable conclusion rather than a destructive sweep."},
+  "declaredIntent":{"summary":"Evidence-back and reconcile legacy open PRs before release without merging obsolete histories or weakening the lifecycle.","requestedCapabilities":["ai_governance","documentation","software_design"]},
+  "scenarioCoverage":[
+    {"scenario":"A historical PR is provably superseded by an archived and merged current-main replacement.","required":true,"status":"unverified","evidence":[],"expected":"The exact obsolete PR is closed with a Summary record binding its head, replacement archive/PR, and provider closure result.","verificationPlan":"Query provider PR metadata and compare exact archived manifests and current main ancestry before closing."},
+    {"scenario":"A historical PR lacks sufficient replacement evidence or contains behavior absent from current main.","required":true,"status":"unverified","evidence":[],"expected":"The PR remains open and is recorded as a release-blocking follow-up; this Work Item makes no destructive mutation.","verificationPlan":"Inspect PR diff, checks, merge ancestry, and related archive evidence before deciding closure."},
+    {"scenario":"A closure is followed by branch cleanup.","required":true,"status":"unverified","evidence":[],"expected":"The provider outcome and exact remote branch absence are recorded; unrelated local worktrees/branches remain untouched.","verificationPlan":"Use provider PR metadata and remote-ref queries after each closure, then inspect the local worktree list."}
+  ],
+  "verification":[
+    {"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":false,"reason":"User's temporary plan-wide authorization excludes local full quality and full pytest for non-release Work Items; focused provider/archive verification and full hosted PR checks remain mandatory."}
+  ],
+  "destructiveChangePolicy":{"allowed":false,"requiresHumanApproval":true,"allowPatterns":[]},
+  "restrictedWriteApproval":{"approved":true,"approvedBy":"user","reason":"The user explicitly authorized planned PR/branch convergence before release and continuous execution; each closure is still constrained to evidence-backed obsolete provider PRs."},
+  "rollbackNote":"Provider PR closures are not reopened or rewritten by rollback. Preserve the Summary/Outcome evidence and, if an incorrect decision is discovered, create a separate corrective Work Item.",
+  "budgetImpact":{"expectedMetrics":{"archiveGrowth":688}},
+  "startReceipt":{"path":".ai/work-items/starts/stale-open-pr-reconciliation-20260730.json","baseCommit":"55d19295f68862166e2dc5873e991e2971c920f2","initialScopeDigest":"612398fa61d5e0f26e8dca96d41d0a97e69057e6305a6cdad4eeeb75cfc9e4dd","contractSkeletonDigest":"9bfb056515d8c18a654a2eec461a997dc01e87ab2dcfb93054e8127de963c366"}
+}
