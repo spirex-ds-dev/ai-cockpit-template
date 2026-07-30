@@ -5,6 +5,10 @@ description: Close JA-UNINSTALL-RUNTIME-001 with an installed, digest-bound, fai
 ---
 
 # Installed Detached Uninstaller Runtime Corrective
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Objective
 

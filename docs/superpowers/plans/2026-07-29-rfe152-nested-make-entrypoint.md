@@ -5,6 +5,10 @@ description: TDD and governed lifecycle plan for explicit Makefile.ai propagatio
 ---
 
 # RFE-152 Nested Make Entrypoint Implementation Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Goal
 

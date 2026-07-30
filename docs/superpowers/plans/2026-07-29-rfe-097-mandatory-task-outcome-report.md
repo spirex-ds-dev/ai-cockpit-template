@@ -5,6 +5,10 @@ description: Make every closed Work Item produce validated, visible reporting wi
 ---
 
 # RFE-097 Mandatory Task Outcome and Closure Receipt Implementation Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 

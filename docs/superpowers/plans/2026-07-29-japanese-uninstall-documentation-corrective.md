@@ -11,6 +11,10 @@ keywords:
 ---
 
 # Japanese Uninstall Documentation Corrective
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Objective
 

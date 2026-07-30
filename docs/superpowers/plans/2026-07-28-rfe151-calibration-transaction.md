@@ -5,6 +5,10 @@ description: TDD plan for fail-closed Calibration evidence, Candidate-bound conf
 ---
 
 # RFE-151 Calibration Transaction Implementation Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Goal
 

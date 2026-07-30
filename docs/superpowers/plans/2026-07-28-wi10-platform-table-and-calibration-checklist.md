@@ -11,6 +11,10 @@ keywords:
 ---
 
 # WI-10 Platform Table and Calibration Checklist Corrective Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Objective
 

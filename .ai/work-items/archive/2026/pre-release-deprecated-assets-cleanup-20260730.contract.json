@@ -1,0 +1,79 @@
+{
+  "contractVersion": 2,
+  "workItemId": "pre-release-deprecated-assets-cleanup-20260730",
+  "mode": "code",
+  "title": "Clean deprecated pre-release assets with evidence-backed retention",
+  "baseCommit": "87c85a5c3effd84377080c3c5f0470d582bfa12e",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/pre-release-deprecated-assets-cleanup-20260730.contract.json",
+    ".ai/work-items/active/pre-release-deprecated-assets-cleanup-20260730.summary.json",
+    ".ai/work-items/active/pre-release-deprecated-assets-cleanup-20260730.outcome.json",
+    ".ai/work-items/active/pre-release-deprecated-assets-cleanup-20260730.outcome.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/reference/deprecated-assets-registry.json",
+    "docs/reference/deprecated-assets.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    "docs/superpowers/plans/**",
+    "scripts/check_deprecated_assets.py",
+    "tests/test_deprecated_assets.py",
+    "Makefile"
+  ],
+  "outOfScope": [
+    "Deleting or rewriting immutable archived Contracts, Summaries, Outcomes, Manifests, Start Receipts, decision evidence, release evidence, semantic version tags, or GitHub Releases.",
+    "Changing runtime behavior, installer behavior, release metadata, dependency pins, CI workflows, or capability statuses without a separately scoped corrective Work Item.",
+    "The final current-cycle plan cleanup, release publication, or final local-worktree convergence Work Items.",
+    "Deleting a file that still has a runtime use, an unresolved reference, no explicit replacement, no recovery path, or an incomplete registry record."
+  ],
+  "sources": [
+    {"path":"docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md","reason":"User-authorized sequence and PLAN-008 require a distinct pre-release deprecated code, logic, documentation, and completed-plan cleanup before publication."},
+    {"path":"docs/reference/remediation-instruction-traceability.json","reason":"PLAN-DIRECTIVE-026 records the user instruction and its existing registry/checker evidence."},
+    {"path":"docs/reference/deprecated-assets-registry.json","reason":"Current machine-readable candidates, protection flags, replacement facts, and deletion boundary."},
+    {"path":"docs/reference/deprecated-assets.md","reason":"Published statement that registry validation alone never authorizes deletion."},
+    {"path":".ai/work-items/archive/2026/deprecated-assets-archive-hygiene.contract.json","reason":"Predecessor established the registry but explicitly did not execute deletion or retention changes."},
+    {"path":".ai/work-items/archive/index.json","reason":"Protected immutable lifecycle evidence inventory."}
+  ],
+  "rawUserRequest":"发布前，加个工单，处理过期的代码、逻辑、文档（包括已经实现了的计划文档）。最后发版本之前，将远端、本地的分支都整理干净。所有工单按指示—计划—实现—验收双向追踪，发现流程问题先解决再继续。除发布版本和各工单 PR 外，尽可能不跑全量测试，完整门禁；临时许可只写入 Contract，不写工程规则。",
+  "rawRequestSource":{"type":"human","reference":"conversation:pre-release-deprecated-assets-and-plan-cleanup","capturedAt":"2026-07-30","digest":"sha256:pre-release-deprecated-assets-cleanup-authorized"},
+  "requestedOperation":{"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment":{"level":"medium","riskTypes":["accidental_deletion","stale_reference","archive_integrity","documentation_governance"],"reason":"Removing a live, referenced, or audit-protected asset would damage installation, release, or lifecycle evidence. The Work Item must fail closed unless every change is mapped to a candidate record, replacement, references, and recovery boundary.","unknownsReviewComplete":true},
+  "agentCapability":{"canImplement":true,"canVerify":true,"needsHumanDecision":false,"blockedReason":""},
+  "executionDecision":{"status":"continue","reason":"The user explicitly authorized continuous planned execution. Deletion remains limited to explicit, evidence-backed candidates and protected historical evidence remains outside scope."},
+  "preReviewWarnings":["A registry entry is inventory evidence, not standalone deletion authorization.","Preserve immutable lifecycle and release evidence even when historical plan prose is outdated.","Use focused verification locally under the temporary authorization; fresh full hosted CI remains mandatory for this Work Item PR."],
+  "checkpointPolicy":{"requiredBeforeFinish":true,"requiredStages":["before_edit","before_finish"],"reason":"Capture the pre-change inventory and the final protected/deleted/historicalized evidence matrix."},
+  "acceptance":[
+    "A1: Every user-named asset class—code, logic, documentation, and completed execution-plan documents—has a Summary row citing either an exact changed path or a retained-path reason.",
+    "A2: Every newly identified registry candidate records an exact path, purpose, replacement, current references, runtime/migration use, protection state, deletion decision, and recovery rationale; the checker rejects incomplete records.",
+    "A3: No immutable archive, decision, or release evidence is deleted or rewritten.",
+    "A4: Any deleted or historicalized live asset has no runtime use or unresolved reference, has an explicit replacement and recovery path, and is named in the Summary evidence matrix.",
+    "A5: Focused registry/reference/traceability tests and all required AI governance gates pass; local full quality and full pytest are not run only under the temporary user authorization, while the Work Item PR must complete fresh hosted CI.",
+    "A6: The active Outcome is reported directly in Chinese before archive; the Work Item then completes archive, dedicated PR, hosted CI, merge, closure, exact work-branch cleanup, and synchronized main before later release work starts."
+  ],
+  "guidelines":[
+    "Preserve immutable archived evidence; historical status must be recorded, never concealed by rewriting the past.",
+    "Do not delete from inference: require an explicit registry decision, replacement, reference check, and recovery rationale.",
+    "Keep pre-release cleanup distinct from release publication and final current-cycle plan cleanup.",
+    "Record every discovered workflow defect in the Summary and do not change repository rules to apply the temporary focused-verification authorization."
+  ],
+  "intent":{"problem":"The user requires a real pre-release cleanup of obsolete code, logic, documentation, and already-implemented execution plans. The existing deprecated-assets Work Item only created an inventory and explicitly made no deletion or retention change, so treating it as completed cleanup would leave misleading or stale assets before release.","constraints":["Preserve immutable archives, decision records, release evidence, semantic tags, and provider Releases.","Classify every candidate using deterministic evidence before deletion or historicalization; unresolved candidates remain retained and are reported.","Do not modify repository rules for the temporary focused local-verification direction.","Use a dedicated branch and complete the full PR/hosted CI/closure lifecycle before release."],"rationale":"A release-ready repository needs an auditable distinction between current product documentation, historical record, protected evidence, and safely removable duplicate assets. This prevents both accidental evidence loss and stale instructions being treated as operational guidance."},
+  "declaredIntent":{"summary":"Safely remove or historicalize only evidence-backed obsolete assets before release while preserving protected audit records and a reversible explanation for every decision.","requestedCapabilities":["ai_governance","documentation","test_automation"]},
+  "scenarioCoverage":[
+    {"scenario":"A candidate is unreferenced, non-runtime, non-protected, has an explicit replacement, and is safely removable or historicalizable.","required":true,"status":"unverified","evidence":[],"expected":"The Summary records the evidence and the exact resulting deletion or historicalization; focused checks prove the registry and references remain valid.","verificationPlan":"Inspect repository references and registry fields, make the minimal scoped change, then run deprecated-assets and traceability checks."},
+    {"scenario":"A candidate is protected, runtime-used, migration-required, referenced, or lacks a replacement/recovery path.","required":true,"status":"unverified","evidence":[],"expected":"The asset is retained, explicitly classified with its blocking reason, and no deletion claim is made.","verificationPlan":"Run the registry validator and inspect references/protection prefixes; record the no-change rationale in the Summary."},
+    {"scenario":"A historical plan is complete or superseded but must remain accessible as audit evidence.","required":true,"status":"unverified","evidence":[],"expected":"The document is clearly historicalized or retained with a current replacement link; active runtime instructions are not removed by this Work Item.","verificationPlan":"Check plan markers, current-plan references, and documentation/traceability links after the scoped change."}
+  ],
+  "verification":[
+    {"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":false,"reason":"Temporary user authorization for this plan excludes local full quality/full pytest for non-release Work Items; focused checks and all governance gates remain mandatory, and fresh hosted PR CI remains required."}
+  ],
+  "destructiveChangePolicy":{"allowed":true,"requiresHumanApproval":false,"allowPatterns":["docs/superpowers/plans/**","docs/reference/**","scripts/**","tests/**"],"reason":"The user explicitly authorized this pre-release cleanup. Each deletion remains restricted by the Contract acceptance, registry evidence, protection boundary, replacement, reference, and recovery requirements."},
+  "restrictedWriteApproval":{"approved":true,"approvedBy":"user","reason":"The user explicitly authorized continuous planned cleanup and all governed Work Item lifecycle actions; protected archival and release evidence remains excluded."},
+  "rollbackNote":"Restore only this Work Item's committed file changes from the dedicated branch if a scoped deletion or historicalization is found incorrect. Never rewrite immutable archive, decision, tag, or provider-release evidence; record a corrective Work Item instead.",
+  "budgetImpact":{"expectedMetrics":{"archiveGrowth":690}},
+  "startReceipt":{"path":".ai/work-items/starts/pre-release-deprecated-assets-cleanup-20260730.json","baseCommit":"87c85a5c3effd84377080c3c5f0470d582bfa12e","initialScopeDigest":"064a657fdbe7c00b80ca85277369e0ff0b44c80812f63654851a3faaa56ba809","contractSkeletonDigest":"ffa5862e49786db015348501a0ef1c968e80452d9e2a291e974791a30493909e"}
+}

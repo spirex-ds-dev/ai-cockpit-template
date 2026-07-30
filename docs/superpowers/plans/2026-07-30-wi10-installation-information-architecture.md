@@ -5,6 +5,10 @@ description: "Implementation plan for the beginner-first, Work Item-centered ins
 ---
 
 # WI-10 Installation Information Architecture Implementation Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans or superpowers:subagent-driven-development task-by-task.
 

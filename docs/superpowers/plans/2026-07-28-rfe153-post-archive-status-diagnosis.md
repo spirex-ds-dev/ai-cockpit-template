@@ -5,6 +5,10 @@ description: TDD plan for manifest- and Summary-bound no-active ownership and tr
 ---
 
 # RFE-153 Post-Archive Status Diagnosis Implementation Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Goal
 

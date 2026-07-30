@@ -5,6 +5,10 @@ description: Exact-source final Japanese release-gate reassessment after every c
 ---
 
 # Final Japanese Capability Reassessment Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Objective
 

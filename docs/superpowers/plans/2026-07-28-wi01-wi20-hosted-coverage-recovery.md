@@ -11,6 +11,10 @@ keywords:
 ---
 
 # WI-01 through WI-20 Hosted Coverage Recovery
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Purpose
 

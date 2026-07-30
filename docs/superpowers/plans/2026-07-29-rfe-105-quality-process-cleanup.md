@@ -5,6 +5,10 @@ description: "Make quality phases own, terminate, and reap their child process g
 ---
 
 # RFE-105: quality-session process cleanup
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Problem
 

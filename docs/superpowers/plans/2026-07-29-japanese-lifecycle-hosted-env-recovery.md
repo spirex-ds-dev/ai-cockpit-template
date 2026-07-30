@@ -11,6 +11,10 @@ keywords:
 ---
 
 # Japanese Lifecycle Hosted Environment Recovery
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Purpose
 
@@ -62,4 +66,3 @@ protected core recursive Make and quality subprocesses, but
 authority boundaries. A fixture-only workaround would hide a real installer
 failure, so the recovery centralizes the production subprocess boundary and
 tests both direct variables and encoded recursive Make overrides.
-

@@ -5,6 +5,10 @@ description: "Redeliver direct active-state Task Outcome reporting from current 
 ---
 
 # RFE-108: Pre-Archive Outcome Successor
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Purpose
 
