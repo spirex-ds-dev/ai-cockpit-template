@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import ai_finish
 
 
@@ -80,6 +82,41 @@ def test_finish_archive_message_is_not_lifecycle_closure():
 
     assert "lifecycle is not closed" in output
     assert "make ai-close-work-item TASK=example" in output
+
+
+def test_capability_truth_gate_is_fail_closed_before_finish(monkeypatch, tmp_path):
+    summary_path = tmp_path / "summary.json"
+    summary_path.write_text("{}", encoding="utf-8")
+    calls = []
+
+    def fake_run(command, **_kwargs):
+        calls.append(command)
+        return 1, 1, "capability evidence is stale"
+
+    monkeypatch.setattr(ai_finish, "run", fake_run)
+    code = ai_finish.run_mandatory_evidence_checks(
+        contract="contract.json",
+        summary="summary.json",
+        contract_data={"scope": []},
+        contract_path=Path("contract.json"),
+        summary_path=summary_path,
+        contract_hash="a" * 64,
+        commit_sha="b" * 40,
+        obs=type(
+            "Observation",
+            (),
+            {
+                "check_started": lambda *_a, **_k: None,
+                "check_failed": lambda *_a, **_k: None,
+                "check_passed": lambda *_a, **_k: None,
+            },
+        )(),
+    )
+
+    assert code == 1
+    assert calls == [["make", "check-capability-truth"]]
+    assert ai_finish.load_json(summary_path)["verification"][0]["check"] == "capabilityTruth"
+    assert ai_finish.load_json(summary_path)["verification"][0]["result"] == "failed"
 
 
 def test_promote_review_readiness_does_not_override_failed_stabilization_evidence():
