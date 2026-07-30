@@ -67,8 +67,9 @@ worktree root だけを受け付けます。Makefile は `ARGS` を変更せず 
 provider 問い合わせ、receipt の書き込み、base の切り替え、branch 操作より前に、CLI
 は選択された worktree の branch が厳密に `codex/<child-task>` であることを要求します。
 task と worktree が一致しなければ fail closed で停止し、ある Work Item の receipt に
-別 Work Item の PR や branch を結び付けることはできません。Git 操作だけが子 checkout
-に限定され、provider の `gh` 証拠は現在の policy checkout に束縛されたままです。通常の
+別 Work Item の PR や branch を結び付けることはできません。Git 操作は子 checkout
+に限定され、provider の `gh` 問い合わせもその選択された子 branch を明示するため、現在の
+policy checkout の PR を推測しません。通常の
 merged PR、Head SHA、親 branch への merge 保持、clean worktree、receipt、remote 不在の
 検証はすべて必須です。
 

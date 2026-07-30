@@ -75,7 +75,7 @@ def test_archived_evidence_uses_strict_summary_validation() -> None:
     assert "legacy_archive=False" in source
 
 
-def test_explicit_worktree_scopes_git_but_not_provider_queries() -> None:
+def test_explicit_worktree_scopes_git_but_leaves_provider_cli_unprefixed() -> None:
     commands: list[tuple[str, ...]] = []
 
     def runner(args, _check):
@@ -90,6 +90,38 @@ def test_explicit_worktree_scopes_git_but_not_provider_queries() -> None:
     assert commands == [
         ("-C", "/tmp/child-worktree", "status", "--porcelain"),
         ("gh", "pr", "view", "474"),
+    ]
+
+
+def test_verify_pr_explicitly_selects_the_requested_work_item_branch() -> None:
+    commands: list[tuple[str, ...]] = []
+    payload = {
+        "state": "MERGED",
+        "headRefName": "codex/child",
+        "headRefOid": "child-head",
+        "baseRefName": "codex/parent",
+        "mergedAt": "2026-07-30T00:00:00Z",
+        "mergeCommit": {"oid": "merge-child"},
+        "url": "https://example.test/pr/474",
+    }
+
+    def runner(args, _check):
+        commands.append(tuple(args))
+        return closure.CommandResult(0, __import__("json").dumps(payload))
+
+    assert (
+        closure._verify_pr(runner, "codex/child", "main", "child-head", allow_stacked_base=True)
+        == payload
+    )
+    assert commands == [
+        (
+            "gh",
+            "pr",
+            "view",
+            "codex/child",
+            "--json",
+            "state,headRefName,headRefOid,baseRefName,mergedAt,mergeCommit,url",
+        )
     ]
 
 

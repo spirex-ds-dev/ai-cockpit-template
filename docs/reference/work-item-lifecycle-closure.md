@@ -78,7 +78,8 @@ receipt write, base switch, or branch mutation, the CLI requires the selected
 worktree to be checked out on exactly `codex/<child-task>`. A task/worktree
 mismatch stops fail closed; it cannot create a receipt for one Work Item while
 using another Work Item's PR or branch. Git operations are scoped to that child
-checkout; provider `gh` evidence stays bound to the current policy checkout.
+checkout; provider `gh` discovery explicitly names that selected child branch,
+so it cannot infer the current policy checkout's PR.
 All normal merged-PR, Head-SHA, parent-retention, clean-worktree, receipt, and
 remote-absence checks remain mandatory.
 
