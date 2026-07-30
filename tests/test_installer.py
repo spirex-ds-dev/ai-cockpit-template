@@ -89,6 +89,27 @@ def test_installed_distribution_contains_pr_and_approval_wiring(tmp_path):
         assert (tmp_path / "scripts" / script).is_file()
 
 
+def test_generic_installed_pr_gate_does_not_run_placeholder_formatter(tmp_path):
+    base = init_git_repo(tmp_path, "Makefile", "include Makefile.ai\n", "initial host")
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+
+    assert installer.install() == 0
+    run(tmp_path, "git", "add", ".")
+    run(tmp_path, "git", "commit", "-qm", "install cockpit")
+    result = run(tmp_path, "make", "check-ai-pr", f"AI_BASE_COMMIT={base}")
+
+    assert "ERROR: configure PROJECT_FORMAT_CHECK for the generic stack." not in result.stdout
+    assert "ERROR: configure PROJECT_FORMAT_CHECK for the generic stack." not in result.stderr
+
+
 def test_installer_source_context_ignores_candidate_metadata(tmp_path):
     source = tmp_path / "source"
     target = tmp_path / "target"

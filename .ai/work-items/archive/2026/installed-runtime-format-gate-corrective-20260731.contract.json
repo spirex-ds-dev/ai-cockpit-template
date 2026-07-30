@@ -1,0 +1,180 @@
+{
+  "contractVersion": 2,
+  "workItemId": "installed-runtime-format-gate-corrective-20260731",
+  "mode": "code",
+  "title": "Fix unconfigured adopter PR format gate",
+  "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/installed-runtime-format-gate-corrective-20260731.contract.json",
+    ".ai/work-items/active/installed-runtime-format-gate-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/installed-runtime-format-gate-corrective-20260731.outcome.json",
+    ".ai/work-items/active/installed-runtime-format-gate-corrective-20260731.outcome.md",
+    "templates/make/Makefile.ai",
+    "templates/stacks/generic.mk",
+    "tests/test_installer.py",
+    ".ai/cockpit/checks.yaml",
+    "Makefile",
+    "scripts/ai_finish.py",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_makefile.py",
+    "tests/test_finish_readiness.py",
+    "tests/test_core_gates.py",
+    "tests/test_installed_runtime_parity.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Failed PR #519 and its archived Work Item evidence.",
+    "Release publication, tags, and unrelated project quality commands."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30589143695/job/91027358235",
+      "reason": "Hosted installation-smoke failed at Install into temporary repository."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Installed check-ai-pr invokes the adopter project formatter before source-bound evidence."
+    },
+    {
+      "path": "templates/stacks/generic.mk",
+      "reason": "Generic stack intentionally configures PROJECT_FORMAT_CHECK as a fail-until-configured placeholder."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["installer_runtime"],
+    "reason": "The installed PR gate must distinguish an absent optional formatter from a configured formatter that fails.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The failure is reproducible in an isolated generic adopter and has a bounded corrective scope."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "An unconfigured generic adopter reaches source-bound evidence and PR ownership validation without attempting its placeholder formatter.",
+    "A configured adopter still runs formatter before source-bound evidence and fails closed if that formatter fails.",
+    "A focused installed-runtime regression reproduces the hosted generic installation path."
+  ],
+  "guidelines": ["Preserve fail-closed behavior for configured project formatters.", "Do not make the generic placeholder a false passing formatter."],
+  "intent": {
+    "problem": "PR #519 installation-smoke fails because the newly ordered installed check-ai-pr always invokes the generic stack's deliberately failing formatter placeholder.",
+    "constraints": ["Keep source-bound evidence before PR acceptance.", "Do not edit the failed PR or its archived evidence.", "Use focused verification under the temporary efficiency exception."],
+    "rationale": "A declared configuration state lets the installed gate skip only an absent formatter while keeping configured formatter failures blocking."
+  },
+  "rawUserRequest": "Analyze the recurring release and installation workflow failures, organize the root cause, and implement durable prevention under the authorized plan.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-31-continue-installation-runtime-corrective", "capturedAt": "2026-07-31", "digest": "sha256:installation-runtime-format-gate-corrective"},
+  "declaredIntent": {"summary": "Repair the installed PR gate so generic adopters do not fail on an intentionally absent formatter while configured formatter failures remain blocking.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized efficiency exception: focused regression and source-bound evidence run locally; hosted CI remains mandatory before merge."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user explicitly authorized continuous planned Work Item execution, including implementation and governance corrections."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 705
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/installed-runtime-format-gate-corrective-20260731.json",
+    "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+    "initialScopeDigest": "42ad5d34c74d2d7afce754323c8c7d8c20469c7f4c734e0aec95efa9c59c2bba",
+    "contractSkeletonDigest": "96b612d49404cfdd1455a3ccfa4a4a9d25b021bb05f904bfc14afb9b993bccb8"
+  }
+}
