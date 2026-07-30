@@ -1,0 +1,255 @@
+{
+  "contractVersion": 2,
+  "workItemId": "stacked-pr-closure-executor-20260730",
+  "mode": "code",
+  "title": "Add parent-branch executor for stacked Work Item closure",
+  "baseCommit": "b2abfe1e5ece11526863e82a330a108b3c048efc",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/stacked-pr-closure-executor-20260730.contract.json",
+    ".ai/work-items/active/stacked-pr-closure-executor-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/stacked-pr-closure-executor-20260730.outcome.json",
+    ".ai/work-items/active/stacked-pr-closure-executor-20260730.outcome.md",
+    ".ai/work-items/recovery-receipts/**",
+    "scripts/ai_close_work_item.py",
+    "scripts/ai_check_pr.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "tests/test_pr_aggregate.py",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/reference/work-item-lifecycle-closure.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Relaxing default-base closure validation.",
+    "Closing a Work Item from an arbitrary repository or unregistered worktree.",
+    "Deleting any branch before merged-PR and receipt verification succeeds.",
+    "Release publication or unrelated WI-10 installation documentation changes."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "The current CLI requires the caller to run the branch-local script, which prevents a newer parent branch from closing an already-merged child worktree that still has the prior script version."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Existing lifecycle tests establish strict merged-PR, SHA, receipt, deletion, and stacked-parent boundaries."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/stabilize-quality-coverage-and-pr-body-20260730.contract.json",
+      "reason": "Archived child Work Item evidence and merged PR #474 provide the real recovery target."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/stacked-pr-closure-recovery-corrective-20260730.summary.json",
+      "reason": "The prior corrective repair records the retained-merge proof but exposes the need for a parent-branch execution entrypoint."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "PR #473 proves that the aggregate checker cannot distinguish a verified historical recovery chain from unrelated newly maintained Work Items when an earlier archived Contract lacks an explicit predecessor source."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Existing aggregate PR tests cover source-linked recovery chains but not an append-only receipt that verifies an immutable historical chain without rewriting archives."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "lifecycle_closure",
+      "pr_aggregate_validation",
+      "branch_deletion",
+      "cross_worktree_execution"
+    ],
+    "reason": "An unvalidated target worktree could cause closure actions in the wrong checkout, while an over-broad aggregate exception could conceal unrelated Work Items. The executor and receipt must be evidence-bound and retain every existing closure and PR-ownership gate.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user continuously authorized correction of discovered workflow defects before progressing to WI-10 and release work."
+  },
+  "preReviewWarnings": [
+    "Verify that --worktree scopes Git operations but never scopes provider gh requests.",
+    "Verify the target is a registered worktree of this repository and that direct default-base closure remains strict.",
+    "Verify that a historical recovery receipt cannot waive missing, reordered, incompatible, or unrelated Work Items."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The closure CLI accepts an explicit target worktree only after proving that it is a registered worktree of this repository.",
+    "Provider gh requests remain unscoped while every Git operation for the target Work Item runs in the explicit target worktree.",
+    "A parent-branch invocation can close archived merged PR #474 from its still-identifiable child worktree and records a valid Closure Receipt.",
+    "Default-base closure, arbitrary-path rejection, detached-target rejection, and the existing stacked-parent checks remain fail-closed.",
+    "The English and Japanese lifecycle references document the exceptional command without presenting it as a routine adopter path.",
+    "The aggregate PR checker accepts a multi-archive PR only when an append-only historical recovery receipt exactly binds the consecutive archived pairs and their Git ancestry; it otherwise retains the one-new-Work-Item rejection.",
+    "The receipt and regression tests prove that missing, reordered, incompatible, or unrelated archive entries remain rejected."
+  ],
+  "guidelines": [
+    "The explicit target-worktree path must be evidence-bound and fail closed; it is not a general branch deletion API.",
+    "Provider operations and Git worktree selection must remain separated so that --worktree cannot alter the provider identity query.",
+    "Document the exceptional recovery command in English and Japanese without weakening the normal one-Work-Item lifecycle.",
+    "A recovery-chain receipt must bind every historical archive pair and Git relationship deterministically; it must never be a task-name whitelist or require rewriting immutable archive evidence."
+  ],
+  "intent": {
+    "problem": "After #475 merged, its improved stacked-base validator is available on the WI-10 parent branch, but the older merged child #474 still owns a worktree containing its pre-fix script. The normal closure command therefore cannot execute the new parent-branch implementation against that child checkout. In addition, PR #473 fails because the aggregate checker reads three archived Work Items as independent even though they form a historically merged recovery chain; the first corrective archive cannot be retroactively amended to cite WI-10.",
+    "constraints": [
+      "Keep the default invocation and default-base validation unchanged.",
+      "Require the target path to be a registered worktree of the same repository.",
+      "Do not scope GitHub provider requests to the target worktree.",
+      "Do not delete remote or local branches until the existing authoritative PR and Closure Receipt validations pass.",
+      "Do not rewrite any archived Contract, Summary, Start Receipt, or Closure Receipt.",
+      "Do not weaken the default one-new-Work-Item-per-PR rule or add a task-name whitelist.",
+      "Use the recovered #474 worktree as end-to-end proof after this corrective Work Item merges."
+    ],
+    "rationale": "A narrow, explicit executor lets the synchronized parent branch run current closure policy against a still-identifiable child worktree. A separately append-only, deterministic receipt gives the PR checker a way to verify the historical chain without mutating archive evidence or weakening branch-deletion and PR-ownership controls."
+  },
+  "rawUserRequest": "Continue: fully solve the stacked PR lifecycle process problem before WI-10 and later release work.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-30 continuous authorization to correct discovered process defects",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:stacked-pr-closure-executor"
+  },
+  "declaredIntent": {
+    "summary": "Add a fail-closed parent-branch executor for closing a verified child Work Item worktree.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The parent branch invokes closure for merged child #474 through its registered child worktree.",
+      "expected": "Closure verifies the exact child PR and parent retention, writes a receipt in the current policy checkout, and deletes only the child branch.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Regression test plus post-merge execution against the preserved #474 worktree."
+    },
+    {
+      "scenario": "An arbitrary, detached, or foreign target path is supplied.",
+      "expected": "Closure stops before provider queries, receipt creation, or branch deletion.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Regression tests for non-worktree and detached target paths."
+    },
+    {
+      "scenario": "PR #473 contains WI-10 and two sequential corrective archive pairs whose earliest correction cannot cite WI-10 because the archive is immutable.",
+      "expected": "A complete append-only recovery receipt permits only that fully verified historical chain; default multi-Work-Item rejection remains in effect for every other PR.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused aggregate checker tests cover valid chain, missing receipt, reordered entry, incompatible base, and unrelated entry."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 678
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/stacked-pr-closure-executor-20260730.json",
+    "baseCommit": "b2abfe1e5ece11526863e82a330a108b3c048efc",
+    "initialScopeDigest": "52c0be7e2ffdda2c17b4221e45fd3914ba5319360a96cc76b8de1587520dda33",
+    "contractSkeletonDigest": "fabe3509fe00e976bfe91c3b1582cca53ace0f4b4ff303297877aedb4e54dd1f"
+  }
+}

@@ -51,6 +51,37 @@ branch を保持し、通常の worktree では元の Work Item checkout へ戻�
 `git branch -d` や手動の remote branch 削除を先に実行すると、PR ownership
 または再試行 identity を失うため避けます。
 
+## stacked PR の例外実行
+
+通常は merge 済み Work Item branch 自身から closure を実行します。子の corrective
+PR が active な親 Work Item branch に merge され、子 worktree が古い closure 実装を
+保持している場合だけ、親 branch の現在の policy から、その子 worktree を明示して
+実行できます。
+
+```sh
+make ai-close-work-item TASK=<child-task> ARGS="--worktree /absolute/path/to/child-worktree"
+```
+
+これは一般的な branch 削除 API ではありません。同じ repository に登録済みの Git
+worktree root だけを受け付けます。Git 操作だけが子 checkout に限定され、provider の
+`gh` 証拠は現在の policy checkout に束縛されたままです。通常の merged PR、Head
+SHA、親 branch への merge 保持、clean worktree、receipt、remote 不在の検証はすべて
+必須です。
+
+## 過去の stacked PR チェーン receipt
+
+archive は不変です。corrective Work Item が明示的な predecessor source を持たずに
+すでに archive 済みの場合、aggregate PR check は archive の書き換えや task 名による
+例外を許可しません。代わりに、`.ai/work-items/recovery-receipts/` 配下の限定された
+append-only receipt が、連続する archive prefix を正確に束縛できます。各 Work Item ID、
+Contract/Summary の path、SHA-256 digest、archive sequence、base commit、PR merge-base
+を記録します。
+
+checker はすべての束縛と base-commit ancestry edge を再計算します。receipt の完全に
+compatible な prefix だけを受け入れ、その後の entry には通常の隣接 source recovery
+rule が引き続き必要です。receipt の欠落、並び替え、不整合、無関係な entry があれば、
+既定の「一つの PR に一つの新規 Work Item」rule がそのまま適用されます。
+
 ## 完了状態
 
 成功時は共通して次の条件が揃います。

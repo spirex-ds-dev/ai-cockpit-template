@@ -54,6 +54,56 @@ def test_archived_evidence_uses_strict_summary_validation() -> None:
     assert "legacy_archive=False" in source
 
 
+def test_explicit_worktree_scopes_git_but_not_provider_queries() -> None:
+    commands: list[tuple[str, ...]] = []
+
+    def runner(args, _check):
+        commands.append(tuple(args))
+        return closure.CommandResult(0, "")
+
+    scoped = closure._in_worktree(runner, "/tmp/child-worktree")
+
+    scoped(["status", "--porcelain"], False)
+    scoped(["gh", "pr", "view", "474"], False)
+
+    assert commands == [
+        ("-C", "/tmp/child-worktree", "status", "--porcelain"),
+        ("gh", "pr", "view", "474"),
+    ]
+
+
+def test_registered_target_worktree_rejects_missing_path(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError, match="does not exist"):
+        closure._registered_target_worktree(str(tmp_path / "missing"))
+
+
+def test_registered_target_worktree_accepts_same_repository_root(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "child"
+    target.mkdir()
+    source_root = tmp_path / "policy"
+    source_root.mkdir()
+    calls: list[tuple[str, ...]] = []
+
+    def runner(args, _check):
+        calls.append(tuple(args))
+        if args == ["rev-parse", "--show-toplevel"]:
+            return closure.CommandResult(0, f"{target}\n")
+        if args == ["worktree", "list", "--porcelain"]:
+            return closure.CommandResult(0, f"worktree {source_root}\n")
+        raise AssertionError(args)
+
+    monkeypatch.setattr(closure, "PROJECT_ROOT", source_root)
+    monkeypatch.setattr(closure, "_in_worktree", lambda _runner, _path: runner)
+
+    assert closure._registered_target_worktree(str(target)) is runner
+    assert calls == [
+        ("rev-parse", "--show-toplevel"),
+        ("worktree", "list", "--porcelain"),
+    ]
+
+
 def test_close_branch_discovery_uses_remote_identity_for_duplicate_branch_names() -> None:
     with pytest.raises(RuntimeError, match="could not uniquely discover"):
         closure._discover_base(
@@ -635,6 +685,43 @@ def test_main_reports_ready_only_for_ready_on_base(monkeypatch, capsys) -> None:
     output = capsys.readouterr().out
     assert "Closure Receipt: target/example.closure.md" in output
     assert "Repository state: ready for next Work Item" in output
+
+
+def test_main_uses_registered_explicit_worktree(monkeypatch, capsys) -> None:
+    target_runner = object()
+    monkeypatch.setattr(
+        closure,
+        "parse_args",
+        lambda: type("Args", (), {"task": "example", "worktree": "/tmp/child"})(),
+    )
+    monkeypatch.setattr(
+        closure,
+        "_registered_target_worktree",
+        lambda path: target_runner if path == "/tmp/child" else None,
+    )
+    observed = {}
+
+    def close(task, runner):
+        observed.update({"task": task, "runner": runner})
+        return {
+            "state": "closed",
+            "pullRequest": 474,
+            "contract": ".ai/work-items/archive/2026/example.contract.json",
+            "workBranch": "codex/example",
+            "baseRemote": "origin",
+            "baseBranch": "main",
+            "baseWorktree": None,
+            "receipt": ".ai/work-items/archive/example.closure.md",
+            "closureReceipt": ".ai/work-items/archive/example.closure.md",
+            "repositoryState": "ready_on_base",
+            "nextWorkItemReady": True,
+        }
+
+    monkeypatch.setattr(closure, "close_work_item", close)
+
+    assert closure.main() == 0
+    assert observed == {"task": "example", "runner": target_runner}
+    assert "Repository state: ready for next Work Item" in capsys.readouterr().out
 
 
 def test_main_reports_detached_closure_as_not_ready(monkeypatch, capsys) -> None:

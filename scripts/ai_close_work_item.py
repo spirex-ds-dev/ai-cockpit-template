@@ -311,9 +311,31 @@ def _in_worktree(runner: Runner, path: str) -> Runner:
     """Run Git commands against a designated worktree without changing branches."""
 
     def scoped(args: Sequence[str], check: bool = False) -> CommandResult:
+        if args and args[0] == "gh":
+            return runner(args, check)
         return runner(["-C", path, *args], check)
 
     return scoped
+
+
+def _registered_target_worktree(path: str) -> Runner:
+    """Return a runner for a registered worktree in this repository only."""
+    target = Path(path).expanduser().resolve()
+    if not target.is_dir():
+        raise RuntimeError("target worktree path does not exist")
+    runner = _in_worktree(_default_runner, str(target))
+    top_level = runner(["rev-parse", "--show-toplevel"], False)
+    if top_level.returncode != 0 or not top_level.stdout.strip():
+        raise RuntimeError("target path is not a Git worktree")
+    if Path(top_level.stdout.strip()).resolve() != target:
+        raise RuntimeError("target path is not the root of a Git worktree")
+    worktrees = runner(["worktree", "list", "--porcelain"], False)
+    if worktrees.returncode != 0:
+        raise RuntimeError("cannot inspect target Git worktrees")
+    source_root = PROJECT_ROOT.resolve().as_posix()
+    if f"worktree {source_root}" not in worktrees.stdout.splitlines():
+        raise RuntimeError("target worktree is not registered in this repository")
+    return runner
 
 
 def _remote_branch_absent(runner: Runner, remote: str, branch: str) -> None:
@@ -474,13 +496,21 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Close a completed Work Item safely.")
     parser.add_argument("--task", required=True)
+    parser.add_argument(
+        "--worktree",
+        help="registered child Work Item worktree for exceptional stacked-PR closure",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
     try:
-        result = close_work_item(args.task, _default_runner)
+        target_worktree = getattr(args, "worktree", None)
+        runner = (
+            _registered_target_worktree(target_worktree) if target_worktree else _default_runner
+        )
+        result = close_work_item(args.task, runner)
     except (OSError, RuntimeError, ValueError) as exc:
         print(f"Work Item lifecycle: not closed\nReason: {exc}", file=sys.stderr)
         return 1
