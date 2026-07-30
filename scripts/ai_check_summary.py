@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 import sys
 import time
 from datetime import datetime, timezone
@@ -601,7 +602,21 @@ def _valid_repository_evidence_path(path: str) -> str | None:
         return "must be a normalized repository-relative path"
     if not (PROJECT_ROOT / candidate).exists():
         return "does not exist"
+    if not _is_git_tracked_repository_path(path):
+        return "must be a Git-tracked repository file"
     return None
+
+
+def _is_git_tracked_repository_path(path: str) -> bool:
+    """Return whether a path can be present in a clean repository checkout."""
+    result = subprocess.run(  # nosec B603 B607 - fixed list-form Git interrogation
+        ["git", "ls-files", "--error-unmatch", "--", path],
+        cwd=PROJECT_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return result.returncode == 0
 
 
 def validate_documentation_alignment(
