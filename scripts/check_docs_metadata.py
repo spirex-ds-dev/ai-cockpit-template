@@ -10,6 +10,7 @@ from pathlib import Path, PurePosixPath
 from typing import cast
 
 from install_ai_cockpit import STACKS
+from check_pre_release_documentation_alignment import build_report, generated_artifact_errors
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_FRONT_MATTER = ("author", "title", "description")
@@ -1469,6 +1470,15 @@ def check_repository(root: Path) -> list[str]:
 
 def main() -> int:
     errors = check_repository(ROOT)
+    report = build_report(ROOT)
+    errors.extend(
+        f"pre-release documentation alignment: {error}"
+        for error in generated_artifact_errors(ROOT, report)
+    )
+    errors.extend(
+        f"pre-release documentation alignment: {finding['detail']}"
+        for finding in report["blockingFindings"]
+    )
     if errors:
         print("documentation metadata check failed:", file=sys.stderr)
         for error in errors:

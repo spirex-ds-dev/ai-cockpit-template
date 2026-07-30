@@ -1,0 +1,242 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-alignment-regeneration-corrective-20260730",
+  "mode": "code",
+  "title": "Fail closed when pre-release documentation alignment artifacts are stale",
+  "baseCommit": "e6cced1d473e601bc747f75fcf394cb657a84ba1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-alignment-regeneration-corrective-20260730.contract.json",
+    ".ai/work-items/active/documentation-alignment-regeneration-corrective-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-alignment-regeneration-corrective-20260730.outcome.json",
+    ".ai/work-items/active/documentation-alignment-regeneration-corrective-20260730.outcome.md",
+    "scripts/check_docs_metadata.py",
+    "scripts/check_pre_release_documentation_alignment.py",
+    "tests/test_pre_release_documentation_alignment.py",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/capability-truth-matrix.json"
+  ],
+  "outOfScope": [
+    "Changing the substantive Trust Layer, Japanese assessment, release state, or historical archive evidence.",
+    "Merging or retrying failed PR #498 without a fresh corrective lifecycle.",
+    "Weakening the full hosted quality requirement or treating a generated report as current without source-bound verification."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30552983573",
+      "reason": "Hosted CI evidence for closed PR #498: the execution-plan update made the source-derived documentation-alignment report and digest stale."
+    },
+    {
+      "path": "scripts/check_pre_release_documentation_alignment.py",
+      "reason": "Current generator derives the report from current sources but did not reject stale checked-in generated artifacts in its command path."
+    },
+    {
+      "path": "tests/test_pre_release_documentation_alignment.py",
+      "reason": "Existing regression proves consistency only when this test runs; the focused deprecated-assets verification did not make that dependency explicit."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "A tracked source surface whose update exposed the stale generated report."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "generated_artifact_drift",
+      "documentation_governance"
+    ],
+    "reason": "The fix changes a pre-release documentation gate and generated artifacts. A false pass could permit later plan or documentation changes to be reported against stale evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user confirmed continuous corrective delivery. The failed hosted evidence, source generator, and regression test give a bounded, reproducible repair path."
+  },
+  "preReviewWarnings": [
+    "Review the stale-artifact failure path, not merely a regenerated snapshot: a source change must make the command fail closed until both checked-in reports are regenerated."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The alignment checker compares the derived report and rendered Markdown with their checked-in generated artifacts and fails closed with an actionable stale-artifact error when either differs.",
+    "The normal documentation metadata gate executes that fail-closed alignment check, so focused documentation verification cannot silently skip it.",
+    "Regression tests cover current generated-artifact agreement and a controlled stale-artifact mismatch.",
+    "The checked-in JSON and Markdown reports are regenerated from the exact current source tree and retain their non-claim boundaries.",
+    "Focused verification, all required governance gates, PR validation, hosted CI, merge, closure, and branch cleanup are recorded before this corrective is reported complete."
+  ],
+  "guidelines": [
+    "Preserve fail-closed evidence semantics: stale generated artifacts are not current evidence.",
+    "Keep the repair scoped to documentation-alignment generation and its direct quality gate integration.",
+    "Do not alter immutable failed PR or archived Work Item evidence."
+  ],
+  "intent": {
+    "problem": "PR #498 correctly failed hosted quality after it updated the serial execution plan but did not regenerate the checked-in pre-release documentation-alignment JSON and Markdown. The existing generator could derive current content, but its command path did not compare derived content to committed artifacts, and the focused deprecated-assets check did not execute that consistency check.",
+    "constraints": [
+      "Preserve the failure as closed PR #498 evidence and do not edit its archive bundle.",
+      "Use a fresh Work Item and one PR for the corrective.",
+      "Keep documentation claims bounded; this repair proves generated-artifact freshness, not human translation quality, provider identity, enterprise compliance, or publication.",
+      "The user's temporary focused-verification exception applies before final CI; required governance gates and hosted CI remain mandatory."
+    ],
+    "rationale": "A source-bound report must either be regenerated with every source change or fail before it is treated as current. Making the checker compare generated artifacts and wiring it into the normal metadata gate closes both the technical and focused-verification process gap."
+  },
+  "rawUserRequest": "Continue the full plan without stopping. When hosted CI fails, inspect Actions logs, preserve failed evidence, find the root cause, and implement a permanent process correction rather than repeatedly retrying. Generated documentation evidence must not become stale after plan or documentation changes.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continue-plan-and-inspect-actions-results",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:continue-plan-and-inspect-actions-results-20260730"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:continue-plan-and-inspect-actions-results",
+    "scope": "Implement the bounded corrective, complete its PR lifecycle, and continue the approved plan."
+  },
+  "declaredIntent": {
+    "summary": "Fail closed for stale pre-release documentation-alignment artifacts and make the normal documentation gate verify their currentness.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A tracked alignment source changes while the checked-in JSON or Markdown report remains old.",
+      "expected": "The checker and normal documentation metadata gate fail closed with an actionable stale-artifact finding; no alignment claim is accepted.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [
+        "tests/test_pre_release_documentation_alignment.py"
+      ],
+      "verificationPlan": "Use a temporary source mutation or artifact mismatch in a focused regression test, then restore and verify the regenerated current artifacts pass."
+    },
+    {
+      "scenario": "Current sources and generated JSON/Markdown agree.",
+      "expected": "The checker and documentation metadata gate pass without changing the report.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [
+        "scripts/check_pre_release_documentation_alignment.py",
+        "docs/reference/pre-release-documentation-alignment.json",
+        "docs/reference/pre-release-documentation-alignment.md"
+      ],
+      "verificationPlan": "Run the checker, metadata gate, and focused regression tests after regeneration."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-approved efficiency exception for this non-release Work Item: focused tests, static checks, documentation metadata, and all governance checks run locally; the PR's hosted template-smoke remains the complete quality gate."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 693
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-alignment-regeneration-corrective-20260730.json",
+    "baseCommit": "e6cced1d473e601bc747f75fcf394cb657a84ba1",
+    "initialScopeDigest": "2b97425c90613f06fb900c93cc7c09c53205da7ac527855c89b06475c58630c1",
+    "contractSkeletonDigest": "45c659c04beeaf5e32c0df82bc9fa7085313b2ed461f2387b8a284bb395d1ad6"
+  }
+}

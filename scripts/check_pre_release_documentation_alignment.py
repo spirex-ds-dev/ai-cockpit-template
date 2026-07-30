@@ -300,6 +300,24 @@ def render_markdown(report: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def generated_artifact_errors(root: Path, report: dict[str, Any]) -> list[str]:
+    """Reject checked-in generated views that no longer represent current sources."""
+    expected_json = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
+    expected_markdown = render_markdown(report)
+    refresh_command = "python3 scripts/check_pre_release_documentation_alignment.py --write"
+    errors: list[str] = []
+    for path, expected, label in (
+        (JSON_REPORT, expected_json, "JSON"),
+        (MARKDOWN_REPORT, expected_markdown, "Markdown"),
+    ):
+        candidate = root / path
+        if not candidate.is_file() or candidate.read_text(encoding="utf-8") != expected:
+            errors.append(
+                f"generated documentation-alignment {label} is stale: {path}; run {refresh_command}"
+            )
+    return errors
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--write", action="store_true")
@@ -310,10 +328,13 @@ def main() -> int:
             json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
         (ROOT / MARKDOWN_REPORT).write_text(render_markdown(report), encoding="utf-8")
-    if report["status"] != "aligned":
+    artifact_errors = [] if args.write else generated_artifact_errors(ROOT, report)
+    if report["status"] != "aligned" or artifact_errors:
         print("[ERROR] documentation alignment is blocked", file=sys.stderr)
         for finding in report["blockingFindings"]:
             print(f"[ERROR] {finding['detail']}", file=sys.stderr)
+        for error in artifact_errors:
+            print(f"[ERROR] {error}", file=sys.stderr)
         return 2
     print("pre-release documentation alignment passed")
     return 0
