@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from ai_schema_migration import MigrationError, apply_plan, build_plan
 
-
 REGISTRY = {
     "versions": {"1": {}, "2": {}},
     "transitions": {

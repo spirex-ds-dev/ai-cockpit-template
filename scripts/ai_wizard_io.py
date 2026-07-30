@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable, Sequence
 from enum import Enum
-from typing import Callable, Sequence, TextIO
+from typing import TextIO
 
 
 class Action(Enum):

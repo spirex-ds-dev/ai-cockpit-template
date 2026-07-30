@@ -10,6 +10,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from ai_common import InvalidDataShapeError
+
 STAGES = {"preflight", "implementation", "verification", "pr", "merge", "closure"}
 SEVERITIES = {"informational", "warning", "needs_human_confirmation", "blocked"}
 STATUSES = {"open", "resolved", "accepted_residual_risk", "blocked"}
@@ -133,7 +135,7 @@ def render_issue_overview(records: list[dict[str, Any]]) -> str:
 def _load(path: Path) -> dict[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
-        raise ValueError("record must be a JSON object")
+        raise InvalidDataShapeError("record must be a JSON object")
     return value
 
 

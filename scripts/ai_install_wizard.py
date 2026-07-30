@@ -5,15 +5,15 @@ from __future__ import annotations
 import argparse
 import locale
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, cast
+from typing import Any, cast
 
 from ai_install_plan import WizardPlan, build_wizard_plan
 from ai_installer_detection import collect_installation_detection
 from ai_wizard_io import confirm, select
 from ai_wizard_localization import format_message, load_messages, resolve_language
-
 
 OutputFn = Callable[[str], None]
 InstallerFactory = Callable[..., object]

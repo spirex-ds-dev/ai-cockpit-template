@@ -8,7 +8,6 @@ import json
 import subprocess
 from pathlib import Path
 
-
 RELEASE_PATHS = (
     "release.json",
     "next-release.json",

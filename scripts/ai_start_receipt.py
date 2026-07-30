@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
-import argparse
 import subprocess
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -92,7 +92,7 @@ def build_receipt(
         "receiptPath": f"{RECEIPT_PREFIX}{work_item_id}.json",
         "baseCommit": base_commit,
         "baseBranch": current_branch(project_root=project_root),
-        "startTimestamp": timestamp or datetime.now(timezone.utc).isoformat(),
+        "startTimestamp": timestamp or datetime.now(UTC).isoformat(),
         "initialScopeDigest": scope_digest(scope),
         "contractSkeletonDigest": skeleton_digest(contract),
     }

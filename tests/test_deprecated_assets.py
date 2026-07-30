@@ -7,7 +7,6 @@ from pathlib import Path
 
 from check_deprecated_assets import validate_registry
 
-
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "docs/reference/deprecated-assets-registry.json"
 

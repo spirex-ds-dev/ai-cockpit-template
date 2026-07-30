@@ -22,7 +22,6 @@ from ai_common import (
 )
 from ai_observability import create_observability, elapsed_ms
 
-
 POLICY = PROJECT_ROOT / ".ai" / "guards" / "agent_risk_policy.yaml"
 REPORT = PROJECT_ROOT / "target" / "ai_agent_risk_report.json"
 NON_CODING_STATUSES = {"defer", "needs_human_decision", "block"}

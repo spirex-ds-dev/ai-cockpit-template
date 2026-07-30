@@ -8,7 +8,7 @@ import hashlib
 import json
 import sys
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +22,8 @@ from ai_common import (
     simple_yaml_scalars,
     validate_scenario_coverage,
 )
+from ai_decision_protocol import persist_request
+from ai_decision_protocol import record_evidence as persist_decision_evidence
 from ai_evidence_dependencies import (
     EvidenceDependencyError,
     contract_scope_dependency_issues,
@@ -29,9 +31,7 @@ from ai_evidence_dependencies import (
 )
 from ai_readiness_policy import has_explicit_blocker
 from ai_trust_guards import trust_signals
-from ai_decision_protocol import persist_request, record_evidence as persist_decision_evidence
 from ai_upgrade_conflict_report import validate_report
-
 
 ALLOWED_STATUSES = {
     "ready",
@@ -576,7 +576,7 @@ def sources_signal(contract: dict[str, Any]) -> Signal:
             ["contract.sources"],
         )
 
-    internal_only = all(path.startswith(".ai/") or path.startswith("target/") for path, _ in valid)
+    internal_only = all(path.startswith((".ai/", "target/")) for path, _ in valid)
     if internal_only:
         return Signal(
             "Sources",
@@ -706,8 +706,10 @@ def scenario_coverage_signal(contract: dict[str, Any]) -> Signal:
             "Scenario Coverage",
             "Ready",
             [
-                f"{len(planned_items)} required scenario(s) are planned for verification; "
-                f"{completed_count} are already verified or not_applicable"
+                (
+                    f"{len(planned_items)} required scenario(s) are planned for verification; "
+                    f"{completed_count} are already verified or not_applicable"
+                )
             ],
             ["contract.scenarioCoverage", "contract.riskAssessment"],
         )
@@ -881,7 +883,7 @@ def record_decision_evidence(
         "workItemId": report["workItemId"],
         "contractHash": report["contractHash"],
         "preflightHash": report["preflightHash"],
-        "recordedAt": datetime.now(timezone.utc).isoformat(),
+        "recordedAt": datetime.now(UTC).isoformat(),
         "recordedBy": recorded_by,
     }
     issues = validate_decision_evidence(evidence, report, request)
@@ -932,7 +934,7 @@ def derive_report(
     policy = load_policy(policy_path)
     current_contract_hash = contract_hash(contract_path)
     report = {
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "generatedAt": datetime.now(UTC).isoformat(),
         "workItemId": contract.get("workItemId", ""),
         "contractPath": contract_path.as_posix(),
         "contractHash": current_contract_hash,

@@ -8,20 +8,20 @@ import json
 import shutil
 import subprocess
 import sys
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Sequence
 
 from ai_check_summary import validate_summary
 from ai_check_work_item import validate_contract
 from ai_common import (
     PROJECT_ROOT,
+    InvalidProviderPayloadError,
     clean_git_environment,
     discover_remote_default_candidates,
     load_json,
     run_git,
 )
-
 
 ARCHIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
@@ -220,7 +220,7 @@ def _verify_pr(
             f"cannot verify the pull request through the platform adapter: {exc}"
         ) from exc
     if not isinstance(data, dict):
-        raise RuntimeError("pull request adapter returned a non-object response")
+        raise InvalidProviderPayloadError("pull request adapter returned a non-object response")
     if data.get("state") != "MERGED":
         raise RuntimeError("pull request is not merged; no cleanup was attempted")
     if data.get("headRefName") != branch:

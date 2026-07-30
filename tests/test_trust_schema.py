@@ -6,10 +6,8 @@ import copy
 import json
 from pathlib import Path
 
-import pytest
-
 import ai_trust_schema
-
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 

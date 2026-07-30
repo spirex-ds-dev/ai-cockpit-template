@@ -2,6 +2,7 @@
 # mypy: disable-error-code=union-attr
 
 from __future__ import annotations
+
 from typing import Any
 
 DEFAULT_HARD_RISK_TYPES = {

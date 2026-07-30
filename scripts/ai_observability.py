@@ -8,11 +8,10 @@ import os
 import sys
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Protocol
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_LOG_PATH = PROJECT_ROOT / "target" / "ai_observability.jsonl"
@@ -61,7 +60,7 @@ class AiEvent:
     event_type: AiEventType
     level: AiEventLevel
     message: str
-    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     context: AiRunContext | None = None
     check_id: str | None = None
     command: str | None = None
@@ -128,7 +127,7 @@ class AiObservability:
         for sink in self._sinks:
             try:
                 sink.record(event)
-            except Exception as exc:
+            except Exception as exc:  # noqa: BLE001 - optional sink must not interrupt the governed operation
                 print(f"[observability] sink failed: {type(sink).__name__}: {exc}", file=sys.stderr)
 
     def check_started(self, *, check_id: str, command: str | None = None) -> None:

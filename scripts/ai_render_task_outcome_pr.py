@@ -11,12 +11,12 @@ import argparse
 import json
 import re
 import sys
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 from ai_common import parse_yaml
 from ai_render_task_outcome_multilingual import normalize_locale
-
 
 SAFE_FIELDS = (
     "status",

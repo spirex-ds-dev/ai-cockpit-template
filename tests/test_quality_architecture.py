@@ -4,9 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
-
 from ai_quality_architecture import build_report, inspect_source
-
 
 ROOT = Path(__file__).resolve().parents[1]
 

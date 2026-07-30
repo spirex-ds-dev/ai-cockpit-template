@@ -19,7 +19,6 @@ from ai_common import (
 from ai_observability import create_observability, elapsed_ms
 from ai_start_receipt import receipt_path, validate_receipt
 
-
 REQUIRED_FIELDS = (
     "contractVersion",
     "workItemId",
@@ -186,9 +185,10 @@ def validate_optional_readiness(data: dict[str, Any]) -> list[str]:
         issues.append("archiveIndexRepair must be boolean")
 
     warnings = data.get("preReviewWarnings")
-    if warnings is not None:
-        if not isinstance(warnings, list) or any(not non_empty_string(item) for item in warnings):
-            issues.append("preReviewWarnings must be a list of non-empty strings")
+    if warnings is not None and (
+        not isinstance(warnings, list) or any(not non_empty_string(item) for item in warnings)
+    ):
+        issues.append("preReviewWarnings must be a list of non-empty strings")
 
     checkpoint = data.get("checkpointPolicy")
     if checkpoint is not None:
@@ -303,9 +303,10 @@ def validate_intent(data: dict[str, Any]) -> list[str]:
             issues.append(f"intent.{key} must be a non-empty string when provided")
     for key in INTENT_LIST_KEYS:
         value = intent.get(key)
-        if value is not None:
-            if not isinstance(value, list) or any(not non_empty_string(item) for item in value):
-                issues.append(f"intent.{key} must be a list of non-empty strings when provided")
+        if value is not None and (
+            not isinstance(value, list) or any(not non_empty_string(item) for item in value)
+        ):
+            issues.append(f"intent.{key} must be a list of non-empty strings when provided")
     return issues
 
 

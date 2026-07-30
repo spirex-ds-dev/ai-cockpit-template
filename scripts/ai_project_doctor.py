@@ -12,7 +12,6 @@ from typing import Any
 
 from ai_common import simple_yaml_lists, simple_yaml_scalars
 
-
 LANGUAGE_SIGNALS = {
     "python": ("pyproject.toml", "setup.py", "requirements.txt", "**/*.py"),
     "dart": ("pubspec.yaml", "**/*.dart"),

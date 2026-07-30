@@ -7,7 +7,6 @@ from typing import Any
 
 import pytest
 
-
 ROOT = Path(__file__).parents[1]
 SCHEMA_PATH = ROOT / ".ai/schemas/task_outcome.schema.json"
 

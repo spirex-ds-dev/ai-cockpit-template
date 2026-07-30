@@ -3,12 +3,11 @@ import subprocess
 import sys
 from pathlib import Path
 
-import install_ai_cockpit
 import ai_disable_enable
 import ai_rollback
 import ai_uninstall_proposal
-from install_ai_cockpit import Installer, RUNTIME_TARGETS, SCRIPT_NAMES
-
+import install_ai_cockpit
+from install_ai_cockpit import RUNTIME_TARGETS, SCRIPT_NAMES, Installer
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME_SCRIPTS = {

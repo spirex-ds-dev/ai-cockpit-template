@@ -10,24 +10,26 @@ import re
 import shutil
 import subprocess
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Iterable, cast
+from typing import cast
 
-from ai_generate_status import write_no_active_status
+from ai_adoption_evidence import build_runtime_verification
 from ai_check_summary import (
     complete_generated_documentation_alignment,
     documentation_alignment_skeleton,
 )
-from ai_adoption_evidence import build_runtime_verification
-from ai_upgrade_conflict_report import build_report
-from ai_preflight_review import upgrade_conflict_gate
-from ai_start_receipt import build_receipt, receipt_binding
+from ai_common import InvalidDataShapeError
+from ai_generate_status import write_no_active_status
 from ai_install_facts import FACT_NAMES, write_fact_bundle
 from ai_installer_bootstrap import adoption_record_paths
-from ai_installer_detection import missing_runtime_scripts
-from ai_installer_detection import InstallationDetection, collect_installation_detection
+from ai_installer_detection import (
+    InstallationDetection,
+    collect_installation_detection,
+    missing_runtime_scripts,
+)
 from ai_installer_evidence import action_counts
 from ai_installer_ownership import is_project_owned
 from ai_installer_repository import clean_git_environment, git_records, git_target_args, run_git
@@ -39,6 +41,9 @@ from ai_installer_transaction import (
     classify_source,
 )
 from ai_installer_upgrade import release_semver as installer_release_semver
+from ai_preflight_review import upgrade_conflict_gate
+from ai_start_receipt import build_receipt, receipt_binding
+from ai_upgrade_conflict_report import build_report
 
 CATALOG_NAME = "ai_installer_catalog.json"
 CATALOG_PATH = Path(__file__).with_name(CATALOG_NAME)
@@ -217,7 +222,7 @@ class Installer:
             / ".ai"
             / "cockpit"
             / "upgrade-backups"
-            / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
+            / datetime.now(UTC).strftime("%Y%m%dT%H%M%S.%fZ")
         )
         self.actions: list[Action] = []
         self.backups: dict[Path, Path] = {}
@@ -1075,7 +1080,7 @@ class Installer:
                 source_value = source_version[key]
                 target_value = target_version[key]
                 if not isinstance(source_value, int) or not isinstance(target_value, int):
-                    raise ValueError(f"version metadata {key} must remain an integer")
+                    raise InvalidDataShapeError(f"version metadata {key} must remain an integer")
                 if source_value < target_value:
                     print(
                         f"ERROR: refusing {key} downgrade from {target_value} to {source_value}",
@@ -1084,14 +1089,17 @@ class Installer:
                     return False
             source_release = source_version.get("releaseVersion")
             target_release = target_version.get("releaseVersion")
-            if isinstance(source_release, str) and isinstance(target_release, str):
-                if self.release_semver(source_release) < self.release_semver(target_release):
-                    print(
-                        f"ERROR: refusing releaseVersion downgrade from {target_release} "
-                        f"to {source_release}",
-                        file=sys.stderr,
-                    )
-                    return False
+            if (
+                isinstance(source_release, str)
+                and isinstance(target_release, str)
+                and self.release_semver(source_release) < self.release_semver(target_release)
+            ):
+                print(
+                    f"ERROR: refusing releaseVersion downgrade from {target_release} "
+                    f"to {source_release}",
+                    file=sys.stderr,
+                )
+                return False
         return True
 
     def prepare_upgrade_branch(self) -> bool:
@@ -1340,7 +1348,7 @@ class Installer:
                 self.created_paths.add(path)
 
     def finalize_upgrade_records(self) -> None:
-        contract_path, summary_path = self.upgrade_paths()
+        _contract_path, summary_path = self.upgrade_paths()
         if self.dry_run or not summary_path.exists():
             return
         summary = json.loads(summary_path.read_text(encoding="utf-8"))
@@ -1372,7 +1380,7 @@ class Installer:
     def load_version(path: Path) -> dict[str, int | str]:
         data = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(data, dict):
-            raise ValueError(f"{path}: root must be a JSON object")
+            raise InvalidDataShapeError(f"{path}: root must be a JSON object")
         result: dict[str, int | str] = {}
         for key in ("distributionVersion", "contractSchema"):
             value = data.get(key)
@@ -1492,43 +1500,43 @@ class Installer:
         existed = dst.exists()
         relative = dst.relative_to(self.target).as_posix()
         project_owned_boundary = is_project_owned(relative)
-        if self.upgrade and existed and src.read_bytes() != dst.read_bytes():
-            if project_owned_boundary or not self.confirm_upgrade_conflicts:
-                decision = {
-                    "path": relative,
-                    "classification": "Project-owned" if project_owned_boundary else "Diverged",
-                    "decision": "preserved",
-                    "reason": "Target differs from template baseline; review manually before adopting template changes.",
-                    "summary": "Target content differs from the template-managed content.",
-                    "recommendation": "Confirm the project-owned decision or keep the target file unchanged.",
-                }
-                self.upgrade_conflicts.append(decision)
-                self.upgrade_conflict_report = build_report(
-                    self.upgrade_conflicts,
-                    source_version=self.load_version(
-                        self.source / ".ai" / "cockpit" / "version.json"
-                    ),
-                    target_version=self.load_version(
-                        self.target / ".ai" / "cockpit" / "version.json"
-                    ),
+        if (
+            self.upgrade
+            and existed
+            and src.read_bytes() != dst.read_bytes()
+            and (project_owned_boundary or not self.confirm_upgrade_conflicts)
+        ):
+            decision = {
+                "path": relative,
+                "classification": "Project-owned" if project_owned_boundary else "Diverged",
+                "decision": "preserved",
+                "reason": "Target differs from template baseline; review manually before adopting template changes.",
+                "summary": "Target content differs from the template-managed content.",
+                "recommendation": "Confirm the project-owned decision or keep the target file unchanged.",
+            }
+            self.upgrade_conflicts.append(decision)
+            self.upgrade_conflict_report = build_report(
+                self.upgrade_conflicts,
+                source_version=self.load_version(self.source / ".ai" / "cockpit" / "version.json"),
+                target_version=self.load_version(self.target / ".ai" / "cockpit" / "version.json"),
+            )
+            report_path = self.target / ".ai" / "cockpit" / "upgrade-conflict-report.json"
+            if not self.dry_run:
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                report_path.write_text(
+                    json.dumps(self.upgrade_conflict_report, indent=2) + "\n", encoding="utf-8"
                 )
-                report_path = self.target / ".ai" / "cockpit" / "upgrade-conflict-report.json"
-                if not self.dry_run:
-                    report_path.parent.mkdir(parents=True, exist_ok=True)
-                    report_path.write_text(
-                        json.dumps(self.upgrade_conflict_report, indent=2) + "\n", encoding="utf-8"
-                    )
-                if upgrade_conflict_gate(
-                    self.upgrade_conflict_report, confirmed=self.confirm_upgrade_conflicts
-                ):
-                    raise ValueError(
-                        "upgrade conflict report requires human confirmation; "
-                        "review .ai/cockpit/upgrade-conflict-report.json and pass "
-                        "--confirm-upgrade-conflicts"
-                    )
-                if project_owned_boundary:
-                    self.record("skip", dst, "preserve project-owned or diverged governance file")
-                    return
+            if upgrade_conflict_gate(
+                self.upgrade_conflict_report, confirmed=self.confirm_upgrade_conflicts
+            ):
+                raise ValueError(
+                    "upgrade conflict report requires human confirmation; "
+                    "review .ai/cockpit/upgrade-conflict-report.json and pass "
+                    "--confirm-upgrade-conflicts"
+                )
+            if project_owned_boundary:
+                self.record("skip", dst, "preserve project-owned or diverged governance file")
+                return
         if existed and not (self.force or self.upgrade):
             self.record("skip", dst, "already exists")
             return
@@ -1679,13 +1687,13 @@ class Installer:
 
     def print_summary(self) -> None:
         writes, skips = action_counts(self.actions)
-        print("")
+        print()
         print(
             f"AI Cockpit install {'dry run ' if self.dry_run else ''}complete: {writes} write/append action(s), {skips} skipped."
         )
         if self.backups:
             print(f"Backups: {self.backup_dir.relative_to(self.target)}")
-        print("")
+        print()
         print("Next steps:")
         if self.create_adoption:
             print("  1. Run: make ai-finish TASK=adopt_ai_cockpit")

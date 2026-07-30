@@ -1,5 +1,4 @@
 import pytest
-
 from ai_verification_policy import (
     escalation_reasons,
     order_checks,

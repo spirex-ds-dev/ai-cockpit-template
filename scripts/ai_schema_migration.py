@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 from copy import deepcopy
+from pathlib import Path
 from typing import Any
 
 
@@ -152,8 +153,10 @@ def main() -> int:
     parser.add_argument("--to-version", type=int, required=True)
     parser.add_argument("--confirm", action="store_true")
     args = parser.parse_args()
-    config = json.load(open(args.config, encoding="utf-8"))
-    registry = json.load(open(args.registry, encoding="utf-8"))
+    with Path(args.config).open(encoding="utf-8") as config_file:
+        config = json.load(config_file)
+    with Path(args.registry).open(encoding="utf-8") as registry_file:
+        registry = json.load(registry_file)
     plan = build_plan(
         config, from_version=args.from_version, to_version=args.to_version, registry=registry
     )

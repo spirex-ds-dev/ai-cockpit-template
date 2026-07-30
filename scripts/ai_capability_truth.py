@@ -10,6 +10,7 @@ import posixpath
 from pathlib import Path
 from typing import Any
 
+from ai_common import InvalidDataShapeError
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MATRIX_PATH = PROJECT_ROOT / "docs" / "reference" / "capability-truth-matrix.json"
@@ -102,7 +103,7 @@ class CapabilityTruthError(ValueError):
 def _load(path: Path) -> dict[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
-        raise ValueError("matrix root must be an object")
+        raise InvalidDataShapeError("matrix root must be an object")
     return value
 
 

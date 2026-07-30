@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ai_wizard_localization import (
     SUPPORTED_LANGUAGES,
     format_message,

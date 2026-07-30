@@ -9,13 +9,11 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-
 from ai_evidence_dependencies import (
     changed_path_dependency_issues,
     contract_scope_dependency_issues,
     load_capability_evidence_dependencies,
 )
-
 
 MATRIX_PATH = "docs/reference/capability-truth-matrix.json"
 MARKDOWN_PATH = "docs/reference/capability-truth-matrix.md"

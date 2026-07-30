@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 
 import pytest
-
 from ai_calibrate import CALIBRATION_STAGES, CalibrationError
 from ai_calibration_wizard import CalibrationWizard, main
 

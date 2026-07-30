@@ -1,11 +1,10 @@
+import shutil
 import subprocess
 import sys
-import shutil
 from pathlib import Path
 
 from ai_check_adoption_ready import readiness_failures, template_exemption
 from ai_readiness_policy import readiness_state
-
 
 ROOT = Path(__file__).resolve().parents[1]
 

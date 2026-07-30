@@ -9,8 +9,9 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from ai_uninstall_facts import UninstallFactsError, collect_uninstall_facts
 from ai_uninstall_proposal import build_proposal, validate_proposal

@@ -5,9 +5,8 @@ import os
 import subprocess
 from pathlib import Path
 
-import pytest
-
 import ai_close_work_item as closure
+import pytest
 
 
 def run_command(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:

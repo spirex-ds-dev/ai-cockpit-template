@@ -8,14 +8,24 @@ import json
 import math
 import os
 import re
-import subprocess
 import shlex
+import subprocess
+from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable
-
+from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+
+class InvalidDataShapeError(TypeError, ValueError):
+    """Reject malformed structured data while retaining the legacy ValueError contract."""
+
+
+class InvalidProviderPayloadError(TypeError, RuntimeError):
+    """Reject malformed provider payloads while retaining the legacy RuntimeError contract."""
+
+
 CHECKS_PATH = PROJECT_ROOT / ".ai" / "cockpit" / "checks.yaml"
 SCENARIO_COVERAGE_STATUSES = {"verified", "unverified", "not_applicable"}
 GIT_ENV_PREFIX = "GIT_"
@@ -96,7 +106,7 @@ def _declared_makefiles(command: list[str]) -> list[str]:
             values.append(command[index + 1])
             index += 2
             continue
-        if token.startswith("--file=") or token.startswith("--makefile="):
+        if token.startswith(("--file=", "--makefile=")):
             values.append(token.split("=", 1)[1])
         elif token.startswith("-f") and token != "-f":  # nosec B105 - Make option
             values.append(token[2:])
@@ -147,7 +157,7 @@ def load_json(path: Path) -> dict[str, Any]:
         path.read_text(encoding="utf-8"), object_pairs_hook=_reject_duplicate_keys(path)
     )
     if not isinstance(data, dict):
-        raise ValueError("root must be a JSON object")
+        raise InvalidDataShapeError("root must be a JSON object")
     return data
 
 
@@ -282,11 +292,11 @@ def path_fingerprint(path: str) -> str:
         return "deleted"
     if candidate.is_symlink():
         target = os.readlink(candidate)
-        payload = f"symlink:{stat_result.st_mode}:{target}".encode("utf-8")
+        payload = f"symlink:{stat_result.st_mode}:{target}".encode()
         return hashlib.sha256(payload).hexdigest()
     if not candidate.is_file():
         return f"non_file:{stat_result.st_mode}"
-    payload = f"mode={stat_result.st_mode}\n".encode("utf-8") + candidate.read_bytes()
+    payload = f"mode={stat_result.st_mode}\n".encode() + candidate.read_bytes()
     return hashlib.sha256(payload).hexdigest()
 
 
@@ -736,8 +746,10 @@ def redact_sensitive_output(value: str) -> str:
         (r"\bAKIA[0-9A-Z]{16}\b", "[AWS_KEY_REDACTED]"),
         (r"\bgh[pousr]_[A-Za-z0-9_]{20,}\b", "[GITHUB_TOKEN_REDACTED]"),
         (
-            r"-----BEGIN (?P<private_key_kind>(?:[A-Z0-9]+ )*PRIVATE KEY)-----"
-            r".*?(?:-----END (?P=private_key_kind)-----|\Z)",
+            (
+                r"-----BEGIN (?P<private_key_kind>(?:[A-Z0-9]+ )*PRIVATE KEY)-----"
+                r".*?(?:-----END (?P=private_key_kind)-----|\Z)"
+            ),
             "[PRIVATE_KEY_REDACTED]",
         ),
         (

@@ -6,13 +6,12 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from ai_common import parse_yaml
+from ai_common import InvalidDataShapeError, parse_yaml
 from ai_project_profile import load_profile
-
 
 STATUS_VALUES = (
     "complete",
@@ -38,14 +37,14 @@ INVENTORY_KEYS = (
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _parse_timestamp(value: Any) -> datetime | None:
     if not isinstance(value, str) or not value.strip():
         return None
     try:
-        return datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return datetime.fromisoformat(value)
     except ValueError:
         return None
 
@@ -327,7 +326,7 @@ def _inventory_without_overrides(root: Path) -> dict[str, dict[str, Any]]:
 
 def _apply_override(item: dict[str, Any], override: Any, *, now: datetime) -> dict[str, Any]:
     if not isinstance(override, dict):
-        raise ValueError(f"command evidence for {item['key']} must be an object")
+        raise InvalidDataShapeError(f"command evidence for {item['key']} must be an object")
     status = override.get("status")
     confirmation = override.get("confirmation")
     evidence_kind = override.get("evidenceKind", "not_verified")

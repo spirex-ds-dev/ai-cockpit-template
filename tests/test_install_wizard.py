@@ -1,9 +1,8 @@
-from pathlib import Path
 from dataclasses import replace
-
-import pytest
+from pathlib import Path
 
 import ai_install_wizard
+import pytest
 from ai_install_wizard import WizardResult, main, run_wizard
 from ai_installer_detection import collect_installation_detection
 

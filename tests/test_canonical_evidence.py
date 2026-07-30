@@ -1,7 +1,6 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
-
 from ai_canonical_evidence import payload_digest, render_markdown, validate_document
 
 
@@ -67,8 +66,7 @@ def test_invalid_evidence_fails_closed(mutation, expected):
     doc = document()
     mutation(doc)
     assert any(
-        expected in error
-        for error in validate_document(doc, now=datetime(2026, 7, 25, tzinfo=timezone.utc))
+        expected in error for error in validate_document(doc, now=datetime(2026, 7, 25, tzinfo=UTC))
     )
 
 

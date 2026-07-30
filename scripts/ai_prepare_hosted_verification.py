@@ -4,18 +4,17 @@
 from __future__ import annotations
 
 import argparse
-from collections.abc import Callable
-from datetime import datetime, timezone
 import hashlib
 import json
 import os
-from pathlib import Path
 import subprocess  # nosec B404 - every executable and argument list is fixed below
 import sys
+from collections.abc import Callable
+from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 
 from ai_common import nested_make_command
-
 
 CODEX_AUDIT_REF_PREFIX = "refs/codex/turn-diffs/"
 
@@ -243,7 +242,7 @@ def prepare_snapshot(
         "summaryPath": summary_path.relative_to(root).as_posix(),
         "summaryDigest": digest(summary_path),
         "quality": quality,
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "generatedAt": datetime.now(UTC).isoformat(),
         "onlyEligibleNextAction": "push_this_branch_for_hosted_verification_only",
         "authorizationClaim": "not_provided_by_receipt",
         "forbiddenActions": [

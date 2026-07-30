@@ -1,5 +1,4 @@
 import pytest
-
 from bootstrap_wizard import (
     BOOTSTRAP_CREATION_MODE,
     BOOTSTRAP_LIFECYCLE,

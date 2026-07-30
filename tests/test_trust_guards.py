@@ -1,8 +1,7 @@
 import copy
 
-import pytest
-
 import ai_trust_guards
+import pytest
 
 
 def contract() -> dict:

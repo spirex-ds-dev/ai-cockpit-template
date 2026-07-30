@@ -3,8 +3,8 @@
 
 from __future__ import annotations
 
-import json
 import argparse
+import json
 import sys
 import time
 from dataclasses import asdict, dataclass
@@ -12,7 +12,6 @@ from pathlib import Path
 
 from ai_common import PROJECT_ROOT, changed_paths, first_match, load_json, parse_simple_manifest
 from ai_observability import create_observability, elapsed_ms
-
 
 OWNERSHIP = PROJECT_ROOT / ".ai" / "guards" / "file_ownership.yaml"
 BOUNDARY = PROJECT_ROOT / ".ai" / "guards" / "file_boundary.yaml"

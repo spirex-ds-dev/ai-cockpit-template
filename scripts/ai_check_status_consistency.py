@@ -14,7 +14,6 @@ from typing import Any
 
 from ai_common import PROJECT_ROOT, clean_git_environment
 
-
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 DEFAULT_STATUS = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
 

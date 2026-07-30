@@ -6,7 +6,6 @@ from __future__ import annotations
 import re
 from typing import Any
 
-
 _DOMAINS = {
     "authentication": ("authentication", "login", "credential", "password", "mfa"),
     "authorization": ("authorization", "permission", "role", "privilege", "access control"),

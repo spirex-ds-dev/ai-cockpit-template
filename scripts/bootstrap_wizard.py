@@ -11,7 +11,6 @@ from dataclasses import dataclass, replace
 from enum import Enum
 from typing import Any
 
-
 BOOTSTRAP_LIFECYCLE = "bootstrap_adoption"
 BOOTSTRAP_CREATION_MODE = "bootstrap_installer"
 NOT_CLAIMED = "not_claimed"
@@ -48,7 +47,7 @@ class Session:
     creation_mode: str = BOOTSTRAP_CREATION_MODE
     readiness: str = NOT_CLAIMED
 
-    def transition(self, event: str, **payload: Any) -> "Session":
+    def transition(self, event: str, **payload: Any) -> Session:
         """Apply one explicit event and return a new session value."""
         if event == "cancel":
             if self.phase in {Phase.CANCELLED, Phase.CONFIRMED, Phase.WRITE}:
@@ -97,7 +96,7 @@ class Session:
             return replace(self, phase=Phase.CONFIRMED)
         raise WizardError(f"event {event!r} is invalid from {self.phase.value}")
 
-    def invalidate(self, upstream_revision: str) -> "Session":
+    def invalidate(self, upstream_revision: str) -> Session:
         """Discard downstream decisions when an upstream fact changes."""
         if upstream_revision == self.upstream_revision:
             return self
@@ -129,7 +128,7 @@ class Session:
             "readiness": self.readiness,
         }
 
-    def _at(self, phase: Phase) -> "Session":
+    def _at(self, phase: Phase) -> Session:
         if phase is Phase.DETECT:
             return replace(self, phase=phase, proposal=None, configuration=None, review=None)
         if phase is Phase.PROPOSE:

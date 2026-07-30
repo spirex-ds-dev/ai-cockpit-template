@@ -5,7 +5,6 @@ from __future__ import annotations
 
 from typing import Any
 
-
 REPORT_VERSION = 1
 CLASSIFICATIONS = {"Template-owned", "Project-owned", "Diverged", "Human Confirmation Required"}
 

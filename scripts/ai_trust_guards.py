@@ -8,10 +8,9 @@ import re
 from pathlib import Path
 from typing import Any, cast
 
-from ai_trust_schema import ValidationError, validate_payload
-from ai_critical_domain_guards import critical_domain_signals
 from ai_common import parse_yaml
-
+from ai_critical_domain_guards import critical_domain_signals
+from ai_trust_schema import ValidationError, validate_payload
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 CAPABILITIES_PATH = PROJECT_ROOT / ".ai" / "project" / "capabilities.json"
@@ -213,10 +212,12 @@ def intent_capability_signal(
     )
 
 
-_AMBIGUOUS_TERMS = re.compile(r"\b(?:something|maybe|somehow|as appropriate|if needed|etc)\b", re.I)
+_AMBIGUOUS_TERMS = re.compile(
+    r"\b(?:something|maybe|somehow|as appropriate|if needed|etc)\b", re.IGNORECASE
+)
 _UNDERSPECIFIED_TERMS = re.compile(
     r"(?:\bmake\s+(?:it|this)\s+better\b|\bimprove\s+(?:it|this)\b|随便改改|大概改一下)",
-    re.I,
+    re.IGNORECASE,
 )
 
 # This is deliberately a small boundary vocabulary.  Broad multilingual and hidden-risk

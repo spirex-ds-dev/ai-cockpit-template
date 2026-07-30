@@ -2,11 +2,9 @@ import json
 import shutil
 from pathlib import Path
 
-import pytest
-
 import check_system_invariants
+import pytest
 from check_system_invariants import release_contract_issues
-
 
 ROOT = Path(__file__).resolve().parents[1]
 

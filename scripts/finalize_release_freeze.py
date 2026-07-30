@@ -3,9 +3,9 @@
 
 from __future__ import annotations
 
-import json
 import argparse
 import hashlib
+import json
 import re
 import sys
 

@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-import unsupported_claim_gate  # noqa: E402
+import unsupported_claim_gate
 
 
 def test_gate_blocks_six_unsupported_claims_and_allows_supported_claim() -> None:

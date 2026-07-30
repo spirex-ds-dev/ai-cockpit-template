@@ -1,7 +1,6 @@
 import subprocess
 
 import pytest
-
 from bootstrap_repository import BootstrapRepositoryError, detect_repository, revalidate_repository
 
 

@@ -2,21 +2,18 @@
 
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 
 import pytest
-
-from check_docs_metadata import capability_claim_errors
-import copy
-
 from ai_capability_truth import (
     CapabilityTruthError,
     build_evidence_source,
     regenerate_matrix,
     validate_matrix,
 )
-
+from check_docs_metadata import capability_claim_errors
 
 ROOT = Path(__file__).resolve().parents[1]
 MATRIX_PATH = ROOT / "docs/reference/capability-truth-matrix.json"

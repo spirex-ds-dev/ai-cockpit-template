@@ -3,10 +3,10 @@
 
 from __future__ import annotations
 
+import hashlib
 import io
 import json
 import os
-import hashlib
 import re
 import shutil
 import subprocess
@@ -18,6 +18,7 @@ import urllib.request
 from pathlib import Path
 from typing import TypedDict
 
+from ai_common import InvalidDataShapeError, InvalidProviderPayloadError
 
 ROOT = Path(__file__).resolve().parents[1]
 RELEASE = ROOT / "release.json"
@@ -135,11 +136,11 @@ def _semver_key(tag: str) -> tuple[int, int, int]:
 def stable_release_tags(payload: object) -> set[str]:
     """Return stable semantic provider Releases from a validated API payload."""
     if not isinstance(payload, list):
-        raise ValueError("provider release payload must be a list")
+        raise InvalidDataShapeError("provider release payload must be a list")
     tags: set[str] = set()
     for item in payload:
         if not isinstance(item, dict):
-            raise ValueError("provider release payload entries must be objects")
+            raise InvalidDataShapeError("provider release payload entries must be objects")
         tag = item.get("tag_name")
         draft = item.get("draft")
         prerelease = item.get("prerelease")
@@ -148,7 +149,9 @@ def stable_release_tags(payload: object) -> set[str]:
             or not isinstance(draft, bool)
             or not isinstance(prerelease, bool)
         ):
-            raise ValueError("provider release payload has invalid tag/draft/prerelease fields")
+            raise InvalidDataShapeError(
+                "provider release payload has invalid tag/draft/prerelease fields"
+            )
         if not draft and not prerelease and re.fullmatch(r"v\d+\.\d+\.\d+", tag):
             tags.add(tag)
     if not tags:
@@ -546,8 +549,7 @@ def fetch_published_release_assets(
     """Download the public release evidence assets for *tag*."""
     parsed = urllib.parse.urlsplit(PUBLIC_REPOSITORY)
     repository_path = parsed.path.rstrip("/")
-    if repository_path.endswith(".git"):
-        repository_path = repository_path[:-4]
+    repository_path = repository_path.removesuffix(".git")
     api_url = f"{parsed.scheme}://{parsed.netloc}/api/v3/repos{repository_path}/releases/tags/{tag}"
     if parsed.netloc == "github.com":
         api_url = f"https://api.github.com/repos{repository_path}/releases/tags/{tag}"
@@ -561,7 +563,7 @@ def fetch_published_release_assets(
         raise RuntimeError(f"{tag}: published release is missing or still draft")
     assets = release.get("assets")
     if not isinstance(assets, list):
-        raise RuntimeError(f"{tag}: published release assets are missing")
+        raise InvalidProviderPayloadError(f"{tag}: published release assets are missing")
     payloads: dict[str, bytes] = {}
     requested_assets = {"provenance.json", "release-digests.json", "sbom.json"}
     requested_assets.update(extra_asset_names or set())
@@ -919,7 +921,7 @@ def inspect_tagged_release(
         except (OSError, json.JSONDecodeError) as exc:
             raise RuntimeError(f"{tag}: invalid release.json: {exc}") from exc
         if not isinstance(metadata, dict):
-            raise RuntimeError(f"{tag}: release.json must contain an object")
+            raise InvalidProviderPayloadError(f"{tag}: release.json must contain an object")
         if metadata.get("releaseTag") != tag:
             if not allow_historical_metadata:
                 raise RuntimeError(

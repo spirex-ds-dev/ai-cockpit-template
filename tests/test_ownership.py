@@ -1,5 +1,4 @@
 import pytest
-
 from ai_ownership import OwnershipError, ownership_decision, ownership_facts, parse_managed_regions
 
 
