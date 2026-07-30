@@ -1,0 +1,67 @@
+{
+  "contractVersion": 2,
+  "workItemId": "dependabot-supersession-plan-membership-corrective-20260730",
+  "mode": "code",
+  "title": "Correct Dependabot supersession traceability plan membership",
+  "baseCommit": "2dd7e85655de725d857db49b5f72604756662f4a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/dependabot-supersession-plan-membership-corrective-20260730.contract.json",
+    ".ai/work-items/active/dependabot-supersession-plan-membership-corrective-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/dependabot-supersession-plan-membership-corrective-20260730.outcome.json",
+    ".ai/work-items/active/dependabot-supersession-plan-membership-corrective-20260730.outcome.md",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": [
+    "Changing dependency pins, lockfiles, source code, CI configuration, release metadata, tags, Releases, assets, provider PR state, branches, or worktrees.",
+    "Editing the failed immutable archive or reopening/reusing PR #486."
+  ],
+  "sources": [
+    {"path": "docs/reference/remediation-instruction-traceability.json", "reason": "PLAN-DIRECTIVE-055 includes a plan Work Item identifier not registered in the comprehensive plan."},
+    {"path": "GitHub Actions run 30532402493", "reason": "Hosted template-smoke rejected the unregistered DEPENDABOT-INTAKE-001-SUPERSESSION-CLOSURE identifier in traceability regressions."},
+    {"path": "GitHub PR #486", "reason": "Failed predecessor retained as immutable audit evidence; this Work Item replaces only the current-main traceability correction."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["traceability_integrity"], "reason": "A plan-membership mismatch can make a valid current-base corrective fail hosted consistency checks. The scope is one traceability record; no implementation or provider state changes are permitted.", "unknownsReviewComplete": true},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user directed continuous plan execution and requires process or traceability faults to be corrected before proceeding. This current-main replacement preserves the failed PR as audit evidence."},
+  "preReviewWarnings": ["Remove only the unregistered plan Work Item label; preserve the original DEPENDABOT-INTAKE-001 plan membership and all prior evidence paths."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record checkpoints before implementation and finishing to reduce mid-task drift."},
+  "acceptance": [
+    "PLAN-DIRECTIVE-055 contains only plan Work Item identifiers actually registered in the comprehensive remediation plan.",
+    "The current traceability CLI and focused instruction-traceability regression pass without weakening plan-membership validation.",
+    "The failed #486 archive and provider PR state remain untouched; this branch changes only lifecycle evidence and the traceability record.",
+    "The correction remains explicitly traceable to the hosted failure before release work resumes."
+  ],
+  "guidelines": [
+    "Preserve strict plan-membership validation; repair input evidence rather than weaken the checker.",
+    "Remove only the invalid identifier and retain DEPENDABOT-INTAKE-001 as the existing plan Work Item.",
+    "Use focused traceability verification and mandatory hosted PR checks; do not run local full quality or full pytest under the temporary Contract-local direction."
+  ],
+  "intent": {
+    "problem": "The prior supersession-record PR #486 added DEPENDABOT-INTAKE-001-SUPERSESSION-CLOSURE to PLAN-DIRECTIVE-055, but that identifier is not registered in the comprehensive plan. Hosted traceability tests rejected the mismatch.",
+    "constraints": ["Start from current origin/main and leave #486 immutable as failure evidence.", "Change only the traceability record and this Work Item lifecycle evidence.", "Do not weaken plan-membership validation or add a fictional plan Work Item.", "Use focused local verification under the temporary user direction; fresh hosted checks remain mandatory before merge."],
+    "rationale": "The correct repair preserves fail-closed plan validation and removes the invalid input instead of making the plan checker accept unregistered work."
+  },
+  "verification": [
+    {"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},
+    {"check":"quality","required":false,"reason":"User's temporary plan-wide focused-verification direction excludes local full quality and full pytest for non-release Work Items; focused traceability checks plus the hosted PR gate remain mandatory."}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "human", "reason": "The user authorized continuous plan execution, required root-cause correction before resuming, and approved Contract-local focused verification without repository-rule changes."},
+  "rollbackNote": "Revert only the traceability-record and lifecycle-evidence commit if the registered plan mapping is later shown inaccurate; do not alter failed #486 archive evidence.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 687}},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "rawUserRequest": "每个工单遇到流程问题必须记录并先修流程；所有计划工单继续执行。临时方案：除发布版本和各个工单 PR 外，尽可能不走本地全量测试和完整门禁；将授权写入 Contract，但不要写入工程规则。",
+  "rawRequestSource": {"type":"human","reference":"conversation:continuous-plan-and-contract-local-focused-verification-2026-07-30","capturedAt":"2026-07-30","digest":"sha256:traceability-corrective-user-direction"},
+  "declaredIntent": {"summary":"Repair a hosted-detected plan-membership mismatch by preserving the strict checker and correcting only traceability input evidence.","requestedCapabilities":["ai_governance","software_design","documentation","test_automation"]},
+  "scenarioCoverage": [
+    {"scenario":"An unregistered plan Work Item identifier remains fail-closed.","required":true,"status":"unverified","expected":"The focused traceability test rejects an intentionally unregistered planWorkItems value.","verificationPlan":"Run the focused existing instruction-traceability regression that exercises plan-membership enforcement after correcting PLAN-DIRECTIVE-055.","evidence":[]},
+    {"scenario":"PLAN-DIRECTIVE-055 maps only to its registered DEPENDABOT-INTAKE-001 plan Work Item and accepted evidence paths.","required":true,"status":"unverified","expected":"The traceability CLI and focused regression succeed with no plan-membership finding.","verificationPlan":"Run the traceability CLI and focused pytest coverage after removing only the invalid label.","evidence":[]}
+  ],
+  "startReceipt": {"path":".ai/work-items/starts/dependabot-supersession-plan-membership-corrective-20260730.json","baseCommit":"2dd7e85655de725d857db49b5f72604756662f4a","initialScopeDigest":"a9c10bbd51ca9f657d776e0e410f07422b99ddde2349d7d67d818ac44deb4a66","contractSkeletonDigest":"15c2ec0923e861624799e04171d0b9216a35d446b4ce287a5b15501a7e1ac0ca"}
+}
