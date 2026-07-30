@@ -31,9 +31,10 @@ def test_doctor_requires_python_311_or_newer(monkeypatch, tmp_path):
         VersionInfo((3, 10, 14, "final", 0)),
     )
 
-    _, _, failures = ai_doctor.diagnose(tmp_path)
+    passed, _, failures = ai_doctor.diagnose(tmp_path)
 
     assert "Python 3.11 or newer is required" in failures
+    assert not any("satisfies 3.11+" in item for item in passed)
 
 
 def test_doctor_fails_without_git_repository_or_initial_commit(tmp_path):

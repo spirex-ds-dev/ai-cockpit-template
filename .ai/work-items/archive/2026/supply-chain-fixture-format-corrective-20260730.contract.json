@@ -1,0 +1,173 @@
+{
+  "contractVersion": 2,
+  "workItemId": "supply-chain-fixture-format-corrective-20260730",
+  "mode": "code",
+  "title": "supply-chain-fixture-format-corrective-20260730",
+  "baseCommit": "a2ac65c00d24ff43fc1da13724a6d18b51eae8d4",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/supply-chain-fixture-format-corrective-20260730.contract.json",
+    ".ai/work-items/active/supply-chain-fixture-format-corrective-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/supply-chain-fixture-format-corrective-20260730.outcome.json",
+    ".ai/work-items/active/supply-chain-fixture-format-corrective-20260730.outcome.md",
+    "tests/test_supply_chain.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": ["Any functional change to the scanner, doctor, dependency baseline, assessment evidence, or quality policy.", "Merging, closing, rebasing, or deleting #481 through #484 during this Work Item."],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30529406374",
+      "reason": "PR #484 template-smoke failed solely because ruff format would reformat tests/test_supply_chain.py."
+    },
+    {
+      "path": "tests/test_supply_chain.py",
+      "reason": "Exact file and runtime fixtures cited by the hosted formatter failure."
+    },
+    {
+      "path": "docs/reference/remediation-instruction-traceability.json",
+      "reason": "Records the parent baseline correction and its required fresh hosted verification chain."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["format_regression", "stacked_ci"],
+    "reason": "This corrective change must be formatting-only and must not change scanner behavior; all hosted verification remains required.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous plan execution with focused local verification and mandatory hosted CI."
+  },
+  "preReviewWarnings": [
+    "Confirm the diff is ruff-format-only and the exact corrective PR head passes hosted CI."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ruff format --check accepts tests/test_supply_chain.py without changing scanner semantics.",
+    "Focused supply-chain fixture regressions continue to pass.",
+    "The change is limited to formatting plus required Work Item evidence and traceability.",
+    "The exact corrective PR head passes hosted CI before merge; parent #484 then receives fresh hosted evidence."
+  ],
+  "guidelines": [
+    "Apply only formatter output; do not alter executable scanner behavior or its policy boundaries.",
+    "Record that local full quality is skipped under temporary user direction and do not claim hosted success before provider evidence exists."
+  ],
+  "intent": {
+    "problem": "PR #484 hosted template-smoke failed at project-format-check because ruff would reformat one fixture expression in tests/test_supply_chain.py; all earlier checks had passed.",
+    "constraints": ["Use the formatter's exact output only.", "Run focused format and supply-chain tests locally; do not run local full quality under the temporary user direction.", "Hosted CI on this fresh stacked corrective PR remains mandatory."],
+    "rationale": "The archived #484 cannot be amended. A small independent Work Item preserves immutable evidence while restoring its merge path."
+  },
+  "rawUserRequest": "Continue the approved plan efficiently: use focused local verification rather than full quality for each Work Item, while keeping hosted CI mandatory before merge.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-30-continue-focused-verification", "capturedAt": "2026-07-30T18:10:00+09:00", "digest": "sha256:format-corrective-hosted-ci-required"},
+  "declaredIntent": {"summary": "Correct the #484 formatter-only hosted failure without altering scanner behavior.", "requestedCapabilities": ["ai_governance", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [{"scenario": "The formatted fixture file passes ruff format check.", "required": true, "status": "unverified", "expected": "No formatter diff remains.", "verificationPlan": "Run ruff format --check tests/test_supply_chain.py.", "evidence": []}, {"scenario": "Runtime fixture construction still exercises scanner behavior.", "required": true, "status": "unverified", "expected": "Focused supply-chain tests pass.", "verificationPlan": "Run the direct fixture regression tests.", "evidence": []}, {"scenario": "Fresh child PR head passes hosted CI.", "required": true, "status": "unverified", "expected": "All required hosted checks are successful.", "verificationPlan": "Inspect provider checks after the PR is created.", "evidence": []}],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user direction: use focused local verification for this plan; hosted CI remains mandatory before merge."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized the continuing governed plan lifecycle; this does not change repository rules."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 686
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/supply-chain-fixture-format-corrective-20260730.json",
+    "baseCommit": "a2ac65c00d24ff43fc1da13724a6d18b51eae8d4",
+    "initialScopeDigest": "54c8225f7c7f807814f0e3753590a2423f74b454ded6724406b700f8c4ff5010",
+    "contractSkeletonDigest": "19908945a67d075aee948c09a5ca7283e812c9cf2f4d07cd834b61bca808d86b"
+  }
+}

@@ -14,7 +14,7 @@ import subprocess
 import sys
 import tempfile
 from collections.abc import Iterator
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 from ai_check_diff_ownership import format_preview, preview
@@ -208,7 +208,7 @@ def next_available_task_id(task: str, occupied_ids: set[str], *, date: str | Non
     """Choose a deterministic collision-free ID without overwriting history."""
     if task not in occupied_ids:
         return task
-    stamp = date or datetime.now(datetime.UTC).astimezone().strftime("%Y%m%d")
+    stamp = date or datetime.now(UTC).astimezone().strftime("%Y%m%d")
     candidate = f"{task}-{stamp}"
     if candidate not in occupied_ids:
         return candidate
