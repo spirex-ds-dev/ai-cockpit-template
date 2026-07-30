@@ -1,0 +1,186 @@
+{
+  "contractVersion": 2,
+  "workItemId": "stabilize-quality-coverage-and-pr-body-20260730",
+  "mode": "code",
+  "title": "stabilize-quality-coverage-and-pr-body-20260730",
+  "baseCommit": "0aba6ff27a9a789e9fa5b7c91a9f784793cafacb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/stabilize-quality-coverage-and-pr-body-20260730.contract.json",
+    ".ai/work-items/active/stabilize-quality-coverage-and-pr-body-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/stabilize-quality-coverage-and-pr-body-20260730.outcome.json",
+    ".ai/work-items/active/stabilize-quality-coverage-and-pr-body-20260730.outcome.md",
+    "tests/test_docs_metadata.py",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Changing the 85.10% coverage threshold or disabling the pre-push quality gate.",
+    "Changing archived WI-10 records or its delivered installation documentation.",
+    "Creating a PR through shell-interpolated content."
+  ],
+  "sources": [
+    {
+      "path": "target/coverage.json",
+      "reason": "Fresh pre-push quality run: 1529 tests passed but total coverage was 85.06%, below the 85.10% enforced floor."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "The WI-10 documentation checker has untested fail-closed branches suitable for focused regression coverage."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Requires a separate Contract, branch lifecycle, and fail-closed verification."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["quality_gate_regression", "shell_interpretation"],
+    "reason": "Coverage must remain safely above the enforced floor; PR publication must not execute user-visible markdown as shell syntax.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous corrective execution and the scope is bounded to tests and safe PR publication."
+  },
+  "preReviewWarnings": ["Review that new tests cover existing fail-closed behavior and do not loosen coverage policy."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A fresh full `make quality` passes with total coverage materially above 85.10%, without changing the threshold.",
+    "New focused tests exercise existing documentation-metadata fail-closed branches and remain deterministic.",
+    "PR creation uses a body file or another non-shell-interpolated mechanism; no Markdown backticks are evaluated as shell commands.",
+    "The corrective Work Item completes its active Outcome, archive, PR, hosted CI, merge, and closure lifecycle before WI-10 publication resumes."
+  ],
+  "guidelines": [
+    "Do not lower a quality threshold to hide an insufficient test-coverage margin.",
+    "Treat PR prose as data, never as executable shell input."
+  ],
+  "intent": {
+    "problem": "The WI-10 branch passed one local quality run only narrowly, then failed the enforced pre-push quality run at 85.06%. In addition, a PR body passed with shell backticks caused command substitution and an unintended quality run instead of a PR.",
+    "constraints": ["Keep the coverage floor at 85.10%.", "Add tests only; do not weaken fail-closed documentation checks.", "Use a non-shell-interpolated PR body mechanism."],
+    "rationale": "A governed release path must be reproducibly green and must not permit presentation text to execute commands."
+  },
+  "rawUserRequest": "Continue the authorized WI-10 lifecycle; repair any release-flow and quality-gate issue rather than bypassing it.",
+  "rawRequestSource": {"type":"human","reference":"conversation:2026-07-30 continuous authorized WI-10 lifecycle","capturedAt":"2026-07-30","digest":"sha256:coverage-margin-and-pr-body-correction"},
+  "declaredIntent": {
+    "summary": "Stabilize deterministic coverage and safely publish the already-archived WI-10 through its required lifecycle.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {"scenario":"A full quality run uses a different test collection path.","expected":"Coverage stays above 85.10% without policy changes.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Add focused tests for previously uncovered documentation-checker error branches and run fresh make quality."},
+    {"scenario":"A PR description contains Markdown backticks.","expected":"The content remains literal PR prose and starts no shell command.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Create the PR using a body file passed to gh, then inspect the rendered body."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 676
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/stabilize-quality-coverage-and-pr-body-20260730.json",
+    "baseCommit": "0aba6ff27a9a789e9fa5b7c91a9f784793cafacb",
+    "initialScopeDigest": "19a5d62d00f5eb5f01a087d191bfe9f4fda944043036436439fcf1347d6f3128",
+    "contractSkeletonDigest": "827340866467ede6cd1194f857d84e3fc24f2f5b0f25bc42c6cd16c8ad9b25f3"
+  }
+}
