@@ -84,8 +84,18 @@ Contract/Summary の path、SHA-256 digest、archive sequence、base commit、PR
 
 checker はすべての束縛と base-commit ancestry edge を再計算します。receipt の完全に
 compatible な prefix だけを受け入れ、その後の entry には通常の隣接 source recovery
-rule が引き続き必要です。receipt の欠落、並び替え、不整合、無関係な entry があれば、
-既定の「一つの PR に一つの新規 Work Item」rule がそのまま適用されます。
+rule が引き続き必要です。
+
+この不変 prefix の後に既に merge 済みの子 Work Item が現れる場合もありますが、
+repository history が次のすべてを証明するときだけ受け入れます。canonical Start Receipt
+が有効であること、Contract と Summary が一つの immutable archive commit で同時に追加
+されたこと、その commit が親 PR base の後にある二親 merge の第二親から、検査対象の
+親 PR history に入ったことです。`HEAD` から到達できること、task 名、local Closure
+Receipt、親 branch への直接追加だけでは十分ではありません。これにより実際の子 PR を
+許可しつつ、親 PR 内の独立した Work Item を隠すことを防ぎます。
+
+receipt の欠落、並び替え、不整合、未 merge、無関係な entry があれば、既定の
+「一つの PR に一つの新規 Work Item」rule がそのまま適用されます。
 
 ## 完了状態
 

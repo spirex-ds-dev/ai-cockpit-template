@@ -269,6 +269,146 @@ def test_historical_recovery_receipts_preserve_invalid_json_as_fail_closed_evide
     assert "_loadError" in receipts[0][1]
 
 
+def test_verified_merged_child_archive_requires_pair_added_on_second_merge_parent(
+    tmp_path, monkeypatch
+):
+    contract_path = write_pair(tmp_path, "child", ["src/child.py"], ["src/child.py"])
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    receipt = build_receipt(contract, project_root=tmp_path)
+    receipt_path = tmp_path / receipt["receiptPath"]
+    receipt_path.parent.mkdir(parents=True, exist_ok=True)
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+    contract["startReceipt"] = receipt_binding(receipt)
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+    summary_path = contract_path.with_name(contract_path.name.replace(".contract", ".summary"))
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary["archiveSequence"] = 75
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    contract_rel = contract_path.relative_to(tmp_path).as_posix()
+    summary_rel = summary_path.relative_to(tmp_path).as_posix()
+
+    def git(args):
+        if args[:3] == ["log", "--format=%H", "--diff-filter=A"]:
+            return fake_git_result(stdout="archive-addition\n")
+        if args == ["diff-tree", "--no-commit-id", "--name-status", "-r", "archive-addition"]:
+            return fake_git_result(stdout=f"A\t{contract_rel}\nA\t{summary_rel}\n")
+        if args == ["rev-list", "--merges", "--ancestry-path", "a" * 40 + "..HEAD"]:
+            return fake_git_result(stdout="parent-merge\n")
+        if args == ["show", "-s", "--format=%P", "parent-merge"]:
+            return fake_git_result(stdout="parent-one parent-two\n")
+        if args[:2] == ["merge-base", "--is-ancestor"]:
+            return fake_git_result(
+                returncode=0
+                if tuple(args[2:])
+                in {
+                    ("a" * 40, "HEAD"),
+                    ("archive-addition", "parent-two"),
+                }
+                else 1
+            )
+        return fake_git_result()
+
+    monkeypatch.setattr(ai_check_pr, "run_git", git)
+
+    entry = (
+        contract_path,
+        contract,
+        summary,
+        ai_check_pr.archive_pair_rank(contract_path, summary_path),
+    )
+
+    assert ai_check_pr.is_verified_merged_child_archive(entry, "a" * 40)
+
+
+def test_verified_merged_child_archive_rejects_archive_already_in_first_parent(
+    tmp_path, monkeypatch
+):
+    contract_path = write_pair(tmp_path, "child", ["src/child.py"], ["src/child.py"])
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    receipt = build_receipt(contract, project_root=tmp_path)
+    receipt_path = tmp_path / receipt["receiptPath"]
+    receipt_path.parent.mkdir(parents=True, exist_ok=True)
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+    contract["startReceipt"] = receipt_binding(receipt)
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+    summary_path = contract_path.with_name(contract_path.name.replace(".contract", ".summary"))
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary["archiveSequence"] = 75
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    contract_rel = contract_path.relative_to(tmp_path).as_posix()
+    summary_rel = summary_path.relative_to(tmp_path).as_posix()
+
+    def git(args):
+        if args[:3] == ["log", "--format=%H", "--diff-filter=A"]:
+            return fake_git_result(stdout="archive-addition\n")
+        if args == ["diff-tree", "--no-commit-id", "--name-status", "-r", "archive-addition"]:
+            return fake_git_result(stdout=f"A\t{contract_rel}\nA\t{summary_rel}\n")
+        if args == ["rev-list", "--merges", "--ancestry-path", "a" * 40 + "..HEAD"]:
+            return fake_git_result(stdout="parent-merge\n")
+        if args == ["show", "-s", "--format=%P", "parent-merge"]:
+            return fake_git_result(stdout="parent-one parent-two\n")
+        if args[:2] == ["merge-base", "--is-ancestor"]:
+            return fake_git_result(
+                returncode=0
+                if tuple(args[2:])
+                in {
+                    ("a" * 40, "HEAD"),
+                    ("archive-addition", "parent-one"),
+                    ("archive-addition", "parent-two"),
+                }
+                else 1
+            )
+        return fake_git_result()
+
+    monkeypatch.setattr(ai_check_pr, "run_git", git)
+
+    entry = (
+        contract_path,
+        contract,
+        summary,
+        ai_check_pr.archive_pair_rank(contract_path, summary_path),
+    )
+
+    assert not ai_check_pr.is_verified_merged_child_archive(entry, "a" * 40)
+
+
+def test_trusted_merged_child_does_not_hide_multiple_untrusted_work_items(tmp_path, monkeypatch):
+    first = write_pair(tmp_path, "first", ["src/a.py"], ["src/a.py"])
+    second = write_pair(tmp_path, "second", ["src/b.py"], ["src/b.py"])
+    child = write_pair(tmp_path, "child", ["src/c.py"], ["src/c.py"])
+    for path, sequence in ((first, 75), (second, 76), (child, 77)):
+        summary_path = path.with_name(path.name.replace(".contract", ".summary"))
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        summary["archiveSequence"] = sequence
+        summary_path.write_text(json.dumps(summary), encoding="utf-8")
+    policy = tmp_path / "scope.yaml"
+    policy.write_text("allowAlways:\n", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_check_pr, "SCOPE_POLICY", policy)
+    monkeypatch.setattr(
+        ai_check_pr,
+        "archive_base_is_compatible",
+        lambda contract, _base: contract["workItemId"] != "child",
+    )
+    monkeypatch.setattr(
+        ai_check_pr,
+        "is_verified_merged_child_archive",
+        lambda entry, _base: entry[1]["workItemId"] == "child",
+    )
+    patch_changes(monkeypatch, ["src/a.py", "src/b.py", "src/c.py"])
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [first, second, child])
+
+    assert any(
+        "exactly one newly maintained Work Item" in issue and "first" in issue and "second" in issue
+        for issue in issues
+    )
+
+
 def test_receipt_verified_prefix_only_extends_through_normal_adjacent_recovery(monkeypatch):
     first, second, third = Path("first"), Path("second"), Path("third")
     entries = [
