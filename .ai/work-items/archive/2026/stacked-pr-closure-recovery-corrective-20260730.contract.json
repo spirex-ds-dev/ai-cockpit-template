@@ -1,0 +1,217 @@
+{
+  "contractVersion": 2,
+  "workItemId": "stacked-pr-closure-recovery-corrective-20260730",
+  "mode": "code",
+  "title": "stacked-pr-closure-recovery-corrective-20260730",
+  "baseCommit": "a878a1eadcd39aecf9a601654e32dad89ee366a6",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/stacked-pr-closure-recovery-corrective-20260730.contract.json",
+    ".ai/work-items/active/stacked-pr-closure-recovery-corrective-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/stacked-pr-closure-recovery-corrective-20260730.outcome.json",
+    ".ai/work-items/active/stacked-pr-closure-recovery-corrective-20260730.outcome.md",
+    "scripts/ai_close_work_item.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Relaxing default-branch PR closure validation.",
+    "Deleting a merged stacked branch without a valid Closure Receipt.",
+    "Changing unrelated Work Item lifecycle behavior or release state."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Closure rejects merged PR #474 because it assumes every PR base is the repository default branch."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Existing closure regression coverage establishes the direct default-branch fail-closed invariant."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/stabilize-quality-coverage-and-pr-body-20260730.summary.json",
+      "reason": "Archived evidence binds the already merged corrective PR #474 that requires safe closure."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "lifecycle_closure",
+      "branch_deletion",
+      "stacked_pr_provenance"
+    ],
+    "reason": "An incorrectly accepted arbitrary base could delete the wrong branch; the stacked path must be explicit and prove the parent Work Item branch, ancestry, and receipt facts.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user continuously authorized repair of discovered workflow problems before further publication."
+  },
+  "preReviewWarnings": [
+    "Review stacked-base identity and ancestry while preserving the direct default-branch rejection path."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Default-branch closure remains fail-closed for wrong PR bases.",
+    "A stacked PR may close only when its base is a still-identifiable, unclosed Work Item branch that still retains the stacked PR merge commit.",
+    "Closure receipts record the actual stacked base and preserve retry behavior if remote deletion fails.",
+    "Regression tests cover an accepted stacked closure after the parent advances, a non-Work-Item base rejection, a merge-retention mismatch rejection, and existing direct PR behavior."
+  ],
+  "guidelines": [
+    "Default closure protection stays strict; the stacked path must be evidence-based and opt-in by verified repository state.",
+    "Branch deletion occurs only after authoritative merged-PR and Closure Receipt validation."
+  ],
+  "intent": {
+    "problem": "PR #474 correctly merged its corrective change into the still-open WI-10 branch, but ai-close-work-item rejects it because it assumes every merged PR targets the remote default branch. This leaves the corrective branch unclosable before WI-10 can continue to main.",
+    "constraints": [
+      "Do not weaken direct default-branch PR validation.",
+      "Do not delete the corrective branch until its receipt is valid.",
+      "Require verifiable stacked-base Work Item identity and merge ancestry."
+    ],
+    "rationale": "A narrowly defined stacked-PR closure path prevents both orphan branches and arbitrary-base branch deletion while preserving isolated corrective PRs."
+  },
+  "rawUserRequest": "Continue: solve the discovered closure process problem before further release workflow.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-30 continuous authorization to repair workflow problems",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:stacked-pr-closure-recovery-corrective"
+  },
+  "declaredIntent": {
+    "summary": "Implement fail-closed closure for verified stacked corrective PRs.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A direct PR has a non-default base.",
+      "expected": "Closure remains rejected.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Regression test wrong-base direct PR."
+    },
+    {
+      "scenario": "A corrective PR is merged into a verified Work Item parent branch.",
+      "expected": "Closure verifies the parent identity and ancestry, emits a receipt, and deletes only the corrective branch.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Fake-runner stacked closure tests and an actual PR #474 closure after merge."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 677
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/stacked-pr-closure-recovery-corrective-20260730.json",
+    "baseCommit": "a878a1eadcd39aecf9a601654e32dad89ee366a6",
+    "initialScopeDigest": "85b48fcd2a9050e31e1e67bd03f00012c1d7e8d775ab57358770ed37af9ab0b2",
+    "contractSkeletonDigest": "1fd2e8ecfc92a136b7f1e639f083b4da245178a518ec3c88dcbfc215e4256e41"
+  }
+}

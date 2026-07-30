@@ -78,6 +78,7 @@ class FakeGit:
         self.remote_check_returncode = remote_check_returncode
         self.current_branch = "codex/example"
         self.base_worktree_path = ""
+        self.base_branch = "main"
         self.work_branch_commit = "work123"
 
     def __call__(self, args: list[str] | tuple[str, ...], check: bool) -> closure.CommandResult:
@@ -89,10 +90,10 @@ class FakeGit:
                 raise RuntimeError(f"forced failure: {' '.join(normalized)}")
             return closure.CommandResult(1, "", "forced failure")
         if normalized == ("branch", "--show-current"):
-            branch = "main" if command[:1] == ("-C",) else self.current_branch
+            branch = self.base_branch if command[:1] == ("-C",) else self.current_branch
             return closure.CommandResult(0, f"{branch}\n")
-        if normalized == ("switch", "main"):
-            self.current_branch = "main"
+        if normalized == ("switch", self.base_branch):
+            self.current_branch = self.base_branch
             return closure.CommandResult(0, "")
         if normalized == ("switch", "--detach", "HEAD"):
             self.current_branch = ""
@@ -104,17 +105,17 @@ class FakeGit:
             if self.base_worktree_path:
                 return closure.CommandResult(
                     0,
-                    "worktree /tmp/base-worktree\nHEAD abc123\nbranch refs/heads/main\n\n",
+                    f"worktree /tmp/base-worktree\nHEAD abc123\nbranch refs/heads/{self.base_branch}\n\n",
                 )
             return closure.CommandResult(0, "")
         if normalized == ("status", "--porcelain", "--untracked-files=all"):
             return closure.CommandResult(0, "")
         if normalized == ("rev-parse", "codex/example"):
             return closure.CommandResult(0, f"{self.work_branch_commit}\n")
-        if normalized[:2] == ("rev-parse", "main") or normalized[:2] == (
-            "rev-parse",
-            "origin/main",
-        ):
+        if normalized[:2] in {
+            ("rev-parse", self.base_branch),
+            ("rev-parse", f"origin/{self.base_branch}"),
+        }:
             return closure.CommandResult(0, "abc123\n")
         if normalized[:3] == ("ls-remote", "--exit-code", "--heads"):
             if self.remote_check_returncode is not None:
@@ -135,9 +136,11 @@ def prepare(monkeypatch: pytest.MonkeyPatch, fake: FakeGit) -> None:
     monkeypatch.setattr(
         closure,
         "_verify_pr",
-        lambda _runner, _branch, _base, _branch_commit: {
+        lambda _runner, _branch, _base, _branch_commit, **_kwargs: {
             "url": "https://example.test/pr/1",
             "headRefOid": "work123",
+            "baseRefName": "main",
+            "mergeCommit": {"oid": "merge123"},
         },
     )
     monkeypatch.setattr(
@@ -221,7 +224,7 @@ def test_unmerged_pr_blocks_all_cleanup(monkeypatch: pytest.MonkeyPatch) -> None
     monkeypatch.setattr(
         closure,
         "_verify_pr",
-        lambda *_args: (_ for _ in ()).throw(RuntimeError("pull request is not merged")),
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(RuntimeError("pull request is not merged")),
     )
 
     with pytest.raises(RuntimeError, match="not merged"):
@@ -285,7 +288,7 @@ def test_branch_mapping_mismatch_blocks_before_switch(monkeypatch: pytest.Monkey
     monkeypatch.setattr(
         closure,
         "_verify_pr",
-        lambda *_args: (_ for _ in ()).throw(RuntimeError("head branch does not match")),
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(RuntimeError("head branch does not match")),
     )
 
     with pytest.raises(RuntimeError, match="head branch"):
@@ -467,6 +470,124 @@ def test_verify_pr_requires_exact_local_head_sha() -> None:
         closure._verify_pr(runner, "codex/example", "main", "work123")
 
 
+def test_verify_stacked_base_requires_archived_parent_identity_remote_and_ancestry(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    archive = tmp_path / "archive" / "2026"
+    archive.mkdir(parents=True)
+    (archive / "parent.contract.json").write_text('{"workItemId": "parent"}\n', encoding="utf-8")
+    monkeypatch.setattr(closure, "ARCHIVE_DIR", tmp_path / "archive")
+    monkeypatch.setattr(closure, "CLOSURE_RECEIPTS_DIR", tmp_path / "receipts")
+
+    def runner(args, _check):
+        if tuple(args[:3]) == ("ls-remote", "--exit-code", "--heads"):
+            return closure.CommandResult(0, "parent-sha\trefs/heads/codex/parent\n")
+        if tuple(args) == ("fetch", "origin", "codex/parent"):
+            return closure.CommandResult(0, "")
+        if tuple(args) == (
+            "merge-base",
+            "--is-ancestor",
+            "merge123",
+            "origin/codex/parent",
+        ):
+            return closure.CommandResult(0, "")
+        raise AssertionError(args)
+
+    closure._verify_stacked_base(
+        runner,
+        remote="origin",
+        default_branch="main",
+        stacked_base="codex/parent",
+        merge_commit="merge123",
+    )
+
+
+@pytest.mark.parametrize(
+    ("stacked_base", "merge_returncode", "message"),
+    [
+        ("release", 0, "not a Work Item branch"),
+        ("codex/parent", 1, "not retained"),
+    ],
+)
+def test_verify_stacked_base_rejects_untrusted_parent(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    stacked_base: str,
+    merge_returncode: int,
+    message: str,
+) -> None:
+    archive = tmp_path / "archive" / "2026"
+    archive.mkdir(parents=True)
+    (archive / "parent.contract.json").write_text('{"workItemId": "parent"}\n', encoding="utf-8")
+    monkeypatch.setattr(closure, "ARCHIVE_DIR", tmp_path / "archive")
+    monkeypatch.setattr(closure, "CLOSURE_RECEIPTS_DIR", tmp_path / "receipts")
+
+    def runner(args, _check):
+        if tuple(args[:3]) == ("ls-remote", "--exit-code", "--heads"):
+            return closure.CommandResult(0, "parent-sha\trefs/heads/codex/parent\n")
+        if tuple(args) == ("fetch", "origin", "codex/parent"):
+            return closure.CommandResult(0, "")
+        if tuple(args[:2]) == ("merge-base", "--is-ancestor"):
+            return closure.CommandResult(merge_returncode, "", "not ancestor")
+        raise AssertionError(args)
+
+    with pytest.raises(RuntimeError, match=message):
+        closure._verify_stacked_base(
+            runner,
+            remote="origin",
+            default_branch="main",
+            stacked_base=stacked_base,
+            merge_commit="merge123",
+        )
+
+
+def test_verify_stacked_base_rejects_a_parent_that_is_already_closed(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    archive = tmp_path / "archive" / "2026"
+    archive.mkdir(parents=True)
+    (archive / "parent.contract.json").write_text('{"workItemId": "parent"}\n', encoding="utf-8")
+    receipts = tmp_path / "receipts"
+    receipts.mkdir()
+    (receipts / "parent.closure.md").write_text("closed\n", encoding="utf-8")
+    monkeypatch.setattr(closure, "ARCHIVE_DIR", tmp_path / "archive")
+    monkeypatch.setattr(closure, "CLOSURE_RECEIPTS_DIR", receipts)
+
+    with pytest.raises(RuntimeError, match="already closed"):
+        closure._verify_stacked_base(
+            lambda _args, _check: pytest.fail("remote checks must not run for a closed parent"),
+            remote="origin",
+            default_branch="main",
+            stacked_base="codex/parent",
+            merge_commit="merge123",
+        )
+
+
+def test_stacked_closure_synchronizes_the_verified_parent_branch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake = FakeGit()
+    fake.base_branch = "codex/parent"
+    prepare(monkeypatch, fake)
+    monkeypatch.setattr(
+        closure,
+        "_verify_pr",
+        lambda *_args, **_kwargs: {
+            "url": "https://example.test/pr/2",
+            "headRefOid": "work123",
+            "baseRefName": "codex/parent",
+            "mergeCommit": {"oid": "merge123"},
+        },
+    )
+    monkeypatch.setattr(closure, "_verify_stacked_base", lambda *_args, **_kwargs: None)
+
+    result = closure.close_work_item("example", fake)
+
+    assert result["baseBranch"] == "codex/parent"
+    assert ("switch", "codex/parent") in fake.commands
+    assert ("merge", "--ff-only", "origin/codex/parent") in fake.commands
+
+
 def test_external_runner_fails_closed_when_command_is_unavailable(monkeypatch):
     monkeypatch.setattr(closure.shutil, "which", lambda _name: None)
 
@@ -582,9 +703,11 @@ def test_real_linked_worktree_closure_is_closed_but_not_ready(
     monkeypatch.setattr(
         closure,
         "_verify_pr",
-        lambda _runner, _branch, _base, _head: {
+        lambda _runner, _branch, _base, _head, **_kwargs: {
             "url": "https://example.test/pr/1",
             "headRefOid": work_commit,
+            "baseRefName": "main",
+            "mergeCommit": {"oid": "merge123"},
         },
     )
     monkeypatch.setattr(
