@@ -539,6 +539,21 @@ def test_finalize_release_freeze_runtime_mode_binds_exact_detached_source(monkey
     assert freeze["lifecycle"]["defaultBranch"] == "main"
 
 
+def test_runtime_release_freeze_does_not_rewrite_source_bound_capability_truth(
+    monkeypatch, tmp_path
+):
+    _configure_finalizer(monkeypatch, tmp_path, branch="", head="runtime", remote_head="default")
+    regenerated = []
+    monkeypatch.setattr(
+        finalizer,
+        "regenerate_capability_truth",
+        lambda _root: regenerated.append("matrix"),
+    )
+
+    assert finalizer.main(runtime_source_commit="runtime", runtime_default_branch="main") == 0
+    assert regenerated == []
+
+
 def test_finalize_release_freeze_runtime_requires_controlled_default_branch(monkeypatch, tmp_path):
     _configure_finalizer(monkeypatch, tmp_path, branch="", head="runtime")
 

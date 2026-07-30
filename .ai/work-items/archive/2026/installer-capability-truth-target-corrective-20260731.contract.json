@@ -1,0 +1,178 @@
+{
+  "contractVersion": 2,
+  "workItemId": "installer-capability-truth-target-corrective-20260731",
+  "mode": "code",
+  "title": "Synchronize installed Capability Truth finish target",
+  "baseCommit": "1feabd36e7c15cae68ef2b10787ac1965d8cf23d",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/installer-capability-truth-target-corrective-20260731.contract.json",
+    ".ai/work-items/active/installer-capability-truth-target-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/installer-capability-truth-target-corrective-20260731.outcome.json",
+    ".ai/work-items/active/installer-capability-truth-target-corrective-20260731.outcome.md",
+    "templates/make/Makefile.ai",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_makefile.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Publishing releases, changing Capability Truth claims, and retrying PR #515 without a corrective commit."],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30578747334",
+      "reason": "Hosted failure identifies checks.yaml target missing from installed Makefile.ai."
+    },
+    {"path": "templates/make/Makefile.ai", "reason": "Canonical installed command surface."},
+    {"path": "tests/test_installed_runtime_parity.py", "reason": "Installer runtime target regression coverage."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "installer_runtime_parity"
+    ],
+    "reason": "The failure is deterministic installer target parity; a focused template and installed-runtime regression can validate it."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized corrective Work Items and their PR lifecycle."
+  },
+  "preReviewWarnings": [
+    "The installed target must not claim Capability Truth validation when an adopter has no matrix configured."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Installed Makefile.ai declares check-capability-truth so checks.yaml and installed command surfaces agree.",
+    "The installed target validates the canonical matrix only when both the matrix and validator exist; otherwise it reports not configured without a false claim.",
+    "Focused installed-runtime and Makefile regressions cover the target and absent-matrix boundary.",
+    "Hosted CI remains mandatory before the replacement evidence PR can merge."
+  ],
+  "guidelines": [
+    "Keep template and installed Makefile command surfaces synchronized.",
+    "Do not claim a Capability Truth validation result when its matrix is absent.",
+    "Use deterministic focused tests; do not rerun failed hosted CI unchanged."
+  ],
+  "intent": {
+    "problem": "PR #515 added check-capability-truth to checks.yaml but omitted it from templates/make/Makefile.ai, so both template system invariants and installer smoke fail.",
+    "constraints": ["The adopter Runtime does not distribute the template Capability Truth matrix or validator.", "Do not make an absent matrix look validated.", "Local broad quality remains skipped only under the user's temporary efficiency allowance."],
+    "rationale": "An explicit installed target with an evidence-presence boundary prevents command-surface drift while preserving capability truth for adopters."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user efficiency authorization permits focused local verification; hosted PR CI remains mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized corrective implementation and lifecycle work."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 705
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/installer-capability-truth-target-corrective-20260731.json",
+    "baseCommit": "1feabd36e7c15cae68ef2b10787ac1965d8cf23d",
+    "initialScopeDigest": "c81a274114b99f392125e94be95d445823670f7034630cc5dbe2b7e66dc17c6c",
+    "contractSkeletonDigest": "ebdbf4127baff78fa331ca0f44ad10e07a6bcf4c6c28efa44914a78f944658e8"
+  },
+  "rawUserRequest": "需要的时候，自己查看Actions结果，目标计划全部完成前不要停止。",
+  "rawRequestSource": {"type":"human","reference":"conversation:2026-07-31-continuous-plan-authorization","capturedAt":"2026-07-31","digest":"sha256:installer-target-corrective"},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "declaredIntent": {"summary":"Repair installed Makefile target parity without overstating adopter Capability Truth evidence.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "scenarioCoverage": [
+    {"scenario":"An installed adopter has no Capability Truth matrix.","expected":"check-capability-truth explicitly reports not configured and returns success without claiming validation.","verificationPlan":"Installed Makefile focused regression.","required":true,"status":"verified","evidence":["tests/test_installed_runtime_parity.py"]},
+    {"scenario":"Template checks.yaml registers Capability Truth.","expected":"Installed Makefile declares the corresponding target.","verificationPlan":"Runtime parity regression.","required":true,"status":"verified","evidence":["tests/test_installed_runtime_parity.py"]}
+  ]
+}

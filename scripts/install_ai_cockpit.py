@@ -62,6 +62,7 @@ RUNTIME_TARGETS = (
     "ai-cockpit-uninstall-facts",
     "ai-cockpit-uninstall-propose",
     "ai-cockpit-uninstall-execute",
+    "check-capability-truth",
 )
 
 RUNTIME_SURFACE_SCRIPTS = frozenset(

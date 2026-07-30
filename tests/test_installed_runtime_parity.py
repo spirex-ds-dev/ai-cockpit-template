@@ -34,6 +34,7 @@ EXPECTED_RUNTIME_TARGETS = (
     "ai-cockpit-uninstall-facts",
     "ai-cockpit-uninstall-propose",
     "ai-cockpit-uninstall-execute",
+    "check-capability-truth",
 )
 
 
@@ -69,6 +70,31 @@ def test_installed_adopter_contains_runtime_scripts_and_targets(tmp_path):
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_installed_capability_truth_target_reports_when_matrix_is_not_configured(tmp_path):
+    target = tmp_path / "adopter"
+    installer = Installer(
+        source=ROOT,
+        target=target,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+    )
+
+    assert installer.install() == 0
+    result = subprocess.run(
+        ["make", "-f", "Makefile.ai", "check-capability-truth"],
+        cwd=target,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "not configured" in result.stdout
 
 
 def test_installer_fails_closed_when_runtime_script_is_not_available(monkeypatch, tmp_path):
