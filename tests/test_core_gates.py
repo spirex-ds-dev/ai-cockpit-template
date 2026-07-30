@@ -1085,8 +1085,9 @@ def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
     assert ai_finish.main() == 0
     # Status is regenerated before each status-derived assertion so persisted
     # verification evidence cannot invalidate the projection it is checking.
-    assert len(executed) == 12
-    assert executed[0] == ["make", "quality"]
+    assert len(executed) == 13
+    assert executed[0] == ["make", "capabilityTruth"]
+    assert executed[1] == ["make", "quality"]
     assert sum(command[:2] == ["make", "generate-cockpit-status"] for command in executed) == 4
     assert executed[-1][:2] == ["make", "check-ai-change-summary"]
     recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]

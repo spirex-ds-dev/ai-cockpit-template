@@ -1,0 +1,177 @@
+{
+  "contractVersion": 2,
+  "workItemId": "finish-gate-stabilization-call-count-corrective-20260731",
+  "mode": "code",
+  "title": "Correct finish success-path coverage for mandatory evidence gate",
+  "baseCommit": "c407259048e8a993e4da95a5068899eb9a0a7f26",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/finish-gate-stabilization-call-count-corrective-20260731.contract.json",
+    ".ai/work-items/active/finish-gate-stabilization-call-count-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/finish-gate-stabilization-call-count-corrective-20260731.outcome.json",
+    ".ai/work-items/active/finish-gate-stabilization-call-count-corrective-20260731.outcome.md",
+    "tests/test_core_gates.py",
+    ".ai/cockpit/checks.yaml",
+    "Makefile",
+    "scripts/ai_finish.py",
+    "tests/test_finish_readiness.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Release state and archived #517 evidence."],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30580439374/job/90999051174",
+      "reason": "Hosted template-smoke failure identifies the stale success-path invocation count."
+    },
+    {"path":"tests/test_core_gates.py","reason":"The success-path test owns the obsolete count assertion."},
+    {"path":"scripts/ai_finish.py","reason":"Mandatory gate is the intentional new call that the test must assert."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "test_regression"
+    ],
+    "reason": "One focused test assertion updates to match a deliberate mandatory gate."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized all corrective Work Items and their full lifecycle."
+  },
+  "preReviewWarnings": [
+    "Recreate the mandatory gate from #517 and verify the successful execution order explicitly."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The success-path test asserts 13 calls, including the mandatory Capability Truth call before quality.",
+    "ai-finish runs the canonical Capability Truth validator before Outcome/archive, independently of optional broad quality.",
+    "The focused core-gate regression passes locally.",
+    "Hosted CI passes before this corrective can merge."
+  ],
+  "guidelines": [
+    "Fix only the evidence-backed test expectation; do not weaken the mandatory gate.",
+    "Assert semantic call ordering, not only a numeric count."
+  ],
+  "intent": {
+    "problem": "Hosted CI shows test_finish_main_stabilizes_successful_work_item expects 12 calls although the new mandatory Capability Truth gate deliberately creates 13.",
+    "constraints": ["Recreate the mandatory gate from failed #517 in this single replacement Work Item.", "Do not modify archived failed PR evidence.", "Use the temporary focused-verification allowance; hosted CI remains mandatory."],
+    "rationale": "The test must encode the intentionally expanded success-path contract so future changes cannot silently remove the gate."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user efficiency authorization permits focused local verification; hosted PR CI remains mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized corrective implementation, PR merge, closure, and cleanup."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 706
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/finish-gate-stabilization-call-count-corrective-20260731.json",
+    "baseCommit": "c407259048e8a993e4da95a5068899eb9a0a7f26",
+    "initialScopeDigest": "8f6088c7552c37efd0c1ef949ff20dce4c175d8625d7601a18e833480551aa31",
+    "contractSkeletonDigest": "9a99131f3ad684737c4d11db0391d7d279ba61daf7d5778cb9b49b4be668c8f8"
+  },
+  "rawUserRequest":"继续执行所有已授权的纠正工单；需要时自行查看 Actions；在全部目标计划完成前不要停止。",
+  "rawRequestSource":{"type":"human","reference":"conversation:2026-07-31-continuous-plan-authorization","capturedAt":"2026-07-31","digest":"sha256:finish-count-corrective"},
+  "requestedOperation":{"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "declaredIntent":{"summary":"Correct the focused success-path contract after the new mandatory evidence call surfaced in hosted CI.","requestedCapabilities":["ai_governance","test_automation"]},
+  "scenarioCoverage":[
+    {"scenario":"Successful ai-finish runs the mandatory evidence gate before declared quality.","expected":"The test asserts 13 calls and capabilityTruth as the first command.","verificationPlan":"Focused core-gate test.","required":true,"status":"verified","evidence":["tests/test_core_gates.py","tests/test_finish_readiness.py"]}
+  ]
+}
