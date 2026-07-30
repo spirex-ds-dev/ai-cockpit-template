@@ -5,10 +5,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+import unsupported_claim_gate
+
 ROOT = Path(__file__).parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-
-import unsupported_claim_gate
 
 
 def test_gate_blocks_six_unsupported_claims_and_allows_supported_claim() -> None:

@@ -1,0 +1,211 @@
+{
+  "contractVersion": 2,
+  "workItemId": "ruff-e402-baseline-corrective-20260730",
+  "mode": "code",
+  "title": "ruff-e402-baseline-corrective-20260730",
+  "baseCommit": "a3e15fba04ad71b9ccdf10737e7513d071c1f6d3",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/ruff-e402-baseline-corrective-20260730.contract.json",
+    ".ai/work-items/active/ruff-e402-baseline-corrective-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/ruff-e402-baseline-corrective-20260730.outcome.json",
+    ".ai/work-items/active/ruff-e402-baseline-corrective-20260730.outcome.md",
+    "tests/test_project_governance_journey.py",
+    "tests/test_unsupported_claim_regression.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Do not change test behavior, imports, assertions, or any file other than the two baseline E402 import placements.",
+    "Do not modify the archived refusal-record Work Item."
+  ],
+  "sources": [
+    {
+      "path": "tests/test_project_governance_journey.py",
+      "reason": "origin/main baseline E402 reported by project-lint."
+    },
+    {
+      "path": "tests/test_unsupported_claim_regression.py",
+      "reason": "origin/main baseline E402 reported by project-lint."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Canonical project-lint command invoked by PR preflight."
+    }
+  ],
+  "rawUserRequest": "Continue the plan. The refusal-record Work Item cannot pass required PR preflight because current origin/main has E402 in two unmodified tests. Create a separate minimal corrective Work Item, then resume the archived Work Item PR.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation continuation and local project-lint output",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:ruff-e402-baseline-corrective-authorized"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "ci"
+    ],
+    "reason": "This baseline lint failure blocks every PR lifecycle and must be corrected independently from the feature Work Item.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous planned corrective Work Item execution."
+  },
+  "preReviewWarnings": [
+    "Verify that only import placement changes and that whole-repository project-lint passes."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Move only the two imports needed to remove the exact baseline Ruff E402 violations without changing test behavior.",
+    "A2: `make project-lint` and the two affected test modules pass.",
+    "A3: The Work Item completes an independent PR lifecycle before the blocked archived Work Item resumes."
+  ],
+  "guidelines": [
+    "Keep the corrective diff limited to import ordering and its governance evidence.",
+    "Record the baseline root cause and do not describe it as a refusal-record implementation defect."
+  ],
+  "intent": {
+    "problem": "The canonical PR preflight invokes whole-repository Ruff and fails on two E402 import-order violations already present in origin/main, preventing the archived refusal-record Work Item from entering PR verification.",
+    "constraints": [
+      "Use a separate Work Item and branch from origin/main.",
+      "Move imports only; preserve test behavior.",
+      "Run full project-lint because this exact gate is the corrective target."
+    ],
+    "rationale": "Correcting the shared baseline before resuming the feature PR removes a repeatable process blocker without mixing unrelated changes into the archived Work Item."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user direction: this corrective Work Item runs the necessary full project-lint target and focused affected tests, rather than the full quality suite."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized continuous planned Work Item execution."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 690
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/ruff-e402-baseline-corrective-20260730.json",
+    "baseCommit": "a3e15fba04ad71b9ccdf10737e7513d071c1f6d3",
+    "initialScopeDigest": "0731958999e6db06cc922111fa2698dbe5ad9f31c723e3110c47cdd6a578e6b8",
+    "contractSkeletonDigest": "46e36269a4ab9034ca82974d831c3bedd4da5d33c1afd647e6da5bcc123d82c2"
+  },
+  "declaredIntent": {
+    "summary": "Remove the two origin/main E402 baseline violations so canonical PR preflight can run.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Both original E402 locations pass Ruff without test behavior changes.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "project-lint and both test modules pass.",
+      "verificationPlan": "Run project-lint plus focused pytest."
+    }
+  ]
+}
