@@ -393,6 +393,12 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
             "run ai-close-work-item from the merged Work Item branch before deleting it, then let closure "
             "synchronize the base and remove local/remote branches"
         )
+    expected_branch = f"codex/{task}"
+    if work_branch != expected_branch:
+        raise RuntimeError(
+            "requested Work Item does not match the selected worktree branch; "
+            f"expected {expected_branch}, found {work_branch}"
+        )
     _require_clean_worktree(runner)
     work_commit = runner(["rev-parse", work_branch], True).stdout.strip()
     if not work_commit:
