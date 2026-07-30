@@ -299,7 +299,7 @@ check-ai-guard-calibration: check-ai-project-profile
 QUALITY_FAST_STATIC_GATES := project-format-check project-lint diff-check
 QUALITY_FAST_POLICY_GATES := check-trust-schemas check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency
 QUALITY_TEST_GATES := project-test
-QUALITY_EVIDENCE_GATES := unsupported-claim-regression adopter-long-cycle check-release-evidence check-dependency-vulnerabilities
+QUALITY_EVIDENCE_GATES := unsupported-claim-regression adopter-long-cycle check-release-evidence check-release-state-consistency check-dependency-vulnerabilities
 QUALITY_SUPPLY_CHAIN_GATES := check-bandit-baseline check-sbom check-provenance check-secret-scanning
 QUALITY_PROJECT_CONSISTENCY_GATES := check-quality-architecture check-deprecated-assets check-instruction-traceability
 QUALITY_MAKE = $(AI_NESTED_MAKE)
@@ -355,7 +355,7 @@ qg-project-test:
 	$(call RUN_QUALITY_GATE,project-test,tests)
 
 quality-evidence-group:
-quality-evidence-group: qg-unsupported-claim-regression qg-adopter-long-cycle qg-check-release-evidence qg-check-dependency-vulnerabilities
+quality-evidence-group: qg-unsupported-claim-regression qg-adopter-long-cycle qg-check-release-evidence qg-check-release-state-consistency qg-check-dependency-vulnerabilities
 
 qg-unsupported-claim-regression:
 	$(call RUN_QUALITY_GATE,unsupported-claim-regression,evidence)
@@ -363,6 +363,8 @@ qg-adopter-long-cycle:
 	$(call RUN_QUALITY_GATE,adopter-long-cycle,evidence)
 qg-check-release-evidence:
 	$(call RUN_QUALITY_GATE,check-release-evidence,evidence)
+qg-check-release-state-consistency:
+	$(call RUN_QUALITY_GATE,check-release-state-consistency,evidence)
 qg-check-dependency-vulnerabilities:
 	$(call RUN_QUALITY_GATE,check-dependency-vulnerabilities,evidence)
 
