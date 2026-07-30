@@ -1,0 +1,219 @@
+{
+  "contractVersion": 2,
+  "workItemId": "closure-hosted-evidence-replacement-20260730",
+  "mode": "code",
+  "title": "Prevent local-only evidence from entering archived Work Item summaries",
+  "baseCommit": "a18a7d0065c16ee19f6b65f76268c2a4fe9b01aa",
+  "baselineDirtyPaths": [
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "status": "M",
+      "fingerprint": "575e589019ebef572d38d7d885fa8d7ae409e620d8fbcf76223efcb2258bf610"
+    }
+  ],
+  "scope": [
+    ".ai/work-items/active/closure-hosted-evidence-replacement-20260730.contract.json",
+    ".ai/work-items/active/closure-hosted-evidence-replacement-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/closure-hosted-evidence-replacement-20260730.outcome.json",
+    ".ai/work-items/active/closure-hosted-evidence-replacement-20260730.outcome.md",
+    "Makefile",
+    "scripts/ai_close_work_item.py",
+    "scripts/ai_check_summary.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "tests/test_ai_check_summary.py",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/reference/work-item-lifecycle-closure.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Do not reopen or rewrite the immutable archive evidence from closed PR #477.",
+    "Do not accept a local target/ receipt as repository documentation evidence.",
+    "Do not weaken clean-checkout evidence validation.",
+    "Do not close the separate #474 lifecycle until this corrective Work Item is merged."
+  ],
+  "sources": [
+    {
+      "path": "Makefile",
+      "reason": "Owns forwarding of ai-close-work-item arguments to the lifecycle script."
+    },
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Owns selected-worktree closure binding and branch identity validation."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Owns validation of documentationAlignment evidence before archiving."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Owns executable closure argument and task/worktree regression coverage."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Owns executable Summary evidence validation coverage."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.md",
+      "reason": "Authoritative English lifecycle guidance for the closure command."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.ja.md",
+      "reason": "Japanese equivalent lifecycle guidance."
+    }
+  ],
+  "rawUserRequest": "The hosted CI failure of PR #477 showed that documentationAlignment accepted a local-only target closure receipt. Complete the corrective fix without rewriting the closed archive: require repository-tracked evidence, preserve the closure argument and branch-binding correction, add regressions, and then continue the governed lifecycle.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:closure-hosted-evidence-corrective",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:0c0d0f3f5cc28b35fce6a3b8a4bc4e4b6fdc7805e2e7ef55d96a843bd1c4fd4b"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Deliver a fresh, source-bound replacement for the closed #477 corrective attempt, preventing local-only documentation evidence from surviving to hosted validation.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "lifecycle_integrity",
+      "evidence_integrity",
+      "hosted_verification"
+    ],
+    "reason": "The correction governs archive eligibility and closure identity; a false acceptance would fail only in a clean hosted checkout and a false rejection could block legitimate pre-commit active Contract evidence.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user gave continuous authorization for corrective Work Items, verification, PR lifecycle, and cleanup."
+  },
+  "preReviewWarnings": [
+    "Treat the closed #477 archive as audit evidence only; do not mutate it.",
+    "Prove the clean-checkout failure mode with a regression before final quality.",
+    "Keep the #474 closure deferred until this replacement has merged."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Capture the pre-edit source boundary and final evidence before archive."
+  },
+  "acceptance": [
+    "A1: ai-close-work-item forwards explicit ARGS and the closure script rejects a selected worktree whose branch is not codex/<task> before provider lookup, receipt creation, or cleanup.",
+    "A2: documentationAlignment evidence rejects an existing local path unless it is Git-tracked or explicitly owned by the current active Contract scope; ignored target/ receipts remain rejected before archive.",
+    "A3: missing and malformed evidence paths remain rejected, with a diagnostic that distinguishes local-only evidence from a missing path.",
+    "A4: focused lifecycle and Summary validation tests cover closure argument forwarding, task/worktree mismatch, tracked evidence, and local-only target evidence.",
+    "A5: English and Japanese lifecycle guidance preserve the explicit argument forwarding and exact task/worktree binding boundary.",
+    "A6: this replacement creates one new archive and one PR; closed PR #477 remains immutable audit evidence."
+  ],
+  "guidelines": [
+    "Fail closed for evidence that cannot exist in a clean Git checkout unless the current active Contract explicitly owns the pre-commit file; do not substitute local target artifacts for governed evidence.",
+    "Bind closure task, worktree, branch, provider PR, and receipt before cleanup; do not infer one from another.",
+    "Preserve failed archive and hosted evidence; deliver the correction through a new Work Item rather than rewriting history.",
+    "Keep the validator deterministic and project-local; do not depend on provider state to classify a repository path.",
+    "Maintain equivalent English and Japanese lifecycle instructions."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "An archived Summary names an existing target/ closure receipt that is ignored and absent from a clean checkout.",
+      "expected": "Summary validation fails before archive unless the file is Git-tracked or explicitly scoped by the active Contract.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a focused test with an existing untracked evidence path and run tests/test_ai_check_summary.py."
+    },
+    {
+      "scenario": "A Summary names an existing Git-tracked repository documentation path.",
+      "expected": "Summary validation accepts it when it is declared by the Work Item evidence records.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Retain and run the positive documentationAlignment regression."
+    },
+    {
+      "scenario": "A caller requests closure for task A using a worktree checked out on task B.",
+      "expected": "Closure stops before provider lookup, receipt generation, or branch cleanup.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run the focused lifecycle closure regression."
+    }
+  ],
+  "intent": {
+    "problem": "Closed PR #477 passed local finish but failed hosted check-ai-pr because the archived Summary's documentationAlignment referenced an ignored local target/task-closure-receipts file. The validator checked existence but not whether clean Git checkout could contain the file. The original closure command also required explicit Makefile argument forwarding and exact task/worktree branch binding.",
+    "constraints": [
+      "Use a replacement Work Item from the exact parent branch base a18a7d0065c16ee19f6b65f76268c2a4fe9b01aa.",
+      "Do not rewrite or revive PR #477 or its archive evidence.",
+      "Do not weaken missing-path or clean-checkout validation.",
+      "Do not close #474 until this corrective Work Item has been merged."
+    ],
+    "rationale": "A deterministic Git-tracked-or-active-scope check moves the failure to the local pre-archive boundary without breaking legitimate pre-commit installation evidence, while new branch binding prevents cross-task closure receipts."
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized the planned corrective Work Items and lifecycle work, including governed Makefile, script, test, documentation, archive, PR, merge, and cleanup changes."
+  },
+  "rollbackNote": "Revert this replacement Work Item diff; retain closed #477 as immutable audit evidence.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 680
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/closure-hosted-evidence-replacement-20260730.json",
+    "baseCommit": "a18a7d0065c16ee19f6b65f76268c2a4fe9b01aa",
+    "initialScopeDigest": "91309c743effbc8f180139c2a0848d51981d9a4eac6868611f18bf0750307e11",
+    "contractSkeletonDigest": "c1d11624638cb069a58664d735263a87b3d15f7a7d5ddafc8abc64aa8e03fc5e"
+  }
+}
