@@ -1,0 +1,240 @@
+{
+  "contractVersion": 2,
+  "workItemId": "python311-release-baseline-corrective-20260730",
+  "mode": "code",
+  "title": "python311-release-baseline-corrective-20260730",
+  "baseCommit": "ff30dd38c0cd313bce90746331d433ed4b5b60d3",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/python311-release-baseline-corrective-20260730.contract.json",
+    ".ai/work-items/active/python311-release-baseline-corrective-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/python311-release-baseline-corrective-20260730.outcome.json",
+    ".ai/work-items/active/python311-release-baseline-corrective-20260730.outcome.md",
+    "scripts/ai_doctor.py",
+    "scripts/ai_japanese_capability.py",
+    "scripts/check_supply_chain.py",
+    "tests/test_doctor.py",
+    "tests/test_japanese_capability.py",
+    "tests/test_supply_chain.py",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/remediation-instruction-traceability.json",
+    ".ai/guards/coverage_policy.yaml"
+  ],
+  "outOfScope": [
+    "Changing the Python 3.11 baseline, dependency versions, lint policy, or the completed UTC correction.",
+    "Changing release versions, publishing a release, merging or closing #481, #482, or #483 during this Work Item.",
+    "Weakening secret detection or converting a release-blocking Japanese assessment into a self-declared pass."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30528357265",
+      "reason": "Hosted template-smoke evidence for PR #483: 1553 passed and three named baseline failures."
+    },
+    {
+      "path": "tests/test_doctor.py",
+      "reason": "Reproduces the missing Python 3.11 minimum-version failure."
+    },
+    {
+      "path": "tests/test_japanese_capability.py",
+      "reason": "Reproduces stale final reassessment evidence."
+    },
+    {
+      "path": "tests/test_supply_chain.py",
+      "reason": "Reproduces false positives from tracked test fixtures in the repository secret scan."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["ci_baseline", "release_evidence", "secret_scanning"],
+    "reason": "A hosted release gate currently fails on three regressions. The fix must retain fail-closed test-fixture pattern detection and assessment boundaries.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuation and focused local verification; hosted CI remains the merge condition."
+  },
+  "preReviewWarnings": [
+    "Review that doctor reports Python 3.11 before unrelated workspace facts.",
+    "Review that fixture exclusions remain exact and never suppress non-test secrets.",
+    "Review the regenerated Japanese assessment only claims current evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ai_doctor rejects Python 3.10 and reports the Python 3.11 minimum independently of Git-repository state.",
+    "The final Japanese assessment is regenerated from this exact repository evidence and passes the final-reassessment check without broadening capability claims.",
+    "The repository secret scan ignores only intentional, tracked test fixtures while detecting equivalent secret material outside approved test fixtures.",
+    "Focused regression tests and required AI governance checks pass; local full quality is recorded as not run under temporary user authorization and hosted CI on the fresh corrective PR remains mandatory.",
+    "Capability Truth and bidirectional instruction traceability record this correction without changing implementation-status claims."
+  ],
+  "guidelines": [
+    "Keep failure behavior deterministic and fail closed; do not infer missing evidence as success.",
+    "Use minimal, path-specific test-fixture exclusions; production and non-fixture files remain scanned.",
+    "Record exact verification scope and do not report hosted CI as passed before provider evidence exists."
+  ],
+  "intent": {
+    "problem": "PR #483 proved the UTC correction but its hosted template-smoke uncovered three inherited baseline failures: doctor omitted the Python minimum check, Japanese final-assessment artifacts are stale after prior changes, and the repository scan flags intentional fixtures in test_supply_chain.py.",
+    "constraints": ["Create a fresh, dedicated corrective PR stacked on #483.", "Do not weaken governance, test-fixture pattern detection, Japanese release evidence, or change dependency baselines.", "Use focused local verification under the user's temporary efficiency direction; hosted CI remains mandatory."],
+    "rationale": "These failures prevent both #483 and its parent dependency-refresh chain from reaching a trustworthy release gate. One bounded corrective Work Item gives them a single verifiable baseline while preserving their individual regression tests."
+  },
+  "rawUserRequest": "Continue the planned work efficiently: do not run local full quality gates for non-release Work Items, but preserve quality through focused verification and mandatory hosted CI. Repair the hosted failures before continuing the Python 3.11 dependency migration chain.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-30-focused-verification-and-continue",
+    "capturedAt": "2026-07-30T17:45:00+09:00",
+    "digest": "sha256:focused-local-verification-hosted-ci-required"
+  },
+  "declaredIntent": {
+    "summary": "Repair the three hosted baseline failures discovered on PR #483 without weakening test-fixture detection, Japanese assessment, or release governance.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Python 3.10 on a non-repository path reports the version failure.",
+      "required": true,
+      "status": "unverified",
+      "expected": "The diagnostic reports Python 3.11 or newer is required alongside any independent repository facts.",
+      "verificationPlan": "Run tests/test_doctor.py::test_doctor_requires_python_311_or_newer after the minimal implementation.",
+      "evidence": []
+    },
+    {
+      "scenario": "A regenerated final reassessment matches exact current evidence.",
+      "required": true,
+      "status": "unverified",
+      "expected": "The report remains final_reassessment and --check --require-final-reassessment has no drift.",
+      "verificationPlan": "Regenerate the report then run tests/test_japanese_capability.py::test_release_requirement_accepts_fresh_final_reassessment.",
+      "evidence": []
+    },
+    {
+      "scenario": "Approved test fixtures do not fail the scan but a synthetic non-fixture still does.",
+      "required": true,
+      "status": "unverified",
+      "expected": "Only declared test fixture contexts are excluded; equivalent material elsewhere remains detected.",
+      "verificationPlan": "Run the focused supply-chain tests and the repository scan after a test-first minimal change.",
+      "evidence": []
+    },
+    {
+      "scenario": "The exact child PR head passes all required hosted checks.",
+      "required": true,
+      "status": "unverified",
+      "expected": "Provider evidence binds successful required jobs to the corrective PR head.",
+      "verificationPlan": "Inspect GitHub Actions results for the exact child PR head before merge.",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user authorization for this plan: run focused local checks during implementation; hosted CI remains mandatory before merge."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized continued plan execution and this repository-scoped corrective implementation."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 685
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/python311-release-baseline-corrective-20260730.json",
+    "baseCommit": "ff30dd38c0cd313bce90746331d433ed4b5b60d3",
+    "initialScopeDigest": "45fc82f07873edc617e8b0162338cdcf3f5080641b27100850cfc7136a158f8e",
+    "contractSkeletonDigest": "5b770f8588a4c0d0de50790e56dce567d23872c5eb05657845dd2488eb88efc5"
+  }
+}

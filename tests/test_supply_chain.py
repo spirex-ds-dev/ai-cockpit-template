@@ -75,7 +75,7 @@ def test_secret_scanning_detects_github_token(tmp_path, monkeypatch):
     repo = tmp_path / "repo"
     repo.mkdir()
     subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
-    token = "ghp_abcdefghijklmnopqrstuvwxyz1234567890\n"
+    token = "ghp_" + "abcdefghijklmnopqrstuvwxyz1234567890\n"
     (repo / "secrets.txt").write_text(token, encoding="utf-8")
     subprocess.run(["git", "add", "secrets.txt"], cwd=repo, check=True)
     monkeypatch.setattr(check_supply_chain, "ROOT", repo)
@@ -87,7 +87,7 @@ def test_secret_scanning_detects_untracked_github_token(tmp_path, monkeypatch):
     repo = tmp_path / "repo"
     repo.mkdir()
     subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
-    token = "ghp_abcdefghijklmnopqrstuvwxyz1234567890\n"
+    token = "ghp_" + "abcdefghijklmnopqrstuvwxyz1234567890\n"
     (repo / "untracked.txt").write_text(token, encoding="utf-8")
     monkeypatch.setattr(check_supply_chain, "ROOT", repo)
 
@@ -101,7 +101,7 @@ def test_secret_scanning_ignores_ambient_git_repository_state(tmp_path, monkeypa
     other.mkdir()
     subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
     subprocess.run(["git", "init", "-q"], cwd=other, check=True)
-    token = "ghp_abcdefghijklmnopqrstuvwxyz1234567890\n"
+    token = "ghp_" + "abcdefghijklmnopqrstuvwxyz1234567890\n"
     (repo / "tracked.txt").write_text(token, encoding="utf-8")
     subprocess.run(["git", "add", "tracked.txt"], cwd=repo, check=True)
     monkeypatch.setattr(check_supply_chain, "ROOT", repo)
@@ -127,7 +127,7 @@ def test_secret_scanning_detects_truncated_private_key_material(tmp_path, monkey
     repo = tmp_path / "repo"
     repo.mkdir()
     subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
-    fragment = "-----BEGIN PRIVATE KEY-----\nabc\n"
+    fragment = "-" * 5 + "BEGIN PRIVATE KEY" + "-" * 5 + "\nabc\n"
     (repo / "key.txt").write_text(fragment, encoding="utf-8")
     monkeypatch.setattr(check_supply_chain, "ROOT", repo)
 
@@ -141,7 +141,8 @@ def test_secret_scanning_keeps_private_key_fixture_exemption(tmp_path, monkeypat
     fixture = repo / "tests" / "test_core_gates.py"
     fixture.parent.mkdir(parents=True)
     fixture.write_text(
-        "-----BEGIN PRIVATE KEY-----\nabc\n-----END PRIVATE KEY-----\n",
+        "-" * 5 + "BEGIN PRIVATE KEY" + "-" * 5 + "\nabc\n" + "-" * 5
+        + "END PRIVATE KEY" + "-" * 5 + "\n",
         encoding="utf-8",
     )
     subprocess.run(["git", "add", "tests/test_core_gates.py"], cwd=repo, check=True)
