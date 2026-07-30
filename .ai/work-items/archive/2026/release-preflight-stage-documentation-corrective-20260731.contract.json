@@ -1,0 +1,253 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-preflight-stage-documentation-corrective-20260731",
+  "mode": "code",
+  "title": "release-preflight-stage-documentation-corrective-20260731",
+  "baseCommit": "1e0d165c1a14b4213f56e8faf5b92127365361ab",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-preflight-stage-documentation-corrective-20260731.contract.json",
+    ".ai/work-items/active/release-preflight-stage-documentation-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-preflight-stage-documentation-corrective-20260731.outcome.json",
+    ".ai/work-items/active/release-preflight-stage-documentation-corrective-20260731.outcome.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "tests/test_release_workflow.py",
+    "scripts/ai_finish.py",
+    "tests/test_finish_readiness.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing release workflow behavior, release-preflight validation semantics, release metadata, tags, provider Releases, or archived evidence."
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Authoritative lifecycle documentation that incorrectly leaves the local premerge versus hosted runtime preflight boundary implicit."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Working reference: runtime freeze and release preflight execute on the exact detached merged source."
+    },
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "Defines premerge finalization from clean candidate HEAD and runtime finalization from the exact release source."
+    },
+    {
+      "path": "scripts/check_release_preflight.py",
+      "reason": "Requires Japanese assessment and release evidence to bind to the exact checked-out source."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Existing executable workflow-order regression pattern."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "The finish lifecycle must respect Contract-declared optional verification so focused verification can produce a truthful readiness result."
+    },
+    {
+      "path": "tests/test_finish_readiness.py",
+      "reason": "Executable regression coverage for readiness promotion with optional not-run verification."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Regenerated evidence binding for the repository-governance-layer capability after the finish lifecycle script and regression test change."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Canonical generator for the Japanese evidence assessment that binds the changed Capability Truth Matrix."
+    },
+    {
+      "path": "scripts/check_pre_release_documentation_alignment.py",
+      "reason": "Canonical generator for derived pre-release documentation-alignment evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_process",
+      "documentation_command_boundary",
+      "optional_verification_lifecycle"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "An ambiguous release-stage command can induce a false local failure or an unsafe retry; this corrective changes only the documented and tested order."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized correction of discovered process issues before publication; the runtime workflow and failing local invocation provide deterministic evidence."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The lifecycle guide distinguishes premerge candidate preparation from exact-source runtime publication verification and names the only phase in which check-release-preflight is valid.",
+    "The guide states that premerge freeze metadata must be committed without treating the resulting metadata commit as the release source identity.",
+    "An executable regression verifies the release workflow retains runtime freeze before release preflight and the lifecycle guide states the same ordering.",
+    "Focused documentation and workflow regression checks pass without changing release behavior or immutable release identities.",
+    "A Contract-declared optional check recorded as not_run does not prevent readiness promotion, while every required check must still pass."
+  ],
+  "guidelines": [
+    "Preserve fail-closed release identity and exact-source verification boundaries.",
+    "Describe premerge and runtime phases without implying that a metadata commit is the release source.",
+    "Use an executable regression for the documented workflow ordering.",
+    "Respect Contract-required verification boundaries; never treat an explicitly optional check as passed."
+  ],
+  "intent": {
+    "problem": "The v0.5.45 preparation exposed that the lifecycle guide says to run check-release-preflight after premerge metadata is committed, even though that gate requires a detached exact source checkout and therefore rejects the metadata commit by design.",
+    "constraints": [
+      "Do not change the provider release workflow or weaken its exact-source preflight.",
+      "Do not mutate release metadata, tags, provider Releases, or archived Work Item evidence.",
+      "Use focused checks under the user-authorized temporary efficiency agreement.",
+      "Do not weaken readiness when any Contract-required check is failed or absent."
+    ],
+    "rationale": "A documented and tested phase boundary prevents future agents from treating the expected local rejection as a release defect or attempting unsafe retries before publication."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized all planned and discovered process-corrective Work Items before publication; this Work Item changes active/archive lifecycle records only through governed commands."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+    "archiveGrowth": 701
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-preflight-stage-documentation-corrective-20260731.json",
+    "baseCommit": "1e0d165c1a14b4213f56e8faf5b92127365361ab",
+    "initialScopeDigest": "a47a287ddc2769d2aba762686316aca366eee20896d686687c79db68e8e902fc",
+    "contractSkeletonDigest": "506352337ffdb5f60b24cd01a4c89d38da572723038be30fe7cb403a21752496"
+  },
+  "rawUserRequest": "需要的时候，自己查看 Actions 结果，目标计划全部完成前不要停止。发现流程问题时先修正流程，再继续发布。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-continuous-plan-authorization",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:continuous-authorized-release-and-cleanup"
+  },
+  "declaredIntent": {
+    "summary": "Correct the documented and tested premerge-versus-runtime release preflight boundary before continuing v0.5.45 publication.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A release preparation PR has committed premerge metadata after archive.",
+      "expected": "The guide directs the agent to PR validation and hosted CI, not a local HEAD release preflight.",
+      "verificationPlan": "Assert the lifecycle guide describes this premerge boundary and run the focused workflow regression.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "The controlled release workflow starts from the merged default-branch SHA.",
+      "expected": "Runtime freeze executes before check-release-preflight and both bind to the exact SOURCE_COMMIT.",
+      "verificationPlan": "Extend and run tests/test_release_workflow.py against the workflow and guide wording.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ]
+}

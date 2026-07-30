@@ -174,10 +174,16 @@ are calculated from the clean candidate branch `HEAD`. The controlled
 `SOURCE_COMMIT` reference is retained separately so the hosted release workflow
 can resolve the exact merged default-branch identity. Both `.ai/work-items/active` and
 `.ai/work-items/archive` are export-ignored, so moving evidence during Finish does
-not change canonical content. After merge, the hosted detached checkout must
-regenerate the same tree and archive or stop before tag mutation. Then run
-`make check-release-preflight`; it fails closed when lifecycle evidence is absent
-or inconsistent, archive policy blocks, or regenerated content differs.
+not change canonical content.
+
+Do not run `make check-release-preflight` on the premerge metadata commit. That
+commit carries the candidate freeze records but is not the release source identity;
+the exact-source gate would correctly reject it. The gate runs only after runtime
+freeze on the exact merged `SOURCE_COMMIT`, in the hosted detached checkout. After
+merge, that checkout must regenerate the same tree and archive or stop before tag
+mutation. `make check-release-preflight RELEASE_PREFLIGHT_SOURCE_COMMIT="$SOURCE_COMMIT"`
+then fails closed when lifecycle evidence is absent or inconsistent, archive policy
+blocks, or regenerated content differs.
 
 ```json
 {
