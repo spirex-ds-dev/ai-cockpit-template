@@ -674,6 +674,19 @@ def test_pr_rejects_rebased_archive_without_receipt_binding(monkeypatch):
     assert not ai_check_pr.archive_base_is_compatible(contract, "b" * 40)
 
 
+def test_pr_rejects_rewriting_existing_archived_evidence(monkeypatch):
+    archived_contract = ".ai/work-items/archive/2026/existing.contract.json"
+    monkeypatch.setattr(
+        ai_check_pr, "archive_evidence_changes", lambda _base: {archived_contract: "M"}
+    )
+    monkeypatch.setattr(ai_check_pr, "changed_name_status", lambda *_args, **_kwargs: [])
+    monkeypatch.setattr(ai_check_pr, "changed_paths", lambda *_args, **_kwargs: [])
+
+    issues = ai_check_pr.validate_pr_bundle("a" * 40, [])
+
+    assert any("archive PR policy is append-only" in issue for issue in issues)
+
+
 def test_pr_accepts_only_canonical_resumed_lineage(monkeypatch):
     original = "a" * 40
     resumed = "b" * 40

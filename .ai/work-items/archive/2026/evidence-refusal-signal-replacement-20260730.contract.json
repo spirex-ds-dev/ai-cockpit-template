@@ -1,0 +1,197 @@
+{
+  "contractVersion": 2,
+  "workItemId": "evidence-refusal-signal-replacement-20260730",
+  "mode": "code",
+  "title": "evidence-refusal-signal-replacement-20260730",
+  "baseCommit": "d8ac9e1c77e669d911c577fefd859be7c78d3f02",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/evidence-refusal-signal-replacement-20260730.contract.json",
+    ".ai/work-items/active/evidence-refusal-signal-replacement-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/evidence-refusal-signal-replacement-20260730.outcome.json",
+    ".ai/work-items/active/evidence-refusal-signal-replacement-20260730.outcome.md",
+    ".ai/guards/coverage_policy.yaml",
+    "Makefile",
+    "scripts/ai_input_trust.py",
+    "scripts/ai_critical_domain_guards.py",
+    "scripts/ai_japanese_capability.py",
+    "scripts/check_real_absurd_injection_docs.py",
+    "tests/test_input_trust.py",
+    "tests/test_input_trust_corpus.py",
+    "tests/test_critical_domain_guards.py",
+    "tests/test_makefile.py",
+    "tests/test_pr_aggregate.py",
+    "tests/test_real_absurd_injection.py",
+    "tests/test_real_absurd_injection_docs.py",
+    "docs/reference/real-absurd-injection-cases.md",
+    "docs/reference/real-absurd-injection-cases.zh-CN.md",
+    "docs/reference/real-absurd-injection-cases.ja.md",
+    "docs/trust-layer.md",
+    "docs/trust-layer.zh-CN.md",
+    "docs/trust-layer.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Do not modify either archived unmerged predecessor Work Item or claim universal malicious-intent detection.",
+    "Do not publish a release or assert external human identity verification."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/pre-release-real-absurd-injection-replacement-20260730.outcome.md",
+      "reason": "Archived unmerged predecessor with the verified twelve-case implementation boundary."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authoritative pre-release plan placement."
+    }
+  ],
+  "rawUserRequest": "Continue the independent replacement for the twelve real absurd and injection cases. AI Cockpit must help an agent say no with evidence. Add explicit output signals: green allows automatic next step; yellow identifies risk and requires human acknowledgment before medium-or-higher-risk release; red blocks when evidence is insufficient or a request conflicts with authority, scope, or safety. Do not claim to know a person's intent merely from the request.",
+  "rawRequestSource": {"type": "human", "reference": "conversation continuation", "capturedAt": "2026-07-30", "digest": "sha256:evidence-refusal-signal-authorized"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "prompt_injection",
+      "documentation_truth"
+    ],
+    "reason": "The replacement must express evidence-based refusals honestly and prevent ambiguous outcome handling.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous planned Work Item execution."
+  },
+  "preReviewWarnings": [
+    "Review color semantics, explicit non-allow refusal records, and retained RAI-01 limitation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Recreate the twelve-case English, Chinese, and Japanese assessment with machine alignment checks from current main.",
+    "A2: Every non-allow assessment exposes an evidence-based refusal record with decision, conflict reason, missing evidence, and recovery condition.",
+    "A3: Deterministically map outcomes to 🟢 allow, 🟡 risk/confirmation, or 🔴 block; medium-or-higher risk cannot automatically proceed without human acknowledgment.",
+    "A4: Preserve the honest boundary: RAI-01 remains not_proven and no result claims malicious-intent detection.",
+    "A5: Required governance gates and fresh replacement PR Hosted CI pass; local full quality remains temporarily waived for this non-release Work Item."
+  ],
+  "guidelines": [
+    "Never turn an evidence gap into implied authorization or fabricated certainty.",
+    "Keep all three language signal and refusal semantics equivalent and machine-checked.",
+    "Use the archived predecessors only as audit sources; do not alter or reuse their archive bundles."
+  ],
+  "intent": {
+    "problem": "The prior independent implementation could not be rebased after a baseline corrective merge without colliding with immutable archive evidence. The user also requires immediately understandable green/yellow/red output signals.",
+    "constraints": ["Start from current origin/main.", "Preserve the complete twelve-case evidence and multilingual scope.", "Keep full local quality waived only in this Contract; Hosted CI remains mandatory."],
+    "rationale": "A current-main replacement avoids archive mutation and turns evidence-based refusal into a clear human/Agent operational signal."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user direction for non-release Work Items: focused local verification; fresh Hosted CI remains mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized continuous planned Work Item execution."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 691
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/evidence-refusal-signal-replacement-20260730.json",
+    "baseCommit": "d8ac9e1c77e669d911c577fefd859be7c78d3f02",
+    "initialScopeDigest": "f9e62a620d9a4bff137a83d693b3e6c9a9b365c6d448c76266a5cbb92290504e",
+    "contractSkeletonDigest": "08c968068b94b7a4499ac597b96f9d2b399ee0c9be6b1daad5291b1c80a25bcb"
+  },
+  "declaredIntent": {"summary": "Implement the multilingual evidence-based refusal and signal model from current main.", "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]},
+  "scenarioCoverage": [{"scenario": "All twelve cases, refusal records, and signals align across executable and three-language evidence.", "required": true, "status": "unverified", "evidence": [], "expected": "No non-allow case implies permission; signal mapping remains consistent.", "verificationPlan": "Focused real-case, documentation, input-trust, and signal tests."}]
+}
