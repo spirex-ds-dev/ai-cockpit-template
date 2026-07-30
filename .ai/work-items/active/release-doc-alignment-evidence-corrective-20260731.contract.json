@@ -1,0 +1,224 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-doc-alignment-evidence-corrective-20260731",
+  "mode": "code",
+  "title": "Refresh release documentation alignment evidence",
+  "baseCommit": "e15b440bfaa0fb04b796f88101a8a7e39d455f87",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-doc-alignment-evidence-corrective-20260731.contract.json",
+    ".ai/work-items/active/release-doc-alignment-evidence-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-doc-alignment-evidence-corrective-20260731.outcome.json",
+    ".ai/work-items/active/release-doc-alignment-evidence-corrective-20260731.outcome.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Release publication, tags, GitHub Releases, and provider assets.",
+    "Changes to release workflow, documentation-alignment implementation, tests, permanent governance rules, or user-facing documentation content."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30576327848/job/90985408659",
+      "reason": "Hosted template-smoke failure identifies both checked-in documentation-alignment artifacts as stale."
+    },
+    {
+      "path": "scripts/check_pre_release_documentation_alignment.py",
+      "reason": "Canonical deterministic generator and verification command for the two artifacts."
+    },
+    {
+      "path": "User authorization in this conversation",
+      "reason": "Authorizes all planned corrective Work Items and permits focused verification instead of a local full quality run."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "generated_evidence_drift"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "This is a deterministic refresh of two generated files; hosted CI remains an explicit post-merge verification dependency."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuation of all planned corrective Work Items; this task only refreshes canonical generated evidence."
+  },
+  "preReviewWarnings": [
+    "Do not claim the release is ready or publish it in this Work Item; hosted CI must validate this corrective after merge."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Both checked-in pre-release documentation-alignment artifacts are regenerated solely by the canonical generator.",
+    "The deterministic documentation metadata check accepts the regenerated artifacts.",
+    "Focused regression tests for documentation alignment pass.",
+    "No release workflow, release artifact, permanent governance rule, or user-facing source documentation is changed."
+  ],
+  "guidelines": [
+    "Use the canonical generator; do not hand-edit generated evidence.",
+    "Keep this corrective limited to evidence freshness and its Work Item lifecycle records.",
+    "Report the actual verification boundary and do not claim release completion before hosted CI passes."
+  ],
+  "intent": {
+    "problem": "PR #513 template-smoke failed because archiving the preceding corrective changed documentation-alignment inputs after its generated JSON and Markdown reports had been committed.",
+    "constraints": [
+      "Regenerate only the stale documentation-alignment reports and required Work Item evidence.",
+      "Do not modify the generator, workflow, release state, tag, provider release, or permanent governance rules.",
+      "Use focused verification locally under the user's temporary efficiency allowance; hosted CI remains required after merge."
+    ],
+    "rationale": "A dedicated corrective makes the source-derived evidence current and reviewable without weakening its stale-artifact gate."
+  },
+  "rawUserRequest": "需要的时候，自己查看Actions结果，目标计划全部完成前不要停止。所有计划和发现的纠正工单均已授权；非发布工单可使用聚焦验证代替本地全量质量门。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-continuous-plan-authorization",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:continuous-authorized-documentation-evidence-corrective"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Refresh the two checked-in, source-derived documentation-alignment reports that the hosted stale-artifact gate rejected.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Canonical generator refreshes both stale checked-in evidence files from the current source tree.",
+      "expected": "Both reports exactly match the generator output and the documentation metadata gate accepts them.",
+      "verificationPlan": "Run the generator with --write, then run it without --write and the focused alignment tests.",
+      "required": true,
+      "riskDomain": "generated_evidence_integrity",
+      "status": "unverified",
+      "evidence": [
+        "python3 scripts/check_pre_release_documentation_alignment.py --write",
+        "python3 scripts/check_pre_release_documentation_alignment.py"
+      ]
+    },
+    {
+      "scenario": "No release or permanent-rule surface is changed by the corrective.",
+      "expected": "The diff contains only the two generated reports and this Work Item's lifecycle records.",
+      "verificationPlan": "Inspect git diff --check and run the governed scope check before finishing.",
+      "required": true,
+      "riskDomain": "scope_control",
+      "status": "unverified",
+      "evidence": [
+        "git diff --check",
+        "make check-ai-scope"
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all planned corrective Work Items, including their PR, merge, and closure lifecycle."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 703
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-doc-alignment-evidence-corrective-20260731.json",
+    "baseCommit": "e15b440bfaa0fb04b796f88101a8a7e39d455f87",
+    "initialScopeDigest": "bb5b7caa11ae70e61696b7a84a7394f4b99506fcad1786aad6d1a36e0e30e14c",
+    "contractSkeletonDigest": "bac5084ff0cef9dd518eb68e9e759f26393f4eae0fb21778155ffeeba70ed32f"
+  }
+}
