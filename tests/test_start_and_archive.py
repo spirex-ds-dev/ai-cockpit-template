@@ -4,6 +4,7 @@ import json
 import runpy
 import subprocess
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 
 import ai_archive_work_item
@@ -166,6 +167,18 @@ def test_next_available_task_id_resolves_archive_collision_before_creation():
         )
         == "publish-new-version-20260725-2"
     )
+
+
+def test_next_available_task_id_uses_module_utc_reference_for_generated_stamp(monkeypatch):
+    class FixedDatetime:
+        @staticmethod
+        def now(tz):
+            assert tz is UTC
+            return datetime(2026, 7, 30, tzinfo=UTC)
+
+    monkeypatch.setattr(ai_start, "datetime", FixedDatetime)
+
+    assert ai_start.next_available_task_id("task", {"task"}) == "task-20260730"
 
 
 def test_start_receipt_binds_contract_and_rejects_tampering(tmp_path):

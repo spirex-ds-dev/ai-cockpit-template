@@ -1877,6 +1877,30 @@
         "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q tests/test_work_item_lifecycle_closure.py tests/test_release_distribution.py tests/test_supply_chain.py tests/test_capability_truth_matrix.py",
         "Fresh hosted required checks on the corrective PR and then on #481 before merge"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-057",
+      "summary": "Correct the mypy-only UTC reference failure found by fresh hosted template-smoke for the ruff 0.16 compatibility PR. Keep the archived predecessor immutable, import the module-level UTC constant in ai_start.py, preserve local-date Work Item ID semantics, and require fresh hosted checks on this corrective PR and then #482's updated exact head.",
+      "planWorkItems": [
+        "DEPENDABOT-INTAKE-001"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/ruff016-mypy-utc-corrective-20260730.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_start.py",
+        "tests/test_start_and_archive.py",
+        "docs/reference/capability-truth-matrix.json"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_start_and_archive.py",
+        "scripts/ai_start.py"
+      ],
+      "verificationCommands": [
+        "PYTHONDONTWRITEBYTECODE=1 python3 -m mypy scripts/ai_start.py",
+        "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q tests/test_start_and_archive.py",
+        "Fresh hosted required checks on the corrective PR and then on #482 before merge"
+      ]
     }
   ]
 }
