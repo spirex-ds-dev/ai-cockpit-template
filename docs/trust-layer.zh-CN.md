@@ -79,6 +79,8 @@ Human Decision and Recovery 必须说明发生了什么、为什么重要、可�
 
 门禁覆盖有限的、已知且可审查的案例：缺失或过期证据、无依据声明、非法 Work Item 状态、范围违规、原始请求与操作不匹配、选定的提示注入指示器、不安全的关键域效果，以及必须请求人类确认的场景。对能够识别的案例，它们采用 fail-closed。
 
+[真实荒诞与注入案例评估](reference/real-absurd-injection-cases.zh-CN.md) 记录了 12 个具体负例及其当前结果。它区分当前被直接覆盖的 5 个输入信任案例，与仍需复核的 7 个仓库/生命周期证据缺口；它不推断请求者或文档具有恶意，也不把未绑定的门禁说成已防护。
+
 它们不检测智能体的内部状态，不理解所有语言细节，不提供通用提示注入防御，也不证明外部控制已经配置。Capability Truth Matrix 是当前实现状态的唯一事实来源；本文档的理念不能把 planned、template-only、adopter-installed 或 externally required 能力升级为 implemented。
 
 <!-- section-id: machine-readable-evidence -->

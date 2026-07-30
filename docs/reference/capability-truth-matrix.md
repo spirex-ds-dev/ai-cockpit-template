@@ -39,6 +39,8 @@ Capability-bound work has two separate requirements. Before editing, the Work It
 
 The WI-06 absurd corpus is intentionally negative and offline. L1 structural, L2 behavioral, L3 adversarial, and L4 recovery cases for unsupported world facts, forged evidence, impossible completion, unavailable APIs/toolchains, secrets, protected-branch writes, and production operations return `blocked`/`not_ready` with an explicit safe alternative. These cases demonstrate the repository boundary; they do not claim general hallucination prevention.
 
+The [real absurd and injection assessment](real-absurd-injection-cases.md) separately records twelve concrete requests. It currently marks only RAI-02, RAI-04, RAI-05, RAI-06, and RAI-10 as directly covered by the deterministic input-trust evaluator. RAI-01, RAI-03, RAI-07, RAI-08, RAI-09, RAI-11, and RAI-12 remain explicit `evidence_gap`/`review` results until a gate is bound to the required repository or lifecycle fact. The assessment is therefore not a claim of universal attack or hallucination prevention.
+
 ## Wizard boundary
 
 The Installation Wizard is an implemented template entrypoint with an explicit confirmation-gated write boundary. The Calibration Wizard is an implemented presentation adapter over the persisted ten-stage Session; adopter execution, project-owned approval, and external toolchain results remain separate evidence. Fixture coverage for Swift, Kotlin/Android, and mixed monorepos demonstrates scenario modeling, not proof that every adopter's Xcode, Gradle, CocoaPods, JDK, or instrumented commands run successfully.

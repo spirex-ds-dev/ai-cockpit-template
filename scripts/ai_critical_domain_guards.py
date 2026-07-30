@@ -23,6 +23,10 @@ _BYPASS_TERMS = (
     "suppress check",
     "skip checker",
     "delete all tests",
+    "delete failing tests",
+    "skip tests and pr",
+    "push main",
+    "approve your own",
 )
 _PRODUCTION_TERMS = (
     "production operation",
