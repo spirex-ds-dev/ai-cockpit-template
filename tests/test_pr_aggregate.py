@@ -249,6 +249,38 @@ def test_historical_recovery_receipts_load_only_json_files(tmp_path, monkeypatch
     ]
 
 
+def test_historical_recovery_receipts_preserve_invalid_json_as_fail_closed_evidence(
+    tmp_path, monkeypatch
+):
+    directory = tmp_path / ".ai" / "work-items" / "recovery-receipts"
+    directory.mkdir(parents=True)
+    (directory / "invalid.json").write_text("{", encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    receipts = ai_check_pr.historical_recovery_receipts()
+
+    assert receipts[0][0] == ".ai/work-items/recovery-receipts/invalid.json"
+    assert "_loadError" in receipts[0][1]
+
+
+def test_receipt_verified_prefix_only_extends_through_normal_adjacent_recovery(monkeypatch):
+    first, second, third = Path("first"), Path("second"), Path("third")
+    entries = [
+        (first, {}, {}, (74, "first", "first")),
+        (second, {}, {}, (75, "second", "second")),
+        (third, {}, {}, (76, "third", "third")),
+    ]
+    monkeypatch.setattr(
+        ai_check_pr, "is_documented_pr_recovery_pair", lambda *_args, **_kwargs: True
+    )
+
+    assert ai_check_pr.extend_documented_recovery_paths(entries, "base", {first}) == {
+        first,
+        second,
+        third,
+    }
+
+
 def test_pr_accepts_one_documented_adjacent_recovery_pair(tmp_path, monkeypatch):
     predecessor = write_pair(tmp_path, "predecessor", ["src/a.py"], ["src/a.py"])
     recovery = write_pair(tmp_path, "recovery", ["src/b.py"], ["src/b.py"], approved=True)
