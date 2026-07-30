@@ -1,0 +1,211 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-alignment-ruff-ci-corrective-20260730",
+  "mode": "code",
+  "title": "Correct documentation alignment CI Ruff mismatch",
+  "baseCommit": "dfd6a5fae8054c100bda6b3417c402ef4e50719c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-alignment-ruff-ci-corrective-20260730.contract.json",
+    ".ai/work-items/active/documentation-alignment-ruff-ci-corrective-20260730.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-alignment-ruff-ci-corrective-20260730.outcome.json",
+    ".ai/work-items/active/documentation-alignment-ruff-ci-corrective-20260730.outcome.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "scripts/check_pre_release_documentation_alignment.py",
+    "tests/test_pre_release_documentation_alignment.py"
+  ],
+  "outOfScope": [
+    "Do not mutate the immutable archives or source changes from failed PRs #494 and #495; do not change release behavior."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/documentation-alignment-ruff-ci-corrective-20260730.contract.json",
+      "reason": "Initial Work Item skeleton."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30550975174",
+      "reason": "Hosted failure evidence: CI Ruff reports EXE001 and two I001 errors for the replacement documentation-alignment files."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/documentation-alignment-ci-corrective-20260730.summary.json",
+      "reason": "The failed replacement Work Item defines the exact report, checker, test, and plan state to recreate from current main."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["hosted_ci_compatibility", "archive_immutability"],
+    "reason": "A previously locally green change failed on CI-specific lint rules; the correction must preserve failed evidence and verify against the hosted Ruff surface.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous planned Work Item execution and requested autonomous Actions inspection."
+  },
+  "preReviewWarnings": ["Confirm CI-compatible lint behavior before opening the replacement PR."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Recreate the 16-surface source-bound documentation alignment report, checker, focused test, and plan state from current origin/main.",
+    "A2: Make the script executable and organize both import blocks so CI Ruff 0.16 reports no EXE001 or I001 errors.",
+    "A3: Run the exact CI lint command, focused regression suite, and project-format check locally under the temporary focused-quality authorization.",
+    "A4: Report the active Outcome in Chinese, then complete archive, dedicated PR, hosted CI, merge, closure, and branch cleanup."
+  ],
+  "guidelines": [
+    "Treat #494 and #495 as immutable failed evidence; do not amend either archive.",
+    "Use the same Ruff rule surface as hosted CI before opening a replacement PR.",
+    "Do not claim hosted success before the replacement PR passes."
+  ],
+  "intent": {
+    "problem": "The source-bound documentation alignment delivery failed twice on hosted CI because local lint verification did not match CI Ruff 0.16: #495 reports one non-executable shebang and two import-order violations.",
+    "constraints": [
+      "Start from current origin/main and recreate only the intended documentation alignment artifacts.",
+      "Preserve #494 and #495 archive evidence unchanged.",
+      "Use focused local verification under the user-approved temporary quality policy; hosted CI remains mandatory."
+    ],
+    "rationale": "A fresh corrective Work Item preserves audit truth and proves the concrete CI-specific lint requirements before a new PR is opened."
+  },
+  "rawUserRequest": "Continue the target plan autonomously, inspect Actions when needed, do not stop before all planned work is complete. Correct the failed CI path without weakening quality; focused verification is authorized for non-release Work Items.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation continuation",
+    "capturedAt": "2026-07-30",
+    "digest": "sha256:documentation-alignment-ruff-ci-corrective-authorized"
+  },
+  "declaredIntent": {
+    "summary": "Correct the documentation-alignment CI Ruff mismatch with a source-bound replacement.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The recreated documentation alignment script and test have executable/import ordering accepted by the exact CI Ruff surface.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "CI Ruff reports no EXE001 or I001 violations and focused alignment regressions pass.",
+      "verificationPlan": "Run `python3 -m ruff check scripts tests`, `python3 -m ruff format --check scripts tests`, project-format check, and focused tests."
+    },
+    {
+      "scenario": "Failed PR evidence remains immutable while the replacement starts from current main.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "No archived #494/#495 evidence is modified; replacement archive is independent.",
+      "verificationPlan": "Diff ownership, archive validation, and PR lifecycle checks."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user direction permits focused local verification for non-release Work Items; hosted CI remains mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert only this replacement Work Item diff; preserve failed archive evidence and PR records.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 692
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-alignment-ruff-ci-corrective-20260730.json",
+    "baseCommit": "dfd6a5fae8054c100bda6b3417c402ef4e50719c",
+    "initialScopeDigest": "443b76aa3b62d85354ca24f764816123b3dc0edb15bb5f028ad810e7deda18a2",
+    "contractSkeletonDigest": "10bac98a12bdc43bae073619b2f2bbab00d87172091d9675c6f8616e4f55b511"
+  }
+}
