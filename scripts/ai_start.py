@@ -124,6 +124,82 @@ def active_work_item_paths() -> list[Path]:
     return sorted(path for path in ACTIVE_DIR.glob("*.json") if path.is_file())
 
 
+def linked_worktree_records(*, root: Path = PROJECT_ROOT) -> list[tuple[Path, str | None]]:
+    """Return linked worktree paths and their checked-out branches.
+
+    ``git worktree list --porcelain`` is intentionally the only discovery
+    source: arbitrary neighbouring directories must not influence lifecycle
+    state. Detached worktrees are represented with ``None`` and are handled by
+    the caller as historical/non-active checkouts.
+    """
+    result = subprocess.run(  # nosec B603 B607 - fixed list-form Git interrogation
+        ["git", "worktree", "list", "--porcelain"],
+        cwd=root,
+        env=clean_git_environment(),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        # Unit-level Contract construction uses a temporary non-Git root. It
+        # cannot have linked worktrees, so preserve that isolated behavior;
+        # real repository discovery errors remain fail-closed below.
+        if not (root / ".git").exists():
+            return [(root, None)]
+        raise RuntimeError("cannot enumerate linked worktrees")
+    records: list[tuple[Path, str | None]] = []
+    for block in result.stdout.split("\n\n"):
+        lines = block.splitlines()
+        location = next(
+            (line.removeprefix("worktree ") for line in lines if line.startswith("worktree ")), None
+        )
+        if not location:
+            continue
+        ref = next(
+            (
+                line.removeprefix("branch refs/heads/")
+                for line in lines
+                if line.startswith("branch refs/heads/")
+            ),
+            None,
+        )
+        records.append((Path(location), ref))
+    return records
+
+
+def linked_worktree_active_issue(*, root: Path = PROJECT_ROOT) -> str | None:
+    """Fail closed when another branch owns an active Contract/Summary pair."""
+    try:
+        records = linked_worktree_records(root=root)
+    except (OSError, RuntimeError):
+        return "ERROR: cannot enumerate linked worktrees before starting a Work Item"
+    for worktree, branch in records:
+        try:
+            if worktree.resolve() == root.resolve() or branch is None:
+                continue
+        except OSError:
+            return f"ERROR: cannot resolve linked worktree before starting a Work Item: {worktree}"
+        active_dir = worktree / ".ai" / "work-items" / "active"
+        contracts = {
+            path.name.removesuffix(".contract.json") for path in active_dir.glob("*.contract.json")
+        }
+        summaries = {
+            path.name.removesuffix(".summary.json") for path in active_dir.glob("*.summary.json")
+        }
+        if not contracts and not summaries:
+            continue
+        if contracts != summaries:
+            return (
+                "ERROR: linked worktree has malformed active Work Item records on branch "
+                f"{branch}: {worktree} (contract/summary pair required)"
+            )
+        return (
+            f"ERROR: linked worktree has active Work Item {sorted(contracts)[0]} on branch "
+            f"{branch}: {worktree}"
+        )
+    return None
+
+
 def existing_work_item_ids() -> set[str]:
     """Return active and archived Work Item IDs before creating a new skeleton."""
     paths = list(ACTIVE_DIR.glob("*.contract.json"))
@@ -404,6 +480,11 @@ def validate_start_state(
     branch_issue = default_branch_start_issue(root=PROJECT_ROOT)
     if branch_issue:
         print(branch_issue, file=sys.stderr)
+        return None
+
+    linked_issue = linked_worktree_active_issue(root=PROJECT_ROOT)
+    if linked_issue:
+        print(linked_issue, file=sys.stderr)
         return None
 
     consistency_issues = refresh_stale_no_active_status(validate_status_consistency())

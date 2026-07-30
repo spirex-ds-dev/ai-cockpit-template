@@ -31,6 +31,70 @@ def test_start_and_archive_use_clean_git_environment():
     assert all(not key.startswith("GIT_") for key in ai_common.clean_git_environment())
 
 
+def test_linked_worktree_active_pair_blocks_start_before_lifecycle_writes(tmp_path, monkeypatch):
+    current = tmp_path / "current"
+    other = tmp_path / "other"
+    for root in (current, other):
+        (root / ".ai" / "work-items" / "active").mkdir(parents=True)
+    (other / ".ai" / "work-items" / "active" / "other-task.contract.json").write_text(
+        "{}", encoding="utf-8"
+    )
+    (other / ".ai" / "work-items" / "active" / "other-task.summary.json").write_text(
+        "{}", encoding="utf-8"
+    )
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", current)
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", current / ".ai" / "work-items" / "active")
+    monkeypatch.setattr(
+        ai_start,
+        "linked_worktree_records",
+        lambda **_kwargs: [(other, "codex/other-task")],
+    )
+
+    issue = ai_start.linked_worktree_active_issue()
+
+    assert issue == (
+        "ERROR: linked worktree has active Work Item other-task on branch "
+        f"codex/other-task: {other}"
+    )
+    assert not list((current / ".ai" / "work-items" / "active").glob("*.json"))
+
+
+def test_linked_worktree_malformed_active_pair_fails_closed(tmp_path, monkeypatch):
+    current = tmp_path / "current"
+    other = tmp_path / "other"
+    for root in (current, other):
+        (root / ".ai" / "work-items" / "active").mkdir(parents=True)
+    (other / ".ai" / "work-items" / "active" / "other-task.contract.json").write_text(
+        "{}", encoding="utf-8"
+    )
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", current)
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", current / ".ai" / "work-items" / "active")
+    monkeypatch.setattr(
+        ai_start,
+        "linked_worktree_records",
+        lambda **_kwargs: [(other, "codex/other-task")],
+    )
+
+    issue = ai_start.linked_worktree_active_issue()
+
+    assert issue == (
+        "ERROR: linked worktree has malformed active Work Item records on branch "
+        f"codex/other-task: {other} (contract/summary pair required)"
+    )
+
+
+def test_linked_worktree_check_ignores_detached_or_empty_worktrees(tmp_path, monkeypatch):
+    current = tmp_path / "current"
+    detached = tmp_path / "detached"
+    for root in (current, detached):
+        (root / ".ai" / "work-items" / "active").mkdir(parents=True)
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", current)
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", current / ".ai" / "work-items" / "active")
+    monkeypatch.setattr(ai_start, "linked_worktree_records", lambda **_kwargs: [(detached, None)])
+
+    assert ai_start.linked_worktree_active_issue() is None
+
+
 def test_rewrite_archived_path_references_preserves_non_path_scalars():
     active = ".ai/work-items/active/task.contract.json"
     archived = ".ai/work-items/archive/2026/task.contract.json"
