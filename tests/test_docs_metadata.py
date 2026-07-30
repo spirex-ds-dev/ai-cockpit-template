@@ -7,8 +7,11 @@ from check_docs_metadata import (
     check_repository,
     command_evidence_errors,
     documentation_fact_errors,
+    front_matter_errors,
     historical_context_errors,
+    installation_command_errors,
     multilingual_layer_errors,
+    stack_errors,
 )
 
 
@@ -241,3 +244,95 @@ def test_context_registry_rejects_missing_governed_entry_and_archive_classificat
         "docs/superpowers/plans/2026-07-30-wi10-installation-information-architecture.md: "
         "missing from documentation context registry"
     ) in errors
+
+
+def test_context_registry_rejects_invalid_schema_entries_and_mutable_history(tmp_path):
+    copy_documentation(tmp_path)
+    registry = tmp_path / "docs/reference/documentation-context-registry.json"
+    value = json.loads(registry.read_text(encoding="utf-8"))
+    value["schemaVersion"] = 2
+    value["entries"] = [
+        None,
+        {
+            "path": "docs/reference/documentation-architecture.md",
+            "context": "invalid",
+            "mutable": "yes",
+        },
+        {
+            "path": "docs/reference/documentation-architecture.md",
+            "context": "historical_record",
+            "mutable": True,
+        },
+        {"path": ".ai/work-items/archive/**", "context": "historical_record", "mutable": False},
+    ]
+    registry.write_text(json.dumps(value), encoding="utf-8")
+
+    errors = historical_context_errors(tmp_path)
+    assert "docs/reference/documentation-context-registry.json: schemaVersion must be 1" in errors
+    assert "documentation context entry 0 must be an object" in errors
+    assert (
+        "documentation context path has invalid context: docs/reference/documentation-architecture.md"
+        in errors
+    )
+    assert (
+        "documentation context path requires boolean mutable: docs/reference/documentation-architecture.md"
+        in errors
+    )
+    assert (
+        "documentation context path is duplicated: docs/reference/documentation-architecture.md"
+        in errors
+    )
+    assert (
+        "docs/reference/documentation-architecture.md: missing historical context marker" in errors
+    )
+
+
+def test_front_matter_and_stack_checks_reject_missing_required_metadata(tmp_path):
+    copy_documentation(tmp_path)
+    readme = tmp_path / "README.md"
+    readme.write_text("title: incomplete\n", encoding="utf-8")
+    assert str(readme) + ": missing YAML front matter" in front_matter_errors(readme)
+
+    readme.write_text("---\ntitle: incomplete\n", encoding="utf-8")
+    assert str(readme) + ": unterminated YAML front matter" in front_matter_errors(readme)
+
+    stack_root = tmp_path / "stack"
+    stack_root.mkdir()
+    copy_documentation(stack_root)
+    stack_readme = stack_root / "README.md"
+    stack_readme.write_text(
+        stack_readme.read_text(encoding="utf-8").replace("generic, rust", "generic only"),
+        encoding="utf-8",
+    )
+    assert "README.md: supported-stack list does not match installer STACKS" in stack_errors(
+        stack_root
+    )
+
+
+def test_installation_command_check_rejects_missing_primary_contract_markers(tmp_path):
+    copy_documentation(tmp_path)
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        readme.read_text(encoding="utf-8")
+        .replace("main/release.json", "release.json")
+        .replace("${RELEASE_TAG}/install.sh", "install.sh")
+        .replace("<!-- release-capabilities: auditable-adoption,sha256-verification -->", "")
+        .replace("<!-- public-quality-target: ai-cockpit-quality -->", "")
+        .replace("--create-adoption", "--adoption")
+        .replace('STACK="${STACK:-generic}"', "")
+        .replace('--stack "$STACK"', ""),
+        encoding="utf-8",
+    )
+
+    errors = installation_command_errors(tmp_path)
+    assert (
+        "README.md: primary install command must resolve the tagged installer from release.json"
+        in errors
+    )
+    assert "README.md: release capability marker is missing or inconsistent" in errors
+    assert "README.md: public quality target differs from release.json" in errors
+    assert "README.md: primary install command must create auditable adoption evidence" in errors
+    assert (
+        "README.md: primary install command must use an explicit generic-default STACK variable"
+        in errors
+    )
