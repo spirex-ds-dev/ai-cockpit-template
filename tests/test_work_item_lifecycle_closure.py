@@ -109,7 +109,10 @@ def test_verify_pr_explicitly_selects_the_requested_work_item_branch() -> None:
         commands.append(tuple(args))
         return closure.CommandResult(0, __import__("json").dumps(payload))
 
-    assert closure._verify_pr(runner, "codex/child", "main", "child-head", allow_stacked_base=True) == payload
+    assert (
+        closure._verify_pr(runner, "codex/child", "main", "child-head", allow_stacked_base=True)
+        == payload
+    )
     assert commands == [
         (
             "gh",
