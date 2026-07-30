@@ -14,11 +14,20 @@
     ".ai/work-items/active/release-doc-alignment-evidence-corrective-20260731.outcome.json",
     ".ai/work-items/active/release-doc-alignment-evidence-corrective-20260731.outcome.md",
     "docs/reference/pre-release-documentation-alignment.json",
-    "docs/reference/pre-release-documentation-alignment.md"
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".github/workflows/release.yml",
+    "scripts/ai_start.py",
+    "scripts/finalize_release_freeze.py",
+    "tests/test_release_preflight.py",
+    "tests/test_release_workflow.py",
+    "tests/test_start_and_archive.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
   ],
   "outOfScope": [
     "Release publication, tags, GitHub Releases, and provider assets.",
-    "Changes to release workflow, documentation-alignment implementation, tests, permanent governance rules, or user-facing documentation content."
+    "New changes to the inherited release workflow, Japanese/Capability Truth evidence, implementation, tests, permanent governance rules, or user-facing documentation content."
   ],
   "sources": [
     {
@@ -28,6 +37,10 @@
     {
       "path": "scripts/check_pre_release_documentation_alignment.py",
       "reason": "Canonical deterministic generator and verification command for the two artifacts."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-runtime-japanese-evidence-corrective-20260731.archive-manifest.json",
+      "reason": "The stacked parent Work Item owns the inherited nine implementation and evidence paths; this Work Item must not modify them."
     },
     {
       "path": "User authorization in this conversation",
@@ -196,7 +209,8 @@
     },
     {
       "check": "quality",
-      "required": true
+      "required": false,
+      "reason": "Temporary user efficiency authorization permits focused local verification for this non-release corrective; full hosted PR CI remains required."
     }
   ],
   "destructiveChangePolicy": {
