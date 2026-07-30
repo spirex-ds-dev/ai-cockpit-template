@@ -77,6 +77,33 @@ def test_registered_target_worktree_rejects_missing_path(tmp_path: Path) -> None
         closure._registered_target_worktree(str(tmp_path / "missing"))
 
 
+def test_registered_target_worktree_accepts_same_repository_root(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "child"
+    target.mkdir()
+    source_root = tmp_path / "policy"
+    source_root.mkdir()
+    calls: list[tuple[str, ...]] = []
+
+    def runner(args, _check):
+        calls.append(tuple(args))
+        if args == ["rev-parse", "--show-toplevel"]:
+            return closure.CommandResult(0, f"{target}\n")
+        if args == ["worktree", "list", "--porcelain"]:
+            return closure.CommandResult(0, f"worktree {source_root}\n")
+        raise AssertionError(args)
+
+    monkeypatch.setattr(closure, "PROJECT_ROOT", source_root)
+    monkeypatch.setattr(closure, "_in_worktree", lambda _runner, _path: runner)
+
+    assert closure._registered_target_worktree(str(target)) is runner
+    assert calls == [
+        ("rev-parse", "--show-toplevel"),
+        ("worktree", "list", "--porcelain"),
+    ]
+
+
 def test_close_branch_discovery_uses_remote_identity_for_duplicate_branch_names() -> None:
     with pytest.raises(RuntimeError, match="could not uniquely discover"):
         closure._discover_base(
