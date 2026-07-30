@@ -433,7 +433,7 @@ def test_comprehensive_matrix_is_evidence_bound_and_reports_current_blockers():
     result = evaluate()
 
     assert result["assessmentVersion"] == 3
-    assert result["workItemId"] == "japanese-final-reassessment-after-documentation-truth-20260729"
+    assert result["workItemId"] == "final-japanese-reassessment-replacement-20260731"
     assert result["workItemRole"] == "final_reassessment"
     assert result["scope"] == "bounded repository-governance Japanese handling"
     assert len(result["cases"]) >= 10
@@ -519,10 +519,7 @@ def test_json_and_markdown_are_deterministic_views_of_one_result():
     assert render_json(first) == render_json(second)
     markdown = render_markdown(first)
     assert first["digest"] in markdown
-    assert (
-        "- Assessment Work Item: "
-        "`japanese-final-reassessment-after-documentation-truth-20260729`" in markdown
-    )
+    assert "- Assessment Work Item: `final-japanese-reassessment-replacement-20260731`" in markdown
     assert "- Work Item role: `final_reassessment`" in markdown
     assert "[Machine-readable assessment](japanese-capability-assessment.json)" in markdown
     assert "Assessment definition Work Item" not in markdown

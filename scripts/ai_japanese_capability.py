@@ -22,7 +22,7 @@ from typing import Any
 from ai_input_trust import SourceType, assess_input, re_evaluate_high_risk_operation
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSESSMENT_WORK_ITEM_ID = "japanese-final-reassessment-after-documentation-truth-20260729"
+ASSESSMENT_WORK_ITEM_ID = "final-japanese-reassessment-replacement-20260731"
 ASSESSMENT_WORK_ITEM_ROLE = "final_reassessment"
 CORPUS_PATH = ROOT / "tests/fixtures/japanese-capability-corpus.json"
 JSON_REPORT_PATH = ROOT / "docs/reference/japanese-capability-assessment.json"
