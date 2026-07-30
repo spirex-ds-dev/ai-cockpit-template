@@ -5,6 +5,10 @@ description: Bind resumed Work Item verification evidence to the latest trusted 
 ---
 
 # RFE-096 Resume Verification Generation Corrective Implementation Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 

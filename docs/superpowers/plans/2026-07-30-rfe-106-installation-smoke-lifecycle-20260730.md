@@ -5,6 +5,10 @@ description: "Repair the installed-adopter smoke fixture so an active Outcome is
 ---
 
 # RFE-106: Installation smoke lifecycle repair
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Root cause
 

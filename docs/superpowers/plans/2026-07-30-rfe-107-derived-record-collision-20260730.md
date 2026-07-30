@@ -5,6 +5,10 @@ description: "Prevent delayed archived Work Items from colliding with newer arch
 ---
 
 # RFE-107: Derived archive-record collision prevention
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Purpose
 

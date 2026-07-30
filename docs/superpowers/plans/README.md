@@ -23,8 +23,7 @@ keywords:
 
 | 计划 | 状态 | 说明 |
 | --- | --- | --- |
-| [2026-07-22 Conditional GO 全面评审整改](2026-07-22-conditional-go-review-remediation.md) | 历史保留/已完成 | WI1–WI11 严格串行；每项 PR、合并、归档、关闭、分支清理和默认分支同步均有证据；不得启动新工单。 |
-| [2026-07-24 Release Post-Merge Source Verification](2026-07-24-release-postmerge-source-verification.md) | 执行中 | 修复候选内容与合并后精确来源身份之间的发布门禁。 |
+| [2026-07-25 AI Cockpit 全面整改执行计划](2026-07-25-ai-cockpit-comprehensive-remediation.md) | 当前执行 | 当前发布前 Work Item 的顺序、指示—计划—实现—验收追踪和最终发布/计划清理边界。 |
 
 ## 历史保留计划
 
@@ -38,9 +37,11 @@ keywords:
 - [2026-07-20 全面评审整改（修订版）](2026-07-20-comprehensive-review-remediation.md) — 已被 2026-07-21 计划替代，保留审计历史。
 - [2026-07-21 最新评审整改](2026-07-21-review-remediation.md) — 工单 1–17 已完成，PR #168 合并，上一版已发布，最后工单已关闭。
 - [2026-07-21 Bootstrap Adoption 评审整改](2026-07-21-bootstrap-adoption-review-remediation.md) — WI01–WI15 已完成，PR #172–#186 合并，上一版已发布，保留完整审计证据。
+- [2026-07-22 Conditional GO 全面评审整改](2026-07-22-conditional-go-review-remediation.md) — 已完成；保留其串行 Work Item 生命周期的审计历史。
 - [2026-07-22 Project Calibration and Update Recalibration](2026-07-22-project-calibration-recalibration.md) — 已完成并压缩为 archive-backed closure index。
 - [2026-07-22 Installed Lifecycle Management 评审整改](2026-07-22-installed-lifecycle-review-remediation.md) — 工单 1–16 已完成并压缩为 archive-backed closure index。
 - [2026-07-22 AI Cockpit Governance Hardening](2026-07-22-ai-cockpit-governance-hardening.md) — 已完成并压缩为 archive-backed closure index。
+- [2026-07-24 Release Post-Merge Source Verification](2026-07-24-release-postmerge-source-verification.md) — 已完成的发布流程纠偏记录；不是当前发布指令。
 - [2026-07-25 Interactive Installation and Calibration Wizard](2026-07-25-interactive-installation-calibration-wizard.md) — WI0–WI11 已完成并关闭；WI12 盘点确认无重复执行计划可删除，canonical plan 与 append-only issue log 保留，完成事实见 [archive index](../../../.ai/work-items/archive/index.json) 与 [WI11 final report](../../../.ai/work-items/archive/2026/wizard-final-verification-and-user-report.summary.json)。
 
 ## Retention decision for the Interactive Wizard plan

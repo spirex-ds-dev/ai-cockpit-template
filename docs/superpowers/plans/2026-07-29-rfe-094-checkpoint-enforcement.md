@@ -5,6 +5,10 @@ description: Prevent late before-edit checkpoint evidence and replay the source-
 ---
 
 # RFE-094 Checkpoint Enforcement Implementation Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 

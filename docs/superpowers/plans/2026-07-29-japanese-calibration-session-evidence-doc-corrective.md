@@ -5,6 +5,10 @@ description: Correct the trilingual Calibration Session evidence-storage boundar
 ---
 
 # Japanese Calibration Session Evidence Documentation Corrective Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Objective
 

@@ -5,6 +5,10 @@ description: TDD and lifecycle plan for v0.5.45 candidate truth and obsolete-pat
 ---
 
 # RFE-082 Release Truth Reconciliation Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Goal
 

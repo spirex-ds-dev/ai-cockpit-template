@@ -5,6 +5,10 @@ description: Remove the diagnosed Node runtime, Go cache, and Homebrew tap warni
 ---
 
 # GitHub Actions Warning Corrective
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Instruction
 

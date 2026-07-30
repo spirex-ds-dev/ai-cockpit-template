@@ -5,6 +5,10 @@ description: Prevent archived Summary evidence from retaining stale active Work 
 ---
 
 # Archive Summary Evidence Path Rewrite
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Problem
 

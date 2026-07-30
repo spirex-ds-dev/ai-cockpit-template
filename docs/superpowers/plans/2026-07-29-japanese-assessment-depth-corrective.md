@@ -5,6 +5,10 @@ description: TDD and lifecycle plan for replacing the shallow Japanese report wi
 ---
 
 # Japanese Assessment Depth Corrective Implementation Plan
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 ## Objective
 

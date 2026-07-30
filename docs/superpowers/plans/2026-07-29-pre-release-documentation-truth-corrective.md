@@ -10,6 +10,10 @@ keywords:
 ---
 
 # Pre-release Documentation Truth Corrective
+> **Historical Record**
+> **Not Current Product Documentation**
+> **Do Not Use As Runtime Instruction**
+
 
 Work Item: `pre-release-documentation-truth-corrective-20260729`
 
