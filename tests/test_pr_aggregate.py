@@ -249,6 +249,12 @@ def test_historical_recovery_receipts_load_only_json_files(tmp_path, monkeypatch
     ]
 
 
+def test_historical_recovery_receipts_accepts_no_receipt_directory(tmp_path, monkeypatch):
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    assert ai_check_pr.historical_recovery_receipts() == []
+
+
 def test_historical_recovery_receipts_preserve_invalid_json_as_fail_closed_evidence(
     tmp_path, monkeypatch
 ):
