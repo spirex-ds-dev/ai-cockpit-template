@@ -6,6 +6,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from ai_calibration_profiles import load_policy, validate_selection
 from ai_common import non_empty_string, parse_yaml
 
 FACT_KEYS = ("languages", "frameworks", "buildSystems", "infrastructure")
@@ -84,6 +85,21 @@ def validate_profile(data: dict[str, Any], *, require_approval: bool) -> list[st
             str(item).lower().startswith("blocking:") for item in unknowns
         ):
             issues.append("blocking unknowns must be resolved before Profile approval")
+
+    calibration_profile = data.get("calibrationProfile")
+    if calibration_profile is not None:
+        try:
+            policy = load_policy()
+        except ValueError as exc:
+            issues.append(str(exc))
+        else:
+            issues.extend(
+                validate_selection(
+                    calibration_profile,
+                    policy,
+                    require_human=require_approval,
+                )
+            )
     return issues
 
 

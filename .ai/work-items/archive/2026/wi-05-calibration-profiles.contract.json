@@ -1,0 +1,287 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-05-calibration-profiles",
+  "mode": "code",
+  "title": "Calibration Profiles",
+  "baseCommit": "e255fcdb685b3c822de1d5dd3a3cbf58bedeb1db",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-05-calibration-profiles.contract.json",
+    ".ai/work-items/active/wi-05-calibration-profiles.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-05-calibration-profiles.outcome.json",
+    ".ai/work-items/active/wi-05-calibration-profiles.outcome.md",
+    ".ai/calibration/profiles.yaml",
+    ".ai/project_profile.yaml",
+    "scripts/ai_calibration_profiles.py",
+    "scripts/ai_project_profile.py",
+    "scripts/ai_calibrate.py",
+    "scripts/ai_installer_catalog.json",
+    "tests/test_calibration_profiles.py",
+    "tests/test_calibrate.py",
+    "tests/test_project_profile.py",
+    "tests/test_calibration_session.py",
+    "tests/test_adoption_e2e.py",
+    "docs/reference/calibration-profiles.md",
+    "docs/reference/calibration-profiles.ja.md",
+    "docs/reference/calibration-profiles.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/superpowers/plans/2026-08-01-calibration-profiles.md",
+    "Makefile",
+    "templates/make/Makefile.ai"
+  ],
+  "outOfScope": [
+    "Changing Work Item governance routing delivered by WI03",
+    "Rebuilding the interactive installer or calibration wizard UX assigned to WI08",
+    "Binding public capability claims assigned to WI06",
+    "Requiring release, supply-chain, external identity, or enterprise audit controls for Lite calibration"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-08-01-calibration-profiles.md",
+      "reason": "Executable plan derived from the user-provided WI05 requirements."
+    },
+    {
+      "path": "scripts/ai_calibrate.py",
+      "reason": "Existing proposal and durable calibration-session owner that must consume profile selection without duplicating lifecycle logic."
+    },
+    {
+      "path": "scripts/ai_project_profile.py",
+      "reason": "Existing Project Profile validator and backward-compatibility boundary."
+    },
+    {
+      "path": ".ai/project_profile.yaml",
+      "reason": "Current confirmed template Project Profile and target persisted calibrationProfile shape."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_policy",
+      "backward_compatibility",
+      "adopter_configuration"
+    ],
+    "reason": "Profile selection changes which calibration controls adopters must evidence; malformed policy, silent downgrade, or incompatible existing profiles must fail closed."
+    ,"unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Calibration control policy, Project Profile validation, installer catalog, and Make entrypoint changes are protected governance and distribution surfaces."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user supplied explicit levels, controls, transition rules, and authorization; implementation can be verified locally and in Hosted CI."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "preReviewWarnings": [
+    "Confirm Lite never inherits Strict-only release, supply-chain, external identity, or enterprise controls.",
+    "Confirm an unrecorded downgrade fails closed while upgrades remain monotonic.",
+    "Confirm existing version 1 Project Profiles remain readable."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A versioned policy defines cumulative Lite, Standard, and Strict calibration controls; Lite contains source paths, test paths, generated paths, protected paths, quality command, default branch, project owner, reviewer, and major unknowns while excluding Strict-only controls.",
+    "Calibration Profile validation requires level, human selection evidence, timestamp, reasons, exact required controls, and exact deferred controls, and fails closed for unknown levels, malformed policy, missing evidence, or control drift.",
+    "Profile transitions allow Lite to Standard and Standard to Strict without exception evidence; any downgrade requires original level, new level, reason, closed controls, risk acceptor, and effective scope, and rejects incomplete or falsely declared transition records.",
+    "Generated calibration proposals and the confirmed template Project Profile expose a valid calibrationProfile while existing legacy version 1 profiles without that section remain readable.",
+    "The validator and Make entrypoint are installed into adopter repositories, and focused tests cover all levels, upgrade, downgrade, invalid policy, legacy compatibility, proposal rendering, and installation parity.",
+    "English, Japanese, and Simplified Chinese reference documentation state required/deferred controls, evidence limits, transition recovery, and non-claims without expanding AI Cockpit beyond Repository Governance Layer."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Calibration currently presents one heavy control surface, so ordinary and first-time adopters can be forced to supply release-grade evidence that is unrelated to their current risk. The repository needs explicit Lite, Standard, and Strict calibration levels whose requirements are deterministic and reviewable.",
+    "constraints": [
+      "Preserve Evidence over Self-Declaration and fail closed on malformed or incomplete profile evidence.",
+      "Lite must not require supply-chain, release attestation, dual-person activation, enterprise audit, or external identity evidence.",
+      "Profiles may upgrade monotonically; downgrade requires an explicit bounded risk-acceptance record.",
+      "Preserve existing Project Profile compatibility and the current calibration session lifecycle.",
+      "Do not implement WI06 capability-claim binding or WI08 installer UX in this Work Item."
+    ],
+    "rationale": "A single policy-backed validator and persisted profile selection makes calibration proportional without weakening high-risk controls or duplicating the existing session and quality-routing authorities."
+  },
+  "rawUserRequest": "Execute WI-05 Calibration Profiles from the provided next-stage development directive: add Lite, Standard, and Strict calibration levels, keep Lite lightweight, make requirements cumulative, allow upgrades, require a complete recorded exception for downgrades, and complete the full branch, PR, merge, archive, and cleanup lifecycle.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:ai-cockpit-next-phase#WI-05",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:143bfc0a9e8db782a8b0b3ebec03862ddd369a496c1fd382ad76bbff14a342cd"
+  },
+  "declaredIntent": {
+    "summary": "Make calibration proportional through evidence-backed Lite, Standard, and Strict control profiles and fail-closed transition rules.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Lite, Standard, and Strict controls are resolved from the versioned policy.",
+      "expected": "Each level resolves to the exact cumulative required and deferred controls and Lite excludes Strict-only controls.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_profiles.py (7 passed)",
+        "make ai-cockpit-quality CONTRACT=.ai/work-items/active/wi-05-calibration-profiles.contract.json"
+      ],
+      "verificationPlan": "Run focused policy and validator tests using valid and malformed policy fixtures."
+    },
+    {
+      "scenario": "An adopter upgrades or attempts to downgrade a selected calibration profile.",
+      "expected": "Monotonic upgrades pass and downgrades fail unless every bounded risk-acceptance field and closed-control relationship is valid.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_profiles.py (7 passed)",
+        "docs/reference/calibration-profiles.md"
+      ],
+      "verificationPlan": "Run focused upgrade/downgrade transition tests, including incomplete and contradictory records."
+    },
+    {
+      "scenario": "Existing and newly generated Project Profiles are validated after the feature is installed.",
+      "expected": "Legacy Project Profiles remain valid while generated proposals and current profiles carry a valid calibrationProfile.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_calibration_session.py and tests/test_project_governance.py focused regressions passed",
+        "make ai-cockpit-quality completed with 1726 passed"
+      ],
+      "verificationPlan": "Run existing calibration/session tests plus new proposal and legacy-profile regression tests."
+    },
+    {
+      "scenario": "A fresh adopter receives and validates the Calibration Profile feature.",
+      "expected": "Installed adopters receive the profile validator, policy, documentation, and Make interface without gaining release-only Lite requirements.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_adoption_e2e.py focused adoption regression passed",
+        "make ai-cockpit-quality completed with installer boundary regression passed"
+      ],
+      "verificationPlan": "Run focused adoption E2E/catalog tests and the Contract-selected Standard quality graph."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all bounded governance, code, documentation, PR, merge, archive, and branch-cleanup decisions needed to complete every planned Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 737
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-05-calibration-profiles.json",
+    "baseCommit": "e255fcdb685b3c822de1d5dd3a3cbf58bedeb1db",
+    "initialScopeDigest": "7ff296a03273bdb0622e5d3657180457ab064e0cf64ec5c78372eb34aac4df2e",
+    "contractSkeletonDigest": "c2170c0a129563cd298e5d5c541e246e1c8645971a32f893223c789b257920e0"
+  }
+}
