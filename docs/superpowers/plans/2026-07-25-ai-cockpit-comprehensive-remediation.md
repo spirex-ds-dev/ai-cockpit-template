@@ -675,6 +675,8 @@ WI-21 在 corrective 合并后以 PR #408 run `30280375075` 完成真实 Hosted 
 | WI-18 发布新版本 | 待所有前置阶段关闭；候选版本、provider Release、tag、asset、projection 分别验证 |
 | WI-19 清理计划文档 | 发布完整关闭后最后执行 |
 
+**RFE-RELEASE-FINALIZATION-20260731（发布证据代际，高，处理中）：** 当前 `main` 的 `make check-release-preflight` 正确拒绝旧的 v0.5.45 freeze：它的 source tree、canonical archive、release digest 与 premerge base 都仍绑定旧提交，而分支/worktree 收敛 PR #526 已使 `main` 前进。不得手改旧 archive、在 `main` 直接重跑 freeze，或复用旧 release PR；独立 `release-v0-5-45-finalization-recovery-20260731` 必须从当前 `origin/main` 生成新的、archive-owned premerge candidate freeze，经过 PR/Hosted/merge/closure 后，在精确 merged source 上重新执行 preflight。该恢复不创建 tag、Release 或资产；provider publication 仍只属于其后的 WI-18 边界。
+
 当前唯一允许的顺序是：GitHub Actions Node/Go/Homebrew 警告纠偏并接收 #443 → RFE-ISSUE-093/094 检查点与候选发布证据纠偏 → RFE-ISSUE-096 恢复后验证证据代际纠偏 → RFE-ISSUE-097 强制 Task Outcome 与 Closure Receipt → RFE-108 归档前 active Outcome 直接对话报告 successor → 完成 #441、#442 → `provider-merge-state-recovery-20260730` 完整关闭 → 以单独人类决策恢复并关闭 Python 3.11 迁移 → 恢复并分别接收 Dependabot #444、#445 → 以最新 `main` 重做 #403 的计划完成证据审计并关闭旧 PR/分支 → 按用户最新反馈重构三语安装文档的信息架构 → 恢复并关闭文档对齐 → 过期代码/逻辑/文档清理 → 三语真实荒诞与注入攻击评估及整改 → 对全部最终源再做一次零 blocker 日语 `final_reassessment` → WI-18 发布 → WI-19 清理当前周期计划。每一项都必须完成 Contract → Preflight → 实现/验收 → `ai-finish`/archive → push → PR → merge → `make ai-close-work-item` → 本地/远端分支清理 → main 同步；不得从 detached closed worktree 直接进入下一项。
 
 ### 本计划工单已发现的问题
