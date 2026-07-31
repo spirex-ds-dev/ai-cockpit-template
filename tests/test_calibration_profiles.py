@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import ai_calibration_profiles as profiles
@@ -181,3 +182,58 @@ def test_generated_proposal_exposes_lite_projection_without_claiming_human_selec
         for issue in validate_profile(proposed, require_approval=False)
         if issue.startswith("calibrationProfile")
     ]
+
+
+def test_cli_validates_confirmed_profile_and_writes_passed_receipt(
+    tmp_path: Path,
+    capsys,
+) -> None:
+    receipt_path = tmp_path / "receipts" / "calibration-profile.json"
+
+    result = profiles.main(
+        [
+            "--profile",
+            ".ai/project_profile.yaml",
+            "--policy",
+            str(POLICY),
+            "--output",
+            str(receipt_path),
+        ]
+    )
+
+    assert result == 0
+    assert capsys.readouterr().out == "calibration Profile validation passed\n"
+    assert json.loads(receipt_path.read_text(encoding="utf-8")) == {
+        "status": "passed",
+        "profile": ".ai/project_profile.yaml",
+        "policy": str(POLICY),
+        "previousLevel": None,
+        "issues": [],
+    }
+
+
+def test_cli_blocks_malformed_project_profile_and_persists_failure_receipt(
+    tmp_path: Path,
+    capsys,
+) -> None:
+    malformed_profile = tmp_path / "malformed-project-profile.yaml"
+    malformed_profile.write_text(" version: 1\n", encoding="utf-8")
+    receipt_path = tmp_path / "blocked.json"
+
+    result = profiles.main(
+        [
+            "--profile",
+            str(malformed_profile),
+            "--output",
+            str(receipt_path),
+        ]
+    )
+
+    captured = capsys.readouterr()
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    assert result == 1
+    assert captured.out == ""
+    assert "[ERROR] failed to load Project Profile:" in captured.err
+    assert receipt["status"] == "blocked"
+    assert receipt["profile"] == str(malformed_profile)
+    assert receipt["issues"] == [captured.err.removeprefix("[ERROR] ").rstrip("\n")]
