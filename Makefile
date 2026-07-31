@@ -43,7 +43,7 @@ check-docs-metadata check-trust-layer-docs check-real-absurd-injection-docs chec
 	ai-start ai-resume-work-item ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	ai-verify-focused ai-verify-full \
 	ai-doctor check-ai-adoption-ready \
-	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-guidelines check-ai-review-policy template-adoption-ready \
+	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-guidelines check-ai-review-policy template-adoption-ready \
 	check-ai-scenario-coverage check-ai-start-receipt check-ai-archive-recovery generate-ai-preflight-review check-ai-preflight-review ai-preflight ai-prepare-implementation \
 	ai-prepare-hosted-verification-snapshot \
 	check-ai-change-summary generate-cockpit-status generate-cockpit-status-ja check-ai-status check-ai-status-ja check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
@@ -312,7 +312,7 @@ check-ai-guard-calibration: check-ai-project-profile
 	$(AI_PYTHON) scripts/ai_check_guard_calibration.py --root .
 
 QUALITY_FAST_STATIC_GATES := project-format-check project-lint diff-check
-QUALITY_FAST_POLICY_GATES := check-trust-schemas check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency
+QUALITY_FAST_POLICY_GATES := check-trust-schemas check-docs-metadata check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration check-ai-status-consistency check-ai-test-weakening-fast
 QUALITY_TEST_GATES := project-test
 QUALITY_EVIDENCE_GATES := unsupported-claim-regression adopter-long-cycle check-release-evidence check-release-state-consistency check-dependency-vulnerabilities
 QUALITY_SUPPLY_CHAIN_GATES := check-bandit-baseline check-sbom check-provenance check-secret-scanning
@@ -343,7 +343,7 @@ qg-diff-check:
 quality-fast-policy:
 	+$(QUALITY_MAKE) --no-print-directory -j2 quality-fast-policy-gates
 
-quality-fast-policy-gates: qg-check-trust-schemas qg-check-docs-metadata qg-check-ai-system-invariants qg-check-ai-project-profile qg-check-ai-guard-calibration qg-check-ai-status-consistency
+quality-fast-policy-gates: qg-check-trust-schemas qg-check-docs-metadata qg-check-ai-system-invariants qg-check-ai-project-profile qg-check-ai-guard-calibration qg-check-ai-status-consistency $(if $(filter true,$(TEST_WEAKENING_FULL_OWNERSHIP)),,qg-check-ai-test-weakening-fast)
 
 qg-check-trust-schemas:
 	$(call RUN_QUALITY_GATE,check-trust-schemas,policy)
@@ -357,6 +357,8 @@ qg-check-ai-guard-calibration:
 	$(call RUN_QUALITY_GATE,check-ai-guard-calibration,policy)
 qg-check-ai-status-consistency:
 	$(call RUN_QUALITY_GATE,check-ai-status-consistency,policy)
+qg-check-ai-test-weakening-fast:
+	$(call RUN_QUALITY_GATE,check-ai-test-weakening-fast,policy)
 
 # Heavy groups are separate ownership units.  Their outputs are either read-only
 # or isolated by the gate itself; no blanket high-parallelism quality target is used.
@@ -396,7 +398,7 @@ qg-check-secret-scanning:
 	$(call RUN_QUALITY_GATE,check-secret-scanning,supply-chain)
 
 quality-project-consistency-group:
-quality-project-consistency-group: qg-check-quality-architecture qg-check-deprecated-assets qg-check-instruction-traceability
+quality-project-consistency-group: qg-check-quality-architecture qg-check-deprecated-assets qg-check-instruction-traceability qg-check-ai-test-weakening
 
 qg-check-quality-architecture:
 	$(call RUN_QUALITY_GATE,check-quality-architecture,project-consistency)
@@ -404,6 +406,8 @@ qg-check-deprecated-assets:
 	$(call RUN_QUALITY_GATE,check-deprecated-assets,project-consistency)
 qg-check-instruction-traceability:
 	$(call RUN_QUALITY_GATE,check-instruction-traceability,project-consistency)
+qg-check-ai-test-weakening:
+	$(call RUN_QUALITY_GATE,check-ai-test-weakening,project-consistency)
 
 quality-full:
 	+@set -eu; \
@@ -417,7 +421,7 @@ quality-full:
 		mkdir -p "$$timing" "$$logs" "$$junit"; \
 		trap 'printf "%s\n" "$$session_id" > target/quality/current-session.txt' EXIT; \
 		printf '%s\n' "$$session_id" > target/quality/current-session.txt; \
-		$(AI_PYTHON) scripts/run_quality_session.py --phase quality-fast --phase quality-heavy -- $(QUALITY_MAKE) --no-print-directory QUALITY_SESSION_ID="$$session_id" QUALITY_RUN_ID="$$run_id" QUALITY_TIMING_DIR="$$timing" QUALITY_LOG_DIR="$$logs" QUALITY_JUNIT_DIR="$$junit"; \
+		$(AI_PYTHON) scripts/run_quality_session.py --phase quality-fast --phase quality-heavy -- $(QUALITY_MAKE) --no-print-directory QUALITY_SESSION_ID="$$session_id" QUALITY_RUN_ID="$$run_id" QUALITY_TIMING_DIR="$$timing" QUALITY_LOG_DIR="$$logs" QUALITY_JUNIT_DIR="$$junit" TEST_WEAKENING_FULL_OWNERSHIP=true; \
 		$(AI_PYTHON) scripts/summarize_quality_gates.py --input "$$timing" --json-output "$$session_root/summary.json" --markdown-output "$$session_root/summary.md"; \
 		cp "$$session_root/summary.json" target/quality/summary.json; \
 		cp "$$session_root/summary.md" target/quality/summary.md
@@ -574,6 +578,12 @@ check-ai-reference-impact:
 		fi; \
 		if test "$$found" = false; then printf '%s\n' 'Reference impact: no declared records.'; fi
 
+check-ai-test-weakening-fast:
+	$(AI_PYTHON) scripts/ai_check_test_weakening.py --root . $(if $(AI_BASE_COMMIT),--base-ref "$(AI_BASE_COMMIT)",) --mode fast --policy .ai/guards/test_weakening_policy.yaml
+
+check-ai-test-weakening:
+	$(AI_PYTHON) scripts/ai_check_test_weakening.py --root . $(if $(AI_BASE_COMMIT),--base-ref "$(AI_BASE_COMMIT)",) --mode full --policy .ai/guards/test_weakening_policy.yaml
+
 check-ai-scenario-coverage:
 	$(AI_PYTHON) scripts/ai_check_scenario_coverage.py $(if $(CONTRACT),--contract $(CONTRACT)) $(if $(SUMMARY),--summary $(SUMMARY))
 
@@ -688,6 +698,7 @@ check-ai-pr:
 		$(AI_NESTED_MAKE) check-changed-critical-coverage AI_BASE_COMMIT="$(AI_BASE_COMMIT)"; \
 		$(AI_NESTED_MAKE) check-source-bound-evidence; \
 		$(AI_NESTED_MAKE) check-ai-reference-impact; \
+		$(AI_NESTED_MAKE) check-ai-test-weakening AI_BASE_COMMIT="$(AI_BASE_COMMIT)"; \
 		if test -f scripts/check_governance_complexity.py && test -f .ai/guards/governance_complexity_policy.yaml; then \
 			$(AI_PYTHON) scripts/check_governance_complexity.py; \
 		fi; \

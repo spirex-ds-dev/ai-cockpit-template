@@ -1,0 +1,231 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-02-test-weakening-guard",
+  "mode": "code",
+  "title": "Test Weakening Guard",
+  "rawUserRequest": "Implement WI-02 Test Weakening Guard from the AI Cockpit next-phase instruction. Detect test semantic weakening, distinguish warning/review/block outcomes, require evidence rather than agent explanation, and integrate low-cost signals into quality-fast plus full analysis into quality-full, quality-release, and check-ai-pr.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:ai-cockpit-next-phase#WI-02",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:20a7f37cfd2e1fcccf41537d5c12d46ef0f56506b9d3ebb525aef4d005fbd7e2"
+  },
+  "declaredIntent": {
+    "summary": "Detect evidence-backed test weakening that can make a change appear safe by reducing verification strength.",
+    "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "9d4a5b5410080ce003c160ab7c07b8cf2c5c730e",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-02-test-weakening-guard.contract.json",
+    ".ai/work-items/active/wi-02-test-weakening-guard.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-02-test-weakening-guard.outcome.json",
+    ".ai/work-items/active/wi-02-test-weakening-guard.outcome.md",
+    "scripts/ai_check_test_weakening.py",
+    "scripts/ai_installer_catalog.json",
+    ".ai/guards/test_weakening_policy.yaml",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/schemas/test_weakening.schema.json",
+    "tests/test_test_weakening.py",
+    "docs/reference/test-weakening-guard.md",
+    "docs/reference/test-weakening-guard.ja.md",
+    "docs/reference/test-weakening-guard.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/remediation-instruction-traceability.json",
+    "Makefile",
+    "templates/make/Makefile.ai"
+  ],
+  "outOfScope": [
+    "Proving semantic equivalence of arbitrary tests or requirements.",
+    "Changing hosted branch protection or provider required-check settings.",
+    "Automatically accepting weakened tests based on agent-authored prose.",
+    "WI-03 governance profile routing beyond integrating the explicitly required quality entrypoints."
+  ],
+  "sources": [
+    {
+      "path": "user-request:ai-cockpit-next-phase#WI-02",
+      "reason": "Authoritative signal classes, decision levels, output shape, required artifacts, and quality integration."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Canonical Repository Governance Layer and evidence terminology."
+    },
+    {
+      "path": "scripts/ai_check_backtrack.py",
+      "reason": "Existing test-file deletion signal and fail-closed conventions."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Existing coverage scope and production-to-test ownership configuration."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Canonical fast, full, release, and PR verification entrypoints."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "evidence_integrity",
+      "test_semantic_regression",
+      "false_positive_analysis",
+      "false_negative_analysis"
+    ],
+    "reason": "Effective governance profile: strict. The guard determines whether reduced verification strength may conceal regressions; it must block explicit bypasses, preserve reviewable evidence, and document heuristic limits without claiming semantic completeness.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The required signals and outcomes are explicit; uncertain semantic cases are runtime review outcomes rather than planning gaps."
+  },
+  "preReviewWarnings": [
+    "Review threshold calibration, cross-language heuristic limits, snapshot update handling, and separation of evidence-backed weakening from legitimate test refactoring."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A versioned Test Weakening report validates decision, typed signals, severity, before/after evidence where applicable, explanation requirement, and recovery condition; malformed policy and unsafe paths fail closed.",
+    "Diff analysis detects test file/case/assertion/exception/negative/security/regression removal, added skip or disable markers, material snapshot churn, coverage exclusion/source/threshold weakening, removed test command paths, continue-on-error, nonblocking required checks, and shell success bypasses.",
+    "Minor assertion or snapshot changes produce warning, material weakening produces review or needs_human_confirmation, and explicit requests or diffs that delete failing/security tests, lower coverage to pass, or add success bypasses block.",
+    "The checker emits reproducible JSON evidence from a declared Git base, supports a fast low-cost mode and a full mode, and does not claim universal semantic understanding for unsupported test ecosystems or languages.",
+    "Policy, JSON Schema, positive/negative/malformed/path-boundary/legacy tests, Make and PR integration, and aligned English/Japanese/Chinese documentation including limitations, false positives, false negatives, and recovery are delivered."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "A test file loses most assertions and gains a skip marker.", "expected": "review with assertion_reduction and skip_added evidence.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Create a temporary Git repository, commit before/after fixtures, and assert the full-mode JSON report."},
+    {"scenario": "A CI test command is changed to continue-on-error or shell success bypass.", "expected": "blocked with the exact workflow signal and recovery condition.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run the checker against controlled workflow diffs for continue-on-error and || true."},
+    {"scenario": "Coverage exclusions expand or the measured threshold is lowered.", "expected": "review, or blocked when the diff/request shows threshold lowering to make current results pass.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Use literal before/after coverage configuration fixtures and an explicit bypass request."},
+    {"scenario": "A small explained snapshot or assertion refactor preserves test cases.", "expected": "warning without a false claim of safety.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run fast and full modes against a bounded benign fixture and assert warning evidence."},
+    {"scenario": "The policy is malformed, the base is invalid, or a path escapes the repository.", "expected": "invalid or blocked without reading outside the repository.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused CLI and unit tests cover malformed YAML-compatible policy, invalid revisions, traversal, symlink, and legacy report handling."}
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "File-deletion checks cannot detect when tests remain present but are weakened through removed cases or assertions, new skips, relaxed coverage, nonblocking CI, or success bypasses, allowing regressions to be hidden behind superficially passing verification.",
+    "constraints": [
+      "Keep the product boundary as a Repository Governance Layer.",
+      "Use repository diff and policy evidence; agent explanations alone cannot satisfy the guard.",
+      "Treat heuristic uncertainty as review or human confirmation and document false-positive and false-negative boundaries.",
+      "Keep fast mode limited to low-cost signals and avoid release-only work in ordinary loops.",
+      "Do not mutate tests, coverage configuration, workflows, or provider settings automatically."
+    ],
+    "rationale": "A structured diff-derived weakening report lets humans distinguish benign refactoring from evidence loss and blocks explicit attempts to make failing verification appear green."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all in-scope implementation, governance, PR, merge, archive, and branch-cleanup decisions for every Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 732
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-02-test-weakening-guard.json",
+    "baseCommit": "9d4a5b5410080ce003c160ab7c07b8cf2c5c730e",
+    "initialScopeDigest": "afad6a709b2e2212416d4e2c317eb900a4ac370a25d1869e33790c1975603323",
+    "contractSkeletonDigest": "8fa754faa41a332f5b3861e1ea61ab3b12cedf82f45ea57c75e59e49688d6f27"
+  }
+}
