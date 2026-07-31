@@ -165,6 +165,64 @@ def test_beginner_route_rejects_missing_platform_examples(tmp_path):
     )
 
 
+def test_beginner_route_rejects_platform_page_without_work_item_entry(tmp_path):
+    copy_documentation(tmp_path)
+    platform_page = tmp_path / "docs/getting-started/examples/ios.zh-CN.md"
+    platform_page.write_text(
+        platform_page.read_text(encoding="utf-8").replace(
+            "<!-- platform-entry: work-item-first -->",
+            "<!-- platform-entry: removed -->",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    assert (
+        "docs/getting-started/examples/ios.zh-CN.md: missing Work Item-first platform entry"
+        in beginner_installation_errors(tmp_path)
+    )
+
+
+def test_beginner_route_rejects_platform_page_without_calibration_and_recovery_route(tmp_path):
+    copy_documentation(tmp_path)
+    platform_page = tmp_path / "docs/getting-started/examples/android.ja.md"
+    platform_page.write_text(
+        platform_page.read_text(encoding="utf-8").replace(
+            "<!-- platform-next: calibration-and-recovery -->",
+            "<!-- platform-next: removed -->",
+            1,
+        ),
+        encoding="utf-8",
+    )
+
+    assert (
+        "docs/getting-started/examples/android.ja.md: missing calibration and recovery route"
+        in beginner_installation_errors(tmp_path)
+    )
+
+
+def test_beginner_route_rejects_platform_page_without_evidence_boundary_or_with_legacy_flow(
+    tmp_path,
+):
+    copy_documentation(tmp_path)
+    platform_page = tmp_path / "docs/getting-started/examples/java.md"
+    platform_page.write_text(
+        platform_page.read_text(encoding="utf-8").replace(
+            "<!-- platform-boundary: no-toolchain-device-signing-hosted-claim -->",
+            "<!-- platform-boundary: removed -->",
+            1,
+        )
+        + "\n<!-- platform-stage: legacy -->\n",
+        encoding="utf-8",
+    )
+
+    errors = beginner_installation_errors(tmp_path)
+    assert "docs/getting-started/examples/java.md: missing platform evidence boundary" in errors
+    assert (
+        "docs/getting-started/examples/java.md: contains legacy seven-stage platform flow" in errors
+    )
+
+
 def test_layer_checker_rejects_missing_language_document(tmp_path):
     copy_documentation(tmp_path)
     (tmp_path / "docs/getting-started/30-second-start.ja.md").unlink()
