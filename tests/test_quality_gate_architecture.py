@@ -108,6 +108,7 @@ def test_smoke_uses_node24_upload_artifact_release_for_quality_diagnostics():
     )[0]
     assert "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a" in upload
     assert "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02" not in smoke
+    assert "target/coverage.json" in upload
 
 
 def test_quality_full_uses_commit_and_run_bound_session_directories():

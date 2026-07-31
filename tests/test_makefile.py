@@ -24,6 +24,55 @@ def test_check_ai_pr_uses_aggregate_validator():
     )
 
 
+def test_check_ai_pr_runs_fast_predictors_before_aggregate_validation():
+    result = subprocess.run(
+        ["make", "-n", "check-ai-pr", "AI_BASE_COMMIT=abc123"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    ordered_markers = (
+        "project-format-check",
+        "project-lint",
+        "check-changed-critical-coverage",
+        "check-source-bound-evidence",
+        "check-ai-pr-core",
+    )
+    positions = [result.stdout.index(marker) for marker in ordered_markers]
+    assert positions == sorted(positions)
+
+
+def test_makefile_exposes_source_bound_evidence_gate():
+    result = subprocess.run(
+        ["make", "-n", "check-source-bound-evidence"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "scripts/ai_capability_truth.py" in result.stdout
+    assert "scripts/ai_japanese_capability.py --check --require-final-reassessment" in result.stdout
+    assert "scripts/check_pre_release_documentation_alignment.py" in result.stdout
+
+
+def test_project_lint_checks_locked_ruff_version_before_rule_evaluation():
+    result = subprocess.run(
+        ["make", "-n", "project-lint"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+    version_check = result.stdout.index("scripts/check_dev_tool_versions.py")
+    ruff_check = result.stdout.index("-m ruff check scripts tests")
+    assert version_check < ruff_check
+
+
 def test_project_format_check_runs_ruff_format_check():
     result = subprocess.run(
         ["make", "-n", "project-format-check"],
