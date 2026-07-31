@@ -58,6 +58,68 @@ def checkpoint_evidence(summary: dict[str, Any] | None) -> list[dict[str, Any]]:
     return [item for item in evidence if isinstance(item, dict)]
 
 
+def validate_checkpoint_bindings(
+    contract: dict[str, Any],
+    summary: dict[str, Any] | None,
+    *,
+    expected_contract_hash: str = "",
+) -> list[str]:
+    """Validate checkpoint-to-Contract bindings without requiring finished gates."""
+    issues: list[str] = []
+    policy = contract.get("checkpointPolicy")
+    if not isinstance(policy, dict) or policy.get("requiredBeforeFinish") is not True:
+        return issues
+    required_stages = [
+        item for item in policy.get("requiredStages", []) if isinstance(item, str) and item.strip()
+    ]
+    evidence = checkpoint_evidence(summary)
+    evidence_stages = {
+        item.get("stage")
+        for item in evidence
+        if non_empty_string(item.get("stage")) and item.get("recorded") is True
+    }
+    missing = [stage for stage in required_stages if stage not in evidence_stages]
+    if missing:
+        issues.append(f"missing checkpointEvidence for required stage(s): {', '.join(missing)}")
+    expected_counts = {
+        "acceptanceCount": len(contract.get("acceptance", []))
+        if isinstance(contract.get("acceptance"), list)
+        else 0,
+        "unknownCount": len(contract.get("unknowns", []))
+        if isinstance(contract.get("unknowns"), list)
+        else 0,
+        "requiredChecks": len(command_prefixes(contract)),
+    }
+    for item in evidence:
+        if item.get("stage") not in required_stages or item.get("recorded") is not True:
+            continue
+        stage = item.get("stage")
+        if not non_empty_string(item.get("contractHash")):
+            issues.append(f"checkpointEvidence[{stage}].contractHash is required")
+        for key in (
+            "acceptanceCount",
+            "unknownCount",
+            "requiredChecks",
+            "requiredChecksPassed",
+        ):
+            if not isinstance(item.get(key), int):
+                issues.append(f"checkpointEvidence[{stage}].{key} must be integer")
+        recorded_hash = item.get("contractHash")
+        hashes_match = isinstance(recorded_hash, str) and (
+            recorded_hash == expected_contract_hash
+            or recorded_hash.startswith(expected_contract_hash)
+            or expected_contract_hash.startswith(recorded_hash)
+        )
+        if expected_contract_hash and not hashes_match:
+            issues.append(f"checkpointEvidence[{stage}] contractHash is stale")
+        for key, expected in expected_counts.items():
+            if item.get(key) != expected:
+                issues.append(f"checkpointEvidence[{stage}].{key} is stale")
+        if stage == "before_edit" and item.get("requiredChecksPassed") != 0:
+            issues.append("before_edit checkpoint must be recorded before required verification")
+    return issues
+
+
 def validate_agent_risks(
     contract: dict[str, Any], summary: dict[str, Any] | None, *, expected_contract_hash: str = ""
 ) -> list[str]:
@@ -113,61 +175,13 @@ def validate_agent_risks(
             "executionDecision continue conflicts with agentCapability.needsHumanDecision true"
         )
 
-    policy = contract.get("checkpointPolicy")
-    if isinstance(policy, dict) and policy.get("requiredBeforeFinish") is True:
-        required_stages = [
-            item
-            for item in policy.get("requiredStages", [])
-            if isinstance(item, str) and item.strip()
-        ]
-        evidence_stages = {
-            item.get("stage")
-            for item in checkpoint_evidence(summary)
-            if non_empty_string(item.get("stage")) and item.get("recorded") is True
-        }
-        missing = [stage for stage in required_stages if stage not in evidence_stages]
-        if missing:
-            issues.append(f"missing checkpointEvidence for required stage(s): {', '.join(missing)}")
-        for item in checkpoint_evidence(summary):
-            if item.get("stage") in required_stages and item.get("recorded") is True:
-                if not non_empty_string(item.get("contractHash")):
-                    issues.append(
-                        f"checkpointEvidence[{item.get('stage')}].contractHash is required"
-                    )
-                for key in (
-                    "acceptanceCount",
-                    "unknownCount",
-                    "requiredChecks",
-                    "requiredChecksPassed",
-                ):
-                    if not isinstance(item.get(key), int):
-                        issues.append(
-                            f"checkpointEvidence[{item.get('stage')}].{key} must be integer"
-                        )
-                recorded_hash = item.get("contractHash")
-                hashes_match = isinstance(recorded_hash, str) and (
-                    recorded_hash == expected_contract_hash
-                    or recorded_hash.startswith(expected_contract_hash)
-                    or expected_contract_hash.startswith(recorded_hash)
-                )
-                if expected_contract_hash and not hashes_match:
-                    issues.append(f"checkpointEvidence[{item.get('stage')}] contractHash is stale")
-                expected_counts = {
-                    "acceptanceCount": len(contract.get("acceptance", []))
-                    if isinstance(contract.get("acceptance"), list)
-                    else 0,
-                    "unknownCount": len(contract.get("unknowns", []))
-                    if isinstance(contract.get("unknowns"), list)
-                    else 0,
-                    "requiredChecks": len(commands),
-                }
-                for key, expected in expected_counts.items():
-                    if item.get(key) != expected:
-                        issues.append(f"checkpointEvidence[{item.get('stage')}].{key} is stale")
-                if item.get("stage") == "before_edit" and item.get("requiredChecksPassed") != 0:
-                    issues.append(
-                        "before_edit checkpoint must be recorded before required verification"
-                    )
+    issues.extend(
+        validate_checkpoint_bindings(
+            contract,
+            summary,
+            expected_contract_hash=expected_contract_hash,
+        )
+    )
 
     return issues
 

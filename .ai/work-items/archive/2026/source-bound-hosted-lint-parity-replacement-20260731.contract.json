@@ -1,0 +1,309 @@
+{
+  "contractVersion": 2,
+  "workItemId": "source-bound-hosted-lint-parity-replacement-20260731",
+  "mode": "code",
+  "title": "Replace source-bound verification with hosted lint parity",
+  "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "继续完成根因整改，不要停在表面修复。保持 source-bound、覆盖率、Hosted CI 和完整生命周期门禁；减少重复全量测试，但不能降低质量。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-hosted-lint-root-correction-authorized",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:6337ec3053b29d2e8bd4b948cec1b07afd6cadc9b48291101a2c54ee23fc1be9"
+  },
+  "declaredIntent": {
+    "summary": "Replace the failed #522 delivery from the exact origin/main baseline, retain its architectural correction, address every hosted Ruff 0.16.0 finding, and make local lint fail when the active Ruff version differs from the repository dependency lock.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation",
+      "software_design"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/source-bound-hosted-lint-parity-replacement-20260731.contract.json",
+    ".ai/work-items/active/source-bound-hosted-lint-parity-replacement-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/source-bound-hosted-lint-parity-replacement-20260731.outcome.json",
+    ".ai/work-items/active/source-bound-hosted-lint-parity-replacement-20260731.outcome.md",
+    ".ai/cockpit/checks.yaml",
+    ".ai/guards/changed_critical_coverage_policy.json",
+    ".github/workflows/smoke.yml",
+    "Makefile",
+    "scripts/ai_check_agent_risk.py",
+    "scripts/ai_finish.py",
+    "scripts/check_changed_critical_coverage.py",
+    "scripts/check_dev_tool_versions.py",
+    "scripts/install_ai_cockpit.py",
+    "templates/make/Makefile.ai",
+    "templates/stacks/generic.mk",
+    "tests/test_ai_check_agent_risk.py",
+    "tests/test_changed_critical_coverage.py",
+    "tests/test_core_gates.py",
+    "tests/test_dev_tool_versions.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_installer.py",
+    "tests/test_makefile.py",
+    "tests/test_quality_gate_architecture.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Rewriting or copying the archived evidence owned by failed PR #519, #520, #521, or #522.",
+    "Lowering Ruff rules, total coverage, critical-file coverage floors, source-bound evidence, or Hosted CI requirements.",
+    "Publishing a release or changing release candidate metadata.",
+    "Changing adopter-project dependency requirements; the tool-version gate applies to this template repository's development checks."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30592812015/job/91038571578",
+      "reason": "Hosted #522 template-smoke evidence: project-lint failed under locked Ruff 0.16.0 with EXE001, TRY004, UP022, and I001."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/522",
+      "reason": "Failed archived delivery retained as audit evidence and replaced rather than mutated."
+    },
+    {
+      "path": "requirements-dev.in",
+      "reason": "Authoritative direct development dependency pins, including ruff==0.16.0."
+    },
+    {
+      "path": "requirements-dev.lock",
+      "reason": "Hosted smoke installs this hash-locked dependency graph before running quality."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Standard verification engine that receives source-bound injection and early checkpoint binding validation."
+    },
+    {
+      "path": "scripts/check_critical_coverage.py",
+      "reason": "Authoritative lifecycle-critical per-file coverage floors."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_gate",
+      "dependency_parity",
+      "hosted_ci",
+      "archive_replacement"
+    ],
+    "reason": "This replacement affects the finish engine, installed Runtime parity, local/Hosted lint equivalence, PR prediction, and source-bound generated evidence. A false local pass or archive rewrite would repeat the failure class.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user pre-authorized all plan Work Items and explicitly instructed the agent to continue root-cause correction without duplicate confirmation."
+  },
+  "preReviewWarnings": [
+    "Do not amend #522 or copy its archive records into this replacement.",
+    "Do not silence Ruff 0.16.0 findings or weaken tool rules.",
+    "Local lint evidence is invalid unless the executing Ruff version equals the direct repository pin.",
+    "Do not rerun the complete local project test; use focused tests and critical coverage, then require Hosted quality."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The #522 source-bound architecture is reproduced from origin/main without importing #522 archive evidence: sourceBoundEvidence is injected and deduplicated inside the standard ai-finish engine and executes before quality and Outcome.",
+    "ai-finish rejects malformed verification and stale Contract/checkpoint bindings before declared checks execute, with a concrete ai-prepare-implementation recovery command.",
+    "The changed-critical predictor observes committed, staged, unstaged, and untracked paths and enforces every unchanged lifecycle-critical coverage floor.",
+    "Root and installed Runtime PR paths preserve lint, source-bound evidence, and PR ownership while explicitly unconfigured generic formatter/linter tools alone are skipped.",
+    "Under Ruff 0.16.0, Hosted findings EXE001, TRY004, UP022, and I001 are absent; the new executable retains mode 100755.",
+    "Template-repository project-lint exits nonzero before Ruff rule evaluation when the active Ruff version differs from the direct development dependency manifest pin; the same gate exits zero with Ruff 0.16.0.",
+    "Hosted diagnostics include target/coverage.json, and replacement PR template-smoke, installation-smoke, release-evidence, ci-evidence, compatibility, and CodeQL checks all succeed.",
+    "Focused regressions, locked-version lint, formatter, source-bound evidence, governance checks, and changed-critical coverage pass without lowering any quality threshold."
+  ],
+  "guidelines": [
+    "Use the existing standard verification engine; do not create a second mandatory execution lane.",
+    "Treat requirements-dev.in as the direct development-tool version authority and requirements-dev.lock as the hosted installation authority.",
+    "Preserve all existing quality and coverage floors; version mismatch must fail closed with an actionable diagnostic.",
+    "Keep generated source-bound evidence synchronized after every bound implementation or test change."
+  ],
+  "intent": {
+    "problem": "PR #522 corrected the verification architecture but local project-lint used Ruff 0.15.21 while Hosted smoke installed locked Ruff 0.16.0. The local gate therefore produced a false pass and missed five deterministic findings. Because #522 was already archived, governance requires a fresh replacement Work Item and PR rather than post-archive mutation.",
+    "constraints": [
+      "Start from the exact latest origin/main and retain #522 as immutable failed evidence.",
+      "Reproduce the full architectural correction without copying failed archive assets.",
+      "Do not weaken Ruff, source-bound evidence, coverage, Hosted CI, or archive immutability.",
+      "Use focused local verification and require Hosted quality instead of repeating full local project-test."
+    ],
+    "rationale": "A version-parity gate converts a hidden environment difference into an immediate local failure. Fixing the actual Ruff 0.16.0 findings and validating with the pinned version makes local evidence comparable to Hosted smoke, while replacement delivery preserves archive truth."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized efficiency exception: focused checks and changed-critical coverage run locally; complete Hosted quality remains mandatory."
+    },
+    {
+      "check": "projectLint",
+      "required": true
+    },
+    {
+      "check": "projectFormat",
+      "required": true
+    },
+    {
+      "check": "docsMetadata",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized the full corrective plan and instructed the agent to continue through governance, CI, PR, merge, and cleanup."
+  },
+  "rollbackNote": "Revert this replacement Work Item as one unit; retain failed PR #519-#522 and their remote evidence for audit until successful closure cleanup.",
+  "scenarioCoverage": [
+    {
+      "scenario": "The active Ruff version differs from requirements-dev.in.",
+      "expected": "project-lint fails before invoking Ruff checks and reports expected and observed versions plus the environment recovery direction.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Unit-test version parsing and mismatch behavior, then execute the real mismatch locally."
+    },
+    {
+      "scenario": "The locked Ruff 0.16.0 environment evaluates the replacement diff.",
+      "expected": "EXE001, TRY004, UP022, and I001 are absent and project-lint passes.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run Ruff 0.16.0 in an isolated environment and require Hosted template-smoke."
+    },
+    {
+      "scenario": "sourceBoundEvidence is omitted or duplicated in the Contract verification list.",
+      "expected": "ai-finish executes exactly one registered source-bound check before downstream checks and Outcome.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run command-aware ai_finish integration regressions."
+    },
+    {
+      "scenario": "The Contract changes after before_edit or contains malformed inline verification.",
+      "expected": "ai-finish stops before any declared check and gives the checkpoint refresh or registered-check diagnostic.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run checkpoint binding and inline Contract early-stop regressions."
+    },
+    {
+      "scenario": "A lifecycle-critical script changes in any Git worktree state.",
+      "expected": "The focused predictor selects mapped tests and enforces the unchanged authoritative floor.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run predictor unit tests and the real PR diff."
+    },
+    {
+      "scenario": "Hosted smoke runs all required jobs.",
+      "expected": "template-smoke, installation-smoke, and release-evidence are all represented; ci-evidence records exact status and succeeds only when all succeed.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Inspect the replacement PR's Hosted run and aggregate evidence."
+    }
+  ],
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 705
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/source-bound-hosted-lint-parity-replacement-20260731.json",
+    "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+    "initialScopeDigest": "02612717de638a0df376ea433aee5c3a25bad933ed6b7f0ffc166b6954b90413",
+    "contractSkeletonDigest": "d293fed93cbb4926d90cd5e22bd1f1604e1dfd7b338b31a2726116a4d3153de6"
+  }
+}
