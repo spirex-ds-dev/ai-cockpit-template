@@ -827,7 +827,9 @@ def exercise_public_distribution(
         if readiness.returncode == 0:
             raise RuntimeError(f"{tag}: adoption readiness must fail before project calibration")
         finished = run_command(
-            ["make", "ai-finish", "TASK=adopt_ai_cockpit"], cwd=project, env=isolated_env
+            ["make", "ai-finish", "TASK=adopt_ai_cockpit", "ARCHIVE=true"],
+            cwd=project,
+            env=isolated_env,
         )
         if finished.returncode != 0:
             raise RuntimeError(

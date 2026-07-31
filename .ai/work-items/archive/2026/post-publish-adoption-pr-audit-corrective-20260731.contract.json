@@ -1,0 +1,223 @@
+{
+  "contractVersion": 2,
+  "workItemId": "post-publish-adoption-pr-audit-corrective-20260731",
+  "mode": "code",
+  "title": "Fix post-publish adoption PR audit lifecycle",
+  "baseCommit": "3b383c8bf2b0b13264edbfaa4a40449d1ac48911",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/post-publish-adoption-pr-audit-corrective-20260731.contract.json",
+    ".ai/work-items/active/post-publish-adoption-pr-audit-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/post-publish-adoption-pr-audit-corrective-20260731.outcome.json",
+    ".ai/work-items/active/post-publish-adoption-pr-audit-corrective-20260731.outcome.md",
+    "scripts/check_release_distribution.py",
+    "tests/test_release_distribution.py"
+  ],
+  "outOfScope": [
+    "Changing or republishing the immutable v0.5.47 tag or public Release.",
+    "Weakening check-ai-pr or allowing an adopter PR without an archived Work Item Contract.",
+    "Changing installer behavior, calibration requirements, or release workflow behavior beyond the post-publish adoption fixture."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.47",
+      "reason": "The v0.5.47 public Release completed before the post-publish adoption audit exposed the lifecycle mismatch."
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "The release-distribution adopter fixture calls ai-finish before committing and running check-ai-pr."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Defines the explicit ARCHIVE=true lifecycle boundary for moving a reported Work Item into PR-auditable archive evidence."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Correctly requires a newly maintained archived Work Item Contract in a governed PR."
+    },
+    {
+      "path": "tests/test_release_distribution.py",
+      "reason": "Owns automated release-distribution and adopter lifecycle regression coverage."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_distribution",
+      "adopter_lifecycle"
+    ],
+    "reason": "The public release is immutable, so the corrective must preserve fail-closed PR evidence while repairing its executable post-publish adopter simulation.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous corrective work and requires root-cause correction before continuing the release plan."
+  },
+  "preReviewWarnings": [
+    "Do not mask the failure by weakening check-ai-pr; the fixture must use the same explicit archive boundary as an authorized adopter PR."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The public adoption fixture explicitly archives adopt_ai_cockpit after its active-state report and before staging its PR evidence.",
+    "A focused regression test fails when the fixture invokes ai-finish without ARCHIVE=true and passes only when the exact archive boundary is present.",
+    "The fixture still proves that generic quality and adoption-readiness fail closed before calibration, and check-ai-pr passes only with the archived Contract.",
+    "Focused release-distribution tests and all required governance gates pass; full local quality remains optional under the user's temporary efficiency authorization, without waiving Hosted CI."
+  ],
+  "guidelines": [
+    "Preserve check-ai-pr's archived Work Item requirement; do not create a bypass for installer adoption.",
+    "Keep the repair confined to the executable post-publish adopter fixture and its regression test.",
+    "Do not alter immutable v0.5.47 provider artifacts."
+  ],
+  "intent": {
+    "problem": "The v0.5.47 public release passed its release workflow but post-publish distribution validation failed because its simulated adopter called ai-finish without ARCHIVE=true. ai-finish now intentionally leaves the report active until the explicit archive flag is supplied, and active Work Items are ignored by Git. Therefore the subsequent PR audit correctly found no newly archived Contract.",
+    "constraints": [
+      "Do not republish, delete, retag, or change v0.5.47.",
+      "Do not weaken the governed PR requirement for an archived Work Item Contract.",
+      "Use the user's temporary focused-verification approval, while retaining all governance gates and Hosted CI."
+    ],
+    "rationale": "The fixture must model the explicit transition from active report to archive before a PR, so public distribution validation proves the actual governed adopter lifecycle instead of bypassing it."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized focused-verification exception; it does not waive governance gates or Hosted CI."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized continuous corrective work, PR/merge/closure, and stated that all planned Work Items may proceed without routine confirmation."
+  },
+  "rollbackNote": "Revert only this corrective Work Item through its PR if required; preserve v0.5.47 and its published provider assets.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 728
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/post-publish-adoption-pr-audit-corrective-20260731.json",
+    "baseCommit": "3b383c8bf2b0b13264edbfaa4a40449d1ac48911",
+    "initialScopeDigest": "bd885e2c7799b8eb2eed267b33d0236a7b6b3e1ab6906db866cd7dd9888bda65",
+    "contractSkeletonDigest": "a75ecb3271e1a8ac09e5006387069c7ad739398971522f5fa40d62391b9acdd2"
+  },
+  "rawUserRequest": "Continue. Before publishing, clean remote and local branches. If the direction does not converge, stop, identify the root cause, correct it, then continue.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-post-publish-distribution-correction",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:post-publish-adoption-pr-audit-v0547"
+  },
+  "declaredIntent": {
+    "summary": "Repair the post-publish adopter PR simulation without weakening its archived-evidence requirement.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A freshly installed adopter completes its adoption Work Item then prepares a governed PR.",
+      "expected": "The fixture explicitly archives the reported adoption Work Item, stages its archive evidence, and check-ai-pr accepts exactly one newly maintained archived Contract.",
+      "verificationPlan": "A focused release-distribution test records the ai-finish invocation and executes the public post-publish distribution check after publication.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "An adopter is not calibrated yet.",
+      "expected": "Generic quality and adoption readiness still fail closed; this change does not claim a configured adopter is ready.",
+      "verificationPlan": "Focused fixture assertions retain the existing failed readiness and quality checks before the PR audit.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ]
+}
