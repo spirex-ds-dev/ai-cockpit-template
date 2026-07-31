@@ -21,9 +21,18 @@ keywords:
 
 ## 当前计划
 
-| 计划 | 状态 | 说明 |
-| --- | --- | --- |
-| [2026-07-25 AI Cockpit 全面整改执行计划](2026-07-25-ai-cockpit-comprehensive-remediation.md) | 当前执行 | 当前发布前 Work Item 的顺序、指示—计划—实现—验收追踪和最终发布/计划清理边界。 |
+当前没有执行中的跨周期整改计划。新的工作必须以新的 Work Item Contract 和当时的用户指示为准，不能把历史计划当作继续执行授权。
+
+## 本周期关闭索引
+
+[2026-07-25 AI Cockpit 全面整改执行计划](2026-07-25-ai-cockpit-comprehensive-remediation.md) 已在 v0.5.47 发布、发布后采用审计 corrective PR #539 合并并关闭后完成。本计划保留为历史关闭索引：
+
+- 公开发布：[v0.5.47](https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.47)，tag target `3b383c8bf2b0b13264edbfaa4a40449d1ac48911`；
+- 最终 corrective：[PR #539](https://github.com/spirex-ds-dev/ai-cockpit-template/pull/539)，合并提交 `e14e567cf3073272727392c99084216e00733bfc`；
+- 权威完成事实：[Work Item archive index](../../../.ai/work-items/archive/index.json)；
+- 本轮最终 closure receipt：`target/task-closure-receipts/post-publish-adoption-pr-audit-corrective-20260731.closure.md`。
+
+原计划正文和所有历史计划仍保留；Git 历史可恢复任何本次索引化修改。
 
 ## 历史保留计划
 
