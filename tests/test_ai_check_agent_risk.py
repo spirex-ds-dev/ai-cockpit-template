@@ -340,6 +340,49 @@ def test_agent_risk_rejects_invalid_checkpoint_evidence():
     assert any("requiredChecks is stale" in issue for issue in issues)
 
 
+def test_checkpoint_binding_validation_rejects_stale_contract_before_finish():
+    contract = {
+        "verification": [{"check": "quality", "required": True}],
+        "acceptance": ["done"],
+        "unknowns": [],
+        "checkpointPolicy": {
+            "requiredBeforeFinish": True,
+            "requiredStages": ["before_edit", "before_finish"],
+        },
+    }
+    summary = {
+        "checkpointEvidence": [
+            {
+                "stage": "before_edit",
+                "recorded": True,
+                "contractHash": "old-contract",
+                "acceptanceCount": 1,
+                "unknownCount": 0,
+                "requiredChecks": 2,
+                "requiredChecksPassed": 0,
+            },
+            {
+                "stage": "before_finish",
+                "recorded": True,
+                "contractHash": "new-contract",
+                "acceptanceCount": 1,
+                "unknownCount": 0,
+                "requiredChecks": 1,
+                "requiredChecksPassed": 0,
+            },
+        ]
+    }
+
+    issues = ai_check_agent_risk.validate_checkpoint_bindings(
+        contract, summary, expected_contract_hash="new-contract"
+    )
+
+    assert issues == [
+        "checkpointEvidence[before_edit] contractHash is stale",
+        "checkpointEvidence[before_edit].requiredChecks is stale",
+    ]
+
+
 def test_agent_risk_rejects_missing_checkpoint_and_invalid_counts():
     contract = {
         "verification": [{"check": "quality", "required": True}],

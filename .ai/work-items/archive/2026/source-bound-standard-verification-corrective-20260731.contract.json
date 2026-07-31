@@ -1,0 +1,303 @@
+{
+  "contractVersion": 2,
+  "workItemId": "source-bound-standard-verification-corrective-20260731",
+  "mode": "code",
+  "title": "Integrate source-bound evidence into the standard finish verification engine",
+  "rawUserRequest": "继续。按已确认的根治方案，从最新 origin/main 建立独立纠正工单：删除 ai-finish 的特殊 mandatory evidence 通道，将 sourceBoundEvidence 注入标准验证引擎；修复命令无关的假阳性测试；补齐 PR 前关键文件覆盖率预测与 CI 失败覆盖率证据；通过 focused 验证和一次 project-test 后完成完整 PR、CI、合并、关闭流程。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-architectural-root-correction-approved",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:ad40d022d866988db5b10b0b61fc9d776ba7c0e0a781624c98d0a6ad736b847a"
+  },
+  "declaredIntent": {
+    "summary": "Replace three archived, unmerged corrective attempts with one source-bound finish gate that reuses the standard verification engine and predicts changed critical-file coverage before hosted CI.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation",
+      "software_design"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+    ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.outcome.json",
+    ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.outcome.md",
+    ".ai/cockpit/checks.yaml",
+    ".ai/guards/changed_critical_coverage_policy.json",
+    ".github/workflows/smoke.yml",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "templates/stacks/generic.mk",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_agent_risk.py",
+    "scripts/check_changed_critical_coverage.py",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_changed_critical_coverage.py",
+    "tests/test_ai_check_agent_risk.py",
+    "tests/test_core_gates.py",
+    "tests/test_finish_readiness.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_installer.py",
+    "tests/test_makefile.py",
+    "tests/test_quality_gate_architecture.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Mutating archived Work Item evidence or branch history belonging to PR #519, #520, or #521.",
+    "Lowering total or per-critical-file coverage floors.",
+    "Weakening formatter, lint, source-bound evidence, hosted CI, or aggregate evidence gates.",
+    "Publishing a release or changing release candidate metadata."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30590502495/job/91031545696",
+      "reason": "Hosted #521 template-smoke evidence: all tests passed, but scripts/ai_finish.py critical coverage regressed from the green-main baseline to 84.26%, below the 85% floor."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "The existing run_declared_checks engine already owns command rendering, observability, evidence persistence, ordering, and fail-closed handling."
+    },
+    {
+      "path": "scripts/check_critical_coverage.py",
+      "reason": "Authoritative critical-file floors used by project-test, including the 85% scripts/ai_finish.py floor."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/521",
+      "reason": "Latest archived replacement whose separate mandatory-check lane exposed command-order test coupling and the missing local coverage predictor."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Hosted quality execution and diagnostics upload boundary that currently omits target/coverage.json."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_gate",
+      "test_evidence",
+      "installer_runtime",
+      "ci_observability"
+    ],
+    "reason": "The change affects finish ordering, installed Runtime parity, PR prediction, and hosted failure evidence. A regression could either bypass source-bound evidence or block valid adopter workflows.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user approved the architectural correction after the three failed replacement attempts were analyzed."
+  },
+  "preReviewWarnings": [
+    "Do not copy or modify archived evidence from PR #519-#521.",
+    "Do not add a second mandatory-check execution lane or tests whose generic stub can be consumed by the wrong command.",
+    "The changed-critical coverage predictor supplements but does not replace project-test or hosted CI."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "ai-finish automatically injects sourceBoundEvidence into the standard declared-check execution list when absent, deduplicates an explicit declaration, and executes it before quality and Outcome generation.",
+    "Source-bound registration failure and command failure are fail-closed; source-bound failure prevents quality and Outcome, while a later quality failure is still reached and attributed to quality after source-bound passes.",
+    "Root and installed Runtime PR paths preserve mandatory lint and source-bound evidence while an explicitly unconfigured generic formatter remains optional.",
+    "A lightweight changed-critical coverage command selects declared tests for changed critical scripts, generates a focused coverage report, and enforces the unchanged per-file floor without claiming to replace project-test.",
+    "Hosted smoke diagnostics upload the generated coverage JSON when quality fails or succeeds, in addition to timing and log evidence.",
+    "Focused regressions, formatter, lint, source-bound evidence, governance gates, one local project-test, and all hosted PR checks pass without lowering any quality floor."
+    ,
+    "ai-finish rejects stale Contract/checkpoint bindings before declared verification, Outcome generation, or status stabilization and directs the operator to refresh the implementation checkpoint."
+  ],
+  "guidelines": [
+    "Reuse the standard verification engine rather than creating a parallel mandatory-check path.",
+    "Tests must be command-aware and prove the intended downstream branch rather than accepting any mocked command failure.",
+    "Keep root and installed Runtime behavior aligned while preserving adopter-specific optional formatter configuration.",
+    "Keep critical coverage policy declarative, fail closed on missing mappings or reports, and retain existing floors."
+  ],
+  "intent": {
+    "problem": "Three successive archived PRs fixed symptoms but failed at different hosted boundaries. The latest implementation duplicated the standard verification engine with a special mandatory source-bound lane. That changed command order, allowed generic test stubs to intercept the wrong check, increased critical-file statements, and escaped local lightweight validation because no focused critical-coverage predictor existed.",
+    "constraints": [
+      "Start independently from the exact latest origin/main and preserve failed PRs as audit evidence until a successful replacement closes.",
+      "Do not weaken source-bound evidence, lint, formatter, coverage, hosted CI, or archive immutability.",
+      "Use focused checks during implementation and run project-test once before archive because scripts/ai_finish.py is lifecycle-critical.",
+      "Keep release execution blocked until this corrective lifecycle is merged and closed."
+    ],
+    "rationale": "Injecting a mandatory registered check into the existing ordered verification list removes duplicated control flow and makes all checks share one evidence and failure model. Command-aware tests prevent false positives. A changed-critical predictor catches the same class of coverage regression before hosted CI, while one authoritative project-test remains the final local coverage proof."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized efficiency exception: run focused checks and one project-test instead of the complete local quality graph; hosted CI remains mandatory."
+    },
+    {
+      "check": "projectLint",
+      "required": true
+    },
+    {
+      "check": "projectFormat",
+      "required": true
+    },
+    {
+      "check": "docsMetadata",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly approved continuing the architectural root correction and has authorized the planned corrective Work Items."
+  },
+  "rollbackNote": "Revert this replacement Work Item as one unit; retain the archived evidence and failed PRs for #519-#521.",
+  "scenarioCoverage": [
+    {
+      "scenario": "The active Contract omits sourceBoundEvidence from verification.",
+      "expected": "ai-finish injects the registered check exactly once before quality and Outcome generation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add a failing integration regression around ai_finish.main, then implement standard-list injection and verify exact command order."
+    },
+    {
+      "scenario": "sourceBoundEvidence passes and the required quality or project check fails.",
+      "expected": "The downstream check executes, owns the failure evidence, and no Outcome is generated.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use command-aware test doubles that pass source-bound and fail only the named downstream command."
+    },
+    {
+      "scenario": "A lifecycle-critical script changes but focused tests do not meet its existing per-file coverage floor.",
+      "expected": "The lightweight changed-critical coverage predictor fails before PR creation and identifies the exact file, observed percentage, and unchanged floor.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Create policy and CLI regressions with controlled git diff and coverage fixtures, then run the real predictor for scripts/ai_finish.py."
+    },
+    {
+      "scenario": "Hosted smoke diagnostics are collected after repository quality succeeds or fails.",
+      "expected": "The always-running smoke artifact upload includes target/coverage.json together with timing and repository logs.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Add workflow architecture regression for the always-running upload step and inspect the hosted PR artifact after execution."
+    },
+    {
+      "scenario": "An installed generic adopter has no configured formatter or linter.",
+      "expected": "The unconfigured project tools are skipped explicitly; source-bound evidence and PR ownership checks remain enforced.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run installed Runtime parity and installer regressions, then require hosted installation-smoke."
+    },
+    {
+      "scenario": "The Contract changes after its before_edit checkpoint was recorded.",
+      "expected": "ai-finish rejects the stale binding before declared verification, Outcome generation, or status stabilization and names the checkpoint refresh command.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Unit-test checkpoint binding validation and the ai-finish early-stop command boundary."
+    }
+  ],
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 705
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/source-bound-standard-verification-corrective-20260731.json",
+    "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+    "initialScopeDigest": "6001c084a2cc7370936d0f4966ac19d4adf49f4cfccf52186410db7d06e4d0f4",
+    "contractSkeletonDigest": "7844023f78dd0c0ca7c2aba2d63a97996ca60292b0ae04d2c3f228b8cef2ceeb"
+  }
+}

@@ -1,0 +1,753 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "source-bound-standard-verification-corrective-20260731",
+  "contractPath": ".ai/work-items/archive/2026/source-bound-standard-verification-corrective-20260731.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/source-bound-standard-verification-corrective-20260731.contract.json",
+      "reason": "Declares the independently authorized architectural correction, exact scope, verification exception, and acceptance boundaries."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/source-bound-standard-verification-corrective-20260731.summary.json",
+      "reason": "Maps the implementation, discovered process defects, scenario evidence, verification, and residual hosted risk back to the Contract."
+    },
+    {
+      "path": ".ai/work-items/starts/source-bound-standard-verification-corrective-20260731.json",
+      "reason": "Binds this replacement Work Item to the exact origin/main baseline."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated active Cockpit projection for the corrective Work Item."
+    },
+    {
+      "path": ".ai/cockpit/checks.yaml",
+      "reason": "Registers sourceBoundEvidence as a standard verification check rather than a special runner lane."
+    },
+    {
+      "path": ".ai/guards/changed_critical_coverage_policy.json",
+      "reason": "Declares focused test mappings for every lifecycle-critical script while reusing the authoritative coverage floors."
+    },
+    {
+      "path": ".github/workflows/smoke.yml",
+      "reason": "Uploads target/coverage.json with hosted quality diagnostics on every outcome."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Adds source-bound and changed-critical targets and orders format, lint, focused critical coverage, source-bound evidence, and aggregate PR validation."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Injects and deduplicates sourceBoundEvidence inside the standard declared-check engine, orders it first, prevalidates the full check list, and rejects stale checkpoint bindings before executing declared commands."
+    },
+    {
+      "path": "scripts/ai_check_agent_risk.py",
+      "reason": "Exposes checkpoint binding validation independently from finished-gate validation so ai-finish can fail early without requiring final check results."
+    },
+    {
+      "path": "scripts/check_changed_critical_coverage.py",
+      "reason": "Predicts per-critical-file coverage regressions from committed, staged, unstaged, and untracked PR changes."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Publishes check-source-bound-evidence as part of the installed Runtime target surface."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Runs configured formatter and lint checks plus mandatory source-bound evidence before installed PR aggregation, with explicit unconfigured boundaries."
+    },
+    {
+      "path": "templates/stacks/generic.mk",
+      "reason": "Marks the generic formatter and linter as unconfigured instead of executing placeholder failures."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Proves automatic injection, deduplication, source-bound short-circuiting, downstream quality attribution, pre-execution Contract validation, and stale-checkpoint early stopping with command-aware doubles."
+    },
+    {
+      "path": "tests/test_ai_check_agent_risk.py",
+      "reason": "Proves stale Contract hashes and required-check counts are reported deterministically by the reusable checkpoint binding validator."
+    },
+    {
+      "path": "tests/test_changed_critical_coverage.py",
+      "reason": "Covers mapping selection, floor drift, missing mapping, focused failure diagnostics, dirty-worktree discovery, and predictor execution."
+    },
+    {
+      "path": "tests/test_installed_runtime_parity.py",
+      "reason": "Requires installed Runtime parity for the source-bound target."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Executes the generic adopter PR path and verifies explicit optional-tool messages without placeholder formatter or linter failures."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Proves root PR predictor order and the source-bound Make target command composition."
+    },
+    {
+      "path": "tests/test_quality_gate_architecture.py",
+      "reason": "Requires hosted diagnostics to retain target/coverage.json."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Generated source-bound Capability Truth evidence refreshed after bound implementation and test changes."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Generated machine-readable Japanese assessment refreshed after bound Make, Runtime, and test changes."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Generated human-readable Japanese assessment refreshed from the same machine facts."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Generated documentation-alignment evidence refreshed after source-bound assets changed."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Generated human-readable documentation-alignment report refreshed from the same evidence."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/source-bound-standard-verification-corrective-20260731.outcome.json",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/source-bound-standard-verification-corrective-20260731.outcome.md",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/source-bound-standard-verification-corrective-20260731.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30590502495/job/91031545696",
+    "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/521",
+    "scripts/ai_finish.py",
+    "scripts/check_critical_coverage.py",
+    ".github/workflows/smoke.yml"
+  ],
+  "verification": [
+    {
+      "check": "quality",
+      "result": "not_run"
+    },
+    {
+      "check": "sourceBoundEvidence",
+      "command": "make check-source-bound-evidence",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:08:58.476557+00:00",
+      "exitCode": 0,
+      "durationMs": 168,
+      "outputDigest": "4b3aed28ca693a9a3f7086e87518f6a599b0812c8a62ac43ce178de65b2301cf",
+      "commandHash": "d86740d1d67217b831acef07cf8c7dfdf9a5216b5917b64f95de6e72269f5dc3",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {\"absurdCases\": [{\"caseId\": \"rocket-launch\", \"level\": \"L1\", \"class\": \"world_fact\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"safeAlternative\": \"local dry-run plan\"}, {\"caseId\": \"production-delete\", \"level\": \"L2\", \"class\": \"authority\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"s",
+      "outputTail": "cs_metadata.py\", \"sha256\": \"33424b126bda9beb8055ef35ddf204d09c6533a6a6bfbeb05d699bae1881a318\" }, { \"path\": \"tests/test_guards_and_status.py\", \"sha256\": \"56beafdeec33c14456e487fa298e3473d09dde5b18b94807ca738174f8cd6075\" }, { \"path\": \"tests/test_input_trust.py\", \"sha256\": \"5fc72a69ce0539cd5791c956cd29f68b7647dc4a14b3599eec7314455a3372f3\" }, { \"path\": \"tests/test_input_trust_corpus.py\", \"sha256\": \"a5196c1965c10dc84bb8641cef0128c928d67d506ec2be10a40c5df3f5265dde\" }, { \"path\": \"tests/test_install_wizard.py\", \"sha256\": \"896267c1acde3d6433b0853351a6c814df7b81afa010468ae50429971b1ff686\" }, { \"path\": \"tests/test_japanese_adopter_lifecycle.py\", \"sha256\": \"6e33190d690ed7a4cbcaa168916518ced4e5d018c33f148a8a9e54d102577d83\" }, { \"path\": \"tests/test_japanese_capability.py\", \"sha256\": \"55fda8db695ae4ffc7f47c15ce3efc5d8126692690c39491bca5222e98a04154\" }, { \"path\": \"tests/test_makefile.py\", \"sha256\": \"256963fa31f2058b999a2c071db89c04f64752264a103eef77269385e25df1f2\" }, { \"path\": \"tests/test_task_outcome_multilingual.py\", \"sha256\": \"d0202b172f7f44f228136cc1b18d28cfa2d2f57b13c40f1d151394490d2c9995\" }, { \"path\": \"tests/test_task_outcome_pr_summary.py\", \"sha256\": \"407c8cb2717cb1fc1664d5f706d4a5187720329137f235277d3e7fed87ced239\" }, { \"path\": \"tests/test_trust_layer_docs.py\", \"sha256\": \"8230686f3332b7b670efe8e0cbdb60eac8653618fa80ddf244f79b21f5005ac7\" }, { \"path\": \"tests/test_wizard_localization.py\", \"sha256\": \"a7161e9d05d8bd5a2d7116aff553cf36880776a1b870f7aea241529f65f28d38\" } ] }, \"limitations\": [ \"This assessment does not claim general model fluency, translation quality, or provider behavior.\", \"Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking.\" ], \"scope\": \"bounded repository-governance Japanese handling\", \"workItemId\": \"final-japanese-reassessment-replacement-20260731\", \"workItemRole\": \"final_reassessment\" } PYTHONDONTWRITEBYTECODE=1 python3 scripts/check_pre_release_documentation_alignment.py pre-release documentation alignment passed",
+      "outputBytes": 25234
+    },
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:08:58.619138+00:00",
+      "exitCode": 0,
+      "durationMs": 46,
+      "outputDigest": "a75aa0276ed8837d2d976713092c591688328c4e7016a96aa21aa6b30cbfd592",
+      "commandHash": "f515f1dd21cf7e32ba7965947f8dc55d34c402df2700505ffb8754fdf0dcf45a",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_work_item.py .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json work item contract check passed: .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_work_item.py .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json work item contract check passed: .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "outputBytes": 279
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:08:58.896422+00:00",
+      "exitCode": 0,
+      "durationMs": 124,
+      "outputDigest": "69344863b04733600cd51167c303a9fe71448b6b7d7a0faee9c0adfd413583ed",
+      "commandHash": "6a2f48d2c7dcc9713af8e2e5799855b4fde0b192d8886bd88d6699a7f324578d",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scope.py .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json scope guard passed: 24 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scope.py .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json scope guard passed: 24 changed path(s) covered",
+      "outputBytes": 198
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:08:59.179819+00:00",
+      "exitCode": 0,
+      "durationMs": 197,
+      "outputDigest": "afff14ecb4a8e0e9846ff8964b2b7a2d24d0cc3d35e4ce4eebf52cb3ced139ce",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guards.py --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json [warning] restricted_write: .ai/guards/changed_critical_coverage_policy.json (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. [warning] restricted_write: .ai/cockpit/checks.yaml (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/smoke.yml (.g",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guards.py --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json [warning] restricted_write: .ai/guards/changed_critical_coverage_policy.json (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. [warning] restricted_write: .ai/cockpit/checks.yaml (.ai/**) - AI governance configuration. [warning] restricted_write: .github/workflows/smoke.yml (.github/workflows/**) - CI workflow configuration. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 4 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 711
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json SUMMARY=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:08:59.500691+00:00",
+      "exitCode": 0,
+      "durationMs": 250,
+      "outputDigest": "36e32d88d5df2728bad664eade480c3252d7a4a258ff2eb5b649dfc01458841b",
+      "commandHash": "17d118d2c8795174c66ccb4ddc7725bc97b0916b8d4f14df60a54c39aa4ed60e",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_checkpoint.py --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `source-bound-standard-verification-corrective-20260731` - Contract Hash: `91572b8cd1c5ad46` - Mode: `code` - notCodable: `False` - Execution Decision:",
+      "outputTail": "active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/changed_critical_coverage_policy.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/source-bound-standard-verification-corrective-20260731.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_agent_risk.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/check_changed_critical_coverage.py` — covered by Contract scope - [active_owned] `scripts/install_ai_cockpit.py` — covered by Contract scope - [active_owned] `templates/make/Makefile.ai` — covered by Contract scope - [active_owned] `templates/stacks/generic.mk` — covered by Contract scope - [active_owned] `tests/test_ai_check_agent_risk.py` — covered by Contract scope - [active_owned] `tests/test_changed_critical_coverage.py` — covered by Contract scope - [active_owned] `tests/test_core_gates.py` — covered by Contract scope - [active_owned] `tests/test_installed_runtime_parity.py` — covered by Contract scope - [active_owned] `tests/test_installer.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope - [active_owned] `tests/test_quality_gate_architecture.py` — covered by Contract scope ## Next Action - Run or record required verification: aiAgentRisk",
+      "outputBytes": 8064
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:08:59.698872+00:00",
+      "exitCode": 0,
+      "durationMs": 122,
+      "outputDigest": "5085a02294d037e63a85a9446e1b497345575c36140666510ceb6410262e7a6d",
+      "commandHash": "469fbf5de3bdb0d34e45881fc448ced40107fb5c2cb21c2f3b836b51b25119cd",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_review_policy.py --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json review policy matched 9 path(s) [review] .ai/guards/changed_critical_coverage_policy.json [review] .ai/work-items/starts/source-bound-standard-verification-corrective-20260731.json [review] .ai/cockpit/checks.yaml [review] .ai/cockpit/current_status.md [review] .github/workflows/smoke.yml [review] Makefile [review] scripts/ai_chec",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_review_policy.py --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json review policy matched 9 path(s) [review] .ai/guards/changed_critical_coverage_policy.json [review] .ai/work-items/starts/source-bound-standard-verification-corrective-20260731.json [review] .ai/cockpit/checks.yaml [review] .ai/cockpit/current_status.md [review] .github/workflows/smoke.yml [review] Makefile [review] scripts/ai_check_agent_risk.py [review] scripts/ai_finish.py [review] templates/make/Makefile.ai review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 659
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:08:59.873719+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "7129fb431d5d59c569f22fa9d6ff9b30876753d23ac690d93f14eed56841f07c",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 131
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:00.055974+00:00",
+      "exitCode": 0,
+      "durationMs": 110,
+      "outputDigest": "a2e66935f0b5b56e7ea492a898b6ab49413746bdde21a6663eaa1d889cb54e56",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json SUMMARY=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:00.166559+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "e2efa4162145cc088239116716b5513ef15016ca904fd06f748b3b540eddeb7b",
+      "commandHash": "054a851ff21c94c335d6f4b4e2df46eacf09756e6f102d65c975f224ad7c1a2d",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 322
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json SUMMARY=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:00.273884+00:00",
+      "exitCode": 0,
+      "durationMs": 38,
+      "outputDigest": "444436d0e03bf790f0191ce113043f9f7abe227a3d95994a12f6781fd11b9b69",
+      "commandHash": "fdd44dd36b991d1fdee47d0c56ffbc29296b980f987aafd319180d3ab4f6c6ce",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guidelines.py --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_guidelines.py --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json guidelines compliance check passed: 4 guideline(s) verified",
+      "outputBytes": 327
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:00.587094+00:00",
+      "exitCode": 0,
+      "durationMs": 240,
+      "outputDigest": "07d5effeb5f8e552af486c482a785e2680b865524bc5ddd383d9992cf8cc9495",
+      "commandHash": "3d8c8813d28e1fc99576073018b12437ce6b85deeeed33a028ea526a487f37dc",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json ## Diff Ownership Preview - active_owned: `24`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/checks.yaml` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/changed_cri",
+      "outputTail": "e_owned] `.ai/cockpit/checks.yaml` — covered by Contract scope - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/guards/changed_critical_coverage_policy.json` — covered by Contract scope - [active_owned] `.ai/work-items/starts/source-bound-standard-verification-corrective-20260731.json` — covered by Contract scope - [active_owned] `.github/workflows/smoke.yml` — covered by Contract scope - [active_owned] `Makefile` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `scripts/ai_check_agent_risk.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/check_changed_critical_coverage.py` — covered by Contract scope - [active_owned] `scripts/install_ai_cockpit.py` — covered by Contract scope - [active_owned] `templates/make/Makefile.ai` — covered by Contract scope - [active_owned] `templates/stacks/generic.mk` — covered by Contract scope - [active_owned] `tests/test_ai_check_agent_risk.py` — covered by Contract scope - [active_owned] `tests/test_changed_critical_coverage.py` — covered by Contract scope - [active_owned] `tests/test_core_gates.py` — covered by Contract scope - [active_owned] `tests/test_installed_runtime_parity.py` — covered by Contract scope - [active_owned] `tests/test_installer.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope - [active_owned] `tests/test_quality_gate_architecture.py` — covered by Contract scope",
+      "outputBytes": 2370
+    },
+    {
+      "check": "projectLint",
+      "command": "make ai-cockpit-project-lint",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:07.909780+00:00",
+      "exitCode": 0,
+      "durationMs": 7228,
+      "outputDigest": "823e80291d55d4d253541ebf62d974a5ba8b9c0c781e6f5eb489dbdaa6c78ad0",
+      "commandHash": "28c9fc7cd996abc95550cc455498bf3e64bc2e0182f4cbd0fa08aedd0a0700c0",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check scripts tests All checks passed! PYTHONDONTWRITEBYTECODE=1 python3 -m mypy scripts/*.py Success: no issues found in 130 source files PYTHONDONTWRITEBYTECODE=1 python3 scripts/check_governance_complexity.py [WARNING] pythonLines=68264 exceeds configured maximum 41150 (warning) [WARNING] markdownLines=24652 exceeds configured maximum 9900 (warning) [WARNING] archiveGrowth=704 exceeds configured maximum 200 (warning) governance complexity check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 -m ruff check scripts tests All checks passed! PYTHONDONTWRITEBYTECODE=1 python3 -m mypy scripts/*.py Success: no issues found in 130 source files PYTHONDONTWRITEBYTECODE=1 python3 scripts/check_governance_complexity.py [WARNING] pythonLines=68264 exceeds configured maximum 41150 (warning) [WARNING] markdownLines=24652 exceeds configured maximum 9900 (warning) [WARNING] archiveGrowth=704 exceeds configured maximum 200 (warning) governance complexity check passed: {'trackedFiles': 2906, 'pythonLines': 68264, 'markdownLines': 24652, 'pythonFiles': 270, 'markdownFiles': 275, 'governanceScripts': 100, 'guardFiles': 13, 'archiveContracts': 704, 'archiveSummaries': 704, 'archiveIndexEntries': 704, 'functionComplexity': 47, 'schemaCount': 5, 'guardCount': 13, 'repeatedProtocolFields': 34, 'dependencyCycles': 0, 'installAllowlistEntries': 5, 'archiveGrowth': 704, 'generatedEvidenceRatio': 0.997442} PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile scripts/*.py tests/*.py",
+      "outputBytes": 1010
+    },
+    {
+      "check": "projectFormat",
+      "command": "make ai-cockpit-project-format-check",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:08.025030+00:00",
+      "exitCode": 0,
+      "durationMs": 49,
+      "outputDigest": "bb7d45c2276bc0232b3a82d0e7c8fe0063b610f436c6cac06f53962abec86901",
+      "commandHash": "29859ad1a1523a42b0f2d67cd5309d8ee4e0e0121acef2058d81385e53521fd0",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 -m ruff format --check scripts tests 270 files already formatted git diff --check",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 -m ruff format --check scripts tests 270 files already formatted git diff --check",
+      "outputBytes": 116
+    },
+    {
+      "check": "docsMetadata",
+      "command": "make check-docs-metadata",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:08.325299+00:00",
+      "exitCode": 0,
+      "durationMs": 233,
+      "outputDigest": "9ef4ec4d734a769151143d65a747cffb50e37fa678919fbcf2a784332f68d1c8",
+      "commandHash": "3865c2222dbcd28d7b8123bfe6deb2e6fe0a487794ff37758a6aa211c4e5dfc6",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "7e8ae43c54237d97e765b583583c03490fa782305fddf4470d4571e328018a0e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/check_docs_metadata.py documentation metadata check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/check_docs_metadata.py documentation metadata check passed",
+      "outputBytes": 101
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json SUMMARY=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:08.689936+00:00",
+      "exitCode": 0,
+      "durationMs": 259,
+      "outputDigest": "a1828ac75767bd9536911661aee958e5419efbb486219abe30af83c16b546651",
+      "commandHash": "f989d9955b87e3fe4894d3f15a1611c627d976c1a94bc82d705b945fb935c0b0",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "eef43b56b5dfcbaa00b1d6f946067b1c65380728b6022b8d1f00ca54e7073773",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_generate_status.py .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_generate_status.py .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 424
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json SUMMARY=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:09.240318+00:00",
+      "exitCode": 0,
+      "durationMs": 240,
+      "outputDigest": "5511ffa700fb26c78e2679d4806671cd5c7ae7c972678f64c60ccefe89acf822",
+      "commandHash": "23ca6b0bb786f82f8820d5aa4fa607739222b666450d8970870a3b8dced4d770",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "5c7ec0e89db53fe5f3442256e9b063edd9cafc7194174ec3abad94faf08e7a86",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 352
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:09.605994+00:00",
+      "exitCode": 0,
+      "durationMs": 37,
+      "outputDigest": "1156c9e1bf158b3423d353f4c44540bca1436905785abef51a57014ed23ad1e4",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "d65a8b4d7a5d68c20f5dd6190a02ff1e3fd3bc820b226ff431d9be6edf2972a5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 108
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json SUMMARY=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:09.751130+00:00",
+      "exitCode": 0,
+      "durationMs": 44,
+      "outputDigest": "f096761a3bcc000fc41dc2d167006a3dcffd00922a3c5056e6a383bd400ce8ce",
+      "commandHash": "8c1f5b83aab5048406634af560dda877a33cd6433325058062f8bee1684da862",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "d65a8b4d7a5d68c20f5dd6190a02ff1e3fd3bc820b226ff431d9be6edf2972a5",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_agent_risk.py --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_agent_risk.py --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json --summary .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 332
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json CONTRACT=.ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T00:09:10.869798+00:00",
+      "exitCode": 0,
+      "durationMs": 227,
+      "outputDigest": "fe78bfb505b65a5cd2ee1d01de377eadda83d761f0a7ed0fa22df92cd4031879",
+      "commandHash": "8def326b366584ac2d3b2d5f67b6d9dc0037eda0c7b7a02a161b1d1d6ed9a772",
+      "contractHash": "91572b8cd1c5ad46d4e07ca63778e0b1d8d6939153401cd56c4a4bd870f63981",
+      "commitSha": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+      "executionContractPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "worktreeDigest": "31d278276e0b9397dbd98701da8b05cf3604349fe8641d4cfa477ff11538dae3",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_summary.py .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json ai summary check passed: .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/ai_check_summary.py .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json --contract .ai/work-items/active/source-bound-standard-verification-corrective-20260731.contract.json ai summary check passed: .ai/work-items/active/source-bound-standard-verification-corrective-20260731.summary.json",
+      "outputBytes": 370
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Reuse the standard verification engine rather than creating a parallel mandatory-check path.",
+      "compliant": true,
+      "evidence": "scripts/ai_finish.py injects sourceBoundEvidence into declared_items and executes it only through run_declared_checks."
+    },
+    {
+      "guideline": "Tests must be command-aware and prove the intended downstream branch rather than accepting any mocked command failure.",
+      "compliant": true,
+      "evidence": "tests/test_core_gates.py returns failures only for sourceBoundEvidence, quality, or the explicitly named target and asserts exact execution order."
+    },
+    {
+      "guideline": "Keep root and installed Runtime behavior aligned while preserving adopter-specific optional formatter configuration.",
+      "compliant": true,
+      "evidence": "Root and installed Make regressions pass; generic explicitly marks formatter and linter unconfigured while source-bound evidence remains mandatory."
+    },
+    {
+      "guideline": "Keep critical coverage policy declarative, fail closed on missing mappings or reports, and retain existing floors.",
+      "compliant": true,
+      "evidence": ".ai/guards/changed_critical_coverage_policy.json covers all 21 authoritative critical files and tests reject missing mappings or floor drift."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Local implementation and complete project-test evidence pass. Hosted matrices, artifact availability, and aggregate evidence remain mandatory before merge."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "id": "ARCH-521-STANDARD-ENGINE",
+      "status": "resolved_locally",
+      "detail": "The separate mandatory evidence lane changed command order and allowed generic test doubles to consume the wrong failure. The replacement removes that lane and injects the check into the standard engine."
+    },
+    {
+      "id": "PREDICTOR-DIRTY-WORKTREE",
+      "status": "resolved_locally",
+      "detail": "The first predictor draft inspected only committed base...HEAD changes and falsely reported active edits as not applicable. The final implementation includes committed, staged, unstaged, and untracked paths."
+    },
+    {
+      "id": "INLINE-CONTRACT-SIDE-EFFECT",
+      "status": "resolved_locally",
+      "detail": "Registering sourceBoundEvidence exposed that malformed inline verification could execute an earlier check before rejection. The standard runner now prevalidates the complete list before any command."
+    },
+    {
+      "id": "LATE-STALE-CHECKPOINT-DETECTION",
+      "status": "resolved_locally",
+      "detail": "A Contract verification-list correction after before_edit was detected only during late stabilization. ai-finish now validates checkpoint bindings before declared verification and directs the operator to refresh the checkpoint."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "medium",
+      "area": "hosted_ci",
+      "detail": "Hosted compatibility, installation-smoke, template-smoke, CodeQL, coverage artifact upload, and ci-evidence remain unverified until the replacement PR runs.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "sourceBoundEvidence is injected and deduplicated inside the standard verification engine.",
+      "changed-critical coverage policy retains all existing floors and observes active worktree changes.",
+      "generic adopter skips only explicitly unconfigured project tools while source-bound evidence remains active.",
+      "hosted artifact contains target/coverage.json."
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified",
+    "userVisibleOutput": "verified",
+    "persistence": "verified",
+    "localization": "verified",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "verified"
+  },
+  "userCorrectionsCaptured": [
+    "After three failed replacement attempts, stop symptom patching and correct the architecture before continuing.",
+    "For this plan, avoid repeated full local gates without weakening quality; use focused checks and one project-test.",
+    "Continue through the already authorized plan without stopping for duplicate confirmation."
+  ],
+  "userCorrectionSolidification": [
+    "Removed the special mandatory-check lane and added command-aware regressions for exact failure ownership.",
+    "Added a changed-critical coverage predictor and recorded the single project-test result instead of scheduling a duplicate full test.",
+    "Kept hosted CI, PR, merge, closure, and cleanup mandatory."
+  ],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "91572b8cd1c5ad46",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 18,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "91572b8cd1c5ad46",
+      "acceptanceCount": 7,
+      "unknownCount": 0,
+      "requiredChecks": 18,
+      "requiredChecksPassed": 16
+    }
+  ],
+  "knownGaps": [
+    "Hosted CI and the uploaded artifact are intentionally not claimed before the PR runs."
+  ],
+  "overclaimPrevention": "Local green evidence proves repository behavior only. It does not claim hosted success, provider artifact availability, PR merge, release readiness, or closure before those lifecycle steps occur.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-07-30T23:58:14Z",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/source-bound-standard-verification-corrective-20260731.contract.json",
+          ".ai/work-items/archive/2026/source-bound-standard-verification-corrective-20260731.summary.json"
+        ],
+        "reason": "The approved architectural solution, implementation, and acceptance evidence are bidirectionally mapped."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          "tests/test_core_gates.py",
+          "tests/test_changed_critical_coverage.py",
+          "scripts/check_critical_coverage.py"
+        ],
+        "reason": "Each Contract behavior is represented by executable evidence or a named hosted residual risk."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "Makefile",
+          "templates/make/Makefile.ai",
+          "templates/stacks/generic.mk",
+          "docs/reference/capability-truth-matrix.json"
+        ],
+        "reason": "Root and installed commands match the refreshed source-bound capability evidence."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/japanese-capability-assessment.json",
+          "docs/reference/japanese-capability-assessment.md"
+        ],
+        "reason": "No translated prose behavior changed; generated Japanese capability evidence is current for the modified Runtime and tests."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/pre-release-documentation-alignment.json",
+          "docs/reference/pre-release-documentation-alignment.md",
+          ".ai/work-items/archive/2026/source-bound-standard-verification-corrective-20260731.contract.json",
+          ".ai/work-items/archive/2026/source-bound-standard-verification-corrective-20260731.summary.json"
+        ],
+        "reason": "All three discovered process defects and the remaining hosted boundary are explicit."
+      }
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The active Contract omits sourceBoundEvidence from verification.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_finish_main_stabilizes_successful_work_item",
+        "tests/test_core_gates.py::test_finish_main_deduplicates_explicit_source_bound_check"
+      ],
+      "reason": "The standard list injects source-bound first and executes an explicit duplicate only once."
+    },
+    {
+      "scenario": "sourceBoundEvidence passes and the required quality or project check fails.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_core_gates.py::test_finish_main_records_required_check_failure",
+        "tests/test_core_gates.py::test_finish_main_source_bound_failure_stops_quality_and_outcome"
+      ],
+      "reason": "Command-aware doubles prove exact failure ownership and Outcome short-circuiting."
+    },
+    {
+      "scenario": "A lifecycle-critical script changes but focused tests do not meet its existing per-file coverage floor.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_changed_critical_coverage.py",
+        "make check-changed-critical-coverage AI_BASE_COMMIT=f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+        "scripts/ai_finish.py coverage 86.54% >= 85%",
+        "scripts/ai_check_agent_risk.py coverage 90.51% >= 75%"
+      ],
+      "reason": "The predictor fails on missing mapping, floor drift, missing report, or insufficient focused coverage and passes the real active diff."
+    },
+    {
+      "scenario": "Hosted smoke diagnostics are collected after repository quality succeeds or fails.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_quality_gate_architecture.py::test_smoke_uses_node24_upload_artifact_release_for_quality_diagnostics",
+        ".github/workflows/smoke.yml"
+      ],
+      "reason": "The always-running upload step now includes target/coverage.json; provider execution remains a documented hosted residual risk."
+    },
+    {
+      "scenario": "An installed generic adopter has no configured formatter or linter.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_installer.py::test_generic_installed_pr_gate_skips_only_unconfigured_project_tools",
+        "tests/test_installed_runtime_parity.py::test_installer_runtime_targets_are_one_authoritative_surface"
+      ],
+      "reason": "The adopter receives explicit optional-tool messages while the mandatory source-bound target remains installed and active."
+    },
+    {
+      "scenario": "The Contract changes after its before_edit checkpoint was recorded.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_ai_check_agent_risk.py::test_checkpoint_binding_validation_rejects_stale_contract_before_finish",
+        "tests/test_core_gates.py::test_finish_main_rejects_stale_checkpoint_before_declared_checks"
+      ],
+      "reason": "The binding-only validator runs before declared checks and reports the exact ai-prepare-implementation recovery command."
+    }
+  ],
+  "followUps": [
+    "After successful merge and closure, close PR #519-#521 as superseded audit records and remove only their exact branches and worktrees."
+  ],
+  "unverifiedScenarios": [],
+  "taskOutcome": {
+    "status": "completed_with_warnings",
+    "jsonPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.outcome.json",
+    "markdownPath": ".ai/work-items/active/source-bound-standard-verification-corrective-20260731.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2
+  },
+  "archiveSequence": 704
+}
