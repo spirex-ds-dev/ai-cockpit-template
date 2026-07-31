@@ -13,6 +13,8 @@ keywords:
 
 > **2026-07-25 历史快照（不是当前状态）：** 当时只完成了《AI Cockpit 全面整改开发指示》的收查、确认和计划编制，尚未开始整改。后续工单状态只以本文“当前执行状态”和不可变 Work Item archive 为准。
 
+> **2026-07-31 关闭索引：** 本计划定义的发布前阶段、v0.5.47 发布以及发布后采用 PR 审计 corrective 已完成并关闭。公开发布为 [v0.5.47](https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.47)（tag target `3b383c8bf2b0b13264edbfaa4a40449d1ac48911`）；最后 corrective 为 [PR #539](https://github.com/spirex-ds-dev/ai-cockpit-template/pull/539)，合并提交 `e14e567cf3073272727392c99084216e00733bfc`。完成事实以 [archive index](../../../.ai/work-items/archive/index.json) 与其 Contract、Summary、Outcome、manifest 为准。本文件从“当前执行”压缩为审计叙事，不授权未来任务。
+
 > **For agentic workers:** 每个任务都是一个独立 Work Item。必须按顺序执行；每个任务完成实现与验证、`ai-finish`/归档、push、PR、合并、`ai-close-work-item`、分支清理、默认分支同步和文档对齐后，才允许进入下一个任务。
 
 **目标：** 将 AI Cockpit 收敛为坚固、干净、可信任的 Repository Governance Layer：有证据时允许合理依赖，证据不足或冲突时安全停止，未知和人工决策清楚可见，任务结束后可审查地说明完成内容、发现的问题、避免的风险和剩余风险。
