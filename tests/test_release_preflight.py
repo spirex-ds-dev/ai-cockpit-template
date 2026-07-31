@@ -234,7 +234,9 @@ def _write_json(path: Path, value: dict) -> None:
     path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
 
 
-def _run_release_preflight(repo: Path, source_ref: str) -> subprocess.CompletedProcess[str]:
+def _run_release_preflight(
+    repo: Path, source_ref: str, *, mode: str = "exact-source"
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [
             sys.executable,
@@ -243,6 +245,8 @@ def _run_release_preflight(repo: Path, source_ref: str) -> subprocess.CompletedP
             str(repo),
             "--source-commit",
             source_ref,
+            "--mode",
+            mode,
         ],
         check=False,
         capture_output=True,
@@ -408,6 +412,22 @@ def test_postmerge_preflight_rejects_included_content_after_candidate_merge(tmp_
     assert result.returncode == 1
     assert "release preflight blocked" in result.stderr
     assert "archiveSha256 does not match regenerated archive" in result.stderr
+
+
+def test_repository_readiness_accepts_included_content_after_historical_freeze(tmp_path):
+    repo, fresh, _ = _build_candidate_merge(tmp_path)
+    (repo / "source.txt").write_text("post-merge correction\n", encoding="utf-8")
+    _git(repo, "add", "source.txt")
+    _git(repo, "commit", "-q", "-m", "correction after historical freeze")
+    correction_commit = _git(repo, "rev-parse", "HEAD")
+    _git(repo, "push", "-q", "origin", "main")
+    _git(fresh, "fetch", "-q", "origin", "main:refs/remotes/origin/main")
+    _git(fresh, "checkout", "--detach", "-q", correction_commit)
+
+    result = _run_release_preflight(fresh, "origin/main", mode="repository-readiness")
+
+    assert result.returncode == 0, result.stderr
+    assert "release readiness passed" in result.stdout
 
 
 def test_release_identity_ref_rejects_head():

@@ -487,6 +487,44 @@ def test_release_preflight_requires_current_japanese_capability_evidence(tmp_pat
     assert not marker.exists()
 
 
+def test_release_readiness_uses_japanese_evidence_and_repository_mode(tmp_path):
+    probe = tmp_path / "probe.py"
+    probe.write_text(
+        "#!/usr/bin/env python3\nimport json, sys\nprint(json.dumps({'argv': sys.argv[1:]}))\n",
+        encoding="utf-8",
+    )
+    probe.chmod(0o755)
+
+    result = subprocess.run(
+        ["make", "check-release-readiness", f"PYTHON={probe}"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    records = [json.loads(line) for line in result.stdout.splitlines() if line.startswith("{")]
+    assert records == [
+        {
+            "argv": [
+                "scripts/ai_japanese_capability.py",
+                "--check",
+                "--require-final-reassessment",
+            ]
+        },
+        {
+            "argv": [
+                "scripts/check_release_preflight.py",
+                "--root",
+                ".",
+                "--mode",
+                "repository-readiness",
+            ]
+        },
+    ]
+
+
 def test_makefile_exposes_paired_japanese_status_generation_and_validation():
     makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
 
