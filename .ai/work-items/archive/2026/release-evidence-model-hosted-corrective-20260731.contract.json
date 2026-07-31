@@ -1,0 +1,221 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-evidence-model-hosted-corrective-20260731",
+  "mode": "code",
+  "title": "Repair release evidence Hosted regressions",
+  "baseCommit": "bd1e12dd5250ce56991b44c6a3fba550320c41c9",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue after finding the root cause when the release direction fails to converge. Preserve quality, avoid redundant local full checks under the temporary authorization, and do not merge stale release PRs directly.",
+  "rawRequestSource": {"type":"human","reference":"conversation:2026-07-31-hosted-failure-corrective","capturedAt":"2026-07-31","digest":"sha256:hosted-regression-corrective"},
+  "declaredIntent": {"summary":"Repair the release-evidence root-cause solution after Hosted CI exposed stale candidate supply-chain evidence and insufficient coverage.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "scope": [
+    ".ai/work-items/active/release-evidence-model-hosted-corrective-20260731.contract.json",
+    ".ai/work-items/active/release-evidence-model-hosted-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".github/workflows/release.yml",
+    "Makefile",
+    "scripts/check_release_preflight.py",
+    "scripts/finalize_release_freeze.py",
+    "scripts/check_supply_chain.py",
+    "tests/test_release_preflight.py",
+    "tests/test_release_workflow.py",
+    "tests/test_makefile.py",
+    "tests/test_supply_chain.py",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    "release-state.json",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/superpowers/plans/2026-07-31-release-evidence-model-corrective.md",
+    ".ai/work-items/active/release-evidence-model-hosted-corrective-20260731.outcome.json",
+    ".ai/work-items/active/release-evidence-model-hosted-corrective-20260731.outcome.md"
+  ],
+  "outOfScope": [
+    "Creating, moving, deleting, or publishing any semantic Git tag, GitHub Release, or public asset.",
+    "Merging #528, #529, or failed #534 directly.",
+    "Changing unrelated runtime/product behavior, lowering coverage requirements, or reducing Hosted CI."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Canonical Work Item, PR, release, and closure lifecycle."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30606796671",
+      "reason": "Hosted failure: stale candidate supply-chain baseline and coverage 85.07% below 85.10%."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-evidence-model-corrective-20260731.summary.json",
+      "reason": "Prior root-cause implementation to reproduce in a successor without merging failed PR #534."
+    },
+    {
+      "path": "scripts/check_supply_chain.py",
+      "reason": "Candidate baseline generation and validation semantics."
+    },
+    {
+      "path": "tests/test_release_preflight.py",
+      "reason": "Coverage gap from new release readiness branches."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Authorized release sequence and root-cause convergence requirement."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_identity", "supply_chain_evidence", "coverage_regression", "workflow_regression"],
+    "reason": "A wrong repair could weaken exact-source publication control or mask a genuine coverage regression.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous corrective execution after root-cause analysis; this task must stop if an exact-source or no-publication invariant cannot be proved."
+  },
+  "preReviewWarnings": [
+    "Do not lower the 85.10% coverage gate; add missing regression coverage.",
+    "Refresh candidate supply-chain evidence through its authoritative generator, never by hand.",
+    "Keep strict runtime exact-source validation and no-publication rehearsal boundaries unchanged."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The successor includes the release-readiness/runtime-evidence split and rehearsal controls from the failed #534 without merging that failed PR.",
+    "Candidate SBOM, provenance, release digest, and release projection are refreshed through scripts/check_supply_chain.py refresh and pass validation.",
+    "Regression tests cover the release preflight branches sufficiently for total coverage to meet or exceed 85.10%, without lowering the threshold.",
+    "Focused tests, required local governance gates, and successor Hosted CI demonstrate the repair; no tag, Release, or public asset is created."
+  ],
+  "guidelines": [
+    "Maintain fail-closed behavior at every publication boundary.",
+    "Use authoritative generators for derived supply-chain evidence.",
+    "Do not weaken coverage or Hosted CI to make the corrective PR pass.",
+    "Keep a rehearsal incapable of creating tags, Releases, or public assets."
+  ],
+  "intent": {
+    "problem": "Hosted run 30606796671 rejected #534 because the release workflow change changed SBOM action evidence without refreshing candidate supply-chain baselines, and total coverage fell to 85.07% below the 85.10% required threshold. The prior PR was already archived and must not be silently modified or merged after a failed Hosted run.",
+    "constraints": ["Recreate the root-cause release-evidence design from origin/main in this independent Work Item.", "Refresh dependent supply-chain candidate evidence only with the authoritative generator.", "Add tests rather than weakening the coverage threshold.", "Run focused local verification under the documented temporary efficiency exception and require full Hosted CI.", "Do not publish a release or directly merge stale #528/#529/#534."],
+    "rationale": "A successor cleanly preserves one archived Work Item per PR, converts Hosted evidence into explicit regression coverage, and avoids the former release-freeze recursion."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized focused-verification exception; this does not waive required governance gates or full Hosted CI."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized continuous root-cause repair of repository governance while reserving actual publication for a later release step."
+  },
+  "rollbackNote": "If the successor cannot prove exact runtime evidence, no-publication rehearsal isolation, current supply-chain evidence, and coverage without lowering requirements, stop and preserve the diagnosis rather than merging a partial repair.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 713
+    }
+  },
+  "scenarioCoverage": [
+    {"scenario":"Release workflow/action metadata changes after a candidate baseline.","expected":"The authoritative refresh command updates all dependent SBOM, provenance, digest, and release projection artifacts; validation passes without hand-editing.","verificationPlan":"Run supply-chain refresh then validate sbom, provenance, and release; use the existing regression test.","required":true,"status":"unverified","evidence":[]},
+    {"scenario":"A new release readiness/runtime exact-source branch is added.","expected":"Total coverage remains at or above 85.10% and the added branches have focused regression tests.","verificationPlan":"Add focused preflight tests and run the project coverage test through Hosted CI.","required":true,"status":"unverified","evidence":[]},
+    {"scenario":"Successor PR runs Hosted CI.","expected":"template-smoke, installation-smoke, release-evidence, and aggregate ci-evidence all succeed before merge.","verificationPlan":"Inspect the successor PR checks and exact Action logs.","required":true,"status":"unverified","evidence":[]},
+    {"scenario":"Release rehearsal is later dispatched.","expected":"It shares exact-source preparation but cannot create tag, Release, or public asset.","verificationPlan":"Retain workflow static tests now; run Hosted rehearsal only after successor PR merge.","required":true,"status":"unverified","evidence":[]}
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-evidence-model-hosted-corrective-20260731.json",
+    "baseCommit": "bd1e12dd5250ce56991b44c6a3fba550320c41c9",
+    "initialScopeDigest": "958dc20a7768494aa6b08d38699591d60debf236948f0239ec5caf82628fa829",
+    "contractSkeletonDigest": "ce2d61bbbbad5b6729235915694af09d78f464c57ebee37456238ce86bf8f113"
+  }
+}

@@ -234,7 +234,9 @@ def _write_json(path: Path, value: dict) -> None:
     path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
 
 
-def _run_release_preflight(repo: Path, source_ref: str) -> subprocess.CompletedProcess[str]:
+def _run_release_preflight(
+    repo: Path, source_ref: str, *, mode: str = "exact-source"
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [
             sys.executable,
@@ -243,6 +245,8 @@ def _run_release_preflight(repo: Path, source_ref: str) -> subprocess.CompletedP
             str(repo),
             "--source-commit",
             source_ref,
+            "--mode",
+            mode,
         ],
         check=False,
         capture_output=True,
@@ -408,6 +412,79 @@ def test_postmerge_preflight_rejects_included_content_after_candidate_merge(tmp_
     assert result.returncode == 1
     assert "release preflight blocked" in result.stderr
     assert "archiveSha256 does not match regenerated archive" in result.stderr
+
+
+def test_repository_readiness_accepts_included_content_after_historical_freeze(tmp_path):
+    repo, fresh, _ = _build_candidate_merge(tmp_path)
+    (repo / "source.txt").write_text("post-merge correction\n", encoding="utf-8")
+    _git(repo, "add", "source.txt")
+    _git(repo, "commit", "-q", "-m", "correction after historical freeze")
+    correction_commit = _git(repo, "rev-parse", "HEAD")
+    _git(repo, "push", "-q", "origin", "main")
+    _git(fresh, "fetch", "-q", "origin", "main:refs/remotes/origin/main")
+    _git(fresh, "checkout", "--detach", "-q", correction_commit)
+
+    result = _run_release_preflight(fresh, "origin/main", mode="repository-readiness")
+
+    assert result.returncode == 0, result.stderr
+    assert "release readiness passed" in result.stdout
+
+
+def test_repository_readiness_keeps_policy_fail_closed_without_freeze_bytes():
+    state = {
+        "state": "candidate_prepared",
+        "releaseTag": "v0.5.45",
+        "previousRelease": "v0.5.44",
+    }
+    release = {"releaseTag": "v0.5.44"}
+    candidate = {"releaseTag": "v0.5.45", "basedOnReleaseTag": "v0.5.44"}
+
+    assert (
+        preflight.validate_repository_readiness(
+            state=state,
+            release=release,
+            candidate=candidate,
+            active_work_items=[],
+            archive_count=201,
+            archive_max=200,
+            archive_enforcement="warning",
+        )
+        == []
+    )
+    issues = preflight.validate_repository_readiness(
+        state=state,
+        release=release,
+        candidate=candidate,
+        active_work_items=["still-active"],
+        archive_count=201,
+        archive_max=200,
+        archive_enforcement="error",
+    )
+    assert "active Work Items remain: still-active" in issues
+    assert "archiveGrowth=201 exceeds configured maximum 200" in issues
+
+
+def test_repository_policy_context_reads_active_work_items_and_warning_policy(tmp_path):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    (active / "z.contract.json").write_text("{}\n", encoding="utf-8")
+    (active / "a.contract.json").write_text("{}\n", encoding="utf-8")
+    archive = tmp_path / ".ai" / "work-items" / "archive" / "2026"
+    archive.mkdir(parents=True)
+    (archive / "one.contract.json").write_text("{}\n", encoding="utf-8")
+    policy = tmp_path / ".ai" / "guards" / "governance_complexity_policy.yaml"
+    policy.parent.mkdir(parents=True)
+    policy.write_text(
+        "max:\n  archiveGrowth: 200\nenforcement:\n  archiveGrowth: warning\n",
+        encoding="utf-8",
+    )
+
+    assert preflight.repository_policy_context(tmp_path) == (
+        ["a", "z"],
+        1,
+        200,
+        "warning",
+    )
 
 
 def test_release_identity_ref_rejects_head():
