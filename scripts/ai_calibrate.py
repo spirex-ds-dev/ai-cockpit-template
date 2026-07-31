@@ -15,6 +15,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from ai_calibration_profiles import load_policy
 from ai_project_profile import BOUNDARY_KEYS, FACT_KEYS, load_profile
 
 CALIBRATION_STAGES = (
@@ -721,13 +722,28 @@ def render_key_list(lines: list[str], indent: str, key: str, items: list[str]) -
 def proposed_profile(report: dict[str, Any]) -> str:
     facts = report.get("detectedFacts", {})
     suggestions = report.get("suggestedBoundaries", {})
+    calibration_policy = load_policy()
     lines = [
         "# Generated proposal. Review facts and suggestions; do not treat this file as approved.",
         "version: 1",
         "repositoryRole: template",
         "",
-        "detectedFacts:",
+        "calibrationProfile:",
+        "  level: lite",
+        "  selectedBy: pending_human",
+        "  selectedAt: pending",
+        "  reasons: []",
+        "  requiredControls:",
     ]
+    lines.extend(f"    - {control}" for control in calibration_policy.required_controls("lite"))
+    lines.append("  deferredControls:")
+    lines.extend(f"    - {control}" for control in calibration_policy.deferred_controls("lite"))
+    lines.extend(
+        [
+            "",
+            "detectedFacts:",
+        ]
+    )
     for key in FACT_KEYS:
         render_key_list(
             lines, "  ", key, values(facts.get(key, []) if isinstance(facts, dict) else [], "value")

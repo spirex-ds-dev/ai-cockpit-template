@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -11,6 +12,21 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def run(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(args, cwd=cwd, text=True, capture_output=True, check=False)
+
+
+def isolated_make_environment() -> dict[str, str]:
+    environment = dict(os.environ)
+    for key in (
+        "AI_BASE_COMMIT",
+        "CONTRACT",
+        "GOVERNANCE_PROFILE",
+        "MAKEFLAGS",
+        "MAKELEVEL",
+        "MFLAGS",
+        "SUMMARY",
+    ):
+        environment.pop(key, None)
+    return environment
 
 
 def clone_adopter_with_remote(tmp_path: Path) -> Path:
@@ -65,21 +81,30 @@ def test_installed_adopter_receives_governance_router_and_profile_targets(tmp_pa
 
     assert installer.install() == 0
     assert (tmp_path / "scripts" / "determine_governance_profile.py").is_file()
+    assert (tmp_path / "scripts" / "ai_calibration_profiles.py").is_file()
     assert (tmp_path / ".ai" / "quality" / "governance-routing.yaml").is_file()
+    assert (tmp_path / ".ai" / "calibration" / "profiles.yaml").is_file()
     makefile_ai = (tmp_path / "Makefile.ai").read_text(encoding="utf-8")
     for target in ("quality-fast:", "quality-standard:", "quality-full:", "quality-release:"):
         assert target in makefile_ai
     assert "scripts/determine_governance_profile.py" in makefile_ai
-    quality = run(
-        tmp_path,
-        "make",
-        "ai-cockpit-quality",
-        f"PYTHON={sys.executable}",
-        "PROJECT_FORMAT_CHECK=true",
-        "PROJECT_TEST=true",
-        "PROJECT_LINT=true",
-        "AI_COCKPIT_PROJECT_FORMAT_CONFIGURED=true",
-        "AI_COCKPIT_PROJECT_LINT_CONFIGURED=true",
+    assert "check-ai-calibration-profile:" in makefile_ai
+    quality = subprocess.run(
+        (
+            "make",
+            "ai-cockpit-quality",
+            f"PYTHON={sys.executable}",
+            "PROJECT_FORMAT_CHECK=true",
+            "PROJECT_TEST=true",
+            "PROJECT_LINT=true",
+            "AI_COCKPIT_PROJECT_FORMAT_CONFIGURED=true",
+            "AI_COCKPIT_PROJECT_LINT_CONFIGURED=true",
+        ),
+        cwd=tmp_path,
+        text=True,
+        capture_output=True,
+        check=False,
+        env=isolated_make_environment(),
     )
     assert quality.returncode == 0, quality.stdout + quality.stderr
     receipt = json.loads(

@@ -33,7 +33,7 @@ GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 	test project-format-check project-test project-lint diff-check quality quality-gates \
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
 check-docs-metadata check-trust-layer-docs check-real-absurd-injection-docs check-governance-complexity \
-	check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
+	check-ai-system-invariants check-ai-project-profile check-ai-calibration-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
 	check-bandit-evidence check-bandit-baseline check-sbom check-provenance check-release-evidence refresh-candidate-release-evidence check-secret-scanning \
 	check-release-distribution check-release-state-consistency check-japanese-capability check-release-readiness check-release-preflight check-ci-release-evidence \
 	check-source-bound-evidence check-changed-critical-coverage \
@@ -115,6 +115,7 @@ help:
 	@printf '%s\n' '  make cockpit-doctor'
 	@printf '%s\n' '  make cockpit-calibrate'
 	@printf '%s\n' '  make cockpit-validate-calibration'
+	@printf '%s\n' '  make check-ai-calibration-profile [ARGS="--previous-level standard"]'
 	@printf '%s\n' '  make check-release-distribution  # networked public release contract'
 	@printf '%s\n' '  make check-trust-schemas'
 	@printf '%s\n' '  make check-trust-guards'
@@ -309,6 +310,9 @@ cockpit-validate-calibration:
 
 check-ai-project-profile:
 	$(AI_PYTHON) scripts/ai_calibrate.py validate --profile .ai/project_profile.yaml --confirmed
+
+check-ai-calibration-profile:
+	$(AI_PYTHON) scripts/ai_calibration_profiles.py --profile "$(or $(PROFILE),.ai/project_profile.yaml)" $(ARGS)
 
 check-ai-guard-calibration: check-ai-project-profile
 	$(AI_PYTHON) scripts/ai_check_guard_calibration.py --root .

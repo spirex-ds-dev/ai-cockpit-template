@@ -1,0 +1,199 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-05-hosted-coverage-recovery",
+  "mode": "code",
+  "title": "Restore cross-platform calibration profile coverage margin",
+  "baseCommit": "be92609dc49b08beb12bd4d630f3815c1084ff31",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-05-hosted-coverage-recovery.contract.json",
+    ".ai/work-items/active/wi-05-hosted-coverage-recovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-05-hosted-coverage-recovery.outcome.json",
+    ".ai/work-items/active/wi-05-hosted-coverage-recovery.outcome.md",
+    "tests/test_calibration_profiles.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Lowering or changing the 85.10 coverage threshold",
+    "Changing calibration-profile production behavior or public documentation",
+    "Rewriting the immutable WI05 calibration-profiles archive"
+  ],
+  "sources": [
+    {
+      "path": "github:pull/546#job-91264927058",
+      "reason": "Hosted Linux template-smoke completed all 1728 tests but measured 85.06% coverage against the unchanged 85.10% floor."
+    },
+    {
+      "path": "scripts/ai_calibration_profiles.py",
+      "reason": "The new validator has deterministic CLI receipt, error, and load paths that are not yet directly exercised."
+    },
+    {
+      "path": "tests/test_calibration_profiles.py",
+      "reason": "The focused owner for calibration-profile policy and CLI behavior."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "cross_platform_coverage",
+      "hosted_ci"
+    ],
+    "reason": "The behavior passes locally and on Hosted, but Linux platform branches reduce aggregate coverage below the unchanged floor; recovery must add real behavioral coverage rather than tune policy.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "This recovery changes only focused tests and generated lifecycle evidence."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Hosted evidence identifies one deterministic coverage margin and the user pre-authorized bounded CI recovery decisions."
+  },
+  "preReviewWarnings": [
+    "Confirm the recovery covers real CLI behavior and failure receipts.",
+    "Confirm the 85.10 threshold remains unchanged.",
+    "Confirm the original WI05 archive remains byte-for-byte unchanged."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Focused tests directly exercise successful calibration-profile CLI validation, output-receipt persistence, and malformed Project Profile failure reporting.",
+    "The full local suite remains green with aggregate coverage above 85.10% without changing coverage configuration or production behavior.",
+    "The recovery is archived separately without modifying the immutable WI05 predecessor archive, then replacement Hosted checks pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "PR #546 template-smoke ran all 1728 tests successfully on Linux but aggregate coverage was 85.06%, below the unchanged 85.10% floor; macOS locally measured exactly 85.10% because platform-only branches differ.",
+    "constraints": [
+      "Do not lower or round the coverage threshold.",
+      "Add only meaningful tests for existing WI05 behavior.",
+      "Do not change production behavior or rewrite the archived WI05 evidence.",
+      "Keep the recovery in the existing PR branch so replacement Hosted evidence binds to the new head."
+    ],
+    "rationale": "Direct CLI and error-receipt tests close untested public execution paths in the new validator and provide stable cross-platform coverage margin without weakening quality policy."
+  },
+  "rawUserRequest": "Continue every Work Item through Hosted CI, merge, closure, and cleanup; fix bounded Hosted failures without pausing unless a true human decision or external permission is required.",
+  "rawRequestSource": {"type": "human", "reference": "user-goal:continue-all-work-items-and-hosted-recovery", "capturedAt": "2026-08-01", "digest": "sha256:3a9cc784273f9748df6f58bcfe9daafdd54a0c72af7bf9fe695d10e6b6d76d2a"},
+  "declaredIntent": {"summary": "Restore cross-platform coverage margin for WI05 through meaningful validator CLI tests.", "requestedCapabilities": ["ai_governance", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "A valid confirmed Project Profile is validated through the calibration-profile CLI with an output receipt.", "expected": "The CLI returns success and persists a passed receipt with exact profile and policy references.", "required": true, "status": "verified", "evidence": ["tests/test_calibration_profiles.py::test_cli_validates_confirmed_profile_and_writes_passed_receipt", "9 focused tests passed"], "verificationPlan": "Add a focused main() regression and run tests/test_calibration_profiles.py."},
+    {"scenario": "The CLI receives a malformed or missing Project Profile.", "expected": "The CLI returns failure, emits a bounded error, and persists a blocked receipt when requested.", "required": true, "status": "verified", "evidence": ["tests/test_calibration_profiles.py::test_cli_blocks_malformed_project_profile_and_persists_failure_receipt", "1730 project tests passed at 85.26% coverage"], "verificationPlan": "Add malformed and missing input regressions and run the full project suite with coverage."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all bounded implementation, governance, PR, merge, archive, and cleanup decisions needed to complete every Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 738
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-05-hosted-coverage-recovery.json",
+    "baseCommit": "be92609dc49b08beb12bd4d630f3815c1084ff31",
+    "initialScopeDigest": "976ca22f8e724ac0c2e919fbc71465a8b222ae5552079f38cb680acc656b1e0d",
+    "contractSkeletonDigest": "2d9bb39956aaabc9297e4c1416b646479d3a4ccd2afb86f910baa5f13e258e59"
+  }
+}

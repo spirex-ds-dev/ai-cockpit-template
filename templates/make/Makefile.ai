@@ -28,7 +28,7 @@ AI_COCKPIT_RELEASE_CHECK ?= printf '%s\n' 'ERROR: Release verification is not co
 GOVERNANCE_PROFILE ?=
 GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 
-.PHONY: ai-help ai-doctor ai-onboard cockpit-doctor cockpit-calibrate cockpit-calibrate-session cockpit-calibration-inventory cockpit-validate-calibration check-ai-project-profile check-ai-guard-calibration check-ai-adoption-ready \
+.PHONY: ai-help ai-doctor ai-onboard cockpit-doctor cockpit-calibrate cockpit-calibrate-session cockpit-calibration-inventory cockpit-validate-calibration check-ai-project-profile check-ai-calibration-profile check-ai-guard-calibration check-ai-adoption-ready \
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality quality-fast quality-standard quality-full quality-release \
 	check-capability-truth check-source-bound-evidence \
 	ai-start ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
@@ -45,6 +45,7 @@ ai-help:
 	@printf '%s\n' '  make cockpit-calibrate-session ARGS="start --session-id <id>"'
 	@printf '%s\n' '  make cockpit-calibration-inventory [ARGS="--output target/calibration-inventory.json"]'
 	@printf '%s\n' '  make cockpit-validate-calibration'
+	@printf '%s\n' '  make check-ai-calibration-profile [ARGS="--previous-level standard"]'
 	@printf '%s\n' '  make check-ai-guard-calibration'
 	@printf '%s\n' '  make check-ai-adoption-ready'
 	@printf '%s\n' '  make template-adoption-ready  # explicit template-maintenance readiness mode'
@@ -206,6 +207,9 @@ cockpit-validate-calibration:
 
 check-ai-project-profile:
 	$(AI_PYTHON) scripts/ai_calibrate.py validate --profile .ai/project_profile.yaml --confirmed
+
+check-ai-calibration-profile:
+	$(AI_PYTHON) scripts/ai_calibration_profiles.py --profile "$(or $(PROFILE),.ai/project_profile.yaml)" $(ARGS)
 
 check-docs-metadata:
 	$(AI_PYTHON) scripts/check_docs_metadata.py
