@@ -8,6 +8,7 @@ ARGS ?=
 TASK ?=
 TITLE ?=
 MODE ?= investigate
+SKIP_QUALITY ?= false
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 AI_PYTHON = PYTHONDONTWRITEBYTECODE=1 $(PYTHON)
 override AI_COCKPIT_MAKE_ENTRYPOINT := $(firstword $(MAKEFILE_LIST))
@@ -33,6 +34,7 @@ check-docs-metadata check-trust-layer-docs check-real-absurd-injection-docs chec
 	check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
 	check-bandit-evidence check-bandit-baseline check-sbom check-provenance check-release-evidence refresh-candidate-release-evidence check-secret-scanning \
 	check-release-distribution check-release-state-consistency check-japanese-capability check-release-preflight check-ci-release-evidence \
+	check-source-bound-evidence check-changed-critical-coverage \
 	check-lockfile-reproducibility \
 	check-quality-architecture \
 	check-deprecated-assets \
@@ -162,6 +164,7 @@ delusion-test-gate:
 	$(AI_PYTHON) -m pytest -q tests/test_delusion_scenarios.py tests/test_unsupported_claim_regression.py
 
 project-lint:
+	$(AI_PYTHON) scripts/check_dev_tool_versions.py --manifest requirements-dev.in --tool ruff
 	$(AI_PYTHON) -m ruff check scripts tests
 	$(AI_PYTHON) -m mypy scripts/*.py
 	$(AI_PYTHON) scripts/check_governance_complexity.py
@@ -193,6 +196,14 @@ check-release-state-consistency:
 
 check-japanese-capability:
 	$(AI_PYTHON) scripts/ai_japanese_capability.py --check
+
+check-source-bound-evidence:
+	$(AI_PYTHON) scripts/ai_capability_truth.py
+	$(AI_PYTHON) scripts/ai_japanese_capability.py --check --require-final-reassessment
+	$(AI_PYTHON) scripts/check_pre_release_documentation_alignment.py
+
+check-changed-critical-coverage:
+	$(AI_PYTHON) scripts/check_changed_critical_coverage.py --base "$(AI_BASE_COMMIT)"
 
 check-release-preflight:
 	$(AI_PYTHON) scripts/ai_japanese_capability.py --check --require-final-reassessment
@@ -654,6 +665,9 @@ check-ai-pr-core:
 check-ai-pr:
 	@set -e; \
 		$(AI_NESTED_MAKE) project-format-check; \
+		$(AI_NESTED_MAKE) project-lint; \
+		$(AI_NESTED_MAKE) check-changed-critical-coverage AI_BASE_COMMIT="$(AI_BASE_COMMIT)"; \
+		$(AI_NESTED_MAKE) check-source-bound-evidence; \
 		if test -f scripts/check_governance_complexity.py && test -f .ai/guards/governance_complexity_policy.yaml; then \
 			$(AI_PYTHON) scripts/check_governance_complexity.py; \
 		fi; \
@@ -662,4 +676,4 @@ check-ai-pr:
 ai-finish:
 	@# ARCHIVE is a one-shot lifecycle request. Do not let Make propagate it into
 	@# nested project/test invocations, where it could archive an unrelated Work Item.
-	env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES REPORT_LANGUAGE= $(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)" $(if $(filter true,$(ARCHIVE)),--archive) $(if $(REPORT_LANGUAGE),--language "$(REPORT_LANGUAGE)")
+	env -u ARCHIVE -u MAKEFLAGS -u MAKEOVERRIDES REPORT_LANGUAGE= $(AI_PYTHON) scripts/ai_finish.py --task "$(TASK)" $(if $(filter true,$(SKIP_QUALITY)),--skip-quality) $(if $(filter true,$(ARCHIVE)),--archive) $(if $(REPORT_LANGUAGE),--language "$(REPORT_LANGUAGE)")

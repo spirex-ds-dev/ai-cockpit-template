@@ -1035,16 +1035,137 @@ def test_finish_main_records_required_check_failure(tmp_path, monkeypatch):
     monkeypatch.setattr(
         ai_finish,
         "render_check_command",
-        lambda *_args, **_kwargs: ("make quality", ["make", "quality"]),
+        lambda check, **_kwargs: (f"make {check}", ["make", check]),
     )
-    monkeypatch.setattr(ai_finish, "run", lambda _command: (3, 7, "quality failed"))
+    executed = []
+
+    def fail_quality(command, **_kwargs):
+        executed.append(command)
+        if command == ["make", "quality"]:
+            return 3, 7, "quality failed"
+        return 0, 1, "passed"
+
+    monkeypatch.setattr(ai_finish, "run", fail_quality)
     monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
     assert ai_finish.main() == 3
+    assert executed == [["make", "sourceBoundEvidence"], ["make", "quality"]]
     recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
-    assert recorded[0]["result"] == "failed"
-    assert recorded[0]["exitCode"] == 3
+    assert [item["check"] for item in recorded] == ["sourceBoundEvidence", "quality"]
+    assert recorded[0]["result"] == "passed"
+    assert recorded[1]["result"] == "failed"
+    assert recorded[1]["exitCode"] == 3
+
+
+def test_finish_main_rejects_stale_checkpoint_before_declared_checks(tmp_path, monkeypatch, capsys):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    contract = active / "task.contract.json"
+    summary = active / "task.summary.json"
+    contract.write_text(
+        json.dumps(
+            {
+                "contractVersion": 2,
+                "workItemId": "task",
+                "acceptance": ["done"],
+                "unknowns": [],
+                "checkpointPolicy": {
+                    "requiredBeforeFinish": True,
+                    "requiredStages": ["before_edit"],
+                },
+                "verification": [{"check": "quality", "required": True}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    summary.write_text(
+        json.dumps(
+            {
+                "verification": [],
+                "checkpointEvidence": [
+                    {
+                        "stage": "before_edit",
+                        "recorded": True,
+                        "contractHash": "stale",
+                        "acceptanceCount": 1,
+                        "unknownCount": 0,
+                        "requiredChecks": 1,
+                        "requiredChecksPassed": 0,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "ensure_work_item_branch", lambda: None)
+    monkeypatch.setattr(ai_finish, "preview", lambda **_kwargs: [])
+    executed = []
+
+    def run(command, **_kwargs):
+        executed.append(command)
+        return 0, 1, "passed"
+
+    monkeypatch.setattr(ai_finish, "run", run)
+    monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+
+    assert ai_finish.main() == 2
+    assert executed == []
+    error = capsys.readouterr().err
+    assert "checkpointEvidence[before_edit] contractHash is stale" in error
+    assert "make ai-prepare-implementation" in error
+
+
+def test_finish_main_source_bound_failure_stops_quality_and_outcome(tmp_path, monkeypatch):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    contract = active / "task.contract.json"
+    summary = active / "task.summary.json"
+    contract.write_text(
+        json.dumps(
+            {
+                "contractVersion": 2,
+                "workItemId": "task",
+                "verification": [{"check": "quality", "required": True}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(
+        ai_finish,
+        "render_check_command",
+        lambda check, **_kwargs: (f"make {check}", ["make", check]),
+    )
+    executed = []
+
+    def fail_source_bound(command, **_kwargs):
+        executed.append(command)
+        if command == ["make", "sourceBoundEvidence"]:
+            return 4, 2, "stale evidence"
+        return 0, 1, "passed"
+
+    monkeypatch.setattr(ai_finish, "run", fail_source_bound)
+    monkeypatch.setattr(
+        ai_finish,
+        "run_task_outcome_pipeline",
+        lambda *_args, **_kwargs: pytest.fail("Outcome must not run after source-bound failure"),
+    )
+    monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+
+    assert ai_finish.main() == 4
+    assert executed == [["make", "sourceBoundEvidence"]]
+    recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
+    assert [(item["check"], item["result"]) for item in recorded] == [
+        ("sourceBoundEvidence", "failed")
+    ]
 
 
 def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
@@ -1085,13 +1206,61 @@ def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
     assert ai_finish.main() == 0
     # Status is regenerated before each status-derived assertion so persisted
     # verification evidence cannot invalidate the projection it is checking.
-    assert len(executed) == 12
-    assert executed[0] == ["make", "quality"]
+    assert len(executed) == 13
+    assert executed[0] == ["make", "sourceBoundEvidence"]
+    assert executed[1] == ["make", "quality"]
     assert sum(command[:2] == ["make", "generate-cockpit-status"] for command in executed) == 4
     assert executed[-1][:2] == ["make", "check-ai-change-summary"]
     recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
     assert all(item["result"] == "passed" for item in recorded)
-    assert {item["check"] for item in recorded} >= {"quality", "aiStatus", "aiSummary"}
+    assert {item["check"] for item in recorded} >= {
+        "sourceBoundEvidence",
+        "quality",
+        "aiStatus",
+        "aiSummary",
+    }
+
+
+def test_finish_main_deduplicates_explicit_source_bound_check(tmp_path, monkeypatch):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    contract = active / "task.contract.json"
+    summary = active / "task.summary.json"
+    contract.write_text(
+        json.dumps(
+            {
+                "contractVersion": 2,
+                "workItemId": "task",
+                "verification": [
+                    {"check": "sourceBoundEvidence", "required": False},
+                    {"check": "quality", "required": True},
+                    {"check": "sourceBoundEvidence", "required": True},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(
+        ai_finish,
+        "render_check_command",
+        lambda check, **_kwargs: (f"make {check}", ["make", check]),
+    )
+    executed = []
+
+    def fail_quality(command, **_kwargs):
+        executed.append(command)
+        return (3, 7, "quality failed") if command == ["make", "quality"] else (0, 1, "passed")
+
+    monkeypatch.setattr(ai_finish, "run", fail_quality)
+    monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+
+    assert ai_finish.main() == 3
+    assert executed == [["make", "sourceBoundEvidence"], ["make", "quality"]]
 
 
 def test_finish_main_demotes_readiness_when_final_status_check_fails(tmp_path, monkeypatch):
@@ -1212,14 +1381,26 @@ def test_finish_main_reports_unknown_check_id(tmp_path, monkeypatch):
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
+    rendered = []
+
+    def render(check, **_kwargs):
+        rendered.append(check)
+        if check == "missingCheck":
+            raise ValueError("unknown check")
+        return f"make {check}", ["make", check]
+
+    monkeypatch.setattr(ai_finish, "render_check_command", render)
+    executed = []
     monkeypatch.setattr(
         ai_finish,
-        "render_check_command",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(ValueError("unknown check")),
+        "run",
+        lambda command, **_kwargs: executed.append(command) or (0, 1, "passed"),
     )
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
     assert ai_finish.main() == 2
+    assert rendered == ["sourceBoundEvidence", "missingCheck"]
+    assert executed == [["make", "sourceBoundEvidence"]]
 
 
 def test_finish_main_fails_when_archive_step_fails(tmp_path, monkeypatch):
@@ -1380,6 +1561,13 @@ def test_finish_main_rejects_inline_command_verification(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(
+        ai_finish,
+        "run",
+        lambda *_args, **_kwargs: pytest.fail(
+            "Malformed verification must be rejected before any command executes"
+        ),
+    )
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
     assert ai_finish.main() == 2

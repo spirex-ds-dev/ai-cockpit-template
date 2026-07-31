@@ -1,0 +1,212 @@
+{
+  "contractVersion": 2,
+  "workItemId": "hosted-bandit-guard-corrective-20260731",
+  "mode": "code",
+  "title": "Correct Hosted Bandit baseline drift without weakening security",
+  "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "继续完成根因整改，不要停在表面修复；减少重复全量测试但不能降低质量，所有流程问题应落地为可验证的防复发机制。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-continue-root-correction",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:6337ec3053b29d2e8bd4b948cec1b07afd6cadc9b48291101a2c54ee23fc1be9"
+  },
+  "declaredIntent": {
+    "summary": "Replace failed #523 from exact origin/main, preserve its source-bound and local/Hosted Ruff parity correction, and remove the five newly introduced Bandit low-risk findings through narrowly justified fixed-command annotations rather than accepting baseline drift.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/hosted-bandit-guard-corrective-20260731.contract.json",
+    ".ai/work-items/active/hosted-bandit-guard-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/checks.yaml",
+    ".ai/guards/changed_critical_coverage_policy.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/hosted-bandit-guard-corrective-20260731.outcome.json",
+    ".ai/work-items/active/hosted-bandit-guard-corrective-20260731.outcome.md",
+    ".github/workflows/smoke.yml",
+    "Makefile",
+    "scripts/ai_check_agent_risk.py",
+    "scripts/ai_finish.py",
+    "scripts/check_changed_critical_coverage.py",
+    "scripts/check_dev_tool_versions.py",
+    "scripts/install_ai_cockpit.py",
+    "templates/make/Makefile.ai",
+    "templates/stacks/generic.mk",
+    "tests/test_ai_check_agent_risk.py",
+    "tests/test_changed_critical_coverage.py",
+    "tests/test_core_gates.py",
+    "tests/test_dev_tool_versions.py",
+    "tests/test_installed_runtime_parity.py",
+    "tests/test_installer.py",
+    "tests/test_makefile.py",
+    "tests/test_quality_gate_architecture.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Rewriting failed archive evidence or outcomes owned by PR #522 or #523.",
+    "Updating .ai/cockpit/bandit_low_risk_baseline.json to accept the five new findings.",
+    "Weakening Bandit, Ruff, coverage, source-bound, CI, or archive requirements.",
+    "Publishing a release or changing release candidate metadata."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30593768093/job/91041533382",
+      "reason": "Hosted #523 template-smoke: 1614 tests passed and coverage met threshold, then check-bandit-baseline failed with expected count 116 versus actual 121."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/523",
+      "reason": "Failed archived replacement that must remain immutable audit evidence."
+    },
+    {
+      "path": ".ai/cockpit/bandit_low_risk_baseline.json",
+      "reason": "Authoritative low-risk Bandit baseline: count 116 and digest a4d1e8d5."
+    },
+    {
+      "path": "scripts/check_changed_critical_coverage.py",
+      "reason": "New fixed-list Git and Python test invocations contributed B404/B603 findings."
+    },
+    {
+      "path": "scripts/check_dev_tool_versions.py",
+      "reason": "New fixed interpreter-module version query contributed B404/B603 findings."
+    },
+    {
+      "path": "scripts/ai_verification_context.py",
+      "reason": "Existing repository reference for narrowly reasoned B404/B603/B607 nosec annotations on fixed list-form Git invocation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["security_baseline", "hosted_ci", "archive_replacement", "governance_gate"],
+    "reason": "The corrective delivery reproduces an already-tested architecture and changes security scanner treatment. A baseline update would conceal newly introduced process execution findings; annotations must be narrow, accurate, and tested.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continued root-cause correction and explicitly requested that plan Work Items proceed without repeated confirmation."
+  },
+  "preReviewWarnings": [
+    "Do not change the Bandit baseline merely to make Hosted CI pass.",
+    "Every nosec annotation must identify the fixed executable and argument-boundary reason; no shell invocation or dynamic executable may be suppressed.",
+    "Do not mutate #523 archive files; deliver a new replacement Work Item and PR from origin/main."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": ["before_edit", "before_finish"],
+    "reason": "Record pre-edit and pre-finish bindings to prevent this replacement from drifting from its exact corrective scope."
+  },
+  "acceptance": [
+    "The #523 source-bound architecture and all associated tests are reproduced from exact origin/main without importing or mutating #523 archive evidence.",
+    "Bandit reports no new findings from scripts/check_changed_critical_coverage.py or scripts/check_dev_tool_versions.py; all five prior B404/B603 findings are handled by precise rationale-bearing annotations for static list-form commands only.",
+    "The existing Bandit baseline remains byte-for-byte unchanged and make check-bandit-baseline passes with count 116 and its existing digest.",
+    "Regression tests prove the version-parity gate still fails on mismatched Ruff and passes under locked Ruff 0.16.0, and changed-critical coverage still covers all Git worktree states.",
+    "Focused regression, Bandit baseline, locked lint, format, source-bound evidence, documentation metadata, governance gates, and changed-critical coverage pass locally without lowering thresholds.",
+    "Hosted template-smoke, installation-smoke, release-evidence, ci-evidence, compatibility, and CodeQL are successful before merge."
+  ],
+  "guidelines": [
+    "Use rationale-bearing nosec annotations only for immutable executable and argument lists; never suppress dynamic process construction or shell execution.",
+    "Preserve the existing Bandit baseline and all quality thresholds; resolve the new scanner findings in source rather than accepting drift.",
+    "Keep source-bound generated evidence synchronized after every bound implementation or test change.",
+    "Keep the failed #523 archive immutable and deliver this as one independent replacement Work Item and PR."
+  ],
+  "intent": {
+    "problem": "PR #523 fixed local/Hosted Ruff parity but its two newly added scripts introduced five low-risk Bandit findings. Hosted quality correctly rejected the resulting count/digest drift from the immutable 116-finding baseline after all 1614 tests and coverage gates had passed. The root cause is missing source-level documentation of fixed process boundaries, not an accepted new security risk or a need to revise the baseline.",
+    "constraints": [
+      "Start from exact current origin/main and do not copy or rewrite #523 archive evidence.",
+      "Do not update the Bandit baseline, lower scanner rules, or use broad nosec suppression.",
+      "Each exception must be restricted to the known static interpreter/Git/pytest list-form invocation and explain why command injection is not introduced.",
+      "Use focused local checks under the recorded temporary efficiency exception; full Hosted quality remains mandatory."
+    ],
+    "rationale": "Source-level, reasoned Bandit annotations preserve a stable baseline and make the exceptional safety argument reviewable at the actual process boundary. A fresh Work Item preserves failed Hosted evidence truth while still delivering the already validated architectural fix."
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": false, "reason": "Temporary user-authorized efficiency exception: focused regression and Bandit baseline run locally; full quality remains mandatory on Hosted CI."},
+    {"check": "projectLint", "required": true},
+    {"check": "projectFormat", "required": true},
+    {"check": "docsMetadata", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized ongoing plan Work Items, root-cause corrections, PR lifecycle, and cleanup without repeated confirmation."
+  },
+  "rollbackNote": "Revert this single replacement as a unit; retain PR #522 and #523 with their failed Hosted evidence until the successful successor has completed lifecycle closure.",
+  "scenarioCoverage": [
+    {
+      "scenario": "Bandit scans the new static process-boundary scripts.",
+      "expected": "No B404/B603 findings are emitted for the five explicitly documented static list-form process boundaries, and the baseline count/digest remain unchanged.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run make check-bandit-baseline and inspect Bandit JSON filtered to the two new scripts."
+    },
+    {
+      "scenario": "Ruff version parity runs locally under a mismatch and the locked environment.",
+      "expected": "The mismatch fails before Ruff rule evaluation; locked Ruff 0.16.0 passes project-lint.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run tests/test_dev_tool_versions.py, tests/test_makefile.py, a real mismatch command, and locked project-lint."
+    },
+    {
+      "scenario": "Lifecycle-critical scripts change in committed, staged, unstaged, or untracked state.",
+      "expected": "The focused predictor selects mapped tests and enforces authoritative critical coverage floors.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run tests/test_changed_critical_coverage.py and make check-changed-critical-coverage against the recorded base."
+    },
+    {
+      "scenario": "Hosted smoke evaluates the replacement.",
+      "expected": "template-smoke, installation-smoke, release-evidence, and ci-evidence all succeed with exact required-job evidence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Inspect the successor PR's GitHub Actions run and aggregate evidence after push."
+    }
+  ],
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 705}},
+  "startReceipt": {
+    "path": ".ai/work-items/starts/hosted-bandit-guard-corrective-20260731.json",
+    "baseCommit": "f0dcb51576ac7b3eeab5d2c280376d6b9805317f",
+    "initialScopeDigest": "a79e01a63a022c68f7cb737807a11ebfebfac06259db66b05ea452b06cc9539e",
+    "contractSkeletonDigest": "cf5d2bf87de1e0ad298e3206a9d5ff7ae60b02bf5b231272629a1dfaaf0dd245"
+  }
+}

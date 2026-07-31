@@ -302,6 +302,8 @@ def archive_next_steps(task: str) -> str:
 
 def verification_priority(item: dict[str, Any]) -> int:
     check_id = verification_key(item)
+    if check_id == "sourceBoundEvidence":
+        return 0
     if check_id == "aiStatus":
         return 20
     if check_id == "aiStatusCheck":
@@ -326,6 +328,27 @@ def finish_execution_priority(item: dict[str, Any]) -> int:
 STABILIZATION_CHECKS = frozenset(
     {"aiStatus", "aiStatusCheck", "aiStatusConsistency", "aiAgentRisk", "aiSummary"}
 )
+MANDATORY_VERIFICATION_CHECKS = ("sourceBoundEvidence",)
+
+
+def inject_mandatory_verification_checks(
+    declared_items: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Return one required standard-engine item for every mandatory check."""
+    mandatory_items: dict[str, dict[str, Any]] = {
+        check_id: {"check": check_id, "required": True}
+        for check_id in MANDATORY_VERIFICATION_CHECKS
+    }
+    ordinary_items: list[dict[str, Any]] = []
+    for item in declared_items:
+        check_id = verification_key(item)
+        if check_id not in mandatory_items:
+            ordinary_items.append(item)
+            continue
+        mandatory_item = dict(item)
+        mandatory_item["required"] = True
+        mandatory_items[check_id] = mandatory_item
+    return [*mandatory_items.values(), *ordinary_items]
 
 
 def _outcome_paths(task: str) -> tuple[Path, Path]:
@@ -573,16 +596,17 @@ def run_declared_checks(
     obs: Any,
 ) -> int:
     """Run declared checks and persist transactional verification evidence."""
-    transactional_markers_written = False
-    outcome_requested = True
     for item in declared_items:
-        check_id = verification_key(item)
-        if not check_id or "command" in item:
+        if not verification_key(item) or "command" in item:
             print(
                 "ERROR: contractVersion 2 verification must use registered check IDs only",
                 file=sys.stderr,
             )
             return 2
+    transactional_markers_written = False
+    outcome_requested = True
+    for item in declared_items:
+        check_id = verification_key(item)
         # These checks attest self-referential Summary/Status artifacts.  They
         # run together after ordinary verification has been recorded, where
         # each state write can be followed by a fresh Status projection.
@@ -717,6 +741,23 @@ def main() -> int:
             return preflight_code
     contract_hash = hashlib.sha256(contract_path.read_bytes()).hexdigest()
     commit_sha = current_head()
+    from ai_check_agent_risk import validate_checkpoint_bindings
+
+    checkpoint_issues = validate_checkpoint_bindings(
+        contract_data,
+        load_json(summary_path),
+        expected_contract_hash=contract_hash,
+    )
+    if checkpoint_issues:
+        for issue in checkpoint_issues:
+            print(f"ERROR: {issue}", file=sys.stderr)
+        print(
+            "ERROR: Contract/checkpoint binding is stale; run "
+            f"make ai-prepare-implementation CONTRACT={contract} SUMMARY={summary} "
+            "before retrying ai-finish.",
+            file=sys.stderr,
+        )
+        return 2
     declared = contract_data.get("verification", [])
     if not isinstance(declared, list):
         print("ERROR: Contract verification must be a list", file=sys.stderr)
@@ -724,7 +765,9 @@ def main() -> int:
 
     obs = create_observability(work_item_id=args.task)
     total_start = time.time()
-    declared_items = [item for item in declared if isinstance(item, dict)]
+    declared_items = inject_mandatory_verification_checks(
+        [item for item in declared if isinstance(item, dict)]
+    )
     summary_requests_outcome = True
     declared_items.sort(
         key=finish_execution_priority if summary_requests_outcome else verification_priority
