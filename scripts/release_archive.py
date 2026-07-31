@@ -30,7 +30,19 @@ def _git_archive_members(root: Path, source_commit: str) -> list[tarfile.TarInfo
         return archive.getmembers()
 
 
-def canonical_tar(root: Path, source_commit: str) -> bytes:
+def _worktree_file_bytes(root: Path, relative_path: str) -> bytes:
+    path = root / relative_path
+    current = root
+    for part in Path(relative_path).parts:
+        current /= part
+        if current.is_symlink():
+            raise ValueError("archive worktree member is not a regular file")
+    if not path.is_file():
+        raise ValueError("archive worktree member is not a regular file")
+    return path.read_bytes()
+
+
+def _canonical_tar(root: Path, source_commit: str, *, use_worktree: bool) -> bytes:
     """Serialize Git-selected paths using Python-owned stable tar metadata."""
     members = _git_archive_members(root, source_commit)
     output = io.BytesIO()
@@ -45,17 +57,29 @@ def canonical_tar(root: Path, source_commit: str) -> bytes:
             stable.mtime = 0
             if member.isfile():
                 path = member.name.removeprefix("ai-cockpit/")
-                content = subprocess.run(  # nosec B603 B607
-                    ["git", "-C", str(root), "show", f"{source_commit}:{path}"],
-                    check=True,
-                    stdout=subprocess.PIPE,
-                ).stdout
+                if use_worktree:
+                    content = _worktree_file_bytes(root, path)
+                else:
+                    content = subprocess.run(  # nosec B603 B607
+                        ["git", "-C", str(root), "show", f"{source_commit}:{path}"],
+                        check=True,
+                        stdout=subprocess.PIPE,
+                    ).stdout
                 stable.size = len(content)
                 archive.addfile(stable, io.BytesIO(content))
             else:
                 stable.size = 0
                 archive.addfile(stable)
     return output.getvalue()
+
+
+def canonical_tar(root: Path, source_commit: str) -> bytes:
+    return _canonical_tar(root, source_commit, use_worktree=False)
+
+
+def canonical_tar_from_worktree(root: Path, source_commit: str) -> bytes:
+    """Serialize Git-selected paths using current, regular worktree bytes."""
+    return _canonical_tar(root, source_commit, use_worktree=True)
 
 
 def canonical_archive_bytes(root: Path, source_commit: str) -> bytes:
@@ -65,12 +89,27 @@ def canonical_archive_bytes(root: Path, source_commit: str) -> bytes:
     return output.getvalue()
 
 
+def canonical_archive_bytes_from_worktree(root: Path, source_commit: str) -> bytes:
+    output = io.BytesIO()
+    with gzip.GzipFile(fileobj=output, mode="wb", compresslevel=9, mtime=0) as compressor:
+        compressor.write(canonical_tar_from_worktree(root, source_commit))
+    return output.getvalue()
+
+
 def canonical_source_tree(root: Path, source_commit: str) -> str:
     return hashlib.sha256(canonical_tar(root, source_commit)).hexdigest()
 
 
 def canonical_archive_sha(root: Path, source_commit: str) -> str:
     return hashlib.sha256(canonical_archive_bytes(root, source_commit)).hexdigest()
+
+
+def canonical_source_tree_from_worktree(root: Path, source_commit: str) -> str:
+    return hashlib.sha256(canonical_tar_from_worktree(root, source_commit)).hexdigest()
+
+
+def canonical_archive_sha_from_worktree(root: Path, source_commit: str) -> str:
+    return hashlib.sha256(canonical_archive_bytes_from_worktree(root, source_commit)).hexdigest()
 
 
 def main() -> int:

@@ -1,0 +1,263 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-freeze-coverage-regression-corrective-20260731",
+  "mode": "code",
+  "title": "Restore release-freeze regression coverage",
+  "baseCommit": "7dafd3ca33b712af16d44db8ddaf1a54e62c984b",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue the authorized release plan. Do not bypass the failed Hosted coverage gate; create a corrective Work Item that restores coverage with focused verification, then continue toward release.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continuous-release-authorization",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:continuous-authorized-release-coverage-corrective"
+  },
+  "declaredIntent": {
+    "summary": "Restore the release-freeze correction's lost coverage margin with tests, rather than reducing the 85.10 percent project-test threshold or changing the archived failed Work Item.",
+    "requestedCapabilities": ["ai_governance", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/release-freeze-coverage-regression-corrective-20260731.contract.json",
+    ".ai/work-items/active/release-freeze-coverage-regression-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-freeze-coverage-regression-corrective-20260731.outcome.json",
+    ".ai/work-items/active/release-freeze-coverage-regression-corrective-20260731.outcome.md",
+    "scripts/finalize_release_freeze.py",
+    "scripts/release_archive.py",
+    "tests/test_release_preflight.py",
+    "tests/test_capability_truth_matrix.py",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Modifying the coverage threshold or excluding release-freeze code from coverage.",
+    "Changing provider workflows, tags, Releases, or assets.",
+    "Editing, reusing, or merging the archived failed Work Item from pull request 528."
+  ],
+  "sources": [
+    {
+      "path": "scripts/finalize_release_freeze.py",
+      "reason": "The release-freeze ordering correction must be rebuilt from main before coverage can be restored."
+    },
+    {
+      "path": "tests/test_capability_truth_matrix.py",
+      "reason": "The self-reference boundary requires regression coverage when release metadata is export-ignored."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Current release behavior documentation must describe the controlled derived-evidence boundary."
+    },
+    {
+      "path": "scripts/release_archive.py",
+      "reason": "New worktree archive helpers have unexercised error and file-read branches."
+    },
+    {
+      "path": "pull-request:528",
+      "reason": "Immutable failed corrective evidence; its implementation is re-created independently, never amended or merged."
+    },
+    {
+      "path": "tests/test_release_preflight.py",
+      "reason": "Existing release-freeze regression fixture is the closest test boundary for the helpers."
+    },
+    {
+      "path": "conversation:continuous-release-authorization",
+      "reason": "Authorization requires fail-closed corrective work without lowering quality."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30598510791/job/91056004461",
+      "reason": "Hosted evidence: 1618 tests passed but coverage was 85.05 percent, below the 85.10 percent gate."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["coverage_regression", "release_process_correctness"],
+    "unknownsReviewComplete": true,
+    "reason": "A release prerequisite is blocked. The correction must prove newly added branches without weakening the project-wide coverage gate."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized continuous corrective execution and instructed that failures must be fixed rather than bypassed."
+  },
+  "preReviewWarnings": [
+    "Review whether every new release_archive helper branch has a deterministic regression test, and confirm the coverage threshold is unchanged."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Finalization refreshes only controlled Capability Truth, Japanese assessment, and documentation-alignment reports before computing the canonical worktree archive.",
+    "Capability Truth retains release.json as runtime evidence but does not include it in archive-bound sourceEvidence, preventing archive SHA self-reference.",
+    "Regression tests cover the worktree archive helper's successful read and rejected non-regular or symlinked input paths.",
+    "project-test passes its unchanged 85.10 percent coverage gate locally.",
+    "Hosted CI passes the same project-test coverage gate on the corrective PR.",
+    "No coverage threshold, exclusion, release metadata, provider workflow, tag, Release, or asset changes are made."
+  ],
+  "guidelines": [
+    "Keep release archive validation fail-closed and deterministic.",
+    "Rebuild failed archived implementation independently; do not amend or merge its archive bundle.",
+    "Test behavior through public helper boundaries without weakening coverage policy.",
+    "Use the temporary user-authorized focused local verification policy; Hosted PR remains mandatory."
+  ],
+  "intent": {
+    "problem": "Pull request 528 repairs release-freeze ordering but Hosted and local project-test both show 1618 tests passing with only 85.05 to 85.07 percent coverage, below the immutable 85.10 percent gate. Its newly introduced worktree archive helper branches are not sufficiently exercised. Because main does not contain that failed corrective, this Work Item must independently rebuild the release-freeze correction and its coverage regressions.",
+    "constraints": [
+      "Rebuild the controlled derived-evidence finalization correction from current main, then add tests instead of reducing coverage requirements or excluding production paths.",
+      "Do not change the failed Work Item's archived files; preserve them as audit evidence.",
+      "Run focused local verification and the mandatory Hosted PR under the user-authorized temporary efficiency policy.",
+      "Do not create tags, Releases, assets, or provider-side publication state."
+    ],
+    "rationale": "The coverage gate correctly prevented a release prerequisite from merging with unproved fail-closed branches. A separate replacement preserves archive immutability, independently rebuilds the needed behavior, and restores measurable verification evidence."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized efficiency exception; project-test is the exact failed gate and Hosted PR remains mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized continuous corrective execution, PR lifecycle, and no quality-gate bypass."
+  },
+  "rollbackNote": "Revert only this corrective Work Item through its dedicated PR. It creates no provider-side release state.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 709
+    }
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Worktree archive reads a normal tracked regular file.",
+      "expected": "The canonical archive contains its current worktree bytes and coverage records the helper path.",
+      "verificationPlan": "Add a focused regression assertion through the existing release preflight fixture, then run project-test.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Derived reports change after preliminary release metadata and release.json includes archive identity.",
+      "expected": "Finalization refreshes the controlled reports before archive binding, while release.json remains runtime evidence outside archive-bound sourceEvidence.",
+      "verificationPlan": "Focused finalizer and Capability Truth regressions, then project-test and Hosted PR.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A worktree member or parent is a symlink or non-regular file.",
+      "expected": "Archive construction rejects it fail-closed without following it.",
+      "verificationPlan": "Exercise each rejected-input branch in focused release preflight tests, then run project-test.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Coverage remains below the project threshold.",
+      "expected": "The exact project-test gate fails and prevents PR merge.",
+      "verificationPlan": "Run project-test locally and require Hosted template-smoke on the corrective PR.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-freeze-coverage-regression-corrective-20260731.json",
+    "baseCommit": "7dafd3ca33b712af16d44db8ddaf1a54e62c984b",
+    "initialScopeDigest": "c3e116f5b79d84d99b8948a9286db88ccce4b4b4c0cb7bbddeebb91d69aeb1bd",
+    "contractSkeletonDigest": "d858e3e88746c52a2fc94047d917d53118e184e81a58fbc03ba1ea808cbeecfb"
+  }
+}
