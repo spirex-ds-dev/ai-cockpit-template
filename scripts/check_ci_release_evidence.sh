@@ -55,7 +55,7 @@ jq -e '
 jq -e 'all(.workflowRuns[]; .headSha == $headSha)' \
   --arg headSha "$top_head" "$evidence_path" >/dev/null || fail "workflow run Head SHA does not match top-level Head SHA"
 
-jq -e 'all(.workflowRuns[]; (.requiredJobNames | sort) == ($required | sort))' \
+jq -e '([.workflowRuns[].requiredJobNames[]] | unique | sort) == ($required | unique | sort)' \
   --argjson required "$top_required_jobs" "$evidence_path" >/dev/null || fail "workflow-run required-job set does not match top-level required-job set"
 
 jq -e 'all(.workflowRuns[]; . as $run | all($run.requiredJobNames[]; . as $required | any($run.jobs[]; .name == $required)))' \

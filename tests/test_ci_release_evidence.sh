@@ -58,6 +58,18 @@ all_three="$tmp/all-three.json"
 jq '.state = "candidate" | .requiredJobNames = ["template-smoke","installation-smoke","release-evidence"] | .workflowRuns[0].requiredJobNames = ["template-smoke","installation-smoke","release-evidence"] | .workflowRuns[0].jobs += [{name:"installation-smoke",conclusion:"success"},{name:"release-evidence",conclusion:"success"}] | .conclusion = "success"' "$valid" > "$all_three"
 bash "$root/scripts/check_ci_release_evidence.sh" "$all_three" "$head"
 
+multi_workflow="$tmp/multi-workflow.json"
+jq '.state = "candidate" | .requiredJobNames = ["template-smoke","compatibility-gate"] | .workflowRuns += [{workflowRunId:"67890",workflowName:"compatibility.yml",headSha:.headSha,requiredJobNames:["compatibility-gate"],jobs:[{name:"compatibility-gate",conclusion:"success"}],conclusion:"success",failureReasons:[]}]' "$valid" > "$multi_workflow"
+bash "$root/scripts/check_ci_release_evidence.sh" "$multi_workflow" "$head"
+
+multi_workflow_set_mismatch="$tmp/multi-workflow-set-mismatch.json"
+jq '.requiredJobNames += ["missing-job"]' "$multi_workflow" > "$multi_workflow_set_mismatch"
+if bash "$root/scripts/check_ci_release_evidence.sh" "$multi_workflow_set_mismatch" "$head" 2>"$tmp/multi-workflow-set.err"; then
+  echo 'multi-workflow required-job set mismatch unexpectedly passed' >&2
+  exit 1
+fi
+grep -q 'workflow-run required-job set does not match top-level required-job set' "$tmp/multi-workflow-set.err"
+
 upstream_failed="$tmp/upstream-failed.json"
 jq '.state = "failed" | .conclusion = "failure" | .failureReasons = ["template-smoke:failure","installation-smoke:skipped","release-evidence:skipped"] | .requiredJobNames = ["template-smoke","installation-smoke","release-evidence"] | .workflowRuns[0].requiredJobNames = .requiredJobNames | .workflowRuns[0].conclusion = "failure" | .workflowRuns[0].failureReasons = .failureReasons | .workflowRuns[0].jobs[0].conclusion = "failure" | .workflowRuns[0].jobs += [{name:"installation-smoke",conclusion:"skipped"},{name:"release-evidence",conclusion:"skipped"}]' "$valid" > "$upstream_failed"
 bash "$root/scripts/check_ci_release_evidence.sh" "$upstream_failed" "$head"
