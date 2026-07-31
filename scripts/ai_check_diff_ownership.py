@@ -27,6 +27,8 @@ ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 ARCHIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
 OWNERSHIP_POLICY = PROJECT_ROOT / ".ai" / "guards" / "file_ownership.yaml"
 CURRENT_STATUS = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
+HUMAN_REPORT_JSON = PROJECT_ROOT / ".ai" / "cockpit" / "task_report.json"
+HUMAN_REPORT_MARKDOWN = PROJECT_ROOT / ".ai" / "cockpit" / "task_report.md"
 REPORT = PROJECT_ROOT / "target" / "ai_diff_ownership_report.json"
 GENERATED_ARCHIVE_INDEX = ".ai/work-items/archive/index.json"
 STATES = {
@@ -214,6 +216,49 @@ def is_generated_no_active_status(path: str) -> bool:
     return all(marker in text for marker in required_markers)
 
 
+def generated_human_report_owner(path: str, contract: dict[str, Any] | None) -> Ownership | None:
+    """Return narrow ownership for an exact, validator-backed active report pair.
+
+    Finish may be retried after it has generated the current report.  Fixture
+    Contracts and older adopters cannot be expected to declare newly introduced
+    generated paths, so the lifecycle owns only the exact pair that validates
+    against that active Work Item's Task Outcome.  Missing, malformed, stale,
+    or cross-task artifacts remain unowned.
+    """
+    if path not in {".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md"}:
+        return None
+    if not HUMAN_REPORT_JSON.is_file() or not HUMAN_REPORT_MARKDOWN.is_file():
+        return None
+    work_item_id = contract.get("workItemId") if isinstance(contract, dict) else None
+    if isinstance(work_item_id, str) and work_item_id:
+        outcome_path = ACTIVE_DIR / f"{work_item_id}.outcome.json"
+    else:
+        outcomes = sorted(ACTIVE_DIR.glob("*.outcome.json"))
+        if len(outcomes) != 1:
+            return None
+        outcome_path = outcomes[0]
+        work_item_id = outcome_path.name.removesuffix(".outcome.json")
+    if not outcome_path.is_file():
+        return None
+    try:
+        from ai_generate_human_report import validate_human_report
+
+        outcome = load_json(outcome_path)
+        report = load_json(HUMAN_REPORT_JSON)
+        markdown = HUMAN_REPORT_MARKDOWN.read_text(encoding="utf-8")
+        issues = validate_human_report(report, outcome, phase="review", markdown=markdown)
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+        return None
+    if issues or outcome.get("workItemId") != work_item_id:
+        return None
+    return Ownership(
+        path,
+        "active_owned",
+        [f"generated:{work_item_id}"],
+        "exact generated Human Benefit Report pair validates against active Task Outcome",
+    )
+
+
 def classify(
     path: str,
     candidates: list[Owner],
@@ -317,6 +362,10 @@ def preview(*, base: str = "", contract: dict[str, Any] | None = None) -> list[O
     values: list[Ownership] = []
     for status, path in changed:
         if is_generated_no_active_status(path):
+            continue
+        generated_report = generated_human_report_owner(path, contract)
+        if generated_report is not None:
+            values.append(generated_report)
             continue
         if path == GENERATED_ARCHIVE_INDEX and archive_index_repair_approved(contract):
             continue

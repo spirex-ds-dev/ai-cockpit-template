@@ -84,6 +84,7 @@ def test_installed_distribution_contains_pr_and_approval_wiring(tmp_path):
     for script in (
         "ai_check_task_outcome.py",
         "ai_generate_task_outcome.py",
+        "ai_generate_human_report.py",
         "ai_render_task_outcome.py",
     ):
         assert (tmp_path / "scripts" / script).is_file()

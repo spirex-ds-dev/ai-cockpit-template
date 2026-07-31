@@ -1,0 +1,298 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-04-human-benefit-report",
+  "mode": "code",
+  "title": "Human Benefit Report",
+  "baseCommit": "2eae170ad702bd237be304e29f28d795848aeb9f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+    ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-04-human-benefit-report.outcome.json",
+    ".ai/work-items/active/wi-04-human-benefit-report.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/guards/scope_policy.yaml",
+    ".ai/guards/file_ownership.yaml",
+    "scripts/ai_generate_human_report.py",
+    "scripts/ai_check_diff_ownership.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_pr.py",
+    "scripts/ai_close_work_item.py",
+    "scripts/ai_installer_catalog.json",
+    "tests/test_human_benefit_report.py",
+    "tests/test_diff_ownership.py",
+    "tests/test_contract_and_policy.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_pr_aggregate.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "tests/test_installer.py",
+    "docs/features/human-benefit-report.md",
+    "docs/features/human-benefit-report.ja.md",
+    "docs/features/human-benefit-report.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/superpowers/plans/2026-08-01-human-benefit-report.md",
+    "Makefile",
+    "templates/make/Makefile.ai"
+  ],
+  "outOfScope": [
+    "Replacing the existing Task Outcome machine-truth schema or duplicating its event model",
+    "Claiming that a generated report proves human receipt, approval, provider identity, merge, security, or production safety",
+    "Changing governance-profile routing, calibration controls, installer interaction design, or capability-claim policy assigned to other Work Items",
+    "Backfilling immutable historical Work Item archives"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-08-01-human-benefit-report.md",
+      "reason": "Executable plan derived from the user-provided WI04 requirements."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "Existing evidence-derived Task Outcome is the canonical fact source and must not be duplicated."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Existing pre-archive lifecycle integration owns generation and direct presentation."
+    },
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Existing provider-bound closure path owns final merge and cleanup facts."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Documents the current reporting boundary, evidence rules, and known lifecycle semantics."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_reporting",
+      "evidence_integrity",
+      "lifecycle_integration"
+    ],
+    "reason": "The compact human view must remain a deterministic projection of validated Task Outcome evidence across finish, PR review, and provider-bound closure without creating a competing source of truth.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The change affects protected .ai guard policy, Make interfaces, installer distribution, and core finish, PR, ownership, and closure lifecycle enforcement."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user supplied the required fields and lifecycle stages and authorized bounded implementation, PR, merge, archive, and cleanup decisions."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "preReviewWarnings": [
+    "Confirm issue counts are derived from evidence-backed Task Outcome sections rather than free-form agent claims.",
+    "Confirm the review report does not claim provider merge or cleanup facts before closure.",
+    "Confirm final closure presentation binds provider facts while leaving the repository worktree clean."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A deterministic Human Benefit Report projection answers what changed, detected issue count, hard stops, warnings, resolved and unresolved issues, prevented risks, human decisions, remaining risks, and the next safe action using only validated Task Outcome evidence.",
+    "Machine-readable JSON and a concise human-readable Markdown Review Report are generated at .ai/cockpit/task_report.json and .ai/cockpit/task_report.md during ai-finish without introducing a second event or evidence authority.",
+    "check-ai-pr fails closed when the committed Review Report is missing, malformed, stale, or inconsistent with the archived Task Outcome for the PR diff.",
+    "ai-close-work-item generates and validates a Final Report from the archived Outcome plus authoritative provider merge and cleanup facts before deleting either branch, and writes it beside the closure receipt without dirtying synchronized main.",
+    "Focused tests cover completed, warning, stop, resolved/unresolved, human-decision, stale-report, and closure-provider scenarios; installer and Make interfaces distribute the feature.",
+    "English, Japanese, and Simplified Chinese documentation explains Review versus Final Report, evidence limits, recovery behavior, and non-claims."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Engineering Summary and raw governance logs are complete but too technical for a person to quickly see what AI Cockpit changed, which problems stopped execution, what was resolved, what risk was avoided, which decisions were human, and what safe action remains.",
+    "constraints": [
+      "Validated Task Outcome remains the single machine-truth source; the compact view introduces no parallel event model.",
+      "Counts and prevented-risk statements derive from bound records and omit productivity, security, time, money, and trust scoring.",
+      "Review output is limited to repository evidence available before provider merge.",
+      "Final output binds authoritative provider facts and writes outside synchronized source history.",
+      "The implementation boundary excludes WI06 capability binding, WI08 installer UX, and WI09 external identity policy."
+    ],
+    "rationale": "A compact, validated projection makes existing repository truth legible to humans while retaining one evidence authority and the current lifecycle safety boundary."
+  },
+  "rawUserRequest": "Execute WI-04 Human Benefit Report from the provided next-stage development directive: generate a concise evidence-backed task report at finish, PR review, and closure, and complete the full branch, PR, merge, archive, and cleanup lifecycle.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:ai-cockpit-next-phase#WI-04",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:674c596650f7741bfcca380be8202e7a161a7918acae41beac972fa741b0ff8b"
+  },
+  "declaredIntent": {
+    "summary": "Expose the evidence-backed human value of each governed task through concise review and final reports.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Work Item completes with findings, warnings, stops, resolutions, prevented impact, residual risk, and human decisions.",
+      "expected": "The compact report derives internally consistent counts and preserves evidence-backed details and the next safe action without adding unsupported claims.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_human_benefit_report.py (5 passed)",
+        "make generate-human-benefit-report and make check-human-benefit-report passed against an archived Outcome"
+      ],
+      "verificationPlan": "Run focused projection and validation tests with complete, warning, stopped, resolved, unresolved, and malformed Task Outcome fixtures."
+    },
+    {
+      "scenario": "ai-finish produces a review-stage report and check-ai-pr evaluates the archived PR evidence.",
+      "expected": "Finish writes deterministic cockpit artifacts and PR validation fails closed for missing, stale, malformed, or inconsistent review output.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_ai_finish_integration.py",
+        "tests/test_pr_aggregate.py"
+      ],
+      "verificationPlan": "Run focused finish and PR-check integration tests that bind the report to the matching Outcome."
+    },
+    {
+      "scenario": "A merged Work Item is closed after authoritative provider verification.",
+      "expected": "Closure writes a validated final report with PR, merge, synchronized base, and cleanup facts before branch deletion, while synchronized main remains clean.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py",
+        "tests/test_human_benefit_report.py::test_final_report_requires_and_binds_provider_closure_facts"
+      ],
+      "verificationPlan": "Run closure lifecycle tests with valid and invalid provider payloads and inspect generated target artifacts."
+    },
+    {
+      "scenario": "An adopter installs the Human Benefit Report feature.",
+      "expected": "The generator, validation entrypoints, and documented lifecycle are installed consistently without adding release-grade requirements to ordinary tasks.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_installer.py::test_installed_distribution_contains_pr_and_approval_wiring",
+        "tests/test_human_benefit_report.py::test_installer_and_make_interfaces_distribute_human_report"
+      ],
+      "verificationPlan": "Run installer catalog and Makefile parity tests plus the Contract-selected Standard quality graph."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all bounded governance, code, documentation, PR, merge, archive, and branch-cleanup decisions needed to complete every planned Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 739
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-04-human-benefit-report.json",
+    "baseCommit": "2eae170ad702bd237be304e29f28d795848aeb9f",
+    "initialScopeDigest": "5f8c0b93f5e2aa8cebebdb5f8bb2d1d172c5b8f6a48b88732ffa1129ba611999",
+    "contractSkeletonDigest": "5fd589488ccadcdeff86baaf1d821d1862a9603e994482d00030a7c10291519a"
+  }
+}

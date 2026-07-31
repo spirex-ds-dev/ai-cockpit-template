@@ -30,6 +30,8 @@ from ai_start_receipt import validate_receipt, validate_resume_history_structure
 
 SCOPE_POLICY = PROJECT_ROOT / ".ai" / "guards" / "scope_policy.yaml"
 OWNERSHIP_POLICY = PROJECT_ROOT / ".ai" / "guards" / "file_ownership.yaml"
+HUMAN_REPORT_JSON = ".ai/cockpit/task_report.json"
+HUMAN_REPORT_MARKDOWN = ".ai/cockpit/task_report.md"
 
 
 ARCHIVE_PREFIX = ".ai/work-items/archive/"
@@ -543,6 +545,32 @@ def machine_path_issues(value: Any, location: str = "root") -> list[str]:
     return issues
 
 
+def human_benefit_report_issues(contract_path: Path) -> list[str]:
+    """Validate the committed Review Report against this archive's Outcome."""
+
+    from ai_generate_human_report import validate_human_report
+
+    outcome_path = contract_path.with_name(
+        contract_path.name.replace(".contract.json", ".outcome.json")
+    )
+    report_path = PROJECT_ROOT / HUMAN_REPORT_JSON
+    markdown_path = PROJECT_ROOT / HUMAN_REPORT_MARKDOWN
+    missing = [
+        path.relative_to(PROJECT_ROOT).as_posix()
+        for path in (outcome_path, report_path, markdown_path)
+        if not path.is_file()
+    ]
+    if missing:
+        return ["Human Benefit Review Report evidence is missing: " + ", ".join(missing)]
+    try:
+        outcome = load_json(outcome_path)
+        report = load_json(report_path)
+        markdown = markdown_path.read_text(encoding="utf-8")
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        return [f"Human Benefit Review Report cannot be loaded: {exc}"]
+    return validate_human_report(report, outcome, phase="review", markdown=markdown)
+
+
 def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
     issues: list[str] = []
     evidence_changes = archive_evidence_changes(base)
@@ -740,6 +768,18 @@ def validate_pr_bundle(base: str, contract_paths: list[Path]) -> list[str]:
     all_paths = changed_paths(
         {"baseCommit": base, "baselineDirtyPaths": []}, ignore_baseline_dirty=True
     )
+    report_required = (
+        HUMAN_REPORT_JSON in all_paths
+        or HUMAN_REPORT_MARKDOWN in all_paths
+        or bool(_git_blob_hash(base, HUMAN_REPORT_JSON))
+        or any(
+            HUMAN_REPORT_JSON in entry[1].get("scope", [])
+            for entry in archive_entries
+            if isinstance(entry[1].get("scope"), list)
+        )
+    )
+    if report_required and archive_entries:
+        issues.extend(human_benefit_report_issues(archive_entries[-1][0]))
     policy = simple_yaml_lists(SCOPE_POLICY)
     ownership = parse_simple_manifest(OWNERSHIP_POLICY)
     exempt = policy.get("allowAlways", [])
