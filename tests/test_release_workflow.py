@@ -54,6 +54,26 @@ def test_rehearsal_guards_every_public_release_side_effect():
         assert "if: ${{ !inputs.rehearsal }}" in step
 
 
+def test_draft_quick_install_verification_uses_authenticated_asset_api_after_upload():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    create = workflow.index("Create exact-SHA tag and Draft GitHub Release")
+    verify = workflow.index("Verify tagged Quick Install contract before publication")
+    publish = workflow.index("Publish verified Draft Release")
+    draft_upload = workflow[create:verify]
+    quick_install = workflow[verify:publish]
+
+    assert 'cp "$RUNNER_TEMP/release-projection.json" "$RUNNER_TEMP/release.json"' in draft_upload
+    assert '"$RUNNER_TEMP/release.json#release.json"' in draft_upload
+    assert "gh release download" not in quick_install
+    assert (
+        'gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json assets' in quick_install
+    )
+    assert '.apiUrl | split("/") | last' in quick_install
+    assert '"repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}"' in quick_install
+    assert "download_draft_asset release.json" in quick_install
+
+
 def test_published_projection_is_not_promoted_in_repository():
     import json
 

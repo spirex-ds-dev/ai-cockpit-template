@@ -395,6 +395,7 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: |
           set -euo pipefail
+          cp "$RUNNER_TEMP/release-projection.json" "$RUNNER_TEMP/release.json"
           git push origin "$SOURCE_COMMIT:refs/tags/$RELEASE_TAG"
           gh release create "$RELEASE_TAG" \
             --repo "$GITHUB_REPOSITORY" \
@@ -407,7 +408,7 @@ jobs:
             "$RUNNER_TEMP/release-evidence/release-digests.json#release-digests.json" \
             "$RUNNER_TEMP/release-evidence/ci-release-evidence.json#ci-release-evidence.json" \
             "$RUNNER_TEMP/release-source.json#release-source.json" \
-            "$RUNNER_TEMP/release-projection.json#release.json" \
+            "$RUNNER_TEMP/release.json#release.json" \
             "$RUNNER_TEMP/release-evidence/$(jq -r '.releaseArchive.assetName' release.json)#$(jq -r '.releaseArchive.assetName' release.json)"
 
       - name: Verify Draft tag target and release asset subjects
@@ -441,14 +442,19 @@ jobs:
           test "$declared_archive_url" = "$expected_archive_url"
           download_dir="$RUNNER_TEMP/tagged-install"
           mkdir -p "$download_dir"
-          gh release download "$RELEASE_TAG" \
-            --repo "$GITHUB_REPOSITORY" \
-            --pattern "$archive_name" \
-            --dir "$download_dir"
-          gh release download "$RELEASE_TAG" \
-            --repo "$GITHUB_REPOSITORY" \
-            --pattern release.json \
-            --dir "$download_dir"
+          release_json="$(gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json assets)"
+          download_draft_asset() {
+            local asset_name="$1"
+            local asset_id
+            asset_id="$(jq -r --arg name "$asset_name" '.assets[] | select(.name == $name) | .apiUrl | split("/") | last' <<<"$release_json")"
+            test "$asset_id" =~ ^[0-9]+$
+            gh api --method GET \
+              -H "Accept: application/octet-stream" \
+              "repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}" \
+              > "$download_dir/$asset_name"
+          }
+          download_draft_asset "$archive_name"
+          download_draft_asset release.json
           verified_archive="$download_dir/$archive_name"
           test "$(sha256sum "$verified_archive" | cut -d' ' -f1)" = \
             "$(jq -r '.releaseArchive.sha256' release.json)"
