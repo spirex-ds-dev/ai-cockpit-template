@@ -1,0 +1,145 @@
+{
+  "contractVersion": 2,
+  "workItemId": "final-branch-worktree-convergence-20260731",
+  "mode": "code",
+  "title": "Converge remote branches and local worktrees before release",
+  "baseCommit": "b8b6c2d6e39917ef71bfa3ff446e58a1db78a522",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "最后发布版本之前，将远端、本地的分支都整理干净：远端只有 main，本地也只有与远端同步一致的 main。",
+  "rawRequestSource": {"type":"human","reference":"conversation:pre-release-branch-worktree-cleanup","capturedAt":"2026-07-31","digest":"sha256:0a5b4a9f7b4ca8458422e8f87b528f6af02bc8a6f716bedb08fbb2fde1c0f915"},
+  "declaredIntent": {"summary":"Remove exact obsolete source-bound and release-recovery branch/worktree identities after their failed PRs were closed and replacements merged; leave only synchronized main after this Work Item closes.","requestedCapabilities":["ai_governance"]},
+  "requestedOperation":{"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "scope": [
+    ".ai/work-items/active/final-branch-worktree-convergence-20260731.contract.json",
+    ".ai/work-items/active/final-branch-worktree-convergence-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/final-branch-worktree-convergence-20260731.outcome.json",
+    ".ai/work-items/active/final-branch-worktree-convergence-20260731.outcome.md"
+  ],
+  "outOfScope": ["Deleting origin/main, the main worktree, semantic tags, provider Releases, or historical archive evidence.","Deleting any path/ref not explicitly recorded in the pre-removal Summary inventory.","Publishing a release or changing runtime, CI, test, or product documentation behavior."],
+  "sources": [
+    {
+      "path": "AGENTS.md", "reason": "Canonical lifecycle closure and branch-cleanup rules."
+    }, {"path":".ai/work-items/archive/2026/prepublish-branch-worktree-convergence-20260731.contract.json","reason":"Prior audited convergence pattern and user authorization context."}, {"path":"git worktree list --porcelain on 2026-07-31","reason":"Exact worktree inventory before removal."}, {"path":"git for-each-ref refs/remotes/origin on 2026-07-31","reason":"Exact remote-branch inventory before removal."}, {"path":"conversation:pre-release-branch-worktree-cleanup","reason":"Explicit user final-state authorization."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes":["destructive_cleanup","unmerged_historical_branch","dirty_worktree"],"unknownsReviewComplete":true,"reason":"Exact obsolete identities include unmerged histories and potentially dirty worktrees. Deletion is user-authorized but must be preceded by an exact status/SHA inventory and followed by provider and local postcondition checks."
+  },
+  "agentCapability": {
+    "canImplement":true,"canVerify":true,"needsHumanDecision":false,"blockedReason":""
+  },
+  "executionDecision": {
+    "status":"continue","reason":"The user explicitly authorized the final convergence target and continuous plan execution."
+  },
+  "preReviewWarnings": [
+    "Delete only names and paths in the Summary inventory; never use broad ref or filesystem globs."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason":"Bind the destructive inventory and postconditions before deletion."
+  },
+  "acceptance": [
+    "The Summary records every exact pre-removal remote branch, local branch, and worktree path with SHA and dirty-state evidence.","Only the exact inventoried obsolete refs and worktrees are removed; semantic tags, Releases, origin/main, and the main worktree remain unchanged.","After closure, provider remote branches contain only origin/main and origin/HEAD, and git worktree list contains only the synchronized main worktree.","Focused governance and aggregate PR checks pass under the temporary local efficiency exception; Hosted CI passes before merge."
+  ],
+  "guidelines": [
+    "Treat every target as an exact path/ref recorded before removal; no broad deletes.","Preserve semantic tags, provider releases, historical archives, and main.","Do not remove the active cleanup worktree until its PR merge and ai-close-work-item lifecycle runs.","Use focused local verification; do not weaken Hosted checks."
+  ],
+  "intent": {
+    "problem":"The repository retains obsolete remote branches, local branches, and fifteen historical worktrees after failed source-bound/release recovery attempts. This violates the required pre-release state: remote only main and local only the synchronized main.","constraints":["Remove only exact inventory entries after recording SHA and dirty state.","Do not remove main, tags, Releases, historical archives, or the active cleanup worktree before lifecycle closure.","Use focused local verification under the recorded temporary efficiency exception; Hosted CI remains mandatory."],"rationale":"One final audited convergence Work Item makes destructive cleanup reviewable and proves the release starts from one synchronized base identity."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check":"quality","required":false,"reason":"Temporary user-authorized local efficiency exception; Hosted CI remains mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed":true,
+    "requiresHumanApproval": true,
+    "allowPatterns":["exact pre-inventoried remote refs","exact pre-inventoried local branches","exact pre-inventoried linked worktree paths"],"approvalEvidence":{"approved":true,"approvedBy":"user","reason":"User explicitly required remote only main and local only synchronized main before release."}
+  },
+  "restrictedWriteApproval": {
+    "approved":true,"approvedBy":"user","reason":"User authorized pre-release branch and worktree cleanup plus continuous plan execution."
+  },
+  "rollbackNote":"Deleted obsolete identities are intentionally not restored; preserve their archived/provider evidence and create a new corrective branch only if a new need is discovered.",
+  "scenarioCoverage":[{"scenario":"An inventoried historical branch/worktree is obsolete.","expected":"It is deleted only when its exact name/path and SHA/status are recorded.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Capture inventory then compare postcondition."},{"scenario":"An unlisted ref/tag/main exists.","expected":"It remains untouched.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Verify explicit deletion commands and final refs."},{"scenario":"The active convergence worktree exists.","expected":"It remains until merge and ai-close-work-item.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Verify no active-path removal prior to closure."},{"scenario":"Hosted CI evaluates the cleanup record.","expected":"Required jobs succeed before merge.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Inspect PR Hosted results."}],
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 707
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/final-branch-worktree-convergence-20260731.json",
+    "baseCommit": "b8b6c2d6e39917ef71bfa3ff446e58a1db78a522",
+    "initialScopeDigest": "7a8e81e713bab5e044bc9d561369500efcdd49c1ac868d027ce28f209b2e8efb",
+    "contractSkeletonDigest": "0d3b4c396a1fd316082431d3a6c29af7e53c2c84cc6b40506e69f1ae159c6452"
+  }
+}
