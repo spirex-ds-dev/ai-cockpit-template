@@ -26,6 +26,8 @@ QUALITY_TIMING_DIR ?= target/quality/timing
 QUALITY_LOG_DIR ?= target/quality/logs
 QUALITY_JUNIT_DIR ?= target/quality/junit
 QUALITY_SUMMARY_DIR ?= target/quality
+GOVERNANCE_PROFILE ?=
+GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 
 .PHONY: help \
 	test project-format-check project-test project-lint diff-check quality quality-gates \
@@ -48,7 +50,7 @@ check-docs-metadata check-trust-layer-docs check-real-absurd-injection-docs chec
 	ai-prepare-hosted-verification-snapshot \
 	check-ai-change-summary generate-cockpit-status generate-cockpit-status-ja check-ai-status check-ai-status-ja check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
 	ai-assess-provider-merge-state-recovery \
-	quality-fast quality-full quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
+	quality-fast quality-standard quality-full quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
 	check-ai-task-outcome \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
@@ -360,6 +362,14 @@ qg-check-ai-status-consistency:
 qg-check-ai-test-weakening-fast:
 	$(call RUN_QUALITY_GATE,check-ai-test-weakening-fast,policy)
 
+# Standard reuses existing gate owners and replaces the Fast weakening sample
+# with the full diff analysis. It intentionally excludes Full/Release groups.
+quality-standard:
+	+$(QUALITY_MAKE) --no-print-directory quality-fast TEST_WEAKENING_FULL_OWNERSHIP=true
+	+$(QUALITY_MAKE) --no-print-directory project-test
+	+$(QUALITY_MAKE) --no-print-directory check-ai-reference-impact
+	+$(QUALITY_MAKE) --no-print-directory check-ai-test-weakening
+
 # Heavy groups are separate ownership units.  Their outputs are either read-only
 # or isolated by the gate itself; no blanket high-parallelism quality target is used.
 quality-heavy:
@@ -468,7 +478,16 @@ ai-verify-full:
 ai-verify-policy:
 	PYTHONPATH=scripts $(AI_PYTHON) -c 'from ai_verification_policy import order_checks; print(order_checks({"scope": [], "tests": ["scope"], "trust": ["scope"]}))'
 
-ai-cockpit-quality: quality
+ai-cockpit-quality:
+	+@set -eu; \
+		$(AI_PYTHON) scripts/determine_governance_profile.py \
+			$(if $(AI_BASE_COMMIT),--base "$(AI_BASE_COMMIT)",) \
+			$(if $(CONTRACT),--contract "$(CONTRACT)",) \
+			$(if $(GOVERNANCE_PROFILE),--profile "$(GOVERNANCE_PROFILE)",) \
+			--output "$(GOVERNANCE_RECEIPT)"; \
+		target=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["dispatchTarget"])' "$(GOVERNANCE_RECEIPT)"); \
+		case "$$target" in quality-fast|quality-standard|quality-full|quality-release) ;; *) echo "invalid governance dispatch target: $$target" >&2; exit 2;; esac; \
+		$(QUALITY_MAKE) --no-print-directory "$$target"
 
 ai-start:
 	$(AI_PYTHON) scripts/ai_start.py --task "$(TASK)" --title "$(TITLE)" --mode "$(MODE)"

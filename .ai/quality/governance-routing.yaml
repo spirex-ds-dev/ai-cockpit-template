@@ -1,0 +1,82 @@
+schemaVersion: 1
+profileOrder:
+  - lite
+  - standard
+  - strict
+  - release
+unknownProfile: standard
+evidenceOnlyPatterns:
+  - .ai/cockpit/current_status.md
+  - .ai/work-items/starts/**
+  - .ai/work-items/active/*.outcome.json
+  - .ai/work-items/active/*.outcome.md
+profiles:
+  lite:
+    patterns:
+      - docs/**
+      - README*
+    requiredGroups:
+      - quality-fast
+    dispatchTarget: quality-fast
+  standard:
+    patterns:
+      - src/**
+      - lib/**
+      - app/**
+      - test/**
+      - tests/**
+      - examples/**
+    requiredGroups:
+      - quality-fast
+      - project-test
+      - check-ai-reference-impact
+      - check-ai-test-weakening
+    dispatchTarget: quality-standard
+  strict:
+    patterns:
+      - .ai/**
+      - .github/workflows/**
+      - .cursor/**
+      - scripts/ai_*.py
+      - scripts/install*.py
+      - scripts/uninstall*.py
+      - templates/**
+      - Makefile
+      - Makefile.ai
+      - install.sh
+      - uninstall.sh
+      - AGENTS.md
+      - GEMINI.md
+      - CLAUDE.md
+      - pyproject.toml
+      - requirements*.in
+      - requirements*.txt
+      - requirements*.lock
+      - package.json
+      - package-lock.json
+      - pnpm-lock.yaml
+      - yarn.lock
+      - Cargo.toml
+      - Cargo.lock
+      - go.mod
+      - go.sum
+      - migrations/**
+      - db/migrations/**
+    requiredGroups:
+      - quality-full
+    dispatchTarget: quality-full
+  release:
+    patterns:
+      - release.json
+      - next-release.json
+      - release-state.json
+      - .ai/cockpit/release-digests.json
+      - .ai/cockpit/sbom.json
+      - .ai/cockpit/provenance/**
+      - .github/workflows/release*.yml
+      - .github/workflows/release*.yaml
+      - dist/**
+      - release-assets/**
+    requiredGroups:
+      - quality-release
+    dispatchTarget: quality-release

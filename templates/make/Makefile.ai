@@ -23,9 +23,13 @@ PROJECT_TEST ?= printf '%s\n' 'ERROR: no project test command configured. Set PR
 PROJECT_LINT ?= printf '%s\n' 'ERROR: no project linter configured. Set PROJECT_LINT in Makefile.ai.stack.' >&2; false
 AI_COCKPIT_PROJECT_FORMAT_CONFIGURED ?= true
 AI_COCKPIT_PROJECT_LINT_CONFIGURED ?= true
+AI_COCKPIT_STRICT_CHECK ?= printf '%s\n' 'Strict project-specific checks: not configured; AI lifecycle gates remain independently enforced.'
+AI_COCKPIT_RELEASE_CHECK ?= printf '%s\n' 'ERROR: Release verification is not configured. Set AI_COCKPIT_RELEASE_CHECK in Makefile.ai.stack.' >&2; false
+GOVERNANCE_PROFILE ?=
+GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 
 .PHONY: ai-help ai-doctor ai-onboard cockpit-doctor cockpit-calibrate cockpit-calibrate-session cockpit-calibration-inventory cockpit-validate-calibration check-ai-project-profile check-ai-guard-calibration check-ai-adoption-ready \
-	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
+	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality quality-fast quality-standard quality-full quality-release \
 	check-capability-truth check-source-bound-evidence \
 	ai-start ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy \
@@ -113,7 +117,35 @@ ai-cockpit-uninstall-execute:
 ai-cockpit-diff-check:
 	git diff --check
 
-ai-cockpit-quality: ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check
+quality-fast:
+	+$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-format-check
+	+$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-lint
+	+$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-diff-check
+
+quality-standard:
+	+$(AI_NESTED_MAKE) --no-print-directory quality-fast
+	+$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-test
+	+$(AI_NESTED_MAKE) --no-print-directory check-ai-reference-impact
+	+$(AI_NESTED_MAKE) --no-print-directory check-ai-test-weakening
+
+quality-full:
+	+$(AI_NESTED_MAKE) --no-print-directory quality-standard
+	@$(AI_COCKPIT_STRICT_CHECK)
+
+quality-release:
+	+$(AI_NESTED_MAKE) --no-print-directory quality-full
+	@$(AI_COCKPIT_RELEASE_CHECK)
+
+ai-cockpit-quality:
+	+@set -eu; \
+		$(AI_PYTHON) scripts/determine_governance_profile.py \
+			$(if $(AI_BASE_COMMIT),--base "$(AI_BASE_COMMIT)",) \
+			$(if $(CONTRACT),--contract "$(CONTRACT)",) \
+			$(if $(GOVERNANCE_PROFILE),--profile "$(GOVERNANCE_PROFILE)",) \
+			--output "$(GOVERNANCE_RECEIPT)"; \
+		target=$$($(PYTHON) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["dispatchTarget"])' "$(GOVERNANCE_RECEIPT)"); \
+		case "$$target" in quality-fast|quality-standard|quality-full|quality-release) ;; *) echo "invalid governance dispatch target: $$target" >&2; exit 2;; esac; \
+		$(AI_NESTED_MAKE) --no-print-directory "$$target"
 
 check-capability-truth:
 	@if test -f docs/reference/capability-truth-matrix.json && test -f scripts/ai_capability_truth.py; then \

@@ -8,24 +8,9 @@ import json
 import subprocess
 from pathlib import Path
 
-RELEASE_PATHS = (
-    "release.json",
-    "next-release.json",
-    "release-state.json",
-    ".ai/cockpit/release-digests.json",
-)
-FULL_PREFIXES = (
-    "scripts/",
-    "tests/",
-    ".github/workflows/",
-    ".ai/",
-    "examples/",
-    "Makefile",
-    "install.sh",
-    "AGENTS.md",
-    "GEMINI.md",
-)
-FAST_PREFIXES = ("docs/", "README")
+import determine_governance_profile as governance_routing
+
+POLICY_PATH = Path(__file__).resolve().parents[1] / ".ai/quality/governance-routing.yaml"
 
 
 def changed_paths(base: str, head: str, repository: Path) -> list[str]:
@@ -42,17 +27,13 @@ def changed_paths(base: str, head: str, repository: Path) -> list[str]:
 
 
 def determine(paths: list[str], explicit: str | None = None) -> dict:
-    if explicit in {"fast", "full", "release"}:
-        scope = explicit
-        reasons = [f"explicit mode: {explicit}"]
-    elif any(path in RELEASE_PATHS for path in paths):
-        scope, reasons = "release", ["release preparation path changed"]
-    elif any(path.startswith(FULL_PREFIXES) for path in paths):
-        scope, reasons = "full", ["governance, code, test, install, or workflow path changed"]
-    elif paths and all(path.startswith(FAST_PREFIXES) for path in paths):
-        scope, reasons = "fast", ["documentation-only change"]
-    else:
-        scope, reasons = "full", ["unknown or mixed scope defaults to Full"]
+    explicit_profiles = {"fast": "lite", "full": "strict", "release": "release"}
+    requested = explicit_profiles.get(explicit) if explicit is not None else None
+    routed = governance_routing.determine(
+        paths, governance_routing.load_policy(POLICY_PATH), requested=requested
+    )
+    profile = routed["selectedProfile"]
+    scope = {"lite": "fast", "standard": "full", "strict": "full", "release": "release"}[profile]
     required = {
         "fast": ["quality-fast"],
         "full": ["quality-fast", "quality-full"],
@@ -61,8 +42,8 @@ def determine(paths: list[str], explicit: str | None = None) -> dict:
     return {
         "schemaVersion": 1,
         "scope": scope,
-        "reasons": reasons,
-        "changedPaths": paths,
+        "reasons": routed["reasons"],
+        "changedPaths": routed["changedPaths"],
         "requiredGroups": required,
         "releasePreparation": scope == "release",
     }

@@ -1,0 +1,306 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-03-risk-based-quality-routing",
+  "mode": "code",
+  "title": "Risk-Based Quality Routing",
+  "baseCommit": "565226d2dd282849a8fa3844de4b5c57f9721f5e",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-03-risk-based-quality-routing.contract.json",
+    ".ai/work-items/active/wi-03-risk-based-quality-routing.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-03-risk-based-quality-routing.outcome.json",
+    ".ai/work-items/active/wi-03-risk-based-quality-routing.outcome.md",
+    "scripts/determine_governance_profile.py",
+    "scripts/determine_quality_scope.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_start.py",
+    "scripts/ai_verification_policy.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/install_ai_cockpit.py",
+    ".ai/quality/governance-routing.yaml",
+    ".ai/guards/coverage_policy.yaml",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "tests/test_governance_profile.py",
+    "tests/test_quality_scope.py",
+    "tests/test_contract_and_policy.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_verification_policy.py",
+    "tests/test_makefile.py",
+    "tests/test_quality_gate_architecture.py",
+    "tests/test_adoption_e2e.py",
+    "docs/superpowers/specs/2026-08-01-risk-based-quality-routing-design.md",
+    "docs/superpowers/plans/2026-08-01-risk-based-quality-routing.md",
+    "docs/reference/governance-profiles.md",
+    "docs/reference/governance-profiles.ja.md",
+    "docs/reference/governance-profiles.zh-CN.md",
+    "docs/reference/documentation-context-registry.json",
+    ".ai/work-items/_templates/work_item_contract.example.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": [
+    "Authenticating the identity behind a human override; WI-09 owns external identity boundaries.",
+    "Changing hosted provider branch-protection settings or bypassing required checks.",
+    "Inferring semantic application risk beyond repository path, Contract, and recorded evidence.",
+    "Replacing the existing quality gate ownership graph or adding release work to Lite and Standard profiles."
+  ],
+  "sources": [
+    {
+      "path": "user-request:ai-cockpit-next-phase#WI-03",
+      "reason": "Defines Lite, Standard, Strict, Release routing, escalation, Contract evidence, and override boundaries."
+    },
+    {
+      "path": "scripts/determine_quality_scope.py",
+      "reason": "Existing conservative fast/full/release path classifier to preserve as a compatibility projection."
+    },
+    {
+      "path": "scripts/ai_verification_policy.py",
+      "reason": "Existing check-level policy vocabulary that must align without becoming a second governance profile system."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Canonical quality ownership graph and default ai-cockpit-quality entrypoint."
+    },
+    {
+      "path": "scripts/ai_check_work_item.py",
+      "reason": "Contract v2 closed-field validator and bootstrap boundary for governanceProfile."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Canonical terminology and Repository Governance Layer boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "governance_routing",
+      "quality_downgrade",
+      "contract_schema",
+      "installer_parity"
+    ],
+    "reason": "Effective governance profile is strict because this Work Item changes governance, Contract validation, installer distribution, and the default quality entrypoint. The governanceProfile field is bootstrapped by this Work Item and will be added immediately after validator support exists.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "This Work Item changes governance routing, Contract validation, installer distribution, and the default quality entrypoint."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The profile ordering, path classes, conservative defaults, execution groups, and override evidence boundary are explicit; external identity authentication remains out of scope."
+  },
+  "preReviewWarnings": [
+    "Review fail-closed mixed and unknown path escalation, default Make routing, override expiry, and adopter parity."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A versioned YAML policy and deterministic CLI select lite, standard, strict, or release from changed Git paths; unknown and mixed paths only escalate, and the JSON receipt records base, changed paths, reasons, selected profile, and required quality groups.",
+    "Contract v2 accepts and validates governanceProfile selected/source/reasons/override; a downgrade requires bounded human evidence, reason, risks, not-run checks, and expiry or current-Work-Item scope, while malformed or expired evidence fails closed.",
+    "The default ai-cockpit-quality entrypoint discovers the active Contract and routes Lite to Fast, Standard to Fast plus project/reference/test checks, Strict to Full, and Release to Release without duplicating gate ownership; explicit upward escalation remains possible and downward CLI override is rejected.",
+    "The legacy determine_quality_scope interface remains compatible as a projection of the single governance router, and the verification policy uses the same four-level ordering rather than a competing light/standard/strict vocabulary.",
+    "Focused path, mixed, unknown, Contract, override, Make dry-run, compatibility, installed-adopter, malformed-policy, traversal, and legacy-output tests pass; English, Japanese, and Chinese documentation states evidence boundaries and non-claims."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Existing quality-fast, quality-full, and quality-release targets exist, but the default Work Item finish path still invokes the same full quality graph for ordinary documentation and localized changes. The separate determine_quality_scope and verification policy vocabularies are advisory and do not bind the Contract or default execution.",
+    "constraints": [
+      "Keep AI Cockpit a Repository Governance Layer and route only repository evidence to governance decisions and human control.",
+      "Never silently downgrade mixed, unknown, governance, installer, workflow, security, migration, calibration, evidence-schema, dependency, or release changes.",
+      "Reuse the existing quality graph as the only execution owner; routing may select groups but must not clone their commands.",
+      "Preserve compatibility for existing determine_quality_scope consumers and the quality alias.",
+      "Treat override records as bounded repository evidence, not authenticated enterprise identity; WI-09 owns external identity proof."
+    ],
+    "rationale": "One deterministic profile selector shared by Contract validation, Make routing, compatibility output, and verification policy makes lightweight execution the default without weakening protected changes or creating another parallel Gate system."
+  },
+  "rawUserRequest": "Implement WI-03 Risk-Based Quality Routing from the AI Cockpit next-phase instruction. Automatically select Lite, Standard, Strict, or Release from actual change risk; record governanceProfile in Contract; escalate unknown and mixed paths; require bounded human evidence for downgrade; and make the selected quality graph the default behavior.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:ai-cockpit-next-phase#WI-03",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:70103fe557a2072a2b53e7f34ac444c929e9b95e3e8c2b2d78c9b86bee2c88e6"
+  },
+  "declaredIntent": {
+    "summary": "Make risk-based quality selection executable, conservative, Contract-bound, and lightweight for ordinary changes.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Only ordinary documentation or non-executable examples change.",
+      "expected": "The automatic profile is lite and the default quality command selects only the Fast ownership graph.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Use isolated Git fixtures plus Make dry-run assertions for the exact Lite receipt and target."
+    },
+    {
+      "scenario": "Ordinary source or test paths change without protected governance surfaces.",
+      "expected": "The profile is standard and runs Fast plus project tests, reference impact, and full test-weakening analysis.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Classify source/test fixtures and assert deterministic Standard groups and Make ownership."
+    },
+    {
+      "scenario": "Governance, installer, workflow, security, dependency, migration, calibration, evidence schema, destructive, or public API paths change.",
+      "expected": "The profile is strict and cannot be lowered by an explicit CLI mode or incomplete Contract override.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Cover each protected pattern, incomplete override shapes, and lower requested levels in focused tests."
+    },
+    {
+      "scenario": "Release metadata, SBOM, provenance, release assets, installer distribution, tag, or release workflow paths change.",
+      "expected": "The profile is release and selects Strict plus release evidence groups.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Classify exact release paths and validate release Make routing and compatibility projection."
+    },
+    {
+      "scenario": "Paths are mixed, unknown, malformed, traversing, or symbolic links escape the repository.",
+      "expected": "Mixed paths select the highest profile; unknown selects at least standard; malformed or unsafe inputs fail closed.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Run deterministic unit and CLI fixtures for order independence, malformed YAML, invalid Git bases, traversal, and symlinks."
+    },
+    {
+      "scenario": "A human downgrade override is complete, current, and scoped, then becomes expired or mismatched.",
+      "expected": "Only the valid bounded record may select lower than automatic; expiry or scope mismatch restores automatic escalation and reports the evidence failure.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Validate exact override fields and fixed-time active/expired/current-Work-Item fixtures without claiming identity authentication."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all in-scope implementation, governance, PR, merge, archive, and branch-cleanup decisions for every Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 733
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-03-risk-based-quality-routing.json",
+    "baseCommit": "565226d2dd282849a8fa3844de4b5c57f9721f5e",
+    "initialScopeDigest": "513d0c0c59764305650f25acba69448630d82add0c2468a2b82715f395a19ada",
+    "contractSkeletonDigest": "a1e9bccc1fbe969854df2515edb15205f69223b3a6e4cf7eda9ec3ad7398d448"
+  }
+}

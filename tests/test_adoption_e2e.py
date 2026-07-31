@@ -45,6 +45,29 @@ def adoption_branch_exists(target: Path, name: str = "adopt/ai-cockpit") -> bool
     return result.returncode == 0
 
 
+def test_installed_adopter_receives_governance_router_and_profile_targets(tmp_path):
+    assert run(tmp_path, "git", "init", "-q").returncode == 0
+    (tmp_path / "README.md").write_text("# Existing project\n", encoding="utf-8")
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+        create_adoption=False,
+    )
+
+    assert installer.install() == 0
+    assert (tmp_path / "scripts" / "determine_governance_profile.py").is_file()
+    assert (tmp_path / ".ai" / "quality" / "governance-routing.yaml").is_file()
+    makefile_ai = (tmp_path / "Makefile.ai").read_text(encoding="utf-8")
+    for target in ("quality-fast:", "quality-standard:", "quality-full:", "quality-release:"):
+        assert target in makefile_ai
+    assert "scripts/determine_governance_profile.py" in makefile_ai
+
+
 def test_first_adoption_finishes_and_passes_complete_pr_check(tmp_path):
     assert run(tmp_path, "git", "init", "-q").returncode == 0
     assert run(tmp_path, "git", "config", "user.email", "test@example.invalid").returncode == 0
@@ -74,6 +97,7 @@ def test_first_adoption_finishes_and_passes_complete_pr_check(tmp_path):
     release = json.loads((ROOT / "release.json").read_text(encoding="utf-8"))
     assert contract["sourceReleaseTag"] == release["releaseTag"]
     assert contract["sourceRepository"] == "local source"
+    assert contract["governanceProfile"]["selected"] == "strict"
     assert contract["sources"] == [
         {
             "path": ".ai/cockpit/adoption.md",

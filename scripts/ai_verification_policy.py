@@ -8,9 +8,23 @@ from typing import Any
 
 from ai_impact_classifier import classify_path
 
-POLICY_LEVELS = ("light", "standard", "strict")
+POLICY_LEVELS = ("lite", "standard", "strict", "release")
 VERIFICATION_SCOPES = ("focused", "full")
-ESCALATION_DOMAINS = frozenset({"release", "workflow", "trust", "installer", "unknown"})
+ESCALATION_DOMAINS = frozenset(
+    {"release", "workflow", "trust", "installer", "dependency", "unknown"}
+)
+DOMAIN_LEVELS = {
+    "docs": "lite",
+    "project_code": "standard",
+    "tests": "standard",
+    "unknown": "standard",
+    "dependency": "strict",
+    "workflow": "strict",
+    "trust": "strict",
+    "installer": "strict",
+    "lifecycle": "strict",
+    "release": "release",
+}
 
 
 def select_policy(
@@ -20,15 +34,16 @@ def select_policy(
     if requested is not None and requested not in POLICY_LEVELS:
         raise ValueError(f"unsupported policy level: {requested}")
     domains = {classify_path(path) for path in changed_paths}
-    if stage == "release" or domains & ESCALATION_DOMAINS:
-        level = "strict"
-    elif stage == "pr" or domains & {"project_code", "dependency", "tests"}:
-        level = "standard"
-    else:
-        level = "light"
-    if requested is not None and POLICY_LEVELS.index(requested) > POLICY_LEVELS.index(level):
+    levels = [DOMAIN_LEVELS.get(domain, "standard") for domain in domains]
+    level = max(levels, key=POLICY_LEVELS.index) if levels else "standard"
+    stage_floor = "release" if stage == "release" else "standard" if stage == "pr" else "lite"
+    if POLICY_LEVELS.index(stage_floor) > POLICY_LEVELS.index(level):
+        level = stage_floor
+    if requested is not None:
+        if POLICY_LEVELS.index(requested) < POLICY_LEVELS.index(level):
+            raise ValueError(f"requested policy {requested} cannot lower selected policy {level}")
         level = requested
-    scope = "full" if stage == "release" or level in {"standard", "strict"} else "focused"
+    scope = "focused" if level == "lite" else "full"
     return {"level": level, "scope": scope, "stage": stage, "domains": sorted(domains)}
 
 

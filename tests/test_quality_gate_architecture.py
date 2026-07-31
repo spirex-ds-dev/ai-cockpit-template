@@ -16,6 +16,7 @@ def _target_block(name: str) -> str:
 def test_quality_entry_points_have_explicit_compatibility_semantics():
     text = MAKEFILE.read_text(encoding="utf-8")
     assert "quality-fast:" in text
+    assert "quality-standard:" in text
     assert "quality-full:" in text
     assert "quality-release:" in text
     assert "quality:\n\t+$(QUALITY_MAKE) --no-print-directory quality-full" in text
@@ -25,6 +26,39 @@ def test_quality_entry_points_have_explicit_compatibility_semantics():
     assert "$(call RUN_QUALITY_GATE,project-test,tests)" in text
     assert "$(call RUN_QUALITY_GATE,check-sbom,supply-chain)" in text
     assert "scripts/summarize_quality_gates.py" in text
+
+
+def test_default_quality_entrypoint_routes_without_duplicating_gate_commands():
+    routed = _target_block("ai-cockpit-quality")
+    standard = _target_block("quality-standard")
+
+    assert "scripts/determine_governance_profile.py" in routed
+    assert "dispatchTarget" in routed
+    assert "$(QUALITY_MAKE)" in routed
+    assert "quality-fast" in standard
+    assert "project-test" in standard
+    assert "check-ai-reference-impact" in standard
+    assert "check-ai-test-weakening" in standard
+    assert "quality-full" not in standard
+    assert "quality-release" not in standard
+
+
+def test_standard_quality_dry_run_uses_only_its_required_owners():
+    result = subprocess.run(
+        ["make", "-n", "quality-standard"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "quality-fast" in result.stdout
+    assert "project-test" in result.stdout
+    assert "check-ai-reference-impact" in result.stdout
+    assert "check-ai-test-weakening" in result.stdout
+    assert "quality-full" not in result.stdout
+    assert "quality-release" not in result.stdout
 
 
 def test_specialized_debug_targets_remain_but_are_not_quality_full_subgates():

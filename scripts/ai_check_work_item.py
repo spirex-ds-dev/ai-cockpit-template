@@ -63,10 +63,13 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "predecessorWorkItem",
     "resumeHistory",
     "budgetImpact",
+    "governanceProfile",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
 RISK_LEVELS = {"low", "medium", "high"}
 EXECUTION_STATUSES = {"continue", "defer", "needs_human_decision", "block"}
+GOVERNANCE_PROFILES = {"lite", "standard", "strict", "release"}
+GOVERNANCE_PROFILE_SOURCES = {"automatic", "human_override"}
 INTENT_STRING_KEYS = {"businessGoal", "userGoal", "problem", "rationale"}
 INTENT_LIST_KEYS = {"constraints", "nonGoals"}
 
@@ -81,6 +84,64 @@ def validate_string_list(data: dict[str, Any], key: str, *, allow_empty: bool) -
     for index, item in enumerate(value):
         if not non_empty_string(item):
             issues.append(f"{key}[{index}] must be a non-empty string")
+    return issues
+
+
+def validate_governance_profile(data: dict[str, Any]) -> list[str]:
+    """Validate Contract evidence for automatic selection or a bounded override."""
+    profile = data.get("governanceProfile")
+    if profile is None:
+        return []
+    if not isinstance(profile, dict):
+        return ["governanceProfile must be an object"]
+
+    issues: list[str] = []
+    selected = profile.get("selected")
+    source = profile.get("source")
+    reasons = profile.get("reasons")
+    override = profile.get("override")
+    if selected not in GOVERNANCE_PROFILES:
+        issues.append(f"governanceProfile.selected must be one of {sorted(GOVERNANCE_PROFILES)}")
+    if source not in GOVERNANCE_PROFILE_SOURCES:
+        issues.append(
+            f"governanceProfile.source must be one of {sorted(GOVERNANCE_PROFILE_SOURCES)}"
+        )
+    if (
+        not isinstance(reasons, list)
+        or not reasons
+        or any(not non_empty_string(item) for item in reasons)
+    ):
+        issues.append("governanceProfile.reasons must contain at least one non-empty string")
+
+    if source == "automatic":
+        if override is not None:
+            issues.append("governanceProfile.override must be null when source is automatic")
+        return issues
+    if source != "human_override":
+        return issues
+    if not isinstance(override, dict):
+        issues.append("governanceProfile.override must be an object when source is human_override")
+        return issues
+
+    for key in ("approvalEvidence", "reason"):
+        if not non_empty_string(override.get(key)):
+            issues.append(f"governanceProfile.override.{key} must be a non-empty string")
+    for key in ("risks", "notRunChecks"):
+        values = override.get(key)
+        if (
+            not isinstance(values, list)
+            or not values
+            or any(not non_empty_string(item) for item in values)
+        ):
+            issues.append(
+                f"governanceProfile.override.{key} must contain at least one non-empty string"
+            )
+    expires_at = override.get("expiresAt")
+    work_item_only = override.get("workItemOnly")
+    if not non_empty_string(expires_at) and work_item_only is not True:
+        issues.append("governanceProfile.override requires expiresAt or workItemOnly true")
+    if "workItemId" in override and not non_empty_string(override.get("workItemId")):
+        issues.append("governanceProfile.override.workItemId must be a non-empty string")
     return issues
 
 
@@ -478,6 +539,7 @@ def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str
     issues.extend(validate_semantic_placeholders(data))
     issues.extend(validate_raw_request_requirement(data))
     issues.extend(validate_requested_operation(data))
+    issues.extend(validate_governance_profile(data))
     if "problemStatement" in data and not non_empty_string(data.get("problemStatement")):
         issues.append("problemStatement must be a non-empty string")
 

@@ -8,6 +8,91 @@
   ],
   "capabilities": [
     {
+      "id": "risk_based_quality_routing",
+      "status": "implemented",
+      "claim": "The repository deterministically routes Work Item quality through Lite, Standard, Strict, or Release while preserving conservative escalation and existing gate ownership.",
+      "evidence": [
+        ".ai/quality/governance-routing.yaml",
+        "scripts/determine_governance_profile.py",
+        "scripts/determine_quality_scope.py",
+        "Makefile",
+        "templates/make/Makefile.ai",
+        "docs/reference/governance-profiles.md"
+      ],
+      "verification": [
+        "tests/test_governance_profile.py",
+        "tests/test_quality_scope.py",
+        "tests/test_quality_gate_architecture.py",
+        "tests/test_adoption_e2e.py"
+      ],
+      "sourceEvidence": [
+        ".ai/quality/governance-routing.yaml",
+        "scripts/determine_governance_profile.py",
+        "scripts/determine_quality_scope.py",
+        "Makefile",
+        "templates/make/Makefile.ai",
+        "docs/reference/governance-profiles.md"
+      ],
+      "testEvidence": [
+        "tests/test_governance_profile.py",
+        "tests/test_quality_scope.py",
+        "tests/test_quality_gate_architecture.py",
+        "tests/test_adoption_e2e.py"
+      ],
+      "commandEvidence": [
+        "make ai-cockpit-quality"
+      ],
+      "limitations": "Path and Contract evidence select verification strength but do not authenticate human identity, infer complete semantic risk, or replace hosted release evidence.",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 10,
+        "files": [
+          {
+            "path": ".ai/quality/governance-routing.yaml",
+            "sha256": "d8b566c764f1da9283c19c5d1bb783286a0658c93f1c41dc1ec70709ec566c7e"
+          },
+          {
+            "path": "Makefile",
+            "sha256": "46eea4622ebd6ad7f43674aa32da6fcebd8a75b7a30d23c592dd4dff20b9eccc"
+          },
+          {
+            "path": "docs/reference/governance-profiles.md",
+            "sha256": "efe8dddb8c947410d7114d3593dcf012df8a9830b51e7af2296c7fcb3a3a18e0"
+          },
+          {
+            "path": "scripts/determine_governance_profile.py",
+            "sha256": "c239e75425c145ee44baced2cebf9b6f8fdb3eac8a9e5b35ab4fda946cd7f1ad"
+          },
+          {
+            "path": "scripts/determine_quality_scope.py",
+            "sha256": "aa5011bee48777e31ede8cc73b5a999756a4ed1a675752b48ecf06978c28dec6"
+          },
+          {
+            "path": "templates/make/Makefile.ai",
+            "sha256": "f3c3695a62d752a14fb3e83060792195a37c79fe86f2b23ec542fcd3f2c246e3"
+          },
+          {
+            "path": "tests/test_adoption_e2e.py",
+            "sha256": "ae319ab2f069abd0a0b176abc1e34e71f9fdbebe6f75e3f4c5b6feadf8c0cdbf"
+          },
+          {
+            "path": "tests/test_governance_profile.py",
+            "sha256": "84b4dcf37c61e2f56487f9ba8587b8b707c8c488d77e7a98704aafea2b06f4c1"
+          },
+          {
+            "path": "tests/test_quality_gate_architecture.py",
+            "sha256": "94df99f5ea16804b89f2ded07f495e34e788853e17818306c5279ee236dd33cf"
+          },
+          {
+            "path": "tests/test_quality_scope.py",
+            "sha256": "b14e168015a2e4711c85407ffad97bd9aa74e280caeb34dbe4856c9145fbb42e"
+          }
+        ],
+        "digest": "sha256:2c5925c0a708dde15739f0b2a299242ee7e85cb14e62d57efb86268aaad52947"
+      },
+      "digest": "sha256:ec93c73ea875fc6bff76b74ed3b077bab5216f3b8bd8f94bd7ec8652e56267c6"
+    },
+    {
       "id": "repository_governance_layer",
       "status": "implemented",
       "claim": "Contract, Preflight, verification, Summary, archive, PR, close, and base-sync governance exists in this repository.",
@@ -47,7 +132,7 @@
         "make quality"
       ],
       "limitations": "Repository evidence describes this template; it does not prove an adopter executed the lifecycle.",
-      "digest": "sha256:99f44c7bc169249879f435b59dadbd9225fdb75b241375277c81f6ac3f0e8418",
+      "digest": "sha256:b22a58ca4486298f1b2086fab8cffd6356ae324fc63073acb1b85949cc8bc5fb",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 12,
@@ -58,7 +143,7 @@
           },
           {
             "path": "Makefile",
-            "sha256": "472ab6793dee5b41f025a252596658feec1e5a83a37fbd77f184887f9c38faaf"
+            "sha256": "46eea4622ebd6ad7f43674aa32da6fcebd8a75b7a30d23c592dd4dff20b9eccc"
           },
           {
             "path": "scripts/ai_close_work_item.py",
@@ -74,7 +159,7 @@
           },
           {
             "path": "scripts/ai_start.py",
-            "sha256": "b6a83387ecf8fc01e82303103327a6003626549a90523a755ee00e48f2acba91"
+            "sha256": "617297abdd83297f4395901dd433be3cc4de2f9781bde215e6590123163e3f23"
           },
           {
             "path": "tests/test_finish_e2e.py",
@@ -90,7 +175,7 @@
           },
           {
             "path": "tests/test_start_and_archive.py",
-            "sha256": "23902a5a1c9f2151e718d29335e1f05129b864284559784f1843b3b9366429d4"
+            "sha256": "d55aae9e86f547cc86243e1f99bf177900ed9fa47a11bdc41d3fe70cbf71e5a5"
           },
           {
             "path": "tests/test_task_outcome_ai_finish_integration.py",
@@ -101,7 +186,7 @@
             "sha256": "6b155e79fd7a6c3fb012c7a40dc5affc0a03a09d34e485cac2047887c946287a"
           }
         ],
-        "digest": "sha256:186fb8dceeeb882629bce2a4cc7cb64497491791d81b9a264c3548d5dc14ec88"
+        "digest": "sha256:ef7b9be72bf7ab74551cb3615990ee90d23d1404f194da50568959f7b7702038"
       }
     },
     {
@@ -185,7 +270,7 @@
         "make quality"
       ],
       "limitations": "Installed capability must be verified in the adopter repository.",
-      "digest": "sha256:e4ffb7a54287043a5f2e9194c2f102295f1fab13df9653c4995121c199e46974",
+      "digest": "sha256:93b0686df55c53072332bb5cd9623b2b9a0979b2eedcbb509412102547bc9c6f",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 5,
@@ -196,11 +281,11 @@
           },
           {
             "path": "scripts/install_ai_cockpit.py",
-            "sha256": "4bca91ffaa4c52efc40b9e49aeb283fce89050ec5bc75692378b3b3c7b20cf74"
+            "sha256": "04858bbe941695c617aeaef7a893a3b547fd596896cc7ed7a95be966adbe3ea2"
           },
           {
             "path": "templates/make/Makefile.ai",
-            "sha256": "2805a8b9d3fd9997c513df81562b885ac3c2dbb6e38d4603225a5bcc05c09c98"
+            "sha256": "f3c3695a62d752a14fb3e83060792195a37c79fe86f2b23ec542fcd3f2c246e3"
           },
           {
             "path": "tests/test_install_entrypoint.py",
@@ -211,7 +296,7 @@
             "sha256": "93e3aa0c712e6179f10f985f2b76f3b4ad5e18c3800ce3ff65999f9d1d400171"
           }
         ],
-        "digest": "sha256:06b325a3c940a1bfed2dc14adb6887b2ad5c6f3af9dbf15faecf4aa548797ab3"
+        "digest": "sha256:9ca6fce5c446a31f21f2049cf07b606be668304ca1e70cd07356f3f7e4565c02"
       }
     },
     {
@@ -242,7 +327,7 @@
         "make quality"
       ],
       "limitations": "Template execution evidence does not prove an adopter completed calibration or approval.",
-      "digest": "sha256:b99174146fadd4844e950434fb03e3686d3b47beb0c63a747a8824726555f034",
+      "digest": "sha256:8821f5abdcd0ea07f4b13cb22eb459d1b00ff5c3815423384f26876032bc47dd",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 6,
@@ -261,7 +346,7 @@
           },
           {
             "path": "templates/make/Makefile.ai",
-            "sha256": "2805a8b9d3fd9997c513df81562b885ac3c2dbb6e38d4603225a5bcc05c09c98"
+            "sha256": "f3c3695a62d752a14fb3e83060792195a37c79fe86f2b23ec542fcd3f2c246e3"
           },
           {
             "path": "tests/test_calibration_session.py",
@@ -272,7 +357,7 @@
             "sha256": "e17cd05f2b4cc2d8a373d4455b9049b0707d5233674e2d188bbb008e234d7dac"
           }
         ],
-        "digest": "sha256:6ed31b3ed3e1ecea6fd5d225a738cd5f5e7e6fa3fb51b04e2bd5b12125173dd7"
+        "digest": "sha256:5a0552bfb54b76e5e842f5cd1348376ec202df61737c13376c9be085f46b4945"
       }
     },
     {
@@ -681,7 +766,7 @@
         "make quality"
       ],
       "limitations": "The installed executor implements preserve-evidence Runtime-file removal only. Purge filesystem removal is not implemented. Disable writes a result JSON but does not independently update canonical installed state. Empty directory cleanup, external identity, sandboxing, immutable audit, and enterprise compliance are not claimed; the target-repository receipt and human review remain required.",
-      "digest": "sha256:2cfe8bf204d9251e12c5dcf9894321db8910095484c7c8636cab166e015f0df6",
+      "digest": "sha256:c29ed4cec564b2ed8bb4ff51dd2787ddaa376610494380ed55eb577c563f5616",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 18,
@@ -700,7 +785,7 @@
           },
           {
             "path": "scripts/ai_installer_catalog.json",
-            "sha256": "a565f3eb68bb46503c5a104c3e6e0319090b2e4da76c52e988f734766c4452ac"
+            "sha256": "066ef35bc65172ce6b332f56ee3ddcd946373a1d15a9ed1ad6c015698c61850a"
           },
           {
             "path": "scripts/ai_uninstall_facts.py",
@@ -720,7 +805,7 @@
           },
           {
             "path": "templates/make/Makefile.ai",
-            "sha256": "2805a8b9d3fd9997c513df81562b885ac3c2dbb6e38d4603225a5bcc05c09c98"
+            "sha256": "f3c3695a62d752a14fb3e83060792195a37c79fe86f2b23ec542fcd3f2c246e3"
           },
           {
             "path": "tests/test_detached_uninstaller.py",
@@ -759,7 +844,7 @@
             "sha256": "449e48f52eb3522cabd8e15bd4538b7b09304bb74745835324be174d728262fe"
           }
         ],
-        "digest": "sha256:9d41c1471a09809e6172597f82ff7b4e3ba39040b4dde2d5e5f61bbfbb70e331"
+        "digest": "sha256:817853b0b8c276a53755a7ca7cc8b4f4943273c8f19ef93b9fe4024d99240ae5"
       }
     },
     {
@@ -993,7 +1078,7 @@
         "make check-ai-reference-impact"
       ],
       "limitations": "Python uses AST name analysis, TypeScript uses basic text analysis, and other languages use generic text only. Reflection, aliases, generated code, runtime loading, external repositories, and monitoring remain dependent on supplied evidence; the gate does not claim complete semantic analysis.",
-      "digest": "sha256:f8b343788aa143ad64b08c1f7eb132f2a74506603490fae0fe0292ecfba42a0a",
+      "digest": "sha256:32ef9e5510fe5dd16ac4fcec9aa7ac3efb4612312866df3e1e4b080043b75017",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 9,
@@ -1008,7 +1093,7 @@
           },
           {
             "path": "Makefile",
-            "sha256": "472ab6793dee5b41f025a252596658feec1e5a83a37fbd77f184887f9c38faaf"
+            "sha256": "46eea4622ebd6ad7f43674aa32da6fcebd8a75b7a30d23c592dd4dff20b9eccc"
           },
           {
             "path": "docs/reference/reference-impact-gate.ja.md",
@@ -1028,14 +1113,14 @@
           },
           {
             "path": "templates/make/Makefile.ai",
-            "sha256": "2805a8b9d3fd9997c513df81562b885ac3c2dbb6e38d4603225a5bcc05c09c98"
+            "sha256": "f3c3695a62d752a14fb3e83060792195a37c79fe86f2b23ec542fcd3f2c246e3"
           },
           {
             "path": "tests/test_reference_impact.py",
             "sha256": "ea89daa43993c4d92e3e829733b08ebdcf17c52ed4fe772a5b0875b01a54bc89"
           }
         ],
-        "digest": "sha256:f941f09a00d016ad4b929078f668c4c7095ddb1f49bee33215fd88d3d5c51753"
+        "digest": "sha256:b0f8d036f76c06753f83deafab0622dc0f819a99066d50707373b449d51b57d9"
       }
     },
     {
@@ -1089,7 +1174,7 @@
           },
           {
             "path": "Makefile",
-            "sha256": "472ab6793dee5b41f025a252596658feec1e5a83a37fbd77f184887f9c38faaf"
+            "sha256": "46eea4622ebd6ad7f43674aa32da6fcebd8a75b7a30d23c592dd4dff20b9eccc"
           },
           {
             "path": "docs/reference/test-weakening-guard.ja.md",
@@ -1109,20 +1194,20 @@
           },
           {
             "path": "scripts/ai_installer_catalog.json",
-            "sha256": "a565f3eb68bb46503c5a104c3e6e0319090b2e4da76c52e988f734766c4452ac"
+            "sha256": "066ef35bc65172ce6b332f56ee3ddcd946373a1d15a9ed1ad6c015698c61850a"
           },
           {
             "path": "templates/make/Makefile.ai",
-            "sha256": "2805a8b9d3fd9997c513df81562b885ac3c2dbb6e38d4603225a5bcc05c09c98"
+            "sha256": "f3c3695a62d752a14fb3e83060792195a37c79fe86f2b23ec542fcd3f2c246e3"
           },
           {
             "path": "tests/test_test_weakening.py",
             "sha256": "daa0019341899f60035fa7bf3de1abba2d6e0d2b14e138f9af24ae3f2f87658b"
           }
         ],
-        "digest": "sha256:fd68966d574f838b64d99e2de0b5f03b85c2dd36b0b114aec67f4c0a8ab4f322"
+        "digest": "sha256:f050d71f9331d1e3ab58bb9418e149b0eaf2be05bb19899542ad9a507b4e1198"
       },
-      "digest": "sha256:86022c28068d596e9b9b9ccdd6b67248fffcd4a0f4d5acb4afe92e8716d1b565"
+      "digest": "sha256:251eb087f84de88877d2c9c48dbc4fa7e83ea8f0fc6f6d880e4ce1146d9a90da"
     },
     {
       "id": "enterprise_security_assurance",

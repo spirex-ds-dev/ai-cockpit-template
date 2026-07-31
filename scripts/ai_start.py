@@ -612,6 +612,14 @@ def main() -> int:
                 "riskTypes": ["scope_unclear"],
                 "reason": "Initial skeleton; replace with task-specific implementation and review risks.",
             },
+            "governanceProfile": {
+                "selected": "standard",
+                "source": "automatic",
+                "reasons": [
+                    "Initial Work Item skeleton defaults to Standard until scope is classified."
+                ],
+                "override": None,
+            },
             "agentCapability": {
                 "canImplement": False,
                 "canVerify": False,
