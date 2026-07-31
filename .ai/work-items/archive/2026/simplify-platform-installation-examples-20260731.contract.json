@@ -1,0 +1,245 @@
+{
+  "contractVersion": 2,
+  "workItemId": "simplify-platform-installation-examples-20260731",
+  "mode": "code",
+  "title": "Simplify multilingual platform installation examples",
+  "baseCommit": "9c2f5cf40f5bc7b9fde6feabd1eaca0486b14b7a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/simplify-platform-installation-examples-20260731.contract.json",
+    ".ai/work-items/active/simplify-platform-installation-examples-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/simplify-platform-installation-examples-20260731.outcome.json",
+    ".ai/work-items/active/simplify-platform-installation-examples-20260731.outcome.md",
+    "docs/getting-started/examples/ios.md",
+    "docs/getting-started/examples/ios.zh-CN.md",
+    "docs/getting-started/examples/ios.ja.md",
+    "docs/getting-started/examples/android.md",
+    "docs/getting-started/examples/android.zh-CN.md",
+    "docs/getting-started/examples/android.ja.md",
+    "docs/getting-started/examples/java.md",
+    "docs/getting-started/examples/java.zh-CN.md",
+    "docs/getting-started/examples/java.ja.md",
+    "scripts/check_docs_metadata.py",
+    "tests/test_docs_metadata.py",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Changing Runtime, installer, calibration-session schema, or repository governance behavior.",
+    "Removing the documented evidence, Unknown, human-approval, release-verification, or lifecycle boundaries.",
+    "Changing installation homepage, calibration guide, troubleshooting guide, or immutable historical Work Item evidence except through existing links from the platform pages."
+  ],
+  "sources": [
+    {
+      "path": "docs/getting-started/calibration.md",
+      "reason": "Defines Work Item as the approved calibration route after Runtime installation."
+    },
+    {
+      "path": "docs/troubleshooting/installation.md",
+      "reason": "Provides the existing symptom-first recovery route that platform entry pages must link rather than duplicate."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Current checker still requires obsolete platform-stage tables and must instead enforce the short multilingual Work Item route."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-07-28-wi10-prompt-first-multiplatform-installation-design.md",
+      "reason": "Records the previous prompt-first installation design whose platform surface must now be corrected without deleting the safety boundary."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Generates the Japanese source-bound assessment that must be refreshed after Japanese public documentation and focused documentation tests change."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "documentation_drift",
+      "multilingual_parity",
+      "user_experience"
+    ],
+    "reason": "Nine user-facing documents and their anti-omission checker must converge on the same short Work Item-first route without weakening safety boundaries.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user approved the short platform entry design and explicitly required complete English, Chinese, and Japanese coverage."
+  },
+  "preReviewWarnings": [
+    "Review every platform-language pair; no language may retain the old seven-stage table, filled-answer table, or cross-step navigation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Each of the iOS, Android, and Java examples exists in English, Chinese, and Japanese and uses the same short entry structure: identify the platform, create a calibration Work Item, submit one short platform-aware prompt, and state a plain-language next action.",
+    "No platform entry page requires a first-time user to follow the obsolete seven-stage table, filled-answer table, cross-step navigation, Candidate/session internals, or lifecycle closure before creating the calibration Work Item.",
+    "Each platform entry preserves its material non-claim boundary and directs detailed calibration questions to the existing calibration guide and STOP recovery to the existing troubleshooting route rather than removing safety guidance.",
+    "The documentation checker and focused regression tests reject a missing platform-language entry, missing Work Item route, missing recovery/calibration route, missing evidence boundary, or legacy seven-stage structure.",
+    "The canonical pre-release documentation-alignment and Japanese source-bound assessment reports are refreshed and focused documentation checks pass; full local quality is optional under the user's temporary efficiency authorization while Hosted CI remains required."
+  ],
+  "guidelines": [
+    "Keep first-time platform installation simple: the user sees where to start, what prompt to copy, and what happens next.",
+    "Use Work Item calibration as the single guided route; do not expose Session, Candidate, phase-record, or lifecycle internals on platform entry pages.",
+    "Preserve calibrated trust: Unknown is not guessed, safety boundaries are not weakened, and detailed recovery remains available by link.",
+    "Maintain complete English, Chinese, and Japanese semantic and structural coverage for all three platforms."
+  ],
+  "intent": {
+    "problem": "The installation homepages became beginner-oriented, but all nine iOS, Android, and Java platform examples remain the older 117–142-line seven-stage, multi-table process. They reintroduce governance terminology, cross-step navigation, and detailed lifecycle obligations before a novice can start calibration.",
+    "constraints": [
+      "Do not omit English, Chinese, or Japanese variants for iOS, Android, or Java.",
+      "Keep the user-facing entry pages short and Work Item-first; retain detailed safety and recovery guidance through existing links.",
+      "Do not claim available toolchains, devices, signing, services, credentials, hosted CI, or project commands without repository evidence.",
+      "Use focused verification under the temporary user-authorized efficiency exception; do not waive governance gates or Hosted CI."
+    ],
+    "rationale": "Installation adoption depends on a non-programmer understanding the next action. Governance remains strong when Runtime and the calibration Work Item enforce evidence, while the entry documentation hides unnecessary internal mechanics."
+  },
+  "rawUserRequest": "安装文档改善已经Okay，但是iOS,android,java的安装事例还是旧的复杂版本。请确认下。开个WI，修复。注意多语言不要遗漏。确认，请开始",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-simplify-multilingual-platform-installation-examples",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:human-request-platform-examples-short-work-item-route"
+  },
+  "declaredIntent": {
+    "summary": "Replace the obsolete complex multilingual platform installation examples with short Work Item-first entry pages, while preserving safety boundaries and enforcing all nine language-platform variants.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A first-time iOS, Android, or Java adopter in English, Chinese, or Japanese opens a platform page and can identify the platform, copy one short prompt, and create the calibration Work Item without navigating a seven-stage installation protocol.",
+      "required": true,
+      "expected": "Every one of the nine pages provides the same short Work Item-first route and a platform-specific non-claim boundary.",
+      "verificationPlan": "Run focused documentation tests plus the metadata checker; mutate one required platform route in the regression test."
+      ,"status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A platform fact such as toolchain, signing, service, device, command, or hosted CI is Unknown.",
+      "required": true,
+      "expected": "The entry page directs the reader to evidence-based calibration or STOP recovery and does not invent a platform fact.",
+      "verificationPlan": "Review every platform-language page for its explicit non-claim marker and calibration/troubleshooting links, then enforce them through the checker."
+      ,"status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized focused-verification exception; it does not waive governance gates or Hosted CI."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item commit to restore the previously published platform examples and their former metadata rule; do not alter immutable archive evidence.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 730
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/simplify-platform-installation-examples-20260731.json",
+    "baseCommit": "9c2f5cf40f5bc7b9fde6feabd1eaca0486b14b7a",
+    "initialScopeDigest": "039ba7848f0225845e06adce423dce11592f70855139c1b4a0b8687100fd61b9",
+    "contractSkeletonDigest": "44a44df091e8b057c47852e63ece25bb1e5baead05bc8dbf725cc3872417b41c"
+  }
+}
