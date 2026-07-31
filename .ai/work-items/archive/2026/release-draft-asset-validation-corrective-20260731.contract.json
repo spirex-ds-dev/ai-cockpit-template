@@ -1,0 +1,235 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-draft-asset-validation-corrective-20260731",
+  "mode": "code",
+  "title": "release-draft-asset-validation-corrective-20260731",
+  "baseCommit": "09fa1389364afacf02f0f2953b0583c0e6a21bbd",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-draft-asset-validation-corrective-20260731.contract.json",
+    ".ai/work-items/active/release-draft-asset-validation-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-draft-asset-validation-corrective-20260731.outcome.json",
+    ".ai/work-items/active/release-draft-asset-validation-corrective-20260731.outcome.md",
+    ".github/workflows/release.yml",
+    "tests/test_release_workflow.py",
+    "tests/test_workflows.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_release_distribution.py",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Deleting, moving, retrying, or publishing the reserved v0.5.45 and v0.5.46 tags or their Draft Releases.",
+    "Changing the public v0.5.42 projection without newly published provider evidence.",
+    "Weakening release, coverage, workflow, or Hosted CI requirements."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30611832530",
+      "reason": "The real v0.5.46 publication run failed before public release at the tagged Quick Install verification step."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Contains the exact Draft asset ID validation that failed under Bash."
+    },
+    {
+      "path": "tests/test_release_workflow.py",
+      "reason": "Owns regression coverage for Draft Quick Install verification sequencing and asset retrieval."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Canonical record of reserved tags and the unpublished candidate."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_workflow",
+      "supply_chain",
+      "version_reservation"
+    ],
+    "reason": "A failed production release creates immutable tag and Draft Release evidence; the correction must be executable before a new candidate is attempted.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous corrective release work, but each immutable publication remains guarded by its exact-source verification workflow."
+  },
+  "preReviewWarnings": [
+    "The v0.5.46 tag and Draft Release are failure evidence and must remain untouched."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The Draft asset identifier guard uses valid Bash syntax and rejects empty or non-numeric IDs before downloading a Draft asset.",
+    "Regression tests distinguish Bash [[ ... =~ ... ]] from invalid test ... =~ syntax and prove the real Draft asset retrieval path stays after Draft creation and before publication.",
+    "v0.5.46 is recorded as an unavailable reserved version with failed run 30611832530 and its retained Draft Release as evidence; the sole next candidate is v0.5.47.",
+    "Candidate supply-chain baselines and both release-state metadata digests are regenerated through authoritative generators.",
+    "Focused regression checks, every governance gate, and Hosted CI pass; the full local quality suite remains optional only under the temporary user authorization."
+  ],
+  "guidelines": [
+    "Preserve immutable failed release evidence; never repair a reserved semantic version in place.",
+    "Test the executable shell boundary, not only textual workflow presence.",
+    "Use authoritative generators for derived release evidence and do not lower Hosted CI or release gates."
+  ],
+  "intent": {
+    "problem": "The real v0.5.46 publication created an immutable tag and Draft Release, then failed in the tagged Quick Install check because the workflow used test \"$asset_id\" =~ regex. Bash test does not implement =~, so the intended Draft asset validation was structurally unexecutable.",
+    "constraints": [
+      "Keep v0.5.45 and v0.5.46 immutable tags and retained Draft Releases as failure evidence.",
+      "Advance exactly one patch beyond the highest reserved version, to v0.5.47.",
+      "Do not change the public v0.5.42 projection or weaken release gates.",
+      "Use focused local verification under the user-authorized temporary efficiency policy; retain governance gates and Hosted CI."
+    ],
+    "rationale": "The release workflow must prove its real Draft asset retrieval path before public publication; syntax-level validation prevents the same deterministic failure from consuming another semantic version."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized focused-verification exception; it does not waive governance gates or full Hosted CI."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized continuous corrective release work, PR/merge/closure, and final publication after exact-source verification."
+  },
+  "rollbackNote": "Revert only this corrective Work Item through its PR if required; preserve v0.5.45 and v0.5.46 provider evidence and do not mutate their tags or Draft Releases.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 728
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-draft-asset-validation-corrective-20260731.json",
+    "baseCommit": "09fa1389364afacf02f0f2953b0583c0e6a21bbd",
+    "initialScopeDigest": "84e43a4759f87c29e55860290142449fdfcd56a14776e96f5e95c1b3523ee9e2",
+    "contractSkeletonDigest": "2db1774e671511c10243418b3549cba99448307d1cea0855376babf2a4bbc49e"
+  },
+  "rawUserRequest": "Continue the approved release plan. If the direction does not converge, stop, identify the root cause, correct it, and then continue. Do not reuse failed release versions.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-release-v0546-failure-root-correction",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:release-draft-asset-validation-v0546"
+  },
+  "declaredIntent": {
+    "summary": "Correct the deterministic v0.5.46 Draft asset validation failure and advance the candidate safely.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A Draft Release asset is resolved through its REST apiUrl during tagged Quick Install verification.",
+      "expected": "The workflow uses valid Bash [[ ... =~ ... ]] syntax and rejects an empty or non-numeric asset ID before an API download.",
+      "verificationPlan": "Focused workflow regression tests assert the executable Bash guard and Draft download ordering; Hosted CI runs the workflow checks.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "The v0.5.46 tag and Draft Release exist after a failed publication.",
+      "expected": "Canonical state reserves v0.5.46 as unavailable and offers only v0.5.47 as the next unpublished candidate.",
+      "verificationPlan": "Provider facts, release-state regression tests, authoritative evidence refresh, governance gates, and Hosted CI.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ]
+}
