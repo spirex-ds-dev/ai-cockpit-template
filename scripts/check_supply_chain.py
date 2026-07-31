@@ -29,6 +29,7 @@ SBOM_BASELINE = ROOT / ".ai" / "cockpit" / "sbom.json"
 PROVENANCE_BASELINE = ROOT / ".ai" / "cockpit" / "provenance.json"
 RELEASE_DIGESTS_BASELINE = ROOT / ".ai" / "cockpit" / "release-digests.json"
 RELEASE_STATE = ROOT / "release-state.json"
+NEXT_RELEASE_JSON = ROOT / "next-release.json"
 WORKFLOW_DIR = ROOT / ".github" / "workflows"
 LOCK_FILE = ROOT / "requirements-dev.lock"
 RELEASE_JSON = ROOT / "release.json"
@@ -466,6 +467,7 @@ def synchronize_release_state_metadata_digests() -> None:
     if not isinstance(published_digest, str):
         raise InvalidDataShapeError("release-state.json metadataDigests.published is missing")
     metadata_digests["published"] = sha256_bytes(RELEASE_JSON.read_bytes())
+    metadata_digests["candidate"] = sha256_bytes(NEXT_RELEASE_JSON.read_bytes())
     write_json(RELEASE_STATE, state)
 
 

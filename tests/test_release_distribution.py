@@ -66,7 +66,10 @@ def test_candidate_release_is_next_patch_and_separate_from_published_metadata():
     )
 
     assert (
-        candidate_release_issues(candidate, published, reserved_tags={"v0.5.43", "v0.5.44"}) == []
+        candidate_release_issues(
+            candidate, published, reserved_tags={"v0.5.43", "v0.5.44", "v0.5.45"}
+        )
+        == []
     )
     assert candidate["releaseTag"] == published["releaseTag"] or candidate["releaseTag"].startswith(
         "v"

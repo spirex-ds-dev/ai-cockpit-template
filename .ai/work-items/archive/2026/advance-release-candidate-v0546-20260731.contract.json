@@ -1,0 +1,228 @@
+{
+  "contractVersion": 2,
+  "workItemId": "advance-release-candidate-v0546-20260731",
+  "mode": "code",
+  "title": "Advance release candidate past reserved v0.5.45",
+  "baseCommit": "2f086245374d39f947274faf306cdfd5ab6d800a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/advance-release-candidate-v0546-20260731.contract.json",
+    ".ai/work-items/active/advance-release-candidate-v0546-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/advance-release-candidate-v0546-20260731.outcome.json",
+    ".ai/work-items/active/advance-release-candidate-v0546-20260731.outcome.md",
+    "next-release.json",
+    "release-state.json",
+    ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "scripts/check_supply_chain.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_release_distribution.py",
+    "tests/test_supply_chain.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Deleting, moving, publishing, or reusing the immutable v0.5.45 tag or its Draft Release.",
+    "Changing the public v0.5.42 release projection without new published provider evidence.",
+    "Lowering release, coverage, or Hosted CI requirements."
+  ],
+  "sources": [
+    {
+      "path": "release-state.json",
+      "reason": "Canonical release state records reserved and unavailable semantic versions."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Unpublished candidate projection that must advance past the reserved v0.5.45 tag."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30609474406",
+      "reason": "Failed v0.5.45 publication created an immutable tag and retained Draft Release evidence."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Authoritative documentation for reserved-version and next-patch candidate rules."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_metadata", "supply_chain", "version_reservation"],
+    "reason": "Release-candidate metadata can misrepresent provider state or attempt to reuse a reserved semantic version.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous release correction; external publication remains a later, separately verified action."
+  },
+  "preReviewWarnings": ["Review the v0.5.45 unavailable-record evidence and exact next-patch progression to v0.5.46."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "v0.5.45 is recorded as an unavailable reserved version with the failed publication and retained Draft Release as evidence.",
+    "next-release.json and canonical release-state.json name v0.5.46 as the single unpublished candidate, exactly one patch above the highest reserved version.",
+    "Candidate supply-chain baselines and both release-state metadata digests are regenerated through authoritative generators, not hand-edited.",
+    "Regression coverage proves the repository candidate cannot reuse v0.5.45 and must remain v0.5.46 until an actual publication changes the public projection.",
+    "Release state, source-bound documentation evidence, all required governance gates, and Hosted CI remain enforced."
+  ],
+  "guidelines": [
+    "Do not reuse, delete, move, or publish a reserved semantic version as corrective cleanup.",
+    "Use authoritative generators for derived supply-chain evidence and synchronize every affected canonical metadata digest.",
+    "Do not lower release, coverage, or Hosted CI requirements to advance a candidate."
+  ],
+  "intent": {
+    "problem": "The failed v0.5.45 publication reserved an immutable tag and retains a Draft Release. The candidate record still names v0.5.45, which violates the canonical next-patch rule and would cause future release retries to repeat the invalid version.",
+    "constraints": [
+      "Preserve v0.5.45 and its Draft Release as failure evidence; do not mutate provider state in this Work Item.",
+      "Advance to exactly v0.5.46, not a skipped or reused semantic version.",
+      "Regenerate supply-chain evidence through repository generators and keep the public v0.5.42 projection unchanged.",
+      "Retain required governance gates and independent Hosted CI while omitting only the user-authorized redundant local quality suite."
+    ],
+    "rationale": "Making the reserved-version rule executable in canonical metadata prevents the next release workflow from retrying a semantically unavailable tag."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized focused-verification exception; it does not waive governance gates or full Hosted CI."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized continuous release correction, PR, merge, Hosted verification, and final release continuation."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 726
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/advance-release-candidate-v0546-20260731.json",
+    "baseCommit": "2f086245374d39f947274faf306cdfd5ab6d800a",
+    "initialScopeDigest": "3d3e951f21a45b4f24f43ebd61cc0ba7c0264840008e6c40b497af975e1c3d3f",
+    "contractSkeletonDigest": "c9318daac221cc3f7f9c55f50fa475e43ac78fdcf82e4e9d5f9591b8526ded02"
+  },
+  "rawUserRequest": "Continue the approved release plan. Preserve failed v0.5.45 evidence and advance the candidate instead of reusing a reserved version.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-continuous-release-plan-authorization",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:continuous-authorized-v0546-candidate-correction"
+  },
+  "declaredIntent": {
+    "summary": "Advance the candidate to v0.5.46 after v0.5.45 became a reserved, unavailable tag.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "An immutable v0.5.45 tag and a retained Draft Release exist after failed publication.",
+      "expected": "Canonical state records v0.5.45 as unavailable/reserved and never offers it as the next candidate.",
+      "verificationPlan": "Release-state regression test, metadata consistency checks, and provider facts.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "The successor candidate must preserve the v0.5.42 public projection while advancing exactly one patch after the highest reserved version.",
+      "expected": "Only next-release.json and release-state.json name v0.5.46; candidate evidence is regenerated and Hosted CI remains required.",
+      "verificationPlan": "Focused release metadata tests, generator checks, governance gates, and Hosted CI.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ]
+}
