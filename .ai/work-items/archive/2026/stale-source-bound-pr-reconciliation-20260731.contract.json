@@ -1,0 +1,219 @@
+{
+  "contractVersion": 2,
+  "workItemId": "stale-source-bound-pr-reconciliation-20260731",
+  "mode": "code",
+  "title": "Reconcile superseded source-bound failure PRs",
+  "baseCommit": "f529409421028e6d117e611cb8d73b4c78545b05",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "在发布前整理远端和本地分支；在替代修复合并后，关闭已被替代的失败 PR，但保留其失败审计证据。所有计划工单已经授权持续执行。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-branch-cleanup-and-continue",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:88ffd361577538166d46196f43be3725064612d2e3a65ebef3c2bd16b5b2b1bd"
+  },
+  "declaredIntent": {
+    "summary": "Close the five failed source-bound PRs superseded by successful PR #524, while preserving their provider and archived failure evidence for audit.",
+    "requestedCapabilities": ["ai_governance"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/stale-source-bound-pr-reconciliation-20260731.contract.json",
+    ".ai/work-items/active/stale-source-bound-pr-reconciliation-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/stale-source-bound-pr-reconciliation-20260731.outcome.json",
+    ".ai/work-items/active/stale-source-bound-pr-reconciliation-20260731.outcome.md"
+  ],
+  "outOfScope": [
+    "Deleting semantic-version tags, provider Releases, or origin/main.",
+    "Editing immutable archive evidence from the failed PRs.",
+    "Deleting unrelated branches or worktrees; that is reserved for the final pre-publication convergence Work Item.",
+    "Publishing a release or modifying runtime, CI, test, or documentation behavior."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/519",
+      "reason": "Failed source-bound evidence finalization PR superseded by the successful current-main delivery."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/520",
+      "reason": "Failed installed-runtime format corrective superseded by the successful current-main delivery."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/521",
+      "reason": "Failed finish-readiness corrective superseded by the successful current-main delivery."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/522",
+      "reason": "Failed source-bound standard verification PR whose architecture is delivered by #524."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/523",
+      "reason": "Failed Ruff-parity replacement whose Bandit root cause is resolved by #524."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/524",
+      "reason": "Merged successor with successful template-smoke, installation-smoke, release-evidence, ci-evidence, compatibility, and CodeQL evidence."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Authoritative rule that obsolete unmerged PRs must not be revived and cleanup follows verified replacement evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["provider_pr_closure", "failure_audit_preservation", "branch_cleanup"],
+    "unknownsReviewComplete": true,
+    "reason": "Closing an exact provider PR is externally visible and may delete its remote head branch. Each target has failed CI evidence and a concrete merged successor, but the audit relation and postconditions must be recorded before closure."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the plan, branch cleanup before release, and continued lifecycle execution without repeated confirmation."
+  },
+  "preReviewWarnings": [
+    "Close only exact PR numbers after recording their failed state and #524 successor relation; do not delete provider evidence or tags."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Bind exact provider closure targets and postconditions before external state changes."
+  },
+  "acceptance": [
+    "The Summary records PR #519, #520, #521, #522, and #523 with exact head SHA, failed Hosted state, and the specific successor relationship to merged PR #524.",
+    "Each of the five exact PRs is closed as superseded only after verifying #524 is merged and its source-bound aggregate evidence reports template-smoke, installation-smoke, and release-evidence as success for its Head SHA.",
+    "No failed archive record, semantic tag, provider Release, runtime source, CI, test, or product documentation is modified.",
+    "Provider postconditions show the five PRs closed; remote head branches are reported truthfully for later final convergence rather than inferred.",
+    "Focused governance and aggregate PR checks pass under the temporary local efficiency authorization; Hosted CI for this evidence-only closure Work Item passes before merge."
+  ],
+  "guidelines": [
+    "Use exact PR numbers, head SHAs, and successor links; never close a PR merely because its name sounds obsolete.",
+    "Preserve failed provider and archive evidence; close PRs rather than rewriting history.",
+    "Keep the Work Item limited to reconciliation evidence and provider closure; reserve broad branch/worktree deletion for final convergence.",
+    "Use focused local verification under the temporary authorization; do not weaken Hosted checks."
+  ],
+  "intent": {
+    "problem": "Five open source-bound PRs (#519 through #523) each have failed Hosted CI and have been superseded by merged PR #524. Leaving them open contradicts the required pre-release branch convergence and risks accidentally reviving an invalid implementation path.",
+    "constraints": [
+      "Close only the five enumerated PRs after recording their exact head SHA and failed result.",
+      "Preserve provider failure logs and immutable Work Item archives; do not edit prior records.",
+      "Do not delete tags, releases, origin/main, unrelated branches, or worktrees.",
+      "Run focused local governance checks; full local quality is optional under the recorded temporary efficiency exception, while Hosted CI remains mandatory."
+    ],
+    "rationale": "A single bounded reconciliation record makes the successor relation reviewable, closes only verified obsolete PRs, and leaves destructive final branch/worktree convergence to its own audited Work Item."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized efficiency exception for evidence-only reconciliation; Hosted CI remains mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": ["exact provider PR closures: #519, #520, #521, #522, #523"],
+    "approvalEvidence": {"approved": true, "approvedBy": "user", "reason": "The user authorized ongoing plan execution and required obsolete remote branches to be cleaned before release."}
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized cleanup before release and continuous execution of plan Work Items."
+  },
+  "rollbackNote": "Do not reopen a closed failed PR as rollback. Its provider and archive evidence remain available; a later corrective Work Item must create a new branch if #524 is disproven.",
+  "scenarioCoverage": [
+    {"scenario": "A listed failed PR is compared with its exact successor.", "expected": "The record contains PR number, head SHA, failed checks, and #524 merged-successor evidence.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Read provider metadata for #519 through #524 and record exact facts in the Summary."},
+    {"scenario": "A listed PR is closed after successor verification.", "expected": "Only #519 through #523 become closed; #524 remains merged and its evidence remains reachable.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Close exact PRs through the provider then query their final states."},
+    {"scenario": "An unrelated historical branch or tag exists.", "expected": "It is not affected by this Work Item.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Compare the declared write set and provider closure targets against the exact five PR numbers."},
+    {"scenario": "Hosted verification evaluates the evidence-only reconciliation PR.", "expected": "Required Hosted checks succeed before merge.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Inspect successor PR Hosted results after push."}
+  ],
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 706
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/stale-source-bound-pr-reconciliation-20260731.json",
+    "baseCommit": "f529409421028e6d117e611cb8d73b4c78545b05",
+    "initialScopeDigest": "67660d8eb5e8e9804d412de0923172d54e4ee5ce4654b2dd445a8b878d44b565",
+    "contractSkeletonDigest": "a461a2d7b4732c29c7a314a1aa4c065fe8afcc255def623bad046155f3ccd1fb"
+  }
+}
