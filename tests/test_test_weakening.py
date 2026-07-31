@@ -351,6 +351,45 @@ def test_invalid_base_and_symlink_escape_fail_closed(tmp_path: Path) -> None:
     assert "escapes repository" in escaped.stderr
 
 
+def test_binary_test_like_artifact_is_excluded_from_semantic_analysis(
+    tmp_path: Path,
+) -> None:
+    repo, _ = _repository(tmp_path, {"README.md": "baseline\n"})
+    artifact = repo / "build/classes/java/test/ExampleTest.class"
+    artifact.parent.mkdir(parents=True)
+    artifact.write_bytes(b"\xca\xfe\xba\xbe\x00\xffbaseline")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-qm", "add binary test artifact")
+    base = _git(repo, "rev-parse", "HEAD")
+    artifact.write_bytes(b"\xca\xfe\xba\xbe\x00\xffchanged")
+
+    result = _run(repo, base)
+
+    assert result.returncode == 0
+    report = json.loads(result.stdout)
+    assert report["decision"] == "continue"
+    assert report["signals"] == []
+
+
+def test_replacing_text_test_with_binary_still_reports_removed_strength(tmp_path: Path) -> None:
+    repo, base = _repository(
+        tmp_path,
+        {
+            "tests/test_binary_replacement.py": """def test_value():
+    assert first()
+    assert second()
+"""
+        },
+    )
+    (repo / "tests/test_binary_replacement.py").write_bytes(b"\x00\xffcompiled")
+
+    result = _run(repo, base)
+
+    assert result.returncode == 2
+    signal_types = {signal["type"] for signal in json.loads(result.stdout)["signals"]}
+    assert signal_types >= {"assertion_reduction", "test_case_removed"}
+
+
 def test_test_rename_is_warning_not_deletion(tmp_path: Path) -> None:
     repo, base = _repository(
         tmp_path, {"tests/test_old_name.py": "def test_value():\n    assert value()\n"}

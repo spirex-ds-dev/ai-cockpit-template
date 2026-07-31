@@ -15,14 +15,16 @@ def test_verification_policy_distinguishes_failure_incomplete_and_passed():
 
 
 def test_policy_is_monotonic_and_release_is_full():
-    assert select_policy("task", ["README.md"], requested="light")["scope"] == "focused"
-    assert (
-        select_policy("task", [".github/workflows/test.yml"], requested="light")["level"]
-        == "strict"
-    )
+    assert select_policy("task", ["README.md"], requested="lite")["scope"] == "focused"
+    assert select_policy("task", [".github/workflows/test.yml"])["level"] == "strict"
     assert select_policy("release", ["README.md"])["scope"] == "full"
+    assert select_policy("release", ["README.md"])["level"] == "release"
     assert select_policy("pr", ["src/app.py"])["level"] == "standard"
     assert select_policy("task", ["README.md"], requested="standard")["level"] == "standard"
+    assert select_policy("task", ["requirements-dev.lock"])["level"] == "strict"
+    assert select_policy("task", ["unknown.file"])["level"] == "standard"
+    with pytest.raises(ValueError, match="cannot lower"):
+        select_policy("task", ["requirements-dev.lock"], requested="standard")
     with pytest.raises(ValueError, match="unsupported policy level"):
         select_policy("task", [], requested="unknown")
 

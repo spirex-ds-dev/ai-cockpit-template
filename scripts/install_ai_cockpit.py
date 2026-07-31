@@ -90,6 +90,7 @@ GITIGNORE_SECTION = """# AI Cockpit local state
 .ai/project_profile.proposed.yaml
 target/ai_*.json
 target/ai_*.jsonl
+target/quality/governance-profile.json
 """
 GITIGNORE_RULES = tuple(
     line for line in GITIGNORE_SECTION.splitlines() if line and not line.startswith("#")
@@ -812,6 +813,7 @@ class Installer:
                 ".ai/work-items/starts/**",
                 ".cursor/**",
                 "scripts/ai_*.py",
+                "scripts/determine_governance_profile.py",
                 "scripts/ai_installer_catalog.json",
                 "scripts/bootstrap_*.py",
                 "Makefile.ai",
@@ -866,6 +868,12 @@ class Installer:
                 "level": "low",
                 "riskTypes": ["governance_bootstrap"],
                 "reason": "The first governance PR is bounded to installer-created governance files and has explicit adoption evidence.",
+            },
+            "governanceProfile": {
+                "selected": "strict",
+                "source": "automatic",
+                "reasons": ["Adoption installs governed runtime and policy surfaces."],
+                "override": None,
             },
             "agentCapability": {
                 "canImplement": True,
@@ -1235,6 +1243,12 @@ class Installer:
                 "level": "high",
                 "riskTypes": ["upgrade_integrity"],
                 "reason": "Upgrade replaces managed governance files and must remain reviewable and reversible.",
+            },
+            "governanceProfile": {
+                "selected": "strict",
+                "source": "automatic",
+                "reasons": ["Upgrade replaces managed governance and installer surfaces."],
+                "override": None,
             },
             "agentCapability": {
                 "canImplement": True,

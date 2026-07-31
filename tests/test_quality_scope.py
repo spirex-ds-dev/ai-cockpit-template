@@ -16,5 +16,12 @@ def test_release_paths_require_release_scope():
     assert result["releasePreparation"] is True
 
 
+def test_release_workflow_uses_shared_release_profile():
+    result = determine([".github/workflows/release.yml"])
+
+    assert result["scope"] == "release"
+    assert result["releasePreparation"] is True
+
+
 def test_unknown_or_mixed_scope_defaults_full():
     assert determine(["unknown.txt", "docs/guide.md"])["scope"] == "full"

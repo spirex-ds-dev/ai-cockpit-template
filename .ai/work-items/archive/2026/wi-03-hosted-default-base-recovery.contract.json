@@ -1,0 +1,226 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-03-hosted-default-base-recovery",
+  "mode": "code",
+  "title": "Recover adopter quality routing without an active Contract",
+  "baseCommit": "cabe874284e5d303685c9abc9238a22cf522bb9c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-03-hosted-default-base-recovery.contract.json",
+    ".ai/work-items/active/wi-03-hosted-default-base-recovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-03-hosted-default-base-recovery.outcome.json",
+    ".ai/work-items/active/wi-03-hosted-default-base-recovery.outcome.md",
+    "scripts/determine_governance_profile.py",
+    "tests/test_governance_profile.py",
+    "tests/test_adoption_e2e.py",
+    "docs/reference/governance-profiles.md",
+    "docs/reference/governance-profiles.ja.md",
+    "docs/reference/governance-profiles.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing profile ordering, path classification, override semantics, or quality target ownership.",
+    "Rewriting the immutable WI-03 archive created before Hosted CI exposed this defect.",
+    "Treating the failed Hosted run as transient or bypassing required provider checks."
+  ],
+  "sources": [
+    {
+      "path": "github:pull/545#run-30656653772",
+      "reason": "Hosted compatibility evidence shows every installed stack failing because the router requires a base without an active Contract."
+    },
+    {
+      "path": "scripts/determine_governance_profile.py",
+      "reason": "The CLI currently rejects an omitted base even though it already collects working-tree and untracked changes relative to HEAD."
+    },
+    {
+      "path": ".github/workflows/compatibility.yml",
+      "reason": "The real-stack jobs commit the sample project, install AI Cockpit without starting a Work Item, then invoke make ai-cockpit-quality."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-03-risk-based-quality-routing.summary.json",
+      "reason": "Preserves the original implementation and failed Hosted delivery boundary as immutable predecessor evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "hosted_compatibility",
+      "governance_routing",
+      "recovery_chain"
+    ],
+    "reason": "The default installed-adopter quality entrypoint fails across language stacks; the recovery must restore zero-configuration routing without weakening conservative classification.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "This recovery changes the governance router used by every installed adopter quality entrypoint."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Hosted logs identify one deterministic missing-default defect; HEAD is the conservative local base when no Contract or explicit base exists."
+  },
+  "preReviewWarnings": [
+    "Confirm Contract and explicit --base precedence remains unchanged.",
+    "Confirm no-Contract routing still includes staged, unstaged, and untracked installation changes.",
+    "Confirm the original WI-03 archive remains byte-for-byte unchanged."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "When neither --base nor an active Contract exists, the CLI uses HEAD as the receipt base and classifies staged, unstaged, and untracked paths instead of failing.",
+    "An explicit --base and an active Contract baseCommit retain precedence over the HEAD fallback; invalid explicit bases still fail closed.",
+    "A clean committed fixture followed by untracked installer-style governance files reproduces the Hosted boundary and passes with Strict dispatch after the fix.",
+    "English, Japanese, and Chinese governance-profile documentation explains the no-Contract HEAD fallback without weakening Contract-bound Work Item semantics.",
+    "Focused router/adopter tests, source-bound evidence, canonical Strict finish/archive, and replacement Hosted checks pass while the original WI-03 archive remains unchanged."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "PR #545 Hosted compatibility run 30656653772 proved that installed adopters cannot run make ai-cockpit-quality before starting a Work Item because the new router requires --base or Contract baseCommit. All real and extended stack jobs share the same deterministic failure.",
+    "constraints": [
+      "Preserve the existing explicit --base and active Contract baseCommit precedence.",
+      "Use HEAD only when no stronger base evidence exists, so installer-created working-tree paths remain visible.",
+      "Do not change profile ordering, classification policy, or quality target composition.",
+      "Keep the original WI-03 archive immutable and record the Hosted failure in this adjacent recovery."
+    ],
+    "rationale": "HEAD is the only repository-bound baseline available before an adopter starts its first Work Item; the router already combines HEAD-relative tracked changes with staged, unstaged, and untracked paths, so this fallback restores the intended zero-configuration installed entrypoint without reducing risk."
+  },
+  "rawUserRequest": "Continue all Work Items through Hosted CI, merge, closure, and cleanup without pausing except for a real human or permission blocker; fix discovered non-converging defects before continuing.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-goal:continue-all-work-items-and-hosted-recovery",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:8208ad80b604d04ee0c1138fe34faeceaa37c04f9258eb120fc2560b0989e0ca"
+  },
+  "declaredIntent": {
+    "summary": "Recover WI-03 Hosted compatibility by making no-Contract adopter routing use a conservative HEAD baseline.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {"scenario": "An installed adopter has a committed project and uncommitted installer-created governance files but no active Contract.", "expected": "The router uses HEAD, sees the installer paths, and selects Strict instead of raising a missing-base error.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add a CLI Git fixture with no --base or Contract and assert receipt base, changed paths, and Strict dispatch."},
+    {"scenario": "A caller supplies --base or an active Contract baseCommit.", "expected": "The supplied or Contract base remains authoritative and HEAD fallback is not used.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Retain existing explicit-base CLI coverage and add precedence assertions where needed."},
+    {"scenario": "A caller supplies an invalid explicit base.", "expected": "Git inspection fails closed rather than silently falling back to HEAD.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Retain the invalid Git base regression and run it with focused tests."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all in-scope implementation, governance, PR, merge, archive, and cleanup decisions."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 734
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-03-hosted-default-base-recovery.json",
+    "baseCommit": "cabe874284e5d303685c9abc9238a22cf522bb9c",
+    "initialScopeDigest": "659f3a0fabddca3c473e77b56a0804139c337907a53ec0812c74fc2530aed7f6",
+    "contractSkeletonDigest": "0e93dfc35594654846a9d9ed32a90f443387da6bed82d21b48ef13ee66410121"
+  }
+}

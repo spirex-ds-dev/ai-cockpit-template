@@ -1142,6 +1142,12 @@ def test_ai_start_default_contains_agent_risk_gate(tmp_path, monkeypatch):
     assert contract["notCodable"] is False
     assert contract["baseCommit"] == "a" * 40
     assert contract["checkpointPolicy"]["requiredStages"] == ["before_edit", "before_finish"]
+    assert contract["governanceProfile"] == {
+        "selected": "standard",
+        "source": "automatic",
+        "reasons": ["Initial Work Item skeleton defaults to Standard until scope is classified."],
+        "override": None,
+    }
     assert ".ai/cockpit/current_status.md" in contract["scope"]
     assert ".ai/work-items/active/sample.outcome.json" in contract["scope"]
     assert ".ai/work-items/active/sample.outcome.md" in contract["scope"]

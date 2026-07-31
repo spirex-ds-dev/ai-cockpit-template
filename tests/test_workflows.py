@@ -76,6 +76,23 @@ def test_compatibility_separates_blocking_baseline_from_latest_probes():
     assert 'node-version: "24.11.1"' in workflow
 
 
+def test_extended_gradle_fixtures_ignore_generated_state_before_baseline_commit():
+    workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
+    extended = workflow.split("  extended-real-stack-quality:", 1)[1].split(
+        "  mobile-stack-quality:", 1
+    )[0]
+    ignore_block = (
+        'if [[ "$STACK" == java || "$STACK" == kotlin ]]; then\n'
+        "            printf '/.gradle/\\n/build/\\n' > .gitignore\n"
+        "          fi"
+    )
+
+    assert ignore_block in extended
+    assert extended.index(ignore_block) < extended.index("git add .")
+    assert "src/main" not in ignore_block
+    assert "src/test" not in ignore_block
+
+
 def test_latest_compatibility_probe_uses_distinct_current_tool_commands():
     workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
     latest = workflow.split("  latest-ecosystem-probe:", 1)[1].split("  compatibility-gate:", 1)[0]

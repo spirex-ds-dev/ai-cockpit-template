@@ -62,6 +62,58 @@ def valid_summary():
     }
 
 
+def test_contract_accepts_automatic_governance_profile():
+    contract = valid_contract()
+    contract["governanceProfile"] = {
+        "selected": "strict",
+        "source": "automatic",
+        "reasons": ["governance policy changed"],
+        "override": None,
+    }
+
+    issues = ai_check_work_item.validate_contract(contract)
+
+    assert not [issue for issue in issues if issue.startswith("governanceProfile")]
+    assert "unknown field: governanceProfile" not in issues
+
+
+@pytest.mark.parametrize(
+    ("profile", "expected"),
+    [
+        (
+            {"selected": "weak", "source": "automatic", "reasons": ["x"], "override": None},
+            "governanceProfile.selected must be one of ['lite', 'release', 'standard', 'strict']",
+        ),
+        (
+            {"selected": "strict", "source": "guess", "reasons": ["x"], "override": None},
+            "governanceProfile.source must be one of ['automatic', 'human_override']",
+        ),
+        (
+            {"selected": "strict", "source": "automatic", "reasons": [], "override": None},
+            "governanceProfile.reasons must contain at least one non-empty string",
+        ),
+        (
+            {"selected": "strict", "source": "automatic", "reasons": ["x"], "override": {}},
+            "governanceProfile.override must be null when source is automatic",
+        ),
+        (
+            {
+                "selected": "standard",
+                "source": "human_override",
+                "reasons": ["approved exception"],
+                "override": {"reason": "bounded exception"},
+            },
+            "governanceProfile.override.approvalEvidence must be a non-empty string",
+        ),
+    ],
+)
+def test_contract_rejects_malformed_governance_profile(profile, expected):
+    contract = valid_contract()
+    contract["governanceProfile"] = profile
+
+    assert expected in ai_check_work_item.validate_contract(contract)
+
+
 def test_destructive_allow_patterns_require_policy_and_approval():
     contract = valid_contract()
     contract["destructiveChangePolicy"]["allowPatterns"] = ["outside/**"]

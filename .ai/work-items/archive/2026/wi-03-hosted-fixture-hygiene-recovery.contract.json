@@ -1,0 +1,68 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-03-hosted-fixture-hygiene-recovery",
+  "mode": "code",
+  "title": "Keep generated Gradle caches out of Hosted fixture baselines",
+  "baseCommit": "eb7c505d90712e396f96debb71371add715640bb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-03-hosted-fixture-hygiene-recovery.contract.json",
+    ".ai/work-items/active/wi-03-hosted-fixture-hygiene-recovery.summary.json",
+    ".ai/cockpit/current_status.md", ".ai/work-items/starts/**", ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-03-hosted-fixture-hygiene-recovery.outcome.json",
+    ".ai/work-items/active/wi-03-hosted-fixture-hygiene-recovery.outcome.md",
+    ".github/workflows/compatibility.yml", "tests/test_workflows.py",
+    "docs/reference/capability-truth-matrix.json", "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md", "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Weakening Test Weakening Guard signals for tracked UTF-8 test files.",
+    "Changing project quality commands or supported stack matrices.",
+    "Rewriting immutable WI-03 predecessor archives."
+  ],
+  "sources": [
+    {"path": "github:pull/545#job-91251129255", "reason": "Java Hosted log shows tracked build/spotless-clean test source removed during the later quality invocation."},
+    {"path": "github:pull/545#job-91251129296", "reason": "Kotlin Hosted log shows the equivalent Spotless cache deletion."},
+    {"path": ".github/workflows/compatibility.yml", "reason": "The fixtures run spotlessApply before git add/commit and do not create build-output ignores until after the baseline commit."},
+    {"path": "tests/test_workflows.py", "reason": "Workflow structure assertions are the appropriate local regression surface."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "high", "riskTypes": ["hosted_compatibility", "workflow_fixture", "evidence_integrity"], "reason": "Required Hosted lanes fail because fixture setup commits tool-generated caches as project evidence; the correction must improve fixture hygiene without suppressing legitimate guard signals.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["This recovery changes a required compatibility workflow."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The remaining failures are deterministic generated-cache baseline pollution with a narrow workflow correction."},
+  "preReviewWarnings": ["Keep source and test files tracked.", "Assert ignores exist before git add/commit.", "Do not change guard decision semantics."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record both implementation boundary checkpoints."},
+  "acceptance": [
+    "Java and Kotlin fixtures create root Gradle build-output ignore rules before their initial git add/commit.",
+    "The ignore rules cover .gradle and build directories without ignoring src/main or src/test.",
+    "A workflow regression test verifies ordering before the extended-stack baseline commit.",
+    "Focused workflow tests and source-bound evidence pass without changing Test Weakening Guard behavior.",
+    "Canonical Strict finish/archive and replacement Hosted compatibility checks pass while all predecessor archives remain unchanged."
+  ],
+  "guidelines": ["New public APIs must be documented.", "Do not import internal modules from other features."],
+  "intent": {
+    "problem": "After byte-safe guard recovery, Java and Kotlin Hosted fixtures still fail because spotlessApply creates build/spotless-clean source copies before git add ., causing generated caches to become tracked baseline files that spotlessCheck later deletes.",
+    "constraints": ["Fix fixture baseline hygiene rather than suppressing valid guard review signals.", "Keep real source and test inputs tracked.", "Preserve supported stack commands and matrices.", "Preserve all WI-03 predecessor archives byte-for-byte."],
+    "rationale": "Generated Gradle and Spotless caches are not project source evidence. Ignoring them before the fixture baseline commit makes the Hosted repository model realistic and lets the guard continue treating tracked test deletion as review-worthy."
+  },
+  "rawUserRequest": "Continue all Work Items through Hosted CI, merge, closure, and cleanup; recover deterministic binary diff failures without pausing for bounded implementation decisions.",
+  "rawRequestSource": {"type": "human", "reference": "user-goal:continue-all-work-items-and-hosted-recovery", "capturedAt": "2026-08-01", "digest": "sha256:fd64c843bbdfca5edd426ff665f05e676e647d7bc9eb424e11f57a3b46b58807"},
+  "declaredIntent": {"summary": "Prevent generated Gradle caches from polluting Hosted fixture baselines.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "Java or Kotlin setup runs Spotless before committing the fixture baseline.", "expected": "Generated .gradle and build trees are ignored while src remains tracked.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add workflow text assertions for ignore content and ordering before git add/commit."},
+    {"scenario": "Installed Strict quality reruns Spotless and the test weakening guard.", "expected": "No tracked Spotless cache deletion signal occurs and required Hosted lanes pass.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run replacement Hosted compatibility checks."},
+    {"scenario": "Other real, extended, and mobile stack fixtures run.", "expected": "Their commands and matrix membership remain unchanged.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run focused workflow structure tests and replacement compatibility-gate."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user explicitly authorized bounded workflow, governance, PR, merge, archive, and cleanup decisions."},
+  "rollbackNote": "Revert the workflow fixture ignore and its regression test.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 736}},
+  "startReceipt": {"path": ".ai/work-items/starts/wi-03-hosted-fixture-hygiene-recovery.json", "baseCommit": "eb7c505d90712e396f96debb71371add715640bb", "initialScopeDigest": "a3ffe11e1bf6eb9250392814ef9c75f26a840c08224401d98b839b2d868912db", "contractSkeletonDigest": "1da8924366466bdcfa0736457726af60cd48da5afffea7deeb952dafc2e5be8b"}
+}
