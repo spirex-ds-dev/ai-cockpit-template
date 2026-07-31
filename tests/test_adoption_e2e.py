@@ -47,7 +47,11 @@ def adoption_branch_exists(target: Path, name: str = "adopt/ai-cockpit") -> bool
 
 def test_installed_adopter_receives_governance_router_and_profile_targets(tmp_path):
     assert run(tmp_path, "git", "init", "-q").returncode == 0
+    assert run(tmp_path, "git", "config", "user.email", "test@example.invalid").returncode == 0
+    assert run(tmp_path, "git", "config", "user.name", "Test").returncode == 0
     (tmp_path / "README.md").write_text("# Existing project\n", encoding="utf-8")
+    assert run(tmp_path, "git", "add", "README.md").returncode == 0
+    assert run(tmp_path, "git", "commit", "-qm", "initial").returncode == 0
     installer = Installer(
         source=ROOT,
         target=tmp_path,
@@ -66,6 +70,23 @@ def test_installed_adopter_receives_governance_router_and_profile_targets(tmp_pa
     for target in ("quality-fast:", "quality-standard:", "quality-full:", "quality-release:"):
         assert target in makefile_ai
     assert "scripts/determine_governance_profile.py" in makefile_ai
+    quality = run(
+        tmp_path,
+        "make",
+        "ai-cockpit-quality",
+        f"PYTHON={sys.executable}",
+        "PROJECT_FORMAT_CHECK=true",
+        "PROJECT_TEST=true",
+        "PROJECT_LINT=true",
+        "AI_COCKPIT_PROJECT_FORMAT_CONFIGURED=true",
+        "AI_COCKPIT_PROJECT_LINT_CONFIGURED=true",
+    )
+    assert quality.returncode == 0, quality.stdout + quality.stderr
+    receipt = json.loads(
+        (tmp_path / "target" / "quality" / "governance-profile.json").read_text(encoding="utf-8")
+    )
+    assert receipt["base"] == "HEAD"
+    assert receipt["selectedProfile"] == "strict"
 
 
 def test_first_adoption_finishes_and_passes_complete_pr_check(tmp_path):

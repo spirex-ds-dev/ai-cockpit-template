@@ -40,6 +40,10 @@ Contract 的 `governanceProfile` 记录 `selected`、`source`、`reasons` 和 `o
 所需分组、调度目标和 override 处置。生成的当前状态、工单 Start Receipt 与当前 Outcome 仍保留在证据中，
 但不会单独抬升级别；只有这类证据的差分采用 Standard。无效 Git base、路径穿越或损坏策略均失败关闭。
 
+在首个 Work Item 建立前，已安装的采用方没有 Contract base。仅在这个边界下，路由器以 `HEAD`
+为基线，同时继续纳入已暂存、未暂存和未跟踪的安装器变更。显式 `--base` 或 active Contract 的
+`baseCommit` 始终优先；无效的显式 base 仍然失败关闭。
+
 ```sh
 make ai-cockpit-quality CONTRACT=.ai/work-items/active/<task>.contract.json
 make ai-cockpit-quality GOVERNANCE_PROFILE=strict

@@ -314,7 +314,7 @@ def main() -> int:
     if contract_path is not None and not contract_path.is_absolute():
         contract_path = repository / contract_path
     contract = _load_json(contract_path) if contract_path is not None else None
-    base = args.base or (contract.get("baseCommit") if contract else None)
+    base = args.base or (contract.get("baseCommit") if contract else "HEAD")
     if not _non_empty(base):
         raise ValueError("--base or an active Contract baseCommit is required")
     policy_path = Path(args.policy)

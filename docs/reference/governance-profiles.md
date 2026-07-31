@@ -55,6 +55,12 @@ and current outcome files remain visible evidence but do not raise the profile b
 evidence-only diff defaults to Standard. Unsafe paths, invalid Git bases, and
 malformed policy fail closed.
 
+Before the first Work Item exists, an installed adopter has no Contract base.
+In that bounded case the router uses `HEAD` as the baseline and still includes
+staged, unstaged, and untracked installer changes. An explicit `--base` or an
+active Contract `baseCommit` remains authoritative; an invalid explicit base
+fails closed.
+
 Run the default or an explicit upward escalation with:
 
 ```sh

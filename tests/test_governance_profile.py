@@ -298,3 +298,37 @@ def test_cli_writes_receipt_for_complete_worktree_diff(tmp_path, policy_path, mo
     receipt = json.loads(output.read_text(encoding="utf-8"))
     assert receipt["selectedProfile"] == "lite"
     assert receipt["changedPaths"] == ["docs/guide.md"]
+
+
+def test_cli_defaults_to_head_for_installed_adopter_without_contract(
+    tmp_path, policy_path, monkeypatch
+):
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@example.invalid"], cwd=tmp_path, check=True
+    )
+    subprocess.run(["git", "config", "user.name", "Test"], cwd=tmp_path, check=True)
+    (tmp_path / "README.md").write_text("adopter\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(["git", "commit", "-qm", "initial"], cwd=tmp_path, check=True)
+    policy = tmp_path / ".ai" / "quality" / "governance-routing.yaml"
+    policy.parent.mkdir(parents=True)
+    policy.write_text(policy_path.read_text(encoding="utf-8"), encoding="utf-8")
+    output = tmp_path / "target" / "profile.json"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "determine_governance_profile.py",
+            "--repository",
+            str(tmp_path),
+            "--output",
+            str(output),
+        ],
+    )
+
+    assert routing.main() == 0
+    receipt = json.loads(output.read_text(encoding="utf-8"))
+    assert receipt["base"] == "HEAD"
+    assert receipt["selectedProfile"] == "strict"
+    assert receipt["changedPaths"] == [".ai/quality/governance-routing.yaml"]

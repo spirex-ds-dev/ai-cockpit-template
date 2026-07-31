@@ -42,6 +42,11 @@ Unstage、Untracked Path を統合し、`target/quality/governance-profile.json`
 Fail Closed です。生成された Current Status、Work Item Start Receipt、現在の Outcome は証拠として残りますが、
 単独では Profile を上げません。Evidence-only Diff は Standard になります。
 
+最初の Work Item より前の導入先には Contract base がありません。この境界に限り Router は
+`HEAD` を基準にし、Stage、Unstage、Untracked の Installer 変更を引き続き含めます。明示的な
+`--base` または Active Contract の `baseCommit` が常に優先され、不正な明示 base は Fail Closed
+のままです。
+
 ```sh
 make ai-cockpit-quality CONTRACT=.ai/work-items/active/<task>.contract.json
 make ai-cockpit-quality GOVERNANCE_PROFILE=strict
