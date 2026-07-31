@@ -1,0 +1,242 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-04-hosted-installation-recovery",
+  "mode": "code",
+  "title": "Exclude current human report instances from adoption",
+  "baseCommit": "fba5c40ff0660e777b3c8888f5e95b289714c8df",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-04-hosted-installation-recovery.contract.json",
+    ".ai/work-items/active/wi-04-hosted-installation-recovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-04-hosted-installation-recovery.outcome.json",
+    ".ai/work-items/active/wi-04-hosted-installation-recovery.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/install_ai_cockpit.py",
+    "scripts/ai_archive_work_item.py",
+    "tests/test_installer.py",
+    "tests/test_start_and_archive.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing human benefit report generation or validation semantics",
+    "Removing the human report generator or Make interfaces from installed repositories",
+    "Rewriting the immutable WI04 archive"
+  ],
+  "sources": [
+    {
+      "path": "github:pull/547#job-91283098893",
+      "reason": "Hosted installation-smoke proves a fresh adopter receives the template repository's current task report and then rejects it as stale after producing its own adoption Outcome."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "tree_copy_pairs already excludes repository-specific generated cockpit state such as current_status.md and is the narrow ownership point for excluding current report instances."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "The installer regression suite already asserts generated and supply-chain repository artifacts are not copied into fresh adopters."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "distribution_boundary",
+      "hosted_ci"
+    ],
+    "reason": "The defect affects clean adoption, but the failure is deterministic and the correction is limited to two generated repository-state files.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "A focused installer distribution-boundary correction and regression test require Standard verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "Hosted evidence identifies a deterministic installer ownership defect and the user pre-authorized bounded CI recovery decisions."
+  },
+  "preReviewWarnings": [
+    "Confirm only current report instances are excluded while generator code and Make interfaces remain installed.",
+    "Confirm a fresh installation starts without task_report.json or task_report.md.",
+    "Confirm the immutable WI04 archive is unchanged."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A fresh installation does not copy .ai/cockpit/task_report.json or .ai/cockpit/task_report.md from the template repository.",
+    "The installed repository still contains scripts/ai_generate_human_report.py and its Make interfaces.",
+    "The focused installer regression passes and replacement Hosted installation-smoke succeeds.",
+    "The recovery is archived separately without modifying the immutable WI04 predecessor archive."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "PR #547 installation-smoke fails because the installer copies WI04's current human report instances into a fresh adopter, where they become stale as soon as adoption creates its own Task Outcome.",
+    "constraints": [
+      "Exclude only repository-specific generated report instances.",
+      "Keep the human report generator and Make interfaces distributable.",
+      "Do not change report semantics or rewrite WI04 archived evidence.",
+      "Keep the recovery in the existing PR branch so replacement Hosted evidence binds to the new head."
+    ],
+    "rationale": "Treat task reports like current_status.md: generated repository state must be produced from the adopter's own lifecycle evidence, not seeded from the template repository."
+  },
+  "rawUserRequest": "Continue every Work Item through Hosted CI, merge, closure, and cleanup; fix bounded Hosted failures without pausing unless a true human decision or external permission is required.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-goal:continue-all-work-items-and-hosted-recovery",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:3a9cc784273f9748df6f58bcfe9daafdd54a0c72af7bf9fe695d10e6b6d76d2a"
+  },
+  "declaredIntent": {
+    "summary": "Restore fresh-adopter installation by excluding template-local human report instances.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A fresh adopter is installed from a template repository containing current human report instances.",
+      "expected": "The adopter receives the report generator and Make interfaces but no task_report.json or task_report.md instances.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_installer.py::test_installed_distribution_contains_adoption_files",
+        "42 focused installer and human-report tests passed"
+      ],
+      "verificationPlan": "Extend the focused installer test to assert both current report instances are absent while the generator remains installed."
+    },
+    {
+      "scenario": "The fresh adopter completes its adoption Work Item and runs the aggregate PR check.",
+      "expected": "The adopter generates report evidence from its own Outcome and installation-smoke passes.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_start_and_archive.py::test_archive_code_item_rewrites_summary_paths",
+        "local fresh-adopter install, finish, archive, commit, and check-ai-pr reproduction passed"
+      ],
+      "verificationPlan": "Run the focused installer regression locally and use replacement Hosted installation-smoke as end-to-end evidence."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all bounded implementation, governance, PR, merge, archive, and cleanup decisions needed to complete every Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 740
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-04-hosted-installation-recovery.json",
+    "baseCommit": "fba5c40ff0660e777b3c8888f5e95b289714c8df",
+    "initialScopeDigest": "f62a24e48b902c867d8060a1f06a9923e5f8eb63f22470e0019d7d9f9dfa7449",
+    "contractSkeletonDigest": "ec1d43467c24481feb2ce9b4b943b195c60e933aa61c3d56ed68a4be47ba7955"
+  }
+}

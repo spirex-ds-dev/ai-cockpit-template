@@ -403,6 +403,8 @@ class Installer:
             rel = item.relative_to(src)
             if relative == ".ai" and rel.as_posix() in {
                 "cockpit/current_status.md",
+                "cockpit/task_report.json",
+                "cockpit/task_report.md",
                 "glossary.md",
                 "project_profile.yaml",
                 "project_profile.proposed.yaml",

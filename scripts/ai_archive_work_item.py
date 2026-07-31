@@ -608,6 +608,11 @@ def _execute_archive_transaction(
     index_backup = index_path.read_bytes() if index_path.exists() else None
     status_path = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
     status_backup = status_path.read_bytes() if status_path.exists() else None
+    report_paths = (
+        PROJECT_ROOT / ".ai" / "cockpit" / "task_report.json",
+        PROJECT_ROOT / ".ai" / "cockpit" / "task_report.md",
+    )
+    report_backups = {path: path.read_bytes() if path.exists() else None for path in report_paths}
     active_file_backups = {source: source.read_bytes() for source, _ in files_to_move}
     traceability_changed = False
     try:
@@ -644,6 +649,19 @@ def _execute_archive_transaction(
                         load_json(outcome_target), replacements
                     )
                     save_json(outcome_target, outcome)
+                    if any(content is not None for content in report_backups.values()):
+                        if not all(path.is_file() for path in report_paths):
+                            raise ValueError(
+                                "Human Benefit Report archive refresh requires both report files"
+                            )
+                        from ai_generate_human_report import (
+                            generate_human_report,
+                            render_human_report,
+                        )
+
+                        report = generate_human_report(outcome, phase="review")
+                        save_json(report_paths[0], report)
+                        report_paths[1].write_text(render_human_report(report), encoding="utf-8")
             if traceability_payload is not None:
                 rewritten_traceability, replacement_count = _rewrite_traceability_paths(
                     traceability_payload, replacements
@@ -760,6 +778,11 @@ def _execute_archive_transaction(
             status_path.unlink(missing_ok=True)
         else:
             _restore_original_bytes(status_path, status_backup)
+        for path, report_content in report_backups.items():
+            if report_content is None:
+                path.unlink(missing_ok=True)
+            else:
+                _restore_original_bytes(path, report_content)
         raise
 
 

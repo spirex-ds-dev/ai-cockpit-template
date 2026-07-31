@@ -4,14 +4,14 @@ Phase: `review`
 Result: `completed_with_warnings`
 
 ## What changed
-Task wi-04-human-benefit-report generated an evidence-derived outcome with status completed_with_warnings.
+Task wi-04-hosted-installation-recovery generated an evidence-derived outcome with status completed_with_warnings.
 
 ## Issues
-- Detected issues: 2
+- Detected issues: 1
 - Hard stops: 0
-- Warnings: 2
+- Warnings: 1
 - Resolved: 0
-- Unresolved: 2
+- Unresolved: 1
 
 ## Prevented risks
 None

@@ -156,6 +156,8 @@ def test_installed_distribution_contains_adoption_files(tmp_path):
     assert not (tmp_path / ".ai" / "cockpit" / "provenance.json").exists()
     assert not (tmp_path / ".ai" / "cockpit" / "release-digests.json").exists()
     assert not (tmp_path / ".ai" / "cockpit" / "sbom.json").exists()
+    assert not (tmp_path / ".ai" / "cockpit" / "task_report.json").exists()
+    assert not (tmp_path / ".ai" / "cockpit" / "task_report.md").exists()
     assert "<!-- AI_COCKPIT_SECTION -->" in (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
     managed = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
     assert "\n---\n" not in managed
@@ -183,6 +185,9 @@ def test_installed_distribution_contains_adoption_files(tmp_path):
     assert "scripts/ai_check_pr.py" in makefile_ai
     assert "ai-close-work-item:" in makefile_ai
     assert (tmp_path / "scripts" / "ai_close_work_item.py").is_file()
+    assert (tmp_path / "scripts" / "ai_generate_human_report.py").is_file()
+    assert "generate-human-benefit-report:" in makefile_ai
+    assert "check-human-benefit-report:" in makefile_ai
     assert "scripts/ai_check_guards.py $(if $(CONTRACT),--contract $(CONTRACT))" in makefile_ai
     assert (tmp_path / ".ai" / "glossary.md").read_text(encoding="utf-8") == (
         ROOT / "templates" / "glossary.md"
