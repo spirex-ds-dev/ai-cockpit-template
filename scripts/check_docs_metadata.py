@@ -154,6 +154,13 @@ PLATFORM_INSTALLATION_STAGES = (
     "verify-platform-adoption",
 )
 PLATFORM_EVIDENCE_BOUNDARY = "<!-- platform-boundary: no-toolchain-device-signing-hosted-claim -->"
+PLATFORM_ENTRY_MARKER = "<!-- platform-entry: work-item-first -->"
+PLATFORM_NEXT_MARKER = "<!-- platform-next: calibration-and-recovery -->"
+LEGACY_PLATFORM_MARKERS = (
+    "<!-- platform-step-table:",
+    "<!-- platform-filled-example:",
+    "<!-- platform-stage:",
+)
 COMMAND_GUIDE_MARKER = "<!-- command-guide: purpose,success,failure -->"
 PLATFORM_PROMPT_MARKER = "<!-- platform-prompt: copy-ready -->"
 SCAFFOLD_REVIEW_TABLE_MARKER = "<!-- scaffold-review-table: copy-request,expected,pass,stop -->"
@@ -1091,6 +1098,28 @@ def _beginner_installation_route_errors(root: Path) -> list[str]:
                 or "examples/java" not in text
             ):
                 errors.append(f"{installation_relative}: missing platform example route")
+
+        for platform in INSTALLATION_PLATFORMS:
+            relative = f"docs/getting-started/examples/{platform}{suffix}.md"
+            platform_page = root / relative
+            if not platform_page.is_file():
+                errors.append(f"{relative}: required platform installation example is missing")
+                continue
+            platform_text = platform_page.read_text(encoding="utf-8")
+            if PLATFORM_ENTRY_MARKER not in platform_text:
+                errors.append(f"{relative}: missing Work Item-first platform entry")
+            if PLATFORM_NEXT_MARKER not in platform_text:
+                errors.append(f"{relative}: missing calibration and recovery route")
+            if PLATFORM_EVIDENCE_BOUNDARY not in platform_text:
+                errors.append(f"{relative}: missing platform evidence boundary")
+            if any(marker in platform_text for marker in LEGACY_PLATFORM_MARKERS):
+                errors.append(f"{relative}: contains legacy seven-stage platform flow")
+            calibration_link = (Path("..") / f"calibration{suffix}.md").as_posix()
+            troubleshooting_link = (
+                Path("..") / Path("..") / "troubleshooting" / f"installation{suffix}.md"
+            ).as_posix()
+            if calibration_link not in platform_text or troubleshooting_link not in platform_text:
+                errors.append(f"{relative}: missing same-language calibration or recovery link")
 
         readme_text = readmes[language].read_text(encoding="utf-8")
         if installation_relative not in readme_text:

@@ -1,0 +1,233 @@
+{
+  "contractVersion": 2,
+  "workItemId": "correct-quality-architecture-platform-links-20260731",
+  "mode": "code",
+  "title": "Correct the quality-architecture regression in platform documentation links",
+  "baseCommit": "9c2f5cf40f5bc7b9fde6feabd1eaca0486b14b7a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/correct-quality-architecture-platform-links-20260731.contract.json",
+    ".ai/work-items/active/correct-quality-architecture-platform-links-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/correct-quality-architecture-platform-links-20260731.outcome.json",
+    ".ai/work-items/active/correct-quality-architecture-platform-links-20260731.outcome.md",
+    "docs/getting-started/examples/ios.md",
+    "docs/getting-started/examples/ios.zh-CN.md",
+    "docs/getting-started/examples/ios.ja.md",
+    "docs/getting-started/examples/android.md",
+    "docs/getting-started/examples/android.zh-CN.md",
+    "docs/getting-started/examples/android.ja.md",
+    "docs/getting-started/examples/java.md",
+    "docs/getting-started/examples/java.zh-CN.md",
+    "docs/getting-started/examples/java.ja.md",
+    "scripts/check_docs_metadata.py",
+    "tests/test_docs_metadata.py",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Changing the quality-architecture safety policy or weakening its path-traversal finding.",
+    "Changing runtime, installer, calibration, release, or Hosted CI behavior.",
+    "Editing the closed, unmerged PR #541 archive evidence."
+  ],
+  "sources": [
+    {
+      "path": "tests/test_quality_architecture.py",
+      "reason": "Hosted template-smoke failed because quality architecture detected path traversal literals in the previous platform-link checker."
+    },
+    {
+      "path": "scripts/ai_quality_architecture.py",
+      "reason": "The existing fail-closed safety scanner defines the detected unsafe path-literal boundary."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "The platform documentation checker must preserve same-language calibration and recovery link validation without triggering the scanner."
+    },
+    {
+      "path": "tests/test_quality_architecture.py",
+      "reason": "Focused regression test that exposed the Hosted failure locally."
+    },
+    {
+      "path": "tests/test_docs_metadata.py",
+      "reason": "Focused mutation tests prove that exact same-language platform navigation remains enforced."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["quality_gate_regression", "multilingual_documentation"],
+    "reason": "The correction must preserve nine short platform pages and their language-specific navigation while removing only unsafe source literals from the checker.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The Hosted failure provides an exact, local reproducible diagnostic; user direction permits corrective delivery without routine pauses."
+  },
+  "preReviewWarnings": [
+    "Review that the checker validates the same-language links without literal parent-directory traversal text, and that all nine pages remain the approved short Work Item-first route."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The quality-architecture focused test passes and reports no observed unsafe source patterns after the correction.",
+    "The documentation metadata tests still reject a missing Work Item route, calibration/recovery route, evidence boundary, or legacy seven-stage marker.",
+    "All iOS, Android, and Java English, Chinese, and Japanese entry pages retain the already approved short Work Item-first content without unrelated changes.",
+    "The Japanese source-bound assessment and pre-release documentation alignment are refreshed and pass; Hosted CI remains mandatory before merge."
+  ],
+  "guidelines": [
+    "Preserve fail-closed safety boundaries; do not silence or weaken the quality-architecture detector.",
+    "Keep the correction scoped to documentation-link validation and its tests."
+  ],
+  "intent": {
+    "problem": "PR #541 correctly failed Hosted template-smoke: the short platform entry checker added literal parent-directory link strings, which the repository quality architecture intentionally classifies as unsafe path traversal literals. The original platform-documentation Work Item is archived and its PR is closed without merge.",
+    "constraints": [
+      "Create an independent corrective Work Item and replacement PR; do not edit immutable archive evidence or merge PR #541.",
+      "Do not weaken path-traversal detection, skip Hosted CI, or replace exact link validation with a weaker check.",
+      "Retain the approved short iOS, Android, and Java entry pages in English, Chinese, and Japanese.",
+      "Under the temporary user-approved exception, run focused local regression checks and all governance gates rather than a redundant full local quality suite."
+    ],
+    "rationale": "Constructing expected link paths without unsafe literal source patterns preserves both controls: documentation navigation is checked, while the quality architecture remains able to reject unsafe repository code."
+  },
+  "rawUserRequest": "继续。报告应该是在归档前会给我吧？在 PR #541 的 Hosted CI 出现失败后，继续按已授权的 corrective workflow 修复，不要为了通过而削弱安全门。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-07-31-pr-541-hosted-ci-corrective",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:human-request-correct-quality-architecture-platform-links"
+  },
+  "declaredIntent": {
+    "summary": "Correct the platform documentation checker so it retains exact multilingual link validation without triggering the repository's fail-closed unsafe-source detector.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The quality-architecture scanner evaluates the corrected repository source.",
+      "required": true,
+      "expected": "No unsafe source findings are reported, including no parent-directory path traversal literal from the platform-link checker.",
+      "verificationPlan": "Run the focused quality-architecture test and inspect its report.",
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "One platform page loses its same-language calibration or troubleshooting link after the correction.",
+      "required": true,
+      "expected": "The documentation metadata regression test fails while the normal nine-page set passes.",
+      "verificationPlan": "Run focused documentation metadata tests including the existing mutation cases.",
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized focused-verification exception; focused quality-architecture and documentation regressions plus all governance gates are mandatory, and Hosted CI is still mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert only this corrective Work Item if focused checks or Hosted CI fail; retain PR #541 as the unmerged failure record.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 730
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/correct-quality-architecture-platform-links-20260731.json",
+    "baseCommit": "9c2f5cf40f5bc7b9fde6feabd1eaca0486b14b7a",
+    "initialScopeDigest": "5f01e4635a1415adbf0f04fa027e37c4cb3eaa33d290fdcbeb915d2e130a7ff6",
+    "contractSkeletonDigest": "cd39dabcc1c1ef3d5e1c7af09ad834b6a2789744a1ba8930a8959218263367aa"
+  }
+}
