@@ -1,0 +1,190 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-45-final-freeze-reconciliation-20260731",
+  "mode": "code",
+  "title": "Reconcile the final v0.5.45 release freeze with current main",
+  "baseCommit": "3ec309b3c6fb5f7de82399b1d9269c88eb0383e4",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue the authorized plan through release and final cleanup; repair release root causes before publication, use focused checks where possible, and require Hosted CI.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-31-continuous-plan-authorization", "capturedAt": "2026-07-31", "digest": "sha256:continuous-authorized-release-and-cleanup"},
+  "declaredIntent": {"summary": "Regenerate the v0.5.45 export-ignored freeze projection from the current merged source, prove that its source archive survives the resulting evidence-only merge, and leave provider publication to the following release Work Item.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "document", "authorityRequired": false},
+  "scope": [
+    ".ai/work-items/active/release-v0-5-45-final-freeze-reconciliation-20260731.contract.json",
+    ".ai/work-items/active/release-v0-5-45-final-freeze-reconciliation-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0-5-45-final-freeze-reconciliation-20260731.outcome.json",
+    ".ai/work-items/active/release-v0-5-45-final-freeze-reconciliation-20260731.outcome.md",
+    ".ai/cockpit/release-freeze.json",
+    ".ai/cockpit/release-digests.json",
+    "release.json",
+    "release-state.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Changing release workflow or release-preflight validation implementation.",
+    "Creating, moving, deleting, or publishing any semantic Git tag or GitHub Release.",
+    "Publishing any version or changing the v0.5.45 candidate.",
+    "Editing immutable historical archive evidence or unrelated runtime, CI, test, or product documentation."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md", "reason": "Canonical Work Item and release lifecycle rules."
+    },
+    {"path": "scripts/finalize_release_freeze.py", "reason": "Controlled finalizer, derived-report refresh, and export-ignored metadata projection semantics."},
+    {"path": "scripts/check_release_preflight.py", "reason": "Fail-closed check that diagnosed the current stale freeze against merged main."},
+    {"path": ".ai/work-items/archive/2026/release-v0-5-45-finalization-recovery-20260731.contract.json", "reason": "Immutable predecessor evidence; it must not be revived or changed."},
+    {"path": ".ai/work-items/archive/2026/bandit-baseline-regression-corrective-20260731.summary.json", "reason": "The latest merged corrective changes the source tree that the old freeze did not cover."},
+    {"path": "release-state.json", "reason": "Canonical v0.5.45 candidate and reserved v0.5.43/v0.5.44 identities."},
+    {"path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md", "reason": "Authoritative planned order and release boundary."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_identity", "supply_chain_evidence", "stale_source_binding"],
+    "reason": "Release source/archive/digest bindings are security-relevant; the projection must be regenerated only through the controlled finalizer and checked again after merge.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous governed release recovery, Hosted verification, PR merge, and closure without bypassing gates."
+  },
+  "preReviewWarnings": [
+    "Current preflight failure must be retained as diagnosis; do not hand-edit old freeze evidence.",
+    "No provider tag, Release, or public asset may be created in this recovery Work Item."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "v0.5.45 remains the sole candidate and v0.5.43/v0.5.44 remain reserved immutable identities.",
+    "The controlled premerge finalizer regenerates candidate-tree archive, installer, and digest evidence from current main without changing tags, provider Releases, or assets.",
+    "The evidence-only PR is based on current origin/main; its exact merged source passes check-release-preflight after Hosted smoke and compatibility evidence.",
+    "Documentation records the stale-freeze diagnosis, current replacement evidence, limitations, and subsequent provider-publication boundary without claiming publication."
+  ],
+  "guidelines": [
+    "Preserve the distinction between candidate, immutable tag, stable provider Release, and public distribution evidence.",
+    "Generate release evidence only through repository commands or the controlled provider workflow.",
+    "Do not retry a failed external release path until its failing gate is diagnosed and recorded.",
+    "Do not report success before provider-bound post-publication evidence is verified."
+  ],
+  "intent": {
+    "problem": "After #530 merged, check-release-preflight correctly rejects the v0.5.45 freeze because it was generated before the later finalizer and regression changes. The old source tree/archive/digest values are therefore stale against current main. The generated metadata paths are export-ignored, so an evidence-only successor can bind current source bytes without altering those bytes again.",
+    "constraints": ["Use only v0.5.45 and never mutate v0.5.43/v0.5.44.", "Do not change release workflow or validators, tags, Releases, assets, or historical archive evidence.", "Archive before controlled premerge finalization; retain full governance and require Hosted CI before merge.", "Do not claim provider publication during this recovery."],
+    "rationale": "A fresh independently governed finalization from the current merged source is required. Editing old archives or direct default-branch generation would destroy lifecycle evidence, while the export-ignored projection can survive an evidence-only merge."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized efficiency exception; focused release verification plus full Hosted PR checks remain mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User authorized the continuous release plan and the required governed release-metadata paths, without allowing tag or Release publication before gates."
+  },
+  "rollbackNote": "Do not alter predecessor archives or tags. If current finalization validation fails, preserve this Work Item evidence and create a separate corrective from current main.",
+  "budgetImpact": {
+    "expectedMetrics": {
+    "archiveGrowth": 711
+    }
+  },
+  "scenarioCoverage": [
+    {"scenario": "Existing freeze is stale after later main changes.", "expected": "Preflight remains blocked until a new source-bound projection is generated; old evidence stays immutable.", "verificationPlan": "Record the current preflight failure and inspect predecessor archive without editing it.", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "Controlled premerge finalization runs after archive.", "expected": "It regenerates current candidate-tree archive, installer, and digest evidence while preserving source bytes in the export-ignored projection.", "verificationPlan": "Run finalize-release-freeze-premerge for this archived task and inspect generated metadata plus preflight. This post-archive event is an acceptance requirement, but is not a pre-archive scenario-gate requirement.", "required": false, "status": "unverified", "evidence": []},
+    {"scenario": "Evidence-only recovery PR is merged.", "expected": "The exact merged main source passes release preflight before provider publication.", "verificationPlan": "Inspect required Hosted checks, merge, synchronize main, and run check-release-preflight.", "required": false, "status": "unverified", "evidence": []}
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0-5-45-final-freeze-reconciliation-20260731.json",
+    "baseCommit": "3ec309b3c6fb5f7de82399b1d9269c88eb0383e4",
+    "initialScopeDigest": "8bf0c3a0102780499f461138d000f64a6a564b5241ae3c62ee979dd93a21fc67",
+    "contractSkeletonDigest": "8694cc56f1b9a6dc8696b50c92a1e218f7cd2824a11223e6ea615b1e6a982f15"
+  }
+}
