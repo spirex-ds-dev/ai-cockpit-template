@@ -1996,6 +1996,53 @@
           "path": "docs/reference/reference-impact-gate.md"
         }
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-061",
+      "summary": "Implement WI-02 Test Weakening Guard as a Git-diff-derived evidence guard that warns on bounded low-risk signals, requires review for material verification loss, and blocks explicit test or CI bypasses without claiming semantic completeness.",
+      "planWorkItems": [
+        "WI-02"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/wi-02-test-weakening-guard.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_check_test_weakening.py",
+        "scripts/ai_installer_catalog.json",
+        ".ai/schemas/test_weakening.schema.json",
+        ".ai/guards/test_weakening_policy.yaml",
+        ".ai/guards/coverage_policy.yaml",
+        "Makefile",
+        "templates/make/Makefile.ai",
+        "tests/test_test_weakening.py",
+        "docs/reference/test-weakening-guard.md",
+        "docs/reference/test-weakening-guard.ja.md",
+        "docs/reference/test-weakening-guard.zh-CN.md",
+        "docs/reference/capability-truth-matrix.json"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_test_weakening.py",
+        ".ai/guards/coverage_policy.yaml"
+      ],
+      "verificationCommands": [
+        "python3 -m pytest -q tests/test_test_weakening.py",
+        "make check-ai-test-weakening",
+        "make check-ai-pr AI_BASE_COMMIT=<recorded-base>"
+      ],
+      "requiredNamedPaths": [
+        {
+          "path": "scripts/ai_check_test_weakening.py"
+        },
+        {
+          "path": ".ai/guards/test_weakening_policy.yaml"
+        },
+        {
+          "path": "tests/test_test_weakening.py"
+        },
+        {
+          "path": "docs/reference/test-weakening-guard.md"
+        }
+      ]
     }
   ]
 }

@@ -28,7 +28,7 @@ AI_COCKPIT_PROJECT_LINT_CONFIGURED ?= true
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
 	check-capability-truth check-source-bound-evidence \
 	ai-start ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
-	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy \
+	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy \
 	check-ai-preflight-review generate-ai-preflight-review ai-preflight check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge template-adoption-ready check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
 
 ai-help:
@@ -232,6 +232,12 @@ check-ai-reference-impact:
 		fi; \
 		if test "$$found" = false; then printf '%s\n' 'Reference impact: no declared records.'; fi
 
+check-ai-test-weakening-fast:
+	$(AI_PYTHON) scripts/ai_check_test_weakening.py --root . $(if $(AI_BASE_COMMIT),--base-ref "$(AI_BASE_COMMIT)",) --mode fast --policy .ai/guards/test_weakening_policy.yaml
+
+check-ai-test-weakening:
+	$(AI_PYTHON) scripts/ai_check_test_weakening.py --root . $(if $(AI_BASE_COMMIT),--base-ref "$(AI_BASE_COMMIT)",) --mode full --policy .ai/guards/test_weakening_policy.yaml
+
 check-ai-scenario-coverage:
 	$(AI_PYTHON) scripts/ai_check_scenario_coverage.py $(if $(CONTRACT),--contract $(CONTRACT)) $(if $(SUMMARY),--summary $(SUMMARY))
 
@@ -316,6 +322,7 @@ check-ai-pr:
 		fi; \
 		$(AI_NESTED_MAKE) check-source-bound-evidence; \
 		$(AI_NESTED_MAKE) check-ai-reference-impact; \
+		$(AI_NESTED_MAKE) check-ai-test-weakening AI_BASE_COMMIT="$(AI_BASE_COMMIT)"; \
 		$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
 
 ai-finish:
