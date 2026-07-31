@@ -89,6 +89,41 @@ def _archived_outcome_path(contract_path: Path) -> Path:
     return outcome_path
 
 
+def generate_final_human_report(
+    task: str, contract_path: Path, closure_facts: dict[str, str]
+) -> tuple[Path, Path]:
+    """Write the provider-bound Final Report outside synchronized source history."""
+
+    from ai_generate_human_report import (
+        generate_human_report,
+        render_human_report,
+        validate_human_report,
+    )
+
+    outcome_path = _archived_outcome_path(contract_path)
+    outcome = load_json(outcome_path)
+    report = generate_human_report(outcome, phase="final", closure_facts=closure_facts)
+    markdown = render_human_report(report)
+    issues = validate_human_report(
+        report,
+        outcome,
+        phase="final",
+        closure_facts=closure_facts,
+        markdown=markdown,
+    )
+    if issues:
+        raise RuntimeError("Final Human Benefit Report is invalid: " + "; ".join(issues))
+    json_path = CLOSURE_RECEIPTS_DIR / f"{task}.task-report.json"
+    markdown_path = CLOSURE_RECEIPTS_DIR / f"{task}.task-report.md"
+    json_path.parent.mkdir(parents=True, exist_ok=True)
+    json_path.write_text(
+        json.dumps(report, ensure_ascii=False, sort_keys=True, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    markdown_path.write_text(markdown, encoding="utf-8")
+    return json_path, markdown_path
+
+
 def generate_closure_receipt(
     task: str,
     contract_path: Path,
@@ -112,6 +147,19 @@ def generate_closure_receipt(
     receipt_path = CLOSURE_RECEIPTS_DIR / f"{task}.closure.md"
     receipt_path.parent.mkdir(parents=True, exist_ok=True)
     next_worktree = base_worktree or PROJECT_ROOT.as_posix()
+    final_json, final_markdown = generate_final_human_report(
+        task,
+        contract_path,
+        {
+            "pullRequest": url,
+            "mergeCommit": merge_commit,
+            "base": f"{base_remote}/{base_branch}",
+            "baseCommit": base_commit,
+            "workBranch": work_branch,
+            "cleanup": "scheduled",
+            "continueFrom": next_worktree,
+        },
+    )
     receipt_path.write_text(
         "\n".join(
             [
@@ -119,6 +167,8 @@ def generate_closure_receipt(
                 "",
                 "## Evidence",
                 f"- Archived Task Outcome: `{outcome_path.relative_to(PROJECT_ROOT).as_posix()}`",
+                f"- Final Human Benefit Report: `{final_markdown}`",
+                f"- Final Human Benefit JSON: `{final_json}`",
                 f"- Pull Request: {url}",
                 f"- Merge Commit: `{merge_commit}`",
                 "",
@@ -145,6 +195,8 @@ def validate_closure_receipt(receipt_path: Path, task: str) -> None:
         f"# Work Item Closure Receipt: {task}",
         "## Evidence",
         "- Archived Task Outcome:",
+        "- Final Human Benefit Report:",
+        "- Final Human Benefit JSON:",
         "- Pull Request: https://",
         "- Merge Commit: `",
         "## Closure facts",
@@ -493,6 +545,7 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
         "baseBranch": closure_base,
         "baseCommit": final_local,
         "closureReceipt": str(receipt_path),
+        "finalHumanReport": str(CLOSURE_RECEIPTS_DIR / f"{task}.task-report.md"),
         "state": "closed",
         "repositoryState": repository_state,
         "nextWorkItemReady": not linked_base,
@@ -527,6 +580,8 @@ def main() -> int:
         f"Archived Task Outcome: {Path(str(result['contract'])).with_name(Path(str(result['contract'])).name.replace('.contract.json', '.outcome.md'))}"
     )
     print(f"Closure Receipt: {result['closureReceipt']}")
+    if result.get("finalHumanReport"):
+        print(f"Final Human Benefit Report: {result['finalHumanReport']}")
     print(f"Local work branch: deleted ({result['workBranch']})")
     print(f"Remote work branch: deleted ({result['workBranch']})")
     print(

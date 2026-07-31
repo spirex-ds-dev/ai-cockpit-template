@@ -11,6 +11,7 @@ import ai_archive_work_item
 import ai_check_pr
 import ai_check_scope
 import ai_common
+import ai_generate_human_report
 import ai_resume_work_item
 import ai_start
 import ai_start_receipt
@@ -1398,6 +1399,12 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     )
     markdown.write_text("# Task Outcome: task\n", encoding="utf-8")
     events.write_text('{"eventType":"completed"}\n', encoding="utf-8")
+    report_dir = tmp_path / ".ai" / "cockpit"
+    report_dir.mkdir(parents=True)
+    report_json = report_dir / "task_report.json"
+    report_markdown = report_dir / "task_report.md"
+    report_json.write_text('{"stale":true}\n', encoding="utf-8")
+    report_markdown.write_text("stale report\n", encoding="utf-8")
     monkeypatch.setattr(ai_archive_work_item, "ACTIVE_DIR", active)
     monkeypatch.setattr(ai_archive_work_item, "ARCHIVE_BASE_DIR", archive)
     monkeypatch.setattr(ai_archive_work_item, "PROJECT_ROOT", tmp_path)
@@ -1409,6 +1416,20 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
         lambda **_kwargs: type("Obs", (), {"record": lambda *_args, **_kwargs: None})(),
     )
     monkeypatch.setattr(ai_archive_work_item.subprocess, "run", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(
+        ai_generate_human_report,
+        "generate_human_report",
+        lambda value, *, phase: {
+            "workItemId": value["workItemId"],
+            "source": value["sections"]["evidence"][0]["source"],
+            "phase": phase,
+        },
+    )
+    monkeypatch.setattr(
+        ai_generate_human_report,
+        "render_human_report",
+        lambda value: f"# {value['workItemId']} ({value['phase']})\n",
+    )
     monkeypatch.setattr(
         ai_archive_work_item, "_current_worktree_digest", lambda _contract: "a" * 64
     )
@@ -1427,6 +1448,13 @@ def test_archive_code_item_rewrites_summary_paths(tmp_path, monkeypatch):
     ]
     assert next(archive.glob("*/task.outcome.md")).exists()
     assert next(archive.glob("*/task.events.jsonl")).exists()
+    refreshed_report = json.loads(report_json.read_text(encoding="utf-8"))
+    assert refreshed_report == {
+        "phase": "review",
+        "source": ".ai/work-items/archive/2026/task.contract.json",
+        "workItemId": "task",
+    }
+    assert report_markdown.read_text(encoding="utf-8") == "# task (review)\n"
     data = json.loads(archived_summary.read_text(encoding="utf-8"))
     assert data["archiveSequence"] == 1
     assert "/active/" not in data["contractPath"]

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import inspect
+import json
 import os
 import subprocess
 from pathlib import Path
@@ -72,6 +73,69 @@ def test_make_close_work_item_forwards_explicit_worktree_argument() -> None:
 def test_archived_evidence_uses_strict_summary_validation() -> None:
     source = inspect.getsource(closure._verify_archived_evidence)
     assert "legacy_archive=False" in source
+
+
+def test_final_human_report_binds_provider_facts_outside_source_history(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    contract_path = tmp_path / ".ai/work-items/archive/2026/example.contract.json"
+    contract_path.parent.mkdir(parents=True)
+    contract_path.write_text("{}", encoding="utf-8")
+    outcome = {
+        "format": "ai-cockpit-task-outcome",
+        "schemaVersion": 1,
+        "workItemId": "example",
+        "status": "completed",
+        "bindings": {
+            "taskId": "example",
+            "contractDigest": "a" * 64,
+            "summaryDigest": "b" * 64,
+            "verificationDigest": "c" * 64,
+            "baseCommit": "d" * 40,
+            "headCommit": "e" * 40,
+            "lifecycleStage": "pre_merge",
+            "pullRequest": {"state": "not_created"},
+            "aiCockpitVersion": "repository-governance",
+            "generatorVersion": "1.0",
+        },
+        "sections": {
+            "outcomeSummary": "Completed.",
+            "taskOverview": "Example.",
+            "deliveredChanges": [],
+            "findings": [],
+            "risks": [],
+            "warnings": [],
+            "interventions": [],
+            "forcedStops": [],
+            "resolutions": [],
+            "recurrencePrevention": [],
+            "avoidedImpact": [],
+            "residualRisks": [],
+            "humanDecisions": [],
+            "evidence": [{"source": "contract.json", "subject": "Contract"}],
+        },
+    }
+    contract_path.with_name("example.outcome.json").write_text(
+        json.dumps(outcome), encoding="utf-8"
+    )
+    receipts = tmp_path / "target/task-closure-receipts"
+    monkeypatch.setattr(closure, "CLOSURE_RECEIPTS_DIR", receipts)
+    facts = {
+        "pullRequest": "https://example.test/pr/1",
+        "mergeCommit": "f" * 40,
+        "base": "origin/main",
+        "baseCommit": "1" * 40,
+        "workBranch": "codex/example",
+        "cleanup": "scheduled",
+        "continueFrom": str(tmp_path),
+    }
+
+    json_path, markdown_path = closure.generate_final_human_report("example", contract_path, facts)
+
+    report = json.loads(json_path.read_text(encoding="utf-8"))
+    assert report["phase"] == "final"
+    assert report["closure"] == facts
+    assert "Continue from" in markdown_path.read_text(encoding="utf-8")
 
 
 def test_explicit_worktree_scopes_git_but_leaves_provider_cli_unprefixed() -> None:

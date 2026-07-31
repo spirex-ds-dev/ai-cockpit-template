@@ -52,7 +52,7 @@ check-docs-metadata check-trust-layer-docs check-real-absurd-injection-docs chec
 	ai-assess-provider-merge-state-recovery \
 	quality-fast quality-standard quality-full quality-release quality-fast-static quality-fast-policy quality-fast-static-gates quality-fast-policy-gates quality-heavy quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group quality-installation quality-release-evidence \
 	check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check \
-	check-ai-task-outcome \
+	check-ai-task-outcome generate-human-benefit-report check-human-benefit-report \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
 	ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
 
@@ -661,6 +661,14 @@ check-ai-status-consistency:
 check-ai-task-outcome:
 	@test -n "$(OUTCOME)" || (echo 'OUTCOME=<outcome.json> is required'; exit 2)
 	$(AI_PYTHON) -c "import json, pathlib, sys; sys.path.insert(0, 'scripts'); from ai_check_task_outcome import validate_outcome; outcome=json.loads(pathlib.Path('$(OUTCOME)').read_text()); report=validate_outcome(outcome, pathlib.Path('$(MARKDOWN)').read_text() if '$(MARKDOWN)' else None); print('task outcome valid' if report.valid else '\\n'.join(f'{e.code}: {e.message}' for e in report.errors)); raise SystemExit(0 if report.valid else 1)"
+
+generate-human-benefit-report:
+	@test -n "$(OUTCOME)" || (echo 'OUTCOME=<outcome.json> is required'; exit 2)
+	$(AI_PYTHON) scripts/ai_generate_human_report.py "$(OUTCOME)" "$(or $(OUTPUT_JSON),.ai/cockpit/task_report.json)" "$(or $(OUTPUT_MARKDOWN),.ai/cockpit/task_report.md)"
+
+check-human-benefit-report:
+	@test -n "$(OUTCOME)" || (echo 'OUTCOME=<outcome.json> is required'; exit 2)
+	$(AI_PYTHON) scripts/ai_generate_human_report.py --check "$(OUTCOME)" "$(or $(OUTPUT_JSON),.ai/cockpit/task_report.json)" "$(or $(OUTPUT_MARKDOWN),.ai/cockpit/task_report.md)"
 
 render-task-outcome-pr:
 	@test -n "$(OUTCOME)" || (echo 'OUTCOME=<outcome.json> is required'; exit 2)

@@ -1,0 +1,207 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-04-recovery-chain-receipt",
+  "mode": "code",
+  "title": "Bind immutable WI04 recovery archive chain",
+  "baseCommit": "235bd2b07d9f791aa716079988513d97b205d23a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-04-recovery-chain-receipt.contract.json",
+    ".ai/work-items/active/wi-04-recovery-chain-receipt.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-04-recovery-chain-receipt.outcome.json",
+    ".ai/work-items/active/wi-04-recovery-chain-receipt.outcome.md",
+    ".ai/work-items/recovery-receipts/wi-04-hosted-installation-recovery.json",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md"
+  ],
+  "outOfScope": [
+    "Modifying either immutable WI04 predecessor archive",
+    "Changing installer, archive, report, or PR-check behavior",
+    "Binding any Work Item outside the exact WI04 consecutive archive prefix"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-04-human-benefit-report.contract.json",
+      "reason": "The compatible root Work Item at archive sequence 727."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-04-hosted-installation-recovery.contract.json",
+      "reason": "The immutable adjacent recovery at archive sequence 728 that was archived without an explicit predecessor source."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.md",
+      "reason": "Defines the append-only historical recovery receipt for exactly this immutable-chain condition."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "archive_traceability"
+    ],
+    "reason": "The receipt is append-only, digest-bound, limited to two consecutive immutable archives, and validated by the aggregate PR checker.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "lite",
+    "source": "automatic",
+    "reasons": [
+      "Only append-only governance evidence and generated lifecycle artifacts change."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The repository documents this exact immutable recovery path and the user pre-authorized the human-bound receipt."
+  },
+  "preReviewWarnings": [
+    "Confirm the receipt records exactly archive sequences 727 and 728.",
+    "Confirm every recorded path, digest, base commit, and Work Item ID is recomputed by check-ai-pr.",
+    "Confirm this Work Item explicitly sources the immediately preceding recovery archive."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "An append-only receipt binds exactly the WI04 root and Hosted recovery archives to PR base 2eae170ad702bd237be304e29f28d795848aeb9f.",
+    "The receipt records exact current paths, base commits, archive sequences, and Contract/Summary SHA-256 digests.",
+    "The aggregate PR check accepts the full consecutive WI04 recovery chain without modifying predecessor archives."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The Hosted recovery archive is immutable and lacks the explicit predecessor source required by the current aggregate PR checker, so the checker treats two related WI04 archives as independent Work Items.",
+    "constraints": [
+      "Do not modify either archived Contract or Summary.",
+      "Bind only the exact consecutive WI04 prefix and current PR merge-base.",
+      "Set the receipt human reference to user-goal:continue-all-work-items-and-hosted-recovery.",
+      "Make this Work Item an ordinary adjacent recovery by sourcing the immediately preceding archive pair."
+    ],
+    "rationale": "The documented historical recovery receipt is the narrow append-only mechanism for adding missing relationship evidence after archives become immutable."
+  },
+  "rawUserRequest": "Continue every Work Item through Hosted CI, merge, closure, and cleanup; fix bounded Hosted failures without pausing unless a true human decision or external permission is required.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-goal:continue-all-work-items-and-hosted-recovery",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:3a9cc784273f9748df6f58bcfe9daafdd54a0c72af7bf9fe695d10e6b6d76d2a"
+  },
+  "declaredIntent": {
+    "summary": "Bind the immutable WI04 recovery archive prefix with the documented append-only receipt.",
+    "requestedCapabilities": [
+      "ai_governance"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all bounded implementation, governance, PR, merge, archive, and cleanup decisions needed to complete every Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 741
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-04-recovery-chain-receipt.json",
+    "baseCommit": "235bd2b07d9f791aa716079988513d97b205d23a",
+    "initialScopeDigest": "9fec4e7dd5f5d34ebffffe0fbe722510ec395d5450a249e6fce67f78038528a3",
+    "contractSkeletonDigest": "9ddbdf52385cf457fb05105b00d9e9ebba201766d5f88885371e43a11f4c847d"
+  }
+}

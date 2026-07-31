@@ -144,6 +144,31 @@ def test_restricted_guard_is_hard_without_approval(tmp_path, monkeypatch):
     )
 
 
+def test_generated_human_reports_have_narrow_allowed_ownership(tmp_path, monkeypatch):
+    ownership = tmp_path / "ownership.yaml"
+    ownership.write_text(
+        ".ai/cockpit/task_report.json:\n"
+        "  aiWrite: allowed_with_contract\n"
+        "  reason: generated report\n"
+        ".ai/cockpit/task_report.md:\n"
+        "  aiWrite: allowed_with_contract\n"
+        "  reason: generated report\n"
+        '".ai/**":\n'
+        "  aiWrite: restricted\n"
+        "  reason: governance\n",
+        encoding="utf-8",
+    )
+    boundary = tmp_path / "boundary.yaml"
+    boundary.write_text("", encoding="utf-8")
+    monkeypatch.setattr(ai_check_guards, "OWNERSHIP", ownership)
+    monkeypatch.setattr(ai_check_guards, "BOUNDARY", boundary)
+
+    assert (
+        ai_check_guards.detect([".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md"]) == []
+    )
+    assert ai_check_guards.detect([".ai/cockpit/manual.md"])[0].severity == "error"
+
+
 def test_dependency_scope_rules_are_parsed(tmp_path):
     policy = tmp_path / "scope.yaml"
     policy.write_text(

@@ -1,4 +1,7 @@
+import json
+
 import ai_check_diff_ownership as ownership
+import ai_generate_human_report as human
 
 
 def contract(scope, *, excluded=(), approved=False):
@@ -304,6 +307,73 @@ def test_preview_does_not_skip_malformed_or_manual_status(monkeypatch, tmp_path)
     values = ownership.preview(contract={"baselineDirtyPaths": []})
     assert len(values) == 1
     assert values[0].state == "unowned"
+
+
+def test_preview_owns_only_exact_generated_human_report_pair(monkeypatch, tmp_path):
+    active_dir = tmp_path / "active"
+    active_dir.mkdir()
+    source = {
+        "format": "ai-cockpit-task-outcome",
+        "schemaVersion": 1,
+        "workItemId": "example",
+        "status": "completed",
+        "bindings": {
+            "taskId": "example",
+            "contractDigest": "a" * 64,
+            "summaryDigest": "b" * 64,
+            "verificationDigest": "c" * 64,
+            "baseCommit": "d" * 40,
+            "headCommit": "e" * 40,
+            "lifecycleStage": "pre_merge",
+            "pullRequest": {"state": "not_created"},
+            "aiCockpitVersion": "repository-governance",
+            "generatorVersion": "1.0",
+        },
+        "sections": {
+            "outcomeSummary": "Completed.",
+            "taskOverview": "Example",
+            "deliveredChanges": [],
+            "findings": [],
+            "risks": [],
+            "warnings": [],
+            "interventions": [],
+            "forcedStops": [],
+            "resolutions": [],
+            "recurrencePrevention": [],
+            "avoidedImpact": [],
+            "residualRisks": [],
+            "humanDecisions": [],
+            "evidence": [{"source": "contract.json", "subject": "Contract"}],
+        },
+    }
+    outcome_path = active_dir / "example.outcome.json"
+    outcome_path.write_text(json.dumps(source), encoding="utf-8")
+    report = human.generate_human_report(source)
+    report_json = tmp_path / "task_report.json"
+    report_md = tmp_path / "task_report.md"
+    report_json.write_text(json.dumps(report), encoding="utf-8")
+    report_md.write_text(human.render_human_report(report), encoding="utf-8")
+    monkeypatch.setattr(ownership, "ACTIVE_DIR", active_dir)
+    monkeypatch.setattr(ownership, "HUMAN_REPORT_JSON", report_json)
+    monkeypatch.setattr(ownership, "HUMAN_REPORT_MARKDOWN", report_md)
+    monkeypatch.setattr(
+        ownership,
+        "changed_name_status",
+        lambda *_args, **_kwargs: [
+            ("M", ".ai/cockpit/task_report.json"),
+            ("M", ".ai/cockpit/task_report.md"),
+        ],
+    )
+    monkeypatch.setattr(ownership, "owners", lambda **_kwargs: [])
+    monkeypatch.setattr(ownership, "parse_simple_manifest", lambda _path: {})
+
+    values = ownership.preview(contract={"workItemId": "example", "baselineDirtyPaths": []})
+
+    assert [item.state for item in values] == ["active_owned", "active_owned"]
+
+    report_md.write_text("tampered\n", encoding="utf-8")
+    values = ownership.preview(contract={"workItemId": "example", "baselineDirtyPaths": []})
+    assert [item.state for item in values] == ["unowned", "unowned"]
 
 
 def test_pr_preview_uses_only_archive_pairs_from_the_pr(monkeypatch):

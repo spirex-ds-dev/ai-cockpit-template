@@ -22,6 +22,7 @@ from ai_common import (
     clean_git_environment,
     current_head,
     discover_remote_default_candidates,
+    included,
     load_json,
     nested_make_command,
     path_fingerprint,
@@ -354,6 +355,77 @@ def inject_mandatory_verification_checks(
 def _outcome_paths(task: str) -> tuple[Path, Path]:
     root = ACTIVE_DIR / task
     return root.with_suffix(".outcome.json"), root.with_suffix(".outcome.md")
+
+
+def _human_report_paths() -> tuple[Path, Path]:
+    root = PROJECT_ROOT / ".ai" / "cockpit" / "task_report"
+    return root.with_suffix(".json"), root.with_suffix(".md")
+
+
+def run_human_report_pipeline(task: str, summary_path: Path) -> tuple[bool, str]:
+    """Generate the compact review view from the validated Task Outcome."""
+
+    from ai_generate_human_report import generate_human_report, render_human_report
+
+    outcome_path, _ = _outcome_paths(task)
+    json_path, markdown_path = _human_report_paths()
+    try:
+        outcome = load_json(outcome_path)
+        report = generate_human_report(outcome, phase="review")
+        save_json(json_path, report)
+        markdown_path.write_text(render_human_report(report), encoding="utf-8")
+        summary = load_json(summary_path)
+        changed = summary.setdefault("changedFiles", [])
+        contract_path = PROJECT_ROOT / ".ai" / "work-items" / "active" / f"{task}.contract.json"
+        contract = load_json(contract_path) if contract_path.is_file() else {}
+        scope = contract.get("scope", []) if isinstance(contract, dict) else []
+        existing = {item.get("path") for item in changed if isinstance(item, dict)}
+        for path, reason in (
+            (json_path, "Generated machine-readable Human Benefit Review Report."),
+            (markdown_path, "Generated human-readable Human Benefit Review Report."),
+        ):
+            relative = path.relative_to(PROJECT_ROOT).as_posix()
+            if included(relative, scope) and relative not in existing:
+                changed.append({"path": relative, "reason": reason})
+        alignment = summary.get("documentationAlignment")
+        report_markdown = markdown_path.relative_to(PROJECT_ROOT).as_posix()
+        if included(report_markdown, scope) and isinstance(alignment, dict):
+            checks = alignment.get("checks")
+            if isinstance(checks, list):
+                for check in checks:
+                    if (
+                        not isinstance(check, dict)
+                        or check.get("area") != "documentationCommandsCapability"
+                    ):
+                        continue
+                    evidence_paths = check.setdefault("evidence", [])
+                    if isinstance(evidence_paths, list) and report_markdown not in evidence_paths:
+                        evidence_paths.append(report_markdown)
+                    break
+        save_json(summary_path, summary)
+    except (OSError, KeyError, TypeError, ValueError) as exc:
+        return False, str(exc)
+    return True, "Human Benefit Report pipeline passed"
+
+
+def refresh_archived_human_report(task: str) -> tuple[bool, str]:
+    """Rebind the Review Report after archive rewrites Outcome evidence paths."""
+
+    from ai_generate_human_report import generate_human_report, render_human_report
+
+    matches = sorted(
+        (PROJECT_ROOT / ".ai" / "work-items" / "archive").glob(f"*/{task}.outcome.json")
+    )
+    if len(matches) != 1:
+        return False, f"expected exactly one archived Task Outcome for {task}, found {len(matches)}"
+    json_path, markdown_path = _human_report_paths()
+    try:
+        report = generate_human_report(load_json(matches[0]), phase="review")
+        save_json(json_path, report)
+        markdown_path.write_text(render_human_report(report), encoding="utf-8")
+    except (OSError, KeyError, TypeError, ValueError) as exc:
+        return False, str(exc)
+    return True, "Archived Human Benefit Report binding passed"
 
 
 def _record_outcome_state(summary_path: Path, state: dict[str, Any]) -> None:
@@ -807,6 +879,17 @@ def main() -> int:
         obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
         return 1
 
+    human_report_ok, human_report_message = run_human_report_pipeline(
+        contract_data["workItemId"], summary_path
+    )
+    if not human_report_ok:
+        print(
+            f"ERROR: Human Benefit Report integration failed: {human_report_message}",
+            file=sys.stderr,
+        )
+        obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+        return 1
+
     # Establish a fail-closed readiness baseline before self-referential
     # stabilization. Positive readiness is persisted only after the first
     # stabilization and final Summary validation have passed.
@@ -971,6 +1054,14 @@ def main() -> int:
             obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
             return code
         obs.check_passed(check_id="archive-work-item", command=cmd_str, duration_ms=duration)
+        report_ok, report_message = refresh_archived_human_report(args.task)
+        if not report_ok:
+            print(
+                f"ERROR: archived Human Benefit Report integration failed: {report_message}",
+                file=sys.stderr,
+            )
+            obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+            return 1
         print(archive_next_steps(args.task))
     obs.work_item_finished(result="passed", duration_ms=elapsed_ms(total_start))
     return 0

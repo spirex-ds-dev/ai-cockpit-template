@@ -1,0 +1,835 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wi-04-human-benefit-report",
+  "contractPath": ".ai/work-items/archive/2026/wi-04-human-benefit-report.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-04-human-benefit-report.contract.json",
+      "reason": "Defines WI04 scope, evidence, acceptance, scenarios, and Strict governance."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-04-human-benefit-report.summary.json",
+      "reason": "Records implementation, verification, limitations, and review evidence."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated lifecycle status."
+    },
+    {
+      "path": ".ai/cockpit/task_report.json",
+      "reason": "Generated machine-readable Human Benefit Review Report."
+    },
+    {
+      "path": ".ai/cockpit/task_report.md",
+      "reason": "Generated concise human-readable Review Report."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Associates the new production report generator with its focused test suite."
+    },
+    {
+      "path": ".ai/guards/scope_policy.yaml",
+      "reason": "Classifies generated current Human Benefit Report artifacts as always-owned cockpit evidence."
+    },
+    {
+      "path": ".ai/guards/file_ownership.yaml",
+      "reason": "Classifies only the exact generated report paths as contract-managed cockpit output."
+    },
+    {
+      "path": ".ai/work-items/starts/wi-04-human-benefit-report.json",
+      "reason": "Generated immutable Work Item start evidence."
+    },
+    {
+      "path": "scripts/ai_generate_human_report.py",
+      "reason": "Projects and validates compact review/final reports from Task Outcome truth."
+    },
+    {
+      "path": "scripts/ai_check_diff_ownership.py",
+      "reason": "Recognizes only validator-backed generated current reports as lifecycle-owned evidence."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Generates the Review Report during finish and records its source binding."
+    },
+    {
+      "path": "scripts/ai_check_pr.py",
+      "reason": "Fails closed for missing, malformed, stale, or inconsistent committed review reports."
+    },
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Generates a provider-bound Final Report before branch cleanup."
+    },
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "Distributes the report generator to adopters."
+    },
+    {
+      "path": "tests/test_human_benefit_report.py",
+      "reason": "Covers projection, counting, rendering, validation, CLI, and distribution interfaces."
+    },
+    {
+      "path": "tests/test_diff_ownership.py",
+      "reason": "Covers exact generated-report ownership and fail-closed rejection of malformed evidence."
+    },
+    {
+      "path": "tests/test_contract_and_policy.py",
+      "reason": "Covers generated-report guard exemption without weakening ordinary restricted paths."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Covers finish-stage report generation and Summary binding."
+    },
+    {
+      "path": "tests/test_pr_aggregate.py",
+      "reason": "Covers exact PR-stage report validation and stale evidence rejection."
+    },
+    {
+      "path": "tests/test_work_item_lifecycle_closure.py",
+      "reason": "Covers provider-bound final report generation before cleanup."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Verifies installed dependency closure contains the report generator."
+    },
+    {
+      "path": "docs/features/human-benefit-report.md",
+      "reason": "Documents lifecycle, count semantics, evidence boundaries, and non-claims in English."
+    },
+    {
+      "path": "docs/features/human-benefit-report.ja.md",
+      "reason": "Documents equivalent semantics in Japanese."
+    },
+    {
+      "path": "docs/features/human-benefit-report.zh-CN.md",
+      "reason": "Documents equivalent semantics in Simplified Chinese."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-01-human-benefit-report.md",
+      "reason": "Records the executable implementation plan and single-source design."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Adds source-bound Human Benefit Report capability evidence."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registers the implementation plan as historical implementation context."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Regenerates Japanese source-bound evidence after Make and installer changes."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Regenerates the human-readable Japanese evidence view."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Regenerates source-bound documentation alignment evidence."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Regenerates the human-readable documentation alignment view."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Adds canonical generation and validation entrypoints."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Distributes the Make entrypoints to adopters."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-04-human-benefit-report.outcome.json",
+      "reason": "Mandatory Task Outcome generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-04-human-benefit-report.outcome.md",
+      "reason": "Mandatory human-readable Task Outcome generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-04-human-benefit-report.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "user-request:ai-cockpit-next-phase#WI-04",
+    ".ai/work-items/archive/2026/wi-04-human-benefit-report.contract.json",
+    ".ai/glossary.md",
+    "docs/superpowers/plans/2026-08-01-human-benefit-report.md",
+    "scripts/ai_generate_task_outcome.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_close_work_item.py",
+    "docs/features/task-outcome-report.md"
+  ],
+  "acceptanceEvidence": [
+    {
+      "acceptanceId": "A1",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "The user authorized all bounded implementation and governance decisions."
+      },
+      "evidence": [
+        {
+          "type": "implementation",
+          "path": "scripts/ai_generate_human_report.py",
+          "locator": "generate_human_report and validate_human_report",
+          "verification": "focused-tests"
+        },
+        {
+          "type": "test",
+          "path": "tests/test_human_benefit_report.py",
+          "locator": "counts, stops, risks, decisions, and next action",
+          "verification": "focused-tests"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A2",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "The user requested a human-readable result after task completion."
+      },
+      "evidence": [
+        {
+          "type": "implementation",
+          "path": "scripts/ai_finish.py",
+          "locator": "run_human_report_pipeline",
+          "verification": "focused-tests"
+        },
+        {
+          "type": "test",
+          "path": "tests/test_task_outcome_ai_finish_integration.py",
+          "locator": "review artifact and Summary binding",
+          "verification": "focused-tests"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A3",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "The user authorized fail-closed PR governance."
+      },
+      "evidence": [
+        {
+          "type": "implementation",
+          "path": "scripts/ai_check_pr.py",
+          "locator": "human_benefit_report_issues",
+          "verification": "focused-tests"
+        },
+        {
+          "type": "test",
+          "path": "tests/test_pr_aggregate.py",
+          "locator": "stale review rejection",
+          "verification": "focused-tests"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A4",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "The user authorized provider-bound merge and cleanup decisions."
+      },
+      "evidence": [
+        {
+          "type": "implementation",
+          "path": "scripts/ai_close_work_item.py",
+          "locator": "generate_final_human_report",
+          "verification": "focused-tests"
+        },
+        {
+          "type": "test",
+          "path": "tests/test_work_item_lifecycle_closure.py",
+          "locator": "provider fact binding",
+          "verification": "focused-tests"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A5",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "The user authorized complete installation and focused verification."
+      },
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_installer.py",
+          "locator": "installed dependency closure",
+          "verification": "focused-tests"
+        },
+        {
+          "type": "implementation",
+          "path": "templates/make/Makefile.ai",
+          "locator": "generation and check entrypoints",
+          "verification": "focused-tests"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A6",
+      "humanReview": {
+        "completed": true,
+        "completedBy": "User",
+        "evidence": "The user required human-understandable reporting without unsupported claims."
+      },
+      "evidence": [
+        {
+          "type": "documentation",
+          "path": "docs/features/human-benefit-report.md",
+          "locator": "Review/Final lifecycle and evidence boundary",
+          "verification": "docs-check"
+        },
+        {
+          "type": "documentation",
+          "path": "docs/features/human-benefit-report.ja.md",
+          "locator": "equivalent semantics",
+          "verification": "docs-check"
+        },
+        {
+          "type": "documentation",
+          "path": "docs/features/human-benefit-report.zh-CN.md",
+          "locator": "equivalent semantics",
+          "verification": "docs-check"
+        }
+      ]
+    }
+  ],
+  "verification": [
+    {
+      "check": "sourceBoundEvidence",
+      "command": "make check-source-bound-evidence",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:04:51.813245+00:00",
+      "exitCode": 0,
+      "durationMs": 177,
+      "outputDigest": "64b81e9ddb0d0a60db2978dbc2679365537de9f1b0917e2103763805bc0275be",
+      "commandHash": "d86740d1d67217b831acef07cf8c7dfdf9a5216b5917b64f95de6e72269f5dc3",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {\"absurdCases\": [{\"caseId\": \"rocket-launch\", \"level\": \"L1\", \"class\": \"world_fact\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"safeAlternative\": \"local dry-run plan\"}, {\"caseId\": \"production-delete\", \"level\": \"L2\", \"class\": \"authority\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": ",
+      "outputTail": "ta.py\", \"sha256\": \"63ad60264a4c13eb7be67bb3eaea1361488cc4c82e61195c62cba70d486d63d3\" }, { \"path\": \"tests/test_guards_and_status.py\", \"sha256\": \"56beafdeec33c14456e487fa298e3473d09dde5b18b94807ca738174f8cd6075\" }, { \"path\": \"tests/test_input_trust.py\", \"sha256\": \"5fc72a69ce0539cd5791c956cd29f68b7647dc4a14b3599eec7314455a3372f3\" }, { \"path\": \"tests/test_input_trust_corpus.py\", \"sha256\": \"a5196c1965c10dc84bb8641cef0128c928d67d506ec2be10a40c5df3f5265dde\" }, { \"path\": \"tests/test_install_wizard.py\", \"sha256\": \"896267c1acde3d6433b0853351a6c814df7b81afa010468ae50429971b1ff686\" }, { \"path\": \"tests/test_japanese_adopter_lifecycle.py\", \"sha256\": \"6e33190d690ed7a4cbcaa168916518ced4e5d018c33f148a8a9e54d102577d83\" }, { \"path\": \"tests/test_japanese_capability.py\", \"sha256\": \"55fda8db695ae4ffc7f47c15ce3efc5d8126692690c39491bca5222e98a04154\" }, { \"path\": \"tests/test_makefile.py\", \"sha256\": \"d49c6a9ca12476b814579e010075d3feb59a14a34a576efae35cdbea5dbea3cd\" }, { \"path\": \"tests/test_task_outcome_multilingual.py\", \"sha256\": \"d0202b172f7f44f228136cc1b18d28cfa2d2f57b13c40f1d151394490d2c9995\" }, { \"path\": \"tests/test_task_outcome_pr_summary.py\", \"sha256\": \"407c8cb2717cb1fc1664d5f706d4a5187720329137f235277d3e7fed87ced239\" }, { \"path\": \"tests/test_trust_layer_docs.py\", \"sha256\": \"8230686f3332b7b670efe8e0cbdb60eac8653618fa80ddf244f79b21f5005ac7\" }, { \"path\": \"tests/test_wizard_localization.py\", \"sha256\": \"a7161e9d05d8bd5a2d7116aff553cf36880776a1b870f7aea241529f65f28d38\" } ] }, \"limitations\": [ \"This assessment does not claim general model fluency, translation quality, or provider behavior.\", \"Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking.\" ], \"scope\": \"bounded repository-governance Japanese handling\", \"workItemId\": \"final-japanese-reassessment-replacement-20260731\", \"workItemRole\": \"final_reassessment\" } PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_pre_release_documentation_alignment.py pre-release documentation alignment passed",
+      "outputBytes": 25206
+    },
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:04:52.132385+00:00",
+      "exitCode": 0,
+      "durationMs": 237,
+      "outputDigest": "db2e3fdd87daad8dba67fd1b57de7bf463ce1b48d66e7583dba08444bff32770",
+      "commandHash": "10ee899f99184b9121c0d185774b1b08b2d61ed17414ce812bd4e50b4ba8787f",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-04-human-benefit-report.contract.json work item contract check passed: .ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-04-human-benefit-report.contract.json work item contract check passed: .ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "outputBytes": 232
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:04:52.305831+00:00",
+      "exitCode": 0,
+      "durationMs": 108,
+      "outputDigest": "c9dd17676be51be6d6d5d9c89f13ead7cb379a1d1ed8f2605cd550fec5bd745e",
+      "commandHash": "097953901db06b088a3a2b3dfb02c7ad24b80a51fe1b7d997fcba2b2543cf66b",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-04-human-benefit-report.contract.json scope guard passed: 32 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-04-human-benefit-report.contract.json scope guard passed: 32 changed path(s) covered",
+      "outputBytes": 179
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:04:52.490429+00:00",
+      "exitCode": 0,
+      "durationMs": 134,
+      "outputDigest": "faf46d2be0b183df8e54fef4ac798417b721f31573b0fc10c5ae0346232d01a9",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json [warning] restricted_write: .ai/guards/coverage_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. [warning] restricted_write: .ai/guards/file_ownership.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. [warning] restricte",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json [warning] restricted_write: .ai/guards/coverage_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. [warning] restricted_write: .ai/guards/file_ownership.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. [warning] restricted_write: .ai/guards/scope_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 4 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 809
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/wi-04-human-benefit-report.contract.json SUMMARY=.ai/work-items/active/wi-04-human-benefit-report.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:04:52.738589+00:00",
+      "exitCode": 0,
+      "durationMs": 190,
+      "outputDigest": "cd639499378227654385d578caeef2c4f3b60c65a5e417d0bd97d5c4583eb622",
+      "commandHash": "b383a24524ab68c56c2309e18e95d2f0309322170b0c8ee07e1e3346b59e09d1",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wi-04-human-benefit-report` - Contract Hash: `046f205979703437` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `6` - Unknown Count: `0` - Required Checks:",
+      "outputTail": "uman-benefit-report.md` — covered by Contract scope - [active_owned] `docs/features/human-benefit-report.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-08-01-human-benefit-report.md` — covered by Contract scope - [active_owned] `scripts/ai_check_diff_ownership.py` — covered by Contract scope - [active_owned] `scripts/ai_check_pr.py` — covered by Contract scope - [active_owned] `scripts/ai_close_work_item.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_human_report.py` — covered by Contract scope - [active_owned] `scripts/ai_installer_catalog.json` — covered by Contract scope - [active_owned] `templates/make/Makefile.ai` — covered by Contract scope - [active_owned] `tests/test_contract_and_policy.py` — covered by Contract scope - [active_owned] `tests/test_diff_ownership.py` — covered by Contract scope - [active_owned] `tests/test_human_benefit_report.py` — covered by Contract scope - [active_owned] `tests/test_installer.py` — covered by Contract scope - [active_owned] `tests/test_pr_aggregate.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_ai_finish_integration.py` — covered by Contract scope - [active_owned] `tests/test_work_item_lifecycle_closure.py` — covered by Contract scope ## Next Action - Run or record required verification: quality",
+      "outputBytes": 8349
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:04:52.901551+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "b1adfe22ac493472166cc511abe38978018dd98d0c14a582c8b22f9a42a22cf6",
+      "commandHash": "f07a3111623953ef6b436c9778b8329c620bcc9ea53a28be8c5280a06f4e1740",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json review policy matched 14 path(s) [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/work-items/starts/wi-04-human-benefit-report.json [review] scripts/ai_generate_human_report.py [review] .ai/cockpit/current_status.md [review] .ai/guards/coverage_policy.yaml [review] .ai/guards/file_ownership.yaml [review] .ai/gua",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json review policy matched 14 path(s) [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/work-items/starts/wi-04-human-benefit-report.json [review] scripts/ai_generate_human_report.py [review] .ai/cockpit/current_status.md [review] .ai/guards/coverage_policy.yaml [review] .ai/guards/file_ownership.yaml [review] .ai/guards/scope_policy.yaml [review] Makefile [review] scripts/ai_check_diff_ownership.py [review] scripts/ai_check_pr.py [review] scripts/ai_close_work_item.py [review] scripts/ai_finish.py [review] templates/make/Makefile.ai review focus recorded: 5 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 798
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:04:53.046013+00:00",
+      "exitCode": 0,
+      "durationMs": 92,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:04:53.357568+00:00",
+      "exitCode": 0,
+      "durationMs": 251,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/wi-04-human-benefit-report.contract.json SUMMARY=.ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:04:53.463534+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "fe5b0dc9d366d04e4ea4ae5c9b66ba6d00c46d4823da2f5d483a0041f2a4c2e8",
+      "commandHash": "48a6aa6bdc3beab837e0eaf84a7d639c134cef01e377ba01d2caa4f28ea1fcc3",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 275
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/wi-04-human-benefit-report.contract.json SUMMARY=.ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:04:53.567272+00:00",
+      "exitCode": 0,
+      "durationMs": 51,
+      "outputDigest": "9f5fd78a42d8f7b6098627a6615b6d1325711cbecdf6ea07d37886bc60703ec0",
+      "commandHash": "5f4d375433d1773e08de0761006d33274e94237274b43aca9f73138955e9235c",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json guidelines compliance check passed: 2 guideline(s) verified",
+      "outputBytes": 280
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:04:53.805802+00:00",
+      "exitCode": 0,
+      "durationMs": 186,
+      "outputDigest": "df13fea6332e32c89b86182f360325dbc7840cf362f5317e2793f2e15199f84a",
+      "commandHash": "2776511e978110a85fc4cab1c44e8ba10bdf7f94f79a47f5407fc2465b0c7d72",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json ## Diff Ownership Preview - active_owned: `32`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.md` — covere",
+      "outputTail": " — covered by Contract scope - [active_owned] `docs/features/human-benefit-report.md` — covered by Contract scope - [active_owned] `docs/features/human-benefit-report.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/capability-truth-matrix.json` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-08-01-human-benefit-report.md` — covered by Contract scope - [active_owned] `scripts/ai_check_diff_ownership.py` — covered by Contract scope - [active_owned] `scripts/ai_check_pr.py` — covered by Contract scope - [active_owned] `scripts/ai_close_work_item.py` — covered by Contract scope - [active_owned] `scripts/ai_finish.py` — covered by Contract scope - [active_owned] `scripts/ai_generate_human_report.py` — covered by Contract scope - [active_owned] `scripts/ai_installer_catalog.json` — covered by Contract scope - [active_owned] `templates/make/Makefile.ai` — covered by Contract scope - [active_owned] `tests/test_contract_and_policy.py` — covered by Contract scope - [active_owned] `tests/test_diff_ownership.py` — covered by Contract scope - [active_owned] `tests/test_human_benefit_report.py` — covered by Contract scope - [active_owned] `tests/test_installer.py` — covered by Contract scope - [active_owned] `tests/test_pr_aggregate.py` — covered by Contract scope - [active_owned] `tests/test_task_outcome_ai_finish_integration.py` — covered by Contract scope - [active_owned] `tests/test_work_item_lifecycle_closure.py` — covered by Contract scope",
+      "outputBytes": 3035
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:10:13.847614+00:00",
+      "exitCode": 0,
+      "durationMs": 319963,
+      "outputDigest": "aee5967d5b88e3a9f2e5563cdefd2e5359cdbe229431b7bc8ad3eb0b91e207ed",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "3780fec1f6f10151dc7a1ed069bb4de5b61431b53684640ec63c199abdd877ee",
+      "outputSummary": "{ \"automaticProfile\": \"strict\", \"base\": \"2eae170ad702bd237be304e29f28d795848aeb9f\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/guards/coverage_policy.yaml\", \".ai/guards/file_ownership.yaml\", \".ai/guards/scope_policy.yaml\", \".ai/work-items/starts/wi-04-human-benefit-report.json\", \"Makefile\", \"docs/features/human-benefit-report.ja.md\", \"docs/features/human-benefit-report.md\", \"docs/features/human-benefit-report.zh-CN.md\", \"",
+      "outputTail": "/test_installer.py::test_upgrade_rolls_back_when_post_copy_validation_fails 2.73s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 2.70s call tests/test_installer.py::test_upgrade_backs_up_policies_and_replaces_agent_marker_section 2.70s call tests/test_project_governance.py::test_system_invariants_allow_missing_archive_summary_version 2.69s call tests/test_installer.py::test_upgrade_with_active_requires_explicit_override 2.58s call tests/test_installer.py::test_failed_upgrade_removes_new_gitignore 1742 passed, 3 warnings in 311.43s (0:05:11) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.Nnv3jWrXZ2/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.Nnv3jWrXZ2/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.Nnv3jWrXZ2/multi-workflow.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.Nnv3jWrXZ2/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.Nnv3jWrXZ2/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/2eae170ad702-local-20260731T220453Z-15931-0/summary.json",
+      "outputBytes": 69475
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/wi-04-human-benefit-report.contract.json SUMMARY=.ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:10:14.178648+00:00",
+      "exitCode": 0,
+      "durationMs": 245,
+      "outputDigest": "d0fff52122f4e82c5529e7dfafeef35e6f8e9aabb8b1a61356cd259f11702a7c",
+      "commandHash": "d72ad651c1fab4d042263175481d46e0f542c94c9a921369197fd860edbf55fe",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "ec4afbfd5ed4f012b4bd4d6a580cf4811dd4dfeb8627420df24b56628f7abd62",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-04-human-benefit-report.contract.json --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-04-human-benefit-report.contract.json --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 322
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/wi-04-human-benefit-report.contract.json SUMMARY=.ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:10:14.657110+00:00",
+      "exitCode": 0,
+      "durationMs": 206,
+      "outputDigest": "121c2c70f0c4af7d884c5943887f975468c1e4fe5a53547b2774257668735f4e",
+      "commandHash": "1dc2764ac34aac65482b51122bd3fde24a588a93253ed2742e332a1bcc0b8294",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "139cfd35be5deb66c58163faab3a6d686a426b553e52f925de0b7f7ddded60b6",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 305
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:10:14.991608+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "5ef39fb1ae3018b39b55019014cd519edf9f796940162e8a054f79249b686a83",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/wi-04-human-benefit-report.contract.json SUMMARY=.ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:10:15.131587+00:00",
+      "exitCode": 0,
+      "durationMs": 71,
+      "outputDigest": "99842801e604f080b8a678882d5bc454c7afe7aa37dce8ed19f67f5b61f3706a",
+      "commandHash": "970cd45e778fca51c4ed6bd19924ba8cc9d790410a84a3561ba5fad356a4cf50",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "5ef39fb1ae3018b39b55019014cd519edf9f796940162e8a054f79249b686a83",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json --summary .ai/work-items/active/wi-04-human-benefit-report.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 285
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/wi-04-human-benefit-report.summary.json CONTRACT=.ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "result": "failed",
+      "runner": "ai_finish",
+      "executedAt": "2026-07-31T22:10:15.366761+00:00",
+      "exitCode": 2,
+      "durationMs": 186,
+      "outputDigest": "71f7ceae97a73ef781531b7796e99fe4aa1c658cb4130dcfae8792e4ae10ca1b",
+      "commandHash": "8d9c2df5a35229fe13e49f67b90748816f3b4680727d027287bd113fa0248232",
+      "contractHash": "046f20597970343769c949033f3a866787e4d65e2aac3230dbeb5bc3143211ba",
+      "commitSha": "2eae170ad702bd237be304e29f28d795848aeb9f",
+      "executionContractPath": ".ai/work-items/active/wi-04-human-benefit-report.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-04-human-benefit-report.summary.json",
+      "worktreeDigest": "5ef39fb1ae3018b39b55019014cd519edf9f796940162e8a054f79249b686a83",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-04-human-benefit-report.summary.json --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json [ERROR] verification[0].contractHash does not match Contract make: *** [check-ai-change-summary] Error 1",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-04-human-benefit-report.summary.json --contract .ai/work-items/active/wi-04-human-benefit-report.contract.json [ERROR] verification[0].contractHash does not match Contract make: *** [check-ai-change-summary] Error 1",
+      "outputBytes": 313
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "New public APIs must be documented.",
+      "compliant": true,
+      "evidence": "English, Japanese, and Simplified Chinese documentation covers the public CLI, Make entrypoints, lifecycle, count semantics, and limitations."
+    },
+    {
+      "guideline": "Do not import internal modules from other features.",
+      "compliant": true,
+      "evidence": "The projection imports the public Task Outcome validator and reuses validated Outcome structure without importing a feature-internal implementation surface."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Reporting is lifecycle-critical; exact source comparison, provider-bound final facts, focused integration tests, and a single Task Outcome authority limit the risk."
+  },
+  "generatedFiles": [
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/wi-04-human-benefit-report.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "destructiveChanges": [],
+  "scenarioCoverage": [
+    {
+      "scenario": "A Work Item completes with findings, warnings, stops, resolutions, prevented impact, residual risk, and human decisions.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_human_benefit_report.py",
+        "make generate-human-benefit-report and make check-human-benefit-report"
+      ]
+    },
+    {
+      "scenario": "ai-finish produces a review-stage report and check-ai-pr evaluates the archived PR evidence.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_task_outcome_ai_finish_integration.py",
+        "tests/test_pr_aggregate.py"
+      ]
+    },
+    {
+      "scenario": "A merged Work Item is closed after authoritative provider verification.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_work_item_lifecycle_closure.py",
+        "tests/test_human_benefit_report.py::test_final_report_requires_and_binds_provider_closure_facts"
+      ]
+    },
+    {
+      "scenario": "An adopter installs the Human Benefit Report feature.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_installer.py",
+        "tests/test_human_benefit_report.py::test_installer_and_make_interfaces_distribute_human_report"
+      ]
+    }
+  ],
+  "observedIssues": [
+    "The first Strict quality run exposed a missing production-to-test coverage association for the new generator; coverage_policy.yaml now maps it to the focused report tests.",
+    "Lifecycle retry tests exposed that generated current reports were unowned and then restricted after a prior finish; diff ownership now accepts only exact validator-backed report pairs, while file ownership narrowly permits only the two generated report paths and leaves other .ai files restricted.",
+    "Archiving rewrites Outcome evidence paths, which initially made the pre-archive report stale; ai-finish now regenerates the review report from the archived canonical Outcome.",
+    "The Contract initially selected Standard while protected .ai, Make, installer, and core lifecycle paths require Strict; the profile was corrected before final verification."
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "record-count-semantics",
+      "detail": "Detected issue counts represent distinct evidence records and may include multiple records for one semantic root cause.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    },
+    {
+      "level": "low",
+      "area": "provider-boundary",
+      "detail": "The Review Report cannot prove Hosted CI, merge, cleanup, human receipt, or provider identity; the Final Report adds only closure facts verified by the provider adapter.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "not_ready",
+    "reason": "Final stabilization and status checks are still pending.",
+    "expectedReviewFocus": [
+      "Single Task Outcome authority",
+      "Deterministic issue counts",
+      "Stale PR report rejection",
+      "Provider-bound final facts",
+      "Clean synchronized base after closure"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified",
+    "userVisibleOutput": "verified",
+    "persistence": "verified",
+    "localization": "verified",
+    "generatedArtifacts": "verified",
+    "makeEntrypoints": "verified"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "046f205979703437",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "046f205979703437",
+      "acceptanceCount": 6,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "Canonical ai-finish/archive evidence, Hosted CI, PR merge, lifecycle closure, Final Report, and branch cleanup remain until those actions complete.",
+    "Generated reports do not authenticate a human identity or prove that a person read the report."
+  ],
+  "overclaimPrevention": "The report compresses validated repository and provider-bound closure evidence only; it does not score productivity or trust and does not claim platform isolation, security, enterprise compliance, or production safety.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-01T06:30:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/plans/2026-08-01-human-benefit-report.md"
+        ],
+        "reason": "Implementation follows the single Task Outcome authority and Review/Final lifecycle plan."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/wi-04-human-benefit-report.contract.json",
+          ".ai/work-items/archive/2026/wi-04-human-benefit-report.summary.json"
+        ],
+        "reason": "Six acceptance items and four scenarios map to implementation, focused tests, lifecycle evidence, and documentation."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          ".ai/cockpit/task_report.md",
+          "docs/features/human-benefit-report.md",
+          "Makefile",
+          "templates/make/Makefile.ai",
+          "scripts/ai_generate_human_report.py",
+          "docs/reference/capability-truth-matrix.json",
+          "docs/reference/japanese-capability-assessment.md",
+          "docs/reference/pre-release-documentation-alignment.md"
+        ],
+        "reason": "Documented commands and claims match implemented and installed entrypoints and source-bound capability evidence."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "docs/features/human-benefit-report.md",
+          "docs/features/human-benefit-report.ja.md",
+          "docs/features/human-benefit-report.zh-CN.md"
+        ],
+        "reason": "All three documents preserve lifecycle phases, count semantics, evidence boundaries, and non-claims."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/features/human-benefit-report.md",
+          "docs/superpowers/plans/2026-08-01-human-benefit-report.md"
+        ],
+        "reason": "Record-count, provider, identity, security, compliance, and historical archive limits remain explicit."
+      }
+    ]
+  },
+  "taskOutcome": {
+    "status": "completed_with_warnings",
+    "jsonPath": ".ai/work-items/active/wi-04-human-benefit-report.outcome.json",
+    "markdownPath": ".ai/work-items/active/wi-04-human-benefit-report.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2
+  },
+  "archiveSequence": 727
+}

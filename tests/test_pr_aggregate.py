@@ -1387,3 +1387,61 @@ def test_pr_keeps_non_archive_modified_paths_valid(tmp_path, monkeypatch):
     )
 
     assert ai_check_pr.validate_pr_bundle("a" * 40, [pair]) == []
+
+
+def test_human_benefit_report_issues_rejects_stale_review_report(tmp_path, monkeypatch):
+    from ai_generate_human_report import generate_human_report, render_human_report
+
+    contract_path = tmp_path / ".ai/work-items/archive/2026/example.contract.json"
+    contract_path.parent.mkdir(parents=True)
+    contract_path.write_text("{}", encoding="utf-8")
+    outcome_path = contract_path.with_name("example.outcome.json")
+    sections = {
+        "outcomeSummary": "Completed.",
+        "taskOverview": "Example.",
+        "deliveredChanges": [],
+        "findings": [],
+        "risks": [],
+        "warnings": [],
+        "interventions": [],
+        "forcedStops": [],
+        "resolutions": [],
+        "recurrencePrevention": [],
+        "avoidedImpact": [],
+        "residualRisks": [],
+        "humanDecisions": [],
+        "evidence": [{"source": "contract.json", "subject": "Contract"}],
+    }
+    outcome = {
+        "format": "ai-cockpit-task-outcome",
+        "schemaVersion": 1,
+        "workItemId": "example",
+        "status": "completed",
+        "bindings": {
+            "taskId": "example",
+            "contractDigest": "a" * 64,
+            "summaryDigest": "b" * 64,
+            "verificationDigest": "c" * 64,
+            "baseCommit": "d" * 40,
+            "headCommit": "e" * 40,
+            "lifecycleStage": "pre_merge",
+            "pullRequest": {"state": "not_created"},
+            "aiCockpitVersion": "repository-governance",
+            "generatorVersion": "1.0",
+        },
+        "sections": sections,
+    }
+    outcome_path.write_text(json.dumps(outcome), encoding="utf-8")
+    cockpit = tmp_path / ".ai/cockpit"
+    cockpit.mkdir(parents=True)
+    report = generate_human_report(outcome)
+    (cockpit / "task_report.json").write_text(json.dumps(report), encoding="utf-8")
+    (cockpit / "task_report.md").write_text(render_human_report(report), encoding="utf-8")
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+
+    assert ai_check_pr.human_benefit_report_issues(contract_path) == []
+    report["issues"]["detected"] = 9
+    (cockpit / "task_report.json").write_text(json.dumps(report), encoding="utf-8")
+    assert ai_check_pr.human_benefit_report_issues(contract_path) == [
+        "report is stale or inconsistent with Task Outcome"
+    ]

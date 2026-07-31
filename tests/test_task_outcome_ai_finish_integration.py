@@ -2,6 +2,7 @@ import json
 import sys
 
 import ai_finish
+import ai_generate_human_report as human
 from ai_governance_compression import render_active_status
 
 
@@ -98,6 +99,151 @@ def test_outcome_pipeline_without_contract_fails_closed(tmp_path):
         False,
         "mandatory Task Outcome requires the active Contract",
     )
+
+
+def test_human_report_pipeline_generates_review_artifacts_and_summary_binding(
+    tmp_path, monkeypatch
+):
+    task = "example-task"
+    summary_path = tmp_path / "summary.json"
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [],
+                "documentationAlignment": {
+                    "checks": [{"area": "documentationCommandsCapability", "evidence": []}]
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    outcome_path = tmp_path / "outcome.json"
+    outcome_value = _outcome(task)
+    outcome_value.update(
+        {
+            "format": "ai-cockpit-task-outcome",
+            "schemaVersion": 1,
+            "bindings": {
+                "taskId": task,
+                "contractDigest": "a" * 64,
+                "summaryDigest": "b" * 64,
+                "verificationDigest": "c" * 64,
+                "baseCommit": "d" * 40,
+                "headCommit": "e" * 40,
+                "lifecycleStage": "pre_merge",
+                "pullRequest": {"state": "not_created"},
+                "aiCockpitVersion": "repository-governance",
+                "generatorVersion": "1.0",
+            },
+        }
+    )
+    outcome_path.write_text(json.dumps(outcome_value), encoding="utf-8")
+    json_path = tmp_path / "task_report.json"
+    markdown_path = tmp_path / "task_report.md"
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    contract_path = tmp_path / ".ai/work-items/active" / f"{task}.contract.json"
+    contract_path.parent.mkdir(parents=True)
+    contract_path.write_text(
+        json.dumps({"scope": ["task_report.json", "task_report.md"]}), encoding="utf-8"
+    )
+    monkeypatch.setattr(
+        ai_finish, "_outcome_paths", lambda _: (outcome_path, tmp_path / "outcome.md")
+    )
+    monkeypatch.setattr(ai_finish, "_human_report_paths", lambda: (json_path, markdown_path))
+
+    ok, message = ai_finish.run_human_report_pipeline(task, summary_path)
+
+    assert ok
+    assert message == "Human Benefit Report pipeline passed"
+    report = json.loads(json_path.read_text(encoding="utf-8"))
+    assert human.validate_human_report(report, outcome_value) == []
+    assert markdown_path.read_text(encoding="utf-8") == human.render_human_report(report)
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert {item["path"] for item in summary["changedFiles"]} == {
+        "task_report.json",
+        "task_report.md",
+    }
+    assert summary["documentationAlignment"]["checks"][0]["evidence"] == ["task_report.md"]
+
+
+def test_archived_human_report_refreshes_after_outcome_path_rewrite(tmp_path, monkeypatch):
+    task = "example-task"
+    archive = tmp_path / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True)
+    outcome_value = _outcome(task)
+    outcome_value.update(
+        {
+            "format": "ai-cockpit-task-outcome",
+            "schemaVersion": 1,
+            "bindings": {
+                "taskId": task,
+                "contractDigest": "a" * 64,
+                "summaryDigest": "b" * 64,
+                "verificationDigest": "c" * 64,
+                "baseCommit": "d" * 40,
+                "headCommit": "e" * 40,
+                "lifecycleStage": "pre_merge",
+                "pullRequest": {"state": "not_created"},
+                "aiCockpitVersion": "repository-governance",
+                "generatorVersion": "1.0",
+            },
+        }
+    )
+    outcome_path = archive / f"{task}.outcome.json"
+    outcome_path.write_text(json.dumps(outcome_value), encoding="utf-8")
+    json_path = tmp_path / ".ai/cockpit/task_report.json"
+    markdown_path = tmp_path / ".ai/cockpit/task_report.md"
+    json_path.parent.mkdir(parents=True)
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "_human_report_paths", lambda: (json_path, markdown_path))
+
+    ok, message = ai_finish.refresh_archived_human_report(task)
+
+    assert ok
+    assert message == "Archived Human Benefit Report binding passed"
+    report = json.loads(json_path.read_text(encoding="utf-8"))
+    assert human.validate_human_report(report, outcome_value) == []
+
+
+def test_unscoped_current_report_remains_generated_evidence_not_summary_ownership(
+    tmp_path, monkeypatch
+):
+    task = "example-task"
+    summary_path = tmp_path / "summary.json"
+    summary_path.write_text(json.dumps({"changedFiles": []}), encoding="utf-8")
+    outcome_path = tmp_path / "outcome.json"
+    outcome_value = _outcome(task)
+    outcome_value.update(
+        {
+            "format": "ai-cockpit-task-outcome",
+            "schemaVersion": 1,
+            "bindings": {
+                "taskId": task,
+                "contractDigest": "a" * 64,
+                "summaryDigest": "b" * 64,
+                "verificationDigest": "c" * 64,
+                "baseCommit": "d" * 40,
+                "headCommit": "e" * 40,
+                "lifecycleStage": "pre_merge",
+                "pullRequest": {"state": "not_created"},
+                "aiCockpitVersion": "repository-governance",
+                "generatorVersion": "1.0",
+            },
+        }
+    )
+    outcome_path.write_text(json.dumps(outcome_value), encoding="utf-8")
+    contract_path = tmp_path / ".ai/work-items/active" / f"{task}.contract.json"
+    contract_path.parent.mkdir(parents=True)
+    contract_path.write_text(json.dumps({"scope": ["fixture.txt"]}), encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_finish, "_outcome_paths", lambda _: (outcome_path, tmp_path / "outcome.md")
+    )
+
+    ok, _ = ai_finish.run_human_report_pipeline(task, summary_path)
+
+    assert ok
+    assert json.loads(summary_path.read_text(encoding="utf-8"))["changedFiles"] == []
 
 
 def test_outcome_pipeline_without_opt_in_derives_a_pre_merge_report(tmp_path, monkeypatch):
