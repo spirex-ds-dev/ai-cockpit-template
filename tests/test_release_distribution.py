@@ -858,9 +858,11 @@ quality:
 check-ai-adoption-ready:
 	@printf '%s\\n' 'adoption readiness check failed' >&2; false
 ai-finish:
-	@true
+	@test "$(ARCHIVE)" = true
+	@mkdir -p .ai/work-items/archive/2026
+	@mv .ai/work-items/active/adopt_ai_cockpit.contract.json .ai/work-items/archive/2026/
 check-ai-pr:
-	@true
+	@test -f .ai/work-items/archive/2026/adopt_ai_cockpit.contract.json
 ai-start:
 	@mkdir -p .ai/work-items/active
 	@touch .ai/work-items/active/configure_ai_cockpit.contract.json
