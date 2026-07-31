@@ -276,6 +276,9 @@ jobs:
               dotnet format "$solution"
               ;;
           esac
+          if [[ "$STACK" == java || "$STACK" == kotlin ]]; then
+            printf '/.gradle/\n/build/\n' > .gitignore
+          fi
           git add .
           git commit -qm initial
           "$GITHUB_WORKSPACE/install.sh" --stack "$STACK" --update-makefile
