@@ -56,7 +56,8 @@ def test_remaining_review_gaps_and_completed_evidence_are_explicit() -> None:
         "install.sh",
         "scripts/verify_quick_install_release.py",
         "release.json",
-    } <= set(quick_install["sourceEvidence"])
+    } <= set(quick_install["evidence"])
+    assert "release.json" not in quick_install["sourceEvidence"]
     assert "tests/test_quick_install_release.py" in quick_install["testEvidence"]
     assert "does not prove" in quick_install["limitations"]
     assert capabilities["independent_ci_release_evidence"]["status"] == "implemented"

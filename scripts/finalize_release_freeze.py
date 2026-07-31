@@ -7,10 +7,22 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 import sys
 
 from ai_common import PROJECT_ROOT, discover_remote_default_candidates, included, run_git
-from release_archive import canonical_archive_sha, canonical_source_tree
+from release_archive import (
+    canonical_archive_sha_from_worktree,
+    canonical_source_tree_from_worktree,
+)
+
+DERIVED_REPORT_PATHS = (
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+)
 
 
 def sha256_text(text: str) -> str:
@@ -38,6 +50,46 @@ def regenerate_capability_truth(root) -> None:
     errors = validate_matrix(matrix_path, root=root)
     if errors:
         raise ValueError("; ".join(errors))
+
+
+def _run_derived_report_generator(root, script: str) -> None:
+    result = subprocess.run(  # nosec B603
+        [sys.executable, str(root / "scripts" / script), "--write"],
+        cwd=root,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise ValueError(f"{script} failed: {result.stderr.strip() or result.stdout.strip()}")
+
+
+def _unexpected_derived_changes(root) -> list[str]:
+    changed: set[str] = set()
+    for args in (
+        ["diff", "--name-only"],
+        ["diff", "--cached", "--name-only"],
+        ["ls-files", "--others", "--exclude-standard"],
+    ):
+        result = subprocess.run(  # nosec B603 B607
+            ["git", "-C", str(root), *args], check=True, capture_output=True, text=True
+        )
+        changed.update(path for path in result.stdout.splitlines() if path)
+    return sorted(changed - set(DERIVED_REPORT_PATHS))
+
+
+def refresh_release_derived_reports(root) -> None:
+    if not (root / "docs" / "reference" / "capability-truth-matrix.json").is_file():
+        return
+    regenerate_capability_truth(root)
+    _run_derived_report_generator(root, "ai_japanese_capability.py")
+    _run_derived_report_generator(root, "check_pre_release_documentation_alignment.py")
+    unexpected = _unexpected_derived_changes(root)
+    if unexpected:
+        raise ValueError(
+            "derived report refresh changed paths outside its controlled set: "
+            + ", ".join(unexpected)
+        )
 
 
 def main(
@@ -146,6 +198,7 @@ def main(
             "release-state.json",
             ".ai/cockpit/release-freeze.json",
             ".ai/cockpit/release-digests.json",
+            *DERIVED_REPORT_PATHS,
         ]
         scope = [pattern for pattern in contract.get("scope", []) if isinstance(pattern, str)]
         out_of_scope = [
@@ -178,10 +231,14 @@ def main(
         resolved_source = run_git(["rev-parse", source_identity])
         if resolved_source.returncode != 0 or not resolved_source.stdout.strip():
             return _fail(f"source identity cannot be resolved: {source_identity}")
-    # Export-ignored Work Item evidence lets a controlled future ref preserve candidate bytes.
     materialization_commit = resolved_head if premerge_task is not None else source_identity
-    source_tree = canonical_source_tree(root, materialization_commit)
-    archive_sha = canonical_archive_sha(root, materialization_commit)
+    if runtime_source_commit is None:
+        try:
+            refresh_release_derived_reports(root)
+        except (OSError, ValueError, json.JSONDecodeError, subprocess.SubprocessError) as exc:
+            return _fail(f"derived release report refresh failed: {exc}")
+    source_tree = canonical_source_tree_from_worktree(root, materialization_commit)
+    archive_sha = canonical_archive_sha_from_worktree(root, materialization_commit)
     freeze_path = root / ".ai" / "cockpit" / "release-freeze.json"
     release_digests_path = root / ".ai" / "cockpit" / "release-digests.json"
     release_path = root / "release.json"
@@ -260,11 +317,6 @@ def main(
     release_path.write_text(
         json.dumps(release, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    if runtime_source_commit is None:
-        try:
-            regenerate_capability_truth(root)
-        except (OSError, ValueError, json.JSONDecodeError) as exc:
-            return _fail(f"Capability Truth Matrix regeneration failed: {exc}")
     metadata_digests["published"] = sha256_text(release_path.read_text(encoding="utf-8"))
     release_state_path.write_text(
         json.dumps(release_state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

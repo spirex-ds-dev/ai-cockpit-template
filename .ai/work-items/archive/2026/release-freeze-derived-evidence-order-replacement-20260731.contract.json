@@ -1,0 +1,225 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-freeze-derived-evidence-order-replacement-20260731",
+  "mode": "code",
+  "title": "Rebuild release freeze derived-evidence corrective",
+  "baseCommit": "7dafd3ca33b712af16d44db8ddaf1a54e62c984b",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue the authorized release plan; fix any discovered process root cause before publication.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continuous-release-authorization",
+    "capturedAt": "2026-07-31",
+    "digest": "sha256:continuous-authorized-release"
+  },
+  "declaredIntent": {
+    "summary": "Rebuild the release-freeze derived-evidence correction on a clean branch because the prior local archive exposed Ruff defects after archive and must remain immutable and unmerged.",
+    "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    "scripts/finalize_release_freeze.py",
+    "scripts/release_archive.py",
+    "tests/test_release_preflight.py",
+    "tests/test_capability_truth_matrix.py",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/release-freeze-derived-evidence-order-replacement-20260731.contract.json",
+    ".ai/work-items/active/release-freeze-derived-evidence-order-replacement-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+  ],
+  "outOfScope": [
+    "Creating or changing tags, Releases, assets, release metadata projections, or provider workflows.",
+    "Publishing v0.5.45."
+  ],
+  "sources": [
+    {"path": "scripts/finalize_release_freeze.py", "reason": "Current freeze ordering defect."},
+    {"path": "scripts/check_pre_release_documentation_alignment.py", "reason": "Derived archive-included report."},
+    {"path": "scripts/ai_japanese_capability.py", "reason": "Derived archive-included report."},
+    {"path": "scripts/release_archive.py", "reason": "Canonical archive authority."},
+    {"path": "conversation:continuous-release-authorization", "reason": "Authorization."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["release_identity", "process_correctness"],
+    "unknownsReviewComplete": true,
+    "reason": "Freeze evidence must bind exact archive bytes before immutable provider publication."
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized continuous corrective execution without gate bypass."
+  },
+  "preReviewWarnings": [
+    "Review controlled worktree archive binding, the no-self-reference boundary, and locked Ruff compliance before archive."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Bind release evidence ordering and prevent recurrence of the post-archive lint defect."
+  },
+  "acceptance": [
+    "Regression tests prove controlled dirty tracked evidence is included in the final worktree archive and that finalization refreshes it before binding.",
+    "Capability Truth does not hash export-ignored release metadata that contains its own archive identity.",
+    "Finalizer refreshes Capability Truth, Japanese assessment, and documentation alignment before canonical archive calculation.",
+    "The successor passes locked Ruff checks before archive and check-ai-pr after archive but before push.",
+    "No provider tag, Release, asset, or publication is created."
+  ],
+  "guidelines": [
+    "Use controlled generators rather than manual evidence edits.",
+    "Preserve fail-closed release identity validation.",
+    "Keep provider publication outside this corrective.",
+    "Archive only lint-clean code so immutable Work Item evidence is reviewable."
+  ],
+  "intent": {
+    "problem": "Release finalization calculated sourceTree and archiveSha256 from the committed candidate before it regenerated Capability Truth. The subsequent Japanese assessment and documentation-alignment generators changed archive-included evidence. An archive-included Capability Truth row also hashed export-ignored release.json, which contains archiveSha256, creating a self-reference that cannot converge. The initial corrective correctly found this root cause but its archive must remain immutable after locked Ruff later found import-order defects before PR creation.",
+    "constraints": [
+      "Generate only controlled, tracked derived reports before archive binding and fail closed if an unexpected tracked path changes.",
+      "Archive-included evidence must not hash export-ignored metadata that contains its own archive identity.",
+      "Keep release.json, release-state.json, release-freeze.json, and release-digests.json export-ignored and do not weaken release preflight validation.",
+      "Do not create provider tags, Releases, assets, or workflow-side publication during this corrective.",
+      "Use the temporary user-authorized focused local verification policy; Hosted PR remains mandatory."
+    ],
+    "rationale": "Rebuilding from current origin/main makes the lint repair part of the immutable Work Item lifecycle. Serializing controlled worktree content after generators run, while removing the self-reference, prevents stale archive evidence and preserves the independent post-merge preflight check."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized efficiency exception; focused tests and Hosted PR remain mandatory."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "Authorized process corrective."
+  },
+  "rollbackNote": "Revert this corrective Work Item through its dedicated PR; no provider-side release state is created by this Work Item.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 12000
+    }
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Derived reports change after preliminary release metadata.",
+      "expected": "Final archive is computed only after controlled reports are refreshed.",
+      "verificationPlan": "Focused finalizer regression tests and post-merge preflight fixture.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "The initial corrective archive contains a lint defect discovered before PR creation.",
+      "expected": "A replacement Work Item rebuilds and passes locked static/PR gates before archive and push.",
+      "verificationPlan": "Run project format/lint and check-ai-pr using the locked development environment.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Provider identity is absent.",
+      "expected": "Corrective does not create a tag or Release.",
+      "verificationPlan": "Contract scope and provider inventory remain unchanged.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-freeze-derived-evidence-order-replacement-20260731.json",
+    "baseCommit": "7dafd3ca33b712af16d44db8ddaf1a54e62c984b",
+    "initialScopeDigest": "4c9894e1a028ac7f014cf136741791cdc17d2bfbcda3791d2fce365f1d33a694",
+    "contractSkeletonDigest": "436844366127bfd3f14b3f90c488328d314d1d92cdeb8a1abd5f38a10be3bb9d"
+  }
+}

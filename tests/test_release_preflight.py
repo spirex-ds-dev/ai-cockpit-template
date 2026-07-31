@@ -12,6 +12,7 @@ import pytest
 import scripts.ai_capability_truth as capability_truth
 import scripts.check_release_preflight as preflight
 import scripts.finalize_release_freeze as finalizer
+from scripts import release_archive
 from scripts.check_release_preflight import (
     ReleasePreflightError,
     _load_object,
@@ -140,6 +141,45 @@ def test_canonical_archive_helper_covers_current_source():
     assert len(preflight.canonical_archive_sha(Path.cwd(), source)) == 64
 
 
+def test_canonical_archive_from_worktree_includes_dirty_tracked_evidence(tmp_path):
+    repo = tmp_path / "worktree-archive"
+    repo.mkdir()
+    _git(repo, "init", "-q", "-b", "main")
+    _git(repo, "config", "user.name", "Release Test")
+    _git(repo, "config", "user.email", "release-test@example.invalid")
+    report = repo / "docs" / "derived-report.json"
+    report.parent.mkdir()
+    report.write_text('{"state":"before"}\n', encoding="utf-8")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-q", "-m", "baseline evidence")
+    report.write_text('{"state":"after"}\n', encoding="utf-8")
+
+    assert release_archive.canonical_archive_sha_from_worktree(
+        repo, "HEAD"
+    ) != release_archive.canonical_archive_sha(repo, "HEAD")
+
+
+def test_canonical_archive_from_worktree_rejects_a_symlinked_parent(tmp_path):
+    repo = tmp_path / "worktree-archive-symlink"
+    outside = tmp_path / "outside"
+    repo.mkdir()
+    outside.mkdir()
+    _git(repo, "init", "-q", "-b", "main")
+    _git(repo, "config", "user.name", "Release Test")
+    _git(repo, "config", "user.email", "release-test@example.invalid")
+    report = repo / "docs" / "derived-report.json"
+    report.parent.mkdir()
+    report.write_text('{"state":"tracked"}\n', encoding="utf-8")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-q", "-m", "baseline evidence")
+    shutil.rmtree(report.parent)
+    (outside / "derived-report.json").write_text('{"state":"outside"}\n', encoding="utf-8")
+    (repo / "docs").symlink_to(outside, target_is_directory=True)
+
+    with pytest.raises(ValueError, match="not a regular file"):
+        release_archive.canonical_archive_sha_from_worktree(repo, "HEAD")
+
+
 def _git(repo: Path, *args: str) -> str:
     return subprocess.run(
         ["git", "-C", str(repo), *args],
@@ -266,6 +306,11 @@ def _build_candidate_merge(tmp_path: Path) -> tuple[Path, Path, str]:
                 "release-state.json",
                 ".ai/cockpit/release-freeze.json",
                 ".ai/cockpit/release-digests.json",
+                "docs/reference/capability-truth-matrix.json",
+                "docs/reference/japanese-capability-assessment.json",
+                "docs/reference/japanese-capability-assessment.md",
+                "docs/reference/pre-release-documentation-alignment.json",
+                "docs/reference/pre-release-documentation-alignment.md",
             ]
         },
     )
@@ -365,7 +410,11 @@ def _configure_finalizer(
     if active_task is not None:
         (active / f"{active_task}.contract.json").write_text(
             '{"scope":["release.json","release-state.json",".ai/cockpit/release-freeze.json",'
-            '".ai/cockpit/release-digests.json"]}\n',
+            '".ai/cockpit/release-digests.json","docs/reference/capability-truth-matrix.json",'
+            '"docs/reference/japanese-capability-assessment.json",'
+            '"docs/reference/japanese-capability-assessment.md",'
+            '"docs/reference/pre-release-documentation-alignment.json",'
+            '"docs/reference/pre-release-documentation-alignment.md"]}\n',
             encoding="utf-8",
         )
     (tmp_path / ".ai" / "cockpit" / "current_status.md").write_text(
@@ -404,14 +453,15 @@ def _configure_finalizer(
     materialized = []
     monkeypatch.setattr(
         finalizer,
-        "canonical_source_tree",
+        "canonical_source_tree_from_worktree",
         lambda _root, commit: materialized.append(("tree", commit)) or "tree",
     )
     monkeypatch.setattr(
         finalizer,
-        "canonical_archive_sha",
+        "canonical_archive_sha_from_worktree",
         lambda _root, commit: materialized.append(("archive", commit)) or "archive",
     )
+    monkeypatch.setattr(finalizer, "refresh_release_derived_reports", lambda _root: None)
     return materialized
 
 
@@ -420,7 +470,11 @@ def _archive_finalizer_task(tmp_path: Path) -> None:
     archive.mkdir(parents=True)
     (archive / "task.contract.json").write_text(
         '{"scope":["release.json","release-state.json",".ai/cockpit/release-freeze.json",'
-        '".ai/cockpit/release-digests.json"]}\n',
+        '".ai/cockpit/release-digests.json","docs/reference/capability-truth-matrix.json",'
+        '"docs/reference/japanese-capability-assessment.json",'
+        '"docs/reference/japanese-capability-assessment.md",'
+        '"docs/reference/pre-release-documentation-alignment.json",'
+        '"docs/reference/pre-release-documentation-alignment.md"]}\n',
         encoding="utf-8",
     )
 
@@ -478,10 +532,8 @@ def test_finalize_release_freeze_writes_post_close_lifecycle_evidence(monkeypatc
     }
 
 
-def test_finalizer_regenerates_capability_truth_after_updating_release_metadata(
-    monkeypatch, tmp_path
-):
-    """Catch the PR #507 regression: release.json changes must not leave evidence stale."""
+def test_finalizer_refreshes_capability_truth_before_archive_binding(monkeypatch, tmp_path):
+    """Archive-included Capability Truth must be fresh before final archive binding."""
     _configure_finalizer(monkeypatch, tmp_path)
     evidence = tmp_path / "tests" / "release_evidence.py"
     evidence.parent.mkdir()
@@ -502,11 +554,11 @@ def test_finalizer_regenerates_capability_truth_after_updating_release_metadata(
                     "status": "implemented",
                     "claim": "Release metadata is evidence-bound.",
                     "limitations": "Fixture only.",
-                    "sourceEvidence": ["release.json"],
+                    "sourceEvidence": ["install.sh"],
                     "testEvidence": ["tests/release_evidence.py"],
                     "commandEvidence": ["make check-release-preflight"],
                     "evidenceSource": capability_truth.build_evidence_source(
-                        ["release.json"], ["tests/release_evidence.py"], root=tmp_path
+                        ["install.sh"], ["tests/release_evidence.py"], root=tmp_path
                     ),
                 }
             ],
@@ -515,6 +567,11 @@ def test_finalizer_regenerates_capability_truth_after_updating_release_metadata(
     matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
     matrix["capabilities"][0]["digest"] = capability_truth.row_digest(matrix["capabilities"][0])
     _write_json(matrix_path, matrix)
+    monkeypatch.setattr(
+        finalizer,
+        "refresh_release_derived_reports",
+        lambda root: finalizer.regenerate_capability_truth(root),
+    )
 
     assert finalizer.main(source_commit="a" * 40, tag_target="a" * 40) == 0
     assert capability_truth.validate_matrix(matrix_path, root=tmp_path) == []
@@ -614,6 +671,35 @@ def test_finalize_release_freeze_premerge_requires_archived_work_item(monkeypatc
     freeze = json.loads((tmp_path / ".ai" / "cockpit" / "release-freeze.json").read_text())
     assert freeze["lifecycle"]["state"] == "premerge_finalized"
     assert freeze["lifecycle"]["command"] == "make finalize-release-freeze-premerge TASK=task"
+
+
+def test_finalizer_refreshes_derived_reports_before_worktree_archive_binding(monkeypatch, tmp_path):
+    _configure_finalizer(monkeypatch, tmp_path, branch="codex/task", remote_head="old-commit")
+    _archive_finalizer_task(tmp_path)
+    events = []
+
+    monkeypatch.setattr(
+        finalizer,
+        "refresh_release_derived_reports",
+        lambda root: events.append(("refresh", root)),
+    )
+    monkeypatch.setattr(
+        finalizer,
+        "canonical_source_tree_from_worktree",
+        lambda root, commit: events.append(("tree", commit)) or "tree",
+    )
+    monkeypatch.setattr(
+        finalizer,
+        "canonical_archive_sha_from_worktree",
+        lambda root, commit: events.append(("archive", commit)) or "archive",
+    )
+
+    assert _finalize_premerge("origin/main") == 0
+    assert events == [
+        ("refresh", tmp_path),
+        ("tree", "commit"),
+        ("archive", "commit"),
+    ]
 
 
 def test_finalize_release_freeze_premerge_rejects_unresolved_source_identity(monkeypatch, tmp_path):
