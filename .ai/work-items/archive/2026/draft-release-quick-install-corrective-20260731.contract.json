@@ -1,0 +1,184 @@
+{
+  "contractVersion": 2,
+  "workItemId": "draft-release-quick-install-corrective-20260731",
+  "mode": "code",
+  "title": "Repair draft release Quick Install verification",
+  "baseCommit": "201150154af408048b291eddb5e7712d5eb41042",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/draft-release-quick-install-corrective-20260731.contract.json",
+    ".ai/work-items/active/draft-release-quick-install-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/draft-release-quick-install-corrective-20260731.outcome.json",
+    ".ai/work-items/active/draft-release-quick-install-corrective-20260731.outcome.md",
+    ".github/workflows/release.yml",
+    "scripts/verify_quick_install_release.py",
+    "tests/test_release_workflow.py",
+    "tests/test_workflows.py",
+    "tests/test_quick_install_release.py",
+    "docs/reference/distribution.md",
+    "docs/reference/distribution.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Publishing, deleting, or moving v0.5.45 during this corrective Work Item.", "Lowering Hosted CI, coverage, or release evidence requirements."],
+  "sources": [
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Failed run 30609474406 proves the Draft asset verification ordering/access defect."
+    },
+    {"path": "scripts/verify_quick_install_release.py", "reason": "Canonical Quick Install verifier."},
+    {"path": "tests/test_release_workflow.py", "reason": "Executable workflow ordering regression coverage."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_publication",
+      "supply_chain_evidence",
+      "workflow_ordering"
+    ],
+    "reason": "A failed public-release attempt left an immutable v0.5.45 tag and Draft Release; correction must preserve fail-closed publication boundaries.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User has authorized corrective release workflow implementation; external publication remains out of scope."
+  },
+  "preReviewWarnings": [
+    "Ensure Draft asset validation is authenticated and occurs after assets exist; retain no-publication rehearsal boundary."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Draft Release Quick Install verification succeeds only through a controlled authenticated asset path after the Draft assets exist.",
+    "Regression tests cover Draft asset availability and prohibit the unavailable gh release download path before publication.",
+    "The workflow remains fail-closed and no public release is published by this Work Item.",
+    "Release documentation and source-bound evidence stay aligned."
+  ],
+  "guidelines": [
+    "Maintain fail-closed behavior at every publication boundary.",
+    "Do not weaken coverage or Hosted CI to make the corrective PR pass.",
+    "Do not create, move, or delete a semantic release tag as correction cleanup."
+  ],
+  "intent": {
+    "problem": "Run 30609474406 created a Draft v0.5.45 Release and then failed because gh release download cannot retrieve its Draft assets; the Quick Install verifier was therefore placed on an impossible access path.",
+    "constraints": ["Preserve the immutable v0.5.45 tag and Draft Release as failure evidence.", "Use authenticated controlled Draft-asset access or validate before publication with an equivalent evidence-bound path.", "Add executable regression coverage and keep full Hosted CI."],
+    "rationale": "The fix must make the validation order and asset visibility model internally consistent, rather than retrying an impossible download operation."
+  },
+  "rawUserRequest": "Continue the approved release plan; if the direction is not converging, pause, find the root cause, then execute the corrective path.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-31-continuous-plan-authorization", "capturedAt": "2026-07-31", "digest": "sha256:continuous-authorized-release-corrective"},
+  "declaredIntent": {"summary": "Repair the Draft Release Quick Install verification defect before any further publication attempt.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "Draft assets exist but are not retrievable through the public download path.", "expected": "The workflow uses an authenticated supported asset path and verifies the exact archive and projection.", "verificationPlan": "Workflow regression tests and Hosted CI", "required": true, "status": "unverified", "evidence": []},
+    {"scenario": "Corrective PR changes release logic without a publication request.", "expected": "No tag or Release is created; Hosted CI verifies only the PR workflow.", "verificationPlan": "Contract scope, workflow tests, and Hosted CI", "required": true, "status": "unverified", "evidence": []}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": false,
+      "reason": "Temporary user-authorized focused-verification exception; it does not waive required governance gates or full Hosted CI."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user authorized continuous corrective lifecycle work, including the release workflow correction, PR, merge, and Hosted verification."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 725
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/draft-release-quick-install-corrective-20260731.json",
+    "baseCommit": "201150154af408048b291eddb5e7712d5eb41042",
+    "initialScopeDigest": "994eb168f743d39267586319f587a8b1f59558a0fb684dafbda88c6d5110c238",
+    "contractSkeletonDigest": "230f257b77aa925742179b3608bb5e4112d775939b210d6d72e1fe1005b875b2"
+  }
+}
