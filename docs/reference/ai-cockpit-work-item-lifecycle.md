@@ -199,9 +199,38 @@ blocks, or regenerated content differs.
 }
 ```
 
-After the marker and release metadata are bound, no new Work Item may be archived
-until publication is complete. If any check fails, return to the candidate phase
-and regenerate the source-bound evidence.
+Historical premerge markers and release metadata remain preparation evidence;
+they do not authorize publication of a later source tree. If a later correction
+changes included source bytes, preserve the old record and follow the readiness
+and rehearsal sequence below rather than mutating or repeatedly regenerating it.
+
+## Release readiness and exact-source rehearsal
+
+For new release attempts, the committed premerge marker is historical preparation
+evidence, not the authority for a later default-branch source tree. Run
+`make check-release-readiness` only after there are no active Work Items. It
+checks stable candidate, policy, archive-growth, and mandatory Japanese evidence,
+but deliberately does not compare a historical `release-freeze.json` to current
+source bytes.
+
+The required sequence is: synchronized default branch → repository readiness →
+successful same-SHA rehearsal → actual hosted release. The rehearsal uses the
+same exact-source checkout, runtime freeze, strict preflight, locked dependency,
+required-CI, supply-chain-evidence, and strict-smoke path as publication. It
+creates a private Actions receipt, never a tag, GitHub Release, or public asset.
+It is not a published release.
+
+The actual hosted release receives the rehearsal run id, resolves the default
+branch again, and rejects a missing, failed, wrong-workflow, wrong-SHA, or
+wrong-tag receipt before runtime finalization or immutable mutation. The gate
+still runs only after runtime freeze on the exact merged `SOURCE_COMMIT`; exact
+archive, digest, installer, and identity checks remain mandatory at that boundary.
+
+A later included-source change invalidates the rehearsal SHA and requires a new
+same-SHA rehearsal, not another committed freeze. If exact-source validation
+fails after a successful rehearsal, stop, preserve diagnostics, and open a
+corrective Work Item; do not create a new freeze Work Item as a substitute for
+root-cause repair.
 
 Template and adopter boundary: template-maintenance branches use the template
 repository's `project-format-check` and governance policy from the latest template

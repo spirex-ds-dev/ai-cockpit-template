@@ -28,6 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SBOM_BASELINE = ROOT / ".ai" / "cockpit" / "sbom.json"
 PROVENANCE_BASELINE = ROOT / ".ai" / "cockpit" / "provenance.json"
 RELEASE_DIGESTS_BASELINE = ROOT / ".ai" / "cockpit" / "release-digests.json"
+RELEASE_STATE = ROOT / "release-state.json"
 WORKFLOW_DIR = ROOT / ".github" / "workflows"
 LOCK_FILE = ROOT / "requirements-dev.lock"
 RELEASE_JSON = ROOT / "release.json"
@@ -455,6 +456,19 @@ def synchronize_release_supply_chain_digests() -> None:
     write_json(RELEASE_JSON, release)
 
 
+def synchronize_release_state_metadata_digests() -> None:
+    """Keep the canonical state projection bound to the refreshed release metadata."""
+    state = load_json(RELEASE_STATE)
+    metadata_digests = state.get("metadataDigests")
+    if not isinstance(metadata_digests, dict):
+        raise InvalidDataShapeError("release-state.json is missing metadataDigests")
+    published_digest = metadata_digests.get("published")
+    if not isinstance(published_digest, str):
+        raise InvalidDataShapeError("release-state.json metadataDigests.published is missing")
+    metadata_digests["published"] = sha256_bytes(RELEASE_JSON.read_bytes())
+    write_json(RELEASE_STATE, state)
+
+
 def refresh_candidate_evidence(source_commit: str | None = None) -> None:
     """Write dependent candidate evidence and its local release projection in order."""
     sbom = build_sbom(source_commit)
@@ -462,6 +476,7 @@ def refresh_candidate_evidence(source_commit: str | None = None) -> None:
     write_json(SBOM_BASELINE, sbom)
     write_json(PROVENANCE_BASELINE, provenance)
     synchronize_release_supply_chain_digests()
+    synchronize_release_state_metadata_digests()
     write_json(RELEASE_DIGESTS_BASELINE, build_release_digests(sbom, provenance))
 
 

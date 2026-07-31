@@ -17,6 +17,15 @@ SBOM と provenance のリリース証拠は、`--source-commit` または `SUPP
 コミット済みの `.ai/cockpit/sbom.json`、`provenance.json`、`release-digests.json` は候補ベースラインにすぎません。リリース Workflow は不変の `SOURCE_COMMIT` を checkout した後に `check_supply_chain.py release-assets` を実行し、生成された provenance と digest の subject が同じコミットを指すことを検証し、同じソースコミットに対する厳格な Smoke を通過してから tag と Draft Release を作成します。Draft のまま tag 対象と Asset subject を検証し、`verify_quick_install_release.py` が正確な tag、canonical archive、installer digest、不変の verified capability を検証した場合にだけ公開します。以前のリリース試行向け provenance は現在の最終証明として扱いません。
 候補記録は準備時点のスナップショットですが、リリース Workflow は dispatch 時に default branch を再取得し、最新の `SOURCE_COMMIT` を計算します。`source_commit` を省略した場合はその値を使用し、指定した場合は同じ値であることだけを確認します。古い、または不一致の指定は checkout や公開の前に fail closed します。Detached checkout、tag、Workflow、SBOM、provenance、digest はすべて計算された同一の不変コミットを参照しなければなりません。
 
+公開前に保守担当者は `make check-release-readiness` を実行し、同じ SHA を対象とする
+リリース・リハーサルを dispatch します。リハーサルは exact-source の準備、runtime
+freeze、厳格な preflight、依存関係、CI、supply-chain evidence、厳格な Smoke を同じ経路で
+実行し、private な Actions receipt を保存します。リハーサルは公開済みリリースではありません。
+tag、GitHub Release、public asset を作成できません。実際の公開は、不変な変更の前に、
+再解決した source SHA と要求 tag の両方に一致する成功 receipt を検証しなければなりません。
+その後 main が変わった場合は新しい SHA 用のリハーサルを実行します。古い準備
+スナップショットを理由に freeze Work Item を繰り返し作成してはいけません。
+
 ## PR を起点とするリリース手順
 
 各リリース試行は一つの不変な Identity Tuple を持ちます。`sourceCommit` はマージ済み既定ブランチのコミット、`tagTarget` は同じコミット、`metadataCommit` は候補メタデータを含むコミット（明示必須）、`releaseTag` は要求されたタグです。`HEAD` は証拠として使いません。候補の Freeze メタデータは PR 境界より前にコミットし、マージ後に Workflow が既定ブランチを一度だけ解決して、この Tuple を Preflight、CI 証拠、tag、Provider Asset まで引き継ぎます。close 後のコマンドで Tuple やリリースメタデータを書き換えません。

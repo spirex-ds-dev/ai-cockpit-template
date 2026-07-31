@@ -211,15 +211,80 @@ def validate_release_preflight(
     return issues
 
 
+def repository_policy_context(root: Path) -> tuple[list[str], int, int, str]:
+    """Collect policy facts shared by repository readiness and exact-source gates."""
+    active = sorted(
+        path.name.removesuffix(".contract.json")
+        for path in (root / ".ai" / "work-items" / "active").glob("*.contract.json")
+    )
+    policy = root / ".ai" / "guards" / "governance_complexity_policy.yaml"
+    archive_max = 0
+    archive_enforcement = "error"
+    enforcement_section = False
+    for line in policy.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped == "enforcement:":
+            enforcement_section = True
+            continue
+        if stripped.startswith("archiveGrowth:") and not enforcement_section:
+            archive_max = int(stripped.split(":", 1)[1].strip())
+        elif enforcement_section and stripped == "archiveGrowth: warning":
+            archive_enforcement = "warning"
+    archive_count = len(list((root / ".ai" / "work-items" / "archive").glob("**/*.contract.json")))
+    return active, archive_count, archive_max, archive_enforcement
+
+
+def validate_repository_readiness(
+    *,
+    state: dict[str, Any],
+    release: dict[str, Any],
+    candidate: dict[str, Any],
+    active_work_items: list[str],
+    archive_count: int,
+    archive_max: int,
+    archive_enforcement: str,
+) -> list[str]:
+    """Validate stable release policy without treating old freeze bytes as source truth."""
+    issues = validate_release_projection(state=state, release=release, candidate=candidate)
+    if active_work_items:
+        issues.append(f"active Work Items remain: {', '.join(active_work_items)}")
+    if archive_count > archive_max and archive_enforcement != "warning":
+        issues.append(f"archiveGrowth={archive_count} exceeds configured maximum {archive_max}")
+    return issues
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--source-commit")
+    parser.add_argument(
+        "--mode",
+        choices=("exact-source", "repository-readiness"),
+        default="exact-source",
+    )
     args = parser.parse_args()
     root = args.root.resolve()
     release = _load_object(root / "release.json", "release.json")
     release_state = _load_object(root / "release-state.json", "release-state.json")
     candidate = _load_object(root / "next-release.json", "next-release.json")
+    active, archive_count, archive_max, archive_enforcement = repository_policy_context(root)
+    readiness_issues = validate_repository_readiness(
+        state=release_state,
+        release=release,
+        candidate=candidate,
+        active_work_items=active,
+        archive_count=archive_count,
+        archive_max=archive_max,
+        archive_enforcement=archive_enforcement,
+    )
+    if args.mode == "repository-readiness":
+        if readiness_issues:
+            print("release readiness blocked:", file=sys.stderr)
+            for issue in readiness_issues:
+                print(f"- {issue}", file=sys.stderr)
+            return 1
+        print("release readiness passed")
+        return 0
     freeze = _load_object(root / ".ai" / "cockpit" / "release-freeze.json", "release-freeze.json")
     release_digests = _load_object(
         root / ".ai" / "cockpit" / "release-digests.json", "release-digests.json"
@@ -251,12 +316,9 @@ def main() -> int:
     except ReleasePreflightError as exc:
         print(f"release preflight blocked: {exc}", file=sys.stderr)
         return 1
-    projection_issues = validate_release_projection(
-        state=release_state, release=release, candidate=candidate
-    )
-    if projection_issues:
+    if readiness_issues:
         print("release preflight blocked:", file=sys.stderr)
-        for issue in projection_issues:
+        for issue in readiness_issues:
             print(f"- {issue}", file=sys.stderr)
         return 1
     comparable_digests = dict(release_digests)
@@ -265,24 +327,6 @@ def main() -> int:
     comparable_digests["metadataCommit"] = resolved_metadata_commit
     actual = canonical_archive_sha(root, source_commit)
     source_tree = canonical_source_tree(root, source_commit)
-    active = sorted(
-        path.name.removesuffix(".contract.json")
-        for path in (root / ".ai" / "work-items" / "active").glob("*.contract.json")
-    )
-    policy = root / ".ai" / "guards" / "governance_complexity_policy.yaml"
-    archive_max = 0
-    archive_enforcement = "error"
-    enforcement_section = False
-    for line in policy.read_text(encoding="utf-8").splitlines():
-        stripped = line.strip()
-        if stripped == "enforcement:":
-            enforcement_section = True
-            continue
-        if stripped.startswith("archiveGrowth:") and not enforcement_section:
-            archive_max = int(stripped.split(":", 1)[1].strip())
-        elif enforcement_section and stripped == "archiveGrowth: warning":
-            archive_enforcement = "warning"
-    archive_count = len(list((root / ".ai" / "work-items" / "archive").glob("**/*.contract.json")))
     issues = validate_release_preflight(
         release=release,
         freeze=freeze,

@@ -33,7 +33,7 @@ QUALITY_SUMMARY_DIR ?= target/quality
 check-docs-metadata check-trust-layer-docs check-real-absurd-injection-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
 	check-bandit-evidence check-bandit-baseline check-sbom check-provenance check-release-evidence refresh-candidate-release-evidence check-secret-scanning \
-	check-release-distribution check-release-state-consistency check-japanese-capability check-release-preflight check-ci-release-evidence \
+	check-release-distribution check-release-state-consistency check-japanese-capability check-release-readiness check-release-preflight check-ci-release-evidence \
 	check-source-bound-evidence check-changed-critical-coverage \
 	check-lockfile-reproducibility \
 	check-quality-architecture \
@@ -208,6 +208,10 @@ check-changed-critical-coverage:
 check-release-preflight:
 	$(AI_PYTHON) scripts/ai_japanese_capability.py --check --require-final-reassessment
 	$(AI_PYTHON) scripts/check_release_preflight.py --root .
+
+check-release-readiness:
+	$(AI_PYTHON) scripts/ai_japanese_capability.py --check --require-final-reassessment
+	$(AI_PYTHON) scripts/check_release_preflight.py --root . --mode repository-readiness
 
 finalize-release-freeze:
 	$(AI_PYTHON) scripts/finalize_release_freeze.py \

@@ -113,3 +113,13 @@ evidence. A candidate may become public only after those bindings are verified
 and the workflow validates the real tagged Quick Install while the GitHub
 Release is still Draft.
 The candidate records a preparation snapshot, but the release workflow resolves `SOURCE_COMMIT` from the freshly fetched default branch at dispatch time. The hosted boundary explicitly verifies that detached `HEAD` equals that SHA, records the `.gitattributes` identity, and invokes `make check-release-preflight RELEASE_PREFLIGHT_SOURCE_COMMIT="$SOURCE_COMMIT"`; the validator therefore cannot silently fall back to a different `HEAD`. The default-branch remote-tracking ref is fetched to resolve controlled `origin/main` metadata references in a fresh runner. An omitted `source_commit` input uses the resolved commit; a supplied value is only an assertion and must match it exactly. Detached checkout, tag, provider workflow, SBOM, provenance, and digest evidence must all reference that same immutable source before promotion. A stale or mismatched assertion fails closed before checkout or publication. Missing provider assets remain missing evidence; this release does not change the enterprise-security NO-GO boundary.
+
+Before publication, maintainers run `make check-release-readiness` and dispatch a
+same-SHA release rehearsal. The rehearsal executes the exact-source preparation,
+runtime freeze, strict preflight, dependency, CI, supply-chain evidence, and
+strict-smoke path, then stores a private Actions receipt. A rehearsal is not a published release:
+it cannot create a tag, GitHub Release, or public asset. The
+actual release must verify a successful receipt with the same resolved source SHA
+and requested tag before any immutable mutation. If main changes afterwards, run
+a new rehearsal for that SHA; do not treat an old preparation snapshot as a reason
+to repeatedly create freeze Work Items.

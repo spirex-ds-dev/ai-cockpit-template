@@ -17,6 +17,43 @@ def test_release_workflow_projects_candidate_metadata_at_runtime():
     assert 'assert candidate["basedOnReleaseTag"] == published["releaseTag"]' in workflow
 
 
+def test_release_workflow_requires_same_source_nonpublishing_rehearsal():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    assert "rehearsal:" in workflow
+    assert "rehearsal_run_id:" in workflow
+    assert "Validate successful exact-source rehearsal" in workflow
+    assert "Upload exact-source rehearsal receipt" in workflow
+    assert "name: release-rehearsal" in workflow
+    assert '--name "release-rehearsal"' in workflow
+
+    rehearsal_validation = workflow.index("Validate successful exact-source rehearsal")
+    tag = workflow.index("Create exact-SHA tag and Draft GitHub Release")
+    publish = workflow.index("Publish verified Draft Release")
+    assert rehearsal_validation < tag < publish
+
+    tag_step = workflow[tag : workflow.index("Verify Draft tag target and release asset subjects")]
+    publish_step = workflow[publish:]
+    assert "if: ${{ !inputs.rehearsal }}" in tag_step
+    assert "if: ${{ !inputs.rehearsal }}" in publish_step
+
+
+def test_rehearsal_guards_every_public_release_side_effect():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    public_steps = (
+        "Create exact-SHA tag and Draft GitHub Release",
+        "Verify Draft tag target and release asset subjects",
+        "Verify tagged Quick Install contract before publication",
+        "Publish verified Draft Release",
+    )
+
+    for name in public_steps:
+        start = workflow.index(f"- name: {name}")
+        end = workflow.find("\n      - name:", start + 1)
+        step = workflow[start:] if end == -1 else workflow[start:end]
+        assert "if: ${{ !inputs.rehearsal }}" in step
+
+
 def test_published_projection_is_not_promoted_in_repository():
     import json
 
@@ -51,3 +88,16 @@ def test_lifecycle_guide_keeps_premerge_metadata_and_runtime_preflight_separate(
     assert "Do not run `make check-release-preflight` on the premerge metadata commit." in lifecycle
     assert "The gate runs only after runtime" in lifecycle
     assert "exact merged `SOURCE_COMMIT`" in lifecycle
+    assert "make check-release-readiness" in lifecycle
+    assert "successful same-SHA rehearsal" in lifecycle
+    assert "not another committed freeze" in lifecycle
+
+
+def test_distribution_guides_distinguish_rehearsal_from_publication():
+    english = (ROOT / "docs" / "reference" / "distribution.md").read_text(encoding="utf-8")
+    japanese = (ROOT / "docs" / "reference" / "distribution.ja.md").read_text(encoding="utf-8")
+
+    assert "rehearsal" in english.lower()
+    assert "not a published release" in english.lower()
+    assert "リハーサル" in japanese
+    assert "公開済みリリースではありません" in japanese

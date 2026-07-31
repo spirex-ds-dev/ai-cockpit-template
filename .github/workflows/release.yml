@@ -11,6 +11,15 @@ on:
         description: "Verified main commit SHA to release"
         required: false
         type: string
+      rehearsal:
+        description: "Run exact-source release preparation without creating a tag, Release, or public asset"
+        required: false
+        default: false
+        type: boolean
+      rehearsal_run_id:
+        description: "Successful same-SHA rehearsal run required for publication"
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -24,6 +33,8 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       RELEASE_TAG: ${{ inputs.tag }}
       SOURCE_COMMIT: ${{ inputs.source_commit }}
+      REHEARSAL: ${{ inputs.rehearsal }}
+      REHEARSAL_RUN_ID: ${{ inputs.rehearsal_run_id }}
       RELEASE_DEPENDENCY_TIMEOUT_SECONDS: 1800
     steps:
       - name: Initialize exact source checkout
@@ -106,6 +117,28 @@ jobs:
           assert candidate["basedOnReleaseTag"] == published["releaseTag"]
           PY
           fi
+
+      - name: Validate successful exact-source rehearsal
+        if: ${{ !inputs.rehearsal }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$REHEARSAL_RUN_ID" =~ ^[0-9]+$ ]]
+          gh run view "$REHEARSAL_RUN_ID" --repo "$GITHUB_REPOSITORY" \
+            --json conclusion,headSha,workflowName,databaseId \
+            --jq 'select(.conclusion == "success" and .headSha == env.SOURCE_COMMIT and .workflowName == "release" and (.databaseId | tostring) == env.REHEARSAL_RUN_ID)' \
+            > "$RUNNER_TEMP/rehearsal-run.json"
+          rehearsal_dir="$RUNNER_TEMP/rehearsal-receipt"
+          mkdir -p "$rehearsal_dir"
+          gh run download "$REHEARSAL_RUN_ID" --repo "$GITHUB_REPOSITORY" \
+            --name "release-rehearsal" --dir "$rehearsal_dir"
+          receipt="$rehearsal_dir/release-rehearsal.json"
+          jq -e \
+            --arg source "$SOURCE_COMMIT" \
+            --arg tag "$RELEASE_TAG" \
+            --arg run "$REHEARSAL_RUN_ID" \
+            '(.format == "ai-cockpit-release-rehearsal" and .version == 1 and .mode == "rehearsal" and .sourceCommit == $source and .releaseTag == $tag and (.runId | tostring) == $run)' \
+            "$receipt" > /dev/null
 
       - name: Materialize exact-source runtime release freeze
         shell: bash
@@ -337,7 +370,28 @@ jobs:
           done
           gh run watch "$run_id" --repo "$GITHUB_REPOSITORY" --exit-status
 
+      - name: Record exact-source rehearsal receipt
+        if: ${{ inputs.rehearsal }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq -n \
+            --arg source "$SOURCE_COMMIT" \
+            --arg tag "$RELEASE_TAG" \
+            --arg run "$GITHUB_RUN_ID" \
+            '{format:"ai-cockpit-release-rehearsal",version:1,mode:"rehearsal",sourceCommit:$source,releaseTag:$tag,runId:$run}' \
+            > "$RUNNER_TEMP/release-rehearsal.json"
+
+      - name: Upload exact-source rehearsal receipt
+        if: ${{ inputs.rehearsal }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: release-rehearsal
+          path: ${{ runner.temp }}/release-rehearsal.json
+          if-no-files-found: error
+
       - name: Create exact-SHA tag and Draft GitHub Release
+        if: ${{ !inputs.rehearsal }}
         working-directory: ${{ github.workspace }}
         run: |
           set -euo pipefail
@@ -357,6 +411,7 @@ jobs:
             "$RUNNER_TEMP/release-evidence/$(jq -r '.releaseArchive.assetName' release.json)#$(jq -r '.releaseArchive.assetName' release.json)"
 
       - name: Verify Draft tag target and release asset subjects
+        if: ${{ !inputs.rehearsal }}
         working-directory: ${{ github.workspace }}
         run: |
           set -euo pipefail
@@ -376,6 +431,7 @@ jobs:
           bash scripts/check_ci_release_evidence.sh "$RUNNER_TEMP/release-evidence/ci-release-evidence.json" "$SOURCE_COMMIT"
 
       - name: Verify tagged Quick Install contract before publication
+        if: ${{ !inputs.rehearsal }}
         working-directory: ${{ github.workspace }}
         run: |
           set -euo pipefail
@@ -406,4 +462,5 @@ jobs:
             --asset-url "$verified_archive_url"
 
       - name: Publish verified Draft Release
+        if: ${{ !inputs.rehearsal }}
         run: gh release edit "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --draft=false
