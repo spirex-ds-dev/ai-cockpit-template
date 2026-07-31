@@ -1,0 +1,82 @@
+{
+  "contractVersion": 2,
+  "workItemId": "bandit-baseline-regression-corrective-20260731",
+  "mode": "code",
+  "title": "Correct stale Bandit baseline regression",
+  "baseCommit": "7dafd3ca33b712af16d44db8ddaf1a54e62c984b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    ".ai/work-items/active/bandit-baseline-regression-corrective-20260731.contract.json",
+    ".ai/work-items/active/bandit-baseline-regression-corrective-20260731.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/bandit-baseline-regression-corrective-20260731.outcome.json",
+    ".ai/work-items/active/bandit-baseline-regression-corrective-20260731.outcome.md",
+    "tests/test_bandit_baseline.py",
+    "scripts/finalize_release_freeze.py",
+    "scripts/release_archive.py",
+    "tests/test_release_preflight.py",
+    "tests/test_capability_truth_matrix.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Suppressing Bandit findings without evidence.",
+    "Changing the failed archived Work Item or pull request 529 evidence.",
+    "Tags, Releases, assets, and provider workflow changes."
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/30601211771/job/91064085785", "reason": "Hosted template-smoke failed on exact Bandit baseline drift evidence."},
+    {"path": ".ai/cockpit/bandit_low_risk_baseline.json", "reason": "Current committed baseline expects 116 findings."},
+    {"path": "scripts/check_bandit_baseline.py", "reason": "Defines deterministic count and digest validation."},
+    {"path": "scripts/release_archive.py", "reason": "Contains the existing worktree-archive subprocess finding that the baseline already covers; compare it with the predecessor's additional finalizer finding."},
+    {"path": "tests/test_bandit_baseline.py", "reason": "Regression coverage for baseline parsing and validation."}
+    ,{"path": "pull-request:529", "reason": "Archived predecessor contains the release-freeze implementation that introduced the otherwise unbound new Bandit finding; it is audit evidence only and will be independently rebuilt."}
+  ],
+  "rawUserRequest": "Continue the authorized overall plan without bypassing failed gates. Repair root causes before release; use focused checks where possible, with Hosted CI mandatory.",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-07-31 continue the authorized plan and do not bypass failed gates", "capturedAt": "2026-07-31", "digest": "sha256:bandit-baseline-regression-corrective-authorization"},
+  "declaredIntent": {"summary": "Independently rebuild the release-freeze correction from the archived predecessor and bind its new subprocess import finding to an accurate Bandit baseline in the same corrective PR.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["security_evidence_integrity", "hosted_ci_regression"], "reason": "The baseline must match a reproducible scanner result and must not conceal a new actionable finding.", "unknownsReviewComplete": true},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The failed Hosted log proves the predecessor's code and Bandit evidence must be rebuilt together from current main."},
+  "preReviewWarnings": ["Confirm the only added finding is the documented B404 import in release_archive.py and retain scanner evidence."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record implementation and completion boundaries for this release-blocking correction."},
+  "acceptance": [
+    "The release-freeze correction is independently rebuilt from current main without modifying the archived predecessor evidence.",
+    "The exact resulting Bandit evidence is independently regenerated and compared to the committed baseline.",
+    "The additional B404 finding is traced to the corrective finalizer subprocess import and is assessed rather than suppressed.",
+    "The resulting baseline JSON records exactly the regenerated count and digest.",
+    "Regression tests prove the repository baseline agrees with deterministic current evidence and rejects drift.",
+    "Focused local Bandit and regression checks pass; Hosted CI passes template-smoke before merge.",
+    "No coverage threshold, tag, Release, asset, or provider workflow is changed."
+  ],
+  "guidelines": [
+    "Evidence over Self-Declaration: record the scanner output and exact baseline digest.",
+    "Do not suppress security findings; document the bounded justification for any accepted low-risk baseline item.",
+    "Keep the corrective diff limited to release-freeze evidence binding, directly dependent generated evidence, the Bandit baseline, and regression tests.",
+    "Use focused local verification under the temporary user-authorized efficiency policy while retaining Hosted CI."
+  ],
+  "intent": {"problem": "Predecessor PR #529 added a B404 finding in the release-freeze finalizer while the base baseline still records 116 findings. Its Hosted template-smoke therefore failed after tests and coverage passed. The successor must independently rebuild the code and its matching evidence from current origin/main.", "constraints": ["Use current origin/main as base.", "Do not weaken Bandit or silently suppress findings.", "Do not alter archived #529 evidence.", "Avoid full local quality unless a gate requires it; Hosted CI is mandatory."], "rationale": "The evidence baseline must be accurate for the scanner version in the locked development environment; otherwise a stale record blocks unrelated governed work and hides whether new findings were reviewed."},
+  "scenarioCoverage": [
+    {"scenario": "Corrective finalizer includes the B404 subprocess import finding.", "status": "unverified", "evidence": [], "expected": "The finding is present and traceable to the rebuilt corrective implementation.", "verificationPlan": "Run locked Bandit evidence generation and inspect normalized result.", "required": true},
+    {"scenario": "Committed baseline matches the deterministic scanner evidence.", "status": "unverified", "evidence": [], "expected": "check-bandit-baseline passes with matching count and digest.", "verificationPlan": "Run make check-bandit-baseline after update.", "required": true},
+    {"scenario": "A changed baseline or evidence is rejected.", "status": "unverified", "evidence": [], "expected": "Regression test preserves fail-closed mismatch behavior.", "verificationPlan": "Run focused pytest tests/test_bandit_baseline.py.", "required": true},
+    {"scenario": "Hosted template-smoke runs the same supply-chain gate.", "status": "unverified", "evidence": [], "expected": "Hosted template-smoke succeeds.", "verificationPlan": "Create corrective PR and inspect required Hosted checks.", "required": false}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": false, "reason": "Temporary user-authorized efficiency policy: run focused scanner, tests, static checks, and mandatory Hosted CI instead of redundant full local quality."}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user authorized continuing the overall plan and repairing failed gates; approval is limited to the reproducible .ai/cockpit/bandit_low_risk_baseline.json correction."},
+  "rollbackNote": "Revert only the baseline and regression-test changes; do not suppress scanner execution.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 710}},
+  "startReceipt": {"path": ".ai/work-items/starts/bandit-baseline-regression-corrective-20260731.json", "baseCommit": "7dafd3ca33b712af16d44db8ddaf1a54e62c984b", "initialScopeDigest": "fd4050b0d7d6f51e284e3778787a912f9c40d8989ebfaa3352311462dd2920f1", "contractSkeletonDigest": "4e69edbb58f3e25fbca6e2a93be19f869d2297a606b8ad3ba1fc5b9c3c6a70c2"}
+}

@@ -54,6 +54,17 @@ def test_current_digest_is_order_independent(tmp_path):
     assert digest == expected_digest
 
 
+def test_repository_baseline_pins_current_reviewed_bandit_evidence():
+    baseline = check_bandit_baseline.load_baseline(
+        ROOT / ".ai" / "cockpit" / "bandit_low_risk_baseline.json"
+    )
+
+    assert baseline == {
+        "count": 117,
+        "digest": "37393ddb52460889bb28b323e4eb58de6cdc0b5e8232970339f0f1e6d9942c81",
+    }
+
+
 def test_main_accepts_matching_baseline(tmp_path, monkeypatch):
     repo = tmp_path / "repo"
     repo.mkdir()

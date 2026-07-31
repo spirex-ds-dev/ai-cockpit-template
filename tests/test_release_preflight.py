@@ -1,9 +1,12 @@
+import gzip
 import hashlib
+import io
 import json
 import os
 import shutil
 import subprocess
 import sys
+import tarfile
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -12,6 +15,7 @@ import pytest
 import scripts.ai_capability_truth as capability_truth
 import scripts.check_release_preflight as preflight
 import scripts.finalize_release_freeze as finalizer
+from scripts import release_archive
 from scripts.check_release_preflight import (
     ReleasePreflightError,
     _load_object,
@@ -140,6 +144,82 @@ def test_canonical_archive_helper_covers_current_source():
     assert len(preflight.canonical_archive_sha(Path.cwd(), source)) == 64
 
 
+def _commit_worktree_file(repo: Path, relative_path: str, content: str) -> str:
+    path = repo / relative_path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+    _git(repo, "init")
+    _git(repo, "config", "user.email", "test@example.com")
+    _git(repo, "config", "user.name", "Test User")
+    _git(repo, "add", relative_path)
+    _git(repo, "commit", "-m", "initial")
+    return _git(repo, "rev-parse", "HEAD")
+
+
+def test_worktree_archive_uses_current_tracked_file_bytes(tmp_path: Path):
+    source = _commit_worktree_file(tmp_path, "tracked.txt", "before\n")
+    (tmp_path / "tracked.txt").write_text("after\n", encoding="utf-8")
+
+    archive = release_archive.canonical_tar_from_worktree(tmp_path, source)
+    with tarfile.open(fileobj=io.BytesIO(archive), mode="r:") as contents:
+        member = contents.extractfile("ai-cockpit/tracked.txt")
+        assert member is not None
+        assert member.read() == b"after\n"
+
+    compressed = release_archive.canonical_archive_bytes_from_worktree(tmp_path, source)
+    assert gzip.decompress(compressed) == archive
+    assert len(release_archive.canonical_source_tree_from_worktree(tmp_path, source)) == 64
+    assert len(release_archive.canonical_archive_sha_from_worktree(tmp_path, source)) == 64
+    assert release_archive.canonical_source_tree(tmp_path, source) != (
+        release_archive.canonical_source_tree_from_worktree(tmp_path, source)
+    )
+    assert len(release_archive.canonical_archive_sha(tmp_path, source)) == 64
+
+
+def test_worktree_archive_rejects_symlinked_tracked_member(tmp_path: Path):
+    source = _commit_worktree_file(tmp_path, "tracked.txt", "before\n")
+    external = tmp_path / "external.txt"
+    external.write_text("outside\n", encoding="utf-8")
+    (tmp_path / "tracked.txt").unlink()
+    (tmp_path / "tracked.txt").symlink_to(external)
+
+    with pytest.raises(ValueError, match="not a regular file"):
+        release_archive.canonical_tar_from_worktree(tmp_path, source)
+
+
+def test_worktree_archive_rejects_symlinked_parent(tmp_path: Path):
+    source = _commit_worktree_file(tmp_path, "nested/tracked.txt", "before\n")
+    external = tmp_path / "external"
+    external.mkdir()
+    (external / "tracked.txt").write_text("outside\n", encoding="utf-8")
+    shutil.rmtree(tmp_path / "nested")
+    (tmp_path / "nested").symlink_to(external, target_is_directory=True)
+
+    with pytest.raises(ValueError, match="not a regular file"):
+        release_archive.canonical_tar_from_worktree(tmp_path, source)
+
+
+def test_release_archive_cli_writes_canonical_git_archive(monkeypatch, tmp_path: Path):
+    source = _commit_worktree_file(tmp_path, "tracked.txt", "content\n")
+    output = tmp_path / "archive.tar.gz"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "release_archive",
+            "--root",
+            str(tmp_path),
+            "--source-commit",
+            source,
+            "--output",
+            str(output),
+        ],
+    )
+
+    assert release_archive.main() == 0
+    assert output.read_bytes() == release_archive.canonical_archive_bytes(tmp_path, source)
+
+
 def _git(repo: Path, *args: str) -> str:
     return subprocess.run(
         ["git", "-C", str(repo), *args],
@@ -192,6 +272,12 @@ def _build_candidate_merge(tmp_path: Path) -> tuple[Path, Path, str]:
         "    return hashlib.sha256(value.encode()).hexdigest()\n",
         encoding="utf-8",
     )
+    for name in (
+        "ai_capability_truth.py",
+        "ai_japanese_capability.py",
+        "check_pre_release_documentation_alignment.py",
+    ):
+        (repo / "scripts" / name).write_text("raise SystemExit(0)\n", encoding="utf-8")
     (repo / ".gitattributes").write_text(
         "release.json export-ignore\n"
         "next-release.json export-ignore\n"
@@ -404,14 +490,15 @@ def _configure_finalizer(
     materialized = []
     monkeypatch.setattr(
         finalizer,
-        "canonical_source_tree",
+        "canonical_source_tree_from_worktree",
         lambda _root, commit: materialized.append(("tree", commit)) or "tree",
     )
     monkeypatch.setattr(
         finalizer,
-        "canonical_archive_sha",
+        "canonical_archive_sha_from_worktree",
         lambda _root, commit: materialized.append(("archive", commit)) or "archive",
     )
+    monkeypatch.setattr(finalizer, "refresh_release_derived_reports", lambda _root: None)
     return materialized
 
 
@@ -478,10 +565,10 @@ def test_finalize_release_freeze_writes_post_close_lifecycle_evidence(monkeypatc
     }
 
 
-def test_finalizer_regenerates_capability_truth_after_updating_release_metadata(
+def test_finalizer_preserves_capability_truth_without_release_metadata_self_reference(
     monkeypatch, tmp_path
 ):
-    """Catch the PR #507 regression: release.json changes must not leave evidence stale."""
+    """Breaks if mutable release metadata is bound into its own archive evidence."""
     _configure_finalizer(monkeypatch, tmp_path)
     evidence = tmp_path / "tests" / "release_evidence.py"
     evidence.parent.mkdir()
@@ -502,11 +589,11 @@ def test_finalizer_regenerates_capability_truth_after_updating_release_metadata(
                     "status": "implemented",
                     "claim": "Release metadata is evidence-bound.",
                     "limitations": "Fixture only.",
-                    "sourceEvidence": ["release.json"],
+                    "sourceEvidence": ["install.sh"],
                     "testEvidence": ["tests/release_evidence.py"],
                     "commandEvidence": ["make check-release-preflight"],
                     "evidenceSource": capability_truth.build_evidence_source(
-                        ["release.json"], ["tests/release_evidence.py"], root=tmp_path
+                        ["install.sh"], ["tests/release_evidence.py"], root=tmp_path
                     ),
                 }
             ],
@@ -518,6 +605,31 @@ def test_finalizer_regenerates_capability_truth_after_updating_release_metadata(
 
     assert finalizer.main(source_commit="a" * 40, tag_target="a" * 40) == 0
     assert capability_truth.validate_matrix(matrix_path, root=tmp_path) == []
+
+
+def test_finalizer_refreshes_derived_reports_before_worktree_archive_binding(monkeypatch, tmp_path):
+    _configure_finalizer(monkeypatch, tmp_path)
+    events: list[str] = []
+    monkeypatch.setattr(
+        finalizer,
+        "refresh_release_derived_reports",
+        lambda _root: events.append("refresh"),
+        raising=False,
+    )
+    monkeypatch.setattr(
+        finalizer,
+        "canonical_source_tree_from_worktree",
+        lambda _root, _commit: events.append("tree") or "tree",
+    )
+    monkeypatch.setattr(
+        finalizer,
+        "canonical_archive_sha_from_worktree",
+        lambda _root, _commit: events.append("archive") or "archive",
+    )
+    monkeypatch.setattr(finalizer, "regenerate_capability_truth", lambda _root: None)
+
+    assert finalizer.main(source_commit="a" * 40, tag_target="a" * 40) == 0
+    assert events == ["refresh", "tree", "archive"]
 
 
 def test_finalize_release_freeze_runtime_mode_binds_exact_detached_source(monkeypatch, tmp_path):
