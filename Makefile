@@ -43,7 +43,7 @@ check-docs-metadata check-trust-layer-docs check-real-absurd-injection-docs chec
 	ai-start ai-resume-work-item ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	ai-verify-focused ai-verify-full \
 	ai-doctor check-ai-adoption-ready \
-	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-guidelines check-ai-review-policy template-adoption-ready \
+	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-guidelines check-ai-review-policy template-adoption-ready \
 	check-ai-scenario-coverage check-ai-start-receipt check-ai-archive-recovery generate-ai-preflight-review check-ai-preflight-review ai-preflight ai-prepare-implementation \
 	ai-prepare-hosted-verification-snapshot \
 	check-ai-change-summary generate-cockpit-status generate-cockpit-status-ja check-ai-status check-ai-status-ja check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
@@ -559,6 +559,21 @@ check-ai-backtrack:
 check-ai-coverage-guard:
 	$(AI_PYTHON) scripts/ai_check_coverage_guard.py
 
+REFERENCE_IMPACT_DIR ?= .ai/evidence/reference-impact
+REFERENCE_IMPACT_OUTPUT_DIR ?= target/reference-impact
+
+check-ai-reference-impact:
+	@set -eu; \
+		dir="$(REFERENCE_IMPACT_DIR)"; output_dir="$(REFERENCE_IMPACT_OUTPUT_DIR)"; found=false; \
+		mkdir -p "$$output_dir"; \
+		if test -d "$$dir"; then \
+			for record in "$$dir"/*.json; do \
+				test -f "$$record" || continue; found=true; name=$${record##*/}; \
+				$(AI_PYTHON) scripts/ai_check_reference_impact.py --root . --record "$$record" --output "$$output_dir/$${name%.json}.decision.json" --enforce; \
+			done; \
+		fi; \
+		if test "$$found" = false; then printf '%s\n' 'Reference impact: no declared records.'; fi
+
 check-ai-scenario-coverage:
 	$(AI_PYTHON) scripts/ai_check_scenario_coverage.py $(if $(CONTRACT),--contract $(CONTRACT)) $(if $(SUMMARY),--summary $(SUMMARY))
 
@@ -672,6 +687,7 @@ check-ai-pr:
 		$(AI_NESTED_MAKE) project-lint; \
 		$(AI_NESTED_MAKE) check-changed-critical-coverage AI_BASE_COMMIT="$(AI_BASE_COMMIT)"; \
 		$(AI_NESTED_MAKE) check-source-bound-evidence; \
+		$(AI_NESTED_MAKE) check-ai-reference-impact; \
 		if test -f scripts/check_governance_complexity.py && test -f .ai/guards/governance_complexity_policy.yaml; then \
 			$(AI_PYTHON) scripts/check_governance_complexity.py; \
 		fi; \

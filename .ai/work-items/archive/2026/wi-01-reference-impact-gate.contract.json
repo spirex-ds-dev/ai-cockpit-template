@@ -1,0 +1,224 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-01-reference-impact-gate",
+  "mode": "code",
+  "title": "Reference Impact Gate",
+  "rawUserRequest": "Implement WI-01 Reference Impact Gate from the AI Cockpit next-phase instruction. Before deletion, rename, move, deprecation, visibility/signature, configuration, or public-API removal, analyze declared static, test, configuration, documentation, workflow, dynamic, external-consumer, and monitoring references. Unknown dynamic/external/monitoring evidence must stop for human confirmation; known live references and requests to bypass analysis must block.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-request:ai-cockpit-next-phase#WI-01",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:d9e14416b2b47177b97189433e43efbfb49d2b1ec4f61e352ae2ff2b782322f7"
+  },
+  "declaredIntent": {
+    "summary": "Provide evidence-backed reference impact decisions before destructive or compatibility-affecting symbol changes.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "cad1a2a323aaf1d0181a390b9719200ce3ef0e4e",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-01-reference-impact-gate.contract.json",
+    ".ai/work-items/active/wi-01-reference-impact-gate.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-01-reference-impact-gate.outcome.json",
+    ".ai/work-items/active/wi-01-reference-impact-gate.outcome.md",
+    "scripts/ai_check_reference_impact.py",
+    ".ai/guards/reference_impact_policy.yaml",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/schemas/reference_impact.schema.json",
+    "tests/test_reference_impact.py",
+    "docs/reference/reference-impact-gate.md",
+    "docs/reference/reference-impact-gate.ja.md",
+    "docs/reference/reference-impact-gate.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": [
+    "Language analyzers other than generic text, Python AST, and TypeScript analysis.",
+    "Automatic deletion, migration, or external-consumer discovery.",
+    "Changing existing immutable archive evidence.",
+    "WI-02 test-weakening behavior and WI-03 quality-routing behavior."
+  ],
+  "sources": [
+    {
+      "path": "user-request:ai-cockpit-next-phase#WI-01",
+      "reason": "Authoritative WI-01 requirements, decision rules, output shape, supported analyzers, and required artifacts."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Canonical repository governance terminology and boundaries."
+    },
+    {
+      "path": "scripts/ai_check_guards.py",
+      "reason": "Existing guard discovery and integration conventions."
+    },
+    {
+      "path": "scripts/ai_trust_guards.py",
+      "reason": "Existing fail-closed guard decision conventions."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Canonical quality and PR lifecycle entrypoints."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "destructive_change_policy",
+      "public_api_compatibility",
+      "evidence_integrity",
+      "false_negative_analysis"
+    ],
+    "reason": "This guard governs changes that can break internal or external consumers; it must fail closed for missing dynamic, external, or monitoring evidence and must not overstate analyzer coverage.",
+    "unknownsReviewComplete": true
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user supplied complete scope and decision rules; unknown operational references are represented as runtime human-confirmation outcomes rather than a planning gap."
+  },
+  "preReviewWarnings": [
+    "Review false-negative boundaries, reject bypass wording, and verify that generic analysis is not presented as complete semantic analysis for unsupported languages."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A versioned Reference Impact record validates target type, path, name, operation, reference categories, decision, reason, and recovery condition; malformed and path-escape inputs fail closed.",
+    "The checker supports generic text, Python AST, and TypeScript analysis and labels every other language generic_analysis_only without claiming complete semantic coverage.",
+    "Delete, rename, move, deprecate, visibility/signature change, configuration removal, and public-API removal are evaluated; static/test/configuration/workflow live references and explicit bypass requests block.",
+    "Unknown dynamic, external-consumer, or monitoring evidence and public API/configuration/data deletion return needs_human_confirmation with an actionable recovery condition.",
+    "A policy, schema, focused positive/negative/unknown/malformed/path-escape/symlink/stale-evidence/forged-approval/cross-platform/legacy tests, Make/PR integration, and aligned English/Japanese/Chinese reference documentation are delivered."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "A Python symbol with a static call is proposed for deletion.", "expected": "blocked with the static reference as evidence.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused unit test with a Python caller fixture."},
+    {"scenario": "A TypeScript symbol has no static references but dynamic usage remains unproven.", "expected": "needs_human_confirmation with a recovery condition.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused unit test asserting unknown dynamic evidence is fail-closed."},
+    {"scenario": "A request asks to delete a referenced target without analysis.", "expected": "blocked as a governance-bypass request.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused negative test for bypass language and live reference evidence."},
+    {"scenario": "A supported-language target has zero proven references across required categories and reliable dynamic/external/monitoring evidence.", "expected": "continue decision with evidence retained.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused positive test with complete evidence fixture."},
+    {"scenario": "Input contains malformed paths, a symlink escape, stale evidence, forged approval, legacy schema, or cross-platform paths.", "expected": "invalid or fail-closed decision without following paths outside the repository.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Parameterized security and compatibility tests."}
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Current deletion and compatibility-affecting changes cannot prove whether static, dynamic, configuration, workflow, documentation, monitoring, or external consumers still use the target. Searching alone is insufficient evidence for destructive changes.",
+    "constraints": ["Keep the product boundary as Repository Governance Layer.", "Never automatically delete or infer absent dynamic or external references.", "Use one machine-readable record as the fact source and retain explicit limitations.", "Do not weaken existing hard blocks or mutate archive evidence.", "Normal quality paths must remain lighter than release verification."],
+    "rationale": "A structured, evidence-backed decision makes the analyzer's coverage and remaining uncertainty reviewable and returns control to a human when safety cannot be proven."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized in-scope governance updates, branch lifecycle operations, PRs, merges, archives, and branch cleanup for each Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 731
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-01-reference-impact-gate.json",
+    "baseCommit": "cad1a2a323aaf1d0181a390b9719200ce3ef0e4e",
+    "initialScopeDigest": "e45fb2b418038aff1f5519fa8b20fb63c8099d9fd7151b3c0a795e97bb4505cd",
+    "contractSkeletonDigest": "5ea9a15996effa9bc4c4b661017ed7cb62852eeedded02cfdd2b73fa77416721"
+  }
+}

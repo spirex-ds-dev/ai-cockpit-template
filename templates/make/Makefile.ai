@@ -28,7 +28,7 @@ AI_COCKPIT_PROJECT_LINT_CONFIGURED ?= true
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
 	check-capability-truth check-source-bound-evidence \
 	ai-start ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
-	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy \
+	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy \
 	check-ai-preflight-review generate-ai-preflight-review ai-preflight check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge template-adoption-ready check-ai-serial-order check-ai-budget-impact ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
 
 ai-help:
@@ -217,6 +217,21 @@ check-ai-backtrack:
 check-ai-coverage-guard:
 	$(AI_PYTHON) scripts/ai_check_coverage_guard.py
 
+REFERENCE_IMPACT_DIR ?= .ai/evidence/reference-impact
+REFERENCE_IMPACT_OUTPUT_DIR ?= target/reference-impact
+
+check-ai-reference-impact:
+	@set -eu; \
+		dir="$(REFERENCE_IMPACT_DIR)"; output_dir="$(REFERENCE_IMPACT_OUTPUT_DIR)"; found=false; \
+		mkdir -p "$$output_dir"; \
+		if test -d "$$dir"; then \
+			for record in "$$dir"/*.json; do \
+				test -f "$$record" || continue; found=true; name=$${record##*/}; \
+				$(AI_PYTHON) scripts/ai_check_reference_impact.py --root . --record "$$record" --output "$$output_dir/$${name%.json}.decision.json" --enforce; \
+			done; \
+		fi; \
+		if test "$$found" = false; then printf '%s\n' 'Reference impact: no declared records.'; fi
+
 check-ai-scenario-coverage:
 	$(AI_PYTHON) scripts/ai_check_scenario_coverage.py $(if $(CONTRACT),--contract $(CONTRACT)) $(if $(SUMMARY),--summary $(SUMMARY))
 
@@ -300,6 +315,7 @@ check-ai-pr:
 			printf '%s\n' 'Project lint check: not configured; skipping optional linter.'; \
 		fi; \
 		$(AI_NESTED_MAKE) check-source-bound-evidence; \
+		$(AI_NESTED_MAKE) check-ai-reference-impact; \
 		$(AI_PYTHON) scripts/ai_check_pr.py --base "$(AI_BASE_COMMIT)"
 
 ai-finish:
