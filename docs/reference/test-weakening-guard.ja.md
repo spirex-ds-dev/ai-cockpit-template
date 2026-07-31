@@ -43,6 +43,6 @@ Version なしの旧 Report は `decision`、`signals`、`requiredExplanation` �
 
 ## 限界
 
-これは言語・Framework 非依存のテキスト差分分析です。正当な Test 統合、生成 Snapshot、Concept Rename を False Positive にする可能性があります。Helper 内部の意味的緩和、Data-driven Case の欠落、独自 Skip、Provider 側 Required Check、動的・生成 Test は見逃す可能性があります。新規 Test File 内の Skip Case は Baseline Evidence の弱体化ではなく未完成の新規 Evidence なので、この Guard は `skip_added` として報告しません。閾値は Review 強度を選ぶだけで安全性を定義しません。外部 CI/Provider 状態は Repository Evidence の外です。
+これは言語・Framework 非依存のテキスト差分分析です。NUL Byte を含む File、または UTF-8 として不正な Byte を含む File は Binary として Text Semantic Signal の対象外にします。これにより Test に似た Path の Compiler Artifact を Source として解釈しませんが、Binary Test の意味は検査しません。Text File が Binary に置き換わった場合は、削除された Text を Weakening 候補として引き続き分析します。正当な Test 統合、生成 Snapshot、Concept Rename を False Positive にする可能性があります。Helper 内部の意味的緩和、Data-driven Case の欠落、独自 Skip、Provider 側 Required Check、動的・生成 Test は見逃す可能性があります。新規 Test File 内の Skip Case は Baseline Evidence の弱体化ではなく未完成の新規 Evidence なので、この Guard は `skip_added` として報告しません。閾値は Review 強度を選ぶだけで安全性を定義しません。外部 CI/Provider 状態は Repository Evidence の外です。
 
 Path は worktree 内に正規化されます。不正 Revision、Traversal、非通常 File、Repository 外を指す Symbolic Link は fail closed です。Checker は読み取りと報告だけを行い、Test、Coverage、Workflow、Provider 設定を変更しません。

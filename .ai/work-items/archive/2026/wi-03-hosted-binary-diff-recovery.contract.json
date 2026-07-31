@@ -1,0 +1,81 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-03-hosted-binary-diff-recovery",
+  "mode": "code",
+  "title": "Ignore binary build artifacts in test weakening semantic analysis",
+  "baseCommit": "b6286ed25fa5689751b08f7fe1c6c904096348aa",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-03-hosted-binary-diff-recovery.contract.json",
+    ".ai/work-items/active/wi-03-hosted-binary-diff-recovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-03-hosted-binary-diff-recovery.outcome.json",
+    ".ai/work-items/active/wi-03-hosted-binary-diff-recovery.outcome.md",
+    "scripts/ai_check_test_weakening.py",
+    "tests/test_test_weakening.py",
+    "docs/reference/test-weakening-guard.md",
+    "docs/reference/test-weakening-guard.ja.md",
+    "docs/reference/test-weakening-guard.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing test weakening signal thresholds, severity, or decision policy.",
+    "Treating undecodable binary bytes as source text or weakening analysis of valid UTF-8 test and workflow files.",
+    "Rewriting either immutable WI-03 predecessor archive."
+  ],
+  "sources": [
+    {"path": "github:pull/545#job-91247406390", "reason": "Java Hosted evidence fails in git show output decoding after successful Gradle build."},
+    {"path": "github:pull/545#job-91247406318", "reason": "Kotlin Hosted evidence reproduces the same 0xff UnicodeDecodeError."},
+    {"path": "github:pull/545#job-91247406286", "reason": "C# Hosted evidence reproduces the same binary decode boundary."},
+    {"path": "scripts/ai_check_test_weakening.py", "reason": "_read_before requests Git blob bytes through text=True while _read_after already uses replacement decoding."},
+    {"path": "tests/test_test_weakening.py", "reason": "Existing behavioral fixtures cover text semantics but not committed binary artifacts with test-like paths."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "high", "riskTypes": ["hosted_compatibility", "evidence_guard", "binary_input"], "reason": "The default Strict adopter route reaches a cross-language evidence guard that currently crashes on ordinary compiler output; correction must skip only non-text semantic content and preserve fail-closed Git/path behavior.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["This recovery changes an installed AI evidence guard used by Strict quality."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "Three Hosted stacks reproduce one deterministic bytes-versus-text defect; bounded binary detection and skip semantics are testable locally."},
+  "preReviewWarnings": [
+    "Confirm invalid Git revisions and unsafe paths remain fail closed.",
+    "Confirm valid UTF-8 test weakening signals remain unchanged.",
+    "Confirm binary files with test-like names produce no semantic signal or decode crash."
+  ],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record both implementation boundary checkpoints."},
+  "acceptance": [
+    "Git blobs and worktree files are read as bytes before decoding, so invalid UTF-8 cannot escape as UnicodeDecodeError.",
+    "A changed binary artifact, including a test-like path, is excluded from text-semantic weakening signals and returns a continue decision when it is the only change.",
+    "Valid UTF-8 test, workflow, coverage, snapshot, invalid-base, and symlink behavior remains unchanged and fail closed where previously required.",
+    "English, Japanese, and Chinese guard references explicitly state the binary-content exclusion and its evidence limitation.",
+    "Focused tests, source-bound evidence, canonical Strict finish/archive, and replacement Hosted checks pass without modifying prior WI-03 archives."
+  ],
+  "guidelines": ["New public APIs must be documented.", "Do not import internal modules from other features."],
+  "intent": {
+    "problem": "PR #545 replacement compatibility run 30658089369 passes the recovered router boundary but Java, Kotlin, and C# then crash in ai_check_test_weakening while decoding compiler-produced binary Git blobs as UTF-8 text.",
+    "constraints": ["Preserve all text signal and decision semantics.", "Skip only content proven non-text before regex/diff analysis.", "Keep Git revision validation and repository path safety fail closed.", "Preserve both existing WI-03 archives byte-for-byte."],
+    "rationale": "The guard is a source-text semantic analyzer. Reading bytes first and declining semantic analysis for binary content prevents platform artifacts from crashing quality without pretending binary bytes contain reviewable assertions or workflow text."
+  },
+  "rawUserRequest": "Continue all Work Items through Hosted CI, merge, closure, and cleanup; recover deterministic binary diff failures without pausing for bounded implementation decisions.",
+  "rawRequestSource": {"type": "human", "reference": "user-goal:continue-all-work-items-and-hosted-recovery", "capturedAt": "2026-08-01", "digest": "sha256:fd64c843bbdfca5edd426ff665f05e676e647d7bc9eb424e11f57a3b46b58807"},
+  "declaredIntent": {"summary": "Make Test Weakening Guard robust to binary compiler artifacts reached by Strict adopter quality.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "A committed or changed binary artifact has a test-like filename and invalid UTF-8 bytes.", "expected": "The guard does not decode-crash or emit text-semantic weakening signals.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add a Git fixture containing invalid UTF-8 and NUL bytes at a test-like path, change it, and assert continue with no signals."},
+    {"scenario": "A valid UTF-8 test file loses assertions or gains a skip.", "expected": "Existing warning/review signals and thresholds remain unchanged.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run the complete focused test-weakening suite."},
+    {"scenario": "The base revision is invalid or a changed path escapes through a symlink.", "expected": "The guard remains fail closed with an input error.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run the existing invalid-base and symlink regression."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "The user explicitly authorized all bounded implementation, governance, PR, merge, archive, and cleanup decisions."},
+  "rollbackNote": "Revert this adjacent recovery commit; prior immutable archives remain authoritative.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 735}},
+  "startReceipt": {"path": ".ai/work-items/starts/wi-03-hosted-binary-diff-recovery.json", "baseCommit": "b6286ed25fa5689751b08f7fe1c6c904096348aa", "initialScopeDigest": "2e1449b6b7d7a77fd4c950b5ffc2c87b3ccdcad8f6a3c9b1e5fed487f41d65bc", "contractSkeletonDigest": "daf9f4321aeb391c6ad35b999c2dbadbb351ec32f37da213f7046d87e380397e"}
+}

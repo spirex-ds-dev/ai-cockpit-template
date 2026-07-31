@@ -43,6 +43,6 @@ Fast 只检查低成本 Signal，例如新增 Skip、删除测试、把 CI 改�
 
 ## 限制
 
-该分析是与语言和测试框架无关的文本差异比较。合法的测试合并、生成 Snapshot 或概念重命名可能产生 False Positive；Helper 内的语义放宽、Data-driven Case 丢失、自定义 Skip、Provider 端 Required Check，以及动态或生成测试可能形成 False Negative。新测试文件中的 Skip Case 属于不完整的新 Evidence，而非削弱 Baseline Evidence，因此本 Guard 不将其报告为 `skip_added`。阈值只决定审查强度，不定义安全。外部 CI/Provider 状态不属于 Repository Evidence。
+该分析是与语言和测试框架无关的文本差异比较。包含 NUL 字节或无效 UTF-8 字节的文件会被视为二进制内容，不参与文本语义 Signal；这避免把测试路径下的编译产物误当作源代码，但不会检查二进制测试语义。如果文本文件被二进制内容替换，Guard 仍会把被移除的文本作为潜在削弱进行分析。合法的测试合并、生成 Snapshot 或概念重命名可能产生 False Positive；Helper 内的语义放宽、Data-driven Case 丢失、自定义 Skip、Provider 端 Required Check，以及动态或生成测试可能形成 False Negative。新测试文件中的 Skip Case 属于不完整的新 Evidence，而非削弱 Baseline Evidence，因此本 Guard 不将其报告为 `skip_added`。阈值只决定审查强度，不定义安全。外部 CI/Provider 状态不属于 Repository Evidence。
 
 路径必须规范化并保持在 worktree 内。无效 Revision、Traversal、非常规文件或指向仓库外的 Symbolic Link 会 fail closed。Checker 只读取和报告，不会修改测试、Coverage、Workflow 或 Provider 设置。

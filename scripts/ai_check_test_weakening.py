@@ -75,6 +75,21 @@ def _git(root: Path, *args: str, check: bool = True) -> subprocess.CompletedProc
     )
 
 
+def _git_bytes(root: Path, *args: str, check: bool = True) -> subprocess.CompletedProcess[bytes]:
+    return subprocess.run(  # nosec B603 B607 - executable and argument list are fixed
+        ["git", *args], cwd=root, capture_output=True, check=check
+    )
+
+
+def _text_content(data: bytes) -> str | None:
+    if b"\x00" in data:
+        return None
+    try:
+        return data.decode("utf-8")
+    except UnicodeDecodeError:
+        return None
+
+
 def _safe_relative(value: str) -> str:
     normalized = value.replace("\\", "/")
     path = PurePosixPath(normalized)
@@ -83,12 +98,12 @@ def _safe_relative(value: str) -> str:
     return path.as_posix()
 
 
-def _read_before(root: Path, base: str, path: str) -> str:
-    result = _git(root, "show", f"{base}:{path}", check=False)
-    return result.stdout if result.returncode == 0 else ""
+def _read_before(root: Path, base: str, path: str) -> str | None:
+    result = _git_bytes(root, "show", f"{base}:{path}", check=False)
+    return _text_content(result.stdout) if result.returncode == 0 else ""
 
 
-def _read_after(root: Path, path: str) -> str:
+def _read_after(root: Path, path: str) -> str | None:
     candidate = root / path
     if not candidate.exists():
         return ""
@@ -99,7 +114,7 @@ def _read_after(root: Path, path: str) -> str:
         raise InputError(f"path escapes repository through symlink: {path}") from exc
     if not resolved.is_file():
         raise InputError(f"changed path is not a regular file: {path}")
-    return resolved.read_text(encoding="utf-8", errors="replace")
+    return _text_content(resolved.read_bytes())
 
 
 def _changed_paths(root: Path, base: str) -> list[tuple[str, str, str]]:
@@ -343,6 +358,12 @@ def analyze(
     for status, path, before_path in _changed_paths(root, base):
         before = _read_before(root, base, before_path)
         after = "" if status == "D" else _read_after(root, path)
+        if (status == "A" and after is None) or (status == "D" and before is None):
+            continue
+        if before is None and after is None:
+            continue
+        before = before or ""
+        after = after or ""
         is_test = bool(TEST_PATH.search(path))
         if status == "R" and is_test and TEST_PATH.search(before_path):
             signals.append(
