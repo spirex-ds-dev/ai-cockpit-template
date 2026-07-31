@@ -1951,6 +1951,51 @@
         "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q tests/test_supply_chain.py::test_repository_uses_in_and_lock_without_redundant_txt",
         "Fresh hosted required checks on the corrective PR and then #484 exact updated head before merge"
       ]
+    },
+    {
+      "id": "PLAN-DIRECTIVE-060",
+      "summary": "Implement WI-01 Reference Impact Gate as an evidence-backed, fail-closed repository guard for destructive and compatibility-affecting changes without claiming complete semantic or external-consumer analysis.",
+      "planWorkItems": [
+        "WI-01"
+      ],
+      "contractPaths": [
+        ".ai/work-items/archive/2026/wi-01-reference-impact-gate.contract.json"
+      ],
+      "implementationEvidence": [
+        "scripts/ai_check_reference_impact.py",
+        ".ai/schemas/reference_impact.schema.json",
+        ".ai/guards/reference_impact_policy.yaml",
+        "Makefile",
+        "templates/make/Makefile.ai",
+        "tests/test_reference_impact.py",
+        "docs/reference/reference-impact-gate.md",
+        "docs/reference/reference-impact-gate.ja.md",
+        "docs/reference/reference-impact-gate.zh-CN.md",
+        "docs/reference/capability-truth-matrix.json"
+      ],
+      "acceptanceEvidence": [
+        "tests/test_reference_impact.py",
+        ".ai/guards/coverage_policy.yaml"
+      ],
+      "verificationCommands": [
+        "python3 -m pytest -q tests/test_reference_impact.py",
+        "make check-ai-reference-impact",
+        "make check-ai-pr AI_BASE_COMMIT=<recorded-base>"
+      ],
+      "requiredNamedPaths": [
+        {
+          "path": "scripts/ai_check_reference_impact.py"
+        },
+        {
+          "path": ".ai/guards/reference_impact_policy.yaml"
+        },
+        {
+          "path": "tests/test_reference_impact.py"
+        },
+        {
+          "path": "docs/reference/reference-impact-gate.md"
+        }
+      ]
     }
   ]
 }
