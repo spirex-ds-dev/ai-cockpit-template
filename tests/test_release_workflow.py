@@ -70,6 +70,8 @@ def test_draft_quick_install_verification_uses_authenticated_asset_api_after_upl
         'gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json assets' in quick_install
     )
     assert '.apiUrl | split("/") | last' in quick_install
+    assert '[[ "$asset_id" =~ ^[0-9]+$ ]]' in quick_install
+    assert 'test "$asset_id" =~' not in quick_install
     assert '"repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}"' in quick_install
     assert "download_draft_asset release.json" in quick_install
 

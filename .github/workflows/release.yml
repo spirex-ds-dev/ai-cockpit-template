@@ -447,7 +447,7 @@ jobs:
             local asset_name="$1"
             local asset_id
             asset_id="$(jq -r --arg name "$asset_name" '.assets[] | select(.name == $name) | .apiUrl | split("/") | last' <<<"$release_json")"
-            test "$asset_id" =~ ^[0-9]+$
+            [[ "$asset_id" =~ ^[0-9]+$ ]]
             gh api --method GET \
               -H "Accept: application/octet-stream" \
               "repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}" \

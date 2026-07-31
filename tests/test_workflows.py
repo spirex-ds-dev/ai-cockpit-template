@@ -231,6 +231,8 @@ def test_release_workflow_verifies_tagged_quick_install_before_publish():
     assert "gh release download" not in workflow
     assert 'gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json assets' in workflow
     assert '.apiUrl | split("/") | last' in workflow
+    assert '[[ "$asset_id" =~ ^[0-9]+$ ]]' in workflow
+    assert 'test "$asset_id" =~' not in workflow
     assert '"repos/${GITHUB_REPOSITORY}/releases/assets/${asset_id}"' in workflow
     assert "download_draft_asset release.json" in workflow
     assert '--asset-url "$verified_archive_url"' in workflow

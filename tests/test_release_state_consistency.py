@@ -57,16 +57,19 @@ def test_repository_published_metadata_digest_is_current():
     assert check_release_state_consistency.check_repository(ROOT) == []
 
 
-def test_repository_candidate_advances_past_the_reserved_v0545_failure():
+def test_repository_candidate_advances_past_reserved_release_failures():
     state = json.loads((ROOT / "release-state.json").read_text(encoding="utf-8"))
     candidate = json.loads((ROOT / "next-release.json").read_text(encoding="utf-8"))
 
-    assert candidate["releaseTag"] == "v0.5.46"
-    assert state["releaseTag"] == "v0.5.46"
+    assert candidate["releaseTag"] == "v0.5.47"
+    assert state["releaseTag"] == "v0.5.47"
     assert "v0.5.45" in state["reservedTags"]
+    assert "v0.5.46" in state["reservedTags"]
     unavailable = {item["tag"]: item for item in state["unavailableTags"]}
     assert unavailable["v0.5.45"]["kind"] == "tag_only"
     assert "30609474406" in unavailable["v0.5.45"]["reason"]
+    assert unavailable["v0.5.46"]["kind"] == "tag_only"
+    assert "30611832530" in unavailable["v0.5.46"]["reason"]
     assert check_release_state_consistency.check_repository(ROOT) == []
 
 
