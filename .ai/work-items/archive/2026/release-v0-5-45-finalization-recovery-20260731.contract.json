@@ -1,0 +1,68 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0-5-45-finalization-recovery-20260731",
+  "mode": "code",
+  "title": "Recover current-main v0.5.45 release finalization",
+  "baseCommit": "95c9cbb87d2cd1dd61a602d5a61a71328c06baeb",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue the authorized plan through release and final cleanup; inspect Actions when needed and preserve every fail-closed gate.",
+  "rawRequestSource": {"type":"human","reference":"conversation:2026-07-31-continuous-plan-authorization","capturedAt":"2026-07-31","digest":"sha256:continuous-authorized-release-and-cleanup"},
+  "declaredIntent": {"summary":"Repair only stale v0.5.45 candidate freeze evidence so the next release PR can bind the newly merged main identity without changing any immutable provider identity.","requestedCapabilities":["ai_governance","documentation","test_automation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"document","authorityRequired":false},
+  "scope": [
+    ".ai/work-items/active/release-v0-5-45-finalization-recovery-20260731.contract.json",
+    ".ai/work-items/active/release-v0-5-45-finalization-recovery-20260731.summary.json",
+    ".ai/work-items/active/release-v0-5-45-finalization-recovery-20260731.outcome.json",
+    ".ai/work-items/active/release-v0-5-45-finalization-recovery-20260731.outcome.md",
+    ".ai/work-items/starts/**", ".ai/work-items/archive/**", ".ai/cockpit/current_status.md",
+    ".ai/cockpit/release-freeze.json", ".ai/cockpit/release-digests.json", "release.json", "release-state.json",
+    "docs/reference/capability-truth-matrix.json", "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md",
+    "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+    "docs/reference/remediation-instruction-traceability.json"
+  ],
+  "outOfScope": ["Changing release workflow or validation implementation.","Creating, moving, deleting, or publishing any semantic Git tag or GitHub Release.","Publishing any version other than v0.5.45.","Editing immutable historical archive evidence or unrelated runtime, CI, test, or product documentation."],
+  "sources": [
+    {"path":"AGENTS.md","reason":"Canonical Work Item and release lifecycle rules."},
+    {"path":"docs/reference/distribution.md","reason":"Authoritative candidate-to-merge and provider-publication boundaries."},
+    {"path":"scripts/finalize_release_freeze.py","reason":"Controlled finalizer semantics and generated evidence paths."},
+    {"path":"scripts/check_release_preflight.py","reason":"Current fail-closed diagnosis of stale source, tree, archive, and identity binding."},
+    {"path":".ai/work-items/archive/2026/release-v0-5-45-replacement-20260731.contract.json","reason":"Immutable predecessor evidence; do not revive its stale release metadata."},
+    {"path":"release-state.json","reason":"Canonical v0.5.45 candidate and reserved v0.5.43/v0.5.44 identities."},
+    {"path":"conversation:2026-07-31-continuous-plan-authorization","reason":"User authorization for the continuing plan and later v0.5.45 publication."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level":"high","riskTypes":["release_identity","supply_chain_evidence","stale_source_binding"],"unknownsReviewComplete":true,"reason":"A release candidate's source, archive and digest bindings are security-relevant; stale bindings must be replaced only through the controlled finalizer and then independently checked."},
+  "agentCapability": {"canImplement":true,"canVerify":true,"needsHumanDecision":false,"blockedReason":""},
+  "executionDecision": {"status":"continue","reason":"The user authorized continuous Work Item, PR, hosted verification, merge, and closure execution without bypassing gates."},
+  "preReviewWarnings": ["The old v0.5.45 preparation record is immutable evidence, not a source to mutate.","No provider tag or Release may be created in this recovery Work Item."],
+  "checkpointPolicy": {"requiredBeforeFinish":true,"requiredStages":["before_edit","before_finish"],"reason":"Bind the current release diagnosis and exact recovery boundary before evidence generation."},
+  "acceptance": [
+    "v0.5.45 remains the sole candidate and v0.5.43/v0.5.44 remain reserved immutable identities.",
+    "The archived recovery Work Item owns the release metadata paths and the controlled premerge finalizer regenerates candidate-tree archive, installer, and digest evidence without changing tags or provider Releases.",
+    "The recovery PR is based on current origin/main and its exact merged source passes check-release-preflight after fresh Hosted smoke and compatibility evidence.",
+    "Documentation/traceability records the stale-binding diagnosis, replacement evidence, limitations, and subsequent provider-publication boundary without claiming release publication."
+  ],
+  "guidelines": [
+    "Preserve the distinction between candidate, immutable tag, stable provider Release, and public distribution evidence.",
+    "Generate release evidence only through repository commands or the controlled provider workflow.",
+    "Do not retry a failed external release path until its failing gate is diagnosed and recorded.",
+    "Do not report success before provider-bound post-publication evidence is verified."
+  ],
+  "intent": {"problem":"The current release preflight correctly rejects v0.5.45 because release freeze, canonical archive and digest fields are bound to a pre-PR source rather than current main. Release cannot proceed until a fresh source-bound recovery PR produces a candidate freeze whose canonical content survives its merge.","constraints":["Use only v0.5.45 and never mutate v0.5.43/v0.5.44.","Do not change release workflow or validators, tags, Releases, or historical archive evidence.","Use the controlled finalizer after archival, retain full required governance, and require Hosted evidence before merge.","Do not claim provider publication during this recovery."],"rationale":"A new release-preparation Work Item, rather than editing the old archive or bypassing preflight, makes the stale-binding repair reviewable and lets the existing release workflow bind the exact subsequently merged default-branch commit."},
+  "verification": [
+    {"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":false,"reason":"Temporary user-authorized efficiency exception; focused verification plus full Hosted PR checks remain mandatory."}
+  ],
+  "destructiveChangePolicy": {"allowed":false,"requiresHumanApproval":true,"allowPatterns":[]},
+  "restrictedWriteApproval": {"approved":true,"approvedBy":"user","reason":"User authorized the continuous release plan and the required governed release-metadata paths, without allowing tag/Release publication before gates."},
+  "rollbackNote":"Do not alter predecessor archives or tags. If recovery validation fails, preserve this new Work Item evidence and create a separate corrective from current main.",
+  "budgetImpact":{"expectedMetrics":{"archiveGrowth":708}},
+  "scenarioCoverage": [
+    {"scenario":"Existing freeze is stale after later main changes.","expected":"Preflight remains blocked until a new source-bound recovery candidate is generated; old evidence stays immutable.","verificationPlan":"Record current preflight failure and inspect the predecessor archive without editing it.","required":true,"status":"unverified","evidence":[]},
+    {"scenario":"Controlled premerge finalization runs after archive.","expected":"It materializes the recovery candidate HEAD but preserves the controlled origin/main identity for post-merge resolution.","verificationPlan":"Run finalize-release-freeze-premerge for this archived task and inspect generated metadata plus focused preflight behavior.","required":true,"status":"unverified","evidence":[]},
+    {"scenario":"Recovery PR is merged.","expected":"The exact merged main source has fresh Hosted smoke/compatibility evidence and passes release preflight before provider publication.","verificationPlan":"Inspect PR checks, merge, synchronize main, and run check-release-preflight before dispatching any provider release workflow.","required":true,"status":"unverified","evidence":[]}
+  ],
+  "startReceipt": {"path":".ai/work-items/starts/release-v0-5-45-finalization-recovery-20260731.json","baseCommit":"95c9cbb87d2cd1dd61a602d5a61a71328c06baeb","initialScopeDigest":"f408c1cd501a49d109766b326a2e1ecedf1e9c90d9ce8dc4e0762098977e5524","contractSkeletonDigest":"516e07ac5dd89688d1c0a013878bf3b23f110a305c26adfd05b4a03a004cc29f"}
+}
