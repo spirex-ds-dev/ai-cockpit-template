@@ -4,7 +4,7 @@ Phase: `review`
 Result: `completed_with_warnings`
 
 ## What changed
-Task wi-04-hosted-installation-recovery generated an evidence-derived outcome with status completed_with_warnings.
+Task wi-04-recovery-chain-receipt generated an evidence-derived outcome with status completed_with_warnings.
 
 ## Issues
 - Detected issues: 1
