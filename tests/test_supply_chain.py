@@ -429,6 +429,7 @@ def test_refresh_candidate_evidence_synchronizes_local_release_projection(tmp_pa
     lock = tmp_path / "requirements-dev.lock"
     installer = tmp_path / "install.sh"
     release = tmp_path / "release.json"
+    candidate = tmp_path / "next-release.json"
     release_state = tmp_path / "release-state.json"
     lock.write_text("lock\n", encoding="utf-8")
     installer.write_text("installer\n", encoding="utf-8")
@@ -447,8 +448,17 @@ def test_refresh_candidate_evidence_synchronizes_local_release_projection(tmp_pa
         },
     }
     release.write_text(json.dumps(original, indent=2) + "\n", encoding="utf-8")
+    candidate.write_text('{"releaseTag":"v0.5.43","published":false}\n', encoding="utf-8")
     release_state.write_text(
-        json.dumps({"metadataDigests": {"published": "stale-release"}}) + "\n",
+        json.dumps(
+            {
+                "metadataDigests": {
+                    "published": "stale-release",
+                    "candidate": "stale-candidate",
+                }
+            }
+        )
+        + "\n",
         encoding="utf-8",
     )
     lock.write_text("updated lock\n", encoding="utf-8")
@@ -456,6 +466,7 @@ def test_refresh_candidate_evidence_synchronizes_local_release_projection(tmp_pa
     monkeypatch.setattr(check_supply_chain, "LOCK_FILE", lock)
     monkeypatch.setattr(check_supply_chain, "INSTALLER", installer)
     monkeypatch.setattr(check_supply_chain, "RELEASE_JSON", release)
+    monkeypatch.setattr(check_supply_chain, "NEXT_RELEASE_JSON", candidate)
     monkeypatch.setattr(check_supply_chain, "RELEASE_STATE", release_state)
     monkeypatch.setattr(check_supply_chain, "SBOM_BASELINE", cockpit / "sbom.json")
     monkeypatch.setattr(check_supply_chain, "PROVENANCE_BASELINE", cockpit / "provenance.json")
@@ -499,6 +510,9 @@ def test_refresh_candidate_evidence_synchronizes_local_release_projection(tmp_pa
     assert refreshed_state["metadataDigests"][
         "published"
     ] == check_release_distribution.file_digest(release)
+    assert refreshed_state["metadataDigests"][
+        "candidate"
+    ] == check_release_distribution.file_digest(candidate)
     assert check_release_distribution.supply_chain_issues(refreshed, root=tmp_path) == []
 
 
