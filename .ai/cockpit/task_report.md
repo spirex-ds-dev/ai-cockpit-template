@@ -4,7 +4,7 @@ Phase: `review`
 Result: `completed_with_warnings`
 
 ## What changed
-Task real-adopter-reference-validation generated an evidence-derived outcome with status completed_with_warnings.
+Task provider-backed-governance-validation generated an evidence-derived outcome with status completed_with_warnings.
 
 ## Issues
 - Detected issues: 1

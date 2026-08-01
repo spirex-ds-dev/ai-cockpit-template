@@ -1,0 +1,279 @@
+{
+  "contractVersion": 2,
+  "workItemId": "provider-backed-governance-validation",
+  "mode": "code",
+  "title": "Provider backed governance validation",
+  "baseCommit": "f2b83d096e4697d763adb18847a43bdb8dd857d8",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/provider-backed-governance-validation.contract.json",
+    ".ai/work-items/active/provider-backed-governance-validation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/provider-backed-governance-validation.outcome.json",
+    ".ai/work-items/active/provider-backed-governance-validation.outcome.md",
+    "scripts/provider_backed_governance_validation.py",
+    "tests/test_provider_backed_governance_validation.py",
+    "docs/reference/provider-backed-governance-validation.md"
+  ],
+  "outOfScope": [
+    "Changing GitHub branch-protection or ruleset configuration.",
+    "Changing CODEOWNERS or repository access controls.",
+    "Treating local Git configuration, PR prose, a remote branch, a tag, or a release page as stronger provider evidence than it is.",
+    "Mocking provider responses in the command that produces a provider receipt."
+  ],
+  "sources": [
+    {
+      "path": "user-pasted-text-1",
+      "reason": "User-supplied WI-08 requirements for provider-backed lifecycle evidence and its explicit non-equivalence rules."
+    },
+    {
+      "path": "scripts/ai_external_identity.py",
+      "reason": "Existing provider-identity boundary and evidence-level terminology to preserve."
+    },
+    {
+      "path": "scripts/ai_provider_merge_state_recovery.py",
+      "reason": "Existing receipt discipline for provider state and SHA-bound facts."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/561",
+      "reason": "A real GitHub PR route with provider-visible head and merge SHA evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "provider_evidence_integrity",
+      "external_release_lifecycle",
+      "false_capability_claim"
+    ],
+    "reason": "Provider state is externally authoritative and the validation must fail closed instead of upgrading repository-local facts into provider assurance.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Provider-backed identity, review, merge, branch cleanup, and release evidence require strict provenance and claim boundaries."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized Contract writes and governed lifecycle actions. Provider configuration remains explicitly out of scope."
+  },
+  "preReviewWarnings": [
+    "Review every capability label and receipt binding: unavailable provider facts must remain not_run or not_claimed, and all provider_verified facts must identify provider resource, observation time, and SHA."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A provider-backed validation command obtains GitHub facts through the authenticated provider CLI/API, writes a structured receipt, and never accepts mocked or local-only input as provider_verified.",
+    "The receipt distinguishes provider_verified, repository_recorded_only, local_provider_simulation, not_run, and not_claimed for real PR creation, Required Checks, Branch Protection, CODEOWNERS, Review Approval, merge, merge SHA, remote branch cleanup, tag, release, release asset, provider identity, and provider audit evidence.",
+    "Provider-verified receipt entries bind the provider resource ID, observation time, and applicable Git SHA; unavailable provider resources fail closed to not_run or not_claimed with a reason.",
+    "Focused tests prove the stated non-equivalences: local git username is not authentication, PR text approval is not review approval, remote branch is not PR creation, tag is not release, and release page is not an asset digest.",
+    "The Work Item records at least one real GitHub repository route and documentation explains how provider status is observed without modifying provider configuration."
+  ],
+  "guidelines": [
+    "Keep the provider command read-only; no branch-protection, CODEOWNERS, or provider-configuration mutation is permitted.",
+    "Provider receipts must be deterministic in schema and explicit about missing evidence rather than inferring success.",
+    "Do not accept local Git metadata or repository prose as provider authentication, approval, or release evidence.",
+    "Document public command behavior, capability-state meanings, and operational limits."
+  ],
+  "intent": {
+    "problem": "Repository-local governance evidence does not prove externally enforced GitHub behavior. The template needs a bounded way to observe provider facts without falsely treating local or repository-recorded assertions as provider verification.",
+    "constraints": [
+      "Use GitHub CLI/API observation for provider-backed facts and do not alter provider configuration.",
+      "Label unavailable facts truthfully and retain a reason instead of simulating provider success.",
+      "Bind provider_verified facts to provider resource identifiers, observation time, and SHA where applicable.",
+      "Keep ordinary tests offline and deterministic; the command's live provider route is an explicit opt-in execution."
+    ],
+    "rationale": "A structured receipt lets reviewers distinguish observed GitHub state from repository records and local simulations, preserving calibrated trust during the complete Work Item lifecycle."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "provider receipt classifies every required GitHub lifecycle capability without an equivalence shortcut",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Each capability is provider_verified, repository_recorded_only, local_provider_simulation, not_run, or not_claimed, with a truthful reason where it is not provider_verified.",
+      "verificationPlan": "Run focused receipt-classification tests and one live read-only GitHub observation against this repository."
+    },
+    {
+      "scenario": "provider_verified receipt facts bind resource identity, observation time, and Git SHA",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "No provider_verified entry can omit its provider resource ID, observedAt timestamp, or applicable commit SHA.",
+      "verificationPlan": "Run focused malformed-receipt tests and inspect the live receipt for PR and merge-SHA facts."
+    },
+    {
+      "scenario": "unavailable branch protection, CODEOWNERS, or review records do not become provider claims",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Provider 404 and missing review facts are retained as not_run or not_claimed with the provider response reason.",
+      "verificationPlan": "Exercise fixture responses in focused tests and observe the repository's read-only provider endpoints."
+    },
+    {
+      "scenario": "real GitHub PR, required checks, merge, merge SHA, and remote-branch cleanup are observed as a single route",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The receipt binds a real PR resource, its required-check observations, merge SHA, and absent remote head branch without claiming unobserved review or protection evidence.",
+      "verificationPlan": "Use the completed #561 route for the initial live observation, then use this Work Item's PR lifecycle as final evidence."
+    },
+    {
+      "scenario": "local identity and release lookalikes cannot pass provider validation",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "A local username, approval prose, remote branch, tag, and release page alone are rejected as provider identity, review approval, PR, release, and asset digest evidence respectively.",
+      "verificationPlan": "Run focused negative tests for all five prohibited equivalences."
+    }
+  ],
+  "rawUserRequest": "完成全部工单，需要我授权的明确写入我已经授权。每个工单完成完整流程，直到归档，PR和清理分支。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-pasted-text-1 and follow-up authorization",
+    "capturedAt": "2026-08-01T10:50:00Z",
+    "digest": "sha256:user-authorized-wi-08-provider-backed-validation"
+  },
+  "declaredIntent": {
+    "summary": "Validate actual GitHub lifecycle facts while preserving the difference between provider observation, repository records, and local simulation.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "requiredEvidenceContext": {
+    "destructiveLevel": "none",
+    "availableEvidence": [
+      "GitHub API resource identifiers",
+      "provider observation timestamps",
+      "provider PR and merge commit SHAs",
+      "provider check and release metadata",
+      "explicit unavailable-provider reasons"
+    ],
+    "externalSystem": "GitHub repository spirex-ds-dev/ai-cockpit-template observed through authenticated read-only API requests"
+  },
+  "residualRiskExpectation": "A live receipt is point-in-time GitHub evidence. It cannot prove a future provider configuration, unobserved reviewer intent, or an asset digest when GitHub reports no matching asset.",
+  "humanDecisionPoints": [
+    "The user explicitly authorized Contract writes and complete governed Work Item lifecycle actions, including this Work Item's PR, merge, and branch cleanup.",
+    "Provider configuration changes remain prohibited; if the provider cannot expose a required resource, the receipt must report not_run or not_claimed instead of changing settings."
+  ],
+  "documentationImpact": "Add provider-receipt command documentation including status definitions, real-route collection, and non-equivalence boundaries.",
+  "performanceImpact": "Live GitHub collection is opt-in and makes a bounded set of API requests; focused unit tests remain offline.",
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff to remove the local command, tests, and documentation. The command only reads provider state and writes its requested local receipt.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 747
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/provider-backed-governance-validation.json",
+    "baseCommit": "f2b83d096e4697d763adb18847a43bdb8dd857d8",
+    "initialScopeDigest": "1fbd802d47a17bf6a2ad5303ae001165d219c9b35b88a5675451e9bc093cb8af",
+    "contractSkeletonDigest": "2e2ce86a732d0ee9064e5fda33f447d45d1f11bab73a7c21bb76f0b60a53bb79"
+  }
+}
