@@ -4,7 +4,7 @@ Phase: `review`
 Result: `completed`
 
 ## What changed
-Task wi-07-documentation-architecture-successor generated an evidence-derived outcome with status completed.
+Task wi-08-interactive-installer-ux generated an evidence-derived outcome with status completed.
 
 ## Issues
 - Detected issues: 0
