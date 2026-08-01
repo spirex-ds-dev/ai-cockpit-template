@@ -48,6 +48,22 @@ def test_contract_schema_accepts_resume_writer_field_and_rejects_unrelated_unkno
     assert "unknown field: unexpectedField" in ai_check_work_item.validate_contract(contract)
 
 
+def test_required_evidence_context_requires_normalized_structured_inputs():
+    contract = valid_contract()
+    contract["requiredEvidenceContext"] = {
+        "destructiveLevel": "delete",
+        "availableEvidence": ["usage_analysis", "reference_search"],
+        "externalSystem": "provider",
+    }
+
+    assert ai_check_work_item.validate_contract(contract) == []
+
+    contract["requiredEvidenceContext"]["availableEvidence"] = ["usage_analysis", ""]
+    assert "requiredEvidenceContext.availableEvidence must be a list of non-empty strings" in (
+        ai_check_work_item.validate_contract(contract)
+    )
+
+
 def test_contract_accepts_required_governance_metadata_for_a_work_item():
     contract = valid_contract()
     contract.update(
