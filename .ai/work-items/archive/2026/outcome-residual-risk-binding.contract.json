@@ -1,0 +1,264 @@
+{
+  "contractVersion": 2,
+  "governanceMetadataVersion": 1,
+  "workItemId": "outcome-residual-risk-binding",
+  "mode": "code",
+  "title": "Bind task outcomes to residual risks",
+  "baseCommit": "d88f26644e0da8f02293f737d0c3a11360a25305",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".gitignore",
+    ".ai/schemas/task_outcome.schema.json",
+    "scripts/ai_check_task_outcome.py",
+    "scripts/ai_generate_task_outcome.py",
+    "scripts/ai_render_task_outcome.py",
+    "scripts/ai_generate_human_report.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_work_item.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "tests/test_ai_check_work_item.py",
+    "tests/test_task_outcome_schema.py",
+    "tests/test_task_outcome_validator.py",
+    "tests/test_task_outcome_generator.py",
+    "tests/test_task_outcome_markdown_renderer.py",
+    "tests/test_human_benefit_report.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    ".ai/work-items/active/outcome-residual-risk-binding.contract.json",
+    ".ai/work-items/active/outcome-residual-risk-binding.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/outcome-residual-risk-binding.outcome.json",
+    ".ai/work-items/active/outcome-residual-risk-binding.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md"
+  ],
+  "outOfScope": [
+    ".github/**",
+    "templates/**",
+    "examples/**",
+    "scripts/install_ai_cockpit.py",
+    "docs/archive/**"
+  ],
+  "sources": [
+    {
+      "path": ".ai/schemas/task_outcome.schema.json",
+      "reason": "Defines the current machine-readable Task Outcome shape."
+    },
+    {
+      "path": "scripts/ai_check_task_outcome.py",
+      "reason": "Defines the existing fail-closed Outcome validation boundary."
+    },
+    {
+      "path": "scripts/ai_generate_task_outcome.py",
+      "reason": "Projects evidence and event records into the immutable Outcome."
+    },
+    {
+      "path": "scripts/ai_generate_human_report.py",
+      "reason": "Projects Task Outcome truth into the human-facing report."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Maps the affected human-report and Contract-validation capabilities to authoritative source and test evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_change",
+      "evidence_integrity"
+    ],
+    "reason": "The Work Item changes the machine truth used to present warnings, limitations, residual risks, and forbidden claims; an incorrect mapping could hide unresolved evidence gaps.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The change affects governance schemas, validation, generated reports, and their regression tests."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user supplied the required behavior, scope is bounded to Outcome governance, and focused regression tests can prove the rules."
+  },
+  "preReviewWarnings": [
+    "This bootstrap Contract uses the currently supported fields while the Work Item first adds the new Contract metadata required for all subsequent Work Items."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record the pre-edit and pre-finish scope, acceptance, and evidence state for this governance change."
+  },
+  "acceptance": [
+    "Task Outcome validation rejects every non-empty warning list unless each warning has a structured limitation and either a residual-risk record or a nonRiskExplanation record.",
+    "Task Outcome validation rejects not-run evidence without an explicit limitation and rejects incompatible enterprise-ready or platform-verified claims.",
+    "High-severity residual risks carry a decision owner, required evidence, mitigation, acceptance state, and forbidden claims; completed_with_warnings reports contain explicit forbidden claims.",
+    "The JSON outcome, derived Markdown, and human report render the same limitations, residual risks, and forbidden claims.",
+    "The Contract validator supports the user-required evidence, decision, documentation, performance, residual-risk, predecessor, and rollback metadata before later Work Items begin."
+  ],
+  "guidelines": [
+    "Keep derived report views deterministic and do not permit them to become an evidence authority.",
+    "Do not treat repository-local or fixture evidence as Provider-backed evidence."
+  ],
+  "intent": {
+    "problem": "Task Outcome reports can currently contain warnings or not-run evidence without a structured limitation, residual risk, required evidence, decision owner, or explicit forbidden claim. This lets a human-facing report appear complete while omitting what cannot safely be trusted.",
+    "constraints": [
+      "Preserve the immutable Task Outcome as the evidence-backed source; Markdown and human reports remain derived views.",
+      "Do not claim Provider-backed governance evidence in this Work Item.",
+      "Fail closed for incomplete warning, limitation, residual-risk, and forbidden-claim relationships.",
+      "Use focused test-first changes and retain compatible valid Outcome reports."
+    ],
+    "rationale": "A structured cross-reference makes missing evidence visible to both validators and human reports without relying on prose interpretation."
+  },
+  "problemStatement": "Bind every warning and not-run result to a limitation and either a residual risk or a documented non-risk explanation, then make forbidden claims explicit in all Outcome presentations.",
+  "rawUserRequest": "Complete WI-01 outcome-residual-risk-binding. Warnings must map to limitations, residual risk or non-risk explanation, affected claims, required evidence, and human decision; missing relationships must fail closed. The user authorizes required Contract writes and the bootstrap extension that makes later Contracts carry the requested metadata.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-01-remediation-instruction",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:outcome-residual-risk-binding-user-instruction"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Enforce evidence-backed Outcome limitations, residual risks, and forbidden claims.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "warning and not-run evidence require structured limitations and human-readable forbidden claims",
+      "required": true,
+      "status": "unverified",
+      "expected": "Focused regression tests prove that incomplete mappings fail and complete mappings render consistently in JSON, Markdown, and the human report.",
+      "verificationPlan": "Run the focused Task Outcome schema, validator, generator, Markdown renderer, human report, and Contract validator tests after implementation.",
+      "evidence": []
+    }
+  ],
+  "requiredEvidence": [
+    "Focused regression receipts for schema, validator, generator, renderer, human report, and Contract validation.",
+    "A generated Outcome that demonstrates warning-to-limitation-to-risk and forbidden-claim bindings."
+  ],
+  "humanDecisionPoints": [
+    "A repository administrator must accept or resolve any high or critical residual risk before a blocked claim can be enabled."
+  ],
+  "documentationImpact": "The machine-readable Outcome schema and Capability Truth Matrix describe the changed report boundary; no separate user guide is required because generated reports expose the new sections.",
+  "performanceImpact": "The mapping is linear in the number of warnings and risks and is covered by focused local tests; no external verification is introduced.",
+  "residualRiskExpectation": "Provider-backed branch protection, independent review, identity, and merge enforcement remain not_run, not_claimed, and external_dependency for this remediation cycle.",
+  "predecessorClosureEvidence": "No predecessor exists because this is the first Work Item in the mandated sequence.",
+  "rollbackPlan": "Revert the WI-01 commit set, regenerate status, and rerun the focused Outcome and Contract-validation test receipts before starting a replacement Work Item.",
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized required writes in this and subsequent Work Item Contracts, including the bootstrap Contract-model extension."
+  },
+  "rollbackNote": "Revert the WI-01 branch commit(s), restoring the prior Outcome schema, validator, generators, renderers, Contract validation rules, focused tests, and generated status through the normal Git and Work Item closure process.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 1200
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/outcome-residual-risk-binding.json",
+    "baseCommit": "d88f26644e0da8f02293f737d0c3a11360a25305",
+    "initialScopeDigest": "675232f2db491591aa63f6e2aaa8fa0ffc523d1bad9ae3eb4fb0db6b4f801a3f",
+    "contractSkeletonDigest": "22a056bd7386fa6af223f6c828b908d931975efb545a529fb5d24186162ff10f"
+  }
+}

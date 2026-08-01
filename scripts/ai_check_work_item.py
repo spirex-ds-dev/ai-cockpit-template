@@ -65,6 +65,14 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "resumeHistory",
     "budgetImpact",
     "governanceProfile",
+    "governanceMetadataVersion",
+    "requiredEvidence",
+    "humanDecisionPoints",
+    "documentationImpact",
+    "performanceImpact",
+    "residualRiskExpectation",
+    "predecessorClosureEvidence",
+    "rollbackPlan",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -199,9 +207,28 @@ def validate_optional_readiness(data: dict[str, Any]) -> list[str]:
     issues: list[str] = []
 
     if data.get("contractVersion") == 2:
-        for key in ("riskAssessment", "agentCapability", "executionDecision", "checkpointPolicy"):
+        for key in (
+            "riskAssessment",
+            "agentCapability",
+            "executionDecision",
+            "checkpointPolicy",
+        ):
             if key not in data:
                 issues.append(f"contractVersion 2 requires field: {key}")
+    if data.get("governanceMetadataVersion") == 1:
+        for key in (
+            "requiredEvidence",
+            "humanDecisionPoints",
+            "documentationImpact",
+            "performanceImpact",
+            "residualRiskExpectation",
+            "predecessorClosureEvidence",
+            "rollbackPlan",
+        ):
+            if key not in data:
+                issues.append(f"governanceMetadataVersion 1 requires field: {key}")
+    elif "governanceMetadataVersion" in data:
+        issues.append("governanceMetadataVersion must be 1")
 
     risk = data.get("riskAssessment")
     if risk is not None:
@@ -270,6 +297,19 @@ def validate_optional_readiness(data: dict[str, Any]) -> list[str]:
                 issues.append("checkpointPolicy.reason must be a non-empty string")
 
     issues.extend(validate_scenario_coverage(data.get("scenarioCoverage")))
+
+    for key in ("requiredEvidence", "humanDecisionPoints"):
+        if key in data:
+            issues.extend(validate_string_list(data, key, allow_empty=False))
+    for key in (
+        "documentationImpact",
+        "performanceImpact",
+        "residualRiskExpectation",
+        "predecessorClosureEvidence",
+        "rollbackPlan",
+    ):
+        if key in data and not non_empty_string(data.get(key)):
+            issues.append(f"{key} must be a non-empty string")
 
     return issues
 

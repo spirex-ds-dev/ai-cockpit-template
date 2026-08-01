@@ -48,6 +48,55 @@ def test_contract_schema_accepts_resume_writer_field_and_rejects_unrelated_unkno
     assert "unknown field: unexpectedField" in ai_check_work_item.validate_contract(contract)
 
 
+def test_contract_accepts_required_governance_metadata_for_a_work_item():
+    contract = valid_contract()
+    contract.update(
+        {
+            "requiredEvidence": ["focused regression receipt"],
+            "humanDecisionPoints": ["A reviewer accepts any high residual risk."],
+            "documentationImpact": "No standalone documentation change is required.",
+            "performanceImpact": "Focused validation adds no runtime dependency.",
+            "residualRiskExpectation": "Open high risks require an owner and acceptance state.",
+            "predecessorClosureEvidence": "No predecessor exists for the first Work Item.",
+            "rollbackPlan": "Revert the Work Item commit and rerun focused validation.",
+        }
+    )
+
+    assert ai_check_work_item.validate_contract(contract) == []
+
+
+def test_v2_code_contract_requires_governance_metadata():
+    contract = valid_contract()
+    contract.update(
+        {
+            "contractVersion": 2,
+            "governanceMetadataVersion": 1,
+            "baseCommit": "1234567890abcdef",
+            "scope": [".ai/work-items/active/task.contract.json"],
+            "verification": [{"check": "quality", "required": True}],
+            "rawUserRequest": "Enforce Work Item metadata.",
+            "rawRequestSource": {
+                "type": "human",
+                "reference": "test:metadata",
+                "capturedAt": "2026-08-01",
+                "digest": "sha256:test",
+            },
+            "requestedOperation": {
+                "target": "repository_governance",
+                "action": "modify",
+                "environment": "repository",
+                "effect": "enforce",
+                "authorityRequired": False,
+            },
+        }
+    )
+
+    issues = ai_check_work_item.validate_contract(contract)
+
+    assert "governanceMetadataVersion 1 requires field: requiredEvidence" in issues
+    assert "governanceMetadataVersion 1 requires field: rollbackPlan" in issues
+
+
 def test_v2_code_work_item_requires_sourced_raw_request():
     contract = valid_contract()
     contract.update(

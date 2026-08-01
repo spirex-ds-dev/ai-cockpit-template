@@ -107,6 +107,13 @@
         "title": {"type": "string", "minLength": 1, "maxLength": 512},
         "state": {"$ref": "#/$defs/finalState"},
         "description": {"type": "string", "maxLength": 4096},
+        "sourceWarning": {"type": "string", "minLength": 1, "maxLength": 2048},
+        "affectedClaims": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "requiredEvidence": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "decisionOwner": {"type": "string", "minLength": 1, "maxLength": 512},
+        "mitigation": {"type": "string", "minLength": 1, "maxLength": 2048},
+        "acceptanceStatus": {"type": "string", "minLength": 1, "maxLength": 128},
+        "blockingFor": {"type": "array", "items": {"type": "string", "minLength": 1}},
         "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidenceRef"}}
       }
     },
@@ -174,10 +181,32 @@
         "humanDependency": {"type": "string", "minLength": 1, "maxLength": 2048}
       }
     },
+    "limitation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceWarning", "title", "affectedClaims", "requiredEvidence", "forbiddenClaims"],
+      "properties": {
+        "sourceWarning": {"type": "string", "minLength": 1, "maxLength": 2048},
+        "title": {"type": "string", "minLength": 1, "maxLength": 512},
+        "affectedClaims": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "requiredEvidence": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "forbiddenClaims": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "nonRiskExplanation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceWarning", "reason", "evidence"],
+      "properties": {
+        "sourceWarning": {"type": "string", "minLength": 1, "maxLength": 2048},
+        "reason": {"type": "string", "minLength": 1, "maxLength": 2048},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidenceRef"}}
+      }
+    },
     "sections": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["outcomeSummary", "taskOverview", "deliveredChanges", "findings", "risks", "warnings", "interventions", "forcedStops", "resolutions", "recurrencePrevention", "avoidedImpact", "residualRisks", "humanDecisions", "evidence"],
+      "required": ["outcomeSummary", "taskOverview", "deliveredChanges", "findings", "risks", "warnings", "limitations", "nonRiskExplanations", "forbiddenClaims", "interventions", "forcedStops", "resolutions", "recurrencePrevention", "avoidedImpact", "residualRisks", "humanDecisions", "evidence"],
       "properties": {
         "outcomeSummary": {"type": "string", "minLength": 1, "maxLength": 4096},
         "taskOverview": {"type": "string", "minLength": 1, "maxLength": 4096},
@@ -185,6 +214,9 @@
         "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
         "risks": {"type": "array", "items": {"$ref": "#/$defs/risk"}},
         "warnings": {"type": "array", "items": {"type": "string", "maxLength": 2048}},
+        "limitations": {"type": "array", "items": {"$ref": "#/$defs/limitation"}},
+        "nonRiskExplanations": {"type": "array", "items": {"$ref": "#/$defs/nonRiskExplanation"}},
+        "forbiddenClaims": {"type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 2048}},
         "interventions": {"type": "array", "items": {"$ref": "#/$defs/intervention"}},
         "forcedStops": {"type": "array", "items": {"$ref": "#/$defs/forcedStop"}},
         "resolutions": {"type": "array", "items": {"$ref": "#/$defs/resolution"}},

@@ -1,17 +1,17 @@
 # AI Cockpit Task Report
 
 Phase: `review`
-Result: `completed_with_warnings`
+Result: `completed`
 
 ## What changed
-Task wi-10-end-to-end-adoption-validation generated an evidence-derived outcome with status completed_with_warnings.
+Task outcome-residual-risk-binding generated an evidence-derived outcome with status completed.
 
 ## Issues
-- Detected issues: 1
+- Detected issues: 0
 - Hard stops: 0
-- Warnings: 1
+- Warnings: 0
 - Resolved: 0
-- Unresolved: 1
+- Unresolved: 0
 
 ## Prevented risks
 None
@@ -20,6 +20,12 @@ None
 None
 
 ## Remaining risks
+None
+
+## Limitations
+None
+
+## Forbidden claims
 None
 
 ## Next safe action

@@ -15,6 +15,9 @@ def outcome(*, status="completed", sections=None):
         "findings": [],
         "risks": [],
         "warnings": [],
+        "limitations": [],
+        "nonRiskExplanations": [],
+        "forbiddenClaims": [],
         "interventions": [],
         "forcedStops": [],
         "resolutions": [],
@@ -72,6 +75,16 @@ def test_review_report_derives_counts_risks_decisions_and_next_action():
                 }
             ],
             "warnings": ["Hosted verification is pending."],
+            "limitations": [
+                {
+                    "sourceWarning": "Hosted verification is pending.",
+                    "title": "Hosted evidence is absent",
+                    "affectedClaims": ["provider_verified"],
+                    "requiredEvidence": ["provider receipt"],
+                    "forbiddenClaims": ["Do not claim provider verification."],
+                }
+            ],
+            "forbiddenClaims": ["Do not claim provider verification."],
             "forcedStops": [
                 {
                     "stage": "before_edit",
@@ -94,6 +107,7 @@ def test_review_report_derives_counts_risks_decisions_and_next_action():
                     "title": "Dynamic use unknown",
                     "state": "unresolved",
                     "description": "Plugin use is not proven absent.",
+                    "sourceWarning": "Hosted verification is pending.",
                     "evidence": [{"source": "impact.json", "subject": "analysis"}],
                 }
             ],
@@ -112,6 +126,8 @@ def test_review_report_derives_counts_risks_decisions_and_next_action():
     }
     assert report["preventedRisks"][0]["detectedBy"] == "reference_impact_guard"
     assert report["humanDecisions"] == ["Approve deprecation after migration."]
+    assert report["limitations"][0]["title"] == "Hosted evidence is absent"
+    assert report["forbiddenClaims"] == ["Do not claim provider verification."]
     assert report["remainingRisks"][0]["severity"] == "medium"
     assert report["nextSafeAction"] == "Provide owner evidence."
     assert human.validate_human_report(report, source) == []
@@ -119,6 +135,7 @@ def test_review_report_derives_counts_risks_decisions_and_next_action():
     assert "AI Cockpit Task Report" in markdown
     assert "Detected issues: 4" in markdown
     assert "Provide owner evidence." in markdown
+    assert "Do not claim provider verification." in markdown
 
 
 def test_final_report_requires_and_binds_provider_closure_facts():

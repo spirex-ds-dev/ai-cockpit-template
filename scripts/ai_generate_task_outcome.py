@@ -28,6 +28,9 @@ SECTION_TITLES = {
     "findings": "Findings",
     "risks": "Risks",
     "warnings": "Warnings",
+    "limitations": "Limitations",
+    "nonRiskExplanations": "Non-Risk Explanations",
+    "forbiddenClaims": "Forbidden Claims",
     "interventions": "Interventions",
     "forcedStops": "Forced Stops",
     "resolutions": "Resolutions",
@@ -92,7 +95,7 @@ def _risk(event: Mapping[str, Any], *, accepted: bool = False) -> dict[str, Any]
     severity = _safe_text(event.get("severity"), "medium")
     if severity not in {"informational", "low", "medium", "high", "critical"}:
         severity = "medium"
-    return {
+    risk = {
         "kind": kind,
         "severity": severity,
         "title": _safe_text(event.get("title"), _event_description(event)),
@@ -100,6 +103,18 @@ def _risk(event: Mapping[str, Any], *, accepted: bool = False) -> dict[str, Any]
         "description": _event_description(event),
         "evidence": _evidence_refs(event.get("evidence"), "task-event-log"),
     }
+    for key in (
+        "sourceWarning",
+        "affectedClaims",
+        "requiredEvidence",
+        "decisionOwner",
+        "mitigation",
+        "acceptanceStatus",
+        "blockingFor",
+    ):
+        if key in event:
+            risk[key] = event[key]
+    return risk
 
 
 def _conditional_impact(value: Any) -> str | None:
@@ -152,6 +167,17 @@ def generate_outcome(
     human_decisions: list[str] = [
         item.strip()
         for item in evidence.get("humanDecisions", [])
+        if isinstance(item, str) and item.strip()
+    ]
+    limitations = [
+        dict(item) for item in evidence.get("limitations", []) if isinstance(item, Mapping)
+    ]
+    non_risk_explanations = [
+        dict(item) for item in evidence.get("nonRiskExplanations", []) if isinstance(item, Mapping)
+    ]
+    forbidden_claims = [
+        item.strip()
+        for item in evidence.get("forbiddenClaims", [])
         if isinstance(item, str) and item.strip()
     ]
     all_evidence: list[dict[str, str]] = _evidence_refs(
@@ -308,6 +334,9 @@ def generate_outcome(
         "findings": findings,
         "risks": risks,
         "warnings": sorted(set(warnings)),
+        "limitations": limitations,
+        "nonRiskExplanations": non_risk_explanations,
+        "forbiddenClaims": sorted(set(forbidden_claims)),
         "interventions": interventions,
         "forcedStops": forced_stops,
         "resolutions": resolutions,

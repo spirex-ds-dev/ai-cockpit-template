@@ -1,5 +1,6 @@
 """Focused tests for evidence-derived Task Outcome generation."""
 
+from scripts.ai_check_task_outcome import validate_outcome
 from scripts.ai_generate_task_outcome import generate_outcome, render_markdown
 
 
@@ -39,6 +40,9 @@ def test_empty_evidence_has_all_sections_and_none_markdown() -> None:
         "findings",
         "risks",
         "warnings",
+        "limitations",
+        "nonRiskExplanations",
+        "forbiddenClaims",
         "interventions",
         "forcedStops",
         "resolutions",
@@ -72,6 +76,45 @@ def test_publication_evidence_is_bound_into_final_outcome_evidence():
     assert publication["source"] == "release-workflow"
     assert publication["subject"] == "v1.0.0"
     assert publication["digest"] == "a" * 64
+
+
+def test_warning_mapping_is_preserved_from_evidence_and_risk_event():
+    warning = "Hosted provider checks were not run."
+    outcome = generate_outcome(
+        "task-outcome-generator",
+        bindings(),
+        events=[
+            event(
+                "risk-1",
+                "risk",
+                severity="medium",
+                title="Provider evidence is absent",
+                sourceWarning=warning,
+                affectedClaims=["provider_verified"],
+                requiredEvidence=["provider receipt"],
+                decisionOwner="repository_administrator",
+                mitigation="Do not make provider claims.",
+                acceptanceStatus="open",
+                blockingFor=["enterprise_ready"],
+            )
+        ],
+        evidence={
+            "warnings": [warning],
+            "limitations": [
+                {
+                    "sourceWarning": warning,
+                    "title": "Hosted evidence is absent",
+                    "affectedClaims": ["provider_verified"],
+                    "requiredEvidence": ["provider receipt"],
+                    "forbiddenClaims": ["Do not claim provider verification."],
+                }
+            ],
+            "forbiddenClaims": ["Do not claim provider verification."],
+        },
+    )
+
+    assert outcome["sections"]["residualRisks"][0]["sourceWarning"] == warning
+    assert validate_outcome(outcome, render_markdown(outcome)).valid
 
 
 def test_findings_are_deduplicated_but_post_fix_recurrence_is_new() -> None:
