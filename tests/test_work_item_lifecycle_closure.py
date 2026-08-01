@@ -138,6 +138,41 @@ def test_final_human_report_binds_provider_facts_outside_source_history(
     assert "Continue from" in markdown_path.read_text(encoding="utf-8")
 
 
+def test_closure_receipt_persists_machine_readable_closure_facts(tmp_path: Path, monkeypatch):
+    contract_path = tmp_path / ".ai/work-items/archive/2026/example.contract.json"
+    contract_path.parent.mkdir(parents=True)
+    contract_path.write_text("{}", encoding="utf-8")
+    contract_path.with_name("example.outcome.json").write_text(
+        json.dumps({"workItemId": "example"}), encoding="utf-8"
+    )
+    monkeypatch.setattr(closure, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(closure, "CLOSURE_RECEIPTS_DIR", tmp_path / "receipts")
+    monkeypatch.setattr(
+        closure, "generate_final_human_report", lambda *_: (tmp_path / "r.json", tmp_path / "r.md")
+    )
+    pr = {
+        "url": "https://example.test/pr/1",
+        "number": 1,
+        "state": "MERGED",
+        "headRefOid": "a" * 40,
+        "mergeCommit": {"oid": "b" * 40},
+    }
+    closure.generate_closure_receipt(
+        "example",
+        contract_path,
+        pr,
+        work_branch="codex/example",
+        base_remote="origin",
+        base_branch="main",
+        base_commit="c" * 40,
+        base_worktree=None,
+    )
+    receipt = json.loads((tmp_path / "receipts/example.closure.json").read_text(encoding="utf-8"))
+    assert receipt["workItemId"] == "example"
+    assert receipt["pullRequest"]["state"] == "merged"
+    assert receipt["providerEvidence"] == []
+
+
 def test_explicit_worktree_scopes_git_but_leaves_provider_cli_unprefixed() -> None:
     commands: list[tuple[str, ...]] = []
 

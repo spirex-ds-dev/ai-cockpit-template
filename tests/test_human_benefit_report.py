@@ -153,6 +153,7 @@ def test_final_report_requires_and_binds_provider_closure_facts():
     report = human.generate_human_report(source, phase="final", closure_facts=facts)
 
     assert report["closure"] == facts
+    assert report["closureEvidenceState"] == "repository_recorded_only"
     assert report["nextSafeAction"] == "Continue from /workspace on synchronized origin/main."
     assert human.validate_human_report(report, source, closure_facts=facts) == []
 
