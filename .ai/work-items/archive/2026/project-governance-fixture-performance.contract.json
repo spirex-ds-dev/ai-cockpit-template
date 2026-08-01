@@ -1,0 +1,186 @@
+{
+  "contractVersion": 2,
+  "workItemId": "project-governance-fixture-performance",
+  "mode": "code",
+  "title": "project-governance-fixture-performance",
+  "baseCommit": "58f2563149cf30f0e071de6121bae812e37f8e42",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/project-governance-fixture-performance.contract.json",
+    ".ai/work-items/active/project-governance-fixture-performance.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/project-governance-fixture-performance.outcome.json",
+    ".ai/work-items/active/project-governance-fixture-performance.outcome.md",
+    "tests/test_project_governance.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing production invariant behavior or reducing invariant coverage.",
+    "Modifying provider configuration or the paused governance-performance-budget implementation."
+  ],
+  "sources": [
+    {
+      "path": "tests/test_project_governance.py",
+      "reason": "The existing copied-repository negative tests are the source of the repeated full-quality I/O delay."
+    },
+    {
+      "path": "scripts/check_system_invariants.py",
+      "reason": "Authoritative invariant checker exercised by the affected negative tests."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["test_fixture_fidelity", "quality_runtime_regression"],
+    "reason": "The fixture optimization must retain the same invariant checker and negative assertions while eliminating unnecessary whole-tree copies.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "A shared governance test controls the required full-quality execution time."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The root cause and bounded fixture-only correction are locally reproducible and verified."
+  },
+  "preReviewWarnings": [
+    "The optimized fixture must not hide missing-file violations or alter the production invariant checker."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Negative invariant tests retain their production checker path and missing-file assertions.",
+    "The affected fixture no longer copies the complete repository content for each negative case.",
+    "Focused tests prove the correction and required full quality remains unchanged."
+  ],
+  "guidelines": [
+    "Use a fixture-only optimization; do not change production invariant behavior.",
+    "Keep each negative test isolated so file deletion cannot affect the repository under test."
+  ],
+  "intent": {
+    "problem": "A negative system-invariant test copies the entire repository merely to remove one file, causing repeated strict quality sessions to stall on unrelated I/O.",
+    "constraints": ["Exercise check_system_invariants.invariant_issues without changing its behavior.", "Keep the paused parent Work Item and provider configuration untouched."],
+    "rationale": "A link-backed isolated view preserves read semantics and unlink isolation while making mandatory quality verification proportionate."
+  },
+  "scenarioCoverage": [
+    {"scenario":"missing development lock remains detected","required":true,"status":"verified","evidence":["tests/test_project_governance.py::test_system_invariants_reject_missing_dev_lock"],"expected":"Removing the isolated requirements-dev.lock link produces the existing missing-lock issue.","verificationPlan":"Run the focused negative test."},
+    {"scenario":"fixture remains isolated","required":true,"status":"verified","evidence":["tests/test_project_governance.py::test_system_invariants_reject_missing_dev_lock"],"expected":"Removing an isolated link does not remove the source repository file.","verificationPlan":"Run the affected negative-test group and inspect the source file."}
+  ],
+  "rawUserRequest": "Complete all Work Items efficiently without reducing quality; correct a discovered non-convergent quality workflow before resuming WI-11.",
+  "rawRequestSource": {"type":"human","reference":"active-goal","capturedAt":"2026-08-02T00:00:00+00:00","digest":"sha256:fixture-performance-corrective"},
+  "declaredIntent": {"summary":"Remove unnecessary test-fixture I/O while retaining invariant coverage.","requestedCapabilities":["ai_governance","test_automation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "requiredEvidenceContext": {"destructiveLevel":"none","availableEvidence":["reproducible focused test","source-file existence check"],"externalSystem":"none"},
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 750
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/project-governance-fixture-performance.json",
+    "baseCommit": "58f2563149cf30f0e071de6121bae812e37f8e42",
+    "initialScopeDigest": "3acdd3d6e7e54e417d2e6766e09fee03d332a8911742d62a1e1f2ed1360b6dac",
+    "contractSkeletonDigest": "7b96c5fb77c1209423ed48d3a11f13b6434e407b11a4be6693aa2b6d0122210e"
+  }
+}
