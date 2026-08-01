@@ -82,6 +82,7 @@ def test_installed_distribution_contains_pr_and_approval_wiring(tmp_path):
     # ai-finish invokes this dependency closure for every code-mode Work Item;
     # omit any member and an adopter cannot finish its first Work Item.
     for script in (
+        "ai_required_evidence.py",
         "ai_check_task_outcome.py",
         "ai_generate_task_outcome.py",
         "ai_generate_human_report.py",

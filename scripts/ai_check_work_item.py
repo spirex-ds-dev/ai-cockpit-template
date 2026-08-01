@@ -73,6 +73,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "residualRiskExpectation",
     "predecessorClosureEvidence",
     "rollbackPlan",
+    "requiredEvidenceContext",
 }
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
 RISK_LEVELS = {"low", "medium", "high"}
@@ -553,6 +554,32 @@ def validate_requested_operation(data: dict[str, Any]) -> list[str]:
     return issues
 
 
+def validate_required_evidence_context(data: dict[str, Any]) -> list[str]:
+    """Validate optional structured inputs used by the rule engine."""
+    context = data.get("requiredEvidenceContext")
+    if context is None:
+        return []
+    if not isinstance(context, dict):
+        return ["requiredEvidenceContext must be an object"]
+    issues: list[str] = []
+    allowed = {"destructiveLevel", "availableEvidence", "externalSystem"}
+    for key in context:
+        if key not in allowed:
+            issues.append(f"requiredEvidenceContext.{key} is not allowed")
+    level = context.get("destructiveLevel", "none")
+    if level not in {"none", "delete"}:
+        issues.append("requiredEvidenceContext.destructiveLevel must be none or delete")
+    available = context.get("availableEvidence", [])
+    if not isinstance(available, list) or any(not non_empty_string(item) for item in available):
+        issues.append(
+            "requiredEvidenceContext.availableEvidence must be a list of non-empty strings"
+        )
+    external = context.get("externalSystem", "")
+    if not isinstance(external, str):
+        issues.append("requiredEvidenceContext.externalSystem must be a string")
+    return issues
+
+
 def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str]:
     issues: list[str] = []
     for key in REQUIRED_FIELDS:
@@ -588,6 +615,7 @@ def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str
     issues.extend(validate_semantic_placeholders(data))
     issues.extend(validate_raw_request_requirement(data))
     issues.extend(validate_requested_operation(data))
+    issues.extend(validate_required_evidence_context(data))
     issues.extend(validate_governance_profile(data))
     if "problemStatement" in data and not non_empty_string(data.get("problemStatement")):
         issues.append("problemStatement must be a non-empty string")

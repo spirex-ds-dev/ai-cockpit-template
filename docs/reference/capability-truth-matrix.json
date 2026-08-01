@@ -253,11 +253,12 @@
     {
       "id": "repository_governance_layer",
       "status": "implemented",
-      "claim": "Contract, Preflight, verification, Summary, archive, PR, close, and base-sync governance exists in this repository.",
+      "claim": "Contract, Preflight, operation-derived required evidence, verification, Summary, archive, PR, close, and base-sync governance exists in this repository.",
       "evidence": [
         ".ai/cockpit/README.md",
         "scripts/ai_start.py",
         "scripts/ai_finish.py",
+        "scripts/ai_required_evidence.py",
         "scripts/ai_close_work_item.py",
         "scripts/ai_provider_merge_state_recovery.py",
         "Makefile"
@@ -268,12 +269,14 @@
         "tests/test_finish_readiness.py",
         "tests/test_task_outcome_ai_finish_integration.py",
         "tests/test_work_item_lifecycle_closure.py",
+        "tests/test_required_evidence.py",
         "tests/test_provider_merge_state_recovery.py"
       ],
       "sourceEvidence": [
         ".ai/cockpit/README.md",
         "scripts/ai_start.py",
         "scripts/ai_finish.py",
+        "scripts/ai_required_evidence.py",
         "scripts/ai_close_work_item.py",
         "scripts/ai_provider_merge_state_recovery.py",
         "Makefile"
@@ -284,16 +287,17 @@
         "tests/test_finish_readiness.py",
         "tests/test_task_outcome_ai_finish_integration.py",
         "tests/test_work_item_lifecycle_closure.py",
+        "tests/test_required_evidence.py",
         "tests/test_provider_merge_state_recovery.py"
       ],
       "commandEvidence": [
         "make quality"
       ],
       "limitations": "Repository evidence describes this template; it does not prove an adopter executed the lifecycle.",
-      "digest": "sha256:f5f9da6f583eb3a768ea85d363848269b2d79e3e3bb79e69563abaa32ae3dc84",
+      "digest": "sha256:16c7dfaf67c9d5bcd96e624028d50780a4e72116917bd5f27536de7a8a00662f",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
-        "fileCount": 12,
+        "fileCount": 14,
         "files": [
           {
             "path": ".ai/cockpit/README.md",
@@ -316,6 +320,10 @@
             "sha256": "45a43278e3cc595173c345db9e14c3debf54cd8b791f3a4831dd5d41118f6597"
           },
           {
+            "path": "scripts/ai_required_evidence.py",
+            "sha256": "6621cfa4f9c1af3644fd9028334ad255f33540102ba3d8e47995be9a9f5cec00"
+          },
+          {
             "path": "scripts/ai_start.py",
             "sha256": "617297abdd83297f4395901dd433be3cc4de2f9781bde215e6590123163e3f23"
           },
@@ -332,6 +340,10 @@
             "sha256": "c9a22b8c37cd1304e0ceb378a160a6a9dd2b14a4e6d5e9fcd53e969396d94c9c"
           },
           {
+            "path": "tests/test_required_evidence.py",
+            "sha256": "9e3a33ab53a901aab92feb24f6767b9485e703032b7f6b127f74b105f90b0a46"
+          },
+          {
             "path": "tests/test_start_and_archive.py",
             "sha256": "0a833f7276a343cd34e349dfaf44698da12e875e6db158bddc44471ed0c34828"
           },
@@ -344,7 +356,7 @@
             "sha256": "7817f6c4e38349cc86422ac2534fcdacdc63292113359ebc24ffe32d9def4acc"
           }
         ],
-        "digest": "sha256:c2385b8876bc358d2b2a7deb6ac006a4d0fdabf1d5202af76981ff7e8430ae6c"
+        "digest": "sha256:c0647837d668a96f6807fa7a9e02f81178974d1bc7303677e13d049bfa386edb"
       }
     },
     {
@@ -966,7 +978,7 @@
         "make quality"
       ],
       "limitations": "The installed executor implements preserve-evidence Runtime-file removal only. Purge filesystem removal is not implemented. Disable writes a result JSON but does not independently update canonical installed state. Empty directory cleanup, external identity, sandboxing, immutable audit, and enterprise compliance are not claimed; the target-repository receipt and human review remain required.",
-      "digest": "sha256:932ac7f257fc8542a0b80e45920e7d15eb2818cedb01ca7535bfb832386a6b42",
+      "digest": "sha256:358c2037884babeed02c46159d9385b911155070ffde17c2492553aa9b6e1ab7",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 18,
@@ -985,7 +997,7 @@
           },
           {
             "path": "scripts/ai_installer_catalog.json",
-            "sha256": "78f6777047f318a5901a35a4b7e2a5516b44b9dca6b7829297f481859acd5e0b"
+            "sha256": "dd4240b22bd57096f31d38d967a71c666feb1ea384d2ee0efe05dbdb8f49f72c"
           },
           {
             "path": "scripts/ai_uninstall_facts.py",
@@ -1044,7 +1056,7 @@
             "sha256": "449e48f52eb3522cabd8e15bd4538b7b09304bb74745835324be174d728262fe"
           }
         ],
-        "digest": "sha256:bac0e38f3f432973d87f0abdfa270622283e622bfebdda454aa3ab1486062c4d"
+        "digest": "sha256:7ca026e8b2713fc757ec70c8357e5d25ada910066b8bf78b324f54b6bbcf4fa2"
       }
     },
     {
@@ -1394,7 +1406,7 @@
           },
           {
             "path": "scripts/ai_installer_catalog.json",
-            "sha256": "78f6777047f318a5901a35a4b7e2a5516b44b9dca6b7829297f481859acd5e0b"
+            "sha256": "dd4240b22bd57096f31d38d967a71c666feb1ea384d2ee0efe05dbdb8f49f72c"
           },
           {
             "path": "templates/make/Makefile.ai",
@@ -1405,9 +1417,9 @@
             "sha256": "d1a79915c064162c7ba68b5fc522a01b4067bc7d3f27b6ba67f94dbb51e668c5"
           }
         ],
-        "digest": "sha256:f50252346c078f54b4765cf5d6cee980b603d065877747b3d656f7a2e8a4691a"
+        "digest": "sha256:4bdd1ef59f2ff64b6b5d0c8ca3cc91e132cb0acd98cc003dc3aa921eba186c97"
       },
-      "digest": "sha256:1562745e5ddec4db82fe145bfccbc14a3c51531cefed538c311e7d503902ac65"
+      "digest": "sha256:54ba0cbbaa2fe5cd50d09cad62405d796a5d6751a9c67491cfd5517ba56414ec"
     },
     {
       "id": "capability_claim_binding",
@@ -1496,7 +1508,7 @@
         "python3 -m pytest -q tests/test_external_identity.py tests/test_trust_schema.py tests/test_ai_check_work_item.py"
       ],
       "limitations": "The repository validates supplied evidence structure, level-specific references, and declared scope. It does not contact providers, authenticate actors, implement SSO or IAM, prove branch protection, or provide enterprise assurance.",
-      "digest": "sha256:07304054b63f9c4122c74ecb5accb19684d29ced94fa9c015c0ccc8bef616942",
+      "digest": "sha256:2465cf14e3a52894ed9f75bf64463c19c71d7a97fa645cf9e3f073d7ca1e0b93",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 7,
@@ -1511,7 +1523,7 @@
           },
           {
             "path": "scripts/ai_check_work_item.py",
-            "sha256": "8f45205d9f3d17c371ab00f03903517be9343802022c6cfd890d55aad895c50c"
+            "sha256": "aaa6c6c5668888467cb013f71f3255d49d6a1d1fe3a66043bf2fe2f01457eb8e"
           },
           {
             "path": "scripts/ai_external_identity.py",
@@ -1519,7 +1531,7 @@
           },
           {
             "path": "tests/test_ai_check_work_item.py",
-            "sha256": "ac0c8f9f229ff282b223067734a1f266228e19a8f56fce23f495a48723605d3e"
+            "sha256": "64b9ea2d5a67b5f66fe5e4770c0174f2fe7270b01367d71fa86cb306e7a4e7a9"
           },
           {
             "path": "tests/test_external_identity.py",
@@ -1530,7 +1542,7 @@
             "sha256": "ada65ffaddfad3faa7bef15a4f6fc6c173f4a2cb8efea3dc3aa2561a944e3132"
           }
         ],
-        "digest": "sha256:6805813ddbd99e73a02c97676675c7e57e9c4017f922b33c5274632f6ae1b5aa"
+        "digest": "sha256:5ccba81d86652ef8695876333deaffa1df96d1c24a301c9bbaa382018ef44aae"
       }
     },
     {

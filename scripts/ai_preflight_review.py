@@ -30,6 +30,7 @@ from ai_evidence_dependencies import (
     load_capability_evidence_dependencies,
 )
 from ai_readiness_policy import has_explicit_blocker
+from ai_required_evidence import EvidenceContext, derive_required_evidence
 from ai_trust_guards import trust_signals
 from ai_upgrade_conflict_report import validate_report
 
@@ -313,6 +314,69 @@ def evidence_dependency_signal(contract: dict[str, Any], *, root: Path) -> Signa
         "Ready",
         ["Contract scope owns required Capability Truth matrix dependencies"],
         ["contract.scope", dependencies.matrix_path],
+    )
+
+
+def required_evidence_signal(contract: dict[str, Any]) -> Signal:
+    """Expose operation-derived evidence gaps before implementation begins."""
+    declared = contract.get("requiredEvidenceContext")
+    if declared is None:
+        return Signal(
+            "Required Evidence",
+            "Not Applicable",
+            ["no operation-specific evidence context is declared"],
+            ["contract.requiredEvidenceContext"],
+        )
+    if not isinstance(declared, dict):
+        return Signal(
+            "Required Evidence",
+            "Inconsistent",
+            ["requiredEvidenceContext must be an object"],
+            ["contract.requiredEvidenceContext"],
+        )
+    operation = _dict(contract.get("requestedOperation"))
+    risk = _dict(contract.get("riskAssessment"))
+    profile = _dict(contract.get("governanceProfile"))
+    result = derive_required_evidence(
+        EvidenceContext(
+            requested_operation=str(operation.get("action", "")),
+            changed_paths=tuple(_string_list(contract.get("scope"))),
+            risk_types=tuple(_string_list(risk.get("riskTypes"))),
+            capability_claims=tuple(
+                _string_list(_dict(contract.get("declaredIntent")).get("requestedCapabilities"))
+            ),
+            environment=str(operation.get("environment", "")),
+            external_system=str(declared.get("externalSystem", "")),
+            destructive_level=str(declared.get("destructiveLevel", "none")),
+            governance_profile=str(profile.get("selected", "standard")),
+            available_evidence=tuple(_string_list(declared.get("availableEvidence"))),
+        )
+    )
+    if not result.matched_rules:
+        return Signal(
+            "Required Evidence",
+            "Not Applicable",
+            ["no registered evidence rule matches the declared operation context"],
+            ["contract.requiredEvidenceContext", "contract.requestedOperation"],
+        )
+    if result.missing_evidence:
+        value = "Missing" if result.blocking_level == "block" else "Partial"
+        return Signal(
+            "Required Evidence",
+            value,
+            [
+                "missing required evidence: " + ", ".join(result.missing_evidence),
+                "forbidden claims: " + "; ".join(result.forbidden_claims),
+            ],
+            ["contract.requiredEvidenceContext", "scripts/ai_required_evidence.py"],
+            humanDecisionAllowed=result.human_decision_required,
+        )
+    return Signal(
+        "Required Evidence",
+        "Ready",
+        ["matched rules: " + ", ".join(result.matched_rules)],
+        ["contract.requiredEvidenceContext", "scripts/ai_required_evidence.py"],
+        humanDecisionAllowed=result.human_decision_required,
     )
 
 
@@ -926,6 +990,7 @@ def derive_report(
         acceptance_signal(contract),
         sources_signal(contract),
         evidence_dependency_signal(contract, root=project_root_for(contract_path)),
+        required_evidence_signal(contract),
         scenario_coverage_signal(contract),
         verification_signal(contract),
     ]
@@ -1158,6 +1223,7 @@ def validate_report_structure(report: dict[str, Any]) -> list[str]:
                 "Acceptance",
                 "Sources",
                 "Evidence Dependency",
+                "Required Evidence",
                 "Scenario Coverage",
                 "Verification",
                 "Capability",

@@ -28,6 +28,7 @@ from ai_common import (
     verification_key,
 )
 from ai_observability import create_observability, elapsed_ms
+from ai_required_evidence import EvidenceContext, derive_required_evidence
 
 SCOPE_POLICY = PROJECT_ROOT / ".ai" / "guards" / "scope_policy.yaml"
 REQUIRED_FIELDS = (
@@ -110,6 +111,47 @@ def changed_file_paths(summary: dict[str, Any]) -> set[str]:
         for item in changed
         if isinstance(item, dict) and non_empty_string(item.get("path"))
     }
+
+
+def validate_required_evidence_claims(
+    contract: dict[str, Any], summary: dict[str, Any]
+) -> list[str]:
+    """Require an explicit prohibited-claim statement for every derived evidence gap."""
+    context = contract.get("requiredEvidenceContext")
+    if not isinstance(context, dict):
+        return []
+    operation = contract.get("requestedOperation")
+    operation = operation if isinstance(operation, dict) else {}
+    risk = contract.get("riskAssessment")
+    risk = risk if isinstance(risk, dict) else {}
+    profile = contract.get("governanceProfile")
+    profile = profile if isinstance(profile, dict) else {}
+    result = derive_required_evidence(
+        EvidenceContext(
+            requested_operation=str(operation.get("action", "")),
+            changed_paths=tuple(
+                item for item in contract.get("scope", []) if isinstance(item, str)
+            ),
+            risk_types=tuple(item for item in risk.get("riskTypes", []) if isinstance(item, str)),
+            capability_claims=(),
+            environment=str(operation.get("environment", "")),
+            external_system=str(context.get("externalSystem", "")),
+            destructive_level=str(context.get("destructiveLevel", "none")),
+            governance_profile=str(profile.get("selected", "standard")),
+            available_evidence=tuple(
+                item for item in context.get("availableEvidence", []) if isinstance(item, str)
+            ),
+        )
+    )
+    if not result.missing_evidence:
+        return []
+    prevention = summary.get("overclaimPrevention")
+    prevention = prevention if isinstance(prevention, str) else ""
+    return [
+        f"derived missing evidence requires forbidden claim: {claim}"
+        for claim in result.forbidden_claims
+        if claim not in prevention
+    ]
 
 
 def documentation_alignment_skeleton() -> dict[str, Any]:
@@ -812,6 +854,7 @@ def validate_summary(
     )
     issues.extend(_validate_required_verification(summary, contract))
     if isinstance(contract, dict):
+        issues.extend(validate_required_evidence_claims(contract, summary))
         issues.extend(
             validate_acceptance_evidence(
                 contract,

@@ -191,6 +191,33 @@ def test_preflight_capability_dependency_negative_controls(tmp_path, scope, expe
     assert signal_map(report)["Evidence Dependency"] == expected
 
 
+def test_preflight_blocks_declared_deletion_when_required_evidence_is_missing(tmp_path):
+    contract = ready_contract()
+    contract["requestedOperation"] = {
+        "target": "repository_governance",
+        "action": "modify",
+        "environment": "repository",
+        "effect": "enforce",
+    }
+    contract["requiredEvidenceContext"] = {
+        "destructiveLevel": "delete",
+        "availableEvidence": ["usage_analysis", "reference_search"],
+    }
+    path = capability_contract_path(tmp_path)
+    write_contract(path, contract)
+
+    report = ai_preflight_review.derive_report(
+        contract, contract_path=path, policy_path=tmp_path / "preflight_review_policy.yaml"
+    )
+
+    required_evidence = next(
+        signal for signal in report["signals"] if signal["name"] == "Required Evidence"
+    )
+    assert required_evidence["value"] == "Missing"
+    assert "public_api_impact" in required_evidence["evidence"][0]
+    assert report["status"] == "not_ready"
+
+
 def test_preflight_rejects_malformed_configured_capability_matrix(tmp_path):
     matrix_path = tmp_path / "docs/reference/capability-truth-matrix.json"
     matrix_path.parent.mkdir(parents=True)
@@ -323,6 +350,7 @@ def test_preflight_signals_expose_shared_protocol_envelope(tmp_path):
         "Acceptance": "Ready",
         "Sources": "Ready",
         "Evidence Dependency": "Not Applicable",
+        "Required Evidence": "Not Applicable",
         "Scenario Coverage": "Ready",
         "Verification": "Ready",
         "Critical Domain Guard": "Ready",

@@ -79,6 +79,32 @@ def test_summary_validator_orchestrates_focused_validation_helpers(monkeypatch):
     ]
 
 
+def test_summary_rejects_missing_evidence_without_matching_forbidden_claim():
+    contract = {
+        "requestedOperation": {
+            "action": "modify",
+            "environment": "repository",
+        },
+        "riskAssessment": {"riskTypes": ["destructive_change"]},
+        "governanceProfile": {"selected": "standard"},
+        "scope": ["scripts/legacy_api.py"],
+        "requiredEvidenceContext": {
+            "destructiveLevel": "delete",
+            "availableEvidence": ["usage_analysis", "reference_search"],
+        },
+    }
+    summary = {"overclaimPrevention": "Do not report checks that were not verified."}
+
+    issues = ai_check_summary.validate_required_evidence_claims(contract, summary)
+
+    assert issues == [
+        (
+            "derived missing evidence requires forbidden claim: "
+            "Do not claim deletion safety or compatibility preservation."
+        )
+    ]
+
+
 def test_documentation_alignment_accepts_complete_source_bound_record():
     summary = aligned_documentation_summary()
 
