@@ -1,0 +1,255 @@
+{
+  "contractVersion": 2,
+  "workItemId": "system-invariants-fixture-performance",
+  "mode": "code",
+  "title": "system-invariants-fixture-performance",
+  "baseCommit": "eb3209965f7921f67f9d7eec08900067daf4bb4d",
+  "predecessorWorkItem": {
+    "workItemId": "governance-performance-budget",
+    "status": "closed",
+    "pr": {
+      "number": 566,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/566",
+      "mergeCommit": "eb3209965f7921f67f9d7eec08900067daf4bb4d"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/governance-performance-budget.archive-manifest.json"
+    }
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/system-invariants-fixture-performance.contract.json",
+    ".ai/work-items/active/system-invariants-fixture-performance.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/system-invariants-fixture-performance.outcome.json",
+    ".ai/work-items/active/system-invariants-fixture-performance.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "tests/test_system_invariants.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing system-invariant production logic, weakening any invariant assertion, or changing provider configuration.",
+    "Deleting historical archives, worktrees, or user-managed local data."
+  ],
+  "sources": [
+    {
+      "path": "tests/test_system_invariants.py",
+      "reason": "The repeated full repository fixture copies are the measured slowest local tests."
+    },
+    {
+      "path": "target/quality/sessions/cbdc0775dd4d-local-20260801T223052Z-22180-0/logs/project-test.log",
+      "reason": "Full quality evidence measured five system-invariant fixture tests at 170-232 seconds each."
+    },
+    {
+      "path": ".worktrees",
+      "reason": "Local worktree contents expanded each copied fixture to roughly 852MB and caused multi-gigabyte pytest temporary output."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "test_isolation_regression",
+      "fixture_mutation_leak"
+    ],
+    "reason": "Fixture construction changes can accidentally mutate the source repository or reduce invariant coverage; linked read-only views and per-file copies must preserve isolation.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Shared system-invariant fixtures and full quality execution are governance reliability boundaries."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized governed writes and the measured fixture-only optimization has bounded, locally verifiable behavior."
+  },
+  "preReviewWarnings": [
+    "Review that source paths remain read-only and every intentionally mutated fixture file is copied before mutation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "System-invariant fixtures exclude `.worktrees` and other local execution artifacts, so they do not copy user-managed worktrees into pytest temporary directories.",
+    "Every system-invariant test that mutates a fixture retains an isolated writable copy of only its mutation target while the remaining repository view is read-only linked data.",
+    "The full system-invariant test module passes with identical positive and negative invariant assertions, and focused evidence demonstrates substantially reduced fixture setup cost."
+  ],
+  "guidelines": [
+    "Preserve every existing system-invariant assertion and negative-path coverage; optimize only fixture construction.",
+    "Never mutate the source repository through a linked fixture path; copy each file before the test writes it.",
+    "Do not include local worktrees, credentials, virtual environments, caches, or generated execution output in a fixture repository view."
+  ],
+  "intent": {
+    "problem": "System-invariant tests repeatedly copy the complete repository, including a large user-managed `.worktrees` directory. The resulting fixtures are about 852MB each, consume multi-gigabyte pytest temporary storage, and dominate full-quality runtime without adding test coverage.",
+    "constraints": [
+      "Preserve test isolation and all existing invariant assertions.",
+      "Do not modify production invariant logic, provider configuration, or user worktrees.",
+      "Use only deterministic local filesystem behavior; source files must remain unchanged by fixture mutations."
+    ],
+    "rationale": "A linked read-only repository view with explicit writable copies removes irrelevant local data from fixture setup while retaining the same system-invariant behavior and failure coverage."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "fixture excludes local worktrees",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_system_invariants.py::test_system_invariants_allow_legacy_archive_summary_versions",
+        "tests/test_system_invariants.py::test_system_invariants_reject_missing_required_baselines"
+      ],
+      "expected": "A test fixture view has no copied `.worktrees` directory and source worktrees remain untouched.",
+      "verificationPlan": "Run focused system-invariant fixture tests and inspect their temporary repository views."
+    },
+    {
+      "scenario": "negative invariant mutations remain isolated",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_system_invariants.py",
+        ".venv/bin/python -m pytest -q tests/test_system_invariants.py --durations=10"
+      ],
+      "expected": "Missing baseline, invalid archive summary, and documentation mutation cases still fail or pass exactly as before without modifying the source repository.",
+      "verificationPlan": "Run the complete tests/test_system_invariants.py module."
+    }
+  ],
+  "rawUserRequest": "Continue all governed Work Items and improve performance without reducing quality. The measured system-invariant fixture copies must be made efficient while preserving verification.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:goal-resumed-and-efficiency-request",
+    "capturedAt": "2026-08-02T00:00:00+00:00",
+    "digest": "sha256:system-invariants-fixture-performance"
+  },
+  "declaredIntent": {
+    "summary": "Remove irrelevant local worktree copying from system-invariant test fixtures without weakening verification.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "requiredEvidenceContext": {
+    "destructiveLevel": "none",
+    "availableEvidence": ["full quality timing log", "focused fixture tests", "source-repository immutability assertions"],
+    "externalSystem": "none"
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 752
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/system-invariants-fixture-performance.json",
+    "baseCommit": "eb3209965f7921f67f9d7eec08900067daf4bb4d",
+    "initialScopeDigest": "96765ec4c0ee8099f2c8e86850c86d16ad53c60c8eea17f6448a0b5eee3ebacc",
+    "contractSkeletonDigest": "e9f82f1ba37ebef66ec2aa9c7ce55cd073fa09d0e961c9d3864973a9f12fca17"
+  }
+}
