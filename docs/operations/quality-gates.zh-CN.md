@@ -2,6 +2,8 @@
 author: Ray
 title: "质量门禁运行说明"
 description: AI Cockpit 质量门禁、证据和工单追踪运行说明。
+capabilityClaims:
+  - risk_based_quality_routing
 keywords:
   - ai-cockpit
   - quality-gates

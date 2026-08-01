@@ -7,6 +7,8 @@ audience:
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - interactive_installation_wizard
 ---
 
 # Install AI Cockpit

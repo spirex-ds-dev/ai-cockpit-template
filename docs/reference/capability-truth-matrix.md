@@ -41,6 +41,13 @@ For exact row-level evidence, status vocabulary, and missing-evidence reasons, u
 
 Every capability row is bound to `sourceEvidence`, `testEvidence`, `commandEvidence`, `limitations`, and an `evidenceSource` inventory containing each bound file's SHA-256 plus a canonical aggregate digest. The row `digest` binds that inventory and the row metadata. Missing files, duplicate aliases, escaping paths, symbolic links, changed bytes, or a mismatched row digest produce `evidence_stale`/validation failure; the row cannot support an implementation claim until it is regenerated and re-verified. A passing test, source-tree presence, or template installation alone is not proof that an adopter has the capability.
 
+Current public capability wording is also bound to exact row IDs by
+`capabilityClaims` front matter or inline `capability-claim` markers. The
+documentation check validates row state, byte freshness, limitations, required
+template/planned qualifiers, and equal binding sets across multilingual
+siblings. See [Capability Claim Authoring](capability-claim-authoring.md) for the
+author contract and deterministic exclusions.
+
 Capability-bound work has two separate requirements. Before editing, the Work Item Contract must include this machine matrix whenever its scope owns a bound `sourceEvidence` or `testEvidence` file; Preflight rejects incomplete ownership. After editing, the actual diff must include a regenerated `capability-truth-matrix.json` whenever any such bound file changed; Scope Guard rejects an evidence-only diff. Regenerating the matrix refreshes its byte-bound inventory, but does not itself prove the underlying capability behavior, adopter installation, or any broader security claim.
 
 The WI-06 absurd corpus is intentionally negative and offline. L1 structural, L2 behavioral, L3 adversarial, and L4 recovery cases for unsupported world facts, forged evidence, impossible completion, unavailable APIs/toolchains, secrets, protected-branch writes, and production operations return `blocked`/`not_ready` with an explicit safe alternative. These cases demonstrate the repository boundary; they do not claim general hallucination prevention.

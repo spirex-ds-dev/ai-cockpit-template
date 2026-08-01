@@ -8,6 +8,8 @@ audience:
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - repository_governance_layer
 ---
 
 # Decision States
@@ -23,4 +25,3 @@ AI Cockpit compresses repository evidence into three human-facing states:
 These states are decision aids, not guarantees of semantic safety. See
 [How to Read Cockpit Status](../reference/how-to-read-cockpit-status.md) for the
 generated signal model.
-

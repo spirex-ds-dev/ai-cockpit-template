@@ -8,6 +8,8 @@ audience:
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - reference_impact_gate
 keywords:
   - ai-cockpit
   - reference-impact

@@ -1,0 +1,775 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wi-06-capability-claim-binding",
+  "contractPath": ".ai/work-items/archive/2026/wi-06-capability-claim-binding.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-06-capability-claim-binding.contract.json",
+      "reason": "Defines the capability-claim scope, state rules, scenarios, and verification."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-06-capability-claim-binding.summary.json",
+      "reason": "Records implementation, documentation alignment, and verification evidence."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated current Work Item status."
+    },
+    {
+      "path": ".ai/work-items/starts/wi-06-capability-claim-binding.json",
+      "reason": "Immutable Work Item start receipt."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Composes claim validation under the existing documentation check and exposes a focused helper target."
+    },
+    {
+      "path": "scripts/ai_check_capability_claims.py",
+      "reason": "Validates public claim bindings, evidence freshness, state wording, and multilingual parity."
+    },
+    {
+      "path": "tests/test_capability_claims.py",
+      "reason": "Covers both syntaxes, three-language triggers, invalid/stale evidence, state qualifiers, exclusions, and sibling parity."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Verifies composition without a new registered Gate."
+    },
+    {
+      "path": "docs/reference/capability-claim-authoring.md",
+      "reason": "Documents the author contract, state rules, exclusions, limitations, and remediation."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-01-capability-claim-binding-design.md",
+      "reason": "Records the historical single-truth-source design decision."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-01-capability-claim-binding.md",
+      "reason": "Records the focused TDD implementation plan."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registers the WI06 design and plan as implementation records."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Adds source-bound capability_claim_binding evidence and refreshes changed evidence bytes."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.md",
+      "reason": "Documents claim binding in the human-readable truth projection."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Regenerates machine-readable Japanese source evidence."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Regenerates the Japanese evidence projection."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Regenerates machine-readable documentation alignment."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Regenerates the documentation alignment projection."
+    },
+    {
+      "path": "README.md",
+      "reason": "Binds the English public governance claim."
+    },
+    {
+      "path": "README.ja.md",
+      "reason": "Binds the Japanese public governance claim with equal scope."
+    },
+    {
+      "path": "README.zh-CN.md",
+      "reason": "Binds the Chinese public governance claim with equal scope."
+    },
+    {
+      "path": "docs/concepts/decision-states.md",
+      "reason": "Binds decision-state wording to repository governance evidence."
+    },
+    {
+      "path": "docs/concepts/trust-layer.md",
+      "reason": "Binds trust-layer wording to repository governance evidence."
+    },
+    {
+      "path": "docs/getting-started/first-work-item.md",
+      "reason": "Binds the canonical first-work-item lifecycle claim."
+    },
+    {
+      "path": "docs/getting-started/first-work-item.ja.md",
+      "reason": "Keeps Japanese first-work-item claim scope equal."
+    },
+    {
+      "path": "docs/getting-started/installation.md",
+      "reason": "Binds the English installer capability."
+    },
+    {
+      "path": "docs/getting-started/installation.ja.md",
+      "reason": "Binds the Japanese installer capability with equal scope."
+    },
+    {
+      "path": "docs/getting-started/installation.zh-CN.md",
+      "reason": "Binds the Chinese installer capability with equal scope."
+    },
+    {
+      "path": "docs/operations/quality-gates.md",
+      "reason": "Binds quality routing claims to implemented evidence."
+    },
+    {
+      "path": "docs/operations/quality-gates.ja.md",
+      "reason": "Keeps Japanese quality-routing scope equal."
+    },
+    {
+      "path": "docs/operations/quality-gates.zh-CN.md",
+      "reason": "Keeps Chinese quality-routing scope equal."
+    },
+    {
+      "path": "docs/operations/work-item-lifecycle.md",
+      "reason": "Binds lifecycle verification wording to repository governance evidence."
+    },
+    {
+      "path": "docs/reference/calibration-profiles.md",
+      "reason": "Binds template-only calibration policy with explicit adopter limitation."
+    },
+    {
+      "path": "docs/reference/calibration-profiles.ja.md",
+      "reason": "Adds the equivalent Japanese template-only limitation."
+    },
+    {
+      "path": "docs/reference/calibration-profiles.zh-CN.md",
+      "reason": "Adds the equivalent Chinese template-only limitation."
+    },
+    {
+      "path": "docs/reference/documentation-architecture.md",
+      "reason": "Binds documentation architecture claims."
+    },
+    {
+      "path": "docs/reference/documentation-architecture.ja.md",
+      "reason": "Keeps Japanese documentation architecture scope equal."
+    },
+    {
+      "path": "docs/reference/governance-profiles.md",
+      "reason": "Binds canonical risk-routing claims."
+    },
+    {
+      "path": "docs/reference/governance-profiles.ja.md",
+      "reason": "Keeps Japanese risk-routing scope equal."
+    },
+    {
+      "path": "docs/reference/governance-profiles.zh-CN.md",
+      "reason": "Keeps Chinese risk-routing scope equal."
+    },
+    {
+      "path": "docs/reference/reference-impact-gate.md",
+      "reason": "Binds the canonical reference-impact capability."
+    },
+    {
+      "path": "docs/reference/reference-impact-gate.ja.md",
+      "reason": "Keeps Japanese reference-impact scope equal."
+    },
+    {
+      "path": "docs/reference/reference-impact-gate.zh-CN.md",
+      "reason": "Keeps Chinese reference-impact scope equal."
+    },
+    {
+      "path": "docs/reference/test-weakening-guard.md",
+      "reason": "Binds the canonical test-weakening capability."
+    },
+    {
+      "path": "docs/reference/test-weakening-guard.ja.md",
+      "reason": "Keeps Japanese test-weakening scope equal."
+    },
+    {
+      "path": "docs/reference/test-weakening-guard.zh-CN.md",
+      "reason": "Keeps Chinese test-weakening scope equal."
+    },
+    {
+      "path": "docs/security/threat-model.md",
+      "reason": "Binds repository-governance threat boundary wording."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-06-capability-claim-binding.outcome.json",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-06-capability-claim-binding.outcome.md",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-06-capability-claim-binding.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    "docs/reference/capability-truth-matrix.json",
+    "scripts/ai_capability_truth.py",
+    "scripts/check_docs_metadata.py",
+    "docs/reference/documentation-context-registry.json",
+    "Makefile",
+    "docs/superpowers/specs/2026-08-01-capability-claim-binding-design.md"
+  ],
+  "verification": [
+    {
+      "check": "sourceBoundEvidence",
+      "command": "make check-source-bound-evidence",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:02:27.990549+00:00",
+      "exitCode": 0,
+      "durationMs": 188,
+      "outputDigest": "a33b4ae9d12225e01b413b95574bf557d8d65037bde6c4e07e42aa23b5db3ad7",
+      "commandHash": "d86740d1d67217b831acef07cf8c7dfdf9a5216b5917b64f95de6e72269f5dc3",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {\"absurdCases\": [{\"caseId\": \"rocket-launch\", \"level\": \"L1\", \"class\": \"world_fact\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"safeAlternative\": \"local dry-run plan\"}, {\"caseId\": \"production-delete\", \"level\": \"L2\", \"class\": \"authority\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": ",
+      "outputTail": "ta.py\", \"sha256\": \"6498d8356c85797b11e9773db0843ce8f1bed98729aa81bd94eadecb909db433\" }, { \"path\": \"tests/test_guards_and_status.py\", \"sha256\": \"56beafdeec33c14456e487fa298e3473d09dde5b18b94807ca738174f8cd6075\" }, { \"path\": \"tests/test_input_trust.py\", \"sha256\": \"5fc72a69ce0539cd5791c956cd29f68b7647dc4a14b3599eec7314455a3372f3\" }, { \"path\": \"tests/test_input_trust_corpus.py\", \"sha256\": \"a5196c1965c10dc84bb8641cef0128c928d67d506ec2be10a40c5df3f5265dde\" }, { \"path\": \"tests/test_install_wizard.py\", \"sha256\": \"2683e49865bc52083587eb282778c41d276c8263a4e8f5bc27b75199b56169e5\" }, { \"path\": \"tests/test_japanese_adopter_lifecycle.py\", \"sha256\": \"153c9a5a169605f5a42c4cd0dc2c7a6f6918c678bc1b9dc838141948229adeb7\" }, { \"path\": \"tests/test_japanese_capability.py\", \"sha256\": \"55fda8db695ae4ffc7f47c15ce3efc5d8126692690c39491bca5222e98a04154\" }, { \"path\": \"tests/test_makefile.py\", \"sha256\": \"6a3146201e7a00616e1f227cfaca85fffdc9627939f6d095805a4aab36f4120a\" }, { \"path\": \"tests/test_task_outcome_multilingual.py\", \"sha256\": \"d0202b172f7f44f228136cc1b18d28cfa2d2f57b13c40f1d151394490d2c9995\" }, { \"path\": \"tests/test_task_outcome_pr_summary.py\", \"sha256\": \"407c8cb2717cb1fc1664d5f706d4a5187720329137f235277d3e7fed87ced239\" }, { \"path\": \"tests/test_trust_layer_docs.py\", \"sha256\": \"8230686f3332b7b670efe8e0cbdb60eac8653618fa80ddf244f79b21f5005ac7\" }, { \"path\": \"tests/test_wizard_localization.py\", \"sha256\": \"a7161e9d05d8bd5a2d7116aff553cf36880776a1b870f7aea241529f65f28d38\" } ] }, \"limitations\": [ \"This assessment does not claim general model fluency, translation quality, or provider behavior.\", \"Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking.\" ], \"scope\": \"bounded repository-governance Japanese handling\", \"workItemId\": \"final-japanese-reassessment-replacement-20260731\", \"workItemRole\": \"final_reassessment\" } PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_pre_release_documentation_alignment.py pre-release documentation alignment passed",
+      "outputBytes": 25206
+    },
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:02:28.093667+00:00",
+      "exitCode": 0,
+      "durationMs": 48,
+      "outputDigest": "fd5d7b68ff0d74ac5f1ef4834b447a7e97df002bd1f77a3761d19a78be53c3a3",
+      "commandHash": "94d5b71da03deee092024555164ba1fef78a3095f94060eefb4444b746faefe3",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-06-capability-claim-binding.contract.json work item contract check passed: .ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-06-capability-claim-binding.contract.json work item contract check passed: .ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "outputBytes": 240
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:02:28.258953+00:00",
+      "exitCode": 0,
+      "durationMs": 110,
+      "outputDigest": "0a21439920ce1c41cd22619c08b10f4f28bd5110e5a212ddced6523ff09d58ca",
+      "commandHash": "c2d1dc2a0050ada10247e8df7d6cca312bc102b42d186abcba5f9f1004704d7c",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-06-capability-claim-binding.contract.json scope guard passed: 47 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-06-capability-claim-binding.contract.json scope guard passed: 47 changed path(s) covered",
+      "outputBytes": 183
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:02:28.592637+00:00",
+      "exitCode": 0,
+      "durationMs": 274,
+      "outputDigest": "597a1a9681434db026aa9a96a34da62097257c8b8fd42fc4004318003200a640",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json [warning] restricted_write: Makefile (Makefile) - Shared local and CI command entrypoint. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 310
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/wi-06-capability-claim-binding.contract.json SUMMARY=.ai/work-items/active/wi-06-capability-claim-binding.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:02:28.845304+00:00",
+      "exitCode": 0,
+      "durationMs": 198,
+      "outputDigest": "bf80095a9c33e8193c3320ce677d5a8672569b7f14073efaffbe7079e9298a34",
+      "commandHash": "70451b6089440d0951f2f049ca1e5709b7aa11c3eb3bc3e7c1fd20553c12535f",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wi-06-capability-claim-binding` - Contract Hash: `21abf3afe548b5c3` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `8` - Unknown Count: `0` - Requ",
+      "outputTail": " scope - [active_owned] `docs/reference/documentation-architecture.md` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.ja.md` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.md` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `docs/reference/reference-impact-gate.ja.md` — covered by Contract scope - [active_owned] `docs/reference/reference-impact-gate.md` — covered by Contract scope - [active_owned] `docs/reference/reference-impact-gate.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/test-weakening-guard.ja.md` — covered by Contract scope - [active_owned] `docs/reference/test-weakening-guard.md` — covered by Contract scope - [active_owned] `docs/reference/test-weakening-guard.zh-CN.md` — covered by Contract scope - [active_owned] `docs/security/threat-model.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-08-01-capability-claim-binding.md` — covered by Contract scope - [active_owned] `docs/superpowers/specs/2026-08-01-capability-claim-binding-design.md` — covered by Contract scope - [active_owned] `scripts/ai_check_capability_claims.py` — covered by Contract scope - [active_owned] `tests/test_capability_claims.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope ## Next Action - Ready for final status generation and human review.",
+      "outputBytes": 10806
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:02:29.017910+00:00",
+      "exitCode": 0,
+      "durationMs": 105,
+      "outputDigest": "70da996855232eb013033fb872468d0b8169e9d3eaebad51287fa71fa4219e43",
+      "commandHash": "fd72858e478789401749b6dea8dc2db276e9bd13feb2cf98b03f51598fac3728",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/wi-06-capability-claim-binding.json [review] scripts/ai_check_capability_claims.py [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] Makefile review focus recorded: 4 item(s) report: target/ai_review_policy_repor",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json review policy matched 6 path(s) [review] .ai/work-items/starts/wi-06-capability-claim-binding.json [review] scripts/ai_check_capability_claims.py [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] Makefile review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 507
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:02:29.170572+00:00",
+      "exitCode": 0,
+      "durationMs": 98,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:02:29.325520+00:00",
+      "exitCode": 0,
+      "durationMs": 99,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/wi-06-capability-claim-binding.contract.json SUMMARY=.ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:02:29.437464+00:00",
+      "exitCode": 0,
+      "durationMs": 53,
+      "outputDigest": "7f24a2e1ab65f5ae2864a848f13df77275d1539fe749aae235b285de520a4a06",
+      "commandHash": "9a10537d3ad25ee51d0723948da6f708f1f49718e97bf441b01d50878466f9de",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 283
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/wi-06-capability-claim-binding.contract.json SUMMARY=.ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:02:29.548215+00:00",
+      "exitCode": 0,
+      "durationMs": 54,
+      "outputDigest": "b3f22b68fc1d19ad9346281985b65e7a0d9a41146296be4a87427937c9deab99",
+      "commandHash": "62eb1ad195566ac5698bd7f74eaea7d2411de70391420ea4f8a19f8e770c76e0",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json guidelines compliance check passed: 5 guideline(s) verified",
+      "outputBytes": 288
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:02:29.807038+00:00",
+      "exitCode": 0,
+      "durationMs": 201,
+      "outputDigest": "7745d542b4a1f44fe6f9a1ab26d3191fef999b786a8c59cee170f4bc6d733a00",
+      "commandHash": "2e3b79b243c527bb31723441fb9beb752e4b0259e25bc23bbcd31c3f06a4ba72",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json ## Diff Ownership Preview - active_owned: `47`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Task Outc",
+      "outputTail": "ocs/reference/documentation-architecture.ja.md` — covered by Contract scope - [active_owned] `docs/reference/documentation-architecture.md` — covered by Contract scope - [active_owned] `docs/reference/documentation-context-registry.json` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.ja.md` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.md` — covered by Contract scope - [active_owned] `docs/reference/governance-profiles.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.json` — covered by Contract scope - [active_owned] `docs/reference/japanese-capability-assessment.md` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.json` — covered by Contract scope - [active_owned] `docs/reference/pre-release-documentation-alignment.md` — covered by Contract scope - [active_owned] `docs/reference/reference-impact-gate.ja.md` — covered by Contract scope - [active_owned] `docs/reference/reference-impact-gate.md` — covered by Contract scope - [active_owned] `docs/reference/reference-impact-gate.zh-CN.md` — covered by Contract scope - [active_owned] `docs/reference/test-weakening-guard.ja.md` — covered by Contract scope - [active_owned] `docs/reference/test-weakening-guard.md` — covered by Contract scope - [active_owned] `docs/reference/test-weakening-guard.zh-CN.md` — covered by Contract scope - [active_owned] `docs/security/threat-model.md` — covered by Contract scope - [active_owned] `docs/superpowers/plans/2026-08-01-capability-claim-binding.md` — covered by Contract scope - [active_owned] `docs/superpowers/specs/2026-08-01-capability-claim-binding-design.md` — covered by Contract scope - [active_owned] `scripts/ai_check_capability_claims.py` — covered by Contract scope - [active_owned] `tests/test_capability_claims.py` — covered by Contract scope - [active_owned] `tests/test_makefile.py` — covered by Contract scope",
+      "outputBytes": 4556
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:08:37.887441+00:00",
+      "exitCode": 0,
+      "durationMs": 367983,
+      "outputDigest": "c3d17959d4288e149b9340f254ab2a589a447ce7b63e08cb957a828ae8e45baf",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "f433da3370a6776c1cb128184c58a8cb7945d59b988287f395b16ddb68fb2475",
+      "outputSummary": "{ \"automaticProfile\": \"strict\", \"base\": \"c103ce19e4ab6d4039c0688b8396e58e9b1ffc07\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/work-items/starts/wi-06-capability-claim-binding.json\", \"Makefile\", \"README.ja.md\", \"README.md\", \"README.zh-CN.md\", \"docs/concepts/decision-states.md\", \"docs/concepts/trust-layer.md\", \"docs/getting-started/first-work-item.ja.md\", \"docs/getting-started/first-work-item.md\", \"docs/getting-started/ins",
+      "outputTail": "ants.py::test_system_invariants_reject_archive_summary_invalid_version 4.76s call tests/test_typescript_fixture.py::test_typescript_fixture_executes_build_test_lint_and_format 3.45s call tests/test_project_governance.py::test_guard_calibration_fails_when_confirmed_path_is_missing 3.25s call tests/test_core_gates.py::test_checkpoint_main_reports_required_state 3.18s call tests/test_start_and_archive.py::test_ai_start_generates_active_status 3.16s call tests/test_start_and_archive.py::test_ai_start_fails_closed_when_preflight_gate_blocks 1760 passed, 3 warnings in 358.55s (0:05:58) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.w7S6aneIRy/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.w7S6aneIRy/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.w7S6aneIRy/multi-workflow.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.w7S6aneIRy/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.w7S6aneIRy/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/c103ce19e4ab-local-20260801T020229Z-25801-0/summary.json",
+      "outputBytes": 73633
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/wi-06-capability-claim-binding.contract.json SUMMARY=.ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:08:38.212781+00:00",
+      "exitCode": 0,
+      "durationMs": 245,
+      "outputDigest": "575be667fa410b7ebe8069d4fbfae3300eb48e665d54fc6c0957d4020a112ad4",
+      "commandHash": "2f05ea6a34c613fe797fb5f8e583d11f20c01babe59609268909c4984f641753",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "0c4f6145b7fbb7b4d7cdebd2acc7d7b34bd8fbcd41fef387371d9791014b539e",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-06-capability-claim-binding.contract.json --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-06-capability-claim-binding.contract.json --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 330
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/wi-06-capability-claim-binding.contract.json SUMMARY=.ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:08:38.728813+00:00",
+      "exitCode": 0,
+      "durationMs": 225,
+      "outputDigest": "1eb7d5c22bcbd8b420209f5ab5436f918b6b20d012e28d2d90a93724fa467edd",
+      "commandHash": "69421bbf3d0773ed48c93a87a415ff6c7e4af0ee9698d50b54cbde47b18b7c2a",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "bc0838c90101df118abf32ca0888b06742f097d97049a18eb321d616d8552de6",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 313
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:08:39.084611+00:00",
+      "exitCode": 0,
+      "durationMs": 42,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "11438469757ca47e5b45c6dcee295790c5fbdade68b0c315fca6aa5d0b2edafa",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/wi-06-capability-claim-binding.contract.json SUMMARY=.ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:08:39.196570+00:00",
+      "exitCode": 0,
+      "durationMs": 57,
+      "outputDigest": "bd8cb1e1d778dcc9115289d4641df582a64b009b16bad533f823436a2124b0cd",
+      "commandHash": "ed8fce034c3ec94f1fa92aac14cd18706df7a4de04802da6a8666180cc5cad20",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "11438469757ca47e5b45c6dcee295790c5fbdade68b0c315fca6aa5d0b2edafa",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json --summary .ai/work-items/active/wi-06-capability-claim-binding.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 293
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/wi-06-capability-claim-binding.summary.json CONTRACT=.ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T02:08:40.532899+00:00",
+      "exitCode": 0,
+      "durationMs": 323,
+      "outputDigest": "d3ca6fff80a74649199eeaffa823127571daebf068895407734ba83cdbfde5cf",
+      "commandHash": "ab3446ee7f3c79a8efbada15c14d539cbd63bb12e2e5e14237fe0f496db41bb6",
+      "contractHash": "21abf3afe548b5c3f042449bdd7394ca061864b0ff56e7baf739083ea0e53bc5",
+      "commitSha": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+      "executionContractPath": ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "worktreeDigest": "cf4b212328d13eb12770350235c6c96dfb9f35da671244dc8e87132aaa23275f",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-06-capability-claim-binding.summary.json --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json ai summary check passed: .ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-06-capability-claim-binding.summary.json --contract .ai/work-items/active/wi-06-capability-claim-binding.contract.json ai summary check passed: .ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+      "outputBytes": 307
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Reuse ai_capability_truth.py and capability-truth-matrix.json as the only capability-state and evidence-freshness authority.",
+      "compliant": true,
+      "evidence": "ai_check_capability_claims imports validate_matrix, capability_state, and build_evidence_source; no parallel state store exists."
+    },
+    {
+      "guideline": "Keep detection deterministic and auditable; do not introduce probabilistic language classification or external services.",
+      "compliant": true,
+      "evidence": "The checker uses explicit regular expressions, phrase inventories, frontmatter parsing, and repository-local files only."
+    },
+    {
+      "guideline": "Bind only current canonical public documentation and preserve an explicit exemption for direct generated truth projections and historical evidence.",
+      "compliant": true,
+      "evidence": "Canonical current/reference documents and their translation siblings are selected; the generated matrix projection and noncanonical standalone records are excluded and documented."
+    },
+    {
+      "guideline": "Keep error messages actionable by naming the document, capability ID or missing binding, and required qualifier or repair.",
+      "compliant": true,
+      "evidence": "Focused tests assert path, ID, state, freshness, and multilingual mismatch diagnostics."
+    },
+    {
+      "guideline": "Integrate through the existing documentation verification path instead of adding a formal Gate.",
+      "compliant": true,
+      "evidence": "Makefile composes the checker under check-docs-metadata; tests verify checks.yaml has no new check-capability-claims entry."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Public multilingual documentation is newly fail-closed on deterministic lexical policy and source-bound evidence; focused and Standard-route verification are required."
+  },
+  "generatedFiles": [
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/cockpit/current_status.md"
+  ],
+  "destructiveChanges": [],
+  "observedIssues": [
+    "The first repository scan found 17 unbound canonical documents; exact capability bindings and translation-sibling parity resolved them.",
+    "Changing bound documentation made existing matrix and Japanese/alignment evidence stale; canonical generators refreshed the byte identities."
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "lexical_semantics",
+      "detail": "Deterministic terms and equal binding sets cannot prove that every sentence is semantically entailed by the selected rows.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    },
+    {
+      "level": "low",
+      "area": "translation_quality",
+      "detail": "Multilingual ID parity bounds declared scope but does not replace native-human review of translation quality.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "Claim-term and state-qualifier false-positive/false-negative boundary",
+      "Reuse of exact Capability Truth byte freshness",
+      "Canonical plus translation-sibling document selection",
+      "Absence of a new registered formal Gate"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "not_applicable",
+    "userVisibleOutput": "verified by repository-wide claim validation and authoring documentation",
+    "persistence": "not_applicable",
+    "localization": "verified by equal English, Japanese, and Simplified Chinese sibling binding sets",
+    "generatedArtifacts": "Capability Truth, Japanese assessment, and pre-release alignment regenerated and checked",
+    "makeEntrypoints": "verified by focused Makefile test and make check-docs-metadata"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "21abf3afe548b5c3",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "21abf3afe548b5c3",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 16
+    }
+  ],
+  "knownGaps": [],
+  "scenarioCoverage": [
+    {
+      "scenario": "A canonical README or public document uses capability wording without a valid current binding.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_capability_claims.py::test_unbound_multilingual_claim_terms_fail_with_actionable_path",
+        "tests/test_capability_claims.py::test_unknown_id_and_changed_evidence_fail_closed"
+      ],
+      "verificationPlan": "Focused fixtures verify unbound wording, unknown IDs, evidence drift, and evidence_stale diagnostics."
+    },
+    {
+      "scenario": "A document binds template_only or planned capability evidence but overstates it as a current installed capability.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_capability_claims.py::test_state_qualifiers_reject_overclaim_and_accept_bounded_language",
+        "docs/reference/capability-claim-authoring.md"
+      ],
+      "verificationPlan": "Focused positive and negative fixtures cover restricted state qualifiers."
+    },
+    {
+      "scenario": "English, Japanese, and Simplified Chinese siblings declare different capability scopes.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_capability_claims.py::test_multilingual_siblings_require_equal_binding_sets",
+        "tests/test_capability_claims.py::test_translation_sibling_of_canonical_document_is_in_scope"
+      ],
+      "verificationPlan": "Focused canonical and derived-translation fixtures verify mismatched then matching binding sets."
+    }
+  ],
+  "overclaimPrevention": "Claim binding proves declared IDs, state-compatible lexical wording, limitations, evidence-byte freshness, and multilingual scope parity only; it does not prove semantic entailment, translation quality, production readiness, or enterprise assurance.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-01T10:53:21+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "aligned",
+        "evidence": [
+          "docs/superpowers/specs/2026-08-01-capability-claim-binding-design.md",
+          "docs/superpowers/plans/2026-08-01-capability-claim-binding.md"
+        ],
+        "reason": "The historical design and TDD plan match the implemented single-matrix documentation policy."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/wi-06-capability-claim-binding.contract.json",
+          ".ai/work-items/archive/2026/wi-06-capability-claim-binding.summary.json",
+          "tests/test_capability_claims.py",
+          "tests/test_makefile.py"
+        ],
+        "reason": "Eight acceptance items and three verified scenarios map to focused executable tests."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "scripts/ai_check_capability_claims.py",
+          "Makefile",
+          "docs/reference/capability-claim-authoring.md",
+          "docs/reference/capability-truth-matrix.json",
+          "docs/reference/capability-truth-matrix.md",
+          "docs/concepts/decision-states.md",
+          "docs/concepts/trust-layer.md",
+          "docs/getting-started/first-work-item.md",
+          "docs/getting-started/first-work-item.ja.md",
+          "docs/operations/quality-gates.md",
+          "docs/operations/quality-gates.ja.md",
+          "docs/operations/quality-gates.zh-CN.md",
+          "docs/operations/work-item-lifecycle.md",
+          "docs/reference/calibration-profiles.md",
+          "docs/reference/calibration-profiles.ja.md",
+          "docs/reference/calibration-profiles.zh-CN.md",
+          "docs/reference/documentation-architecture.md",
+          "docs/reference/documentation-architecture.ja.md",
+          "docs/reference/governance-profiles.md",
+          "docs/reference/governance-profiles.ja.md",
+          "docs/reference/governance-profiles.zh-CN.md",
+          "docs/reference/japanese-capability-assessment.md",
+          "docs/reference/reference-impact-gate.md",
+          "docs/reference/reference-impact-gate.ja.md",
+          "docs/reference/reference-impact-gate.zh-CN.md",
+          "docs/reference/test-weakening-guard.md",
+          "docs/reference/test-weakening-guard.ja.md",
+          "docs/reference/test-weakening-guard.zh-CN.md",
+          "docs/security/threat-model.md"
+        ],
+        "reason": "The command, author syntax, capability row, state rules, and limitations agree."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "README.md",
+          "README.ja.md",
+          "README.zh-CN.md",
+          "docs/getting-started/installation.md",
+          "docs/getting-started/installation.ja.md",
+          "docs/getting-started/installation.zh-CN.md",
+          "tests/test_capability_claims.py"
+        ],
+        "reason": "Canonical and translated siblings declare identical exact capability ID sets."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/reference/capability-claim-authoring.md",
+          "docs/reference/documentation-context-registry.json",
+          "docs/reference/pre-release-documentation-alignment.json",
+          "docs/reference/pre-release-documentation-alignment.md"
+        ],
+        "reason": "Lexical, translation, generated-projection, and historical-record limitations are explicit with no open coding unknowns."
+      }
+    ]
+  },
+  "taskOutcome": {
+    "status": "completed",
+    "jsonPath": ".ai/work-items/active/wi-06-capability-claim-binding.outcome.json",
+    "markdownPath": ".ai/work-items/active/wi-06-capability-claim-binding.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2
+  },
+  "archiveSequence": 733
+}

@@ -8,6 +8,8 @@ audience:
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - risk_based_quality_routing
 keywords:
   - ai-cockpit
   - quality-gates

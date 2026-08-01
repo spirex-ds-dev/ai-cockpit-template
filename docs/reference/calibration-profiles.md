@@ -8,6 +8,8 @@ audience:
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - project_calibration_profile_proposal
 keywords:
   - ai-cockpit
   - calibration
@@ -19,6 +21,8 @@ keywords:
 Calibration Profiles select the controls an adopter must evidence. They are
 separate from Work Item quality routing: calibration describes the repository's
 standing governance boundary, while quality routing selects checks for one diff.
+The template provides the proposal and validation policy; this is not proof of
+adopter installation or activation in a target repository.
 
 The levels are cumulative: `lite < standard < strict`.
 

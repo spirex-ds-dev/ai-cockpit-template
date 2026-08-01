@@ -8,6 +8,8 @@ audience:
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - repository_governance_layer
 ---
 
 # Threat Model
@@ -24,4 +26,3 @@ explicit Unknowns.
 Each gate must state its inputs, proven range, unproven range, false-positive
 and false-negative risk, and recovery condition. See
 [Security Boundaries](../security-boundaries.md) for the broader explanatory map.
-

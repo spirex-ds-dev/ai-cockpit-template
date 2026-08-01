@@ -8,6 +8,8 @@ audience:
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - repository_governance_layer
 ---
 
 # Trust Layer
@@ -24,4 +26,3 @@ certificate, or substitute for human review.
 The extended explanatory treatment remains at [Human-Agent Trust Layer](../trust-layer.md).
 Current capability status comes only from the
 [Capability Truth Matrix](../reference/capability-truth-matrix.md).
-
