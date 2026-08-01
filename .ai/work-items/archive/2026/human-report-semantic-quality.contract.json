@@ -1,0 +1,201 @@
+{
+  "contractVersion": 2,
+  "workItemId": "human-report-semantic-quality",
+  "mode": "code",
+  "title": "Human report semantic quality",
+  "baseCommit": "278418c6cb18835112b740aba6f620351aa7845a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/human-report-semantic-quality.contract.json",
+    ".ai/work-items/active/human-report-semantic-quality.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/human-report-semantic-quality.outcome.json",
+    ".ai/work-items/active/human-report-semantic-quality.outcome.md",
+    "scripts/ai_generate_human_report.py",
+    "tests/test_human_benefit_report.py",
+    "docs/reference/human-report-semantic-quality.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Changing provider configuration or treating local/repository claims as provider evidence.", "Changing Task Outcome fact collection outside report projection needs."],
+  "sources": [
+    {
+      "path": "user-pasted-text-1",
+      "reason": "WI-09 required report structure, prohibited claims, and ordinary-user acceptance questions."
+    },
+    {
+      "path": "scripts/ai_generate_human_report.py",
+      "reason": "Current Human Benefit Report projection and validation boundary."
+    },
+    {
+      "path": "tests/test_human_benefit_report.py",
+      "reason": "Existing focused report behavior and regression coverage."
+    }
+  ],
+  "unknowns": [
+  ],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "human_decision_quality", "false_completion_claim", "evidence_omission"
+    ],
+    "reason": "A report is the human decision surface; ambiguous completion and missing limitations can cause unsafe reliance.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Human-facing evidence interpretation and forced-stop semantics are high-impact governance boundaries."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the governed lifecycle; implementation is limited to truthful report projection and tests."
+  },
+  "preReviewWarnings": [
+    "Review that each fixed human question has a direct, evidence-derived answer and no prohibited claim can appear with missing evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The Human Benefit Report renders the twelve required sections: conclusion, completed work, findings, interventions, forced stops, resolved risks, avoided impact, unresolved risks, not-run verification, prohibited claims, human decisions, and next step.",
+    "The report cannot say all complete, safe, enterprise-grade, tested, user-approved, or avoided major risk unless source-bound evidence supports the exact claim.",
+    "Focused tests cover not_run, fixture-only, missing approval binding, unsupported safety and enterprise claims, and ordinary-user questions without JSON inspection.",
+    "Documentation explains report semantics and the limits of the rendered decision surface."
+  ],
+  "guidelines": [
+    "Every report statement must be derived from validated Task Outcome facts or explicitly marked unavailable.",
+    "Do not convert warning, local, fixture, repository-recorded, or missing evidence into a stronger claim.",
+    "Keep the report concise enough for an ordinary user while retaining actionable stop and recovery facts.",
+    "Document all public report semantics and prohibited claims."
+  ],
+  "intent": {
+    "problem": "Existing reports expose internal fields but do not reliably tell a person what was completed, what was blocked, what may not be claimed, or who must decide next.",
+    "constraints": ["Preserve Task Outcome as the evidence authority.", "Never infer external provider, enterprise, approval, safety, or causal-risk evidence.", "Make unavailable and forced-stop facts visible without requiring JSON inspection.", "Keep focused tests deterministic and report generation local."],
+    "rationale": "A stable evidence-derived report lets people make calibrated continuation decisions without mistaking formatted output for proof."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {"scenario":"ordinary user answers the required questions without JSON","required":true,"status":"unverified","evidence":[],"expected":"Rendered report states completed work, omissions, blocks, rationale, continuation state, and decision owner.","verificationPlan":"Run focused rendering tests with complete and constrained Task Outcomes."},
+    {"scenario":"not_run or missing evidence blocks completion and safety overclaims","required":true,"status":"unverified","evidence":[],"expected":"Report names unavailable verification and prohibited claims instead of saying all complete or safe.","verificationPlan":"Run negative report projection tests."},
+    {"scenario":"fixture and repository assertions cannot become provider or approval evidence","required":true,"status":"unverified","evidence":[],"expected":"Report preserves fixture/local/repository evidence limits and shows approval as unavailable without a binding.","verificationPlan":"Run focused evidence-level and approval-binding tests."},
+    {"scenario":"forced stops, residual risk, human decision, and next step remain actionable","required":true,"status":"unverified","evidence":[],"expected":"Each constrained outcome renders intervention, responsible decision owner, and safe continuation direction.","verificationPlan":"Run report rendering regressions for blocked and warning states."}
+  ],
+  "rawUserRequest":"完成全部工单，需要我授权的明确写入我已经授权。每个工单完成完整流程，直到归档，PR和清理分支。",
+  "rawRequestSource":{"type":"human","reference":"user-pasted-text-1 and follow-up authorization","capturedAt":"2026-08-01T10:50:00Z","digest":"sha256:user-authorized-wi-09-human-report"},
+  "declaredIntent":{"summary":"Make the Human Benefit Report a truthful, evidence-derived decision surface for ordinary users.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "requestedOperation":{"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "requiredEvidenceContext":{"destructiveLevel":"none","availableEvidence":["validated Task Outcome","verification records","residual risks","forced-stop facts","human decision evidence"],"externalSystem":"none"},
+  "residualRiskExpectation":"A rendered report cannot prove unobserved external controls; it must retain that limit explicitly.",
+  "humanDecisionPoints":["The user authorized Contract writes and complete Work Item lifecycle actions; no provider configuration change is allowed."],
+  "documentationImpact":"Document the human report sections, prohibited claims, and evidence boundaries.",
+  "performanceImpact":"Rendering remains local and linear in the Task Outcome size.",
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 748
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/human-report-semantic-quality.json",
+    "baseCommit": "278418c6cb18835112b740aba6f620351aa7845a",
+    "initialScopeDigest": "2167c9a8c9fee12f16b0c30feaf0b2b799ddd1272687009eb2b8fad38d18e0f1",
+    "contractSkeletonDigest": "91f471ef71f99e3fea8b4b05dee4d75faab3cd577cecbf9b2f4bc420b69c42e3"
+  }
+}

@@ -195,3 +195,51 @@ def test_installer_and_make_interfaces_distribute_human_report():
         text = makefile.read_text(encoding="utf-8")
         assert "generate-human-benefit-report:" in text
         assert "check-human-benefit-report:" in text
+
+
+def test_markdown_uses_the_fixed_human_decision_structure_without_stronger_claims():
+    source = outcome(
+        status="completed_with_warnings",
+        sections={
+            "interventions": ["Stopped the change until owner evidence was supplied."],
+            "forcedStops": [
+                {
+                    "reason": "Owner evidence was missing.",
+                    "result": "resolved",
+                    "evidence": [{"source": "stop.json", "subject": "stop"}],
+                }
+            ],
+            "limitations": [
+                {
+                    "title": "Hosted verification was not run",
+                    "sourceWarning": "No hosted receipt is available.",
+                }
+            ],
+            "forbiddenClaims": ["Do not claim this is safe."],
+            "humanDecisions": ["A release owner must decide whether to proceed."],
+        },
+    )
+
+    markdown = human.render_human_report(human.generate_human_report(source))
+
+    headings = [
+        "Task conclusion",
+        "Completed work",
+        "Findings",
+        "AI Cockpit interventions",
+        "Forced stops",
+        "Resolved risks",
+        "Avoided impact",
+        "Unresolved risks",
+        "Not-run verification",
+        "Forbidden claims",
+        "Human decisions",
+        "Next safe action",
+    ]
+    positions = [markdown.index(heading) for heading in headings]
+    assert positions == sorted(positions)
+    assert "Stopped the change until owner evidence was supplied." in markdown
+    assert "Owner evidence was missing." in markdown
+    assert "Hosted verification was not run" in markdown
+    assert "A release owner must decide whether to proceed." in markdown
+    assert "Evidence-derived report projection" not in markdown
