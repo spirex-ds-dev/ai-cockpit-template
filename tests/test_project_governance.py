@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import shutil
 import sys
@@ -12,6 +13,23 @@ from ai_project_profile import load_profile, validate_profile
 from check_system_invariants import invariant_issues
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def isolated_repository_view(tmp_path, *writable_paths: Path) -> Path:
+    """Build a read-only linked repository view, copying only mutated files."""
+    copy = tmp_path / "repository"
+    shutil.copytree(
+        ROOT,
+        copy,
+        ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__"),
+        copy_function=os.symlink,
+    )
+    for path in writable_paths:
+        relative = path.relative_to(ROOT)
+        destination = copy / relative
+        destination.unlink()
+        shutil.copy2(path, destination)
+    return copy
 
 
 def fact_values(report, category):
@@ -392,11 +410,9 @@ def test_repository_system_invariants_are_consistent():
 
 
 def test_system_invariants_reject_missing_dev_lock(tmp_path, monkeypatch):
-    copy = tmp_path / "repository"
-    shutil.copytree(
-        ROOT, copy, ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__")
-    )
+    copy = isolated_repository_view(tmp_path)
     (copy / "requirements-dev.lock").unlink()
+    assert (ROOT / "requirements-dev.lock").is_file()
     monkeypatch.setattr(
         check_system_invariants, "exercise_installer", lambda *_args, **_kwargs: None
     )
@@ -405,10 +421,7 @@ def test_system_invariants_reject_missing_dev_lock(tmp_path, monkeypatch):
 
 
 def test_system_invariants_reject_missing_governance_docs(tmp_path, monkeypatch):
-    copy = tmp_path / "repository"
-    shutil.copytree(
-        ROOT, copy, ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__")
-    )
+    copy = isolated_repository_view(tmp_path)
     (copy / "SECURITY.md").unlink()
     (copy / "CONTRIBUTING.md").unlink()
     (copy / ".github" / "CODEOWNERS").unlink()
@@ -424,10 +437,8 @@ def test_system_invariants_reject_missing_governance_docs(tmp_path, monkeypatch)
 
 
 def test_system_invariants_allow_missing_archive_summary_version(tmp_path, monkeypatch):
-    copy = tmp_path / "repository"
-    shutil.copytree(
-        ROOT, copy, ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__")
-    )
+    source_summary = next((ROOT / ".ai" / "work-items" / "archive").rglob("*.summary.json"))
+    copy = isolated_repository_view(tmp_path, source_summary)
     archive_summary = next((copy / ".ai" / "work-items" / "archive").rglob("*.summary.json"))
     data = json.loads(archive_summary.read_text(encoding="utf-8"))
     data.pop("summaryVersion", None)
@@ -443,10 +454,7 @@ def test_system_invariants_allow_missing_archive_summary_version(tmp_path, monke
 
 
 def test_system_invariants_reject_manifest_stack_drift(tmp_path, monkeypatch):
-    copy = tmp_path / "repository"
-    shutil.copytree(
-        ROOT, copy, ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__")
-    )
+    copy = isolated_repository_view(tmp_path, ROOT / ".ai" / "cockpit" / "system_invariants.json")
     manifest = copy / ".ai" / "cockpit" / "system_invariants.json"
     data = json.loads(manifest.read_text(encoding="utf-8"))
     data["stacks"].remove("python")
@@ -460,10 +468,7 @@ def test_system_invariants_reject_manifest_stack_drift(tmp_path, monkeypatch):
 
 
 def test_system_invariants_reject_unpinned_workflow_actions(tmp_path, monkeypatch):
-    copy = tmp_path / "repository"
-    shutil.copytree(
-        ROOT, copy, ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__")
-    )
+    copy = isolated_repository_view(tmp_path, ROOT / ".github" / "workflows" / "smoke.yml")
     workflow = copy / ".github" / "workflows" / "smoke.yml"
     workflow.write_text(
         re.sub(
