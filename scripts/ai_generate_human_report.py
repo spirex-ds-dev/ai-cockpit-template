@@ -219,6 +219,8 @@ def generate_human_report(
             "unresolved": detected - resolved,
         },
         "preventedRisks": _prevented_risks(sections),
+        "interventions": _string_list(sections.get("interventions")),
+        "forcedStops": stops,
         "humanDecisions": list(sections.get("humanDecisions", [])),
         "limitations": _mapping_list(sections.get("limitations")),
         "forbiddenClaims": _string_list(sections.get("forbiddenClaims")),
@@ -242,37 +244,58 @@ def render_human_report(report: Mapping[str, Any]) -> str:
         f"Phase: `{report['phase']}`",
         f"Result: `{report['result']}`",
         "",
-        "## What changed",
+        "## 任务结论 / Task conclusion",
+        f"Task Outcome status: `{report['result']}`.",
+        "",
+        "## 实际完成内容 / Completed work",
         str(report["task"]["summary"]),
         "",
-        "## Issues",
+        "## 发现的问题 / Findings",
         f"- Detected issues: {issues['detected']}",
         f"- Hard stops: {issues['hardStops']}",
         f"- Warnings: {issues['warnings']}",
         f"- Resolved: {issues['resolved']}",
         f"- Unresolved: {issues['unresolved']}",
         "",
-        "## Prevented risks",
+        "## AI Cockpit 的干预 / AI Cockpit interventions",
     ]
+    interventions = report.get("interventions", [])
+    lines.extend(f"- {item}" for item in interventions) if interventions else lines.append(
+        "None recorded."
+    )
+    lines.extend(["", "## 强制停止 / Forced stops"])
+    stops = report.get("forcedStops", [])
+    lines.extend(
+        f"- {_description(item)}" for item in stops if isinstance(item, Mapping)
+    ) if stops else lines.append("None recorded.")
+    lines.extend(["", "## 已解决风险 / Resolved risks"])
+    if issues["resolved"]:
+        lines.append(f"- {issues['resolved']} resolved item(s) recorded in the Task Outcome.")
+    else:
+        lines.append("None recorded.")
+    lines.extend(["", "## 避免的影响 / Avoided impact"])
     prevented = report.get("preventedRisks", [])
-    lines.extend(f"- {item['risk']}" for item in prevented) if prevented else lines.append("None")
-    lines.extend(["", "## Human decisions"])
-    decisions = report.get("humanDecisions", [])
-    lines.extend(f"- {item}" for item in decisions) if decisions else lines.append("None")
-    lines.extend(["", "## Remaining risks"])
+    lines.extend(
+        f"- {item['risk']} ({item['action']}: {item['resolution']})" for item in prevented
+    ) if prevented else lines.append("None recorded.")
+    lines.extend(["", "## 未解决风险 / Unresolved risks"])
     remaining = report.get("remainingRisks", [])
     lines.extend(
         f"- [{item['severity']}] {item['detail']}" for item in remaining
-    ) if remaining else lines.append("None")
-    lines.extend(["", "## Limitations"])
+    ) if remaining else lines.append("None recorded.")
+    lines.extend(["", "## 未执行验证 / Not-run verification"])
     limitations = report.get("limitations", [])
     lines.extend(
-        f"- {item.get('title', 'Limitation')}" for item in limitations
-    ) if limitations else lines.append("None")
-    lines.extend(["", "## Forbidden claims"])
+        f"- {item.get('title', 'Limitation')}: {item.get('sourceWarning', 'Evidence is unavailable.')}"
+        for item in limitations
+    ) if limitations else lines.append("None recorded.")
+    lines.extend(["", "## 当前禁止声明 / Forbidden claims"])
     claims = report.get("forbiddenClaims", [])
-    lines.extend(f"- {item}" for item in claims) if claims else lines.append("None")
-    lines.extend(["", "## Next safe action", str(report["nextSafeAction"]), ""])
+    lines.extend(f"- {item}" for item in claims) if claims else lines.append("None recorded.")
+    lines.extend(["", "## 需要人的决定 / Human decisions"])
+    decisions = report.get("humanDecisions", [])
+    lines.extend(f"- {item}" for item in decisions) if decisions else lines.append("None recorded.")
+    lines.extend(["", "## 下一步 / Next safe action", str(report["nextSafeAction"]), ""])
     return "\n".join(lines)
 
 
