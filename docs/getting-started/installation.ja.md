@@ -1,134 +1,77 @@
 ---
 author: Ray
 title: "AI Cockpit をインストールする"
-description: "初めて使う人のための、プロンプト中心の AI Cockpit インストールと校正の入口。"
+description: "対話型を既定とするインストール、レビュー、rollback、校正境界。"
+audience:
+  - adopter
+status: current
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
 ---
 
 # AI Cockpit をインストールする
 
 <!-- public-quality-target: ai-cockpit-quality -->
 
-これは最も簡単な導入経路です。AI Cockpit の内部記録を先に理解する必要はありません。
-対象プロジェクトを開き、コーディング Agent に一度に一つのプロンプトを渡し、
-結果を読んでから次へ進んでください。
+人が使う既定経路は対話型インストーラーです。対象 Git リポジトリで実行します。
 
-## 開始すると何が起きるか
-
-```text
-プロジェクトを開く → 準備を確認する → 計画を確認する → Runtime を入れる
-→ 結果を確認する → 校正 Work Item を開始する
+<!-- command-evidence: adopter_required -->
+```bash
+./install.sh --interactive
 ```
 
-Runtime のインストールは、プロジェクト向け校正の完了ではありません。
+TTY で引数なし実行した場合も同じ Wizard が開きます。明示的な installer flag は
+自動化向けの安定した入口として残り、非 TTY の引数なし実行は入力待ちせず停止します。
+
+## Wizard が表示するもの
+
+1. Target Repository
+2. Readiness
+3. Installation Mode
+4. Governance Profile
+5. Planned Changes
+6. Conflict Review
+7. Explicit Confirmation
+8. Installation
+9. Verification
+10. Next Action
+
+確認前に、対象 path、Git と tool の readiness、New Adoption / Upgrade /
+Dry Run、Lite / Standard / Strict、追加・変更 file 数、source code への影響、
+installation branch、検出した conflict を表示します。表示上の既定値は Standard です。
+
+Profile の選択は installation intent の記録だけです。Installer は Lite、Standard、
+Strict を有効化しません。Project Calibration は installation 後の別 Work Item です。
+
+## 安全境界
+
+明示的な `yes` までは対象を変更しません。Dry Run、blocked readiness、未解決 conflict、
+空回答、拒否、EOF、中断では書き込み transaction を呼びません。
+Readiness または conflict evidence が `Unknown` の場合は停止し、installation 前に解決します。
+
+Installer は commit、push、Pull Request 作成、merge、成功した installation branch の削除、
+Strict の有効化、Calibration 完了の報告を行いません。Transaction failure では既存の
+Installer が元 branch または detached HEAD を復元し、作成・置換 file、managed section、
+Makefile、agent marker を rollback します。再試行前に、報告された対象状態を確認してください。
+
+## 自動化と Prompt 補助
+
+決定的な自動化では `--dry-run`、`--upgrade`、`--create-adoption`、`--stack`、
+`--update-makefile` などの明示 flag を使います。Prompt 中心の Agent 導入は補助経路です。
+同じ read-only plan、conflict、予定 file を表示し、Installer 実行前に明示確認を待たせます。
+
+## Installation 後
+
 インストール後は、独立したプロジェクト校正 Work Item を開始します。
+生成された Work Item と branch を review します。Git publication は通常の人間 review
+lifecycle で行います。Calibration は別 Work Item として開始し、installation だけを
+production readiness evidence として扱いません。
 
-## 始める前に必要なこと
+## 詳細
 
-- 導入したい対象プロジェクトを開いていること。
-- プロジェクトが Git を使っていること。
-- 後でブランチと Pull Request を作る権限があること。
-- プロジェクトを読み、作業内容を見せられる AI コーディング Agent があること。
-
-このプロジェクトにすでに AI Cockpit が入っている場合は、再インストールしません。
-**手順 6**へ進み、必要な Work Item を直接開始してください。
-
-## 手順 1：対象プロジェクトを確認する
-
-**すること：**次を Agent に貼り付けます。
-
-```text
-今エディタで開いているプロジェクトを、読むだけで確認してください。ファイルは変更しないでください。
-プロジェクトのパス、現在の Git ブランチ、未コミットの変更の有無、Git 管理かどうかを教えてください。
-「続行できます」「私の確認が必要です」「続行できません」のいずれかで答えてください。
-確認できないことは推測せず Unknown と書いてください。
-```
-
-**表示されるもの：**パス、ブランチ、簡単な状態です。
-
-**停止して相談する場合：**対象外のプロジェクト、または説明できない変更がある場合。
-
-## 手順 2：インストールの準備を確認する
-
-```text
-現在のプロジェクトが AI Cockpit のインストールに適しているか、読むだけで確認してください。
-Git、必要なローカルツール、使えるデフォルトブランチを確認してください。
-準備済みのもの、不足しているもの、助けが必要な担当を、やさしい日本語で説明してください。
-確認できない事実は推測せず Unknown と書いてください。
-```
-
-**理由：**適さないプロジェクトへファイルを書き込まないためです。
-
-**表示されるもの：**短い「続行可」または「支援が必要」の結果です。
-
-**停止して相談する場合：**必要なツール、リポジトリの事実、または担当者が不明な場合。
-
-## 手順 3：インストール計画を確認する
-
-```text
-このプロジェクト用の AI Cockpit インストール計画を作ってください。ただし実行はしないでください。
-使う正式バージョン、作るブランチ、新規または変更するファイル、既存コードへの影響、
-中断した場合の戻し方を説明し、最後に私の承認を待ってください。
-```
-
-**理由：**書き込み前に、変更の範囲を人が確認するためです。
-
-**表示されるもの：**短くレビューできる計画です。
-
-**停止して相談する場合：**想定外のファイル、競合、Unknown がある場合。
-
-## 手順 4：Runtime をインストールする
-
-```text
-今表示したインストール計画を承認します。列挙された Runtime のインストールと検証だけを実行してください。
-commit、push、Pull Request の作成、マージはしないでください。計画外の変更、競合、Unknown が出たら直ちに停止し、
-やさしい日本語で結果を報告してください。
-```
-
-**表示されるもの：**インストールされたファイルとローカル検証の結果です。
-
-**停止して相談する場合：**Agent が追加作業を提案する、または既存の変更を上書きしようとする場合。
-
-## 手順 5：インストール結果を確認する
-
-```text
-読むだけで、AI Cockpit Runtime がこのプロジェクトに正しく入ったか確認してください。
-確認した根拠、追加または変更したファイル、次に安全な操作を列挙してください。
-commit、push、Pull Request、マージはしないでください。
-```
-
-**表示されるもの：**「インストール済み」または「未完了」の明確な結論です。
-
-**停止して相談する場合：**根拠が不完全、または結論が明確でない場合。
-
-## 手順 6：プロジェクト校正を開始する
-
-```text
-このプロジェクトの AI Cockpit 校正 Work Item を開始してください。まずプロジェクトを確認してタスク範囲を提案し、
-Work Item の計画ができるまでプロジェクト方針やソースコードを変更しないでください。
-ソースの場所、テスト、生成ファイル、重要なリスク、それを確認できるレビュアーを、やさしい質問で確認してください。
-確認できない回答は Unknown とし、確認が必要な所で停止してください。
-```
-
-**理由：**校正によって、インストール済み Runtime をこのプロジェクトに合わせます。
-
-**表示されるもの：**小さく追跡できるタスクと、短い質問の一覧です。
-
-**停止して相談する場合：**校正の範囲を超える、または担当者がいない場合。
-
-## インストール完了の基準
-
-- Runtime が入っている。
-- インストール結果を確認した。
-- 独立した校正 Work Item が準備済み、または実行中である。
-- commit、push、Pull Request、マージ、有効化を、一つの既定承認に混ぜていない。
-
-## 詳しい説明が必要な場合
-
-- [厳格なインストールとサプライチェーン検証](installation-security.ja.md)
-- [プロジェクト校正ガイド](calibration.ja.md)
-- [インストールのトラブルシューティング](../troubleshooting/installation.ja.md)
+- [厳格な installation と supply-chain verification](installation-security.ja.md)
+- [Project Calibration guide](calibration.ja.md)
+- [Calibration session model](../reference/calibration-session-model.ja.md)
+- [Installation troubleshooting](../troubleshooting/installation.ja.md)
+- [Interactive Wizard architecture](../architecture/interactive-installation-wizard.md)
 - [iOS](examples/ios.ja.md)、[Android](examples/android.ja.md)、[Java](examples/java.ja.md) の例
-- [保守者・監査者向けの校正内部モデル](../reference/calibration-session-model.ja.md)
-
-AI Cockpit は Unknown を推測せず、あなたの作業を上書きせず、別 Release へ黙って切り替えず、
-一度の承認を後続操作の権限として扱いません。詳細な制御は上の上級ガイドに残しています。

@@ -55,7 +55,7 @@ def japanese_adopter(tmp_path_factory):
             target=target,
             source=ROOT,
             language="ja-JP",
-            input_fn=iter(["1", "y"]).__next__,
+            input_fn=iter(["1", "2", "y"]).__next__,
             output=rendered.append,
             is_tty=True,
         )
@@ -72,7 +72,9 @@ def test_japanese_adopter_installs_with_real_wizard_and_release_binding(japanese
     )
     release = json.loads((ROOT / "release.json").read_text(encoding="utf-8"))
 
-    assert rendered[0] == "インストール方法を選択してください:"
+    assert rendered[0] == "AI Cockpit インストール"
+    assert "インストール方法を選択してください:" in rendered
+    assert "ガバナンスプロファイルを選択してください (既定: Standard):" in rendered
     assert "インストールを実行しますか？ [y/N]" in rendered
     assert "インストール結果: installed (終了コード 0)。" in rendered
     assert _run(target, "git", "branch", "--show-current").stdout.strip() == "adopt/ai-cockpit"

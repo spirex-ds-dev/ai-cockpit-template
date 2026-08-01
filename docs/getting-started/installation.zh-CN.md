@@ -1,130 +1,76 @@
 ---
 author: Ray
 title: "安装 AI Cockpit"
-description: "面向首次使用者、以提示词为主的 AI Cockpit 安装与校准入口。"
+description: "以交互式流程为默认入口的安装、审查、回滚与校准边界。"
+audience:
+  - adopter
+status: current
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
 ---
 
 # 安装 AI Cockpit
 
 <!-- public-quality-target: ai-cockpit-quality -->
 
-这是最简单的安装路径。你不需要先理解 AI Cockpit 的内部记录；打开目标工程，
-每次只把一段提示词交给编程 Agent，并在继续前阅读结果即可。
+面向人的默认路径是真正的交互式安装器。请在目标 Git 仓库中运行：
 
-## 开始后会发生什么
-
-```text
-打开工程 → 检查准备情况 → 查看计划 → 安装 Runtime
-→ 确认结果 → 启动校准 Work Item
+<!-- command-evidence: adopter_required -->
+```bash
+./install.sh --interactive
 ```
 
-安装 Runtime 不等于已经完成工程校准。安装完成后，开始独立的工程校准 Work Item。
+TTY 环境中不带参数执行也会打开同一向导。显式 installer 参数仍是稳定的自动化入口；
+非 TTY 环境中不带参数会直接安全停止，不会等待输入。
 
-## 开始前需要什么
+## 向导展示什么
 
-- 已打开要安装的目标工程。
-- 工程已使用 Git。
-- 之后有创建分支和 Pull Request 的权限。
-- 有能读取工程并展示过程的 AI 编程 Agent。
+1. Target Repository
+2. Readiness
+3. Installation Mode
+4. Governance Profile
+5. Planned Changes
+6. Conflict Review
+7. Explicit Confirmation
+8. Installation
+9. Verification
+10. Next Action
 
-如果这个工程已经安装过 AI Cockpit，不要重复安装；直接进入**第 6 步**，
-启动当前需要的 Work Item。
+确认前，向导会显示目标路径、Git 与工具 readiness、New Adoption / Upgrade /
+Dry Run、Lite / Standard / Strict、计划新增和修改数量、源码影响、安装分支及所有冲突。
+界面默认选择 Standard。
 
-## 第 1 步：确认打开的是目标工程
+Profile 选择只记录安装意图。安装器不会激活 Lite、Standard 或 Strict；工程校准仍是
+安装后的独立 Work Item。
 
-**这样做：**把下面内容复制给 Agent。
+## 安全边界
 
-```text
-只读取检查我当前打开的工程，不要修改任何文件。
-告诉我工程路径、当前 Git 分支、是否有未提交修改、是否已使用 Git。
-请用“可以继续”“需要我确认”或“无法继续”回答。不能确认的内容写 Unknown，不要猜测。
-```
+在明确输入 `yes` 前，目标仓库保持只读。Dry Run、readiness 阻断、未解决冲突、空回答、
+拒绝、EOF 或中断都不会调用写入事务。
+如果 readiness 或冲突证据为 `Unknown`，必须停止并在安装前解决。
 
-**你会看到：**工程路径、分支和简单状态。
+安装器不会 commit、push、创建 Pull Request、merge、删除成功安装分支、激活 Strict，
+也不会把安装报告为校准完成。事务失败时，现有 Installer 会恢复原 branch 或 detached HEAD，
+并回滚新建或替换的文件、managed section、Makefile 和 agent marker。重试前应检查报告中的
+目标状态，不能根据普通失败消息自行推断恢复成功。
 
-**停止并联系：**打开的不是目标工程，或存在无法解释的修改。
+## 自动化与提示词辅助路径
 
-## 第 2 步：检查是否可以安装
+确定性自动化请使用 `--dry-run`、`--upgrade`、`--create-adoption`、`--stack`、
+`--update-makefile` 等显式参数。Prompt-first Agent 安装降为辅助路径：必须执行同一只读计划，
+展示冲突与计划文件，并在调用 Installer 前等待明确确认。
 
-```text
-只读取检查当前工程是否适合安装 AI Cockpit。
-检查 Git、所需本地工具和可用的默认分支。用简单中文说明哪些已准备好、
-哪些缺失、需要谁协助。不能确认的内容写 Unknown，不要猜测。
-```
+## 安装之后
 
-**为什么：**避免在不适合的工程中写入文件。
+安装完成后，开始独立的工程校准 Work Item。
+审查生成的 Work Item 和安装分支。Git 发布仍走正常的人类审查生命周期。校准必须作为
+独立 Work Item 开始；安装本身不是生产就绪证据。
 
-**你会看到：**简短的“可继续”或“需要协助”结果。
-
-**停止并联系：**缺少工具、工程事实不明确，或负责人未知。
-
-## 第 3 步：查看安装计划
-
-```text
-为当前工程生成 AI Cockpit 安装计划，但不要执行。
-说明将使用哪个正式版本、将创建哪个分支、会新增或修改哪些文件、
-是否影响现有代码，以及安装中止时如何恢复。最后等待我的批准。
-```
-
-**为什么：**任何写入前，都先由你确认明确的变更范围。
-
-**你会看到：**一份简短、可以审核的计划。
-
-**停止并联系：**计划包含意外文件、冲突或 Unknown。
-
-## 第 4 步：安装 Runtime
-
-```text
-我批准刚才显示的安装计划。只执行已列出的 Runtime 安装和验证。
-不要 commit、push、创建 Pull Request 或合并。出现计划外修改、冲突或 Unknown 时立即停止。
-请用简单中文报告结果。
-```
-
-**你会看到：**已安装的文件和本地验证结果。
-
-**停止并联系：**Agent 提议额外工作，或要覆盖已有修改。
-
-## 第 5 步：确认安装结果
-
-```text
-只读取确认 AI Cockpit Runtime 是否已在当前工程正确安装。
-列出检查过的证据、新增或修改的文件，以及下一项安全操作。
-不要创建 commit、push、Pull Request 或合并。
-```
-
-**你会看到：**明确的“已安装”或“未安装”结论。
-
-**停止并联系：**证据不完整，或结论不清楚。
-
-## 第 6 步：启动工程校准
-
-```text
-为当前工程启动一个 AI Cockpit 校准 Work Item。先检查工程并提出任务范围；
-在 Work Item 计划就绪前，不要修改工程策略或源代码。
-用简单问题确认源码路径、测试、生成文件、重要风险和可确认它们的审核人。
-不能确认的回答写 Unknown，需要确认时停止。
-```
-
-**为什么：**校准会让已安装的 Runtime 适合这个具体工程。
-
-**你会看到：**一个小型、可追踪的任务和一组简短问题。
-
-**停止并联系：**任务超出校准范围，或缺少负责人。
-
-## 安装完成的标准
-
-- Runtime 已安装。
-- 已检查安装结果。
-- 独立的校准 Work Item 已准备好或正在执行。
-- 没有把 commit、push、Pull Request、合并或启用混入一次默认授权。
-
-## 需要更多说明？
+## 更多信息
 
 - [严格安装与供应链验证](installation-security.zh-CN.md)
 - [工程校准指南](calibration.zh-CN.md)
+- [校准会话模型](../reference/calibration-session-model.zh-CN.md)
 - [安装故障排除](../troubleshooting/installation.zh-CN.md)
+- [交互式向导架构](../architecture/interactive-installation-wizard.md)
 - [iOS](examples/ios.zh-CN.md)、[Android](examples/android.zh-CN.md)、[Java](examples/java.zh-CN.md) 示例
-- [面向维护者和审计者的校准内部模型](../reference/calibration-session-model.zh-CN.md)
-
-AI Cockpit 不得猜测 Unknown，不得覆盖你的工作，不得静默改用其他 Release，
-也不得把一次批准当作后续操作的权限。详细控制要求保留在上面的进阶文档中。

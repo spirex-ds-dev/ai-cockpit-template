@@ -6,16 +6,19 @@ from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 
 from ai_installer_detection import InstallationDetection
+from ai_installer_evidence import InstallationPreview
 
 STEP_NAMES = (
     "Target Repository",
-    "Repository Readiness",
+    "Readiness",
     "Installation Mode",
-    "Project Stack",
-    "Installation Options",
-    "Adoption Branch",
-    "Installation Plan Review",
-    "Installation/Result",
+    "Governance Profile",
+    "Planned Changes",
+    "Conflict Review",
+    "Explicit Confirmation",
+    "Installation",
+    "Verification",
+    "Next Action",
 )
 
 
@@ -55,6 +58,8 @@ class WizardPlan:
     stack: str
     options: dict[str, object]
     branch: str
+    profile: str
+    preview: InstallationPreview
 
     @property
     def step_names(self) -> tuple[str, ...]:
@@ -67,6 +72,14 @@ class WizardPlan:
             "stack": self.stack,
             "options": dict(self.options),
             "branch": self.branch,
+            "profile": self.profile,
+            "preview": {
+                "adds": self.preview.adds,
+                "modifies": self.preview.modifies,
+                "skips": self.preview.skips,
+                "sourceCodeChanges": self.preview.source_code_changes,
+                "branch": self.preview.branch,
+            },
         }
 
 
@@ -99,9 +112,17 @@ def _step(
 
 
 def build_wizard_plan(
-    detection: InstallationDetection, *, stack: str, options: Mapping[str, object], branch: str
+    detection: InstallationDetection,
+    *,
+    stack: str,
+    options: Mapping[str, object],
+    branch: str,
+    profile: str,
+    preview: InstallationPreview,
 ) -> WizardPlan:
-    """Create exactly eight deterministic steps from read-only detection facts."""
+    """Create exactly ten deterministic stages from read-only detection facts."""
+    if profile not in {"lite", "standard", "strict"}:
+        raise ValueError("profile must be lite, standard, or strict")
     facts = detection.facts.to_dict()
     facts.update({"mode": detection.mode, "stacks": list(detection.stacks)})
     common_stop = (
@@ -152,68 +173,122 @@ def build_wizard_plan(
         ),
         _step(
             STEP_NAMES[3],
-            purpose="Summarize detected project stacks.",
-            why="Stack signals determine compatible installer options.",
-            facts={"stacks": list(detection.stacks)},
-            suggested=stack,
-            impact="Multi-stack keeps all detected signals for review.",
-            example="swift + android",
-            expected="iOS, Android, Generic, or multi-stack facts are shown.",
+            purpose="Choose the governance profile to plan for later calibration.",
+            why="The operator needs a visible governance intent without activating policy.",
+            facts={"selected": profile, "available": ["lite", "standard", "strict"]},
+            suggested="standard",
+            impact="The selection is plan-only; Strict is never activated by installation.",
+            example="standard",
+            expected="One profile intent is visible while calibration remains separate.",
             stop=common_stop,
-            checklist=("stack signals reviewed", "multi-project layout checked"),
+            checklist=("profile impact reviewed", "no automatic policy activation"),
         ),
         _step(
             STEP_NAMES[4],
-            purpose="Review installation options.",
-            why="Options change files and conflict behavior after confirmation.",
-            facts=dict(options),
-            suggested="defaults",
-            impact="Force and examples affect the eventual transaction.",
-            example="force=false, with_examples=false",
-            expected="Options are explicit and stable.",
+            purpose="Review the exact planned change summary.",
+            why="File impact and branch ownership must be visible before confirmation.",
+            facts={
+                "adds": preview.adds,
+                "modifies": preview.modifies,
+                "skips": preview.skips,
+                "sourceCodeChanges": preview.source_code_changes,
+                "branch": preview.branch,
+            },
+            suggested="review all counts",
+            impact="Only AI Cockpit governance surfaces should change.",
+            example="adds=41, modifies=1, sourceCodeChanges=false",
+            expected="Adds, modifications, skips, source impact, and branch are explicit.",
             stop=common_stop,
-            checklist=("force policy reviewed", "examples and Makefile options reviewed"),
+            checklist=("counts reviewed", "source impact reviewed", "branch reviewed"),
         ),
         _step(
             STEP_NAMES[5],
-            purpose="Review the adoption branch boundary.",
-            why="Branch facts prevent accidental work on the wrong base.",
-            facts={"branch": facts["branch"], "defaultBranch": facts["defaultBranch"]},
-            suggested=branch,
-            impact="Branch selection is passed to the existing transaction only after confirmation.",
-            example="ai-cockpit/adopt",
-            expected="Base remote and branch are visible.",
+            purpose="Review repository and managed-file conflicts.",
+            why="Unresolved conflicts must stop before the write transaction.",
+            facts={
+                "conflicts": facts["conflicts"],
+                "trackedHygiene": facts["trackedHygiene"],
+                "symlinkRisks": facts["symlinkRisks"],
+                "blockingReasons": list(detection.blocking_reasons),
+            },
+            suggested="continue only when empty",
+            impact="Any blocker keeps the installer read-only.",
+            example="conflicts=[]",
+            expected="Every blocking conflict is explicit before confirmation.",
             stop=common_stop,
-            checklist=("base branch reviewed", "no automatic push or merge"),
+            checklist=("conflicts empty", "symlink risks empty", "hygiene reviewed"),
         ),
         _step(
             STEP_NAMES[6],
-            purpose="Show the complete plan for final review.",
-            why="The operator must see every fact, impact, and write boundary together.",
-            facts=detection.plan.to_dict(),
-            suggested="confirm after review",
+            purpose="Require an explicit affirmative installation decision.",
+            why="A default or ambiguous response cannot authorize repository writes.",
+            facts={
+                "writeBoundary": "none_before_confirmation",
+                "automation": "no commit / no push / no PR / no merge / no branch deletion",
+                "profileActivation": "none",
+            },
+            suggested="decline unless the complete plan is understood",
             impact=detection.plan.impact,
-            example="writeBoundary=none_before_confirmation",
-            expected="The full eight-step plan is rendered before confirmation.",
+            example="confirm: yes",
+            expected="Only an explicit yes may invoke the Installer transaction.",
             stop=common_stop,
             checklist=detection.plan.checklist,
         ),
         _step(
             STEP_NAMES[7],
-            purpose="Report Dry Run or confirmed installation result.",
-            why="The result must distinguish proposal, cancellation, and transaction output.",
+            purpose="Delegate the confirmed transaction to the existing Installer.",
+            why="One transaction authority preserves atomic rollback and managed ownership.",
             facts={
-                "writeBoundary": "none_before_confirmation",
-                "automation": "no commit / no push / no PR / no merge",
+                "mode": detection.mode,
+                "stack": stack,
+                "options": dict(options),
+                "branch": branch,
+                "transactionAuthority": "install_ai_cockpit.Installer",
             },
-            suggested="cancel unless confirmed",
-            impact="Only affirmative confirmation can invoke Installer.",
-            example="confirm: yes",
-            expected="Result includes status and exit code.",
+            suggested="execute only after confirmation",
+            impact="Installer owns writes, backups, branch restoration, and rollback.",
+            example="Installer.install()",
+            expected="The transaction returns one observable exit code.",
             stop=common_stop,
-            checklist=("confirm explicitly", "preserve conflict files", "report result"),
+            checklist=("single transaction authority", "no external automation"),
+        ),
+        _step(
+            STEP_NAMES[8],
+            purpose="Verify the observable installation result.",
+            why="Installation success and rollback failure must not be conflated.",
+            facts={"installerExitCode": "pending", "calibrationComplete": False},
+            suggested="require exit code 0 for installation success",
+            impact="A non-zero result is failed and must not claim successful recovery.",
+            example="status=installed, exitCode=0",
+            expected="Status and exit code are reported without a calibration claim.",
+            stop=common_stop,
+            checklist=("exit code recorded", "calibration not claimed"),
+        ),
+        _step(
+            STEP_NAMES[9],
+            purpose="Show the next bounded operator action.",
+            why="Installation creates reviewable governance changes, not production readiness.",
+            facts={
+                "commit": False,
+                "push": False,
+                "pullRequest": False,
+                "merge": False,
+                "calibration": "separate workflow",
+            },
+            suggested="review the generated Work Item before any Git publication",
+            impact="The successful installation branch remains for human review.",
+            example="make ai-finish TASK=adopt_ai_cockpit",
+            expected="The next action is reviewable and calibration remains separate.",
+            stop=common_stop,
+            checklist=("review Work Item", "calibrate separately", "retain branch"),
         ),
     )
     return WizardPlan(
-        steps=steps, mode=detection.mode, stack=stack, options=dict(options), branch=branch
+        steps=steps,
+        mode=detection.mode,
+        stack=stack,
+        options=dict(options),
+        branch=branch,
+        profile=profile,
+        preview=preview,
     )

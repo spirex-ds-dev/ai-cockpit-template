@@ -1,0 +1,291 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-08-interactive-installer-ux",
+  "mode": "code",
+  "title": "WI08 Interactive Installer UX",
+  "rawUserRequest": "Complete WI-08 Interactive Installer UX from the attached AI Cockpit next-stage directive through archive, PR, merge, closure, and branch cleanup. Make the interactive installer the human default, implement the specified ten-step flow, preserve atomic rollback, and do not commit, push, create a PR, merge, delete a successful install branch, auto-activate Strict policy, or equate installation with completed calibration.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation and attached AI Cockpit next-stage directive: WI-08 Interactive Installer UX",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:wi-08-interactive-installer-ux-authorized-request"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Converge the existing safe interactive installer on the specified ten-stage operator UX without weakening its transaction, rollback, automation, or calibration boundaries.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "baseCommit": "b9c878d10137f82d67f99957e980a64d9e8141fa",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-08-interactive-installer-ux.contract.json",
+    ".ai/work-items/active/wi-08-interactive-installer-ux.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-08-interactive-installer-ux.outcome.json",
+    ".ai/work-items/active/wi-08-interactive-installer-ux.outcome.md",
+    "docs/superpowers/specs/2026-08-01-interactive-installer-ux-design.md",
+    "docs/superpowers/plans/2026-08-01-interactive-installer-ux.md",
+    "scripts/ai_install_plan.py",
+    "scripts/ai_install_wizard.py",
+    "scripts/ai_installer_evidence.py",
+    "locales/wizard/en.json",
+    "locales/wizard/ja.json",
+    "locales/wizard/zh-CN.json",
+    "tests/test_install_plan.py",
+    "tests/test_install_wizard.py",
+    "tests/test_installer_evidence.py",
+    "tests/test_install_entrypoint.py",
+    "tests/test_japanese_adopter_lifecycle.py",
+    "docs/architecture/interactive-installation-wizard.md",
+    "docs/getting-started/installation.md",
+    "docs/getting-started/installation.ja.md",
+    "docs/getting-started/installation.zh-CN.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Replacing the existing Installer transaction engine or duplicating its rollback authority",
+    "Adding a full-screen TUI, web UI, package-manager distribution, or uvx command",
+    "Committing, pushing, creating or merging PRs from the installer",
+    "Automatically activating a Lite, Standard, or Strict calibrated project profile",
+    "Claiming installation completes calibration or production readiness",
+    "Implementing WI06 capability-claim binding, WI09 external identity controls, or WI10 end-to-end adoption validation"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_install_wizard.py",
+      "reason": "Existing read-only-until-confirmed wizard orchestration to extend rather than replace."
+    },
+    {
+      "path": "scripts/ai_install_plan.py",
+      "reason": "Existing deterministic eight-step plan model that must converge on the required ten-step contract."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Sole installation transaction and rollback authority; intentionally read-only for this Work Item."
+    },
+    {
+      "path": "docs/architecture/interactive-installation-wizard.md",
+      "reason": "Current public architecture and safety boundary for the interactive installer."
+    },
+    {
+      "path": "tests/test_install_wizard.py",
+      "reason": "Executable confirmation, dry-run, localization, and delegation evidence."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "installer_ux",
+      "transaction_boundary",
+      "localization",
+      "public_contract"
+    ],
+    "reason": "The change alters the public human installation flow and localized decision chrome, but delegates every write and rollback to the existing tested Installer transaction.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Interactive installer orchestration, localization, and public capability evidence require the Standard route; release publication behavior is unchanged."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The attached directive fixes the ten steps and safety boundaries, and the user has explicitly authorized bounded implementation decisions and the full PR lifecycle."
+  },
+  "preReviewWarnings": [
+    "Confirm no target write occurs before explicit affirmative confirmation.",
+    "Confirm profile selection is plan-only and does not activate Strict or claim calibration completion.",
+    "Confirm failure continues to restore the original branch or detached HEAD and pre-install filesystem state through the existing Installer transaction."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The interactive installer presents exactly ten ordered stages: Target Repository, Readiness, Installation Mode, Governance Profile, Planned Changes, Conflict Review, Explicit Confirmation, Installation, Verification, and Next Action.",
+    "The default human entry remains no-argument TTY or ./install.sh --interactive, while explicit legacy CLI options remain deterministic and no-argument non-TTY execution fails closed without writing.",
+    "The wizard shows repository facts, a Standard default among Lite/Standard/Strict, planned add/modify counts, source-code impact, and adoption branch before confirmation.",
+    "Dry Run, blocked readiness, unresolved conflict review, or declined confirmation invokes no write transaction.",
+    "Profile selection remains advisory installation-plan evidence: Strict is never auto-selected or activated and installation is never reported as completed calibration.",
+    "Confirmed installation delegates to the existing Installer, reports verification and next actions, and preserves its atomic rollback of Git HEAD, files, managed sections, Makefile, and agent markers on failure.",
+    "English, Japanese, and Simplified Chinese wizard resources remain key-parity compatible and public documentation/capability evidence matches the executable ten-step boundary.",
+    "Focused installer tests and the Contract-selected Standard quality route pass."
+  ],
+  "guidelines": [
+    "Reuse read-only detection and the existing Installer transaction; do not create a second write or rollback engine.",
+    "Keep the pre-confirmation path side-effect free and make every non-affirmative outcome fail closed.",
+    "Treat governance profile selection as a visible plan choice only; calibration and activation remain separate workflows.",
+    "Keep all human-facing decision chrome in exact-parity locale resources and preserve machine facts verbatim.",
+    "Do not add commit, push, PR, merge, successful-branch deletion, or package-manager behavior."
+  ],
+  "intent": {
+    "problem": "The repository already has a safe eight-step installer wizard, but it does not match the next-stage ten-step human UX contract: governance profile, planned changes, conflict review, post-install verification, and next action are not first-class stages. Prompt-oriented installation guidance must become secondary to a concrete operator flow without weakening transaction safety.",
+    "constraints": [
+      "Preserve the existing Installer as the sole write and rollback authority.",
+      "Perform no target write before explicit affirmative confirmation.",
+      "Keep legacy non-interactive flags compatible and no-argument non-TTY fail closed.",
+      "Default the displayed profile to Standard, never automatically choose or activate Strict, and keep calibration separate.",
+      "Preserve exact-parity English, Japanese, and Simplified Chinese locale resources.",
+      "Avoid unrelated refactoring and package-manager or full-screen UI work."
+    ],
+    "rationale": "Extending the existing plan and orchestration layers provides the required human comprehension while retaining the already-tested detector, transaction, and rollback boundaries."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "An operator reviews a new adoption without confirming it.",
+      "expected": "All ten stages, Standard-by-default profile, planned changes, conflict state, and automation boundary are visible while the target filesystem and Git HEAD remain unchanged.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_install_wizard.py",
+        "tests/test_install_plan.py"
+      ],
+      "verificationPlan": "Run focused dry-run and declined-confirmation tests that snapshot target paths and Git HEAD."
+    },
+    {
+      "scenario": "Readiness or conflict review is blocked.",
+      "expected": "The wizard stops before Explicit Confirmation and never constructs or invokes a write Installer.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_install_wizard.py",
+        "scripts/ai_install_wizard.py"
+      ],
+      "verificationPlan": "Inject blocked detection and conflict facts and assert fail-closed status with zero installer calls."
+    },
+    {
+      "scenario": "A confirmed installation succeeds or the Installer transaction fails.",
+      "expected": "Success reports Verification and Next Action without calibration overclaim; failure reports restoration and relies on the existing atomic rollback path for branch/detached HEAD and filesystem state.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_install_wizard.py",
+        "tests/test_installer.py",
+        "tests/test_adoption_e2e.py"
+      ],
+      "verificationPlan": "Run focused wizard delegation/result tests plus existing installer rollback and adoption lifecycle tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 744
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-08-interactive-installer-ux.json",
+    "baseCommit": "b9c878d10137f82d67f99957e980a64d9e8141fa",
+    "initialScopeDigest": "09e7783acd8120bb5337f5839bdaa543a7c0d0da69b3291f594be5ed819124a8",
+    "contractSkeletonDigest": "64e44e7abbf75b0e883205d0ca9db8ed3f220c88e61680780c93e2333731e961"
+  }
+}

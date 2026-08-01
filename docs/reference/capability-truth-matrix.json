@@ -379,14 +379,14 @@
         "make quality"
       ],
       "limitations": "Template evidence validates repository records but does not authenticate the named human or prove completed adopter calibration.",
-      "digest": "sha256:aa60a7773c9dad0c28518b491d78c25dd706865d462a1460150371ea6bbd52f8",
+      "digest": "sha256:8d8752978c8feadef693f4a125667b41ca9a67723922e664b52338dd81e24a4e",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 8,
         "files": [
           {
             "path": "docs/getting-started/installation.md",
-            "sha256": "a8900831e6192cc7039bda745620f54548b05726c522ec78f905a95ae4ddb75b"
+            "sha256": "9b545a2075083855c3a1ec22687a85c922b58db6cc81f815de08bce81935669f"
           },
           {
             "path": "docs/reference/calibration-profiles.md",
@@ -417,7 +417,7 @@
             "sha256": "2973cde030bb0fd1081a2663337a1c973b24b1d93779a390229ed3375ed43de5"
           }
         ],
-        "digest": "sha256:7de2b54d414f556922cc70d44477dfac845769f1b611213d2c60bd7ce7ba0f98"
+        "digest": "sha256:209fab12081d80427bc7c38cbeeda739f23582f732f0b234bfcca9e5240a82ea"
       }
     },
     {
@@ -503,14 +503,14 @@
         "make quality"
       ],
       "limitations": "Template execution evidence does not prove an adopter completed calibration or approval.",
-      "digest": "sha256:520f40dcf4e4e973bdc5d07cab6e46641635e4fa7afc27d9481dd9d409b6c922",
+      "digest": "sha256:a279c3224d64d795f8e98abc4d9361c01c3987f1ef1fc1948ea67944f171204c",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 6,
         "files": [
           {
             "path": "docs/getting-started/installation.md",
-            "sha256": "a8900831e6192cc7039bda745620f54548b05726c522ec78f905a95ae4ddb75b"
+            "sha256": "9b545a2075083855c3a1ec22687a85c922b58db6cc81f815de08bce81935669f"
           },
           {
             "path": "docs/reference/calibration-session.md",
@@ -533,47 +533,59 @@
             "sha256": "e17cd05f2b4cc2d8a373d4455b9049b0707d5233674e2d188bbb008e234d7dac"
           }
         ],
-        "digest": "sha256:92e1541afc068d504d1f0062e1120ea4d85f49867ac1617fa9b09148621f0d3f"
+        "digest": "sha256:adf64ccb3907f8f85e97997daa519edb861c4b8470c7bd06aad76db292f1f8e9"
       }
     },
     {
       "id": "interactive_installation_wizard",
       "status": "implemented",
-      "claim": "The template provides a confirmation-gated Installation Wizard for repository detection, New Adoption, Upgrade, Dry Run, and mobile or mixed-stack planning; it does not commit, push, create a PR, or merge.",
+      "claim": "The template provides a ten-stage, confirmation-gated Installation Wizard for repository readiness, mode and plan-only governance-profile selection, planned-change and conflict review, New Adoption, Upgrade, Dry Run, verification, and bounded next actions; it does not commit, push, create or merge a PR, delete the successful branch, activate Strict, or claim calibration completion.",
       "evidence": [
         "install.sh",
         "scripts/ai_install_wizard.py",
         "scripts/ai_install_plan.py",
+        "scripts/ai_installer_evidence.py",
+        "docs/architecture/interactive-installation-wizard.md",
         "docs/getting-started/installation.md"
       ],
       "verification": [
         "tests/test_install_wizard.py",
         "tests/test_install_plan.py",
+        "tests/test_installer_evidence.py",
+        "tests/test_install_entrypoint.py",
         "tests/test_wizard_fixtures.py"
       ],
       "sourceEvidence": [
         "install.sh",
         "scripts/ai_install_wizard.py",
         "scripts/ai_install_plan.py",
+        "scripts/ai_installer_evidence.py",
+        "docs/architecture/interactive-installation-wizard.md",
         "docs/getting-started/installation.md"
       ],
       "testEvidence": [
         "tests/test_install_wizard.py",
         "tests/test_install_plan.py",
+        "tests/test_installer_evidence.py",
+        "tests/test_install_entrypoint.py",
         "tests/test_wizard_fixtures.py"
       ],
       "commandEvidence": [
         "make quality"
       ],
-      "limitations": "The wizard does not itself commit, push, create a PR, or merge.",
-      "digest": "sha256:9dc996e50d11aa539e442b2b7fa1d0881b087a6310de45035033c0d6f833d3e9",
+      "limitations": "Profile choice is installation-plan intent only; the wizard neither calibrates nor proves an adopter repository is production-ready, and it does not itself commit, push, create or merge a PR, delete the successful branch, or activate Strict policy.",
+      "digest": "sha256:404b44322ea551b735e9a57e17c0a56f97786a1ae17cfefe932a078236a3a0ea",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
-        "fileCount": 7,
+        "fileCount": 11,
         "files": [
           {
+            "path": "docs/architecture/interactive-installation-wizard.md",
+            "sha256": "9c4e8644756b277e54f844f4eafaa05f266457fa99daea8c49b60772adc9355d"
+          },
+          {
             "path": "docs/getting-started/installation.md",
-            "sha256": "a8900831e6192cc7039bda745620f54548b05726c522ec78f905a95ae4ddb75b"
+            "sha256": "9b545a2075083855c3a1ec22687a85c922b58db6cc81f815de08bce81935669f"
           },
           {
             "path": "install.sh",
@@ -581,26 +593,38 @@
           },
           {
             "path": "scripts/ai_install_plan.py",
-            "sha256": "53fd28457fd9159d9d2c00f357ee7963a0186357e84444925bd4260fe4828c3f"
+            "sha256": "1604dacec31e7b00b5a8c292f218433c518ad8805c8b8adadd56d4b02725d830"
           },
           {
             "path": "scripts/ai_install_wizard.py",
-            "sha256": "0e2983193cbd7499a2850408e03e3600edfbc18aa806021002b982e72d36d229"
+            "sha256": "fc66c349a0542f934809aca056c980b27bb211c9a649490dd6c24477dceb4dd6"
+          },
+          {
+            "path": "scripts/ai_installer_evidence.py",
+            "sha256": "c3dbde1e0fd6f5bb4da5379b53bb34ccfb629f9ef5ecd52d34ace92014abcd18"
+          },
+          {
+            "path": "tests/test_install_entrypoint.py",
+            "sha256": "f1b0448e95f2e4cc556eef1b5dba225aa1921d48c093331f2b41d78f397fa4ea"
           },
           {
             "path": "tests/test_install_plan.py",
-            "sha256": "ee401757e4a7c53a7fa555749136f41e5250d5efd8a9b8ebbac5dd841f7d1105"
+            "sha256": "73ca0c3d5c8e9c1bf58745c44201f04985e296ddc5489ba4bc1e98216c604689"
           },
           {
             "path": "tests/test_install_wizard.py",
-            "sha256": "896267c1acde3d6433b0853351a6c814df7b81afa010468ae50429971b1ff686"
+            "sha256": "2683e49865bc52083587eb282778c41d276c8263a4e8f5bc27b75199b56169e5"
+          },
+          {
+            "path": "tests/test_installer_evidence.py",
+            "sha256": "cd3725c6759569c84f775c170bedfe463118d59b1340a5a45d1b277a5b091296"
           },
           {
             "path": "tests/test_wizard_fixtures.py",
             "sha256": "ed98ad09ca960c0120d9ebf5108afe38b865fee8c0b44dde89f25209ea9c2d68"
           }
         ],
-        "digest": "sha256:769d67aca6f798c2c36eee25bb00ad66b412a1d7162d8a779366a6353e1ee3a6"
+        "digest": "sha256:7bf6c6cf0237f91ba4924dfe2ef3387104a913cf867b270586a3d3d0b1343bf6"
       }
     },
     {
@@ -790,14 +814,14 @@
         "make quality"
       ],
       "limitations": "Bootstrap evidence remains template-local until an adopter records installation facts.",
-      "digest": "sha256:c4353b3617f1b50f7e1819d325a1d9db58175c37c3e944555d4f107102f495e0",
+      "digest": "sha256:cd37c40bb8b2c9167f20a678f53013c765beeae028ade0c923f23a8bfdc63ec8",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 6,
         "files": [
           {
             "path": "docs/getting-started/installation.md",
-            "sha256": "a8900831e6192cc7039bda745620f54548b05726c522ec78f905a95ae4ddb75b"
+            "sha256": "9b545a2075083855c3a1ec22687a85c922b58db6cc81f815de08bce81935669f"
           },
           {
             "path": "scripts/ai_lifecycle_facts.py",
@@ -820,7 +844,7 @@
             "sha256": "f41d52daf1228faf2a057d32267d61049ca315a1b0d4f9701b231782ca81f6fc"
           }
         ],
-        "digest": "sha256:62ec0be0414b665bfa3fa1deab039d9c5debb6467888e1e4bd7825fee4199396"
+        "digest": "sha256:7f44b007ab7ac535a45615241b23424db07c83174579ab2c3d9162aebad8515f"
       }
     },
     {
@@ -942,7 +966,7 @@
         "make quality"
       ],
       "limitations": "The installed executor implements preserve-evidence Runtime-file removal only. Purge filesystem removal is not implemented. Disable writes a result JSON but does not independently update canonical installed state. Empty directory cleanup, external identity, sandboxing, immutable audit, and enterprise compliance are not claimed; the target-repository receipt and human review remain required.",
-      "digest": "sha256:3a2aba4dce7029aea3e28567b418fe500c920ac326f3f47a0488f29d95c63cf8",
+      "digest": "sha256:7580ef34c173ee9940c4f4793c7f4b72836ffd2314022b254bd16c95bc74771b",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 18,
@@ -997,7 +1021,7 @@
           },
           {
             "path": "tests/test_japanese_adopter_lifecycle.py",
-            "sha256": "6e33190d690ed7a4cbcaa168916518ced4e5d018c33f148a8a9e54d102577d83"
+            "sha256": "153c9a5a169605f5a42c4cd0dc2c7a6f6918c678bc1b9dc838141948229adeb7"
           },
           {
             "path": "tests/test_japanese_capability.py",
@@ -1020,7 +1044,7 @@
             "sha256": "449e48f52eb3522cabd8e15bd4538b7b09304bb74745835324be174d728262fe"
           }
         ],
-        "digest": "sha256:1f93315c11b9a97962a835dd1c6df05738d61181f68d546f4b162380178d5906"
+        "digest": "sha256:a56ac0c6d310fd658bdfd611d3f6cc28caaaf4802e7545ce5ac8fa4bf9037e8b"
       }
     },
     {
