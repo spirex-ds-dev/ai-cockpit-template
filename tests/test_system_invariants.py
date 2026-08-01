@@ -1,4 +1,5 @@
 import json
+import os
 import shutil
 from pathlib import Path
 
@@ -27,12 +28,33 @@ def _archive_summary_version_issues(issues):
     ]
 
 
-def _copy_repository_tree(tmp_path):
+def _isolated_repository_view(tmp_path, *writable_paths: Path):
+    """Build a linked repository view and copy only files this test mutates."""
     copy = tmp_path / "repository"
     shutil.copytree(
-        ROOT, copy, ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__")
+        ROOT,
+        copy,
+        ignore=shutil.ignore_patterns(
+            ".git",
+            ".venv",
+            ".worktrees",
+            "target",
+            "__pycache__",
+            ".mypy_cache",
+            ".pytest_cache",
+            ".ruff_cache",
+        ),
+        copy_function=os.symlink,
     )
+    for path in writable_paths:
+        destination = copy / path.relative_to(ROOT)
+        destination.unlink()
+        shutil.copy2(path, destination)
     return copy
+
+
+def _archive_summary_source() -> Path:
+    return next((ROOT / ".ai" / "work-items" / "archive").rglob("*.summary.json"))
 
 
 def test_release_contract_accepts_consistent_public_quality_target(tmp_path):
@@ -61,8 +83,9 @@ def test_release_contract_rejects_invalid_target(tmp_path):
 def test_system_invariants_allow_legacy_archive_summary_versions(
     tmp_path, monkeypatch, summary_version
 ):
-    copy = _copy_repository_tree(tmp_path)
-    archive_summary = next((copy / ".ai" / "work-items" / "archive").rglob("*.summary.json"))
+    archive_summary_source = _archive_summary_source()
+    copy = _isolated_repository_view(tmp_path, archive_summary_source)
+    archive_summary = copy / archive_summary_source.relative_to(ROOT)
     data = json.loads(archive_summary.read_text(encoding="utf-8"))
     if summary_version is None:
         data.pop("summaryVersion", None)
@@ -77,8 +100,9 @@ def test_system_invariants_allow_legacy_archive_summary_versions(
 
 
 def test_system_invariants_reject_archive_summary_invalid_version(tmp_path, monkeypatch):
-    copy = _copy_repository_tree(tmp_path)
-    archive_summary = next((copy / ".ai" / "work-items" / "archive").rglob("*.summary.json"))
+    archive_summary_source = _archive_summary_source()
+    copy = _isolated_repository_view(tmp_path, archive_summary_source)
+    archive_summary = copy / archive_summary_source.relative_to(ROOT)
     data = json.loads(archive_summary.read_text(encoding="utf-8"))
     data["summaryVersion"] = 3
     archive_summary.write_text(json.dumps(data), encoding="utf-8")
@@ -92,15 +116,18 @@ def test_system_invariants_reject_archive_summary_invalid_version(tmp_path, monk
 
 
 def test_system_invariants_reject_missing_required_baselines(tmp_path, monkeypatch):
-    copy = _copy_repository_tree(tmp_path)
-    for path in (
-        copy / "requirements-dev.lock",
-        copy / ".ai" / "cockpit" / "bandit_low_risk_baseline.json",
-        copy / ".ai" / "cockpit" / "sbom.json",
-        copy / ".ai" / "cockpit" / "provenance.json",
-        copy / "SECURITY.md",
-    ):
+    missing_paths = (
+        ROOT / "requirements-dev.lock",
+        ROOT / ".ai" / "cockpit" / "bandit_low_risk_baseline.json",
+        ROOT / ".ai" / "cockpit" / "sbom.json",
+        ROOT / ".ai" / "cockpit" / "provenance.json",
+        ROOT / "SECURITY.md",
+    )
+    copy = _isolated_repository_view(tmp_path, *missing_paths)
+    for source_path in missing_paths:
+        path = copy / source_path.relative_to(ROOT)
         path.unlink()
+        assert source_path.is_file()
     monkeypatch.setattr(
         check_system_invariants, "exercise_installer", lambda *_args, **_kwargs: None
     )
@@ -115,7 +142,8 @@ def test_system_invariants_reject_missing_required_baselines(tmp_path, monkeypat
 
 
 def test_system_invariants_ignore_make_options_before_documented_target(tmp_path, monkeypatch):
-    copy = _copy_repository_tree(tmp_path)
+    copy = _isolated_repository_view(tmp_path)
+    assert not (ROOT / "docs" / "make-options.md").exists()
     (copy / "docs" / "make-options.md").write_text(
         "Use `make -n quality` to inspect the dry-run graph.\n",
         encoding="utf-8",
@@ -130,7 +158,8 @@ def test_system_invariants_ignore_make_options_before_documented_target(tmp_path
 
 
 def test_system_invariants_resolve_makefile_option_before_documented_target(tmp_path, monkeypatch):
-    copy = _copy_repository_tree(tmp_path)
+    copy = _isolated_repository_view(tmp_path)
+    assert not (ROOT / "docs" / "makefile-option.md").exists()
     (copy / "docs" / "makefile-option.md").write_text(
         "Use `make -f Makefile.ai quality-fast` through the installed makefile.\n",
         encoding="utf-8",
