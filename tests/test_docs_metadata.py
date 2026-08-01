@@ -6,7 +6,9 @@ from check_docs_metadata import (
     beginner_installation_errors,
     check_repository,
     command_evidence_errors,
+    documentation_architecture_errors,
     documentation_fact_errors,
+    formal_document_metadata_errors,
     front_matter_errors,
     historical_context_errors,
     installation_command_errors,
@@ -32,6 +34,54 @@ def copy_documentation(target: Path) -> None:
 
 def test_repository_documentation_metadata_is_consistent():
     assert check_repository(ROOT) == []
+
+
+def test_wi07_documentation_architecture_is_complete():
+    assert formal_document_metadata_errors(ROOT) == []
+    assert documentation_architecture_errors(ROOT) == []
+
+
+def test_wi07_formal_metadata_rejects_missing_and_invalid_values(tmp_path):
+    copy_documentation(tmp_path)
+    path = tmp_path / "docs" / "concepts" / "decision-states.md"
+    text = path.read_text(encoding="utf-8")
+    path.write_text(
+        text.replace("status: current", "status: obsolete", 1).replace(
+            "lastVerifiedBy: capability-truth-matrix\n", "", 1
+        ),
+        encoding="utf-8",
+    )
+
+    errors = formal_document_metadata_errors(tmp_path)
+    assert "docs/concepts/decision-states.md: invalid status: obsolete" in errors
+    assert "docs/concepts/decision-states.md: front matter missing lastVerifiedBy" in errors
+
+
+def test_wi07_architecture_rejects_missing_topic_and_extra_readme_section(tmp_path):
+    copy_documentation(tmp_path)
+    (tmp_path / "docs" / "security" / "threat-model.md").unlink()
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        readme.read_text(encoding="utf-8")
+        + "\n<!-- readme-section: release-internals -->\n## Release internals\n",
+        encoding="utf-8",
+    )
+
+    errors = documentation_architecture_errors(tmp_path)
+    assert "docs/security/threat-model.md: required WI07 canonical document is missing" in errors
+    assert "README.md: unsupported README section marker: release-internals" in errors
+
+
+def test_wi07_archive_entrypoints_are_historical_not_runtime_instructions(tmp_path):
+    copy_documentation(tmp_path)
+    archive = tmp_path / "docs" / "archive" / "plans" / "README.md"
+    archive.write_text(
+        archive.read_text(encoding="utf-8").replace("status: historical", "status: current"),
+        encoding="utf-8",
+    )
+
+    errors = formal_document_metadata_errors(tmp_path)
+    assert "docs/archive/plans/README.md: expected status historical, found current" in errors
 
 
 def test_trilingual_beginner_routes_are_complete():
@@ -356,40 +406,39 @@ def test_front_matter_and_stack_checks_reject_missing_required_metadata(tmp_path
     stack_root = tmp_path / "stack"
     stack_root.mkdir()
     copy_documentation(stack_root)
-    stack_readme = stack_root / "README.md"
-    stack_readme.write_text(
-        stack_readme.read_text(encoding="utf-8").replace("generic, rust", "generic only"),
+    configuration = stack_root / "docs" / "configuration.md"
+    configuration.write_text(
+        configuration.read_text(encoding="utf-8").replace("generic\nrust", "generic only"),
         encoding="utf-8",
     )
-    assert "README.md: supported-stack list does not match installer STACKS" in stack_errors(
-        stack_root
+    assert (
+        "docs/configuration.md: supported-stack list does not match installer STACKS"
+        in stack_errors(stack_root)
     )
 
 
 def test_installation_command_check_rejects_missing_primary_contract_markers(tmp_path):
     copy_documentation(tmp_path)
-    readme = tmp_path / "README.md"
-    readme.write_text(
-        readme.read_text(encoding="utf-8")
+    quick_start = tmp_path / "docs" / "getting-started" / "30-second-start.md"
+    quick_start.write_text(
+        quick_start.read_text(encoding="utf-8")
         .replace("main/release.json", "release.json")
-        .replace("${RELEASE_TAG}/install.sh", "install.sh")
-        .replace("<!-- release-capabilities: auditable-adoption,sha256-verification -->", "")
-        .replace("<!-- public-quality-target: ai-cockpit-quality -->", "")
-        .replace("--create-adoption", "--adoption")
-        .replace('STACK="${STACK:-generic}"', "")
-        .replace('--stack "$STACK"', ""),
+        .replace("$RELEASE_TAG/install.sh", "install.sh")
+        .replace(
+            "https://github.com/spirex-ds-dev/ai-cockpit-template.git",
+            "https://example.invalid/repo.git",
+        )
+        .replace("--interactive", "--dry-run"),
         encoding="utf-8",
     )
 
     errors = installation_command_errors(tmp_path)
     assert (
-        "README.md: primary install command must resolve the tagged installer from release.json"
+        "docs/getting-started/30-second-start.md: quick start must resolve the tagged installer from release.json"
         in errors
     )
-    assert "README.md: release capability marker is missing or inconsistent" in errors
-    assert "README.md: public quality target differs from release.json" in errors
-    assert "README.md: primary install command must create auditable adoption evidence" in errors
     assert (
-        "README.md: primary install command must use an explicit generic-default STACK variable"
+        "docs/getting-started/30-second-start.md: canonical public source default is missing: https://github.com/spirex-ds-dev/ai-cockpit-template.git"
         in errors
     )
+    assert "docs/getting-started/30-second-start.md: wizard entry is missing" in errors

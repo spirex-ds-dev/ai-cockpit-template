@@ -2,6 +2,12 @@
 author: Ray
 title: "Quality Gate Operations"
 description: Operating model, evidence, and traceability for AI Cockpit quality gates.
+audience:
+  - maintainer
+  - contributor
+status: current
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
 keywords:
   - ai-cockpit
   - quality-gates

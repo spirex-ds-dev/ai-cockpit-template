@@ -2,6 +2,12 @@
 author: Ray
 title: "Capability Truth Matrix"
 description: Evidence-backed distinction between implemented, template-only, adopter-installed, and planned AI Cockpit capabilities.
+audience:
+  - adopter
+  - auditor
+status: reference
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
 keywords:
   - ai-cockpit
   - capability-truth

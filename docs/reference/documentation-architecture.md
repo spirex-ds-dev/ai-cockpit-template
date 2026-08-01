@@ -2,6 +2,12 @@
 author: Ray
 title: "Documentation Architecture"
 description: Documentation information architecture for AI Cockpit.
+audience:
+  - maintainer
+  - contributor
+status: reference
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
 keywords:
   - ai-cockpit
   - documentation
@@ -11,6 +17,27 @@ keywords:
 ---
 
 # Documentation Architecture
+
+## Canonical layers
+
+```text
+docs/
+├── getting-started/  installation, first calibration, first Work Item
+├── concepts/         trust, evidence governance, decision states
+├── operations/       quality gates, lifecycle, recovery
+├── security/         threat, injection, and supply-chain boundaries
+├── reference/        capability truth, schemas, commands
+└── archive/          historical plan, review, and design entrypoints
+```
+
+Current formal pages declare `audience`, `status`, `authority`, and
+`lastVerifiedBy`. Allowed audiences are `adopter`, `maintainer`,
+`security_reviewer`, `auditor`, and `contributor`; allowed statuses are
+`current`, `reference`, `historical`, and `draft`; allowed authorities are
+`canonical`, `derived`, `explanatory`, and `archived_evidence`.
+
+One topic has one canonical owner. Compatibility pages link to that owner;
+historical entrypoints preserve context but never become runtime instruction.
 
 This page is for documentation maintainers. It defines authoritative ownership,
 language mapping, and current-versus-historical context; adopters normally enter

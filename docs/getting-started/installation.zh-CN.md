@@ -6,6 +6,8 @@ description: "面向首次使用者、以提示词为主的 AI Cockpit 安装与
 
 # 安装 AI Cockpit
 
+<!-- public-quality-target: ai-cockpit-quality -->
+
 这是最简单的安装路径。你不需要先理解 AI Cockpit 的内部记录；打开目标工程，
 每次只把一段提示词交给编程 Agent，并在继续前阅读结果即可。
 

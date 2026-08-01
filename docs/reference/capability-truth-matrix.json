@@ -8,6 +8,67 @@
   ],
   "capabilities": [
     {
+      "id": "documentation_architecture",
+      "status": "implemented",
+      "claim": "The repository exposes canonical getting-started, concepts, operations, security, reference, and historical entry layers, enforces classification metadata for their formal documents, and limits each language README to the seven-entry public model.",
+      "evidence": [
+        "docs/reference/documentation-architecture.md",
+        "scripts/check_docs_metadata.py",
+        "README.md",
+        "README.ja.md",
+        "README.zh-CN.md"
+      ],
+      "verification": [
+        "tests/test_docs_metadata.py"
+      ],
+      "sourceEvidence": [
+        "README.md",
+        "README.ja.md",
+        "README.zh-CN.md",
+        "docs/reference/documentation-architecture.md",
+        "scripts/check_docs_metadata.py"
+      ],
+      "testEvidence": [
+        "tests/test_docs_metadata.py"
+      ],
+      "commandEvidence": [
+        "make check-docs-metadata"
+      ],
+      "limitations": "The metadata and navigation checks prove only the declared canonical paths, classifications, README section model, and repository links; they do not prove prose quality, translation completeness, or that every historical statement remains accurate.",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 6,
+        "files": [
+          {
+            "path": "README.ja.md",
+            "sha256": "cfe9d90519311c1abfa96645e2f721dba9036b274e534e091233c1ae174703b8"
+          },
+          {
+            "path": "README.md",
+            "sha256": "8e8f6e07eae93dd98f988b127262d76cd4b7ec009a7f021e45e3985d3edf4fd7"
+          },
+          {
+            "path": "README.zh-CN.md",
+            "sha256": "f8c66f8563957ab4f13e44d25d3957e3657f17d1d95f2298bd293f093d7f9324"
+          },
+          {
+            "path": "docs/reference/documentation-architecture.md",
+            "sha256": "68124df3fdb2346c7ca9c6c81e9a26b94d6c3c6d78f553f1086b3285e2b701c4"
+          },
+          {
+            "path": "scripts/check_docs_metadata.py",
+            "sha256": "b534d33a14240a829a6a2c464561ed745f0b07dfc0a3cc1d464fb5f8de85b09f"
+          },
+          {
+            "path": "tests/test_docs_metadata.py",
+            "sha256": "6498d8356c85797b11e9773db0843ce8f1bed98729aa81bd94eadecb909db433"
+          }
+        ],
+        "digest": "sha256:e987143edf3a0e85335f4657bb762668f09c091e216935600cd054568c6f5392"
+      },
+      "digest": "sha256:830eb650bfb304b9e3f233e26bb685b622816f9a49e2338bfe5dd5acc5fbac9a"
+    },
+    {
       "id": "risk_based_quality_routing",
       "status": "implemented",
       "claim": "The repository deterministically routes Work Item quality through Lite, Standard, Strict, or Release while preserving conservative escalation and existing gate ownership.",
@@ -318,14 +379,14 @@
         "make quality"
       ],
       "limitations": "Template evidence validates repository records but does not authenticate the named human or prove completed adopter calibration.",
-      "digest": "sha256:1c973feb0497b0d26e2e020e9bae256abdfcb8828d4ebecd120da74361e75944",
+      "digest": "sha256:aa60a7773c9dad0c28518b491d78c25dd706865d462a1460150371ea6bbd52f8",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 8,
         "files": [
           {
             "path": "docs/getting-started/installation.md",
-            "sha256": "647c892eef5e4837340cb066c9071d133874003df3ec28dff4da7f60ddfb5278"
+            "sha256": "a8900831e6192cc7039bda745620f54548b05726c522ec78f905a95ae4ddb75b"
           },
           {
             "path": "docs/reference/calibration-profiles.md",
@@ -356,7 +417,7 @@
             "sha256": "2973cde030bb0fd1081a2663337a1c973b24b1d93779a390229ed3375ed43de5"
           }
         ],
-        "digest": "sha256:23407f80eecdf76d20edd84eb314fd63a4e8bda48da3ad3a0299271d399a3a1b"
+        "digest": "sha256:7de2b54d414f556922cc70d44477dfac845769f1b611213d2c60bd7ce7ba0f98"
       }
     },
     {
@@ -442,14 +503,14 @@
         "make quality"
       ],
       "limitations": "Template execution evidence does not prove an adopter completed calibration or approval.",
-      "digest": "sha256:93dc68abc3588e5d666b50c655fab6779a69d5987062fe1f30713f4fc9387f34",
+      "digest": "sha256:520f40dcf4e4e973bdc5d07cab6e46641635e4fa7afc27d9481dd9d409b6c922",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 6,
         "files": [
           {
             "path": "docs/getting-started/installation.md",
-            "sha256": "647c892eef5e4837340cb066c9071d133874003df3ec28dff4da7f60ddfb5278"
+            "sha256": "a8900831e6192cc7039bda745620f54548b05726c522ec78f905a95ae4ddb75b"
           },
           {
             "path": "docs/reference/calibration-session.md",
@@ -472,7 +533,7 @@
             "sha256": "e17cd05f2b4cc2d8a373d4455b9049b0707d5233674e2d188bbb008e234d7dac"
           }
         ],
-        "digest": "sha256:8fdffa338f46f709887b82695e5c4fede44443da1826c851a6bde9060e7aea01"
+        "digest": "sha256:92e1541afc068d504d1f0062e1120ea4d85f49867ac1617fa9b09148621f0d3f"
       }
     },
     {
@@ -505,14 +566,14 @@
         "make quality"
       ],
       "limitations": "The wizard does not itself commit, push, create a PR, or merge.",
-      "digest": "sha256:6a8f23b6cb5576133ff47ca308032f730fb0e1c40b3d2bc8b00fecd57401dba8",
+      "digest": "sha256:9dc996e50d11aa539e442b2b7fa1d0881b087a6310de45035033c0d6f833d3e9",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 7,
         "files": [
           {
             "path": "docs/getting-started/installation.md",
-            "sha256": "647c892eef5e4837340cb066c9071d133874003df3ec28dff4da7f60ddfb5278"
+            "sha256": "a8900831e6192cc7039bda745620f54548b05726c522ec78f905a95ae4ddb75b"
           },
           {
             "path": "install.sh",
@@ -539,7 +600,7 @@
             "sha256": "ed98ad09ca960c0120d9ebf5108afe38b865fee8c0b44dde89f25209ea9c2d68"
           }
         ],
-        "digest": "sha256:65c8ac267f31c5a3ae4cbfbc2153340ebaf0ab685a085752190a387732508a73"
+        "digest": "sha256:769d67aca6f798c2c36eee25bb00ad66b412a1d7162d8a779366a6353e1ee3a6"
       }
     },
     {
@@ -729,14 +790,14 @@
         "make quality"
       ],
       "limitations": "Bootstrap evidence remains template-local until an adopter records installation facts.",
-      "digest": "sha256:f0fe975b638996f9b3ae5a47aa799cba8aeab31a26b1d2eee135ba869bba5df4",
+      "digest": "sha256:c4353b3617f1b50f7e1819d325a1d9db58175c37c3e944555d4f107102f495e0",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 6,
         "files": [
           {
             "path": "docs/getting-started/installation.md",
-            "sha256": "647c892eef5e4837340cb066c9071d133874003df3ec28dff4da7f60ddfb5278"
+            "sha256": "a8900831e6192cc7039bda745620f54548b05726c522ec78f905a95ae4ddb75b"
           },
           {
             "path": "scripts/ai_lifecycle_facts.py",
@@ -759,7 +820,7 @@
             "sha256": "f41d52daf1228faf2a057d32267d61049ca315a1b0d4f9701b231782ca81f6fc"
           }
         ],
-        "digest": "sha256:eeec4f099873243733b8d5552433f1d2e862e1046c4749ad6fdc6d08944a0621"
+        "digest": "sha256:62ec0be0414b665bfa3fa1deab039d9c5debb6467888e1e4bd7825fee4199396"
       }
     },
     {

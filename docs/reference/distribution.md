@@ -48,6 +48,8 @@ Compatibility support claims are split between a fixed-version blocking baseline
 
 ## Published Capabilities
 
+<!-- release-capabilities: auditable-adoption,sha256-verification -->
+
 The documented public release is defined in `release.json`. Release preparation may use the separate `next-release.json` candidate record, which must be marked `releaseState: candidate`, `published: false`, and exactly one patch after the published tag. `release.json` intentionally omits self-referential source/archive fields: Quick Install resolves the immutable tag target, while `release-source.json` and provider-bound evidence record the exact source commit. `.gitattributes` excludes the mutable release projections from the source archive so the published archive SHA is independently reproducible. The candidate record cannot redirect the public installation entry; publication occurs only after exact-source verification.
 
 Release progression has one canonical record: `release-state.json` (`schemaVersion: 1`, `canonical: true`). It owns the `development` → `candidate_prepared` → `candidate_verified` → `release_published` state machine, release tag, previous release, source identity, and evidence references. `release.json` and `next-release.json` are explicitly declared projections: the former is the published installer contract and the latter is the unpublished candidate projection. They are not independent release truths. `evidenceStatus` describes whether provider evidence is pending, verified, or published; `evidenceBundleDigest` is `null` until provider evidence exists and must be a real SHA-256 for verified or published states. `make check-release-state-consistency` rejects missing canonical markers, projection remapping, prose placeholders, and invalid status/digest combinations. Failed verification must leave the state and tag unchanged.
@@ -78,6 +80,12 @@ An unreleased worktree may regenerate its local SBOM, provenance, and digest man
 ```
 
 Without `--update-makefile`, the installer writes `Makefile.ai` and `Makefile.ai.stack` but does not modify the host `Makefile`.
+
+The canonical non-interactive adoption flags remain together:
+
+```sh
+sh "$INSTALLER" --stack "$STACK" --update-makefile --create-adoption
+```
 
 ## Installed Runtime Surface
 

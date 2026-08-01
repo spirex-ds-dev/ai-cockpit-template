@@ -2,6 +2,12 @@
 author: Ray
 title: "First Work Item"
 description: First governed task walkthrough after AI Cockpit adoption.
+audience:
+  - adopter
+  - contributor
+status: current
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
 keywords:
   - ai-cockpit
   - first-work-item
