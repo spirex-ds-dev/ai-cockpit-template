@@ -132,6 +132,8 @@ def test_full_quality_has_one_workflow_owner():
     assert "quality heartbeat" in smoke
     assert "Publish quality timing summary" in smoke
     assert "$GITHUB_STEP_SUMMARY" in smoke
+    assert "scripts/ai_performance_budget.py" in smoke
+    assert "performance-baseline.json" in smoke
 
 
 def test_release_preflight_precedes_expensive_quality():

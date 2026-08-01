@@ -230,6 +230,14 @@ def test_quality_runs_static_tests_and_evidence_as_explicit_phases():
     assert "--cov-fail-under=85.10" in makefile
 
 
+def test_quality_summary_receives_governance_receipt_metadata_when_available():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    assert 'QUALITY_PROFILE="$$profile"' in makefile
+    assert 'QUALITY_ESCALATIONS="$$escalations"' in makefile
+    assert '--profile "$(QUALITY_PROFILE)"' in makefile
+    assert "$(QUALITY_ESCALATIONS)" in makefile
+
+
 def test_project_governance_make_targets_are_public():
     result = subprocess.run(
         [
