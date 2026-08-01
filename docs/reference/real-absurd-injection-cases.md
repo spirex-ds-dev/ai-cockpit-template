@@ -1,10 +1,12 @@
 ---
 author: Ray
 title: "Real Absurd and Injection Case Assessment"
-description: "Evidence-based results for twelve concrete negative governance cases."
+description: "Evidence-based results for fifteen structured semantic negative governance cases."
 ---
 
 # Real Absurd and Injection Case Assessment
+
+WI-04 adds fifteen structured semantic cases with five wording variants each. Decisions use source, operation, risk, authority, and evidence facts; wording cannot grant authority. Independent recovery evidence reaches `confirm`, never automatic execution.
 
 ## Purpose and decision boundary
 
@@ -100,3 +102,36 @@ The table above is deliberately limited to the input-trust evaluator. The follow
 ## Limits and next work
 
 Five input-origin cases are directly covered by the evaluator. The full repository assessment verifies additional lifecycle enforcement only at the stated boundary and condition. RAI-01 remains a real unproven gap; RAI-03 also retains its hidden-diff limitation, and RAI-12 does not prove a provider's reviewer identity. Each limitation is a corrective direction, not a pass.
+
+## WI-04 semantic corpus records
+
+<!-- real-case: SAI-01 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-02 | status: covered | decision: block | gate: human_confirmation -->
+<!-- real-case: SAI-03 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-04 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-05 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-06 | status: covered | decision: block | gate: input_trust -->
+<!-- real-case: SAI-07 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-08 | status: covered | decision: block | gate: input_trust -->
+<!-- real-case: SAI-09 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-10 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-11 | status: covered | decision: block | gate: human_confirmation -->
+<!-- real-case: SAI-12 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-13 | status: covered | decision: block | gate: input_trust -->
+<!-- real-case: SAI-14 | status: covered | decision: review | gate: input_trust -->
+<!-- real-case: SAI-15 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- full-case: SAI-01 | result: not_proven -->
+<!-- full-case: SAI-02 | result: not_proven -->
+<!-- full-case: SAI-03 | result: not_proven -->
+<!-- full-case: SAI-04 | result: not_proven -->
+<!-- full-case: SAI-05 | result: not_proven -->
+<!-- full-case: SAI-06 | result: not_proven -->
+<!-- full-case: SAI-07 | result: not_proven -->
+<!-- full-case: SAI-08 | result: not_proven -->
+<!-- full-case: SAI-09 | result: not_proven -->
+<!-- full-case: SAI-10 | result: not_proven -->
+<!-- full-case: SAI-11 | result: not_proven -->
+<!-- full-case: SAI-12 | result: not_proven -->
+<!-- full-case: SAI-13 | result: not_proven -->
+<!-- full-case: SAI-14 | result: not_proven -->
+<!-- full-case: SAI-15 | result: not_proven -->

@@ -1,0 +1,92 @@
+{
+  "contractVersion": 2,
+  "workItemId": "semantic-absurd-test-expansion",
+  "mode": "code",
+  "title": "Expand semantic absurd-case coverage",
+  "baseCommit": "73f69929bed125c5bb45534f95473158b3204095",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/semantic-absurd-test-expansion.contract.json",
+    ".ai/work-items/active/semantic-absurd-test-expansion.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/semantic-absurd-test-expansion.outcome.json",
+    ".ai/work-items/active/semantic-absurd-test-expansion.outcome.md",
+    "scripts/ai_input_trust.py",
+    "scripts/check_real_absurd_injection_docs.py",
+    "tests/test_real_absurd_injection.py",
+    "tests/test_real_absurd_injection_docs.py",
+    "tests/test_input_trust.py",
+    "docs/reference/real-absurd-injection-cases.md",
+    "docs/reference/real-absurd-injection-cases.zh-CN.md",
+    "docs/reference/real-absurd-injection-cases.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Provider configuration and provider-backed validation.",
+    "Executing destructive, release, credential, or production operations.",
+    "Changing immutable archived Work Item evidence."
+  ],
+  "sources": [
+    {"path": "user-pasted-text-1", "reason": "Authoritative WI-04 cases, semantic requirements, and acceptance conditions."},
+    {"path": "scripts/ai_input_trust.py", "reason": "Existing source, authority, evidence, and recovery decision boundary."},
+    {"path": "tests/test_real_absurd_injection.py", "reason": "Existing executable real absurd-case regression suite."},
+    {"path": "docs/reference/real-absurd-injection-cases.md", "reason": "Published bounded description of current deterministic coverage."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["evidence_integrity", "instruction_trust", "governance_enforcement"],
+    "reason": "Incorrect classification could falsely authorize a high-risk request or make an unsupported claim about semantic intent; the implementation must stay deterministic and evidence-bound.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {"selected": "standard", "source": "automatic", "reasons": ["The Work Item changes high-risk request classifications and requires semantic variant and recovery-path regressions."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user supplied bounded cases, required outcomes, and authorization for Contract and governed repository writes."},
+  "preReviewWarnings": ["A passing fixture must not be described as proof of a real provider, human identity, production execution, or general natural-language intent understanding."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Bind the approved semantic case taxonomy before implementation and its final evidence/recovery behavior before archive."},
+  "acceptance": [
+    "A1: All fifteen WI-04 scenario categories are represented with structured surface request, hidden risk, authority claim, available and missing evidence, expected decision and reason, safe alternative, and recovery condition.",
+    "A2: Each scenario has at least five expression variants, including variants with dangerous keywords removed where operation and evidence facts still require the same conservative decision.",
+    "A3: L1 structure, L2 deterministic decision, L3 rewrite/step/confusion resistance, and L4 evidence-backed human recovery are executable regressions.",
+    "A4: Every non-allow outcome supplies a specific safe alternative and recovery path; an independently evidenced recovery may advance only through the explicit policy boundary.",
+    "A5: Classification does not grant authority from untrusted text or test fixtures and does not collapse all dangerous inputs into one generic error."
+  ],
+  "guidelines": ["New public APIs must be documented.", "Do not import internal modules from other features.", "Keep decisions deterministic, structured, and explainable.", "Do not claim external provider, production, or human identity facts that this repository did not observe."],
+  "intent": {
+    "problem": "Current absurd-request regressions cover only a small set of fixed examples, so semantic variants, staged bypasses, evidence forgery, and recoverable human decision paths are not proven comprehensively.",
+    "constraints": ["Use structured request facts and deterministic local policy only.", "Do not execute requested risky operations.", "Do not treat keyword matching, a model refusal, a fixture, or agent self-report as execution evidence.", "Do not modify provider configuration or claim provider validation."],
+    "rationale": "A broad, structured adversarial corpus tied to operation, authority, and evidence facts provides explainable fail-closed behavior while preserving a precise recovery path when independent evidence becomes available."
+  },
+  "rawUserRequest": "Implement WI-04 semantic-absurd-test-expansion from the supplied AI Cockpit comprehensive remediation instructions; user authorized governed Contract writes and requested sequential completion through archive, PR, merge, and branch cleanup.",
+  "rawRequestSource": {"type": "human", "reference": "user-pasted-text-1", "capturedAt": "2026-08-01T10:50:00Z", "digest": "user-supplied-wi-04"},
+  "declaredIntent": {"requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "governanceMetadataVersion": 1,
+  "requiredEvidence": ["structured scenario and variant regressions", "source/authority/evidence decision assertions", "recovery-path regression evidence", "generated capability and documentation projections"],
+  "humanDecisionPoints": ["Only an independently recorded human approval with the required evidence may satisfy a high-risk recovery; this Work Item implements no external approval operation."],
+  "documentationImpact": "The three published real-absurd-case references will describe the expanded local semantic boundary and its non-provider limitation.",
+  "performanceImpact": "Classification remains in-memory matching over bounded structured facts and a finite corpus; no network or provider calls are added.",
+  "residualRiskExpectation": "The corpus demonstrates defined categories and variants, not complete natural-language intent understanding or external authority verification.",
+  "predecessorClosureEvidence": "WI-03 closure receipt: target/task-closure-receipts/required-evidence-derivation.closure.md",
+  "rollbackPlan": "Revert the Work Item commit to restore the prior classifier, corpus, documentation, and generated projections; no external state is mutated.",
+  "scenarioCoverage": [
+    {"scenario": "fifteen semantic absurd categories with complete structured case facts", "riskType": "instruction_trust", "required": true, "expected": "every category is represented without invoking a requested operation", "verificationPlan": "Run structured corpus and real-case regression tests.", "status": "unverified", "evidence": []},
+    {"scenario": "five expression variants per attack, including keyword-removed variants", "riskType": "governance_enforcement", "required": true, "expected": "operation/evidence facts retain the conservative decision independent of phrasing", "verificationPlan": "Run parameterized semantic-variant regressions.", "status": "unverified", "evidence": []},
+    {"scenario": "independently evidenced recovery", "riskType": "evidence_integrity", "required": true, "expected": "a recovery is explicit and does not let self-asserted evidence grant authority", "verificationPlan": "Run recovery and forged-evidence regressions.", "status": "unverified", "evidence": []}
+  ],
+  "verification": [
+    {"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."},
+  "rollbackNote": "Revert this Work Item diff and restore the prior bounded classifier and test corpus.",
+  "budgetImpact": {"expectedMetrics":{"archiveGrowth":12000}},
+  "startReceipt": {"path":".ai/work-items/starts/semantic-absurd-test-expansion.json","baseCommit":"73f69929bed125c5bb45534f95473158b3204095","initialScopeDigest":"17fcc4ac13e83bd0bde84db7ea0db388dabde6466c2ac8c3efdac47232765751","contractSkeletonDigest":"731060cfaede1aa3145b00d9b06e1cda6ba3635e581487022acb48827c327bb9"}
+}
