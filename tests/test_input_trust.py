@@ -2,10 +2,13 @@ from ai_input_trust import (
     ContentSource,
     InjectionOutcome,
     InstructionAuthority,
+    OperationCategory,
+    OperationTimeRequest,
     ProvenanceRecord,
     SourceType,
     TrustLevel,
     assess_input,
+    evaluate_operation_time_policy,
     evaluate_provenance_operation,
     re_evaluate_high_risk_operation,
 )
@@ -53,3 +56,24 @@ def test_input_trust_provenance_keeps_external_markdown_as_untrusted_content():
 
     assert record.trustLabel == "untrusted_content"
     assert decision.decision == "block"
+
+
+def test_input_trust_operation_time_requires_authoritative_input():
+    decision = evaluate_operation_time_policy(
+        OperationTimeRequest(
+            requestedOperation=OperationCategory.MERGE.value,
+            actualToolCall=OperationCategory.MERGE.value,
+            targetResource="main",
+            declaredScope=("main",),
+            approvedOperation=OperationCategory.MERGE.value,
+            approvedTargetResource="main",
+            approvedScope=("main",),
+            currentAuthority="user",
+            evidenceFresh=True,
+            destructiveImpact="high",
+            inputTrust="untrusted_content",
+        )
+    )
+
+    assert decision.decision == "confirm"
+    assert decision.mayProceedAutomatically is False

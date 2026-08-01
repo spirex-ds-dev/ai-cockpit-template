@@ -1,0 +1,252 @@
+{
+  "contractVersion": 2,
+  "workItemId": "operation-time-policy-reevaluation",
+  "mode": "code",
+  "title": "Operation-time policy reevaluation",
+  "baseCommit": "8a333dc6a8e2af419fc0e0cd1a6af0a59cc0d6b1",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/operation-time-policy-reevaluation.contract.json",
+    ".ai/work-items/active/operation-time-policy-reevaluation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/operation-time-policy-reevaluation.outcome.json",
+    ".ai/work-items/active/operation-time-policy-reevaluation.outcome.md",
+    "scripts/ai_input_trust.py",
+    "tests/test_input_trust.py",
+    "tests/test_operation_time_policy_reevaluation.py",
+    "docs/reference/operation-time-policy-reevaluation.md",
+    "docs/reference/operation-time-policy-reevaluation.zh-CN.md",
+    "docs/reference/operation-time-policy-reevaluation.ja.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Provider configuration, Branch Protection, and external production operations.",
+    "Executing scripts, API writes, releases, migrations, or destructive operations.",
+    "Immutable archive evidence except through the governed archive command."
+  ],
+  "sources": [
+    {
+      "path": "user-pasted-text-1",
+      "reason": "Authoritative WI-06 requirements and acceptance criteria supplied by the user."
+    },
+    {
+      "path": "scripts/ai_input_trust.py",
+      "reason": "Existing deterministic trust and provenance policy seam extended by WI-05."
+    },
+    {
+      "path": "tests/test_input_trust.py",
+      "reason": "Existing regression suite and coverage association for the policy module."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Repository terminology and governance boundaries."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "policy_bypass",
+      "authority_staleness",
+      "operation_target_mismatch"
+    ],
+    "reason": "Operation-time decisions can otherwise reuse stale approval or be bypassed by an actual tool call that differs from the reviewed request.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Code, tests, and synchronized public documentation change together; no external provider validation is in scope."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized governed Contract writes and the complete Work Item lifecycle; this Work Item implements a local policy model only."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A requested operation is re-evaluated against the actual tool call, target resource, current authority, evidence freshness, and destructive impact immediately before execution.",
+    "A later dangerous-script execution is blocked or requires a new review even when the earlier step only created the script.",
+    "An approval binding is invalid when its target resource or declared scope differs from the operation-time request.",
+    "Stale evidence yields human confirmation rather than automatic execution.",
+    "An actual tool call that does not match the original request is stopped with a specific recovery condition.",
+    "All listed high-risk operation categories are represented by deterministic regression coverage.",
+    "A focused English, Chinese, and Japanese reference page names the policy inputs and states that the model does not execute external operations."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Input-time trust checks alone do not prevent later scripts, tools, or multi-step tasks from changing the operation or target after an earlier request was approved.",
+    "constraints": [
+      "Keep the model deterministic and fail closed; it must decide policy only and never execute an operation.",
+      "Do not modify provider configuration or make external production claims.",
+      "Preserve WI-05 provenance and use current, attributable authority/evidence for every operation-time decision.",
+      "Keep public policy APIs documented and covered by focused regressions."
+    ],
+    "rationale": "A local, explicit operation-time policy record makes changed scope, stale evidence, and request/tool mismatches reviewable before a high-risk action can proceed."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 744
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/operation-time-policy-reevaluation.json",
+    "baseCommit": "8a333dc6a8e2af419fc0e0cd1a6af0a59cc0d6b1",
+    "initialScopeDigest": "7910d6eace4825857322a06319aa1e0f5680738d85d865e0f8aae49577cf9d60",
+    "contractSkeletonDigest": "983ba36af1cdc2a00c388265dfc9ae4afd00248d38be4c59629dfe636ea98ef7"
+  },
+  "rawUserRequest": "Implement WI-06 operation-time-policy-reevaluation from the supplied AI Cockpit comprehensive remediation instructions; user authorized governed Contract writes and requested sequential completion through archive, PR, merge, and branch cleanup.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-pasted-text-1",
+    "capturedAt": "2026-08-01T10:50:00Z",
+    "digest": "user-supplied-wi-06"
+  },
+  "declaredIntent": {
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "dangerous script execution is re-evaluated after script creation",
+      "riskType": "policy_bypass",
+      "required": true,
+      "expected": "the actual execution is blocked or sent to review independently of the earlier create-script step",
+      "verificationPlan": "Run focused operation-time regression tests.",
+      "status": "verified",
+      "evidence": ["tests/test_operation_time_policy_reevaluation.py"]
+    },
+    {
+      "scenario": "approval binding becomes invalid when scope or target changes",
+      "riskType": "authority_staleness",
+      "required": true,
+      "expected": "changed scope or resource cannot reuse a former approval",
+      "verificationPlan": "Run approval-binding mismatch regressions.",
+      "status": "verified",
+      "evidence": ["tests/test_operation_time_policy_reevaluation.py"]
+    },
+    {
+      "scenario": "stale evidence and request/tool mismatch stop automatic execution",
+      "riskType": "operation_target_mismatch",
+      "required": true,
+      "expected": "stale evidence requires human confirmation and mismatched calls are blocked with recovery guidance",
+      "verificationPlan": "Run freshness and actual-call mismatch regressions across all required high-risk categories.",
+      "status": "verified",
+      "evidence": ["tests/test_operation_time_policy_reevaluation.py"]
+    }
+  ]
+}

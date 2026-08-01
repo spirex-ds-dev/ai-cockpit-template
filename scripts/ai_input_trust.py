@@ -93,6 +93,132 @@ class GovernanceSignal(str, Enum):
     BLOCK = "🔴"
 
 
+class OperationCategory(str, Enum):
+    """Operations that require a fresh policy decision at execution time."""
+
+    DELETE_FILES = "delete_files"
+    MODIFY_TESTS = "modify_tests"
+    MODIFY_CI = "modify_ci"
+    MODIFY_BRANCH_PROTECTION = "modify_branch_protection"
+    WRITE_SECRET = "write_secret"  # nosec B105: policy vocabulary, never credential material
+    PUSH = "push"
+    MERGE = "merge"
+    RELEASE = "release"
+    DATA_MIGRATION = "data_migration"
+    EXECUTE_SCRIPT = "execute_script"
+    EXTERNAL_API_WRITE = "external_api_write"
+    INSTALL_OR_UPGRADE = "install_or_upgrade"
+    UNINSTALL_GOVERNANCE = "uninstall_governance"
+
+
+@dataclass(frozen=True)
+class OperationTimeRequest:
+    """Facts bound immediately before a high-risk operation is considered.
+
+    This record is a local policy input only.  It never executes a command,
+    writes a provider resource, or turns a decision into an authorization.
+    """
+
+    requestedOperation: str
+    actualToolCall: str
+    targetResource: str
+    declaredScope: tuple[str, ...]
+    approvedOperation: str
+    approvedTargetResource: str
+    approvedScope: tuple[str, ...]
+    currentAuthority: str
+    evidenceFresh: bool
+    destructiveImpact: str
+    inputTrust: str = TrustLabel.AUTHORITY.value
+
+
+@dataclass(frozen=True)
+class OperationTimeDecision:
+    """Fail-closed result of an operation-time policy evaluation."""
+
+    decision: str
+    reason: str
+    safeAlternative: str
+    recoveryCondition: str
+
+    @property
+    def mayProceedAutomatically(self) -> bool:
+        return self.decision == GovernanceDecision.ALLOW.value
+
+
+def evaluate_operation_time_policy(request: OperationTimeRequest) -> OperationTimeDecision:
+    """Re-evaluate local policy facts immediately before a high-risk action.
+
+    A prior request is insufficient when the actual call, target, scope,
+    authority, or evidence has changed.  ``allow`` still means only that this
+    local policy record is internally consistent; an executor must apply its
+    own applicable controls separately.
+    """
+
+    safe_alternative = "preserve the request and actual call for human review"
+    try:
+        OperationCategory(request.actualToolCall)
+    except ValueError:
+        return OperationTimeDecision(
+            GovernanceDecision.BLOCK.value,
+            "actual tool call is not a recognized high-risk operation",
+            safe_alternative,
+            "classify the actual tool call before requesting approval",
+        )
+    if request.requestedOperation != request.actualToolCall:
+        return OperationTimeDecision(
+            GovernanceDecision.BLOCK.value,
+            "actual tool call does not match the requested operation",
+            safe_alternative,
+            "create a new approval binding for the actual tool call",
+        )
+    if request.destructiveImpact not in {"low", "medium", "high"}:
+        return OperationTimeDecision(
+            GovernanceDecision.BLOCK.value,
+            "destructive impact is not classified",
+            safe_alternative,
+            "classify destructive impact before requesting a current approval",
+        )
+    if request.inputTrust != TrustLabel.AUTHORITY.value:
+        return OperationTimeDecision(
+            GovernanceDecision.CONFIRM.value,
+            "input trust is not authoritative for the requested high-risk operation",
+            safe_alternative,
+            "obtain attributable human authority for the operation",
+        )
+    if not request.currentAuthority or not request.approvedOperation:
+        return OperationTimeDecision(
+            GovernanceDecision.CONFIRM.value,
+            "current authority is missing for the requested high-risk operation",
+            safe_alternative,
+            "obtain current human authority bound to the operation, target, and scope",
+        )
+    if not request.evidenceFresh:
+        return OperationTimeDecision(
+            GovernanceDecision.CONFIRM.value,
+            "operation evidence is stale",
+            safe_alternative,
+            "refresh the operation evidence and request human confirmation",
+        )
+    if (
+        request.approvedOperation != request.actualToolCall
+        or request.approvedTargetResource != request.targetResource
+        or request.approvedScope != request.declaredScope
+    ):
+        return OperationTimeDecision(
+            GovernanceDecision.CONFIRM.value,
+            "approval binding does not match the current operation target or scope",
+            safe_alternative,
+            "create a current approval binding for the exact operation, target, and scope",
+        )
+    return OperationTimeDecision(
+        GovernanceDecision.ALLOW.value,
+        "operation-time policy inputs match the current request",
+        "continue through the executor's separate applicable controls",
+        "retain this decision with the operation evidence",
+    )
+
+
 _INJECTION_PATTERNS = (
     r"administrator\s+approved",
     r"忽略策略|伪造管理员批准|跳过审查",
