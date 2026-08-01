@@ -26,6 +26,42 @@ class TrustLevel(str, Enum):
     UNTRUSTED = "untrusted"
 
 
+class ContentSource(str, Enum):
+    """WI-05 source vocabulary for provenance that survives later task steps."""
+
+    DIRECT_USER_INSTRUCTION = "direct_user_instruction"
+    REPOSITORY_POLICY = "repository_policy"
+    REPOSITORY_DOCUMENT = "repository_document"
+    ISSUE_CONTENT = "issue_content"
+    PULL_REQUEST_COMMENT = "pull_request_comment"
+    EXTERNAL_WEB_CONTENT = "external_web_content"
+    BUILD_LOG = "build_log"
+    TEST_FIXTURE = "test_fixture"
+    GENERATED_AGENT_CONTENT = "generated_agent_content"
+    TOOL_OUTPUT = "tool_output"
+    PROVIDER_VERIFIED_EVENT = "provider_verified_event"
+
+
+class TrustLabel(str, Enum):
+    """Trust classification; labels describe provenance, not operational permission."""
+
+    AUTHORITY = "authority"
+    TRUSTED_EVIDENCE = "trusted_evidence"
+    REPOSITORY_CONTENT = "repository_content"
+    UNTRUSTED_CONTENT = "untrusted_content"
+    GENERATED_CONTENT = "generated_content"
+    PROVIDER_VERIFIED = "provider_verified"
+    UNKNOWN_SOURCE = "unknown_source"
+
+
+class ToolOutputKind(str, Enum):
+    """Separate raw tool observations from tool and agent interpretations."""
+
+    RAW_DATA = "raw_data"
+    TOOL_INTERPRETATION = "tool_interpretation"
+    AGENT_INTERPRETATION = "agent_interpretation"
+
+
 class InstructionAuthority(str, Enum):
     HUMAN_REQUEST = "human_request"
     NONE = "none"
@@ -80,6 +116,182 @@ class InputTrustRecord:
     external: dict[str, Any]
     outcome: str
     reason: str
+
+
+_TRUST_LABEL_BY_SOURCE = {
+    ContentSource.DIRECT_USER_INSTRUCTION: TrustLabel.AUTHORITY,
+    ContentSource.REPOSITORY_POLICY: TrustLabel.AUTHORITY,
+    ContentSource.REPOSITORY_DOCUMENT: TrustLabel.REPOSITORY_CONTENT,
+    ContentSource.ISSUE_CONTENT: TrustLabel.UNTRUSTED_CONTENT,
+    ContentSource.PULL_REQUEST_COMMENT: TrustLabel.UNTRUSTED_CONTENT,
+    ContentSource.EXTERNAL_WEB_CONTENT: TrustLabel.UNTRUSTED_CONTENT,
+    ContentSource.BUILD_LOG: TrustLabel.UNTRUSTED_CONTENT,
+    ContentSource.TEST_FIXTURE: TrustLabel.UNTRUSTED_CONTENT,
+    ContentSource.GENERATED_AGENT_CONTENT: TrustLabel.GENERATED_CONTENT,
+    ContentSource.TOOL_OUTPUT: TrustLabel.UNKNOWN_SOURCE,
+    ContentSource.PROVIDER_VERIFIED_EVENT: TrustLabel.PROVIDER_VERIFIED,
+}
+
+
+@dataclass(frozen=True)
+class ProvenanceRecord:
+    """Immutable provenance for content; it never authenticates or executes.
+
+    ``source`` is the original ingress source.  ``chain`` records every local
+    transformation so later work cannot silently replace an untrusted origin
+    with an authority or independent-evidence claim.
+    """
+
+    source: str
+    trustLabel: str
+    instructionAuthority: str
+    content: str
+    chain: tuple[str, ...]
+    toolOutputKind: str | None
+    isIndependentEvidence: bool
+
+    @classmethod
+    def origin(cls, source: ContentSource | str, content: str) -> ProvenanceRecord:
+        resolved = ContentSource(source)
+        label = _TRUST_LABEL_BY_SOURCE[resolved]
+        return cls(
+            source=resolved.value,
+            trustLabel=label.value,
+            instructionAuthority=(
+                InstructionAuthority.HUMAN_REQUEST.value
+                if resolved is ContentSource.DIRECT_USER_INSTRUCTION
+                else InstructionAuthority.NONE.value
+            ),
+            content=content,
+            chain=(resolved.value,),
+            toolOutputKind=None,
+            isIndependentEvidence=label is TrustLabel.PROVIDER_VERIFIED,
+        )
+
+    @classmethod
+    def tool_output(cls, kind: ToolOutputKind | str, content: str) -> ProvenanceRecord:
+        resolved_kind = ToolOutputKind(kind)
+        label = (
+            TrustLabel.UNKNOWN_SOURCE
+            if resolved_kind is ToolOutputKind.RAW_DATA
+            else TrustLabel.GENERATED_CONTENT
+        )
+        return cls(
+            source=ContentSource.TOOL_OUTPUT.value,
+            trustLabel=label.value,
+            instructionAuthority=InstructionAuthority.NONE.value,
+            content=content,
+            chain=(ContentSource.TOOL_OUTPUT.value, resolved_kind.value),
+            toolOutputKind=resolved_kind.value,
+            isIndependentEvidence=False,
+        )
+
+    def with_trust_label(self, label: TrustLabel | str) -> ProvenanceRecord:
+        """Reject a local relabeling attempt instead of allowing trust escalation."""
+        requested = TrustLabel(label).value
+        if requested != self.trustLabel:
+            raise ValueError("provenance transformations cannot upgrade trust labels")
+        return self
+
+    def derive_tool_interpretation(self, content: str) -> ProvenanceRecord:
+        return self._derive(
+            content,
+            step=ToolOutputKind.TOOL_INTERPRETATION.value,
+            label=TrustLabel.GENERATED_CONTENT,
+            tool_output_kind=ToolOutputKind.TOOL_INTERPRETATION,
+        )
+
+    def derive_agent_interpretation(self, content: str) -> ProvenanceRecord:
+        return self._derive(
+            content,
+            step=ToolOutputKind.AGENT_INTERPRETATION.value,
+            label=TrustLabel.GENERATED_CONTENT,
+            tool_output_kind=ToolOutputKind.AGENT_INTERPRETATION,
+        )
+
+    def _derive(
+        self,
+        content: str,
+        *,
+        step: str,
+        label: TrustLabel,
+        tool_output_kind: ToolOutputKind | None,
+    ) -> ProvenanceRecord:
+        return ProvenanceRecord(
+            source=self.source,
+            trustLabel=label.value,
+            instructionAuthority=InstructionAuthority.NONE.value,
+            content=content,
+            chain=(*self.chain, step),
+            toolOutputKind=tool_output_kind.value if tool_output_kind else None,
+            isIndependentEvidence=False,
+        )
+
+
+@dataclass(frozen=True)
+class ProvenanceDecision:
+    """A safe dataflow decision; no outcome authorizes an external operation."""
+
+    decision: str
+    reason: str
+    safeAlternative: str
+    recoveryCondition: str
+
+
+def propagate_provenance(record: ProvenanceRecord, content: str) -> ProvenanceRecord:
+    """Carry original source and label into a later step without reclassification."""
+    return ProvenanceRecord(
+        source=record.source,
+        trustLabel=record.trustLabel,
+        instructionAuthority=record.instructionAuthority,
+        content=content,
+        chain=(*record.chain, "cross_step"),
+        toolOutputKind=record.toolOutputKind,
+        isIndependentEvidence=False,
+    )
+
+
+def evaluate_provenance_operation(
+    record: ProvenanceRecord, operation: str, *, high_risk: bool
+) -> ProvenanceDecision:
+    """Require complete, non-self-generated provenance before high-risk review."""
+    recovery = "record the origin and every transformation before human review"
+    alternative = "preserve the content as data and request attributable provenance"
+    if high_risk and not record.chain:
+        return ProvenanceDecision(
+            "block",
+            "high-risk operation requires a complete provenance chain",
+            alternative,
+            recovery,
+        )
+    if high_risk and (
+        record.trustLabel == TrustLabel.GENERATED_CONTENT.value
+        or not record.isIndependentEvidence
+        and record.source == ContentSource.GENERATED_AGENT_CONTENT.value
+    ):
+        return ProvenanceDecision(
+            "block",
+            "generated content cannot serve as independent evidence for a high-risk operation",
+            alternative,
+            recovery,
+        )
+    if high_risk and record.trustLabel in {
+        TrustLabel.UNTRUSTED_CONTENT.value,
+        TrustLabel.UNKNOWN_SOURCE.value,
+        TrustLabel.REPOSITORY_CONTENT.value,
+    }:
+        return ProvenanceDecision(
+            "block",
+            "untrusted or non-authoritative content cannot authorize a high-risk operation",
+            alternative,
+            recovery,
+        )
+    return ProvenanceDecision(
+        "review",
+        f"{operation} requires the separate operation-time authority and evidence checks",
+        "use the governed operation review path",
+        "supply operation-specific authority and evidence through the applicable gate",
+    )
 
 
 @dataclass(frozen=True)
