@@ -336,3 +336,60 @@ def test_summarizer_reports_decision_and_slowest_gate(tmp_path):
     assert summary["decision"] == "PASS"
     assert summary["slowestGate"] == "slow"
     assert "Parallel efficiency" in (tmp_path / "summary.md").read_text(encoding="utf-8")
+
+
+def test_summarizer_emits_profile_budget_and_cache_diagnostics():
+    records = [
+        {
+            "schemaVersion": 1,
+            "gate": "project-test",
+            "category": "tests",
+            "startedAt": "2026-08-01T00:00:00+00:00",
+            "finishedAt": "2026-08-01T00:00:03+00:00",
+            "durationMs": 3000,
+            "result": "passed",
+            "commitSha": "abc",
+            "cache": {"applicable": True, "hit": False},
+        },
+        {
+            "schemaVersion": 1,
+            "gate": "project-test",
+            "category": "tests",
+            "startedAt": "2026-08-01T00:00:03+00:00",
+            "finishedAt": "2026-08-01T00:00:04+00:00",
+            "durationMs": 1000,
+            "result": "passed",
+            "commitSha": "abc",
+            "cache": {"applicable": True, "hit": True},
+        },
+    ]
+
+    summary = summarize_quality_gates.summarize(
+        records,
+        profile="strict",
+        escalations=["release_preflight"],
+        escalation_reasons=["release workflow file changed"],
+        budget_ms=3500,
+    )
+
+    report = summary["performanceReport"]
+    assert report["profile"] == "strict"
+    assert report["verificationEscalations"] == ["release_preflight"]
+    assert report["escalationReasons"] == ["release workflow file changed"]
+    assert report["preflightDurationMs"] == 0
+    assert report["gateDurationMs"] == 4000
+    assert report["testDurationMs"] == 4000
+    assert report["cache"] == {"applicable": 2, "hits": 1, "misses": 1}
+    assert report["repeatedChecks"] == ["project-test"]
+    assert report["slowestStep"] == {"name": "project-test", "durationMs": 3000}
+    assert report["budget"] == {"limitMs": 3500, "status": "over_budget", "overageMs": 500}
+    rendered = summarize_quality_gates.markdown(summary)
+    assert "Budget status: over_budget" in rendered
+    assert "Cache hits/misses: 1/1" in rendered
+
+
+def test_summarizer_marks_an_absent_budget_as_not_configured():
+    report = summarize_quality_gates.performance_report(
+        [], profile="light", escalations=[], escalation_reasons=[], budget_ms=None
+    )
+    assert report["budget"] == {"limitMs": None, "status": "not_configured", "overageMs": 0}

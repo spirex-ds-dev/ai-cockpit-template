@@ -1,0 +1,309 @@
+{
+  "contractVersion": 2,
+  "workItemId": "governance-performance-budget",
+  "mode": "code",
+  "title": "governance-performance-budget",
+  "baseCommit": "cbdc0775dd4de84727a8c752232667928de516ff",
+  "predecessorWorkItem": {
+    "workItemId": "project-governance-fixture-performance",
+    "status": "closed",
+    "pr": {
+      "number": 565,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/565",
+      "mergeCommit": "cbdc0775dd4de84727a8c752232667928de516ff"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/project-governance-fixture-performance.archive-manifest.json"
+    }
+  },
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/governance-performance-budget.contract.json",
+    ".ai/work-items/active/governance-performance-budget.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/governance-performance-budget.outcome.json",
+    ".ai/work-items/active/governance-performance-budget.outcome.md",
+    "scripts/summarize_quality_gates.py",
+    "scripts/ai_performance_budget.py",
+    "Makefile",
+    ".github/workflows/smoke.yml",
+    "tests/test_quality_telemetry.py",
+    "tests/test_makefile.py",
+    "tests/test_performance_budget.py",
+    "tests/test_ci_quality_orchestration.py",
+    "docs/reference/governance-performance-budget.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing quality-gate membership, disabling required checks, or modifying provider configuration.",
+    "Treating local timing data as hosted-provider performance evidence."
+  ],
+  "sources": [
+    {
+      "path": "user-pasted-text-1",
+      "reason": "WI-11 requires structured performance reporting, budgets, slowest-step diagnostics, and cache validation without skipping security checks."
+    },
+    {
+      "path": "scripts/summarize_quality_gates.py",
+      "reason": "Existing authoritative quality timing and cache aggregation boundary."
+    },
+    {
+      "path": "scripts/run_quality_gate.py",
+      "reason": "Existing per-gate duration, cache, and execution evidence schema."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "performance_budget_misclassification",
+      "security_check_omission",
+      "misleading_hosted_claim"
+    ],
+    "reason": "Budget reporting changes CI decision diagnostics and must not turn measurements into permission to omit required verification.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "CI workflow, shared Make dispatch, and governance evidence reporting are high-risk verification boundaries."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the governed Work Item lifecycle and the bounded reporting implementation is locally verifiable."
+  },
+  "preReviewWarnings": [
+    "Budget alerts must identify measured slowest steps without changing the mandatory verification graph.",
+    "Hosted evidence must remain explicitly distinguished from local performance measurements."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Quality summaries include total, phase/gate, test, archive, cache, profile, escalation, repeated-check, and slowest-step measurements in a structured Performance Report.",
+    "Configured profile budgets are evaluated from a measured baseline; over-budget reports identify the exact slowest step and never suppress required checks.",
+    "Repeated equivalent inputs prove cache accounting, and absent cache evidence remains explicit rather than inferred.",
+    "CI publishes the structured report and current documentation distinguishes local measurements from hosted evidence."
+  ],
+  "guidelines": [
+    "Use quality evidence already produced by run_quality_gate; do not add an independent duplicate execution graph.",
+    "Budget evaluation may report or fail the budget policy but must never skip security, release, or required quality checks.",
+    "Keep local and hosted performance facts distinct in schemas, reports, and documentation."
+  ],
+  "intent": {
+    "problem": "Quality sessions expose individual gate timings but do not provide a profile-aware, budgeted report that explains governance cost, cache effectiveness, repetition, or the concrete slowest step.",
+    "constraints": [
+      "Build on existing timing receipts rather than duplicating quality execution.",
+      "Do not change provider configuration or weaken required verification.",
+      "Do not present local measurements as hosted-provider facts."
+    ],
+    "rationale": "Measured, source-bound cost evidence makes low-risk workflows genuinely lighter while preserving mandatory evidence for higher-risk work."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "budget report captures measured quality cost",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_quality_telemetry.py::test_summarizer_emits_profile_budget_and_cache_diagnostics"
+      ],
+      "expected": "A quality receipt produces total, cache, repeated-check, profile, escalation, and slowest-step fields.",
+      "verificationPlan": "Run focused performance-report tests."
+    },
+    {
+      "scenario": "over-budget diagnostics preserve required checks",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_quality_telemetry.py::test_summarizer_emits_profile_budget_and_cache_diagnostics",
+        "tests/test_makefile.py"
+      ],
+      "expected": "An over-budget result identifies the slowest step without changing the quality command graph.",
+      "verificationPlan": "Run budget-policy and Makefile regression tests."
+    },
+    {
+      "scenario": "local measurements do not imply hosted evidence",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "docs/reference/governance-performance-budget.md",
+        "tests/test_performance_budget.py"
+      ],
+      "expected": "The report labels its measurement source and has no provider-performance claim.",
+      "verificationPlan": "Run schema and documentation tests."
+    }
+  ],
+  "rawUserRequest": "Complete WI-11 governance-performance-budget with structured CI performance reporting and safe budgets.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-pasted-text-1",
+    "capturedAt": "2026-08-02T00:00:00+00:00",
+    "digest": "sha256:wi11-governance-performance-budget"
+  },
+  "declaredIntent": {
+    "summary": "Quantify governance cost without weakening verification.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "requiredEvidenceContext": {
+    "destructiveLevel": "none",
+    "availableEvidence": [
+      "quality gate receipts",
+      "quality session summaries",
+      "focused regression tests"
+    ],
+    "externalSystem": "none"
+  },
+  "performanceImpact": "Adds a report-only aggregation over existing receipts; it must not add a second quality execution graph.",
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 761
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/governance-performance-budget.json",
+    "baseCommit": "58f2563149cf30f0e071de6121bae812e37f8e42",
+    "initialScopeDigest": "cf8c4a241a92cd34133662cdfd9eacd8193783e9000c1d9f6db792498bf38f56",
+    "contractSkeletonDigest": "f053b4c7ed256753bbe37ce5a808b25a2b547efb8f9e7265ccbfd431bf26672f"
+  },
+  "resumeHistory": [
+    {
+      "resumeVersion": 1,
+      "fromBaseCommit": "58f2563149cf30f0e071de6121bae812e37f8e42",
+      "toBaseCommit": "cbdc0775dd4de84727a8c752232667928de516ff",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/governance-performance-budget",
+      "recordedAt": "2026-08-01T22:29:14.535907+00:00",
+      "priorContractDigest": "0089cedf5309a74df4428c178083e137e83f2bc9ccc89201698af3ec191d949a",
+      "predecessorWorkItemId": "project-governance-fixture-performance",
+      "predecessorMergeCommit": "cbdc0775dd4de84727a8c752232667928de516ff",
+      "predecessorManifestPath": ".ai/work-items/archive/2026/project-governance-fixture-performance.archive-manifest.json",
+      "predecessorClosure": {
+        "statusClosed": true,
+        "prMerged": true,
+        "closureSucceeded": true,
+        "localBranchDeleted": true,
+        "remoteBranchDeleted": true,
+        "baseSynchronized": true
+      }
+    }
+  ]
+}

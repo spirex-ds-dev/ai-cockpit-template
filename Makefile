@@ -26,6 +26,9 @@ QUALITY_TIMING_DIR ?= target/quality/timing
 QUALITY_LOG_DIR ?= target/quality/logs
 QUALITY_JUNIT_DIR ?= target/quality/junit
 QUALITY_SUMMARY_DIR ?= target/quality
+QUALITY_PROFILE ?= unknown
+QUALITY_ESCALATIONS ?=
+QUALITY_ESCALATION_REASONS ?=
 GOVERNANCE_PROFILE ?=
 GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 
@@ -440,7 +443,7 @@ quality-full:
 		trap 'printf "%s\n" "$$session_id" > target/quality/current-session.txt' EXIT; \
 		printf '%s\n' "$$session_id" > target/quality/current-session.txt; \
 		$(AI_PYTHON) scripts/run_quality_session.py --phase quality-fast --phase quality-heavy -- $(QUALITY_MAKE) --no-print-directory QUALITY_SESSION_ID="$$session_id" QUALITY_RUN_ID="$$run_id" QUALITY_TIMING_DIR="$$timing" QUALITY_LOG_DIR="$$logs" QUALITY_JUNIT_DIR="$$junit" TEST_WEAKENING_FULL_OWNERSHIP=true; \
-		$(AI_PYTHON) scripts/summarize_quality_gates.py --input "$$timing" --json-output "$$session_root/summary.json" --markdown-output "$$session_root/summary.md"; \
+		$(AI_PYTHON) scripts/summarize_quality_gates.py --input "$$timing" --json-output "$$session_root/summary.json" --markdown-output "$$session_root/summary.md" --profile "$(QUALITY_PROFILE)" $(QUALITY_ESCALATIONS) $(QUALITY_ESCALATION_REASONS); \
 		cp "$$session_root/summary.json" target/quality/summary.json; \
 		cp "$$session_root/summary.md" target/quality/summary.md
 
@@ -494,10 +497,13 @@ ai-cockpit-quality:
 			$(if $(GOVERNANCE_PROFILE),--profile "$(GOVERNANCE_PROFILE)",) \
 			--output "$(GOVERNANCE_RECEIPT)"; \
 		target=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["dispatchTarget"])' "$(GOVERNANCE_RECEIPT)"); \
+		profile=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("selectedProfile", "unknown"))' "$(GOVERNANCE_RECEIPT)"); \
+		escalations=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(" ".join("--escalation " + value for value in json.load(open(sys.argv[1], encoding="utf-8")).get("verificationEscalations", [])))' "$(GOVERNANCE_RECEIPT)"); \
+		escalation_reasons=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(" ".join("--escalation-reason " + value for value in json.load(open(sys.argv[1], encoding="utf-8")).get("releaseEscalationReasons", [])))' "$(GOVERNANCE_RECEIPT)"); \
 		case "$$target" in quality-fast|quality-standard|quality-full|quality-release) ;; *) echo "invalid governance dispatch target: $$target" >&2; exit 2;; esac; \
-		$(QUALITY_MAKE) --no-print-directory "$$target"; \
+		$(QUALITY_MAKE) --no-print-directory "$$target" QUALITY_PROFILE="$$profile" QUALITY_ESCALATIONS="$$escalations" QUALITY_ESCALATION_REASONS="$$escalation_reasons"; \
 		if $(PYTHON_EXECUTABLE) -c 'import json, sys; raise SystemExit(0 if "release_preflight" in json.load(open(sys.argv[1], encoding="utf-8")).get("verificationEscalations", []) else 1)' "$(GOVERNANCE_RECEIPT)"; then \
-			$(QUALITY_MAKE) --no-print-directory quality-release; \
+			$(QUALITY_MAKE) --no-print-directory quality-release QUALITY_PROFILE="$$profile" QUALITY_ESCALATIONS="$$escalations" QUALITY_ESCALATION_REASONS="$$escalation_reasons"; \
 		fi
 
 ai-start:

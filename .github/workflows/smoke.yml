@@ -154,7 +154,11 @@ jobs:
                 --input "$session_root/timing" \
                 --json-output "$session_root/summary.json" \
                 --markdown-output "$session_root/summary.md"
+              python3 scripts/ai_performance_budget.py \
+                --input "$session_root/summary.json" \
+                --output "$session_root/performance-baseline.json"
               cat "$session_root/summary.md" >> "$GITHUB_STEP_SUMMARY"
+              cat "$session_root/performance-baseline.json" >> "$GITHUB_STEP_SUMMARY"
             else
               echo "No quality timing evidence was produced for session $session_id." >&2
               exit 1
