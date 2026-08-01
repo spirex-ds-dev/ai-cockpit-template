@@ -227,6 +227,7 @@ def generate_human_report(
     normalized_facts = _validate_closure_facts(closure_facts) if phase == "final" else None
     if normalized_facts is not None:
         report["closure"] = normalized_facts
+        report["closureEvidenceState"] = "repository_recorded_only"
     report["nextSafeAction"] = _next_safe_action(phase, sections, remaining, normalized_facts)
     return report
 

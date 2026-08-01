@@ -4,7 +4,7 @@ Phase: `review`
 Result: `completed`
 
 ## What changed
-Task outcome-residual-risk-binding generated an evidence-derived outcome with status completed.
+Task lifecycle-closure-receipt generated an evidence-derived outcome with status completed.
 
 ## Issues
 - Detected issues: 0

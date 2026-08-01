@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import shutil
 import subprocess
@@ -145,6 +146,7 @@ def generate_closure_receipt(
     if not isinstance(url, str) or not url.startswith("https://"):
         raise RuntimeError("Closure Receipt requires authoritative pull request URL")
     receipt_path = CLOSURE_RECEIPTS_DIR / f"{task}.closure.md"
+    json_receipt_path = CLOSURE_RECEIPTS_DIR / f"{task}.closure.json"
     receipt_path.parent.mkdir(parents=True, exist_ok=True)
     next_worktree = base_worktree or PROJECT_ROOT.as_posix()
     final_json, final_markdown = generate_final_human_report(
@@ -159,6 +161,35 @@ def generate_closure_receipt(
             "cleanup": "scheduled",
             "continueFrom": next_worktree,
         },
+    )
+    outcome_digest = hashlib.sha256(outcome_path.read_bytes()).hexdigest()
+    json_receipt_path.write_text(
+        json.dumps(
+            {
+                "workItemId": task,
+                "outcomeDigest": outcome_digest,
+                "pullRequest": {
+                    "number": pr.get("number"),
+                    "url": url,
+                    "state": "merged",
+                    "headSha": pr.get("headRefOid"),
+                    "mergeSha": merge_commit,
+                },
+                "branch": {"name": work_branch, "remoteDeleted": False, "localDeleted": False},
+                "defaultBranch": {
+                    "name": base_branch,
+                    "containsMerge": True,
+                    "verifiedAt": "repository_recorded",
+                },
+                "closureState": "closing",
+                "providerEvidence": [],
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
     )
     receipt_path.write_text(
         "\n".join(
@@ -206,6 +237,23 @@ def validate_closure_receipt(receipt_path: Path, task: str) -> None:
     )
     if any(marker not in text for marker in required):
         raise RuntimeError("Closure Receipt is invalid: required closure facts are missing")
+
+
+def finalize_closure_receipt(task: str) -> None:
+    """Mark the persisted receipt closed only after both branch deletions succeed."""
+    path = CLOSURE_RECEIPTS_DIR / f"{task}.closure.json"
+    if not path.is_file():
+        raise RuntimeError("Closure Receipt JSON is missing before branch cleanup")
+    receipt = load_json(path)
+    branch = receipt.get("branch")
+    if not isinstance(branch, dict):
+        raise TypeError("Closure Receipt JSON has invalid branch facts")
+    branch["remoteDeleted"] = True
+    branch["localDeleted"] = True
+    receipt["closureState"] = "closed"
+    path.write_text(
+        json.dumps(receipt, ensure_ascii=False, sort_keys=True, indent=2) + "\n", encoding="utf-8"
+    )
 
 
 def _verify_archived_evidence(task: str) -> Path:
@@ -533,6 +581,8 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
         work_branch,
         detach_required=base_path is not None,
     )
+    if (CLOSURE_RECEIPTS_DIR / f"{task}.closure.json").is_file():
+        finalize_closure_receipt(task)
 
     linked_base = base_path is not None
     repository_state = "closed_but_current_worktree_detached" if linked_base else "ready_on_base"

@@ -1,0 +1,190 @@
+{
+  "contractVersion": 2,
+  "governanceMetadataVersion": 1,
+  "workItemId": "lifecycle-closure-receipt",
+  "mode": "code",
+  "title": "lifecycle-closure-receipt",
+  "baseCommit": "dce5c19d71b6313745cd4dca23e30ed20c82af31",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/lifecycle-closure-receipt.contract.json",
+    ".ai/work-items/active/lifecycle-closure-receipt.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/lifecycle-closure-receipt.outcome.json",
+    ".ai/work-items/active/lifecycle-closure-receipt.outcome.md",
+    "scripts/ai_close_work_item.py",
+    "scripts/ai_generate_human_report.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "tests/test_human_benefit_report.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+    ,"docs/reference/pre-release-documentation-alignment.json"
+    ,"docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {
+      "path": "user-pasted-text-1",
+      "reason": "User-authorized WI-02 closure-receipt requirements."
+    },
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Existing closure lifecycle and receipt implementation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": ["audit_integrity", "provider_evidence_boundary"],
+    "reason": "Closure facts must not mutate the immutable Outcome or overstate provider verification."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Persistent closure evidence and current-report semantics require Standard governance."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user supplied explicit lifecycle and evidence requirements."
+  },
+  "preReviewWarnings": ["Do not present repository-local closure facts as Provider verification."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Task Outcome remains immutable after ai-finish and archive.",
+    "A closure receipt records the Outcome digest, PR state and SHAs, branch deletion facts, default-branch containment, closure state, provider evidence state, and timestamp.",
+    "Current Human Benefit Report distinguishes Outcome-time facts from closure-time facts and uses repository_recorded_only when Provider evidence is absent.",
+    "Missing or invalid closure receipt prevents fully_closed status."
+  ],
+  "guidelines": [
+    "Keep Outcome immutable; derive closure views from verified facts only.",
+    "Do not convert local Git facts into Provider-verified evidence."
+  ],
+  "intent": {
+    "problem": "The archived pre-merge Outcome cannot represent later merge and branch-cleanup facts, causing current reports to display stale PR state.",
+    "constraints": ["Do not mutate historical Task Outcomes.", "Provider evidence must remain explicitly unavailable unless provider-bound evidence exists."],
+    "rationale": "A separate closure receipt preserves historical truth while giving reviewers an auditable current state."
+  },
+  "rawUserRequest": "Implement WI-02 lifecycle-closure-receipt from the supplied AI Cockpit comprehensive remediation instructions.",
+  "rawRequestSource": {"type": "human", "reference": "user-pasted-text-1", "capturedAt": "2026-08-01T10:50:00Z", "digest": "user-supplied-wi-02"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]},
+  "scenarioCoverage": [
+    {"scenario": "merged closure with repository-only facts", "riskType": "audit_integrity", "required": true, "expected": "verified receipt and current report preserve Outcome-time versus closure-time state", "verificationPlan": "Run lifecycle closure unit tests and validate generated receipt.", "status": "unverified", "evidence": []},
+    {"scenario": "missing closure receipt", "riskType": "provider_evidence_boundary", "required": true, "expected": "fully_closed claim is rejected", "verificationPlan": "Run negative receipt validation test.", "status": "unverified", "evidence": []}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "requiredEvidence": ["archived Outcome digest", "merged PR facts", "default-branch containment", "branch deletion facts"],
+  "humanDecisionPoints": ["A repository administrator decides whether provider-bound evidence is required for an external assurance claim; this Work Item reports only repository_recorded_only without it."],
+  "documentationImpact": "Current Human Benefit Report distinguishes immutable Outcome state from closure state.",
+  "performanceImpact": "Closure receipt generation is bounded local JSON and Markdown rendering.",
+  "residualRiskExpectation": "Provider verification remains repository_recorded_only when no provider-bound evidence exists.",
+  "predecessorClosureEvidence": "WI-01 closure receipt: target/task-closure-receipts/outcome-residual-risk-binding.closure.md",
+  "rollbackPlan": "Revert the Work Item commit; historical Outcomes remain unchanged.",
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all required Contract and governance writes."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 740
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/lifecycle-closure-receipt.json",
+    "baseCommit": "dce5c19d71b6313745cd4dca23e30ed20c82af31",
+    "initialScopeDigest": "518a9aea3673186c9c28fcffa86165058289e8ec810f776225966e83872885d9",
+    "contractSkeletonDigest": "082d650661d0235cd61e64302fa354f31127abf83a6d132e84da964b901e60bd"
+  }
+}
