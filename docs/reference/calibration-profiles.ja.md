@@ -8,6 +8,8 @@ audience:
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - project_calibration_profile_proposal
 keywords:
   - ai-cockpit
   - calibration
@@ -19,6 +21,8 @@ keywords:
 Calibration Profile は、導入先が証拠化する常設コントロールを選択します。
 Work Item の Quality Routing とは別の仕組みです。レベルは
 `lite < standard < strict` の累積順序です。
+この方針と Proposal はテンプレートで提供されますが、導入先での導入済みや
+有効化を証明しません。
 
 | レベル | このレベルで追加される必須コントロール |
 | --- | --- |

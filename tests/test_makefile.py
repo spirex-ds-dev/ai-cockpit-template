@@ -58,6 +58,22 @@ def test_makefile_exposes_source_bound_evidence_gate():
     assert "scripts/check_pre_release_documentation_alignment.py" in result.stdout
 
 
+def test_docs_metadata_composes_capability_claim_binding_without_a_new_gate():
+    result = subprocess.run(
+        ["make", "-n", "check-docs-metadata"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "scripts/check_docs_metadata.py" in result.stdout
+    assert "scripts/ai_check_capability_claims.py" in result.stdout
+    checks = (ROOT / ".ai/cockpit/checks.yaml").read_text(encoding="utf-8")
+    assert "check-capability-claims" not in checks
+
+
 def test_project_lint_checks_locked_ruff_version_before_rule_evaluation():
     result = subprocess.run(
         ["make", "-n", "project-lint"],

@@ -2,6 +2,8 @@
 author: Ray
 title: "Quality Gate 運用"
 description: AI Cockpit の Quality Gate、証拠、Work Item 追跡の運用説明。
+capabilityClaims:
+  - risk_based_quality_routing
 keywords:
   - ai-cockpit
   - quality-gates

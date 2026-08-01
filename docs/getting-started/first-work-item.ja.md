@@ -2,6 +2,8 @@
 author: Ray
 title: "最初の Work Item"
 description: AI Cockpit 導入後に最初の管理対象タスクを実行する日本語ガイド。
+capabilityClaims:
+  - repository_governance_layer
 keywords:
   - ai-cockpit
   - work-item

@@ -8,6 +8,8 @@ audience:
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - test_weakening_guard
 keywords:
   - ai-cockpit
   - test-weakening

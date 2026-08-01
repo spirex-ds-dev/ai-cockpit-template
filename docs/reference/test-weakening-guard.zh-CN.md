@@ -9,6 +9,8 @@ status: current
 authority: translation
 canonical: docs/reference/test-weakening-guard.md
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - test_weakening_guard
 keywords:
   - ai-cockpit
   - test-weakening

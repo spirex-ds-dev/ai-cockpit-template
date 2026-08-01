@@ -8,6 +8,8 @@ audience:
 status: reference
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - documentation_architecture
 keywords:
   - ai-cockpit
   - documentation

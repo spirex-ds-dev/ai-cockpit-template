@@ -8,6 +8,8 @@ audience:
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - project_calibration_profile_proposal
 keywords:
   - ai-cockpit
   - calibration
@@ -19,6 +21,7 @@ keywords:
 Calibration Profile 选择采用方需要提供证据的长期控制项。它不同于 Work Item
 质量路由：前者描述仓库的长期治理边界，后者为单次变更选择检查。等级按
 `lite < standard < strict` 累积。
+该策略和 proposal 由模板提供，但不证明采用方已安装或在目标仓库中激活。
 
 | 等级 | 本级新增的必需控制 |
 | --- | --- |

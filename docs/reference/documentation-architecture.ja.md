@@ -2,6 +2,8 @@
 author: Ray
 title: "ドキュメント構成"
 description: AI Cockpit の日本語ドキュメント入口と参照ページの構成。
+capabilityClaims:
+  - documentation_architecture
 keywords:
   - ai-cockpit
   - documentation

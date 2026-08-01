@@ -7,6 +7,8 @@ audience:
 status: current
 authority: canonical
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - repository_governance_layer
 ---
 
 # AI Cockpit

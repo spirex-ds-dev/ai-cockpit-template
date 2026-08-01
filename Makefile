@@ -32,7 +32,7 @@ GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 .PHONY: help \
 	test project-format-check project-test project-lint diff-check quality quality-gates \
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
-check-docs-metadata check-trust-layer-docs check-real-absurd-injection-docs check-governance-complexity \
+check-docs-metadata check-capability-claims check-trust-layer-docs check-real-absurd-injection-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-calibration-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
 	check-bandit-evidence check-bandit-baseline check-sbom check-provenance check-release-evidence refresh-candidate-release-evidence check-secret-scanning \
 	check-release-distribution check-release-state-consistency check-japanese-capability check-release-readiness check-release-preflight check-ci-release-evidence \
@@ -178,6 +178,10 @@ diff-check:
 
 check-docs-metadata:
 	$(AI_PYTHON) scripts/check_docs_metadata.py
+	$(AI_PYTHON) scripts/ai_check_capability_claims.py
+
+check-capability-claims:
+	$(AI_PYTHON) scripts/ai_check_capability_claims.py
 
 check-trust-layer-docs:
 	$(AI_PYTHON) scripts/check_trust_layer_docs.py

@@ -9,6 +9,8 @@ status: current
 authority: translation
 canonical: docs/reference/governance-profiles.md
 lastVerifiedBy: capability-truth-matrix
+capabilityClaims:
+  - risk_based_quality_routing
 keywords:
   - ai-cockpit
   - governance-profile

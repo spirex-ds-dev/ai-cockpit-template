@@ -1,0 +1,308 @@
+{
+  "contractVersion": 2,
+  "rawUserRequest": "Complete WI-06 Capability Claim Binding from the attached AI Cockpit next-stage directive through archive, PR, merge, closure, and branch cleanup. Require README and current public documentation capability claims in English, Japanese, and Simplified Chinese to bind to current capability truth evidence, enforce implemented/adopter_installed/template_only/planned/evidence_stale wording rules, and add the specified checker, tests, and authoring guide without adding unnecessary formal Gates.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation and attached AI Cockpit next-stage directive: WI-06 Capability Claim Binding",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:wi-06-capability-claim-binding-authorized-request"
+  },
+  "workItemId": "wi-06-capability-claim-binding",
+  "mode": "code",
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Bind strong current public capability language to the existing source-bound capability matrix with state-aware, freshness-aware, and multilingual checks.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "documentation",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "title": "WI06 Capability Claim Binding",
+  "baseCommit": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-06-capability-claim-binding.contract.json",
+    ".ai/work-items/active/wi-06-capability-claim-binding.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-06-capability-claim-binding.outcome.json",
+    ".ai/work-items/active/wi-06-capability-claim-binding.outcome.md",
+    "docs/superpowers/specs/2026-08-01-capability-claim-binding-design.md",
+    "docs/superpowers/plans/2026-08-01-capability-claim-binding.md",
+    "scripts/ai_check_capability_claims.py",
+    "tests/test_capability_claims.py",
+    "tests/test_makefile.py",
+    "Makefile",
+    "README.md",
+    "README.ja.md",
+    "README.zh-CN.md",
+    "docs/concepts/decision-states.md",
+    "docs/concepts/trust-layer.md",
+    "docs/getting-started/first-work-item.md",
+    "docs/getting-started/first-work-item.ja.md",
+    "docs/getting-started/installation.md",
+    "docs/getting-started/installation.ja.md",
+    "docs/getting-started/installation.zh-CN.md",
+    "docs/operations/quality-gates.md",
+    "docs/operations/quality-gates.ja.md",
+    "docs/operations/quality-gates.zh-CN.md",
+    "docs/operations/work-item-lifecycle.md",
+    "docs/reference/calibration-profiles.md",
+    "docs/reference/calibration-profiles.ja.md",
+    "docs/reference/calibration-profiles.zh-CN.md",
+    "docs/reference/capability-claim-authoring.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/documentation-architecture.md",
+    "docs/reference/documentation-architecture.ja.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/governance-profiles.md",
+    "docs/reference/governance-profiles.ja.md",
+    "docs/reference/governance-profiles.zh-CN.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/reference-impact-gate.md",
+    "docs/reference/reference-impact-gate.ja.md",
+    "docs/reference/reference-impact-gate.zh-CN.md",
+    "docs/reference/test-weakening-guard.md",
+    "docs/reference/test-weakening-guard.ja.md",
+    "docs/reference/test-weakening-guard.zh-CN.md",
+    "docs/security/threat-model.md"
+  ],
+  "outOfScope": [
+    "Creating a second capability database or changing the existing capability status vocabulary",
+    "Adding a new top-level governance Gate when the existing documentation check can own the policy",
+    "Semantic machine translation or general-purpose natural-language entailment",
+    "Binding historical implementation records, archived Work Items, supporting evidence, or generated direct matrix projections",
+    "Implementing WI09 external identity controls or WI10 end-to-end adoption validation"
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Existing source-bound capability IDs, states, limitations, and evidence digests to reuse as the single truth source."
+    },
+    {
+      "path": "scripts/ai_capability_truth.py",
+      "reason": "Existing matrix validation and evidence-freshness semantics that the claim checker must reuse."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Existing canonical-document selection and narrow capability-language protection."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Authority and document-type registry used to distinguish current public documentation from historical evidence."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Existing documentation verification entry point where claim binding will be composed without a new Gate."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "public_contract",
+      "multilingual_policy",
+      "evidence_binding"
+    ],
+    "reason": "The change enforces public capability language across canonical multilingual documentation, but reuses the existing source-bound matrix and is isolated from runtime installation behavior.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Public documentation policy, evidence freshness, and multilingual parity require the Standard route; no release or runtime transaction boundary changes."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The attached directive defines the claim vocabulary, binding syntax, state rules, and required artifacts; the user has authorized bounded implementation and lifecycle decisions."
+  },
+  "preReviewWarnings": [
+    "Confirm the checker consumes the existing source-bound matrix instead of creating parallel capability state.",
+    "Confirm template-only and planned rows cannot support unqualified present-tense capability claims.",
+    "Confirm multilingual sibling documents bind the same capability IDs and generated historical evidence is excluded deliberately."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Canonical public Markdown containing capability terms in English, Japanese, or Simplified Chinese must bind exact matrix IDs through YAML capabilityClaims or inline capability-claim markers.",
+    "Unknown IDs, missing or stale evidence, and the evidence_stale effective state fail closed through the existing capability truth implementation.",
+    "Rows eligible for present-tense wording accept it; restricted row states require explicit template/adopter limitation wording or planned/future wording, according to the matrix state rules.",
+    "Multilingual sibling documents declare identical capability ID sets so translated wording cannot silently broaden capability scope.",
+    "Documents registered as implementation_record or supporting_evidence, archived Work Items, and the generated capability-truth-matrix.md projection are excluded; canonical current public documents remain in scope.",
+    "The existing documentation check invokes capability-claim validation without registering another top-level Gate.",
+    "Authoring documentation explains trigger language, both binding syntaxes, state rules, freshness, limitations, multilingual parity, and actionable remediation.",
+    "tests/test_capability_claims.py covers unbound claims, invalid IDs, stale evidence, state qualifiers, both binding syntaxes, and multilingual sibling parity; the Contract-selected Standard quality route passes."
+  ],
+  "guidelines": [
+    "Reuse ai_capability_truth.py and capability-truth-matrix.json as the only capability-state and evidence-freshness authority.",
+    "Keep detection deterministic and auditable; do not introduce probabilistic language classification or external services.",
+    "Bind only current canonical public documentation and preserve an explicit exemption for direct generated truth projections and historical evidence.",
+    "Keep error messages actionable by naming the document, capability ID or missing binding, and required qualifier or repair.",
+    "Integrate through the existing documentation verification path instead of adding a formal Gate."
+  ],
+  "intent": {
+    "problem": "The capability truth matrix records source-bound implementation state, but public documentation can still use strong capability language without pointing to a matrix row. This permits README or translated claims to exceed current evidence even while the matrix itself remains valid.",
+    "constraints": [
+      "Preserve the existing matrix IDs, state vocabulary, exact evidence byte binding, and generated truth projection.",
+      "Support inline HTML markers and YAML frontmatter bindings.",
+      "Cover English, Japanese, and Simplified Chinese capability wording deterministically.",
+      "Do not treat installation of a template or a planned row as proof of an active capability.",
+      "Avoid a new formal Gate and avoid scanning historical implementation evidence as current marketing claims."
+    ],
+    "rationale": "A small documentation checker layered on the existing capability truth API makes every current public claim traceable, state-aware, fresh, and multilingual without duplicating evidence or expanding governance ceremony."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A canonical README or public document uses capability wording without a valid current binding.",
+      "expected": "The documentation check fails and identifies an unbound claim, unknown ID, stale evidence row, or evidence_stale effective state with an actionable repair.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_capability_claims.py",
+        "scripts/ai_check_capability_claims.py"
+      ],
+      "verificationPlan": "Run focused fixtures for unbound wording, an unknown capability ID, an evidence digest mismatch, and an effective evidence_stale row."
+    },
+    {
+      "scenario": "A document binds template_only or planned capability evidence but overstates it as a current installed capability.",
+      "expected": "The checker fails until template-only/adopter limitation wording or planned/future wording is present; implemented and adopter_installed rows remain eligible for current wording.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_capability_claims.py",
+        "docs/reference/capability-claim-authoring.md"
+      ],
+      "verificationPlan": "Run focused positive and negative fixtures for every effective state and required qualifier class."
+    },
+    {
+      "scenario": "English, Japanese, and Simplified Chinese siblings declare different capability scopes.",
+      "expected": "The checker fails with the differing sibling paths and capability ID sets, while equal bindings with localized wording pass.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_capability_claims.py",
+        "README.md",
+        "README.ja.md",
+        "README.zh-CN.md"
+      ],
+      "verificationPlan": "Run a multilingual fixture set with mismatched then matching YAML and inline bindings."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human",
+    "reason": "The user explicitly authorized all bounded writes required to complete every Work Item; this Work Item changes Makefile only to compose the new checker under the existing documentation check."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 745
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-06-capability-claim-binding.json",
+    "baseCommit": "c103ce19e4ab6d4039c0688b8396e58e9b1ffc07",
+    "initialScopeDigest": "9bb13715af59b66206c7e3d67aae3147785125da0f4890182abdb27ebfd90895",
+    "contractSkeletonDigest": "ea730c4d68defb0e5b7cd82c67d0d6e30c906ca5634e012983edfc2f6c5d6468"
+  }
+}
