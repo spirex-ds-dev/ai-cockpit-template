@@ -1,0 +1,212 @@
+{
+  "contractVersion": 2,
+  "workItemId": "installer-input-trust-runtime-inclusion",
+  "mode": "code",
+  "title": "Install input-trust runtime for adopters",
+  "baseCommit": "3d2fdc248c3c1e3861562505a7448ff2953a9bb5",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/installer-input-trust-runtime-inclusion.contract.json",
+    ".ai/work-items/active/installer-input-trust-runtime-inclusion.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/installer-input-trust-runtime-inclusion.outcome.json",
+    ".ai/work-items/active/installer-input-trust-runtime-inclusion.outcome.md",
+    "scripts/ai_installer_catalog.json",
+    "tests/test_installer.py",
+    "docs/reference/adopter-long-cycle-validation.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "External provider writes, source-project pushes, or provider configuration changes.",
+    "Changing input-trust policy semantics or weakening existing policy tests.",
+    "Editing the paused real-adopter-reference-validation Work Item or its evidence."
+  ],
+  "sources": [
+    {
+      "path": "user-pasted-text-1",
+      "reason": "Authoritative serial Work Item instruction requiring real-adopter injection validation."
+    },
+    {
+      "path": "scripts/ai_installer_catalog.json",
+      "reason": "Installed runtime catalog that omitted ai_input_trust.py."
+    },
+    {
+      "path": "scripts/ai_input_trust.py",
+      "reason": "Existing injection policy module that must become available to adopters unchanged."
+    },
+    {
+      "path": "scripts/real_adopter_reference_validation.py",
+      "reason": "Paused WI-07 discovery evidence: a real installed clone raises ModuleNotFoundError for ai_input_trust."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "installer_runtime_completeness",
+      "adopter_security_boundary"
+    ],
+    "reason": "Omitting the installed input-trust runtime leaves a real adopter unable to execute the template's injection boundary.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Installer runtime inventory affects all adopters and a documented injection-security boundary."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the complete governed lifecycle; this corrective only restores an already-implemented runtime module to adopter installation scope."
+  },
+  "preReviewWarnings": [
+    "Review the catalog delta, installed-clone import regression, and absence of any policy semantic change."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The installer catalog distributes scripts/ai_input_trust.py to new and upgraded adopters.",
+    "A regression installs into an isolated non-template repository and imports the installed module to block a representative external instruction request.",
+    "The regression proves no source-project or provider remote is contacted and no input-trust decision semantics are changed.",
+    "Reference documentation names the installed runtime boundary and does not overclaim provider assurance."
+  ],
+  "guidelines": [
+    "Preserve existing input-trust policy semantics; this Work Item changes distribution only.",
+    "Use isolated local adopter repositories for installation regressions.",
+    "Fail closed if the installed module cannot be imported or fails to block an external instruction probe."
+  ],
+  "intent": {
+    "problem": "WI-07 real-adopter execution found that scripts/ai_input_trust.py is absent from the installer catalog, so an installed adopter cannot run the template's declared injection boundary.",
+    "constraints": [
+      "Do not change ai_input_trust.py behavior or external-provider state.",
+      "Prove the module exists and behaves correctly after an isolated adopter installation.",
+      "Keep the paused WI-07 branch and its evidence intact until this corrective Work Item closes."
+    ],
+    "rationale": "An injection-control claim is not usable by adopters unless its runtime module is installed with the rest of the governance runtime."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {"scenario": "new isolated adopter installation contains ai_input_trust.py", "required": true, "status": "unverified", "evidence": [], "expected": "The installed scripts directory contains the policy module.", "verificationPlan": "Run the focused isolated-adopter installation regression."},
+    {"scenario": "installed input-trust module blocks an external instruction request", "required": true, "status": "unverified", "evidence": [], "expected": "The installed module evaluates an external delete-tests instruction as block.", "verificationPlan": "Run the focused installed-module behavior regression."},
+    {"scenario": "distribution change does not alter source policy semantics", "required": true, "status": "unverified", "evidence": [], "expected": "Existing input-trust regressions remain green.", "verificationPlan": "Run focused input-trust tests with the catalog regression."}
+  ],
+  "rawUserRequest": "完成全部工单，需要我授权的明确写入我已经授权。每个工单完成完整流程，直到归档，PR和清理分支。",
+  "rawRequestSource": {"type": "human", "reference": "user-pasted-text-1 and standing authorization", "capturedAt": "2026-08-01T10:50:00Z", "digest": "sha256:user-authorized-installer-input-trust-corrective"},
+  "declaredIntent": {"summary": "Restore the existing input-trust runtime to the installed adopter surface without changing policy semantics.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "requiredEvidenceContext": {"destructiveLevel": "none", "availableEvidence": ["real-adopter ModuleNotFoundError finding", "installer catalog", "isolated installation regression"], "externalSystem": "disposable local adopter repositories"},
+  "requiredEvidence": ["catalog entry", "installed-module import receipt", "external-instruction block receipt"],
+  "humanDecisionPoints": ["The user authorized governed Contract writes and complete Work Item lifecycle execution; no additional decision is required for this local distribution corrective."],
+  "documentationImpact": "Clarify that installed adoption runtime includes the input-trust policy module while provider assurance remains out of scope.",
+  "performanceImpact": "One focused isolated-adopter installation regression; no external provider operation or project-toolchain execution.",
+  "residualRiskExpectation": "A local installed-module receipt does not prove a particular adopter's provider controls, project toolchain, or production policy enforcement.",
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert the catalog entry and regression/documentation changes; no adopter repository or provider state is retained.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 745
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/installer-input-trust-runtime-inclusion.json",
+    "baseCommit": "3d2fdc248c3c1e3861562505a7448ff2953a9bb5",
+    "initialScopeDigest": "a47ab14f592498bbfcaed611050ed658a077c01f470e3801649c45e46c980371",
+    "contractSkeletonDigest": "9334857ee5ada45536e6a0ede17930b7a927724966cf9fa0679a211310b10da9"
+  }
+}
