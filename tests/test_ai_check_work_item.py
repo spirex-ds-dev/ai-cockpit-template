@@ -97,6 +97,54 @@ def test_code_work_item_requires_requested_operation():
     assert any("requestedOperation" in issue for issue in issues)
 
 
+def test_destructive_approval_requires_provider_or_enterprise_identity() -> None:
+    contract = valid_contract()
+    contract["destructiveChangePolicy"] = {
+        "allowed": True,
+        "requiresHumanApproval": True,
+        "allowPatterns": ["src/api/public.py"],
+        "approvalEvidence": {
+            "approved": True,
+            "approvedBy": "Ray",
+            "reason": "Approved in repository text.",
+        },
+    }
+
+    issues = ai_check_work_item.validate_contract(contract)
+
+    assert any("repository_recorded_only" in issue for issue in issues)
+
+
+def test_destructive_approval_accepts_provider_bound_identity_evidence() -> None:
+    contract = valid_contract()
+    contract["destructiveChangePolicy"] = {
+        "allowed": True,
+        "requiresHumanApproval": True,
+        "allowPatterns": ["src/api/public.py"],
+        "approvalEvidence": {
+            "approved": True,
+            "approvedBy": "github-user",
+            "reason": "Approved by a provider review bound to the target commit.",
+            "identityEvidence": {
+                "schemaVersion": 1,
+                "approvalType": "destructive_change",
+                "identityLevel": "provider_verified",
+                "actor": "github-user",
+                "provider": "github",
+                "evidence": {
+                    "repository": "org/repo",
+                    "pullRequest": 123,
+                    "reviewId": 456,
+                    "commitSha": "0123456789abcdef0123456789abcdef01234567",
+                },
+                "scope": ["src/api/public.py"],
+            },
+        },
+    }
+
+    assert ai_check_work_item.validate_contract(contract) == []
+
+
 def test_v2_code_work_item_rejects_skeleton_placeholders():
     contract = valid_contract()
     contract.update(
@@ -142,3 +190,166 @@ def test_v2_code_work_item_rejects_skeleton_placeholders():
     )
     issues = ai_check_work_item.validate_contract(contract)
     assert any("placeholder" in issue for issue in issues)
+
+
+def test_governance_profile_rejects_invalid_automatic_and_override_evidence():
+    assert ai_check_work_item.validate_governance_profile({"governanceProfile": "lite"}) == [
+        "governanceProfile must be an object"
+    ]
+
+    automatic = {
+        "governanceProfile": {
+            "selected": "unknown",
+            "source": "automatic",
+            "reasons": [""],
+            "override": {},
+        }
+    }
+    issues = ai_check_work_item.validate_governance_profile(automatic)
+    assert any("selected must be one of" in issue for issue in issues)
+    assert any("reasons must contain" in issue for issue in issues)
+    assert "governanceProfile.override must be null when source is automatic" in issues
+
+    override = {
+        "governanceProfile": {
+            "selected": "lite",
+            "source": "human_override",
+            "reasons": ["Bounded exception"],
+            "override": {
+                "approvalEvidence": "",
+                "reason": "",
+                "risks": [],
+                "notRunChecks": [""],
+                "workItemId": "",
+            },
+        }
+    }
+    issues = ai_check_work_item.validate_governance_profile(override)
+    assert any("approvalEvidence" in issue for issue in issues)
+    assert any("override.reason" in issue for issue in issues)
+    assert any("override.risks" in issue for issue in issues)
+    assert any("override.notRunChecks" in issue for issue in issues)
+    assert any("requires expiresAt or workItemOnly true" in issue for issue in issues)
+    assert any("override.workItemId" in issue for issue in issues)
+
+
+def test_optional_readiness_reports_each_malformed_evidence_group():
+    issues = ai_check_work_item.validate_optional_readiness(
+        {
+            "contractVersion": 2,
+            "riskAssessment": {"level": "urgent", "riskTypes": [""], "reason": ""},
+            "agentCapability": {
+                "canImplement": "yes",
+                "canVerify": None,
+                "needsHumanDecision": 0,
+                "blockedReason": False,
+            },
+            "executionDecision": {"status": "run", "reason": ""},
+            "archiveIndexRepair": "no",
+            "preReviewWarnings": [""],
+            "checkpointPolicy": {
+                "requiredBeforeFinish": "yes",
+                "requiredStages": [""],
+                "reason": "",
+            },
+            "scenarioCoverage": [],
+        }
+    )
+    expected_fragments = (
+        "riskAssessment.level",
+        "riskAssessment.riskTypes",
+        "riskAssessment.reason",
+        "agentCapability.canImplement",
+        "agentCapability.canVerify",
+        "agentCapability.needsHumanDecision",
+        "agentCapability.blockedReason",
+        "executionDecision.status",
+        "executionDecision.reason",
+        "archiveIndexRepair",
+        "preReviewWarnings",
+        "checkpointPolicy.requiredBeforeFinish",
+        "checkpointPolicy.requiredStages",
+        "checkpointPolicy.reason",
+    )
+    for fragment in expected_fragments:
+        assert any(fragment in issue for issue in issues)
+
+
+def test_baseline_and_approval_validation_rejects_incomplete_records():
+    issues = ai_check_work_item.validate_baseline_and_approvals(
+        {
+            "contractVersion": 2,
+            "workItemId": "task",
+            "baseCommit": "short",
+            "baselineDirtyPaths": ["file", {"path": "", "status": "", "fingerprint": ""}],
+            "adoptionBootstrapPaths": [],
+            "destructiveChangePolicy": {
+                "allowed": False,
+                "requiresHumanApproval": "yes",
+                "allowPatterns": ["src/**"],
+            },
+            "restrictedWriteApproval": {"approved": True, "approvedBy": "", "reason": ""},
+        }
+    )
+    expected_fragments = (
+        "baseCommit",
+        "baselineDirtyPaths[0]",
+        "baselineDirtyPaths[1].path",
+        "adoptionBootstrapPaths is only allowed",
+        "adoptionBootstrapPaths must be a non-empty list",
+        "destructiveChangePolicy.requiresHumanApproval",
+        "allowPatterns require allowed true",
+        "approved restrictedWriteApproval",
+    )
+    for fragment in expected_fragments:
+        assert any(fragment in issue for issue in issues)
+
+
+def test_intent_validation_rejects_unknown_empty_and_malformed_fields():
+    assert ai_check_work_item.validate_intent({"intent": []}) == ["intent must be an object"]
+
+    issues = ai_check_work_item.validate_intent(
+        {
+            "intent": {
+                "unknown": "value",
+                "problem": "",
+                "constraints": ["valid", ""],
+                "nonGoals": "none",
+            }
+        }
+    )
+    assert "intent.unknown is not a recognized field" in issues
+    assert "intent.problem must be a non-empty string when provided" in issues
+    assert "intent.constraints must be a list of non-empty strings when provided" in issues
+    assert "intent.nonGoals must be a list of non-empty strings when provided" in issues
+
+
+def test_raw_request_validation_rejects_invalid_exemption_and_source():
+    contract = {
+        "contractVersion": 2,
+        "mode": "code",
+        "scope": [".ai/work-items/active/task.contract.json"],
+        "riskAssessment": {"level": "high"},
+        "rawRequestExemption": {
+            "exemption": "internal_governance",
+            "policyRef": "raw-request-exemptions.v1",
+            "triggerRef": "internal-governance",
+            "applicability": ["repository"],
+            "approvedBy": "policy",
+        },
+    }
+    issues = ai_check_work_item.validate_raw_request_requirement(contract)
+    assert any("cannot exempt high-risk work" in issue for issue in issues)
+
+    contract["rawUserRequest"] = " "
+    contract["rawRequestSource"] = {
+        "type": "chat",
+        "reference": "",
+        "capturedAt": "",
+        "digest": "",
+    }
+    issues = ai_check_work_item.validate_raw_request_requirement(contract)
+    assert "rawUserRequest must be a non-empty string" in issues
+    assert any("rawRequestSource.type" in issue for issue in issues)
+    for field in ("reference", "capturedAt", "digest"):
+        assert any(f"rawRequestSource.{field}" in issue for issue in issues)

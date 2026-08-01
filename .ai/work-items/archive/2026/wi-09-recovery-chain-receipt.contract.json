@@ -1,0 +1,222 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-09-recovery-chain-receipt",
+  "mode": "code",
+  "title": "WI09 Recovery Chain Receipt",
+  "baseCommit": "82b1d4414780d79f5123956cd10f0529d5522538",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-09-recovery-chain-receipt.contract.json",
+    ".ai/work-items/active/wi-09-recovery-chain-receipt.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-09-recovery-chain-receipt.outcome.json",
+    ".ai/work-items/active/wi-09-recovery-chain-receipt.outcome.md",
+    ".ai/work-items/recovery-receipts/wi-09-external-identity-recovery.json",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md"
+  ],
+  "outOfScope": [
+    "Modifying either immutable WI09 archive pair",
+    "Changing external-identity behavior, tests, coverage policy, PR-check behavior, or any unrelated Work Item",
+    "Binding any archive outside the exact WI09 sequences 734 and 735"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-09-external-identity-boundary.contract.json",
+      "reason": "Compatible root archive at sequence 734 and PR merge-base bc0d3a81fecc4c272c2237dae94628573f0fac6b."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-09-changed-critical-coverage-corrective.contract.json",
+      "reason": "Immutable adjacent recovery at sequence 735 whose archived relationship evidence is incomplete."
+    },
+    {
+      "path": "docs/reference/work-item-lifecycle-closure.md",
+      "reason": "Defines the append-only historical recovery receipt for immutable adjacent archive chains."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "immutable_recovery_evidence"
+    ],
+    "reason": "The receipt is append-only, digest-bound, limited to two consecutive immutable archives, and validated by the existing aggregate PR checker.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Historical recovery receipts are a restricted governance trust root."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized bounded governance corrections and the repository defines a deterministic append-only repair."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: An append-only receipt binds exactly WI09 archive sequences 734 and 735 to PR base bc0d3a81fecc4c272c2237dae94628573f0fac6b.",
+    "A2: The receipt records exact paths, base commits, archive sequences, and Contract/Summary SHA-256 digests for both immutable archives.",
+    "A3: The receipt carries the user's existing human authorization reference and no forged provider identity claim.",
+    "A4: Aggregate PR validation accepts the WI09 archive chain without modifying either predecessor archive or PR-check behavior."
+  ],
+  "guidelines": [
+    "Preserve both predecessor archive pairs byte-for-byte; recovery is append-only.",
+    "Bind only the exact consecutive prefix and current PR merge-base.",
+    "Use the user's explicit standing authorization without claiming provider-verified identity."
+  ],
+  "intent": {
+    "problem": "WI09 and its focused-coverage corrective are immutable consecutive archives, but the corrective archived without the exact source and restricted-write approval predicates required by aggregate PR validation.",
+    "constraints": [
+      "Do not rewrite archive sequences 734 or 735.",
+      "Do not change code, tests, policies, thresholds, or aggregate-validator behavior.",
+      "Bind only the current WI09 two-archive prefix and exact PR merge-base."
+    ],
+    "rationale": "The repository's documented historical recovery receipt is the narrow append-only mechanism for restoring the missing relationship evidence after archives become immutable."
+  },
+  "rawUserRequest": "Continue all Work Items without pausing except for a real human decision or external permission blocker; all bounded decisions, writes, PRs, merges, archives, and cleanup are authorized.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continue-all-work-items-and-authorize-bounded-decisions",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:wi-09-recovery-chain-receipt-human-authorization"
+  },
+  "declaredIntent": {
+    "summary": "Append an exact historical recovery receipt for the immutable WI09 archive pair.",
+    "requestedCapabilities": [
+      "ai_governance"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The receipt is evaluated against the exact WI09 PR merge-base and consecutive archive prefix.",
+      "expected": "Historical recovery validation trusts sequence 735 and aggregate PR validation accepts the chain.",
+      "verificationPlan": "Run make check-ai-pr with AI_BASE_COMMIT=bc0d3a81fecc4c272c2237dae94628573f0fac6b after archiving the receipt Work Item.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Archived Contract or Summary bytes differ from the receipt.",
+      "expected": "The existing aggregate validator rejects the receipt fail closed.",
+      "verificationPlan": "Use the existing historical recovery receipt validator tests and exact digest comparison.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized all bounded implementation, governance, PR, merge, archive, and cleanup decisions needed to complete every Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 748
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-09-recovery-chain-receipt.json",
+    "baseCommit": "82b1d4414780d79f5123956cd10f0529d5522538",
+    "initialScopeDigest": "bd929f0a62d5ce0a1fd0c0e58f51fc289aa03520e596968b9c90ccb95fc56953",
+    "contractSkeletonDigest": "5257e1f92caea7fc7b178f873a43603ddabef0aab353dcd21608b082eae2e7d2"
+  }
+}

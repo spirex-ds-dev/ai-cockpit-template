@@ -112,6 +112,10 @@ predecessor、merge commit、archive manifest に拘束されます。手動の
   - `approved`: `boolean`
   - `approvedBy`: `"Ray"` などの承認者名。
   - `reason`: 承認の背景。
+  - このレコードはリポジトリ上の意思決定記録であり、`approvedBy` の本人性を認証しません。外部証拠がない場合の表示状態は `repository_recorded_only` です。
+- **`destructiveChangePolicy.approvalEvidence.identityEvidence`**: `object`
+  - <!-- capability-claim: external_identity_boundary --> 破壊的変更では [External Identity Boundary](reference/external-identity-boundary.md) の Approval Evidence を必須とします。
+  - `provider_verified` または `enterprise_verified` の完全な外部参照と対象 `scope` が必要です。`self_declared`、`repository_recorded`、または `approvedBy` だけの記録は高リスク承認として使用できません。
 - **`rollbackNote`**: `string`
   - 万が一変更を元に戻す（ロールバック）ことになった場合の具体的な手順や注意書き。
 
