@@ -1,0 +1,321 @@
+{
+  "contractVersion": 2,
+  "workItemId": "real-adopter-reference-validation",
+  "mode": "code",
+  "title": "Real adopter reference validation",
+  "baseCommit": "e1e1655e1673bda1720b9a6ff75099463e23b18a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/real-adopter-reference-validation.contract.json",
+    ".ai/work-items/active/real-adopter-reference-validation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/real-adopter-reference-validation.outcome.json",
+    ".ai/work-items/active/real-adopter-reference-validation.outcome.md",
+    "scripts/real_adopter_reference_validation.py",
+    "tests/test_real_adopter_reference_validation.py",
+    "docs/reference/real-adopter-reference-validation.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Any write, push, pull request, merge, tag, release, or provider-configuration change in a reference project.",
+    "Claiming provider identity, branch-protection, review, audit, or release evidence from local clones.",
+    "Treating a controlled fixture or this template repository as a reference project.",
+    "Changing the reference projects' product source, dependency manifests, CI, signing material, or existing governance files."
+  ],
+  "sources": [
+    {
+      "path": "user-pasted-text-1",
+      "reason": "User-supplied WI-07 requirements, reference-project categories, required lifecycle phases, and acceptance boundaries."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Installer interface and dry-run, adoption, upgrade-conflict, and managed-file behavior under validation."
+    },
+    {
+      "path": "docs/reference/adopter-long-cycle-validation.md",
+      "reason": "Existing controlled-fixture boundary which this Work Item must not overclaim."
+    },
+    {
+      "path": "tests/test_project_governance_journey.py",
+      "reason": "Existing adopter journey phases and assertions to preserve while extending reference validation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "external_reference_validation",
+      "installer_lifecycle",
+      "evidence_integrity"
+    ],
+    "reason": "The Work Item runs non-destructive lifecycle validation in isolated clones of three external reference projects and must preserve evidence boundaries.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Installer, upgrade, rollback, uninstall, scope-violation, and evidence-integrity behavior are high-impact governance boundaries."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the Work Item lifecycle; implementation remains limited to isolated local clones with no reference-provider writes."
+  },
+  "preReviewWarnings": [
+    "Review that every Evidence Pack records immutable source revision, every unavailable native toolchain is not_run, and no local-clone fact becomes a provider claim."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A deterministic runner selects three public, non-template reference projects matching the service, mobile, and enterprise-monorepo categories and records repository URL, immutable revision, baseline state, and project classification in a separate Evidence Pack for each.",
+    "Each Evidence Pack executes and records new-install dry run, conflict review, Makefile conflict, existing-agent-file preservation, calibration, first Work Item, scope violation, test weakening, injection, finish, local PR/merge/close simulation, upgrade, upgrade conflict, rollback, disable, enable, uninstall, and reinstall phases; unavailable native toolchains are not_run with a reason and recovery condition.",
+    "The runner proves that the reference clone's baseline product paths are unchanged except for installer-owned governance paths, and emits an explainable before/after Git diff classification.",
+    "Focused tests prove source identity validation, phase completeness, unavailability handling, ownership-diff enforcement, and prevention of fixture/template/provider overclaims; documentation describes command use and evidence limitations."
+  ],
+  "guidelines": [
+    "Keep source repositories read-only: use disposable clones and never push or alter provider configuration.",
+    "Evidence Packs must distinguish executed local facts, not_run native-toolchain phases, and unsupported provider facts.",
+    "Fail closed when immutable source identity, required phase coverage, or non-governance diff preservation cannot be proved."
+  ],
+  "intent": {
+    "problem": "Existing adopter evidence is controlled-fixture evidence and cannot demonstrate how AI Cockpit behaves against varied, real project structures without conflating local validation with provider assurance.",
+    "constraints": [
+      "Use three non-template public reference projects in isolated disposable clones.",
+      "Do not write to source remotes, create external pull requests, change provider configuration, or claim provider-backed facts.",
+      "Preserve original product files and report unavailable native toolchains as not_run with recovery conditions.",
+      "Keep test execution deterministic by unit-testing the runner with local repositories; record actual reference execution separately."
+    ],
+    "rationale": "Structured, immutable Evidence Packs make adopter applicability inspectable while retaining the boundary between observable local execution and external-provider assurance."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "three non-template reference source identities are recorded before mutation",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Each Evidence Pack includes the remote URL, immutable HEAD, baseline status, and project classification.",
+      "verificationPlan": "Run the reference runner against its three catalog entries and inspect the emitted Evidence Packs."
+    },
+    {
+      "scenario": "all required governance lifecycle phases produce one independent Evidence Pack per reference",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Every required phase has an executed, blocked, or not_run result in each pack.",
+      "verificationPlan": "Run the reference runner and assert its phase-completeness validator in focused tests."
+    },
+    {
+      "scenario": "unavailable mobile native tooling is explicitly not_run with a recovery condition",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Missing native tooling does not become a pass and names the command needed to resume.",
+      "verificationPlan": "Run the mobile catalog entry and focused unavailability regression tests."
+    },
+    {
+      "scenario": "baseline product paths remain unchanged and before/after Git diff is explainable",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Only AI Cockpit-managed paths differ and every changed path is classified.",
+      "verificationPlan": "Run the runner and focused ownership-diff regression tests."
+    },
+    {
+      "scenario": "local reference evidence does not become a provider or enterprise assurance claim",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Evidence output labels provider assurance as not_verified and documentation states the limit.",
+      "verificationPlan": "Run focused output-boundary tests and the documentation capability projection checks."
+    }
+  ],
+  "rawUserRequest": "完成全部工单，需要我授权的明确写入我已经授权。每个工单完成完整流程，直到归档，PR和清理分支。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-pasted-text-1 and follow-up authorization",
+    "capturedAt": "2026-08-01T10:50:00Z",
+    "digest": "sha256:user-authorized-wi-07-real-adopter-validation"
+  },
+  "declaredIntent": {
+    "summary": "Validate AI Cockpit across three real, read-only reference-project clones without converting local facts into provider claims.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "requiredEvidenceContext": {
+    "destructiveLevel": "none",
+    "availableEvidence": [
+      "immutable source revision",
+      "separate Evidence Pack per reference",
+      "phase results",
+      "diff classification",
+      "not_run recovery conditions"
+    ],
+    "externalSystem": "public source repositories accessed through disposable local clones"
+  },
+  "residualRiskExpectation": "Local disposable-clone evidence does not prove source-repository permissions, hosted CI, reviews, branch protection, provider identity, or releases.",
+  "humanDecisionPoints": [
+    "The user already authorized Contract writes and complete Work Item lifecycle execution; no additional decision is required while all reference-project actions remain disposable local-clone operations."
+  ],
+  "documentationImpact": "Add the real-reference runner and clearly state its local-evidence and provider-boundary limits.",
+  "performanceImpact": "Network cloning is opt-in for the runner and excluded from ordinary quality gates; focused tests use local repositories.",
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff; the runner uses temporary directories and must leave no reference-project mutation.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 745
+    }
+  },
+  "predecessorWorkItem": {
+    "workItemId": "installer-input-trust-runtime-inclusion",
+    "status": "closed",
+    "pr": {
+      "number": 560,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/560",
+      "mergeCommit": "e1e1655e1673bda1720b9a6ff75099463e23b18a"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/installer-input-trust-runtime-inclusion.archive-manifest.json"
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/real-adopter-reference-validation.json",
+    "baseCommit": "3d2fdc248c3c1e3861562505a7448ff2953a9bb5",
+    "initialScopeDigest": "f44853200467056af27c5ebf4e2e28f23b277ef01aa854c69ef877bfc1991405",
+    "contractSkeletonDigest": "953eb15ebb6b5520eecbeeaafd6f663e27ec5153e7fe49e7e8844f6045f1f916"
+  },
+  "resumeHistory": [
+    {
+      "resumeVersion": 1,
+      "fromBaseCommit": "3d2fdc248c3c1e3861562505a7448ff2953a9bb5",
+      "toBaseCommit": "e1e1655e1673bda1720b9a6ff75099463e23b18a",
+      "baseRemote": "origin",
+      "baseBranch": "main",
+      "workBranch": "codex/real-adopter-reference-validation",
+      "recordedAt": "2026-08-01T15:46:21.082024+00:00",
+      "priorContractDigest": "5dac9f33699828bfb43396194e3588ea717f11b778b6406fc365306c7954137a",
+      "predecessorWorkItemId": "installer-input-trust-runtime-inclusion",
+      "predecessorMergeCommit": "e1e1655e1673bda1720b9a6ff75099463e23b18a",
+      "predecessorManifestPath": ".ai/work-items/archive/2026/installer-input-trust-runtime-inclusion.archive-manifest.json",
+      "predecessorClosure": {
+        "statusClosed": true,
+        "prMerged": true,
+        "closureSucceeded": true,
+        "localBranchDeleted": true,
+        "remoteBranchDeleted": true,
+        "baseSynchronized": true
+      }
+    }
+  ]
+}
