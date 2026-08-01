@@ -1027,6 +1027,9 @@ def test_upgrade_rolls_back_when_post_copy_validation_fails(tmp_path, monkeypatc
     assert initial.install() == 0
     checks = tmp_path / ".ai" / "cockpit" / "checks.yaml"
     checks.write_text("# CUSTOM BEFORE UPGRADE\n", encoding="utf-8")
+    install_facts = {
+        path: path.read_bytes() for path in (tmp_path / ".ai" / "install").glob("*.json")
+    }
 
     upgrade = Installer(
         source=ROOT,
@@ -1046,6 +1049,8 @@ def test_upgrade_rolls_back_when_post_copy_validation_fails(tmp_path, monkeypatc
 
     assert upgrade.install() == 2
     assert checks.read_text(encoding="utf-8") == "# CUSTOM BEFORE UPGRADE\n"
+    assert install_facts
+    assert all(path.read_bytes() == content for path, content in install_facts.items())
 
 
 def test_install_and_upgrade_preserve_project_owned_profiles(tmp_path):

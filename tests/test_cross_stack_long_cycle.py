@@ -8,8 +8,12 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_cross_stack_bundle_covers_all_fixture_phases_and_boundaries():
     bundle = cross_stack_long_cycle.run(ROOT)
     assert {item["stack"] for item in bundle["fixtures"]} == {
+        "android",
+        "flutter",
+        "swift-package",
         "python",
         "java-multimodule",
+        "mixed-monorepo",
         "typescript-web",
     }
     assert bundle["adopterRepository"]["remote"] == "local bare origin"

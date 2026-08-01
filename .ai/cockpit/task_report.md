@@ -4,7 +4,7 @@ Phase: `review`
 Result: `completed_with_warnings`
 
 ## What changed
-Task wi-09-recovery-chain-receipt generated an evidence-derived outcome with status completed_with_warnings.
+Task wi-10-end-to-end-adoption-validation generated an evidence-derived outcome with status completed_with_warnings.
 
 ## Issues
 - Detected issues: 1

@@ -602,12 +602,15 @@ class Installer:
                     "could not be restored.",
                     file=sys.stderr,
                 )
-        for original, backup in reversed(list(self.backups.items())):
-            original.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(backup, original)
         for path in sorted(self.created_paths, key=lambda item: len(item.parts), reverse=True):
             if path.is_file() or path.is_symlink():
                 path.unlink()
+        # A generated install fact can be tracked as both attempt-created and
+        # overwritten. Remove attempt-created content first, then restore every
+        # pre-existing backup so the restored file is not deleted afterwards.
+        for original, backup in reversed(list(self.backups.items())):
+            original.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(backup, original)
         shutil.rmtree(self.backup_dir, ignore_errors=True)
         candidate_dirs = {
             parent
@@ -1472,8 +1475,14 @@ class Installer:
         if self.dry_run:
             return
         fact_paths = [self.target / ".ai" / "install" / name for name in FACT_NAMES]
+        created: list[Path] = []
         for path in fact_paths:
-            self.record("write", path, "write installed lifecycle fact")
+            if path.exists():
+                self.backup_path(path)
+                self.record("overwrite", path, "write installed lifecycle fact")
+            else:
+                self.record("write", path, "write installed lifecycle fact")
+                created.append(path)
         write_fact_bundle(
             source=self.source,
             target=self.target,
@@ -1481,7 +1490,7 @@ class Installer:
                 self.source / ".ai" / "cockpit" / "version.json"
             ),
         )
-        self.created_paths.update(self.target / ".ai" / "install" / name for name in FACT_NAMES)
+        self.created_paths.update(created)
 
     def copy_scripts(self) -> None:
         self.copy_path(

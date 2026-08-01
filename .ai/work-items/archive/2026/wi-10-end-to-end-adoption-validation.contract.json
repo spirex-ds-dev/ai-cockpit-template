@@ -1,0 +1,276 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-10-end-to-end-adoption-validation",
+  "mode": "code",
+  "title": "End-to-End Adoption Validation",
+  "baseCommit": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+    ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-10-end-to-end-adoption-validation.outcome.json",
+    ".ai/work-items/active/wi-10-end-to-end-adoption-validation.outcome.md",
+    "scripts/end_to_end_adoption_validation.py",
+    "scripts/install_ai_cockpit.py",
+    ".ai/guards/coverage_policy.yaml",
+    "tests/test_end_to_end_adoption_validation.py",
+    "tests/test_installer.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_cross_stack_long_cycle.py",
+    "tests/test_fixture_harness.py",
+    "pyproject.toml",
+    "examples/fixtures/**",
+    "docs/fixtures/real-fixture-evidence.md",
+    "docs/fixtures/real-fixture-evidence.ja.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Claiming GitHub, App Store, Play Store, cloud, device, signing, provider identity, or enterprise controls were exercised by local fixtures",
+    "Downloading unavailable Android, iOS, Flutter, Java, Node, or Python toolchains during validation",
+    "Performing a real hosted PR merge or provider-backed Work Item closure from fixture repositories",
+    "Changing test-weakening, input-trust, or external-identity policy semantics",
+    "Treating deterministic policy probes or local bare Git remotes as external-provider evidence"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "reason": "Repository-local capture of the authorized WI10 end-to-end adoption validation requirements."
+    },
+    {
+      "path": "scripts/fixture_harness.py",
+      "reason": "Existing three-stack deterministic fixture harness whose synthetic boundary WI10 must advance beyond."
+    },
+    {
+      "path": "scripts/external_adopter_long_cycle.py",
+      "reason": "Existing isolated local Git lifecycle implementation and cleanup evidence."
+    },
+    {
+      "path": "tests/test_adoption_e2e.py",
+      "reason": "Existing real installer, calibration, finish, PR-check, and transactional rollback integration evidence."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Canonical installer and upgrade behavior exercised by the new validation matrix."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "cross_stack_integration",
+      "evidence_boundary",
+      "negative_path_validation"
+    ],
+    "reason": "The matrix exercises repository writes and fail-closed policy behavior across seven project shapes, but only inside disposable local repositories and without external production operations.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Seven-stack integration and negative-path evidence require the Standard route; no release or external production operation is performed."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The directive fixes the seven project types, lifecycle operations, negative cases, upgrade cases, and evidence boundaries; all implementation decisions are bounded and locally verifiable."
+  },
+  "preReviewWarnings": [
+    "Review that every reported pass is backed by an executed local operation and that unavailable provider/toolchain behavior remains not_run or not_claimed.",
+    "Review rollback assertions for exact filesystem and Git-state restoration."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: One command validates Python service, TypeScript web, Java backend, Android application, iOS Swift Package, Flutter application, and mixed monorepo fixtures, each backed by an actual disposable Git repository and real AI Cockpit installation.",
+    "A2: Every fixture records install, configure, calibrate, Work Item start, safe change, scope violation, test deletion/skip/coverage weakening, injection attempts, finish, local PR evidence, local closure, upgrade, and failed-upgrade rollback with command/result/evidence kind.",
+    "A3: Scope violations, test weakening, external Markdown injection, forged approval, fabricated test success, and invalid release metadata fail closed with actionable results; warnings are never represented as passes.",
+    "A4: Dirty worktree, marker conflict, Makefile conflict, detached HEAD behavior, unavailable network/source, and invalid release metadata installation paths are exercised without leaving branch or filesystem mutations.",
+    "A5: Upgrade cases prove unmodified managed files update, locally modified managed files require review, project-owned configuration is preserved, impact/recalibration signals remain visible, and a failed apply restores the pre-upgrade state.",
+    "A6: Focused tests run the complete seven-project matrix deterministically without downloading toolchains; results label local_real_execution, policy_probe, local_provider_simulation, not_run, and not_claimed boundaries explicitly.",
+    "A7: English and Japanese fixture documentation explains how to run the matrix, what was truly executed, and what remains outside local evidence."
+    ,"A8: Upgrade transaction rollback removes files created by the failed attempt and then restores every overwritten pre-existing install fact, with a regression test for paths present in both tracking sets."
+  ],
+  "guidelines": [
+    "Keep the harness standard-library-only, deterministic, and confined to disposable temporary repositories.",
+    "Exercise canonical installer and governance entrypoints where practical; label focused policy probes distinctly from full lifecycle execution.",
+    "Never translate unavailable external provider, identity, signing, device, network, or enterprise evidence into a passing result.",
+    "Preserve fixture project-owned content and avoid committing generated dependency directories or build outputs.",
+    "For rollback, delete attempt-created paths before restoring backups so a path tracked as both created and overwritten cannot erase its restored original.",
+    "Document the public command and evidence model in English and Japanese."
+  ],
+  "intent": {
+    "problem": "Existing adoption evidence combines three project types with deterministic phase labels, but it does not execute the complete directive-defined install-to-upgrade lifecycle across all seven required project shapes or prove the required adversarial and rollback behavior.",
+    "constraints": [
+      "Use disposable local Git repositories and the actual local template installer; do not mutate real adopter repositories.",
+      "Cover exactly the seven directive-defined project types and all mandatory normal, adversarial, installation-failure, and upgrade cases.",
+      "Do not download toolchains or contact hosted providers; record those boundaries honestly.",
+      "Use local bare Git repositories only as explicitly labeled PR/closure simulations, never provider verification.",
+      "Keep the validation lightweight enough for focused and hosted CI while retaining deterministic evidence."
+    ],
+    "rationale": "A manifest-driven but executable repository matrix can reuse one rigorous lifecycle implementation for seven realistic project layouts, providing reviewable evidence without duplicating full external infrastructure or overstating local results."
+  },
+  "rawUserRequest": "Complete WI-10 End-to-End Adoption Validation through archive, PR, merge, closure, and branch cleanup. Validate installation into Python service, TypeScript web, Java backend, Android, iOS Swift Package, Flutter, and mixed monorepo projects; exercise the listed normal, scope, test-weakening, absurd-request, install-failure, upgrade, and rollback cases; continue without pausing unless a true human or external permission blocker occurs.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation and attached AI Cockpit next-stage directive: WI-10 End-to-End Adoption Validation",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:wi-10-end-to-end-adoption-validation-authorized-request"
+  },
+  "declaredIntent": {
+    "summary": "Execute and evidence the complete seven-project local adoption lifecycle and its fail-closed negative paths.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Seven realistic project shapes complete install, calibration, governed safe-change, finish, local PR evidence, and local lifecycle cleanup.",
+      "expected": "Every fixture reports executed local evidence for each normal phase while hosted-provider closure remains explicitly simulated/not_run.",
+      "required": true,
+      "status": "unverified",
+      "evidence": ["tests/test_end_to_end_adoption_validation.py"],
+      "verificationPlan": "Run the focused complete-matrix integration test and assert the seven fixture identities, phase inventory, evidence kinds, and clean final Git state."
+    },
+    {
+      "scenario": "Out-of-scope changes, test deletion/skip/coverage reduction, external Markdown injection, forged approval, and fabricated test success are attempted.",
+      "expected": "Each attempt is blocked by the relevant canonical guard or focused policy probe and includes an actionable reason.",
+      "required": true,
+      "status": "unverified",
+      "evidence": ["tests/test_end_to_end_adoption_validation.py"],
+      "verificationPlan": "Run focused adversarial assertions across the emitted evidence bundle and verify no warning or not_run state is counted as passed."
+    },
+    {
+      "scenario": "Dirty worktree, marker/Makefile conflicts, detached HEAD, unavailable source/network boundary, and invalid release metadata are exercised transactionally.",
+      "expected": "Installation fails or follows its documented detached-HEAD behavior without leaving unexpected branch or filesystem mutations.",
+      "required": true,
+      "status": "unverified",
+      "evidence": ["tests/test_end_to_end_adoption_validation.py", "tests/test_adoption_e2e.py"],
+      "verificationPlan": "Run focused installation-failure cases and compare pre/post Git HEAD plus tracked filesystem digests."
+    },
+    {
+      "scenario": "Managed, locally modified managed, and project-owned upgrade paths plus a deliberately failed upgrade are exercised.",
+      "expected": "Safe managed updates apply, conflicts remain review-required, project-owned configuration is retained, recalibration impact stays visible, and failure rolls back exactly.",
+      "required": true,
+      "status": "unverified",
+      "evidence": ["tests/test_end_to_end_adoption_validation.py", "tests/test_upgrade_apply.py"],
+      "verificationPlan": "Run upgrade and rollback probes and compare before/after digests, proposal classifications, snapshots, and project-owned content."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human",
+    "reason": "The user explicitly authorized all bounded repository, governance, test, documentation, PR, merge, closure, and branch-cleanup writes needed to complete every Work Item."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 749
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-10-end-to-end-adoption-validation.json",
+    "baseCommit": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+    "initialScopeDigest": "cd330f5f190a0f4734e4090caf3efaa9333ae3c1d8c650ef121a115ea82cb6a8",
+    "contractSkeletonDigest": "d72e29e8f4fb9a87d8baf38c2a58cbaec17be083aa1e7635b84e9e62e13bcd93"
+  }
+}

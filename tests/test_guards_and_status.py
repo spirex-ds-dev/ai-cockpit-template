@@ -102,6 +102,10 @@ def test_default_coverage_policy_recognizes_stack_test_layouts(monkeypatch):
         ("packages/web/src/index.ts", "packages/web/tests/index.test.ts"),
         ("services/api/src/main/java/App.java", "services/api/src/test/java/AppTest.java"),
         ("packages/ui/lib/widget.dart", "packages/ui/test/widget_test.dart"),
+        (
+            "examples/fixtures/flutter-app/lib/main.dart",
+            "examples/fixtures/flutter-app/test/widget_test.dart",
+        ),
     ]
     for production, test in cases:
         assert ai_check_coverage_guard.detect([production, test]) == []
