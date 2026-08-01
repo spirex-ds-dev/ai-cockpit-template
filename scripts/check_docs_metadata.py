@@ -15,6 +15,40 @@ from install_ai_cockpit import STACKS
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_FRONT_MATTER = ("author", "title", "description")
 README_FILES = ("README.md", "README.ja.md", "README.zh-CN.md")
+FORMAL_METADATA_FIELDS = ("audience", "status", "authority", "lastVerifiedBy")
+FORMAL_AUDIENCES = {"adopter", "maintainer", "security_reviewer", "auditor", "contributor"}
+FORMAL_STATUSES = {"current", "reference", "historical", "draft"}
+FORMAL_AUTHORITIES = {"canonical", "derived", "explanatory", "archived_evidence"}
+WI07_FORMAL_DOCUMENTS = {
+    "docs/getting-started/installation.md": ("current", "canonical"),
+    "docs/getting-started/first-calibration.md": ("current", "canonical"),
+    "docs/getting-started/first-work-item.md": ("current", "canonical"),
+    "docs/concepts/trust-layer.md": ("current", "canonical"),
+    "docs/concepts/evidence-governance.md": ("current", "canonical"),
+    "docs/concepts/decision-states.md": ("current", "canonical"),
+    "docs/operations/quality-gates.md": ("current", "canonical"),
+    "docs/operations/work-item-lifecycle.md": ("current", "canonical"),
+    "docs/operations/recovery.md": ("current", "canonical"),
+    "docs/security/threat-model.md": ("current", "canonical"),
+    "docs/security/injection-boundary.md": ("current", "canonical"),
+    "docs/security/supply-chain.md": ("current", "canonical"),
+    "docs/reference/capability-truth-matrix.md": ("reference", "canonical"),
+    "docs/reference/documentation-architecture.md": ("reference", "canonical"),
+    "docs/reference/schemas.md": ("reference", "canonical"),
+    "docs/reference/commands.md": ("reference", "canonical"),
+    "docs/archive/plans/README.md": ("historical", "archived_evidence"),
+    "docs/archive/reviews/README.md": ("historical", "archived_evidence"),
+    "docs/archive/historical-designs/README.md": ("historical", "archived_evidence"),
+}
+README_SECTION_MARKERS = {
+    "identity",
+    "problem",
+    "how-it-works",
+    "decision-states",
+    "quick-start",
+    "boundary",
+    "documentation",
+}
 README_CAPABILITY_MARKER = "<!-- release-capabilities: auditable-adoption,sha256-verification -->"
 README_PREREQUISITE_MARKER = (
     "<!-- install-prerequisites: python3.11,git-initial-commit,curl,gnu-make,posix -->"
@@ -408,6 +442,76 @@ def front_matter_errors(path: Path) -> list[str]:
     ]
 
 
+def _front_matter_values(path: Path) -> tuple[dict[str, str], set[str]]:
+    text = path.read_text(encoding="utf-8")
+    closing = text.find("\n---\n", 4)
+    if not text.startswith("---\n") or closing < 0:
+        return {}, set()
+    values: dict[str, str] = {}
+    audiences: set[str] = set()
+    current_key = ""
+    for line in text[4:closing].splitlines():
+        match = re.match(r"^([A-Za-z][A-Za-z0-9_-]*):\s*(.*?)\s*$", line)
+        if match:
+            current_key = match.group(1)
+            values[current_key] = match.group(2).strip("\"'")
+            continue
+        if current_key == "audience" and (item := re.match(r"^\s+-\s+([a-z_]+)\s*$", line)):
+            audiences.add(item.group(1))
+    if values.get("audience"):
+        audiences.add(values["audience"])
+    return values, audiences
+
+
+def formal_document_metadata_errors(root: Path) -> list[str]:
+    errors: list[str] = []
+    for relative, (expected_status, expected_authority) in WI07_FORMAL_DOCUMENTS.items():
+        path = root / relative
+        if not path.is_file():
+            continue
+        values, audiences = _front_matter_values(path)
+        for field in FORMAL_METADATA_FIELDS:
+            if field not in values:
+                errors.append(f"{relative}: front matter missing {field}")
+        invalid_audiences = audiences - FORMAL_AUDIENCES
+        if not audiences:
+            errors.append(f"{relative}: audience must contain at least one allowed value")
+        for audience in sorted(invalid_audiences):
+            errors.append(f"{relative}: invalid audience: {audience}")
+        status = values.get("status")
+        authority = values.get("authority")
+        if status and status not in FORMAL_STATUSES:
+            errors.append(f"{relative}: invalid status: {status}")
+        elif status and status != expected_status:
+            errors.append(f"{relative}: expected status {expected_status}, found {status}")
+        if authority and authority not in FORMAL_AUTHORITIES:
+            errors.append(f"{relative}: invalid authority: {authority}")
+        elif authority and authority != expected_authority:
+            errors.append(f"{relative}: expected authority {expected_authority}, found {authority}")
+    return errors
+
+
+def documentation_architecture_errors(root: Path) -> list[str]:
+    errors: list[str] = []
+    for relative in WI07_FORMAL_DOCUMENTS:
+        if not (root / relative).is_file():
+            errors.append(f"{relative}: required WI07 canonical document is missing")
+    marker_pattern = re.compile(r"<!--\s*readme-section:\s*([a-z0-9-]+)\s*-->")
+    for name in README_FILES:
+        path = root / name
+        text = path.read_text(encoding="utf-8")
+        markers = marker_pattern.findall(text)
+        for marker in sorted(set(markers) - README_SECTION_MARKERS):
+            errors.append(f"{name}: unsupported README section marker: {marker}")
+        for marker in sorted(README_SECTION_MARKERS - set(markers)):
+            errors.append(f"{name}: missing README section marker: {marker}")
+        if len(markers) != len(README_SECTION_MARKERS):
+            errors.append(f"{name}: README sections must map one-to-one to the WI07 entry model")
+        if len(text.splitlines()) > 140:
+            errors.append(f"{name}: README entry page exceeds 140 lines")
+    return errors
+
+
 def tier_marker() -> str:
     return (
         "<!-- stack-tiers: verified="
@@ -441,16 +545,8 @@ def stack_errors(root: Path) -> list[str]:
             "scripts/check_docs_metadata.py: canonical stack order does not match installer STACKS"
         ]
 
-    readme_list = ", ".join(ordered_stacks)
     marker = tier_marker()
     errors = []
-    for name in README_FILES:
-        text = (root / name).read_text(encoding="utf-8")
-        if readme_list not in text:
-            errors.append(f"{name}: supported-stack list does not match installer STACKS")
-        if marker not in text:
-            errors.append(f"{name}: stack compatibility tiers do not match executable CI evidence")
-
     configuration = (root / "docs" / "configuration.md").read_text(encoding="utf-8")
     configuration_list = "\n".join(ordered_stacks)
     if configuration_list not in configuration:
@@ -479,71 +575,14 @@ def installation_command_errors(root: Path) -> list[str]:
         )
     else:
         sha256_published = archive_capability is True
-    quality_target = release["publicContract"]["projectQualityTarget"]
-    quality_marker = f"<!-- public-quality-target: {quality_target} -->"
     errors = []
     for path in documentation_files(root):
         relative = path.relative_to(root).as_posix()
         text = path.read_text(encoding="utf-8")
-        if relative in README_FILES:
-            if re.search(r"\bv\d+\.\d+\.\d+\b", text):
-                errors.append(
-                    f"{relative}: primary README must not hardcode a concrete release version"
-                )
-            if "main/release.json" not in text or "${RELEASE_TAG}/install.sh" not in text:
-                errors.append(
-                    f"{relative}: primary install command must resolve the tagged installer from release.json"
-                )
-            if README_CAPABILITY_MARKER not in text:
-                errors.append(f"{relative}: release capability marker is missing or inconsistent")
-            prerequisite_position = text.find(README_PREREQUISITE_MARKER)
-            install_position = text.find('sh "$INSTALLER" --stack')
-            if (
-                prerequisite_position < 0
-                or install_position < 0
-                or prerequisite_position > install_position
-            ):
-                errors.append(
-                    f"{relative}: installation prerequisites must precede the primary install command"
-                )
-            if quality_marker not in text:
-                errors.append(f"{relative}: public quality target differs from release.json")
-            readiness_lines = [
-                line
-                for line in text.splitlines()
-                if "`check-ai-pr`" in line
-                and (
-                    "readiness" in line.lower()
-                    or "導入準備" in line
-                    or "Adoption Readiness" in line
-                )
-            ]
-            if not any(f"`{quality_target}`" in line for line in readiness_lines):
-                errors.append(
-                    f"{relative}: readiness guidance does not use the public quality target"
-                )
-            if "--create-adoption" not in text:
-                errors.append(
-                    f"{relative}: primary install command must create auditable adoption evidence"
-                )
-            if 'STACK="${STACK:-generic}"' not in text or '--stack "$STACK"' not in text:
-                errors.append(
-                    f"{relative}: primary install command must use an explicit generic-default STACK variable"
-                )
-            ordered_steps = (
-                "--create-adoption",
-                "make ai-finish TASK=adopt_ai_cockpit",
-                "git commit",
-                "make check-ai-pr",
-                "make ai-close-work-item TASK=adopt_ai_cockpit",
-                "make ai-start TASK=configure_ai_cockpit",
-                "make cockpit-doctor",
+        if relative in README_FILES and re.search(r"\bv\d+\.\d+\.\d+\b", text):
+            errors.append(
+                f"{relative}: primary README must not hardcode a concrete release version"
             )
-            positions = [text.find(step) for step in ordered_steps]
-            if any(position < 0 for position in positions) or positions != sorted(positions):
-                errors.append(
-                    f"{relative}: primary adoption flow must finish, audit, and start configuration governance before calibration"
-                )
         for number, line in enumerate(text.splitlines(), start=1):
             if (
                 "raw.githubusercontent.com/spirex-ds-dev/ai-cockpit-template/main/install.sh"
@@ -594,7 +633,7 @@ def installation_command_errors(root: Path) -> list[str]:
     advanced_installation_reference = "\n".join(
         path.read_text(encoding="utf-8")
         for path in (
-            root / "README.md",
+            root / "docs" / "getting-started" / "30-second-start.md",
             root / "docs" / "reference" / "distribution.md",
             root / "docs" / "reference" / "upgrade.md",
         )
@@ -617,10 +656,24 @@ def installation_command_errors(root: Path) -> list[str]:
                 "advanced installation reference: "
                 f"installer environment variable is undocumented: {variable}"
             )
-    for variable in sorted(README_BOOTSTRAP_ENV):
-        for name in README_FILES:
-            if variable not in (root / name).read_text(encoding="utf-8"):
-                errors.append(f"{name}: bootstrap environment variable is undocumented: {variable}")
+    quick_starts = {
+        "en": root / "docs" / "getting-started" / "30-second-start.md",
+        "ja": root / "docs" / "getting-started" / "30-second-start.ja.md",
+        "zh-CN": root / "docs" / "getting-started" / "30-second-start.zh-CN.md",
+    }
+    for language, path in quick_starts.items():
+        text = path.read_text(encoding="utf-8")
+        if "main/release.json" not in text or "$RELEASE_TAG/install.sh" not in text:
+            errors.append(
+                f"{path.relative_to(root).as_posix()}: quick start must resolve the tagged installer from release.json"
+            )
+        for source in sorted(CANONICAL_PUBLIC_SOURCE_DEFAULTS):
+            if source not in text:
+                errors.append(
+                    f"{path.relative_to(root).as_posix()}: canonical public source default is missing: {source}"
+                )
+        if language == "en" and "--interactive" not in text:
+            errors.append("docs/getting-started/30-second-start.md: wizard entry is missing")
     if f'REF="${{AI_COCKPIT_TEMPLATE_REF:-{release_tag}}}"' not in install_script:
         errors.append("install.sh: default ref does not match release.json")
     return errors
@@ -697,45 +750,17 @@ def documentation_fact_errors(root: Path) -> list[str]:
         errors.append("Makefile: project-test coverage floor is missing")
     else:
         floor = f"{floor_match.group(1)}%"
-        for name in README_FILES:
-            text = (root / name).read_text(encoding="utf-8")
-            if floor not in text:
-                errors.append(f"{name}: documented coverage floor differs from Makefile: {floor}")
+        configuration = (root / "docs" / "configuration.md").read_text(encoding="utf-8")
+        if floor not in configuration:
+            errors.append(
+                f"docs/configuration.md: documented coverage floor differs from Makefile: {floor}"
+            )
 
     for name in README_FILES:
         text = (root / name).read_text(encoding="utf-8")
-        for source in sorted(CANONICAL_PUBLIC_SOURCE_DEFAULTS):
-            if source not in text:
-                errors.append(f"{name}: canonical public source default is missing: {source}")
         for claim in sorted(STALE_UI_LOCALIZATION_CLAIMS | STALE_PUBLISHED_TAG_CLAIMS):
             if claim in text:
                 errors.append(f"{name}: unsupported documentation claim: {claim}")
-        install_position = text.find("--create-adoption")
-        contract_position = text.find('ADOPTION_CONTRACT="$(python3 -c')
-        base_position = text.find('ADOPTION_BASE="$(python3 -c')
-        finish_position = text.find("make ai-finish TASK=adopt_ai_cockpit")
-        commit_position = text.find('git commit -m "adopt AI Cockpit governance"')
-        if (
-            min(
-                install_position,
-                finish_position,
-                contract_position,
-                base_position,
-                commit_position,
-            )
-            < 0
-            or not install_position
-            < finish_position
-            < contract_position
-            < base_position
-            < commit_position
-            or ".ai/work-items/archive/index.json" not in text
-            or '"workItemId"]=="adopt_ai_cockpit"' not in text
-            or ".ai/work-items/active/adopt_ai_cockpit.contract.json" in text
-        ):
-            errors.append(
-                f"{name}: adoption PR check must reload archived Contract base after finish approval"
-            )
 
     authoritative = [
         root / "docs" / "getting-started" / "installation.md",
@@ -791,12 +816,6 @@ def multilingual_layer_errors(root: Path) -> list[str]:
             found = set(re.findall(r"<!--\s*doc-domain:\s*([a-z0-9-]+)\s*-->", text))
             for domain in sorted(required_domains - found):
                 errors.append(f"{relative}: missing required documentation domain: {domain}")
-
-            expected_link = relative
-            if expected_link not in readmes[language].read_text(encoding="utf-8"):
-                errors.append(
-                    f"{readmes[language].name}: missing same-language WI-10 entry: {expected_link}"
-                )
 
         combined = "\n".join(language_text)
         found_semantics = set(re.findall(r"<!--\s*semantic-domain:\s*([a-z0-9-]+)\s*-->", combined))
@@ -1484,6 +1503,8 @@ def check_repository(root: Path) -> list[str]:
     errors = []
     for path in documentation_files(root):
         errors.extend(front_matter_errors(path))
+    errors.extend(formal_document_metadata_errors(root))
+    errors.extend(documentation_architecture_errors(root))
     errors.extend(stack_errors(root))
     errors.extend(installation_command_errors(root))
     errors.extend(japanese_style_errors(root))

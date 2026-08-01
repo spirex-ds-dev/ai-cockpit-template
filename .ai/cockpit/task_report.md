@@ -4,7 +4,7 @@ Phase: `review`
 Result: `completed`
 
 ## What changed
-Task wi-07-critical-coverage-corrective generated an evidence-derived outcome with status completed.
+Task wi-07-documentation-architecture-successor generated an evidence-derived outcome with status completed.
 
 ## Issues
 - Detected issues: 0

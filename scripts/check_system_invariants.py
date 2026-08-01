@@ -85,8 +85,9 @@ def release_contract_issues(root: Path, release: dict[str, Any]) -> list[str]:
         return ["release.json public project quality target is missing or invalid"]
     marker = f"<!-- public-quality-target: {target} -->"
     paths = [
-        *(root / name for name in README_FILES),
         root / "docs" / "getting-started" / "installation.md",
+        root / "docs" / "getting-started" / "installation.ja.md",
+        root / "docs" / "getting-started" / "installation.zh-CN.md",
     ]
     return [
         f"{path.relative_to(root)}: public quality target differs from release.json"
@@ -151,21 +152,32 @@ def invariant_issues(root: Path = ROOT) -> list[str]:
     capability_marker = (
         f"<!-- release-capabilities: {','.join(manifest.get('releaseCapabilities', []))} -->"
     )
-    for name in README_FILES:
-        text = (root / name).read_text(encoding="utf-8")
-        for marker, label in (
-            (tier_marker, "compatibility tiers"),
-            (flow_marker, "governance flow"),
-            (capability_marker, "release capabilities"),
-        ):
-            if marker not in text:
-                issues.append(f"{name}: {label} differ from system manifest")
-        install_line = next(
-            (line for line in text.splitlines() if 'sh "$INSTALLER" --stack' in line), ""
-        )
-        for flag in manifest.get("recommendedInstallFlags", []):
-            if flag not in install_line:
-                issues.append(f"{name}: primary install command is missing {flag}")
+    marker_owners = (
+        (root / "docs" / "configuration.md", tier_marker, "compatibility tiers"),
+        (
+            root / "docs" / "operations" / "work-item-lifecycle.md",
+            flow_marker,
+            "governance flow",
+        ),
+        (
+            root / "docs" / "reference" / "distribution.md",
+            capability_marker,
+            "release capabilities",
+        ),
+    )
+    for path, marker, label in marker_owners:
+        if marker not in path.read_text(encoding="utf-8"):
+            issues.append(f"{path.relative_to(root)}: {label} differ from system manifest")
+    distribution_text = (root / "docs" / "reference" / "distribution.md").read_text(
+        encoding="utf-8"
+    )
+    install_line = next(
+        (line for line in distribution_text.splitlines() if 'sh "$INSTALLER" --stack' in line),
+        "",
+    )
+    for flag in manifest.get("recommendedInstallFlags", []):
+        if flag not in install_line:
+            issues.append(f"docs/reference/distribution.md: install command is missing {flag}")
     install_script = (root / "install.sh").read_text(encoding="utf-8")
     if not (root / "requirements-dev.lock").is_file():
         issues.append("requirements-dev.lock is missing")

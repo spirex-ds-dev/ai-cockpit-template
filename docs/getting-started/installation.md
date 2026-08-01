@@ -2,6 +2,11 @@
 author: Ray
 title: "Install AI Cockpit"
 description: "A beginner-first, prompt-first path for installing AI Cockpit and starting calibration."
+audience:
+  - adopter
+status: current
+authority: canonical
+lastVerifiedBy: capability-truth-matrix
 ---
 
 # Install AI Cockpit

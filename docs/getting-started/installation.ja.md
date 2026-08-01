@@ -6,6 +6,8 @@ description: "初めて使う人のための、プロンプト中心の AI Cockp
 
 # AI Cockpit をインストールする
 
+<!-- public-quality-target: ai-cockpit-quality -->
+
 これは最も簡単な導入経路です。AI Cockpit の内部記録を先に理解する必要はありません。
 対象プロジェクトを開き、コーディング Agent に一度に一つのプロンプトを渡し、
 結果を読んでから次へ進んでください。

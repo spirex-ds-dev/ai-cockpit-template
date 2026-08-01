@@ -14,9 +14,8 @@ def write_release_contract_fixture(root, target="quality"):
     metadata = {"publicContract": {"projectQualityTarget": target}}
     (root / "release.json").write_text(json.dumps(metadata), encoding="utf-8")
     marker = f"<!-- public-quality-target: {target} -->\n"
-    for name in ("README.md", "README.ja.md", "README.zh-CN.md"):
-        (root / name).write_text(marker, encoding="utf-8")
-    (root / "docs" / "getting-started" / "installation.md").write_text(marker, encoding="utf-8")
+    for name in ("installation.md", "installation.ja.md", "installation.zh-CN.md"):
+        (root / "docs" / "getting-started" / name).write_text(marker, encoding="utf-8")
     return metadata
 
 
@@ -43,11 +42,11 @@ def test_release_contract_accepts_consistent_public_quality_target(tmp_path):
 
 def test_release_contract_rejects_documentation_drift(tmp_path):
     metadata = write_release_contract_fixture(tmp_path)
-    (tmp_path / "README.ja.md").write_text(
+    (tmp_path / "docs" / "getting-started" / "installation.ja.md").write_text(
         "<!-- public-quality-target: stale -->\n", encoding="utf-8"
     )
     assert release_contract_issues(tmp_path, metadata) == [
-        "README.ja.md: public quality target differs from release.json"
+        "docs/getting-started/installation.ja.md: public quality target differs from release.json"
     ]
 
 

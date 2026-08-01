@@ -12,6 +12,10 @@ keywords:
 
 # Configuration
 
+The template repository's current project-test coverage floor is **85.10%**.
+Adopter projects must calibrate their own evidence-backed threshold rather than
+inheriting that number as a universal requirement.
+
 AI Cockpit keeps project-specific commands in `Makefile.ai.stack`.
 
 Configuration describes repository governance; it does not establish runtime isolation or enterprise authorization. Installing the Runtime only installs entrypoints. The current calibration command creates and validates a Project Profile proposal; the complete ten-stage session and Candidate activation are planned and must not be treated as completed by a preset. See the [Capability Truth Matrix](reference/capability-truth-matrix.md).
