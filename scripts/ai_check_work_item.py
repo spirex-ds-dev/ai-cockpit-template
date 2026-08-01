@@ -16,6 +16,7 @@ from ai_common import (
     non_empty_string,
     validate_scenario_coverage,
 )
+from ai_external_identity import high_risk_approval_issues
 from ai_observability import create_observability, elapsed_ms
 from ai_start_receipt import receipt_path, validate_receipt
 
@@ -324,6 +325,14 @@ def validate_baseline_and_approvals(data: dict[str, Any]) -> list[str]:
                 evidence.get("reason")
             ):
                 issues.append("destructive approvalEvidence requires approvedBy and reason")
+            if isinstance(evidence, dict):
+                identity_evidence = evidence.get("identityEvidence")
+                identity_issues = high_risk_approval_issues(
+                    identity_evidence or evidence, required_scope=patterns
+                )
+                issues.extend(
+                    f"destructive approval identity: {issue}" for issue in identity_issues
+                )
 
     approval = data.get("restrictedWriteApproval")
     if approval is not None:

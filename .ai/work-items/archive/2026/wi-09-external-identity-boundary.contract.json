@@ -1,0 +1,269 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-09-external-identity-boundary",
+  "mode": "code",
+  "title": "External Identity Boundary",
+  "baseCommit": "bc0d3a81fecc4c272c2237dae94628573f0fac6b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-09-external-identity-boundary.contract.json",
+    ".ai/work-items/active/wi-09-external-identity-boundary.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-09-external-identity-boundary.outcome.json",
+    ".ai/work-items/active/wi-09-external-identity-boundary.outcome.md",
+    ".ai/trust/schema/approval.schema.json",
+    "scripts/ai_external_identity.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/ai_trust_schema.py",
+    "scripts/ai_check_work_item.py",
+    "tests/test_external_identity.py",
+    "tests/test_trust_schema.py",
+    "tests/test_ai_check_work_item.py",
+    "Makefile",
+    "docs/reference/external-identity-boundary.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/contract-fields.md",
+    "docs/architecture.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/superpowers/specs/2026-08-01-external-identity-boundary-design.md",
+    "docs/superpowers/plans/2026-08-01-external-identity-boundary.md"
+  ],
+  "outOfScope": [
+    "Authenticating a human inside the repository or contacting GitHub, SSO, IAM, or enterprise approval APIs",
+    "Treating repository-recorded names, chat authorization, commits, or local files as provider-verified identity",
+    "Changing existing non-destructive restricted-write workflow semantics",
+    "Implementing branch protection, release attestation, immutable audit, enterprise compliance, or WI10 adoption validation",
+    "Adding a new top-level governance Gate"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/wi-09-external-identity-boundary.contract.json",
+      "reason": "Repository-local capture of the human-authorized WI09 identity levels, approval schema, and repository-recorded-only boundary."
+    },
+    {
+      "path": "scripts/ai_check_work_item.py",
+      "reason": "Current destructive-change approval validation that accepts repository-local names and therefore needs the external identity boundary."
+    },
+    {
+      "path": ".ai/trust/schema/human_decision_evidence.schema.json",
+      "reason": "Existing strict Trust Layer decision evidence model and schema conventions."
+    },
+    {
+      "path": "docs/architecture.md",
+      "reason": "Existing architectural statement that approvedBy records workflow decisions but does not authenticate a person."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "authorization_boundary",
+      "schema_compatibility",
+      "public_contract"
+    ],
+    "reason": "The change tightens destructive authorization semantics and adds a public evidence schema, but remains repository-local and does not perform external provider operations.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "A public Trust Layer schema and high-risk authorization boundary require focused regression and the Standard quality route; no release or external production operation is performed."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The directive defines the identity levels, minimum approval payload, and fail-closed high-risk boundary; implementation choices are bounded and locally verifiable."
+  },
+  "preReviewWarnings": [
+    "Review that repository-recorded authorization remains visible for workflow audit but can never be upgraded to provider-verified identity without provider-bound evidence.",
+    "Review backward compatibility for non-destructive Contract records and archived evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: A strict Approval Evidence schema represents approvalType, identityLevel, actor, provider, provider-bound evidence, and non-empty scope using the four directive-defined identity levels.",
+    "A2: Deterministic validation classifies plain approvedBy-style records as repository_recorded_only and never treats self_declared or repository_recorded evidence as high-risk authorization.",
+    "A3: provider_verified evidence must bind the repository, pull request, review or environment/ruleset record, and commit SHA; enterprise_verified evidence must carry an external enterprise reference.",
+    "A4: Destructive-change Contract approval requires provider_verified or enterprise_verified Approval Evidence; legacy approvedBy and reason alone fail with actionable repository_recorded_only guidance.",
+    "A5: Non-destructive restrictedWriteApproval remains a repository workflow record and documentation explicitly states that it does not authenticate the named person.",
+    "A6: Focused schema, identity-level, malformed-evidence, high-risk rejection, and compatibility tests pass together with the Contract-selected Standard quality route.",
+    "A7: Canonical documentation explains the four levels, schema, display state, high-risk rule, provider/enterprise boundaries, and non-capabilities without claiming external verification."
+  ],
+  "guidelines": [
+    "Keep identity classification deterministic, language-neutral, and repository-local; do not call external providers.",
+    "Use a strict schema plus semantic validation rather than inferring identity from actor names or free text.",
+    "Fail closed for high-risk authorization when provider-bound fields are missing, malformed, or at a lower identity level.",
+    "Preserve archived records and non-destructive restricted-write compatibility.",
+    "Integrate under the existing Trust Layer schema check instead of adding a formal Gate."
+  ],
+  "intent": {
+    "problem": "Repository fields such as approvedBy can record that an approval name was written, but current validation can mistake that local assertion for sufficient approval evidence for destructive changes. The repository needs an explicit boundary between self-declaration, repository recording, provider verification, and enterprise verification.",
+    "constraints": [
+      "Use exactly self_declared, repository_recorded, provider_verified, and enterprise_verified as identity levels.",
+      "Display repository-only approval as repository_recorded_only and do not silently upgrade it.",
+      "Require external evidence identifiers for provider and enterprise levels while performing no network verification.",
+      "Do not break ordinary non-destructive Work Item and restricted-write records.",
+      "Do not claim that AI Cockpit itself authenticates identities."
+    ],
+    "rationale": "A strict evidence object and one semantic classifier make approval strength auditable and allow high-risk policy to reject insufficient identity evidence without adding external identity infrastructure or another Gate."
+  },
+  "declaredIntent": {
+    "summary": "Add a repository-local external identity evidence boundary for high-risk approval records.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A destructive change supplies only approvedBy and reason or an explicit repository_recorded identity level.",
+      "expected": "Validation fails closed, labels the evidence repository_recorded_only, and asks for provider_verified or enterprise_verified evidence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": ["tests/test_external_identity.py", "tests/test_ai_check_work_item.py"],
+      "verificationPlan": "Run focused negative tests for legacy approvedBy, self_declared, and repository_recorded destructive approvals."
+    },
+    {
+      "scenario": "A GitHub review approval binds repository, pull request, review identifier, and commit SHA at provider_verified level.",
+      "expected": "Schema and semantic validation pass and high-risk authorization is eligible only for the declared scope.",
+      "required": true,
+      "status": "unverified",
+      "evidence": ["tests/test_external_identity.py", ".ai/trust/schema/approval.schema.json"],
+      "verificationPlan": "Run focused positive and field-removal tests against the GitHub provider example."
+    },
+    {
+      "scenario": "An enterprise_verified approval omits its external enterprise reference or attempts to use repository-local evidence only.",
+      "expected": "Semantic validation rejects the record without downgrading or fabricating evidence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": ["tests/test_external_identity.py"],
+      "verificationPlan": "Run focused enterprise evidence positive and negative fixtures."
+    }
+  ],
+  "rawUserRequest": "Complete WI-09 External Identity Boundary from the attached AI Cockpit next-stage directive through archive, PR, merge, closure, and branch cleanup. Distinguish self_declared, repository_recorded, provider_verified, and enterprise_verified identity; add the specified Approval Schema; display repository-only approval as repository_recorded_only; and prevent high-risk operations from relying only on approvedBy-style repository text.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation and attached AI Cockpit next-stage directive: WI-09 External Identity Boundary",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:wi-09-external-identity-boundary-authorized-request"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "human",
+    "reason": "The user explicitly authorized all bounded writes required to complete every Work Item; this Work Item changes Makefile only to compose identity validation under the existing Trust Layer check."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 746
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-09-external-identity-boundary.json",
+    "baseCommit": "bc0d3a81fecc4c272c2237dae94628573f0fac6b",
+    "initialScopeDigest": "6421025928cf052fad79c609d669b5b50d317f4b2cbdbb2d9d51834e4f020ed7",
+    "contractSkeletonDigest": "23276068d2558ada4a211353e5c890b8da271346c6d1b6065015070df5322e31"
+  }
+}

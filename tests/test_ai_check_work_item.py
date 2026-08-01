@@ -97,6 +97,54 @@ def test_code_work_item_requires_requested_operation():
     assert any("requestedOperation" in issue for issue in issues)
 
 
+def test_destructive_approval_requires_provider_or_enterprise_identity() -> None:
+    contract = valid_contract()
+    contract["destructiveChangePolicy"] = {
+        "allowed": True,
+        "requiresHumanApproval": True,
+        "allowPatterns": ["src/api/public.py"],
+        "approvalEvidence": {
+            "approved": True,
+            "approvedBy": "Ray",
+            "reason": "Approved in repository text.",
+        },
+    }
+
+    issues = ai_check_work_item.validate_contract(contract)
+
+    assert any("repository_recorded_only" in issue for issue in issues)
+
+
+def test_destructive_approval_accepts_provider_bound_identity_evidence() -> None:
+    contract = valid_contract()
+    contract["destructiveChangePolicy"] = {
+        "allowed": True,
+        "requiresHumanApproval": True,
+        "allowPatterns": ["src/api/public.py"],
+        "approvalEvidence": {
+            "approved": True,
+            "approvedBy": "github-user",
+            "reason": "Approved by a provider review bound to the target commit.",
+            "identityEvidence": {
+                "schemaVersion": 1,
+                "approvalType": "destructive_change",
+                "identityLevel": "provider_verified",
+                "actor": "github-user",
+                "provider": "github",
+                "evidence": {
+                    "repository": "org/repo",
+                    "pullRequest": 123,
+                    "reviewId": 456,
+                    "commitSha": "0123456789abcdef0123456789abcdef01234567",
+                },
+                "scope": ["src/api/public.py"],
+            },
+        },
+    }
+
+    assert ai_check_work_item.validate_contract(contract) == []
+
+
 def test_v2_code_work_item_rejects_skeleton_placeholders():
     contract = valid_contract()
     contract.update(

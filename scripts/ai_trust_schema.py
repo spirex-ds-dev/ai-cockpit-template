@@ -11,6 +11,7 @@ from typing import Any
 
 SCHEMA_DIR = Path(__file__).resolve().parents[1] / ".ai" / "trust" / "schema"
 SCHEMA_NAMES = {
+    "approval",
     "repository_capabilities",
     "success_criteria",
     "human_decision_request",

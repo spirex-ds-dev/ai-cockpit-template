@@ -966,7 +966,7 @@
         "make quality"
       ],
       "limitations": "The installed executor implements preserve-evidence Runtime-file removal only. Purge filesystem removal is not implemented. Disable writes a result JSON but does not independently update canonical installed state. Empty directory cleanup, external identity, sandboxing, immutable audit, and enterprise compliance are not claimed; the target-repository receipt and human review remain required.",
-      "digest": "sha256:7580ef34c173ee9940c4f4793c7f4b72836ffd2314022b254bd16c95bc74771b",
+      "digest": "sha256:932ac7f257fc8542a0b80e45920e7d15eb2818cedb01ca7535bfb832386a6b42",
       "evidenceSource": {
         "algorithm": "sha256-canonical-json-v1",
         "fileCount": 18,
@@ -985,7 +985,7 @@
           },
           {
             "path": "scripts/ai_installer_catalog.json",
-            "sha256": "b2d6d9e225436ba09a8765f69f4b20a0d7f5d2c24b63df60450b616c59ba552b"
+            "sha256": "78f6777047f318a5901a35a4b7e2a5516b44b9dca6b7829297f481859acd5e0b"
           },
           {
             "path": "scripts/ai_uninstall_facts.py",
@@ -1044,7 +1044,7 @@
             "sha256": "449e48f52eb3522cabd8e15bd4538b7b09304bb74745835324be174d728262fe"
           }
         ],
-        "digest": "sha256:a56ac0c6d310fd658bdfd611d3f6cc28caaaf4802e7545ce5ac8fa4bf9037e8b"
+        "digest": "sha256:bac0e38f3f432973d87f0abdfa270622283e622bfebdda454aa3ab1486062c4d"
       }
     },
     {
@@ -1394,7 +1394,7 @@
           },
           {
             "path": "scripts/ai_installer_catalog.json",
-            "sha256": "b2d6d9e225436ba09a8765f69f4b20a0d7f5d2c24b63df60450b616c59ba552b"
+            "sha256": "78f6777047f318a5901a35a4b7e2a5516b44b9dca6b7829297f481859acd5e0b"
           },
           {
             "path": "templates/make/Makefile.ai",
@@ -1405,9 +1405,9 @@
             "sha256": "d1a79915c064162c7ba68b5fc522a01b4067bc7d3f27b6ba67f94dbb51e668c5"
           }
         ],
-        "digest": "sha256:da4f617608326b29045f8db77d139c49c653779b9214788a557178dc7ff4fd38"
+        "digest": "sha256:f50252346c078f54b4765cf5d6cee980b603d065877747b3d656f7a2e8a4691a"
       },
-      "digest": "sha256:a589a963c054d2fdd6b44b2b817746f2e39898c95d5b75acfbe2f648b8d9d8a0"
+      "digest": "sha256:1562745e5ddec4db82fe145bfccbc14a3c51531cefed538c311e7d503902ac65"
     },
     {
       "id": "capability_claim_binding",
@@ -1463,6 +1463,74 @@
           }
         ],
         "digest": "sha256:d7b9fc89985abe8cfd908234fda55423cb4b0a86a18fa383b0733d071f34366a"
+      }
+    },
+    {
+      "id": "external_identity_boundary",
+      "status": "implemented",
+      "claim": "Approval evidence is classified as self-declared, repository-recorded, provider-verified, or enterprise-verified; repository-only actor names remain repository_recorded_only and cannot satisfy destructive-change approval.",
+      "evidence": [
+        ".ai/trust/schema/approval.schema.json",
+        "scripts/ai_external_identity.py",
+        "scripts/ai_check_work_item.py",
+        "docs/reference/external-identity-boundary.md"
+      ],
+      "verification": [
+        "tests/test_external_identity.py",
+        "tests/test_trust_schema.py",
+        "tests/test_ai_check_work_item.py"
+      ],
+      "sourceEvidence": [
+        ".ai/trust/schema/approval.schema.json",
+        "scripts/ai_external_identity.py",
+        "scripts/ai_check_work_item.py",
+        "docs/reference/external-identity-boundary.md"
+      ],
+      "testEvidence": [
+        "tests/test_external_identity.py",
+        "tests/test_trust_schema.py",
+        "tests/test_ai_check_work_item.py"
+      ],
+      "commandEvidence": [
+        "make check-trust-schemas",
+        "python3 -m pytest -q tests/test_external_identity.py tests/test_trust_schema.py tests/test_ai_check_work_item.py"
+      ],
+      "limitations": "The repository validates supplied evidence structure, level-specific references, and declared scope. It does not contact providers, authenticate actors, implement SSO or IAM, prove branch protection, or provide enterprise assurance.",
+      "digest": "sha256:3454ca2344b644aff6a047e8d26bfeb5abaa1adc81b6c6e1781342eb12ce3cf2",
+      "evidenceSource": {
+        "algorithm": "sha256-canonical-json-v1",
+        "fileCount": 7,
+        "files": [
+          {
+            "path": ".ai/trust/schema/approval.schema.json",
+            "sha256": "19fb51d0c370c9196f2b20a9659733390e78ff24732cc8fa91af94bd8292465c"
+          },
+          {
+            "path": "docs/reference/external-identity-boundary.md",
+            "sha256": "ce5c9c405077b85c882f1245d60114b10ebc1e50b508963dfdab7e48f45f14b8"
+          },
+          {
+            "path": "scripts/ai_check_work_item.py",
+            "sha256": "15382185b9aaeb3985f4eaddfcdba782187a141471eef037a65042fe2befe067"
+          },
+          {
+            "path": "scripts/ai_external_identity.py",
+            "sha256": "8d4a3f797dcc16c25885d8b149c224aa3c74e005f6c4fd9d2c8bd937f1ff8b82"
+          },
+          {
+            "path": "tests/test_ai_check_work_item.py",
+            "sha256": "ac4ca1fccc27756dc9cdb528faea6c2ab3c56a5d2701ce6e8ec466f4da0b9d6f"
+          },
+          {
+            "path": "tests/test_external_identity.py",
+            "sha256": "2d42cb76a95648962bb871f845c6d888b992591ba94e99ed92610b43512b37b3"
+          },
+          {
+            "path": "tests/test_trust_schema.py",
+            "sha256": "ada65ffaddfad3faa7bef15a4f6fc6c173f4a2cb8efea3dc3aa2561a944e3132"
+          }
+        ],
+        "digest": "sha256:865408cfadca531813bfec8bf4a743af400d408d090318719b75e943455e3bb5"
       }
     },
     {

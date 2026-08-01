@@ -233,3 +233,5 @@ PR 監査（`check-ai-pr`）は、プルリクエストに含まれるアーカ�
 PR のアーカイブ検証には必ず Contract v2 形式を使用する必要があります。v1 形式はローカルの歴史的調査のためにのみ読み込み可能として許容されますが、PR で新規追加または変更された場合は、検証レジストリや実行メタデータの迂回を防ぐために拒否されます。
 
 リポジトリ内の承認フィールド（`approvedBy` 等）は、ワークフロー上の意思決定プロセスを記録するものであり、厳密な人間の個人認証を提供するものではありません。AI Cockpit は AI エージェントの自律的な安全ガードを目的とした変更管理ワークフローであり、悪意のあるエージェントを隔離するセキュリティサンドボックスではありません。信頼された人間による最終承認や独立したビルドテストの実行は、コードホスティングプラットフォームの保護されたブランチ設定や保護された CI 環境で実施される必要があります。
+
+<!-- capability-claim: external_identity_boundary --> 外部 ID 境界では `self_declared`、`repository_recorded`、`provider_verified`、`enterprise_verified` を区別します。リポジトリ内の名前だけなら `repository_recorded_only` と表示し、破壊的変更の承認には利用しません。詳細は [External Identity Boundary](reference/external-identity-boundary.md) を参照してください。
