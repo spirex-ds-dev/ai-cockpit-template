@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).parents[1]
 
 
-def test_fixture_harness_emits_eight_phases_for_three_stacks(tmp_path):
+def test_fixture_harness_emits_eight_phases_for_seven_stacks(tmp_path):
     output = tmp_path / "bundle.json"
     subprocess.run(
         [sys.executable, "scripts/fixture_harness.py", "--output", str(output)],
@@ -15,9 +15,13 @@ def test_fixture_harness_emits_eight_phases_for_three_stacks(tmp_path):
     )
     bundle = json.loads(output.read_text(encoding="utf-8"))
     assert {item["stack"] for item in bundle["fixtures"]} == {
+        "android",
+        "flutter",
+        "swift-package",
         "python",
         "typescript-web",
         "java-multimodule",
+        "mixed-monorepo",
     }
     for fixture in bundle["fixtures"]:
         assert [phase["phase"] for phase in fixture["phases"]] == [

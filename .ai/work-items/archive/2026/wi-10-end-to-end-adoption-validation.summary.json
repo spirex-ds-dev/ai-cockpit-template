@@ -1,0 +1,849 @@
+{
+  "summaryVersion": 2,
+  "workItemId": "wi-10-end-to-end-adoption-validation",
+  "contractPath": ".ai/work-items/archive/2026/wi-10-end-to-end-adoption-validation.contract.json",
+  "changedFiles": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-10-end-to-end-adoption-validation.contract.json",
+      "reason": "Defined the authorized seven-project adoption validation boundary and verification plan."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-10-end-to-end-adoption-validation.summary.json",
+      "reason": "Recorded implementation, evidence boundaries, verification, and residual risk."
+    },
+    {
+      "path": ".ai/cockpit/current_status.md",
+      "reason": "Generated active Work Item decision status."
+    },
+    {
+      "path": "scripts/end_to_end_adoption_validation.py",
+      "reason": "Executes the disposable seven-project installation-to-upgrade matrix and emits reviewable evidence."
+    },
+    {
+      "path": "scripts/install_ai_cockpit.py",
+      "reason": "Restores overwritten install facts after removing attempt-created files during failed-upgrade rollback."
+    },
+    {
+      "path": ".ai/guards/coverage_policy.yaml",
+      "reason": "Maps the fixture's standard Flutter main.dart/widget_test.dart layout to its accompanying test without weakening the coverage guard."
+    },
+    {
+      "path": "tests/test_end_to_end_adoption_validation.py",
+      "reason": "Verifies seven project types, complete lifecycle phases, fail-closed cases, cleanup, evidence boundaries, and CLI output."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Prevents failed upgrade rollback from deleting pre-existing install facts."
+    },
+    {
+      "path": "tests/test_guards_and_status.py",
+      "reason": "Regression-tests the explicit Flutter fixture source-to-test coverage association."
+    },
+    {
+      "path": "tests/test_cross_stack_long_cycle.py",
+      "reason": "Updates the existing aggregate lifecycle assertion from the prior three-fixture set to the directive-required seven project types."
+    },
+    {
+      "path": "tests/test_fixture_harness.py",
+      "reason": "Updates the deterministic harness assertion to the same seven directive-required fixture stacks while preserving its phase and boundary checks."
+    },
+    {
+      "path": "pyproject.toml",
+      "reason": "Limits template-root pytest collection to the repository test suite so adopter fixture tests run only in their copied fixture repositories."
+    },
+    {
+      "path": "docs/fixtures/real-fixture-evidence.md",
+      "reason": "Documents the English command, lifecycle coverage, and local/external evidence boundary."
+    },
+    {
+      "path": "docs/fixtures/real-fixture-evidence.ja.md",
+      "reason": "Documents the same validation semantics and limitations in Japanese."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Registers the maintained fixture evidence documents as current instructions."
+    },
+    {
+      "path": "docs/reference/capability-truth-matrix.json",
+      "reason": "Regenerated source-bound installer evidence after the rollback fix."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Regenerated source-bound Japanese capability evidence after installer changes."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.md",
+      "reason": "Regenerated the human-readable Japanese capability projection."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Regenerated source-bound pre-release alignment evidence."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.md",
+      "reason": "Regenerated the human-readable pre-release alignment projection."
+    },
+    {
+      "path": "examples/fixtures/android-app/fixture.json",
+      "reason": "Declares the Android project validation manifest."
+    },
+    {
+      "path": "examples/fixtures/android-app/settings.gradle.kts",
+      "reason": "Provides a realistic Android project marker."
+    },
+    {
+      "path": "examples/fixtures/android-app/app/src/main/kotlin/example/MainActivity.kt",
+      "reason": "Provides Android product source for safe-change probes."
+    },
+    {
+      "path": "examples/fixtures/android-app/app/src/test/kotlin/example/MainActivityTest.kt",
+      "reason": "Provides Android test source for weakening probes."
+    },
+    {
+      "path": "examples/fixtures/flutter-app/fixture.json",
+      "reason": "Declares the Flutter project validation manifest."
+    },
+    {
+      "path": "examples/fixtures/flutter-app/pubspec.yaml",
+      "reason": "Provides a realistic Flutter project marker."
+    },
+    {
+      "path": "examples/fixtures/flutter-app/lib/main.dart",
+      "reason": "Provides Flutter product source for safe-change probes."
+    },
+    {
+      "path": "examples/fixtures/flutter-app/test/widget_test.dart",
+      "reason": "Provides Flutter test source for weakening probes."
+    },
+    {
+      "path": "examples/fixtures/ios-swift-package/fixture.json",
+      "reason": "Declares the iOS Swift Package validation manifest."
+    },
+    {
+      "path": "examples/fixtures/ios-swift-package/Package.swift",
+      "reason": "Provides a realistic Swift Package project marker."
+    },
+    {
+      "path": "examples/fixtures/ios-swift-package/Sources/AppCore/AppCore.swift",
+      "reason": "Provides Swift product source for safe-change probes."
+    },
+    {
+      "path": "examples/fixtures/ios-swift-package/Tests/AppCoreTests/AppCoreTests.swift",
+      "reason": "Provides Swift test source for weakening probes."
+    },
+    {
+      "path": "examples/fixtures/mixed-monorepo/fixture.json",
+      "reason": "Declares the mixed-monorepo validation manifest."
+    },
+    {
+      "path": "examples/fixtures/mixed-monorepo/package.json",
+      "reason": "Provides the Node marker in the mixed monorepo."
+    },
+    {
+      "path": "examples/fixtures/mixed-monorepo/pyproject.toml",
+      "reason": "Provides the Python marker in the mixed monorepo."
+    },
+    {
+      "path": "examples/fixtures/mixed-monorepo/services/api/app.py",
+      "reason": "Provides mixed-monorepo product source for safe-change probes."
+    },
+    {
+      "path": "examples/fixtures/mixed-monorepo/services/api/tests/test_app.py",
+      "reason": "Provides mixed-monorepo test source for weakening probes."
+    },
+    {
+      "path": "examples/fixtures/python/fixture.json",
+      "reason": "Upgrades the Python fixture to the executable project manifest schema."
+    },
+    {
+      "path": "examples/fixtures/python/pyproject.toml",
+      "reason": "Provides a realistic Python service marker."
+    },
+    {
+      "path": "examples/fixtures/python/src/service.py",
+      "reason": "Provides Python product source for safe-change probes."
+    },
+    {
+      "path": "examples/fixtures/python/tests/test_service.py",
+      "reason": "Provides Python test source for weakening probes."
+    },
+    {
+      "path": "examples/fixtures/java-multimodule/fixture.json",
+      "reason": "Adds executable project-type, installer stack, source, and test bindings."
+    },
+    {
+      "path": "examples/fixtures/typescript-web/fixture.json",
+      "reason": "Adds executable project-type, installer stack, source, and test bindings."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-10-end-to-end-adoption-validation.outcome.json",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-10-end-to-end-adoption-validation.outcome.md",
+      "reason": "Mandatory Task Outcome evidence generated by ai-finish."
+    },
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Generated archive discovery index."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wi-10-end-to-end-adoption-validation.archive-manifest.json",
+      "reason": "Immutable archive evidence root."
+    }
+  ],
+  "sourcesUsed": [
+    ".ai/work-items/archive/2026/wi-10-end-to-end-adoption-validation.contract.json",
+    "scripts/fixture_harness.py",
+    "scripts/external_adopter_long_cycle.py",
+    "tests/test_adoption_e2e.py",
+    "scripts/install_ai_cockpit.py"
+  ],
+  "verification": [
+    {
+      "check": "sourceBoundEvidence",
+      "command": "make check-source-bound-evidence",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:08:00.190518+00:00",
+      "exitCode": 0,
+      "durationMs": 160,
+      "outputDigest": "1da5cee96d1dbf26a54446829b0463065f23ccfe11e5ad9bcb955b58e045f772",
+      "commandHash": "d86740d1d67217b831acef07cf8c7dfdf9a5216b5917b64f95de6e72269f5dc3",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_capability_truth.py capability truth matrix check passed: <PROJECT_ROOT>/docs/reference/capability-truth-matrix.json {\"absurdCases\": [{\"caseId\": \"rocket-launch\", \"level\": \"L1\", \"class\": \"world_fact\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": false, \"safeAlternative\": \"local dry-run plan\"}, {\"caseId\": \"production-delete\", \"level\": \"L2\", \"class\": \"authority\", \"decision\": \"blocked\", \"status\": \"not_ready\", \"claimSupported\": ",
+      "outputTail": "ta.py\", \"sha256\": \"6498d8356c85797b11e9773db0843ce8f1bed98729aa81bd94eadecb909db433\" }, { \"path\": \"tests/test_guards_and_status.py\", \"sha256\": \"f9ceeb2fda00c004bdf3ad5ffdfff02d3d8ee7292017c171a768722f086a7b59\" }, { \"path\": \"tests/test_input_trust.py\", \"sha256\": \"5fc72a69ce0539cd5791c956cd29f68b7647dc4a14b3599eec7314455a3372f3\" }, { \"path\": \"tests/test_input_trust_corpus.py\", \"sha256\": \"a5196c1965c10dc84bb8641cef0128c928d67d506ec2be10a40c5df3f5265dde\" }, { \"path\": \"tests/test_install_wizard.py\", \"sha256\": \"2683e49865bc52083587eb282778c41d276c8263a4e8f5bc27b75199b56169e5\" }, { \"path\": \"tests/test_japanese_adopter_lifecycle.py\", \"sha256\": \"153c9a5a169605f5a42c4cd0dc2c7a6f6918c678bc1b9dc838141948229adeb7\" }, { \"path\": \"tests/test_japanese_capability.py\", \"sha256\": \"55fda8db695ae4ffc7f47c15ce3efc5d8126692690c39491bca5222e98a04154\" }, { \"path\": \"tests/test_makefile.py\", \"sha256\": \"6a3146201e7a00616e1f227cfaca85fffdc9627939f6d095805a4aab36f4120a\" }, { \"path\": \"tests/test_task_outcome_multilingual.py\", \"sha256\": \"d0202b172f7f44f228136cc1b18d28cfa2d2f57b13c40f1d151394490d2c9995\" }, { \"path\": \"tests/test_task_outcome_pr_summary.py\", \"sha256\": \"407c8cb2717cb1fc1664d5f706d4a5187720329137f235277d3e7fed87ced239\" }, { \"path\": \"tests/test_trust_layer_docs.py\", \"sha256\": \"8230686f3332b7b670efe8e0cbdb60eac8653618fa80ddf244f79b21f5005ac7\" }, { \"path\": \"tests/test_wizard_localization.py\", \"sha256\": \"a7161e9d05d8bd5a2d7116aff553cf36880776a1b870f7aea241529f65f28d38\" } ] }, \"limitations\": [ \"This assessment does not claim general model fluency, translation quality, or provider behavior.\", \"Every English-inferred, missing, stale, or non-executable Japanese capability is release-blocking.\" ], \"scope\": \"bounded repository-governance Japanese handling\", \"workItemId\": \"final-japanese-reassessment-replacement-20260731\", \"workItemRole\": \"final_reassessment\" } PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_pre_release_documentation_alignment.py pre-release documentation alignment passed",
+      "outputBytes": 25206
+    },
+    {
+      "check": "aiWorkItem",
+      "command": "make check-ai-contract CONTRACT=.ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:08:00.287710+00:00",
+      "exitCode": 0,
+      "durationMs": 45,
+      "outputDigest": "9124e70b9862565cbe9254fb466044721e46a50e1c6aa6e7815fc2dd4c578401",
+      "commandHash": "82f0f6b70f3e800132e7567d18050ac7051d82daf4484aae577473353dc6bc2f",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json work item contract check passed: .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_work_item.py .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json work item contract check passed: .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "outputBytes": 252
+    },
+    {
+      "check": "aiScope",
+      "command": "make check-ai-scope CONTRACT=.ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:08:00.443303+00:00",
+      "exitCode": 0,
+      "durationMs": 103,
+      "outputDigest": "a1233fd7fed3d4126334c4069bb720774728f3bcd8ed283f914b2e3a089bcc03",
+      "commandHash": "01e55a804a8274a0f731920dffc33dd41a756f9ec22f6c1da3fc857e5db80fac",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json scope guard passed: 44 changed path(s) covered",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scope.py .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json scope guard passed: 44 changed path(s) covered",
+      "outputBytes": 189
+    },
+    {
+      "check": "aiGuards",
+      "command": "make check-ai-guards",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:08:00.604622+00:00",
+      "exitCode": 0,
+      "durationMs": 109,
+      "outputDigest": "dabd1a5d53ebffa1b4bce7afbfa18f6ac39a2fd81ef50b6f5e88a0641b6207e3",
+      "commandHash": "769f935b899dad1a2abcf23ef3cd08c6904b7f7d03a988b5ce6aa573d18b1e83",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json [warning] restricted_write: .ai/guards/coverage_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guards.py --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json [warning] restricted_write: .ai/guards/coverage_policy.yaml (.ai/guards/**) - Guard manifests define repository policy and should change only with an explicit Contract. guard check completed: 1 warning(s) report: target/ai_guard_report.json",
+      "outputBytes": 395
+    },
+    {
+      "check": "aiCheckpoint",
+      "command": "make ai-checkpoint CONTRACT=.ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json SUMMARY=.ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json STAGE=before_finish",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:08:00.869072+00:00",
+      "exitCode": 0,
+      "durationMs": 211,
+      "outputDigest": "7305a19eab0ae0cb4a4ae2c3928cd5980d295edf86da027b05fc4b547f64da70",
+      "commandHash": "d07578deaf2757f7a09aa566f05991aac331ae0df3ca1c3d95ee56704223ff74",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_checkpoint.py --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json --stage \"before_finish\" # AI Work Item Checkpoint - Stage: `before_finish` - Work Item: `wi-10-end-to-end-adoption-validation` - Contract Hash: `ac9d7fca31f0433e` - Mode: `code` - notCodable: `False` - Execution Decision: `continue` - Acceptance Count: `8` - Unknown",
+      "outputTail": "rces/AppCore/AppCore.swift` — covered by Contract scope - [active_owned] `examples/fixtures/ios-swift-package/Tests/AppCoreTests/AppCoreTests.swift` — covered by Contract scope - [active_owned] `examples/fixtures/ios-swift-package/fixture.json` — covered by Contract scope - [active_owned] `examples/fixtures/java-multimodule/fixture.json` — covered by Contract scope - [active_owned] `examples/fixtures/mixed-monorepo/fixture.json` — covered by Contract scope - [active_owned] `examples/fixtures/mixed-monorepo/package.json` — covered by Contract scope - [active_owned] `examples/fixtures/mixed-monorepo/pyproject.toml` — covered by Contract scope - [active_owned] `examples/fixtures/mixed-monorepo/services/api/app.py` — covered by Contract scope - [active_owned] `examples/fixtures/mixed-monorepo/services/api/tests/test_app.py` — covered by Contract scope - [active_owned] `examples/fixtures/python/fixture.json` — covered by Contract scope - [active_owned] `examples/fixtures/python/pyproject.toml` — covered by Contract scope - [active_owned] `examples/fixtures/python/src/service.py` — covered by Contract scope - [active_owned] `examples/fixtures/python/tests/test_service.py` — covered by Contract scope - [active_owned] `examples/fixtures/typescript-web/fixture.json` — covered by Contract scope - [active_owned] `pyproject.toml` — covered by Contract scope - [active_owned] `scripts/end_to_end_adoption_validation.py` — covered by Contract scope - [active_owned] `scripts/install_ai_cockpit.py` — covered by Contract scope - [active_owned] `tests/test_cross_stack_long_cycle.py` — covered by Contract scope - [active_owned] `tests/test_end_to_end_adoption_validation.py` — covered by Contract scope - [active_owned] `tests/test_fixture_harness.py` — covered by Contract scope - [active_owned] `tests/test_guards_and_status.py` — covered by Contract scope - [active_owned] `tests/test_installer.py` — covered by Contract scope ## Next Action - Run or record required verification: aiSummary",
+      "outputBytes": 10442
+    },
+    {
+      "check": "aiReviewPolicy",
+      "command": "make check-ai-review-policy SUMMARY=.ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:08:01.020694+00:00",
+      "exitCode": 0,
+      "durationMs": 97,
+      "outputDigest": "931df7100507dfdc2fb8b0310f0ff1e43bd0da2ff3fba61f719189d14749ec4a",
+      "commandHash": "95ec90e081739a8c44a885872677aa5c71dc0dde814bf7064c2eec872aa157cc",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json review policy matched 5 path(s) [review] .ai/work-items/starts/wi-10-end-to-end-adoption-validation.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/guards/coverage_policy.yaml review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_review_policy.py --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json review policy matched 5 path(s) [review] .ai/work-items/starts/wi-10-end-to-end-adoption-validation.json [review] .ai/cockpit/current_status.md [review] .ai/cockpit/task_report.json [review] .ai/cockpit/task_report.md [review] .ai/guards/coverage_policy.yaml review focus recorded: 4 item(s) report: target/ai_review_policy_report.json",
+      "outputBytes": 495
+    },
+    {
+      "check": "aiBacktrack",
+      "command": "make check-ai-backtrack",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:08:01.170027+00:00",
+      "exitCode": 0,
+      "durationMs": 97,
+      "outputDigest": "879173ffc9bfa9ed2266efb59783f15c34e8c14479d2cd3dafac29dc36137291",
+      "commandHash": "3ae95e96677b5ecabc3d873ff9cda8d7d3c807724cd86bda76ebb00cef4e4f88",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_backtrack.py backtrack guard: no issues report: target/ai_backtrack_report.json",
+      "outputBytes": 140
+    },
+    {
+      "check": "aiCoverage",
+      "command": "make check-ai-coverage-guard",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:08:01.315432+00:00",
+      "exitCode": 0,
+      "durationMs": 95,
+      "outputDigest": "c794b587dd5b113b0a1a80c89e9497143d005bed7185c33c3a2d674da922459d",
+      "commandHash": "296a9883f8b9ad27f3d57afdee3ebdea5c75869c899a00e55d80563bc889328a",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_coverage_guard.py coverage guard: no issues report: target/ai_coverage_guard_report.json",
+      "outputBytes": 149
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "command": "make check-ai-scenario-coverage CONTRACT=.ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json SUMMARY=.ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:08:01.415007+00:00",
+      "exitCode": 0,
+      "durationMs": 47,
+      "outputDigest": "0d4470ed4f56403c6b0aaca03dc0b18223ed0b7baa217fd178caaf6c46b158f2",
+      "commandHash": "12e8b347f564d2a25a18903b60277294aae611aa96760b166a12d4f7ab17f5df",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_scenario_coverage.py --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json report: target/ai_scenario_coverage_report.json",
+      "outputBytes": 295
+    },
+    {
+      "check": "aiGuidelines",
+      "command": "make check-ai-guidelines CONTRACT=.ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json SUMMARY=.ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:08:01.518251+00:00",
+      "exitCode": 0,
+      "durationMs": 52,
+      "outputDigest": "551018767744dd37ad09658b8d25dd18c0a3493d853124f2e8d8a4c20087cba5",
+      "commandHash": "25d029882b1dfe99e8e330eb13405c8bbfd1e6113bd5e52edc6af9a8f895698c",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json guidelines compliance check passed: 6 guideline(s) verified",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_guidelines.py --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json guidelines compliance check passed: 6 guideline(s) verified",
+      "outputBytes": 300
+    },
+    {
+      "check": "aiDiffOwnership",
+      "command": "make check-ai-diff-ownership CONTRACT=.ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:08:01.782156+00:00",
+      "exitCode": 0,
+      "durationMs": 207,
+      "outputDigest": "41e5fa2ba1905226372b07b4fe7fcd0fce1383284545d73fc28fcb40e8e9d730",
+      "commandHash": "303297d14a418dbab4565900ff922fba6d4204d704bab98a5df1a00f7cecf2c2",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_diff_ownership.py --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json ## Diff Ownership Preview - active_owned: `44`, ambiguous: `0`, approval_required: `0`, archived_owned: `0`, out_of_scope: `0`, unowned: `0` - [active_owned] `.ai/cockpit/current_status.md` — covered by Contract scope - [active_owned] `.ai/cockpit/task_report.json` — exact generated Human Benefit Report pair validates against active Tas",
+      "outputTail": " scope - [active_owned] `examples/fixtures/ios-swift-package/Sources/AppCore/AppCore.swift` — covered by Contract scope - [active_owned] `examples/fixtures/ios-swift-package/Tests/AppCoreTests/AppCoreTests.swift` — covered by Contract scope - [active_owned] `examples/fixtures/ios-swift-package/fixture.json` — covered by Contract scope - [active_owned] `examples/fixtures/java-multimodule/fixture.json` — covered by Contract scope - [active_owned] `examples/fixtures/mixed-monorepo/fixture.json` — covered by Contract scope - [active_owned] `examples/fixtures/mixed-monorepo/package.json` — covered by Contract scope - [active_owned] `examples/fixtures/mixed-monorepo/pyproject.toml` — covered by Contract scope - [active_owned] `examples/fixtures/mixed-monorepo/services/api/app.py` — covered by Contract scope - [active_owned] `examples/fixtures/mixed-monorepo/services/api/tests/test_app.py` — covered by Contract scope - [active_owned] `examples/fixtures/python/fixture.json` — covered by Contract scope - [active_owned] `examples/fixtures/python/pyproject.toml` — covered by Contract scope - [active_owned] `examples/fixtures/python/src/service.py` — covered by Contract scope - [active_owned] `examples/fixtures/python/tests/test_service.py` — covered by Contract scope - [active_owned] `examples/fixtures/typescript-web/fixture.json` — covered by Contract scope - [active_owned] `pyproject.toml` — covered by Contract scope - [active_owned] `scripts/end_to_end_adoption_validation.py` — covered by Contract scope - [active_owned] `scripts/install_ai_cockpit.py` — covered by Contract scope - [active_owned] `tests/test_cross_stack_long_cycle.py` — covered by Contract scope - [active_owned] `tests/test_end_to_end_adoption_validation.py` — covered by Contract scope - [active_owned] `tests/test_fixture_harness.py` — covered by Contract scope - [active_owned] `tests/test_guards_and_status.py` — covered by Contract scope - [active_owned] `tests/test_installer.py` — covered by Contract scope",
+      "outputBytes": 4573
+    },
+    {
+      "check": "quality",
+      "command": "make ai-cockpit-quality",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:17:17.975468+00:00",
+      "exitCode": 0,
+      "durationMs": 556007,
+      "outputDigest": "a5cbb18d53530e78cc756d1914784f561284ba3a890c91a0ef7f0eeab222fcb2",
+      "commandHash": "4797135e5feb34072ec83da66daaf06ccf575717c08dec61b869a922d8bdad20",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "280c3a5681eba4935c8dc2d702657efd63caf11e0a83479d20848e8f8ce00793",
+      "outputSummary": "{ \"automaticProfile\": \"strict\", \"base\": \"aed6b388f5ea6d4fcb6325a8c6d05a522cf06474\", \"changedPaths\": [ \".ai/cockpit/current_status.md\", \".ai/cockpit/task_report.json\", \".ai/cockpit/task_report.md\", \".ai/guards/coverage_policy.yaml\", \".ai/work-items/starts/wi-10-end-to-end-adoption-validation.json\", \"docs/fixtures/real-fixture-evidence.ja.md\", \"docs/fixtures/real-fixture-evidence.md\", \"docs/reference/capability-truth-matrix.json\", \"docs/reference/documentation-context-registry.json\", \"docs/referen",
+      "outputTail": "py::test_complexity_report_records_increment 6.04s call tests/test_finish_e2e.py::test_archive_collision_fails_after_checks_and_preserves_active 5.48s call tests/test_governance_complexity.py::test_report_records_three_provenance_bound_baselines 5.24s call tests/test_project_governance.py::test_guard_calibration_accepts_optional_boundary_lists 4.73s call tests/test_adoption_ready.py::test_trivial_quality_commands_do_not_satisfy_static_readiness 3.57s call tests/test_installer.py::test_install_and_upgrade_preserve_project_owned_profiles 1781 passed, 3 warnings in 545.76s (0:09:05) bash tests/test_installer_boundaries.sh installer boundary regression passed PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/check_critical_coverage.py critical coverage floors passed: 21 file(s) bash tests/test_ci_release_evidence.sh CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.mS1S1gqYex/valid.json CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence invalid: head SHA does not match expected source CI/Release Evidence invalid: job status is inconsistent with top-level conclusion CI/Release Evidence invalid: required evidence fields are missing or malformed CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.mS1S1gqYex/all-three.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.mS1S1gqYex/multi-workflow.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.mS1S1gqYex/upstream-failed.json CI/Release Evidence valid: /var/folders/3z/qt8pjxx568xbg3d10zks40sr0000gp/T/tmp.mS1S1gqYex/downstream-failed.json CI/Release Evidence invalid: required evidence fields are missing or malformed release state consistency check passed - ciEvidence must be provider-bound and complete CI/Release Evidence shell regression passed quality gate summary written: target/quality/sessions/aed6b388f5ea-local-20260801T050801Z-24712-0/summary.json",
+      "outputBytes": 76089
+    },
+    {
+      "check": "aiStatus",
+      "command": "make generate-cockpit-status CONTRACT=.ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json SUMMARY=.ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:17:18.439070+00:00",
+      "exitCode": 0,
+      "durationMs": 366,
+      "outputDigest": "00df20e3ddf1b7f88a1338b990667fc637c5b70fe87d79b50aa3aba49342c621",
+      "commandHash": "911dc39199f1a746fe377bc984565322353c8e901b2639d1ef19a0ff1fdcdb53",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "31d1e3a248f48d4727dcb8b7ad83dbbb5f0f46f97e283c2fccb31a3852d5163b",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_generate_status.py .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json cockpit status generated: <PROJECT_ROOT>/.ai/cockpit/current_status.md",
+      "outputBytes": 342
+    },
+    {
+      "check": "aiStatusCheck",
+      "command": "make check-ai-status CONTRACT=.ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json SUMMARY=.ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:17:19.013458+00:00",
+      "exitCode": 0,
+      "durationMs": 316,
+      "outputDigest": "1f54c4aaeec9f3bd2516d26b27451f9e983c0c578767844edf805b640537d78c",
+      "commandHash": "9ea9b6fe2b31a198946e8fc5dfa7230e412fc3e9d48674f69731d06fef0a88db",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "e9f96d63c998a69ec24f54bbb2318fcab88a425793dae237c01422d6a90870b1",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status.py .ai/cockpit/current_status.md --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json cockpit status check passed: .ai/cockpit/current_status.md",
+      "outputBytes": 325
+    },
+    {
+      "check": "aiStatusConsistency",
+      "command": "make check-ai-status-consistency",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:17:19.414439+00:00",
+      "exitCode": 0,
+      "durationMs": 43,
+      "outputDigest": "fda60fb87f2fde12251f9725cbf83adac66fa049e31a0a893b226aa95539197e",
+      "commandHash": "ddd5a0e5fa9b289b1ab3ba23cf37c1a7f01d48f31e2ad99e85762ba20f93c2a6",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "5fc8869da1f33b0d69f5b4362b4a610a70e5ad9df4d4fa3b82fdb3f360fe1951",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_status_consistency.py ai status consistency check passed",
+      "outputBytes": 117
+    },
+    {
+      "check": "aiAgentRisk",
+      "command": "make check-ai-agent-risk CONTRACT=.ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json SUMMARY=.ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:17:19.530187+00:00",
+      "exitCode": 0,
+      "durationMs": 56,
+      "outputDigest": "96c1393c25cd4472377ce5c4de2741a3327186b7661c9186af2b880104869728",
+      "commandHash": "9235a0fef4d25c88d5245afd9f96b29b8c6dd174badd9a93e8414c402cf383be",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "5fc8869da1f33b0d69f5b4362b4a610a70e5ad9df4d4fa3b82fdb3f360fe1951",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_agent_risk.py --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json --summary .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json agent risk check passed report: target/ai_agent_risk_report.json",
+      "outputBytes": 305
+    },
+    {
+      "check": "aiSummary",
+      "command": "make check-ai-change-summary SUMMARY=.ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json CONTRACT=.ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "result": "passed",
+      "runner": "ai_finish",
+      "executedAt": "2026-08-01T05:17:20.427877+00:00",
+      "exitCode": 0,
+      "durationMs": 150,
+      "outputDigest": "6ec8bd20a8dccbc864e00cacf3fa465a63660710e92dde42595d64761f57fc9c",
+      "commandHash": "0ebbb46aba73957d36656398d2a2d4365f52116bf633bb64ab19f1a136356ee2",
+      "contractHash": "ac9d7fca31f0433e175a9ef4791983da130921e107bf14d9a23bd47f5cb07f1d",
+      "commitSha": "aed6b388f5ea6d4fcb6325a8c6d05a522cf06474",
+      "executionContractPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json",
+      "executionSummaryPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "worktreeDigest": "0a1ac045c6c0d6986d2d3a55ae17ef148a434c936dd7a04dd0e41b53ff9fb978",
+      "outputSummary": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json ai summary check passed: .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "outputTail": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python scripts/ai_check_summary.py .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json --contract .ai/work-items/active/wi-10-end-to-end-adoption-validation.contract.json ai summary check passed: .ai/work-items/active/wi-10-end-to-end-adoption-validation.summary.json",
+      "outputBytes": 325
+    }
+  ],
+  "guidelinesCompliance": [
+    {
+      "guideline": "Keep the harness standard-library-only, deterministic, and confined to disposable temporary repositories.",
+      "compliant": true,
+      "evidence": "The harness uses standard-library orchestration and creates every target below a caller-supplied or TemporaryDirectory workspace."
+    },
+    {
+      "guideline": "Exercise canonical installer and governance entrypoints where practical; label focused policy probes distinctly from full lifecycle execution.",
+      "compliant": true,
+      "evidence": "Install, calibration, finish/archive, check-ai-pr, Git cleanup, upgrade, and rollback execute real entrypoints; policy-only cases use evidenceKind policy_probe."
+    },
+    {
+      "guideline": "Never translate unavailable external provider, identity, signing, device, network, or enterprise evidence into a passing result.",
+      "compliant": true,
+      "evidence": "The bundle fixes hostedProvider, providerIdentity, and deviceAndSigning to not_run and enterpriseAssurance to not_claimed."
+    },
+    {
+      "guideline": "Preserve fixture project-owned content and avoid committing generated dependency directories or build outputs.",
+      "compliant": true,
+      "evidence": "Fixture copying excludes node_modules, dist, generated evidence, and caches; final repositories are clean with only main remaining."
+    },
+    {
+      "guideline": "For rollback, delete attempt-created paths before restoring backups so a path tracked as both created and overwritten cannot erase its restored original.",
+      "compliant": true,
+      "evidence": "Installer rollback order and test_upgrade_rolls_back_when_post_copy_validation_fails preserve every pre-existing install fact byte-for-byte."
+    },
+    {
+      "guideline": "Document the public command and evidence model in English and Japanese.",
+      "compliant": true,
+      "evidence": "docs/fixtures/real-fixture-evidence.md and .ja.md describe the same command, matrix, evidence kinds, and non-claims."
+    }
+  ],
+  "unknownsRemaining": [],
+  "risk": {
+    "level": "medium",
+    "detail": "Local repositories prove repository-level lifecycle behavior; hosted providers, real devices, signing, and unavailable project toolchains remain separate delegated evidence."
+  },
+  "generatedFiles": [],
+  "destructiveChanges": [],
+  "observedIssues": [
+    {
+      "severity": "high",
+      "area": "upgrade rollback",
+      "detail": "The first full matrix showed that failed upgrade rollback deleted four pre-existing .ai/install facts because they were restored before created-path cleanup.",
+      "resolution": "Reordered cleanup and backup restoration, added lifecycle-fact backups, and added byte-for-byte regression coverage."
+    },
+    {
+      "severity": "medium",
+      "area": "coverage association",
+      "detail": "The first ai-finish run correctly rejected Flutter fixture source main.dart because the generic filename-derived association did not recognize its standard widget_test.dart companion.",
+      "resolution": "Added one fixture-specific source-to-test association and a regression case that fails under the prior policy and passes with the explicit mapping; thresholds and weakening rules are unchanged."
+    },
+    {
+      "severity": "medium",
+      "area": "fixture test collection",
+      "detail": "The next full quality run recursively collected copied-adopter Python tests from examples/fixtures, where their fixture-local imports are intentionally unavailable at the template root.",
+      "resolution": "Configured root pytest collection to tests/ only and added an executable collect-only regression; fixture tests remain present for copied-adopter execution."
+    },
+    {
+      "severity": "medium",
+      "area": "cross-stack aggregate expectation",
+      "detail": "The full suite's aggregate cross-stack test still asserted the historic three-fixture set after WI10 added four directive-required project shapes.",
+      "resolution": "Expanded the existing exact-set assertion to all seven fixture stacks while retaining the lifecycle and evidence-boundary assertions."
+    },
+    {
+      "severity": "medium",
+      "area": "fixture harness expectation",
+      "detail": "The deterministic fixture-harness test independently retained the historic three-stack assertion despite discovery being intentionally dynamic.",
+      "resolution": "Expanded its exact-set assertion to the same seven fixture stacks; all eight phase and blocked-boundary assertions remain enforced for every fixture."
+    }
+  ],
+  "residualRisks": [
+    {
+      "level": "low",
+      "area": "external evidence boundary",
+      "detail": "Local bare remotes do not prove GitHub review identity, branch protection, hosted CI, mobile device execution, signing, or enterprise controls.",
+      "reviewRecommended": true,
+      "followUpCandidate": false
+    }
+  ],
+  "reviewReadiness": {
+    "status": "ready_with_risks",
+    "reason": "All required verification passed; residual risk remains documented.",
+    "expectedReviewFocus": [
+      "local_real_execution versus policy_probe and local_provider_simulation boundaries",
+      "failed-upgrade install-fact restoration order",
+      "seven fixture project markers and source/test bindings",
+      "SKIP_QUALITY fixture boundary and not_run toolchains"
+    ]
+  },
+  "boundaryChecks": {
+    "runtimeEntrypoints": "verified by seven real installer/calibration/finish/upgrade repository runs",
+    "userVisibleOutput": "verified by CLI catalog JSON, lifecycle evidence records, and actionable blocked-case recovery",
+    "persistence": "verified by archive commit, local bare-remote merge, branch deletion, and clean final repository assertions",
+    "localization": "verified by aligned English and Japanese fixture evidence documentation",
+    "generatedArtifacts": "verified by JSON bundle schema assertions and regenerated Capability Truth source identity",
+    "makeEntrypoints": "verified through installed cockpit-doctor, ai-finish, and check-ai-pr invocations"
+  },
+  "userCorrectionsCaptured": [],
+  "userCorrectionSolidification": [],
+  "checkpointEvidence": [
+    {
+      "stage": "before_edit",
+      "recorded": true,
+      "contractHash": "ac9d7fca31f0433e",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 0
+    },
+    {
+      "stage": "before_finish",
+      "recorded": true,
+      "contractHash": "ac9d7fca31f0433e",
+      "acceptanceCount": 8,
+      "unknownCount": 0,
+      "requiredChecks": 16,
+      "requiredChecksPassed": 15
+    }
+  ],
+  "knownGaps": [
+    "Hosted provider PR/merge/identity checks, real mobile devices, signing, and unavailable project toolchains are not_run; local Git and policy results do not replace them."
+  ],
+  "overclaimPrevention": "Report only local_real_execution, policy_probe, and local_provider_simulation evidence; never convert skipped project quality, local bare Git, or unavailable toolchains into hosted/provider/device/enterprise success.",
+  "documentationAlignment": {
+    "schemaVersion": 1,
+    "status": "aligned",
+    "checkedAt": "2026-08-01T13:18:00+09:00",
+    "checks": [
+      {
+        "area": "plan",
+        "status": "not_applicable",
+        "evidence": [],
+        "reason": "The attached WI10 directive is captured directly in the Contract; no repository implementation plan was added."
+      },
+      {
+        "area": "contractSummaryEvidence",
+        "status": "aligned",
+        "evidence": [
+          ".ai/work-items/archive/2026/wi-10-end-to-end-adoption-validation.contract.json",
+          ".ai/work-items/archive/2026/wi-10-end-to-end-adoption-validation.summary.json",
+          "tests/test_end_to_end_adoption_validation.py"
+        ],
+        "reason": "Eight acceptance items and four required scenarios map to executable integration and rollback evidence."
+      },
+      {
+        "area": "documentationCommandsCapability",
+        "status": "aligned",
+        "evidence": [
+          "scripts/end_to_end_adoption_validation.py",
+          "docs/fixtures/real-fixture-evidence.md",
+          "docs/reference/capability-truth-matrix.json",
+          "docs/reference/japanese-capability-assessment.md",
+          "docs/reference/pre-release-documentation-alignment.md"
+        ],
+        "reason": "The public command, implemented phases, evidence model, and installed-runtime evidence remain source-bound."
+      },
+      {
+        "area": "multilingualSemantics",
+        "status": "aligned",
+        "evidence": [
+          "docs/fixtures/real-fixture-evidence.md",
+          "docs/fixtures/real-fixture-evidence.ja.md"
+        ],
+        "reason": "English and Japanese pages describe the same command, seven project types, cases, and evidence boundaries."
+      },
+      {
+        "area": "limitationsUnknownsHistory",
+        "status": "aligned",
+        "evidence": [
+          "docs/fixtures/real-fixture-evidence.md",
+          "docs/reference/documentation-context-registry.json"
+        ],
+        "reason": "External provider, identity, device, signing, enterprise, and skipped project-toolchain limitations are explicit and the maintained docs are registered."
+      }
+    ]
+  },
+  "acceptanceEvidence": [
+    {
+      "acceptanceId": "A1",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_end_to_end_adoption_validation.py",
+          "locator": "seven required real project shapes",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A2",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_end_to_end_adoption_validation.py",
+          "locator": "complete lifecycle phase inventory per fixture",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A3",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_end_to_end_adoption_validation.py",
+          "locator": "scope, weakening, injection, approval, and evidence negative cases",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A4",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_end_to_end_adoption_validation.py",
+          "locator": "six transactional installation-failure cases",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A5",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_end_to_end_adoption_validation.py",
+          "locator": "upgrade, Profile retention, impact, recalibration, and rollback evidence",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A6",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_end_to_end_adoption_validation.py",
+          "locator": "complete matrix and evidence-boundary assertions",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A7",
+      "evidence": [
+        {
+          "type": "documentation",
+          "path": "docs/fixtures/real-fixture-evidence.md",
+          "locator": "End-to-end adoption validation",
+          "verification": "quality"
+        },
+        {
+          "type": "documentation",
+          "path": "docs/fixtures/real-fixture-evidence.ja.md",
+          "locator": "End-to-End Adoption Validation",
+          "verification": "quality"
+        }
+      ]
+    },
+    {
+      "acceptanceId": "A8",
+      "evidence": [
+        {
+          "type": "test",
+          "path": "tests/test_installer.py",
+          "locator": "test_upgrade_rolls_back_when_post_copy_validation_fails",
+          "verification": "quality"
+        }
+      ]
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Seven realistic project shapes complete install, calibration, governed safe-change, finish, local PR evidence, and local lifecycle cleanup.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_end_to_end_adoption_validation.py::test_complete_matrix_executes_real_local_lifecycle_and_failure_cases"
+      ],
+      "verificationPlan": "The complete matrix passed for all seven disposable repositories and asserted clean main-only final state."
+    },
+    {
+      "scenario": "Out-of-scope changes, test deletion/skip/coverage reduction, external Markdown injection, forged approval, and fabricated test success are attempted.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_end_to_end_adoption_validation.py::test_policy_probes_fail_closed_without_promoting_warnings_or_missing_evidence",
+        "tests/test_end_to_end_adoption_validation.py::test_complete_matrix_executes_real_local_lifecycle_and_failure_cases"
+      ],
+      "verificationPlan": "Canonical scope, test-weakening, and input-trust policies blocked automatic execution with recovery instructions."
+    },
+    {
+      "scenario": "Dirty worktree, marker/Makefile conflicts, detached HEAD, unavailable source/network boundary, and invalid release metadata are exercised transactionally.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_end_to_end_adoption_validation.py::test_complete_matrix_executes_real_local_lifecycle_and_failure_cases",
+        "tests/test_adoption_e2e.py"
+      ],
+      "verificationPlan": "All six cases were rejected and their pre-attempt branch/filesystem state was retained or restored."
+    },
+    {
+      "scenario": "Managed, locally modified managed, and project-owned upgrade paths plus a deliberately failed upgrade are exercised.",
+      "required": true,
+      "status": "verified",
+      "evidence": [
+        "tests/test_end_to_end_adoption_validation.py::test_complete_matrix_executes_real_local_lifecycle_and_failure_cases",
+        "tests/test_installer.py::test_upgrade_rolls_back_when_post_copy_validation_fails"
+      ],
+      "verificationPlan": "Seven upgrade runs preserved Project Profiles and rollback evidence; deliberate failures restored branch and install facts byte-for-byte."
+    }
+  ],
+  "taskOutcome": {
+    "status": "completed_with_warnings",
+    "jsonPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.outcome.json",
+    "markdownPath": ".ai/work-items/active/wi-10-end-to-end-adoption-validation.outcome.md",
+    "rawEvidencePath": "derived:pre_merge",
+    "evidenceCount": 2
+  },
+  "archiveSequence": 737
+}
