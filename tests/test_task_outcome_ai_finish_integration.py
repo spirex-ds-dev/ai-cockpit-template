@@ -291,6 +291,32 @@ def test_outcome_pipeline_without_opt_in_derives_a_pre_merge_report(tmp_path, mo
     }
 
 
+def test_outcome_pipeline_structures_legacy_known_gaps_as_limitations(tmp_path, monkeypatch):
+    task = "example-task"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": task, "baseCommit": "a" * 40, "verification": []}),
+        encoding="utf-8",
+    )
+    warning = "Hosted provider checks were not_run."
+    summary_path.write_text(
+        json.dumps({"verification": [], "changedFiles": [], "knownGaps": [warning]}),
+        encoding="utf-8",
+    )
+    json_path = tmp_path / "outcome.json"
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _: (json_path, tmp_path / "outcome.md"))
+
+    ok, message = ai_finish.run_task_outcome_pipeline(task, summary_path, contract_path)
+
+    assert ok, message
+    sections = json.loads(json_path.read_text(encoding="utf-8"))["sections"]
+    assert sections["limitations"][0]["sourceWarning"] == warning
+    assert sections["nonRiskExplanations"][0]["sourceWarning"] == warning
+    assert sections["forbiddenClaims"]
+
+
 def test_outcome_pipeline_missing_input_fails_closed(tmp_path, monkeypatch):
     summary_path = tmp_path / "summary.json"
     summary_path.write_text(json.dumps({"taskOutcomeInput": "missing-raw.json"}), encoding="utf-8")

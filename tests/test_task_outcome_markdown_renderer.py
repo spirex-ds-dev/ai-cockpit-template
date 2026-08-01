@@ -24,7 +24,7 @@ def outcome() -> dict[str, object]:
 def test_empty_report_has_all_sections_and_none_markers() -> None:
     rendered = render_task_outcome(outcome())
     assert rendered.startswith("# Task Outcome: task-outcome-markdown-renderer")
-    assert rendered.count("## ") == 14
+    assert rendered.count("## ") == 17
     assert rendered.count("None") >= 10
 
 

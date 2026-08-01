@@ -220,6 +220,8 @@ def generate_human_report(
         },
         "preventedRisks": _prevented_risks(sections),
         "humanDecisions": list(sections.get("humanDecisions", [])),
+        "limitations": _mapping_list(sections.get("limitations")),
+        "forbiddenClaims": _string_list(sections.get("forbiddenClaims")),
         "remainingRisks": remaining,
     }
     normalized_facts = _validate_closure_facts(closure_facts) if phase == "final" else None
@@ -261,6 +263,14 @@ def render_human_report(report: Mapping[str, Any]) -> str:
     lines.extend(
         f"- [{item['severity']}] {item['detail']}" for item in remaining
     ) if remaining else lines.append("None")
+    lines.extend(["", "## Limitations"])
+    limitations = report.get("limitations", [])
+    lines.extend(
+        f"- {item.get('title', 'Limitation')}" for item in limitations
+    ) if limitations else lines.append("None")
+    lines.extend(["", "## Forbidden claims"])
+    claims = report.get("forbiddenClaims", [])
+    lines.extend(f"- {item}" for item in claims) if claims else lines.append("None")
     lines.extend(["", "## Next safe action", str(report["nextSafeAction"]), ""])
     return "\n".join(lines)
 

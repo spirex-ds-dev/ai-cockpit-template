@@ -473,6 +473,24 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
         if isinstance(item, dict) and isinstance(item.get("path"), str)
     ]
     warnings = [item for item in summary.get("knownGaps", []) if isinstance(item, str)]
+    limitations = [
+        {
+            "sourceWarning": warning,
+            "title": "Unresolved evidence is explicitly limited",
+            "affectedClaims": ["completion_claim"],
+            "requiredEvidence": ["fresh verification evidence"],
+            "forbiddenClaims": ["Do not claim this warning was verified or resolved."],
+        }
+        for warning in warnings
+    ]
+    non_risk_explanations = [
+        {
+            "sourceWarning": warning,
+            "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
+            "evidence": [],
+        }
+        for warning in warnings
+    ]
     human_decisions = [
         item["instruction"]
         for item in summary.get("userCorrectionsCaptured", [])
@@ -496,6 +514,11 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
         "evidence": {
             "deliveredChanges": delivered,
             "warnings": warnings,
+            "limitations": limitations,
+            "nonRiskExplanations": non_risk_explanations,
+            "forbiddenClaims": ["Do not claim an unresolved warning was verified or resolved."]
+            if warnings
+            else [],
             "humanDecisions": human_decisions,
             "sources": [
                 {

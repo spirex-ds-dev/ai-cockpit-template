@@ -1,5 +1,8 @@
 """Focused tests for fail-closed Task Outcome validation."""
 
+import json
+from pathlib import Path
+
 from scripts.ai_check_task_outcome import validate_outcome
 from scripts.ai_generate_task_outcome import generate_outcome, render_markdown
 
@@ -79,6 +82,10 @@ def test_claim_rules_and_residual_risk_visibility_are_enforced() -> None:
         "severity": "high",
         "title": "Residual",
         "state": "accepted",
+        "decisionOwner": "repository_administrator",
+        "requiredEvidence": ["approval receipt"],
+        "mitigation": "Keep the claim blocked.",
+        "acceptanceStatus": "accepted",
         "evidence": [],
     }
     candidate["sections"]["risks"] = [risk]
@@ -96,6 +103,94 @@ def test_claim_rules_and_residual_risk_visibility_are_enforced() -> None:
     }
 
 
+def test_warning_without_a_structured_limitation_is_rejected() -> None:
+    candidate = outcome()
+    candidate["sections"]["warnings"] = ["Hosted provider checks were not run."]
+
+    report = validate_outcome(
+        candidate, render_markdown(candidate), expected_task_id="task-outcome-validator"
+    )
+
+    assert not report.valid
+    assert "warning_binding" in {error.code for error in report.errors}
+
+
+def test_archived_wi_10_not_run_warning_cannot_bypass_structured_bindings() -> None:
+    archived = Path(__file__).parents[1] / (
+        ".ai/work-items/archive/2026/wi-10-end-to-end-adoption-validation.outcome.json"
+    )
+    candidate = json.loads(archived.read_text(encoding="utf-8"))
+
+    report = validate_outcome(candidate, expected_task_id="wi-10-end-to-end-adoption-validation")
+
+    assert not report.valid
+    assert "warning_binding" in {error.code for error in report.errors}
+
+
+def test_not_run_evidence_rejects_enterprise_or_platform_verified_claims() -> None:
+    candidate = outcome()
+    warning = "Hosted provider checks were not_run."
+    candidate["sections"]["warnings"] = [warning]
+    candidate["sections"]["limitations"] = [
+        {
+            "sourceWarning": warning,
+            "title": "Hosted evidence is absent",
+            "affectedClaims": ["provider_verified"],
+            "requiredEvidence": ["provider receipt"],
+            "forbiddenClaims": ["Do not claim provider verification."],
+        }
+    ]
+    candidate["sections"]["nonRiskExplanations"] = [
+        {"sourceWarning": warning, "reason": "The Provider was not contacted.", "evidence": []}
+    ]
+    candidate["sections"]["forbiddenClaims"] = ["Do not claim provider verification."]
+    candidate["sections"]["outcomeSummary"] = "Platform-verified and enterprise-ready."
+
+    report = validate_outcome(candidate, render_markdown(candidate))
+
+    assert not report.valid
+    assert "not_run_claim" in {error.code for error in report.errors}
+
+
+def test_warning_with_a_limitation_risk_and_forbidden_claim_is_valid() -> None:
+    candidate = outcome()
+    warning = "Hosted provider checks were not run."
+    candidate["status"] = "completed_with_warnings"
+    candidate["sections"]["warnings"] = [warning]
+    candidate["sections"]["limitations"] = [
+        {
+            "sourceWarning": warning,
+            "title": "Provider checks are absent",
+            "affectedClaims": ["provider_verified"],
+            "requiredEvidence": ["provider receipt"],
+            "forbiddenClaims": ["Do not claim provider verification."],
+        }
+    ]
+    risk = {
+        "kind": "potential_risk",
+        "severity": "medium",
+        "title": "Provider controls remain unverified",
+        "state": "unresolved",
+        "sourceWarning": warning,
+        "affectedClaims": ["provider_verified"],
+        "requiredEvidence": ["provider receipt"],
+        "decisionOwner": "repository_administrator",
+        "mitigation": "Do not make provider-backed claims.",
+        "acceptanceStatus": "open",
+        "blockingFor": ["enterprise_ready"],
+        "evidence": [],
+    }
+    candidate["sections"]["risks"] = [risk]
+    candidate["sections"]["residualRisks"] = [risk]
+    candidate["sections"]["forbiddenClaims"] = ["Do not claim provider verification."]
+
+    report = validate_outcome(
+        candidate, render_markdown(candidate), expected_task_id="task-outcome-validator"
+    )
+
+    assert report.valid, report.errors
+
+
 def test_valid_conditional_claim_and_matching_residual_risk_pass() -> None:
     candidate = outcome()
     risk = {
@@ -103,6 +198,10 @@ def test_valid_conditional_claim_and_matching_residual_risk_pass() -> None:
         "severity": "high",
         "title": "Residual",
         "state": "accepted",
+        "decisionOwner": "repository_administrator",
+        "requiredEvidence": ["approval receipt"],
+        "mitigation": "Keep the claim blocked.",
+        "acceptanceStatus": "accepted",
         "evidence": [],
     }
     candidate["sections"]["risks"] = [risk]

@@ -22,6 +22,9 @@ SECTIONS = {
     "findings",
     "risks",
     "warnings",
+    "limitations",
+    "nonRiskExplanations",
+    "forbiddenClaims",
     "interventions",
     "forcedStops",
     "resolutions",
@@ -31,6 +34,7 @@ SECTIONS = {
     "humanDecisions",
     "evidence",
 }
+LEGACY_SECTIONS = SECTIONS - {"limitations", "nonRiskExplanations", "forbiddenClaims"}
 SECRET_KEY = re.compile(
     r"(password|passwd|secret|token|api[_-]?key|private[_-]?key)", re.IGNORECASE
 )
@@ -38,6 +42,10 @@ UNSUPPORTED_KEY = re.compile(
     r"(score|hours?|money|percentage|percent|productivity|savings)", re.IGNORECASE
 )
 CONDITIONAL = ("if not detected", "could have", "如果未被发现", "可能导致")
+NOT_RUN = re.compile(r"\bnot[_ -]?run\b", re.IGNORECASE)
+INCOMPATIBLE_VERIFIED_CLAIM = re.compile(
+    r"\b(?:enterprise[-_ ]ready|platform[-_ ]verified)\b", re.IGNORECASE
+)
 # Work Item Contracts historically use both hyphenated and underscore task IDs
 # (for example, the installed first-adoption Contract is adopt_ai_cockpit).
 # Outcome validation must bind that canonical Contract ID rather than reject a
@@ -142,10 +150,12 @@ def _validate_bindings(
 
 
 def _validate_sections(sections: Any, errors: list[ValidationError]) -> None:
-    if not isinstance(sections, dict) or set(sections) != SECTIONS:
-        _error(errors, "section_shape", "sections must contain exactly the Outcome section set")
+    if not isinstance(sections, dict) or (
+        set(sections) != SECTIONS and set(sections) != LEGACY_SECTIONS
+    ):
+        _error(errors, "section_shape", "sections must contain the supported Outcome section set")
         return
-    for key in SECTIONS:
+    for key in sections:
         if key not in {"outcomeSummary", "taskOverview"} and not isinstance(sections[key], list):
             _error(errors, "section_shape", f"sections.{key} must be an array")
     if isinstance(sections.get("warnings"), list) and any(
@@ -183,6 +193,58 @@ def _validate_severities(sections: Mapping[str, Any], errors: list[ValidationErr
 
 
 def _validate_claims(sections: Mapping[str, Any], errors: list[ValidationError]) -> None:
+    warnings = sections.get("warnings", [])
+    limitations = sections.get("limitations", [])
+    non_risks = sections.get("nonRiskExplanations", [])
+    residual = sections.get("residualRisks", [])
+    forbidden_claims = sections.get("forbiddenClaims", [])
+    limitation_sources = {
+        item.get("sourceWarning") for item in limitations if isinstance(item, Mapping)
+    }
+    non_risk_sources = {
+        item.get("sourceWarning") for item in non_risks if isinstance(item, Mapping)
+    }
+    residual_sources = {item.get("sourceWarning") for item in residual if isinstance(item, Mapping)}
+    for warning in (item for item in warnings if isinstance(item, str)):
+        if warning not in limitation_sources or not (
+            warning in non_risk_sources or warning in residual_sources
+        ):
+            _error(
+                errors,
+                "warning_binding",
+                "warnings require structured limitation and residual-risk or non-risk bindings",
+            )
+    not_run_warnings = [
+        warning for warning in warnings if isinstance(warning, str) and NOT_RUN.search(warning)
+    ]
+    if not_run_warnings:
+        rendered_text = " ".join(
+            str(sections.get(key, ""))
+            for key in ("outcomeSummary", "taskOverview", "deliveredChanges", "findings")
+        )
+        if INCOMPATIBLE_VERIFIED_CLAIM.search(rendered_text):
+            _error(
+                errors,
+                "not_run_claim",
+                "not_run evidence is incompatible with enterprise-ready or platform-verified claims",
+            )
+    if sections.get("warnings") and not forbidden_claims:
+        _error(errors, "forbidden_claim", "warnings require explicit forbidden claims")
+    if sections.get("warnings") and any(
+        not isinstance(item, str) or not item.strip() for item in forbidden_claims
+    ):
+        _error(errors, "forbidden_claim", "forbidden claims must be non-empty text")
+    if sections.get("warnings") and not all(
+        isinstance(item, Mapping) and isinstance(item.get("sourceWarning"), str)
+        for item in limitations
+    ):
+        _error(errors, "warning_binding", "limitations must identify their source warning")
+    for risk in residual:
+        if not isinstance(risk, Mapping) or risk.get("severity") not in {"high", "critical"}:
+            continue
+        for key in ("decisionOwner", "requiredEvidence", "mitigation", "acceptanceStatus"):
+            if not risk.get(key):
+                _error(errors, "residual_risk", f"high residual risk requires {key}")
     for claim in sections.get("avoidedImpact", []):
         if not isinstance(claim, str) or not claim.strip().lower().startswith(CONDITIONAL):
             _error(errors, "conditional_claim", "Avoided Impact must use conditional language")
@@ -205,7 +267,6 @@ def _validate_claims(sections: Mapping[str, Any], errors: list[ValidationError])
             errors, "unsupported_quantification", "unsupported quantitative claim in report text"
         )
     risks = sections.get("risks", [])
-    residual = sections.get("residualRisks", [])
     residual_keys = {
         (item.get("title"), item.get("state")) for item in residual if isinstance(item, Mapping)
     }
@@ -227,6 +288,9 @@ def _validate_markdown(
         "Findings",
         "Risks",
         "Warnings",
+        "Limitations",
+        "Non-Risk Explanations",
+        "Forbidden Claims",
         "Interventions",
         "Forced Stops",
         "Resolutions",
