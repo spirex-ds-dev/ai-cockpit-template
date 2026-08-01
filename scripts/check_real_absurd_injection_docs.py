@@ -5,30 +5,33 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-CASE_IDS = tuple(f"RAI-{number:02d}" for number in range(1, 13))
+CASE_IDS = tuple(f"SAI-{number:02d}" for number in range(1, 16))
 DOCUMENTS = (
     "docs/reference/real-absurd-injection-cases.md",
     "docs/reference/real-absurd-injection-cases.zh-CN.md",
     "docs/reference/real-absurd-injection-cases.ja.md",
 )
 _RECORD = re.compile(
-    r"<!-- real-case: (RAI-\d{2}) \| status: ([a-z_]+) \| "
+    r"<!-- real-case: (SAI-\d{2}) \| status: ([a-z_]+) \| "
     r"decision: ([a-z_]+) \| gate: ([a-z_]+) -->"
 )
-_FULL_RECORD = re.compile(r"<!-- full-case: (RAI-\d{2}) \| result: ([a-z_]+) -->")
+_FULL_RECORD = re.compile(r"<!-- full-case: (SAI-\d{2}) \| result: ([a-z_]+) -->")
 FULL_RESULTS = (
     "not_proven",
-    "block",
-    "block",
-    "block",
-    "review",
-    "block",
-    "block",
-    "block",
-    "block",
-    "block",
-    "block",
-    "block",
+    "not_proven",
+    "not_proven",
+    "not_proven",
+    "not_proven",
+    "not_proven",
+    "not_proven",
+    "not_proven",
+    "not_proven",
+    "not_proven",
+    "not_proven",
+    "not_proven",
+    "not_proven",
+    "not_proven",
+    "not_proven",
 )
 REFUSAL_MARKERS = {
     "docs/reference/real-absurd-injection-cases.md": (

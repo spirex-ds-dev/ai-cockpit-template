@@ -100,3 +100,36 @@ description: "12 个具体负例的基于证据的当前结果。"
 ## 限制与后续工作
 
 五个输入来源案例由评估器直接覆盖。全工程评估只在所述边界和条件下确认额外的生命周期强制。RAI-01 仍是实际未证明缺口；RAI-03 仍有隐藏 diff 的限制，RAI-12 也不证明提供方的评审者身份。每个限制都是整改方向，不是通过。
+
+## WI-04 语义语料记录
+
+<!-- real-case: SAI-01 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-02 | status: covered | decision: block | gate: human_confirmation -->
+<!-- real-case: SAI-03 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-04 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-05 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-06 | status: covered | decision: block | gate: input_trust -->
+<!-- real-case: SAI-07 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-08 | status: covered | decision: block | gate: input_trust -->
+<!-- real-case: SAI-09 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-10 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-11 | status: covered | decision: block | gate: human_confirmation -->
+<!-- real-case: SAI-12 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- real-case: SAI-13 | status: covered | decision: block | gate: input_trust -->
+<!-- real-case: SAI-14 | status: covered | decision: review | gate: input_trust -->
+<!-- real-case: SAI-15 | status: not_covered | decision: review | gate: evidence_gap -->
+<!-- full-case: SAI-01 | result: not_proven -->
+<!-- full-case: SAI-02 | result: not_proven -->
+<!-- full-case: SAI-03 | result: not_proven -->
+<!-- full-case: SAI-04 | result: not_proven -->
+<!-- full-case: SAI-05 | result: not_proven -->
+<!-- full-case: SAI-06 | result: not_proven -->
+<!-- full-case: SAI-07 | result: not_proven -->
+<!-- full-case: SAI-08 | result: not_proven -->
+<!-- full-case: SAI-09 | result: not_proven -->
+<!-- full-case: SAI-10 | result: not_proven -->
+<!-- full-case: SAI-11 | result: not_proven -->
+<!-- full-case: SAI-12 | result: not_proven -->
+<!-- full-case: SAI-13 | result: not_proven -->
+<!-- full-case: SAI-14 | result: not_proven -->
+<!-- full-case: SAI-15 | result: not_proven -->

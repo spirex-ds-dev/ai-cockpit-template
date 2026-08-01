@@ -9,8 +9,13 @@ def test_real_absurd_injection_documents_are_complete_and_aligned() -> None:
     assert check_repository(ROOT) == []
 
 
+def test_real_absurd_injection_documents_define_all_fifteen_semantic_case_ids() -> None:
+    assert CASE_IDS == tuple(f"SAI-{number:02d}" for number in range(1, 16))
+
+
 def test_real_absurd_injection_documents_define_all_twelve_case_ids() -> None:
-    assert CASE_IDS == tuple(f"RAI-{number:02d}" for number in range(1, 13))
+    """Preserve the original baseline while the semantic corpus expands it."""
+    assert CASE_IDS[:12] == tuple(f"SAI-{number:02d}" for number in range(1, 13))
 
 
 def test_real_absurd_injection_documents_require_an_actionable_refusal_record() -> None:

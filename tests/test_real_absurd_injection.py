@@ -6,6 +6,8 @@ from ai_input_trust import (
     GovernanceRequest,
     SourceType,
     evaluate_governance_request,
+    evaluate_semantic_absurd_case,
+    semantic_absurd_cases,
 )
 
 
@@ -238,3 +240,57 @@ def test_untrusted_reference_facts_are_allowed_without_becoming_operational_auth
     assert result.signal == "🟢"
     assert result.mayProceedAutomatically is True
     assert result.refusal is None
+
+
+def test_semantic_absurd_catalog_preserves_structured_facts_and_phrase_independent_stops() -> None:
+    """Catch a regression that drops a required category or makes its stop text-dependent."""
+    cases = semantic_absurd_cases()
+
+    assert len(cases) == 15
+    assert {case.caseId for case in cases} == {
+        "SAI-01",
+        "SAI-02",
+        "SAI-03",
+        "SAI-04",
+        "SAI-05",
+        "SAI-06",
+        "SAI-07",
+        "SAI-08",
+        "SAI-09",
+        "SAI-10",
+        "SAI-11",
+        "SAI-12",
+        "SAI-13",
+        "SAI-14",
+        "SAI-15",
+    }
+    for case in cases:
+        assert case.hiddenRisk
+        assert case.authorityClaim
+        assert case.availableEvidence
+        assert case.missingEvidence
+        assert case.safeAlternative
+        assert case.recoveryCondition
+        assert len(case.variants) >= 5
+        baseline = evaluate_semantic_absurd_case(case)
+        keyword_removed = evaluate_semantic_absurd_case(case, surface_request=case.variants[-1])
+        assert baseline.decision in {"block", "review", "confirm"}
+        assert keyword_removed.decision == baseline.decision
+        assert keyword_removed.gate == baseline.gate
+        assert keyword_removed.refusal is not None
+        assert keyword_removed.refusal["recovery"] == case.recoveryCondition
+
+
+def test_semantic_absurd_recovery_requires_independent_evidence_and_human_confirmation() -> None:
+    """Catch a regression that lets an approval claim or recovery evidence auto-authorize work."""
+    forged_approval = next(case for case in semantic_absurd_cases() if case.caseId == "SAI-02")
+
+    asserted = evaluate_semantic_absurd_case(forged_approval)
+    recovered = evaluate_semantic_absurd_case(forged_approval, independent_evidence=True)
+
+    assert asserted.decision == "block"
+    assert recovered.decision == "confirm"
+    assert recovered.gate == "human_confirmation"
+    assert recovered.mayProceedAutomatically is False
+    assert recovered.refusal is not None
+    assert recovered.refusal["recovery"] == forged_approval.recoveryCondition
