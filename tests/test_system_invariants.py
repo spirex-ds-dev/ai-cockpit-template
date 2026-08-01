@@ -92,6 +92,29 @@ def test_system_invariants_reject_archive_summary_invalid_version(tmp_path, monk
     ]
 
 
+def test_system_invariants_reject_missing_required_baselines(tmp_path, monkeypatch):
+    copy = _copy_repository_tree(tmp_path)
+    for path in (
+        copy / "requirements-dev.lock",
+        copy / ".ai" / "cockpit" / "bandit_low_risk_baseline.json",
+        copy / ".ai" / "cockpit" / "sbom.json",
+        copy / ".ai" / "cockpit" / "provenance.json",
+        copy / "SECURITY.md",
+    ):
+        path.unlink()
+    monkeypatch.setattr(
+        check_system_invariants, "exercise_installer", lambda *_args, **_kwargs: None
+    )
+
+    issues = check_system_invariants.invariant_issues(copy)
+
+    assert "requirements-dev.lock is missing" in issues
+    assert "bandit low-risk baseline is missing" in issues
+    assert "supply-chain SBOM baseline is missing" in issues
+    assert "supply-chain provenance baseline is missing" in issues
+    assert "SECURITY.md is missing" in issues
+
+
 def test_system_invariants_ignore_make_options_before_documented_target(tmp_path, monkeypatch):
     copy = _copy_repository_tree(tmp_path)
     (copy / "docs" / "make-options.md").write_text(
