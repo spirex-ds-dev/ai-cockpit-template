@@ -1,0 +1,203 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-07-critical-coverage-corrective",
+  "mode": "code",
+  "title": "Cover canonical system invariant failure paths",
+  "rawUserRequest": "Continue all Work Items through archive, PR, merge, and branch cleanup without pausing unless a real human decision or external permission blocks execution. Resolve the WI07 post-archive critical-coverage failure without weakening quality.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-01-complete-all-work-items",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:wi-07-critical-coverage-corrective-20260801"
+  },
+  "declaredIntent": {
+    "summary": "Add the smallest source-bound regression test needed for the WI07 canonical system-invariant paths to satisfy the changed-critical coverage gate.",
+    "requestedCapabilities": ["ai_governance", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "68777a11ff28c46d275bac1d31121a2e1582785f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-07-critical-coverage-corrective.contract.json",
+    ".ai/work-items/active/wi-07-critical-coverage-corrective.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-07-critical-coverage-corrective.outcome.json",
+    ".ai/work-items/active/wi-07-critical-coverage-corrective.outcome.md",
+    "tests/test_system_invariants.py"
+  ],
+  "outOfScope": [
+    "Changing scripts/check_system_invariants.py or its production behavior",
+    "Editing the immutable WI07 archive bundle",
+    "Weakening the 75 percent changed-critical coverage threshold",
+    "Changing documentation architecture content"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/wi-07-critical-coverage-corrective.contract.json",
+      "reason": "Bounded governance record for the post-archive corrective."
+    },
+    {
+      "path": "tests/test_system_invariants.py",
+      "reason": "Existing source-bound test owner selected by the changed-critical coverage gate."
+    },
+    {
+      "path": "scripts/check_system_invariants.py",
+      "reason": "Unmodified production validator whose canonical-document and baseline failure branches need direct regression coverage."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "test_coverage"
+    ],
+    "reason": "The corrective changes one existing test module, exercises only required-baseline fail-closed paths in an unchanged validator, and has no runtime or public documentation effect.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "A source-bound test-only corrective should use the automatically selected quality route while preserving all governance checks."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The failing coverage report identifies the exact validator and threshold; the correction is a bounded negative regression test with no unresolved decision."
+  },
+  "preReviewWarnings": [
+    "Confirm the new test reaches required-baseline failure paths without modifying production behavior.",
+    "Confirm changed-critical coverage reaches at least 75 percent and the test remains deterministic."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A regression test removes required baseline files and asserts each fail-closed diagnostic.",
+    "scripts/check_system_invariants.py remains byte-for-byte unchanged from origin/main.",
+    "The focused system-invariant tests pass and check-changed-critical-coverage reports at least 75 percent for scripts/check_system_invariants.py."
+  ],
+  "guidelines": [
+    "Keep the corrective test-only and do not weaken production validation or coverage policy.",
+    "Use existing repository-copy and installer-stub test helpers to preserve realistic validator behavior."
+  ],
+  "intent": {
+    "problem": "WI07 passed the full Standard suite but its post-archive aggregate PR gate measured 72.87 percent changed-critical coverage for scripts/check_system_invariants.py, below the required 75 percent. The archived WI07 evidence is immutable, so the missing failure-path coverage must be delivered as a fresh corrective Work Item.",
+    "constraints": [
+      "Do not edit or replace the archived WI07 Contract, Summary, Outcome, or manifest.",
+      "Do not lower or bypass the changed-critical coverage threshold.",
+      "Do not change scripts/check_system_invariants.py production behavior.",
+      "Keep the regression deterministic and limited to existing fail-closed diagnostics."
+    ],
+    "rationale": "One realistic negative test can cover existing required-baseline guards that are part of the same source-bound validator, raising the metric above the threshold without adding implementation complexity or weakening quality."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 742
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-07-critical-coverage-corrective.json",
+    "baseCommit": "68777a11ff28c46d275bac1d31121a2e1582785f",
+    "initialScopeDigest": "bc372f62fdb32683b52f24bb073fd3b0b76dd4ae7870f6e0717c4580a4fe5cf7",
+    "contractSkeletonDigest": "c6b929ba4fa6c21490a22835f44ff4be580de8b116c5ea67f0f733ac05024f25"
+  }
+}
