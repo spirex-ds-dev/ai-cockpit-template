@@ -342,8 +342,9 @@ def required_evidence_signal(contract: dict[str, Any]) -> Signal:
             requested_operation=str(operation.get("action", "")),
             changed_paths=tuple(_string_list(contract.get("scope"))),
             risk_types=tuple(_string_list(risk.get("riskTypes"))),
-            capability_claims=tuple(
-                _string_list(_dict(contract.get("declaredIntent")).get("requestedCapabilities"))
+            capability_claims=(
+                *_string_list(contract.get("capabilityClaims")),
+                *_string_list(_dict(contract.get("declaredIntent")).get("requestedCapabilities")),
             ),
             environment=str(operation.get("environment", "")),
             external_system=str(declared.get("externalSystem", "")),

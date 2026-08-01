@@ -14,11 +14,11 @@ def test_verification_policy_distinguishes_failure_incomplete_and_passed():
     assert verification_signal(["a"], {"a": "passed"})["value"] == "passed"
 
 
-def test_policy_is_monotonic_and_release_is_full():
-    assert select_policy("task", ["README.md"], requested="lite")["scope"] == "focused"
+def test_policy_is_monotonic_and_release_stage_is_strict_full():
+    assert select_policy("task", ["README.md"], requested="light")["scope"] == "focused"
     assert select_policy("task", [".github/workflows/test.yml"])["level"] == "strict"
     assert select_policy("release", ["README.md"])["scope"] == "full"
-    assert select_policy("release", ["README.md"])["level"] == "release"
+    assert select_policy("release", ["README.md"])["level"] == "strict"
     assert select_policy("pr", ["src/app.py"])["level"] == "standard"
     assert select_policy("task", ["README.md"], requested="standard")["level"] == "standard"
     assert select_policy("task", ["requirements-dev.lock"])["level"] == "strict"

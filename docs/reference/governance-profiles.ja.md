@@ -19,20 +19,22 @@ keywords:
 # Governance Profile
 
 AI Cockpit は Repository Evidence で正当化できる最小の Quality Graph を選択します。
-順序は `lite < standard < strict < release` です。混在変更は最高 Profile、未知または
-空の Path Evidence は少なくとも Standard になります。
+順序は `light < standard < strict` です。混在変更は最高 Profile、未知または
+空の Path Evidence は少なくとも Standard になります。Release は第 4 の Profile ではなく、
+操作固有の検証エスカレーションです。
 
 ## Profile
 
 | Profile | 代表的な変更 | Dispatch target |
 | --- | --- | --- |
-| Lite | 文書、Comment、非実行 Example、Format のみ | `quality-fast` |
+| Light | 文書、Comment、非実行 Example、Format のみ | `quality-fast` |
 | Standard | 通常 Source、Test、Bug Fix、小規模 Refactor | `quality-standard` |
 | Strict | Governance、CI、Installer、Security、Dependency、破壊的/Public API、Migration、Calibration、Evidence Schema | `quality-full` |
-| Release | Release Identity、Workflow、SBOM、Provenance、Asset、Distribution | `quality-release` |
 
 Standard は既存の Fast、Project Test、Reference Impact、Full Test Weakening の所有者を
-再利用し、Strict と Release も既存 Graph を再利用します。`make quality` は Full の
+再利用し、Strict は既存の Full Graph を再利用します。Release 関連の operation、resource、
+capability claim を持つ Strict Work Item だけが `quality-release` の release-preflight と
+distribution verification を追加で実行します。`make quality` は Full の
 互換 Alias のまま、`make ai-cockpit-quality` が Evidence-based Entry Point です。
 
 ## Contract Evidence

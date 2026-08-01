@@ -13,12 +13,11 @@ from typing import Any
 
 from ai_common import parse_yaml
 
-PROFILE_ORDER = ("lite", "standard", "strict", "release")
+PROFILE_ORDER = ("light", "standard", "strict")
 EXPECTED_TARGETS = {
-    "lite": "quality-fast",
+    "light": "quality-fast",
     "standard": "quality-standard",
     "strict": "quality-full",
-    "release": "quality-release",
 }
 DEFAULT_POLICY = Path(".ai/quality/governance-routing.yaml")
 
@@ -53,10 +52,12 @@ def load_policy(path: Path) -> dict[str, Any]:
         raise ValueError(f"profileOrder must be {list(PROFILE_ORDER)}")
     unknown = data.get("unknownProfile")
     if unknown not in PROFILE_ORDER[1:]:
-        raise ValueError("unknownProfile must be standard, strict, or release")
+        raise ValueError("unknownProfile must be standard or strict")
     evidence_patterns = _string_list(data.get("evidenceOnlyPatterns"), "evidenceOnlyPatterns")
     for pattern in evidence_patterns:
         _validate_relative_path(pattern, label=f"policy pattern {pattern!r}")
+    for pattern in _string_list(data.get("releaseOwnedPatterns"), "releaseOwnedPatterns"):
+        _validate_relative_path(pattern, label=f"release pattern {pattern!r}")
     profiles = data.get("profiles")
     if not isinstance(profiles, dict) or set(profiles) != set(PROFILE_ORDER):
         raise ValueError(f"profiles must define exactly {list(PROFILE_ORDER)}")
@@ -129,6 +130,8 @@ def _rank(profile: str) -> int:
 
 
 def _classify(path: str, policy: dict[str, Any]) -> tuple[str, list[str]]:
+    if any(fnmatch.fnmatchcase(path, pattern) for pattern in policy["releaseOwnedPatterns"]):
+        return "strict", [f"release-owned resource requires strict: {path}"]
     evidence_matches = sorted(
         pattern for pattern in policy["evidenceOnlyPatterns"] if fnmatch.fnmatchcase(path, pattern)
     )
@@ -147,6 +150,44 @@ def _classify(path: str, policy: dict[str, Any]) -> tuple[str, list[str]]:
     selected = max((profile for profile, _ in matches), key=_rank)
     patterns = sorted(pattern for profile, pattern in matches if profile == selected)
     return selected, [f"{selected} pattern {pattern}: {path}" for pattern in patterns]
+
+
+def _release_escalation(
+    paths: list[str], policy: dict[str, Any], contract: dict[str, Any]
+) -> list[str]:
+    reasons = [
+        f"release-owned resource: {path}"
+        for path in paths
+        if any(fnmatch.fnmatchcase(path, pattern) for pattern in policy["releaseOwnedPatterns"])
+    ]
+    classes = contract.get("operationClasses", [])
+    if isinstance(classes, list) and "release" in classes:
+        reasons.append("Contract operationClasses includes release")
+    operation = contract.get("requestedOperation", {})
+    operation_text = str(operation).lower() if isinstance(operation, dict) else ""
+    release_operation_terms = (
+        "release",
+        "create_tag",
+        "publish",
+        "distribution",
+        "sbom",
+        "provenance",
+        "checksum",
+        "signature",
+        "signing",
+    )
+    if any(term in operation_text for term in release_operation_terms):
+        reasons.append("requestedOperation declares release context")
+    claims = contract.get("capabilityClaims", [])
+    intent = contract.get("declaredIntent", {})
+    if isinstance(intent, dict):
+        claims = list(claims) if isinstance(claims, list) else []
+        requested_capabilities = intent.get("requestedCapabilities", [])
+        if isinstance(requested_capabilities, list):
+            claims.extend(requested_capabilities)
+    if isinstance(claims, list) and {"release_ready", "distribution_verified"} & set(claims):
+        reasons.append("Contract capability claim requires release evidence")
+    return sorted(set(reasons))
 
 
 def _parse_timestamp(value: str) -> datetime:
@@ -264,6 +305,12 @@ def determine(
             source = "explicit_escalation"
             reasons = [f"explicit escalation to {requested}"]
 
+    release_reasons = _release_escalation(normalized, policy, contract_data)
+    if release_reasons and _rank(selected) < _rank("strict"):
+        selected = "strict"
+        source = "release_escalation"
+        reasons = sorted({*reasons, "release context requires strict governance"})
+    escalations = ["release_preflight", "distribution"] if release_reasons else []
     config = policy["profiles"][selected]
     return {
         "schemaVersion": 1,
@@ -277,6 +324,9 @@ def determine(
         "pathDecisions": decisions,
         "requiredGroups": list(config["requiredGroups"]),
         "dispatchTarget": config["dispatchTarget"],
+        "operationClasses": ["release"] if release_reasons else [],
+        "verificationEscalations": escalations,
+        "releaseEscalationReasons": release_reasons,
         "override": override_result,
     }
 

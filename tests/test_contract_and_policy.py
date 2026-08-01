@@ -82,7 +82,7 @@ def test_contract_accepts_automatic_governance_profile():
     [
         (
             {"selected": "weak", "source": "automatic", "reasons": ["x"], "override": None},
-            "governanceProfile.selected must be one of ['lite', 'release', 'standard', 'strict']",
+            "governanceProfile.selected must be one of ['light', 'standard', 'strict']",
         ),
         (
             {"selected": "strict", "source": "guess", "reasons": ["x"], "override": None},

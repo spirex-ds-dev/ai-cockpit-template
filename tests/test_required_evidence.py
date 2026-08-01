@@ -53,7 +53,7 @@ def test_publication_requires_human_decision_and_release_evidence():
         )
     )
 
-    assert result.matched_rules == ("publication",)
+    assert result.matched_rules == ("publication", "release_context")
     assert result.missing_evidence == (
         "sbom",
         "provenance",
@@ -62,6 +62,50 @@ def test_publication_requires_human_decision_and_release_evidence():
     )
     assert result.human_decision_required is True
     assert result.owner_by_evidence["provider_release_receipt"] == "release_manager"
+
+
+def test_release_resource_blocks_release_claims_without_distribution_evidence():
+    result = derive_required_evidence(
+        EvidenceContext(
+            requested_operation="modify",
+            changed_paths=(".github/workflows/release.yml",),
+            risk_types=(),
+            capability_claims=("release_ready",),
+            environment="repository",
+            external_system="",
+            destructive_level="none",
+            governance_profile="strict",
+            available_evidence=("tag", "commit", "digest"),
+        )
+    )
+
+    assert result.matched_rules == ("release_context",)
+    assert result.missing_evidence == (
+        "sbom",
+        "provenance",
+        "provider_release_receipt",
+        "asset_availability",
+    )
+    assert "release readiness" in result.forbidden_claims[0]
+
+
+def test_release_resource_requires_evidence_when_no_claim_was_declared():
+    result = derive_required_evidence(
+        EvidenceContext(
+            requested_operation="modify",
+            changed_paths=(".github/workflows/release.yml",),
+            risk_types=(),
+            capability_claims=(),
+            environment="repository",
+            external_system="",
+            destructive_level="none",
+            governance_profile="strict",
+            available_evidence=(),
+        )
+    )
+
+    assert result.matched_rules == ("release_context",)
+    assert "tag" in result.missing_evidence
 
 
 def test_mobile_fixture_evidence_does_not_imply_unobserved_lifecycle_stages():

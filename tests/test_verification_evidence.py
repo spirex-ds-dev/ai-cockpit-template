@@ -84,6 +84,21 @@ def test_pending_finish_evidence_is_not_accepted_as_completed():
     assert item["runner"] == "ai_finish_pending"
 
 
+def test_release_claim_requires_forbidden_claim_prevention_in_summary():
+    contract = {
+        "requestedOperation": {"action": "modify", "environment": "repository"},
+        "riskAssessment": {"riskTypes": []},
+        "governanceProfile": {"selected": "strict"},
+        "scope": ["docs/guide.md"],
+        "capabilityClaims": ["distribution_verified"],
+        "requiredEvidenceContext": {"availableEvidence": []},
+    }
+
+    issues = ai_check_summary.validate_required_evidence_claims(contract, {})
+
+    assert any("distribution verification" in issue for issue in issues)
+
+
 def test_finish_orders_self_referential_gates_after_status_generation():
     commands = [
         {"check": "aiSummary"},

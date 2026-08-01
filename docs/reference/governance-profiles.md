@@ -1,7 +1,7 @@
 ---
 author: Ray
 title: "Governance Profiles"
-description: Risk-based Lite, Standard, Strict, and Release quality routing for AI Cockpit Work Items.
+description: Risk-based Light, Standard, and Strict routing with operation-specific verification escalation.
 audience:
   - adopter
   - maintainer
@@ -18,21 +18,22 @@ keywords:
 # Governance Profiles
 
 AI Cockpit selects the smallest quality graph justified by repository evidence.
-Profiles are ordered `lite < standard < strict < release`; mixed changes take the
-highest result, and unknown or empty path evidence defaults to at least Standard.
+Profiles are ordered `light < standard < strict`; mixed changes take the highest
+result, and unknown or empty path evidence defaults to at least Standard. Release
+is an operation class that adds checks to Strict; it is not a fourth profile.
 
 ## Profiles
 
 | Profile | Typical changes | Dispatch target |
 | --- | --- | --- |
-| Lite | documentation, comments, non-executable examples, formatting-only work | `quality-fast` |
+| Light | documentation, comments, non-executable examples, formatting-only work | `quality-fast` |
 | Standard | ordinary source, tests, bug fixes, and small refactors | `quality-standard` |
 | Strict | governance, CI, installer, security, dependency, destructive/public API, migration, calibration, or evidence-schema work | `quality-full` |
-| Release | release identity, workflow, SBOM, provenance, assets, or distribution | `quality-release` |
 
 `quality-standard` reuses Fast, the project test owner, reference-impact, and
-full test-weakening checks. Strict and Release reuse the existing Full and
-Release owners. `make quality` remains a compatibility alias for Full;
+full test-weakening checks. Strict uses Full. A Strict Work Item whose operation,
+scope, resource claim, or capability claim is release-related also runs
+`quality-release` for release-preflight and distribution verification. `make quality` remains a compatibility alias for Full;
 `make ai-cockpit-quality` is the evidence-routed Work Item entrypoint.
 
 ## Contract evidence
@@ -56,6 +57,11 @@ and override disposition. Generated current-status, Work Item start receipt,
 and current outcome files remain visible evidence but do not raise the profile by themselves; an
 evidence-only diff defaults to Standard. Unsafe paths, invalid Git bases, and
 malformed policy fail closed.
+
+The receipt carries `operationClasses`, `verificationEscalations`, and their
+evidence reasons. `release` is not an accepted governance-profile input.
+Non-release Strict work never acquires the release graph merely because of its
+governance intensity.
 
 Before the first Work Item exists, an installed adopter has no Contract base.
 In that bounded case the router uses `HEAD` as the baseline and still includes

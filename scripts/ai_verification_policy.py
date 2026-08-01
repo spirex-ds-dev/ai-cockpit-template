@@ -8,13 +8,13 @@ from typing import Any
 
 from ai_impact_classifier import classify_path
 
-POLICY_LEVELS = ("lite", "standard", "strict", "release")
+POLICY_LEVELS = ("light", "standard", "strict")
 VERIFICATION_SCOPES = ("focused", "full")
 ESCALATION_DOMAINS = frozenset(
     {"release", "workflow", "trust", "installer", "dependency", "unknown"}
 )
 DOMAIN_LEVELS = {
-    "docs": "lite",
+    "docs": "light",
     "project_code": "standard",
     "tests": "standard",
     "unknown": "standard",
@@ -23,7 +23,7 @@ DOMAIN_LEVELS = {
     "trust": "strict",
     "installer": "strict",
     "lifecycle": "strict",
-    "release": "release",
+    "release": "strict",
 }
 
 
@@ -36,14 +36,14 @@ def select_policy(
     domains = {classify_path(path) for path in changed_paths}
     levels = [DOMAIN_LEVELS.get(domain, "standard") for domain in domains]
     level = max(levels, key=POLICY_LEVELS.index) if levels else "standard"
-    stage_floor = "release" if stage == "release" else "standard" if stage == "pr" else "lite"
+    stage_floor = "strict" if stage == "release" else "standard" if stage == "pr" else "light"
     if POLICY_LEVELS.index(stage_floor) > POLICY_LEVELS.index(level):
         level = stage_floor
     if requested is not None:
         if POLICY_LEVELS.index(requested) < POLICY_LEVELS.index(level):
             raise ValueError(f"requested policy {requested} cannot lower selected policy {level}")
         level = requested
-    scope = "focused" if level == "lite" else "full"
+    scope = "focused" if level == "light" else "full"
     return {"level": level, "scope": scope, "stage": stage, "domains": sorted(domains)}
 
 

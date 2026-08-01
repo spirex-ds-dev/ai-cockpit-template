@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from fnmatch import fnmatchcase
 
 
 @dataclass(frozen=True)
@@ -34,8 +35,25 @@ class EvidenceRule:
     destructive_levels: tuple[str, ...] = ()
     risk_types: tuple[str, ...] = ()
     environments: tuple[str, ...] = ()
+    path_patterns: tuple[str, ...] = ()
+    capability_claims: tuple[str, ...] = ()
+    path_or_capability: bool = False
 
     def matches(self, context: EvidenceContext) -> bool:
+        path_match = any(
+            fnmatchcase(path, pattern)
+            for path in context.changed_paths
+            for pattern in self.path_patterns
+        )
+        claim_match = bool(set(self.capability_claims) & set(context.capability_claims))
+        context_match = (
+            (path_match or claim_match)
+            if self.path_or_capability
+            else (
+                (not self.path_patterns or path_match)
+                and (not self.capability_claims or claim_match)
+            )
+        )
         return (
             (not self.operations or context.requested_operation in self.operations)
             and (
@@ -43,6 +61,7 @@ class EvidenceRule:
             )
             and (not self.risk_types or bool(set(self.risk_types) & set(context.risk_types)))
             and (not self.environments or context.environment in self.environments)
+            and context_match
         )
 
 
@@ -92,6 +111,44 @@ RULES = (
         blocking_level="block",
         human_decision_required=True,
         forbidden_claim="Do not claim a published or downloadable release.",
+    ),
+    EvidenceRule(
+        identifier="release_context",
+        path_patterns=(
+            "release.json",
+            "next-release.json",
+            "release-state.json",
+            "VERSION",
+            "version.txt",
+            "version.json",
+            "package-publish*.json",
+            ".npmrc",
+            ".github/workflows/release*.yml",
+            ".github/workflows/release*.yaml",
+            ".github/workflows/sign*.yml",
+            ".github/workflows/sign*.yaml",
+            "signing/**",
+            "dist/**",
+            "release-assets/**",
+            ".ai/cockpit/release-digests.json",
+            ".ai/cockpit/sbom.json",
+            ".ai/cockpit/provenance/**",
+        ),
+        capability_claims=("release_ready", "distribution_verified"),
+        path_or_capability=True,
+        required_evidence=(
+            "tag",
+            "commit",
+            "digest",
+            "sbom",
+            "provenance",
+            "provider_release_receipt",
+            "asset_availability",
+        ),
+        owner="release_manager",
+        blocking_level="block",
+        human_decision_required=True,
+        forbidden_claim="Do not claim release readiness or distribution verification.",
     ),
     EvidenceRule(
         identifier="permission",
