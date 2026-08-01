@@ -1,0 +1,227 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wi-09-changed-critical-coverage-corrective",
+  "mode": "code",
+  "title": "WI09 Changed Critical Coverage Corrective",
+  "baseCommit": "0dd20f464056ef0407bb818c079b423e1e363880",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wi-09-changed-critical-coverage-corrective.contract.json",
+    ".ai/work-items/active/wi-09-changed-critical-coverage-corrective.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wi-09-changed-critical-coverage-corrective.outcome.json",
+    ".ai/work-items/active/wi-09-changed-critical-coverage-corrective.outcome.md",
+    "tests/test_ai_check_work_item.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing WI09 production code, Approval Evidence schema, policy semantics, coverage thresholds, or the changed-critical mapping",
+    "Rewriting the immutable archived WI09 Contract, Summary, Outcome, or manifest"
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/2026/wi-09-external-identity-boundary.archive-manifest.json",
+      "reason": "Immutable predecessor evidence for the immediately adjacent recovery pair."
+    },
+    {
+      "path": "scripts/check_changed_critical_coverage.py",
+      "reason": "PR check that reported ai_check_work_item.py focused coverage at 57.14 percent against its 70 percent floor."
+    },
+    {
+      "path": ".ai/guards/changed_critical_coverage_policy.json",
+      "reason": "Authoritative mapping from ai_check_work_item.py to tests/test_ai_check_work_item.py and the unchanged 70 percent floor."
+    },
+    {
+      "path": "tests/test_ai_check_work_item.py",
+      "reason": "Mapped focused suite that needs direct validator branch coverage."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "low",
+    "riskTypes": [
+      "focused_coverage_gap"
+    ],
+    "reason": "The correction adds direct negative validator tests only and preserves production behavior and thresholds.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "lite",
+    "source": "automatic",
+    "reasons": [
+      "Test-only adjacent recovery with no production or policy change is eligible for Lite verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The failed PR check names the exact script, mapped test file, measured coverage, and unchanged floor; direct branch tests are deterministic."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: tests/test_ai_check_work_item.py directly covers meaningful governance-profile, readiness, baseline, approval, and intent validation failure paths.",
+    "A2: check-changed-critical-coverage passes for the original WI09 diff with ai_check_work_item.py at or above the unchanged 70 percent floor.",
+    "A3: The original 1771-test quality result remains behaviorally valid and the corrective focused tests plus Lite route pass without production changes.",
+    "A4: The immutable WI09 archive remains unchanged and aggregate PR validation accepts the consecutive source-bound recovery pair."
+  ],
+  "guidelines": [
+    "Add behaviorally meaningful direct validator tests; do not add empty line coverage or implementation-detail assertions.",
+    "Do not lower coverage floors, expand exclusions, or change the mapped critical-file policy.",
+    "Do not modify the archived WI09 evidence or production behavior."
+  ],
+  "intent": {
+    "problem": "The archived WI09 implementation passes its full 1771-test suite and gives ai_check_work_item.py 80.10 percent full-suite coverage, but the required PR-focused mapping runs only tests/test_ai_check_work_item.py and measured 57.14 percent against the existing 70 percent floor.",
+    "constraints": [
+      "Keep the archived WI09 evidence byte-for-byte immutable.",
+      "Change only the mapped test file, directly derived evidence reports, and new corrective lifecycle records.",
+      "Preserve the 70 percent floor and current critical-file mapping.",
+      "Exercise real validator decisions rather than artificial execution."
+    ],
+    "rationale": "Direct tests for the validator's existing failure branches make the focused predictor independently meaningful and recover the immutable predecessor through the repository's adjacent-pair mechanism."
+  },
+  "declaredIntent": {
+    "summary": "Add direct Work Item validator regression coverage for the WI09 PR predictor.",
+    "requestedCapabilities": ["test_automation", "ai_governance"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "The PR predictor runs only tests/test_ai_check_work_item.py for changed ai_check_work_item.py.",
+      "expected": "The focused report covers at least 70 percent of ai_check_work_item.py without policy changes.",
+      "required": true,
+      "status": "unverified",
+      "evidence": ["tests/test_ai_check_work_item.py"],
+      "verificationPlan": "Run make check-changed-critical-coverage with the original WI09 base commit."
+    },
+    {
+      "scenario": "Malformed governance profile, readiness, baseline, approval, and intent fields enter the Contract validator.",
+      "expected": "Direct tests assert actionable existing diagnostics across those branches.",
+      "required": true,
+      "status": "unverified",
+      "evidence": ["tests/test_ai_check_work_item.py"],
+      "verificationPlan": "Run the mapped focused pytest file and inspect branch-focused assertions."
+    }
+  ],
+  "rawUserRequest": "Continue all authorized Work Items without pausing; recover the WI09 PR changed-critical coverage failure without lowering quality and complete archive, PR, merge, closure, and cleanup.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continue-all-work-items-and-correct-bounded-failures",
+    "capturedAt": "2026-08-01",
+    "digest": "sha256:wi-09-adjacent-changed-critical-coverage-recovery"
+  },
+  "requestedOperation": {
+    "target": "tests",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "test",
+    "authorityRequired": false
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 747
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wi-09-changed-critical-coverage-corrective.json",
+    "baseCommit": "0dd20f464056ef0407bb818c079b423e1e363880",
+    "initialScopeDigest": "e6375928f9861ef1eb939a6dd4131c977d587fdf0dde5297f4477641c070cc84",
+    "contractSkeletonDigest": "74a6e7335368500a1a554718b074dcd2706830c6b312965e398051e4ec288058"
+  }
+}
