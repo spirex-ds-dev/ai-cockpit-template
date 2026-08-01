@@ -65,6 +65,9 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "resumeHistory",
     "budgetImpact",
     "governanceProfile",
+    "operationClasses",
+    "verificationEscalations",
+    "capabilityClaims",
     "governanceMetadataVersion",
     "requiredEvidence",
     "humanDecisionPoints",
@@ -78,7 +81,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
 MODES = {"investigate", "author_todo", "code", "review", "cleanup"}
 RISK_LEVELS = {"low", "medium", "high"}
 EXECUTION_STATUSES = {"continue", "defer", "needs_human_decision", "block"}
-GOVERNANCE_PROFILES = {"lite", "standard", "strict", "release"}
+GOVERNANCE_PROFILES = {"light", "standard", "strict"}
 GOVERNANCE_PROFILE_SOURCES = {"automatic", "human_override"}
 INTENT_STRING_KEYS = {"businessGoal", "userGoal", "problem", "rationale"}
 INTENT_LIST_KEYS = {"constraints", "nonGoals"}
@@ -152,6 +155,15 @@ def validate_governance_profile(data: dict[str, Any]) -> list[str]:
         issues.append("governanceProfile.override requires expiresAt or workItemOnly true")
     if "workItemId" in override and not non_empty_string(override.get("workItemId")):
         issues.append("governanceProfile.override.workItemId must be a non-empty string")
+    return issues
+
+
+def validate_operation_escalations(data: dict[str, Any]) -> list[str]:
+    """Validate optional operation inputs without trusting them as the sole derivation source."""
+    issues: list[str] = []
+    for key in ("operationClasses", "verificationEscalations", "capabilityClaims"):
+        if key in data:
+            issues.extend(validate_string_list(data, key, allow_empty=True))
     return issues
 
 
@@ -617,6 +629,7 @@ def validate_contract(data: dict[str, Any], contract_path: str = "") -> list[str
     issues.extend(validate_requested_operation(data))
     issues.extend(validate_required_evidence_context(data))
     issues.extend(validate_governance_profile(data))
+    issues.extend(validate_operation_escalations(data))
     if "problemStatement" in data and not non_empty_string(data.get("problemStatement")):
         issues.append("problemStatement must be a non-empty string")
 

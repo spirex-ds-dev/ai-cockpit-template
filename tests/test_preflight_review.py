@@ -71,6 +71,25 @@ def planned_scenario_contract() -> dict:
     return contract
 
 
+def test_release_claim_requires_distribution_evidence_before_preflight_is_ready():
+    contract = ready_contract()
+    contract["scope"] = ["docs/guide.md"]
+    contract["capabilityClaims"] = ["release_ready"]
+    contract["requestedOperation"] = {
+        "target": "repository_governance",
+        "action": "modify",
+        "environment": "repository",
+        "effect": "enforce",
+        "authorityRequired": False,
+    }
+    contract["requiredEvidenceContext"] = {"availableEvidence": []}
+
+    signal = ai_preflight_review.required_evidence_signal(contract)
+
+    assert signal.value == "Missing"
+    assert "provider_release_receipt" in signal.evidence[0]
+
+
 def conservative_contract() -> dict:
     return {
         "workItemId": "task",

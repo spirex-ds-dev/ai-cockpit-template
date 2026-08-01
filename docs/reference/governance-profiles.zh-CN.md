@@ -19,19 +19,19 @@ keywords:
 # 治理配置级别
 
 AI Cockpit 根据仓库证据选择足够且最小的质量图。级别顺序为
-`lite < standard < strict < release`；混合变更采用最高级别，未知或空路径证据至少采用 Standard。
+`light < standard < strict`；混合变更采用最高级别，未知或空路径证据至少采用 Standard。Release 是操作类别，不是第四个治理档位。
 
 ## 级别
 
 | 级别 | 典型变更 | 调度目标 |
 | --- | --- | --- |
-| Lite | 文档、注释、不可执行示例、纯格式变更 | `quality-fast` |
+| Light | 文档、注释、不可执行示例、纯格式变更 | `quality-fast` |
 | Standard | 普通源码、测试、缺陷修复、小型重构 | `quality-standard` |
 | Strict | 治理、CI、安装器、安全、依赖、破坏性/公共 API、迁移、校准、证据 Schema | `quality-full` |
-| Release | 发布身份、工作流、SBOM、来源证明、资产、分发 | `quality-release` |
 
-Standard 复用现有 Fast、项目测试、引用影响和完整测试削弱检查；Strict 与 Release
-同样复用现有图。`make quality` 继续作为 Full 的兼容别名，`make ai-cockpit-quality`
+Standard 复用现有 Fast、项目测试、引用影响和完整测试削弱检查；Strict 复用现有 Full 图。
+若 Strict 工单的操作、资源或能力声明涉及 Release，额外运行 `quality-release` 的
+release-preflight 和分发验证。`make quality` 继续作为 Full 的兼容别名，`make ai-cockpit-quality`
 是按证据路由的工单入口。
 
 ## Contract 证据

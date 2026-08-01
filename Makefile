@@ -495,7 +495,10 @@ ai-cockpit-quality:
 			--output "$(GOVERNANCE_RECEIPT)"; \
 		target=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["dispatchTarget"])' "$(GOVERNANCE_RECEIPT)"); \
 		case "$$target" in quality-fast|quality-standard|quality-full|quality-release) ;; *) echo "invalid governance dispatch target: $$target" >&2; exit 2;; esac; \
-		$(QUALITY_MAKE) --no-print-directory "$$target"
+		$(QUALITY_MAKE) --no-print-directory "$$target"; \
+		if $(PYTHON_EXECUTABLE) -c 'import json, sys; raise SystemExit(0 if "release_preflight" in json.load(open(sys.argv[1], encoding="utf-8")).get("verificationEscalations", []) else 1)' "$(GOVERNANCE_RECEIPT)"; then \
+			$(QUALITY_MAKE) --no-print-directory quality-release; \
+		fi
 
 ai-start:
 	$(AI_PYTHON) scripts/ai_start.py --task "$(TASK)" --title "$(TITLE)" --mode "$(MODE)"

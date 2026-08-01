@@ -7,6 +7,8 @@ import time
 from argparse import Namespace
 from pathlib import Path
 
+import pytest
+
 from scripts import determine_quality_scope, run_quality_gate, summarize_quality_gates
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -230,8 +232,8 @@ def test_summarizer_function_reports_failed_and_skipped_records():
 
 def test_scope_changed_paths_and_explicit_mode(tmp_path):
     assert determine_quality_scope.changed_paths("HEAD", "HEAD", ROOT) == []
-    result = determine_quality_scope.determine([], explicit="release")
-    assert result["requiredGroups"] == ["quality-fast", "quality-full", "quality-release"]
+    with pytest.raises(ValueError, match="unsupported quality scope mode"):
+        determine_quality_scope.determine([], explicit="release")
 
 
 def test_runner_preserves_failure_and_timeout_evidence(tmp_path):

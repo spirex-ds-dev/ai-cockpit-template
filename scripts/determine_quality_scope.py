@@ -27,13 +27,19 @@ def changed_paths(base: str, head: str, repository: Path) -> list[str]:
 
 
 def determine(paths: list[str], explicit: str | None = None) -> dict:
-    explicit_profiles = {"fast": "lite", "full": "strict", "release": "release"}
+    explicit_profiles = {"fast": "light", "full": "strict"}
+    if explicit is not None and explicit not in explicit_profiles:
+        raise ValueError(f"unsupported quality scope mode: {explicit}")
     requested = explicit_profiles.get(explicit) if explicit is not None else None
     routed = governance_routing.determine(
         paths, governance_routing.load_policy(POLICY_PATH), requested=requested
     )
     profile = routed["selectedProfile"]
-    scope = {"lite": "fast", "standard": "full", "strict": "full", "release": "release"}[profile]
+    scope = (
+        "release"
+        if routed["verificationEscalations"]
+        else {"light": "fast", "standard": "full", "strict": "full"}[profile]
+    )
     required = {
         "fast": ["quality-fast"],
         "full": ["quality-fast", "quality-full"],
@@ -42,6 +48,9 @@ def determine(paths: list[str], explicit: str | None = None) -> dict:
     return {
         "schemaVersion": 1,
         "scope": scope,
+        "governanceProfile": profile,
+        "operationClasses": routed["operationClasses"],
+        "verificationEscalations": routed["verificationEscalations"],
         "reasons": routed["reasons"],
         "changedPaths": routed["changedPaths"],
         "requiredGroups": required,
@@ -54,7 +63,7 @@ def main() -> int:
     parser.add_argument("--base", required=True)
     parser.add_argument("--head", default="HEAD")
     parser.add_argument("--event", default="local")
-    parser.add_argument("--mode", choices=("fast", "full", "release"))
+    parser.add_argument("--mode", choices=("fast", "full"))
     parser.add_argument("--repository", default=".")
     parser.add_argument("--output", default="target/quality/scope.json")
     args = parser.parse_args()

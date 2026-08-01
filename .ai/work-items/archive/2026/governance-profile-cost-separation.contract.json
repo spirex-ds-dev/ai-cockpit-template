@@ -1,0 +1,219 @@
+{
+  "contractVersion": 2,
+  "workItemId": "governance-profile-cost-separation",
+  "mode": "code",
+  "title": "Governance profile cost separation",
+  "baseCommit": "8c2efa735cef681a75f69e88ff020c925ed0f16f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/governance-profile-cost-separation.contract.json",
+    ".ai/work-items/active/governance-profile-cost-separation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/governance-profile-cost-separation.outcome.json",
+    ".ai/work-items/active/governance-profile-cost-separation.outcome.md",
+    ".ai/quality/governance-routing.yaml",
+    ".ai/guards/coverage_policy.yaml",
+    "scripts/determine_governance_profile.py",
+    "scripts/determine_quality_scope.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_preflight_review.py",
+    "scripts/ai_verification_policy.py",
+    "scripts/ai_required_evidence.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "tests/test_governance_profile.py",
+    "tests/test_verification_policy.py",
+    "tests/test_required_evidence.py",
+    "tests/test_ai_check_work_item.py",
+    "tests/test_contract_and_policy.py",
+    "tests/test_verification_evidence.py",
+    "tests/test_preflight_review.py",
+    "tests/test_makefile.py",
+    "tests/test_quality_telemetry.py",
+    "docs/reference/governance-profiles.md",
+    "docs/reference/governance-profiles.zh-CN.md",
+    "docs/reference/governance-profiles.ja.md",
+    "docs/reference/governance-profile-cost-separation.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Rewriting historical archived Work Items or changing provider configuration.",
+    "Running release verification for non-release Strict Work Items."
+  ],
+  "sources": [
+    {
+      "path": "user-pasted-text-1",
+      "reason": "WI-10 outcome, canonical profiles, and cost-separation requirements."
+    },
+    {
+      "path": "user-policy-decision-wi-10",
+      "reason": "Confirms release as an operation-triggered Strict escalation rather than a fourth profile."
+    },
+    {
+      "path": "scripts/determine_governance_profile.py",
+      "reason": "Current routing policy, canonical profile boundary, and release operation escalation behavior."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "release_verification_omission", "governance_downgrade", "compatibility_migration"
+    ],
+    "reason": "Separating intensity from release operation can omit release evidence or overrun non-release Strict work if normalization and derivation drift.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The router, contract schema, required-evidence derivation, and Make dispatch are governance boundaries."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user confirmed the three-profile model and release escalation policy."
+  },
+  "preReviewWarnings": [
+    "Review legacy release rejection and automatic release-context derivation, especially omitted operationClasses."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Only light, standard, and strict are accepted governance profiles; legacy release profile input is rejected and release remains an explicit operation class.",
+    "The verification graph derives from profile, operation classes, resource claims, and capability claims, with release preflight and distribution checks only for release context.",
+    "Release-owned scope, requested operation, or release_ready/distribution_verified claims automatically require release escalation even when omitted by an Agent.",
+    "Focused tests prove non-release Strict work excludes release checks, release behavior is preserved, and insufficient release evidence blocks release claims.",
+    "Current documentation distinguishes governance intensity from operation-specific verification without rewriting historical archive records."
+  ],
+  "guidelines": [
+    "Keep light, standard, and strict as the only canonical profile vocabulary in active routing and documentation.",
+    "Reject legacy release profile input while preserving release operation-class escalation.",
+    "Derive release escalation conservatively from operation, scope, resources, and claims; no Contract omission may downgrade it.",
+    "Keep release-specific gates separate from non-release Strict execution and document the distinction."
+  ],
+  "intent": {
+    "problem": "Legacy Lite/Standard/Strict/Release routing conflates governance intensity with release operation, making light work insufficiently distinct and risking either skipped release evidence or unnecessary release verification.",
+    "constraints": ["Use only light, standard, and strict as canonical profiles.", "Treat release as an explicit Strict escalation, not a profile.", "Preserve current release behavior through automatic derivation without legacy profile compatibility.", "Do not rewrite historical archive records or modify provider configuration."],
+    "rationale": "A two-axis model lets low-risk work stay light while release-specific proof remains mandatory whenever the operation or claim requires it."
+  },
+  "scenarioCoverage": [
+    {"scenario":"light documentation work uses the light graph","required":true,"status":"unverified","evidence":[],"expected":"Light routes to focused verification without Standard or Strict groups.","verificationPlan":"Run focused routing tests."},
+    {"scenario":"non-release Strict work excludes release graphs","required":true,"status":"unverified","evidence":[],"expected":"Security or CI scope remains Strict without release_preflight or distribution escalation.","verificationPlan":"Run routing and Make dispatch tests."},
+    {"scenario":"release context is automatically escalated","required":true,"status":"unverified","evidence":[],"expected":"Release scopes, operations, and claims add release_preflight and distribution even when the Contract omits them.","verificationPlan":"Run negative derivation tests."},
+    {"scenario":"legacy release profile input is rejected","required":true,"status":"unverified","evidence":[],"expected":"Release must be declared as an operation class, not selected as a governance profile.","verificationPlan":"Run legacy-input rejection tests."}
+  ],
+  "rawUserRequest": "Complete WI-10 using light, standard, strict profiles and release operation escalation.",
+  "rawRequestSource": {"type":"human","reference":"user-policy-decision-wi-10","capturedAt":"2026-08-01T19:35:29Z","digest":"sha256:user-confirmed-wi10-three-profile-release-escalation"},
+  "declaredIntent": {"summary":"Separate governance intensity from release-specific verification.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "requiredEvidenceContext": {"destructiveLevel":"none","availableEvidence":["routing policy","operation classes","scope claims","capability claims","focused tests"],"externalSystem":"none"},
+  "restrictedWriteApproval": {"approved":true,"approvedBy":"user","reason":"User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."},
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 749
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/governance-profile-cost-separation.json",
+    "baseCommit": "8c2efa735cef681a75f69e88ff020c925ed0f16f",
+    "initialScopeDigest": "15c24c12f21fe7a4cca49e4c56018f68af8ee756a4de4095d659c98f63f78738",
+    "contractSkeletonDigest": "8133be13d24fe15a228d7ee2d41100b5d84667b42aabd4e614f98eb8aec02b31"
+  }
+}

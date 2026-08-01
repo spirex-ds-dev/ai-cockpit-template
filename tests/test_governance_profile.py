@@ -6,14 +6,14 @@ from datetime import UTC, datetime
 import pytest
 
 from scripts import determine_governance_profile as routing
+from scripts import determine_quality_scope as quality_scope
 
 POLICY = """\
 schemaVersion: 1
 profileOrder:
-  - lite
+  - light
   - standard
   - strict
-  - release
 unknownProfile: standard
 evidenceOnlyPatterns:
   - .ai/cockpit/current_status.md
@@ -21,7 +21,7 @@ evidenceOnlyPatterns:
   - .ai/work-items/active/*.outcome.json
   - .ai/work-items/active/*.outcome.md
 profiles:
-  lite:
+  light:
     patterns:
       - docs/**
       - README*
@@ -46,13 +46,9 @@ profiles:
     requiredGroups:
       - quality-full
     dispatchTarget: quality-full
-  release:
-    patterns:
-      - release.json
-      - .github/workflows/release*.yml
-    requiredGroups:
-      - quality-release
-    dispatchTarget: quality-release
+releaseOwnedPatterns:
+  - release.json
+  - .github/workflows/release*.yml
 """
 
 
@@ -66,14 +62,14 @@ def policy_path(tmp_path):
 @pytest.mark.parametrize(
     ("paths", "expected"),
     [
-        (["docs/guide.md"], "lite"),
+        (["docs/guide.md"], "light"),
         (["src/service.py"], "standard"),
         ([".ai/guards/policy.yaml"], "strict"),
-        (["release.json"], "release"),
+        (["release.json"], "strict"),
         (["unclassified.file"], "standard"),
         ([], "standard"),
         (["docs/guide.md", "src/service.py"], "standard"),
-        (["docs/guide.md", "Makefile", "release.json"], "release"),
+        (["docs/guide.md", "Makefile", "release.json"], "strict"),
     ],
 )
 def test_selects_highest_profile_conservatively(policy_path, paths, expected):
@@ -108,17 +104,76 @@ def test_generated_work_item_evidence_does_not_force_strict(policy_path):
         policy,
     )
 
-    assert docs["selectedProfile"] == "lite"
+    assert docs["selectedProfile"] == "light"
     assert evidence_only["selectedProfile"] == "standard"
     assert docs["pathDecisions"][0]["profile"] == "evidence_only"
+
+
+def test_release_resource_adds_release_escalation_without_fourth_profile(policy_path):
+    policy = routing.load_policy(policy_path)
+
+    result = routing.determine(["release.json"], policy)
+
+    assert result["selectedProfile"] == "strict"
+    assert result["operationClasses"] == ["release"]
+    assert result["verificationEscalations"] == ["release_preflight", "distribution"]
+
+
+def test_non_release_strict_resource_does_not_add_release_graph(policy_path):
+    policy = routing.load_policy(policy_path)
+
+    result = routing.determine(["Makefile"], policy)
+
+    assert result["selectedProfile"] == "strict"
+    assert result["operationClasses"] == []
+    assert result["verificationEscalations"] == []
+
+
+def test_legacy_release_input_is_rejected(policy_path):
+    policy = routing.load_policy(policy_path)
+
+    with pytest.raises(ValueError, match="unsupported governance profile"):
+        routing.determine(["docs/guide.md"], policy, requested="release")
+
+
+def test_release_capability_claim_adds_escalation_without_release_scope(policy_path):
+    policy = routing.load_policy(policy_path)
+
+    result = routing.determine(
+        ["docs/guide.md"],
+        policy,
+        contract={"capabilityClaims": ["release_ready"]},
+    )
+
+    assert result["selectedProfile"] == "strict"
+    assert result["verificationEscalations"] == ["release_preflight", "distribution"]
+
+
+def test_tag_operation_adds_release_escalation_without_release_named_profile(policy_path):
+    policy = routing.load_policy(policy_path)
+
+    result = routing.determine(
+        ["docs/guide.md"],
+        policy,
+        contract={"requestedOperation": {"action": "create_tag"}},
+    )
+
+    assert result["selectedProfile"] == "strict"
+    assert result["operationClasses"] == ["release"]
+    assert result["verificationEscalations"] == ["release_preflight", "distribution"]
+
+
+def test_legacy_quality_scope_mode_is_rejected():
+    with pytest.raises(ValueError, match="unsupported quality scope mode"):
+        quality_scope.determine(["docs/guide.md"], explicit="release")
 
 
 @pytest.mark.parametrize(
     "content",
     [
         "schemaVersion: 2\n",
-        POLICY.replace("  - release\n", "  - mystery\n", 1),
-        POLICY.replace("unknownProfile: standard", "unknownProfile: lite"),
+        POLICY.replace("  - strict\n", "  - mystery\n", 1),
+        POLICY.replace("unknownProfile: standard", "unknownProfile: light"),
         POLICY.replace("dispatchTarget: quality-full", "dispatchTarget: quality-fast"),
     ],
 )
@@ -213,7 +268,7 @@ def test_invalid_or_expired_override_restores_automatic(policy_path, override):
     contract = {
         "workItemId": "wi-3",
         "governanceProfile": {
-            "selected": "lite",
+            "selected": "light",
             "source": "human_override",
             "reasons": ["exception"],
             "override": override,
@@ -296,7 +351,7 @@ def test_cli_writes_receipt_for_complete_worktree_diff(tmp_path, policy_path, mo
 
     assert routing.main() == 0
     receipt = json.loads(output.read_text(encoding="utf-8"))
-    assert receipt["selectedProfile"] == "lite"
+    assert receipt["selectedProfile"] == "light"
     assert receipt["changedPaths"] == ["docs/guide.md"]
 
 

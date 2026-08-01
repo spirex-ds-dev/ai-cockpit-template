@@ -1,9 +1,8 @@
 schemaVersion: 1
 profileOrder:
-  - lite
+  - light
   - standard
   - strict
-  - release
 unknownProfile: standard
 evidenceOnlyPatterns:
   - .ai/cockpit/current_status.md
@@ -11,7 +10,7 @@ evidenceOnlyPatterns:
   - .ai/work-items/active/*.outcome.json
   - .ai/work-items/active/*.outcome.md
 profiles:
-  lite:
+  light:
     patterns:
       - docs/**
       - README*
@@ -65,18 +64,22 @@ profiles:
     requiredGroups:
       - quality-full
     dispatchTarget: quality-full
-  release:
-    patterns:
-      - release.json
-      - next-release.json
-      - release-state.json
-      - .ai/cockpit/release-digests.json
-      - .ai/cockpit/sbom.json
-      - .ai/cockpit/provenance/**
-      - .github/workflows/release*.yml
-      - .github/workflows/release*.yaml
-      - dist/**
-      - release-assets/**
-    requiredGroups:
-      - quality-release
-    dispatchTarget: quality-release
+releaseOwnedPatterns:
+  - release.json
+  - next-release.json
+  - release-state.json
+  - VERSION
+  - version.txt
+  - version.json
+  - package-publish*.json
+  - .npmrc
+  - .ai/cockpit/release-digests.json
+  - .ai/cockpit/sbom.json
+  - .ai/cockpit/provenance/**
+  - .github/workflows/release*.yml
+  - .github/workflows/release*.yaml
+  - .github/workflows/sign*.yml
+  - .github/workflows/sign*.yaml
+  - signing/**
+  - dist/**
+  - release-assets/**

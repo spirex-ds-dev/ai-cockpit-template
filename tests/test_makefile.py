@@ -255,6 +255,16 @@ def test_project_governance_make_targets_are_public():
     assert "ai_preflight_review.py" in result.stdout
 
 
+def test_governance_quality_adds_release_graph_only_from_receipt_escalation():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    template = (ROOT / "templates/make/Makefile.ai").read_text(encoding="utf-8")
+
+    for content in (makefile, template):
+        assert '"verificationEscalations"' in content
+        assert '"release_preflight"' in content
+        assert "quality-release" in content
+
+
 def test_lockfile_reproducibility_uses_python_module_invocation():
     result = subprocess.run(
         ["make", "-n", "check-lockfile-reproducibility", "PYTHON=python3"],

@@ -133,7 +133,9 @@ def validate_required_evidence_claims(
                 item for item in contract.get("scope", []) if isinstance(item, str)
             ),
             risk_types=tuple(item for item in risk.get("riskTypes", []) if isinstance(item, str)),
-            capability_claims=(),
+            capability_claims=tuple(
+                item for item in contract.get("capabilityClaims", []) if isinstance(item, str)
+            ),
             environment=str(operation.get("environment", "")),
             external_system=str(context.get("externalSystem", "")),
             destructive_level=str(context.get("destructiveLevel", "none")),
