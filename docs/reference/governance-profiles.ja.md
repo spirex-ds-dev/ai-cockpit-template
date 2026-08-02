@@ -1,7 +1,7 @@
 ---
 author: Ray
 title: "Governance Profile"
-description: AI Cockpit Work Item 向けの Lite、Standard、Strict、Release リスクベース品質ルーティング。
+description: AI Cockpit Work Item 向けの Light、Standard、Strict と release 操作エスカレーションによるリスクベース品質ルーティング。
 audience:
   - adopter
   - maintainer

@@ -14,8 +14,9 @@ description: "Executable plan for WI-03 governance-profile selection and quality
 > smallest focused verification after every green step. The repository Work Item
 > lifecycle remains the final integration and archival authority.
 
-**Goal:** Make Lite, Standard, Strict, and Release selection deterministic,
-Contract-bound, conservative, and executable through the existing quality graph.
+**Goal:** Make Light, Standard, and Strict profile selection deterministic,
+Contract-bound, conservative, and executable through the existing quality graph,
+with release represented as an operation-specific escalation.
 
 **Architecture:** A new Python router reads a versioned YAML policy and emits one
 receipt. Contract validation, the legacy scope adapter, verification policy, and
@@ -45,8 +46,9 @@ active WI-03 Contract.
 **Files:** `.ai/quality/governance-routing.yaml`,
 `scripts/determine_governance_profile.py`, `tests/test_governance_profile.py`.
 
-1. Add failing classification tests for Lite, Standard, every Strict protected
-   class, Release, unknown, empty, mixed, and input-order independence.
+1. Add failing classification tests for Light, Standard, every Strict protected
+   class, release-context escalation, unknown, empty, mixed, and input-order
+   independence.
 2. Implement strict policy loading, normalized path matching, profile ordering,
    and deterministic receipts.
 3. Add failing CLI/security tests for invalid bases, malformed YAML, absolute and
@@ -64,8 +66,9 @@ tests.
 1. Add red tests proving the legacy output schema and explicit modes remain
    compatible while classification delegates to the router.
 2. Replace independent legacy classification with profile projection.
-3. Add red tests for the four-level verification vocabulary and conservative
-   ordering; update the policy module without creating a second classifier.
+3. Add red tests for the three-profile verification vocabulary, release
+   escalation, and conservative ordering; update the policy module without
+   creating a second classifier.
 4. Run both focused suites to green.
 
 ## Task 4: Route existing Make ownership graphs
@@ -73,9 +76,9 @@ tests.
 **Files:** `Makefile`, `templates/make/Makefile.ai`, `tests/test_makefile.py`,
 `tests/test_quality_gate_architecture.py`.
 
-1. Add red dry-run and architecture assertions for Lite, Standard, Strict, and
-   Release routing, sole gate ownership, explicit escalation, and rejected
-   downgrade.
+1. Add red dry-run and architecture assertions for Light, Standard, Strict, and
+   release-operation escalation, sole gate ownership, explicit escalation, and
+   rejected downgrade.
 2. Add a Standard composition target using existing Fast, project-test,
    reference-impact, and full test-weakening owners.
 3. Make `ai-cockpit-quality` discover the active Contract, create the routing

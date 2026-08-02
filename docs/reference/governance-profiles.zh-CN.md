@@ -1,7 +1,7 @@
 ---
 author: Ray
 title: "治理配置级别"
-description: 面向 AI Cockpit 工单的 Lite、Standard、Strict、Release 风险质量路由。
+description: 面向 AI Cockpit 工单的 Light、Standard、Strict 与 release 操作升级的风险质量路由。
 audience:
   - adopter
   - maintainer

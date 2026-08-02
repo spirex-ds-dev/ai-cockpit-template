@@ -1,0 +1,101 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-profile-documentation-closure",
+  "mode": "code",
+  "title": "Close residual release-profile documentation drift",
+  "rawUserRequest": "再自检；发现当前文档仍把 release 作为第四个治理 Profile 后，修正并完成完整闭环。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03 post-closure self-audit and correction approval",
+    "capturedAt": "2026-08-03",
+    "digest": "sha256:release-profile-documentation-closure-authorization"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "a66d161a9fa768696b4bd365a8ce314cf95a7f44",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-profile-documentation-closure.contract.json",
+    ".ai/work-items/active/release-profile-documentation-closure.summary.json",
+    ".ai/work-items/active/release-profile-documentation-closure.outcome.json",
+    ".ai/work-items/active/release-profile-documentation-closure.outcome.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "docs/superpowers/specs/2026-08-01-risk-based-quality-routing-design.md",
+    "docs/superpowers/plans/2026-08-01-risk-based-quality-routing.md",
+    "docs/superpowers/plans/2026-08-03-release-profile-documentation-closure.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/governance-profiles.ja.md",
+    "docs/reference/governance-profiles.zh-CN.md"
+  ],
+  "outOfScope": [
+    "Provider configuration, branch-protection settings, release publication, and distribution operations.",
+    "Immutable archived Work Item records."
+  ],
+  "sources": [
+    {"path": ".ai/glossary.md", "reason": "Defines the canonical three Governance Profiles and release escalation boundary."},
+    {"path": "docs/superpowers/specs/2026-08-01-risk-based-quality-routing-design.md", "reason": "Contains the discovered active legacy vocabulary."},
+    {"path": "docs/superpowers/plans/2026-08-01-risk-based-quality-routing.md", "reason": "Contains related active implementation-plan vocabulary."},
+    {"path": "docs/reference/documentation-context-registry.json", "reason": "Registers current implementation-record documentation for metadata validation."},
+    {"path": "docs/reference/governance-profiles.ja.md", "reason": "Current localized governance-profile reference."},
+    {"path": "docs/reference/governance-profiles.zh-CN.md", "reason": "Current localized governance-profile reference."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["documentation_drift", "governance_semantics"],
+    "reason": "Incorrect active terminology can cause agents to select an obsolete governance model or omit release escalation evidence.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": ["The Work Item changes governance documentation and active planning records."],
+    "operationClasses": ["documentation"],
+    "verificationEscalations": [],
+    "override": null
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "User confirmed the minimal correction design and previously granted lifecycle authority."},
+  "preReviewWarnings": ["Keep release as an operation-specific strict escalation, not a fourth governance profile.", "Do not rewrite immutable archives."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Preserve the documented correction and final evidence boundary."},
+  "acceptance": [
+    "All in-scope current documents describe only light, standard, and strict governance profiles, with release represented as an explicit Strict operation escalation.",
+    "The historical design and implementation-plan records remain useful but clearly state current terminology and do not grant obsolete runtime instruction.",
+    "Japanese and Simplified Chinese governance-profile references retain the same governance-intensity versus release-operation distinction.",
+    "Current non-archive documentation has no phrase that presents release as a fourth governance profile, and documentation/system-invariant checks pass."
+  ],
+  "guidelines": [
+    "Preserve historical context without allowing it to contradict current product semantics.",
+    "Do not claim a release operation or release evidence for this documentation-only Work Item.",
+    "Keep localized semantics aligned with the canonical Governance Profile boundary."
+  ],
+  "intent": {
+    "problem": "A post-closure self-audit found active design, plan, and localized reference documents that still represent release as a fourth governance profile, contradicting the approved three-profile model.",
+    "constraints": ["Use the canonical glossary semantics.", "Do not modify Provider configuration or release behavior.", "Preserve immutable archived Work Item history.", "Use one dedicated Work Item and PR."],
+    "rationale": "Correcting all discovered active documentation surfaces prevents obsolete terminology from being reused as operational instruction."
+  },
+  "declaredIntent": {"summary": "Remove active fourth-profile documentation drift while preserving release as a strict escalation.", "requestedCapabilities": ["ai_governance", "documentation"]},
+  "scenarioCoverage": [
+    {"scenario": "Current English design and plan records no longer define release as a governance profile.", "required": true, "status": "unverified", "evidence": [], "expected": "Only light, standard, and strict are profile values; release is an operation escalation.", "verificationPlan": "Search non-archive documentation and inspect corrected records."},
+    {"scenario": "Localized governance references distinguish governance intensity from release-specific verification.", "required": true, "status": "unverified", "evidence": [], "expected": "Japanese and Simplified Chinese references match the canonical boundary.", "verificationPlan": "Inspect localized files and run documentation metadata validation."},
+    {"scenario": "The correction leaves no active legacy fourth-profile phrase in the declared surfaces.", "required": true, "status": "unverified", "evidence": [], "expected": "Legacy scan has no active match for a release fourth profile.", "verificationPlan": "Run focused ripgrep scan excluding immutable archives and generated target output."}
+  ],
+  "verification": [
+    {"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": false, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "User", "reason": "User confirmed the correction design and granted standing authority for governed Work Item writes and lifecycle completion."},
+  "rollbackNote": "Revert this Work Item's documentation, plan, and archive bundle; do not alter historical archived evidence.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 771}},
+  "startReceipt": {"path": ".ai/work-items/starts/release-profile-documentation-closure.json", "baseCommit": "a66d161a9fa768696b4bd365a8ce314cf95a7f44", "initialScopeDigest": "ae6678ea08abaa2aae28ae87b303bfaefcb0daf4086aca5d0925c14ef53b86aa", "contractSkeletonDigest": "ec156bedfa1c53f63b884ff8c9e313f35833528209a1247b215cb9deb294cb31"}
+}
