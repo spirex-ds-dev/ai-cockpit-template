@@ -1,0 +1,78 @@
+{
+  "contractVersion": 2,
+  "workItemId": "multilingual-semantic-parity",
+  "mode": "code",
+  "title": "Verify multilingual semantic parity",
+  "rawUserRequest": "WI-20 multilingual-semantic-parity: upgrade multilingual checks from matching sections to matching semantics for status, prohibited claims, safety boundaries, human decisions, risks, limitations, commands, paths, and capability claims. Chinese, Japanese, and English must not differ in scope or overstate one language.",
+  "rawRequestSource": {"type": "human", "reference": "AI Cockpit comprehensive remediation instructions, WI-20; active user goal", "capturedAt": "2026-08-02", "digest": "sha256:multilingual-semantic-parity"},
+  "declaredIntent": {"summary": "Add a bounded machine-comparable semantic projection for governed human-facing views without translating arbitrary evidence prose or rewriting historical archives.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "baseCommit": "d8fde967480073f93e1f69b6412d8e6566204a06",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/multilingual-semantic-parity.contract.json",
+    ".ai/work-items/active/multilingual-semantic-parity.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/multilingual-semantic-parity.outcome.json",
+    ".ai/work-items/active/multilingual-semantic-parity.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/archive/index.json",
+    "scripts/ai_multilingual_semantic_parity.py",
+    "tests/test_multilingual_semantic_parity.py",
+    "docs/reference/multilingual-semantic-parity.md"
+  ],
+  "outOfScope": [
+    "Provider configuration, release publication, and external translation services.",
+    "Machine translation of arbitrary evidence prose or rewrites of historical archived Work Items."
+  ],
+  "sources": [
+    {"path": "scripts/ai_generate_status.py", "reason": "Status localization preserves machine facts while translating presentation chrome."},
+    {"path": "scripts/ai_render_task_outcome_multilingual.py", "reason": "Outcome JSON is the current sole fact source for localized Outcome views."},
+    {"path": "scripts/ai_check_capability_claims.py", "reason": "Existing multilingual sibling claim binding is the capability-claim baseline."},
+    {"path": "tests/test_task_outcome_multilingual.py", "reason": "Existing localized Outcome regression coverage identifies the current boundary."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["evidence_integrity", "localization"], "reason": "A language-specific overclaim can alter a governance decision even when headings and links match.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["Semantic parity protects the interpretation of governance evidence across languages."], "override": null},
+  "operationClasses": ["repository_governance"],
+  "verificationEscalations": [],
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The requested scope is local, deterministic, and has concrete existing source views."},
+  "preReviewWarnings": ["Review the projection as a semantic guard, not as a claim that arbitrary prose was translated with semantic equivalence."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record intent and evidence before implementation and finish."},
+  "acceptance": [
+    "A machine-comparable semantic projection covers status, prohibited claims, safety boundaries, human decisions, risks, limitations, commands, paths, and capability claims for English, Japanese, and Chinese views.",
+    "Validation rejects a language-specific extra capability claim, missing prohibition or limitation, or differing command/path token.",
+    "Localized views retain the same source-bound semantic facts while presentation chrome may differ by language.",
+    "Documentation distinguishes machine-comparable controlled semantics from arbitrary evidence prose that remains source text."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Equivalent controlled semantic facts in English, Japanese, and Chinese validate.", "required": true, "riskDomain": "localization", "status": "unverified", "evidence": [], "expected": "validation passes", "verificationPlan": "Unit test with equivalent projections."},
+    {"scenario": "A translated view with a stronger capability claim or omitted safety boundary fails closed.", "required": true, "riskDomain": "evidence_integrity", "status": "unverified", "evidence": [], "expected": "validation error", "verificationPlan": "Mutation regression fixtures."},
+    {"scenario": "Commands and paths remain byte-identical across localized views.", "required": true, "riskDomain": "compatibility", "status": "unverified", "evidence": [], "expected": "validation passes only for identical tokens", "verificationPlan": "Unit test with command/path mutations."}
+  ],
+  "guidelines": [
+    "Compare controlled semantic facts, not arbitrary evidence prose; preserve source text where no deterministic translation authority exists.",
+    "Fail closed on language-specific capability expansion, missing safety boundaries, or divergent commands and paths.",
+    "Do not modify provider configuration or historical archived Work Items."
+  ],
+  "intent": {"problem": "Existing multilingual checks preserve selected structural and machine values, but they do not provide one comparable semantic contract across controlled governance facts.", "constraints": ["Do not use external translation services.", "Do not translate arbitrary evidence prose.", "Do not rewrite historical archives or provider configuration."], "rationale": "A small explicit projection detects language-specific overclaims and missing restrictions while keeping human-readable localized chrome."},
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "requiredEvidence": ["Focused semantic parity unit tests", "Full governed quality receipt"],
+  "residualRiskExpectation": "This validates controlled semantic facts only; arbitrary human evidence prose remains explicitly source text.",
+  "humanDecisionPoints": ["Reviewers confirm that the controlled projection captures governance-critical semantics without claiming general translation equivalence."],
+  "documentationImpact": "Add a bounded reference explaining the controlled semantic projection and its non-translation boundary.",
+  "performanceImpact": "One in-memory semantic comparison over small controlled projections; no provider calls.",
+  "rollbackPlan": "Revert this Work Item diff to remove the projection, validator, tests, and documentation together.",
+  "rollbackNote": "Revert this Work Item diff to restore the prior localized-view behavior and remove the validator as one change.",
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User granted standing authorization to record governed Contract writes for current and future Work Items."},
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 761}},
+  "startReceipt": {"path": ".ai/work-items/starts/multilingual-semantic-parity.json", "baseCommit": "d8fde967480073f93e1f69b6412d8e6566204a06", "initialScopeDigest": "34b14712d95162f9f6f91950b8cb7c7f26410809c2b1e39e3c7fa3eb3497a65c", "contractSkeletonDigest": "36b02bb9d8e5b90c0c96516a5bee099c9bd1318c409aa4a3b8b597400debc480"}
+}
