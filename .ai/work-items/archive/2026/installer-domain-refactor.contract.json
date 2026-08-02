@@ -1,0 +1,243 @@
+{
+  "contractVersion": 2,
+  "workItemId": "installer-domain-refactor",
+  "mode": "code",
+  "title": "Refactor installer into explicit domains",
+  "baseCommit": "03c3081695bccdc2a1882112983ac377a4b36b2b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/installer-domain-refactor.contract.json",
+    ".ai/work-items/active/installer-domain-refactor.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/bandit_low_risk_baseline.json",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/installer-domain-refactor.outcome.json",
+    ".ai/work-items/active/installer-domain-refactor.outcome.md",
+    "scripts/installer/**",
+    "scripts/install_ai_cockpit.py",
+    "tests/test_installer_domains.py",
+    "tests/test_bandit_baseline.py",
+    "docs/reference/installed-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Provider configuration, secrets, release publication, and adopter project writes are excluded.",
+    "Existing installer behavior is preserved; this Work Item does not redesign installation policy."
+  ],
+  "sources": [
+    {"path": "user-pasted-text-1", "reason": "User-approved WI-12 target domains and compatibility constraints."},
+    {"path": "scripts/install_ai_cockpit.py", "reason": "Current compatibility CLI and legacy installer implementation."},
+    {"path": "scripts/ai_installer_transaction.py", "reason": "Existing transaction primitives to preserve and expose through the domain package."},
+    {"path": "scripts/ai_installer_repository.py", "reason": "Existing read-only repository facts boundary."},
+    {"path": "tests/test_installer_transaction.py", "reason": "Existing transaction behavior regression coverage."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["installer_compatibility", "transaction_boundary"],
+    "reason": "Moving installer responsibilities can regress compatible command behavior or weaken the read-only plan / approved transaction boundary.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": ["Installer source and tests change without release publication or provider operations."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user specified the required domain boundaries and explicitly authorized Contract writes; implementation is repository-local and reversible."
+  },
+  "preReviewWarnings": ["Review compatibility entrypoints and confirm planning remains read-only while transactions require an explicit confirmation."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "scripts/installer exposes named request, inspection, plan, conflict, confirmation, transaction, rollback, ownership, Git-state, evidence, presentation, application, and CLI boundaries.",
+    "The compatibility CLI delegates through an application boundary; planning APIs are read-only and transaction execution rejects an unconfirmed plan.",
+    "Existing installer CLI command behavior remains covered by focused regression tests.",
+    "The installed-lifecycle reference documents the staged compatibility boundary without claiming a provider or release guarantee."
+  ],
+  "guidelines": [
+    "New public installer-domain APIs must be documented and tested.",
+    "Do not import installer-internal modules from unrelated governance features.",
+    "Plans must be read-only and transactions must run only after explicit confirmation."
+  ],
+  "intent": {
+    "problem": "The legacy installer entrypoint concentrates orchestration, planning, persistence, rollback, and presentation in one module, obscuring which operations are read-only and which may write an adopter repository.",
+    "constraints": ["Preserve the existing command-line interface.", "Do not modify provider configuration or an adopter repository.", "Keep plan creation read-only and require explicit confirmation before transaction execution.", "Do not rewrite historical Work Item artifacts."],
+    "rationale": "Explicit installer domains make the trust boundary reviewable without changing the installation policy."
+  },
+  "rawUserRequest": "Complete WI-12 installer-domain-refactor as part of the user-authorized remediation sequence, preserving installer commands while separating inspection, planning, confirmation, transaction, rollback, ownership, Git facts, evidence, presentation, application, and CLI responsibilities.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-pasted-text-1 WI-12 installer-domain-refactor",
+    "capturedAt": "2026-08-02T00:00:00+00:00",
+    "digest": "sha256:user-authorized-installer-domain-refactor"
+  },
+  "declaredIntent": {
+    "summary": "Separate installer responsibilities without weakening command compatibility or the plan/transaction trust boundary.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "requiredEvidenceContext": {
+    "destructiveLevel": "none",
+    "availableEvidence": ["focused domain-boundary tests", "existing installer regression tests", "full local quality receipt"],
+    "externalSystem": "none"
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "planning remains read-only",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_installer_domains.py::test_application_inspection_and_planning_are_read_only"],
+      "expected": "Inspection and plan creation return data without creating or modifying target files.",
+      "verificationPlan": "Run focused installer-domain tests that snapshot the target before and after planning."
+    },
+    {
+      "scenario": "transaction requires explicit confirmation",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_installer_domains.py::test_transaction_rejects_unconfirmed_plan_before_executor_runs"],
+      "expected": "An unconfirmed plan is rejected before any transaction callback runs; a confirmed plan may execute only its declared actions.",
+      "verificationPlan": "Run focused installer-domain transaction tests."
+    },
+    {
+      "scenario": "legacy CLI remains compatible",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_installer_domains.py::test_compatibility_cli_is_a_thin_non_writing_adapter", "tests/test_installer.py"],
+      "expected": "The compatibility entrypoint delegates through the application boundary and retains existing argument behavior.",
+      "verificationPlan": "Run installer entrypoint and installer regression tests."
+    }
+  ],
+  "performanceImpact": "The refactor must not add a second installer scan or quality graph; it reuses existing inspection and transaction primitives.",
+  "predecessorWorkItem": {
+    "workItemId": "governance-performance-budget",
+    "status": "closed",
+    "pr": {
+      "number": 566,
+      "merged": true,
+      "url": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/566",
+      "mergeCommit": "eb3209965f7921f67f9d7eec08900067daf4bb4d"
+    },
+    "closure": {
+      "succeeded": true,
+      "localBranchDeleted": true,
+      "remoteBranchDeleted": true,
+      "baseSynchronized": true,
+      "evidence": ".ai/work-items/archive/2026/governance-performance-budget.archive-manifest.json"
+    }
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff; the compatibility entrypoint and existing installer policy remain intact.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 753
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/installer-domain-refactor.json",
+    "baseCommit": "03c3081695bccdc2a1882112983ac377a4b36b2b",
+    "initialScopeDigest": "eb819be3ec7960e456cd2610c3f1a3f443bddbe11be54b688ae1e358c25b35e9",
+    "contractSkeletonDigest": "6ab69908d5ad1f6bc64cd074a10197af16c7bdfbbd3b999d633fb43ab3531b4c"
+  }
+}

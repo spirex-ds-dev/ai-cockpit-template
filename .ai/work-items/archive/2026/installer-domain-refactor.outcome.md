@@ -1,0 +1,80 @@
+# Task Outcome: installer-domain-refactor
+
+Status: `completed`
+
+## Outcome Summary
+Task installer-domain-refactor generated an evidence-derived outcome with status completed.
+
+## Task Overview
+Governed Work Item: installer-domain-refactor
+
+## Delivered Changes
+- .ai/work-items/active/installer-domain-refactor.contract.json
+- .ai/work-items/active/installer-domain-refactor.summary.json
+- .ai/cockpit/bandit_low_risk_baseline.json
+- tests/test_bandit_baseline.py
+- scripts/install_ai_cockpit.py
+- scripts/installer/__init__.py
+- scripts/installer/application.py
+- scripts/installer/cli.py
+- scripts/installer/confirmation.py
+- scripts/installer/inspection.py
+- scripts/installer/planning.py
+- scripts/installer/transaction.py
+- scripts/installer/ownership.py
+- scripts/installer/rollback.py
+- scripts/installer/git_state.py
+- scripts/installer/evidence.py
+- scripts/installer/presentation.py
+- scripts/installer/upgrade.py
+- scripts/installer/legacy.py
+- tests/test_installer_domains.py
+- docs/reference/installed-lifecycle.md
+- docs/reference/capability-truth-matrix.json
+- docs/reference/japanese-capability-assessment.json
+- docs/reference/japanese-capability-assessment.md
+- docs/reference/pre-release-documentation-alignment.json
+- docs/reference/pre-release-documentation-alignment.md
+
+## Findings
+None
+
+## Risks
+None
+
+## Warnings
+None
+
+## Limitations
+None
+
+## Non-Risk Explanations
+None
+
+## Forbidden Claims
+None
+
+## Interventions
+None
+
+## Forced Stops
+None
+
+## Resolutions
+None
+
+## Recurrence Prevention
+None
+
+## Avoided Impact
+None
+
+## Residual Risks
+None
+
+## Human Decisions
+None
+
+## Evidence
+- Contract
+- Summary

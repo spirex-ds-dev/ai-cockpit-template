@@ -22,6 +22,25 @@ Ownership is explicit: `template`, `project`, `shared`, `generated`, or `histori
 
 These facts are a repository record, not an identity system, approval system, immutable audit ledger, sandbox, or enterprise assurance claim. Update, migration, rollback, disable/enable, uninstall, and purge behavior is governed by their own Work Items and must consume validated facts.
 
+## Installer domain boundary
+
+The compatibility command remains `scripts/install_ai_cockpit.py`. It is a
+thin CLI adapter: it does not write adopter files itself and delegates to the
+installer application boundary. The staged domain package at
+`scripts/installer/` makes the review boundary explicit:
+
+- `inspection`, `git_state`, and `planning` collect or render read-only facts.
+- `confirmation` and `transaction` require an explicit approved confirmation
+  before an executor can act on a plan.
+- `ownership`, `rollback`, and `evidence` carry typed review facts rather than
+  inferring permission from a pathname.
+- `application`, `presentation`, `upgrade`, and `cli` compose the compatible
+  installer surface without changing its policy.
+
+This is a staged refactor. It preserves the established installer behavior and
+does not claim that an adopter installation, provider operation, or release
+has been executed merely because a plan was inspected.
+
 ## Ownership decisions
 
 Ownership is an installation fact, not a path heuristic. The supported classes are:
