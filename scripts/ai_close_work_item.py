@@ -80,6 +80,18 @@ def _find_archived_contract(task: str) -> Path:
     return matches[0]
 
 
+def _recorded_start_branch(task: str) -> str | None:
+    """Return a bounded legacy branch identity recorded at Work Item start."""
+    receipt = PROJECT_ROOT / ".ai" / "work-items" / "starts" / f"{task}.json"
+    if not receipt.is_file():
+        return None
+    data = load_json(receipt)
+    branch = data.get("baseBranch") if isinstance(data, dict) else None
+    if not isinstance(branch, str) or not branch.startswith("codex/"):
+        return None
+    return branch
+
+
 def _archived_outcome_path(contract_path: Path) -> Path:
     outcome_path = contract_path.with_name(
         contract_path.name.replace(".contract.json", ".outcome.json")
@@ -496,7 +508,8 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
             "synchronize the base and remove local/remote branches"
         )
     expected_branch = f"codex/{task}"
-    if work_branch != expected_branch:
+    recorded_branch = _recorded_start_branch(task)
+    if work_branch != expected_branch and work_branch != recorded_branch:
         raise RuntimeError(
             "requested Work Item does not match the selected worktree branch; "
             f"expected {expected_branch}, found {work_branch}"
