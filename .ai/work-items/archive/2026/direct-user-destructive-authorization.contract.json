@@ -1,0 +1,251 @@
+{
+  "contractVersion": 2,
+  "workItemId": "direct-user-destructive-authorization",
+  "mode": "code",
+  "title": "Record direct-user destructive authorization",
+  "baseCommit": "9a177e4cdf4afb7d7b75de1e3b6c6db01b7376ff",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/direct-user-destructive-authorization.contract.json",
+    ".ai/work-items/active/direct-user-destructive-authorization.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/direct-user-destructive-authorization.outcome.json",
+    ".ai/work-items/active/direct-user-destructive-authorization.outcome.md",
+    ".ai/trust/schema/approval.schema.json",
+    "scripts/ai_external_identity.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_work_item.py",
+    "tests/test_external_identity.py",
+    "tests/test_ai_check_work_item.py",
+    "tests/test_core_gates.py",
+    "tests/test_trust_schema.py",
+    "docs/reference/external-identity-boundary.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/contract-fields.md",
+    "docs/superpowers/specs/2026-08-02-direct-user-destructive-authorization-design.md",
+    "docs/superpowers/plans/2026-08-02-direct-user-destructive-authorization.md"
+  ],
+  "outOfScope": [
+    "Provider configuration, GitHub branch protection, reviews, credentials, releases, and tags.",
+    "Permission for a Work Item to infer, fabricate, or upgrade a provider review.",
+    "Actual lifecycle-remnant deletion; that is a successor Work Item with an exact, separately reviewed scope."
+  ],
+  "sources": [
+    {
+      "path": "docs/reference/external-identity-boundary.md",
+      "reason": "Current high-risk destructive authorization boundary and its external-evidence requirement."
+    },
+    {
+      "path": "scripts/ai_external_identity.py",
+      "reason": "Canonical identity-level semantic validator."
+    },
+    {
+      "path": "conversation:2026-08-02-direct-user-authorization",
+      "reason": "User explicitly authorized a bounded same-identity direct-user authorization record because an author cannot approve their own GitHub PR."
+    },
+    {
+      "path": "https://docs.github.com/rest/pulls/reviews#create-a-review-for-a-pull-request",
+      "reason": "Observed GitHub 422 response: a pull-request author cannot approve their own pull request."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["authorization_boundary", "destructive_cleanup"],
+    "reason": "The change deliberately adds a lower-assurance authorization path. It must be explicit, exact-scope-bound, tamper-evident, and visibly distinct from independent provider or enterprise verification.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The task changes a governance boundary but performs no deletion or release operation."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly approved the bounded direct-user model after its difference from provider review was explained."
+  },
+  "preReviewWarnings": [
+    "Direct user authorization must never be rendered or validated as provider_verified or enterprise_verified.",
+    "The new authority is valid only with an exact scope and a non-empty direct-user instruction record and digest."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: Approval Evidence supports an explicit direct_user_authorized identity level that is distinct from provider_verified and enterprise_verified.",
+    "A2: A high-risk destructive Contract accepts direct_user_authorized evidence only when it has an exact allowPatterns scope, a direct-user authorization record, a sha256-form digest, and non-empty actor and timestamp fields.",
+    "A3: Missing, malformed, or mismatched direct-user evidence remains fail-closed, and it cannot claim an external reviewer or reviewId.",
+    "A4: Documentation names the assurance limit and records that direct user authorization is not independent provider or enterprise verification.",
+    "A5: Focused regression tests demonstrate both the accepted bounded path and rejected malformed/forged paths."
+  ],
+  "guidelines": [
+    "Preserve the distinction between direct user authorization and independently verified Provider or enterprise identity.",
+    "Require exact target scope and tamper-evident instruction reference for every direct-user destructive authorization.",
+    "Do not add a mechanism that can synthesize or relabel a GitHub review."
+  ],
+  "intent": {
+    "problem": "GitHub refuses a pull-request author's self-approval. The user is the only available decision maker and explicitly permitted same-identity continuation, but the present model only accepts independent provider or enterprise evidence for destructive cleanup.",
+    "constraints": [
+      "Do not modify Provider configuration or claim that a user message is an independent review.",
+      "Direct user consent must remain visibly lower-assurance and must bind an exact destructive scope.",
+      "Preserve fail-closed behavior for missing, malformed, mismatched, or self-declared evidence.",
+      "Do not delete worktrees or branches in this policy Work Item."
+    ],
+    "rationale": "A narrow direct-user-consent type lets an authenticated human delegate an exact cleanup through the Agent while preserving a truthful assurance label and preventing a fabricated GitHub reviewer identity."
+  },
+  "rawUserRequest": "我没有第二身份。就用同一身份继续。可以将我的授权，许可写入记录。 如果不行，就修改，可以同一个身份进行。 确认。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-02-direct-user-authorization",
+    "capturedAt": "2026-08-02",
+    "digest": "sha256:direct-user-same-identity-authorization"
+  },
+  "declaredIntent": {
+    "summary": "Permit only an explicitly recorded direct-user authorization for an exact destructive scope when independent provider review is unavailable to the sole authenticated user.",
+    "requestedCapabilities": ["ai_governance", "software_design"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "An exact direct-user destructive authorization is recorded",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "It is accepted only as direct_user_authorized and only for the exact allowPatterns scope.",
+      "verificationPlan": "Focused external-identity and Contract validation tests cover the accepted record."
+    },
+    {
+      "scenario": "Direct-user authorization is missing or malformed",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Validation rejects it without any provider-verified claim.",
+      "verificationPlan": "Focused tests omit each required direct-user evidence field and assert failure."
+    },
+    {
+      "scenario": "An Agent attempts to relabel direct authorization as an external review",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Provider and enterprise requirements remain independent and direct-user evidence cannot satisfy them.",
+      "verificationPlan": "Focused tests assert direct-user records cannot carry provider/review evidence and documentation states the boundary."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized this narrowly scoped governance-policy change to record same-identity direct authorization truthfully."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 767
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/direct-user-destructive-authorization.json",
+    "baseCommit": "9a177e4cdf4afb7d7b75de1e3b6c6db01b7376ff",
+    "initialScopeDigest": "0eb52e537dce82d8f42574d224f0c8bafdb64222c82488e9cbf2023e6017e90e",
+    "contractSkeletonDigest": "15b491c005a4f12f8564469d4b5b619ae77fa76a464640bb63994b79eec20871"
+  }
+}

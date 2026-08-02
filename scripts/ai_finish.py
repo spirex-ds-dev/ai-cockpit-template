@@ -122,7 +122,8 @@ def run(command: list[str], *, extra_env: dict[str, str] | None = None) -> tuple
         stderr=subprocess.STDOUT,
     )
     if result.stdout:
-        print(result.stdout, end="" if result.stdout.endswith("\n") else "\n")
+        displayed = console_output(result.stdout)
+        print(displayed, end="" if displayed.endswith("\n") else "\n")
     return result.returncode, elapsed_ms(start), result.stdout or ""
 
 
@@ -331,6 +332,18 @@ STABILIZATION_CHECKS = frozenset(
     {"aiStatus", "aiStatusCheck", "aiStatusConsistency", "aiAgentRisk", "aiSummary"}
 )
 MANDATORY_VERIFICATION_CHECKS = ("sourceBoundEvidence",)
+CONSOLE_OUTPUT_LIMIT = 12_000
+
+
+def console_output(output: str) -> str:
+    """Keep terminal diagnostics bounded without weakening stored evidence."""
+    if len(output) <= CONSOLE_OUTPUT_LIMIT:
+        return output
+    omitted = len(output) - CONSOLE_OUTPUT_LIMIT
+    return (
+        output[:CONSOLE_OUTPUT_LIMIT]
+        + f"\n[output truncated: {omitted} character(s) retained in verification evidence]\n"
+    )
 
 
 def inject_mandatory_verification_checks(

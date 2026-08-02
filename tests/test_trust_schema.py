@@ -36,7 +36,7 @@ def test_human_decision_request_requires_all_explain_before_asking_fields() -> N
         ai_trust_schema.validate(payload, schema)
 
 
-def test_approval_schema_declares_the_four_identity_levels() -> None:
+def test_approval_schema_declares_direct_user_authorization_separately() -> None:
     schema = ai_trust_schema.load_schemas()["approval"]
 
     assert schema["properties"]["identityLevel"]["enum"] == [
@@ -44,6 +44,7 @@ def test_approval_schema_declares_the_four_identity_levels() -> None:
         "repository_recorded",
         "provider_verified",
         "enterprise_verified",
+        "direct_user_authorized",
     ]
 
 

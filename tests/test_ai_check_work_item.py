@@ -210,6 +210,35 @@ def test_destructive_approval_accepts_provider_bound_identity_evidence() -> None
     assert ai_check_work_item.validate_contract(contract) == []
 
 
+def test_destructive_approval_accepts_exact_direct_user_authorization() -> None:
+    contract = valid_contract()
+    contract["destructiveChangePolicy"] = {
+        "allowed": True,
+        "requiresHumanApproval": True,
+        "allowPatterns": [".worktrees/example"],
+        "approvalEvidence": {
+            "approved": True,
+            "approvedBy": "repository-owner",
+            "reason": "Direct user instruction authorizes this exact cleanup.",
+            "identityEvidence": {
+                "schemaVersion": 1,
+                "approvalType": "destructive_change",
+                "identityLevel": "direct_user_authorized",
+                "actor": "repository-owner",
+                "provider": None,
+                "evidence": {
+                    "directUserInstructionRef": "conversation:2026-08-02-cleanup",
+                    "directUserInstructionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "authorizedAt": "2026-08-02T10:00:00Z",
+                },
+                "scope": [".worktrees/example"],
+            },
+        },
+    }
+
+    assert ai_check_work_item.validate_contract(contract) == []
+
+
 def test_v2_code_work_item_rejects_skeleton_placeholders():
     contract = valid_contract()
     contract.update(

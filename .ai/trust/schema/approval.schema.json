@@ -23,7 +23,8 @@
         "self_declared",
         "repository_recorded",
         "provider_verified",
-        "enterprise_verified"
+        "enterprise_verified",
+        "direct_user_authorized"
       ]
     },
     "actor": {"type": "string", "minLength": 1},
@@ -39,7 +40,10 @@
         "rulesetId": {"type": ["integer", "string"]},
         "commitSha": {"type": "string", "minLength": 1},
         "enterpriseSystem": {"type": "string", "minLength": 1},
-        "externalReference": {"type": "string", "minLength": 1}
+        "externalReference": {"type": "string", "minLength": 1},
+        "directUserInstructionRef": {"type": "string", "minLength": 1},
+        "directUserInstructionDigest": {"type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$"},
+        "authorizedAt": {"type": "string", "format": "date-time"}
       }
     },
     "scope": {
