@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 import tarfile
+from datetime import UTC, datetime
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -16,6 +17,7 @@ import scripts.ai_capability_truth as capability_truth
 import scripts.check_release_preflight as preflight
 import scripts.finalize_release_freeze as finalizer
 from scripts import release_archive
+from scripts.ai_capability_freshness import current_environment, make_record
 from scripts.check_release_preflight import (
     ReleasePreflightError,
     _load_object,
@@ -669,6 +671,11 @@ def test_finalizer_preserves_capability_truth_without_release_metadata_self_refe
                     "sourceEvidence": ["install.sh"],
                     "testEvidence": ["tests/release_evidence.py"],
                     "commandEvidence": ["make check-release-preflight"],
+                    "freshness": make_record(
+                        environment=current_environment(),
+                        scope=["install.sh", "tests/release_evidence.py"],
+                        now=datetime.now(UTC),
+                    ),
                     "evidenceSource": capability_truth.build_evidence_source(
                         ["install.sh"], ["tests/release_evidence.py"], root=tmp_path
                     ),

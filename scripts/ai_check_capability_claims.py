@@ -6,9 +6,11 @@ from __future__ import annotations
 import argparse
 import json
 import re
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from ai_capability_freshness import current_environment, evaluate_freshness
 from ai_capability_truth import (
     CapabilityTruthError,
     build_evidence_source,
@@ -192,6 +194,15 @@ def _effective_state(row: dict[str, Any], *, root: Path) -> str:
     state = capability_state(row)
     if state == "evidence_stale":
         return state
+    freshness = row.get("freshness")
+    if (
+        not isinstance(freshness, dict)
+        or evaluate_freshness(freshness, environment=current_environment(), now=datetime.now(UTC))[
+            "state"
+        ]
+        != "fresh"
+    ):
+        return "evidence_stale"
     source_paths = row.get("sourceEvidence")
     test_paths = row.get("testEvidence")
     if not isinstance(source_paths, list) or not isinstance(test_paths, list):
