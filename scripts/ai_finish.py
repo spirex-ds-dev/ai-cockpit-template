@@ -34,6 +34,7 @@ from ai_common import (
     verification_key,
 )
 from ai_observability import create_observability, elapsed_ms
+from ai_work_item_intelligence import record_fact_once
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 REPORT_BOUNDARY_TEXT = {
@@ -1061,6 +1062,11 @@ def main() -> int:
     )
 
     print("Work Item finish checks passed")
+    record_fact_once(
+        args.task,
+        "finish_passed",
+        {"contractPath": contract, "summaryPath": summary, "commitSha": commit_sha},
+    )
     outcome_json, _outcome_markdown = _outcome_paths(args.task)
     try:
         print(render_direct_outcome_report(load_json(outcome_json), args.language), end="")

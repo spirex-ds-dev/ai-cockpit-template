@@ -385,6 +385,7 @@ class Installer:
                 Path("work-items/active"),
                 Path("work-items/archive"),
                 Path("work-items/starts"),
+                Path("work-items/runtime"),
                 Path("decisions"),
             }
             if relative == ".ai"
@@ -394,6 +395,10 @@ class Installer:
             keep = src / pruned / ".gitkeep"
             if keep.is_file():
                 pairs.append((keep, dst / pruned / ".gitkeep"))
+        if relative == ".ai":
+            runtime_ignore = src / "work-items" / "runtime" / ".gitignore"
+            if runtime_ignore.is_file():
+                pairs.append((runtime_ignore, dst / "work-items" / "runtime" / ".gitignore"))
         items: list[Path] = []
         for current, directories, filenames in os.walk(src):
             current_path = Path(current)

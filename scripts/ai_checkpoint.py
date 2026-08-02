@@ -17,6 +17,7 @@ from ai_common import (
     verification_key,
     verification_status_for_generation,
 )
+from ai_work_item_intelligence import record_fact_once
 
 
 def required_verification(contract: dict[str, Any]) -> list[str]:
@@ -172,6 +173,12 @@ def main() -> int:
 
     if args.summary and isinstance(summary, dict):
         record_checkpoint(summary, contract, args.stage, Path(args.contract), Path(args.summary))
+    if args.stage == "before_edit":
+        record_fact_once(
+            str(contract.get("workItemId", "")),
+            "implementation_started",
+            {"checkpoint": "before_edit", "contractHash": contract_hash(Path(args.contract))},
+        )
 
     print("# AI Work Item Checkpoint")
     print(f"- Stage: `{args.stage}`")

@@ -1,0 +1,41 @@
+from __future__ import annotations
+
+import json
+import sys
+
+import scripts.ai_work_item_status as status_cli
+
+
+def test_cli_returns_stable_not_found_envelope(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(sys, "argv", ["ai_work_item_status.py", "--work-item", "missing-item"])
+    assert status_cli.main() == 10
+    payload = json.loads(capsys.readouterr().out)
+    assert payload == {
+        "ok": False,
+        "data": None,
+        "error": {"code": "not_found", "message": "snapshot not found for missing-item"},
+    }
+
+
+def test_list_cli_delegates_only_to_read_query(monkeypatch, capsys) -> None:
+    calls: list[dict[str, object]] = []
+
+    def query(**kwargs):
+        calls.append(kwargs)
+        return {"schemaVersion": 1, "indexVersion": 0, "entries": []}
+
+    monkeypatch.setattr(status_cli, "query", query)
+    monkeypatch.setattr(
+        sys, "argv", ["ai_work_item_status.py", "--list-active", "--state", "active"]
+    )
+    assert status_cli.main() == 0
+    assert calls == [
+        {
+            "work_item": None,
+            "state": "active",
+            "pending_human_decisions": False,
+            "eligible_action": None,
+            "after_index_version": None,
+        }
+    ]
+    assert json.loads(capsys.readouterr().out)["ok"] is True

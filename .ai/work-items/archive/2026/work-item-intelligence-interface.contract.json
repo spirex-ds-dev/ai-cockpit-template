@@ -1,0 +1,280 @@
+{
+  "contractVersion": 2,
+  "workItemId": "work-item-intelligence-interface",
+  "mode": "code",
+  "title": "Expose Trustworthy Real-Time Work Item Intelligence to External Agents",
+  "baseCommit": "41ce26e390fd0e0eb986418881d688e7d8be9a62",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/work-item-intelligence-interface.contract.json",
+    ".ai/work-items/active/work-item-intelligence-interface.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/work-item-intelligence-interface.outcome.json",
+    ".ai/work-items/active/work-item-intelligence-interface.outcome.md",
+    ".ai/work-items/runtime/.gitignore",
+    ".ai/schemas/work-item-intelligence-snapshot.schema.json",
+    ".ai/guards/coverage_policy.yaml",
+    "scripts/ai_work_item_intelligence.py",
+    "scripts/ai_work_item_status.py",
+    "scripts/ai_start.py",
+    "scripts/ai_preflight_review.py",
+    "scripts/ai_checkpoint.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_close_work_item.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_installer_catalog.json",
+    "scripts/installer/legacy.py",
+    "tests/test_work_item_intelligence.py",
+    "tests/test_work_item_intelligence_integration.py",
+    "docs/reference/work-item-intelligence-interface.md",
+    "docs/superpowers/specs/2026-08-02-work-item-intelligence-interface.md",
+    "docs/reference/schemas.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md"
+    ,"docs/reference/documentation-context-registry.json"
+    ,"docs/reference/pre-release-documentation-alignment.json"
+    ,"docs/reference/pre-release-documentation-alignment.md"
+    ,"docs/reference/japanese-capability-assessment.json"
+    ,"docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "provider configuration and credentials",
+    "remote HTTP, WebSocket, webhook, or MCP service",
+    "scheduler, DAG/workflow engine, retry controller, or agent manager",
+    "historical archived Work Item records"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/specs/2026-08-02-work-item-intelligence-interface.md",
+      "reason": "Repository-local transcription of the user-provided WIII product and acceptance specification."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Defines the governed Work Item lifecycle and closure requirements."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines repository truth, governance boundaries, and status terminology."
+    },
+    {
+      "path": "scripts/ai_domain_model.py",
+      "reason": "Existing canonical lifecycle vocabulary and evidence-bound transitions."
+    },
+    {
+      "path": "scripts/ai_task_event_log.py",
+      "reason": "Existing append-only, secret-safe evidence primitives to preserve."
+    }
+  ],
+  "rawUserRequest": "Implement the final Work Item: a local, read-only Work Item Intelligence Interface that exposes fact-derived, real-time snapshots to external agents without becoming a scheduler, workflow engine, or remote service. It must distinguish lifecycle, governance state, and activity health; provide stable query errors and incremental index queries; derive rather than accept terminal claims; remain safe, auditable, efficient, and documented.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "attachment:69628fcd-aa59-4620-b152-ed1b36b5abc5/pasted-text.txt",
+    "capturedAt": "2026-08-02",
+    "digest": "sha256:00dedc7688d33d9e3b88e79b97fed35862bac70aa5579d8186fb17b1a35ea851"
+  },
+  "declaredIntent": {
+    "summary": "Expose trustworthy, fact-derived local Work Item intelligence for external agents.",
+    "requestedCapabilities": ["ai_governance"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "requiredEvidenceContext": {
+    "availableEvidence": []
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_change",
+      "state_consistency",
+      "local_persistence",
+      "security_boundary"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "The interface projects governance truth and local runtime facts; strict verification is retained for false terminal state, mutation during query, cross-Work-Item leakage, and secret-exposure risks, while the specified local-only boundary excludes external production impact."
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "High-risk governance state and evidence projection changes require strict verification; this is not a release operation."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user supplied a complete local-only specification, explicit exclusions, and authority to write the Contract."
+  },
+  "preReviewWarnings": [
+    "Review fact derivation, terminal-claim blocking, read-only queries, per-Work-Item isolation, and rebuild/tamper recovery."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A versioned, fact-derived Work Item Intelligence Snapshot exposes independent lifecycle phase, governance state, and activity health, progress facts, blockers, missing evidence, dependencies, human decisions, risks, verification, eligibility, activity, and integrity fields without subjective percentage progress.",
+    "The local query interface supports single Work Item JSON, active listing, state filtering, pending-human-decision filtering, eligibility filtering, and index-version delta queries with stable envelope, error code, and exit-code semantics; every query is read-only and runs no quality gate.",
+    "Append-only per-Work-Item facts and an incrementally maintained runtime index are isolated, secret-safe, tamper-detectable, and rebuildable; lifecycle integrations derive facts after authoritative operations without allowing agents to self-assert completed, release-ready, or distribution-verified states.",
+    "Documentation clearly states the local repository boundary, the fact-to-snapshot decision model, supported commands, limitations, and the explicit non-goals of remote service, scheduler, workflow engine, retry controller, and agent manager.",
+    "Focused unit and integration tests cover state derivation, missing/stale/rejected evidence, human decision/dependency behavior, heartbeat semantics, no-mutation query behavior, tamper/rebuild, concurrency isolation, compatibility with current Markdown status, and measured local query/index baseline reporting."
+  ],
+  "guidelines": [
+    "Derive all governance and terminal claims from authoritative Contract, Summary, archive, and runtime facts; never accept an agent assertion as evidence.",
+    "Keep the interface local and read-only for queries: do not add provider configuration, credentials, remote transport, scheduling, retry, or agent-control behavior.",
+    "Keep runtime data per Work Item, append-only where facts are recorded, digest-checked, rebuildable, and free of secrets, full environment values, private notes, and external response bodies.",
+    "Document every public command and preserve the existing Markdown Cockpit Status as a compatibility projection rather than a competing authority."
+  ],
+  "intent": {
+    "problem": "External agents cannot safely understand which governed Work Item may proceed, why it is blocked, or what evidence is missing from the current Markdown status alone; agent self-report must not become a source of truth.",
+    "constraints": [
+      "Implement only a repository-local, file-backed intelligence interface.",
+      "Do not rewrite historical archived Work Items or alter provider configuration.",
+      "Do not make stale activity automatically fail, cancel, or retry a Work Item.",
+      "Do not make a status query mutate state or execute quality gates."
+    ],
+    "rationale": "A compact projection of authoritative facts improves human and external-agent decision quality while preserving the repository governance boundary and avoiding a second workflow engine."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Fact-derived terminal state",
+      "required": true,
+      "status": "unverified",
+      "expected": "Completed, release-ready, and distribution-verified claims are rejected or withheld until corresponding authoritative evidence is present.",
+      "verificationPlan": "Run focused intelligence tests that submit self-asserted and evidence-backed facts.",
+      "evidence": []
+    },
+    {
+      "scenario": "Read-only query and incremental index",
+      "required": true,
+      "status": "unverified",
+      "expected": "Single/list/filter/delta queries return stable envelopes without changing facts, snapshots, index, or running gates.",
+      "verificationPlan": "Run CLI and integration tests using before/after filesystem digests and an isolated runtime root.",
+      "evidence": []
+    },
+    {
+      "scenario": "Isolation, integrity, and recovery",
+      "required": true,
+      "status": "unverified",
+      "expected": "Work Item facts are isolated; tampered snapshots are detected and a deterministic rebuild restores the authoritative projection.",
+      "verificationPlan": "Run multi-Work-Item, tamper, rebuild, and concurrent-writer focused tests.",
+      "evidence": []
+    },
+    {
+      "scenario": "Non-goals remain absent",
+      "required": true,
+      "status": "unverified",
+      "expected": "No remote service, provider configuration, scheduler, retry controller, or automatic stale-state transition is introduced.",
+      "verificationPlan": "Run focused boundary tests and inspect the declared implementation scope and documentation.",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "Standing user authorization: future Work Item writes may be recorded in the Contract; applies only to this Contract scope and excludes provider configuration."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 764
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/work-item-intelligence-interface.json",
+    "baseCommit": "41ce26e390fd0e0eb986418881d688e7d8be9a62",
+    "initialScopeDigest": "8e5a81007a30a5aa6e96a178a90bdf19d17ba369dcb2293b25d5bf066eea2e1e",
+    "contractSkeletonDigest": "2f38021610a64f96391d45e32888032f7c14901f8eb50cd6e78b0d01dc026caf"
+  }
+}

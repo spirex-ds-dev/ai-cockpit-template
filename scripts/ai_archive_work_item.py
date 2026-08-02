@@ -31,6 +31,7 @@ from ai_common import (
     verification_key,
 )
 from ai_observability import AiEvent, AiEventLevel, AiEventType, create_observability
+from ai_work_item_intelligence import record_fact_once
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 ARCHIVE_BASE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
@@ -963,6 +964,11 @@ def main() -> int:
         return 1
 
     obs = create_observability(work_item_id=work_item_id)
+    record_fact_once(
+        str(work_item_id),
+        "archived",
+        {"archiveYear": target_dir.name, "archiveSequence": archive_sequence},
+    )
     obs.record(
         AiEvent(
             AiEventType.CHECK_PASSED,

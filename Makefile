@@ -58,6 +58,7 @@ check-docs-metadata check-capability-claims check-trust-layer-docs check-real-ab
 	check-ai-task-outcome generate-human-benefit-report check-human-benefit-report \
 	ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable \
 	ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
+	ai-work-item-status ai-work-item-intelligence-rebuild
 
 check-ai-diff-ownership:
 	$(AI_PYTHON) scripts/ai_check_diff_ownership.py $(if $(AI_BASE_COMMIT),--base $(AI_BASE_COMMIT),) $(if $(CONTRACT),--contract $(CONTRACT),)
@@ -524,6 +525,12 @@ ai-doctor:
 
 ai-lifecycle-facts:
 	$(AI_PYTHON) scripts/ai_lifecycle_facts.py --root .
+
+ai-work-item-status:
+	$(AI_PYTHON) scripts/ai_work_item_status.py $(ARGS)
+
+ai-work-item-intelligence-rebuild:
+	$(AI_PYTHON) scripts/ai_work_item_status.py --rebuild $(ARGS)
 
 ai-cockpit-version:
 	$(AI_PYTHON) scripts/ai_install_status.py version --root .
