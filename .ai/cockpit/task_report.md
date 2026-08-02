@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task domain-model-consolidation generated an evidence-derived outcome with status completed_with_warnings.
+Task derived-artifact-reduction generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1
@@ -32,7 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: The migration is intentionally limited to the lifecycle adapter; it does not claim that every historical governance record schema has been converted.
+- Unresolved evidence is explicitly limited: No historical archive schema migration is included by design.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.
