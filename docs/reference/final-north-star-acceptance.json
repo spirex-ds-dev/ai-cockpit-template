@@ -1,0 +1,31 @@
+{
+  "schema": "ai-cockpit-final-north-star-acceptance",
+  "schemaVersion": 1,
+  "decision": "CONDITIONAL_GO",
+  "dimensions": {
+    "installation": {"status": "verified", "evidence": ["tests/test_installer.py", "docs/reference/installed-lifecycle.md"]},
+    "upgrade": {"status": "verified", "evidence": ["tests/test_installer.py"]},
+    "uninstall": {"status": "verified", "evidence": ["tests/test_japanese_adopter_lifecycle.py", "docs/reference/installed-lifecycle.md"]},
+    "lifecycle": {"status": "verified", "evidence": ["scripts/ai_close_work_item.py", "tests/test_work_item_lifecycle_closure.py"]},
+    "absurd_tests": {"status": "verified", "evidence": ["tests/test_absurd_capability_truth.py"]},
+    "injection": {"status": "verified", "evidence": ["tests/test_input_trust_corpus.py"]},
+    "unknown": {"status": "verified", "evidence": ["tests/test_unknown_confirmation.py"]},
+    "agent_self_assertion": {"status": "verified", "evidence": ["tests/test_input_trust.py"]},
+    "real_adopter": {"status": "limited", "evidence": ["docs/reference/adopter-long-cycle-validation.md"]},
+    "provider_evidence": {"status": "limited", "evidence": ["docs/reference/enterprise-control-matrix.json"]},
+    "enterprise_boundary": {"status": "verified", "evidence": ["docs/reference/enterprise-control-matrix.json"]},
+    "task_outcome": {"status": "verified", "evidence": ["tests/test_task_outcome_validator.py"]},
+    "documentation": {"status": "verified", "evidence": ["tests/test_docs_metadata.py"]},
+    "multilingual": {"status": "verified", "evidence": ["tests/test_multilingual_semantic_parity.py"]},
+    "performance": {"status": "verified", "evidence": ["scripts/ai_quality_architecture.py"]},
+    "code_quality": {"status": "verified", "evidence": [".ai/work-items/archive/2026/failure-recovery-usability.summary.json"]},
+    "stale_assets": {"status": "verified", "evidence": ["scripts/ai_check_status_consistency.py"]},
+    "recovery": {"status": "verified", "evidence": ["scripts/ai_recovery_usability.py", "tests/test_recovery_usability.py"]},
+    "capability_truth": {"status": "verified", "evidence": ["docs/reference/capability-truth-matrix.json"]},
+    "north_star": {"status": "verified", "evidence": ["docs/philosophy/design-philosophy.md", "docs/reference/wi01-wi20-bidirectional-traceability-audit.json"]}
+  },
+  "limitations": [
+    "Real adopter evidence is bounded and does not prove external identity, authorization, or production operation.",
+    "Provider and enterprise controls remain explicitly not_verified without current external receipts."
+  ]
+}
