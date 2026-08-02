@@ -183,6 +183,9 @@ check-docs-metadata:
 	$(AI_PYTHON) scripts/check_docs_metadata.py
 	$(AI_PYTHON) scripts/ai_check_capability_claims.py
 
+ai-documentation-read-set:
+	$(AI_PYTHON) scripts/ai_documentation_authority.py $(if $(INCLUDE_REFERENCE),--include-reference,)
+
 check-capability-claims:
 	$(AI_PYTHON) scripts/ai_check_capability_claims.py
 
