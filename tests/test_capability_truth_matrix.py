@@ -157,3 +157,37 @@ def test_validate_matrix_rejects_bound_byte_drift_and_regeneration_repairs_it(
     (tmp_path / "source.py").write_text("changed\n", encoding="utf-8")
     errors = validate_matrix(matrix_path, root=tmp_path)
     assert any("evidenceSource does not match" in error for error in errors)
+
+
+def test_regeneration_records_freshness_for_local_evidence(tmp_path) -> None:
+    (tmp_path / "source.py").write_text("source\n", encoding="utf-8")
+    (tmp_path / "test.py").write_text("test\n", encoding="utf-8")
+    matrix = regenerate_matrix(
+        {
+            "statusVocabulary": ["implemented", "template_only", "adopter_installed", "planned"],
+            "capabilities": [
+                {
+                    "id": "bounded",
+                    "status": "implemented",
+                    "claim": "Bound evidence exists.",
+                    "evidence": ["source.py"],
+                    "verification": ["test.py"],
+                    "sourceEvidence": ["source.py"],
+                    "testEvidence": ["test.py"],
+                    "commandEvidence": ["pytest"],
+                    "limitations": "Repository-local evidence only.",
+                }
+            ],
+        },
+        root=tmp_path,
+    )
+
+    freshness = matrix["capabilities"][0]["freshness"]
+    assert set(freshness) == {
+        "verifiedAt",
+        "validUntil",
+        "environment",
+        "scope",
+        "evidenceFreshness",
+    }
+    assert freshness["evidenceFreshness"] == "fresh"
