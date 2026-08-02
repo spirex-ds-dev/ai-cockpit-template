@@ -63,6 +63,7 @@ DEFAULT_THRESHOLDS = {
     "materialAssertionRatio": 0.6,
     "snapshotReviewChangedLines": 20,
 }
+RETIREMENT_EVIDENCE_DIR = ".ai/evidence/test-weakening"
 
 
 class InputError(ValueError):
@@ -299,6 +300,55 @@ def _load_policy(path: Path | None) -> dict[str, float]:
     return thresholds
 
 
+def _approved_retirement_evidence(
+    root: Path, base: str, signals: list[dict[str, Any]]
+) -> dict[str, Any] | None:
+    """Return a narrow, source-bound approval for review-only test retirement.
+
+    Evidence can never clear critical signals and must cover exactly the current
+    base, affected paths, and reported signal types.  Missing or malformed
+    records intentionally leave the normal review decision intact.
+    """
+    directory = root / RETIREMENT_EVIDENCE_DIR
+    if (
+        not directory.is_dir()
+        or not signals
+        or any(item["severity"] == "critical" for item in signals)
+    ):
+        return None
+    paths = {str(item["path"]) for item in signals}
+    types = {str(item["type"]) for item in signals}
+    for candidate in sorted(directory.glob("*.json")):
+        try:
+            record = json.loads(candidate.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(record, dict) or record.get("version") != 1:
+            continue
+        if (
+            record.get("baseRef") != base
+            or record.get("decision") != "retire_cancelled_requirement"
+        ):
+            continue
+        source = record.get("humanAuthorization")
+        if not isinstance(source, dict) or not all(
+            isinstance(source.get(key), str) and source[key].strip()
+            for key in ("reference", "digest", "approvedBy")
+        ):
+            continue
+        if (
+            set(record.get("retiredPaths", [])) != paths
+            or set(record.get("allowedSignals", [])) != types
+        ):
+            continue
+        return {
+            "status": "accepted",
+            "path": candidate.relative_to(root).as_posix(),
+            "source": source["reference"],
+        }
+    return None
+
+
 def normalize_report(value: dict[str, Any]) -> dict[str, Any]:
     """Read the pre-version legacy report shape without inventing evidence."""
     if value.get("version") == 1:
@@ -511,7 +561,10 @@ def analyze(
         if signals
         else "continue"
     )
-    return {
+    approval = _approved_retirement_evidence(root, base, signals)
+    if decision == "review" and approval is not None:
+        decision = "warning"
+    report = {
         "version": 1,
         "mode": mode,
         "baseRef": base,
@@ -527,6 +580,9 @@ def analyze(
             "Static signals do not prove semantic equivalence or complete test coverage."
         ],
     }
+    if approval is not None:
+        report["requirementEvidence"] = approval
+    return report
 
 
 def main(argv: list[str] | None = None) -> int:

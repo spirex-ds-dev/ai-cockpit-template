@@ -40,6 +40,13 @@ If `--base-ref` is omitted, the checker uses the sole active Contract's `baseCom
 
 Every non-continue report contains a recovery condition. Restore the lost test strength, or provide independently reviewable changed-requirement evidence and rerun against the same base. A narrative such as “the tests are safe” does not clear a signal.
 
+For an intentional retirement, `.ai/evidence/test-weakening/*.json` may authorize
+only review-level signals. Its `baseRef`, `retiredPaths`, and `allowedSignals`
+must exactly match the live report, and it must carry a non-empty human
+authorization reference and digest. Accepted evidence changes the result to a
+visible `warning`; missing, stale, mismatched, malformed, or critical-signal
+evidence remains fail-closed.
+
 ## Evidence and compatibility
 
 ```json
