@@ -1,0 +1,242 @@
+{
+  "contractVersion": 2,
+  "workItemId": "installer-real-conflict-matrix",
+  "mode": "code",
+  "title": "installer-real-conflict-matrix",
+  "baseCommit": "932a00c904d8871db689fd8473109cd684252eb8",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/installer-real-conflict-matrix.contract.json",
+    ".ai/work-items/active/installer-real-conflict-matrix.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/installer-real-conflict-matrix.outcome.json",
+    ".ai/work-items/active/installer-real-conflict-matrix.outcome.md"
+    ,"scripts/installer/conflict_matrix.py"
+    ,"scripts/installer/inspection.py"
+    ,"tests/test_installer_conflict_matrix.py"
+    ,"docs/reference/installed-lifecycle.md"
+    ,"docs/reference/capability-truth-matrix.json"
+    ,"docs/reference/japanese-capability-assessment.json"
+    ,"docs/reference/japanese-capability-assessment.md"
+    ,"docs/reference/pre-release-documentation-alignment.json"
+    ,"docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Provider configuration, secrets, release publication, and writes to a non-test adopter repository are excluded.",
+    "This Work Item does not alter installer conflict policy; it models and verifies existing conflict behavior."
+  ],
+  "sources": [
+    {
+      "path": "user-pasted-text WI-13 installer-real-conflict-matrix",
+      "reason": "User-approved WI-13 scenario and acceptance requirements."
+    },
+    {
+      "path": "scripts/installer/legacy.py",
+      "reason": "Existing installer conflict and recovery behavior under test."
+    },
+    {
+      "path": "tests/test_installer.py",
+      "reason": "Existing executable installer conflict coverage."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Canonical governance terminology."
+    },
+    {
+      "path": "docs/reference/installed-lifecycle.md",
+      "reason": "Installed lifecycle documentation boundary."
+    }
+  ],
+  "rawUserRequest": "WI-13 installer-real-conflict-matrix: cover real installation conflicts including dirty worktrees, detached HEAD, existing governance files, symlinks, read-only paths, nested repositories, interrupted/concurrent installs, failed upgrades, and active Work Items. Classify every scenario as safe, warning, requires_review, or blocked; blocked scenarios must make zero writes and failures must recover to a provable original state.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-pasted-text WI-13 installer-real-conflict-matrix",
+    "capturedAt": "2026-08-02T00:00:00+00:00",
+    "digest": "sha256:user-authorized-installer-real-conflict-matrix"
+  },
+  "declaredIntent": {
+    "summary": "Introduce an inspectable, read-only conflict matrix over existing installer behavior and exercise it with isolated filesystem and Git fixtures.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["installer_safety", "filesystem_conflicts", "compatibility"],
+    "unknownsReviewComplete": true,
+    "reason": "Conflict classification must remain read-only and must not weaken existing installer refusal or rollback behavior."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The work item changes installer safety evidence and tests while preserving existing policy."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User supplied the required scenario matrix and authorized governed writes."
+  },
+  "preReviewWarnings": ["Review that classification itself remains read-only and blocked cases create no target writes."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A read-only installer conflict matrix classifies every required WI-13 scenario as safe, warning, requires_review, or blocked.",
+    "Focused isolated fixtures cover dirty worktree, detached HEAD, existing .ai and AGENTS.md, reserved Make targets, symlink, read-only path, nested repository, submodule marker, case conflict, traversal, modified managed file, interrupted and concurrent installs, failed upgrade, and active Work Item.",
+    "Every blocked scenario proves zero writes; failure and rollback scenarios preserve or restore the original fixture state.",
+    "Installed lifecycle documentation distinguishes conflict inspection from approved installer transaction behavior."
+  ],
+  "guidelines": [
+    "New public installer-domain APIs must be documented and tested.",
+    "Conflict inspection must be read-only; transaction authorization and installer policy remain in their existing domains."
+  ],
+  "intent": {
+    "problem": "The legacy installer already has scattered conflict defenses, but it does not expose a single read-only scenario matrix that lets maintainers verify which real installation conflicts are safe, warn, require review, or block before a transaction writes.",
+    "constraints": [
+      "Preserve existing installer behavior and command compatibility.",
+      "Do not modify provider configuration or a non-test adopter repository.",
+      "Use only isolated temporary filesystem and Git fixtures for conflict simulation.",
+      "Blocked scenarios must make zero writes and recovery scenarios must retain provable original-state evidence.",
+      "Do not rewrite historical Work Item artifacts."
+    ],
+    "rationale": "A central read-only matrix turns implicit installer safety behavior into testable evidence without granting an inspection API authority to mutate an adopter repository."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "blocked conflict inspections make zero writes",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_installer_conflict_matrix.py::test_empty_target_is_safe_and_inspection_is_read_only", "tests/test_installer_conflict_matrix.py::test_detects_required_filesystem_conflicts"],
+      "expected": "Blocked path, symlink, conflict, and active-work-item cases produce no transaction writes.",
+      "verificationPlan": "Snapshot each isolated fixture before inspection and assert it is byte-for-byte unchanged after classification."
+    },
+    {
+      "scenario": "Git and filesystem conflict coverage",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_installer_conflict_matrix.py::test_detects_git_symlink_nested_and_submodule_markers", "tests/test_installer_conflict_matrix.py::test_path_traversal_and_modified_managed_file_are_blocked_or_reviewed"],
+      "expected": "Dirty, detached, nested Git, submodule, read-only, case, traversal, and managed-file cases have stable classifications.",
+      "verificationPlan": "Build deterministic temporary Git and filesystem fixtures and assert each matrix row."
+    },
+    {
+      "scenario": "recovery preserves source state",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_installer_conflict_matrix.py", "tests/test_installer.py::test_upgrade_rolls_back_when_post_copy_validation_fails"],
+      "expected": "Interrupted, concurrent, and failed-upgrade scenarios preserve or restore source state.",
+      "verificationPlan": "Run existing installer recovery fixtures alongside matrix classification and compare their pre/post state."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 754
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/installer-real-conflict-matrix.json",
+    "baseCommit": "932a00c904d8871db689fd8473109cd684252eb8",
+    "initialScopeDigest": "3277b6d272bee81cf466c6cdb4022ba644244ef5671141595baf836711e3f1c1",
+    "contractSkeletonDigest": "29b914d915a19060d0dfeb5838d00595f497d0b55434f7fdc055ec94e90bab28"
+  }
+}

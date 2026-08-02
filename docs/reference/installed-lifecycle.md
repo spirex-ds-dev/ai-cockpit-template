@@ -126,6 +126,16 @@ project-owned and audit evidence, and emit its own verified receipt.
 
 ## Cockpit, CLI, and Summary alignment
 
+## Read-only installer conflict matrix
+
+`scripts/installer/conflict_matrix.py` provides a read-only inspection view of
+common installation conflicts. Its findings use `safe`, `warning`,
+`requires_review`, and `blocked`; they are evidence for an installer plan, not
+permission to mutate a target. A blocked finding (for example an active install
+lock, reserved Make target, active Work Item, symlink, or escaping path) must
+result in zero transaction writes. Recovery and approval remain separate
+transaction responsibilities.
+
 The generated Cockpit Status is the user-facing projection of Lifecycle Facts. It must show installed/target version, Runtime State, Project Profile, conflicts, rollback state, disable state, uninstall preparation, and residual risk. A lifecycle Summary binds Upgrade ID and Manifest Hash to change counts, Migration Plan, Snapshot, user decisions, verification results, and residual risk. Commands and docs use the same states (`active`, `disabled`, `needs_human_confirmation`, `blocked`, `partial_rollback`, `purged`); an unavailable tool is recorded as `not_run`, never implied to have executed.
 
 Cross-stack E2E evidence uses three explicit kinds: `local_real_execution`, `not_run`, and `simulation`. A real Python fixture must cover the lifecycle phases; TypeScript/Java lanes are recorded as `not_run` when their toolchain is unavailable. Manifest, Schema, Rollback, and Uninstall evidence carries the stack and phase so a simulated result cannot be presented as an execution result.
