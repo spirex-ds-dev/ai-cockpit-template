@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Cockpit Work Item Intelligence Snapshot",
+  "type": "object",
+  "required": ["schemaVersion", "identity", "status", "progressFacts", "blockingReasons", "missingEvidence", "dependencies", "humanDecisions", "risks", "verification", "actionEligibility", "currentActivity", "statusVersion", "factSequence", "snapshotDigest"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "identity": {"type": "object", "required": ["workItemId"]},
+    "status": {"type": "object", "required": ["lifecyclePhase", "governanceState", "activityHealth"]},
+    "progressFacts": {"type": "object"},
+    "blockingReasons": {"type": "array"},
+    "missingEvidence": {"type": "array"},
+    "dependencies": {"type": "array"},
+    "humanDecisions": {"type": "array"},
+    "risks": {"type": "array"},
+    "verification": {"type": "object"},
+    "actionEligibility": {"type": "object"},
+    "currentActivity": {"type": "object"},
+    "statusVersion": {"type": "integer", "minimum": 1},
+    "factSequence": {"type": "integer", "minimum": 0},
+    "lastFactId": {"type": ["string", "null"]},
+    "snapshotDigest": {"type": "string", "pattern": "^sha256:"}
+  },
+  "additionalProperties": true
+}

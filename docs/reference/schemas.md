@@ -21,7 +21,7 @@ lastVerifiedBy: capability-truth-matrix
 | Capability status | [capability-truth-matrix.json](capability-truth-matrix.json) |
 | Documentation context | [documentation-context-registry.json](documentation-context-registry.json) |
 | Archive discovery | `.ai/work-items/archive/index.json` and immutable archive manifests |
+| Work Item Intelligence Snapshot | `.ai/schemas/work-item-intelligence-snapshot.schema.json` and `scripts/ai_work_item_intelligence.py` |
 
 Examples are explanatory. The executable validators and versioned
 machine-readable records decide whether a concrete instance is valid.
-

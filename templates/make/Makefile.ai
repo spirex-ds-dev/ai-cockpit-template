@@ -33,7 +33,7 @@ GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 	check-capability-truth check-source-bound-evidence \
 	ai-start ai-finish check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-scenario-coverage check-ai-guidelines check-ai-review-policy \
-	check-ai-preflight-review generate-ai-preflight-review ai-preflight check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge template-adoption-ready check-ai-serial-order check-ai-budget-impact generate-human-benefit-report check-human-benefit-report ai-lifecycle-facts ai-cockpit-version ai-cockpit-update-check ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
+	check-ai-preflight-review generate-ai-preflight-review ai-preflight check-ai-change-summary generate-cockpit-status check-ai-status check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-diff-ownership ai-pre-merge template-adoption-ready check-ai-serial-order check-ai-budget-impact generate-human-benefit-report check-human-benefit-report ai-lifecycle-facts ai-work-item-status ai-work-item-intelligence-rebuild ai-cockpit-version ai-cockpit-update-check ai-cockpit-update-propose ai-cockpit-update-apply ai-cockpit-rollback-propose ai-cockpit-disable ai-cockpit-enable ai-cockpit-uninstall-facts ai-cockpit-uninstall-propose ai-cockpit-uninstall-execute
 
 ai-help:
 	@printf '%s\n' 'AI Cockpit commands:'
@@ -74,6 +74,12 @@ ai-cockpit-project-lint:
 
 ai-lifecycle-facts:
 	$(AI_PYTHON) scripts/ai_lifecycle_facts.py --root .
+
+ai-work-item-status:
+	$(AI_PYTHON) scripts/ai_work_item_status.py $(ARGS)
+
+ai-work-item-intelligence-rebuild:
+	$(AI_PYTHON) scripts/ai_work_item_status.py --rebuild $(ARGS)
 
 ai-cockpit-version:
 	$(AI_PYTHON) scripts/ai_install_status.py version --root .

@@ -33,6 +33,7 @@ from ai_readiness_policy import has_explicit_blocker
 from ai_required_evidence import EvidenceContext, derive_required_evidence
 from ai_trust_guards import trust_signals
 from ai_upgrade_conflict_report import validate_report
+from ai_work_item_intelligence import record_fact_once
 
 ALLOWED_STATUSES = {
     "ready",
@@ -1478,6 +1479,12 @@ def main() -> int:
     )
     if decision_protocol_enabled(contract):
         persist_request(report, root=project_root_for(contract_path))
+    if report["status"] == "ready":
+        record_fact_once(
+            str(contract["workItemId"]),
+            "preflight_ready",
+            {"preflightHash": report["preflightHash"], "contractHash": report["contractHash"]},
+        )
     print(render_markdown(report), end="")
     print(f"preflight review generated: {output_path}")
     return 0

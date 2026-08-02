@@ -23,6 +23,7 @@ from ai_common import (
     load_json,
     run_git,
 )
+from ai_work_item_intelligence import record_fact_once
 
 ARCHIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
@@ -625,6 +626,7 @@ def main() -> int:
         print(f"Work Item lifecycle: not closed\nReason: {exc}", file=sys.stderr)
         return 1
     print("Work Item lifecycle: closed")
+    record_fact_once(args.task, "closed", {"closureReceipt": str(result["closureReceipt"])})
     print(f"Pull request: merged ({result['pullRequest']})")
     print(
         f"Archived Task Outcome: {Path(str(result['contract'])).with_name(Path(str(result['contract'])).name.replace('.contract.json', '.outcome.md'))}"

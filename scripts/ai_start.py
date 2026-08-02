@@ -33,6 +33,7 @@ from ai_generate_status import write_active_status, write_no_active_status
 from ai_observability import create_observability
 from ai_readiness_policy import readiness_state
 from ai_start_receipt import build_receipt, current_branch, receipt_binding, receipt_path
+from ai_work_item_intelligence import record_fact_once
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
 START_LOCK_FILENAME = ".ai-start.lock"
@@ -716,6 +717,12 @@ def main() -> int:
             return 1
         create_observability(work_item_id=task).work_item_started(
             fields={"mode": args.mode, "title": title}
+        )
+        record_fact_once(
+            task,
+            "contract_created",
+            {"contractPath": contract_rel, "summaryPath": summary_rel, "mode": args.mode},
+            root=PROJECT_ROOT,
         )
 
         # This deliberately uses the complete local diff, not the Contract-aware
