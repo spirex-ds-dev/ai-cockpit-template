@@ -1,0 +1,250 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-authority-boundary",
+  "mode": "code",
+  "title": "documentation-authority-boundary",
+  "rawUserRequest": "WI-15 documentation-authority-boundary: define canonical, reference, and historical document authority; default agents to current material, require opt-in for reference, exclude archive, and keep one canonical document per topic.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "user-pasted-text WI-15 documentation-authority-boundary",
+    "capturedAt": "2026-08-02T10:55:00+09:00",
+    "digest": "documentation-authority-boundary-policy"
+  },
+  "declaredIntent": {
+    "requestKind": "repository_governance",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "0d883c424cfe4c444ce2928267b8b900c09ef035",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/documentation-authority-boundary.contract.json",
+    ".ai/work-items/active/documentation-authority-boundary.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/documentation-authority-boundary.outcome.json",
+    ".ai/work-items/active/documentation-authority-boundary.outcome.md",
+    ".ai/glossary.md",
+    "AGENTS.md",
+    "Makefile",
+    "scripts/ai_documentation_authority.py",
+    "scripts/check_docs_metadata.py",
+    "tests/test_documentation_authority.py",
+    "tests/test_docs_metadata.py",
+    "docs/current/README.md",
+    "docs/archive/documentation-authority-boundary.md",
+    "docs/reference/documentation-authority-boundary.md",
+    "docs/reference/documentation-authority-registry.json",
+    "docs/reference/documentation-architecture.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Historical archived Work Items and existing historical documentation records are preserved.",
+    "No provider configuration, scheduler, workflow engine, or automatic document migration is introduced."
+  ],
+  "sources": [
+    {
+      "path": "user-pasted-text WI-15 documentation-authority-boundary",
+      "reason": "Defines the required documentation authority model and default reading boundary."
+    },
+    {
+      "path": "docs/reference/documentation-architecture.md",
+      "reason": "Existing documentation role, canonical-owner, and historical-context model."
+    },
+    {
+      "path": "docs/reference/documentation-context-registry.json",
+      "reason": "Existing machine-readable classification for current and historical documentation context."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Existing front-matter and documentation architecture enforcement point."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Existing agent reading and governed-work rules to align with the default reading boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["documentation_authority_drift", "migration_compatibility"],
+    "reason": "A default-reading boundary can accidentally promote historical material or make current documentation undiscoverable; validation and an explicit registry must keep the transition bounded.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "strict pattern .ai/** and scripts/ai_*.py apply to governance and documentation enforcement."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user supplied the documentation authority policy and authorized governed writes; current documentation metadata and registry provide implementation evidence."
+  },
+  "preReviewWarnings": ["Review that default routing excludes reference and archive material without hiding the explicit opt-in path."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A machine-readable documentation authority registry defines canonical, reference, and historical records, with one canonical owner per declared topic.",
+    "The default agent reading set contains only current canonical instructional documentation; reference requires explicit opt-in and archive is excluded by default.",
+    "The validator rejects invalid authority metadata, duplicate canonical ownership, and historical documents presented as current instruction.",
+    "The query command is read-only and tests cover default routing, reference opt-in, archive exclusion, and duplicate-canonical rejection.",
+    "Documentation and AGENTS rules explain the authority boundary without rewriting historical archives."
+  ],
+  "guidelines": [
+    "New public authority-query APIs must be documented and tested.",
+    "Default agent reading must not treat reference or historical documentation as current instruction.",
+    "Preserve historical documentation and Work Item archives."
+  ],
+  "intent": {
+    "problem": "Documentation has existing metadata and context records, but agents still lack one bounded machine-readable default reading set that distinguishes current instruction from reference and historical material.",
+    "constraints": [
+      "Use authority values canonical, reference, historical and the requested instructional/status/supersededBy metadata semantics.",
+      "Keep docs/reference available only through explicit opt-in and docs/archive excluded by default.",
+      "Do not rewrite historical documents or archived Work Items.",
+      "Do not add a scheduler, workflow engine, provider configuration, or automatic migration."
+    ],
+    "rationale": "A small registry and validator make authority explicit for agents while preserving existing documentation paths and historical evidence."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "default agent read set",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Only current canonical instructional documents are returned without opt-in.",
+      "verificationPlan": "Run focused documentation-authority tests."
+    },
+    {
+      "scenario": "reference and archive boundary",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Reference documents require opt-in and historical archive documents are never current instruction.",
+      "verificationPlan": "Run focused documentation-authority tests with fixture records."
+    },
+    {
+      "scenario": "single canonical topic owner",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Duplicate canonical ownership for one topic fails validation.",
+      "verificationPlan": "Run focused duplicate-canonical negative test."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 756
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-authority-boundary.json",
+    "baseCommit": "0d883c424cfe4c444ce2928267b8b900c09ef035",
+    "initialScopeDigest": "dc061f68c1eae43e6615962c3a18b4fbde382120fbcddf053a1d92720aa35225",
+    "contractSkeletonDigest": "98d734eef6b31e6bcc6b57eaa0166e7e3ec9eb3776173c03618c7e92cbbf67db"
+  }
+}

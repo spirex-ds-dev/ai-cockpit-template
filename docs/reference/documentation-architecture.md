@@ -24,6 +24,7 @@ keywords:
 
 ```text
 docs/
+├── current/          canonical default agent instruction route
 ├── getting-started/  installation, first calibration, first Work Item
 ├── concepts/         trust, evidence governance, decision states
 ├── operations/       quality gates, lifecycle, recovery
@@ -40,6 +41,11 @@ Current formal pages declare `audience`, `status`, `authority`, and
 
 One topic has one canonical owner. Compatibility pages link to that owner;
 historical entrypoints preserve context but never become runtime instruction.
+
+The [Documentation Authority Registry](documentation-authority-registry.json)
+adds the explicit agent read boundary: `docs/current/` is the default canonical
+instruction route, `docs/reference/` requires opt-in, and `docs/archive/` is
+historical context. It does not rewrite existing historical records.
 
 This page is for documentation maintainers. It defines authoritative ownership,
 language mapping, and current-versus-historical context; adopters normally enter

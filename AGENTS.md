@@ -59,6 +59,14 @@ Before changing code, docs, CI, build files, or AI governance files:
 9. Run the AI checks and project checks declared in the Contract.
 10. When `make ai-start ... MODE=code` or `make ai-preflight` reports `needs_human_confirmation` or `not_ready`, pause and report the Preflight Review to the user before coding continues. Advisory mode means the command may exit successfully; it does not permit silent implementation.
 
+### Documentation Authority Boundary
+
+For documentation that may be treated as an instruction source, start with the
+machine-readable default read set from `make ai-documentation-read-set`.
+Reference material requires explicit `INCLUDE_REFERENCE=1`; documents under
+`docs/archive/` are historical context and cannot grant current instruction.
+This routing rule complements, and never replaces, this `AGENTS.md` file.
+
 `unknowns` and `notCodable` are valid outputs when the task is not ready for coding. `make ai-checkpoint` is environment support against long-task drift, not paperwork.
 
 ## Safety Rules

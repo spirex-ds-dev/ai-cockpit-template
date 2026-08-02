@@ -9,6 +9,7 @@ import sys
 from pathlib import Path, PurePosixPath
 from typing import cast
 
+from ai_documentation_authority import validate_registry
 from check_pre_release_documentation_alignment import build_report, generated_artifact_errors
 from install_ai_cockpit import STACKS
 
@@ -1491,6 +1492,45 @@ def historical_context_errors(root: Path) -> list[str]:
     return errors
 
 
+def documentation_authority_errors(root: Path) -> list[str]:
+    """Bind the new agent routing registry to real document front matter."""
+    relative = "docs/reference/documentation-authority-registry.json"
+    registry_path = root / relative
+    if not registry_path.is_file():
+        return [f"{relative}: missing authority registry"]
+    try:
+        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return [f"{relative}: invalid JSON"]
+    errors = [f"{relative}: {error}" for error in validate_registry(registry)]
+    documents = registry.get("documents") if isinstance(registry, dict) else None
+    if not isinstance(documents, list):
+        return errors
+    for item in documents:
+        if not isinstance(item, dict) or not isinstance(item.get("path"), str):
+            continue
+        path = root / item["path"]
+        if not path.is_file():
+            errors.append(f"{item['path']}: authority-registry document is missing")
+            continue
+        values, _ = _front_matter_values(path)
+        for field in ("authority", "instructional", "status", "supersededBy"):
+            expected = item.get(field)
+            actual = values.get(field)
+            normalized_expected = (
+                ""
+                if expected is None
+                else str(expected).lower()
+                if isinstance(expected, bool)
+                else str(expected)
+            )
+            if actual != normalized_expected:
+                errors.append(
+                    f"{item['path']}: front matter {field} does not match authority registry"
+                )
+    return errors
+
+
 def japanese_uninstall_errors(root: Path) -> list[str]:
     """Keep recovery details out of the beginner path while preserving a Japanese route."""
     relative = "docs/troubleshooting/installation.ja.md"
@@ -1515,6 +1555,7 @@ def check_repository(root: Path) -> list[str]:
     errors.extend(beginner_installation_errors(root))
     errors.extend(japanese_uninstall_errors(root))
     errors.extend(historical_context_errors(root))
+    errors.extend(documentation_authority_errors(root))
     return errors
 
 
