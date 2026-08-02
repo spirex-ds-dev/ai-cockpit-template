@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task remove-cancelled-provider-validation generated an evidence-derived outcome with status completed_with_warnings.
+Task lifecycle-remnant-reconciliation generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1
@@ -32,7 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: No Provider-side controls can be verified by this local cleanup.
+- Unresolved evidence is explicitly limited: Provider-bound approval for destructive successor Work Item is not yet available.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.

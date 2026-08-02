@@ -1,0 +1,236 @@
+{
+  "contractVersion": 2,
+  "workItemId": "lifecycle-remnant-reconciliation",
+  "mode": "code",
+  "title": "Reconcile lifecycle remnants",
+  "baseCommit": "261e150af6f20aa51fd842012a5dcc42fcf19053",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/lifecycle-remnant-reconciliation.contract.json",
+    ".ai/work-items/active/lifecycle-remnant-reconciliation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/lifecycle-remnant-reconciliation.outcome.json",
+    ".ai/work-items/active/lifecycle-remnant-reconciliation.outcome.md"
+  ],
+  "outOfScope": [
+    "Historical archived Work Item Contracts, Summaries, Outcomes, and merge records.",
+    "Provider configuration, branch-protection settings, credentials, releases, and tags.",
+    "Implementation changes unrelated to reconciliation of known lifecycle remnants."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/archive/index.json",
+      "reason": "Authoritative archive index for completed Work Item identities."
+    },
+    {
+      "path": "target/task-closure-receipts/remove-cancelled-provider-validation.closure.md",
+      "reason": "Current successful closure receipt establishes the expected lifecycle end state."
+    },
+    {
+      "path": ".worktrees/",
+      "reason": "Current filesystem evidence for retained historical worktrees; each target must be inspected before cleanup."
+    },
+    {
+      "path": "user-current-goal",
+      "reason": "The user authorized full Work Item lifecycle closure, PR merge, and branch cleanup."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "repository_lifecycle",
+      "destructive_cleanup"
+    ],
+    "reason": "Removing a worktree or branch is recoverable only when its exact identity is verified; preserve any dirty worktree and fail closed on ambiguity.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Lifecycle reconciliation has medium operational risk but does not perform a release or Provider operation."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user has explicitly authorized closure and cleanup; each destructive target will still be inspected and recorded before action."
+  },
+  "preReviewWarnings": [
+    "Do not remove a dirty worktree, a branch with an open PR, or any tag/release identity; capture an exact reconciliation receipt."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Every retained worktree and non-main lifecycle branch is classified as clean-removable, active, or protected, with evidence recorded in the Summary.",
+    "No worktree, branch, tag, release, Provider configuration, or historical archive is deleted or modified by this Work Item.",
+    "The review PR exposes the exact proposed destructive scope and requires a provider-bound Approve record before a successor Work Item can perform deletion.",
+    "A human-readable traffic-light Outcome reports the inventory, protected targets, and remaining approval dependency."
+  ],
+  "guidelines": [
+    "Inspect every cleanup target before deletion and fail closed on dirty or ambiguous state.",
+    "Do not rewrite historical archives, merged PR history, Provider settings, tags, or releases.",
+    "Record exact worktree, branch, PR, and cleanup evidence in the Summary."
+  ],
+  "intent": {
+    "problem": "The full-cycle audit found retained detached historical worktrees and a WI-16 branch/PR lifecycle remnant after earlier deliveries. The repository requires provider-bound approval before any destructive reconciliation can begin.",
+    "constraints": [
+      "This Work Item is limited to inventory and provider-review preparation; it must not delete a target.",
+      "Do not alter historical archive records or Provider configuration.",
+      "Preserve dirty worktrees and report them instead of forcing cleanup.",
+      "Use the canonical archive, PR, merge, and ai-close-work-item lifecycle for this corrective Work Item."
+    ],
+    "rationale": "A review-only inventory PR creates the required provider-bound approval evidence before a subsequent destructive Work Item acts on any exact target."
+  },
+  "rawUserRequest": "验收，对应，然后再自检，有问题再对应，再自检，直到全部完整闭环。用户已授权完成全部工单、PR、归档与分支清理，并允许将授权写入 Contract。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:active-goal-lifecycle-cleanup-authorization",
+    "capturedAt": "2026-08-02",
+    "digest": "sha256:full-lifecycle-closure-authorization"
+  },
+  "declaredIntent": {
+    "summary": "Reconcile only verified stale Work Item lifecycle artifacts while preserving dirty, active, release, Provider, and historical evidence.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A clean detached historical worktree has no active Contract or open PR",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "It can be removed only after its exact path and branch/PR state are recorded.",
+      "verificationPlan": "Inspect git status, worktree metadata, archive identity, and provider PR state before removal."
+    },
+    {
+      "scenario": "A worktree is dirty or owns a still-active branch/PR",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "It is preserved and reported rather than force-removed.",
+      "verificationPlan": "Run status and PR association checks; verify no destructive command targets protected content."
+    },
+    {
+      "scenario": "The reconciliation Work Item completes its own governed lifecycle",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Archive, PR, merge, closure receipt, and branch deletion all succeed.",
+      "verificationPlan": "Run ai-finish, archive, check-ai-pr, hosted checks, merge, and ai-close-work-item."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized all Work Item lifecycle cleanup, PR merge, branch cleanup, and recording that authorization in Contracts."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 766
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/lifecycle-remnant-reconciliation.json",
+    "baseCommit": "261e150af6f20aa51fd842012a5dcc42fcf19053",
+    "initialScopeDigest": "f6ad8242955118e8c92dc9f38c09a1e04da973e77f650df55312878d6f12ad37",
+    "contractSkeletonDigest": "b6d9d5dc508c6bcc950c7d001708cf74662ff6b06ed6436dbf6fe2543889cebd"
+  }
+}
