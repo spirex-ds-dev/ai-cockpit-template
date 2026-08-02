@@ -6,6 +6,7 @@ import sys
 
 import pytest
 
+import scripts.ai_work_item_state as state_adapter
 from scripts.ai_work_item_state import CANONICAL, STATES, event_id, recover, transition
 
 
@@ -74,3 +75,25 @@ def test_cli_is_deterministic_and_never_claims_invalid_transition():
     payload = json.loads(result.stdout)
     assert payload["allowed"] is False
     assert "reason" in payload
+
+
+def test_adapter_delegates_transition_decision_to_the_domain_service(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    class Result:
+        def as_legacy_dict(self):
+            return {"allowed": False, "state": "created", "target": "closed", "reason": "delegated"}
+
+    class Domain:
+        def __init__(self):
+            self.call = None
+
+        def transition(self, work_item, target, *, evidence):
+            self.call = (work_item, target, evidence)
+            return Result()
+
+    domain = Domain()
+    monkeypatch.setattr(state_adapter, "_DOMAIN", domain)
+    assert state_adapter.transition("created", "closed", work_item="wi")["reason"] == "delegated"
+    assert domain.call[0].work_item_id == "wi"
+    assert domain.call[1] == "closed"
