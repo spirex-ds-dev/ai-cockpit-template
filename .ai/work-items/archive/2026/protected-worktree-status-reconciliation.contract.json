@@ -1,0 +1,46 @@
+{
+  "contractVersion": 2,
+  "workItemId": "protected-worktree-status-reconciliation",
+  "mode": "code",
+  "title": "Reconcile protected historical worktree status",
+  "rawUserRequest": "自检还有功能上是否闭环，旧的代码和文档是否清理完。要以产品级别做为验收标准；此前已授权所有本轮 Work Item 的 Contract、清理、PR、合并、归档和分支删除。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-02-product-closure-and-standing-authorization", "capturedAt": "2026-08-02", "digest": "sha256:user-authorized-protected-worktree-reconciliation"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "baseCommit": "73dbf282496efd93aaf896b383a3acbf821de3e4",
+  "baselineDirtyPaths": [],
+  "scope": [".ai/work-items/active/protected-worktree-status-reconciliation.contract.json", ".ai/work-items/active/protected-worktree-status-reconciliation.summary.json", ".ai/cockpit/current_status.md", ".ai/work-items/starts/**", ".ai/work-items/archive/**", ".ai/work-items/active/protected-worktree-status-reconciliation.outcome.json", ".ai/work-items/active/protected-worktree-status-reconciliation.outcome.md"],
+  "outOfScope": ["Provider configuration and branch-protection settings.", "Production/provider operations.", "Changing historical source code or documentation; the predecessor branch is removed only after replacement evidence is verified."],
+  "sources": [
+    {"path": ".ai/work-items/archive/2026/capability-freshness-corrected-delivery.contract.json", "reason": "Merged replacement delivery records the portable capability-freshness behavior and predecessor limitation."},
+    {"path": ".ai/work-items/archive/2026/historical-worktree-cleanup.contract.json", "reason": "Records the protected worktree exception and preceding clean-worktree cleanup."},
+    {"path": "AGENTS.md", "reason": "Requires lifecycle closure and preserves unknown user changes."},
+    {"path": ".worktrees", "reason": "Git worktree registry and target branch state are audited before removal."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "declaredIntent": {"summary": "Reconcile the final protected historical generated-status residue after proving the merged replacement supersedes its predecessor.", "requestedCapabilities": ["ai_governance", "software_design"]},
+  "riskAssessment": {"level": "high", "riskTypes": ["destructive_cleanup", "user_data_protection", "branch_lifecycle"], "reason": "Removing the last dirty historical worktree and its unmerged predecessor branch is destructive; evidence must prove it is generated stale status and superseded delivery.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "human_override", "reasons": ["Destructive worktree and branch cleanup requires strict review."], "operationClasses": ["repository_governance"], "verificationEscalations": [], "override": {"approvalEvidence": "User granted standing authorization for required Work Item writes, cleanup, PR merge, archive, and branch deletion in this thread.", "reason": "Strict cleanup, no release operation.", "risks": ["destructive_cleanup", "user_data_protection", "branch_lifecycle"], "notRunChecks": ["Release-preflight and distribution verification are inapplicable: no release-owned resource or operation is touched."], "workItemOnly": true, "workItemId": "protected-worktree-status-reconciliation"}},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The target has one uncommitted generated status file, no active Contract, and a replacement delivery; user standing authorization covers the bounded cleanup once re-verified."},
+  "preReviewWarnings": ["Re-audit the exact diff and active-record inventory immediately before deletion.", "Fail closed unless the stale status and predecessor branch are demonstrably superseded by the merged replacement."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Capture target re-audit before destructive cleanup and final lifecycle closure."},
+  "acceptance": [
+    "The dirty historical difference is proven to be only a generated stale current-status projection with no active Work Item records.",
+    "The unmerged predecessor branch is proven superseded by the merged capability-freshness-corrected-delivery archive and is not needed for recovery.",
+    "The protected historical worktree and its local-only predecessor branch are removed through Git lifecycle commands without changing provider configuration.",
+    "The Contract, Summary, Outcome, archive, PR, merge, ai-close-work-item, branch cleanup, and synchronized base record the exact evidence."
+  ],
+  "guidelines": ["Do not modify Provider configuration or branch-protection settings.", "Do not discard non-generated user changes.", "Use Git worktree and branch commands so repository metadata and filesystem state are removed together.", "Retain archived predecessor evidence; never rewrite it."],
+  "intent": {"problem": "One historical linked worktree was retained because it had a modified generated status file and an unmerged predecessor branch, preventing a clean product-level repository closure.", "constraints": ["Remove only after exact re-audit proves the change is generated stale output.", "Verify the replacement delivery is merged and preserves the capability behavior.", "Do not alter provider configuration.", "Complete the governed lifecycle."], "rationale": "A bounded, evidence-backed removal eliminates stale local code and documentation without treating generated residue as user work or rewriting historical evidence."},
+  "scenarioCoverage": [
+    {"scenario": "The only dirty target file is a stale generated status projection and active records are absent.", "required": true, "riskDomain": "user_data_protection", "status": "verified", "evidence": ["git diff showed only .ai/cockpit/current_status.md", "active-work-item inventory contained only .gitkeep and task-event-log.events.jsonl"], "expected": "eligible only when both checks hold", "verificationPlan": "Final re-audit was recorded immediately before cleanup."},
+    {"scenario": "The predecessor branch contains unmerged commits but a later merged Work Item supersedes its delivery.", "required": true, "riskDomain": "branch_lifecycle", "status": "verified", "evidence": ["merged main commit 804d0c947a8e9ef376cd20d4c3c5bddce2162d52", "capability-freshness-corrected-delivery archive"], "expected": "eligible only with explicit supersession evidence", "verificationPlan": "Exact replacement merge and predecessor identity were reviewed before cleanup."}
+  ],
+  "verification": [{"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":true}],
+  "destructiveChangePolicy": {"allowed": true, "requiresHumanApproval": false, "allowPatterns": ["git worktree remove for capability-freshness-portable-environment-remediation after final generated-status and replacement-delivery verification", "git branch -D for codex/capability-freshness-portable-environment-remediation after worktree removal and supersession verification"]},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "User", "reason": "Standing conversation authorization covers this necessary Work Item cleanup and records it in the Contract."},
+  "rollbackNote": "Do not recreate removed stale worktree automatically; archived predecessor and merged replacement evidence remain available for recovery analysis.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 770}},
+  "startReceipt": {"path": ".ai/work-items/starts/protected-worktree-status-reconciliation.json", "baseCommit": "73dbf282496efd93aaf896b383a3acbf821de3e4", "initialScopeDigest": "314942f5cc3729daec4943a17cc08a2aa2440825adac9c38c7e260c1070a7cc9", "contractSkeletonDigest": "f30df296a1f57efd39e2660c9836c1d7b6d5ad1d594a201f5e8e55c1b72ce893"}
+}
