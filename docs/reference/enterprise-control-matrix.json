@@ -1,31 +1,19 @@
 {
-  "schemaVersion": 1,
-  "statusVocabulary": [
-    "external_control_required",
-    "configured",
-    "verified",
-    "not_configured",
-    "not_applicable",
-    "unknown"
-  ],
-  "boundary": "Repository-local evidence is not external enterprise control evidence.",
+  "schemaVersion": 2,
+  "verdict": "observed_control_evidence_only",
+  "boundary": "Repository-local governance facts are not external enterprise control evidence. This inventory is an adopter checklist and defaults to not_verified until current external evidence is supplied.",
   "controls": [
-    {"id": "identity", "status": "external_control_required", "evidence": "Trusted identity provider and account lifecycle records are adopter-owned."},
-    {"id": "authorization", "status": "external_control_required", "evidence": "Least privilege and access policy are adopter-owned."},
-    {"id": "required_review", "status": "external_control_required", "evidence": "Repository PR evidence supports review but does not configure branch protection."},
-    {"id": "branch_protection", "status": "external_control_required", "evidence": "Provider branch rules require adopter/provider evidence."},
-    {"id": "separation_of_duties", "status": "external_control_required", "evidence": "Organizational role separation is external."},
-    {"id": "signed_commit_tag", "status": "external_control_required", "evidence": "Signature policy and verification require provider/adopter evidence."},
-    {"id": "immutable_release", "status": "external_control_required", "evidence": "Immutable distribution storage and retention are external."},
-    {"id": "least_privilege", "status": "external_control_required", "evidence": "Runtime and provider permissions require adopter configuration evidence."},
-    {"id": "secret_management", "status": "external_control_required", "evidence": "Secret storage, rotation, and scanning policy are external."},
-    {"id": "audit_retention", "status": "external_control_required", "evidence": "Retention, legal hold, and immutable audit storage are external."},
-    {"id": "data_classification", "status": "external_control_required", "evidence": "Data classification and handling policy are adopter-owned."},
-    {"id": "provider_data_transfer", "status": "external_control_required", "evidence": "Provider terms and data-transfer controls require external evidence."},
-    {"id": "incident_response", "status": "external_control_required", "evidence": "Incident response ownership and execution are external."},
-    {"id": "legal_hold", "status": "external_control_required", "evidence": "Legal hold and discovery controls are external."},
-    {"id": "sbom", "status": "external_control_required", "evidence": "Repository SBOM generation is evidence input, not adopter retention or review proof."},
-    {"id": "provenance", "status": "external_control_required", "evidence": "Repository provenance checks do not prove adopter deployment provenance."},
-    {"id": "dependency_vulnerability", "status": "external_control_required", "evidence": "Scanner output is time-bound evidence and does not prove absence of vulnerabilities."}
+    {"controlId":"identity","provider":null,"resource":"adopter-managed identity system","requiredState":"identity lifecycle enforced","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"identity_administrator","limitation":"No current external identity-provider receipt is supplied.","expiresAt":null},
+    {"controlId":"authorization","provider":null,"resource":"adopter-managed authorization system","requiredState":"least privilege enforced","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"authorization_administrator","limitation":"No current external authorization-policy receipt is supplied.","expiresAt":null},
+    {"controlId":"branch_protection","provider":null,"resource":"adopter repository","requiredState":"protected branch rules enforced","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"repository_administrator","limitation":"Local PR evidence cannot prove provider branch rules.","expiresAt":null},
+    {"controlId":"review_policy","provider":null,"resource":"adopter review workflow","requiredState":"required review policy enforced","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"repository_administrator","limitation":"Repository review records do not prove provider enforcement.","expiresAt":null},
+    {"controlId":"secret_management","provider":null,"resource":"adopter secret-management system","requiredState":"storage and rotation policy enforced","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"security_administrator","limitation":"Repository scanning cannot prove external secret storage or rotation.","expiresAt":null},
+    {"controlId":"audit_log","provider":null,"resource":"adopter audit system","requiredState":"immutable audit logging enabled","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"audit_owner","limitation":"Repository logs are not immutable external audit evidence.","expiresAt":null},
+    {"controlId":"artifact_signing","provider":null,"resource":"adopter signing system","requiredState":"trusted signing identity enforced","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"release_administrator","limitation":"Repository checks do not prove trusted signing identity or key custody.","expiresAt":null},
+    {"controlId":"sbom","provider":null,"resource":"adopter distribution process","requiredState":"SBOM retained and independently reviewed","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"release_administrator","limitation":"Generated SBOM is an input, not evidence of adopter retention or review.","expiresAt":null},
+    {"controlId":"provenance","provider":null,"resource":"adopter deployment process","requiredState":"deployment provenance retained and verified","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"release_administrator","limitation":"Repository provenance checks do not prove deployment provenance.","expiresAt":null},
+    {"controlId":"retention","provider":null,"resource":"adopter retention system","requiredState":"retention and legal hold policy enforced","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"records_administrator","limitation":"Repository records do not prove external retention or legal hold.","expiresAt":null},
+    {"controlId":"separation_of_duties","provider":null,"resource":"adopter organization","requiredState":"role separation enforced","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"organization_administrator","limitation":"Repository metadata cannot prove organizational role separation.","expiresAt":null},
+    {"controlId":"production_isolation","provider":null,"resource":"adopter production environment","requiredState":"production isolation enforced","observedState":"not_verified","evidenceType":"none","verifiedAt":null,"owner":"production_administrator","limitation":"Repository-local governance does not prove production isolation.","expiresAt":null}
   ]
 }
