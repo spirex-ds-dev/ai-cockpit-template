@@ -7,9 +7,11 @@ import argparse
 import hashlib
 import json
 import posixpath
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from ai_capability_freshness import current_environment, evaluate_freshness, make_record
 from ai_common import InvalidDataShapeError
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -209,6 +211,11 @@ def regenerate_matrix(matrix: dict[str, Any], *, root: Path = PROJECT_ROOT) -> d
         if not isinstance(source_paths, list) or not isinstance(test_paths, list):
             raise CapabilityTruthError("capability evidence inventories must be lists")
         row["evidenceSource"] = build_evidence_source(source_paths, test_paths, root=root)
+        row["freshness"] = make_record(
+            environment=current_environment(),
+            scope=[*source_paths, *test_paths],
+            now=datetime.now(UTC),
+        )
         row["digest"] = row_digest(row)
     return matrix
 
@@ -249,6 +256,16 @@ def validate_matrix(path: Path = MATRIX_PATH, *, root: Path = PROJECT_ROOT) -> l
         for field in ("claim", "limitations", "digest"):
             if not isinstance(row.get(field), str) or not row[field]:
                 errors.append(f"{prefix}.{field} must be non-empty")
+        freshness = row.get("freshness")
+        if not isinstance(freshness, dict):
+            errors.append(f"{prefix}.freshness must be an object")
+        elif (
+            evaluate_freshness(freshness, environment=current_environment(), now=datetime.now(UTC))[
+                "state"
+            ]
+            != "fresh"
+        ):
+            errors.append(f"{prefix}.freshness is stale")
         for field in ("sourceEvidence", "testEvidence", "commandEvidence"):
             value = row.get(field)
             if (

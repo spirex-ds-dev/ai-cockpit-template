@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import copy
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
-from ai_capability_truth import regenerate_matrix
+from ai_capability_freshness import current_environment, make_record
+from ai_capability_truth import regenerate_matrix, row_digest
 from ai_check_capability_claims import claim_errors, extract_claim_ids
 
 
@@ -112,6 +114,27 @@ def test_unknown_id_and_changed_evidence_fail_closed(tmp_path: Path) -> None:
         "evidenceSource does not match current evidence bytes" in error for error in stale_errors
     )
     assert any("bounded" in error and "evidence_stale" in error for error in stale_errors)
+
+
+def test_expired_freshness_record_rejects_a_bound_claim(tmp_path: Path) -> None:
+    root = _repository(tmp_path, [_row("bounded")])
+    document = root / "README.md"
+    document.write_text(
+        _front_matter(claims=("bounded",)) + "This supports governed work.\n",
+        encoding="utf-8",
+    )
+    matrix_path = root / "docs/reference/capability-truth-matrix.json"
+    matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
+    row = matrix["capabilities"][0]
+    row["freshness"] = make_record(
+        environment=current_environment(),
+        scope=["source.py", "test.py"],
+        now=datetime(2020, 1, 1, tzinfo=UTC),
+    )
+    row["digest"] = row_digest(row)
+    matrix_path.write_text(json.dumps(matrix), encoding="utf-8")
+
+    assert any("bounded" in error and "evidence_stale" in error for error in claim_errors(root))
 
 
 def test_state_qualifiers_reject_overclaim_and_accept_bounded_language(tmp_path: Path) -> None:
