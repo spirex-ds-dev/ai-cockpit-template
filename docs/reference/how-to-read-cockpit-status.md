@@ -41,7 +41,10 @@ Start with these fields in order:
 6. `Evidence`
 7. `Scenario Coverage` if present in the signals list
 
-`Preflight Review` derives implementation readiness from Contract evidence. It is advisory by default and should be shown before coding starts.
+`Preflight Review` derives implementation readiness from Contract evidence. This
+repository enforces it before coding starts: `needs_human_confirmation` and
+`not_ready` block implementation. An adopter may choose the explicit advisory
+compatibility profile, but that is not this repository's default.
 
 `Recommendation` gives the decision state. `Decision Drivers` explains why that state was chosen.
 `Governance Signals` show the compressed judgment, and `Evidence` points back to the repository truth.

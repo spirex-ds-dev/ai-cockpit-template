@@ -48,7 +48,7 @@ def test_publication_requires_human_decision_and_release_evidence():
             environment="repository",
             external_system="provider",
             destructive_level="none",
-            governance_profile="release",
+            governance_profile="strict",
             available_evidence=("tag", "commit", "digest"),
         )
     )

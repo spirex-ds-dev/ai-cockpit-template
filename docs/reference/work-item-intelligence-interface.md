@@ -9,6 +9,8 @@ audience:
 status: reference
 authority: canonical
 lastVerifiedBy: work-item-intelligence-tests
+capabilityClaims:
+  - work_item_intelligence_interface
 ---
 
 # Work Item Intelligence Interface
@@ -52,8 +54,10 @@ make ai-work-item-intelligence-rebuild ARGS="--work-item example-task"
 ```
 
 Queries return `{ok,data,error}`. Exit codes are 0 success, 10 not found, 11
-unavailable, 12 inconsistent/tampered, 13 stale, 20 invalid query, 30 invalid
-data, and 40 internal failure. Query commands never write facts, refresh a
+unavailable, 12 inconsistent/tampered, 20 invalid query, 30 invalid data, and
+40 internal failure. Code 13 is reserved for a future stale-query policy;
+today stale activity is returned as an observational health value and does not
+cause a query to fail. Query commands never write facts, refresh a
 snapshot, or execute a quality gate. Rebuild is an explicit maintenance
 operation, not a query. `--measure` executes repeated local active-list reads
 and returns transient min/median/p95/max milliseconds; it persists neither a
@@ -61,11 +65,13 @@ benchmark nor a snapshot.
 
 ## Storage and compatibility
 
-Runtime data lives under `.ai/work-items/runtime/<id>/`: immutable append-only
-facts, an integrity-checked status projection, optional activity observation,
-and a per-repository incremental index. These local runtime files are not an
-archival rewrite. Existing Markdown Cockpit Status remains the human-facing
-compatibility projection; WIII is the new machine-query authority.
+Runtime data lives under `.ai/work-items/runtime/<id>/`: facts appended through
+the CLI writer, a digest-checked derived status projection, optional activity
+observation, and a per-repository incremental index. The status projection and
+index detect changed derived bytes; raw local runtime files are not immutable
+or a per-fact tamper-evident ledger. These local runtime files are not an
+archival rewrite. Existing Markdown Cockpit Status remains the canonical
+human-facing generated projection; WIII is authoritative for machine queries.
 
 The snapshot shape is described by
 `.ai/schemas/work-item-intelligence-snapshot.schema.json`. Do not record
