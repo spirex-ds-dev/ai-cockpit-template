@@ -1,0 +1,264 @@
+{
+  "contractVersion": 2,
+  "workItemId": "historical-worktree-cleanup",
+  "mode": "code",
+  "title": "Clean verified historical worktree remnants",
+  "rawUserRequest": "完成全部工单；每个工单完成完整流程，直到归档、PR 和清理分支。后续需要确认和授权的内容可记录为用户已授权。对本轮历史工作树清理，继续执行。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-02-continuous-work-item-lifecycle-and-cleanup-authorization",
+    "capturedAt": "2026-08-02",
+    "digest": "sha256:user-authorized-historical-worktree-cleanup"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "1511b583f834f9dced3327057de832ed4851314b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/historical-worktree-cleanup.contract.json",
+    ".ai/work-items/active/historical-worktree-cleanup.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/historical-worktree-cleanup.outcome.json",
+    ".ai/work-items/active/historical-worktree-cleanup.outcome.md"
+  ],
+  "outOfScope": [
+    "Provider configuration and branch-protection settings.",
+    "The uncommitted .ai/cockpit/current_status.md in capability-freshness-portable-environment-remediation.",
+    "Any worktree not identified as clean by the recorded preflight audit."
+  ],
+  "sources": [
+    {
+      "path": ".ai/work-items/active/historical-worktree-cleanup.contract.json",
+      "reason": "Governed cleanup Contract and user authorization record."
+    },
+    {
+      "path": ".worktrees",
+      "reason": "The repository linked-worktree registry is the target of the read-only audit: 18 clean historical worktrees and one protected worktree with an uncommitted generated status file."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Requires one Work Item, one branch, archive, PR, merge, and ai-close-work-item lifecycle closure."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "destructive_cleanup",
+      "user_data_protection",
+      "branch_lifecycle"
+    ],
+    "reason": "Git worktree and branch removal is destructive; only audit-proven clean remnants may be removed, while the single dirty worktree remains protected.",
+    "unknownsReviewComplete": true
+  },
+  "declaredIntent": {
+    "summary": "Remove only final-audit-clean historical worktree remnants while retaining the dirty protected exception.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design"
+    ]
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Destructive cleanup requires strict governance and explicit authorization evidence."
+    ],
+    "operationClasses": [
+      "repository_governance"
+    ],
+    "verificationEscalations": [],
+    "override": {
+      "approvalEvidence": "User authorized governed Contract, cleanup, archive, PR, merge, and branch deletion in this thread.",
+      "reason": "Strict destructive-cleanup review without a release operation.",
+      "risks": [
+        "destructive_cleanup",
+        "user_data_protection",
+        "branch_lifecycle"
+      ],
+      "notRunChecks": [
+        "Release-preflight and distribution checks are not applicable because no release-owned resource or operation is touched."
+      ],
+      "workItemOnly": true,
+      "workItemId": "historical-worktree-cleanup"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User explicitly authorized governed worktree and branch cleanup; the dirty worktree is excluded."
+  },
+  "preReviewWarnings": [
+    "Re-audit every target immediately before removal and fail closed if it becomes dirty or gains an active Contract."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "All 18 audit-proven clean historical worktrees are removed through Git worktree lifecycle commands.",
+    "The one associated clean local and remote branch is deleted only after its worktree is removed and archived replacement evidence confirms its closed, unmerged PR is superseded rather than needed for recovery.",
+    "The dirty capability-freshness-portable-environment-remediation worktree and its uncommitted generated status file remain untouched and are reported as a protected exception.",
+    "The cleanup Contract, Summary, Outcome, archive, PR, merge, and ai-close-work-item closure record exact evidence."
+  ],
+  "guidelines": [
+    "Do not modify Provider configuration or branch-protection settings.",
+    "Do not remove a worktree with uncommitted changes or an active Work Item Contract.",
+    "Use Git worktree commands so Git metadata and filesystem state are removed together.",
+    "Delete a non-merged branch only when its closed PR is documented as superseded by a later archived delivery."
+  ],
+  "intent": {
+    "problem": "Historical linked worktrees consume local repository state after their original Work Items were closed, while one worktree contains an uncommitted generated status file that must not be discarded.",
+    "constraints": [
+      "Remove only targets that are clean at the final re-audit.",
+      "Preserve the dirty worktree unchanged.",
+      "Do not alter Provider configuration.",
+      "Complete the governed lifecycle through archive, PR, merge, and ai-close-work-item."
+    ],
+    "rationale": "Git worktree removal is the recoverable metadata-aware cleanup path; an explicit protected exception prevents user-state loss."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A clean detached historical worktree is removed and disappears from git worktree list.",
+      "required": true,
+      "riskDomain": "destructive_cleanup",
+      "status": "unverified",
+      "evidence": [
+        "final git worktree audit records the 18 clean targets and their post-removal absence"
+      ],
+      "expected": "The target directory and linked-worktree metadata are removed without altering main.",
+      "verificationPlan": "Compare the exact clean target list with git worktree list before and after removal, then confirm main is unchanged."
+    },
+    {
+      "scenario": "A clean historical worktree with a local branch is removed, followed by branch deletion only when no worktree owns it.",
+      "required": true,
+      "riskDomain": "branch_lifecycle",
+      "status": "unverified",
+      "evidence": [
+        "final branch ownership, merged-ancestry, and remote-head audit"
+      ],
+      "expected": "No stale local or remote branch remains for the one verified clean cleanup branch, whose closed PR #572 is superseded by archived capability-freshness-corrected-delivery evidence.",
+      "verificationPlan": "Re-audit worktree ownership, merged ancestry, remote heads, PR state, and archived replacement evidence before using the exact git worktree remove, git branch -D, and git push origin --delete commands."
+    },
+    {
+      "scenario": "The dirty historical worktree is excluded from deletion.",
+      "required": true,
+      "riskDomain": "user_data_protection",
+      "status": "unverified",
+      "evidence": [
+        "before-and-after protected worktree status audit"
+      ],
+      "expected": "Its path and uncommitted .ai/cockpit/current_status.md remain present and unchanged.",
+      "verificationPlan": "Record the protected worktree status before cleanup and confirm its path and diff remain after the clean targets are removed."
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": false,
+    "allowPatterns": [
+      "git worktree remove for final-audit-clean historical worktrees",
+      "git branch -D for codex/capability-expiration-environment-binding after worktree removal and supersession verification",
+      "git push origin --delete codex/capability-expiration-environment-binding after supersession verification"
+    ]
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized governed cleanup, archive, PR, merge, and branch deletion in this active goal and authorized recording that approval in Contracts."
+  },
+  "rollbackNote": "Removed clean worktree files are recoverable from their commits; the protected dirty worktree is intentionally retained unchanged.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 768
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/historical-worktree-cleanup.json",
+    "baseCommit": "1511b583f834f9dced3327057de832ed4851314b",
+    "initialScopeDigest": "76e9061d4902cc30e1797cfd021a209949fe7a016a557c17b0beda69f21f7ba9",
+    "contractSkeletonDigest": "682edecb98833700e6a4c3077a8870c692838c5bb4ce16bda2cb82f291a6cc87"
+  }
+}
