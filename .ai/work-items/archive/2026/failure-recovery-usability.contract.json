@@ -1,0 +1,163 @@
+{
+  "contractVersion": 2,
+  "workItemId": "failure-recovery-usability",
+  "mode": "code",
+  "title": "failure-recovery-usability",
+  "rawUserRequest": "WI-21 failure-recovery-usability: ensure ordinary users can recover from interruption, upgrade failure, locks, branch recovery failure, conflicts, incomplete closure, stale evidence, unknown sources, and unavailable providers without reading source code.",
+  "rawRequestSource": {"type":"human","reference":"AI Cockpit comprehensive remediation instructions, WI-21; active user goal","capturedAt":"2026-08-02","digest":"sha256:failure-recovery-usability"},
+  "declaredIntent": {"summary":"Make recovery status, writes, rollback, remaining state, next command, and human intervention machine-readable and human-usable.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "baseCommit": "bd6e591277ba379a03b077eeb9b3969a379daa47",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/failure-recovery-usability.contract.json",
+    ".ai/work-items/active/failure-recovery-usability.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/failure-recovery-usability.outcome.json",
+    ".ai/work-items/active/failure-recovery-usability.outcome.md",
+    "scripts/ai_recovery_usability.py",
+    "tests/test_recovery_usability.py",
+    "docs/reference/failure-recovery-usability.md"
+  ],
+  "outOfScope": ["Provider configuration and external provider recovery operations.", "Historical archive rewrites."],
+  "sources": [
+    {
+      "path": "scripts/ai_close_work_item.py",
+      "reason": "Closure recovery and state evidence baseline."
+    },
+    {"path":"scripts/ai_install_wizard.py","reason":"Existing user-facing installer recovery baseline."},
+    {"path":"tests/test_finish_e2e.py","reason":"Existing failure and preservation regressions."}
+  ],
+  "scenarioCoverage": [
+    {"scenario":"interruption, upgrade failure, lock, branch, and conflict recovery have complete user guidance","required":true,"riskDomain":"recovery","status":"unverified","evidence":[],"expected":"complete report","verificationPlan":"unit fixtures"},
+    {"scenario":"closure, stale evidence, unknown source, and unavailable provider report safe next steps","required":true,"riskDomain":"evidence_integrity","status":"unverified","evidence":[],"expected":"complete report","verificationPlan":"unit fixtures"}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level":"medium","riskTypes":["recovery","evidence_integrity"],"reason":"Ambiguous recovery guidance can cause unsafe repeated operations.","unknownsReviewComplete":true},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {"canImplement":true,"canVerify":true,"needsHumanDecision":false,"blockedReason":""},
+  "executionDecision": {"status":"continue","reason":"Recovery reports and deterministic fixtures can be implemented and tested locally."},
+  "preReviewWarnings": ["Do not claim that local recovery tests prove provider recovery."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Recovery guidance records current state, writes, rollback, remaining state, next command, and human-intervention need for every declared failure mode.",
+    "Recovery validation rejects incomplete recovery guidance and unknown failure modes.",
+    "Tests cover interruption, upgrade failure, lock, branch, conflict, closure, stale evidence, unknown source, and provider-unavailable scenarios.",
+    "Documentation explains the human-readable recovery boundary."
+  ],
+  "guidelines": [
+    "Recovery guidance must state what was and was not rolled back before offering a next command.",
+    "Fail closed when a recovery scenario lacks state, write, rollback, next-command, or human-intervention information.",
+    "Do not modify provider configuration or claim provider recovery evidence."
+  ],
+  "intent": {
+    "problem": "Existing recovery details can require source-code interpretation instead of giving a normal user an actionable state-aware path.",
+    "constraints": ["No provider configuration changes.", "Do not claim local fixtures prove provider recovery.", "Do not rewrite historical archives."],
+    "rationale": "A small structured recovery report makes failure state and the safe next command explicit without hiding unrecovered state."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 762
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/failure-recovery-usability.json",
+    "baseCommit": "bd6e591277ba379a03b077eeb9b3969a379daa47",
+    "initialScopeDigest": "65b8012bdc664c987176fbbc6204a8bdaa508ee82fd254ce4936cbb36a1c0618",
+    "contractSkeletonDigest": "37ba6394b806bb56d28ee95ca0a8b4ea7c6eca0619cf95878a4835281c839a2a"
+  }
+}
