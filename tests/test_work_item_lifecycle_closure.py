@@ -377,6 +377,20 @@ def test_task_branch_mismatch_stops_before_provider_or_cleanup(
     assert not any(command[:2] == ("branch", "-D") for command in fake.commands)
 
 
+def test_recorded_start_branch_is_limited_to_codex_namespace(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(closure, "PROJECT_ROOT", tmp_path)
+    receipt = tmp_path / ".ai/work-items/starts/example.json"
+    receipt.parent.mkdir(parents=True)
+    receipt.write_text('{"baseBranch":"codex/legacy-example"}', encoding="utf-8")
+
+    assert closure._recorded_start_branch("example") == "codex/legacy-example"
+
+    receipt.write_text('{"baseBranch":"main"}', encoding="utf-8")
+    assert closure._recorded_start_branch("example") is None
+
+
 def test_success_proves_remote_absence_before_local_branch_deletion(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
