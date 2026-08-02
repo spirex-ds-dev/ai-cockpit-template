@@ -1,0 +1,250 @@
+{
+  "contractVersion": 2,
+  "workItemId": "domain-model-consolidation",
+  "mode": "code",
+  "title": "Consolidate core governance domain model",
+  "baseCommit": "7140b83be456d9b301b668ea8a2362cbca673fd6",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Complete the remaining governed Work Items. WI-18 must unify WorkItem, Contract, Evidence, Receipt, Decision, Transition, Finding, Risk, HumanDecision, CapabilityClaim, and Closure; scripts must not independently reinterpret lifecycle states.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "AI Cockpit comprehensive remediation instructions, WI-18; active user goal",
+    "capturedAt": "2026-08-02",
+    "digest": "sha256:domain-model-consolidation"
+  },
+  "declaredIntent": {
+    "summary": "Make lifecycle facts and transitions typed, centrally validated, and reusable without silently changing the existing lifecycle contract.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/domain-model-consolidation.contract.json",
+    ".ai/work-items/active/domain-model-consolidation.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/domain-model-consolidation.outcome.json",
+    ".ai/work-items/active/domain-model-consolidation.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/archive/index.json",
+    "scripts/ai_domain_model.py",
+    "scripts/ai_work_item_state.py",
+    "tests/test_domain_model.py",
+    "tests/test_work_item_state_machine.py",
+    "docs/reference/work-item-state-machine.md"
+  ],
+  "outOfScope": [
+    "Provider configuration, repository branch protection, external identity, release, and production operations.",
+    "Historical archived Work Item records and unrelated script-by-script schema migrations."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_work_item_state.py",
+      "reason": "Existing canonical lifecycle state evaluator to preserve behind the shared domain service."
+    },
+    {
+      "path": "scripts/ai_task_event_log.py",
+      "reason": "Existing append-only evidence vocabulary that the core Evidence and Finding objects must not contradict."
+    },
+    {
+      "path": "docs/reference/work-item-state-machine.md",
+      "reason": "Current public lifecycle and recovery behavior to retain and clarify."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["state_divergence", "compatibility", "evidence_integrity"],
+    "reason": "A central model can accidentally alter lifecycle legality or evidence requirements; compatibility adapters and fail-closed tests are required.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Lifecycle state and evidence interpretation are repository governance boundaries that require full verification."
+    ],
+    "operationClasses": ["repository_governance"],
+    "verificationEscalations": [],
+    "override": {
+      "approvalEvidence": "User authorized governed Contract and Work Item writes in this thread.",
+      "reason": "Strict lifecycle and evidence review without a release operation.",
+      "risks": ["state_divergence", "compatibility", "evidence_integrity"],
+      "notRunChecks": ["Release-preflight and distribution checks are not applicable because no release-owned resource or operation is touched."],
+      "workItemOnly": true,
+      "workItemId": "domain-model-consolidation"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The work is limited to repository-local typed models, compatibility adapter, tests, and documentation; no provider or production operation is requested."
+  },
+  "preReviewWarnings": ["Preserve exact current transition outcomes and evidence gates; do not claim that unrelated scripts are globally migrated."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A single typed domain module defines WorkItem, Contract, Evidence, Receipt, Decision, Transition, Finding, Risk, HumanDecision, CapabilityClaim, and Closure without duplicated lifecycle-state vocabulary.",
+    "The domain service exclusively decides canonical lifecycle transition legality, matching evidence kind, idempotency, and fail-closed stale or contradictory evidence behavior.",
+    "The existing ai_work_item_state CLI remains a compatibility adapter whose valid and invalid outputs match the previous externally observable contract.",
+    "Tests reject illegal transitions and malformed evidence through the domain service and prove the adapter delegates to it.",
+    "The state-machine reference documents the domain-service authority and the limited compatibility boundary."
+  ],
+  "guidelines": [
+    "Keep lifecycle state, evidence kind, and transition decisions owned by the shared domain model rather than re-declaring them in adapters.",
+    "Preserve append-only evidence and fail-closed behavior; do not weaken existing transition checks.",
+    "Do not modify provider configuration or historical archived Work Items."
+  ],
+  "intent": {
+    "problem": "The repository has a deterministic Work Item state evaluator, an event-evidence vocabulary, and several governance record shapes, but no explicit shared domain model for the core objects. This invites future scripts to re-interpret lifecycle states and evidence differently.",
+    "constraints": ["Preserve existing lifecycle CLI and valid transition semantics.", "Reject illegal transitions and stale, contradictory, or malformed evidence fail closed.", "Keep the migration bounded to the lifecycle adapter; do not claim every historical script is rewritten.", "Do not modify provider configuration, release behavior, or archived Work Items."],
+    "rationale": "A compact typed domain vocabulary plus one authoritative transition service makes future consumers reuse the same legal-state and evidence rules while retaining a stable compatibility boundary."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A canonical lifecycle step with matching digest-bound evidence is accepted by the domain service.",
+      "required": true,
+      "riskDomain": "compatibility",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "accepted transition and deterministic receipt identity",
+      "verificationPlan": "Add domain-model unit tests and retain the existing state-machine regression suite."
+    },
+    {
+      "scenario": "A skipped, unknown, stale, contradictory, or locally/remote-inconsistent transition is rejected uniformly.",
+      "required": true,
+      "riskDomain": "state_divergence",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "allowed=false with an actionable resume condition",
+      "verificationPlan": "Parametrized domain-service tests cover illegal order and every invalid evidence signal."
+    },
+    {
+      "scenario": "The legacy CLI adapter returns the same external JSON fields while delegating its decision to the domain service.",
+      "required": true,
+      "riskDomain": "compatibility",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "stable CLI payload for valid and invalid transitions",
+      "verificationPlan": "Existing CLI regression plus an adapter-delegation test."
+    },
+    {
+      "scenario": "Typed evidence and findings cannot become a success state when their required identity or digest is malformed.",
+      "required": true,
+      "riskDomain": "evidence_integrity",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "validation failure or not allowed",
+      "verificationPlan": "Domain-model validation tests for missing identifiers and evidence digest."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User",
+    "reason": "User authorized governed Contract and Work Item writes."
+  },
+  "humanDecisionPoints": ["Before merge, a reviewer confirms that the bounded adapter migration preserves lifecycle compatibility and does not overclaim a repository-wide rewrite."],
+  "requiredEvidence": ["Focused domain and state-machine tests.", "Full governed verification and hosted PR checks."],
+  "rollbackNote": "Revert this Work Item diff to restore the previous adapter implementation; no external state is changed.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 759
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/domain-model-consolidation.json",
+    "baseCommit": "7140b83be456d9b301b668ea8a2362cbca673fd6",
+    "initialScopeDigest": "34e5b9f61d4fcbe620142e240c701eb6d1eded943c43864ff414d8ae6361dbe7",
+    "contractSkeletonDigest": "aea7c56297b11e098e1525e40f9b6bc2cf9e7865cd9da1ad37ea96f4ba5cd5fb"
+  }
+}
