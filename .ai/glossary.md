@@ -41,6 +41,9 @@ description: AI Cockpit の主要用語とアーキテクチャ境界の定義�
 | Delegated Domain Evidence | 専門の evidence-producing tools が生成し、AI Cockpit が要求、引用、検証、集約する test results、coverage reports、SBOM、vulnerability scans、provenance、signatures、project-specific quality checks。 |
 | Evidence-Producing Tool | ドメイン固有の結果や成果物を生成・処理する専門ツールまたは実装。SBOM は証拠成果物、CycloneDX は標準・形式であり、cyclonedx-python-lib、Syft、Trivy、pip-audit、Sigstore tooling などが交換可能な外部ツール／実装に当たる。AI Cockpit Core の実装ではない。 |
 | Release Evidence | Release の判断を支える Delegated Domain Evidence。SBOM、vulnerability scan、provenance、signatures などを含むが、AI Cockpit Core の能力そのものではない。Tests と coverage は Work Item Review、Merge、Release の複数の判断を支え得る。 |
+| Governance Profile | Work Item に必要なガバナンスおよび検証強度。値は `light`、`standard`、`strict` のみである。`release` は Profile ではなく、`strict` に明示的な release operation と verification escalation を加える操作種別である。 |
+| Calibration Profile | Project の比例的な control policy を表す別の意味領域。値は既存互換のため `lite`、`standard`、`strict`。Governance Profile の `light` と Calibration Profile の `lite` は別値であり、相互に代用してはならない。 |
+| Human Status Color | 人が Outcome を即座に読むための正規値。`green` は完了かつ必要証拠あり、`yellow` は注意または限定的な残存リスク、`red` は停止・失敗・介入要、`unknown` は証拠不足で推測禁止を表す。表示では英語・日本語・簡体中国語の対応ラベルを使えるが、記録する機械値はこの英語値を保持する。 |
 
 ## アーキテクチャ境界
 

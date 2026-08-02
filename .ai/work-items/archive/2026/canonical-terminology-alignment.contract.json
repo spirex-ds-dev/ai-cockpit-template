@@ -1,0 +1,177 @@
+{
+  "contractVersion": 2,
+  "workItemId": "canonical-terminology-alignment",
+  "mode": "code",
+  "title": "canonical-terminology-alignment",
+  "baseCommit": "409886447af22bfeb0088e79e35ccf4265226a74",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/canonical-terminology-alignment.contract.json",
+    ".ai/work-items/active/canonical-terminology-alignment.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/canonical-terminology-alignment.outcome.json",
+    ".ai/work-items/active/canonical-terminology-alignment.outcome.md",
+    ".ai/glossary.md",
+    "scripts/ai_terminology.py",
+    "tests/test_terminology.py",
+    "docs/reference/canonical-terminology.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Provider configuration, release publication, and historical archived Work Items are excluded.", "Calibration profile storage remains compatible; this Work Item only makes its distinction from governance profiles explicit."],
+  "sources": [
+    {
+      "path": "user-pasted-text WI-14 canonical-terminology-alignment",
+      "reason": "User-required canonical governance and status terms."
+    },
+    {"path": ".ai/glossary.md", "reason": "Current repository terminology."},
+    {"path": "scripts/ai_calibration_profiles.py", "reason": "Existing distinct calibration profile vocabulary."},
+    {"path": "scripts/ai_check_work_item.py", "reason": "Existing governance profile vocabulary."}
+  ],
+  "rawUserRequest": "WI-14 canonical-terminology-alignment: unify light, standard, strict, green, yellow, red, and unknown across machine terminology and multilingual mappings.",
+  "rawRequestSource": {"type":"human","reference":"user-pasted-text WI-14","capturedAt":"2026-08-02T00:00:00+00:00","digest":"sha256:user-authorized-canonical-terminology"},
+  "declaredIntent": {"summary":"Establish canonical governance and human-status terminology without conflating the separate calibration profile domain.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["terminology_drift","compatibility"], "unknownsReviewComplete": true,
+    "reason": "Canonicalization must not turn the calibration-specific lite profile into a governance profile."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,"canVerify": true,"needsHumanDecision": false,"blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue","reason": "User supplied the canonical term set and authorized governed writes."
+  },
+  "preReviewWarnings": ["Verify governance light and calibration lite remain distinct semantic domains."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A canonical terminology registry defines governance profile terms light, standard, strict and human status terms green, yellow, red, unknown.",
+    "The registry explicitly distinguishes governance light from calibration lite and rejects invalid terms for each domain.",
+    "Focused tests verify canonical values, semantic-domain separation, and status-to-color mapping.",
+    "Glossary and reference documentation describe the canonical mapping without rewriting archived artifacts."
+  ],
+  "guidelines": [
+    "New terminology APIs must be documented and tested.", "Do not conflate governance and calibration vocabulary."
+  ],
+  "intent": {
+    "problem": "Governance, status, and calibration vocabulary is currently distributed across scripts and documentation, making semantic drift and mistaken global replacement plausible.",
+    "constraints": ["Governance profiles are exactly light, standard, strict.", "Human status colors are exactly green, yellow, red, unknown.", "Calibration lite is a distinct compatibility domain.", "Do not rewrite historical artifacts."],
+    "rationale": "A small canonical registry makes machine validation and human reporting use the same explicit meanings."
+  },
+  "scenarioCoverage": [
+    {"scenario":"governance profile validation","required":true,"status":"unverified","evidence":[],"expected":"Only light, standard, strict are governance profiles.","verificationPlan":"Run focused terminology tests."},
+    {"scenario":"calibration compatibility","required":true,"status":"unverified","evidence":[],"expected":"Calibration lite remains valid but is not a governance profile.","verificationPlan":"Run focused terminology tests."},
+    {"scenario":"human status mapping","required":true,"status":"unverified","evidence":[],"expected":"green, yellow, red, unknown have stable machine and display semantics.","verificationPlan":"Run focused terminology tests."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,"approvedBy": "user","reason": "User explicitly authorized required Contract and governed Work Item writes for this and future Work Items."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 755
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/canonical-terminology-alignment.json",
+    "baseCommit": "409886447af22bfeb0088e79e35ccf4265226a74",
+    "initialScopeDigest": "1fd35157236dd67b9f07832b6f8dc9fc1376d7650fed8c125dd3a636907720aa",
+    "contractSkeletonDigest": "6130610688d3e85eace79844b311102b71875e6210ec4b1480fbe454d6df3dd1"
+  }
+}
