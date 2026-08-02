@@ -1,7 +1,7 @@
 ---
 author: Codex
 title: "Risk-Based Quality Routing Design"
-description: "Design for selecting Lite, Standard, Strict, or Release governance from repository evidence without duplicating quality gates."
+description: "Historical design record for selecting Light, Standard, or Strict governance with release-specific verification escalation."
 ---
 
 # Risk-Based Quality Routing Design
@@ -27,12 +27,15 @@ needlessly expensive while the evidence for any downgrade is implicit.
 ## Decision
 
 Introduce one deterministic governance-profile selector with the ordered
-profiles `lite < standard < strict < release`. The selector reads a versioned
-repository policy, classifies changed Git paths, evaluates the active Contract,
-and emits a JSON receipt. All consumers use that result:
+profiles `light < standard < strict`. The selector reads a versioned repository
+policy, classifies changed Git paths, evaluates the active Contract, detects
+release-owned operations and resources, and emits a JSON receipt. A release
+context adds release-preflight and distribution verification to Strict; it is
+not a fourth profile. All consumers use that result:
 
 - `determine_quality_scope.py` remains available as a compatibility projection;
-- `ai_verification_policy.py` uses the same four-level vocabulary;
+- `ai_verification_policy.py` uses the same three-profile vocabulary and
+  explicit operation escalation;
 - `ai-cockpit-quality` selects an existing quality ownership graph;
 - Contract v2 records the selected profile and any bounded override evidence.
 
@@ -43,10 +46,13 @@ No gate command is copied into the router.
 
 | Profile | Typical evidence | Existing execution ownership |
 | --- | --- | --- |
-| Lite | documentation, comments, non-executable examples, formatting-only changes | `quality-fast` |
+| Light | documentation, comments, non-executable examples, formatting-only changes | `quality-fast` |
 | Standard | ordinary source, tests, bug fixes, small refactors | `quality-fast`, project tests, reference-impact, full test-weakening |
 | Strict | governance, CI, installer, security, destructive behavior, public API, dependency, migration, calibration, evidence schemas | `quality-full` |
-| Release | release metadata, tags/workflows, SBOM, provenance, assets, distribution | `quality-release` |
+
+Release metadata, tags/workflows, SBOM, provenance, assets, distribution, or
+release claims select `strict` plus the `release_preflight` and `distribution`
+verification escalations. Non-release Strict work does not run that graph.
 
 Unknown paths select at least Standard. Mixed changes select the highest profile.
 Explicit requests may raise but may not lower the automatically selected profile.
@@ -55,17 +61,17 @@ Explicit requests may raise but may not lower the automatically selected profile
 
 `.ai/quality/governance-routing.yaml` is the policy SSOT. It declares:
 
-- a schema version and the fixed profile order;
+- a schema version and the fixed three-profile order;
 - evidence-only lifecycle patterns that remain in receipts without raising risk;
 - exact paths and path prefixes for each profile;
 - required Make ownership groups for each profile;
 - the conservative unknown-path profile;
-- release and protected-surface patterns that take precedence over broader
-  documentation or source patterns.
+- release and protected-surface patterns that derive operation and verification
+  escalation ahead of broader documentation or source patterns.
 
 The loader rejects missing keys, unknown profiles, unsafe paths, duplicate or
 unordered profile declarations, and malformed group mappings. Policy failure is
-an error, never a Lite fallback.
+an error, never a Light fallback.
 
 ## Contract evidence and overrides
 
@@ -105,10 +111,11 @@ external identity proof remains outside WI-03.
 ## Compatibility
 
 The legacy quality-scope interface keeps its schema and explicit
-`fast|full|release` modes. It delegates classification to the shared router and
-projects Lite to Fast, Standard and Strict to Full, and Release to Release. The
-generic `quality` alias remains Full for callers that explicitly chose it; only
-the AI Cockpit default entrypoint becomes evidence-routed.
+`fast|full|release` quality modes. The shared router maps Light to Fast and
+Standard or Strict to Full; a detected release operation additionally selects
+the release verification graph. The generic `quality` alias remains Full for
+callers that explicitly chose it; only the AI Cockpit default entrypoint becomes
+evidence-routed.
 
 Installed adopters receive the policy, router, compatibility adapter, and Make
 entrypoint together. Missing installed assets fail closed instead of silently
@@ -126,11 +133,12 @@ falling back to a weaker graph.
 
 ## Verification strategy
 
-Red-first tests cover each profile, mixed and unknown changes, input ordering,
-malformed policy, traversal and symlink escape, Contract schema, valid and stale
-overrides, CLI escalation, forbidden downgrade, legacy output, Make dry-runs,
-quality ownership invariants, and installed-adopter behavior. The Work Item then
-runs the focused suites and the Strict finish graph required by its own changes.
+Red-first tests cover each of the three profiles, release-context derivation,
+mixed and unknown changes, input ordering, malformed policy, traversal and
+symlink escape, Contract schema, valid and stale overrides, CLI escalation,
+forbidden downgrade, legacy output, Make dry-runs, quality ownership invariants,
+and installed-adopter behavior. The Work Item then runs the focused suites and
+the Strict finish graph required by its own changes.
 
 ## Rejected alternatives
 
