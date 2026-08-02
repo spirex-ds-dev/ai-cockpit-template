@@ -24,6 +24,22 @@ def provider_approval() -> dict:
     }
 
 
+def direct_user_approval() -> dict:
+    return {
+        "schemaVersion": 1,
+        "approvalType": "destructive_change",
+        "identityLevel": "direct_user_authorized",
+        "actor": "repository-owner",
+        "provider": None,
+        "evidence": {
+            "directUserInstructionRef": "conversation:2026-08-02-cleanup",
+            "directUserInstructionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "authorizedAt": "2026-08-02T10:00:00Z",
+        },
+        "scope": [".worktrees/example"],
+    }
+
+
 def test_repository_name_is_repository_recorded_only() -> None:
     record = {"approved": True, "approvedBy": "Ray", "reason": "approved"}
 
@@ -102,3 +118,40 @@ def test_non_destructive_approval_type_is_not_high_risk_authority() -> None:
     record = provider_approval()
     record["approvalType"] = "restricted_write"
     assert "approvalType" in " ".join(ai_external_identity.high_risk_approval_issues(record))
+
+
+def test_direct_user_authorization_requires_exact_scope_and_instruction_binding() -> None:
+    record = direct_user_approval()
+
+    assert ai_external_identity.identity_state(record) == "direct_user_authorized"
+    assert (
+        ai_external_identity.high_risk_approval_issues(
+            record, required_scope=[".worktrees/example"]
+        )
+        == []
+    )
+
+    for field in ("directUserInstructionRef", "directUserInstructionDigest", "authorizedAt"):
+        malformed = copy.deepcopy(record)
+        del malformed["evidence"][field]
+        assert field in " ".join(ai_external_identity.high_risk_approval_issues(malformed))
+
+    malformed = copy.deepcopy(record)
+    malformed["evidence"]["reviewId"] = 123
+    assert "provider" in " ".join(ai_external_identity.high_risk_approval_issues(malformed))
+
+    malformed = copy.deepcopy(record)
+    malformed["evidence"]["directUserInstructionDigest"] = "sha256:not-a-digest"
+    assert "sha256 instruction digest" in " ".join(
+        ai_external_identity.high_risk_approval_issues(malformed)
+    )
+
+    malformed = copy.deepcopy(record)
+    malformed["evidence"]["authorizedAt"] = "not-a-timestamp"
+    assert "ISO-8601" in " ".join(ai_external_identity.high_risk_approval_issues(malformed))
+
+    assert "exactly match" in " ".join(
+        ai_external_identity.high_risk_approval_issues(
+            record, required_scope=[".worktrees/another-target"]
+        )
+    )

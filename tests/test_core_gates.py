@@ -85,6 +85,30 @@ def test_finish_run_merges_stabilization_environment(monkeypatch):
     assert captured["env"]["AI_FINISH_STABILIZING"] == "1"
 
 
+def test_finish_console_output_is_bounded_but_marks_truncation():
+    output = "x" * (ai_finish.CONSOLE_OUTPUT_LIMIT + 10)
+
+    displayed = ai_finish.console_output(output)
+
+    assert displayed.startswith("x" * ai_finish.CONSOLE_OUTPUT_LIMIT)
+    assert "output truncated: 10 character(s)" in displayed
+
+
+def test_finish_run_bounds_large_console_output(monkeypatch, capsys):
+    payload = "x" * (ai_finish.CONSOLE_OUTPUT_LIMIT + 10)
+    monkeypatch.setattr(
+        ai_finish.subprocess,
+        "run",
+        lambda *_args, **_kwargs: SimpleNamespace(returncode=0, stdout=payload),
+    )
+
+    code, _, output = ai_finish.run(["make", "check-ai-agent-risk"])
+
+    assert code == 0
+    assert output == payload
+    assert "output truncated: 10 character(s)" in capsys.readouterr().out
+
+
 @pytest.fixture(autouse=True)
 def isolate_diff_ownership_preview(monkeypatch):
     monkeypatch.setattr(ai_finish, "preview", lambda **_kwargs: [])

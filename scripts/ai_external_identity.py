@@ -7,12 +7,14 @@ import argparse
 import json
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 from ai_trust_schema import ValidationError, validate_payload
 
-HIGH_RISK_LEVELS = {"provider_verified", "enterprise_verified"}
+DIRECT_USER_LEVEL = "direct_user_authorized"
+HIGH_RISK_LEVELS = {"provider_verified", "enterprise_verified", DIRECT_USER_LEVEL}
 COMMIT_SHA = re.compile(r"^[0-9a-fA-F]{7,128}$")
 LOW_IDENTITY_STATES = {
     "self_declared": "self_declared",
@@ -27,6 +29,8 @@ def identity_state(record: Any) -> str:
     level = record.get("identityLevel")
     if level in LOW_IDENTITY_STATES:
         return LOW_IDENTITY_STATES[level]
+    if level == DIRECT_USER_LEVEL:
+        return DIRECT_USER_LEVEL
     if level in HIGH_RISK_LEVELS:
         return str(level)
     if isinstance(record.get("approvedBy"), str) and record["approvedBy"].strip():
@@ -55,6 +59,42 @@ def approval_issues(record: Any) -> list[str]:
         if provider is not None or evidence:
             issues.append(
                 f"{level} evidence must not imply provider verification; use provider=null and evidence={{}}"
+            )
+    elif level == DIRECT_USER_LEVEL:
+        if provider is not None:
+            issues.append("direct_user_authorized evidence requires provider=null")
+        for field in (
+            "directUserInstructionRef",
+            "directUserInstructionDigest",
+            "authorizedAt",
+        ):
+            if not _present(evidence.get(field)):
+                issues.append(f"direct_user_authorized evidence requires {field}")
+        digest = evidence.get("directUserInstructionDigest")
+        if _present(digest) and not re.fullmatch(r"sha256:[0-9a-fA-F]{64}", digest):
+            issues.append("direct_user_authorized evidence requires a sha256 instruction digest")
+        authorized_at = evidence.get("authorizedAt")
+        if _present(authorized_at):
+            try:
+                parsed = authorized_at.replace("Z", "+00:00")
+                datetime.fromisoformat(parsed)
+            except ValueError:
+                issues.append("direct_user_authorized evidence authorizedAt must be ISO-8601")
+        forbidden = {
+            "repository",
+            "pullRequest",
+            "reviewId",
+            "environmentApprovalId",
+            "rulesetId",
+            "commitSha",
+            "enterpriseSystem",
+            "externalReference",
+        }
+        claimed = sorted(field for field in forbidden if field in evidence)
+        if claimed:
+            issues.append(
+                "direct_user_authorized evidence must not contain provider or enterprise fields: "
+                + ", ".join(claimed)
             )
     elif not _present(provider):
         issues.append(f"{level} requires a non-empty provider")
@@ -90,11 +130,11 @@ def approval_issues(record: Any) -> list[str]:
 
 
 def high_risk_approval_issues(record: Any, *, required_scope: list[str] | None = None) -> list[str]:
-    """Reject high-risk approval unless externally bound evidence is complete."""
+    """Reject high-risk approval unless its declared identity evidence is complete."""
     state = identity_state(record)
     if state not in HIGH_RISK_LEVELS:
         return [
-            f"identity evidence is {state}; high-risk approval requires provider_verified or enterprise_verified"
+            f"identity evidence is {state}; high-risk approval requires provider_verified or enterprise_verified, or a complete direct_user_authorized record"
         ]
     issues = approval_issues(record)
     if isinstance(record, dict) and record.get("approvalType") != "destructive_change":
