@@ -1,26 +1,24 @@
 {
   "reportVersion": 1,
-  "workItemId": "capability-freshness-corrected-delivery",
+  "workItemId": "enterprise-control-evidence-model",
   "phase": "review",
-  "result": "completed",
+  "result": "completed_with_warnings",
   "sourceOutcome": {
     "format": "ai-cockpit-task-outcome",
     "schemaVersion": 1,
-    "digest": "11e09120985c9e7b4229345e4be640bbb095eaba942a411ca896bb704d7819b2"
+    "digest": "4092af868ca44aa3411850457bdadd6d76459308b005472ad08da471bf74395f"
   },
   "task": {
-    "summary": "Task capability-freshness-corrected-delivery generated an evidence-derived outcome with status completed.",
+    "summary": "Task enterprise-control-evidence-model generated an evidence-derived outcome with status completed_with_warnings.",
     "deliveredChanges": [
-      ".ai/work-items/archive/2026/capability-freshness-corrected-delivery.contract.json",
-      ".ai/work-items/archive/2026/capability-freshness-corrected-delivery.summary.json",
-      "scripts/ai_capability_freshness.py",
-      "scripts/ai_capability_truth.py",
-      "scripts/ai_check_capability_claims.py",
-      "tests/test_capability_freshness.py",
-      "tests/test_capability_truth_matrix.py",
-      "tests/test_capability_claims.py",
-      "tests/test_release_preflight.py",
-      "docs/reference/capability-evidence-freshness.md",
+      ".ai/work-items/archive/2026/enterprise-control-evidence-model.contract.json",
+      ".ai/work-items/archive/2026/enterprise-control-evidence-model.summary.json",
+      "scripts/ai_enterprise_control_evidence.py",
+      "tests/test_enterprise_control_evidence.py",
+      "tests/test_enterprise_control_matrix.py",
+      "docs/reference/enterprise-control-matrix.json",
+      "docs/reference/enterprise-control-checklist.md",
+      "docs/enterprise-security-boundary.md",
       "docs/reference/capability-truth-matrix.json",
       "docs/reference/japanese-capability-assessment.json",
       "docs/reference/japanese-capability-assessment.md",
@@ -29,18 +27,34 @@
     ]
   },
   "issues": {
-    "detected": 0,
+    "detected": 1,
     "hardStops": 0,
-    "warnings": 0,
+    "warnings": 1,
     "resolved": 0,
-    "unresolved": 0
+    "unresolved": 1
   },
   "preventedRisks": [],
   "interventions": [],
   "forcedStops": [],
   "humanDecisions": [],
-  "limitations": [],
-  "forbiddenClaims": [],
+  "limitations": [
+    {
+      "sourceWarning": "No external provider or enterprise evidence was supplied because configuration and external verification are out of scope.",
+      "title": "Unresolved evidence is explicitly limited",
+      "affectedClaims": [
+        "completion_claim"
+      ],
+      "requiredEvidence": [
+        "fresh verification evidence"
+      ],
+      "forbiddenClaims": [
+        "Do not claim this warning was verified or resolved."
+      ]
+    }
+  ],
+  "forbiddenClaims": [
+    "Do not claim an unresolved warning was verified or resolved."
+  ],
   "remainingRisks": [],
   "nextSafeAction": "Review the pull request and provider checks before merge."
 }

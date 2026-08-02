@@ -1,0 +1,224 @@
+{
+  "contractVersion": 2,
+  "workItemId": "enterprise-control-evidence-model",
+  "mode": "code",
+  "title": "Model external enterprise control evidence",
+  "baseCommit": "56b0382d1a0951b48e44a91c02fc21cfa6be7e3b",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Complete all governed Work Items. For WI-17, model enterprise controls as external observed evidence, never as repository-created compliance; do not modify provider configuration.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "active user goal and AI Cockpit comprehensive remediation instructions, WI-17",
+    "capturedAt": "2026-08-02",
+    "digest": "sha256:enterprise-control-evidence-model"
+  },
+  "declaredIntent": {
+    "summary": "Replace ambiguous enterprise-control status labels with auditable, time-bound observed-control evidence that keeps the repository/provider boundary explicit.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/enterprise-control-evidence-model.contract.json",
+    ".ai/work-items/active/enterprise-control-evidence-model.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/enterprise-control-evidence-model.outcome.json",
+    ".ai/work-items/active/enterprise-control-evidence-model.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/archive/index.json",
+    "docs/reference/enterprise-control-matrix.json",
+    "docs/reference/enterprise-control-checklist.md",
+    "docs/enterprise-security-boundary.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "scripts/ai_enterprise_control_evidence.py",
+    "tests/test_enterprise_control_matrix.py",
+    "tests/test_enterprise_control_evidence.py"
+  ],
+  "outOfScope": [
+    "Provider configuration, IdP configuration, branch-protection changes, secret-manager configuration, production isolation, and external compliance certification.",
+    "Claims that this repository is compliant, enterprise-ready, or externally verified."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Repository-maintained remediation context for the enterprise-control boundary; the active human request supplies the current WI-17 requirements."
+    },
+    {
+      "path": "docs/reference/enterprise-control-matrix.json",
+      "reason": "Existing boundary inventory to migrate to observed-control evidence."
+    },
+    {
+      "path": "docs/reference/enterprise-control-checklist.md",
+      "reason": "Existing adopter handoff boundary to retain and clarify."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "false_compliance_claim",
+      "stale_external_evidence",
+      "schema_migration"
+    ],
+    "reason": "A misleading control state could be read as an external compliance assertion; evidence must be explicit, time-bound, and fail closed.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Enterprise-control claims require explicit boundary and evidence verification."
+    ],
+    "operationClasses": ["security", "repository_governance"],
+    "verificationEscalations": [],
+    "override": {
+      "approvalEvidence": "User authorized governed Contract and Work Item writes in this thread.",
+      "reason": "Strict review for a public governance boundary without an external control operation.",
+      "risks": ["false_compliance_claim", "stale_external_evidence"],
+      "notRunChecks": ["External provider control verification is out of scope and must remain not_verified."],
+      "workItemOnly": true,
+      "workItemId": "enterprise-control-evidence-model"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The task changes repository-local schema, validation, tests, and documentation only; it does not configure or assert external controls."
+  },
+  "preReviewWarnings": ["Do not infer provider facts from local Git, CI, or checklist text; do not retain a generic compliant or verified aggregate verdict."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Every control record carries provider, resource, requiredState, observedState, evidenceType, verifiedAt, owner, limitation, and expiresAt fields.",
+    "Missing external evidence evaluates only to not_verified with an explicit limitation; no aggregate compliant verdict is representable.",
+    "The control inventory covers identity, authorization, branch protection, review policy, secrets, audit, signing, SBOM, provenance, retention, separation of duties, and production isolation.",
+    "Validation rejects forbidden compliant/verified vocabulary, expired evidence, incomplete records, and attempted provider-fact inference from repository-local evidence.",
+    "Documentation separates an adopter checklist from observed evidence and preserves the external-control boundary."
+  ],
+  "guidelines": [
+    "Keep repository-local evidence distinct from external provider and enterprise-control evidence.",
+    "Use fail-closed states and explicit limitations rather than aggregate compliance claims.",
+    "Do not change provider configuration or historical archived Work Items."
+  ],
+  "intent": {
+    "problem": "The existing enterprise-control matrix mixes checklist-oriented labels such as verified with repository-local boundary text, without the required auditable evidence fields. This can be misread as an enterprise compliance result.",
+    "constraints": ["No external provider, identity, or production configuration changes.", "No compliant or aggregate verified verdict.", "Repository-local facts cannot be promoted to external control evidence.", "Do not rewrite archived Work Items."],
+    "rationale": "A typed observed-control evidence record makes missing, expired, and limited external evidence legible while preserving a useful adopter handoff checklist."
+  },
+  "scenarioCoverage": [
+    {"scenario":"A control with no external evidence remains not_verified and explains the missing evidence.","required":true,"riskDomain":"false_compliance_claim","status":"verified","evidence":["tests/test_enterprise_control_evidence.py::test_missing_external_evidence_is_not_verified_with_a_reason","tests/test_enterprise_control_matrix.py::test_matrix_default_controls_evaluate_to_not_verified"],"expected":"not_verified with limitation","verificationPlan":"Unit tests for evaluator and matrix validation."},
+    {"scenario":"Expired or incomplete observed evidence is rejected rather than producing a positive control state.","required":true,"riskDomain":"stale_external_evidence","status":"verified","evidence":["tests/test_enterprise_control_evidence.py::test_expired_observed_evidence_is_not_verified","tests/test_enterprise_control_evidence.py::test_compliance_verdict_vocabulary_is_rejected"],"expected":"validation error","verificationPlan":"Unit tests with expired and missing-field fixtures."},
+    {"scenario":"A local repository receipt cannot be treated as external provider evidence or a compliant verdict.","required":true,"riskDomain":"false_compliance_claim","status":"verified","evidence":["tests/test_enterprise_control_evidence.py::test_repository_local_receipt_cannot_become_observed_control_evidence","tests/test_enterprise_control_matrix.py::test_matrix_does_not_expose_a_compliance_or_verified_verdict"],"expected":"not_verified or validation error","verificationPlan":"Regression tests for evidence provenance and forbidden verdict vocabulary."},
+    {"scenario":"The documented inventory remains a checklist while observed evidence stays separately queryable.","required":true,"riskDomain":"schema_migration","status":"verified","evidence":["tests/test_enterprise_control_matrix.py::test_enterprise_matrix_has_required_controls_and_complete_not_verified_records","docs/reference/enterprise-control-checklist.md"],"expected":"separate checklist and evidence model","verificationPlan":"Documentation and matrix regression tests."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {"approved": true,"approvedBy": "User","reason": "User authorized governed Contract and Work Item writes."},
+  "humanDecisionPoints": ["An adopter or provider administrator must supply current external evidence before any control can be reported as observed; this Work Item does not make that decision."],
+  "requiredEvidence": ["Focused evaluator and matrix regressions.", "Full governed verification and hosted PR CI."],
+  "rollbackNote": "Revert this Work Item diff; no provider or production state is changed.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 758
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/enterprise-control-evidence-model.json",
+    "baseCommit": "56b0382d1a0951b48e44a91c02fc21cfa6be7e3b",
+    "initialScopeDigest": "809b897c55c4353b11f0bf649fccb403ab0aa8b8f98c4101546d605d71d3af1b",
+    "contractSkeletonDigest": "f86482c8bdbb0ad020879798dac8c35d8d12fa5149562ad4aa4f58e22f0bb0d7"
+  }
+}
