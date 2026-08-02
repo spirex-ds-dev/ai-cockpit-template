@@ -1,0 +1,180 @@
+{
+  "contractVersion": 2,
+  "workItemId": "derived-artifact-reduction",
+  "mode": "code",
+  "title": "Reduce duplicated derived governance artifacts",
+  "baseCommit": "d5543cc0cae9139c2f7861cc3fb5fade100f9029",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Complete the remaining governed Work Items. WI-19 must reduce duplicate JSON and fact sources: Events and Receipts are facts; Summary, Markdown, and Status are derived views that cannot become facts; stable derived content must regenerate with an identical digest.",
+  "rawRequestSource": {"type":"human","reference":"AI Cockpit comprehensive remediation instructions, WI-19; active user goal","capturedAt":"2026-08-02","digest":"sha256:derived-artifact-reduction"},
+  "declaredIntent": {"summary":"Make the authority and regeneration boundary of Outcome, Status, and Human Benefit projections explicit and executable.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "scope": [
+    ".ai/work-items/active/derived-artifact-reduction.contract.json",
+    ".ai/work-items/active/derived-artifact-reduction.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/derived-artifact-reduction.outcome.json",
+    ".ai/work-items/active/derived-artifact-reduction.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/archive/index.json",
+    ".ai/cockpit/derived_artifacts.json",
+    "scripts/ai_derived_artifacts.py",
+    "tests/test_derived_artifacts.py",
+    "docs/reference/derived-artifacts.md"
+  ],
+  "outOfScope": ["Provider configuration, release publication, and external evidence collection.","Deleting Task Outcome, Status, or Human Benefit Report views, or rewriting historical archive evidence."],
+  "sources": [
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Current Outcome and Human Benefit Report generation boundary."
+    },
+    {"path":"scripts/ai_generate_status.py","reason":"Current Status derived-view generator."},
+    {"path":"scripts/ai_generate_task_outcome.py","reason":"Current deterministic Outcome projection generator."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["evidence_integrity","derived_view_drift","compatibility"],
+    "reason": "Incorrect authority binding could allow a derived report to be treated as a fact or produce a stale human-facing view.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Evidence authority and deterministic derived views are a repository governance boundary."
+    ],
+    "operationClasses": ["repository_governance"],
+    "verificationEscalations": [],
+    "override": {"approvalEvidence":"User authorized governed Contract and Work Item writes in this thread.","reason":"Strict evidence-integrity review without a release operation.","risks":["evidence_integrity","derived_view_drift"],"notRunChecks":["Release checks are not applicable because no release operation or release-owned resource is touched."],"workItemOnly":true,"workItemId":"derived-artifact-reduction"}
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The work is repository-local authority metadata, deterministic validation, tests, and documentation only."
+  },
+  "preReviewWarnings": ["Do not make a derived Markdown, Status, or Human Benefit view an upstream authority; do not delete human-facing Outcome reporting."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": ["A machine-readable registry assigns each active derived artifact exactly one or more canonical fact inputs and declares it non-authoritative.","Validation rejects missing, cyclic, or derived-as-authority input bindings and rejects unknown fields without a declared authority.","The registry captures Status, Task Outcome JSON/Markdown, and Human Benefit JSON/Markdown with their actual generators and authoritative inputs.","Regeneration tests prove deterministic canonical digest output for the registry and stable projection inputs.","Documentation distinguishes immutable evidence/facts from generated views without removing human-facing Outcome reporting."],
+  "guidelines": [
+    "Treat Event and Receipt records as facts and Summary, Markdown, Status, and Human Benefit reports as derived views.",
+    "Every registered artifact field must have one declared authority; fail closed on cycles or missing authority.",
+    "Do not modify provider configuration or historical archived Work Items."
+  ],
+  "intent": {
+    "problem": "The repository has deterministic generators for Outcome, Status, and Human Benefit reports, but it lacks one executable registry that says which inputs are authoritative and proves generated views cannot become upstream facts.",
+    "constraints": ["Retain the existing human-readable Outcome and Human Benefit Report.","Do not change external provider or release configuration.","Do not rewrite archived Work Items.","Fail closed if a derived artifact is declared as an authority or dependency cycle."],
+    "rationale": "An explicit authority registry and deterministic validator reduce duplicated fact interpretation while keeping the existing concise views useful to people."
+  },
+  "scenarioCoverage": [
+    {"scenario":"Every registered derived artifact has only fact inputs and a declared generator.","required":true,"riskDomain":"evidence_integrity","status":"unverified","evidence":[],"expected":"registry validates","verificationPlan":"Unit tests validate the repository registry."},
+    {"scenario":"A derived artifact cannot become its own or another derived artifact's authority.","required":true,"riskDomain":"derived_view_drift","status":"unverified","evidence":[],"expected":"validation error","verificationPlan":"Cycle and derived-input regression fixtures."},
+    {"scenario":"The canonical registry digest is stable across equivalent load/validation runs.","required":true,"riskDomain":"compatibility","status":"unverified","evidence":[],"expected":"identical sha256 digest","verificationPlan":"Deterministic digest unit test."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "User",
+    "reason": "User authorized governed Contract and Work Item writes."
+  },
+  "humanDecisionPoints": ["Reviewers confirm that the authority registry is a derived-view boundary, not a claim that all existing historical schemas were migrated."],
+  "requiredEvidence": ["Focused registry validation and deterministic digest tests.","Full governed verification and hosted PR checks."],
+  "rollbackNote": "Revert the registry, validator, tests, and documentation; generated views and external state are unchanged.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 760
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/derived-artifact-reduction.json",
+    "baseCommit": "d5543cc0cae9139c2f7861cc3fb5fade100f9029",
+    "initialScopeDigest": "6be45364a1833bacbfe9a4682861b17d97a3669213c2f3a884e397450c881ef2",
+    "contractSkeletonDigest": "4eceb7f938a6a19599c115aafe35d49084b6996e34a9d1e4ccee6ff910ac4496"
+  }
+}
