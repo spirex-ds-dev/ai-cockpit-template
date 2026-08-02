@@ -61,7 +61,7 @@ def test_repository_baseline_pins_current_reviewed_bandit_evidence():
 
     assert baseline == {
         "count": 117,
-        "digest": "37393ddb52460889bb28b323e4eb58de6cdc0b5e8232970339f0f1e6d9942c81",
+        "digest": "9e01c28f20c0b390861cc7cdc95add156f9345f7f0abcd79a5e06e71a215bf9b",
     }
 
 
