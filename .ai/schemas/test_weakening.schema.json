@@ -46,6 +46,16 @@
       "type": "array",
       "minItems": 1,
       "items": {"type": "string", "minLength": 1}
+    },
+    "requirementEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "path", "source"],
+      "properties": {
+        "status": {"const": "accepted"},
+        "path": {"type": "string", "minLength": 1},
+        "source": {"type": "string", "minLength": 1}
+      }
     }
   },
   "examples": [

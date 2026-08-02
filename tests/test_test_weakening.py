@@ -201,6 +201,66 @@ def test_invalid():
     }
 
 
+def test_authorized_exact_retirement_evidence_downgrades_review_to_warning(tmp_path: Path) -> None:
+    repo, base = _repository(
+        tmp_path,
+        {
+            "tests/test_parser.py": "def test_old():\n    assert 1\n    assert 2\n    assert 3\n    assert 4\n"
+        },
+    )
+    _write(repo, "tests/test_parser.py", "def test_new():\n    assert 1\n")
+    _write(
+        repo,
+        ".ai/evidence/test-weakening/retirement.json",
+        json.dumps(
+            {
+                "version": 1,
+                "decision": "retire_cancelled_requirement",
+                "baseRef": base,
+                "retiredPaths": ["tests/test_parser.py"],
+                "allowedSignals": ["assertion_reduction", "test_case_removed"],
+                "humanAuthorization": {
+                    "approvedBy": "user",
+                    "reference": "conversation:test",
+                    "digest": "sha256:test",
+                },
+            }
+        ),
+    )
+
+    result = _run(repo, base)
+
+    assert result.returncode == 0
+    assert json.loads(result.stdout)["requirementEvidence"]["status"] == "accepted"
+
+
+def test_mismatched_retirement_evidence_remains_review(tmp_path: Path) -> None:
+    repo, base = _repository(tmp_path, {"tests/test_parser.py": "def test_old():\n    assert 1\n"})
+    _write(repo, "tests/test_parser.py", "")
+    _write(
+        repo,
+        ".ai/evidence/test-weakening/retirement.json",
+        json.dumps(
+            {
+                "version": 1,
+                "decision": "retire_cancelled_requirement",
+                "baseRef": base,
+                "retiredPaths": ["tests/other.py"],
+                "allowedSignals": [],
+                "humanAuthorization": {
+                    "approvedBy": "user",
+                    "reference": "conversation:test",
+                    "digest": "sha256:test",
+                },
+            }
+        ),
+    )
+
+    result = _run(repo, base)
+
+    assert result.returncode == 2
+
+
 def test_ci_success_bypasses_are_blocked(tmp_path: Path) -> None:
     repo, base = _repository(
         tmp_path,
