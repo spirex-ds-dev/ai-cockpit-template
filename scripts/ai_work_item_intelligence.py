@@ -365,7 +365,7 @@ def _state(
     return "intake", "draft", blockers, missing, risks, open_entities
 
 
-def _source_validation(facts: list[dict[str, Any]]) -> dict[str, Any]:
+def _source_validation(facts: list[dict[str, Any]], *, root: Path = ROOT) -> dict[str, Any]:
     """Validate declared local provenance without treating absent V1 provenance as a V2 fact."""
     records: list[dict[str, Any]] = []
     for fact in facts:
@@ -393,16 +393,26 @@ def _source_validation(facts: list[dict[str, Any]]) -> dict[str, Any]:
         ):
             record["reason"] = "invalid_source_ref"
         else:
-            path = Path(source_ref["path"])
-            try:
-                actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
-            except OSError:
-                record["reason"] = "source_unavailable"
+            root = root.resolve()
+            relative_path = Path(source_ref["path"])
+            if relative_path.is_absolute() or ".." in relative_path.parts:
+                record["reason"] = "source_path_outside_repository"
             else:
-                if actual == source_ref["digest"]:
-                    record["valid"] = True
+                path = (root / relative_path).resolve()
+                try:
+                    path.relative_to(root)
+                except ValueError:
+                    record["reason"] = "source_path_outside_repository"
                 else:
-                    record["reason"] = "source_digest_mismatch"
+                    try:
+                        actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+                    except OSError:
+                        record["reason"] = "source_unavailable"
+                    else:
+                        if actual == source_ref["digest"]:
+                            record["valid"] = True
+                        else:
+                            record["reason"] = "source_digest_mismatch"
         records.append(record)
     return {"valid": all(row["valid"] for row in records), "records": records}
 
@@ -504,7 +514,7 @@ def _snapshot_v2(
     work_item: str, facts: list[dict[str, Any]], *, root: Path = ROOT
 ) -> dict[str, Any]:
     legacy = snapshot(work_item, facts, root=root)
-    validation = _source_validation(facts)
+    validation = _source_validation(facts, root=root)
     source_facts = [
         fact
         for fact in facts
