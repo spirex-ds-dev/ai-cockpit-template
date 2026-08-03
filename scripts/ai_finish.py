@@ -892,6 +892,7 @@ def main() -> int:
             file=sys.stderr,
         )
         return 1
+    verification_start = time.time()
     code = run_declared_checks(
         declared_items,
         args=args,
@@ -903,6 +904,11 @@ def main() -> int:
         contract_hash=contract_hash,
         commit_sha=commit_sha,
         obs=obs,
+    )
+    getattr(obs, "lifecycle_phase_finished", lambda *_args, **_kwargs: None)(
+        "verification",
+        duration_ms=elapsed_ms(verification_start),
+        cache_outcome="miss",
     )
     if code:
         obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
@@ -1105,7 +1111,11 @@ def main() -> int:
             obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
             return 1
         print(archive_next_steps(args.task))
-    obs.work_item_finished(result="passed", duration_ms=elapsed_ms(total_start))
+    duration_ms = elapsed_ms(total_start)
+    getattr(obs, "lifecycle_phase_finished", lambda *_args, **_kwargs: None)(
+        "finish", duration_ms=duration_ms, cache_outcome="miss"
+    )
+    obs.work_item_finished(result="passed", duration_ms=duration_ms)
     return 0
 
 

@@ -13,6 +13,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 from collections.abc import Iterator
 from datetime import UTC, datetime
 from pathlib import Path
@@ -549,6 +550,7 @@ def validate_start_state(
 
 
 def main() -> int:
+    phase_start = time.time()
     args = parse_args()
     try:
         task = slug(args.task)
@@ -715,9 +717,8 @@ def main() -> int:
         }
         if not persist_work_item(contract_path, summary_path, contract, summary):
             return 1
-        create_observability(work_item_id=task).work_item_started(
-            fields={"mode": args.mode, "title": title}
-        )
+        observability = create_observability(work_item_id=task)
+        observability.work_item_started(fields={"mode": args.mode, "title": title})
         record_fact_once(
             task,
             "contract_created",
@@ -737,6 +738,9 @@ def main() -> int:
         print(f"Work Item skeleton created: {task}")
         print(f"contract: {contract_rel}")
         print(f"summary: {summary_rel}")
+        getattr(observability, "lifecycle_phase_finished", lambda *_args, **_kwargs: None)(
+            "planning", duration_ms=int((time.time() - phase_start) * 1000), cache_outcome="miss"
+        )
         return 0
     finally:
         lock_context.__exit__(None, None, None)

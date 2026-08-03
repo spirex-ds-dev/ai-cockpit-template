@@ -8,6 +8,11 @@ from pathlib import Path
 
 import ai_close_work_item as closure
 import pytest
+from ai_observability import AiEventType
+
+
+def test_lifecycle_phase_event_type_is_available_to_closure() -> None:
+    assert AiEventType.LIFECYCLE_PHASE_FINISHED.value == "lifecycle_phase_finished"
 
 
 def run_command(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:

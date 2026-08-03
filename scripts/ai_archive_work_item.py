@@ -10,6 +10,7 @@ import json
 import shutil
 import subprocess
 import sys
+import time
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -788,6 +789,7 @@ def _execute_archive_transaction(
 
 
 def main() -> int:
+    phase_start = time.time()
     args = parse_args()
     if getattr(args, "rebuild_index", False):
         try:
@@ -977,6 +979,9 @@ def main() -> int:
             check_id="aiArchive",
             fields={"year": target_dir.name, "files": len(files_to_move)},
         )
+    )
+    getattr(obs, "lifecycle_phase_finished", lambda *_args, **_kwargs: None)(
+        "archive", duration_ms=int((time.time() - phase_start) * 1000), cache_outcome="miss"
     )
     return 0
 

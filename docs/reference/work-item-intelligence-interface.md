@@ -37,6 +37,12 @@ cancels, or retries a Work Item. Snapshots include fact counters instead of a
 subjective completion percentage, and expose blockers, missing evidence,
 dependencies, decisions, risks, verification, eligibility, and a digest.
 
+Local lifecycle observability may emit paired phase measurements for planning,
+preflight, implementation, verification, finish, and closure. Each measurement
+contains only local elapsed compute, execution count, and cache outcome. Provider
+and human wait are `unknown` unless an authoritative source records them; an
+unpaired or negative local duration produces no timing claim.
+
 `completed`, `release_ready`, and `distribution_verified` remain unavailable
 until the matching authoritative evidence is present. A Strict Work Item alone
 does not imply release verification.

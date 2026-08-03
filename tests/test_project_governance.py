@@ -15,6 +15,12 @@ from check_system_invariants import invariant_issues
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_observability_exposes_the_lifecycle_phase_event_type() -> None:
+    import ai_observability
+
+    assert ai_observability.AiEventType.LIFECYCLE_PHASE_FINISHED.value == "lifecycle_phase_finished"
+
+
 def isolated_repository_view(tmp_path, *writable_paths: Path) -> Path:
     """Build a read-only linked repository view, copying only mutated files."""
     copy = tmp_path / "repository"

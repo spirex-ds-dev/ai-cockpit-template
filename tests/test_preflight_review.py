@@ -5,6 +5,11 @@ from pathlib import Path
 import ai_preflight_review
 import pytest
 from ai_common import validate_scenario_coverage
+from ai_observability import AiEventType
+
+
+def test_lifecycle_phase_event_type_is_available_to_preflight() -> None:
+    assert AiEventType.LIFECYCLE_PHASE_FINISHED.value == "lifecycle_phase_finished"
 
 
 def write_contract(path: Path, data: dict) -> None:
