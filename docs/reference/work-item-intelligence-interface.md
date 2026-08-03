@@ -43,6 +43,12 @@ contains only local elapsed compute, execution count, and cache outcome. Provide
 and human wait are `unknown` unless an authoritative source records them; an
 unpaired or negative local duration produces no timing claim.
 
+Lifecycle timing is not verification-reuse authorization. The current
+source-backed decision keeps every required verification check on its normal
+execution path; a future reuse proposal must bind identical source, change-set,
+command, environment, toolchain, and policy inputs. See
+[`verification-evidence-reuse.md`](verification-evidence-reuse.md).
+
 `completed`, `release_ready`, and `distribution_verified` remain unavailable
 until the matching authoritative evidence is present. A Strict Work Item alone
 does not imply release verification.
