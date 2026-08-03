@@ -77,7 +77,8 @@ human-facing generated projection; WIII is authoritative for machine queries.
 The snapshot shape is described by
 `.ai/schemas/work-item-intelligence-snapshot.schema.json`. Schema version 1
 remains the default compatibility view. Schema version 2 is opt-in through
-`--schema-version 2` and adds `versions`, `sourceValidation`, and `subjects`.
+`--schema-version 2` and adds `versions`, `sourceValidation`, `subjects`, and
+`openEntities`.
 Its `versions.governance` and `versions.sourceSequence` advance only for
 source-bound governance facts; `versions.runtimeObservation` tracks runtime
 observations separately. Rebuilding unchanged facts preserves these counters.
@@ -89,6 +90,18 @@ governance evidence. Missing, unreadable, malformed, or digest-mismatched
 sources yield an explicit V2 `inconsistent` governance state rather than a
 trusted result. Legacy V1 facts remain available through schema version 1;
 they are not retroactively presented as source-bound evidence.
+
+## Keyed open entities
+
+V2 reduces verification failures, human decision requests, and missing
+dependencies as open entities keyed by `subject.kind` and `subject.id`. A
+matching `verification_passed`, `human_decision_recorded`, or
+`dependency_satisfied` fact must name the exact `resolves` value (`kind:id`)
+and carry the same subject. It closes only that entity. Missing, unknown,
+malformed, or cross-subject resolution references yield `inconsistent` rather
+than clearing a blocker. `openEntities` reports remaining keyed blockers. A
+`closed` fact projects `closed` only when no keyed open entity remains. The V1
+compatibility view omits these V2-only fields.
 
 Do not record tokens, passwords, secrets, full environment values, private
 human notes, or external response bodies in facts.

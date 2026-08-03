@@ -202,11 +202,77 @@ def record_fact_once(
 
 def _state(
     facts: list[dict[str, Any]],
-) -> tuple[str, str, list[dict[str, str]], list[dict[str, str]], list[dict[str, str]]]:
+) -> tuple[
+    str, str, list[dict[str, str]], list[dict[str, str]], list[dict[str, str]], list[dict[str, str]]
+]:
     types = [str(row.get("factType")) for row in facts]
     blockers: list[dict[str, str]] = []
     missing: list[dict[str, str]] = []
     risks: list[dict[str, str]] = []
+    open_entities: list[dict[str, str]] = []
+    invalid_resolution = False
+    opened = {
+        "verification_failed": "verification",
+        "human_decision_requested": "decision",
+        "dependency_missing": "dependency",
+    }
+    resolved = {
+        "verification_passed": "verification",
+        "human_decision_recorded": "decision",
+        "dependency_satisfied": "dependency",
+    }
+    keyed_facts = any(
+        str(row.get("factType")) in {*opened, *resolved}
+        and isinstance(row.get("payload", {}).get("subject"), dict)
+        for row in facts
+    )
+    if keyed_facts:
+        open_keys: dict[str, dict[str, str]] = {}
+        for fact in facts:
+            payload = fact.get("payload", {})
+            if not isinstance(payload, dict):
+                continue
+            fact_type = str(fact.get("factType"))
+            subject = payload.get("subject")
+            if fact_type in opened and isinstance(subject, dict):
+                entity_id = str(subject.get("id") or "")
+                if entity_id:
+                    open_keys[f"{opened[fact_type]}:{entity_id}"] = {
+                        "kind": opened[fact_type],
+                        "id": entity_id,
+                    }
+            if fact_type in resolved:
+                target = payload.get("resolves")
+                if (
+                    not isinstance(target, str)
+                    or target not in open_keys
+                    or (
+                        not isinstance(subject, dict)
+                        or subject.get("id") != open_keys[target]["id"]
+                        or subject.get("kind") != open_keys[target]["kind"]
+                    )
+                ):
+                    invalid_resolution = True
+                else:
+                    del open_keys[target]
+        open_entities = list(open_keys.values())
+        if invalid_resolution:
+            return "verification", "inconsistent", blockers, missing, risks, open_entities
+        kinds = {row["kind"] for row in open_entities}
+        if "verification" in kinds:
+            return "verification", "verification_failed", blockers, missing, risks, open_entities
+        if "decision" in kinds:
+            blockers.append(
+                {"code": "human_decision_pending", "detail": "a human decision is required"}
+            )
+            return "review", "needs_human_confirmation", blockers, missing, risks, open_entities
+        if "dependency" in kinds:
+            blockers.append(
+                {"code": "dependency_missing", "detail": "a declared dependency is unavailable"}
+            )
+            return "preflight", "waiting_for_dependency", blockers, missing, risks, open_entities
+        # Keyed facts supersede historical type-presence checks only for entity facts.
+        types = [fact_type for fact_type in types if fact_type not in {*opened, *resolved}]
     claimed = {
         str(row.get("payload", {}).get("claim"))
         for row in facts
@@ -227,32 +293,32 @@ def _state(
                 }
             )
     if "verification_failed" in types:
-        return "verification", "verification_failed", blockers, missing, risks
+        return "verification", "verification_failed", blockers, missing, risks, open_entities
     if "human_decision_requested" in types and "human_decision_recorded" not in types:
         blockers.append(
             {"code": "human_decision_pending", "detail": "a human decision is required"}
         )
-        return "review", "needs_human_confirmation", blockers, missing, risks
+        return "review", "needs_human_confirmation", blockers, missing, risks, open_entities
     if "dependency_missing" in types:
         blockers.append(
             {"code": "dependency_missing", "detail": "a declared dependency is unavailable"}
         )
-        return "preflight", "waiting_for_dependency", blockers, missing, risks
+        return "preflight", "waiting_for_dependency", blockers, missing, risks, open_entities
     if missing:
-        return "verification", "blocked", blockers, missing, risks
+        return "verification", "blocked", blockers, missing, risks, open_entities
     if "closed" in types:
-        return "closed", "closed", blockers, missing, risks
+        return "closed", "closed", blockers, missing, risks, open_entities
     if "closure_started" in types:
-        return "closure", "closing", blockers, missing, risks
+        return "closure", "closing", blockers, missing, risks, open_entities
     if "finish_passed" in types:
-        return "finish", "ready_for_review", blockers, missing, risks
+        return "finish", "ready_for_review", blockers, missing, risks, open_entities
     if "verification_passed" in types:
-        return "review", "ready_for_review", blockers, missing, risks
+        return "review", "ready_for_review", blockers, missing, risks, open_entities
     if "implementation_started" in types:
-        return "implementation", "active", blockers, missing, risks
+        return "implementation", "active", blockers, missing, risks, open_entities
     if "preflight_ready" in types:
-        return "preflight", "ready", blockers, missing, risks
-    return "intake", "draft", blockers, missing, risks
+        return "preflight", "ready", blockers, missing, risks, open_entities
+    return "intake", "draft", blockers, missing, risks, open_entities
 
 
 def _source_validation(facts: list[dict[str, Any]]) -> dict[str, Any]:
@@ -307,7 +373,7 @@ def _is_runtime_observation(fact: dict[str, Any]) -> bool:
 
 def snapshot(work_item: str, facts: list[dict[str, Any]], *, root: Path = ROOT) -> dict[str, Any]:
     """Build the legacy V1 projection; V2 wraps this without changing it."""
-    phase, governance, blockers, missing, risks = _state(facts)
+    phase, governance, blockers, missing, risks, open_entities = _state(facts)
     activity_path = paths(work_item, root=root)["activity"]
     health = "not_observed"
     activity: dict[str, Any] = {"health": health}
@@ -375,6 +441,7 @@ def snapshot(work_item: str, facts: list[dict[str, Any]], *, root: Path = ROOT) 
         "dependencies": dependencies,
         "humanDecisions": decisions,
         "risks": risks,
+        "openEntities": open_entities,
         "verification": {
             "state": "not_run" if not verification else verification[-1].get("result", "observed"),
             "records": verification,
@@ -437,7 +504,7 @@ def _as_v1(snapshot_value: dict[str, Any]) -> dict[str, Any]:
     result = {
         key: value
         for key, value in snapshot_value.items()
-        if key not in {"versions", "sourceValidation", "subjects", "snapshotDigest"}
+        if key not in {"versions", "sourceValidation", "subjects", "openEntities", "snapshotDigest"}
     }
     result["schemaVersion"] = 1
     result["statusVersion"] = 1
