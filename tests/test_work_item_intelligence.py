@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+import scripts.ai_work_item_intelligence as intelligence
 from scripts.ai_work_item_intelligence import (
     IntelligenceError,
     append_fact,
@@ -76,8 +77,9 @@ def test_index_tampering_is_detected_rebuilt_and_measured(tmp_path: Path) -> Non
     value = json.loads(index.read_text(encoding="utf-8"))
     value["entries"][0]["governanceState"] = "closed"
     index.write_text(json.dumps(value), encoding="utf-8")
-    with pytest.raises(IntelligenceError, match="index digest mismatch"):
-        query(root=tmp_path)
+    assert [item["identity"]["workItemId"] for item in query(root=tmp_path)["entries"]] == [
+        "index-item"
+    ]
     rebuild("index-item", root=tmp_path)
     baseline = measure_query_baseline(root=tmp_path, rounds=3)
     assert baseline["rounds"] == 3
@@ -354,3 +356,108 @@ def test_v2_separates_governance_runtime_completion_and_permissions(tmp_path: Pa
     }
     assert "retry" not in after["governancePermissions"]
     assert "cancel" not in after["governancePermissions"]
+
+
+def test_distinct_work_items_publish_independent_entries_without_a_shared_index_lock(
+    tmp_path: Path,
+) -> None:
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    for number in range(64):
+        (active / f"publish-{number:02d}.contract.json").write_text("{}", encoding="utf-8")
+
+    with ThreadPoolExecutor(max_workers=16) as pool:
+        futures = [
+            pool.submit(append_fact, f"publish-{number:02d}", "preflight_ready", {}, root=tmp_path)
+            for number in range(64)
+        ]
+        for future in futures:
+            future.result()
+
+    result = query(schema_version=2, root=tmp_path)
+    assert len(result["entries"]) == 64
+    cursors = []
+    for number in range(64):
+        entry = json.loads(
+            (tmp_path / f".ai/work-items/runtime/publish-{number:02d}/index-entry.json").read_text()
+        )
+        snapshot = read_snapshot(f"publish-{number:02d}", schema_version=2, root=tmp_path)
+        assert entry["publicationId"] == snapshot["publicationId"]
+        cursors.append(entry["cursor"])
+    assert result["indexVersion"] == max(cursors)
+
+
+def test_rebuild_recovers_a_malformed_cache_from_item_local_publications(tmp_path: Path) -> None:
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    for item in ("cache-left", "cache-right"):
+        (active / f"{item}.contract.json").write_text("{}", encoding="utf-8")
+        append_fact(item, "preflight_ready", {}, root=tmp_path)
+
+    cache = tmp_path / ".ai/work-items/runtime/index-cache.json"
+    cache.write_text("not-json", encoding="utf-8")
+    rebuild("cache-left", schema_version=2, root=tmp_path)
+
+    rebuilt = json.loads(cache.read_text(encoding="utf-8"))
+    assert [entry["workItemId"] for entry in rebuilt["entries"]] == ["cache-left", "cache-right"]
+    assert [
+        entry["identity"]["workItemId"]
+        for entry in query(schema_version=2, root=tmp_path)["entries"]
+    ] == [
+        "cache-left",
+        "cache-right",
+    ]
+
+
+def test_reader_returns_inconsistent_when_a_complete_snapshot_lacks_its_entry(
+    tmp_path: Path,
+) -> None:
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    (active / "partial-item.contract.json").write_text("{}", encoding="utf-8")
+    append_fact("partial-item", "preflight_ready", {}, root=tmp_path)
+    (tmp_path / ".ai/work-items/runtime/partial-item/index-entry.json").unlink()
+
+    with pytest.raises(IntelligenceError, match="publication is missing"):
+        query(schema_version=2, root=tmp_path)
+
+
+def test_reader_observes_explicit_inconsistency_during_entry_publication(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    (active / "inflight-item.contract.json").write_text("{}", encoding="utf-8")
+    original_atomic_json = intelligence._atomic_json
+    observed: list[str] = []
+
+    def observe_after_status(path: Path, value: dict[str, object]) -> None:
+        original_atomic_json(path, value)
+        if path.name == "status.json":
+            with pytest.raises(IntelligenceError, match="publication is missing"):
+                query(schema_version=2, root=tmp_path)
+            observed.append("inconsistent")
+
+    monkeypatch.setattr(intelligence, "_atomic_json", observe_after_status)
+    append_fact("inflight-item", "preflight_ready", {}, root=tmp_path)
+
+    assert observed == ["inconsistent"]
+    assert [item["identity"]["workItemId"] for item in query(root=tmp_path)["entries"]] == [
+        "inflight-item"
+    ]
+
+
+def test_publication_cursor_advances_only_when_facts_change(tmp_path: Path) -> None:
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    (active / "cursor-item.contract.json").write_text("{}", encoding="utf-8")
+    append_fact("cursor-item", "preflight_ready", {}, root=tmp_path)
+    first = read_snapshot("cursor-item", schema_version=2, root=tmp_path)
+
+    rebuilt = rebuild("cursor-item", schema_version=2, root=tmp_path)
+    assert rebuilt["publicationId"] == first["publicationId"]
+    assert rebuilt["publicationCursor"] == first["publicationCursor"]
+
+    append_fact("cursor-item", "implementation_started", {}, root=tmp_path)
+    advanced = read_snapshot("cursor-item", schema_version=2, root=tmp_path)
+    assert advanced["publicationCursor"] > first["publicationCursor"]

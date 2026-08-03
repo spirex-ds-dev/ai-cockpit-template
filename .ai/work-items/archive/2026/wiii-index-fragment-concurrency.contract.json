@@ -1,0 +1,179 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wiii-index-fragment-concurrency",
+  "mode": "code",
+  "title": "WIII per-item publication and rebuildable cache",
+  "rawUserRequest": "查收，点评这个评审。然后制定开发对应计划（这次试试多sub agent并行处理）。每个工单都自己走完全部流程包括PR和清理。需要授权的，我授权给你，并写入Contract。循环直到全部计划完成。看看有没有问题？\n\n切换到terra模型，目标自动完成全部计划工单闭环。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-03-wiii-review-and-authorization", "capturedAt": "2026-08-03", "digest": "sha256:74c7603d5eddfa058c824c8a1eece0e26242d1d689b19bc232f06fda696916a9"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Implement Task 5 per-item WIII publication and rebuildable cache, then independently archive, PR, merge, and close it.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "baseCommit": "ee117a10367523dbbc1dd874a65f65bdefcd29fb",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wiii-index-fragment-concurrency.contract.json",
+    ".ai/work-items/active/wiii-index-fragment-concurrency.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wiii-index-fragment-concurrency.outcome.json",
+    ".ai/work-items/active/wiii-index-fragment-concurrency.outcome.md",
+    ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md",
+    "scripts/ai_work_item_intelligence.py", "scripts/ai_work_item_status.py",
+    "tests/test_work_item_intelligence.py", "tests/test_work_item_intelligence_integration.py",
+    "docs/reference/work-item-intelligence-interface.md", "docs/reference/capability-truth-matrix.json", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": ["Scheduler, retry, cancellation, workflow-engine, agent-manager, provider transport, credential, release, tag, and provider-configuration behavior.", "Linear fact reduction, stale-lock recovery, lifecycle timing, receipt reuse, verification routing, and enforcement threshold changes assigned to later Work Items."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md",
+      "reason": "Task 5 delivery boundary and concurrent publication scenarios."
+    },
+    {"path": "docs/superpowers/specs/2026-08-03-wiii-v2-remediation-design.md", "reason": "Publication/cache/recovery design constraints."},
+    {"path": "scripts/ai_work_item_intelligence.py", "reason": "Current shared-index implementation to replace."},
+    {"path": "tests/test_work_item_intelligence_integration.py", "reason": "Existing WIII concurrency and CLI coverage."},
+    {"path": "docs/reference/work-item-intelligence-performance-baseline.md", "reason": "Task 4 workload protocol and environment-bound evidence."},
+    {"path": "conversation:2026-08-03-wiii-review-and-authorization", "reason": "Direct lifecycle authorization."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "concurrency", "publication_consistency", "cache_recovery"
+    ],
+    "reason": "Independent writers and readers must avoid a shared index lock while never exposing partial publication or treating the cache as authoritative.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Concurrent publication semantics and public query behavior require standard verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": "No current blocker."
+  },
+  "executionDecision": {
+    "status": "continue", "reason": "The publication boundary and workload evidence are sourced and locally verifiable."
+  },
+  "preReviewWarnings": [
+    "Review publication-id binding, cache rebuild behavior, concurrent writer isolation, reader consistency, and cursor monotonicity."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Each Work Item publishes an item-local index-entry containing the same publication identifier as its complete snapshot.",
+    "A cache loss or deliberately malformed aggregate cache is rebuilt from valid item-local entries without omitting a valid entry.",
+    "A concurrent run of 64 distinct Work Items completes without shared-index lock timeout, lost entry, or partial reader result; each reader sees old complete state, new complete state, or explicit inconsistent.",
+    "The active-list cursor advances monotonically across complete per-item publications.",
+    "Focused/full WIII tests, Task 4 workload comparison, required governance checks, archive, PR, merge, and ai-close-work-item have recorded evidence."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The current shared aggregate index is rewritten under a global lock, which serializes independent Work Item writers and leaves cache recovery without a per-item authoritative publication unit.",
+    "constraints": ["A single Work Item writer must not acquire a shared aggregate index lock.", "A reader may return only an old complete view, a new complete view, or explicit inconsistent; it may not silently omit a valid delta.", "The aggregate cache is rebuildable and never authoritative for a single Work Item.", "Use Task 4 workload protocol for comparison without treating local measurements as a budget.", "Use the recorded user approval only for this Work Item's PR/merge and governed cleanup."],
+    "rationale": "Per-item immutable publication fragments decouple independent writers and let a damaged cache be reconstructed from complete item-local evidence."
+  },
+  "scenarioCoverage": [
+    {"scenario": "64 Work Items append facts concurrently.", "required": true, "status": "verified", "evidence": ["tests/test_work_item_intelligence.py::test_distinct_work_items_publish_independent_entries_without_a_shared_index_lock", "Task 4 matrix: 48 cases, 1440 samples, 0 timeouts"], "expected": "All item-local publications exist without shared lock timeout or lost entry.", "verificationPlan": "Focused concurrent writer test and Task 4 workload comparison."},
+    {"scenario": "Reader runs during a publication replacement.", "required": true, "status": "verified", "evidence": ["tests/test_work_item_intelligence.py::test_reader_observes_explicit_inconsistency_during_entry_publication"], "expected": "Reader sees old complete, new complete, or inconsistent; no omitted partial delta.", "verificationPlan": "Fault-injection reader consistency test."},
+    {"scenario": "Aggregate cache is malformed after valid entries exist.", "required": true, "status": "verified", "evidence": ["tests/test_work_item_intelligence.py::test_rebuild_recovers_a_malformed_cache_from_item_local_publications", "tests/test_work_item_intelligence.py::test_publication_cursor_advances_only_when_facts_change"], "expected": "Cache is rebuilt from valid item-local entries and cursor remains monotonic.", "verificationPlan": "Fault-injection cache rebuild/integration test."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true, "approvedBy": "user", "reason": "User explicitly authorized required actions and requested this authorization in every Contract; it is limited to this Work Item lifecycle."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 778
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wiii-index-fragment-concurrency.json",
+    "baseCommit": "ee117a10367523dbbc1dd874a65f65bdefcd29fb",
+    "initialScopeDigest": "383750051593ded77626f369394d39e81998e0a4d342126dd625a8abff967ccd",
+    "contractSkeletonDigest": "2d9c1118cfc16108c5062d193bc9b95764e69ba3cd7312428c0cf6d8d7e33c1b"
+  }
+}

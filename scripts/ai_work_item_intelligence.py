@@ -103,7 +103,9 @@ def paths(work_item: str, *, root: Path = ROOT) -> dict[str, Path]:
         "status": base / "status.json",
         "activity": base / "activity.json",
         "lock": base / "status.lock",
+        "indexEntry": base / "index-entry.json",
         "index": base.parent / "index.json",
+        "indexCache": base.parent / "index-cache.json",
         "indexLock": base.parent / "index.lock",
     }
 
@@ -159,14 +161,14 @@ def append_fact(
         raise IntelligenceError("invalid_data", "fact type and object payload are required")
     _safe(payload)
     target = paths(work_item, root=root)
-    with _exclusive_lock(target["indexLock"]), _exclusive_lock(target["lock"]):
+    with _exclusive_lock(target["lock"]):
         return _append_unlocked(work_item, fact_type, payload, root=root)
 
 
 def _append_unlocked(
     work_item: str, fact_type: str, payload: dict[str, Any], *, root: Path
 ) -> dict[str, Any]:
-    """Append while both the Work Item and shared-index locks are held."""
+    """Append while the owning Work Item lock is held."""
     target = paths(work_item, root=root)
     existing = read_facts(work_item, root=root) if target["facts"].exists() else []
     sequence = len(existing) + 1
@@ -192,7 +194,7 @@ def record_fact_once(
     """Append an authoritative lifecycle fact once without making it an agent claim."""
     target = paths(work_item, root=root)
     _safe(payload)
-    with _exclusive_lock(target["indexLock"]), _exclusive_lock(target["lock"]):
+    with _exclusive_lock(target["lock"]):
         if target["facts"].exists():
             for fact in read_facts(work_item, root=root):
                 if fact["factType"] == fact_type and fact.get("payload") == payload:
@@ -536,6 +538,8 @@ def _as_v1(snapshot_value: dict[str, Any]) -> dict[str, Any]:
             "runtimeObservation",
             "completion",
             "governancePermissions",
+            "publicationId",
+            "publicationCursor",
             "snapshotDigest",
         }
     }
@@ -556,34 +560,84 @@ def _atomic_json(path: Path, value: dict[str, Any]) -> None:
     os.replace(name, path)
 
 
+def _entry_from_snapshot(work_item: str, snapshot: dict[str, Any]) -> dict[str, Any]:
+    publication_id = _digest(
+        {
+            "workItemId": work_item,
+            "factSequence": snapshot["factSequence"],
+            "snapshotDigest": snapshot["snapshotDigest"],
+        }
+    )
+    cursor = time.time_ns()
+    entry = {
+        "schemaVersion": 1,
+        "workItemId": work_item,
+        "publicationId": publication_id,
+        "cursor": cursor,
+        "governanceState": snapshot["status"]["governanceState"],
+        "activityHealth": snapshot["status"]["activityHealth"],
+        "factSequence": snapshot["factSequence"],
+        "snapshotDigest": snapshot["snapshotDigest"],
+    }
+    entry["entryDigest"] = _digest(entry)
+    return entry
+
+
+def _read_item_entries(*, root: Path) -> list[dict[str, Any]]:
+    runtime = root / ".ai" / "work-items" / "runtime"
+    entries: list[dict[str, Any]] = []
+    for path in sorted(runtime.glob("*/index-entry.json")):
+        try:
+            entry = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        claimed = entry.pop("entryDigest", None) if isinstance(entry, dict) else None
+        if claimed != _digest(entry) or not isinstance(entry.get("workItemId"), str):
+            continue
+        entry["entryDigest"] = claimed
+        entries.append(entry)
+    return entries
+
+
+def _rebuild_cache(*, root: Path) -> dict[str, Any]:
+    entries = _read_item_entries(root=root)
+    cache = {
+        "schemaVersion": 2,
+        "indexVersion": max((int(entry["cursor"]) for entry in entries), default=0),
+        "entries": sorted(entries, key=lambda entry: entry["workItemId"]),
+    }
+    cache["indexDigest"] = _digest(cache)
+    target = root / ".ai" / "work-items" / "runtime"
+    _atomic_json(target / "index-cache.json", cache)
+    _atomic_json(target / "index.json", cache)
+    return cache
+
+
 def _rebuild_unlocked(work_item: str, *, root: Path = ROOT) -> dict[str, Any]:
     facts = read_facts(work_item, root=root)
     result = _snapshot_v2(work_item, facts, root=root)
     target = paths(work_item, root=root)
-    _atomic_json(target["status"], result)
-    entries = []
-    if target["index"].exists():
+    entry = _entry_from_snapshot(work_item, result)
+    if target["status"].exists():
         try:
-            entries = json.loads(target["index"].read_text(encoding="utf-8")).get("entries", [])
+            previous = json.loads(target["status"].read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
-            entries = []
-    entries = [entry for entry in entries if entry.get("workItemId") != work_item]
-    entries.append(
-        {
-            "workItemId": work_item,
-            "governanceState": result["status"]["governanceState"],
-            "activityHealth": result["status"]["activityHealth"],
-            "factSequence": result["factSequence"],
-            "snapshotDigest": result["snapshotDigest"],
-        }
+            previous = {}
+        if previous.get("publicationId") == entry["publicationId"] and isinstance(
+            previous.get("publicationCursor"), int
+        ):
+            entry["cursor"] = previous["publicationCursor"]
+    result["publicationId"] = entry["publicationId"]
+    result["publicationCursor"] = entry["cursor"]
+    result.pop("snapshotDigest", None)
+    result["snapshotDigest"] = _digest(result)
+    entry["snapshotDigest"] = result["snapshotDigest"]
+    entry["entryDigest"] = _digest(
+        {key: value for key, value in entry.items() if key != "entryDigest"}
     )
-    index = {
-        "schemaVersion": 1,
-        "indexVersion": int(datetime.now(UTC).timestamp() * 1000),
-        "entries": sorted(entries, key=lambda row: row["workItemId"]),
-    }
-    index["indexDigest"] = _digest(index)
-    _atomic_json(target["index"], index)
+    _atomic_json(target["status"], result)
+    _atomic_json(target["indexEntry"], entry)
+    _rebuild_cache(root=root)
     return result
 
 
@@ -591,7 +645,7 @@ def rebuild(work_item: str, *, schema_version: int = 1, root: Path = ROOT) -> di
     if schema_version not in {1, 2}:
         raise IntelligenceError("invalid_query", "schema version must be 1 or 2")
     target = paths(work_item, root=root)
-    with _exclusive_lock(target["indexLock"]), _exclusive_lock(target["lock"]):
+    with _exclusive_lock(target["lock"]):
         value = _rebuild_unlocked(work_item, root=root)
     return _as_v1(value) if schema_version == 1 else value
 
@@ -631,26 +685,23 @@ def query(
 ) -> dict[str, Any]:
     if work_item:
         return read_snapshot(work_item, schema_version=schema_version, root=root)
-    index = root / ".ai" / "work-items" / "runtime" / "index.json"
-    if not index.exists():
-        return {"schemaVersion": schema_version, "indexVersion": 0, "entries": []}
-    try:
-        data = json.loads(index.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        raise IntelligenceError("invalid_data", "runtime index JSON is invalid") from exc
-    claimed = data.pop("indexDigest", None)
-    if claimed != _digest(data):
-        raise IntelligenceError(
-            "inconsistent", "runtime index digest mismatch; rebuild is required"
-        )
-    data["indexDigest"] = claimed
-    entries = data.get("entries", [])
-    if after_index_version is not None and data.get("indexVersion", 0) <= after_index_version:
-        entries = []
+    all_entries = _read_item_entries(root=root)
     active_dir = root / ".ai" / "work-items" / "active"
     active_ids = {
         path.name.removesuffix(".contract.json") for path in active_dir.glob("*.contract.json")
     }
+    published_ids = {str(entry["workItemId"]) for entry in all_entries}
+    for active_id in active_ids:
+        if paths(active_id, root=root)["status"].exists() and active_id not in published_ids:
+            raise IntelligenceError(
+                "inconsistent", f"item-local publication is missing for {active_id}"
+            )
+    if not all_entries:
+        return {"schemaVersion": schema_version, "indexVersion": 0, "entries": []}
+    index_version = max(int(entry["cursor"]) for entry in all_entries)
+    entries = all_entries
+    if after_index_version is not None and index_version <= after_index_version:
+        entries = []
     selected = []
     for entry in entries:
         if entry.get("workItemId") not in active_ids:
@@ -670,7 +721,7 @@ def query(
         selected.append(item)
     return {
         "schemaVersion": schema_version,
-        "indexVersion": data.get("indexVersion", 0),
+        "indexVersion": index_version,
         "entries": selected,
     }
 
