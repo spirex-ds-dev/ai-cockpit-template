@@ -4,6 +4,7 @@ import json
 import sys
 
 import scripts.ai_work_item_status as status_cli
+from scripts.ai_work_item_intelligence import append_fact, read_snapshot
 
 
 def test_cli_returns_stable_not_found_envelope(monkeypatch, capsys) -> None:
@@ -88,3 +89,18 @@ def test_cli_preserves_inconsistent_source_error_without_rebuild(monkeypatch, ca
 
     assert status_cli.main() == 12
     assert json.loads(capsys.readouterr().out)["error"]["code"] == "inconsistent"
+
+
+def test_v1_compatibility_omits_v2_completion_and_v2_exposes_current_state(tmp_path) -> None:
+    append_fact("completion-cli-item", "verification_passed", {}, root=tmp_path)
+    append_fact("completion-cli-item", "verification_failed", {}, root=tmp_path)
+
+    v1 = read_snapshot("completion-cli-item", schema_version=1, root=tmp_path)
+    v2 = read_snapshot("completion-cli-item", schema_version=2, root=tmp_path)
+
+    assert "completion" not in v1
+    assert v2["completion"]["verification"] == {
+        "state": "invalidated",
+        "lastPassedFactId": "completion-cli-item:1",
+        "invalidatedBy": "completion-cli-item:2",
+    }

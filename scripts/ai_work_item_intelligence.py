@@ -523,7 +523,6 @@ def _snapshot_v2(
     result["statusVersion"] = max(1, versions["governance"])
     result["versions"] = versions
     result["sourceValidation"] = validation
-    fact_types = {str(fact.get("factType")) for fact in facts}
     result["governance"] = {
         "lifecyclePhase": result["status"]["lifecyclePhase"],
         "state": result["status"]["governanceState"],
@@ -533,13 +532,7 @@ def _snapshot_v2(
         "activityHealth": result["status"]["activityHealth"],
         "version": versions["runtimeObservation"],
     }
-    result["completion"] = {
-        "implementation": "implementation_started" in fact_types,
-        "verification": "verification_passed" in fact_types,
-        "review": "finish_passed" in fact_types,
-        "integration": "integrated" in fact_types,
-        "closure": "closed" in fact_types,
-    }
+    result["completion"] = _completion(facts)
     result["governancePermissions"] = [
         name
         for name, value in result["actionEligibility"].items()
@@ -563,6 +556,84 @@ def _snapshot_v2(
     result.pop("snapshotDigest", None)
     result["snapshotDigest"] = _digest(result)
     return result
+
+
+def _last_completion_fact(
+    facts: list[dict[str, Any]], fact_types: set[str]
+) -> tuple[int, dict[str, Any]] | None:
+    """Return the last fact relevant to one completion phase."""
+    for index in range(len(facts) - 1, -1, -1):
+        fact = facts[index]
+        if str(fact.get("factType")) in fact_types:
+            return index, fact
+    return None
+
+
+def _completion_phase(
+    facts: list[dict[str, Any]],
+    *,
+    started: set[str],
+    completed: set[str],
+    failed: set[str],
+    verification: bool = False,
+) -> dict[str, str]:
+    """Project one current completion state without treating old evidence as current."""
+    latest = _last_completion_fact(facts, started | completed | failed)
+    if latest is None:
+        return {"state": "not_started"}
+    index, fact = latest
+    fact_type = str(fact.get("factType"))
+    fact_id = str(fact["factId"])
+    if fact_type in started:
+        return {"state": "in_progress", "lastFactId": fact_id}
+    if fact_type in completed:
+        key = "lastPassedFactId" if verification else "lastFactId"
+        return {"state": "completed", key: fact_id}
+    prior_completed = _last_completion_fact(facts[:index], completed)
+    if verification and prior_completed is not None:
+        return {
+            "state": "invalidated",
+            "lastPassedFactId": str(prior_completed[1]["factId"]),
+            "invalidatedBy": fact_id,
+        }
+    return {"state": "failed", "lastFactId": fact_id}
+
+
+def _completion(facts: list[dict[str, Any]]) -> dict[str, dict[str, str]]:
+    """Return the V2 current-state completion contract for every lifecycle phase."""
+    return {
+        "implementation": _completion_phase(
+            facts,
+            started={"implementation_started"},
+            completed={"implementation_completed"},
+            failed={"implementation_failed"},
+        ),
+        "verification": _completion_phase(
+            facts,
+            started={"verification_started"},
+            completed={"verification_passed"},
+            failed={"verification_failed"},
+            verification=True,
+        ),
+        "review": _completion_phase(
+            facts,
+            started={"finish_started"},
+            completed={"finish_passed"},
+            failed={"finish_failed"},
+        ),
+        "integration": _completion_phase(
+            facts,
+            started={"integration_started"},
+            completed={"integrated"},
+            failed={"integration_failed"},
+        ),
+        "closure": _completion_phase(
+            facts,
+            started={"closure_started"},
+            completed={"closed"},
+            failed={"closure_failed"},
+        ),
+    }
 
 
 def _as_v1(snapshot_value: dict[str, Any]) -> dict[str, Any]:
