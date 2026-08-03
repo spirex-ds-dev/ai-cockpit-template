@@ -1,0 +1,266 @@
+{
+  "contractVersion": 2,
+  "workItemId": "final-closure-audit-and-cleanup",
+  "mode": "code",
+  "title": "Audit closed WIII remediation and clean obsolete worktrees",
+  "baseCommit": "d885e5791d37810a727bd92312006ce017e3352f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "docs/reference/final-wiii-remediation-closure-audit.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/final-closure-audit-and-cleanup.contract.json",
+    ".ai/work-items/active/final-closure-audit-and-cleanup.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/final-closure-audit-and-cleanup.outcome.json",
+    ".ai/work-items/active/final-closure-audit-and-cleanup.outcome.md"
+  ],
+  "outOfScope": [
+    "scripts/ai_work_item_intelligence.py",
+    "tests/**",
+    "Makefile",
+    ".github/**",
+    "release.json",
+    "next-release.json",
+    "templates/**"
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md",
+      "reason": "Defines the completed WIII V2 task sequence and conditional truth-alignment rule."
+    },
+    {
+      "path": "docs/reference/wiii-v2-integration-audit.md",
+      "reason": "Records the prior independent integration/truth conclusion and its limits."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wiii-structured-governance-permissions.outcome.md",
+      "reason": "Provides the final closed predecessor outcome."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Defines Work Item closure, branch, and cleanup lifecycle rules."
+    }
+  ],
+  "rawUserRequest": "整个计划完成以后，增加自检，发现问题以后，修复，再自检，有问题再修复。。。循环到全部闭环。最后，发布新版本。完成全部工单包括PR和清理。明确授权给你，并写入Contract。如果没有问题，请开始。全部完成为止不要停止。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03-to-2026-08-04-closure-loop-and-release",
+    "capturedAt": "2026-08-04",
+    "digest": "sha256:user-authorized-closure-audit-cleanup-and-release"
+  },
+  "declaredIntent": {
+    "summary": "Independently audit closed WIII remediation evidence, repair any evidenced gap through separate Work Items, and remove obsolete local branch/worktree identities before release.",
+    "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "document",
+    "authorityRequired": false
+  },
+  "problemStatement": "All planned WIII remediation Work Items are merged, but final completion is unproven until their archival/PR/closure evidence, interfaces, generated truth documents, and obsolete local worktree identities are independently checked against current origin/main.",
+  "scenarioCoverage": [
+    {
+      "scenario": "Every required WIII remediation and parallelism Work Item has an archived Contract/Summary/Outcome, merged PR, and lifecycle closure evidence on current origin/main.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The audit lists the exact evidence inspected and reports no missing lifecycle link.",
+      "verificationPlan": "Inspect archive manifests, GitHub PR state, current branch ancestry, and closure receipts where retained."
+    },
+    {
+      "scenario": "The current WIII interface and capability statements retain repository-local read-only, Agent-scheduled, no-retry/no-cancel boundaries.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Focused interface, integration, and generated-document checks agree with current main behavior.",
+      "verificationPlan": "Run focused WIII tests and the declared documentation/capability generators and checks."
+    },
+    {
+      "scenario": "Obsolete non-merged predecessor worktree and local branches are removed only after exact target, absent remote PR/branch, and retained merged replacement evidence are verified.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The audit records the target identities and confirms only obsolete local identities were removed.",
+      "verificationPlan": "Use git worktree/branch/remote read-only inspection before and after recoverable worktree/branch cleanup."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "lifecycle_cleanup",
+      "evidence_audit"
+    ],
+    "reason": "Audit conclusions must be evidence-based and cleanup must not delete a branch or worktree with retained lifecycle value; no product runtime behavior is changed.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The Work Item changes governance documentation and generated evidence and performs bounded local cleanup after proof."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The owner explicitly authorized the closure audit, repair loop, cleanup, and subsequent release; all audit evidence is repository/GitHub readable."
+  },
+  "preReviewWarnings": [
+    "Verify every conclusion against current evidence, do not modify frozen archives, preserve the WIII/Agent boundary, and prove exact cleanup targets before deletion."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A canonical audit document enumerates every completed WIII/parallelism deliverable and the exact current evidence for its merged/closed state.",
+    "The audit independently verifies current WIII interface boundaries and generated truth/document alignment; any concrete finding becomes a separate corrective Work Item before release.",
+    "Only proven obsolete local predecessor worktrees/branches are removed; current main, merged evidence, tags, remote branches, and immutable archives are preserved.",
+    "Focused checks, declared generators, all required governance checks, ai-finish, PR, merge, and ai-close-work-item pass."
+  ],
+  "guidelines": [
+    "Audit findings must cite current repository or provider evidence; do not infer completion from intent or old claims.",
+    "Keep WIII repository-local and read-only; Agent/subagent scheduling remains outside WIII.",
+    "Delete only an exact verified obsolete local worktree or branch; never alter archived records, tags, current main, or a remote branch without the dedicated lifecycle command."
+  ],
+  "intent": {
+    "problem": "The plan requires a self-audit and repair loop after all functional Work Items; completion and release cannot be claimed until current evidence proves the full lifecycle and cleanup state.",
+    "constraints": [
+      "One Task remains one Work Item, branch, worktree, and PR; this audit does not schedule Agents or alter WIII behavior.",
+      "Do not rewrite immutable archives or delete/move release tags, main, or remote branches outside ai-close-work-item.",
+      "If the audit finds a product/documentation defect, stop its delivery and create a separate corrective Work Item rather than expanding this audit scope.",
+      "Local cleanup is limited to exact obsolete predecessor worktree/branch identities after read-only proof."
+    ],
+    "rationale": "A separate current-state audit converts the requested iterative self-check into durable evidence and prevents stale experimental worktree identities from being mistaken for active work."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": [
+      "exact pre-inventoried obsolete local WIII predecessor branch and worktree identities"
+    ],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "repository owner",
+      "reason": "The repository owner explicitly authorized all Work Items, PRs, cleanup, audit repair loops, and release. Cleanup is limited to exact identities inventoried before deletion.",
+      "identityEvidence": {
+        "schemaVersion": 1,
+        "approvalType": "destructive_change",
+        "identityLevel": "direct_user_authorized",
+        "actor": "repository owner",
+        "provider": null,
+        "evidence": {
+          "directUserInstructionRef": "conversation:2026-08-04-complete-all-work-items-prs-and-cleanup",
+          "directUserInstructionDigest": "sha256:1e61ff0048ff8298470f309bde20c0e14600b04eee6dca1cdadfd7c62030390b",
+          "authorizedAt": "2026-08-04T00:00:00+09:00"
+        },
+        "scope": [
+          "exact pre-inventoried obsolete local WIII predecessor branch and worktree identities"
+        ]
+      }
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "No restricted repository path is changed by this audit; local worktree cleanup is authorized separately through destructiveChangePolicy."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 789
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/final-closure-audit-and-cleanup.json",
+    "baseCommit": "d885e5791d37810a727bd92312006ce017e3352f",
+    "initialScopeDigest": "e590717404af9c09de6f9f50c04a2407abd701857800eae09d4065186bf130f1",
+    "contractSkeletonDigest": "8c4f80107b11051402c33a92ae1543f2af32061a65bc0511879169e100e344e7"
+  }
+}
