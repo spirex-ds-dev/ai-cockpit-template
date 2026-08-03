@@ -140,12 +140,17 @@ It also preserves that publication's cursor and identifier; a new fact creates
 a new publication that advances the active-list cursor.
 
 A source-bound V2 fact carries a payload `subject` (`kind`, `id`) and
-`sourceRef` (`kind`, local `path`, `sha256:` digest). WIII reads the local
-source and checks its digest before using that source-bound fact as valid V2
-governance evidence. Missing, unreadable, malformed, or digest-mismatched
-sources yield an explicit V2 `inconsistent` governance state rather than a
-trusted result. Legacy V1 facts remain available through schema version 1;
-they are not retroactively presented as source-bound evidence.
+`sourceRef` (`kind`, repository-relative `path`, `sha256:` digest). The path
+must not be absolute or contain parent traversal. WIII resolves it below the
+queried repository root before reading it: a symbolic link is allowed only
+when its resolved target also remains below that root. Paths that escape the
+root, including external symbolic links, are invalid without reading the
+target. WIII checks the permitted local source's digest before using that
+source-bound fact as valid V2 governance evidence. Missing, unreadable,
+malformed, out-of-boundary, or digest-mismatched sources yield an explicit V2
+`inconsistent` governance state rather than a trusted result. Legacy V1 facts
+remain available through schema version 1; they are not retroactively
+presented as source-bound evidence.
 
 ## Keyed open entities
 

@@ -317,7 +317,7 @@ def test_v2_rebuild_preserves_versions_for_unchanged_source_bound_projection(
             "subject": {"kind": "preflight", "id": "current"},
             "sourceRef": {
                 "kind": "preflight_receipt",
-                "path": str(receipt),
+                "path": receipt.name,
                 "digest": "sha256:" + sha256(receipt.read_bytes()).hexdigest(),
             },
         },
@@ -335,7 +335,7 @@ def test_v2_versions_split_governance_and_runtime_observations(tmp_path: Path) -
     evidence.write_text('{"ready":true}', encoding="utf-8")
     source_ref = {
         "kind": "test_receipt",
-        "path": str(evidence),
+        "path": evidence.name,
         "digest": "sha256:" + sha256(evidence.read_bytes()).hexdigest(),
     }
     append_fact(
@@ -365,7 +365,7 @@ def test_v2_runtime_observation_source_never_invalidates_governance(tmp_path: Pa
             "subject": {"kind": "preflight", "id": "current"},
             "sourceRef": {
                 "kind": "preflight_receipt",
-                "path": str(evidence),
+                "path": evidence.name,
                 "digest": "sha256:" + sha256(evidence.read_bytes()).hexdigest(),
             },
         },
@@ -378,7 +378,7 @@ def test_v2_runtime_observation_source_never_invalidates_governance(tmp_path: Pa
             "subject": {"kind": "runtime", "id": "worker"},
             "sourceRef": {
                 "kind": "observation",
-                "path": str(tmp_path / "missing"),
+                "path": "missing",
                 "digest": "sha256:" + "0" * 64,
             },
         },
@@ -390,7 +390,6 @@ def test_v2_runtime_observation_source_never_invalidates_governance(tmp_path: Pa
 
 
 def test_v2_rejects_missing_or_digest_mismatched_authoritative_source(tmp_path: Path) -> None:
-    missing = tmp_path / "missing.json"
     append_fact(
         "source-item",
         "preflight_ready",
@@ -398,7 +397,7 @@ def test_v2_rejects_missing_or_digest_mismatched_authoritative_source(tmp_path: 
             "subject": {"kind": "preflight", "id": "current"},
             "sourceRef": {
                 "kind": "preflight_receipt",
-                "path": str(missing),
+                "path": "missing.json",
                 "digest": "sha256:" + "0" * 64,
             },
         },
@@ -407,6 +406,124 @@ def test_v2_rejects_missing_or_digest_mismatched_authoritative_source(tmp_path: 
     snapshot = read_snapshot("source-item", schema_version=2, root=tmp_path)
     assert snapshot["status"]["governanceState"] == "inconsistent"
     assert snapshot["sourceValidation"]["valid"] is False
+
+
+def test_v2_rejects_an_absolute_source_ref_outside_the_repository_root(tmp_path: Path) -> None:
+    outside = tmp_path.parent / f"{tmp_path.name}-outside.json"
+    outside.write_text('{"external":true}', encoding="utf-8")
+    append_fact(
+        "absolute-source-item",
+        "preflight_ready",
+        {
+            "subject": {"kind": "preflight", "id": "current"},
+            "sourceRef": {
+                "kind": "preflight_receipt",
+                "path": str(outside),
+                "digest": "sha256:" + sha256(outside.read_bytes()).hexdigest(),
+            },
+        },
+        root=tmp_path,
+    )
+
+    validation = read_snapshot("absolute-source-item", schema_version=2, root=tmp_path)[
+        "sourceValidation"
+    ]
+
+    assert validation == {
+        "valid": False,
+        "records": [
+            {
+                "factId": "absolute-source-item:1",
+                "valid": False,
+                "reason": "source_path_outside_repository",
+            }
+        ],
+    }
+
+
+def test_v2_rejects_parent_traversal_source_ref(tmp_path: Path) -> None:
+    outside = tmp_path.parent / f"{tmp_path.name}-traversal.json"
+    outside.write_text('{"external":true}', encoding="utf-8")
+    append_fact(
+        "traversal-source-item",
+        "preflight_ready",
+        {
+            "subject": {"kind": "preflight", "id": "current"},
+            "sourceRef": {
+                "kind": "preflight_receipt",
+                "path": f"../{outside.name}",
+                "digest": "sha256:" + sha256(outside.read_bytes()).hexdigest(),
+            },
+        },
+        root=tmp_path,
+    )
+
+    record = read_snapshot("traversal-source-item", schema_version=2, root=tmp_path)[
+        "sourceValidation"
+    ]["records"][0]
+
+    assert record == {
+        "factId": "traversal-source-item:1",
+        "valid": False,
+        "reason": "source_path_outside_repository",
+    }
+
+
+def test_v2_rejects_source_ref_symlink_resolving_outside_the_repository_root(
+    tmp_path: Path,
+) -> None:
+    outside = tmp_path.parent / f"{tmp_path.name}-symlink-target.json"
+    outside.write_text('{"external":true}', encoding="utf-8")
+    (tmp_path / "outside-link.json").symlink_to(outside)
+    append_fact(
+        "symlink-source-item",
+        "preflight_ready",
+        {
+            "subject": {"kind": "preflight", "id": "current"},
+            "sourceRef": {
+                "kind": "preflight_receipt",
+                "path": "outside-link.json",
+                "digest": "sha256:" + sha256(outside.read_bytes()).hexdigest(),
+            },
+        },
+        root=tmp_path,
+    )
+
+    record = read_snapshot("symlink-source-item", schema_version=2, root=tmp_path)[
+        "sourceValidation"
+    ]["records"][0]
+
+    assert record == {
+        "factId": "symlink-source-item:1",
+        "valid": False,
+        "reason": "source_path_outside_repository",
+    }
+
+
+def test_v2_accepts_source_ref_symlink_resolving_inside_the_repository_root(tmp_path: Path) -> None:
+    source = tmp_path / "inside-target.json"
+    source.write_text('{"local":true}', encoding="utf-8")
+    (tmp_path / "inside-link.json").symlink_to(source)
+    append_fact(
+        "inside-symlink-source-item",
+        "preflight_ready",
+        {
+            "subject": {"kind": "preflight", "id": "current"},
+            "sourceRef": {
+                "kind": "preflight_receipt",
+                "path": "inside-link.json",
+                "digest": "sha256:" + sha256(source.read_bytes()).hexdigest(),
+            },
+        },
+        root=tmp_path,
+    )
+
+    assert (
+        read_snapshot("inside-symlink-source-item", schema_version=2, root=tmp_path)[
+            "sourceValidation"
+        ]["valid"]
+        is True
+    )
 
 
 def test_v2_separates_governance_runtime_completion_and_permissions(tmp_path: Path) -> None:

@@ -1,0 +1,207 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wiii-source-ref-boundary",
+  "mode": "code",
+  "title": "Constrain sourceRef paths to the repository boundary",
+  "baseCommit": "36f2f998fae2d30b0f8bbe99ffa4b0852a153b5f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wiii-source-ref-boundary.contract.json",
+    ".ai/work-items/active/wiii-source-ref-boundary.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wiii-source-ref-boundary.outcome.json",
+    ".ai/work-items/active/wiii-source-ref-boundary.outcome.md",
+    "scripts/ai_work_item_intelligence.py",
+    "tests/test_work_item_intelligence.py",
+    ".ai/schemas/work-item-intelligence-snapshot.schema.json",
+    "docs/reference/work-item-intelligence-interface.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "External Agent/subagent scheduling or cross-worktree aggregation.",
+    "The governancePermissions result-model redesign, cache publication, reducer performance, and verification-receipt reuse.",
+    "Any source file outside the repository worktree."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_work_item_intelligence.py",
+      "reason": "Current sourceRef validation reads caller-provided paths directly."
+    },
+    {
+      "path": "tests/test_work_item_intelligence.py",
+      "reason": "Existing V2 source-validation and runtime-observation coverage defines compatible behavior."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-03-wiii-v2-remediation-design.md",
+      "reason": "V2 design specifies source-bound validation and repository-local evidence boundaries."
+    },
+    {
+      "path": "docs/reference/work-item-intelligence-interface.md",
+      "reason": "Published WIII interface documents sourceRef provenance semantics."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines Evidence Governance and repository-bound architectural terminology."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "path_traversal",
+      "symlink_escape",
+      "evidence_integrity"
+    ],
+    "reason": "An unchecked provenance path can read files outside the repository or follow a symbolic link outside the declared evidence boundary.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Source-bound evidence validation is a trust-boundary change."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The repository boundary policy and expected validation behavior are deterministic and testable."
+  },
+  "preReviewWarnings": [
+    "Review lexical traversal, absolute paths, and resolved symbolic-link escape separately; preserve valid repository-relative source references."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "V2 sourceRef accepts only a non-empty repository-relative path with no absolute or parent traversal component.",
+    "A sourceRef resolving through a symbolic link outside the supplied repository root is invalid and does not read external bytes.",
+    "A normal repository-relative sourceRef, including a symlink that resolves inside the repository root, remains valid only when its SHA-256 digest matches.",
+    "The snapshot schema and WIII interface document the repository-bound sourceRef rule, and focused regression tests cover accepted and rejected paths."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "WIII currently validates sourceRef by reading the supplied path directly. Absolute paths, lexical parent traversal, and symbolic links can therefore escape the repository worktree while still producing a matching digest.",
+    "constraints": [
+      "Keep WIII an atomic local evidence/query interface; do not add Agent scheduling.",
+      "Reject external provenance before reading it, fail closed in the existing sourceValidation projection, and preserve V1 compatibility.",
+      "Do not weaken digest validation or accept a path merely because its bytes are readable."
+    ],
+    "rationale": "Repository-bound provenance is necessary for calibrated trust: a valid sourceRef must prove evidence from the declared worktree, not arbitrary machine-local data."
+  },
+  "rawUserRequest": "通过并行实践，测试并行设计。如果遇到问题，请及时修正。注意保持边界，不要忘了North Star。整个计划最后加个工单，总结并行的经验，落地成SKILL，并更新文档。以便以后提供给Agent使用（不再需要我用prompt来指示）。整个计划完成以后，增加自检，发现问题以后，修复，再自检，有问题再修复。。。循环到全部闭环。最后，发布新版本。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-03-conditional-go-parallel-remediation", "capturedAt": "2026-08-03", "digest": "sha256:conditional-go-source-ref-boundary"},
+  "declaredIntent": {"summary": "Close the diagnosed sourceRef trust-boundary gap with repository-local, digest-bound provenance validation.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "A repository-relative source file has the declared SHA-256 digest.", "required": true, "status": "unverified", "evidence": [], "expected": "sourceValidation is valid.", "verificationPlan": "Focused WIII unit test."},
+    {"scenario": "A sourceRef uses an absolute path or lexical parent traversal.", "required": true, "status": "unverified", "evidence": [], "expected": "sourceValidation is invalid without reading the target.", "verificationPlan": "Focused WIII unit test with a file outside the supplied root."},
+    {"scenario": "A repository path is a symbolic link to a target outside the root.", "required": true, "status": "unverified", "evidence": [], "expected": "sourceValidation is invalid without following the external target.", "verificationPlan": "Focused WIII unit test using a temporary outside file and link."},
+    {"scenario": "A symbolic link resolves to a file inside the repository root.", "required": true, "status": "unverified", "evidence": [], "expected": "Digest-bound validation remains valid.", "verificationPlan": "Focused WIII unit test."}
+  ],
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized the complete remediation plan, PRs, closure, cleanup, audit repairs, and release."},
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 787
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wiii-source-ref-boundary.json",
+    "baseCommit": "36f2f998fae2d30b0f8bbe99ffa4b0852a153b5f",
+    "initialScopeDigest": "e38a3d321bd9b5305cde2104e2108a3cd9a90a78314da91b33e7bfbd6b9d80fb",
+    "contractSkeletonDigest": "a20747c5a233fbf9d07714ca91ffc2b541a2a627fddfac55a2f053ffeffae5d5"
+  }
+}
