@@ -58,3 +58,33 @@ def test_cli_passes_explicit_schema_version(monkeypatch, capsys) -> None:
     assert status_cli.main() == 0
     assert calls[0]["schema_version"] == 2
     assert json.loads(capsys.readouterr().out)["data"]["schemaVersion"] == 2
+
+
+def test_cli_defaults_to_v1_without_network_or_scheduler_side_effect(monkeypatch, capsys) -> None:
+    calls: list[dict[str, object]] = []
+
+    def query(**kwargs):
+        calls.append(kwargs)
+        return {"schemaVersion": 1, "identity": {"workItemId": "v1-item"}}
+
+    monkeypatch.setattr(status_cli, "query", query)
+    monkeypatch.setattr(sys, "argv", ["ai_work_item_status.py", "--work-item", "v1-item"])
+
+    assert status_cli.main() == 0
+    assert calls[0]["schema_version"] == 1
+    assert json.loads(capsys.readouterr().out)["data"]["schemaVersion"] == 1
+
+
+def test_cli_preserves_inconsistent_source_error_without_rebuild(monkeypatch, capsys) -> None:
+    def query(**_kwargs):
+        raise status_cli.IntelligenceError("inconsistent", "source digest mismatch")
+
+    monkeypatch.setattr(status_cli, "query", query)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["ai_work_item_status.py", "--work-item", "source-item", "--schema-version", "2"],
+    )
+
+    assert status_cli.main() == 12
+    assert json.loads(capsys.readouterr().out)["error"]["code"] == "inconsistent"
