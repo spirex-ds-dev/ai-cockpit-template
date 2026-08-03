@@ -68,9 +68,18 @@ benchmark nor a snapshot.
 
 Runtime data lives under `.ai/work-items/runtime/<id>/`: facts appended through
 the CLI writer, a digest-checked derived status projection, optional activity
-observation, and a per-repository incremental index. The status projection and
-index detect changed derived bytes; raw local runtime files are not immutable
-or a per-fact tamper-evident ledger. These local runtime files are not an
+observation, and an item-local `index-entry.json` publication. A publication
+contains a stable `publicationId`, a persisted monotonic cursor, and the
+derived snapshot digest. Writers lock only their owning Work Item; publishing
+one item never needs a repository-wide index lock.
+
+`runtime/index-cache.json` (and the compatibility mirror `runtime/index.json`)
+are rebuildable aggregates, never the source of truth. Readers enumerate and
+verify item-local publications, so they can return an old complete result, a
+new complete result, or `inconsistent` if a complete active snapshot lacks its
+publication. A malformed or stale cache is recoverable through an explicit
+rebuild and cannot silently omit a valid publication. Raw local runtime files
+are not immutable or a per-fact tamper-evident ledger, and they are not an
 archival rewrite. Existing Markdown Cockpit Status remains the canonical
 human-facing generated projection; WIII is authoritative for machine queries.
 
@@ -82,6 +91,8 @@ remains the default compatibility view. Schema version 2 is opt-in through
 Its `versions.governance` and `versions.sourceSequence` advance only for
 source-bound governance facts; `versions.runtimeObservation` tracks runtime
 observations separately. Rebuilding unchanged facts preserves these counters.
+It also preserves that publication's cursor and identifier; a new fact creates
+a new publication that advances the active-list cursor.
 
 A source-bound V2 fact carries a payload `subject` (`kind`, `id`) and
 `sourceRef` (`kind`, local `path`, `sha256:` digest). WIII reads the local

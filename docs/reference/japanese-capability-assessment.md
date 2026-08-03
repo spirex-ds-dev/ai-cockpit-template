@@ -10,8 +10,8 @@ description: Comprehensive, bounded, evidence-backed Japanese repository-governa
 
 - Assessment Work Item: `final-japanese-reassessment-replacement-20260731`
 - Work Item role: `final_reassessment`
-- Assessment digest: `sha256:06a81b0dbaccef1874d85935cb1c73b7892c44a02bdb943ec32d9f94b4ea365d`
-- Evidence source: `sha256:0874fc22f002ed17fb20cd84d0668670e9360595a00970788f2bbd521ba5678a` (60 files; `sha256-canonical-json-v1`)
+- Assessment digest: `sha256:ddee48835ddf4de653dddc3d67ee693f387a105826734ffe8403100b22e2609d`
+- Evidence source: `sha256:7e42cf5f0e6ca639e617ae39220dc70d20515c7a2f1377f59208513d792d0949` (60 files; `sha256-canonical-json-v1`)
 - Corpus: `tests/fixtures/japanese-capability-corpus.json` (`14` entries)
 - Blocking findings: `0`
 - [Machine-readable assessment](japanese-capability-assessment.json)
