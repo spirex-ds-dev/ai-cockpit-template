@@ -7,7 +7,7 @@ Result: `completed_with_warnings`
 Task Outcome status: `completed_with_warnings`.
 
 ## 实际完成内容 / Completed work
-Task wiii-open-entity-reducer generated an evidence-derived outcome with status completed_with_warnings.
+Task wiii-governance-runtime-boundary generated an evidence-derived outcome with status completed_with_warnings.
 
 ## 发现的问题 / Findings
 - Detected issues: 1
@@ -32,7 +32,7 @@ None recorded.
 None recorded.
 
 ## 未执行验证 / Not-run verification
-- Unresolved evidence is explicitly limited: Lifecycle producers without entity subjects retain historical behavior until the lifecycle projection Work Item.
+- Unresolved evidence is explicitly limited: No scheduler, external authorization control, or release workflow is implemented.
 
 ## 当前禁止声明 / Forbidden claims
 - Do not claim an unresolved warning was verified or resolved.

@@ -479,6 +479,28 @@ def _snapshot_v2(
     result["statusVersion"] = max(1, versions["governance"])
     result["versions"] = versions
     result["sourceValidation"] = validation
+    fact_types = {str(fact.get("factType")) for fact in facts}
+    result["governance"] = {
+        "lifecyclePhase": result["status"]["lifecyclePhase"],
+        "state": result["status"]["governanceState"],
+        "version": versions["governance"],
+    }
+    result["runtimeObservation"] = {
+        "activityHealth": result["status"]["activityHealth"],
+        "version": versions["runtimeObservation"],
+    }
+    result["completion"] = {
+        "implementation": "implementation_started" in fact_types,
+        "verification": "verification_passed" in fact_types,
+        "review": "finish_passed" in fact_types,
+        "integration": "integrated" in fact_types,
+        "closure": "closed" in fact_types,
+    }
+    result["governancePermissions"] = [
+        name
+        for name, value in result["actionEligibility"].items()
+        if name not in {"retry", "cancel"} and value["eligible"]
+    ]
     result["subjects"] = [
         fact["payload"]["subject"]
         for fact in source_facts + runtime_facts
@@ -504,7 +526,18 @@ def _as_v1(snapshot_value: dict[str, Any]) -> dict[str, Any]:
     result = {
         key: value
         for key, value in snapshot_value.items()
-        if key not in {"versions", "sourceValidation", "subjects", "openEntities", "snapshotDigest"}
+        if key
+        not in {
+            "versions",
+            "sourceValidation",
+            "subjects",
+            "openEntities",
+            "governance",
+            "runtimeObservation",
+            "completion",
+            "governancePermissions",
+            "snapshotDigest",
+        }
     }
     result["schemaVersion"] = 1
     result["statusVersion"] = 1

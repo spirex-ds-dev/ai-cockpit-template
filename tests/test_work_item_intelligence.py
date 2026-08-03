@@ -323,3 +323,34 @@ def test_v2_rejects_missing_or_digest_mismatched_authoritative_source(tmp_path: 
     snapshot = read_snapshot("source-item", schema_version=2, root=tmp_path)
     assert snapshot["status"]["governanceState"] == "inconsistent"
     assert snapshot["sourceValidation"]["valid"] is False
+
+
+def test_v2_separates_governance_runtime_completion_and_permissions(tmp_path: Path) -> None:
+    append_fact("boundary-item", "preflight_ready", {}, root=tmp_path)
+    append_fact("boundary-item", "implementation_started", {}, root=tmp_path)
+    append_fact("boundary-item", "verification_passed", {}, root=tmp_path)
+    append_fact("boundary-item", "finish_passed", {}, root=tmp_path)
+    append_fact("boundary-item", "closed", {}, root=tmp_path)
+    before = read_snapshot("boundary-item", schema_version=2, root=tmp_path)
+    activity = tmp_path / ".ai/work-items/runtime/boundary-item/activity.json"
+    activity.write_text('{"health":"stale"}', encoding="utf-8")
+    after = rebuild("boundary-item", schema_version=2, root=tmp_path)
+    assert after["governance"] == before["governance"]
+    assert after["runtimeObservation"]["activityHealth"] == "stale"
+    assert after["completion"] == {
+        "implementation": True,
+        "verification": True,
+        "review": True,
+        "integration": False,
+        "closure": True,
+    }
+    assert set(after["governancePermissions"]) <= {
+        "start",
+        "continue",
+        "run_verification",
+        "request_human_decision",
+        "finish",
+        "close",
+    }
+    assert "retry" not in after["governancePermissions"]
+    assert "cancel" not in after["governancePermissions"]
