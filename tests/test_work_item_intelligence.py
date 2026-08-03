@@ -548,16 +548,47 @@ def test_v2_separates_governance_runtime_completion_and_permissions(tmp_path: Pa
         "integration": {"state": "not_started"},
         "closure": {"state": "completed", "lastFactId": "boundary-item:5"},
     }
-    assert set(after["governancePermissions"]) <= {
-        "start",
-        "continue",
-        "run_verification",
-        "request_human_decision",
-        "finish",
-        "close",
+    permissions = after["governancePermissions"]
+    assert permissions["statusVersion"] == after["statusVersion"]
+    assert permissions["basis"] == {
+        "governanceState": "closed",
+        "governanceVersion": after["governance"]["version"],
     }
-    assert "retry" not in after["governancePermissions"]
-    assert "cancel" not in after["governancePermissions"]
+    assert permissions["verification"] == {
+        "allowed": False,
+        "reasonCodes": ["governance_state_not_eligible"],
+        "conditions": {"requiredGovernanceStates": ["active"]},
+        "evidenceBasis": ["status.governanceState", "actionEligibility.run_verification"],
+    }
+    assert permissions["finish"]["allowed"] is False
+    assert permissions["closure"]["reasonCodes"] == ["governance_state_not_eligible"]
+    assert "retry" not in permissions
+    assert "cancel" not in permissions
+
+
+def test_v2_governance_permissions_explain_allowed_and_denied_phases(
+    tmp_path: Path,
+) -> None:
+    append_fact("permission-item", "implementation_started", {}, root=tmp_path)
+
+    permissions = read_snapshot("permission-item", schema_version=2, root=tmp_path)[
+        "governancePermissions"
+    ]
+
+    assert permissions["implementation"] == {
+        "allowed": True,
+        "reasonCodes": [],
+        "conditions": {"requiredGovernanceStates": ["ready", "active"]},
+        "evidenceBasis": ["status.governanceState", "actionEligibility.continue"],
+    }
+    assert permissions["verification"] == {
+        "allowed": True,
+        "reasonCodes": [],
+        "conditions": {"requiredGovernanceStates": ["active"]},
+        "evidenceBasis": ["status.governanceState", "actionEligibility.run_verification"],
+    }
+    assert permissions["finish"]["allowed"] is False
+    assert permissions["closure"]["allowed"] is False
 
 
 def test_v2_completion_invalidates_a_historical_verification_pass(tmp_path: Path) -> None:

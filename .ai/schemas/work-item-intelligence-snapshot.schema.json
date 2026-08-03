@@ -51,7 +51,28 @@
       },
       "additionalProperties": false
     },
-    "governancePermissions": {"type": "array", "items": {"enum": ["start", "continue", "run_verification", "request_human_decision", "finish", "close"]}},
+    "governancePermissions": {
+      "description": "V2 read-only local phase decisions. They explain eligibility evidence but do not grant authority or schedule work.",
+      "type": "object",
+      "required": ["statusVersion", "basis", "implementation", "verification", "finish", "closure"],
+      "properties": {
+        "statusVersion": {"type": "integer", "minimum": 1},
+        "basis": {
+          "type": "object",
+          "required": ["governanceState", "governanceVersion"],
+          "properties": {
+            "governanceState": {"type": "string"},
+            "governanceVersion": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        },
+        "implementation": {"$ref": "#/$defs/governancePermission"},
+        "verification": {"$ref": "#/$defs/governancePermission"},
+        "finish": {"$ref": "#/$defs/governancePermission"},
+        "closure": {"$ref": "#/$defs/governancePermission"}
+      },
+      "additionalProperties": false
+    },
     "factSequence": {"type": "integer", "minimum": 0},
     "lastFactId": {"type": ["string", "null"]},
     "snapshotDigest": {"type": "string", "pattern": "^sha256:"}
@@ -72,6 +93,24 @@
         "lastFactId": {"type": "string"},
         "lastPassedFactId": {"type": "string"},
         "invalidatedBy": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "governancePermission": {
+      "type": "object",
+      "required": ["allowed", "reasonCodes", "conditions", "evidenceBasis"],
+      "properties": {
+        "allowed": {"type": "boolean"},
+        "reasonCodes": {"type": "array", "items": {"type": "string"}},
+        "conditions": {
+          "type": "object",
+          "required": ["requiredGovernanceStates"],
+          "properties": {
+            "requiredGovernanceStates": {"type": "array", "items": {"type": "string"}}
+          },
+          "additionalProperties": false
+        },
+        "evidenceBasis": {"type": "array", "items": {"type": "string"}}
       },
       "additionalProperties": false
     }

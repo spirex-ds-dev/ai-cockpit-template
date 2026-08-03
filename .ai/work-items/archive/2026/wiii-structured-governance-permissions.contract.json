@@ -1,0 +1,252 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wiii-structured-governance-permissions",
+  "mode": "code",
+  "title": "Structure WIII governance permissions",
+  "baseCommit": "23d4ea370c2a4e60205966c8f14ba01919916a9c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "scripts/ai_work_item_intelligence.py",
+    ".ai/schemas/work-item-intelligence-snapshot.schema.json",
+    "tests/test_work_item_intelligence.py",
+    "docs/reference/work-item-intelligence-interface.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/active/wiii-structured-governance-permissions.contract.json",
+    ".ai/work-items/active/wiii-structured-governance-permissions.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wiii-structured-governance-permissions.outcome.json",
+    ".ai/work-items/active/wiii-structured-governance-permissions.outcome.md"
+  ],
+  "outOfScope": [
+    "scripts/ai_work_item_status.py",
+    "scripts/ai_verify.py",
+    "scripts/ai_verification_context.py",
+    "Makefile",
+    ".github/**",
+    "release.json",
+    "next-release.json",
+    "templates/**"
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_work_item_intelligence.py",
+      "reason": "Defines the current V2 action-eligibility projection and snapshot serializer."
+    },
+    {
+      "path": ".ai/schemas/work-item-intelligence-snapshot.schema.json",
+      "reason": "Defines the public V2 snapshot contract to evolve."
+    },
+    {
+      "path": "tests/test_work_item_intelligence.py",
+      "reason": "Provides regression coverage for V2 snapshot behavior."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md",
+      "reason": "Records the approved WIII remediation boundary and serial predecessor order."
+    },
+    {
+      "path": "docs/reference/work-item-intelligence-interface.md",
+      "reason": "Documents the external Agent-consumed WIII interface and its boundaries."
+    }
+  ],
+  "rawUserRequest": "不对，不是要否定并行。是给出并行的方案，并解决。主要矛盾是active只能有一个，AI Cockpit的报告只能有一个。这个问题打算怎么解决？对，跟开多个分支是一个意思。一个task，一个WI，一个PR。这样就隔离开了。对，所以我对认识是AI Cockpit不需要做调整或者微调整。调度是Agent和subagent来做的。Okay，这个方向是对。并行这个工单，朝这个方向收敛。通过并行实践，测试并行设计。如果遇到问题，请及时修正。注意保持边界，不要忘了North Star。整个计划最后加个工单，总结并行的经验，落地成SKILL，并更新文档。以便以后提供给Agent使用（不再需要我用prompt来指示）。整个计划完成以后，增加自检，发现问题以后，修复，再自检，有问题再修复。。。循环到全部闭环。最后，发布新版本。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03-agent-orchestrated-parallelism-and-closure-loop",
+    "capturedAt": "2026-08-03",
+    "digest": "sha256:user-authorized-wiii-v2-remediation"
+  },
+  "declaredIntent": {
+    "summary": "Replace the positive-only WIII governance permission list with a stable local structured decision projection for external Agent consumption.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "effect": "enforce",
+    "environment": "repository",
+    "authorityRequired": false
+  },
+  "problemStatement": "WIII V2 exposes governancePermissions only as a positive list derived from legacy actionEligibility. An external Agent cannot determine denied phases, the blocking reasons, the conditions, the projection version, or the evidence basis, and therefore cannot make a stable evidence-based scheduling decision.",
+  "scenarioCoverage": [
+    {
+      "scenario": "A blocked implementation, finish, or closure phase reports allowed=false with stable reason codes and supporting condition/evidence fields.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Focused V2 tests assert all governed phases, including denied phases, expose structured decisions without retry or cancel instructions.",
+      "verificationPlan": "Add a focused failing test before implementation, then run the focused WIII suite and full required quality checks."
+    },
+    {
+      "scenario": "An eligible verification phase reports allowed=true while retaining status version and basis metadata.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Focused V2 tests assert an allowed phase has an empty denial reason list and explains its observed eligibility basis.",
+      "verificationPlan": "Exercise a fact sequence with verification eligible and inspect the explicit V2 snapshot."
+    },
+    {
+      "scenario": "V1 remains an explicit compatibility view and no scheduler, retry, cancellation, network, credential, or external authority behavior is added.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Existing and new tests preserve V1 output selection and prove retry/cancel are absent from the structured V2 governance permission contract.",
+      "verificationPlan": "Run the WIII focused and full tests plus Contract-required quality verification."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "public_interface_contract",
+      "compatibility"
+    ],
+    "reason": "The public local WIII V2 projection and schema change together; a malformed compatibility or denial explanation could mislead an external Agent, but no authority or remote behavior is introduced.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Public schema, local interface, test, and generated truth-document changes require the standard repository profile."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The owner authorized the WIII V2 remediation, sources define a bounded local projection, and all behavior can be verified locally and by hosted PR checks."
+  },
+  "preReviewWarnings": [
+    "Review stable machine-readable reason codes, the basis/condition fields, V1 compatibility, generated truth artifacts, and the absence of scheduler or authority behavior."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "V2 governancePermissions is a structured object covering implementation, verification, finish, and closure; each phase explicitly reports allowed state, stable reason codes, applicable conditions, status version, and evidence basis.",
+    "The object reports denied as well as allowed phases and never becomes an Agent scheduler, retry/cancel instruction, remote query, credential, or authority grant.",
+    "The snapshot schema, unit tests, and interface documentation agree on the V2 object; explicit V1 selection remains compatible.",
+    "Affected generated WIII truth and alignment evidence is regenerated from current behavior and all Contract-required checks pass."
+  ],
+  "guidelines": [
+    "New public interface fields must be documented with their evidence and authority boundary.",
+    "Keep WIII repository-local and read-only; do not add scheduler, retry, cancellation, workflow-engine, agent-manager, remote transport, credential, or provider-authority behavior.",
+    "Maintain explicit V1 compatibility and do not treat derived cache or reports as authoritative evidence."
+  ],
+  "intent": {
+    "problem": "External Agents need a stable, evidence-bearing local WIII phase-decision projection instead of an ambiguous positive-only action list.",
+    "constraints": [
+      "One Task remains one Work Item, branch, worktree, and PR; Agent/subagent scheduling stays outside WIII.",
+      "WIII remains worktree-local, repository-local, and read-only for this change.",
+      "No retry, cancellation, provider operation, network transport, sensitive material, or global active-work registry may be introduced.",
+      "V1 response mode remains explicit and compatible; V2 is additive and schema documented."
+    ],
+    "rationale": "A structured allowed/denied projection with reasons and evidence lets the Agent decide whether to call an atomic local operation while preserving calibrated human-agent trust and the Cockpit boundary."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "repository owner",
+    "reason": "The repository owner explicitly authorized completing all Work Items, including required Contract-recorded governance changes, PRs, merges, cleanup, audit repair loops, and release. This Work Item changes only the declared local WIII snapshot schema."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 788
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wiii-structured-governance-permissions.json",
+    "baseCommit": "23d4ea370c2a4e60205966c8f14ba01919916a9c",
+    "initialScopeDigest": "a657cca6d548edb45e621f0dd1de81b844980bd51b0ba003ed047c9c918e66be",
+    "contractSkeletonDigest": "2176fd1c77ec43f72cc55510bff1e27e5526679274b17eb426bcfac3e75fd07c"
+  }
+}
