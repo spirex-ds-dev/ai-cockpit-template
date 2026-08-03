@@ -9,7 +9,7 @@ from dataclasses import asdict
 
 from ai_check_registry import CheckerRegistry, CheckResult
 from ai_verification_context import build_context
-from ai_verification_policy import select_policy
+from ai_verification_policy import evaluate_current_impact_graph, select_policy
 
 STAGES = ("task", "pr", "release")
 MODES = ("legacy", "unified", "compare")
@@ -126,6 +126,10 @@ def main() -> int:
         if isinstance(context.contract.get("verificationPolicy"), str)
         else None,
     )
+    impact_graph = evaluate_current_impact_graph(
+        profile="release" if args.stage == "release" else policy["level"],
+        receipt_bindings={},
+    )
     if args.mode == "unified":
         results = {
             args.stage: [asdict(result) for result in results["results"][args.stage]],
@@ -133,12 +137,14 @@ def main() -> int:
             "verificationScope": scope,
             "riskAndAuthority": risk_authority,
             "policy": policy,
+            "impactGraph": impact_graph,
         }
     elif args.mode == "legacy":
         results["results"] = [asdict(result) for result in results["results"]]
         results["verificationScope"] = scope
         results["riskAndAuthority"] = risk_authority
         results["policy"] = policy
+        results["impactGraph"] = impact_graph
     else:
         results["legacy"]["results"] = [asdict(result) for result in results["legacy"]["results"]]
         results["unified"]["results"] = {
@@ -148,6 +154,7 @@ def main() -> int:
         results["verificationScope"] = scope
         results["riskAndAuthority"] = risk_authority
         results["policy"] = policy
+        results["impactGraph"] = impact_graph
     print(json.dumps(results, ensure_ascii=False, indent=2))
     return 0
 

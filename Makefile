@@ -493,6 +493,9 @@ ai-verify-full:
 ai-verify-policy:
 	PYTHONPATH=scripts $(AI_PYTHON) -c 'from ai_verification_policy import order_checks; print(order_checks({"scope": [], "tests": ["scope"], "trust": ["scope"]}))'
 
+ai-verify-impact-graph:
+	PYTHONPATH=scripts $(AI_PYTHON) -c 'from ai_verification_policy import evaluate_current_impact_graph; print(evaluate_current_impact_graph(profile="standard", receipt_bindings={}))'
+
 ai-cockpit-quality:
 	+@set -eu; \
 		$(AI_PYTHON) scripts/determine_governance_profile.py \

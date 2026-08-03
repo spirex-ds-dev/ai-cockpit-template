@@ -49,6 +49,11 @@ execution path; a future reuse proposal must bind identical source, change-set,
 command, environment, toolchain, and policy inputs. See
 [`verification-evidence-reuse.md`](verification-evidence-reuse.md).
 
+Verification routing is also observational. `make ai-verify-impact-graph` and
+the `impactGraph` field from `ai-verify` describe Fast, Finish, and Hosted
+proof layers, dependencies, parallelizable roots, and receipt invalidation;
+they never execute a check, schedule a Work Item, or authorize a cache hit.
+
 `completed`, `release_ready`, and `distribution_verified` remain unavailable
 until the matching authoritative evidence is present. A Strict Work Item alone
 does not imply release verification.
