@@ -543,11 +543,7 @@ def _snapshot_v2(
         "version": versions["runtimeObservation"],
     }
     result["completion"] = _completion(facts)
-    result["governancePermissions"] = [
-        name
-        for name, value in result["actionEligibility"].items()
-        if name not in {"retry", "cancel"} and value["eligible"]
-    ]
+    result["governancePermissions"] = _governance_permissions(result)
     result["subjects"] = [
         fact["payload"]["subject"]
         for fact in source_facts + runtime_facts
@@ -644,6 +640,41 @@ def _completion(facts: list[dict[str, Any]]) -> dict[str, dict[str, str]]:
             failed={"closure_failed"},
         ),
     }
+
+
+def _governance_permissions(snapshot: dict[str, Any]) -> dict[str, Any]:
+    """Project V2 local phase decisions from the legacy eligibility evidence.
+
+    This is intentionally a read-only explanation layer.  It neither grants
+    authority nor schedules work; callers still invoke only their bounded local
+    Work Item operation after applying their own Agent policy.
+    """
+    phases = {
+        "implementation": ("continue", ["ready", "active"]),
+        "verification": ("run_verification", ["active"]),
+        "finish": ("finish", ["ready_for_review"]),
+        "closure": ("close", ["closing"]),
+    }
+    eligibility = snapshot["actionEligibility"]
+    result: dict[str, Any] = {
+        "statusVersion": snapshot["statusVersion"],
+        "basis": {
+            "governanceState": snapshot["status"]["governanceState"],
+            "governanceVersion": snapshot["governance"]["version"],
+        },
+    }
+    for phase, (action, states) in phases.items():
+        allowed = eligibility[action]["eligible"]
+        result[phase] = {
+            "allowed": allowed,
+            "reasonCodes": [] if allowed else ["governance_state_not_eligible"],
+            "conditions": {"requiredGovernanceStates": states},
+            "evidenceBasis": [
+                "status.governanceState",
+                f"actionEligibility.{action}",
+            ],
+        }
+    return result
 
 
 def _as_v1(snapshot_value: dict[str, Any]) -> dict[str, Any]:

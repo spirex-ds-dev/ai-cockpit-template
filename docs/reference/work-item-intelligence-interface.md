@@ -175,10 +175,18 @@ or governance version.
 `completion` exposes five independent booleans: `implementation`,
 `verification`, `review`, `integration`, and `closure`. They report observed
 evidence and are not a claim that an external scheduler or release workflow
-ran. `governancePermissions` is a bounded list of currently eligible phase
-actions: `start`, `continue`, `run_verification`, `request_human_decision`,
-`finish`, and `close`. It never contains `retry` or `cancel`. Schema version 1
-continues to omit all four V2-only objects.
+ran.
+
+`governancePermissions` is the V2 read-only phase-decision projection. Its
+`statusVersion` and `basis` bind every decision to the observed governance
+state/version. The `implementation`, `verification`, `finish`, and `closure`
+members each contain `allowed`, stable `reasonCodes`, the
+`requiredGovernanceStates` condition, and the local `evidenceBasis` used to
+derive that decision. It includes denied phases as well as allowed phases, so
+an external Agent can distinguish an unavailable operation from an omitted
+field. It never contains retry/cancel instructions, grants authority, performs
+a remote query, or schedules Work Items; Agent/subagent orchestration remains
+outside WIII. Schema version 1 continues to omit all four V2-only objects.
 
 Do not record tokens, passwords, secrets, full environment values, private
 human notes, or external response bodies in facts.
