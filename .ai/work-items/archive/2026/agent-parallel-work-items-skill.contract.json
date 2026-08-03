@@ -1,0 +1,241 @@
+{
+  "contractVersion": 2,
+  "workItemId": "agent-parallel-work-items-skill",
+  "mode": "code",
+  "title": "Create automatic Agent parallel Work Item skill",
+  "baseCommit": "a82748e240b8b18c4e643153a84f1c982e299e75",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/agent-parallel-work-items-skill.contract.json",
+    ".ai/work-items/active/agent-parallel-work-items-skill.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/agent-parallel-work-items-skill.outcome.json",
+    ".ai/work-items/active/agent-parallel-work-items-skill.outcome.md",
+    "skill:agent-parallel-work-items/**",
+    "docs/reference/agent-parallel-work-items.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Any global Cockpit scheduler, cross-worktree registry, or change to the one-active-Work-Item-per-worktree invariant.",
+    "Automatically creating a PR, merging, or deploying without the user-authorized Work Item lifecycle."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Defines the required Work Item, branch, PR, archive, and closure boundaries."
+    },
+    {
+      "path": "docs/reference/work-item-intelligence-interface.md",
+      "reason": "Defines WIII as a worktree-local atomic interface owned by external Agent scheduling."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/wiii-agent-orchestrated-parallelism-replacement.summary.json",
+      "reason": "Records the real integration failures and repairs that the Skill must prevent."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "rawUserRequest": "Skill 工单放在下一个。完成以后，用剩余的工单继续做实践，发现问题可以继续优化。并行经验 Skill 应当自动启动：接到任务先评估是否可并行；可以时制定任务边界和并行计划并实施。整个计划完成后增加自检—修复—自检循环，最后发布新版本。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03-parallel-practice-skill-and-release-loop",
+    "capturedAt": "2026-08-03",
+    "digest": "sha256:parallel-practice-skill-release-loop"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Create and validate an automatically triggered Agent Skill for safe parallel Work Item planning, execution boundaries, and learning from practice.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "concurrency",
+      "governance_boundary",
+      "workflow_reliability"
+    ],
+    "reason": "The Skill must trigger automatically without treating worktree-local Cockpit state as a global scheduler or creating unsafe parallel Work Items.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User explicitly directed the Skill to be created now, used for remaining Work Items, and improved from practice."
+  },
+  "preReviewWarnings": [
+    "Validate automatic triggering, safe non-parallel fallback, and the immutable-archive/current-main reconciliation rule."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A locally installed `agent-parallel-work-items` Skill has trigger metadata that activates for potentially decomposable multi-deliverable requests.",
+    "The Skill requires an Agent-owned dependency and writable-path assessment before any parallel Work Item plan, and preserves Task = Work Item = branch/worktree = PR isolation.",
+    "The Skill explicitly keeps WIII and AI Cockpit worktree-local, with no global scheduler, and requires current-main integration before archive.",
+    "The Skill is validated against the current parallelism practice and published documentation explains its automatic-use boundary."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A request contains two independent deliverables with non-overlapping paths and no lifecycle dependency.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The Skill directs an Agent to define one isolated Work Item, branch, worktree, and PR for each deliverable before scheduling them in parallel.",
+      "verificationPlan": "Forward-test the Skill against the remaining independent remediation Work Items."
+    },
+    {
+      "scenario": "Candidate Work Items share generated governance evidence or a predecessor lifecycle dependency.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The Skill serializes the conflicting work or requires a fresh current-main replacement rather than rebasing an archived Work Item.",
+      "verificationPlan": "Review the Skill dry-run matrix against the archived parallelism practice."
+    },
+    {
+      "scenario": "An Agent queries several worktrees while a Cockpit report remains active in each one.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The Skill treats each query and Cockpit report as current-worktree-local and keeps aggregate scheduling outside WIII and Cockpit.",
+      "verificationPlan": "Inspect the Skill content and reference documentation after local validation."
+    }
+  ],
+  "intent": {
+    "problem": "Agents need a reusable, automatically-triggered procedure for deciding when a user request can be safely decomposed into independently governed Work Items, after practice showed that isolated branches still need current-main integration and immutable archives cannot be rebased.",
+    "constraints": [
+      "Task equals Work Item equals dedicated branch/worktree equals PR.",
+      "Agent/subagents own scheduling and aggregation; WIII and Cockpit only expose worktree-local atomic state and queries.",
+      "Parallelization is conditional on independent scope, writable paths, and lifecycle dependencies.",
+      "Each Work Item must independently verify, archive, merge, close, and clean up.",
+      "The North Star remains calibrated human-agent trust through evidence, not autonomous global orchestration."
+    ],
+    "rationale": "Encoding the proven boundaries and failure recovery in a discoverable Skill removes the need for the user to repeat a parallelism prompt while keeping authority and evidence explicit."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized all Work Items, PRs, cleanup, the automatic parallelism Skill, iterative self-checks, and release publication."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 786
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/agent-parallel-work-items-skill.json",
+    "baseCommit": "a82748e240b8b18c4e643153a84f1c982e299e75",
+    "initialScopeDigest": "f54081709283e75b57a14191373a3c8b0e6a2351679d79623f80728b5aad0dae",
+    "contractSkeletonDigest": "b68e8627b11831ae29d3381a5e9400e097a015e956226afcf5d5f864de84674d"
+  }
+}
