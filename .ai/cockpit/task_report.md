@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task wiii-linear-reduction-and-recovery generated an evidence-derived outcome with status completed.
+Task work-item-lifecycle-timing generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0

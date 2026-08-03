@@ -17,6 +17,7 @@ import ai_start
 import ai_start_receipt
 import pytest
 from ai_acceptance_policy import validate_acceptance_evidence
+from ai_observability import AiEventType
 from ai_resume_work_item import ResumeError, resume_contract
 from ai_start_receipt import (
     build_receipt,
@@ -28,6 +29,10 @@ from ai_start_receipt import (
     validate_receipt,
     validate_resume_history,
 )
+
+
+def test_lifecycle_phase_event_type_is_available_to_start_and_archive() -> None:
+    assert AiEventType.LIFECYCLE_PHASE_FINISHED.value == "lifecycle_phase_finished"
 
 
 def test_start_and_archive_use_clean_git_environment():

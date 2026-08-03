@@ -1,0 +1,170 @@
+{
+  "contractVersion": 2,
+  "workItemId": "work-item-lifecycle-timing",
+  "mode": "code",
+  "title": "Work Item lifecycle timing model",
+  "baseCommit": "69ab82aab29485453a0788ca302c01b65180d5ca",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/work-item-lifecycle-timing.contract.json",
+    ".ai/work-items/active/work-item-lifecycle-timing.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/work-item-lifecycle-timing.outcome.json",
+    ".ai/work-items/active/work-item-lifecycle-timing.outcome.md",
+    ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md",
+    "scripts/ai_observability.py", "scripts/ai_start.py", "scripts/ai_preflight_review.py", "scripts/ai_finish.py", "scripts/ai_archive_work_item.py", "scripts/ai_close_work_item.py",
+    "tests/test_work_item_lifecycle_timing.py", "tests/test_observability.py", "tests/test_start_and_archive.py", "tests/test_work_item_lifecycle_closure.py", "tests/test_preflight_review.py", "tests/test_project_governance.py",
+    "docs/reference/work-item-intelligence-interface.md",
+    "docs/reference/capability-truth-matrix.json", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": ["Provider polling, human wait measurement, scheduler/retry behavior, verification-evidence reuse, impact routing, release, tags, and external analytics."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md", "reason": "Task 7 scope and acceptance."
+    }, {"path": "scripts/ai_observability.py", "reason": "Existing local observability boundary."}, {"path": "scripts/ai_start.py", "reason": "Lifecycle start boundary."}, {"path": "scripts/ai_finish.py", "reason": "Lifecycle finish boundary."}, {"path": "scripts/ai_archive_work_item.py", "reason": "Archive boundary."}, {"path": "scripts/ai_close_work_item.py", "reason": "Closure boundary."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "data_integrity", "observability"
+    ],
+    "reason": "Timing evidence must never misstate unavailable provider or human wait as measured local execution.", "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": "No active implementation block."
+  },
+  "executionDecision": {
+    "status": "continue", "reason": "The bounded local timing work has source, tests, and explicit authorization."
+  },
+  "preReviewWarnings": ["Review unknown timing claims and phase-pair integrity."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Source-bound local phase timing pairs planning, preflight, implementation, verification, finish, and closure without a negative duration or duplicate unmatched phase.",
+    "Active local compute is reported separately from provider and human wait, which remain unknown without authoritative evidence.",
+    "Repeated execution count and cache outcome are represented deterministically, including no-claim behavior when no timing evidence exists.",
+    "Focused/full timing tests, required governance checks, archive, PR, merge, and ai-close-work-item have recorded evidence."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The V0.5 lifecycle records command facts but cannot give a source-bound account of phase elapsed time, repeated execution, cache result, or unmeasured provider/human wait.",
+    "constraints": ["Capture only deterministic local command boundaries.", "Provider and human wait are unknown unless authoritative evidence supplies them.", "Paired phases must be integrity-checked and no duration claim may be emitted without matching evidence.", "The recorded user approval is limited to this Work Item PR, merge, and governed cleanup."],
+    "rationale": "A local phase ledger makes planning evidence inspectable while retaining explicit uncertainty for external waits."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true, "approvedBy": "user", "reason": "用户明确授权：每个工单自行走完全部流程，包括 PR 和清理；需要授权的我授权给你，并写入 Contract。"
+  },
+  "rawUserRequest": "查收，点评这个评审。然后制定开发对应计划（这次试试多sub agent并行处理）。每个工单都自己走完全部流程包括PR和清理。需要授权的，我授权给你，并写入Contract。循环直到全部计划完成。看看有没有问题？\n\n切换到terra模型，目标自动完成全部计划工单闭环。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-03-wiii-review-and-authorization", "capturedAt": "2026-08-03", "digest": "sha256:74c7603d5eddfa058c824c8a1eece0e26242d1d689b19bc232f06fda696916a9"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Implement Task 7 source-bound local lifecycle timing and then independently archive, PR, merge, and close it.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "scenarioCoverage": [
+    {"scenario": "A phase end has no matching start or would create a negative duration.", "required": true, "status": "verified", "evidence": ["tests/test_work_item_lifecycle_timing.py"], "expected": "The timing record is rejected or remains unknown.", "verificationPlan": "Focused phase-pair integrity tests."},
+    {"scenario": "Provider or human wait has no authoritative source.", "required": true, "status": "verified", "evidence": ["tests/test_work_item_lifecycle_timing.py"], "expected": "No elapsed-time claim is emitted for that wait.", "verificationPlan": "Focused unknown-wait tests."},
+    {"scenario": "The same phase is executed repeatedly with cache outcomes.", "required": true, "status": "verified", "evidence": ["tests/test_work_item_lifecycle_timing.py"], "expected": "Counts and cache results stay deterministic.", "verificationPlan": "Focused repeated-execution tests."}
+  ],
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 780
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/work-item-lifecycle-timing.json",
+    "baseCommit": "69ab82aab29485453a0788ca302c01b65180d5ca",
+    "initialScopeDigest": "948ab9df883bc253e1f30dad933ec5e1f3572a85d81a5a62fb8c930409f195e0",
+    "contractSkeletonDigest": "e573373e944f3fe28e1f564a43b511d36a82279fb0bdf07c315d2885da4720c4"
+  }
+}

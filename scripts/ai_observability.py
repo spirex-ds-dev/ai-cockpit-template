@@ -17,6 +17,50 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_LOG_PATH = PROJECT_ROOT / "target" / "ai_observability.jsonl"
 
 
+class LifecycleTimingLedger:
+    """Retain deterministic, local lifecycle phase measurements only."""
+
+    def __init__(self, *, work_item_id: str) -> None:
+        self._work_item_id = work_item_id
+        self._starts: dict[str, int] = {}
+        self._completed: dict[str, list[tuple[int, str | None]]] = {}
+
+    def start(self, phase: str, *, at_ms: int) -> bool:
+        if phase in self._starts:
+            return False
+        self._starts[phase] = at_ms
+        return True
+
+    def finish(self, phase: str, *, at_ms: int, cache_outcome: str | None = None) -> bool:
+        started = self._starts.pop(phase, None)
+        if started is None or at_ms < started:
+            return False
+        self._completed.setdefault(phase, []).append((at_ms - started, cache_outcome))
+        return True
+
+    def report(self) -> dict[str, Any]:
+        phases = []
+        for phase, entries in self._completed.items():
+            outcomes = {outcome for _, outcome in entries if outcome is not None}
+            cache_outcome = next(iter(outcomes)) if len(outcomes) == 1 else "mixed"
+            phases.append(
+                {
+                    "phase": phase,
+                    "durationMs": sum(duration for duration, _ in entries),
+                    "executionCount": len(entries),
+                    "cacheOutcome": cache_outcome,
+                }
+            )
+        total = sum(duration for entries in self._completed.values() for duration, _ in entries)
+        return {
+            "workItemId": self._work_item_id,
+            "localComputeMs": total if phases else "unknown",
+            "providerWaitMs": "unknown",
+            "humanWaitMs": "unknown",
+            "phases": phases,
+        }
+
+
 class AiEventType(str, Enum):
     WORK_ITEM_STARTED = "work_item_started"
     WORK_ITEM_FINISHED = "work_item_finished"
@@ -25,6 +69,7 @@ class AiEventType(str, Enum):
     CHECK_FAILED = "check_failed"
     GUARD_VIOLATION = "guard_violation"
     STATUS_GENERATED = "status_generated"
+    LIFECYCLE_PHASE_FINISHED = "lifecycle_phase_finished"
 
 
 class AiEventLevel(str, Enum):
@@ -235,6 +280,23 @@ class AiObservability:
                 result=state,
                 path=output_path,
                 fields=fields or {},
+            )
+        )
+
+    def lifecycle_phase_finished(
+        self, phase: str, *, duration_ms: int, cache_outcome: str | None = None
+    ) -> None:
+        self.record(
+            AiEvent(
+                AiEventType.LIFECYCLE_PHASE_FINISHED,
+                AiEventLevel.INFO,
+                f"lifecycle phase finished: {phase}",
+                duration_ms=duration_ms,
+                fields={
+                    "phase": phase,
+                    "durationMs": duration_ms,
+                    "cacheOutcome": cache_outcome,
+                },
             )
         )
 

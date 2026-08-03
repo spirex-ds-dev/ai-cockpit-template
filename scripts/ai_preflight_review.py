@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import sys
+import time
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -1408,6 +1409,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    phase_start = time.time()
     args = parse_args()
     contract_path = resolve_contract_path(args.contract)
     if contract_path is None:
@@ -1485,6 +1487,11 @@ def main() -> int:
             "preflight_ready",
             {"preflightHash": report["preflightHash"], "contractHash": report["contractHash"]},
         )
+    from ai_observability import create_observability
+
+    create_observability(work_item_id=str(contract["workItemId"])).lifecycle_phase_finished(
+        "preflight", duration_ms=int((time.time() - phase_start) * 1000), cache_outcome="miss"
+    )
     print(render_markdown(report), end="")
     print(f"preflight review generated: {output_path}")
     return 0

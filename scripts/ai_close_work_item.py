@@ -9,6 +9,7 @@ import json
 import shutil
 import subprocess
 import sys
+import time
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -628,6 +629,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    phase_start = time.time()
     args = parse_args()
     try:
         target_worktree = getattr(args, "worktree", None)
@@ -651,6 +653,11 @@ def main() -> int:
     print(f"Remote work branch: deleted ({result['workBranch']})")
     print(
         f"Local {result['baseBranch']}: synchronized with {result['baseRemote']}/{result['baseBranch']}"
+    )
+    from ai_observability import create_observability
+
+    create_observability(work_item_id=args.task).lifecycle_phase_finished(
+        "closure", duration_ms=int((time.time() - phase_start) * 1000), cache_outcome="miss"
     )
     if result["nextWorkItemReady"] is True:
         print("Repository state: ready for next Work Item")
