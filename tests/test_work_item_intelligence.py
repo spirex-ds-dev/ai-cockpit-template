@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import os
+import time
 from concurrent.futures import ThreadPoolExecutor
 from hashlib import sha256
 from pathlib import Path
@@ -66,6 +68,86 @@ def test_tamper_is_detected_and_rebuild_is_deterministic(tmp_path: Path) -> None
     with pytest.raises(IntelligenceError, match="digest mismatch"):
         read_snapshot("tamper-item", root=tmp_path)
     assert rebuild("tamper-item", root=tmp_path)["status"]["governanceState"] == "ready"
+
+
+def test_audit_rebuild_rejects_a_fact_with_a_mismatched_digest(tmp_path: Path) -> None:
+    append_fact("digest-item", "preflight_ready", {}, root=tmp_path)
+    facts = tmp_path / ".ai/work-items/runtime/digest-item/facts.jsonl"
+    record = json.loads(facts.read_text(encoding="utf-8"))
+    record["digest"] = "sha256:" + "0" * 64
+    facts.write_text(json.dumps(record) + "\n", encoding="utf-8")
+
+    with pytest.raises(IntelligenceError, match="fact digest mismatch"):
+        rebuild("digest-item", root=tmp_path)
+
+
+def test_expired_writer_lease_is_recovered_before_append(tmp_path: Path) -> None:
+    lock = tmp_path / ".ai/work-items/runtime/recovery-item/status.lock"
+    lock.parent.mkdir(parents=True)
+    lock.write_text(
+        json.dumps({"pid": 999_999_999, "leaseExpiresAt": time.time() - 1}), encoding="utf-8"
+    )
+
+    append_fact("recovery-item", "preflight_ready", {}, root=tmp_path)
+
+    assert read_snapshot("recovery-item", root=tmp_path)["factSequence"] == 1
+    assert not lock.exists()
+
+
+def test_unexpired_writer_lease_is_not_removed(tmp_path: Path) -> None:
+    lock = tmp_path / ".ai/work-items/runtime/live-item/status.lock"
+    lock.parent.mkdir(parents=True)
+    lock.write_text(
+        json.dumps({"pid": os.getpid(), "leaseExpiresAt": time.time() + 60}), encoding="utf-8"
+    )
+
+    with pytest.raises(IntelligenceError, match="lock is unavailable"):
+        append_fact("live-item", "preflight_ready", {}, root=tmp_path)
+
+    assert lock.exists()
+
+
+def test_expired_live_writer_lease_is_not_removed(tmp_path: Path) -> None:
+    lock = tmp_path / ".ai/work-items/runtime/live-expired-item/status.lock"
+    lock.parent.mkdir(parents=True)
+    lock.write_text(
+        json.dumps({"pid": os.getpid(), "leaseExpiresAt": time.time() - 1}), encoding="utf-8"
+    )
+
+    with pytest.raises(IntelligenceError, match="lock is unavailable"):
+        append_fact("live-expired-item", "preflight_ready", {}, root=tmp_path)
+
+    assert lock.exists()
+
+
+def test_audit_rebuild_rejects_a_non_contiguous_fact_sequence(tmp_path: Path) -> None:
+    append_fact("sequence-item", "preflight_ready", {}, root=tmp_path)
+    facts = tmp_path / ".ai/work-items/runtime/sequence-item/facts.jsonl"
+    record = json.loads(facts.read_text(encoding="utf-8"))
+    record["sequence"] = 2
+    record["digest"] = intelligence._digest(
+        {key: value for key, value in record.items() if key != "digest"}
+    )
+    facts.write_text(json.dumps(record) + "\n", encoding="utf-8")
+
+    with pytest.raises(IntelligenceError, match="non-contiguous fact sequence"):
+        rebuild("sequence-item", root=tmp_path)
+
+
+def test_append_reuses_reducer_metadata_without_reparsing_the_fact_log(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    append_fact("incremental-item", "preflight_ready", {}, root=tmp_path)
+    original_read_facts = intelligence.read_facts
+
+    def fail_if_log_is_read(*args: object, **kwargs: object) -> list[dict[str, object]]:
+        raise AssertionError("ordinary append must use reducer metadata")
+
+    monkeypatch.setattr(intelligence, "read_facts", fail_if_log_is_read)
+    append_fact("incremental-item", "implementation_started", {}, root=tmp_path)
+
+    monkeypatch.setattr(intelligence, "read_facts", original_read_facts)
+    assert read_snapshot("incremental-item", root=tmp_path)["factSequence"] == 2
 
 
 def test_index_tampering_is_detected_rebuilt_and_measured(tmp_path: Path) -> None:

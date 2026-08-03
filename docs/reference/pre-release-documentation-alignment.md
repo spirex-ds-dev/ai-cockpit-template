@@ -10,7 +10,7 @@ generated: true
 - Work Item: `documentation-alignment-ruff016-binary-corrective-20260730`
 - Status: `aligned`
 - Surfaces: `16`
-- Digest: `sha256:2c286b17e27fee6a157f8b448ffeec631cd486b7e72e822961bd6e6f085ccb80`
+- Digest: `sha256:4fbeb6d36ef01ef8eef858de3ed7b3b7cd2ea282ac945c92e304226d369f6cf3`
 
 ## Surface decisions
 

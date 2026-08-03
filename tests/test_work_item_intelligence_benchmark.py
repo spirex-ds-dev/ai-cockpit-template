@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -99,3 +100,9 @@ def test_run_case_queries_v2_from_an_isolated_fixture(tmp_path: Path) -> None:
     assert report["metrics"]["sampleCount"] == 30
     assert (tmp_path / "fixture" / ".ai" / "work-items" / "runtime").exists()
     assert not (tmp_path / ".ai" / "work-items" / "runtime").exists()
+    fact = json.loads(
+        (tmp_path / "fixture/.ai/work-items/runtime/bench-000/facts.jsonl").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert fact["digest"].startswith("sha256:")
