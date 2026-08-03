@@ -1,0 +1,250 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wiii-v2-remediation-design",
+  "mode": "code",
+  "title": "Define Work Item Intelligence V2 remediation",
+  "baseCommit": "a3291656fc4a77fb8f1efb8fd101acb74cef2b66",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wiii-v2-remediation-design.contract.json",
+    ".ai/work-items/active/wiii-v2-remediation-design.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wiii-v2-remediation-design.outcome.json",
+    ".ai/work-items/active/wiii-v2-remediation-design.outcome.md",
+    "docs/superpowers/specs/2026-08-03-wiii-v2-remediation-design.md",
+    "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md",
+    "docs/reference/documentation-context-registry.json"
+  ],
+  "outOfScope": [
+    "Production WIII code, schemas, CLI behavior, lifecycle integrations, Makefile behavior, or tests.",
+    "Provider configuration, branch-protection changes, releases, tags, and publication.",
+    "Historical archive rewrites and deletion of unrelated branches or worktrees.",
+    "A scheduler, workflow engine, retry controller, or agent manager."
+  ],
+  "sources": [
+    {
+      "path": "conversation:2026-08-03-wiii-review-and-authorization",
+      "reason": "The user requested review, a multi-Work-Item development plan, complete PR/closure lifecycle execution, and bounded authorization recording."
+    },
+    {
+      "path": "review-attachment:2026-08-03-wiii-v05-assessment",
+      "reason": "The supplied assessment is the input to validate and translate into a staged remediation plan; its assertions must not be treated as established without repository evidence."
+    },
+    {
+      "path": "scripts/ai_work_item_intelligence.py",
+      "reason": "Current WIII fact, snapshot, index, locking, and query implementation to which remediation requirements must trace."
+    },
+    {
+      "path": "tests/test_work_item_intelligence.py",
+      "reason": "Current coverage and regression gaps for status semantics, integrity, and concurrency."
+    },
+    {
+      "path": "docs/reference/work-item-intelligence-interface.md",
+      "reason": "Published WIII boundary and capability statements that the design must preserve or correct."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Authoritative Work Item lifecycle and closure requirements."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Canonical governance, evidence, and lifecycle terminology."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["governance_boundary", "public_contract_design"],
+    "reason": "This Work Item records a public remediation design that governs later changes, but intentionally changes no production behavior.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The Work Item changes governed documentation and Contract records with a medium-risk public interface decision."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized continuous execution and the Work Item has bounded documentation-only scope and explicit verification."
+  },
+  "preReviewWarnings": [
+    "Do not turn candidate latency targets into current product guarantees without a reproducible baseline.",
+    "Do not introduce WIII production changes or claim V2 compatibility before successor Contracts define and verify them."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A1: A repository-local design document classifies every material finding in the supplied assessment as confirmed, partly confirmed, unconfirmed, or deferred, with implementation and test evidence paths.",
+    "A2: The design defines a compatible WIII V2 evolution: source-bound facts, recoverable entity state, version/cursor semantics, governance/runtime separation, and per-item publication boundaries without adding a scheduler or remote service.",
+    "A3: The plan decomposes the approved remediation into independently reviewable Work Items with exact files, interfaces, test-first steps, dependencies, verification, PR/closure lifecycle, and measurable acceptance criteria.",
+    "A4: Performance targets are recorded as baseline-gated candidates until a reproducible characterization Work Item supplies at least 30 samples per declared profile.",
+    "A5: The Contract and Summary truthfully record the direct user authorization, limited branch-cleanup lifecycle boundary, residual risks, and no-production-code scope."
+  ],
+  "guidelines": [
+    "Preserve the Repository Governance Layer boundary: WIII informs external agents but does not schedule, retry, cancel, or manage them.",
+    "Distinguish authoritative source evidence from derived runtime projections and from non-authoritative activity observations.",
+    "Treat all performance values as measured evidence only when their profile, sample size, workload, and environment are recorded.",
+    "Do not claim a successor Work Item, provider check, merge, or cleanup completed until its own evidence exists."
+  ],
+  "intent": {
+    "problem": "The current Work Item Intelligence interface has confirmed semantic, integrity, concurrency, and observability gaps that make it unsuitable to present as a large-scale parallel orchestration interface. The repository needs a staged remediation design before any code work begins so individual changes remain independently reviewable and do not overclaim present capability.",
+    "constraints": [
+      "This Work Item changes only the Contract, Summary, design document, plan, and generated governance artifacts.",
+      "Preserve the repository-local WIII boundary: no provider transport, scheduler, retry controller, workflow engine, or agent manager.",
+      "Treat the supplied assessment as input to validate, not as authority; cite current repository evidence for every confirmed finding.",
+      "Do not create performance gates from single-run measurements or undocumented environments.",
+      "Every successor Work Item must begin from its then-current origin/main, use a dedicated codex branch/worktree, and finish through PR merge plus ai-close-work-item."
+    ],
+    "rationale": "Separating the architecture and delivery plan from production changes lets the repository correct the public capability boundary first, sequence interdependent storage and reducer work safely, and retain credible evidence for each later PR."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized this governed remediation plan, its restricted governance/documentation writes, and continuous Work Item lifecycle execution."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 773
+    }
+  },
+  "rawUserRequest": "查收，点评这个评审。然后制定开发对应计划（这次试试多sub agent并行处理）。每个工单都自己走完全部流程包括PR和清理。需要授权的，我授权给你，并写入Contract。循环直到全部计划完成。看看有没有问题？\n\n切换到terra模型，目标自动完成全部计划工单闭环。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03-wiii-review-and-authorization",
+    "capturedAt": "2026-08-03",
+    "digest": "sha256:74c7603d5eddfa058c824c8a1eece0e26242d1d689b19bc232f06fda696916a9"
+  },
+  "declaredIntent": {
+    "summary": "Assess the current Work Item Intelligence interface and create an evidence-backed, independently deliverable remediation program that the user authorized to execute through complete Work Item lifecycle closure.",
+    "requestedCapabilities": ["ai_governance", "software_design", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "document",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A confirmed semantic or integrity finding is translated into a bounded successor Work Item",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The design names the authoritative implementation evidence, exact behavioral target, and a test-first successor boundary without claiming that the successor is already implemented.",
+      "verificationPlan": "Review the committed design and plan against scripts/ai_work_item_intelligence.py and tests/test_work_item_intelligence.py; run documentation and governance verification during ai-finish."
+    },
+    {
+      "scenario": "A suggested performance value lacks a reproducible baseline",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The design labels it a candidate target and assigns characterization before any enforcement gate.",
+      "verificationPlan": "Inspect every performance criterion in the design and plan for explicit baseline/profile/sample requirements."
+    },
+    {
+      "scenario": "A later Work Item uses the recorded user authorization for PR closure",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Its own Contract records exact branch scope and preserves the distinction between direct user authorization and provider review.",
+      "verificationPlan": "Successor Contract templates in the plan require raw request source, restricted write approval, and exact ai-close-work-item lifecycle wording; no destructive branch action occurs in this Work Item."
+    }
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wiii-v2-remediation-design.json",
+    "baseCommit": "a3291656fc4a77fb8f1efb8fd101acb74cef2b66",
+    "initialScopeDigest": "ae1c1015980237d8267b0ad384b945ba8f2edb58973fb4a08bb3fc7614727c61",
+    "contractSkeletonDigest": "396bae5b06fdd0805832bc3b70cba228fc294ccf712e25a29fec895953f43fa6"
+  }
+}
