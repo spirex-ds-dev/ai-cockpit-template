@@ -1,0 +1,167 @@
+{
+  "contractVersion": 2,
+  "workItemId": "verification-evidence-reuse",
+  "mode": "code",
+  "title": "Verification evidence reuse decision",
+  "baseCommit": "10000b03e0f0175f49aa1232478803aad73ea223",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/verification-evidence-reuse.contract.json",
+    ".ai/work-items/active/verification-evidence-reuse.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/verification-evidence-reuse.outcome.json",
+    ".ai/work-items/active/verification-evidence-reuse.outcome.md",
+    ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md",
+    "docs/reference/verification-evidence-reuse.md", "docs/reference/work-item-intelligence-interface.md",
+    "docs/reference/capability-truth-matrix.json", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": ["Changes to scripts/ai_verification_context.py, scripts/ai_verify.py, verification cache behavior, skipped required checks, provider operations, release, tags, impact routing, scheduler/retry behavior, and any reuse claim without fully matching bindings."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md", "reason": "Task 8 permits a source-backed no-change decision."
+    }, {"path": ".ai/work-items/archive/2026/work-item-lifecycle-timing.summary.json", "reason": "Task 7 local timing evidence."}, {"path": "target/task-closure-receipts/work-item-lifecycle-timing.closure.json", "reason": "Task 7 completed lifecycle evidence."}, {"path": "scripts/ai_verification_context.py", "reason": "Current verification inputs do not bind reusable receipt identity."}, {"path": "scripts/ai_verify.py", "reason": "Current verification runner always executes declared stages."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "data_integrity", "verification"
+    ],
+    "reason": "An unsafely reused receipt could suppress a required verification check after source, environment, or policy changes.", "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": "No active implementation block."
+  },
+  "executionDecision": {
+    "status": "continue", "reason": "A bounded, evidence-based no-change decision is defined by the Task 8 plan."
+  },
+  "preReviewWarnings": ["Review that the decision makes no reuse eligibility or skipped-check claim."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Task 7 timing and current receipt/context sources are analyzed and recorded with an explicit decision.",
+    "No content-addressed receipt is added and ai_verify retains normal execution for every required check.",
+    "The decision document enumerates base commit, head commit, changed-paths, command, environment, toolchain, and policy bindings required for any future reuse.",
+    "Focused verification-evidence tests, required governance checks, archive, PR, merge, and ai-close-work-item have recorded evidence."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Task 7 demonstrates material local verification cost but supplies no comparable, content-addressed repeated receipts that could safely prove reuse eligibility.",
+    "constraints": ["No required check may be skipped for this Work Item.", "Any future reuse requires identical base/head commits, changed paths, command, environment, toolchain, and policy digests.", "One local or hosted timing sample is characterization evidence, not a reuse policy.", "The recorded user approval is limited to this Work Item PR, merge, and governed cleanup."],
+    "rationale": "A source-backed no-change decision preserves verification integrity until receipt validity can be proven instead of inferred."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true, "approvedBy": "user", "reason": "用户明确授权：每个工单自行走完全部流程，包括 PR 和清理；需要授权的，我授权给你，并写入 Contract。"
+  },
+  "rawUserRequest": "查收，点评这个评审。然后制定开发对应计划（这次试试多sub agent并行处理）。每个工单都自己走完全部流程包括PR和清理。需要授权的，我授权给你，并写入Contract。循环直到全部计划完成。看看有没有问题？\n\n切换到terra模型，目标自动完成全部计划工单闭环。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-03-wiii-review-and-authorization", "capturedAt": "2026-08-03", "digest": "sha256:74c7603d5eddfa058c824c8a1eece0e26242d1d689b19bc232f06fda696916a9"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Record the Task 8 evidence-based no-change decision, then independently archive, PR, merge, and close it.", "requestedCapabilities": ["ai_governance", "documentation", "test_automation"]},
+  "scenarioCoverage": [
+    {"scenario": "A proposed receipt differs in any binding input.", "required": true, "status": "verified", "evidence": ["tests/test_verification_evidence.py"], "expected": "No reuse decision or skipped required check is emitted.", "verificationPlan": "Existing verification evidence tests plus decision-document review."},
+    {"scenario": "Only one non-comparable timing sample is available.", "required": true, "status": "verified", "evidence": [".ai/work-items/archive/2026/work-item-lifecycle-timing.summary.json"], "expected": "The decision remains no-change and records the evidence limitation.", "verificationPlan": "Task 7 evidence analysis."}
+  ],
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 781
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/verification-evidence-reuse.json",
+    "baseCommit": "10000b03e0f0175f49aa1232478803aad73ea223",
+    "initialScopeDigest": "442a63e2145ddc4edaaa957e4069b3674e169b4627537c44fb1b9825ac5dcb2e",
+    "contractSkeletonDigest": "4117701ab19ccb8bf648f1115f5b982c9fa385973c7e71861db6cefb7c674141"
+  }
+}
