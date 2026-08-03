@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from concurrent.futures import ThreadPoolExecutor
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
@@ -124,3 +125,107 @@ def test_concurrent_fact_writers_preserve_every_sequence_and_index_entry(tmp_pat
     assert snapshot["factSequence"] == 12
     facts = (tmp_path / ".ai/work-items/runtime/parallel-item/facts.jsonl").read_text().splitlines()
     assert [json.loads(row)["sequence"] for row in facts] == list(range(1, 13))
+
+
+def test_v2_rebuild_preserves_versions_for_unchanged_source_bound_projection(
+    tmp_path: Path,
+) -> None:
+    receipt = tmp_path / "preflight.json"
+    receipt.write_text('{"status":"ready"}', encoding="utf-8")
+    append_fact(
+        "version-item",
+        "preflight_ready",
+        {
+            "subject": {"kind": "preflight", "id": "current"},
+            "sourceRef": {
+                "kind": "preflight_receipt",
+                "path": str(receipt),
+                "digest": "sha256:" + sha256(receipt.read_bytes()).hexdigest(),
+            },
+        },
+        root=tmp_path,
+    )
+    before = read_snapshot("version-item", schema_version=2, root=tmp_path)["versions"]
+    rebuild("version-item", root=tmp_path)
+    after = read_snapshot("version-item", schema_version=2, root=tmp_path)["versions"]
+    assert after == before
+    assert after == {"governance": 1, "sourceSequence": 1, "runtimeObservation": 0}
+
+
+def test_v2_versions_split_governance_and_runtime_observations(tmp_path: Path) -> None:
+    evidence = tmp_path / "evidence.json"
+    evidence.write_text('{"ready":true}', encoding="utf-8")
+    source_ref = {
+        "kind": "test_receipt",
+        "path": str(evidence),
+        "digest": "sha256:" + sha256(evidence.read_bytes()).hexdigest(),
+    }
+    append_fact(
+        "version-item",
+        "preflight_ready",
+        {"subject": {"kind": "preflight", "id": "current"}, "sourceRef": source_ref},
+        root=tmp_path,
+    )
+    append_fact(
+        "version-item",
+        "observation",
+        {"subject": {"kind": "runtime", "id": "worker"}, "health": "active"},
+        root=tmp_path,
+    )
+    snapshot = read_snapshot("version-item", schema_version=2, root=tmp_path)
+    assert snapshot["versions"] == {"governance": 1, "sourceSequence": 1, "runtimeObservation": 1}
+    assert snapshot["status"]["governanceState"] == "ready"
+
+
+def test_v2_runtime_observation_source_never_invalidates_governance(tmp_path: Path) -> None:
+    evidence = tmp_path / "evidence.json"
+    evidence.write_text('{"ready":true}', encoding="utf-8")
+    append_fact(
+        "runtime-item",
+        "preflight_ready",
+        {
+            "subject": {"kind": "preflight", "id": "current"},
+            "sourceRef": {
+                "kind": "preflight_receipt",
+                "path": str(evidence),
+                "digest": "sha256:" + sha256(evidence.read_bytes()).hexdigest(),
+            },
+        },
+        root=tmp_path,
+    )
+    append_fact(
+        "runtime-item",
+        "observation",
+        {
+            "subject": {"kind": "runtime", "id": "worker"},
+            "sourceRef": {
+                "kind": "observation",
+                "path": str(tmp_path / "missing"),
+                "digest": "sha256:" + "0" * 64,
+            },
+        },
+        root=tmp_path,
+    )
+    snapshot = read_snapshot("runtime-item", schema_version=2, root=tmp_path)
+    assert snapshot["sourceValidation"]["valid"] is True
+    assert snapshot["status"]["governanceState"] == "ready"
+
+
+def test_v2_rejects_missing_or_digest_mismatched_authoritative_source(tmp_path: Path) -> None:
+    missing = tmp_path / "missing.json"
+    append_fact(
+        "source-item",
+        "preflight_ready",
+        {
+            "subject": {"kind": "preflight", "id": "current"},
+            "sourceRef": {
+                "kind": "preflight_receipt",
+                "path": str(missing),
+                "digest": "sha256:" + "0" * 64,
+            },
+        },
+        root=tmp_path,
+    )
+    snapshot = read_snapshot("source-item", schema_version=2, root=tmp_path)
+    assert snapshot["status"]["governanceState"] == "inconsistent"
+    assert snapshot["sourceValidation"]["valid"] is False

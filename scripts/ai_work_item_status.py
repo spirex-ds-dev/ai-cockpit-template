@@ -22,6 +22,7 @@ def main() -> int:
     parser.add_argument("--pending-human-decisions", action="store_true")
     parser.add_argument("--eligible-action")
     parser.add_argument("--after-index-version", type=int)
+    parser.add_argument("--schema-version", type=int, choices=[1, 2], default=1)
     parser.add_argument("--rebuild", action="store_true")
     parser.add_argument("--measure", action="store_true")
     parser.add_argument("--format", default="json", choices=["json"])
@@ -53,7 +54,7 @@ def main() -> int:
         return EXIT["invalid_query"]
     try:
         data = (
-            rebuild(args.work_item)
+            rebuild(args.work_item, schema_version=args.schema_version)
             if args.rebuild
             else query(
                 work_item=args.work_item,
@@ -61,6 +62,7 @@ def main() -> int:
                 pending_human_decisions=args.pending_human_decisions,
                 eligible_action=args.eligible_action,
                 after_index_version=args.after_index_version,
+                schema_version=args.schema_version,
             )
         )
         if args.measure:
