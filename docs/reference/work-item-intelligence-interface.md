@@ -71,7 +71,11 @@ make ai-work-item-status ARGS="--list-active --measure"
 make ai-work-item-intelligence-rebuild ARGS="--work-item example-task"
 ```
 
-Queries return `{ok,data,error}`. Exit codes are 0 success, 10 not found, 11
+Successful CLI queries return `{ok,data,error,context}`. `context` is stable
+and declares `scope: current_worktree`, `aggregatesAcrossWorktrees: false`, and
+`schedulerOwnership: external_agent`; it is not a snapshot field and it never
+changes a query's read-only behavior. Errors retain the compatibility envelope
+`{ok,data,error}`. Exit codes are 0 success, 10 not found, 11
 unavailable, 12 inconsistent/tampered, 20 invalid query, 30 invalid data, and
 40 internal failure. Code 13 is reserved for a future stale-query policy;
 today stale activity is returned as an observational health value and does not
@@ -109,6 +113,20 @@ rebuild and cannot silently omit a valid publication. Raw local runtime files
 are not immutable or a per-fact tamper-evident ledger, and they are not an
 archival rewrite. Existing Markdown Cockpit Status remains the canonical
 human-facing generated projection; WIII is authoritative for machine queries.
+
+## Worktree scope and Agent orchestration
+
+Each invocation is scoped to the current worktree. In particular,
+`--list-active` enumerates only publications below that worktree's
+`.ai/work-items/runtime/`; it never means “all active Work Items in every
+worktree of this repository.” The generated Cockpit Status has the same scope:
+one active Contract/Summary pair and one generated report for that worktree.
+
+An Agent that operates several dedicated worktrees performs one read-only WIII
+query per owned worktree and composes any cross-worktree view in its own
+ephemeral scheduling state. `Task = Work Item = dedicated branch/worktree =
+PR`. WIII and AI Cockpit do not persist that aggregate, select work, allocate
+subagents, or perform retry/cancellation/DAG execution.
 
 The snapshot shape is described by
 `.ai/schemas/work-item-intelligence-snapshot.schema.json`. Schema version 1
@@ -149,13 +167,8 @@ version; `runtimeObservation` contains activity health and its independent
 version. A heartbeat or activity-health change cannot change governance state
 or governance version.
 
-`completion` exposes five independent current-state objects: `implementation`,
-`verification`, `review`, `integration`, and `closure`. Every object has a
-`state` of `not_started`, `in_progress`, `completed`, `failed`, `invalidated`,
-or `unknown`; it is not a historical “fact has appeared” boolean. A
-verification failure after a recorded pass is `invalidated`, with
-`lastPassedFactId` and `invalidatedBy` identifying the superseded evidence. A
-fresh later pass returns the state to `completed`. These objects report observed
+`completion` exposes five independent booleans: `implementation`,
+`verification`, `review`, `integration`, and `closure`. They report observed
 evidence and are not a claim that an external scheduler or release workflow
 ran. `governancePermissions` is a bounded list of currently eligible phase
 actions: `start`, `continue`, `run_verification`, `request_human_decision`,
