@@ -45,6 +45,7 @@ does not imply release verification.
 
 ```sh
 make ai-work-item-status ARGS="--work-item example-task --format json"
+make ai-work-item-status ARGS="--work-item example-task --schema-version 2"
 make ai-work-item-status ARGS="--list-active --state active"
 make ai-work-item-status ARGS="--list-active --pending-human-decisions"
 make ai-work-item-status ARGS="--list-active --eligible-action continue"
@@ -74,6 +75,20 @@ archival rewrite. Existing Markdown Cockpit Status remains the canonical
 human-facing generated projection; WIII is authoritative for machine queries.
 
 The snapshot shape is described by
-`.ai/schemas/work-item-intelligence-snapshot.schema.json`. Do not record
-tokens, passwords, secrets, full environment values, private human notes, or
-external response bodies in facts.
+`.ai/schemas/work-item-intelligence-snapshot.schema.json`. Schema version 1
+remains the default compatibility view. Schema version 2 is opt-in through
+`--schema-version 2` and adds `versions`, `sourceValidation`, and `subjects`.
+Its `versions.governance` and `versions.sourceSequence` advance only for
+source-bound governance facts; `versions.runtimeObservation` tracks runtime
+observations separately. Rebuilding unchanged facts preserves these counters.
+
+A source-bound V2 fact carries a payload `subject` (`kind`, `id`) and
+`sourceRef` (`kind`, local `path`, `sha256:` digest). WIII reads the local
+source and checks its digest before using that source-bound fact as valid V2
+governance evidence. Missing, unreadable, malformed, or digest-mismatched
+sources yield an explicit V2 `inconsistent` governance state rather than a
+trusted result. Legacy V1 facts remain available through schema version 1;
+they are not retroactively presented as source-bound evidence.
+
+Do not record tokens, passwords, secrets, full environment values, private
+human notes, or external response bodies in facts.

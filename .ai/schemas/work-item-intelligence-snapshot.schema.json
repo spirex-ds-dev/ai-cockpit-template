@@ -4,7 +4,7 @@
   "type": "object",
   "required": ["schemaVersion", "identity", "status", "progressFacts", "blockingReasons", "missingEvidence", "dependencies", "humanDecisions", "risks", "verification", "actionEligibility", "currentActivity", "statusVersion", "factSequence", "snapshotDigest"],
   "properties": {
-    "schemaVersion": {"const": 1},
+    "schemaVersion": {"enum": [1, 2]},
     "identity": {"type": "object", "required": ["workItemId"]},
     "status": {"type": "object", "required": ["lifecyclePhase", "governanceState", "activityHealth"]},
     "progressFacts": {"type": "object"},
@@ -17,9 +17,34 @@
     "actionEligibility": {"type": "object"},
     "currentActivity": {"type": "object"},
     "statusVersion": {"type": "integer", "minimum": 1},
+    "versions": {
+      "type": "object",
+      "required": ["governance", "sourceSequence", "runtimeObservation"],
+      "properties": {
+        "governance": {"type": "integer", "minimum": 0},
+        "sourceSequence": {"type": "integer", "minimum": 0},
+        "runtimeObservation": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "sourceValidation": {
+      "type": "object",
+      "required": ["valid", "records"],
+      "properties": {
+        "valid": {"type": "boolean"},
+        "records": {"type": "array"}
+      }
+    },
+    "subjects": {"type": "array"},
     "factSequence": {"type": "integer", "minimum": 0},
     "lastFactId": {"type": ["string", "null"]},
     "snapshotDigest": {"type": "string", "pattern": "^sha256:"}
   },
+  "allOf": [
+    {
+      "if": {"properties": {"schemaVersion": {"const": 2}}},
+      "then": {"required": ["versions", "sourceValidation", "subjects"]}
+    }
+  ],
   "additionalProperties": true
 }

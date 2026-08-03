@@ -1,0 +1,230 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wiii-source-bound-versioning",
+  "mode": "code",
+  "title": "Add source-bound WIII V2 fact versions",
+  "baseCommit": "cbe5eaf5874925494e9f82ca17d69b74ca0947af",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wiii-source-bound-versioning.contract.json",
+    ".ai/work-items/active/wiii-source-bound-versioning.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wiii-source-bound-versioning.outcome.json",
+    ".ai/work-items/active/wiii-source-bound-versioning.outcome.md",
+    "scripts/ai_work_item_intelligence.py",
+    "scripts/ai_work_item_status.py",
+    ".ai/schemas/work-item-intelligence-snapshot.schema.json",
+    "tests/test_work_item_intelligence.py",
+    "tests/test_work_item_intelligence_integration.py",
+    "docs/reference/work-item-intelligence-interface.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Scheduler, retry, cancellation, workflow-engine, agent-manager, provider transport, credential, release, tag, and provider-configuration behavior.",
+    "Historical archive rewrites and cleanup of branches or worktrees other than this Work Item via ai-close-work-item.",
+    "Task 2 keyed open-entity reduction, per-item index publication, cache redesign, crash recovery, timing, receipt reuse, and verification-graph changes."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/specs/2026-08-03-wiii-v2-remediation-design.md",
+      "reason": "Evidence-derived V2 architecture and compatibility boundary."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md",
+      "reason": "Approved staged delivery plan and Task 1 acceptance."
+    },
+    {
+      "path": "scripts/ai_work_item_intelligence.py",
+      "reason": "Current fact storage, reduction, and snapshot behavior."
+    },
+    {
+      "path": "scripts/ai_work_item_status.py",
+      "reason": "Current WIII status CLI behavior."
+    },
+    {
+      "path": ".ai/schemas/work-item-intelligence-snapshot.schema.json",
+      "reason": "Published snapshot schema contract."
+    },
+    {
+      "path": "tests/test_work_item_intelligence.py",
+      "reason": "Existing unit behavior and focused regression coverage."
+    },
+    {
+      "path": "conversation:2026-08-03-wiii-review-and-authorization",
+      "reason": "Direct user authorization for the planned Work Item lifecycle, including PR and governed branch cleanup."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["schema_compatibility", "persistence_integrity", "public_cli_compatibility"],
+    "reason": "V2 adds persistent source-bound provenance and versions beside valid V1 behavior; schema and CLI regressions could invalidate stored snapshots.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": "No current blocker; implementation is constrained by the accepted V2 source/version contract."
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The requested V2 source and version boundary is scoped, sourced, and locally verifiable."
+  },
+  "preReviewWarnings": ["Review V1 compatibility, source digest validation, version monotonicity, and unchanged rebuild stability."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A V2 snapshot represents source-bound facts with typed subject and sourceRef fields, and source paths/digests are validated before the fact contributes to V2 governance projection.",
+    "Persisted V2 versions are unchanged by a rebuild with an unchanged projection; a governance-visible fact increments governance/source sequencing only, while a runtime-only observation increments runtime observation only.",
+    "Missing, unreadable, or digest-mismatched authoritative source evidence produces explicit inconsistent V2 output without silently claiming a valid governance state.",
+    "Explicit --schema-version 1 keeps valid V1 response behavior; --schema-version 2 selects the additive V2 serializer, schema, and CLI behavior.",
+    "Focused and full WIII unit/integration tests, schema validation, documentation metadata, required governance checks, ai-finish/archive, hosted PR checks, merge, and ai-close-work-item pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "WIII V1 stores facts without source-bound validation and fixes statusVersion at 1, so consumers cannot detect governance evidence changes or distinguish governance from runtime observation changes. Implement the first compatible V2 foundation without claiming scheduler or remote orchestration capabilities.",
+    "constraints": [
+      "Use test-first development and preserve valid V1 fact/snapshot behavior behind explicit schema-version selection.",
+      "Source evidence must be local, typed, path- and digest-bound; an unavailable or mismatched source is inconsistent rather than silently trusted.",
+      "Do not implement later plan tasks such as keyed open-entity semantics, global index/cache redesign, timing, receipt reuse, or verification routing.",
+      "Use the direct user approval recorded below only for this Work Item's PR/merge and governed ai-close-work-item branch cleanup."
+    ],
+    "rationale": "A source-bound V2 serializer and meaningful persisted counters establish the integrity and compatibility contract that later reducer and publication work depends on."
+  },
+  "rawUserRequest": "查收，点评这个评审。然后制定开发对应计划（这次试试多sub agent并行处理）。每个工单都自己走完全部流程包括PR和清理。需要授权的，我授权给你，并写入Contract。循环直到全部计划完成。看看有没有问题？\n\n切换到terra模型，目标自动完成全部计划工单闭环。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03-wiii-review-and-authorization",
+    "capturedAt": "2026-08-03",
+    "digest": "sha256:74c7603d5eddfa058c824c8a1eece0e26242d1d689b19bc232f06fda696916a9"
+  },
+  "declaredIntent": {
+    "summary": "Implement Task 1 source-bound V2 fact and versioning behavior, then independently archive, PR, merge, and close it.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {"scenario": "An unchanged V2 projection survives a rebuild with identical persisted versions.", "required": true, "status": "unverified", "evidence": [], "expected": "A rebuild without an effective fact or source change preserves all V2 version counters.", "verificationPlan": "Focused unit test using a digest-bound local receipt, then full WIII tests."},
+    {"scenario": "Missing or digest-mismatched source evidence is used by a V2 fact.", "required": true, "status": "unverified", "evidence": [], "expected": "The V2 result is explicit inconsistent output and does not silently claim valid governance state.", "verificationPlan": "Focused unit and integration tests for missing and modified local evidence."},
+    {"scenario": "A valid V1 consumer explicitly selects V1 while a V2 consumer selects V2.", "required": true, "status": "unverified", "evidence": [], "expected": "The CLI returns its documented V1 or V2 shape without implicit compatibility drift.", "verificationPlan": "CLI integration tests for --schema-version 1 and --schema-version 2."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required actions and requested that authorization be written into every Contract; scope is limited to this Work Item's governed artifacts and lifecycle."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 774
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wiii-source-bound-versioning.json",
+    "baseCommit": "cbe5eaf5874925494e9f82ca17d69b74ca0947af",
+    "initialScopeDigest": "730b62c6722cf7f050b4a02e78873efe42841d9b2980e428ec5029d24f8b5382",
+    "contractSkeletonDigest": "49bcc29f1a260ccc6abbf4abc77d7017617c1694ac1588936c158999c4b37c0c"
+  }
+}

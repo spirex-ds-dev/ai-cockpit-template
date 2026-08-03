@@ -36,6 +36,25 @@ def test_list_cli_delegates_only_to_read_query(monkeypatch, capsys) -> None:
             "pending_human_decisions": False,
             "eligible_action": None,
             "after_index_version": None,
+            "schema_version": 1,
         }
     ]
     assert json.loads(capsys.readouterr().out)["ok"] is True
+
+
+def test_cli_passes_explicit_schema_version(monkeypatch, capsys) -> None:
+    calls: list[dict[str, object]] = []
+
+    def query(**kwargs):
+        calls.append(kwargs)
+        return {"schemaVersion": 2, "identity": {"workItemId": "version-item"}}
+
+    monkeypatch.setattr(status_cli, "query", query)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["ai_work_item_status.py", "--work-item", "version-item", "--schema-version", "2"],
+    )
+    assert status_cli.main() == 0
+    assert calls[0]["schema_version"] == 2
+    assert json.loads(capsys.readouterr().out)["data"]["schemaVersion"] == 2

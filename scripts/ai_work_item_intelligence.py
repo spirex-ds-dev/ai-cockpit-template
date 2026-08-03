@@ -255,7 +255,58 @@ def _state(
     return "intake", "draft", blockers, missing, risks
 
 
+def _source_validation(facts: list[dict[str, Any]]) -> dict[str, Any]:
+    """Validate declared local provenance without treating absent V1 provenance as a V2 fact."""
+    records: list[dict[str, Any]] = []
+    for fact in facts:
+        if _is_runtime_observation(fact):
+            continue
+        payload = fact.get("payload")
+        if not isinstance(payload, dict) or "sourceRef" not in payload:
+            continue
+        source_ref = payload.get("sourceRef")
+        subject = payload.get("subject")
+        record: dict[str, Any] = {"factId": fact["factId"], "valid": False}
+        if not (
+            isinstance(subject, dict)
+            and isinstance(subject.get("kind"), str)
+            and subject["kind"]
+            and isinstance(subject.get("id"), str)
+            and subject["id"]
+            and isinstance(source_ref, dict)
+            and isinstance(source_ref.get("kind"), str)
+            and source_ref["kind"]
+            and isinstance(source_ref.get("path"), str)
+            and source_ref["path"]
+            and isinstance(source_ref.get("digest"), str)
+            and re.fullmatch(r"sha256:[0-9a-f]{64}", source_ref["digest"])
+        ):
+            record["reason"] = "invalid_source_ref"
+        else:
+            path = Path(source_ref["path"])
+            try:
+                actual = "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+            except OSError:
+                record["reason"] = "source_unavailable"
+            else:
+                if actual == source_ref["digest"]:
+                    record["valid"] = True
+                else:
+                    record["reason"] = "source_digest_mismatch"
+        records.append(record)
+    return {"valid": all(row["valid"] for row in records), "records": records}
+
+
+def _is_runtime_observation(fact: dict[str, Any]) -> bool:
+    payload = fact.get("payload")
+    subject = payload.get("subject") if isinstance(payload, dict) else None
+    return fact.get("factType") == "observation" or (
+        isinstance(subject, dict) and subject.get("kind") == "runtime"
+    )
+
+
 def snapshot(work_item: str, facts: list[dict[str, Any]], *, root: Path = ROOT) -> dict[str, Any]:
+    """Build the legacy V1 projection; V2 wraps this without changing it."""
     phase, governance, blockers, missing, risks = _state(facts)
     activity_path = paths(work_item, root=root)["activity"]
     health = "not_observed"
@@ -338,6 +389,62 @@ def snapshot(work_item: str, facts: list[dict[str, Any]], *, root: Path = ROOT) 
     return result
 
 
+def _snapshot_v2(
+    work_item: str, facts: list[dict[str, Any]], *, root: Path = ROOT
+) -> dict[str, Any]:
+    legacy = snapshot(work_item, facts, root=root)
+    validation = _source_validation(facts)
+    source_facts = [
+        fact
+        for fact in facts
+        if isinstance(fact.get("payload"), dict)
+        and "sourceRef" in fact["payload"]
+        and not _is_runtime_observation(fact)
+    ]
+    runtime_facts = [fact for fact in facts if _is_runtime_observation(fact)]
+    versions = {
+        "governance": len(source_facts),
+        "sourceSequence": len(source_facts),
+        "runtimeObservation": len(runtime_facts),
+    }
+    result = dict(legacy)
+    result["schemaVersion"] = 2
+    result["statusVersion"] = max(1, versions["governance"])
+    result["versions"] = versions
+    result["sourceValidation"] = validation
+    result["subjects"] = [
+        fact["payload"]["subject"]
+        for fact in source_facts + runtime_facts
+        if isinstance(fact.get("payload", {}).get("subject"), dict)
+    ]
+    if not validation["valid"]:
+        result["status"] = dict(result["status"])
+        result["status"]["governanceState"] = "inconsistent"
+        result["blockingReasons"] = [
+            *result["blockingReasons"],
+            {
+                "code": "source_validation_failed",
+                "detail": "source-bound fact evidence is inconsistent",
+            },
+        ]
+    result.pop("snapshotDigest", None)
+    result["snapshotDigest"] = _digest(result)
+    return result
+
+
+def _as_v1(snapshot_value: dict[str, Any]) -> dict[str, Any]:
+    """Return a byte-compatible V1 view from a persisted V2 projection."""
+    result = {
+        key: value
+        for key, value in snapshot_value.items()
+        if key not in {"versions", "sourceValidation", "subjects", "snapshotDigest"}
+    }
+    result["schemaVersion"] = 1
+    result["statusVersion"] = 1
+    result["snapshotDigest"] = _digest(result)
+    return result
+
+
 def _atomic_json(path: Path, value: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(
@@ -351,7 +458,7 @@ def _atomic_json(path: Path, value: dict[str, Any]) -> None:
 
 def _rebuild_unlocked(work_item: str, *, root: Path = ROOT) -> dict[str, Any]:
     facts = read_facts(work_item, root=root)
-    result = snapshot(work_item, facts, root=root)
+    result = _snapshot_v2(work_item, facts, root=root)
     target = paths(work_item, root=root)
     _atomic_json(target["status"], result)
     entries = []
@@ -380,13 +487,18 @@ def _rebuild_unlocked(work_item: str, *, root: Path = ROOT) -> dict[str, Any]:
     return result
 
 
-def rebuild(work_item: str, *, root: Path = ROOT) -> dict[str, Any]:
+def rebuild(work_item: str, *, schema_version: int = 1, root: Path = ROOT) -> dict[str, Any]:
+    if schema_version not in {1, 2}:
+        raise IntelligenceError("invalid_query", "schema version must be 1 or 2")
     target = paths(work_item, root=root)
     with _exclusive_lock(target["indexLock"]), _exclusive_lock(target["lock"]):
-        return _rebuild_unlocked(work_item, root=root)
+        value = _rebuild_unlocked(work_item, root=root)
+    return _as_v1(value) if schema_version == 1 else value
 
 
-def read_snapshot(work_item: str, *, root: Path = ROOT) -> dict[str, Any]:
+def read_snapshot(work_item: str, *, schema_version: int = 1, root: Path = ROOT) -> dict[str, Any]:
+    if schema_version not in {1, 2}:
+        raise IntelligenceError("invalid_query", "schema version must be 1 or 2")
     target = paths(work_item, root=root)["status"]
     if not target.exists():
         raise IntelligenceError("not_found", f"snapshot not found for {work_item}")
@@ -398,7 +510,13 @@ def read_snapshot(work_item: str, *, root: Path = ROOT) -> dict[str, Any]:
     if claimed != _digest(value):
         raise IntelligenceError("inconsistent", "snapshot digest mismatch; rebuild is required")
     value["snapshotDigest"] = claimed
-    return value
+    if schema_version == 2:
+        if value.get("schemaVersion") != 2:
+            raise IntelligenceError(
+                "inconsistent", "V2 snapshot is unavailable; rebuild is required"
+            )
+        return value
+    return _as_v1(value) if value.get("schemaVersion") == 2 else value
 
 
 def query(
@@ -408,13 +526,14 @@ def query(
     pending_human_decisions: bool = False,
     eligible_action: str | None = None,
     after_index_version: int | None = None,
+    schema_version: int = 1,
     root: Path = ROOT,
 ) -> dict[str, Any]:
     if work_item:
-        return read_snapshot(work_item, root=root)
+        return read_snapshot(work_item, schema_version=schema_version, root=root)
     index = root / ".ai" / "work-items" / "runtime" / "index.json"
     if not index.exists():
-        return {"schemaVersion": 1, "indexVersion": 0, "entries": []}
+        return {"schemaVersion": schema_version, "indexVersion": 0, "entries": []}
     try:
         data = json.loads(index.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
@@ -438,7 +557,7 @@ def query(
             continue
         if state and entry.get("governanceState") != state:
             continue
-        item = read_snapshot(entry["workItemId"], root=root)
+        item = read_snapshot(entry["workItemId"], schema_version=schema_version, root=root)
         if (
             pending_human_decisions
             and item["status"]["governanceState"] != "needs_human_confirmation"
@@ -449,7 +568,11 @@ def query(
         ):
             continue
         selected.append(item)
-    return {"schemaVersion": 1, "indexVersion": data.get("indexVersion", 0), "entries": selected}
+    return {
+        "schemaVersion": schema_version,
+        "indexVersion": data.get("indexVersion", 0),
+        "entries": selected,
+    }
 
 
 def measure_query_baseline(*, root: Path = ROOT, rounds: int = 10) -> dict[str, Any]:
