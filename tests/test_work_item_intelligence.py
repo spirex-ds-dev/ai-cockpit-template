@@ -111,6 +111,100 @@ def test_dependencies_decisions_and_activity_remain_independent(tmp_path: Path) 
     assert stale["status"]["governanceState"] == "needs_human_confirmation"
 
 
+def test_keyed_entities_resolve_only_their_matching_open_blocker(tmp_path: Path) -> None:
+    append_fact(
+        "reducer-item",
+        "verification_failed",
+        {"verificationId": "unit", "subject": {"kind": "verification", "id": "unit"}},
+        root=tmp_path,
+    )
+    append_fact(
+        "reducer-item",
+        "verification_passed",
+        {
+            "verificationId": "unit",
+            "resolves": "verification:unit",
+            "subject": {"kind": "verification", "id": "unit"},
+        },
+        root=tmp_path,
+    )
+    append_fact(
+        "reducer-item",
+        "human_decision_requested",
+        {"decisionId": "approve-a", "subject": {"kind": "decision", "id": "approve-a"}},
+        root=tmp_path,
+    )
+    append_fact(
+        "reducer-item",
+        "human_decision_requested",
+        {"decisionId": "approve-b", "subject": {"kind": "decision", "id": "approve-b"}},
+        root=tmp_path,
+    )
+    append_fact(
+        "reducer-item",
+        "human_decision_recorded",
+        {
+            "decisionId": "approve-a",
+            "resolves": "decision:approve-a",
+            "subject": {"kind": "decision", "id": "approve-a"},
+        },
+        root=tmp_path,
+    )
+    snapshot = read_snapshot("reducer-item", schema_version=2, root=tmp_path)
+    assert snapshot["status"]["governanceState"] == "needs_human_confirmation"
+    assert snapshot["openEntities"] == [{"kind": "decision", "id": "approve-b"}]
+
+
+def test_keyed_dependency_resolution_and_closed_require_no_open_entities(tmp_path: Path) -> None:
+    append_fact(
+        "closed-item",
+        "dependency_missing",
+        {"workItemId": "upstream", "subject": {"kind": "dependency", "id": "upstream"}},
+        root=tmp_path,
+    )
+    append_fact("closed-item", "closed", {}, root=tmp_path)
+    assert (
+        read_snapshot("closed-item", schema_version=2, root=tmp_path)["status"]["governanceState"]
+        == "waiting_for_dependency"
+    )
+    append_fact(
+        "closed-item",
+        "dependency_satisfied",
+        {
+            "workItemId": "upstream",
+            "resolves": "dependency:upstream",
+            "subject": {"kind": "dependency", "id": "upstream"},
+        },
+        root=tmp_path,
+    )
+    assert (
+        read_snapshot("closed-item", schema_version=2, root=tmp_path)["status"]["governanceState"]
+        == "closed"
+    )
+
+
+def test_cross_subject_or_unknown_resolution_cannot_clear_a_blocker(tmp_path: Path) -> None:
+    append_fact(
+        "invalid-reducer-item",
+        "human_decision_requested",
+        {"decisionId": "approve", "subject": {"kind": "decision", "id": "approve"}},
+        root=tmp_path,
+    )
+    append_fact(
+        "invalid-reducer-item",
+        "human_decision_recorded",
+        {
+            "decisionId": "approve",
+            "resolves": "decision:missing",
+            "subject": {"kind": "decision", "id": "approve"},
+        },
+        root=tmp_path,
+    )
+    snapshot = read_snapshot("invalid-reducer-item", schema_version=2, root=tmp_path)
+    assert snapshot["status"]["governanceState"] == "inconsistent"
+    assert snapshot["openEntities"] == [{"kind": "decision", "id": "approve"}]
+
+
 def test_concurrent_fact_writers_preserve_every_sequence_and_index_entry(tmp_path: Path) -> None:
     with ThreadPoolExecutor(max_workers=6) as pool:
         futures = [

@@ -1,0 +1,250 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wiii-open-entity-reducer",
+  "mode": "code",
+  "title": "Keyed open-entity reducer",
+  "rawUserRequest": "查收，点评这个评审。然后制定开发对应计划（这次试试多sub agent并行处理）。每个工单都自己走完全部流程包括PR和清理。需要授权的，我授权给你，并写入Contract。循环直到全部计划完成。看看有没有问题？\n\n切换到terra模型，目标自动完成全部计划工单闭环。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03-wiii-review-and-authorization",
+    "capturedAt": "2026-08-03",
+    "digest": "sha256:74c7603d5eddfa058c824c8a1eece0e26242d1d689b19bc232f06fda696916a9"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Implement Task 2 keyed open-entity reduction, then independently archive, PR, merge, and close it.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "baseCommit": "94da0071c08a66455e4de53f72e93ceb5732b0c3",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wiii-open-entity-reducer.contract.json",
+    ".ai/work-items/active/wiii-open-entity-reducer.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wiii-open-entity-reducer.outcome.json",
+    ".ai/work-items/active/wiii-open-entity-reducer.outcome.md",
+    "scripts/ai_work_item_intelligence.py",
+    "tests/test_work_item_intelligence.py",
+    "docs/reference/work-item-intelligence-interface.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": [
+    "Scheduler, retry, cancellation, workflow-engine, agent-manager, provider transport, credential, release, tag, and provider-configuration behavior.",
+    "Historical archive rewrites and cleanup of branches or worktrees other than this Work Item via ai-close-work-item.",
+    "V2 governance/runtime boundary, index/cache redesign, crash recovery, timing, receipt reuse, and verification-graph changes."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/specs/2026-08-03-wiii-v2-remediation-design.md",
+      "reason": "Evidence-derived V2 architecture and keyed reduction boundary."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md",
+      "reason": "Staged delivery plan and Task 2 acceptance."
+    },
+    {
+      "path": "scripts/ai_work_item_intelligence.py",
+      "reason": "Current historical fact-type reducer and V2 source/subject contract."
+    },
+    {
+      "path": "tests/test_work_item_intelligence.py",
+      "reason": "Existing unit coverage and focused regression location."
+    },
+    {
+      "path": "conversation:2026-08-03-wiii-review-and-authorization",
+      "reason": "Direct user authorization for the planned Work Item lifecycle, including PR and governed branch cleanup."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "state_reduction",
+      "persistence_compatibility"
+    ],
+    "reason": "Changing the governance reducer can misclassify unresolved entities or regress V1 compatibility; focused state-transition tests and full governance verification are required.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "State reduction and persistent V2 compatibility require standard governance verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": "No current blocker; keyed entity reduction is scoped and locally verifiable."
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The reducer scope, state transitions, and verification scenarios are explicit."
+  },
+  "preReviewWarnings": [
+    "Review entity identity, resolution provenance, cross-subject rejection, V1 compatibility, and closed-state precedence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "V2 governance reduction tracks verification failures, human decisions, and missing dependencies by stable entity identity rather than by the historical presence of a fact type.",
+    "A same-subject resolution or supersession makes only its referenced entity non-blocking; missing, malformed, or cross-subject references are rejected or fail closed.",
+    "Interleaved facts prove that a failed verification later passed, one of two decisions still pending, and a dependency later satisfied project the correct V2 governance state; closed takes effect only after open entities resolve.",
+    "Default V1 query behavior remains compatible while explicit V2 behavior documents the keyed reducer semantics.",
+    "Focused and full WIII tests, documentation/capability checks, required governance checks, ai-finish/archive, hosted PR checks, merge, and ai-close-work-item pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The current WIII reducer treats any historical verification failure, decision request, or missing dependency as permanently active. It cannot recover when a later fact resolves a particular entity, so governance state is incorrect after normal remediation.",
+    "constraints": [
+      "Use test-first development and build on Task 1 V2 subject/sourceRef fields without changing the already shipped source-bound versioning contract.",
+      "Resolve or supersede only same-subject, explicitly identified entities; reject cross-subject, missing, and malformed resolution references.",
+      "Preserve valid V1 query behavior and do not implement scheduler, retry/cancel control, publication/cache, crash recovery, timing, receipt reuse, or verification-graph work assigned to later Work Items.",
+      "Use the direct user approval recorded below only for this Work Item's PR/merge and governed ai-close-work-item branch cleanup."
+    ],
+    "rationale": "A small keyed open-entity reducer replaces irreversible fact-type checks with auditable recoverable state and unblocks the later governance/completion projection."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A verification failure is explicitly resolved by a later passing fact for the same subject and entity.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The old failure no longer blocks V2 governance, while an unresolved failure still does.",
+      "verificationPlan": "Focused reducer tests followed by full WIII unit and integration suites."
+    },
+    {
+      "scenario": "Two human decisions exist and only one is recorded.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The remaining open decision keeps governance in needs_human_confirmation.",
+      "verificationPlan": "Focused keyed-decision tests and full WIII suites."
+    },
+    {
+      "scenario": "A resolution references a missing or different-subject entity.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The invalid relationship is rejected or surfaced as inconsistent and cannot clear governance blockers.",
+      "verificationPlan": "Focused negative tests."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized required actions and requested that authorization be written into every Contract; scope is limited to this Work Item's governed artifacts and lifecycle."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 775
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wiii-open-entity-reducer.json",
+    "baseCommit": "94da0071c08a66455e4de53f72e93ceb5732b0c3",
+    "initialScopeDigest": "23b91e63c360555764d7dd8d5cefb9d2eea6996800ec895e6b0acc0c18ac8937",
+    "contractSkeletonDigest": "36dd1df7ee1aef9ed37f78ef7fe21ad7d164a81dda05f3b78e16225d6c928b02"
+  }
+}
