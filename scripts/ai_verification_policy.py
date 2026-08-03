@@ -84,6 +84,93 @@ def order_checks(graph: dict[str, list[str]]) -> list[str]:
     return ordered
 
 
+RECEIPT_BINDINGS = (
+    "baseCommit",
+    "headCommit",
+    "changedPaths",
+    "command",
+    "environment",
+    "toolchain",
+    "policy",
+)
+
+
+def evaluate_impact_graph(
+    graph: dict[str, Any], *, profile: str, receipt_bindings: dict[str, str]
+) -> dict[str, Any]:
+    """Describe a verification DAG without executing checks or scheduling work."""
+    if profile not in (*POLICY_LEVELS, "release"):
+        raise ValueError(f"unsupported graph profile: {profile}")
+    raw_nodes = graph.get("nodes", {})
+    nodes = raw_nodes if isinstance(raw_nodes, dict) else {}
+    errors: list[str] = []
+    required = sorted(name for name, node in nodes.items() if node.get("required") is True)
+    final_proofs = [
+        name
+        for name, node in nodes.items()
+        if node.get("required") is True and node.get("finalProof") is True
+    ]
+    if not final_proofs:
+        errors.append("required final proof node is missing")
+    dependencies = {name: list(node.get("dependsOn", [])) for name, node in nodes.items()}
+    try:
+        ordered = order_checks(dependencies)
+    except ValueError as error:
+        errors.append(str(error))
+        ordered = []
+    cached: list[str] = []
+    invalidated: list[str] = []
+    for name in sorted(nodes):
+        expected = nodes[name].get("receiptBindings")
+        if not isinstance(expected, dict):
+            continue
+        matches = all(expected.get(key) == receipt_bindings.get(key) for key in RECEIPT_BINDINGS)
+        (cached if matches else invalidated).append(name)
+    layers = {
+        layer: sorted(name for name, node in nodes.items() if node.get("layer") == layer)
+        for layer in ("Fast", "Finish", "Hosted")
+    }
+    parallelizable = sorted(name for name, dependencies in dependencies.items() if not dependencies)
+    return {
+        "valid": not errors,
+        "errors": errors,
+        "profile": profile,
+        "requiredNodes": required,
+        "orderedNodes": ordered,
+        "dependencies": dependencies,
+        "parallelizableGroups": [parallelizable] if parallelizable else [],
+        "cachedNodes": cached,
+        "invalidatedNodes": invalidated,
+        "proofLayers": layers,
+    }
+
+
+def evaluate_current_impact_graph(
+    *, profile: str, receipt_bindings: dict[str, str]
+) -> dict[str, Any]:
+    """Evaluate the repository's declared proof layers without running them."""
+    return evaluate_impact_graph(
+        {
+            "nodes": {
+                "fast": {"layer": "Fast", "required": True, "dependsOn": []},
+                "finish": {
+                    "layer": "Finish",
+                    "required": True,
+                    "dependsOn": ["fast"],
+                },
+                "hosted": {
+                    "layer": "Hosted",
+                    "required": True,
+                    "finalProof": True,
+                    "dependsOn": ["finish"],
+                },
+            }
+        },
+        profile=profile,
+        receipt_bindings=receipt_bindings,
+    )
+
+
 def escalation_reasons(
     changed_paths: list[str],
     *,

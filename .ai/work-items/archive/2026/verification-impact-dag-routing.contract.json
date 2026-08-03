@@ -1,0 +1,159 @@
+{
+  "contractVersion": 2,
+  "workItemId": "verification-impact-dag-routing",
+  "mode": "code",
+  "title": "Verification impact DAG routing",
+  "baseCommit": "9155454852441d15ed339bbbd14a89798e658474",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/verification-impact-dag-routing.contract.json",
+    ".ai/work-items/active/verification-impact-dag-routing.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/verification-impact-dag-routing.outcome.json",
+    ".ai/work-items/active/verification-impact-dag-routing.outcome.md",
+    ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md",
+    "scripts/ai_verification_policy.py", "scripts/ai_verify.py", "Makefile",
+    "tests/test_verification_impact_graph.py", "tests/test_verification_policy.py", "tests/test_lightweight_verification.py", "docs/reference/work-item-intelligence-interface.md",
+    "docs/reference/capability-truth-matrix.json", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": ["Scheduler, retry controller, Work Item execution, agent execution, receipt reuse/cache implementation, provider configuration, release publication, tags, and any claim that a graph schedules work."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md", "reason": "Task 9 requirements and boundaries."
+    }, {"path": ".ai/work-items/archive/2026/verification-evidence-reuse.summary.json", "reason": "Task 8 no-reuse decision and future binding requirements."}, {"path":"scripts/ai_verification_policy.py","reason":"Existing policy and DAG primitives."}, {"path":"scripts/ai_verify.py","reason":"Current verification output surface."}, {"path":"Makefile","reason":"Current Fast, Finish, and Hosted proof layers."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["verification", "data_integrity"],
+    "reason": "An incomplete graph or stale receipt state could misrepresent which required verification proof remains necessary.", "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": "No active implementation block."
+  },
+  "executionDecision": {
+    "status": "continue", "reason": "A bounded declarative evaluator and tests are specified."
+  },
+  "preReviewWarnings": ["Review that graph output is observational and does not schedule or skip verification."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A declarative graph reports required nodes, dependency edges, parallelizable groups, and proof layers for Light, Standard, Strict, and Release without executing or scheduling work.",
+    "A graph that omits a required final-proof node is rejected, and any changed receipt binding makes the matching node invalidated rather than cached.",
+    "ai_verify exposes the selected graph as observation while retaining existing verification execution behavior.",
+    "Focused graph and verification-evidence tests plus governed lifecycle checks are recorded."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {"problem":"Verification selection currently has small policy helpers but no declarative, inspectable graph that distinguishes required proof from parallelizable or invalidated nodes.","constraints":["Evaluator output is deterministic and observational.","Binding mismatch leaves a required node invalidated.","Graph evaluation has no scheduler, retry, provider, or agent side effect.","The change remains limited to this Work Item lifecycle."],"rationale":"A pure graph makes verification dependencies and invalidation visible without confusing evidence planning with execution."},
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true, "approvedBy": "user", "reason": "用户明确授权：每个工单自行走完全部流程，包括 PR 和清理；需要授权的，我授权给你，并写入 Contract。"
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "rawUserRequest": "查收，点评这个评审。然后制定开发对应计划（这次试试多sub agent并行处理）。每个工单都自己走完全部流程包括PR和清理。需要授权的，我授权给你，并写入Contract。循环直到全部计划完成。看看有没有问题？\n\n切换到terra模型，目标自动完成全部计划工单闭环。",
+  "rawRequestSource": {"type":"human","reference":"conversation:2026-08-03-wiii-review-and-authorization","capturedAt":"2026-08-03","digest":"sha256:74c7603d5eddfa058c824c8a1eece0e26242d1d689b19bc232f06fda696916a9"},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "declaredIntent": {"summary":"Implement and close Task 9's declarative verification impact graph only.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "scenarioCoverage": [{"scenario":"A final required proof node is absent from a candidate graph.","required":true,"status":"verified","evidence":["tests/test_verification_impact_graph.py"],"expected":"The evaluator rejects the graph rather than emitting an incomplete plan.","verificationPlan":"Focused failing then passing graph test."},{"scenario":"A candidate receipt changes one Task 8 binding.","required":true,"status":"verified","evidence":["tests/test_verification_impact_graph.py"],"expected":"The node is invalidated and not reported cached.","verificationPlan":"Focused failing then passing graph test."}],
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 782
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/verification-impact-dag-routing.json",
+    "baseCommit": "9155454852441d15ed339bbbd14a89798e658474",
+    "initialScopeDigest": "331cbc9c235c56a630db249e0ea7476f6809849c113323f65db4a3acac5cf889",
+    "contractSkeletonDigest": "652ec464edb93a1bb43ed045b8b2c7a7a2e77ee807759703ba515a4a51e50be2"
+  }
+}

@@ -53,6 +53,15 @@ def test_check_dag_is_deterministic_and_fail_closed():
         order_checks({"a": ["b"], "b": ["a"]})
 
 
+def test_impact_graph_reports_declared_proof_layers_without_execution():
+    from ai_verification_policy import evaluate_current_impact_graph
+
+    graph = evaluate_current_impact_graph(profile="strict", receipt_bindings={})
+
+    assert graph["valid"] is True
+    assert graph["orderedNodes"] == ["fast", "finish", "hosted"]
+
+
 def test_escalation_reasons_cover_high_risk_and_injection_signals():
     reasons = escalation_reasons(
         ["tests/test_x.py", ".github/workflows/release.yml"],

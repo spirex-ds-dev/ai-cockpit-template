@@ -135,3 +135,9 @@ def test_authorization_does_not_change_evidence_derived_risk_level():
     )
     assert result["riskLevel"] == "medium"
     assert result["authority"]["approved"] is True
+
+
+def test_verify_module_exports_the_impact_graph_evaluator():
+    from ai_verify import evaluate_current_impact_graph
+
+    assert evaluate_current_impact_graph(profile="light", receipt_bindings={})["valid"] is True
