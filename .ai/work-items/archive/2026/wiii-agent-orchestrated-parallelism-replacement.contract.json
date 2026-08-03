@@ -1,0 +1,176 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wiii-agent-orchestrated-parallelism-replacement",
+  "mode": "code",
+  "title": "Rebase-safe agent-orchestrated Work Item parallelism",
+  "baseCommit": "f6778a017142b38fc2ea6662031887e221130079",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wiii-agent-orchestrated-parallelism-replacement.contract.json",
+    ".ai/work-items/active/wiii-agent-orchestrated-parallelism-replacement.summary.json",
+    ".ai/cockpit/current_status.md",
+    "scripts/ai_work_item_status.py",
+    "scripts/ai_governance_compression.py",
+    "scripts/ai_generate_status.py",
+    "tests/test_work_item_intelligence_integration.py",
+    "tests/test_guards_and_status.py",
+    "docs/reference/work-item-intelligence-interface.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wiii-agent-orchestrated-parallelism-replacement.outcome.json",
+    ".ai/work-items/active/wiii-agent-orchestrated-parallelism-replacement.outcome.md"
+  ],
+  "outOfScope": ["Agent scheduling, retries, cancellation, a global Cockpit registry, and any change to one-active-Work-Item-per-worktree."],
+  "sources": [
+    {
+      "path": "docs/reference/work-item-intelligence-interface.md",
+      "reason": "Canonical WIII boundary and local query contract."
+    },
+    {"path": "AGENTS.md", "reason": "Dedicated Work Item/branch/PR lifecycle requirement."},
+    {"path": ".ai/work-items/archive/2026/wiii-agent-orchestrated-parallelism.contract.json", "reason": "Unpublished archived predecessor that cannot be rebased after #600 merged."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["concurrency", "governance_boundary", "integration"],
+    "reason": "The replacement must retain local query scope while proving it does not regress already-merged completion evidence.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the Work Item lifecycle and required prompt-free Agent parallelism guidance."
+  },
+  "preReviewWarnings": ["Ensure the replacement is based on current main and never removes #600 evidence."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Successful WIII CLI responses declare current-worktree scope, no cross-worktree aggregation, and external-Agent scheduling ownership.",
+    "Cockpit Status identifies its local single-Work-Item scope in English and Japanese.",
+    "The replacement PR is based on current main and retains the #600 completion-state tests and behavior.",
+    "Documentation states that Agents assess dependencies before scheduling isolated Work Items in parallel."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "An archived parallelism Work Item started from a valid common base but could not be safely rebased after an independently merged Work Item changed generated governance evidence. The replacement must land the local scope contract on current main without global scheduler behavior.",
+    "constraints": ["Task equals Work Item equals dedicated branch/worktree equals PR.", "Agent/subagents schedule; WIII exposes local atomic operations and queries.", "Each Work Item independently verifies, archives, merges, closes, and cleans up.", "Do not reuse the predecessor archive as new evidence."],
+    "rationale": "A fresh Work Item from the latest merged base preserves immutable archive evidence and proves that parallel delivery does not regress adjacent merged work."
+  },
+  "rawUserRequest": "通过并行实践，测试并行设计。如果遇到问题，请及时修正。注意保持边界，不要忘了North Star。整个计划最后加个工单，总结并行的经验，落地成SKILL，并更新文档。以便以后提供给Agent使用（不再需要我用prompt来指示）。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-03-parallel-practice-and-skill", "capturedAt": "2026-08-03", "digest": "sha256:36da3dc8674fcedb62b6c697cfac3d0ee7d66ee1bf8fe5d69f21a36c2be6d1a2"},
+  "declaredIntent": {"summary": "Land a current-main replacement for the worktree-local parallel Work Item interface.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [{"scenario": "A local query is read by an Agent managing several worktrees.", "required": true, "status": "unverified", "evidence": [], "expected": "It declares local scope and external scheduling ownership.", "verificationPlan": "CLI integration test."}, {"scenario": "Current main contains #600 completion behavior.", "required": true, "status": "unverified", "evidence": [], "expected": "The replacement does not remove completion-state tests or behavior.", "verificationPlan": "Full WIII and project test suite."}, {"scenario": "A Japanese Cockpit reader sees the scope statement.", "required": true, "status": "unverified", "evidence": [], "expected": "Japanese Status translates the local scope statement.", "verificationPlan": "Status localization test."}],
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized all Work Items, PRs, cleanup, parallel design practice, and a reusable Skill."},
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 785
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wiii-agent-orchestrated-parallelism-replacement.json",
+    "baseCommit": "f6778a017142b38fc2ea6662031887e221130079",
+    "initialScopeDigest": "20d2c2940a948432cd4d116c25c56e556a60d93ee703141d42dec60341b47a3d",
+    "contractSkeletonDigest": "04fa322d3df5083664b9399914d35a98ac99205c5766f0490f99db57ea8d92c4"
+  }
+}

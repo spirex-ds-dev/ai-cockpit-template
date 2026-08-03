@@ -741,6 +741,8 @@ def render_active_status(
         f"- Generated At: `{timestamp}`",
         f"- Task: `{work_item_id}`",
         f"- Mode: `{mode}`",
+        "- Scope: `current_worktree`; one active Work Item and this generated report are local to this worktree.",
+        "- An external Agent queries each worktree separately and owns any aggregate scheduling view.",
         f"- State: `{model['recommendation']}`",
         f"- Recommendation: `{model['recommendation']}`",
         f"- Contract Path: `{contract_path}`",

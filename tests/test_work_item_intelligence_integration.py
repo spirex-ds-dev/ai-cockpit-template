@@ -40,7 +40,13 @@ def test_list_cli_delegates_only_to_read_query(monkeypatch, capsys) -> None:
             "schema_version": 1,
         }
     ]
-    assert json.loads(capsys.readouterr().out)["ok"] is True
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["ok"] is True
+    assert payload["context"] == {
+        "scope": "current_worktree",
+        "aggregatesAcrossWorktrees": False,
+        "schedulerOwnership": "external_agent",
+    }
 
 
 def test_cli_passes_explicit_schema_version(monkeypatch, capsys) -> None:

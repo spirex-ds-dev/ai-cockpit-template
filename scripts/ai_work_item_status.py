@@ -13,6 +13,12 @@ from ai_work_item_intelligence import (
     rebuild,
 )
 
+WORKTREE_QUERY_CONTEXT = {
+    "scope": "current_worktree",
+    "aggregatesAcrossWorktrees": False,
+    "schedulerOwnership": "external_agent",
+}
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -74,7 +80,13 @@ def main() -> int:
             )
         )
         return EXIT[exc.code]
-    print(json.dumps({"ok": True, "data": data, "error": None}, ensure_ascii=False, sort_keys=True))
+    print(
+        json.dumps(
+            {"ok": True, "data": data, "error": None, "context": WORKTREE_QUERY_CONTEXT},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
     return 0
 
 
