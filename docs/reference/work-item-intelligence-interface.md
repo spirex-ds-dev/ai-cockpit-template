@@ -121,3 +121,24 @@ continues to omit all four V2-only objects.
 
 Do not record tokens, passwords, secrets, full environment values, private
 human notes, or external response bodies in facts.
+
+## Reproducible performance characterization
+
+`scripts/ai_work_item_intelligence_benchmark.py` measures the V2 active-list
+query against fixtures created only below its required `--root` directory. It
+does not alter this repository's runtime data and it does not establish an
+enforcement threshold. Each published case records W (Work Items), F (fixture
+facts), concurrency, cold/warm mode, Python and filesystem identifiers, 30 or
+more samples, p50/p95/p99 latency, timeout count, lock wait, and bytes written.
+
+Run the full declared matrix with a disposable root and save the JSON outside
+the repository runtime tree:
+
+```sh
+python scripts/ai_work_item_intelligence_benchmark.py \
+  --root /tmp/wiii-benchmark --output /tmp/wiii-benchmark-report.json
+```
+
+The companion performance baseline records the exact profile and observed
+local values. Those values are evidence for this environment only, not a
+cross-machine product guarantee.
