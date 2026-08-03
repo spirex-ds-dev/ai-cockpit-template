@@ -103,5 +103,21 @@ than clearing a blocker. `openEntities` reports remaining keyed blockers. A
 `closed` fact projects `closed` only when no keyed open entity remains. The V1
 compatibility view omits these V2-only fields.
 
+## Governance, runtime, and completion domains
+
+V2 keeps authoritative governance separate from runtime observation. The
+`governance` object contains lifecycle phase, governance state, and governance
+version; `runtimeObservation` contains activity health and its independent
+version. A heartbeat or activity-health change cannot change governance state
+or governance version.
+
+`completion` exposes five independent booleans: `implementation`,
+`verification`, `review`, `integration`, and `closure`. They report observed
+evidence and are not a claim that an external scheduler or release workflow
+ran. `governancePermissions` is a bounded list of currently eligible phase
+actions: `start`, `continue`, `run_verification`, `request_human_decision`,
+`finish`, and `close`. It never contains `retry` or `cancel`. Schema version 1
+continues to omit all four V2-only objects.
+
 Do not record tokens, passwords, secrets, full environment values, private
 human notes, or external response bodies in facts.

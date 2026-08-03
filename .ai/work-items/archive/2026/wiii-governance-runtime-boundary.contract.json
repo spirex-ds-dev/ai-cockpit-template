@@ -1,0 +1,159 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wiii-governance-runtime-boundary",
+  "mode": "code",
+  "title": "WIII governance runtime boundary",
+  "rawUserRequest": "查收，点评这个评审。然后制定开发对应计划（这次试试多sub agent并行处理）。每个工单都自己走完全部流程包括PR和清理。需要授权的，我授权给你，并写入Contract。循环直到全部计划完成。看看有没有问题？\n\n切换到terra模型，目标自动完成全部计划工单闭环。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-03-wiii-review-and-authorization", "capturedAt": "2026-08-03", "digest": "sha256:74c7603d5eddfa058c824c8a1eece0e26242d1d689b19bc232f06fda696916a9"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Implement Task 3 governance/runtime and completion boundary, then independently archive, PR, merge, and close it.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "baseCommit": "5a07c508a3d97e64eddd5beaca4569bc67fca87a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wiii-governance-runtime-boundary.contract.json",
+    ".ai/work-items/active/wiii-governance-runtime-boundary.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wiii-governance-runtime-boundary.outcome.json",
+    ".ai/work-items/active/wiii-governance-runtime-boundary.outcome.md",
+    "scripts/ai_work_item_intelligence.py", "scripts/ai_work_item_status.py", ".ai/schemas/work-item-intelligence-snapshot.schema.json", "tests/test_work_item_intelligence.py", "tests/test_work_item_intelligence_integration.py", "docs/reference/work-item-intelligence-interface.md", "docs/reference/capability-truth-matrix.json", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": ["Scheduler, retry, cancellation, workflow-engine, agent-manager, provider transport, credential, release, tag, and provider-configuration behavior.", "Index/cache redesign, crash recovery, timing, receipt reuse, and verification-graph work assigned to later Work Items."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md", "reason": "Task 3 delivery boundary."
+    }, {"path": "scripts/ai_work_item_intelligence.py", "reason": "Current V2 snapshot and reducer behavior."}, {"path": "tests/test_work_item_intelligence.py", "reason": "Current WIII unit coverage."}, {"path": "conversation:2026-08-03-wiii-review-and-authorization", "reason": "Direct lifecycle authorization."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "schema_compatibility", "governance_boundary"
+    ],
+    "reason": "V2 grouping must prevent observational activity from mutating governance while preserving V1 compatibility.", "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Public V2 schema and CLI behavior require standard verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": "No current blocker."
+  },
+  "executionDecision": {
+    "status": "continue", "reason": "The Task 3 boundary is sourced and locally verifiable."
+  },
+  "preReviewWarnings": [
+    "Review governance/runtime separation, completion dimensions, permissions, schema, and V1 adapter behavior."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "V2 exposes separate governance, runtimeObservation, completion, and governancePermissions fields while V1 remains compatible.", "Runtime activity cannot mutate governance state or governance version.", "Completion independently records implementation, verification, review, integration, and closure.", "governancePermissions contains only start, continue, run_verification, request_human_decision, finish, and close phase actions, and never retry or cancel instructions.", "Focused/full WIII tests, governance checks, archive, PR, merge, and ai-close-work-item pass."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "V2 currently mixes governance projection and runtime observation at the snapshot boundary and lacks independent completion dimensions or a bounded phase-action interface.", "constraints": ["Preserve Task 1 source/version and Task 2 keyed reducer behavior behind the V1 adapter.", "Do not implement scheduling, retry/cancel control, publication, recovery, timing, receipt reuse, or verification routing.", "Use the recorded user approval only for this Work Item's PR/merge and governed cleanup."], "rationale": "Explicit domains prevent consumers from treating runtime activity as governance and give later Work Items a stable V2 API."
+  },
+  "scenarioCoverage": [{"scenario": "Runtime activity changes after stable governance facts.", "required": true, "status": "unverified", "evidence": [], "expected": "Only runtimeObservation changes; governance state/version do not.", "verificationPlan": "Focused V2 snapshot tests."}, {"scenario": "Completion evidence spans all five lifecycle dimensions.", "required": true, "status": "unverified", "evidence": [], "expected": "Each completion boolean is independently derived.", "verificationPlan": "Focused reducer tests and full WIII suites."}, {"scenario": "Permissions are queried from V2.", "required": true, "status": "unverified", "evidence": [], "expected": "Only allowed governance phases appear; retry/cancel never appear.", "verificationPlan": "Schema and CLI integration tests."}],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true, "approvedBy": "user", "reason": "User explicitly authorized required actions and requested this authorization in every Contract; it is limited to this Work Item lifecycle."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 776
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wiii-governance-runtime-boundary.json",
+    "baseCommit": "5a07c508a3d97e64eddd5beaca4569bc67fca87a",
+    "initialScopeDigest": "23f8461bde4ac3f38d7a682c7606bfd5d2e208ad56f15329f69e1a74ab481bc2",
+    "contractSkeletonDigest": "f1def4640ba27090ad6df6a1682461c9d58e43ba890c6e8393bf4d6bcec5f222"
+  }
+}

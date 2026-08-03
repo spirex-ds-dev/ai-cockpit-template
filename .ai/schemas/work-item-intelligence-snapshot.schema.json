@@ -36,6 +36,10 @@
       }
     },
     "subjects": {"type": "array"},
+    "governance": {"type": "object", "required": ["lifecyclePhase", "state", "version"]},
+    "runtimeObservation": {"type": "object", "required": ["activityHealth", "version"]},
+    "completion": {"type": "object", "required": ["implementation", "verification", "review", "integration", "closure"]},
+    "governancePermissions": {"type": "array", "items": {"enum": ["start", "continue", "run_verification", "request_human_decision", "finish", "close"]}},
     "factSequence": {"type": "integer", "minimum": 0},
     "lastFactId": {"type": ["string", "null"]},
     "snapshotDigest": {"type": "string", "pattern": "^sha256:"}
@@ -43,7 +47,7 @@
   "allOf": [
     {
       "if": {"properties": {"schemaVersion": {"const": 2}}},
-      "then": {"required": ["versions", "sourceValidation", "subjects"]}
+      "then": {"required": ["versions", "sourceValidation", "subjects", "governance", "runtimeObservation", "completion", "governancePermissions"]}
     }
   ],
   "additionalProperties": true
