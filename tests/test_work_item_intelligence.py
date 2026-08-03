@@ -422,11 +422,14 @@ def test_v2_separates_governance_runtime_completion_and_permissions(tmp_path: Pa
     assert after["governance"] == before["governance"]
     assert after["runtimeObservation"]["activityHealth"] == "stale"
     assert after["completion"] == {
-        "implementation": True,
-        "verification": True,
-        "review": True,
-        "integration": False,
-        "closure": True,
+        "implementation": {"state": "in_progress", "lastFactId": "boundary-item:2"},
+        "verification": {
+            "state": "completed",
+            "lastPassedFactId": "boundary-item:3",
+        },
+        "review": {"state": "completed", "lastFactId": "boundary-item:4"},
+        "integration": {"state": "not_started"},
+        "closure": {"state": "completed", "lastFactId": "boundary-item:5"},
     }
     assert set(after["governancePermissions"]) <= {
         "start",
@@ -438,6 +441,33 @@ def test_v2_separates_governance_runtime_completion_and_permissions(tmp_path: Pa
     }
     assert "retry" not in after["governancePermissions"]
     assert "cancel" not in after["governancePermissions"]
+
+
+def test_v2_completion_invalidates_a_historical_verification_pass(tmp_path: Path) -> None:
+    append_fact("completion-item", "implementation_started", {}, root=tmp_path)
+    append_fact("completion-item", "verification_passed", {}, root=tmp_path)
+    append_fact("completion-item", "verification_failed", {}, root=tmp_path)
+
+    completion = read_snapshot("completion-item", schema_version=2, root=tmp_path)["completion"]
+
+    assert completion["verification"] == {
+        "state": "invalidated",
+        "lastPassedFactId": "completion-item:2",
+        "invalidatedBy": "completion-item:3",
+    }
+
+
+def test_v2_completion_replaces_invalidated_verification_with_a_fresh_pass(tmp_path: Path) -> None:
+    append_fact("reverified-item", "verification_passed", {}, root=tmp_path)
+    append_fact("reverified-item", "verification_failed", {}, root=tmp_path)
+    append_fact("reverified-item", "verification_passed", {}, root=tmp_path)
+
+    completion = read_snapshot("reverified-item", schema_version=2, root=tmp_path)["completion"]
+
+    assert completion["verification"] == {
+        "state": "completed",
+        "lastPassedFactId": "reverified-item:3",
+    }
 
 
 def test_distinct_work_items_publish_independent_entries_without_a_shared_index_lock(

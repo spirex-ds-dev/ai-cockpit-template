@@ -1,0 +1,236 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wiii-completion-state-correctness",
+  "mode": "code",
+  "title": "Correct WIII completion state semantics",
+  "baseCommit": "e82642f3229fae0ca05bbff6eafceb3227f8a2c3",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wiii-completion-state-correctness.contract.json",
+    ".ai/work-items/active/wiii-completion-state-correctness.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wiii-completion-state-correctness.outcome.json",
+    ".ai/work-items/active/wiii-completion-state-correctness.outcome.md",
+    "scripts/ai_work_item_intelligence.py",
+    ".ai/schemas/work-item-intelligence-snapshot.schema.json",
+    "tests/test_work_item_intelligence.py",
+    "tests/test_work_item_intelligence_integration.py",
+    "docs/reference/work-item-intelligence-interface.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/documentation-context-registry.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "V1 snapshot behavior, scheduler/retry/cancellation behavior, sourceRef path validation, index publication/cache behavior, reducer persistence design, provider configuration, releases, tags, and historical archive rewrites."
+  ],
+  "sources": [
+    {
+      "path": "docs/superpowers/specs/2026-08-03-wiii-v2-remediation-design.md",
+      "reason": "The approved WIII V2 remediation design establishes the current-state completion boundary; the latest assessment refines its invalidation requirement."
+    },
+    {
+      "path": "scripts/ai_work_item_intelligence.py",
+      "reason": "Defines the V2 completion projection currently derived from historical fact presence."
+    },
+    {
+      "path": "tests/test_work_item_intelligence.py",
+      "reason": "Defines current WIII V2 unit behavior and regression conventions."
+    },
+    {
+      "path": "docs/reference/work-item-intelligence-interface.md",
+      "reason": "Publishes the WIII V2 completion contract for external agents."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["public_protocol", "state_correctness", "backward_compatibility"],
+    "reason": "A stale historical pass must never be exposed as current verification completion, while schema version 1 remains byte-compatible.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Public V2 protocol and persistent snapshots require the Standard profile."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "User authorized the full Work Item lifecycle and the source, scope, acceptance, and verification are explicit."
+  },
+  "preReviewWarnings": [
+    "Review invalidation ordering: a later verification failure must override an earlier pass without changing V1 output."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "V2 completion exposes each phase as a state object using only not_started, in_progress, completed, failed, invalidated, or unknown.",
+    "A verification_passed followed by verification_failed exposes verification.state=invalidated and identifies the pass fact and invalidating fact.",
+    "A later verification pass after invalidation returns verification.state=completed and points at that latest pass.",
+    "V1 output remains byte-compatible and V2 schema, unit tests, integration tests, and reference documentation describe the current-state semantics."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "V2 completion currently treats the historical appearance of verification_passed as completion even when a later verification_failed fact makes verification no longer valid. External agents that read only completion can therefore make an unsafe decision.",
+    "constraints": ["Completion is a V2 current-state projection, not a historical boolean.", "V1 compatibility output remains unchanged.", "The change remains repository-local and read-only; it adds no scheduler, retry, cancellation, provider, or network behavior.", "Every state transition must be derived deterministically from ordered facts."],
+    "rationale": "Explicit phase states make invalidation observable and prevent stale positive evidence from being mistaken for current readiness."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "User explicitly authorized completing every Work Item, including PR and cleanup, and directed that this authorization be recorded in the Contract."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "rawUserRequest": "完成全部工单包括PR和清理。明确授权给你，并写入Contract。如果没有问题，请开始。全部完成为止不要停止。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03-wiii-completion-authorization",
+    "capturedAt": "2026-08-03",
+    "digest": "sha256:8ba908e8dbb2e7d207c236cd159c4e9f52b22639836fe9c008c7d9d6a33e1c7d"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Correct the WIII V2 completion projection so external agents consume current, invalidation-aware verification state.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A passed verification is later invalidated by a failure.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "V2 reports invalidated verification and links the passed and invalidating facts.",
+      "verificationPlan": "Focused unit and CLI integration tests."
+    },
+    {
+      "scenario": "A fresh verification pass follows an invalidation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "V2 returns completed verification using the latest valid pass.",
+      "verificationPlan": "Focused unit and CLI integration tests."
+    },
+    {
+      "scenario": "A schema version 1 consumer reads the same fact stream.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The V1 compatibility view remains unchanged and omits V2 completion state objects.",
+      "verificationPlan": "Existing and new explicit V1 integration tests."
+    }
+  ],
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 784
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wiii-completion-state-correctness.json",
+    "baseCommit": "e82642f3229fae0ca05bbff6eafceb3227f8a2c3",
+    "initialScopeDigest": "6922cf0002e51720db83136e3e0e70bf540b362a2d690d011f80020a46c493b2",
+    "contractSkeletonDigest": "1d827840c93b93680a1633e79ebf9178392dbd6fade1ee0117d72a32e7c13a05"
+  }
+}

@@ -38,7 +38,18 @@
     "subjects": {"type": "array"},
     "governance": {"type": "object", "required": ["lifecyclePhase", "state", "version"]},
     "runtimeObservation": {"type": "object", "required": ["activityHealth", "version"]},
-    "completion": {"type": "object", "required": ["implementation", "verification", "review", "integration", "closure"]},
+    "completion": {
+      "type": "object",
+      "required": ["implementation", "verification", "review", "integration", "closure"],
+      "properties": {
+        "implementation": {"$ref": "#/$defs/completionPhase"},
+        "verification": {"$ref": "#/$defs/completionPhase"},
+        "review": {"$ref": "#/$defs/completionPhase"},
+        "integration": {"$ref": "#/$defs/completionPhase"},
+        "closure": {"$ref": "#/$defs/completionPhase"}
+      },
+      "additionalProperties": false
+    },
     "governancePermissions": {"type": "array", "items": {"enum": ["start", "continue", "run_verification", "request_human_decision", "finish", "close"]}},
     "factSequence": {"type": "integer", "minimum": 0},
     "lastFactId": {"type": ["string", "null"]},
@@ -50,5 +61,18 @@
       "then": {"required": ["versions", "sourceValidation", "subjects", "governance", "runtimeObservation", "completion", "governancePermissions"]}
     }
   ],
-  "additionalProperties": true
+  "additionalProperties": true,
+  "$defs": {
+    "completionPhase": {
+      "type": "object",
+      "required": ["state"],
+      "properties": {
+        "state": {"enum": ["not_started", "in_progress", "completed", "failed", "invalidated", "unknown"]},
+        "lastFactId": {"type": "string"},
+        "lastPassedFactId": {"type": "string"},
+        "invalidatedBy": {"type": "string"}
+      },
+      "additionalProperties": false
+    }
+  }
 }

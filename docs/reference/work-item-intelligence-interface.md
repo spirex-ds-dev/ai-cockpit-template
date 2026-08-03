@@ -149,8 +149,13 @@ version; `runtimeObservation` contains activity health and its independent
 version. A heartbeat or activity-health change cannot change governance state
 or governance version.
 
-`completion` exposes five independent booleans: `implementation`,
-`verification`, `review`, `integration`, and `closure`. They report observed
+`completion` exposes five independent current-state objects: `implementation`,
+`verification`, `review`, `integration`, and `closure`. Every object has a
+`state` of `not_started`, `in_progress`, `completed`, `failed`, `invalidated`,
+or `unknown`; it is not a historical “fact has appeared” boolean. A
+verification failure after a recorded pass is `invalidated`, with
+`lastPassedFactId` and `invalidatedBy` identifying the superseded evidence. A
+fresh later pass returns the state to `completed`. These objects report observed
 evidence and are not a claim that an external scheduler or release workflow
 ran. `governancePermissions` is a bounded list of currently eligible phase
 actions: `start`, `continue`, `run_verification`, `request_human_decision`,
