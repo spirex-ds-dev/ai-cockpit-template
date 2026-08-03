@@ -1,0 +1,179 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wiii-linear-reduction-and-recovery",
+  "mode": "code",
+  "title": "WIII linear fact reduction and crash recovery",
+  "rawUserRequest": "查收，点评这个评审。然后制定开发对应计划（这次试试多sub agent并行处理）。每个工单都自己走完全部流程包括PR和清理。需要授权的，我授权给你，并写入Contract。循环直到全部计划完成。看看有没有问题？\n\n切换到terra模型，目标自动完成全部计划工单闭环。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-03-wiii-review-and-authorization", "capturedAt": "2026-08-03", "digest": "sha256:74c7603d5eddfa058c824c8a1eece0e26242d1d689b19bc232f06fda696916a9"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Implement Task 6 linear WIII fact validation, reduction, audit rebuild, and safe stale-lock recovery, then independently archive, PR, merge, and close it.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "baseCommit": "692fbb714693b7de54e60bd42065bdd61bcbf330",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wiii-linear-reduction-and-recovery.contract.json",
+    ".ai/work-items/active/wiii-linear-reduction-and-recovery.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/wiii-linear-reduction-and-recovery.outcome.json",
+    ".ai/work-items/active/wiii-linear-reduction-and-recovery.outcome.md",
+    ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md",
+    "scripts/ai_work_item_intelligence.py", "scripts/ai_work_item_intelligence_benchmark.py",
+    "tests/test_work_item_intelligence.py", "tests/test_work_item_intelligence_integration.py", "tests/test_work_item_intelligence_benchmark.py",
+    "docs/reference/work-item-intelligence-interface.md",
+    "docs/reference/capability-truth-matrix.json", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": ["Scheduler, retry policy, workflow engine, provider transport, credentials, release, tag, lifecycle timing, verification-receipt reuse, impact routing, and performance-budget enforcement."],
+  "sources": [
+    {
+      "path": "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md", "reason": "Task 6 boundary, validation, scale, and recovery acceptance."},
+    {"path": "docs/superpowers/specs/2026-08-03-wiii-v2-remediation-design.md", "reason": "Item-local storage, audit rebuild, and live-lock safety constraints."},
+    {"path": "scripts/ai_work_item_intelligence.py", "reason": "Task 5 publication implementation to extend without a global lock."},
+    {"path": "scripts/ai_work_item_intelligence_benchmark.py", "reason": "Task 4 fixture protocol that must emit facts valid under Task 6 digest validation."},
+    {"path": "tests/test_work_item_intelligence.py", "reason": "Existing WIII fact, cache, and concurrency coverage."},
+    {"path": "docs/reference/work-item-intelligence-performance-baseline.md", "reason": "Task 4 scale-measurement protocol."},
+    {"path": "conversation:2026-08-03-wiii-review-and-authorization", "reason": "Direct lifecycle authorization."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "data_integrity", "crash_recovery", "concurrency", "performance"
+    ],
+    "reason": "Fact validation and lock recovery must avoid accepting corrupted evidence or removing a live writer lock while ensuring bounded growth at the declared scale.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Initial Work Item skeleton defaults to Standard until scope is classified."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": "No current blocker."
+  },
+  "executionDecision": {
+    "status": "continue", "reason": "The linear-reduction and safe-recovery design is source-backed and locally verifiable."
+  },
+  "preReviewWarnings": [
+    "Review digest/sequence validation, one-pass reduction metadata, full audit rebuild, stale-lock ownership evidence, and live-lock preservation."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Duplicate factId, malformed or mismatched digest, and non-contiguous sequence records are rejected before they can produce a trusted publication.",
+    "Appending facts uses metadata-backed incremental reduction, while an explicit audit rebuild validates the full log and preserves complete old/new or explicit inconsistent reader behavior.",
+    "A 500/2,000-fact scale report follows the Task 4 profile and records a non-quadratic growth observation without asserting a machine-specific timing budget.",
+    "Stale crashed-writer locks can be recovered using owner/lease evidence, but an active live lock is never removed.",
+    "Focused/full WIII tests, Task 4 report validation, required governance checks, archive, PR, merge, and ai-close-work-item have recorded evidence."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "Task 5 removed the shared index lock, but append still reparses facts with quadratic duplicate detection and lock files cannot distinguish stale crashed owners from a live writer.",
+    "constraints": ["Publication eligibility rejects duplicate identifiers, digest mismatches, and non-contiguous sequences.", "Ordinary append consumes only reducer metadata plus the new fact.", "The audit entrypoint revalidates the retained log from its first record.", "Stale-lock recovery requires both an expired lease and a dead owner PID; a live owner is preserved even after lease expiry.", "Task 4 output is characterization evidence, never an enforcement threshold.", "The recorded user approval covers only this Work Item's PR, merge, and governed cleanup."],
+    "rationale": "A compact, digest-bound reducer metadata record makes normal append linear in the new fact while retaining a full audit path; owner/lease lock metadata enables safe recovery after a crash."
+  },
+  "scenarioCoverage": [
+    {"scenario": "A duplicate, digest-mismatched, or sequence-gap fact is encountered.", "required": true, "status": "verified", "evidence": ["tests/test_work_item_intelligence.py::test_audit_rebuild_rejects_a_fact_with_a_mismatched_digest", "tests/test_work_item_intelligence.py::test_audit_rebuild_rejects_a_non_contiguous_fact_sequence"], "expected": "The record is rejected and no trusted publication is emitted.", "verificationPlan": "Focused malformed-log tests and audit rebuild tests."},
+    {"scenario": "A crashed owner leaves an expired lock while a live owner remains protected even after its lease expires.", "required": true, "status": "verified", "evidence": ["tests/test_work_item_intelligence.py::test_expired_writer_lease_is_recovered_before_append", "tests/test_work_item_intelligence.py::test_unexpired_writer_lease_is_not_removed", "tests/test_work_item_intelligence.py::test_expired_live_writer_lease_is_not_removed"], "expected": "Only an expired lock with a dead owner is recovered; the live lock remains unavailable.", "verificationPlan": "Fault-injection stale/live-lock tests."},
+    {"scenario": "500 and 2,000 valid facts are reduced.", "required": true, "status": "verified", "evidence": ["Task 4 protocol observation: 500 facts p95=0.339ms, 2000 facts p95=0.289ms, 0 timeouts", "tests/test_work_item_intelligence.py::test_append_reuses_reducer_metadata_without_reparsing_the_fact_log"], "expected": "The captured profile documents bounded non-quadratic growth without a timing budget claim.", "verificationPlan": "Task 4 profile scale characterization test."}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true, "approvedBy": "user", "reason": "User explicitly authorized required actions and requested this authorization in every Contract; it is limited to this Work Item lifecycle."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 779
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/wiii-linear-reduction-and-recovery.json",
+    "baseCommit": "692fbb714693b7de54e60bd42065bdd61bcbf330",
+    "initialScopeDigest": "de711c60df056a8377ee3f019439ce8f267d22f1e9ab26f3472cf4888fa85863",
+    "contractSkeletonDigest": "ec0045d4e880fb8185128a06ba3bea85f4eb09be89a277da70834cae62268dbc"
+  }
+}

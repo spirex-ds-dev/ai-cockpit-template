@@ -20,7 +20,7 @@ scripts_dir = str(Path(__file__).resolve().parent)
 if scripts_dir not in sys.path:
     sys.path.insert(0, scripts_dir)
 
-from ai_work_item_intelligence import query, rebuild
+from ai_work_item_intelligence import _digest, query, rebuild
 
 
 class BenchmarkError(ValueError):
@@ -140,21 +140,17 @@ def run_case(
             item = f"bench-{item_number:03d}"
             facts = []
             for sequence in range(1, facts_per_item + 1):
-                facts.append(
-                    json.dumps(
-                        {
-                            "factId": f"{item}:{sequence}",
-                            "workItemId": item,
-                            "sequence": sequence,
-                            "factType": "observation",
-                            "occurredAt": "2026-08-03T00:00:00Z",
-                            "source": "benchmark-fixture",
-                            "payload": {"sample": sequence},
-                            "digest": "benchmark-fixture",
-                        },
-                        sort_keys=True,
-                    )
-                )
+                fact = {
+                    "factId": f"{item}:{sequence}",
+                    "workItemId": item,
+                    "sequence": sequence,
+                    "factType": "observation",
+                    "occurredAt": "2026-08-03T00:00:00Z",
+                    "source": "benchmark-fixture",
+                    "payload": {"sample": sequence},
+                }
+                fact["digest"] = _digest(fact)
+                facts.append(json.dumps(fact, sort_keys=True))
             facts_path = fixture / ".ai" / "work-items" / "runtime" / item / "facts.jsonl"
             facts_path.parent.mkdir(parents=True, exist_ok=True)
             facts_path.write_text("\n".join(facts) + "\n", encoding="utf-8")

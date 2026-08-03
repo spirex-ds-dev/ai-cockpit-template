@@ -100,6 +100,7 @@ def paths(work_item: str, *, root: Path = ROOT) -> dict[str, Path]:
     return {
         "base": base,
         "facts": base / "facts.jsonl",
+        "reducer": base / "reducer-state.json",
         "status": base / "status.json",
         "activity": base / "activity.json",
         "lock": base / "status.lock",
@@ -112,15 +113,32 @@ def paths(work_item: str, *, root: Path = ROOT) -> dict[str, Path]:
 
 @contextmanager
 def _exclusive_lock(path: Path, *, timeout_seconds: float = 5.0):
-    """Use portable exclusive creation; never silently race an index update."""
+    """Use an owner lease and exclusive creation; never remove a live writer lock."""
     path.parent.mkdir(parents=True, exist_ok=True)
     deadline = time.monotonic() + timeout_seconds
     descriptor: int | None = None
     while descriptor is None:
         try:
             descriptor = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-            os.write(descriptor, str(os.getpid()).encode())
+            os.write(
+                descriptor,
+                json.dumps(
+                    {"pid": os.getpid(), "leaseExpiresAt": time.time() + timeout_seconds}
+                ).encode(),
+            )
         except FileExistsError:
+            try:
+                owner = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                owner = {}
+            if (
+                isinstance(owner, dict)
+                and isinstance(owner.get("leaseExpiresAt"), (int, float))
+                and owner["leaseExpiresAt"] < time.time()
+                and not _process_is_alive(owner.get("pid"))
+            ):
+                path.unlink(missing_ok=True)
+                continue
             if time.monotonic() >= deadline:
                 raise IntelligenceError(
                     "unavailable", f"runtime write lock is unavailable: {path.name}"
@@ -133,11 +151,24 @@ def _exclusive_lock(path: Path, *, timeout_seconds: float = 5.0):
         path.unlink(missing_ok=True)
 
 
+def _process_is_alive(pid: object) -> bool:
+    if not isinstance(pid, int) or pid <= 0:
+        return False
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
 def read_facts(work_item: str, *, root: Path = ROOT) -> list[dict[str, Any]]:
     source = paths(work_item, root=root)["facts"]
     if not source.exists():
         raise IntelligenceError("not_found", f"runtime facts not found for {work_item}")
     facts: list[dict[str, Any]] = []
+    fact_ids: set[str] = set()
     for number, line in enumerate(source.read_text(encoding="utf-8").splitlines(), 1):
         try:
             fact = json.loads(line)
@@ -147,9 +178,18 @@ def read_facts(work_item: str, *, root: Path = ROOT) -> list[dict[str, Any]]:
             raise IntelligenceError("invalid_data", f"fact {number} must be an object")
         if fact.get("workItemId") != work_item or not isinstance(fact.get("factId"), str):
             raise IntelligenceError("invalid_data", f"invalid fact identity at line {number}")
-        if any(row["factId"] == fact["factId"] for row in facts):
+        if fact["factId"] in fact_ids:
             raise IntelligenceError("invalid_data", f"duplicate factId: {fact['factId']}")
+        if fact.get("sequence") != number:
+            raise IntelligenceError(
+                "invalid_data", f"non-contiguous fact sequence at line {number}"
+            )
+        claimed = fact.pop("digest", None)
+        if claimed != _digest(fact):
+            raise IntelligenceError("invalid_data", f"fact digest mismatch at line {number}")
+        fact["digest"] = claimed
         _safe(fact)
+        fact_ids.add(fact["factId"])
         facts.append(fact)
     return facts
 
@@ -170,7 +210,9 @@ def _append_unlocked(
 ) -> dict[str, Any]:
     """Append while the owning Work Item lock is held."""
     target = paths(work_item, root=root)
-    existing = read_facts(work_item, root=root) if target["facts"].exists() else []
+    existing = _read_reducer_facts(target)
+    if existing is None:
+        existing = read_facts(work_item, root=root) if target["facts"].exists() else []
     sequence = len(existing) + 1
     fact = {
         "factId": f"{work_item}:{sequence}",
@@ -184,7 +226,7 @@ def _append_unlocked(
     fact["digest"] = _digest(fact)
     with target["facts"].open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(fact, ensure_ascii=False, sort_keys=True) + "\n")
-    _rebuild_unlocked(work_item, root=root)
+    _rebuild_unlocked(work_item, root=root, facts=[*existing, fact])
     return fact
 
 
@@ -560,6 +602,24 @@ def _atomic_json(path: Path, value: dict[str, Any]) -> None:
     os.replace(name, path)
 
 
+def _read_reducer_facts(target: dict[str, Path]) -> list[dict[str, Any]] | None:
+    """Return verified incremental state, or force a full audit when it is absent."""
+    source = target["reducer"]
+    if not source.exists():
+        return None
+    try:
+        state = json.loads(source.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    claimed = state.pop("reducerDigest", None) if isinstance(state, dict) else None
+    if claimed != _digest(state) or not isinstance(state.get("facts"), list):
+        return None
+    facts = state["facts"]
+    if not all(isinstance(fact, dict) for fact in facts):
+        return None
+    return facts
+
+
 def _entry_from_snapshot(work_item: str, snapshot: dict[str, Any]) -> dict[str, Any]:
     publication_id = _digest(
         {
@@ -613,8 +673,10 @@ def _rebuild_cache(*, root: Path) -> dict[str, Any]:
     return cache
 
 
-def _rebuild_unlocked(work_item: str, *, root: Path = ROOT) -> dict[str, Any]:
-    facts = read_facts(work_item, root=root)
+def _rebuild_unlocked(
+    work_item: str, *, root: Path = ROOT, facts: list[dict[str, Any]] | None = None
+) -> dict[str, Any]:
+    facts = read_facts(work_item, root=root) if facts is None else facts
     result = _snapshot_v2(work_item, facts, root=root)
     target = paths(work_item, root=root)
     entry = _entry_from_snapshot(work_item, result)
@@ -637,6 +699,9 @@ def _rebuild_unlocked(work_item: str, *, root: Path = ROOT) -> dict[str, Any]:
     )
     _atomic_json(target["status"], result)
     _atomic_json(target["indexEntry"], entry)
+    reducer = {"schemaVersion": 1, "factSequence": len(facts), "facts": facts}
+    reducer["reducerDigest"] = _digest(reducer)
+    _atomic_json(target["reducer"], reducer)
     _rebuild_cache(root=root)
     return result
 

@@ -73,6 +73,16 @@ contains a stable `publicationId`, a persisted monotonic cursor, and the
 derived snapshot digest. Writers lock only their owning Work Item; publishing
 one item never needs a repository-wide index lock.
 
+Before an audit rebuild trusts a fact log, it requires an exact item identity,
+unique `factId`, contiguous sequence beginning at one, and a digest matching
+the complete fact content. `reducer-state.json` is a digest-bound incremental
+reduction checkpoint: ordinary append uses it with the new fact instead of
+reparsing the log, while explicit rebuild discards it and audits every fact.
+An expired JSON owner lease may be recovered only after its owner PID is no
+longer alive; a live owner is never removed even after its lease expires.
+These lock records support local crash recovery only and do not imply
+distributed locking or scheduler ownership.
+
 `runtime/index-cache.json` (and the compatibility mirror `runtime/index.json`)
 are rebuildable aggregates, never the source of truth. Readers enumerate and
 verify item-local publications, so they can return an old complete result, a
