@@ -1,0 +1,54 @@
+{
+  "contractVersion": 2,
+  "workItemId": "wiii-performance-characterization",
+  "mode": "code",
+  "title": "WIII performance characterization",
+  "rawUserRequest": "查收，点评这个评审。然后制定开发对应计划（这次试试多sub agent并行处理）。每个工单都自己走完全部流程包括PR和清理。需要授权的，我授权给你，并写入Contract。循环直到全部计划完成。看看有没有问题？\n\n切换到terra模型，目标自动完成全部计划工单闭环。",
+  "rawRequestSource": {"type": "human", "reference": "conversation:2026-08-03-wiii-review-and-authorization", "capturedAt": "2026-08-03", "digest": "sha256:74c7603d5eddfa058c824c8a1eece0e26242d1d689b19bc232f06fda696916a9"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "declaredIntent": {"summary": "Implement Task 4 reproducible WIII performance characterization, then independently archive, PR, merge, and close it.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "baseCommit": "324c5b7dcc29f8367072de2f2a525d3710ae353c",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/wiii-performance-characterization.contract.json", ".ai/work-items/active/wiii-performance-characterization.summary.json", ".ai/cockpit/current_status.md", ".ai/cockpit/task_report.json", ".ai/cockpit/task_report.md", ".ai/work-items/starts/**", ".ai/work-items/archive/**", ".ai/work-items/active/wiii-performance-characterization.outcome.json", ".ai/work-items/active/wiii-performance-characterization.outcome.md",
+    "scripts/ai_work_item_intelligence_benchmark.py", "tests/test_work_item_intelligence_benchmark.py", "docs/reference/work-item-intelligence-interface.md", "docs/reference/work-item-intelligence-performance-baseline.md", "docs/reference/capability-truth-matrix.json", "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md", "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md"
+  ],
+  "outOfScope": ["Scheduler, retry, cancellation, workflow-engine, agent-manager, provider transport, credential, release, tag, and provider-configuration behavior.", "Runtime publication/cache changes, crash recovery, lifecycle timing, receipt reuse, verification routing, and enforcement threshold changes assigned to later Work Items."],
+  "sources": [
+    {"path": "docs/superpowers/plans/2026-08-03-wiii-v2-remediation-plan.md", "reason": "Task 4 delivery boundary and measurement matrix."},
+    {"path": "docs/superpowers/specs/2026-08-03-wiii-v2-remediation-design.md", "reason": "V2 query and benchmark design constraints."},
+    {"path": "scripts/ai_work_item_intelligence.py", "reason": "Existing V2 snapshot/query implementation exercised by the harness."},
+    {"path": "tests/test_work_item_intelligence.py", "reason": "Existing WIII test conventions and fixtures."},
+    {"path": "conversation:2026-08-03-wiii-review-and-authorization", "reason": "Direct lifecycle authorization."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "medium", "riskTypes": ["performance_measurement", "environment_variance"], "reason": "The harness must produce truthful, reproducible local measurements without mutating repository runtime data or making unsupported performance guarantees.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "standard", "source": "automatic", "reasons": ["A public benchmark protocol and generated evidence require standard verification."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": "No current blocker."},
+  "executionDecision": {"status": "continue", "reason": "The benchmark boundary, profiles, and verification are sourced and locally executable."},
+  "preReviewWarnings": ["Review temporary-directory isolation, report completeness, reproducibility metadata, percentile calculation, and absence of an enforcement claim."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."},
+  "acceptance": [
+    "The benchmark report validator rejects a case with fewer than 30 samples or missing W/F/concurrency, cold/warm, environment, latency percentile, timeout, lock-wait, or bytes-written evidence.",
+    "The harness writes all generated workload data under a caller-provided temporary root and does not write .ai runtime files in the repository.",
+    "The committed baseline contains the W={1,100}, F={1,1000,2000}, concurrency={1,8,32,64} matrix with 30 samples for each declared profile and records environment metadata.",
+    "The interface reference describes the report shape, local-only limits, and no-guarantee interpretation.",
+    "The archived Outcome names the focused benchmark test command, affected WIII test command, required governance checks, merged PR URL, and ai-close-work-item receipt."
+  ],
+  "guidelines": ["New public APIs must be documented.", "Do not import internal modules from other features."],
+  "intent": {"problem": "The V2 interface has no reproducible performance evidence describing workload, environment, concurrency, or distributional latency, so later scale and cache work lacks a truthful comparison baseline.", "constraints": ["Use temporary directories for generated benchmark data and leave repository runtime data unchanged.", "Record measured distributions and environment metadata; do not set or imply an enforcement threshold.", "Exercise the V2 query shape from Task 3 without changing its production behavior.", "Use the recorded user approval only for this Work Item's PR/merge and governed cleanup."], "rationale": "A validated, source-controlled measurement protocol makes later scalability claims comparable while separating evidence collection from performance policy."},
+  "scenarioCoverage": [
+    {"scenario": "A malformed report case omits mandatory measurement evidence.", "required": true, "status": "unverified", "evidence": [], "expected": "Validation identifies the missing evidence and rejects the report.", "verificationPlan": "Focused benchmark validation tests."},
+    {"scenario": "A normal benchmark run uses temporary workload data.", "required": true, "status": "unverified", "evidence": [], "expected": "A valid report is emitted while the repository .ai runtime tree remains unchanged.", "verificationPlan": "Focused harness isolation test."},
+    {"scenario": "The full declared workload matrix is generated.", "required": true, "status": "unverified", "evidence": [], "expected": "Every W/F/concurrency/profile combination records 30 samples and required percentile/count fields.", "verificationPlan": "Focused report-matrix test and committed baseline inspection."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User explicitly authorized required actions and requested this authorization in every Contract; it is limited to this Work Item lifecycle."},
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 777}},
+  "startReceipt": {"path": ".ai/work-items/starts/wiii-performance-characterization.json", "baseCommit": "324c5b7dcc29f8367072de2f2a525d3710ae353c", "initialScopeDigest": "2c521149ac093d2e7138444180d6f0eb3b89d46bc9d459f4785f672c8b84b7f3", "contractSkeletonDigest": "81971cfb5ff42162a2f6e92e9d6674d161145e9956f1c7b856f671fd774e512a"}
+}
