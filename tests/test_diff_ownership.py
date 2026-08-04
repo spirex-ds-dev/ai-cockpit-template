@@ -375,6 +375,21 @@ def test_preview_owns_only_exact_generated_human_report_pair(monkeypatch, tmp_pa
     values = ownership.preview(contract={"workItemId": "example", "baselineDirtyPaths": []})
     assert [item.state for item in values] == ["unowned", "unowned"]
 
+    # A valid report for a different active Outcome is not an ownership
+    # substitute for this Work Item's exact current Outcome.
+    other = json.loads(json.dumps(source))
+    other["workItemId"] = "other"
+    other["bindings"]["taskId"] = "other"
+    cross_task_report = human.generate_human_report(other)
+    report_json.write_text(json.dumps(cross_task_report), encoding="utf-8")
+    report_md.write_text(human.render_human_report(cross_task_report), encoding="utf-8")
+    values = ownership.preview(contract={"workItemId": "example", "baselineDirtyPaths": []})
+    assert [item.state for item in values] == ["unowned", "unowned"]
+
+    report_md.unlink()
+    values = ownership.preview(contract={"workItemId": "example", "baselineDirtyPaths": []})
+    assert [item.state for item in values] == ["unowned", "unowned"]
+
 
 def test_pr_preview_uses_only_archive_pairs_from_the_pr(monkeypatch):
     pr_owner = ownership.Owner(
