@@ -1,0 +1,245 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0548-preparation-rehearsal",
+  "mode": "code",
+  "title": "Prepare and rehearse v0.5.48 release",
+  "baseCommit": "49d5d718ab10cdb50a39ef8696a26d900e626a3d",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0548-preparation-rehearsal.contract.json",
+    ".ai/work-items/active/release-v0548-preparation-rehearsal.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0548-preparation-rehearsal.outcome.json",
+    ".ai/work-items/active/release-v0548-preparation-rehearsal.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md"
+  ],
+  "outOfScope": [
+    "Creating, moving, deleting, or publishing any immutable semantic-version tag or GitHub Release.",
+    "Changing release.json, next-release.json, release-state.json, installer content, source code, workflows, or release documentation.",
+    "Claiming that v0.5.48 is published, publicly downloadable, or provider-verified before a separate publication Work Item completes."
+  ],
+  "sources": [
+    {
+      "path": "release-state.json",
+      "reason": "Canonical candidate state: v0.5.48 is candidate_prepared with deferred source binding and no provider evidence."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Unpublished v0.5.48 candidate projection and requested tag."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Authoritative same-SHA rehearsal workflow and no-publication boundary."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Documents readiness, exact-source rehearsal, and publication sequencing."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/parallel-work-item-workflow-reliability.summary.json",
+      "reason": "Records completion of the parallel workflow corrective Work Item before release preparation resumes."
+    },
+    {
+      "path": "conversation:2026-08-03-continuous-closure-and-release-authorization",
+      "reason": "Explicit user authorization for all Work Items, PRs, merge, cleanup, and continued execution."
+    }
+  ],
+  "rawUserRequest": "完成全部工单包括PR和清理。明确授权给你，并写入Contract。如果没有问题，请开始。全部完成为止不要停止。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03-continuous-closure-and-release-authorization",
+    "capturedAt": "2026-08-03",
+    "digest": "sha256:1e61ff0048ff8298470f309bde20c0e14600b04eee6dca1cdadfd7c62030390b"
+  },
+  "declaredIntent": {
+    "summary": "Prepare and prove the exact-source v0.5.48 rehearsal without performing public release publication.",
+    "requestedCapabilities": ["ai_governance"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "release_identity",
+      "provider_workflow",
+      "evidence_integrity"
+    ],
+    "reason": "The rehearsal must bind v0.5.48 to the current merged default-branch SHA without creating immutable provider state or allowing a stale receipt to authorize publication.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Release preparation and provider-hosted rehearsal require strict evidence controls."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized the governed Work Item lifecycle. This Work Item is restricted to readiness and a non-publishing rehearsal; publication remains separately governed."
+  },
+  "preReviewWarnings": [
+    "Verify the rehearsal resolves the exact current origin/main SHA, uses v0.5.48, publishes no tag or public asset, and retains a provider receipt for the next Work Item."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The clean exact-source release workflow proves that v0.5.48 remains the valid candidate after the highest immutable reserved tag and that release-state/projections are internally consistent; repository-readiness is intentionally deferred until no Work Item is active.",
+    "A release.yml rehearsal is dispatched for the exact current default-branch SHA and v0.5.48, succeeds, and records a private source-bound rehearsal receipt.",
+    "The Summary records the provider run ID, resolved source SHA, requested tag, successful conclusion, and evidence that the rehearsal created no immutable tag, GitHub Release, or public asset.",
+    "No release source projection, tag, public provider asset, workflow, or product behavior is changed by this Work Item.",
+    "This Work Item completes its own archive, PR, merge, ai-close-work-item, and branch cleanup before a distinct publication Work Item may use the rehearsal receipt."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Local readiness rejects an inconsistent candidate, reused tag, or release-state/projection mismatch before the provider workflow is dispatched.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The clean exact-source release workflow passes its release preflight only for the internally consistent v0.5.48 candidate; local repository-readiness is expected to reject the active Work Item.",
+      "verificationPlan": "Record the active-Work-Item repository-readiness rejection, then inspect the rehearsal's exact-source release-preflight step and source binding."
+    },
+    {
+      "scenario": "The provider rehearsal resolves the current default-branch SHA and v0.5.48, succeeds, and creates no public release mutation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "release.yml concludes success with rehearsal=true, matching source SHA and tag, with a downloadable private rehearsal receipt and no v0.5.48 tag or Release.",
+      "verificationPlan": "Dispatch release.yml with rehearsal=true and inspect the run, receipt artifact, tag list, and provider release list."
+    },
+    {
+      "scenario": "A later publication cannot use a rehearsal receipt from a different source SHA.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The documented workflow requires same-SHA receipt binding; this Work Item records the resolved SHA and receipt identity without claiming publication.",
+      "verificationPlan": "Inspect release.yml receipt validation and record the exact source/tag/run tuple in the Summary."
+    }
+  ],
+  "guidelines": [
+    "Preserve the separation between a private rehearsal and public release publication.",
+    "Treat provider run metadata as evidence only when it is bound to the exact source SHA and requested tag.",
+    "Do not create, move, delete, or reuse a semantic-version tag."
+  ],
+  "intent": {
+    "problem": "The v0.5.48 candidate is prepared but has no source-bound provider rehearsal receipt. Releasing without a same-SHA rehearsal would violate the documented exact-source and private-rehearsal boundary.",
+    "constraints": [
+      "Use the latest merged origin/main SHA and candidate tag v0.5.48.",
+      "Dispatch release.yml only with rehearsal=true; do not create a tag, GitHub Release, or public asset.",
+      "Do not modify candidate metadata or release source files during this evidence-only Work Item.",
+      "A later publication Work Item must independently authorize and verify public provider mutation."
+    ],
+    "rationale": "The rehearsal proves the authoritative workflow can prepare and validate the exact candidate source while keeping immutable publication actions out of the preparation Work Item."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 792
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0548-preparation-rehearsal.json",
+    "baseCommit": "49d5d718ab10cdb50a39ef8696a26d900e626a3d",
+    "initialScopeDigest": "bce0ad6478176f5eef73348b2eb7115c99d238164cab3e99bf7a333a0dddaae2",
+    "contractSkeletonDigest": "6974a76cee288efc4f520a24b91865ad449c08810b783616b7c82b327eb47514"
+  }
+}
