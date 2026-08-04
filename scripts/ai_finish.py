@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
+import fcntl
 import hashlib
 import json
 import os
@@ -37,6 +39,7 @@ from ai_observability import create_observability, elapsed_ms
 from ai_work_item_intelligence import record_fact_once
 
 ACTIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "active"
+FINISH_LOCK_MAX_AGE_SECONDS = 24 * 60 * 60
 REPORT_BOUNDARY_TEXT = {
     "en": (
         "## Task Outcome Report (active; relay to the human before archive)",
@@ -51,6 +54,110 @@ REPORT_BOUNDARY_TEXT = {
         "次のライフサイクル操作：アーカイブは明示的に実行し、直接報告の後にのみ行います。",
     ),
 }
+
+
+class FinishMutexError(RuntimeError):
+    """Raised when another Finish owns this Work Item worktree."""
+
+
+def _finish_lock_path(task: str, *, root: Path) -> Path:
+    """Return an untracked lock location unique to this worktree and task."""
+    result = subprocess.run(  # nosec B603 B607 - fixed list-form Git metadata lookup
+        ["git", "rev-parse", "--git-dir"],
+        cwd=root,
+        env=clean_git_environment(),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode == 0 and result.stdout.strip():
+        git_dir = Path(result.stdout.strip())
+        if not git_dir.is_absolute():
+            git_dir = root / git_dir
+        return git_dir / f"ai-finish-{task}.lock"
+    return root / ".ai" / "work-items" / "runtime" / f"ai-finish-{task}.lock"
+
+
+def _load_finish_lock_metadata(lock_path: Path) -> dict[str, Any]:
+    try:
+        value = json.loads(lock_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return value if isinstance(value, dict) else {}
+
+
+def _metadata_is_stale(metadata: dict[str, Any], *, now: datetime) -> bool:
+    value = metadata.get("startedAt")
+    if not isinstance(value, str):
+        return False
+    try:
+        started = datetime.fromisoformat(value)
+    except ValueError:
+        return False
+    if started.tzinfo is None:
+        return False
+    return (now - started.astimezone(UTC)).total_seconds() > FINISH_LOCK_MAX_AGE_SECONDS
+
+
+@contextlib.contextmanager
+def finish_mutex(
+    task: str,
+    *,
+    archive: bool,
+    root: Path = PROJECT_ROOT,
+) -> Any:
+    """Serialize Finish only for one task in one worktree.
+
+    Advisory metadata makes the owner/retry route observable.  The kernel lock
+    is authoritative, automatically released on process death, and therefore
+    cannot turn a crashed Finish into an unbounded stale lock.
+    """
+    lock_path = _finish_lock_path(task, root=root)
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    with lock_path.open("a+", encoding="utf-8") as handle:
+        try:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as exc:
+            handle.seek(0)
+            owner = _load_finish_lock_metadata(lock_path)
+            owner_pid = owner.get("pid", "unknown")
+            owner_mode = "archive" if owner.get("archive") is True else "normal"
+            requested_mode = "archive" if archive else "normal"
+            raise FinishMutexError(
+                "ai-finish is already running for this Work Item worktree "
+                f"(task={task}, owner_pid={owner_pid}, owner_mode={owner_mode}, "
+                f"requested_mode={requested_mode}). Wait for the owner to finish, then retry; "
+                "do not remove or edit active evidence or the mutex file."
+            ) from exc
+        now = datetime.now(UTC)
+        previous = _load_finish_lock_metadata(lock_path)
+        if _metadata_is_stale(previous, now=now):
+            print(
+                "Recovered stale ai-finish mutex metadata after kernel-lock acquisition "
+                f"(task={task}, previous_pid={previous.get('pid', 'unknown')}).",
+                file=sys.stderr,
+            )
+        metadata = {
+            "task": task,
+            "pid": os.getpid(),
+            "startedAt": now.isoformat(),
+            "archive": archive,
+            "worktree": root.resolve().as_posix(),
+        }
+        handle.seek(0)
+        handle.truncate()
+        json.dump(metadata, handle, ensure_ascii=False, sort_keys=True)
+        handle.write("\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+        try:
+            yield
+        finally:
+            handle.seek(0)
+            handle.truncate()
+            handle.flush()
+            os.fsync(handle.fileno())
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
 
 def _git_output(args: list[str]) -> str:
@@ -1006,8 +1113,7 @@ def run_declared_checks(
     return 0
 
 
-def main() -> int:
-    args = parse_args()
+def _main_with_mutex(args: argparse.Namespace) -> int:
     contract, summary = task_paths(args.task)
     if not (PROJECT_ROOT / contract).exists():
         print(f"ERROR: Contract does not exist: {contract}", file=sys.stderr)
@@ -1465,6 +1571,18 @@ def main() -> int:
     )
     obs.work_item_finished(result="passed", duration_ms=duration_ms)
     return 0
+
+
+def main() -> int:
+    args = parse_args()
+    try:
+        # Acquire before Preflight, verification, Outcome/report/status, or
+        # archive paths can perform mutable lifecycle work.
+        with finish_mutex(args.task, archive=args.archive):
+            return _main_with_mutex(args)
+    except FinishMutexError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

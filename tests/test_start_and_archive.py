@@ -12,6 +12,7 @@ import ai_check_pr
 import ai_check_scope
 import ai_common
 import ai_generate_human_report
+import ai_linked_worktree_recovery
 import ai_resume_work_item
 import ai_start
 import ai_start_receipt
@@ -33,6 +34,48 @@ from ai_start_receipt import (
 
 def test_lifecycle_phase_event_type_is_available_to_start_and_archive() -> None:
     assert AiEventType.LIFECYCLE_PHASE_FINISHED.value == "lifecycle_phase_finished"
+
+
+def test_linked_worktree_foreign_duplicate_stays_fail_closed_with_recovery_route(
+    tmp_path, monkeypatch
+):
+    current, canonical, foreign = (tmp_path / name for name in ("current", "canonical", "foreign"))
+    for root in (current, canonical, foreign):
+        (root / ".ai" / "work-items" / "active").mkdir(parents=True)
+    for root in (canonical, foreign):
+        for suffix in ("contract", "summary"):
+            (root / ".ai" / "work-items" / "active" / f"other-task.{suffix}.json").write_text(
+                '{"workItemId":"other-task"}', encoding="utf-8"
+            )
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", current)
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", current / ".ai" / "work-items" / "active")
+    monkeypatch.setattr(
+        ai_start,
+        "linked_worktree_records",
+        lambda **_kwargs: [(canonical, "codex/other-task"), (foreign, "codex/other-task-refresh")],
+    )
+    issue = ai_start.linked_worktree_active_issue()
+    assert "recoverable foreign duplicate Work Item identity" in issue
+    assert str(foreign) in issue
+    assert "ai_linked_worktree_recovery.py --task other-task" in issue
+
+
+def test_foreign_duplicate_diagnostic_is_read_only_and_requires_canonical_owner(
+    tmp_path, monkeypatch
+):
+    canonical, foreign = tmp_path / "canonical", tmp_path / "foreign"
+    canonical.mkdir()
+    foreign.mkdir()
+    identities = [
+        ai_start.LinkedWorktreeIdentity(canonical, "codex/other-task", "other-task"),
+        ai_start.LinkedWorktreeIdentity(foreign, "codex/other-task-refresh", "other-task"),
+    ]
+    monkeypatch.setattr(ai_start, "linked_worktree_identity_report", lambda: (identities, []))
+    code, value = ai_linked_worktree_recovery.report("other-task")
+    assert code == 0
+    assert value["status"] == "recoverable_foreign_duplicate"
+    assert value["authorization"] == "diagnostic_only_no_mutation"
+    assert foreign.exists()
 
 
 def test_start_and_archive_use_clean_git_environment():

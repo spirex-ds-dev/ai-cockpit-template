@@ -3,13 +3,58 @@ import json
 import os
 import subprocess
 import sys
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import ai_check_summary
 import ai_common
+import ai_finish
+import pytest
 from install_ai_cockpit import Installer
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_finish_mutex_rejects_same_worktree_normal_archive_before_evidence_writes(
+    tmp_path: Path,
+) -> None:
+    (tmp_path / ".ai" / "work-items" / "active").mkdir(parents=True)
+    with (
+        ai_finish.finish_mutex("same-task", archive=False, root=tmp_path),
+        pytest.raises(ai_finish.FinishMutexError, match="same-task") as failure,
+        ai_finish.finish_mutex("same-task", archive=True, root=tmp_path),
+    ):
+        pass
+    assert "archive" in str(failure.value)
+    assert not list((tmp_path / ".ai" / "work-items" / "active").glob("*.outcome.*"))
+
+
+def test_finish_mutex_is_scoped_to_each_worktree_and_recovers_only_stale_metadata(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    first, second = tmp_path / "first", tmp_path / "second"
+    for root in (first, second):
+        active = root / ".ai" / "work-items" / "active"
+        active.mkdir(parents=True)
+    stale = ai_finish._finish_lock_path("same-task", root=first)
+    stale.parent.mkdir(parents=True, exist_ok=True)
+    stale.write_text(
+        json.dumps(
+            {
+                "task": "same-task",
+                "pid": 1,
+                "startedAt": (datetime.now(UTC) - timedelta(days=2)).isoformat(),
+                "archive": False,
+            }
+        ),
+        encoding="utf-8",
+    )
+    with (
+        ai_finish.finish_mutex("same-task", archive=False, root=first),
+        ai_finish.finish_mutex("same-task", archive=True, root=second),
+    ):
+        pass
+    assert "Recovered stale ai-finish mutex metadata" in capsys.readouterr().err
 
 
 def test_finish_git_environment_helper_excludes_git_overrides():
