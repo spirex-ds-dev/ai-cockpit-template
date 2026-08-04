@@ -37,11 +37,22 @@ def test_check_ai_pr_runs_fast_predictors_before_aggregate_validation():
         "project-format-check",
         "project-lint",
         "check-changed-critical-coverage",
-        "check-source-bound-evidence",
         "check-ai-pr-core",
     )
     positions = [result.stdout.index(marker) for marker in ordered_markers]
     assert positions == sorted(positions)
+
+
+def test_normal_pr_does_not_run_release_only_source_bound_reassessment():
+    result = subprocess.run(
+        ["make", "-n", "check-ai-pr", "AI_BASE_COMMIT=abc123"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "check-source-bound-evidence" not in result.stdout
 
 
 def test_makefile_exposes_source_bound_evidence_gate():
@@ -518,11 +529,19 @@ def test_release_preflight_requires_current_japanese_capability_evidence(tmp_pat
     ]
     assert records == [
         {
+            "argv": ["scripts/ai_capability_truth.py"],
+            "source": source_commit,
+        },
+        {
             "argv": [
                 "scripts/ai_japanese_capability.py",
                 "--check",
                 "--require-final-reassessment",
             ],
+            "source": source_commit,
+        },
+        {
+            "argv": ["scripts/check_pre_release_documentation_alignment.py"],
             "source": source_commit,
         },
         {
@@ -552,6 +571,7 @@ def test_release_readiness_uses_japanese_evidence_and_repository_mode(tmp_path):
     assert result.returncode == 0, result.stdout + result.stderr
     records = [json.loads(line) for line in result.stdout.splitlines() if line.startswith("{")]
     assert records == [
+        {"argv": ["scripts/ai_capability_truth.py"]},
         {
             "argv": [
                 "scripts/ai_japanese_capability.py",
@@ -559,6 +579,7 @@ def test_release_readiness_uses_japanese_evidence_and_repository_mode(tmp_path):
                 "--require-final-reassessment",
             ]
         },
+        {"argv": ["scripts/check_pre_release_documentation_alignment.py"]},
         {
             "argv": [
                 "scripts/check_release_preflight.py",

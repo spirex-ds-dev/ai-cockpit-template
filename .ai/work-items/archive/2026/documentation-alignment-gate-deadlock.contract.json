@@ -1,0 +1,216 @@
+{
+  "contractVersion": 2,
+  "workItemId": "documentation-alignment-gate-deadlock",
+  "mode": "code",
+  "title": "Break the documentation alignment final-reassessment deadlock",
+  "rawUserRequest": "When a process issue blocks governed work, first create a corrective Work Item and do not use a temporary workaround. The documentation-alignment quality gate now requires a final Japanese reassessment bound to changed source, but the documented reassessment occurs after merge; correct the deadlock while preserving fail-closed Japanese evidence. The quality Work Item's current blocked alignment report is continuation evidence only, never final release evidence.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "RayIori user authorization: process problems require corrective Work Items; no temporary workaround; tracking issue: https://github.com/spirex-ds-dev/ai-cockpit-template/issues/623",
+    "capturedAt": "2026-08-04",
+    "digest": "sha256:documentation-alignment-gate-deadlock-user-authorization"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Separate ordinary Work Item finish from final release reassessment while retaining exact-source, fail-closed release evidence.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "baseCommit": "30ed47542cf9366c1da81a540c3aabfd3e1f9804",
+  "baselineDirtyPaths": [],
+  "scope": [
+    "Makefile",
+    ".ai/cockpit/checks.yaml",
+    ".ai/cockpit/README.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "scripts/ai_finish.py",
+    "scripts/check_docs_metadata.py",
+    "tests/test_core_gates.py",
+    "tests/test_docs_metadata.py",
+    "tests/test_makefile.py",
+    "tests/test_japanese_capability.py",
+    "tests/test_pre_release_documentation_alignment.py",
+    ".ai/work-items/active/documentation-alignment-gate-deadlock.contract.json",
+    ".ai/work-items/active/documentation-alignment-gate-deadlock.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/documentation-alignment-gate-deadlock.json",
+    ".ai/work-items/active/documentation-alignment-gate-deadlock.outcome.json",
+    ".ai/work-items/active/documentation-alignment-gate-deadlock.outcome.md",
+    ".ai/work-items/archive/**"
+  ],
+  "outOfScope": [
+    "Changing the Japanese assessment findings, report bytes, evidence-source binding algorithm, or final_reassessment role to make a stale assessment pass.",
+    "Weakening release preflight or release-readiness gates, publishing a release, or modifying provider state.",
+    "Temporary SKIP_QUALITY, manual report edits, or any bypass that lets a Work Item claim the final reassessment was performed."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Defines the governed Work Item lifecycle and requires a corrective Work Item for workflow defects."
+    },
+    {
+      "path": ".ai/glossary.md",
+      "reason": "Defines Repository Truth, Preflight, Active Work Item, and fail-closed evidence terminology."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Injects sourceBoundEvidence into every ai-finish execution, creating the observed lifecycle deadlock."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Defines ordinary quality, PR, source-bound evidence, and release-preflight target ownership."
+    },
+    {
+      "path": "scripts/check_docs_metadata.py",
+      "reason": "Shows that ordinary documentation metadata validation incorrectly imports and executes the release-only documentation-alignment report."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Shows that a final reassessment is byte-bound to its exact source and must become stale after later source changes."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md",
+      "reason": "Records that final Japanese reassessment belongs after all pre-release source changes and before publication."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Existing ai-finish lifecycle regression coverage for mandatory source-bound checks."
+    },
+    {
+      "path": "tests/test_makefile.py",
+      "reason": "Existing Make-target wiring regression coverage."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release", "ci"],
+    "reason": "The correction changes which lifecycle stage enforces release-source evidence; it must preserve strict final reassessment and fail closed release checks.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Release and CI gate semantics are modified.",
+      "A false pass could permit a stale final reassessment to be represented as current."
+    ],
+    "operationClasses": ["repository_governance"],
+    "verificationEscalations": [],
+    "override": {
+      "approvalEvidence": "RayIori authorized governed corrective Work Item implementation in this task.",
+      "reason": "Strict lifecycle evidence review without a release operation.",
+      "risks": ["release_evidence_boundary", "continuation_evidence", "generated_report_drift"],
+      "notRunChecks": ["Release preflight is not an ordinary Work Item finish check; it remains required at the release stage."],
+      "workItemOnly": true,
+      "workItemId": "documentation-alignment-gate-deadlock"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized a corrective Work Item; the affected lifecycle paths, intended release-only boundary, and regression checks are explicit."
+  },
+  "preReviewWarnings": [
+    "Review that ordinary Work Item finish no longer requires a final reassessment, while release preflight/readiness still fail closed on stale or non-final Japanese evidence.",
+    "Review that the correction does not modify a generated assessment or claim that final reassessment occurs before its required lifecycle stage."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": ["before_edit", "before_finish"],
+    "reason": "This lifecycle-gate correction requires an implementation boundary checkpoint and a final evidence checkpoint."
+  },
+  "acceptance": [
+    "A Work Item that changes Japanese-assessment-bound source files can complete ordinary documentation metadata/quality and ai-finish lifecycle without generating or misrepresenting a final reassessment.",
+    "Release-only preflight/readiness targets continue to require a current final_reassessment and fail closed when its bound source drifts.",
+    "The Make/check catalog and workflow documentation distinguish ordinary Work Item verification from release-source-bound final reassessment.",
+    "Focused regression tests prove both the ordinary continuation path and the release fail-closed path."
+  ],
+  "guidelines": [
+    "Preserve evidence over self-declaration: a stale final assessment must never be accepted as current.",
+    "Keep release-only controls explicit and fail closed; do not downgrade them to advisory checks.",
+    "Use registered Make check IDs rather than introducing ad-hoc shell commands.",
+    "Document lifecycle boundaries in terms consistent with the glossary."
+  ],
+  "intent": {
+    "problem": "ai-finish injects sourceBoundEvidence for every Work Item. That target requires a final Japanese reassessment whose exact evidence bytes must equal HEAD. A documentation or Make/test corrective changes those bound bytes, while the documented final reassessment must happen only after its PR is merged; ordinary quality/finish therefore cannot complete to reach the merge that permits the reassessment.",
+    "constraints": [
+      "Do not fabricate, rewrite, or relabel final Japanese assessment evidence.",
+      "Keep strict source-bound final reassessment in release preflight/readiness.",
+      "Do not use temporary quality skips or manual evidence patches.",
+      "Preserve active Outcome/blocked continuation evidence produced by the lifecycle engine."
+    ],
+    "rationale": "The final reassessment is release evidence, not a universal pre-merge prerequisite. Separating that release control from ordinary Work Item completion lets the corrective lifecycle produce honest continuation evidence, while publication remains fail closed until a new exact-source final reassessment succeeds."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Ordinary corrective Work Item changes final-assessment-bound source",
+      "riskType": "ci",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Ordinary finish executes its declared quality/governance checks without injecting the release-only final reassessment gate, so it can create truthful continuation evidence.",
+      "verificationPlan": "Add a focused ai_finish regression that records only declared checks for a contract without release-source evidence."
+    },
+    {
+      "scenario": "Release candidate has stale or non-final Japanese evidence",
+      "riskType": "release",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "check-release-preflight and check-release-readiness still invoke --require-final-reassessment and reject stale evidence.",
+      "verificationPlan": "Assert Make target command wiring and retain the focused Japanese capability release requirement regression."
+    }
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "The user authorized corrective workflow changes, tests, documentation, and governed Work Item evidence."
+  },
+  "rollbackNote": "Revert this Work Item's Make, check catalog, ai-finish, documentation, and test changes together; do not edit published Japanese assessment reports or release evidence as rollback.",
+  "budgetImpact": {
+    "expectedMetrics": {"archiveGrowth": 14}
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/documentation-alignment-gate-deadlock.json",
+    "baseCommit": "30ed47542cf9366c1da81a540c3aabfd3e1f9804",
+    "initialScopeDigest": "0f496027893cecefdc49718ad62c5d54e90a02d6b8516c68506ff10f2fea68cf",
+    "contractSkeletonDigest": "9f1ef7c2991df342aa3aa45e7694f0b5cd1235f6ede681934dd30905e88bda7d"
+  }
+}

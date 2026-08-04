@@ -220,11 +220,11 @@ check-changed-critical-coverage:
 	$(AI_PYTHON) scripts/check_changed_critical_coverage.py --base "$(AI_BASE_COMMIT)"
 
 check-release-preflight:
-	$(AI_PYTHON) scripts/ai_japanese_capability.py --check --require-final-reassessment
+	$(AI_NESTED_MAKE) check-source-bound-evidence
 	$(AI_PYTHON) scripts/check_release_preflight.py --root .
 
 check-release-readiness:
-	$(AI_PYTHON) scripts/ai_japanese_capability.py --check --require-final-reassessment
+	$(AI_NESTED_MAKE) check-source-bound-evidence
 	$(AI_PYTHON) scripts/check_release_preflight.py --root . --mode repository-readiness
 
 finalize-release-freeze:
@@ -750,7 +750,6 @@ check-ai-pr:
 		$(AI_NESTED_MAKE) project-format-check; \
 		$(AI_NESTED_MAKE) project-lint; \
 		$(AI_NESTED_MAKE) check-changed-critical-coverage AI_BASE_COMMIT="$(AI_BASE_COMMIT)"; \
-		$(AI_NESTED_MAKE) check-source-bound-evidence; \
 		$(AI_NESTED_MAKE) check-ai-reference-impact; \
 		$(AI_NESTED_MAKE) check-ai-test-weakening AI_BASE_COMMIT="$(AI_BASE_COMMIT)"; \
 		if test -f scripts/check_governance_complexity.py && test -f .ai/guards/governance_complexity_policy.yaml; then \

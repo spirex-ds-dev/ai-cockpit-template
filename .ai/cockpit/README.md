@@ -224,6 +224,23 @@ After archive, the generated state is `no_active_work_item`. It means no active 
 
 `make ai-pre-merge AI_BASE_COMMIT=<merge-base>` reports four layers in order: content quality, lifecycle consistency, ownership preview, and final PR audit. A failure in any layer means commit/merge is not allowed; `check-ai-pr` remains the final authority.
 
+### Release-source reassessment boundary
+
+`make check-source-bound-evidence` is release-stage evidence, not an implicit
+check for every ordinary `ai-finish` or `check-ai-pr` execution. It validates
+Capability Truth, the byte-bound Japanese `final_reassessment`, and the
+documentation-alignment report against the current source. A Work Item that
+changes one of those bound sources must retain any resulting `blocked` report
+as continuation evidence, complete its normal PR/merge/closure lifecycle, and
+then let the independent final reassessment run at the documented release
+stage. A blocked alignment report is never final reassessment, release-ready,
+or publication evidence.
+
+`make check-release-preflight` and `make check-release-readiness` both invoke
+`check-source-bound-evidence` before their release checks. They remain fail
+closed when the final reassessment is stale, missing, non-final, or has
+blocking findings.
+
 ## Agent Risk Controls
 
 AI Cockpit treats prompt instructions as guidance, not enforcement. Repository safety comes from hard gates that inspect the actual Work Item and diff.

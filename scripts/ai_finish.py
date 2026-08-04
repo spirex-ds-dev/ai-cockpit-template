@@ -365,7 +365,11 @@ def finish_execution_priority(item: dict[str, Any]) -> int:
 STABILIZATION_CHECKS = frozenset(
     {"aiStatus", "aiStatusCheck", "aiStatusConsistency", "aiAgentRisk", "aiSummary"}
 )
-MANDATORY_VERIFICATION_CHECKS = ("sourceBoundEvidence",)
+# Final source-bound reassessment is release evidence.  It must be requested
+# by the release-stage Contract/target, not injected into every ordinary Work
+# Item finish: a source-changing corrective must be able to complete its PR
+# lifecycle before the post-merge reassessment can truthfully bind to HEAD.
+MANDATORY_VERIFICATION_CHECKS: tuple[str, ...] = ()
 CONSOLE_OUTPUT_LIMIT = 12_000
 
 
@@ -383,21 +387,23 @@ def console_output(output: str) -> str:
 def inject_mandatory_verification_checks(
     declared_items: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    """Return one required standard-engine item for every mandatory check."""
-    mandatory_items: dict[str, dict[str, Any]] = {
+    """Normalize explicitly declared checks without adding release-only gates."""
+    normalized: dict[str, dict[str, Any]] = {
         check_id: {"check": check_id, "required": True}
         for check_id in MANDATORY_VERIFICATION_CHECKS
     }
-    ordinary_items: list[dict[str, Any]] = []
     for item in declared_items:
         check_id = verification_key(item)
-        if check_id not in mandatory_items:
-            ordinary_items.append(item)
+        if not check_id:
             continue
-        mandatory_item = dict(item)
-        mandatory_item["required"] = True
-        mandatory_items[check_id] = mandatory_item
-    return [*mandatory_items.values(), *ordinary_items]
+        current = normalized.get(check_id)
+        if current is None:
+            normalized[check_id] = dict(item)
+            continue
+        replacement = dict(item)
+        replacement["required"] = current.get("required") is True or item.get("required") is True
+        normalized[check_id] = replacement
+    return list(normalized.values())
 
 
 def _outcome_paths(task: str) -> tuple[Path, Path]:
