@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task parallel-work-item-workflow-reliability generated an evidence-derived outcome with status completed.
+Task release-v0548-preparation-rehearsal generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0
