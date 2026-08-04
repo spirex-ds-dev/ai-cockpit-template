@@ -277,6 +277,11 @@ def test_required_failure_keeps_active_and_retry_archives(tmp_path):
     )
     assert failed.returncode != 0
     assert contract_path.exists()
+    blocked_outcome = tmp_path / ".ai/work-items/active/e2e.outcome.json"
+    blocked_report = tmp_path / ".ai/cockpit/task_report.json"
+    assert blocked_outcome.exists(), failed.stdout + failed.stderr
+    assert blocked_report.exists(), failed.stdout + failed.stderr
+    assert json.loads(blocked_outcome.read_text(encoding="utf-8"))["status"] == "blocked"
 
     retried = run(
         tmp_path,

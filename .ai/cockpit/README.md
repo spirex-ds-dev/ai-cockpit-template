@@ -98,7 +98,9 @@ base. If another worktree owns base, it reports
 `closed_but_current_worktree_detached`; closure succeeded, but the invoking
 worktree is not ready for the next Work Item.
 
-The required order is: latest remote base, dedicated Work Item branch, implementation, `ai-finish`/archive, push, PR, PR merge, then `ai-close-work-item`. Do not merge the feature branch into local `main` before the PR, and do not delete the Work Item branch before closure; otherwise local `main` can diverge from `origin/main` or the merged branch identity can be lost before ownership verification.
+The required order is: latest remote base, dedicated Work Item branch, implementation, non-archive `ai-finish`, explicit archive, push, PR, PR merge, then `ai-close-work-item`. Do not merge the feature branch into local `main` before the PR, and do not delete the Work Item branch before closure; otherwise local `main` can diverge from `origin/main` or the merged branch identity can be lost before ownership verification.
+
+If a non-archive Finish fails after it has reached the Outcome boundary, it retains a validator-valid active `blocked` Task Outcome and regenerates both review-phase Human Benefit Report files from that exact Outcome. This is recovery evidence, not a pass or archive authorization. A retry remains fail closed: diff ownership accepts the report pair only when both files validate against that active Work Item's current Outcome; a missing, malformed, stale, incomplete, or cross-task pair blocks retry until the lifecycle refresh succeeds.
 
 Run `make ai-start` only after creating the dedicated Work Item branch.
 When the remote default branch is uniquely discoverable, the command rejects

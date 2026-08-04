@@ -606,6 +606,129 @@ def _write_and_validate_pre_merge_outcome(
     return True, "Outcome pipeline passed"
 
 
+def write_blocked_outcome(
+    task: str,
+    contract_path: Path,
+    summary_path: Path,
+    *,
+    failed_check: str,
+    failure_message: str,
+) -> tuple[bool, str]:
+    """Persist a valid blocked Outcome, then derive its exact review report.
+
+    The Outcome is the recovery fact.  Its report is deliberately derived only
+    after the Outcome has been persisted, so report-generation failure cannot
+    erase the usable blocked record.  The caller still fails closed when this
+    function returns ``False``.
+    """
+    from ai_check_task_outcome import validate_outcome
+    from ai_generate_task_outcome import generate_outcome
+    from ai_render_task_outcome import render_task_outcome
+
+    json_path, markdown_path = _outcome_paths(task)
+    message = f"Finish blocked at {failed_check}: {failure_message}"
+    try:
+        payload = _pre_merge_outcome_input(task, contract_path, summary_path)
+        evidence = dict(payload["evidence"])
+        warnings = list(evidence.get("warnings", []))
+        warnings.append(message)
+        evidence["warnings"] = warnings
+        evidence["status"] = "blocked"
+        evidence["limitations"] = [
+            *list(evidence.get("limitations", [])),
+            {
+                "sourceWarning": message,
+                "title": "Finish verification is blocked",
+                "affectedClaims": ["completion_claim", "archive_readiness"],
+                "requiredEvidence": [f"a passing {failed_check} retry"],
+                "forbiddenClaims": ["Do not claim this Work Item is complete or archive-ready."],
+            },
+        ]
+        evidence["nonRiskExplanations"] = [
+            *list(evidence.get("nonRiskExplanations", [])),
+            {
+                "sourceWarning": message,
+                "reason": "The failed Finish gate is recorded as a recovery condition, not a completed result.",
+                "evidence": [],
+            },
+        ]
+        evidence["forbiddenClaims"] = [
+            *list(evidence.get("forbiddenClaims", [])),
+            "Do not claim a blocked Work Item has completed verification or may be archived.",
+        ]
+        outcome = generate_outcome(task, payload["bindings"], evidence=evidence)
+        markdown = render_task_outcome(outcome)
+        report = validate_outcome(outcome, markdown, expected_task_id=task)
+        if not report.valid:
+            return False, "; ".join(f"{item.code}: {item.message}" for item in report.errors)
+        save_json(json_path, outcome)
+        markdown_path.write_text(markdown, encoding="utf-8")
+        _record_outcome_state(
+            summary_path,
+            {
+                "status": "blocked",
+                "jsonPath": json_path.relative_to(PROJECT_ROOT).as_posix(),
+                "markdownPath": markdown_path.relative_to(PROJECT_ROOT).as_posix(),
+                "rawEvidencePath": "derived:blocked_finish",
+                "failedCheck": failed_check,
+                "error": failure_message,
+            },
+        )
+    except (OSError, KeyError, TypeError, ValueError) as exc:
+        return False, str(exc)
+
+    report_ok, report_message = run_human_report_pipeline(task, summary_path)
+    if not report_ok:
+        return (
+            False,
+            f"blocked Outcome persisted but Human Benefit Report refresh failed: {report_message}",
+        )
+    return True, "blocked Outcome and Human Benefit Report persisted"
+
+
+def failed_check_from_summary(summary_path: Path, fallback: str) -> str:
+    """Return the most recently recorded failed check without guessing success."""
+    try:
+        verification = load_json(summary_path).get("verification", [])
+    except (OSError, ValueError, TypeError):
+        return fallback
+    if not isinstance(verification, list):
+        return fallback
+    for item in reversed(verification):
+        if isinstance(item, dict) and item.get("result") == "failed":
+            check = item.get("check")
+            if isinstance(check, str) and check:
+                return check
+    return fallback
+
+
+def return_blocked_finish_failure(
+    *,
+    task: str,
+    contract_path: Path,
+    summary_path: Path,
+    failed_check: str,
+    failure_message: str,
+    code: int,
+) -> int:
+    """Fail closed while retaining the standard blocked recovery evidence."""
+    blocked_ok, blocked_message = write_blocked_outcome(
+        task,
+        contract_path,
+        summary_path,
+        failed_check=failed_check,
+        failure_message=failure_message,
+    )
+    if blocked_ok:
+        print(f"Blocked Task Outcome persisted: {blocked_message}", file=sys.stderr)
+    else:
+        print(
+            "ERROR: blocked Task Outcome/report recovery failed: " + blocked_message,
+            file=sys.stderr,
+        )
+    return code if code else 1
+
+
 def run_task_outcome_pipeline(
     task: str, summary_path: Path, contract_path: Path | None = None
 ) -> tuple[bool, str]:
@@ -931,7 +1054,14 @@ def main() -> int:
             "ERROR: finish is blocked until every task-era changed path has Work Item ownership.",
             file=sys.stderr,
         )
-        return 1
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="aiDiffOwnership",
+            failure_message="one or more task-era changed paths are unowned, ambiguous, restricted, or out of scope",
+            code=1,
+        )
     existing_summary = load_json(summary_path)
     reuse_archive_verification = args.archive and reusable_archive_verification(
         existing_summary,
@@ -965,7 +1095,14 @@ def main() -> int:
     )
     if code:
         obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-        return code
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check=failed_check_from_summary(summary_path, "verification"),
+            failure_message="a required declared verification check failed",
+            code=code,
+        )
 
     if reuse_archive_verification:
         outcome_ok = _outcome_paths(args.task)[0].is_file()
@@ -984,14 +1121,28 @@ def main() -> int:
     if not outcome_ok:
         print(f"ERROR: Task Outcome integration failed: {outcome_message}", file=sys.stderr)
         obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-        return 1
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="taskOutcome",
+            failure_message=outcome_message,
+            code=1,
+        )
     if not human_report_ok:
         print(
             f"ERROR: Human Benefit Report integration failed: {human_report_message}",
             file=sys.stderr,
         )
         obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-        return 1
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="humanBenefitReport",
+            failure_message=human_report_message,
+            code=1,
+        )
 
     if reuse_archive_verification:
         print("Work Item finish checks reused from same-state evidence")
@@ -1000,7 +1151,14 @@ def main() -> int:
             print(render_direct_outcome_report(load_json(outcome_json), args.language), end="")
         except ValueError as exc:
             print(f"ERROR: {exc}", file=sys.stderr)
-            return 1
+            return return_blocked_finish_failure(
+                task=args.task,
+                contract_path=contract_path,
+                summary_path=summary_path,
+                failed_check="taskOutcomeReport",
+                failure_message=str(exc),
+                code=1,
+            )
         if args.archive:
             archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
             cmd_str = " ".join(archive_command)
@@ -1011,7 +1169,14 @@ def main() -> int:
                     check_id="archive-work-item", command=cmd_str, duration_ms=duration
                 )
                 obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-                return code
+                return return_blocked_finish_failure(
+                    task=args.task,
+                    contract_path=contract_path,
+                    summary_path=summary_path,
+                    failed_check="archive-work-item",
+                    failure_message="archive command failed",
+                    code=code,
+                )
             obs.check_passed(check_id="archive-work-item", command=cmd_str, duration_ms=duration)
             report_ok, report_message = refresh_archived_human_report(args.task)
             if not report_ok:
@@ -1020,7 +1185,14 @@ def main() -> int:
                     file=sys.stderr,
                 )
                 obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-                return 1
+                return return_blocked_finish_failure(
+                    task=args.task,
+                    contract_path=contract_path,
+                    summary_path=summary_path,
+                    failed_check="archivedHumanBenefitReport",
+                    failure_message=report_message,
+                    code=1,
+                )
             print(archive_next_steps(args.task))
         obs.work_item_finished(result="passed", duration_ms=elapsed_ms(total_start))
         return 0
@@ -1080,7 +1252,14 @@ def main() -> int:
                     duration_ms=refresh_duration,
                 )
                 obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-                return refresh_code
+                return return_blocked_finish_failure(
+                    task=args.task,
+                    contract_path=contract_path,
+                    summary_path=summary_path,
+                    failed_check="aiStatus",
+                    failure_message="status refresh failed during stabilization",
+                    code=refresh_code,
+                )
         obs.check_started(check_id=check_id, command=" ".join(command))
         if check_id == "aiAgentRisk":
             code, duration, output = run(command, extra_env={"AI_FINISH_STABILIZING": "1"})
@@ -1106,7 +1285,14 @@ def main() -> int:
         if code != 0:
             obs.check_failed(check_id=check_id, command=" ".join(command), duration_ms=duration)
             obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-            return code
+            return return_blocked_finish_failure(
+                task=args.task,
+                contract_path=contract_path,
+                summary_path=summary_path,
+                failed_check=check_id,
+                failure_message="stabilization check failed",
+                code=code,
+            )
         obs.check_passed(check_id=check_id, command=" ".join(command), duration_ms=duration)
 
     # Promote only after the declared checks, stabilization, and final Summary
@@ -1134,7 +1320,14 @@ def main() -> int:
             save_json(summary_path, failed_summary)
             print(output, file=sys.stderr)
             obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-            return code
+            return return_blocked_finish_failure(
+                task=args.task,
+                contract_path=contract_path,
+                summary_path=summary_path,
+                failed_check="finalStatus",
+                failure_message="final status validation failed",
+                code=code,
+            )
 
     # Revalidate the promoted Summary last and retain its evidence as the
     # archive's final worktree-digest anchor.
@@ -1155,7 +1348,14 @@ def main() -> int:
         save_json(summary_path, failed_summary)
         print(output, file=sys.stderr)
         obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
-        return code
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="aiSummary",
+            failure_message="final Summary validation failed",
+            code=code,
+        )
     record_result(
         summary_path,
         evidence(

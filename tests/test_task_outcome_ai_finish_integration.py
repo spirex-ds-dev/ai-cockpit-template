@@ -4,6 +4,7 @@ import sys
 import ai_check_agent_risk
 import ai_finish
 import ai_generate_human_report as human
+from ai_check_task_outcome import validate_outcome
 from ai_governance_compression import render_active_status
 
 
@@ -100,6 +101,79 @@ def test_outcome_pipeline_without_contract_fails_closed(tmp_path):
         False,
         "mandatory Task Outcome requires the active Contract",
     )
+
+
+def test_blocked_outcome_refreshes_the_exact_active_review_report(tmp_path, monkeypatch):
+    task = "example-task"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": task, "baseCommit": "a" * 40, "verification": []}),
+        encoding="utf-8",
+    )
+    summary_path.write_text(json.dumps({"changedFiles": [], "verification": []}), encoding="utf-8")
+    outcome_path = tmp_path / "outcome.json"
+    markdown_path = tmp_path / "outcome.md"
+    report_json = tmp_path / "task_report.json"
+    report_markdown = tmp_path / "task_report.md"
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+    monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _task: (outcome_path, markdown_path))
+    monkeypatch.setattr(ai_finish, "_human_report_paths", lambda: (report_json, report_markdown))
+
+    ok, message = ai_finish.write_blocked_outcome(
+        task,
+        contract_path,
+        summary_path,
+        failed_check="quality",
+        failure_message="quality gate failed",
+    )
+
+    assert ok, message
+    outcome = json.loads(outcome_path.read_text(encoding="utf-8"))
+    assert outcome["status"] == "blocked"
+    assert validate_outcome(
+        outcome, markdown_path.read_text(encoding="utf-8"), expected_task_id=task
+    ).valid
+    report = json.loads(report_json.read_text(encoding="utf-8"))
+    assert human.validate_human_report(report, outcome) == []
+    assert report_markdown.read_text(encoding="utf-8") == human.render_human_report(report)
+    assert any("quality gate failed" in warning for warning in outcome["sections"]["warnings"])
+
+
+def test_blocked_outcome_survives_report_refresh_failure(tmp_path, monkeypatch):
+    task = "example-task"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": task, "baseCommit": "a" * 40, "verification": []}),
+        encoding="utf-8",
+    )
+    summary_path.write_text(json.dumps({"changedFiles": [], "verification": []}), encoding="utf-8")
+    outcome_path = tmp_path / "outcome.json"
+    markdown_path = tmp_path / "outcome.md"
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "b" * 40)
+    monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _task: (outcome_path, markdown_path))
+    monkeypatch.setattr(
+        ai_finish, "run_human_report_pipeline", lambda *_args: (False, "report writer unavailable")
+    )
+
+    ok, message = ai_finish.write_blocked_outcome(
+        task,
+        contract_path,
+        summary_path,
+        failed_check="aiDiffOwnership",
+        failure_message="stale report blocks retry",
+    )
+
+    assert not ok
+    assert "report writer unavailable" in message
+    outcome = json.loads(outcome_path.read_text(encoding="utf-8"))
+    assert outcome["status"] == "blocked"
+    assert validate_outcome(
+        outcome, markdown_path.read_text(encoding="utf-8"), expected_task_id=task
+    ).valid
 
 
 def test_human_report_pipeline_generates_review_artifacts_and_summary_binding(
