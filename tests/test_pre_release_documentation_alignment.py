@@ -95,6 +95,27 @@ def test_bound_evidence_fails_closed_for_missing_drift_and_duplicate_paths(tmp_p
     )
 
 
+def test_japanese_bound_evidence_reports_makefile_capability_and_test_drift(tmp_path):
+    paths = [
+        "Makefile",
+        "docs/reference/capability-truth-matrix.json",
+        "tests/test_core_gates.py",
+    ]
+    rows = []
+    for path in paths:
+        candidate = tmp_path / path
+        candidate.parent.mkdir(parents=True, exist_ok=True)
+        candidate.write_text("before", encoding="utf-8")
+        rows.append({"path": path, "sha256": hashlib.sha256(b"before").hexdigest()})
+        candidate.write_text("after", encoding="utf-8")
+
+    assert bound_evidence_errors(tmp_path, {"evidenceSource": {"files": rows}}) == [
+        "Japanese bound evidence drift: Makefile",
+        "Japanese bound evidence drift: docs/reference/capability-truth-matrix.json",
+        "Japanese bound evidence drift: tests/test_core_gates.py",
+    ]
+
+
 @pytest.mark.parametrize("value", ["../outside.md", "/absolute.md", "."])
 def test_normalized_path_rejects_escape(value):
     with pytest.raises(AlignmentError):

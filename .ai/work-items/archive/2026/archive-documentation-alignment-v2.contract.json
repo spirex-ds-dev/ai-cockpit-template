@@ -1,0 +1,264 @@
+{
+  "contractVersion": 2,
+  "workItemId": "archive-documentation-alignment-v2",
+  "mode": "code",
+  "title": "P1: Make Finish archive-ready documentation alignment truthful",
+  "baseCommit": "8486677c235e18ff8a49e485fca21f261c29e9e5",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/archive-documentation-alignment-v2.contract.json",
+    ".ai/work-items/active/archive-documentation-alignment-v2.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/archive-documentation-alignment-v2.outcome.json",
+    ".ai/work-items/active/archive-documentation-alignment-v2.outcome.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_summary.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_core_gates.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_pre_release_documentation_alignment.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Release-only source-bound assessment semantics and release publication workflows.",
+    "Unrelated active or archived Work Items, including #634 and #638 implementation state.",
+    "Provider-side push, PR, merge, tag, release, or branch-deletion operations."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/626",
+      "reason": "Authoritative P1 finding and required correction for completed Outcome/archive inconsistency."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Finish ordering, Outcome generation, blocked recovery, and archive invocation implementation."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Authoritative documentation-alignment validator and source-surface semantics."
+    },
+    {
+      "path": "scripts/ai_archive_work_item.py",
+      "reason": "Archive validates the active Summary and is the lifecycle consumer that previously exposed the defect."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Existing Finish/Outcome/archive ordering regression coverage."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "lifecycle_truth",
+      "evidence_integrity",
+      "documentation_alignment"
+    ],
+    "unknownsReviewComplete": true,
+    "reason": "A false completed Outcome can enable invalid lifecycle claims; corrective ordering must preserve truthful blocked recovery and archive fail-closed behavior."
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Lifecycle and evidence-integrity corrective requires the standard governed profile."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The Issue, current Finish/archive implementation, and deterministic regression tests provide sufficient bounded evidence."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "Finish validates documentationAlignment before it can persist or report a completed Outcome; an incomplete alignment produces a valid blocked Outcome with failed gate and recovery condition.",
+    "The validation also runs after generated Outcome/report artifacts update the active Summary, so an archive-required documentation surface cannot make a completed Outcome stale.",
+    "Regression tests cover Japanese bound documentation evidence drift (Makefile, capability matrix, and test surfaces), completed-versus-blocked Outcome state, archive non-invocation on failed Finish, and successful retry/archive ordering.",
+    "Capability and pre-release documentation-alignment references state the corrected Finish/archive boundary without claiming release-only reassessment for ordinary Work Items."
+  ],
+  "guidelines": [
+    "Keep lifecycle truth fail-closed: no completed Outcome may remain after a required archive-readiness condition fails.",
+    "Preserve deterministic, repository-relative documentation evidence validation and do not bypass generated report ownership.",
+    "Keep release-only source-bound assessment controls separate from ordinary Work Item Finish validation."
+  ],
+  "intent": {
+    "problem": "#623 demonstrated that ai-finish could emit an active completed Outcome and only later discover that documentation alignment made archive impossible. That creates contradictory lifecycle truth and repeats the Outcome reliability finding.",
+    "constraints": [
+      "Start from latest origin/main and do not copy uncommitted #634 or #638 changes.",
+      "Use the existing canonical validator and generated Summary/report pathways; do not hand-edit generated reports to make a gate pass.",
+      "Keep blocked Outcomes durable and retryable, and do not weaken archive validation or release-only assessment controls.",
+      "Do not push, open a PR, merge, tag, or publish from this Work Item."
+    ],
+    "rationale": "Move archive-required documentation readiness into Finish before completion is claimed, then revalidate after generated artifacts alter evidence so a completed Outcome is a truthful prerequisite for archive."
+  },
+  "rawUserRequest": "Correct #626 completely: archive-required documentation alignment must not allow completed Outcome, including Japanese evidence drift and retry/archive order, using an independent governed Work Item.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-05-user-authorized-plan-and-#626-delegation",
+    "capturedAt": "2026-08-05T00:00:00+09:00",
+    "digest": "sha256:issue-626-user-authorized-corrective"
+  },
+  "declaredIntent": {
+    "summary": "Correct the archive-readiness/Outcome ordering defect without weakening release-only or archive controls.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+      {
+        "scenario": "incomplete alignment before Outcome generation",
+        "riskType": "lifecycle_truth",
+        "required": true,
+        "status": "unverified",
+        "evidence": [],
+        "expected": "Finish writes a valid blocked Outcome and does not invoke archive when required documentation alignment is incomplete.",
+        "verificationPlan": "Focused Finish integration test using an incomplete active Summary."
+      },
+      {
+        "scenario": "generated artifact alignment drift",
+        "riskType": "evidence_integrity",
+        "required": true,
+        "status": "unverified",
+        "evidence": [],
+        "expected": "Outcome/report-generated Markdown surfaces are rechecked before completion; drift produces blocked rather than completed state.",
+        "verificationPlan": "Focused Finish integration test that makes post-generation alignment invalid."
+      },
+      {
+        "scenario": "Japanese bound documentation surface",
+        "riskType": "documentation_alignment",
+        "required": true,
+        "status": "unverified",
+        "evidence": [],
+        "expected": "Makefile, capability matrix, Japanese pre-release documents, and test files remain declared and bound in alignment evidence when changed.",
+        "verificationPlan": "Validator regression test with the Japanese bound evidence set."
+      },
+      {
+        "scenario": "retry then archive",
+        "riskType": "lifecycle_truth",
+        "required": true,
+        "status": "unverified",
+        "evidence": [],
+        "expected": "A repaired alignment permits completed Outcome followed by archive in canonical order.",
+        "verificationPlan": "Existing and new local Finish/archive E2E coverage plus ai-finish --archive local closure."
+      }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 797
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/archive-documentation-alignment-v2.json",
+    "baseCommit": "8486677c235e18ff8a49e485fca21f261c29e9e5",
+    "initialScopeDigest": "1a7cbc189b055fce4b6e705d84e4b252fdf37da8b7f80ec0614508be28d10d85",
+    "contractSkeletonDigest": "47674e6d081996cba349b9d9b19f69baa073bd6482f21cdd6f8e0bb3c7668a85"
+  }
+}
