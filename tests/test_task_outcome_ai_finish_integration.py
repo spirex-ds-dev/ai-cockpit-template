@@ -241,6 +241,66 @@ def test_human_report_pipeline_generates_review_artifacts_and_summary_binding(
     assert summary["documentationAlignment"]["checks"][0]["evidence"] == ["task_report.md"]
 
 
+def test_human_report_pipeline_binds_generated_outcome_markdown_before_finish_recheck(
+    tmp_path, monkeypatch
+):
+    task = "example-task"
+    outcome_path = tmp_path / "outcome.json"
+    outcome_markdown = tmp_path / "outcome.md"
+    summary_path = tmp_path / "summary.json"
+    outcome_value = _outcome(task)
+    outcome_value.update(
+        {
+            "format": "ai-cockpit-task-outcome",
+            "schemaVersion": 1,
+            "bindings": {
+                "taskId": task,
+                "contractDigest": "a" * 64,
+                "summaryDigest": "b" * 64,
+                "verificationDigest": "c" * 64,
+                "baseCommit": "d" * 40,
+                "headCommit": "e" * 40,
+                "lifecycleStage": "pre_merge",
+                "pullRequest": {"state": "not_created"},
+                "aiCockpitVersion": "repository-governance",
+                "generatorVersion": "1.0",
+            },
+        }
+    )
+    outcome_path.write_text(json.dumps(outcome_value), encoding="utf-8")
+    outcome_markdown.write_text("# Task Outcome\n", encoding="utf-8")
+    summary_path.write_text(
+        json.dumps(
+            {
+                "changedFiles": [{"path": "outcome.md", "reason": "generated Outcome"}],
+                "documentationAlignment": {
+                    "checks": [{"area": "documentationCommandsCapability", "evidence": []}]
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    report_json = tmp_path / "task_report.json"
+    report_markdown = tmp_path / "task_report.md"
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    active_contract = tmp_path / ".ai/work-items/active" / f"{task}.contract.json"
+    active_contract.parent.mkdir(parents=True)
+    active_contract.write_text(
+        json.dumps({"scope": ["outcome.md", "task_report.json", "task_report.md"]}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _: (outcome_path, outcome_markdown))
+    monkeypatch.setattr(ai_finish, "_human_report_paths", lambda: (report_json, report_markdown))
+
+    ok, message = ai_finish.run_human_report_pipeline(task, summary_path)
+
+    assert ok, message
+    evidence = json.loads(summary_path.read_text(encoding="utf-8"))["documentationAlignment"][
+        "checks"
+    ][0]["evidence"]
+    assert evidence == ["outcome.md", "task_report.md"]
+
+
 def test_archived_human_report_refreshes_after_outcome_path_rewrite(tmp_path, monkeypatch):
     task = "example-task"
     archive = tmp_path / ".ai/work-items/archive/2026"
@@ -488,6 +548,7 @@ def test_finish_archives_using_only_same_state_verification(tmp_path, monkeypatc
     monkeypatch.setattr(
         ai_check_agent_risk, "validate_checkpoint_bindings", lambda *_args, **_kwargs: []
     )
+    monkeypatch.setattr(ai_finish, "documentation_alignment_issues", lambda *_args: [])
     monkeypatch.setattr(
         ai_finish, "_outcome_paths", lambda _task: (outcome_path, active / f"{task}.outcome.md")
     )
@@ -505,6 +566,99 @@ def test_finish_archives_using_only_same_state_verification(tmp_path, monkeypatc
     assert commands == [
         ["make", "archive-work-item", f"CONTRACT={contract_path.relative_to(tmp_path).as_posix()}"],
     ]
+
+
+def test_reused_finish_verification_blocks_archive_when_documentation_alignment_is_incomplete(
+    tmp_path, monkeypatch
+):
+    """A stale completed Outcome must not reach archive through the reuse path."""
+    task = "example-task"
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    contract_path = active / f"{task}.contract.json"
+    summary_path = active / f"{task}.summary.json"
+    contract = {
+        "contractVersion": 2,
+        "workItemId": task,
+        "baseCommit": "a" * 40,
+        "scope": [],
+        "verification": [],
+    }
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+    digest = ai_finish.worktree_digest_for_finish([], summary_path.relative_to(tmp_path).as_posix())
+    summary_path.write_text(
+        json.dumps(
+            {
+                "verification": [
+                    {
+                        "check": "aiSummary",
+                        "result": "passed",
+                        "runner": "ai_finish",
+                        "contractHash": __import__("hashlib")
+                        .sha256(contract_path.read_bytes())
+                        .hexdigest(),
+                        "commitSha": "a" * 40,
+                        "executionContractPath": contract_path.relative_to(tmp_path).as_posix(),
+                        "executionSummaryPath": summary_path.relative_to(tmp_path).as_posix(),
+                        "worktreeDigest": digest,
+                    }
+                ],
+                "documentationAlignment": {
+                    "schemaVersion": 1,
+                    "status": "not_checked",
+                    "checkedAt": None,
+                    "checks": [],
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (active / f"{task}.outcome.json").write_text(json.dumps(_outcome(task)), encoding="utf-8")
+    (active / f"{task}.outcome.md").write_text("# Task Outcome\n", encoding="utf-8")
+
+    class Observer:
+        def lifecycle_phase_finished(self, *_args, **_kwargs):
+            pass
+
+        def check_started(self, **_kwargs):
+            pass
+
+        def check_passed(self, **_kwargs):
+            pass
+
+        def check_failed(self, **_kwargs):
+            pass
+
+        def work_item_finished(self, **_kwargs):
+            pass
+
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "ensure_work_item_branch", lambda: None)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
+    monkeypatch.setattr(ai_finish, "preview", lambda **_kwargs: [])
+    monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: Observer())
+    monkeypatch.setattr(
+        ai_check_agent_risk, "validate_checkpoint_bindings", lambda *_args, **_kwargs: []
+    )
+    blocked = {}
+    monkeypatch.setattr(
+        ai_finish,
+        "return_blocked_finish_failure",
+        lambda **kwargs: blocked.update(kwargs) or kwargs["code"],
+    )
+    commands = []
+    monkeypatch.setattr(
+        ai_finish,
+        "run",
+        lambda command, **_kwargs: commands.append(command) or (0, 1, "ok"),
+    )
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", task, "--archive"])
+
+    assert ai_finish.main() == 1
+    assert blocked["failed_check"] == "documentationAlignment"
+    assert commands == []
 
 
 def test_status_contains_only_outcome_link_count_and_status_not_full_report():

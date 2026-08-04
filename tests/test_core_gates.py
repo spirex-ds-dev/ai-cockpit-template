@@ -1105,6 +1105,7 @@ def test_finish_main_does_not_inject_release_source_evidence_into_work_item_chec
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "documentation_alignment_issues", lambda *_args: [])
     monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
@@ -1278,6 +1279,7 @@ def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "documentation_alignment_issues", lambda *_args: [])
     monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
@@ -1371,6 +1373,7 @@ def test_finish_main_demotes_readiness_when_final_status_check_fails(tmp_path, m
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "documentation_alignment_issues", lambda *_args: [])
     monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
@@ -1511,6 +1514,7 @@ def test_finish_main_fails_when_archive_step_fails(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "documentation_alignment_issues", lambda *_args: [])
     monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
@@ -1550,6 +1554,7 @@ def test_finish_main_fails_when_stabilization_check_fails(tmp_path, monkeypatch)
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "documentation_alignment_issues", lambda *_args: [])
     monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
@@ -1592,6 +1597,7 @@ def test_finish_main_allows_optional_check_failure(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "documentation_alignment_issues", lambda *_args: [])
     monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
@@ -1681,6 +1687,7 @@ def test_finish_main_archives_on_success(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "documentation_alignment_issues", lambda *_args: [])
     monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(

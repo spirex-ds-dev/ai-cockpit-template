@@ -443,7 +443,13 @@ def run_human_report_pipeline(task: str, summary_path: Path) -> tuple[bool, str]
                 changed.append({"path": relative, "reason": reason})
         alignment = summary.get("documentationAlignment")
         report_markdown = markdown_path.relative_to(PROJECT_ROOT).as_posix()
-        if included(report_markdown, scope) and isinstance(alignment, dict):
+        outcome_markdown = _outcome_paths(task)[1].relative_to(PROJECT_ROOT).as_posix()
+        documented_generated_paths = {
+            report_markdown,
+            outcome_markdown,
+        }
+        declared_after_generation = {item.get("path") for item in changed if isinstance(item, dict)}
+        if isinstance(alignment, dict):
             checks = alignment.get("checks")
             if isinstance(checks, list):
                 for check in checks:
@@ -453,8 +459,14 @@ def run_human_report_pipeline(task: str, summary_path: Path) -> tuple[bool, str]
                     ):
                         continue
                     evidence_paths = check.setdefault("evidence", [])
-                    if isinstance(evidence_paths, list) and report_markdown not in evidence_paths:
-                        evidence_paths.append(report_markdown)
+                    if isinstance(evidence_paths, list):
+                        for generated_path in sorted(
+                            candidate
+                            for candidate in documented_generated_paths & declared_after_generation
+                            if included(candidate, scope)
+                        ):
+                            if generated_path not in evidence_paths:
+                                evidence_paths.append(generated_path)
                     break
         save_json(summary_path, summary)
     except (OSError, KeyError, TypeError, ValueError) as exc:
@@ -700,6 +712,22 @@ def failed_check_from_summary(summary_path: Path, fallback: str) -> str:
             if isinstance(check, str) and check:
                 return check
     return fallback
+
+
+def documentation_alignment_issues(summary_path: Path, contract_data: dict[str, Any]) -> list[str]:
+    """Return archive-required documentation-alignment defects without mutation.
+
+    A completed Outcome is an archive prerequisite.  Revalidate the active
+    Summary even when `--archive` reuses a prior Finish attestation because the
+    Summary itself is intentionally excluded from that attestation's worktree
+    digest to avoid a self-reference cycle.
+    """
+    from ai_check_summary import validate_documentation_alignment
+
+    try:
+        return validate_documentation_alignment(load_json(summary_path), contract_data)
+    except (OSError, TypeError, ValueError) as exc:
+        return [f"documentationAlignment could not be validated: {exc}"]
 
 
 def return_blocked_finish_failure(
@@ -1104,6 +1132,18 @@ def main() -> int:
             code=code,
         )
 
+    alignment_issues = documentation_alignment_issues(summary_path, contract_data)
+    if alignment_issues:
+        obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="documentationAlignment",
+            failure_message="; ".join(alignment_issues[:3]),
+            code=1,
+        )
+
     if reuse_archive_verification:
         outcome_ok = _outcome_paths(args.task)[0].is_file()
         outcome_message = "existing outcome is bound by same-state verification"
@@ -1141,6 +1181,22 @@ def main() -> int:
             summary_path=summary_path,
             failed_check="humanBenefitReport",
             failure_message=human_report_message,
+            code=1,
+        )
+
+    # The Outcome/report pipeline expands the active Summary's declared
+    # documentation surfaces. Recheck before any completed state is reported
+    # or archive is invoked, rather than leaving archive as the first consumer
+    # able to discover that the completion claim is stale.
+    alignment_issues = documentation_alignment_issues(summary_path, contract_data)
+    if alignment_issues:
+        obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="documentationAlignment",
+            failure_message="; ".join(alignment_issues[:3]),
             code=1,
         )
 
