@@ -279,17 +279,22 @@ def recoverable_foreign_duplicate_identities(
     return recoverable
 
 
-def linked_worktree_active_issue(*, root: Path = PROJECT_ROOT) -> str | None:
-    """Reject malformed foreign state while permitting isolated Work Items."""
+def linked_worktree_active_issue(
+    requested_task: str | None = None, *, root: Path = PROJECT_ROOT
+) -> str | None:
+    """Reject unsafe foreign state while allowing unrelated recoverable duplicates."""
     identities, errors = linked_worktree_identity_report(root=root)
     if errors:
         return errors[0]
     recoverable = recoverable_foreign_duplicate_identities(identities)
     for identity in identities:
         if identity in recoverable:
+            if requested_task != identity.task:
+                continue
             return (
                 "ERROR: linked worktree has a recoverable foreign duplicate Work Item identity: "
                 f"{identity.branch} carries {identity.task} while codex/{identity.task} is the canonical owner: "
+                f"requested task {requested_task} conflicts with that active identity. "
                 f"{identity.worktree}. Run `python3 scripts/ai_linked_worktree_recovery.py --task {identity.task}` "
                 "for the read-only owner repair route."
             )
@@ -583,7 +588,7 @@ def validate_start_state(
         print(branch_issue, file=sys.stderr)
         return None
 
-    linked_issue = linked_worktree_active_issue(root=PROJECT_ROOT)
+    linked_issue = linked_worktree_active_issue(task, root=PROJECT_ROOT)
     if linked_issue:
         print(linked_issue, file=sys.stderr)
         return None

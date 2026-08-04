@@ -1,0 +1,73 @@
+{
+  "contractVersion": 2,
+  "workItemId": "foreign-duplicate-start-v1",
+  "mode": "code",
+  "title": "Permit unrelated Work Item start despite recoverable foreign duplicate",
+  "baseCommit": "2e09db7068cfb6654afc8e545927df2e8bc1f825",
+  "startReceipt": {"path": ".ai/work-items/starts/foreign-duplicate-start-v1.json", "baseCommit": "2e09db7068cfb6654afc8e545927df2e8bc1f825", "initialScopeDigest": "a8ab29da61314dc94b157a63af9b9805dd9f335d7a806ce18a0cf5f39aff5981", "contractSkeletonDigest": "7857a9bbc2b1cac9602512b5f0c303dd3cff72c32c10dd79a4a84b4497149200"},
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "目标：执行计划，到全部完成。 我授权给你自动执行，写入到每个工单的Contract里。遇到流程问题，要先开工单修正。不要采用临时修补方案。",
+  "rawRequestSource": {"type": "human", "reference": "conversation", "capturedAt": "2026-08-04T22:43:00+00:00", "digest": "sha256:authorized-governed-corrective-653"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scope": [
+    ".ai/work-items/active/foreign-duplicate-start-v1.contract.json",
+    ".ai/work-items/active/foreign-duplicate-start-v1.summary.json",
+    ".ai/work-items/active/foreign-duplicate-start-v1.outcome.json",
+    ".ai/work-items/active/foreign-duplicate-start-v1.outcome.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/evidence/test-weakening/foreign-duplicate-start-v1.json",
+    ".ai/cockpit/current_status.md",
+    "scripts/ai_start.py",
+    "tests/test_start_and_archive.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Mutating, detaching, renaming, or deleting foreign linked worktrees or their active evidence.",
+    "Any manual ai-start bypass, global relaxation of malformed identity checks, release, or quality weakening."
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/653", "reason": "Authoritative regression report and acceptance."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/642", "reason": "Original linked-worktree startup resilience requirement."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/652", "reason": "Merged predecessor whose real-main behavior exposed the remaining regression."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "high", "riskTypes": ["workflow_integrity", "evidence_integrity"], "reason": "A mistaken relaxation could hide malformed or active Work Item identity conflicts.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["P1 workflow regression blocks all subsequent Work Item lifecycle."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user authorized autonomous corrective implementation and this bootstrap Contract records the ai-start failure before any lifecycle write."},
+  "preReviewWarnings": [],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record implementation and closure checkpoints for this startup-regression correction."},
+  "acceptance": [
+    "A new unrelated Work Item can create its Contract/Summary when a foreign duplicate has exactly one canonical owner.",
+    "Foreign duplicate diagnosis remains read-only and reports owner-only recovery guidance.",
+    "Malformed, ambiguous, noncanonical-without-owner, and requested-task active-owner identity states remain fail closed.",
+    "A real Git linked-worktree regression proves no foreign Contract/Summary bytes are mutated.",
+    "Focused checks, full quality, standard Finish/archive, hosted PR checks, merge, and closure pass without a manual ai-start bypass."
+  ],
+  "guidelines": [
+    "Do not mutate foreign linked worktrees or their evidence.",
+    "Make allowance only for a uniquely canonical recoverable duplicate unrelated to the requested Work Item.",
+    "Preserve fail-closed behavior for malformed, ambiguous, and requested-task conflicts.",
+    "Use real linked-worktree regression evidence rather than mocked classification alone."
+  ],
+  "intent": {"problem": "After #652 merged, ai-start still globally rejects a new Work Item because an unrelated stale foreign duplicate identity is recoverable but not allowed.", "constraints": ["Normal ai-start failed before it could create this Contract; this bootstrap record is the governed corrective path.", "Do not repair or change foreign worktrees automatically."], "rationale": "A new Work Item must be able to start independently while preserving explicit diagnostics and fail-closed protection for real identity conflicts."},
+  "declaredIntent": {"summary": "Permit independent governed Work Item startup while retaining fail-closed linked-worktree identity integrity.", "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]},
+  "scenarioCoverage": [
+    {"scenario": "A canonical owner and unrelated recoverable foreign duplicate exist.", "expected": "New Work Item startup succeeds and foreign evidence bytes remain unchanged.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Real Git linked-worktree regression."},
+    {"scenario": "A malformed or ambiguous foreign active identity exists.", "expected": "Startup remains fail closed with diagnostic output.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused identity classification regressions."},
+    {"scenario": "The requested task already has an active canonical owner.", "expected": "Startup remains fail closed and does not create a second active record.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Focused requested-task conflict regression."}
+  ],
+  "verification": [
+    {"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "RayIori", "reason": "The user authorized autonomous execution for every corrective Work Item; the only restricted write is source-bound test-retirement evidence required by the configured guard for #653."},
+  "rollbackNote": "Revert this Work Item diff and preserve foreign worktree evidence.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 799}}
+}
