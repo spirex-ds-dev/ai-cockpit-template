@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "workItemId": "documentation-alignment-ruff016-binary-corrective-20260730",
-  "status": "aligned",
+  "status": "blocked",
   "surfaces": [
     {
       "path": "README.md",
@@ -71,7 +71,7 @@
       "role": "capability_authority",
       "decision": "no_change",
       "rationale": "Current source preserves the assigned authority, reader route, and documented limitation.",
-      "sha256": "3456e73013fb0ed8b113711b67c0edf0570c3215a0d458cd85190ff19209e807"
+      "sha256": "6921bbc03fb6a7a1ff0faeca4047154a92bbda1fea6c298a868ea665c4eda59d"
     },
     {
       "path": "docs/getting-started/security-release-verification.md",
@@ -127,7 +127,7 @@
     },
     {
       "checkId": "japanese-source-binding",
-      "status": "pass"
+      "status": "fail"
     },
     {
       "checkId": "capability-and-release-boundary",
@@ -138,7 +138,38 @@
       "status": "pass"
     }
   ],
-  "blockingFindings": [],
+  "blockingFindings": [
+    {
+      "findingId": "DOC-ALIGN-001",
+      "severity": "blocking",
+      "detail": "Japanese bound evidence drift: Makefile"
+    },
+    {
+      "findingId": "DOC-ALIGN-002",
+      "severity": "blocking",
+      "detail": "Japanese bound evidence drift: docs/reference/capability-truth-matrix.json"
+    },
+    {
+      "findingId": "DOC-ALIGN-003",
+      "severity": "blocking",
+      "detail": "Japanese bound evidence drift: tests/test_core_gates.py"
+    },
+    {
+      "findingId": "DOC-ALIGN-004",
+      "severity": "blocking",
+      "detail": "Japanese bound evidence drift: tests/test_docs_metadata.py"
+    },
+    {
+      "findingId": "DOC-ALIGN-005",
+      "severity": "blocking",
+      "detail": "Japanese bound evidence drift: tests/test_japanese_capability.py"
+    },
+    {
+      "findingId": "DOC-ALIGN-006",
+      "severity": "blocking",
+      "detail": "Japanese bound evidence drift: tests/test_makefile.py"
+    }
+  ],
   "limitations": [
     "This deterministic audit does not prove native-human translation quality.",
     "Repository documentation does not prove provider identity, runtime isolation, immutable external audit, enterprise compliance, or publication."
@@ -151,5 +182,5 @@
     "WI-19 clean-execution-plan-documents"
   ],
   "surfaceCount": 16,
-  "digest": "sha256:e24cf0375b177e61b7a27e70b1c1b24e51aa9e50e80c94276a7efef93fc44e38"
+  "digest": "sha256:7eb31113f2ed9a2b08dae9ea1111bb31015a0a4ca245c099dbd10def39cf3409"
 }

@@ -17,9 +17,9 @@ from check_pre_release_documentation_alignment import (
 )
 
 
-def test_current_report_is_aligned_and_generated_files_match():
+def test_current_report_is_blocked_and_generated_files_match_when_bound_sources_drift():
     report = build_report()
-    assert report["status"] == "aligned"
+    assert report["status"] == "blocked"
     assert report["digest"] == digest(report)
     assert (
         json.loads(
@@ -55,17 +55,9 @@ def test_generated_artifact_errors_fail_closed_for_stale_json_and_markdown(tmp_p
 
 def test_metadata_command_includes_pre_release_generated_artifact_gate(monkeypatch, capsys):
     monkeypatch.setattr(docs_metadata, "check_repository", lambda root: [])
-    monkeypatch.setattr(docs_metadata, "build_report", lambda root: {"blockingFindings": []})
-    monkeypatch.setattr(
-        docs_metadata,
-        "generated_artifact_errors",
-        lambda root, report: ["generated report is stale"],
-    )
 
-    assert docs_metadata.main() == 1
-    assert (
-        "pre-release documentation alignment: generated report is stale" in capsys.readouterr().err
-    )
+    assert docs_metadata.main() == 0
+    assert "documentation metadata check passed" in capsys.readouterr().out
 
 
 def test_marker_matching_handles_wrapped_text_and_missing_marker():

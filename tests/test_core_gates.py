@@ -1047,6 +1047,7 @@ def test_finish_main_records_required_check_failure(tmp_path, monkeypatch):
             {
                 "contractVersion": 2,
                 "workItemId": "task",
+                "baseCommit": "b" * 40,
                 "verification": [{"check": "quality", "required": True}],
             }
         ),
@@ -1055,6 +1056,7 @@ def test_finish_main_records_required_check_failure(tmp_path, monkeypatch):
     summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
     monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
     monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
     monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
     monkeypatch.setattr(
         ai_finish,
@@ -1074,12 +1076,74 @@ def test_finish_main_records_required_check_failure(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
     assert ai_finish.main() == 3
-    assert executed == [["make", "sourceBoundEvidence"], ["make", "quality"]]
+    assert executed == [["make", "quality"]]
     recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
-    assert [item["check"] for item in recorded] == ["sourceBoundEvidence", "quality"]
-    assert recorded[0]["result"] == "passed"
-    assert recorded[1]["result"] == "failed"
-    assert recorded[1]["exitCode"] == 3
+    assert [item["check"] for item in recorded] == ["quality"]
+    assert recorded[0]["result"] == "failed"
+    assert recorded[0]["exitCode"] == 3
+
+
+def test_finish_main_does_not_inject_release_source_evidence_into_work_item_checks(
+    tmp_path, monkeypatch
+):
+    """A normal Work Item may finish before the post-merge final reassessment."""
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    contract = active / "task.contract.json"
+    summary = active / "task.summary.json"
+    contract.write_text(
+        json.dumps(
+            {
+                "contractVersion": 2,
+                "workItemId": "task",
+                "baseCommit": "b" * 40,
+                "verification": [{"check": "quality", "required": True}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    summary.write_text(json.dumps({"verification": []}), encoding="utf-8")
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(
+        ai_finish,
+        "render_check_command",
+        lambda check, **_kwargs: (f"make {check}", ["make", check]),
+    )
+    executed = []
+
+    def record_run(command, **_kwargs):
+        executed.append(command)
+        return 0, 1, "passed"
+
+    monkeypatch.setattr(ai_finish, "run", record_run)
+    monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: ObservabilityStub())
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
+
+    assert ai_finish.main() == 0
+    assert executed[0] == ["make", "quality"]
+    assert ["make", "sourceBoundEvidence"] not in executed
+
+
+def test_finish_verification_normalization_ignores_entries_without_a_check_key():
+    """Malformed optional entries cannot become executable verification checks."""
+    assert ai_finish.inject_mandatory_verification_checks(
+        [{"required": False}, {"check": "quality", "required": True}]
+    ) == [{"check": "quality", "required": True}]
+
+
+def test_pre_merge_outcome_requires_a_valid_contract_base_commit(tmp_path, monkeypatch):
+    contract = tmp_path / "task.contract.json"
+    summary = tmp_path / "task.summary.json"
+    contract.write_text(json.dumps({"baseCommit": "invalid"}), encoding="utf-8")
+    summary.write_text(json.dumps({}), encoding="utf-8")
+
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
+
+    with pytest.raises(ValueError, match="baseCommit"):
+        ai_finish._pre_merge_outcome_input("task", contract, summary)
 
 
 def test_finish_main_rejects_stale_checkpoint_before_declared_checks(tmp_path, monkeypatch, capsys):
@@ -1153,7 +1217,10 @@ def test_finish_main_source_bound_failure_stops_quality_and_outcome(tmp_path, mo
             {
                 "contractVersion": 2,
                 "workItemId": "task",
-                "verification": [{"check": "quality", "required": True}],
+                "verification": [
+                    {"check": "sourceBoundEvidence", "required": True},
+                    {"check": "quality", "required": True},
+                ],
             }
         ),
         encoding="utf-8",
@@ -1230,15 +1297,13 @@ def test_finish_main_stabilizes_successful_work_item(tmp_path, monkeypatch):
     assert ai_finish.main() == 0
     # Status is regenerated before each status-derived assertion so persisted
     # verification evidence cannot invalidate the projection it is checking.
-    assert len(executed) == 13
-    assert executed[0] == ["make", "sourceBoundEvidence"]
-    assert executed[1] == ["make", "quality"]
+    assert len(executed) == 12
+    assert executed[0] == ["make", "quality"]
     assert sum(command[:2] == ["make", "generate-cockpit-status"] for command in executed) == 4
     assert executed[-1][:2] == ["make", "check-ai-change-summary"]
     recorded = json.loads(summary.read_text(encoding="utf-8"))["verification"]
     assert all(item["result"] == "passed" for item in recorded)
     assert {item["check"] for item in recorded} >= {
-        "sourceBoundEvidence",
         "quality",
         "aiStatus",
         "aiSummary",
@@ -1423,8 +1488,8 @@ def test_finish_main_reports_unknown_check_id(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", "task", "--no-archive"])
 
     assert ai_finish.main() == 2
-    assert rendered == ["sourceBoundEvidence", "missingCheck"]
-    assert executed == [["make", "sourceBoundEvidence"]]
+    assert rendered == ["missingCheck"]
+    assert executed == []
 
 
 def test_finish_main_fails_when_archive_step_fails(tmp_path, monkeypatch):

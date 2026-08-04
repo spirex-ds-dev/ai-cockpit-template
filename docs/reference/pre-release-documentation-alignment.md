@@ -8,9 +8,9 @@ generated: true
 # Pre-release Documentation Alignment Report
 
 - Work Item: `documentation-alignment-ruff016-binary-corrective-20260730`
-- Status: `aligned`
+- Status: `blocked`
 - Surfaces: `16`
-- Digest: `sha256:e24cf0375b177e61b7a27e70b1c1b24e51aa9e50e80c94276a7efef93fc44e38`
+- Digest: `sha256:7eb31113f2ed9a2b08dae9ea1111bb31015a0a4ca245c099dbd10def39cf3409`
 
 ## Surface decisions
 
@@ -37,7 +37,7 @@ generated: true
 
 - `surface-inventory-and-markers`: **pass**
 - `trust-layer-contract`: **pass**
-- `japanese-source-binding`: **pass**
+- `japanese-source-binding`: **fail**
 - `capability-and-release-boundary`: **pass**
 - `serial-plan-stage`: **pass**
 
@@ -45,3 +45,12 @@ generated: true
 
 - This deterministic audit does not prove native-human translation quality.
 - Repository documentation does not prove provider identity, runtime isolation, immutable external audit, enterprise compliance, or publication.
+
+## Blocking findings
+
+- `DOC-ALIGN-001`: Japanese bound evidence drift: Makefile
+- `DOC-ALIGN-002`: Japanese bound evidence drift: docs/reference/capability-truth-matrix.json
+- `DOC-ALIGN-003`: Japanese bound evidence drift: tests/test_core_gates.py
+- `DOC-ALIGN-004`: Japanese bound evidence drift: tests/test_docs_metadata.py
+- `DOC-ALIGN-005`: Japanese bound evidence drift: tests/test_japanese_capability.py
+- `DOC-ALIGN-006`: Japanese bound evidence drift: tests/test_makefile.py

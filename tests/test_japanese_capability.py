@@ -632,7 +632,17 @@ def test_cli_check_rejects_report_drift_before_reporting_blockers(tmp_path, monk
     assert "stale Japanese assessment Markdown" in capsys.readouterr().err
 
 
-def test_release_requirement_accepts_fresh_final_reassessment(monkeypatch, capsys):
+def test_release_requirement_accepts_fresh_final_reassessment(tmp_path, monkeypatch, capsys):
+    result = evaluate()
+    result["workItemRole"] = "final_reassessment"
+    result["blockingFindings"] = []
+    json_path = tmp_path / "japanese-capability-assessment.json"
+    markdown_path = tmp_path / "japanese-capability-assessment.md"
+    json_path.write_text(render_json(result), encoding="utf-8")
+    markdown_path.write_text(render_markdown(result), encoding="utf-8")
+    monkeypatch.setattr(ai_japanese_capability, "JSON_REPORT_PATH", json_path)
+    monkeypatch.setattr(ai_japanese_capability, "MARKDOWN_REPORT_PATH", markdown_path)
+    monkeypatch.setattr(ai_japanese_capability, "evaluate", lambda: result)
     monkeypatch.setattr(
         sys,
         "argv",

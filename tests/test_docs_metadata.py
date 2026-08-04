@@ -19,6 +19,12 @@ from check_docs_metadata import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_ordinary_docs_metadata_does_not_import_release_alignment_gate():
+    source = (ROOT / "scripts" / "check_docs_metadata.py").read_text(encoding="utf-8")
+
+    assert "check_pre_release_documentation_alignment" not in source
+
+
 def copy_documentation(target: Path) -> None:
     for name in ("README.md", "README.ja.md", "README.zh-CN.md"):
         shutil.copy2(ROOT / name, target / name)
