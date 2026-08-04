@@ -15,6 +15,7 @@ import sys
 import tempfile
 import time
 from collections.abc import Iterator
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -181,7 +182,19 @@ def has_complete_archived_work_item(worktree: Path, task: str) -> bool:
     )
 
 
-def linked_worktree_active_issue(*, root: Path = PROJECT_ROOT) -> str | None:
+@dataclass(frozen=True)
+class LinkedWorktreeIdentity:
+    """A validated active Work Item identity observed in a linked checkout."""
+
+    worktree: Path
+    branch: str
+    task: str
+
+
+def linked_worktree_identity_report(
+    *, root: Path = PROJECT_ROOT
+) -> tuple[list[LinkedWorktreeIdentity], list[str]]:
+    """Discover linked active identities without mutating any checkout."""
     """Reject malformed foreign state while permitting isolated Work Items.
 
     Concurrency belongs to the agent orchestrator, not to a shared active-WI
@@ -192,13 +205,18 @@ def linked_worktree_active_issue(*, root: Path = PROJECT_ROOT) -> str | None:
     try:
         records = linked_worktree_records(root=root)
     except (OSError, RuntimeError):
-        return "ERROR: cannot enumerate linked worktrees before starting a Work Item"
+        return [], ["ERROR: cannot enumerate linked worktrees before starting a Work Item"]
+    identities: list[LinkedWorktreeIdentity] = []
+    errors: list[str] = []
     for worktree, branch in records:
         try:
             if worktree.resolve() == root.resolve() or branch is None:
                 continue
         except OSError:
-            return f"ERROR: cannot resolve linked worktree before starting a Work Item: {worktree}"
+            errors.append(
+                f"ERROR: cannot resolve linked worktree before starting a Work Item: {worktree}"
+            )
+            continue
         active_dir = worktree / ".ai" / "work-items" / "active"
         contracts = {
             path.name.removesuffix(".contract.json") for path in active_dir.glob("*.contract.json")
@@ -206,40 +224,79 @@ def linked_worktree_active_issue(*, root: Path = PROJECT_ROOT) -> str | None:
         summaries = {
             path.name.removesuffix(".summary.json") for path in active_dir.glob("*.summary.json")
         }
-        stale_summary_orphans = {
+        summaries -= {
             task
             for task in summaries - contracts
             if has_complete_archived_work_item(worktree, task)
         }
-        summaries -= stale_summary_orphans
         if not contracts and not summaries:
             continue
         if contracts != summaries:
-            return (
+            errors.append(
                 "ERROR: linked worktree has malformed active Work Item records on branch "
                 f"{branch}: {worktree} (contract/summary pair required)"
             )
+            continue
         if len(contracts) != 1:
-            return (
+            errors.append(
                 "ERROR: linked worktree has multiple active Work Items on branch "
                 f"{branch}: {worktree}"
             )
+            continue
         task = next(iter(contracts))
-        if branch != f"codex/{task}":
-            return (
-                "ERROR: linked worktree active Work Item branch does not match its task: "
-                f"{branch} != codex/{task}: {worktree}"
-            )
         try:
             contract = json.loads(
                 (active_dir / f"{task}.contract.json").read_text(encoding="utf-8")
             )
             summary = json.loads((active_dir / f"{task}.summary.json").read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
-            return f"ERROR: linked worktree has unreadable active Work Item records: {worktree}"
+            errors.append(
+                f"ERROR: linked worktree has unreadable active Work Item records: {worktree}"
+            )
+            continue
         if contract.get("workItemId") != task or summary.get("workItemId") != task:
-            return (
+            errors.append(
                 f"ERROR: linked worktree active Work Item IDs do not match record paths: {worktree}"
+            )
+            continue
+        identities.append(LinkedWorktreeIdentity(worktree, branch, task))
+    return identities, errors
+
+
+def recoverable_foreign_duplicate_identities(
+    identities: list[LinkedWorktreeIdentity],
+) -> set[LinkedWorktreeIdentity]:
+    """Classify only a noncanonical duplicate with one canonical owner."""
+    recoverable: set[LinkedWorktreeIdentity] = set()
+    for identity in identities:
+        canonical = [
+            candidate
+            for candidate in identities
+            if candidate.task == identity.task and candidate.branch == f"codex/{identity.task}"
+        ]
+        if identity.branch != f"codex/{identity.task}" and len(canonical) == 1:
+            recoverable.add(identity)
+    return recoverable
+
+
+def linked_worktree_active_issue(*, root: Path = PROJECT_ROOT) -> str | None:
+    """Reject malformed foreign state while permitting isolated Work Items."""
+    identities, errors = linked_worktree_identity_report(root=root)
+    if errors:
+        return errors[0]
+    recoverable = recoverable_foreign_duplicate_identities(identities)
+    for identity in identities:
+        if identity in recoverable:
+            return (
+                "ERROR: linked worktree has a recoverable foreign duplicate Work Item identity: "
+                f"{identity.branch} carries {identity.task} while codex/{identity.task} is the canonical owner: "
+                f"{identity.worktree}. Run `python3 scripts/ai_linked_worktree_recovery.py --task {identity.task}` "
+                "for the read-only owner repair route."
+            )
+        if identity.branch != f"codex/{identity.task}":
+            return (
+                "ERROR: linked worktree active Work Item branch does not match its task: "
+                f"{identity.branch} != codex/{identity.task}: {identity.worktree}"
             )
     return None
 

@@ -17,9 +17,10 @@ from check_pre_release_documentation_alignment import (
 )
 
 
-def test_current_report_is_blocked_and_generated_files_match_when_bound_sources_drift():
+def test_current_report_is_aligned_and_generated_files_match_after_bound_evidence_refresh():
     report = build_report()
-    assert report["status"] == "blocked"
+    assert report["status"] == "aligned"
+    assert report["blockingFindings"] == []
     assert report["digest"] == digest(report)
     assert (
         json.loads(
@@ -32,6 +33,54 @@ def test_current_report_is_blocked_and_generated_files_match_when_bound_sources_
     assert Path("docs/reference/pre-release-documentation-alignment.md").read_text(
         encoding="utf-8"
     ) == render_markdown(report)
+
+
+def test_build_report_blocks_when_injected_bound_evidence_drifts(tmp_path, monkeypatch):
+    bound = tmp_path / "bound.md"
+    bound.write_text("before", encoding="utf-8")
+    checksum = hashlib.sha256(b"before").hexdigest()
+    assessment_path = tmp_path / "docs/reference/japanese-capability-assessment.json"
+    assessment_path.parent.mkdir(parents=True)
+    assessment_path.write_text(
+        json.dumps(
+            {
+                "workItemRole": "final_reassessment",
+                "blockingFindings": [],
+                "evidenceSource": {"files": [{"path": "bound.md", "sha256": checksum}]},
+            }
+        ),
+        encoding="utf-8",
+    )
+    surface = tmp_path / "surface.md"
+    surface.write_text("required marker", encoding="utf-8")
+    plan = tmp_path / "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md"
+    plan.parent.mkdir(parents=True)
+    plan.write_text("文档对齐 WI-18 WI-19", encoding="utf-8")
+    bound.write_text("after", encoding="utf-8")
+    monkeypatch.setattr(
+        alignment,
+        "SURFACES",
+        {
+            "surface.md": ("test", ("required marker",)),
+            "docs/superpowers/plans/2026-07-25-ai-cockpit-comprehensive-remediation.md": (
+                "plan",
+                ("文档对齐", "WI-18", "WI-19"),
+            ),
+        },
+    )
+    monkeypatch.setattr(alignment, "UPDATED_SURFACES", set())
+    monkeypatch.setattr(alignment, "check_trust_layer", lambda root: [])
+
+    report = build_report(tmp_path)
+
+    assert report["status"] == "blocked"
+    assert report["blockingFindings"] == [
+        {
+            "findingId": "DOC-ALIGN-001",
+            "severity": "blocking",
+            "detail": "Japanese bound evidence drift: bound.md",
+        }
+    ]
 
 
 def test_generated_artifact_errors_fail_closed_for_stale_json_and_markdown(tmp_path, monkeypatch):

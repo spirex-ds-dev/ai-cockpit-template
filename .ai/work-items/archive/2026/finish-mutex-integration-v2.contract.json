@@ -1,0 +1,63 @@
+{
+  "contractVersion": 2,
+  "workItemId": "finish-mutex-integration-v2",
+  "mode": "code",
+  "title": "Integrate startup recovery and Finish mutex",
+  "baseCommit": "7aea8469439b5fb551f0ea71b3ac94bd1ac00a16",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/finish-mutex-integration-v2.contract.json",
+    ".ai/work-items/active/finish-mutex-integration-v2.summary.json",
+    ".ai/work-items/active/finish-mutex-integration-v2.outcome.json",
+    ".ai/work-items/active/finish-mutex-integration-v2.outcome.md",
+    ".ai/work-items/starts/**", ".ai/work-items/archive/**", ".ai/cockpit/current_status.md", ".ai/guards/coverage_policy.yaml",
+    "scripts/ai_start.py", "scripts/ai_linked_worktree_recovery.py", "scripts/ai_finish.py",
+    "tests/test_start_and_archive.py", "tests/test_finish_e2e.py", "tests/test_pre_release_documentation_alignment.py", "tests/test_guards_and_status.py",
+    ".ai/cockpit/README.md", "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json", "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json", "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": ["Mutating, detaching, renaming, or deleting predecessor #642/#644/#646 worktrees or their active evidence.", "Any temporary startup bypass, global Finish lock, quality weakening, release, or manual rewrite of generated evidence."],
+  "sources": [
+    {"path":"https://github.com/spirex-ds-dev/ai-cockpit-template/issues/644","reason":"Authoritative startup/documentation deadlock requirements."},
+    {"path":"https://github.com/spirex-ds-dev/ai-cockpit-template/issues/646","reason":"Authoritative same-worktree Finish concurrency failure facts."},
+    {"path":"https://github.com/spirex-ds-dev/ai-cockpit-template/issues/647","reason":"Authoritative integrated corrective scope and acceptance."},
+    {"path":"https://github.com/spirex-ds-dev/ai-cockpit-template/issues/648","reason":"User correction requires a later governed active Outcome/traffic-light projection, not a temporary status patch here."},
+    {"path":"https://github.com/spirex-ds-dev/ai-cockpit-template/issues/650","reason":"Corrective prerequisite created from this Work Item's full-quality failure; the current documentation-alignment test asserts obsolete blocked state after prescribed evidence regeneration."},
+    {"path":"https://github.com/spirex-ds-dev/ai-cockpit-template/issues/651","reason":"Corrective prerequisite created from Finish's coverage-guard failure; explicitly bind the read-only linked-worktree diagnostic to its regression test without weakening the guard."},
+    {"path":"/tmp/647-ai-start.log","reason":"Immutable normal ai-start failure: foreign linked worktree branch identity mismatch blocked skeleton creation before lifecycle writes."}
+  ],
+  "rawUserRequest":"Execute the complete authorized plan; each corrective has a Contract, no temporary workaround, and safe parallelism is used.",
+  "rawRequestSource":{"type":"human","reference":"conversation:2026-08-05-complete-plan-authorization","capturedAt":"2026-08-05","digest":"sha256:647-bootstrap-authority-and-normal-start-failure"},
+  "requestedOperation":{"target":"repository_governance","action":"modify","environment":"repository","effect":"enforce","authorityRequired":false},
+  "declaredIntent":{"summary":"Deliver the governed integration of startup recovery, prescribed Japanese evidence regeneration, and a task/worktree-scoped Finish mutex.","requestedCapabilities":["ai_governance","software_design","test_automation","documentation"]},
+  "unknowns": [], "notCodable": false,
+  "riskAssessment":{"level":"high","riskTypes":["workflow_integrity","concurrency","evidence_integrity"],"reason":"A wrong recovery or mutex can mutate the wrong Work Item evidence or silently serialize independent tasks.","unknownsReviewComplete":true},
+  "agentCapability":{"canImplement":true,"canVerify":true,"needsHumanDecision":false,"blockedReason":""},
+  "executionDecision":{"status":"continue","reason":"The user explicitly authorized autonomous corrective implementation, Contract writes, PR lifecycle, and release preparation; #647 is the governed resolution of normal-start failure."},
+  "checkpointPolicy":{"requiredBeforeFinish":true,"requiredStages":["before_edit","before_finish"],"reason":"Bind implementation and completion to explicit checkpoints."},
+  "acceptance":[
+    "#642 foreign-duplicate diagnosis/recovery remains non-mutating and fail-closed; isolated valid Work Items remain parallelizable.",
+    "Japanese source-bound evidence is changed only by its prescribed generators and all source-bound documentation checks pass.",
+    "A same-task concurrent normal/archive ai-finish attempt is rejected before mutable Outcome, report, status, or archive writes, shows owner/retry guidance, and stale metadata recovery is bounded and auditable.",
+    "Distinct Work Item worktrees do not contend for the Finish mutex.",
+    "Documentation-alignment regression tests assert generated current truth and independently exercise injected source drift without requiring a stale blocked baseline.",
+    "Coverage guard explicitly associates the linked-worktree recovery diagnostic with its exercised regression test, while unrelated tests remain rejected.",
+    "Full quality, standard Finish/archive, hosted PR checks, merge, and closure complete without manual evidence rewrite."
+  ],
+  "guidelines":["Keep all foreign duplicate diagnosis read-only and fail closed.","Use an OS-scoped lock keyed by the active Work Item worktree, never a global repository lock.","Regenerate source-bound Japanese artifacts only through their prescribed generators.","Preserve predecessor worktrees and evidence as read-only facts."],
+  "intent":{"problem":"Normal ai-start is globally blocked by a foreign linked-worktree identity while #644 needs prescribed Japanese evidence regeneration, and concurrent ai-finish processes can write the same active Work Item evidence simultaneously.","constraints":["This bootstrap Contract exists only because the normal creator failed before writing; its source records that immutable failure and user authority.","Do not repair foreign worktrees automatically or change predecessor evidence.","Acquire the mutex before all Finish mutable evidence operations; automatic stale handling must be bounded."],"rationale":"A single current-main integration replaces both deadlocks with normal deterministic lifecycle behavior while preserving safe parallel Work Items."},
+  "scenarioCoverage":[
+    {"scenario":"One canonical and one foreign duplicate identity are discovered.","expected":"Start remains fail closed and diagnostic output is read-only with owner-only recovery guidance.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Focused start/recovery tests."},
+    {"scenario":"Normal and archive Finish run concurrently for the same active Work Item worktree.","expected":"The second process exits before Outcome/report/status/archive mutation and names a safe retry condition.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Focused subprocess mutex regression."},
+    {"scenario":"Two distinct Work Item worktrees finish in parallel.","expected":"Their separate scoped locks do not contend.","required":true,"status":"unverified","evidence":[],"verificationPlan":"Focused scoped-lock regression."}
+  ],
+  "verification":[
+    {"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":true}
+  ],
+  "destructiveChangePolicy":{"allowed":false,"requiresHumanApproval":true,"allowPatterns":[]},
+  "restrictedWriteApproval":{"approved":true,"approvedBy":"user","reason":"User explicitly authorized automatic execution and Contract writes for every corrective Work Item."},
+  "rollbackNote":"Revert this Work Item diff; no predecessor checkout or evidence is changed.",
+  "budgetImpact":{"expectedMetrics":{"archiveGrowth":1}},
+  "startReceipt":{"path":".ai/work-items/starts/finish-mutex-integration-v2.json","baseCommit":"7aea8469439b5fb551f0ea71b3ac94bd1ac00a16","initialScopeDigest":"9c5086ea9aa02c86a171bfb5900bdb36eb69217de6a56f65f75075c6c000243c","contractSkeletonDigest":"c88ef1e099862423580097defa986c3f4fb2de30157dd72497a7eaf9a7235c25"}
+}

@@ -119,6 +119,30 @@ def test_default_coverage_policy_rejects_cross_module_test(monkeypatch):
     assert [item.path for item in items] == ["src/auth.rs"]
 
 
+def test_default_coverage_policy_associates_linked_worktree_recovery_with_its_regression(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        ai_check_coverage_guard, "POLICY", ROOT / ".ai" / "guards" / "coverage_policy.yaml"
+    )
+
+    assert (
+        ai_check_coverage_guard.detect(
+            [
+                "scripts/ai_linked_worktree_recovery.py",
+                "tests/test_start_and_archive.py",
+            ]
+        )
+        == []
+    )
+    assert [
+        item.path
+        for item in ai_check_coverage_guard.detect(
+            ["scripts/ai_linked_worktree_recovery.py", "tests/test_guards_and_status.py"]
+        )
+    ] == ["scripts/ai_linked_worktree_recovery.py"]
+
+
 def test_checkpoint_next_action_stops_on_unknowns():
     contract = {"notCodable": False, "unknowns": ["decision"], "verification": []}
     assert ai_checkpoint.next_action(contract, None).startswith("Stop coding")
