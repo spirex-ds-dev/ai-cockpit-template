@@ -1,0 +1,276 @@
+{
+  "contractVersion": 2,
+  "workItemId": "publish-v0548",
+  "mode": "code",
+  "title": "Publish v0.5.48 from current main",
+  "baseCommit": "6f5b5a129360b96c57e4f75caf2d89827a9e0d5a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/publish-v0548.contract.json",
+    ".ai/work-items/active/publish-v0548.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/publish-v0548.outcome.json",
+    ".ai/work-items/active/publish-v0548.outcome.md"
+  ],
+  "outOfScope": [
+    "Changing release workflow security controls, provider configuration, branch protection, signing infrastructure, or supply-chain generators.",
+    "Changing release.json, next-release.json, release-state.json, installer content, product source, or release documentation.",
+    "Modifying, deleting, reusing, or claiming validity for any existing immutable tag or provider Release.",
+    "Claiming publication or public installation without provider-bound post-publication evidence."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Canonical Work Item lifecycle and release boundary rules."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "The sole provider workflow authorized to create the v0.5.48 immutable tag, Release, and verified assets."
+    },
+    {
+      "path": "release.json",
+      "reason": "Published release projection used to validate the candidate base identity."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Unpublished v0.5.48 candidate identity."
+    },
+    {
+      "path": "release-state.json",
+      "reason": "Candidate state and deferred source-binding boundary."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0548-preparation-rehearsal.summary.json",
+      "reason": "The prior private rehearsal evidence; its SHA is historical and cannot authorize a new source."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Defines the candidate, immutable tag, provider Release, and public-distribution distinctions."
+    }
+  ],
+  "rawUserRequest": "完成全部工单包括PR和清理。明确授权给你，并写入Contract。如果没有问题，请开始。全部完成为止不要停止。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03-continuous-closure-and-release-authorization",
+    "capturedAt": "2026-08-03",
+    "digest": "sha256:1e61ff0048ff8298470f309bde20c0e14600b04eee6dca1cdadfd7c62030390b"
+  },
+  "declaredIntent": {
+    "summary": "Publish only v0.5.48 from the freshly resolved main source after a new same-SHA private rehearsal and all fail-closed provider gates pass.",
+    "requestedCapabilities": ["ai_governance"]
+  },
+  "requestedOperation": {
+    "target": "repository_release",
+    "action": "publish",
+    "environment": "public_provider",
+    "effect": "create_immutable_release_tag_and_public_assets",
+    "authorityRequired": true
+  },
+  "authorityEvidence": {
+    "type": "user_authorization",
+    "authorizedBy": "user",
+    "reference": "conversation:2026-08-03-continuous-closure-and-release-authorization",
+    "scope": "Publish only v0.5.48 after mandatory same-SHA rehearsal, provider workflow, tag, Release, asset, and post-publication evidence pass. No gate bypass, historical-tag mutation, or blind retry is authorized."
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "external_publication",
+      "release_identity",
+      "supply_chain_evidence",
+      "irreversible_tag_and_asset"
+    ],
+    "reason": "The operation creates a public immutable tag and provider assets. Exact source, tag identity, provider Release state, archive, provenance, installer, and distribution evidence must agree.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Public immutable provider release requires strict governance."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized continuous completion, including governed PR lifecycle, release, cleanup, and fail-closed verification."
+  },
+  "preReviewWarnings": [
+    "Resolve current origin/main immediately before each workflow dispatch; the archived rehearsal SHA is not reusable after the rehearsal PR merge.",
+    "Do not conflate a tag, Draft/stable provider Release, provider assets, or public install evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "v0.5.48 remains the sole unreserved release candidate and no historic immutable tag or provider Release is modified.",
+    "A fresh private release.yml rehearsal succeeds for the exact freshly resolved origin/main SHA and v0.5.48, producing a source-bound receipt without public mutation.",
+    "The provider release.yml publication for that same SHA and receipt succeeds and creates the v0.5.48 tag, provider Release, and declared assets only through the controlled workflow.",
+    "Provider-bound post-publication evidence verifies the tag target, Release state, asset identities, archive digest, source binding, and tagged install boundary before publication is claimed.",
+    "This Work Item records the authority and evidence truthfully, completes archive, one PR, hosted checks, merge, ai-close-work-item, and owned-branch cleanup."
+  ],
+  "guidelines": [
+    "Preserve the distinction between candidate, immutable tag, provider Release, and public distribution evidence.",
+    "Use only repository release commands and the controlled provider workflow to create provider release state or evidence.",
+    "Do not retry a failed provider path until its exact failing gate is diagnosed and recorded.",
+    "Do not report publication or public installation success before provider-bound post-publication evidence verifies it."
+  ],
+  "intent": {
+    "problem": "The v0.5.48 candidate has a successful private rehearsal on the former main SHA, but the rehearsal archival PR changed main. Its receipt cannot bind the final publication source, and no v0.5.48 tag, provider Release, public asset, or public-install evidence exists.",
+    "constraints": [
+      "Dispatch only .github/workflows/release.yml for v0.5.48, bound to the freshly resolved default-branch SHA.",
+      "Run a fresh same-SHA rehearsal first, then pass its exact run ID to the non-rehearsal publication dispatch.",
+      "Do not alter existing tags, provider Releases, release source projections, workflows, or historical archive evidence.",
+      "Require source preflight, successful provider dependencies, provider Release evidence, tagged install, and post-publication verification before claiming success.",
+      "Record the active Outcome before archive and complete this Work Item PR, merge, closure, and cleanup."
+    ],
+    "rationale": "A new independently governed Work Item binds the irreversible v0.5.48 provider operation to the current merged source and retains, rather than misuses, the prior rehearsal as historical evidence."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": true,
+    "requiresHumanApproval": true,
+    "allowPatterns": ["provider_release_v0.5.48"],
+    "approvalEvidence": {
+      "approved": true,
+      "approvedBy": "user",
+      "reason": "The user explicitly authorized continuous completion through PRs, cleanup, and release, while retaining all fail-closed gates.",
+      "identityEvidence": {
+        "schemaVersion": 1,
+        "approvalType": "destructive_change",
+        "identityLevel": "direct_user_authorized",
+        "actor": "repository owner",
+        "provider": null,
+        "evidence": {
+          "directUserInstructionRef": "conversation:2026-08-03-continuous-closure-and-release-authorization",
+          "directUserInstructionDigest": "sha256:1e61ff0048ff8298470f309bde20c0e14600b04eee6dca1cdadfd7c62030390b",
+          "authorizedAt": "2026-08-04T00:00:00+09:00"
+        },
+        "scope": ["provider_release_v0.5.48"]
+      }
+    }
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-authorized-continuous-release-plan",
+    "reason": "The user explicitly authorized continuous v0.5.48 publication, PRs, merge, closure, and final cleanup; this does not authorize bypasses, historical-tag mutation, or unsupported claims."
+  },
+  "rollbackNote": "Before tag creation, cancel the provider workflow and retain diagnostics. After the tag exists, never delete or move it; retain any failed Draft Release and open a separate corrective Work Item.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 793
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/publish-v0548.json",
+    "baseCommit": "6f5b5a129360b96c57e4f75caf2d89827a9e0d5a",
+    "initialScopeDigest": "b907af33346b0569a842b58d539c6434fff7cf72abce3b4515cfdcd12e1b231d",
+    "contractSkeletonDigest": "6f562f2457d711693964bef3b6d5ebc270232b47166b46b074af4eade9579b28"
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Main changes after the prior rehearsal, making its receipt stale.",
+      "expected": "Publication is blocked unless a new successful rehearsal receipt has the same source SHA and requested v0.5.48 tag.",
+      "verificationPlan": "Resolve origin/main immediately before dispatch, run release.yml with rehearsal=true, and validate the receipt before publication.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "The candidate identity conflicts with an existing immutable tag or provider Release.",
+      "expected": "The workflow refuses a conflicting identity; historic tags and Releases remain untouched.",
+      "verificationPlan": "Record tag and Release absence before dispatch and provider workflow identity checks after dispatch.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Provider publication creates a tag or Release whose source, assets, or public distribution evidence does not agree.",
+      "expected": "The controlled workflow fails closed or post-publication evidence identifies the exact mismatch without unsupported publication claims.",
+      "verificationPlan": "Verify workflow conclusion, tag target, provider Release state, asset digests, receipt source binding, and tagged install evidence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ]
+}
