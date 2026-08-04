@@ -1,0 +1,174 @@
+{
+  "contractVersion": 2,
+  "workItemId": "final-v0548-audit",
+  "mode": "code",
+  "title": "Audit v0.5.48 release and lifecycle closure",
+  "baseCommit": "3493d6e9e0f2a41a82b7779e839d6594f3132d1a",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/final-v0548-audit.contract.json",
+    ".ai/work-items/active/final-v0548-audit.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/final-v0548-audit.outcome.json",
+    ".ai/work-items/active/final-v0548-audit.outcome.md"
+  ],
+  "outOfScope": ["Creating, modifying, deleting, or publishing any tag, Release, asset, workflow, or provider configuration.", "Changing product source, release metadata, governance policy, or archived historical evidence.", "Repairing a discovered defect inside this audit; any defect requires a separately governed corrective Work Item."],
+  "sources": [
+    {
+      "path": "AGENTS.md", "reason": "Canonical Work Item closure rules."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/publish-v0548.summary.json", "reason": "Publication evidence record."
+    },
+    {
+      "path": ".ai/work-items/archive/2026/release-v0548-preparation-rehearsal.summary.json", "reason": "Exact-source rehearsal evidence record."
+    },
+    {
+      "path": "docs/reference/distribution.md", "reason": "Release-truth definitions."
+    }
+  ],
+  "rawUserRequest": "完成全部工单包括PR和清理。明确授权给你，并写入Contract。如果没有问题，请开始。全部完成为止不要停止。",
+  "rawRequestSource": {"type":"human","reference":"conversation:2026-08-03-continuous-closure-and-release-authorization","capturedAt":"2026-08-03","digest":"sha256:1e61ff0048ff8298470f309bde20c0e14600b04eee6dca1cdadfd7c62030390b"},
+  "declaredIntent": {"summary":"Audit the completed v0.5.48 release and governed Work Item lifecycle without altering release state.","requestedCapabilities":["ai_governance"]},
+  "requestedOperation": {"target":"repository_governance","action":"modify","environment":"repository","effect":"document","authorityRequired":false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium", "riskTypes":["completion_claim","release_evidence","lifecycle_closure"], "reason":"An audit must not confuse stale, indirect, or incomplete evidence with closure.", "unknownsReviewComplete":true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Evidence-only final audit uses standard governance."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue", "reason":"User authorized continuous completion with fail-closed verification."
+  },
+  "preReviewWarnings": [
+    "Do not claim global completion unless Work Item, PR, branch, tag, Release, and post-publication facts are independently evidenced."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "No active Work Item Contract remains on the audited default branch after this audit closes.",
+    "Archived rehearsal and publication Work Items have merged PRs, closure receipts, and absent remote work branches.",
+    "v0.5.48 tag, stable provider Release, asset inventory, source SHA, and successful provider run agree.",
+    "Current main passes the applicable repository governance and release-evidence checks, or any exact failure is recorded and remediated in a separate Work Item.",
+    "This audit archives, merges one PR, and closes its own lifecycle without release mutation."
+  ],
+  "guidelines": [
+    "Treat provider facts, repository records, and local checks as distinct evidence classes.", "Do not convert an audit finding into an ungoverned repair.", "Do not claim completed release or closure without exact evidence."
+  ],
+  "intent": {
+    "problem":"The user requested a final self-check-and-repair loop after the parallel reliability work and v0.5.48 release. The release must be audited for truth, PR lifecycle closure, branch cleanup, and North Star boundary adherence.",
+    "constraints":["Read provider and Git state independently.","Do not mutate provider or release state.","Open a separate corrective Work Item if any substantive issue is discovered.","Archive, PR, merge, and close this audit Work Item."],
+    "rationale":"A separate evidence-only audit avoids treating the publication Work Item's self-report as final proof."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 794
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/final-v0548-audit.json",
+    "baseCommit": "3493d6e9e0f2a41a82b7779e839d6594f3132d1a",
+    "initialScopeDigest": "a931db09e473664a2ca0dc87368bf5959ea1956b2d3b7c10c031429559c2c9b5",
+    "contractSkeletonDigest": "b49732f1ebc285a3101a065bedab94a62260e91aab2ce22e7380345b0a302fc7"
+  },
+  "scenarioCoverage": [
+    {"scenario":"A release tag exists without a stable Release or complete assets.","expected":"Audit identifies the mismatch and does not claim publication success.","verificationPlan":"Read tag, Release state, assets, source binding, and provider run independently.","required":true,"status":"unverified","evidence":[]},
+    {"scenario":"A merged Work Item retains a remote branch or incomplete closure.","expected":"Audit identifies it through PR and branch inventory.","verificationPlan":"Read PR merge status, closure receipts, and exact remote branch absence.","required":true,"status":"unverified","evidence":[]},
+    {"scenario":"A local governance check passes while an active Work Item remains or records are inconsistent.","expected":"Audit fails closed or records a corrective Work Item.","verificationPlan":"Run current status, Work Item, and release evidence checks on current main.","required":true,"status":"unverified","evidence":[]}
+  ]
+}
