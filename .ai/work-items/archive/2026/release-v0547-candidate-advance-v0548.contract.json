@@ -1,0 +1,263 @@
+{
+  "contractVersion": 2,
+  "workItemId": "release-v0547-candidate-advance-v0548",
+  "mode": "code",
+  "title": "Advance release candidate past published v0.5.47",
+  "baseCommit": "d55fc19c42fc07121b3d4bd21ed6c912e4547bee",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/release-v0547-candidate-advance-v0548.contract.json",
+    ".ai/work-items/active/release-v0547-candidate-advance-v0548.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/release-v0547-candidate-advance-v0548.outcome.json",
+    ".ai/work-items/active/release-v0547-candidate-advance-v0548.outcome.md",
+    "release.json",
+    "next-release.json",
+  "release-state.json",
+  ".ai/cockpit/release-freeze.json",
+  ".ai/cockpit/sbom.json",
+    ".ai/cockpit/provenance.json",
+    ".ai/cockpit/release-digests.json",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "tests/test_makefile.py",
+    "tests/test_release_state_consistency.py",
+    "tests/test_release_distribution.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Creating, deleting, moving, or retrying any immutable tag or provider Release.",
+    "Changing release workflow security controls, branch protection, signing infrastructure, or artifact generators.",
+    "Claiming a v0.5.48 public release before a separate governed publication Work Item completes provider-bound evidence."
+  ],
+  "sources": [
+    {
+      "path": "release-state.json",
+      "reason": "Canonical candidate state currently offers the existing v0.5.47 stable provider Release as unpublished."
+    },
+    {
+      "path": "next-release.json",
+      "reason": "Candidate projection must advance beyond immutable v0.5.47."
+    },
+    {
+      "path": "scripts/check_release_distribution.py",
+      "reason": "Establishes that release.json remains historical repository projection after publication while immutable Release assets are authoritative."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/releases/tag/v0.5.47",
+      "reason": "Provider evidence: v0.5.47 is a stable public Release with source binding and release assets."
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "reason": "Defines immutable tag and provider-asset publication boundaries."
+    },
+    {
+      "path": "docs/reference/distribution.md",
+      "reason": "Defines candidate, immutable tag, provider Release, and post-publication evidence distinctions."
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "Requires dedicated Work Item, PR, lifecycle closure, and fail-closed release evidence."
+    },
+    {
+      "path": "Makefile",
+      "reason": "The strict release profile fails full quality because release escalation reasons containing spaces are passed to the quality summary without argument-safe quoting."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "The installed template must preserve the same candidate-versus-publication quality boundary as the repository Makefile."
+    }
+  ],
+  "rawUserRequest": "完成全部工单包括PR和清理。明确授权给你，并写入Contract。如果没有问题，请开始。全部完成为止不要停止。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03-continuous-closure-and-release-authorization",
+    "capturedAt": "2026-08-04",
+    "digest": "sha256:1e61ff0048ff8298470f309bde20c0e14600b04eee6dca1cdadfd7c62030390b"
+  },
+  "declaredIntent": {
+    "summary": "Record v0.5.47 as unavailable for retry and establish v0.5.48 as the only future candidate without mutating provider state.",
+    "requestedCapabilities": ["ai_governance", "documentation", "software_design", "test_automation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["release_metadata", "supply_chain_evidence", "version_reservation"],
+    "reason": "Incorrect candidate metadata can cause immutable-version reuse or make unsupported distribution claims.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Release-owned candidate and release-state metadata require strict governance."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized continuous correction, PR lifecycle, closure, cleanup, and final publication while preserving fail-closed checks."
+  },
+  "preReviewWarnings": [
+    "Do not treat a stable provider Release, an immutable tag, a repository projection, and a future candidate as interchangeable facts."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The v0.5.47 provider Release URL, source commit, archive checksum, and six evidence assets are independently verified as published evidence.",
+    "release.json remains the intentionally historical repository projection, and release-state.json records v0.5.47 as an unavailable immutable identity rather than an unpublished candidate.",
+    "next-release.json and release-state.json establish exactly v0.5.48 as the sole unpublished candidate, with regenerated supply-chain and metadata evidence.",
+    "Strict release quality safely preserves multi-word escalation reasons and does not invoke no-active-Work-Item publication gates from an active candidate Work Item; the regression is covered without lowering the selected governance profile.",
+    "Release-state, distribution, documentation-alignment, and governance checks pass without changing provider state or reusing an immutable version.",
+    "The Work Item completes its dedicated PR, merge, archive, lifecycle closure, and branch cleanup before the separate v0.5.48 publication Work Item begins."
+  ],
+  "guidelines": [
+    "Preserve the distinction between candidate, immutable tag, Draft/stable provider Release, and public distribution evidence.",
+    "Use authoritative generators for derived supply-chain and documentation evidence; never hand-edit generated status evidence.",
+    "Do not reuse, delete, move, publish, or retry an existing semantic version."
+  ],
+  "intent": {
+    "problem": "The final closure audit found stable provider Release v0.5.47, while canonical candidate state still offers v0.5.47 as unpublished. release.json intentionally remains the historical repository projection after publication, but candidate state must not offer an immutable provider identity for retry. This violates the non-reuse boundary required before final release.",
+    "constraints": [
+      "Use verified provider release assets and repository generators to classify the published identity and regenerate candidate evidence.",
+      "Do not mutate provider state in this Work Item; no tag, Release, or asset may be created, deleted, or retried.",
+      "Advance the candidate exactly one patch beyond v0.5.47: v0.5.48.",
+      "Repair the discovered quality-command argument quoting and active-Work-Item publication-gate routing defects within this Work Item because ai-start rejects a second active Work Item across linked worktrees; preserve strict governance and add regression coverage.",
+      "Keep the next publication as a separate dedicated Work Item after this PR closes."
+    ],
+    "rationale": "Correcting the candidate state before publication prevents accidental reuse of an immutable identity while retaining the existing separation between historical repository projection and provider-bound public evidence."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized continuous corrective Work Items, PRs, merges, closure, cleanup, and final release, subject to mandatory fail-closed gates."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 790
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/release-v0547-candidate-advance-v0548.json",
+    "baseCommit": "d55fc19c42fc07121b3d4bd21ed6c912e4547bee",
+    "initialScopeDigest": "0a75283a5ddd885ee3e98cbdd225435ef66989d3dfffba56117e3506dfb5efb1",
+    "contractSkeletonDigest": "7fa7c2072116aff9d4e4ee3aa2b1905386f83f4696b22c130d5a076706b2cf95"
+  }
+  ,"scenarioCoverage": [
+    {
+      "scenario": "A stable provider Release exists but canonical candidate metadata still describes it as unpublished.",
+      "expected": "The historical repository projection remains unchanged, while the future candidate identity advances beyond the immutable provider tag.",
+      "verificationPlan": "Inspect provider Release assets and run release-state/distribution checks after generator output.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A future publication attempts to reuse v0.5.47.",
+      "expected": "Canonical next-release and release-state metadata name only v0.5.48.",
+      "verificationPlan": "Run release metadata checks and inspect the final projections.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ]
+}
