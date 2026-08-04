@@ -36,7 +36,7 @@ def test_lifecycle_phase_event_type_is_available_to_start_and_archive() -> None:
     assert AiEventType.LIFECYCLE_PHASE_FINISHED.value == "lifecycle_phase_finished"
 
 
-def test_linked_worktree_foreign_duplicate_stays_fail_closed_with_recovery_route(
+def test_linked_worktree_foreign_duplicate_allows_unrelated_task_with_recovery_route(
     tmp_path, monkeypatch
 ):
     current, canonical, foreign = (tmp_path / name for name in ("current", "canonical", "foreign"))
@@ -54,10 +54,113 @@ def test_linked_worktree_foreign_duplicate_stays_fail_closed_with_recovery_route
         "linked_worktree_records",
         lambda **_kwargs: [(canonical, "codex/other-task"), (foreign, "codex/other-task-refresh")],
     )
-    issue = ai_start.linked_worktree_active_issue()
+    issue = ai_start.linked_worktree_active_issue("new-task")
+    assert issue is None
+    assert (
+        foreign / ".ai" / "work-items" / "active" / "other-task.contract.json"
+    ).read_bytes() == (b'{"workItemId":"other-task"}')
+
+
+def test_linked_worktree_foreign_duplicate_for_requested_task_stays_fail_closed(
+    tmp_path, monkeypatch
+):
+    canonical, foreign = tmp_path / "canonical", tmp_path / "foreign"
+    for root in (canonical, foreign):
+        (root / ".ai" / "work-items" / "active").mkdir(parents=True)
+        for suffix in ("contract", "summary"):
+            (root / ".ai" / "work-items" / "active" / f"other-task.{suffix}.json").write_text(
+                '{"workItemId":"other-task"}', encoding="utf-8"
+            )
+    monkeypatch.setattr(
+        ai_start,
+        "linked_worktree_records",
+        lambda **_kwargs: [(canonical, "codex/other-task"), (foreign, "codex/other-task-refresh")],
+    )
+
+    issue = ai_start.linked_worktree_active_issue("other-task")
+
     assert "recoverable foreign duplicate Work Item identity" in issue
-    assert str(foreign) in issue
-    assert "ai_linked_worktree_recovery.py --task other-task" in issue
+    assert "requested task other-task" in issue
+
+
+def test_real_linked_worktree_duplicate_does_not_block_unrelated_start(tmp_path, monkeypatch):
+    root = tmp_path / "repository"
+    root.mkdir()
+    _git(root, "init", "-b", "main")
+    _git(root, "config", "user.name", "Test")
+    _git(root, "config", "user.email", "test@example.com")
+    _write_commit(root, "seed.txt", "start\n")
+    canonical = tmp_path / "canonical"
+    foreign = tmp_path / "foreign"
+    _git(root, "worktree", "add", "-b", "codex/other-task", str(canonical))
+    _git(root, "worktree", "add", "-b", "codex/other-task-refresh", str(foreign))
+    for worktree in (canonical, foreign):
+        active = worktree / ".ai" / "work-items" / "active"
+        active.mkdir(parents=True)
+        for suffix in ("contract", "summary"):
+            (active / f"other-task.{suffix}.json").write_text(
+                '{"workItemId":"other-task"}', encoding="utf-8"
+            )
+    foreign_contract = (foreign / ".ai/work-items/active/other-task.contract.json").read_bytes()
+    foreign_summary = (foreign / ".ai/work-items/active/other-task.summary.json").read_bytes()
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", root)
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", root / ".ai" / "work-items" / "active")
+
+    assert ai_start.linked_worktree_active_issue("new-task", root=root) is None
+    assert (
+        foreign / ".ai/work-items/active/other-task.contract.json"
+    ).read_bytes() == foreign_contract
+    assert (
+        foreign / ".ai/work-items/active/other-task.summary.json"
+    ).read_bytes() == foreign_summary
+
+
+def test_ai_start_main_creates_unrelated_contract_despite_real_foreign_duplicate(
+    tmp_path, monkeypatch
+):
+    root = tmp_path / "repository"
+    root.mkdir()
+    _git(root, "init", "-b", "main")
+    _git(root, "config", "user.name", "Test")
+    _git(root, "config", "user.email", "test@example.com")
+    _write_commit(root, "seed.txt", "start\n")
+    canonical = tmp_path / "canonical"
+    foreign = tmp_path / "foreign"
+    _git(root, "worktree", "add", "-b", "codex/other-task", str(canonical))
+    _git(root, "worktree", "add", "-b", "codex/other-task-refresh", str(foreign))
+    for worktree in (canonical, foreign):
+        active = worktree / ".ai" / "work-items" / "active"
+        active.mkdir(parents=True)
+        for suffix in ("contract", "summary"):
+            (active / f"other-task.{suffix}.json").write_text(
+                '{"workItemId":"other-task"}', encoding="utf-8"
+            )
+    foreign_contract = (foreign / ".ai/work-items/active/other-task.contract.json").read_bytes()
+    foreign_summary = (foreign / ".ai/work-items/active/other-task.summary.json").read_bytes()
+    active = root / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", root)
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_start, "DEFAULT_STATUS", root / ".ai/cockpit/current_status.md")
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
+    stub_active_status(monkeypatch)
+    monkeypatch.setattr(
+        ai_start,
+        "create_observability",
+        lambda **_: type("Obs", (), {"work_item_started": lambda *args, **kwargs: None})(),
+    )
+    monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "new-task", "--mode", "investigate"])
+
+    assert ai_start.main() == 0
+    assert (active / "new-task.contract.json").exists()
+    assert (active / "new-task.summary.json").exists()
+    assert (
+        foreign / ".ai/work-items/active/other-task.contract.json"
+    ).read_bytes() == foreign_contract
+    assert (
+        foreign / ".ai/work-items/active/other-task.summary.json"
+    ).read_bytes() == foreign_summary
 
 
 def test_foreign_duplicate_diagnostic_is_read_only_and_requires_canonical_owner(

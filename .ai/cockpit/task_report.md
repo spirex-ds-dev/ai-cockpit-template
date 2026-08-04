@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task finish-mutex-integration-v2 generated an evidence-derived outcome with status completed.
+Task foreign-duplicate-start-v1 generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0
