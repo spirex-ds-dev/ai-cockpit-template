@@ -19,7 +19,7 @@ def test_quality_entry_points_have_explicit_compatibility_semantics():
     assert "quality-standard:" in text
     assert "quality-full:" in text
     assert "quality-release:" in text
-    assert "quality:\n\t+$(QUALITY_MAKE) --no-print-directory quality-full" in text
+    assert "quality:\n\t$(QUALITY_MAKE) --no-print-directory quality-full" in text
     assert "quality-gates: quality-full" in text
     assert "define RUN_QUALITY_GATE" in text
     assert "$(call RUN_QUALITY_GATE,project-format-check,static)" in text
@@ -163,9 +163,10 @@ def test_quality_full_uses_owned_phase_cleanup_helper():
     assert "quality-heavy" in full
 
 
-def test_full_quality_runs_canonical_release_state_consistency_gate():
+def test_full_quality_dry_run_delegates_without_forced_gate_execution():
     result = subprocess.run(
         ["make", "-n", "quality"], cwd=ROOT, text=True, capture_output=True, check=False
     )
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "--gate check-release-state-consistency" in result.stdout
+    assert "quality-full" in result.stdout
+    assert "--gate check-release-state-consistency" not in result.stdout

@@ -39,16 +39,16 @@ def test_start_and_archive_use_clean_git_environment():
     assert all(not key.startswith("GIT_") for key in ai_common.clean_git_environment())
 
 
-def test_linked_worktree_active_pair_blocks_start_before_lifecycle_writes(tmp_path, monkeypatch):
+def test_linked_worktree_valid_isolated_active_pair_allows_agent_parallelism(tmp_path, monkeypatch):
     current = tmp_path / "current"
     other = tmp_path / "other"
     for root in (current, other):
         (root / ".ai" / "work-items" / "active").mkdir(parents=True)
     (other / ".ai" / "work-items" / "active" / "other-task.contract.json").write_text(
-        "{}", encoding="utf-8"
+        '{"workItemId": "other-task"}', encoding="utf-8"
     )
     (other / ".ai" / "work-items" / "active" / "other-task.summary.json").write_text(
-        "{}", encoding="utf-8"
+        '{"workItemId": "other-task"}', encoding="utf-8"
     )
     monkeypatch.setattr(ai_start, "PROJECT_ROOT", current)
     monkeypatch.setattr(ai_start, "ACTIVE_DIR", current / ".ai" / "work-items" / "active")
@@ -60,10 +60,7 @@ def test_linked_worktree_active_pair_blocks_start_before_lifecycle_writes(tmp_pa
 
     issue = ai_start.linked_worktree_active_issue()
 
-    assert issue == (
-        "ERROR: linked worktree has active Work Item other-task on branch "
-        f"codex/other-task: {other}"
-    )
+    assert issue is None
     assert not list((current / ".ai" / "work-items" / "active").glob("*.json"))
 
 
@@ -88,6 +85,25 @@ def test_linked_worktree_malformed_active_pair_fails_closed(tmp_path, monkeypatc
     assert issue == (
         "ERROR: linked worktree has malformed active Work Item records on branch "
         f"codex/other-task: {other} (contract/summary pair required)"
+    )
+
+
+def test_linked_worktree_active_pair_with_non_dedicated_branch_fails_closed(tmp_path, monkeypatch):
+    current = tmp_path / "current"
+    other = tmp_path / "other"
+    for root in (current, other):
+        (root / ".ai" / "work-items" / "active").mkdir(parents=True)
+    for suffix in ("contract", "summary"):
+        (other / ".ai" / "work-items" / "active" / f"other-task.{suffix}.json").write_text(
+            '{"workItemId": "other-task"}', encoding="utf-8"
+        )
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", current)
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", current / ".ai" / "work-items" / "active")
+    monkeypatch.setattr(ai_start, "linked_worktree_records", lambda **_kwargs: [(other, "main")])
+
+    assert ai_start.linked_worktree_active_issue() == (
+        "ERROR: linked worktree active Work Item branch does not match its task: "
+        f"main != codex/other-task: {other}"
     )
 
 

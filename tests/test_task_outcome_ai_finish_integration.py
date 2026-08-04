@@ -1,6 +1,7 @@
 import json
 import sys
 
+import ai_check_agent_risk
 import ai_finish
 import ai_generate_human_report as human
 from ai_governance_compression import render_active_status
@@ -352,6 +353,84 @@ def test_direct_outcome_report_is_localized_and_explicit_about_archive_boundary(
     assert "工单结果报告" in report
     assert "任务结果: example-task" in report
     assert "归档必须显式执行" in report
+
+
+def test_finish_archives_using_only_same_state_verification(tmp_path, monkeypatch):
+    task = "example-task"
+    active = tmp_path / ".ai/work-items/active"
+    active.mkdir(parents=True)
+    contract_path = active / f"{task}.contract.json"
+    summary_path = active / f"{task}.summary.json"
+    contract = {"contractVersion": 2, "workItemId": task, "scope": [], "verification": []}
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+    digest = ai_finish.worktree_digest_for_finish([], summary_path.relative_to(tmp_path).as_posix())
+    summary_path.write_text(
+        json.dumps(
+            {
+                "verification": [
+                    {
+                        "check": "aiSummary",
+                        "result": "passed",
+                        "runner": "ai_finish",
+                        "contractHash": __import__("hashlib")
+                        .sha256(contract_path.read_bytes())
+                        .hexdigest(),
+                        "commitSha": "a" * 40,
+                        "executionContractPath": contract_path.relative_to(tmp_path).as_posix(),
+                        "executionSummaryPath": summary_path.relative_to(tmp_path).as_posix(),
+                        "worktreeDigest": digest,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    outcome_path = active / f"{task}.outcome.json"
+    outcome_path.write_text(json.dumps(_outcome(task)), encoding="utf-8")
+
+    class Observer:
+        def lifecycle_phase_finished(self, *_args, **_kwargs):
+            pass
+
+        def check_started(self, **_kwargs):
+            pass
+
+        def check_passed(self, **_kwargs):
+            pass
+
+        def check_failed(self, **_kwargs):
+            pass
+
+        def work_item_finished(self, **_kwargs):
+            pass
+
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_finish, "ensure_work_item_branch", lambda: None)
+    monkeypatch.setattr(ai_finish, "current_head", lambda: "a" * 40)
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: [])
+    monkeypatch.setattr(ai_finish, "preview", lambda **_kwargs: [])
+    monkeypatch.setattr(ai_finish, "create_observability", lambda **_kwargs: Observer())
+    monkeypatch.setattr(
+        ai_check_agent_risk, "validate_checkpoint_bindings", lambda *_args, **_kwargs: []
+    )
+    monkeypatch.setattr(
+        ai_finish, "_outcome_paths", lambda _task: (outcome_path, active / f"{task}.outcome.md")
+    )
+    monkeypatch.setattr(ai_finish, "render_direct_outcome_report", lambda *_args: "report\n")
+    monkeypatch.setattr(ai_finish, "refresh_archived_human_report", lambda _task: (True, "ok"))
+    commands = []
+    monkeypatch.setattr(
+        ai_finish,
+        "run",
+        lambda command, **_kwargs: commands.append(command) or (0, 1, "ok"),
+    )
+    monkeypatch.setattr(sys, "argv", ["ai_finish.py", "--task", task, "--archive"])
+
+    assert ai_finish.main() == 0
+    assert commands == [
+        ["make", "archive-work-item", f"CONTRACT={contract_path.relative_to(tmp_path).as_posix()}"],
+    ]
 
 
 def test_status_contains_only_outcome_link_count_and_status_not_full_report():

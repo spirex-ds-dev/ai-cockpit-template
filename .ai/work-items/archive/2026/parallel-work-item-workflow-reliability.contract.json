@@ -1,0 +1,256 @@
+{
+  "contractVersion": 2,
+  "workItemId": "parallel-work-item-workflow-reliability",
+  "mode": "code",
+  "title": "Parallel Work Item workflow reliability",
+  "baseCommit": "0b417d19ba3cc83590c14fa582c1a98a539b29da",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/parallel-work-item-workflow-reliability.contract.json",
+    ".ai/work-items/active/parallel-work-item-workflow-reliability.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/parallel-work-item-workflow-reliability.outcome.json",
+    ".ai/work-items/active/parallel-work-item-workflow-reliability.outcome.md",
+    "scripts/ai_start.py",
+    "scripts/ai_finish.py",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "tests/test_start_and_archive.py",
+    "tests/test_finish_e2e.py",
+    "tests/test_finish_readiness.py",
+    "tests/test_makefile.py",
+    "tests/test_quality_gate_architecture.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing AI Cockpit's boundary so that a Work Item becomes an agent scheduler or owns global orchestration.",
+    "Changing provider releases, tags, branch protection, CI runners, or publishing any public release.",
+    "Collapsing multiple Work Items into one branch or PR."
+  ],
+  "sources": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Defines one Work Item, one dedicated branch, and one PR, with lifecycle closure requirements."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Its linked-worktree active-record guard currently rejects a second independently governed Work Item."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Owns quality routing and ai-finish behavior; dry-run and archive verification must remain safe and bounded."
+    },
+    {
+      "path": "templates/make/Makefile.ai",
+      "reason": "Installed adopters must receive the same quality-routing semantics."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Owns finish/archive verification and is the correct boundary for safe evidence reuse."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Documents the canonical Work Item lifecycle and must remain aligned with parallel agent orchestration."
+    }
+  ],
+  "rawUserRequest": "完成全部工单包括PR和清理。明确授权给你，并写入Contract。如果没有问题，请开始。全部完成为止不要停止。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-03-continuous-closure-and-release-authorization",
+    "capturedAt": "2026-08-04",
+    "digest": "sha256:1e61ff0048ff8298470f309bde20c0e14600b04eee6dca1cdadfd7c62030390b"
+  },
+  "declaredIntent": {
+    "summary": "Allow agents to orchestrate independent Work Items in separate worktrees without weakening Work Item isolation or making AI Cockpit a scheduler.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["workflow_isolation", "verification_integrity", "template_parity"],
+    "reason": "A workflow change can accidentally weaken Work Item isolation, execute mutating commands during a dry run, or reuse stale verification evidence.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The change affects governance lifecycle behavior and installed-template parity."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user explicitly authorized corrective Work Items, dedicated PRs, lifecycle closure, cleanup, and final release while retaining fail-closed checks."
+  },
+  "preReviewWarnings": [
+    "Parallelism remains agent orchestration: this Work Item may enable independent worktrees but must not make a Work Item a scheduler or alter the one-Work-Item/one-PR boundary."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A second valid Contract/Summary pair in a distinct linked worktree can start when its branch is a dedicated Work Item branch, while malformed or conflicting records still fail closed.",
+    "make -n quality and its template equivalent remain non-mutating previews and do not execute recursive quality work.",
+    "ARCHIVE=true ai-finish reuses only verification evidence that is demonstrably bound to the same Work Item state; stale, missing, changed, or mismatched evidence reruns strict verification and fails closed on failure.",
+    "Focused regression tests cover each reliability boundary, and template/documentation/generated truth artifacts accurately state that agents—not Work Items—schedule parallel work.",
+    "The Work Item completes its own dedicated PR, merge, archive, lifecycle closure, and branch cleanup before release preparation resumes."
+  ],
+  "guidelines": [
+    "Keep one task, one Work Item, one branch, and one PR; parallelism is agent orchestration across isolated worktrees.",
+    "Preserve fail-closed validation for malformed state, stale evidence, and quality failures.",
+    "Keep root and installed-template Makefile behavior aligned; do not introduce repository-specific installation assumptions."
+  ],
+  "intent": {
+    "problem": "Parallel practice exposed three reliability defects: ai-start treats any active linked-worktree record as a global lock; dry-running quality can execute recursive work because of forced recipe execution; and archive finish repeats a full strict run even when identical bound verification evidence exists. These defects make safe agent-level parallelism and bounded lifecycle closure impractical.",
+    "constraints": [
+      "AI Cockpit remains a local Work Item governance interface; agents and subagents decide orchestration and concurrency.",
+      "Each independent task must retain its own Work Item Contract, isolated branch/worktree, PR, archive, and closure receipt.",
+      "No dry-run may execute quality commands, and cached verification may only be reused with strong same-state binding and fail-closed fallback.",
+      "Keep the root and distributed template behavior aligned."
+    ],
+    "rationale": "Resolving these mechanics enables the intended one-task/one-WI/one-PR parallel design without turning the governance layer into a scheduler or weakening evidence integrity."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user",
+    "reason": "The user explicitly authorized continuous corrective Work Items, PRs, merges, closure, cleanup, and final release, subject to mandatory fail-closed gates."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 791
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/parallel-work-item-workflow-reliability.json",
+    "baseCommit": "0b417d19ba3cc83590c14fa582c1a98a539b29da",
+    "initialScopeDigest": "de54853373a9bd7a8221ca34b48d395bd3c573de5aa534e949d010fd5a49855e",
+    "contractSkeletonDigest": "9bfbd30409bf6a93f609520e65a18ddf18cdf62e70c49b648c1b034bb305afb6"
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Two agent-owned tasks have valid, distinct Contracts and Summaries in separate linked worktrees.",
+      "expected": "Both can proceed independently while each retains its own branch, PR, archive, and closure identity.",
+      "verificationPlan": "Exercise ai-start linked-worktree classification in focused unit tests and run the full governance checks.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A malformed, conflicting, or unauthorized linked-worktree record is present.",
+      "expected": "The start operation fails closed with a diagnostic instead of silently allowing unsafe concurrency.",
+      "verificationPlan": "Add focused negative tests for malformed and non-Work-Item branch records.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "A developer runs make -n quality or archives an unchanged verified Work Item.",
+      "expected": "Dry-run executes no recursive quality commands; archive may reuse only state-bound evidence and otherwise reruns strict verification.",
+      "verificationPlan": "Add Makefile and finish-script regression tests, then run required quality and lifecycle checks.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ]
+}

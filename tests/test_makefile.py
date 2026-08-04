@@ -228,6 +228,9 @@ def test_quality_runs_static_tests_and_evidence_as_explicit_phases():
     assert "check-decision-protocol" in makefile
     assert "check-baseline-evidence" in makefile
     assert "--cov-fail-under=85.10" in makefile
+    assert "\n\t+$(AI_PYTHON) scripts/run_quality_gate.py" not in makefile
+    quality_section = makefile.split("quality-full:", 1)[1].split("# Backward-compatible", 1)[0]
+    assert "\n\t+@set -eu;" not in quality_section
 
 
 def test_quality_summary_receives_governance_receipt_metadata_when_available():
@@ -279,6 +282,7 @@ def test_governance_quality_keeps_release_graph_outside_active_work_item_routing
         'if $(PYTHON) -c \'import json, sys; raise SystemExit(0 if "release_preflight"'
         not in template
     )
+    assert "\n\t+$(AI_NESTED_MAKE) --no-print-directory quality-" not in template
 
 
 def test_lockfile_reproducibility_uses_python_module_invocation():
