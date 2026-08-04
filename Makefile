@@ -506,12 +506,9 @@ ai-cockpit-quality:
 		target=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["dispatchTarget"])' "$(GOVERNANCE_RECEIPT)"); \
 		profile=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("selectedProfile", "unknown"))' "$(GOVERNANCE_RECEIPT)"); \
 		escalations=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(" ".join("--escalation " + value for value in json.load(open(sys.argv[1], encoding="utf-8")).get("verificationEscalations", [])))' "$(GOVERNANCE_RECEIPT)"); \
-		escalation_reasons=$$($(PYTHON_EXECUTABLE) -c 'import json, sys; print(" ".join("--escalation-reason " + value for value in json.load(open(sys.argv[1], encoding="utf-8")).get("releaseEscalationReasons", [])))' "$(GOVERNANCE_RECEIPT)"); \
+		escalation_reasons=$$($(PYTHON_EXECUTABLE) -c 'import json, shlex, sys; print(" ".join("--escalation-reason " + shlex.quote(value) for value in json.load(open(sys.argv[1], encoding="utf-8")).get("releaseEscalationReasons", [])))' "$(GOVERNANCE_RECEIPT)"); \
 		case "$$target" in quality-fast|quality-standard|quality-full|quality-release) ;; *) echo "invalid governance dispatch target: $$target" >&2; exit 2;; esac; \
-		$(QUALITY_MAKE) --no-print-directory "$$target" QUALITY_PROFILE="$$profile" QUALITY_ESCALATIONS="$$escalations" QUALITY_ESCALATION_REASONS="$$escalation_reasons"; \
-		if $(PYTHON_EXECUTABLE) -c 'import json, sys; raise SystemExit(0 if "release_preflight" in json.load(open(sys.argv[1], encoding="utf-8")).get("verificationEscalations", []) else 1)' "$(GOVERNANCE_RECEIPT)"; then \
-			$(QUALITY_MAKE) --no-print-directory quality-release QUALITY_PROFILE="$$profile" QUALITY_ESCALATIONS="$$escalations" QUALITY_ESCALATION_REASONS="$$escalation_reasons"; \
-		fi
+		$(QUALITY_MAKE) --no-print-directory "$$target" QUALITY_PROFILE="$$profile" QUALITY_ESCALATIONS="$$escalations" QUALITY_ESCALATION_REASONS="$$escalation_reasons"
 
 ai-start:
 	$(AI_PYTHON) scripts/ai_start.py --task "$(TASK)" --title "$(TITLE)" --mode "$(MODE)"
