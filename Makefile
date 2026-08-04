@@ -337,16 +337,16 @@ QUALITY_PROJECT_CONSISTENCY_GATES := check-quality-architecture check-deprecated
 QUALITY_MAKE = $(AI_NESTED_MAKE)
 
 define RUN_QUALITY_GATE
-	+$(AI_PYTHON) scripts/run_quality_gate.py --gate $(1) --category $(2) --session-id "$(QUALITY_SESSION_ID)" --run-id "$(QUALITY_RUN_ID)" --output "$(QUALITY_TIMING_DIR)/$(1).json" --log "$(QUALITY_LOG_DIR)/$(1).log" -- $(QUALITY_MAKE) --no-print-directory $(1)
+	$(AI_PYTHON) scripts/run_quality_gate.py --gate $(1) --category $(2) --session-id "$(QUALITY_SESSION_ID)" --run-id "$(QUALITY_RUN_ID)" --output "$(QUALITY_TIMING_DIR)/$(1).json" --log "$(QUALITY_LOG_DIR)/$(1).log" -- $(QUALITY_MAKE) --no-print-directory $(1)
 endef
 
 # Fast is intentionally narrower than Full.  It never implies release readiness.
 quality-fast:
-	+$(QUALITY_MAKE) --no-print-directory quality-fast-static
-	+$(QUALITY_MAKE) --no-print-directory quality-fast-policy
+	$(QUALITY_MAKE) --no-print-directory quality-fast-static
+	$(QUALITY_MAKE) --no-print-directory quality-fast-policy
 
 quality-fast-static:
-	+$(QUALITY_MAKE) --no-print-directory -j2 quality-fast-static-gates
+	$(QUALITY_MAKE) --no-print-directory -j2 quality-fast-static-gates
 
 quality-fast-static-gates: qg-project-format-check qg-project-lint qg-diff-check
 
@@ -358,7 +358,7 @@ qg-diff-check:
 	$(call RUN_QUALITY_GATE,diff-check,static)
 
 quality-fast-policy:
-	+$(QUALITY_MAKE) --no-print-directory -j2 quality-fast-policy-gates
+	$(QUALITY_MAKE) --no-print-directory -j2 quality-fast-policy-gates
 
 quality-fast-policy-gates: qg-check-trust-schemas qg-check-docs-metadata qg-check-ai-system-invariants qg-check-ai-project-profile qg-check-ai-guard-calibration qg-check-ai-status-consistency $(if $(filter true,$(TEST_WEAKENING_FULL_OWNERSHIP)),,qg-check-ai-test-weakening-fast)
 
@@ -380,15 +380,15 @@ qg-check-ai-test-weakening-fast:
 # Standard reuses existing gate owners and replaces the Fast weakening sample
 # with the full diff analysis. It intentionally excludes Full/Release groups.
 quality-standard:
-	+$(QUALITY_MAKE) --no-print-directory quality-fast TEST_WEAKENING_FULL_OWNERSHIP=true
-	+$(QUALITY_MAKE) --no-print-directory project-test
-	+$(QUALITY_MAKE) --no-print-directory check-ai-reference-impact
-	+$(QUALITY_MAKE) --no-print-directory check-ai-test-weakening
+	$(QUALITY_MAKE) --no-print-directory quality-fast TEST_WEAKENING_FULL_OWNERSHIP=true
+	$(QUALITY_MAKE) --no-print-directory project-test
+	$(QUALITY_MAKE) --no-print-directory check-ai-reference-impact
+	$(QUALITY_MAKE) --no-print-directory check-ai-test-weakening
 
 # Heavy groups are separate ownership units.  Their outputs are either read-only
 # or isolated by the gate itself; no blanket high-parallelism quality target is used.
 quality-heavy:
-	+$(QUALITY_MAKE) --no-print-directory -j2 quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group
+	$(QUALITY_MAKE) --no-print-directory -j2 quality-tests-group quality-evidence-group quality-supply-chain-group quality-project-consistency-group
 
 quality-tests-group:
 quality-tests-group: qg-project-test
@@ -435,7 +435,7 @@ qg-check-ai-test-weakening:
 	$(call RUN_QUALITY_GATE,check-ai-test-weakening,project-consistency)
 
 quality-full:
-	+@set -eu; \
+	@set -eu; \
 		commit=$$(git rev-parse --short=12 HEAD 2>/dev/null || printf unknown); \
 		run_id="$${GITHUB_RUN_ID:-local}"; \
 		attempt="$${GITHUB_RUN_ATTEMPT:-0}"; \
@@ -454,7 +454,7 @@ quality-full:
 # Backward-compatible aliases.  These names are compatibility/debug views of
 # the new ownership graph; none invokes the removed duplicate gate graph.
 quality:
-	+$(QUALITY_MAKE) --no-print-directory quality-full
+	$(QUALITY_MAKE) --no-print-directory quality-full
 
 # Historical aggregate alias; it is intentionally routed to the new Full graph.
 quality-gates: quality-full
@@ -466,12 +466,12 @@ quality-installation:
 	@echo 'Installation gates are owned by the installation-smoke workflow in this phase.'
 
 quality-release-evidence:
-	+$(QUALITY_MAKE) --no-print-directory check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence
+	$(QUALITY_MAKE) --no-print-directory check-release-distribution check-release-state-consistency check-release-preflight check-ci-release-evidence
 
 quality-release:
-	+$(QUALITY_MAKE) --no-print-directory quality-full
-	+$(QUALITY_MAKE) --no-print-directory quality-installation
-	+$(QUALITY_MAKE) --no-print-directory quality-release-evidence
+	$(QUALITY_MAKE) --no-print-directory quality-full
+	$(QUALITY_MAKE) --no-print-directory quality-installation
+	$(QUALITY_MAKE) --no-print-directory quality-release-evidence
 
 ai-cockpit-project-format-check: project-format-check
 

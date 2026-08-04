@@ -208,6 +208,40 @@ def worktree_digest_for_finish(paths: list[str], summary_path: str) -> str:
     return worktree_digest([path for path in paths if path != summary_path])
 
 
+def reusable_archive_verification(
+    summary: dict[str, Any],
+    contract_data: dict[str, Any],
+    *,
+    contract_hash: str,
+    commit_sha: str,
+    contract: str,
+    summary_path: str,
+) -> bool:
+    """Return whether archive can consume a same-state finish attestation.
+
+    `aiSummary` is written last and fingerprints every owned path except the
+    self-referential Summary.  It is therefore the only reusable anchor: a
+    prior pass from another commit, Contract, path, or worktree state is never
+    sufficient to skip strict verification.
+    """
+    values = summary.get("verification")
+    if not isinstance(values, list):
+        return False
+    expected_digest = worktree_digest_for_finish(changed_paths(contract_data), summary_path)
+    return any(
+        isinstance(item, dict)
+        and item.get("check") == "aiSummary"
+        and item.get("result") == "passed"
+        and item.get("runner") == "ai_finish"
+        and item.get("contractHash") == contract_hash
+        and item.get("commitSha") == commit_sha
+        and item.get("executionContractPath") == contract
+        and item.get("executionSummaryPath") == summary_path
+        and item.get("worktreeDigest") == expected_digest
+        for item in values
+    )
+
+
 def record_result(summary_path: Path, item: dict[str, Any]) -> None:
     if not summary_path.exists():
         raise FileNotFoundError(f"summary not found: {summary_path.relative_to(PROJECT_ROOT)}")
@@ -892,39 +926,59 @@ def main() -> int:
             file=sys.stderr,
         )
         return 1
-    verification_start = time.time()
-    code = run_declared_checks(
-        declared_items,
-        args=args,
-        contract=contract,
-        summary=summary,
-        contract_data=contract_data,
-        contract_path=contract_path,
-        summary_path=summary_path,
+    existing_summary = load_json(summary_path)
+    reuse_archive_verification = args.archive and reusable_archive_verification(
+        existing_summary,
+        contract_data,
         contract_hash=contract_hash,
         commit_sha=commit_sha,
-        obs=obs,
+        contract=contract,
+        summary_path=summary,
     )
+    verification_start = time.time()
+    code = 0
+    if reuse_archive_verification:
+        print("Reusing same-state ai-finish verification for archive")
+    else:
+        code = run_declared_checks(
+            declared_items,
+            args=args,
+            contract=contract,
+            summary=summary,
+            contract_data=contract_data,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            contract_hash=contract_hash,
+            commit_sha=commit_sha,
+            obs=obs,
+        )
     getattr(obs, "lifecycle_phase_finished", lambda *_args, **_kwargs: None)(
         "verification",
         duration_ms=elapsed_ms(verification_start),
-        cache_outcome="miss",
+        cache_outcome="hit" if reuse_archive_verification else "miss",
     )
     if code:
         obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
         return code
 
-    outcome_ok, outcome_message = run_task_outcome_pipeline(
-        contract_data["workItemId"], summary_path, contract_path
-    )
+    if reuse_archive_verification:
+        outcome_ok = _outcome_paths(args.task)[0].is_file()
+        outcome_message = "existing outcome is bound by same-state verification"
+        human_report_ok, human_report_message = outcome_ok, outcome_message
+    else:
+        outcome_ok, outcome_message = run_task_outcome_pipeline(
+            contract_data["workItemId"], summary_path, contract_path
+        )
+        if outcome_ok:
+            human_report_ok, human_report_message = run_human_report_pipeline(
+                contract_data["workItemId"], summary_path
+            )
+        else:
+            human_report_ok, human_report_message = False, outcome_message
     if not outcome_ok:
         print(f"ERROR: Task Outcome integration failed: {outcome_message}", file=sys.stderr)
         obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
         return 1
-
-    human_report_ok, human_report_message = run_human_report_pipeline(
-        contract_data["workItemId"], summary_path
-    )
     if not human_report_ok:
         print(
             f"ERROR: Human Benefit Report integration failed: {human_report_message}",
@@ -932,6 +986,38 @@ def main() -> int:
         )
         obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
         return 1
+
+    if reuse_archive_verification:
+        print("Work Item finish checks reused from same-state evidence")
+        outcome_json, _outcome_markdown = _outcome_paths(args.task)
+        try:
+            print(render_direct_outcome_report(load_json(outcome_json), args.language), end="")
+        except ValueError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        if args.archive:
+            archive_command = ["make", "archive-work-item", f"CONTRACT={contract}"]
+            cmd_str = " ".join(archive_command)
+            obs.check_started(check_id="archive-work-item", command=cmd_str)
+            code, duration, _ = run(archive_command)
+            if code != 0:
+                obs.check_failed(
+                    check_id="archive-work-item", command=cmd_str, duration_ms=duration
+                )
+                obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+                return code
+            obs.check_passed(check_id="archive-work-item", command=cmd_str, duration_ms=duration)
+            report_ok, report_message = refresh_archived_human_report(args.task)
+            if not report_ok:
+                print(
+                    f"ERROR: archived Human Benefit Report integration failed: {report_message}",
+                    file=sys.stderr,
+                )
+                obs.work_item_finished(result="failed", duration_ms=elapsed_ms(total_start))
+                return 1
+            print(archive_next_steps(args.task))
+        obs.work_item_finished(result="passed", duration_ms=elapsed_ms(total_start))
+        return 0
 
     # Establish a fail-closed readiness baseline before self-referential
     # stabilization. Positive readiness is persisted only after the first

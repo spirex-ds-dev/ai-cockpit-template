@@ -182,7 +182,13 @@ def has_complete_archived_work_item(worktree: Path, task: str) -> bool:
 
 
 def linked_worktree_active_issue(*, root: Path = PROJECT_ROOT) -> str | None:
-    """Fail closed when another branch owns an active Contract/Summary pair."""
+    """Reject malformed foreign state while permitting isolated Work Items.
+
+    Concurrency belongs to the agent orchestrator, not to a shared active-WI
+    lock.  A linked worktree can therefore own one independently governed
+    Work Item when its branch and both records unambiguously bind to that ID.
+    Every other shape fails closed.
+    """
     try:
         records = linked_worktree_records(root=root)
     except (OSError, RuntimeError):
@@ -213,10 +219,28 @@ def linked_worktree_active_issue(*, root: Path = PROJECT_ROOT) -> str | None:
                 "ERROR: linked worktree has malformed active Work Item records on branch "
                 f"{branch}: {worktree} (contract/summary pair required)"
             )
-        return (
-            f"ERROR: linked worktree has active Work Item {min(contracts)} on branch "
-            f"{branch}: {worktree}"
-        )
+        if len(contracts) != 1:
+            return (
+                "ERROR: linked worktree has multiple active Work Items on branch "
+                f"{branch}: {worktree}"
+            )
+        task = next(iter(contracts))
+        if branch != f"codex/{task}":
+            return (
+                "ERROR: linked worktree active Work Item branch does not match its task: "
+                f"{branch} != codex/{task}: {worktree}"
+            )
+        try:
+            contract = json.loads(
+                (active_dir / f"{task}.contract.json").read_text(encoding="utf-8")
+            )
+            summary = json.loads((active_dir / f"{task}.summary.json").read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return f"ERROR: linked worktree has unreadable active Work Item records: {worktree}"
+        if contract.get("workItemId") != task or summary.get("workItemId") != task:
+            return (
+                f"ERROR: linked worktree active Work Item IDs do not match record paths: {worktree}"
+            )
     return None
 
 

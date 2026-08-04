@@ -82,6 +82,60 @@ def test_finish_archive_message_is_not_lifecycle_closure():
     assert "make ai-close-work-item TASK=example" in output
 
 
+def test_archive_reuse_requires_a_same_state_final_summary_attestation(monkeypatch):
+    contract = {"scope": ["scripts/ai_finish.py"]}
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: contract["scope"])
+    contract_hash = "contract-hash"
+    commit_sha = "commit-sha"
+    contract_path = ".ai/work-items/active/example.contract.json"
+    summary_path = ".ai/work-items/active/example.summary.json"
+    digest = ai_finish.worktree_digest_for_finish(contract["scope"], summary_path)
+    evidence = {
+        "check": "aiSummary",
+        "result": "passed",
+        "runner": "ai_finish",
+        "contractHash": contract_hash,
+        "commitSha": commit_sha,
+        "executionContractPath": contract_path,
+        "executionSummaryPath": summary_path,
+        "worktreeDigest": digest,
+    }
+    summary_data = {"verification": [evidence]}
+
+    assert ai_finish.reusable_archive_verification(
+        summary_data,
+        contract,
+        contract_hash=contract_hash,
+        commit_sha=commit_sha,
+        contract=contract_path,
+        summary_path=summary_path,
+    )
+
+    evidence["commitSha"] = "stale-commit"
+    assert not ai_finish.reusable_archive_verification(
+        summary_data,
+        contract,
+        contract_hash=contract_hash,
+        commit_sha=commit_sha,
+        contract=contract_path,
+        summary_path=summary_path,
+    )
+
+
+def test_archive_reuse_rejects_malformed_verification_evidence(monkeypatch):
+    contract = {"scope": ["scripts/ai_finish.py"]}
+    monkeypatch.setattr(ai_finish, "changed_paths", lambda _contract: contract["scope"])
+
+    assert not ai_finish.reusable_archive_verification(
+        {"verification": {"check": "aiSummary", "result": "passed"}},
+        contract,
+        contract_hash="contract-hash",
+        commit_sha="commit-sha",
+        contract=".ai/work-items/active/example.contract.json",
+        summary_path=".ai/work-items/active/example.summary.json",
+    )
+
+
 def test_promote_review_readiness_does_not_override_failed_stabilization_evidence():
     result = ai_finish.promote_review_readiness(
         summary(verification="failed"),

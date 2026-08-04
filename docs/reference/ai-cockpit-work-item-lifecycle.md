@@ -1,20 +1,31 @@
 ---
 author: Ray
 title: AI Cockpit Work Item Lifecycle
-description: Deterministic serial execution, budget, and release-evidence rules for governed Work Items.
+description: Isolated Work Item lifecycle, agent-orchestrated parallelism, budget, and release-evidence rules.
 ---
 
 # AI Cockpit Work Item Lifecycle
 
-The default execution unit is one Work Item, one dedicated branch, and one PR. Work Items in a plan are executed serially:
+The default execution unit is one Work Item, one dedicated branch, and one PR.
+Within one Work Item its lifecycle is serial and evidence-bound:
 
 ```text
 remote base → dedicated branch → Contract/Preflight → implement → ai-finish/archive
   → push → PR/review → merge → ai-close-work-item → synchronize and clean base
-  → next Work Item
+  → close and clean that Work Item
 ```
 
-The next Work Item must not start until the predecessor has evidence for all of the following: PR merged, archive succeeded, local branch deleted, remote branch deleted, and local base synchronized with the remote base. A successor Contract may record this evidence in `predecessorWorkItem`; `make check-ai-serial-order` fails closed when any field is absent or false.
+An agent or subagent may orchestrate multiple independent Work Items in parallel
+when each has a separate linked worktree, `codex/<work-item-id>` branch,
+Contract/Summary pair, PR, archive, and closure receipt. AI Cockpit does not
+schedule those tasks and a Work Item never becomes a shared global runtime
+lock. It validates the local record shape and fails closed for malformed,
+unpaired, mismatched, or non-dedicated active branches.
+
+When a Work Item is a declared successor, it must wait for its predecessor to
+have evidence for PR merge, archive, local/remote branch deletion, and base
+synchronization. `make check-ai-serial-order` fails closed when that declared
+dependency is incomplete; independent Work Items do not acquire that edge.
 
 Create the dedicated Work Item branch before running `make ai-start`.
 When one remote default branch can be identified, `ai-start` rejects execution

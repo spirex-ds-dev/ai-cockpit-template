@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task release-v0547-candidate-advance-v0548 generated an evidence-derived outcome with status completed.
+Task parallel-work-item-workflow-reliability generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0

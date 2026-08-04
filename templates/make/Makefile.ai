@@ -125,22 +125,22 @@ ai-cockpit-diff-check:
 	git diff --check
 
 quality-fast:
-	+$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-format-check
-	+$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-lint
-	+$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-diff-check
+	$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-format-check
+	$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-lint
+	$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-diff-check
 
 quality-standard:
-	+$(AI_NESTED_MAKE) --no-print-directory quality-fast
-	+$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-test
-	+$(AI_NESTED_MAKE) --no-print-directory check-ai-reference-impact
-	+$(AI_NESTED_MAKE) --no-print-directory check-ai-test-weakening
+	$(AI_NESTED_MAKE) --no-print-directory quality-fast
+	$(AI_NESTED_MAKE) --no-print-directory ai-cockpit-project-test
+	$(AI_NESTED_MAKE) --no-print-directory check-ai-reference-impact
+	$(AI_NESTED_MAKE) --no-print-directory check-ai-test-weakening
 
 quality-full:
-	+$(AI_NESTED_MAKE) --no-print-directory quality-standard
+	$(AI_NESTED_MAKE) --no-print-directory quality-standard
 	@$(AI_COCKPIT_STRICT_CHECK)
 
 quality-release:
-	+$(AI_NESTED_MAKE) --no-print-directory quality-full
+	$(AI_NESTED_MAKE) --no-print-directory quality-full
 	@$(AI_COCKPIT_RELEASE_CHECK)
 
 ai-cockpit-quality:
