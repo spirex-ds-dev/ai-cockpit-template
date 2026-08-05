@@ -1,0 +1,140 @@
+{
+  "contractVersion": 2,
+  "workItemId": "active-work-item-sync-successor-699",
+  "mode": "code",
+  "title": "Re-deliver governed active Work Item synchronization on current main",
+  "baseCommit": "9d2fe82ebdb907dd9375cbc255e0b7c64e4d8b76",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "Continue executing the authorized remediation plan to completion; when a workflow problem is discovered, create a corrective Work Item rather than applying a temporary workaround.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continuous-authorization-and-process-first",
+    "capturedAt": "2026-08-06",
+    "digest": "sha256:continuous-authorized-process-first-remediation"
+  },
+  "declaredIntent": {
+    "summary": "Deliver the governed synchronization capability from immutable #691 evidence onto current main without rebasing, rewriting, or otherwise mutating #691/#698.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/active-work-item-sync-successor-699.contract.json",
+    ".ai/work-items/active/active-work-item-sync-successor-699.summary.json",
+    ".ai/work-items/active/active-work-item-sync-successor-699.outcome.json",
+    ".ai/work-items/active/active-work-item-sync-successor-699.outcome.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_resume_work_item.py",
+    "scripts/ai_start_receipt.py",
+    "scripts/ai_common.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_check_pr.py",
+    "scripts/installer/legacy.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_ai_check_work_item.py",
+    "tests/test_installed_runtime_parity.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/repository-workflow.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "templates/ai/cockpit/README.md",
+    "templates/ai/cockpit/README.ja.md"
+  ],
+  "outOfScope": [
+    "Rebasing, merging, force-pushing, closing, deleting, or otherwise mutating archived Work Item #691, its archive evidence, its branch, or PR #698",
+    "Any provider or remote Git mutation outside the normal successor PR lifecycle",
+    "Using the new synchronization capability for #663 before this successor is merged",
+    "Changing #663 implementation or its provider state in this Work Item",
+    "Weakening Start Receipt, ancestry, clean-worktree, scope, predecessor, or evidence-integrity validation",
+    "Updating a security baseline to conceal new findings"
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/699", "reason": "Authoritative successor requirement, current-main base, and immutable predecessor boundary."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/698", "reason": "Conflicting archived predecessor PR that must remain audit-only and unmodified."},
+    {"path": "git:6c2913e8:.ai/work-items/archive/2026/active-work-item-sync-691.contract.json", "reason": "Immutable #691 Contract records the approved synchronization behavior, scope, risks, and acceptance."},
+    {"path": "git:6c2913e8:.ai/work-items/archive/2026/active-work-item-sync-691.summary.json", "reason": "Immutable #691 Summary provides completed implementation and verification evidence to reproduce on the new base."},
+    {"path": "git:6c2913e8:.ai/work-items/archive/2026/active-work-item-sync-691.outcome.json", "reason": "Completed, warning-free predecessor Outcome; it is evidence, not a mutable successor input."},
+    {"path": "scripts/ai_resume_work_item.py", "reason": "Owns the controlled synchronization implementation and its fail-closed boundary."},
+    {"path": "scripts/ai_start_receipt.py", "reason": "Owns immutable start-receipt and synchronization-lineage validation."},
+    {"path": "docs/reference/ai-cockpit-work-item-lifecycle.md", "reason": "Canonical lifecycle documentation for public command authority and recovery limits."},
+    {"path": ".ai/glossary.md", "reason": "Terminology and architecture boundary source reviewed before implementation."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["lifecycle_order", "evidence_integrity", "git_history", "installed_runtime_parity", "successor_replay"],
+    "reason": "A successor must reproduce an audited local-Git lifecycle capability on a newer main while preserving immutable predecessor evidence and maintaining source/template parity.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": ["The user authorized automatic corrective Work Items; this changes lifecycle evidence, Git safety controls, installed templates, and canonical documentation."],
+    "operationClasses": ["repository_governance"],
+    "verificationEscalations": [],
+    "override": {
+      "approvalEvidence": "The user granted standing authorization for required Work Item corrections, lifecycle completion, and provider operations in this thread.",
+      "reason": "Strict lifecycle and evidence-integrity verification without a release operation.",
+      "risks": ["lifecycle_order", "evidence_integrity", "git_history", "installed_runtime_parity", "successor_replay"],
+      "notRunChecks": ["Release-preflight and distribution verification are inapplicable because this Work Item neither changes release-owned resources nor publishes."],
+      "workItemOnly": true,
+      "workItemId": "active-work-item-sync-successor-699"
+    }
+  },
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "#699 provides an explicit corrective successor on current main; #691/#698 will remain immutable and no temporary or manual lifecycle bypass will be used."},
+  "preReviewWarnings": ["Review predecessor immutability, source binding, ancestry, dirty-state rejection, replay rejection, executable-path safety, and source/template documentation parity."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Lifecycle and Git-history changes require immutable before-edit and before-finish checkpoints."},
+  "acceptance": [
+    "The successor begins from base commit 9d2fe82ebdb907dd9375cbc255e0b7c64e4d8b76 and re-delivers only #691's governed synchronization capability; #691 archive evidence, branch, and PR #698 remain unchanged.",
+    "`make ai-synchronize-work-item CONTRACT=<active-contract> BASE_REMOTE=<remote> BASE_BRANCH=<default>` performs an eligible local dedicated-branch rebase onto the exact remote default target and atomically records old/new base, branch/worktree identity, Contract/Summary digests, and append-only transition evidence.",
+    "Before rebase, the command rejects dirty, archived, detached/base branch, foreign Work Item, stale remote, non-ancestor, provider-mutated, unrelated, or already-synchronized states; it never pushes, force-pushes, opens a PR, mutates provider state, changes immutable Start Receipt, or rewrites archive evidence.",
+    "A rebase conflict is aborted automatically and leaves active Contract/Summary and lifecycle evidence byte-identical; a successful rebase invalidates prior verification and requires fresh preflight plus current-generation checks before Finish.",
+    "Regression tests cover a legal synchronization, conflict abort, all pre-rebase rejection boundaries, replay/stale evidence, and absolute governed Git executable handling without adding Bandit findings beyond the repository baseline.",
+    "Canonical lifecycle/workflow/Cockpit documentation and installed-template counterparts document the exact command, authority limits, recovery conditions, and parity; canonical generated capability and documentation-alignment evidence is refreshed.",
+    "The successor produces a red/yellow/green Outcome through normal `ai-finish`, is archived only after all gates pass, receives a clean merged PR, and closes through the merged-PR lifecycle before #663 consumes the capability."
+  ],
+  "guidelines": [
+    "Keep the command narrower than Git rebase: establish only a verified local baseline transition and never mutate refs or provider state.",
+    "Preserve immutable Start Receipt and predecessor/archive facts; use append-only, digest-bound transition evidence.",
+    "Maintain source-template-installed runtime parity for every public lifecycle command and its recovery documentation.",
+    "New public command behavior, authority limits, and recovery conditions must be documented in canonical lifecycle guidance.",
+    "Use source-level subprocess safety controls and focused tests; do not mask security findings through baseline changes."
+  ],
+  "intent": {
+    "problem": "#691 completed and was archived with a warning-free Outcome, but its draft PR #698 became DIRTY after #687 merged. Policy prohibits rebasing or rewriting archived evidence, leaving an approved capability unavailable on current main.",
+    "constraints": ["Start from the latest current main and preserve #691/#698 as immutable audit evidence.", "The command may perform only a verified local rebase; provider and remote Git mutations remain outside its authority.", "Dedicated identity, clean state, target ancestry, and Contract/Summary/Start Receipt integrity are required before any active-evidence write.", "A baseline transition invalidates verification and never makes Finish eligible.", "Source, installed template, canonical docs, and generated truth artifacts must remain aligned."],
+    "rationale": "A successor applies the already-approved governed behavior to current main without corrupting audit history or normalizing a manual rebase workaround."
+  },
+  "scenarioCoverage": [
+    {"scenario": "Successor code on current main performs an eligible clean active Work Item synchronization.", "expected": "A local rebase and one digest-bound transition receipt occur without provider, remote, archive, or immutable Start Receipt mutation.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Use a temporary Git fixture to assert target ancestry, evidence bytes, and transition validation."},
+    {"scenario": "The active Work Item has dirty state, detached/base branch, stale remote target, foreign identity, non-ancestor history, or an unsafe Git executable resolution.", "expected": "The command rejects before a rebase or active-evidence write and performs no Git/provider mutation.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Exercise each invalid fixture and assert errors plus byte-for-byte no-write postconditions."},
+    {"scenario": "A rebase conflicts, or a caller repeats a transition or supplies stale/forged predecessor, receipt, Contract, or Summary evidence.", "expected": "The conflict is aborted and every replay or integrity mismatch fails closed.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add or re-run direct writer and CLI fixtures for conflict abort, replay, and each stale/mismatched evidence input."},
+    {"scenario": "Source repository and installed template expose the command and canonical recovery guidance.", "expected": "Parity and documentation tests prove equivalent command availability, authority limits, and generated capability truth.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Run installed-runtime parity, documentation-alignment, capability generation, and full quality checks."},
+    {"scenario": "The successor is delivered while #691/#698 remains immutable.", "expected": "The successor changes no predecessor archive/branch/PR state and completes through its own archived Outcome, clean PR merge, and closure lifecycle.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Compare predecessor references before/after; verify successor archive, Outcome status/color, PR merge, and closure records."}
+  ],
+  "verification": [{"check":"aiWorkItem","required":true},{"check":"aiScope","required":true},{"check":"aiGuards","required":true},{"check":"aiCheckpoint","required":true},{"check":"aiAgentRisk","required":true},{"check":"aiReviewPolicy","required":true},{"check":"aiBacktrack","required":true},{"check":"aiCoverage","required":true},{"check":"aiScenarioCoverage","required":true},{"check":"aiGuidelines","required":true},{"check":"aiSummary","required":true},{"check":"aiStatus","required":true},{"check":"aiStatusCheck","required":true},{"check":"aiStatusConsistency","required":true},{"check":"aiDiffOwnership","required":true},{"check":"quality","required":true}],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user-continuation-authorization", "reason": "The user authorized automatic execution and requires workflow defects to be corrected through Work Items rather than temporary patches."},
+  "rollbackNote": "Revert the successor diff and restore its tests, templates, documentation, and generated evidence together; neither the command nor the Work Item may mutate #691/#698 evidence.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 805}},
+  "startReceipt": {"path": ".ai/work-items/starts/active-work-item-sync-successor-699.json", "baseCommit": "9d2fe82ebdb907dd9375cbc255e0b7c64e4d8b76", "initialScopeDigest": "df72970a818522c7dfd1da933c4c49bfad0ca44c2f1617665d5c29830a09af25", "contractSkeletonDigest": "d7ba5dea15d7acbe5f24a86df1eede741e45cd1b30eb67dfdb43d4ad7e3fae3f"}
+}
