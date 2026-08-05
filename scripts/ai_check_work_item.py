@@ -63,6 +63,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "startReceipt",
     "predecessorWorkItem",
     "resumeHistory",
+    "synchronizationHistory",
     "budgetImpact",
     "governanceProfile",
     "operationClasses",

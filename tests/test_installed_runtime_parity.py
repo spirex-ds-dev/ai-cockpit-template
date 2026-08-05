@@ -36,6 +36,7 @@ EXPECTED_RUNTIME_TARGETS = (
     "ai-cockpit-uninstall-execute",
     "check-capability-truth",
     "check-source-bound-evidence",
+    "ai-synchronize-work-item",
 )
 
 

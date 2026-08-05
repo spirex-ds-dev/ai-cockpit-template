@@ -79,7 +79,8 @@ make ai-resume-work-item CONTRACT=<active-contract> \
   BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
 ```
 
-This is the only supported baseline transition for an existing Work Item. The
+This is the supported baseline transition when a completed corrective predecessor
+is the source of the new baseline. The
 writer preserves the immutable Start Receipt, verifies the exact remote ref,
 Git ancestry, original dedicated branch, predecessor merge identity, closure
 postconditions, archive-manifest identity and digests, then atomically appends
@@ -96,6 +97,29 @@ exactly `codex/<work-item-id>`, every resume edge retains that same work branch,
 and all ordinary ancestry, predecessor, archive-manifest,
 digest, and closure checks pass. This recovery is not the normal start path and
 does not permit new Work Items to start on the default branch.
+
+## Synchronize an active Work Item to current main
+
+When an active dedicated Work Item is behind the live remote default branch but
+does not have a completed corrective predecessor, do not run Git rebase by
+hand. From its clean dedicated worktree, first fetch the target so the local
+tracking ref equals the live remote head, then run:
+
+```text
+make ai-synchronize-work-item CONTRACT=<active-contract> \
+  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
+```
+
+The command has local-only authority: it verifies the immutable Start Receipt,
+active Contract/Summary pair, dedicated branch identity, clean state, tracking
+ref freshness, and ancestry; it then performs the local rebase and appends one
+digest-bound `synchronizationHistory` transition. It never pushes,
+force-pushes, opens a PR, changes provider state, rewrites the Start Receipt,
+or changes archive evidence. A conflict is automatically aborted before any
+active evidence write. A successful synchronization marks prior verification
+`not_run`; rerun Preflight and all required current-generation checks before
+Finish. Replay, stale tracking state, detached/base/foreign branches, dirty
+worktrees, unrelated histories, and malformed evidence fail closed.
 
 ## Contract readiness
 

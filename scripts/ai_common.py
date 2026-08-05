@@ -185,15 +185,19 @@ def verification_status_for_generation(
     if not isinstance(summary, dict):
         return {}
 
-    history = contract.get("resumeHistory")
     cutoff: datetime | None = None
-    if history is not None:
+    for field in ("resumeHistory", "synchronizationHistory"):
+        history = contract.get(field)
+        if history is None:
+            continue
         if not isinstance(history, list) or not history or not isinstance(history[-1], dict):
-            raise ValueError("latest resumeHistory.recordedAt is invalid")
-        cutoff = _aware_iso_datetime(
+            raise ValueError(f"latest {field}.recordedAt is invalid")
+        transition_cutoff = _aware_iso_datetime(
             history[-1].get("recordedAt"),
-            error="latest resumeHistory.recordedAt is invalid",
+            error=f"latest {field}.recordedAt is invalid",
         )
+        if cutoff is None or transition_cutoff > cutoff:
+            cutoff = transition_cutoff
 
     statuses: dict[str, str] = {}
     verification = summary.get("verification", [])
@@ -211,7 +215,7 @@ def verification_status_for_generation(
                 continue
             executed_at = _aware_iso_datetime(
                 item.get("executedAt"),
-                error="verification record executedAt is required after resume",
+                error="verification record executedAt is required after baseline transition",
             )
             if executed_at < cutoff:
                 continue
