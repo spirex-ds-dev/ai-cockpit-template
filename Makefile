@@ -40,6 +40,7 @@ check-docs-metadata check-capability-claims check-trust-layer-docs check-real-ab
 	check-bandit-evidence check-bandit-baseline check-sbom check-provenance check-release-evidence refresh-candidate-release-evidence check-secret-scanning \
 	check-release-distribution check-release-state-consistency check-japanese-capability check-release-readiness check-release-preflight check-ci-release-evidence \
 	check-source-bound-evidence check-changed-critical-coverage \
+	check-dependabot-intake \
 	check-lockfile-reproducibility \
 	check-quality-architecture \
 	check-deprecated-assets \
@@ -220,6 +221,9 @@ check-source-bound-evidence:
 
 check-changed-critical-coverage:
 	$(AI_PYTHON) scripts/check_changed_critical_coverage.py --base "$(AI_BASE_COMMIT)"
+
+check-dependabot-intake:
+	$(AI_PYTHON) scripts/ai_check_dependabot_intake.py --event-name "$(GITHUB_EVENT_NAME)" --author "$(AI_PR_AUTHOR)" --pull-request-url "$(AI_PR_URL)" --head "$(AI_PR_HEAD_SHA)"
 
 check-release-preflight:
 	$(AI_NESTED_MAKE) check-source-bound-evidence

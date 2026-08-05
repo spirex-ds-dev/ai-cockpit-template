@@ -68,6 +68,14 @@ closed for a missing, malformed, digest-mismatched, base-mismatched, or
 untracked Receipt. The Receipt proves creation-time lifecycle state only; it
 does not prove implementation success, review approval, or merge status.
 
+### Dependabot source candidates
+
+Raw Dependabot PRs are not Work Item delivery branches. Hosted CI rejects a
+`dependabot[bot]` candidate before quality and PR-ownership checks. Preserve
+source facts, start a separate current-main Work Item, and bind its evidence to
+the exact raw URL/head/diff digest. The gate never mutates a provider PR or
+authorizes a successor merge. See [Dependabot Intake](dependabot-intake.md).
+
 ### Repository-wide active Work Item boundary
 
 Before `ai-start` writes a Contract, Summary, Start Receipt, or Cockpit Status,
