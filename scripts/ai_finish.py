@@ -1159,7 +1159,9 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
             print(f"ERROR: {issue}", file=sys.stderr)
         print(
             "ERROR: Contract/checkpoint binding is stale; run "
-            f"make ai-prepare-implementation CONTRACT={contract} SUMMARY={summary} "
+            f"make ai-revalidate-contract-amendment CONTRACT={contract} SUMMARY={summary} "
+            "PREVIOUS_CONTRACT_HASH=<immutable-before-edit-hash> "
+            "AMENDMENT_REASON='<why the Contract changed>' "
             "before retrying ai-finish.",
             file=sys.stderr,
         )

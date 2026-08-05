@@ -14,7 +14,7 @@ lastVerifiedBy: capability-truth-matrix
 
 | Need | Command family | Detailed owner |
 | --- | --- | --- |
-| Start and prepare work | `make ai-start`, `make ai-preflight`, `make ai-prepare-implementation` | [First Work Item](../getting-started/first-work-item.md) |
+| Start and prepare work | `make ai-start`, `make ai-preflight`, `make ai-prepare-implementation`, `make ai-revalidate-contract-amendment` | [First Work Item](../getting-started/first-work-item.md) |
 | Calibrate | `make cockpit-doctor`, `make cockpit-calibrate-session` | [First Calibration](../getting-started/first-calibration.md) |
 | Verify | `make quality-fast`, `make quality-full`, `make quality-release`, `make ai-cockpit-quality` | [Quality Gates](../operations/quality-gates.md) |
 | Finish and archive | `make ai-finish` | [Work Item Lifecycle](../operations/work-item-lifecycle.md) |

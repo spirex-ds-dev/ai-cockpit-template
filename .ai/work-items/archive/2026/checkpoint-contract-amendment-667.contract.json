@@ -1,0 +1,288 @@
+{
+  "contractVersion": 2,
+  "workItemId": "checkpoint-contract-amendment-667",
+  "mode": "code",
+  "title": "Reconcile before_edit checkpoint recovery with Contract amendments",
+  "baseCommit": "ee8b8a04008f9cb96a6ff36c0197c3c7f8078012",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/checkpoint-contract-amendment-667.contract.json",
+    ".ai/work-items/active/checkpoint-contract-amendment-667.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/checkpoint-contract-amendment-667.outcome.json",
+    ".ai/work-items/active/checkpoint-contract-amendment-667.outcome.md",
+    "scripts/ai_checkpoint.py",
+    "scripts/ai_check_agent_risk.py",
+    "scripts/ai_check_summary.py",
+    "scripts/ai_finish.py",
+    "Makefile",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/commands.md",
+    "docs/reference/repository-workflow.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "tests/test_ai_checkpoint.py",
+    "tests/test_ai_check_agent_risk.py",
+    "tests/test_core_gates.py",
+    "tests/test_makefile.py",
+    "tests/test_task_outcome_ai_finish_integration.py"
+  ],
+  "outOfScope": [
+    "Overwriting, deleting, relabeling, or retroactively altering an original before_edit checkpoint record.",
+    "Changing a Work Item Contract, Summary, archive, Outcome, Start Receipt, branch, pull request, provider state, or historical evidence outside the dedicated #667 test fixtures and this Work Item lifecycle evidence.",
+    "Weakening the requirement that before_edit is recorded before required verification, or treating a replacement checkpoint as evidence that implementation began earlier.",
+    "Adding a temporary manual JSON-edit path, an unbound checkpoint bypass, or an exception that accepts stale Contract evidence without append-only amendment binding.",
+    "Release, installation, dependency, lockfile, SBOM/provenance, or hosted-provider behavior changes."
+  ],
+  "sources": [
+    {
+      "path": "GitHub Issue #667",
+      "reason": "Authoritative P1 requirements for a distinct append-only Contract-amendment/revalidation checkpoint that preserves original before_edit evidence and covers scope amendment before and after verification."
+    },
+    {
+      "path": "scripts/ai_checkpoint.py",
+      "reason": "Current record_checkpoint filters the existing record by stage and rewrites before_edit, causing the original phase-boundary evidence to be lost."
+    },
+    {
+      "path": "scripts/ai_check_agent_risk.py",
+      "reason": "Current binding validation requires the before_edit record to match the current Contract hash and has no amendment-revalidation evidence model."
+    },
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Current stale-checkpoint recovery instructs ai-prepare-implementation, which writes before_edit again instead of preserving the original phase boundary."
+    },
+    {
+      "path": "Makefile",
+      "reason": "Current ai-prepare-implementation target has only the before_edit writer and needs a separate explicit revalidation entrypoint."
+    },
+    {
+      "path": "docs/reference/ai-cockpit-work-item-lifecycle.md",
+      "reason": "Canonical lifecycle documentation must define when an amendment revalidation is allowed and why it cannot replace before_edit."
+    },
+    {
+      "path": "tests/test_core_gates.py",
+      "reason": "Existing stale-checkpoint regression proves the conflicting current recovery message and provides the finish boundary for replacement tests."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_integrity",
+      "lifecycle_ordering",
+      "scope_governance",
+      "recovery_safety"
+    ],
+    "reason": "Replacing before_edit after implementation or verification would falsify phase-boundary evidence; accepting a stale Contract binding without explicit revalidation could hide unreviewed scope. The correction changes lifecycle evidence semantics and must remain append-only and fail closed.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "The Work Item changes the evidence-bound lifecycle and recovery behavior that protects implementation ordering and Contract-scope review."
+    ],
+    "operationClasses": ["repository_governance"],
+    "verificationEscalations": [],
+    "override": {
+      "approvalEvidence": "The user authorized continuous plan execution and required workflow defects to be corrected with a governed Work Item instead of a temporary workaround.",
+      "reason": "Strict lifecycle evidence review without a release operation or provider mutation.",
+      "risks": ["evidence_integrity", "lifecycle_ordering", "scope_governance", "recovery_safety"],
+      "notRunChecks": ["Release-preflight and distribution verification are not applicable because this Work Item changes repository-local checkpoint semantics only and must not create a release or mutate provider state."],
+      "workItemOnly": true,
+      "workItemId": "checkpoint-contract-amendment-667"
+    }
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user directed completion of the plan and requires the P1 checkpoint-recovery defect to be corrected before using Contract-amendment recovery in affected Work Items."
+  },
+  "preReviewWarnings": [
+    "Review that the immutable original before_edit record is retained byte-for-byte in the Summary, that the amendment record binds both prior and current Contract evidence, and that no recovery route can silently convert verification-time evidence into a before-edit claim."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A Work Item with a valid original before_edit checkpoint and a later Contract amendment can record one explicit append-only amendment-revalidation checkpoint without removing, relabeling, or changing the original before_edit record.",
+    "The revalidation record binds the original checkpoint Contract hash, the immediately preceding Contract digest, the amended current Contract digest, the declared amendment reason, and whether required verification had started when the amendment was requested.",
+    "ai-finish and agent-risk fail closed when an amendment lacks valid revalidation evidence, has mismatched digests/counts, attempts to replace before_edit, or is requested after verification without the stricter required record; their recovery output identifies the dedicated revalidation command rather than ai-prepare-implementation.",
+    "ai-prepare-implementation never overwrites an existing before_edit record; its caller receives a deterministic recovery direction when amendment revalidation is the applicable route.",
+    "Regression tests cover scope amendment before verification, after verification begins, malformed or cross-Contract revalidation evidence, and preservation of the original before_edit record; existing checkpoint and finish regressions remain green.",
+    "Canonical lifecycle and command documentation, Make entrypoints, and Capability Truth evidence state the append-only boundary without claiming provider or release verification."
+  ],
+  "guidelines": [
+    "Preserve evidence over self-declaration: immutable original before_edit evidence cannot be replaced by a later checkpoint.",
+    "Keep amendment revalidation append-only, digest-bound, deterministic, and fail closed for missing, malformed, stale, or cross-Work-Item records.",
+    "Do not use manual Summary JSON edits or test-only bypasses as a lifecycle recovery path.",
+    "Document the lifecycle-visible command and recovery conditions in canonical documentation and Capability Truth evidence."
+  ],
+  "intent": {
+    "problem": "When a legitimate implementation discovers that its Contract scope must be amended, the current agent-risk binding rejects the original before_edit checkpoint as stale. ai-finish then instructs ai-prepare-implementation, but that command deletes the original before_edit record and writes a replacement after work may already have started or verification may have run. The result is a contradictory recovery path that can erase the evidence proving when implementation began.",
+    "constraints": [
+      "Retain the original before_edit record as immutable phase-boundary evidence; do not relabel a replacement record as before_edit.",
+      "Use a separate append-only Contract amendment/revalidation record that binds predecessor and current Contract digests, amendment reason, original checkpoint identity, and verification-start state.",
+      "Both before-verification and after-verification amendments must remain fail closed unless their distinct recovery conditions are satisfied; no manual Summary editing or broad bypass is permitted.",
+      "The correction is repository-local: do not change provider state, branch history, release facts, dependencies, or historical archives.",
+      "Update the executable Make/lifecycle surface, tests, canonical documentation, and capability evidence together."
+    ],
+    "rationale": "An append-only revalidation record makes the scope change reviewable without rewriting the past. It separates proof that implementation was authorized to begin from proof that the amended Contract was re-reviewed, preserving strict lifecycle ordering while providing an actionable, machine-verifiable recovery path."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "The user explicitly authorized automatic execution for every Work Item and requires governed corrections to the declared repository-governance lifecycle paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 802
+    }
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "rawUserRequest": "目标：执行计划，到全部完成。我授权给你自动执行，写入到每个工单的Contract里。可以并行，提高效率；如果遇到流程问题，要先开工单修正，不要采用临时修补方案；所有 Pull 和 Issue 全部解决后再发布新版本。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continuous-plan-execution-and-governed-corrections-2026-08-05",
+    "capturedAt": "2026-08-05",
+    "digest": "sha256:667-contract-amendment-user-authorization"
+  },
+  "declaredIntent": {
+    "summary": "Replace the stale-checkpoint recovery loop with a separate append-only Contract amendment revalidation that preserves the original before_edit phase boundary and remains fail closed.",
+    "requestedCapabilities": ["ai_governance", "software_design", "documentation", "test_automation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Contract amendment before verification preserves the original phase boundary",
+      "required": true,
+      "status": "unverified",
+      "expected": "A valid original before_edit record remains unchanged and a distinct append-only revalidation record binds the pre-amendment and current Contract digests before required verification begins.",
+      "verificationPlan": "Add focused checkpoint/agent-risk/finish integration tests that amend scope before any required verification and inspect both records exactly.",
+      "evidence": []
+    },
+    {
+      "scenario": "Contract amendment after verification has started cannot rewrite before_edit",
+      "required": true,
+      "status": "unverified",
+      "expected": "The command preserves before_edit, records verification-start state, and fails closed unless the stricter revalidation evidence and recovery conditions are satisfied.",
+      "verificationPlan": "Add focused negative and recovery tests with a passed required verification entry before the amendment request.",
+      "evidence": []
+    },
+    {
+      "scenario": "Malformed, stale, or cross-Contract amendment evidence is rejected",
+      "required": true,
+      "status": "unverified",
+      "expected": "Agent-risk and ai-finish reject missing, replaced, digest-mismatched, or cross-Work-Item revalidation evidence and name the dedicated command as the only recovery route.",
+      "verificationPlan": "Add table-driven focused negative tests for each invalid binding and verify no declared verification command proceeds.",
+      "evidence": []
+    },
+    {
+      "scenario": "Canonical user-facing lifecycle guidance remains aligned",
+      "required": true,
+      "status": "unverified",
+      "expected": "Make and canonical lifecycle/command documentation describe the append-only command and prohibit rerunning ai-prepare-implementation to overwrite before_edit.",
+      "verificationPlan": "Run focused Make/documentation/capability-evidence checks and inspect generated diagnostics after implementation.",
+      "evidence": []
+    }
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/checkpoint-contract-amendment-667.json",
+    "baseCommit": "ee8b8a04008f9cb96a6ff36c0197c3c7f8078012",
+    "initialScopeDigest": "72e5d7711b884555374c3372a8bbe013be1794b313c4ae39af657b3bfc0ab61b",
+    "contractSkeletonDigest": "3263a15f0651eac60c042b52b80fb407abafad13371db48afe528c6ad3c0a257"
+  }
+}

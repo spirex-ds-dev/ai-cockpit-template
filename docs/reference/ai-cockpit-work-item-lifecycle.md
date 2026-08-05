@@ -101,6 +101,32 @@ does not permit new Work Items to start on the default branch.
 
 Active v2 code Contracts must contain concrete problem, constraints, rationale, sources, acceptance, and verification content. Generic starter phrases are rejected by the Contract check before implementation. If Preflight reports `needs_human_confirmation` or `not_ready`, stop and report the reason; do not continue by treating advisory output as authorization.
 
+### Contract amendment revalidation
+
+`before_edit` proves the phase boundary at which implementation was first
+authorized. It is immutable evidence: do not rerun
+`make ai-prepare-implementation` after that record exists, and do not edit the
+Summary to replace it. If a legitimate scope or Contract amendment is needed,
+first amend the Contract through the governed review path, then run:
+
+```text
+make ai-revalidate-contract-amendment \
+  CONTRACT=.ai/work-items/active/<task>.contract.json \
+  SUMMARY=.ai/work-items/active/<task>.summary.json \
+  PREVIOUS_CONTRACT_HASH=<immutable-before-edit-hash> \
+  AMENDMENT_REASON='<why the Contract changed>'
+```
+
+The command appends a `contract_amendment_revalidation` checkpoint that binds
+the original `before_edit` hash, the preceding Contract hash, the amended
+Contract hash, the reason, and whether required verification had already
+started. If verification had started, the revalidation must additionally
+invalidate every required gate and record the prior passed-gate count; Finish
+then reruns the full required gate set for the amended Contract. Missing,
+malformed, stale, or cross-Contract revalidation evidence fails closed. The
+record does not authorize a merge,
+release, provider mutation, or a manual rewrite of lifecycle evidence.
+
 ## Complexity budget
 
 Before implementation, estimate expected changes in the Contract's `budgetImpact`. At finish, `make check-ai-budget-impact` compares the generated complexity report with `.ai/guards/governance_complexity_policy.yaml`. An overrun is permitted only when the Contract explicitly records approval, a repayment Work Item, and repayment records. A separate budget-repair Work Item/PR is the appropriate repayment path when the current Work Item cannot repay its own increase.

@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -122,6 +123,8 @@ def parse_args() -> argparse.Namespace:
         default="manual",
         help="Checkpoint stage, for example before_edit or before_finish.",
     )
+    parser.add_argument("--previous-contract-hash")
+    parser.add_argument("--reason")
     return parser.parse_args()
 
 
@@ -131,6 +134,15 @@ def record_checkpoint(
     evidence = summary.get("checkpointEvidence", [])
     if not isinstance(evidence, list):
         evidence = []
+    if stage == "before_edit" and any(
+        isinstance(item, dict)
+        and item.get("stage") == "before_edit"
+        and item.get("recorded") is True
+        for item in evidence
+    ):
+        raise ValueError(
+            "before_edit checkpoint already exists; use make ai-revalidate-contract-amendment"
+        )
     statuses = verification_status(summary, contract)
     record = {
         "stage": stage,
@@ -160,6 +172,85 @@ def record_checkpoint(
     save_json(summary_path, summary)
 
 
+def record_contract_amendment_revalidation(
+    summary: dict[str, Any],
+    contract: dict[str, Any],
+    path: Path,
+    summary_path: Path,
+    *,
+    previous_contract_hash: str,
+    reason: str,
+) -> dict[str, Any]:
+    """Append evidence that an amended Contract was revalidated, never rewriting before_edit."""
+    evidence = summary.get("checkpointEvidence", [])
+    if not isinstance(evidence, list):
+        raise TypeError("checkpointEvidence must be a list before amendment revalidation")
+    original = next(
+        (
+            item
+            for item in evidence
+            if isinstance(item, dict)
+            and item.get("stage") == "before_edit"
+            and item.get("recorded") is True
+        ),
+        None,
+    )
+    if not isinstance(original, dict):
+        raise TypeError("before_edit checkpoint is required before contract amendment revalidation")
+    original_hash = original.get("contractHash")
+    if not isinstance(original_hash, str) or not original_hash:
+        raise ValueError("before_edit checkpoint contractHash is required")
+    if not isinstance(previous_contract_hash, str) or not previous_contract_hash:
+        raise ValueError("previous Contract hash is required")
+    preceding = [
+        item
+        for item in evidence
+        if isinstance(item, dict)
+        and item.get("stage") == "contract_amendment_revalidation"
+        and item.get("recorded") is True
+    ]
+    preceding_hash = preceding[-1].get("contractHash") if preceding else original_hash
+    if previous_contract_hash != preceding_hash:
+        raise ValueError(
+            "previous Contract hash must bind the immediately preceding checkpoint evidence"
+        )
+    if not isinstance(reason, str) or not reason.strip():
+        raise ValueError("amendment reason is required")
+    statuses = verification_status(summary, contract)
+    required_checks = required_verification(contract)
+    verification_started = any(
+        statuses.get(check) in {"passed", "failed", "warning", "blocked"}
+        for check in required_checks
+    )
+    record = {
+        "stage": "contract_amendment_revalidation",
+        "recorded": True,
+        "originalBeforeEditContractHash": original_hash,
+        "previousContractHash": previous_contract_hash,
+        "contractHash": contract_hash(path),
+        "acceptanceCount": len(contract.get("acceptance", [])),
+        "unknownCount": len(contract.get("unknowns", [])),
+        "requiredChecks": len(required_verification(contract)),
+        "requiredChecksPassed": 0,
+        "reason": reason.strip(),
+        "verificationStarted": verification_started,
+        # A post-verification amendment is stricter than an ordinary
+        # pre-verification revalidation: every required result is explicitly
+        # invalidated so Finish must establish the amended Contract's full
+        # verification set again. The old records remain append-only evidence.
+        "invalidatedRequiredChecks": required_checks if verification_started else [],
+        "requiredChecksPassedAtAmendment": (
+            len([check for check in required_checks if statuses.get(check) == "passed"])
+            if verification_started
+            else 0
+        ),
+        "recordedAt": datetime.now(UTC).isoformat(),
+    }
+    summary["checkpointEvidence"] = [*evidence, record]
+    save_json(summary_path, summary)
+    return record
+
+
 def main() -> int:
     args = parse_args()
     try:
@@ -171,8 +262,24 @@ def main() -> int:
         print(f"Failed to load checkpoint inputs: {exc}", file=sys.stderr)
         return 1
 
-    if args.summary and isinstance(summary, dict):
-        record_checkpoint(summary, contract, args.stage, Path(args.contract), Path(args.summary))
+    try:
+        if args.summary and isinstance(summary, dict):
+            if args.stage == "contract_amendment_revalidation":
+                record_contract_amendment_revalidation(
+                    summary,
+                    contract,
+                    Path(args.contract),
+                    Path(args.summary),
+                    previous_contract_hash=args.previous_contract_hash or "",
+                    reason=args.reason or "",
+                )
+            else:
+                record_checkpoint(
+                    summary, contract, args.stage, Path(args.contract), Path(args.summary)
+                )
+    except ValueError as exc:
+        print(f"Checkpoint blocked: {exc}", file=sys.stderr)
+        return 2
     if args.stage == "before_edit":
         record_fact_once(
             str(contract.get("workItemId", "")),
