@@ -163,6 +163,48 @@ def test_ai_start_main_creates_unrelated_contract_despite_real_foreign_duplicate
     ).read_bytes() == foreign_summary
 
 
+def test_ai_start_main_creates_unrelated_contract_despite_foreign_canonical_active_work_item(
+    tmp_path, monkeypatch
+):
+    root = tmp_path / "repository"
+    root.mkdir()
+    _git(root, "init", "-b", "main")
+    _git(root, "config", "user.name", "Test")
+    _git(root, "config", "user.email", "test@example.com")
+    _write_commit(root, "seed.txt", "start\n")
+    foreign = tmp_path / "foreign"
+    _git(root, "worktree", "add", "-b", "codex/other-task", str(foreign))
+    foreign_active = foreign / ".ai" / "work-items" / "active"
+    foreign_active.mkdir(parents=True)
+    for suffix in ("contract", "summary"):
+        (foreign_active / f"other-task.{suffix}.json").write_text(
+            '{"workItemId":"other-task"}', encoding="utf-8"
+        )
+    foreign_contract = (foreign_active / "other-task.contract.json").read_bytes()
+    foreign_summary = (foreign_active / "other-task.summary.json").read_bytes()
+    active = root / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", root)
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", active)
+    monkeypatch.setattr(ai_start, "DEFAULT_STATUS", root / ".ai/cockpit/current_status.md")
+    monkeypatch.setattr(ai_start, "validate_status_consistency", list)
+    monkeypatch.setattr(ai_start, "capture_dirty_baseline", list)
+    stub_active_status(monkeypatch)
+    monkeypatch.setattr(
+        ai_start,
+        "create_observability",
+        lambda **_: type("Obs", (), {"work_item_started": lambda *args, **kwargs: None})(),
+    )
+    monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "new-task", "--mode", "investigate"])
+
+    assert ai_start.main() == 0
+    assert (active / "new-task.contract.json").exists()
+    assert (active / "new-task.summary.json").exists()
+    assert (root / ".ai/work-items/starts/new-task.json").exists()
+    assert (foreign_active / "other-task.contract.json").read_bytes() == foreign_contract
+    assert (foreign_active / "other-task.summary.json").read_bytes() == foreign_summary
+
+
 def test_foreign_duplicate_diagnostic_is_read_only_and_requires_canonical_owner(
     tmp_path, monkeypatch
 ):

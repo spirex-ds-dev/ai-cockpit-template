@@ -1,0 +1,230 @@
+{
+  "contractVersion": 2,
+  "workItemId": "foreign-active-start-v1",
+  "mode": "code",
+  "title": "Permit isolated startup despite foreign active Work Item",
+  "baseCommit": "0abe4b4ccb4187a221462be7a2b8c4f004a235b0",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/foreign-active-start-v1.contract.json",
+    ".ai/work-items/active/foreign-active-start-v1.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/foreign-active-start-v1.outcome.json",
+    ".ai/work-items/active/foreign-active-start-v1.outcome.md",
+    "scripts/ai_start.py",
+    "tests/test_start_and_archive.py",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Mutating, detaching, renaming, deleting, or manually repairing any foreign linked worktree or its active evidence.",
+    "Relaxing malformed, ambiguous, non-dedicated, or requested-task-conflict startup checks.",
+    "Changes in #634, #614, #617, #648, or #654 scope."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/656",
+      "reason": "Authoritative report and acceptance for the asserted foreign-active startup regression."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/pull/655",
+      "reason": "Latest-main predecessor that already added linked-worktree duplicate handling."
+    },
+    {
+      "path": "scripts/ai_start.py",
+      "reason": "Authoritative startup policy and linked-worktree identity implementation."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": [
+      "workflow_integrity",
+      "evidence_integrity"
+    ],
+    "reason": "A false allowance can hide unsafe active ownership, while a false rejection blocks independent governed Work Items.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "P1 lifecycle regression and linked-worktree ownership policy require strict evidence."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized autonomous corrective Work Items. A normal ai-start run on latest main succeeded, so this Work Item records and regression-tests that behavior without any bootstrap bypass."
+  },
+  "preReviewWarnings": [],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A real linked-worktree normal ai-start invocation creates the unrelated Contract and Summary while one foreign valid active Work Item remains on its dedicated branch.",
+    "The foreign Contract and Summary bytes remain unchanged during that invocation.",
+    "Starting the same task, malformed or ambiguous active records, and non-dedicated branches remain fail closed.",
+    "The final git diff leaves scripts/ai_start.py unchanged and adds an end-to-end regression whose assertions bind normal startup creation and foreign-byte preservation."
+  ],
+  "guidelines": [
+    "Use a real Git linked-worktree regression rather than mocked identity classification alone.",
+    "Do not mutate foreign linked worktrees or their evidence.",
+    "Preserve fail-closed behavior for malformed, ambiguous, non-dedicated, and requested-task-conflict states.",
+    "Do not manufacture a source change when current-main behavior already satisfies the reported requirement."
+  ],
+  "intent": {
+    "problem": "#656 reported that a valid foreign active Work Item on its canonical dedicated branch globally blocked an unrelated normal ai-start after #655 merged. Direct execution on the exact reported latest main instead created this Work Item normally; that outcome must be preserved and protected by end-to-end evidence.",
+    "constraints": [
+      "No bootstrap, manual bypass, or foreign-worktree mutation is authorized now that normal ai-start succeeds.",
+      "Do not change the scope of #634, #614, #617, #648, or #654."
+    ],
+    "rationale": "A real normal-start regression test is the smallest truthful correction: it prevents reintroduction and avoids inventing a fix for behavior that current main already provides."
+  },
+  "declaredIntent": {
+    "summary": "Prove and preserve isolated normal Work Item startup in the presence of a valid foreign active Work Item.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "test_automation"
+    ]
+  },
+  "rawUserRequest": "目标：执行计划，到全部完成。 我授权给你自动执行，写入到每个工单的Contract里。遇到流程问题，要先开工单修正。不要采用临时修补方案。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation",
+    "capturedAt": "2026-08-05T00:00:00+00:00",
+    "digest": "sha256:9ddb388b819a2b82c8fc05bdfb177b6cb05c0cc051b0dd051e5a9c3a0d8d6495"
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "One foreign valid active Contract/Summary pair belongs to codex/other-task while ai-start receives new-task.",
+      "expected": "Normal ai-start creates new-task Contract/Summary and leaves foreign bytes unchanged.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Real Git linked-worktree end-to-end test invoking ai_start.main."
+    },
+    {
+      "scenario": "The requested task is already owned or foreign active records are malformed, ambiguous, or non-dedicated.",
+      "expected": "Startup fails closed without creating a second active identity.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "verificationPlan": "Focused existing linked-worktree negative regressions."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 800
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/foreign-active-start-v1.json",
+    "baseCommit": "0abe4b4ccb4187a221462be7a2b8c4f004a235b0",
+    "initialScopeDigest": "0043b5b62f45fc8a0cebd62bf04584409b993f65ebb365ee14eb6954e1bbe82f",
+    "contractSkeletonDigest": "c2dcbf628243cabbae156f3458c15ed6298169d3451eae40b29ac1a1f41886e7"
+  }
+}
