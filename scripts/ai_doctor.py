@@ -70,6 +70,21 @@ def diagnose(root: Path) -> tuple[list[str], list[str], list[str]]:
         passed.append("Initial Git commit detected")
     else:
         failures.append("Create an initial Git commit before ai-start or --create-adoption")
+    active = root / ".ai" / "work-items" / "active"
+    if active.is_dir():
+        for outcome_path in sorted(active.glob("*.outcome.json")):
+            try:
+                outcome = __import__("json").loads(outcome_path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                warnings.append(f"Lifecycle Outcome is unreadable: {outcome_path}")
+                continue
+            if isinstance(outcome, dict) and outcome.get("status") == "blocked":
+                warnings.append(
+                    "Lifecycle Outcome is blocked "
+                    f"(color={outcome.get('humanStatusColor', 'unknown')}, "
+                    f"gate={outcome.get('failedGate', outcome.get('failedCheck', 'unknown'))}, "
+                    f"recovery={outcome.get('recoveryCondition', 'not recorded')})"
+                )
     identities, identity_errors = linked_worktree_identity_report(root=root)
     warnings.extend(identity_errors)
     for identity in identities:

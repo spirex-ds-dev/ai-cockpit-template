@@ -847,6 +847,14 @@ def render_active_status(
         outcome_count = task_outcome.get("evidenceCount", 0)
         outcome_status = task_outcome.get("status", "unknown")
         lines.append(f"- Status: `{outcome_status}`")
+        color = task_outcome.get("humanStatusColor", "unknown")
+        lines.append(f"- Traffic Light: `{color}`")
+        failed_gate = task_outcome.get("failedCheck", task_outcome.get("failedGate", ""))
+        if failed_gate:
+            lines.append(f"- Failed Gate: `{failed_gate}`")
+        recovery = task_outcome.get("recoveryCondition", "")
+        if recovery:
+            lines.append(f"- Recovery Condition: `{recovery}`")
         lines.append(f"- Report: `{outcome_path}`")
         lines.append(f"- Evidence Count: `{outcome_count}`")
 

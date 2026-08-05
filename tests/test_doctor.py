@@ -28,6 +28,21 @@ def test_doctor_reports_isolated_unrelated_malformed_linked_worktree(tmp_path, m
     )
 
 
+def test_doctor_projects_blocked_outcome_traffic_light_gate_and_recovery(tmp_path, monkeypatch):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    (active / "task.outcome.json").write_text(
+        '{"status":"blocked","humanStatusColor":"red","failedGate":"quality","recoveryCondition":"retry quality"}',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_doctor, "linked_worktree_identity_report", lambda **_kwargs: ([], []))
+    _, warnings, _ = ai_doctor.diagnose(tmp_path)
+    assert any(
+        "color=red" in item and "gate=quality" in item and "retry quality" in item
+        for item in warnings
+    )
+
+
 def test_doctor_passes_hard_prerequisites_for_repository():
     passed, warnings, failures = ai_doctor.diagnose(ROOT)
     assert not failures

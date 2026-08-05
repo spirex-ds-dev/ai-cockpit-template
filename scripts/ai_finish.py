@@ -603,6 +603,15 @@ def refresh_archived_human_report(task: str) -> tuple[bool, str]:
 
 def _record_outcome_state(summary_path: Path, state: dict[str, Any]) -> None:
     summary = load_json(summary_path)
+    status = state.get("status")
+    if status == "completed":
+        state.setdefault("humanStatusColor", "green")
+        state.setdefault("completionFact", "All declared finish checks passed.")
+        state.setdefault("recoveryCondition", "")
+    elif status in {"blocked", "failed"}:
+        state.setdefault("humanStatusColor", "red")
+    else:
+        state.setdefault("humanStatusColor", "yellow")
     summary["taskOutcome"] = state
     changed = summary.get("changedFiles")
     output_paths = (state.get("jsonPath"), state.get("markdownPath"))
@@ -1144,7 +1153,14 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
                 "record valid Decision Evidence and rerun Preflight until status is ready.",
                 file=sys.stderr,
             )
-            return preflight_code
+            return return_blocked_finish_failure(
+                task=args.task,
+                contract_path=contract_path,
+                summary_path=summary_path,
+                failed_check="aiPreflight",
+                failure_message="the Work Item preflight review is not ready",
+                code=preflight_code,
+            )
     contract_hash = hashlib.sha256(contract_path.read_bytes()).hexdigest()
     commit_sha = current_head()
     from ai_check_agent_risk import validate_checkpoint_bindings
@@ -1163,7 +1179,14 @@ def _main_with_mutex(args: argparse.Namespace) -> int:
             "before retrying ai-finish.",
             file=sys.stderr,
         )
-        return 2
+        return return_blocked_finish_failure(
+            task=args.task,
+            contract_path=contract_path,
+            summary_path=summary_path,
+            failed_check="aiCheckpoint",
+            failure_message="Contract/checkpoint binding is stale",
+            code=2,
+        )
     declared = contract_data.get("verification", [])
     if not isinstance(declared, list):
         print("ERROR: Contract verification must be a list", file=sys.stderr)

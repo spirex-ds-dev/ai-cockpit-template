@@ -153,6 +153,15 @@ def record_checkpoint(
             )
         ),
     }
+    # The first implementation boundary is immutable.  A Contract amendment
+    # must append its own revalidation record; replacing before_edit erases the
+    # exact state that makes that amendment auditable.
+    if stage == "before_edit" and any(
+        item.get("stage") == "before_edit" and item.get("recorded") is True
+        for item in evidence
+        if isinstance(item, dict)
+    ):
+        raise ValueError("duplicate before_edit prepare is refused; append contract revalidation")
     summary["checkpointEvidence"] = [
         item for item in evidence if isinstance(item, dict) and item.get("stage") != stage
     ]

@@ -50,6 +50,7 @@ check-docs-metadata check-capability-claims check-trust-layer-docs check-real-ab
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-guidelines check-ai-review-policy template-adoption-ready \
 	check-ai-scenario-coverage check-ai-start-receipt check-ai-archive-recovery generate-ai-preflight-review check-ai-preflight-review ai-preflight ai-prepare-implementation \
+	check-ai-lifecycle-truth \
 	ai-prepare-hosted-verification-snapshot \
 	check-ai-change-summary generate-cockpit-status generate-cockpit-status-ja check-ai-status check-ai-status-ja check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
 	ai-assess-provider-merge-state-recovery \
@@ -644,6 +645,9 @@ ai-prepare-implementation:
 	@test -n "$(CONTRACT)" -a -n "$(SUMMARY)" || (echo 'CONTRACT and SUMMARY are required' >&2; exit 2)
 	$(AI_NESTED_MAKE) ai-preflight CONTRACT="$(CONTRACT)"
 	$(AI_NESTED_MAKE) ai-checkpoint CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" STAGE="before_edit"
+
+check-ai-lifecycle-truth:
+	$(AI_PYTHON) scripts/ai_lifecycle_truth.py --check
 
 ai-prepare-hosted-verification-snapshot:
 	@test -n "$(CONTRACT)" || (echo 'CONTRACT=<active-contract.json> is required' >&2; exit 2)
