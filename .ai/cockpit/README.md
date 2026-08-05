@@ -148,6 +148,24 @@ archive manifest and closure facts are valid. Never edit the Start Receipt,
 `baseCommit`, or `resumeHistory` by hand. Re-run Preflight and all stale
 verification after a successful resume.
 
+When no closed corrective predecessor supplies the transition but an active
+dedicated Work Item must be rebased to the current remote default branch, use
+the controlled local boundary instead of a manual rebase:
+
+```text
+make ai-synchronize-work-item \
+  CONTRACT=.ai/work-items/active/<task>.contract.json \
+  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
+```
+
+Fetch first: the command rejects a stale tracking ref. It verifies the clean
+dedicated branch, active Contract/Summary and immutable Start Receipt, then
+records one digest-bound `synchronizationHistory` transition. It has no push,
+force-push, PR, provider, archive, or Start Receipt rewrite authority. A
+conflict aborts automatically without writing active evidence; success
+invalidates prior verification, so rerun Preflight and all required checks
+before Finish.
+
 For an existing version-1 Receipt that truthfully records the default branch,
 the resume command has a compatibility-only path: the current branch must be
 exactly `codex/<work-item-id>`, all

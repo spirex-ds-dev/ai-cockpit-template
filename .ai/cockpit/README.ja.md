@@ -97,6 +97,23 @@ facts が有効であることを確認できない場合は fail closed です�
 `baseCommit`、`resumeHistory` を手で編集してはいけません。再開後は Preflight
 をやり直し、古くなった検証をすべて再実行します。
 
+完了済み corrective predecessor がないまま active な専用 Work Item を最新 remote
+default branch へ rebase する必要がある場合、手作業の rebase は禁止です。先に
+fetch してから次を実行します。
+
+```text
+make ai-synchronize-work-item \
+  CONTRACT=.ai/work-items/active/<task>.contract.json \
+  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
+```
+
+tracking ref が stale なら fail closed です。この command は clean な専用 branch、
+active Contract/Summary、immutable Start Receipt を検証し、digest-bound な
+`synchronizationHistory` transition を一つだけ記録します。push、force-push、PR、
+provider、archive、Start Receipt の変更権限はありません。conflict は active evidence
+を書かずに自動 abort し、成功時は以前の verification を無効化するため、Finish 前に
+Preflight と必要な全 check を再実行します。
+
 1. `make ai-start TASK=<task> TITLE="..." MODE=code` で Work Item を作成する。
 2. Contract の `scope`、`sources`、`acceptance`、`verification`、リスク評価、エージェント能力、実行判断を明確にする。
 3. 宣言したスコープ内のみ実装する。

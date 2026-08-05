@@ -15,6 +15,7 @@ RECEIPTS_DIR = PROJECT_ROOT / ".ai" / "work-items" / "starts"
 RECEIPT_SCHEMA_VERSION = 1
 RECEIPT_PREFIX = ".ai/work-items/starts/"
 RESUME_SCHEMA_VERSION = 1
+SYNCHRONIZATION_SCHEMA_VERSION = 1
 RESUME_REQUIRED_FIELDS = (
     "resumeVersion",
     "fromBaseCommit",
@@ -28,6 +29,19 @@ RESUME_REQUIRED_FIELDS = (
     "predecessorMergeCommit",
     "predecessorManifestPath",
     "predecessorClosure",
+)
+SYNCHRONIZATION_REQUIRED_FIELDS = (
+    "synchronizationVersion",
+    "fromBaseCommit",
+    "toBaseCommit",
+    "baseRemote",
+    "baseBranch",
+    "workBranch",
+    "recordedAt",
+    "priorContractDigest",
+    "priorSummaryDigest",
+    "rebaseHeadBefore",
+    "rebaseHeadAfter",
 )
 
 
@@ -219,10 +233,79 @@ def validate_resume_history_structure(contract: dict[str, Any], receipt_base: st
         )
         expected_from = str(transition.get("toBaseCommit", ""))
 
+    synchronization = contract.get("synchronizationHistory")
     if history and isinstance(history[-1], dict):
         final_target = history[-1].get("toBaseCommit")
-        if final_target != contract_base:
+        follows_resume = (
+            isinstance(synchronization, list)
+            and synchronization
+            and isinstance(synchronization[0], dict)
+            and synchronization[0].get("fromBaseCommit") == final_target
+        )
+        if final_target != contract_base and not follows_resume:
             issues.append("resumeHistory final toBaseCommit does not match Contract baseCommit")
+    return issues
+
+
+def validate_synchronization_history_structure(
+    contract: dict[str, Any], receipt_base: str
+) -> list[str]:
+    """Validate local-only baseline transition evidence without repository access."""
+    history = contract.get("synchronizationHistory")
+    if history is None:
+        return []
+    if not isinstance(history, list) or not history:
+        return ["synchronizationHistory must be a non-empty array when present"]
+    resume = contract.get("resumeHistory")
+    expected_from = receipt_base
+    if isinstance(resume, list) and resume and isinstance(resume[-1], dict):
+        expected_from = str(resume[-1].get("toBaseCommit", ""))
+    issues: list[str] = []
+    for index, transition in enumerate(history):
+        location = f"synchronizationHistory[{index}]"
+        if not isinstance(transition, dict):
+            issues.append(f"{location} must be an evidence object")
+            continue
+        for field in SYNCHRONIZATION_REQUIRED_FIELDS:
+            if field not in transition:
+                issues.append(f"{location} missing field: {field}")
+        if any(field not in transition for field in SYNCHRONIZATION_REQUIRED_FIELDS):
+            continue
+        if transition.get("synchronizationVersion") != SYNCHRONIZATION_SCHEMA_VERSION:
+            issues.append(f"{location}.synchronizationVersion is unsupported")
+        for field in (
+            "fromBaseCommit",
+            "toBaseCommit",
+            "baseRemote",
+            "baseBranch",
+            "workBranch",
+            "rebaseHeadBefore",
+            "rebaseHeadAfter",
+        ):
+            if not isinstance(transition.get(field), str) or not transition[field].strip():
+                issues.append(f"{location}.{field} must be a non-empty string")
+        if transition.get("fromBaseCommit") != expected_from:
+            issues.append(f"{location}.fromBaseCommit does not continue from the prior baseline")
+        if transition.get("toBaseCommit") == transition.get("fromBaseCommit"):
+            issues.append(f"{location}.toBaseCommit must advance the baseline")
+        if transition.get("workBranch") == transition.get("baseBranch"):
+            issues.append(f"{location}.workBranch must be a dedicated non-base branch")
+        try:
+            datetime.fromisoformat(str(transition.get("recordedAt")))
+        except ValueError:
+            issues.append(f"{location}.recordedAt is not ISO-8601")
+        for field in ("priorContractDigest", "priorSummaryDigest"):
+            if not _is_digest(transition.get(field)):
+                issues.append(f"{location}.{field} must be a SHA-256 digest")
+        expected_from = str(transition.get("toBaseCommit", ""))
+    if (
+        history
+        and isinstance(history[-1], dict)
+        and history[-1].get("toBaseCommit") != contract.get("baseCommit")
+    ):
+        issues.append(
+            "synchronizationHistory final toBaseCommit does not match Contract baseCommit"
+        )
     return issues
 
 
@@ -376,15 +459,27 @@ def validate_receipt(
     if receipt.get("receiptPath") != expected_path:
         issues.append("Start Receipt receiptPath is not the canonical repository-relative path")
     if receipt.get("baseCommit") != contract.get("baseCommit"):
-        resume_issues = validate_resume_history(
-            contract,
-            receipt,
-            project_root=project_root,
-            require_latest_predecessor=require_latest_predecessor,
-        )
-        if resume_issues:
+        has_resume = contract.get("resumeHistory") is not None
+        has_synchronization = contract.get("synchronizationHistory") is not None
+        if not has_resume and not has_synchronization:
             issues.append("Start Receipt baseCommit does not match Contract")
-            issues.extend(resume_issues)
+        if has_resume:
+            resume_issues = validate_resume_history(
+                contract,
+                receipt,
+                project_root=project_root,
+                require_latest_predecessor=require_latest_predecessor,
+            )
+            if resume_issues:
+                issues.append("Start Receipt baseCommit does not match Contract")
+                issues.extend(resume_issues)
+        if has_synchronization:
+            synchronization_issues = validate_synchronization_history_structure(
+                contract, str(receipt.get("baseCommit", ""))
+            )
+            if synchronization_issues:
+                issues.append("Start Receipt baseCommit does not match Contract")
+                issues.extend(synchronization_issues)
     elif contract.get("resumeHistory") is not None:
         issues.extend(
             validate_resume_history(
@@ -393,6 +488,10 @@ def validate_receipt(
                 project_root=project_root,
                 require_latest_predecessor=require_latest_predecessor,
             )
+        )
+    elif contract.get("synchronizationHistory") is not None:
+        issues.extend(
+            validate_synchronization_history_structure(contract, str(receipt.get("baseCommit", "")))
         )
     try:
         datetime.fromisoformat(str(receipt["startTimestamp"]))

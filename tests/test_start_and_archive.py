@@ -19,7 +19,7 @@ import ai_start_receipt
 import pytest
 from ai_acceptance_policy import validate_acceptance_evidence
 from ai_observability import AiEventType
-from ai_resume_work_item import ResumeError, resume_contract
+from ai_resume_work_item import ResumeError, resume_contract, synchronize_contract
 from ai_start_receipt import (
     build_receipt,
     current_branch,
@@ -542,6 +542,12 @@ def _resume_fixture(tmp_path: Path) -> tuple[Path, Path, Path, str, str]:
     _git(root, "config", "user.name", "Test")
     _git(root, "config", "user.email", "test@example.com")
     start = _write_commit(root, "seed.txt", "start\n")
+    remote = tmp_path / "origin.git"
+    subprocess.run(
+        ["git", "init", "--bare", str(remote)], check=True, capture_output=True, text=True
+    )
+    _git(root, "remote", "add", "origin", str(remote))
+    _git(root, "push", "-u", "origin", "main")
     _git(root, "switch", "-c", "codex/paused-task")
 
     contract_path = root / ".ai/work-items/active/paused-task.contract.json"
@@ -566,7 +572,7 @@ def _resume_fixture(tmp_path: Path) -> tuple[Path, Path, Path, str, str]:
 
     _git(root, "switch", "main")
     target = _write_commit(root, "corrective.txt", "fixed\n")
-    _git(root, "update-ref", "refs/remotes/origin/main", target)
+    _git(root, "push", "origin", "main")
     _git(root, "switch", "codex/paused-task")
     _git(root, "rebase", target)
 
@@ -574,6 +580,196 @@ def _resume_fixture(tmp_path: Path) -> tuple[Path, Path, Path, str, str]:
     contract["predecessorWorkItem"] = _closed_predecessor("corrective", target, manifest)
     contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
     return root, contract_path, receipt_file, start, target
+
+
+def _synchronization_fixture(tmp_path: Path) -> tuple[Path, Path, Path, str, str]:
+    """Create an active, clean dedicated branch that is behind origin/main."""
+    root = tmp_path / "repository"
+    root.mkdir()
+    _git(root, "init", "-b", "main")
+    _git(root, "config", "user.name", "Test")
+    _git(root, "config", "user.email", "test@example.com")
+    start = _write_commit(root, "seed.txt", "start\n")
+    remote = tmp_path / "origin.git"
+    subprocess.run(
+        ["git", "init", "--bare", str(remote)], check=True, capture_output=True, text=True
+    )
+    _git(root, "remote", "add", "origin", str(remote))
+    _git(root, "push", "-u", "origin", "main")
+    _git(root, "switch", "-c", "codex/paused-task")
+
+    contract_path = root / ".ai/work-items/active/paused-task.contract.json"
+    summary_path = root / ".ai/work-items/active/paused-task.summary.json"
+    receipt_file = root / ".ai/work-items/starts/paused-task.json"
+    contract_path.parent.mkdir(parents=True)
+    receipt_file.parent.mkdir(parents=True)
+    contract = {
+        "contractVersion": 2,
+        "workItemId": "paused-task",
+        "mode": "code",
+        "title": "Paused task",
+        "baseCommit": start,
+        "scope": ["src/**"],
+    }
+    receipt = build_receipt(
+        contract,
+        timestamp="2026-08-06T00:00:00+00:00",
+        project_root=root,
+    )
+    contract["startReceipt"] = receipt_binding(receipt)
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    summary_path.write_text(
+        json.dumps(
+            {
+                "workItemId": "paused-task",
+                "verification": [{"check": "quality", "result": "passed"}],
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    receipt_file.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+    _git(root, "add", ".ai")
+    _git(root, "commit", "-m", "record active evidence")
+
+    _git(root, "switch", "main")
+    target = _write_commit(root, "corrective.txt", "fixed\n")
+    _git(root, "push", "origin", "main")
+    _git(root, "switch", "codex/paused-task")
+    return root, contract_path, summary_path, start, target
+
+
+def test_synchronize_contract_rebases_clean_active_branch_and_records_one_transition(tmp_path):
+    root, contract_path, summary_path, start, target = _synchronization_fixture(tmp_path)
+    original_receipt = (root / ".ai/work-items/starts/paused-task.json").read_bytes()
+
+    transition = synchronize_contract(
+        contract_path,
+        summary_path=summary_path,
+        base_remote="origin",
+        base_branch="main",
+        timestamp="2026-08-06T01:00:00+00:00",
+        project_root=root,
+    )
+
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert transition["fromBaseCommit"] == start
+    assert transition["toBaseCommit"] == target
+    assert transition["workBranch"] == "codex/paused-task"
+    assert contract["baseCommit"] == target
+    assert contract["synchronizationHistory"] == [transition]
+    assert _git(root, "merge-base", "--is-ancestor", target, "HEAD") == ""
+    assert summary["verification"][0]["result"] == "not_run"
+    assert (root / ".ai/work-items/starts/paused-task.json").read_bytes() == original_receipt
+
+
+def test_synchronize_contract_aborts_conflict_without_evidence_write(tmp_path):
+    root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
+    _write_commit(root, "seed.txt", "work item edit\n")
+    _git(root, "switch", "main")
+    _write_commit(root, "seed.txt", "corrective edit\n")
+    _git(root, "push", "origin", "main")
+    _git(root, "switch", "codex/paused-task")
+    before_contract = contract_path.read_bytes()
+    before_summary = summary_path.read_bytes()
+    before_head = _git(root, "rev-parse", "HEAD")
+
+    with pytest.raises(ResumeError, match="rebase conflicted and was aborted"):
+        synchronize_contract(
+            contract_path,
+            summary_path=summary_path,
+            base_remote="origin",
+            base_branch="main",
+            project_root=root,
+        )
+
+    assert contract_path.read_bytes() == before_contract
+    assert summary_path.read_bytes() == before_summary
+    assert _git(root, "rev-parse", "HEAD") == before_head
+    assert _git(root, "status", "--porcelain") == ""
+
+
+def test_synchronize_contract_rejects_dirty_worktree_before_rebase_or_write(tmp_path):
+    root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
+    (root / "unrelated.txt").write_text("dirty\n", encoding="utf-8")
+    before_contract = contract_path.read_bytes()
+    before_summary = summary_path.read_bytes()
+    before_head = _git(root, "rev-parse", "HEAD")
+
+    with pytest.raises(ResumeError, match="clean dedicated Work Item worktree"):
+        synchronize_contract(
+            contract_path,
+            summary_path=summary_path,
+            base_remote="origin",
+            base_branch="main",
+            project_root=root,
+        )
+
+    assert contract_path.read_bytes() == before_contract
+    assert summary_path.read_bytes() == before_summary
+    assert _git(root, "rev-parse", "HEAD") == before_head
+
+
+def test_synchronize_contract_rejects_replay_without_rewriting_transition(tmp_path):
+    root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
+    synchronize_contract(
+        contract_path,
+        summary_path=summary_path,
+        base_remote="origin",
+        base_branch="main",
+        project_root=root,
+    )
+    _git(root, "add", ".ai")
+    _git(root, "commit", "-m", "record synchronization")
+    before_contract = contract_path.read_bytes()
+    before_summary = summary_path.read_bytes()
+
+    with pytest.raises(ResumeError, match="already has a synchronization transition"):
+        synchronize_contract(
+            contract_path,
+            summary_path=summary_path,
+            base_remote="origin",
+            base_branch="main",
+            project_root=root,
+        )
+
+    assert contract_path.read_bytes() == before_contract
+    assert summary_path.read_bytes() == before_summary
+
+
+def test_synchronize_contract_rejects_stale_remote_tracking_ref_without_rebase(tmp_path):
+    root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
+    writer = tmp_path / "provider-writer"
+    _git(tmp_path, "clone", _git(root, "remote", "get-url", "origin"), str(writer))
+    _git(writer, "config", "user.name", "Provider")
+    _git(writer, "config", "user.email", "provider@example.com")
+    _write_commit(writer, "provider-main.txt", "new remote state\n")
+    _git(writer, "push", "origin", "main")
+    before_contract = contract_path.read_bytes()
+    before_summary = summary_path.read_bytes()
+    before_head = _git(root, "rev-parse", "HEAD")
+
+    with pytest.raises(ResumeError, match="remote tracking ref is stale"):
+        synchronize_contract(
+            contract_path,
+            summary_path=summary_path,
+            base_remote="origin",
+            base_branch="main",
+            project_root=root,
+        )
+
+    assert contract_path.read_bytes() == before_contract
+    assert summary_path.read_bytes() == before_summary
+    assert _git(root, "rev-parse", "HEAD") == before_head
+
+
+@pytest.mark.parametrize("resolved", [None, "git"])
+def test_governed_git_executable_rejects_missing_or_relative_resolution(monkeypatch, resolved):
+    monkeypatch.setattr(ai_resume_work_item.shutil, "which", lambda _name: resolved)
+
+    with pytest.raises(ResumeError, match="absolute Git executable"):
+        ai_resume_work_item.governed_git_executable()
 
 
 def test_resume_contract_appends_source_bound_lineage_without_rewriting_receipt(tmp_path):

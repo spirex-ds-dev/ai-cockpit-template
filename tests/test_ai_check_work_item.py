@@ -48,6 +48,15 @@ def test_contract_schema_accepts_resume_writer_field_and_rejects_unrelated_unkno
     assert "unknown field: unexpectedField" in ai_check_work_item.validate_contract(contract)
 
 
+def test_contract_schema_accepts_synchronization_history_field():
+    contract = valid_contract()
+    contract["synchronizationHistory"] = []
+
+    assert "unknown field: synchronizationHistory" not in ai_check_work_item.validate_contract(
+        contract
+    )
+
+
 def test_required_evidence_context_requires_normalized_structured_inputs():
     contract = valid_contract()
     contract["requiredEvidenceContext"] = {
