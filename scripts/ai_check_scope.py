@@ -15,6 +15,7 @@ from ai_evidence_dependencies import (
     EvidenceDependencyError,
     changed_path_dependency_issues,
     load_capability_evidence_dependencies,
+    source_bound_generated_evidence_change_issues,
 )
 from ai_observability import create_observability, elapsed_ms
 
@@ -142,6 +143,16 @@ def main() -> int:
                     check_id="aiScope",
                     severity="error",
                     path="capabilityEvidenceDependencies",
+                    detail=issue,
+                )
+            for issue in source_bound_generated_evidence_change_issues(
+                contract, paths, dependencies
+            ):
+                issues.append(issue)
+                obs.guard_violation(
+                    check_id="aiScope",
+                    severity="error",
+                    path="sourceBoundGeneratedEvidence",
                     detail=issue,
                 )
 

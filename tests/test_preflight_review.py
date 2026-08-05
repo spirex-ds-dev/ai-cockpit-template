@@ -5,6 +5,7 @@ from pathlib import Path
 import ai_preflight_review
 import pytest
 from ai_common import validate_scenario_coverage
+from ai_evidence_dependencies import SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS
 from ai_observability import AiEventType
 
 
@@ -213,6 +214,43 @@ def test_preflight_capability_dependency_negative_controls(tmp_path, scope, expe
 
     assert report["status"] == "ready"
     assert signal_map(report)["Evidence Dependency"] == expected
+
+
+def test_preflight_requires_bounded_generated_evidence_policy_for_v2_finish_scope(tmp_path):
+    write_capability_truth_matrix(tmp_path)
+    contract = capability_contract()
+    contract.update(
+        {
+            "contractVersion": 2,
+            "scope": [
+                "docs/getting-started/installation.md",
+                "tests/test_installation.py",
+                *SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS,
+            ],
+        }
+    )
+    path = capability_contract_path(tmp_path)
+    write_contract(path, contract)
+
+    report = ai_preflight_review.derive_report(
+        contract, contract_path=path, policy_path=tmp_path / "preflight_review_policy.yaml"
+    )
+
+    assert report["status"] == "not_ready"
+    signal = next(item for item in report["signals"] if item["name"] == "Evidence Dependency")
+    assert signal["evidence"] == [
+        "source-bound capability evidence scope requires sourceBoundGeneratedEvidence policy"
+    ]
+
+    contract["sourceBoundGeneratedEvidence"] = {
+        "mode": "canonical_generators",
+        "generatedPaths": list(SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS),
+    }
+    report = ai_preflight_review.derive_report(
+        contract, contract_path=path, policy_path=tmp_path / "preflight_review_policy.yaml"
+    )
+    assert report["status"] == "ready"
+    assert signal_map(report)["Evidence Dependency"] == "Ready"
 
 
 def test_preflight_blocks_declared_deletion_when_required_evidence_is_missing(tmp_path):

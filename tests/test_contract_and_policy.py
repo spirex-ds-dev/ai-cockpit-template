@@ -8,6 +8,7 @@ import ai_check_summary
 import ai_check_work_item
 import pytest
 from ai_common import load_json
+from ai_evidence_dependencies import SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS
 
 
 def valid_contract():
@@ -244,6 +245,61 @@ def test_scope_guard_accepts_matrix_and_unrelated_changed_path_controls(
     monkeypatch.setattr(sys, "argv", ["ai_check_scope.py", str(contract_path)])
 
     assert ai_check_scope.main() == 0
+
+
+def test_scope_guard_requires_all_canonical_generated_outputs_for_v2_bound_source(
+    tmp_path, monkeypatch, capsys
+):
+    matrix_path = tmp_path / "docs/reference/capability-truth-matrix.json"
+    matrix_path.parent.mkdir(parents=True)
+    (tmp_path / "scripts").mkdir()
+    (tmp_path / "scripts/ai_finish.py").write_text("pass\n", encoding="utf-8")
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests/test_finish.py").write_text("pass\n", encoding="utf-8")
+    matrix_path.write_text(
+        json.dumps(
+            {
+                "capabilities": [
+                    {
+                        "id": "finish",
+                        "sourceEvidence": ["scripts/ai_finish.py"],
+                        "testEvidence": ["tests/test_finish.py"],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    contract_path = tmp_path / "task.contract.json"
+    contract = {
+        "contractVersion": 2,
+        "workItemId": "task",
+        "scope": [
+            "scripts/ai_finish.py",
+            "tests/test_finish.py",
+            *SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS,
+        ],
+        "outOfScope": [],
+        "sourceBoundGeneratedEvidence": {
+            "mode": "canonical_generators",
+            "generatedPaths": list(SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS),
+        },
+    }
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+    monkeypatch.setattr(ai_check_scope, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        ai_check_scope,
+        "changed_paths",
+        lambda _contract: [
+            "scripts/ai_finish.py",
+            "tests/test_finish.py",
+            "docs/reference/capability-truth-matrix.json",
+        ],
+    )
+    monkeypatch.setattr(sys, "argv", ["ai_check_scope.py", str(contract_path)])
+
+    assert ai_check_scope.main() == 1
+    assert "required generated path is absent from the diff" in capsys.readouterr().err
 
 
 def test_scope_guard_fails_closed_when_configured_dependency_matrix_is_malformed(

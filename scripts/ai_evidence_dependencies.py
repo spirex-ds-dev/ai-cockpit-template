@@ -15,6 +15,14 @@ from ai_common import matches
 
 MATRIX_PATH = "docs/reference/capability-truth-matrix.json"
 MARKDOWN_PATH = "docs/reference/capability-truth-matrix.md"
+SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS = (
+    MATRIX_PATH,
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+)
+SOURCE_BOUND_GENERATED_EVIDENCE_MODE = "canonical_generators"
 
 
 class EvidenceDependencyError(ValueError):
@@ -213,3 +221,92 @@ def changed_path_dependency_issues(
         for path, capability_ids in dependencies.capability_ids_by_path.items()
         if path in changed
     ]
+
+
+def _contract_scopes_capability_evidence(
+    contract: Mapping[str, Any], dependencies: EvidenceDependencies
+) -> bool:
+    scope = contract.get("scope")
+    if not isinstance(scope, list) or any(not isinstance(path, str) for path in scope):
+        return False
+    return any(
+        matches(pattern, path) for pattern in scope for path in dependencies.capability_ids_by_path
+    )
+
+
+def source_bound_generated_evidence_policy_issues(
+    contract: Mapping[str, Any], dependencies: EvidenceDependencies
+) -> list[str]:
+    """Validate the bounded Contract opt-in for canonical generated evidence.
+
+    Contract v1 remains compatible.  A v2 Contract that declares a Capability
+    Truth evidence source must explicitly own the complete, fixed generator
+    output bundle before any source change can be finished.
+    """
+    if contract.get("contractVersion") != 2 or not _contract_scopes_capability_evidence(
+        contract, dependencies
+    ):
+        return []
+
+    policy = contract.get("sourceBoundGeneratedEvidence")
+    if not isinstance(policy, Mapping):
+        return [
+            "source-bound capability evidence scope requires sourceBoundGeneratedEvidence policy"
+        ]
+    if policy.get("mode") != SOURCE_BOUND_GENERATED_EVIDENCE_MODE:
+        return [f"sourceBoundGeneratedEvidence.mode must be {SOURCE_BOUND_GENERATED_EVIDENCE_MODE}"]
+    paths = policy.get("generatedPaths")
+    if not isinstance(paths, list) or any(not isinstance(path, str) for path in paths):
+        return ["sourceBoundGeneratedEvidence.generatedPaths must be a string list"]
+    if set(paths) != set(SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS) or len(paths) != len(
+        SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS
+    ):
+        return [
+            (
+                "sourceBoundGeneratedEvidence.generatedPaths must declare exactly the canonical "
+                "generated paths"
+            )
+        ]
+    scope = contract["scope"]
+    missing = [
+        path
+        for path in SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS
+        if not any(matches(pattern, path) for pattern in scope)
+    ]
+    if missing:
+        return [
+            "sourceBoundGeneratedEvidence requires Contract scope coverage for: "
+            + ", ".join(missing)
+        ]
+    return []
+
+
+def source_bound_generated_evidence_change_issues(
+    contract: Mapping[str, Any], paths: list[str], dependencies: EvidenceDependencies
+) -> list[str]:
+    """Require canonical outputs for a changed bound source and reject extra docs."""
+    if contract.get("contractVersion") != 2:
+        return []
+    changed = set(paths)
+    changed_bound_paths = sorted(
+        path for path in dependencies.capability_ids_by_path if path in changed
+    )
+    if not changed_bound_paths:
+        return []
+
+    issues = source_bound_generated_evidence_policy_issues(contract, dependencies)
+    if issues:
+        return issues
+    for path in SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS:
+        if path not in changed:
+            issues.append(
+                "source-bound generated evidence required generated path is absent from the diff: "
+                + path
+            )
+    for path in sorted(changed):
+        if path.startswith("docs/") and path not in SOURCE_BOUND_GENERATED_DOCUMENTATION_PATHS:
+            issues.append(
+                "sourceBoundGeneratedEvidence does not authorize changed non-generated "
+                "documentation: " + path
+            )
+    return issues
