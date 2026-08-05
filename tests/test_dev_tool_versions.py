@@ -46,6 +46,27 @@ def test_check_tool_version_fails_closed_on_mismatch(tmp_path, monkeypatch, caps
     assert "expected 0.16.0" in error
     assert "observed 0.15.21" in error
     assert "locked development environment" in error
+    assert "python3 -m venv .venv" in error
+    assert ".venv/bin/python -m pip install --require-hashes -r requirements-dev.lock" in error
+    assert "make project-format-check" in error
+
+
+def test_check_tool_version_prints_locked_recovery_when_ruff_cannot_run(
+    tmp_path, monkeypatch, capsys
+):
+    manifest = tmp_path / "requirements-dev.in"
+    manifest.write_text("ruff==0.16.0\n", encoding="utf-8")
+    monkeypatch.setattr(
+        check_dev_tool_versions,
+        "installed_version",
+        lambda _tool: (_ for _ in ()).throw(RuntimeError("module unavailable")),
+    )
+
+    assert check_dev_tool_versions.check_tool_version(manifest, "ruff") == 2
+    error = capsys.readouterr().err
+    assert "module unavailable" in error
+    assert "python3 -m venv .venv" in error
+    assert ".venv/bin/python -m pip install --require-hashes -r requirements-dev.lock" in error
 
 
 def test_check_tool_version_accepts_exact_match(tmp_path, monkeypatch, capsys):

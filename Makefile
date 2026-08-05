@@ -33,7 +33,7 @@ GOVERNANCE_PROFILE ?=
 GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 
 .PHONY: help \
-	test project-format-check project-test project-lint diff-check quality quality-gates \
+	test check-quality-toolchain project-format-check project-test project-lint diff-check quality quality-gates \
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
 check-docs-metadata check-capability-claims check-trust-layer-docs check-real-absurd-injection-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-calibration-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
@@ -132,7 +132,10 @@ help:
 	@printf '%s\n' ''
 	@printf '%s\n' 'Customize project-format-check, project-test, and project-lint for your stack.'
 
-project-format-check:
+check-quality-toolchain:
+	$(AI_PYTHON) scripts/check_dev_tool_versions.py --manifest requirements-dev.in --tool ruff
+
+project-format-check: check-quality-toolchain
 	$(AI_PYTHON) -m ruff format --check scripts tests
 	git diff --check
 
@@ -172,8 +175,7 @@ unsupported-claim-regression:
 delusion-test-gate:
 	$(AI_PYTHON) -m pytest -q tests/test_delusion_scenarios.py tests/test_unsupported_claim_regression.py
 
-project-lint:
-	$(AI_PYTHON) scripts/check_dev_tool_versions.py --manifest requirements-dev.in --tool ruff
+project-lint: check-quality-toolchain
 	$(AI_PYTHON) -m ruff check scripts tests
 	$(AI_PYTHON) -m mypy scripts/*.py
 	$(AI_PYTHON) scripts/check_governance_complexity.py

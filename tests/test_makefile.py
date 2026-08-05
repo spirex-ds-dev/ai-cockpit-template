@@ -100,6 +100,21 @@ def test_project_lint_checks_locked_ruff_version_before_rule_evaluation():
     assert version_check < ruff_check
 
 
+def test_project_format_check_checks_locked_ruff_version_before_format_evaluation():
+    result = subprocess.run(
+        ["make", "-n", "project-format-check"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    version_check = result.stdout.index("scripts/check_dev_tool_versions.py")
+    ruff_format = result.stdout.index("-m ruff format --check scripts tests")
+    assert version_check < ruff_format
+
+
 def test_project_format_check_runs_ruff_format_check():
     result = subprocess.run(
         ["make", "-n", "project-format-check"],
