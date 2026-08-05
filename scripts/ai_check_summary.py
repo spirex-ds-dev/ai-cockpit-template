@@ -54,6 +54,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "generatedFiles",
     "guidelinesCompliance",
     "knownGaps",
+    "nonRiskExplanations",
     "issuesObserved",
     "overclaimPrevention",
     "residualRisks",
@@ -431,6 +432,43 @@ def _validate_verification_entries(
     return issues
 
 
+def _validate_non_risk_explanations(summary: dict[str, Any]) -> list[str]:
+    """Validate Summary evidence that is informative but not an unresolved gap."""
+    issues: list[str] = []
+    non_risk_explanations = summary.get("nonRiskExplanations")
+    if not isinstance(non_risk_explanations, list):
+        return issues
+    for index, explanation in enumerate(non_risk_explanations):
+        prefix = f"nonRiskExplanations[{index}]"
+        if not isinstance(explanation, dict):
+            issues.append(f"{prefix} must be an object")
+            continue
+        allowed = {"sourceWarning", "reason", "evidence"}
+        for key in explanation:
+            if key not in allowed:
+                issues.append(f"{prefix}.{key} is not allowed")
+        for key in ("sourceWarning", "reason"):
+            if not non_empty_string(explanation.get(key)):
+                issues.append(f"{prefix}.{key} must be a non-empty string")
+        evidence = explanation.get("evidence")
+        if not isinstance(evidence, list):
+            issues.append(f"{prefix}.evidence must be a list")
+            continue
+        if not evidence:
+            issues.append(f"{prefix}.evidence must contain at least one evidence reference")
+            continue
+        for evidence_index, reference in enumerate(evidence):
+            reference_prefix = f"{prefix}.evidence[{evidence_index}]"
+            if not isinstance(reference, dict):
+                issues.append(f"{reference_prefix} must be an object")
+                continue
+            if not non_empty_string(reference.get("source")):
+                issues.append(f"{reference_prefix}.source must be a non-empty string")
+            if not non_empty_string(reference.get("subject")):
+                issues.append(f"{reference_prefix}.subject must be a non-empty string")
+    return issues
+
+
 def _validate_summary_metadata(summary: dict[str, Any]) -> list[str]:
     issues: list[str] = []
     risk = summary.get("risk")
@@ -455,9 +493,16 @@ def _validate_summary_metadata(summary: dict[str, Any]) -> list[str]:
         if key in summary and not isinstance(summary.get(key), list):
             issues.append(f"{key} must be a list")
 
-    for key in ("userCorrectionsCaptured", "userCorrectionSolidification", "knownGaps"):
+    for key in (
+        "userCorrectionsCaptured",
+        "userCorrectionSolidification",
+        "knownGaps",
+        "nonRiskExplanations",
+    ):
         if key in summary and not isinstance(summary.get(key), list):
             issues.append(f"{key} must be a list")
+
+    issues.extend(_validate_non_risk_explanations(summary))
 
     known_gaps = summary.get("knownGaps")
     if (

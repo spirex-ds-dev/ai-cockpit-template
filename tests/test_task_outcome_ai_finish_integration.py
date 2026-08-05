@@ -454,6 +454,46 @@ def test_outcome_pipeline_structures_legacy_known_gaps_as_limitations(tmp_path, 
     assert sections["forbiddenClaims"]
 
 
+def test_outcome_pipeline_preserves_non_risk_explanation_without_warning_or_yellow_status(
+    tmp_path, monkeypatch
+):
+    task = "example-task"
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(
+        json.dumps({"workItemId": task, "baseCommit": "a" * 40, "verification": []}),
+        encoding="utf-8",
+    )
+    explanation = {
+        "sourceWarning": "Hosted verification is not required by the Contract.",
+        "reason": "The Contract does not require hosted verification for this Work Item.",
+        "evidence": [{"source": "contract", "subject": "verification"}],
+    }
+    summary_path.write_text(
+        json.dumps(
+            {
+                "verification": [],
+                "changedFiles": [],
+                "knownGaps": [],
+                "nonRiskExplanations": [explanation],
+            }
+        ),
+        encoding="utf-8",
+    )
+    json_path = tmp_path / "outcome.json"
+    monkeypatch.setattr(ai_finish, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_finish, "_outcome_paths", lambda _: (json_path, tmp_path / "outcome.md"))
+
+    ok, message = ai_finish.run_task_outcome_pipeline(task, summary_path, contract_path)
+
+    assert ok, message
+    outcome = json.loads(json_path.read_text(encoding="utf-8"))
+    assert outcome["status"] == "completed"
+    assert outcome["sections"]["warnings"] == []
+    assert outcome["sections"]["limitations"] == []
+    assert outcome["sections"]["nonRiskExplanations"] == [explanation]
+
+
 def test_outcome_pipeline_missing_input_fails_closed(tmp_path, monkeypatch):
     summary_path = tmp_path / "summary.json"
     summary_path.write_text(json.dumps({"taskOutcomeInput": "missing-raw.json"}), encoding="utf-8")

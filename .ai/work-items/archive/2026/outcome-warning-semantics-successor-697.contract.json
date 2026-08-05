@@ -1,0 +1,251 @@
+{
+  "contractVersion": 2,
+  "workItemId": "outcome-warning-semantics-successor-697",
+  "mode": "code",
+  "title": "P1 successor for Outcome warning semantics",
+  "rawUserRequest": "Continue the authorized remediation plan to completion. Preserve truthful red/yellow/green Outcome reporting, correct workflow defects through Work Items rather than temporary patches, and preserve immutable archived PR evidence by creating current-main successors.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continuous-authorization-outcome-traffic-light-and-successor-policy",
+    "capturedAt": "2026-08-06",
+    "digest": "sha256:continuous-authorized-outcome-successor-remediation"
+  },
+  "declaredIntent": {
+    "summary": "Re-deliver the #692 evidence-derived Outcome semantics correction onto current main without rebasing or rewriting archived #692/#696 evidence.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "baseCommit": "74acde5fda268d0aeec424c096af9aba70ceafbf",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/outcome-warning-semantics-successor-697.contract.json",
+    ".ai/work-items/active/outcome-warning-semantics-successor-697.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/outcome-warning-semantics-successor-697.outcome.json",
+    ".ai/work-items/active/outcome-warning-semantics-successor-697.outcome.md",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_summary.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_ai_check_summary.py",
+    "docs/contract-fields.md",
+    "docs/features/task-outcome-report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Rebasing, rewriting, closing, deleting, or otherwise mutating immutable archived #692 evidence, its branch, or PR #696.",
+    "Rewriting #699/#700 archive, Outcome, PR, or closure evidence.",
+    "Changing Outcome handling for genuine known gaps, failed verification, residual risks, or blocked lifecycle states.",
+    "Provider mutation outside the normal successor PR lifecycle."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Derives Task Outcome warnings and non-risk explanations from active Summary evidence."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Validates the distinct structured Summary semantics before Finish."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Covers Finish-to-Outcome derivation and color semantics."
+    },
+    {
+      "path": "tests/test_ai_check_summary.py",
+      "reason": "Covers malformed structured Summary evidence fail-closed behavior."
+    },
+    {
+      "path": "git:9c442bda:.ai/work-items/archive/2026/outcome-warning-semantics-692.contract.json",
+      "reason": "Immutable source Contract for the completed correction that #697 re-delivers without historical rewrite."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/697",
+      "reason": "Authoritative successor requirement after archived PR #696 conflicted with current main."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["governance_semantics", "false_status_signal", "evidence_integrity"],
+    "reason": "Outcome color is a human decision signal: a real gap must never be suppressed, while an explicit non-risk statement must not create a false yellow warning.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Outcome semantics, Finish, and evidence validation are governed lifecycle surfaces."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic corrective Work Items; this successor preserves #692/#696 and re-delivers only the current-main Outcome semantics correction."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "preReviewWarnings": [
+    "Review that nonRiskExplanations never suppresses knownGaps, failed verification, residual risk, or blocked lifecycle status; verify archive/PR predecessor immutability."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A Summary can record an informational non-risk explanation without putting it in knownGaps.",
+    "ai-finish carries a validated nonRiskExplanations entry to the Outcome without adding a warning, limitation, or forbidden completion claim for that entry.",
+    "A completed Outcome with only non-risk explanations remains completed with green human status color.",
+    "A genuine knownGap remains an Outcome warning/limitation and a yellow completed_with_warnings result; failed verification or blocked state remains red.",
+    "Summary validation rejects malformed nonRiskExplanations rather than silently dropping it.",
+    "Maintainer documentation and generated capability/documentation-alignment evidence distinguish knownGaps from nonRiskExplanations."
+  ],
+  "guidelines": [
+    "Public Summary evidence fields must have explicit, non-overlapping semantics documented for maintainers.",
+    "Do not weaken Outcome handling for genuine gaps, failed verification, or blocked states.",
+    "Keep Outcome generation deterministic and evidence-derived."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A completed Work Item records only a structured non-risk explanation that hosted verification is inapplicable.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Finish emits no warning or limitation for that explanation and the Outcome remains completed/green.",
+      "verificationPlan": "Focused Finish-to-Outcome integration test asserts status, warning list, limitation list, and human status color."
+    },
+    {
+      "scenario": "A Work Item records a genuine knownGap, failed verification, residual risk, or blocked lifecycle state.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The Outcome remains warning/yellow or blocked/red as appropriate; non-risk evidence cannot suppress it.",
+      "verificationPlan": "Focused integration regressions retain genuine-gap and failed-Finish assertions."
+    },
+    {
+      "scenario": "A Summary supplies malformed nonRiskExplanations evidence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Summary validation fails closed before Finish can silently discard the evidence.",
+      "verificationPlan": "Focused Summary-validator tests exercise malformed structured entries."
+    }
+  ],
+  "intent": {
+    "problem": "Archived #692 has a green local Outcome, but its draft PR #696 conflicts with current main because #700 merged after #692 branched. The archive cannot be rebased or rewritten, and the valid false-yellow Outcome correction is unavailable on current main.",
+    "constraints": [
+      "Start from latest origin/main and preserve #692/#696 as immutable audit evidence.",
+      "Do not use prose heuristics or suppress arbitrary knownGaps to infer non-risk status.",
+      "Preserve fail-closed handling of malformed Summary evidence and all genuine warning/red conditions.",
+      "Retain backward compatibility for existing Summary records that omit the optional structured field.",
+      "Regenerate source-bound capability and documentation evidence after current-main implementation."
+    ],
+    "rationale": "A structured nonRiskExplanations field retains informational Contract-inapplicability context while preserving knownGaps as the authoritative unfinished-requirement signal. A successor is required because archived Work Item evidence cannot be rebased."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuation-authorization",
+    "reason": "The user authorized automatic execution and requires workflow defects to be corrected through Work Items rather than temporary patches."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 807
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/outcome-warning-semantics-successor-697.json",
+    "baseCommit": "74acde5fda268d0aeec424c096af9aba70ceafbf",
+    "initialScopeDigest": "2a463d0da529a8ff4a55af719e46e4939f8097956e75701f19528936daeb2d83",
+    "contractSkeletonDigest": "796940c377501e5d5ad20cebc662c46fee069929d0d4082c9987129ad477133a"
+  }
+}

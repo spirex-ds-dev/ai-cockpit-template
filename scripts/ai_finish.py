@@ -655,6 +655,9 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
         if isinstance(item, dict) and isinstance(item.get("path"), str)
     ]
     warnings = [item for item in summary.get("knownGaps", []) if isinstance(item, str)]
+    non_risk_explanations = [
+        dict(item) for item in summary.get("nonRiskExplanations", []) if isinstance(item, dict)
+    ]
     limitations = [
         {
             "sourceWarning": warning,
@@ -665,7 +668,7 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
         }
         for warning in warnings
     ]
-    non_risk_explanations = [
+    known_gap_non_risk_explanations = [
         {
             "sourceWarning": warning,
             "reason": "The Summary records this item as an unresolved gap rather than a verified result.",
@@ -697,7 +700,10 @@ def _pre_merge_outcome_input(task: str, contract_path: Path, summary_path: Path)
             "deliveredChanges": delivered,
             "warnings": warnings,
             "limitations": limitations,
-            "nonRiskExplanations": non_risk_explanations,
+            "nonRiskExplanations": [
+                *non_risk_explanations,
+                *known_gap_non_risk_explanations,
+            ],
             "forbiddenClaims": ["Do not claim an unresolved warning was verified or resolved."]
             if warnings
             else [],

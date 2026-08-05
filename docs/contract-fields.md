@@ -254,6 +254,10 @@ Preflight が `needs_human_confirmation` の場合、生成レポートには `h
   - 未検証のまま残っているシナリオ名の一覧です。`unknowns` や `residualRisks` とは別に扱います。
 - **`knownGaps`**: `array[string]` (Summary)
   - 本タスクで意図的に未対応にした、または積み残した要件です。`residualRisks` は残存リスク、`knownGaps` は意図的な未対応項目として分けて扱います。
+  - `knownGaps` の各項目は未解決 Warning として Task Outcome に派生し、completed Outcome を `completed_with_warnings` / yellow にします。「対象外である」「要求されていない」など、未解決要件ではない情報をここへ記録してはいけません。
+- **`nonRiskExplanations`**: `array[object]` (Summary, optional)
+  - 完了事実の限定や Contract 上の対象外など、未解決 requirement や residual risk ではない情報を記録します。各 object は `sourceWarning`、`reason`、少なくとも 1 件の `{source, subject}` evidence reference を持ちます。
+  - `ai-finish` はこの情報を Outcome の Non-Risk Explanations にそのまま派生しますが、Warning、limitation、yellow 状態へは変換しません。実際の未解決項目は必ず `knownGaps` を使います。
 - **`intentAlignment`**: `object` (任意、V2 以降)
   - Summary における Intent 達成度の要約です。`intentAlignment` 全体を省略することも、`null` にすることも、空オブジェクトや部分的な記入にすることも許容されます。
   - フィールド一覧（全て任意）:
