@@ -2,6 +2,7 @@ import json
 import subprocess
 import sys
 from datetime import UTC, datetime
+from pathlib import Path
 
 import pytest
 
@@ -50,6 +51,21 @@ releaseOwnedPatterns:
   - release.json
   - .github/workflows/release*.yml
 """
+
+
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+LIFECYCLE_EVIDENCE_PATHS = [
+    ".ai/work-items/active/docs-only-42.contract.json",
+    ".ai/work-items/active/docs-only-42.summary.json",
+    ".ai/work-items/starts/docs-only-42.json",
+    ".ai/work-items/active/docs-only-42.outcome.json",
+    ".ai/work-items/active/docs-only-42.outcome.md",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".ai/work-items/archive/2026/docs-only-42.contract.json",
+    ".ai/work-items/archive/index.json",
+]
 
 
 @pytest.fixture
@@ -107,6 +123,45 @@ def test_generated_work_item_evidence_does_not_force_strict(policy_path):
     assert docs["selectedProfile"] == "light"
     assert evidence_only["selectedProfile"] == "standard"
     assert docs["pathDecisions"][0]["profile"] == "evidence_only"
+
+
+def test_repository_policy_routes_docs_plus_all_lifecycle_evidence_to_light():
+    policy = routing.load_policy(REPOSITORY_ROOT / ".ai/quality/governance-routing.yaml")
+
+    result = routing.determine(["docs/guide.md", *LIFECYCLE_EVIDENCE_PATHS], policy)
+
+    assert result["automaticProfile"] == "light"
+    assert result["selectedProfile"] == "light"
+    assert result["dispatchTarget"] == "quality-fast"
+    decisions = {item["path"]: item for item in result["pathDecisions"]}
+    for path in LIFECYCLE_EVIDENCE_PATHS:
+        assert decisions[path]["profile"] == "evidence_only"
+        assert decisions[path]["reasons"]
+
+
+def test_repository_policy_keeps_strict_and_release_precedence_over_lifecycle_evidence():
+    policy = routing.load_policy(REPOSITORY_ROOT / ".ai/quality/governance-routing.yaml")
+    paths = ["docs/guide.md", *LIFECYCLE_EVIDENCE_PATHS, "scripts/ai_finish.py"]
+
+    strict = routing.determine(paths, policy)
+    release = routing.determine(
+        ["docs/guide.md", *LIFECYCLE_EVIDENCE_PATHS, "release.json"], policy
+    )
+
+    assert strict["selectedProfile"] == "strict"
+    assert strict["dispatchTarget"] == "quality-full"
+    assert release["selectedProfile"] == "strict"
+    assert release["verificationEscalations"] == ["release_preflight", "distribution"]
+
+
+def test_repository_policy_keeps_unknown_and_evidence_only_diffs_conservative():
+    policy = routing.load_policy(REPOSITORY_ROOT / ".ai/quality/governance-routing.yaml")
+
+    unknown = routing.determine(["unclassified.file"], policy)
+    evidence_only = routing.determine(LIFECYCLE_EVIDENCE_PATHS, policy)
+
+    assert unknown["selectedProfile"] == "standard"
+    assert evidence_only["selectedProfile"] == "standard"
 
 
 def test_release_resource_adds_release_escalation_without_fourth_profile(policy_path):

@@ -1,0 +1,256 @@
+{
+  "contractVersion": 2,
+  "workItemId": "light-routing-687",
+  "mode": "code",
+  "title": "P1: make Light governance routing reachable for evidence-bearing documentation Work Items",
+  "baseCommit": "e9cfdd02585f06a8d5949f643e1fb420ce6c164b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/quality/governance-routing.yaml",
+    ".ai/work-items/active/light-routing-687.contract.json",
+    ".ai/work-items/active/light-routing-687.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/light-routing-687.outcome.json",
+    ".ai/work-items/active/light-routing-687.outcome.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "scripts/determine_governance_profile.py",
+    "tests/test_governance_profile.py",
+    "docs/reference/governance-profiles.md"
+  ],
+  "outOfScope": [
+    "Makefile and quality target implementations",
+    "release metadata, candidate state, tags, and provider Release publication",
+    "unrelated active or archived Work Item evidence",
+    "manual governance profile overrides or quality downgrades"
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/687",
+      "reason": "Authoritative problem statement and acceptance for evidence-bearing documentation Work Items."
+    },
+    {
+      "path": ".ai/quality/governance-routing.yaml",
+      "reason": "Routing-policy SSOT; its broad .ai/** Strict pattern currently escalates required lifecycle evidence."
+    },
+    {
+      "path": "scripts/determine_governance_profile.py",
+      "reason": "Current deterministic classifier and receipt renderer."
+    },
+    {
+      "path": "tests/test_governance_profile.py",
+      "reason": "Existing routing regression coverage and local policy fixture."
+    },
+    {
+      "path": "docs/reference/governance-profiles.md",
+      "reason": "Canonical adopter/maintainer documentation for profile selection and evidence-only behavior."
+    },
+    {
+      "path": "docs/reference/japanese-capability-assessment.json",
+      "reason": "Canonical downstream generated assessment bound to the changed Capability Truth matrix."
+    },
+    {
+      "path": "docs/reference/pre-release-documentation-alignment.json",
+      "reason": "Canonical downstream generated pre-release alignment report bound to the refreshed assessment."
+    }
+  ],
+  "rawUserRequest": "Complete the remediation plan through closure. Issue #687 requires Light routing to remain reachable for a documentation-only governed Work Item despite its required lifecycle evidence, without temporary overrides or quality downgrades.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-05-remediation-plan-continuation and GitHub issue #687",
+    "capturedAt": "2026-08-06",
+    "digest": "sha256:light-routing-687-user-authorization"
+  },
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_policy",
+      "verification_routing"
+    ],
+    "reason": "The change alters automatic quality routing. Incorrect evidence-only matching could hide a Strict operational path or make lifecycle-only diffs an unaudited completion path.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "The Work Item changes routing policy and classifier code, so its own implementation must use Strict verification."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized implementation. The policy, classifier, test fixture, and documentation provide bounded, offline evidence."
+  },
+  "preReviewWarnings": [
+    "Review evidence-only patterns narrowly: they must cover only required lifecycle projections and must never take precedence over release-owned paths."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A docs-only Work Item diff combined with the required active Contract, Summary, start receipt, Outcome, Cockpit status/report, and archive projections selects Light and dispatches quality-fast through a deterministic receipt.",
+    "Adding any Strict operational path to that evidence-bearing documentation diff selects Strict and dispatches quality-full; release-owned paths and release Contract context remain Strict with release escalations.",
+    "Unknown implementation paths retain the policy's conservative Standard-or-Strict default, and an evidence-only diff alone cannot select Light or authorize completion.",
+      "The policy explicitly lists the narrowly permitted lifecycle projections, the receipt exposes their evidence-only decisions, and canonical routing documentation explains the boundary without promising a manual downgrade.",
+    "Capability Truth, Japanese capability, and pre-release documentation-alignment projections are regenerated through their canonical generator chain after the registered routing evidence changes.",
+    "Focused routing tests and the Contract-required verification suite pass with no changes outside declared scope."
+  ],
+  "guidelines": [
+    "New public APIs must be documented.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {
+    "problem": "The current maximum-risk path classifier promotes ordinary docs-only Work Items to Strict because required Contract/Summary/archive lifecycle paths fall under the broad .ai/** Strict pattern. Light is therefore unreachable in the normal governed lifecycle.",
+    "constraints": [
+      "Treat only explicit required lifecycle projections as evidence-only; do not make .ai/** broadly non-risky.",
+      "Preserve Strict precedence for governance implementation, CI, installer, dependency, release, security, migration, and unknown-path policy behavior.",
+      "Do not add a manual profile override, bypass ai-finish lifecycle gates, or change Make quality target ownership.",
+      "Keep routing deterministic, auditable, and offline-testable."
+    ],
+    "rationale": "Narrow path-level evidence-only classification removes bookkeeping-induced escalation while retaining maximum-risk selection across actual implementation paths. The existing receipt remains the auditable decision surface."
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "declaredIntent": {
+    "summary": "Make automatic Light routing reachable for documentation-only Work Items while preserving fail-closed governance and release escalation.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Documentation implementation plus every allowed lifecycle projection",
+      "expected": "The deterministic receipt has evidence-only decisions for lifecycle paths, selects Light, and dispatches quality-fast.",
+      "verificationPlan": "tests/test_governance_profile.py asserts the complete accepted projection list with a documentation path.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Documentation implementation plus Strict operational or release path/context",
+      "expected": "The receipt selects Strict/quality-full; release-owned or release Contract evidence additionally emits release escalations.",
+      "verificationPlan": "tests/test_governance_profile.py covers a Strict path, release-owned path, and release Contract context combined with lifecycle evidence.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    },
+    {
+      "scenario": "Unknown or lifecycle-evidence-only diff",
+      "expected": "Unknown paths use the configured conservative default, while evidence-only-only diffs remain at least Standard.",
+      "verificationPlan": "tests/test_governance_profile.py asserts both outcomes.",
+      "required": true,
+      "status": "unverified",
+      "evidence": []
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "The user granted automatic execution for every plan Work Item and #687 explicitly authorizes correction of governance routing policy."
+  },
+  "rollbackNote": "Revert this Work Item's policy, classifier, tests, and documentation together, restoring the previous conservative routing behavior without rewriting archived evidence.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 805
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/light-routing-687.json",
+    "baseCommit": "e9cfdd02585f06a8d5949f643e1fb420ce6c164b",
+    "initialScopeDigest": "26174ecc64f3c8732b09e0c39de780f75501cf94cbcb182a342a207d2e8a3a3f",
+    "contractSkeletonDigest": "86814b9e4017c6ce9ff681997e4cf94c49d69e5291476fd8b3486be9f180f0c0"
+  }
+}
