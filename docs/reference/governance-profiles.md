@@ -54,9 +54,15 @@ base with committed, staged, unstaged, and untracked paths, and writes
 `target/quality/governance-profile.json`. The receipt records the automatic and
 selected profiles, sorted paths and reasons, required groups, dispatch target,
 and override disposition. Generated current-status, Work Item start receipt,
-and current outcome files remain visible evidence but do not raise the profile by themselves; an
-evidence-only diff defaults to Standard. Unsafe paths, invalid Git bases, and
-malformed policy fail closed.
+active Contract and Summary, current Outcome, human task report, and archive
+projections remain visible evidence but do not raise the profile by themselves.
+These are exact lifecycle projections listed in `evidenceOnlyPatterns`; the
+rule does not apply to arbitrary `.ai/**` files. An evidence-only diff defaults
+to Standard, never Light, so it is not a completion or quality-downgrade path.
+Any documentation change combined only with these projections can select Light
+and dispatch `quality-fast`. Any Strict implementation path, release-owned
+resource, release context, malformed policy, unsafe path, or invalid Git base
+retains conservative escalation or fails closed.
 
 The receipt carries `operationClasses`, `verificationEscalations`, and their
 evidence reasons. `release` is not an accepted governance-profile input.
