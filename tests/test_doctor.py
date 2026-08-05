@@ -43,6 +43,29 @@ def test_doctor_projects_blocked_outcome_traffic_light_gate_and_recovery(tmp_pat
     )
 
 
+def test_doctor_rejects_a_successor_receipt_with_a_foreign_outcome_digest(tmp_path, monkeypatch):
+    active = tmp_path / ".ai" / "work-items" / "active"
+    active.mkdir(parents=True)
+    outcome = active / "task.outcome.json"
+    outcome.write_text(
+        '{"workItemId":"task","status":"blocked","humanStatusColor":"red"}',
+        encoding="utf-8",
+    )
+    (active / "task.successor-receipt.json").write_text(
+        '{"schemaVersion":1,"transition":"quarantined","predecessor":{"workItemId":"task"},'
+        '"predecessorOutcomeDigest":"' + "0" * 64 + '",'
+        '"successor":{"workItemId":"fix","branch":"codex/fix","baseCommit":"' + "a" * 40 + '"},'
+        '"successorWorkItemId":"fix","issue":"https://github.com/spirex-ds-dev/ai-cockpit-template/issues/682",'
+        '"authority":"RayIori","reason":"repair"}',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_doctor, "linked_worktree_identity_report", lambda **_kwargs: ([], []))
+
+    _, _, failures = ai_doctor.diagnose(tmp_path)
+
+    assert any("outcome_digest_mismatch" in item for item in failures)
+
+
 def test_doctor_passes_hard_prerequisites_for_repository():
     passed, warnings, failures = ai_doctor.diagnose(ROOT)
     assert not failures

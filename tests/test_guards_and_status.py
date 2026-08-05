@@ -247,6 +247,86 @@ def test_generate_active_status_renders_evidence_and_backtrack(tmp_path, monkeyp
     assert "test: `tests/test_app.py` - present" in text
 
 
+def test_generate_active_status_projects_only_a_digest_bound_successor_receipt(
+    tmp_path, monkeypatch
+):
+    contract = tmp_path / "blocked-task.contract.json"
+    summary = tmp_path / "blocked-task.summary.json"
+    outcome = tmp_path / "blocked-task.outcome.json"
+    receipt = tmp_path / "blocked-task.successor-receipt.json"
+    output = tmp_path / "status.md"
+    contract.write_text(
+        json.dumps(
+            {
+                "workItemId": "blocked-task",
+                "mode": "code",
+                "notCodable": False,
+                "unknowns": [],
+                "acceptance": ["done"],
+                "riskAssessment": {"level": "low", "riskTypes": [], "reason": "fixture"},
+                "verification": [{"check": "quality", "required": True}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    summary.write_text(
+        json.dumps(
+            {
+                "reviewReadiness": {
+                    "status": "ready",
+                    "reason": "fixture",
+                    "expectedReviewFocus": [],
+                },
+                "verification": [{"check": "quality", "result": "passed"}],
+                "unknownsRemaining": [],
+                "risk": {"level": "low", "detail": "fixture"},
+                "guidelinesCompliance": [],
+                "checkpointEvidence": [],
+                "residualRisks": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    outcome.write_text(
+        json.dumps({"workItemId": "blocked-task", "status": "blocked"}), encoding="utf-8"
+    )
+    receipt.write_text(
+        json.dumps(
+            {
+                "schemaVersion": 1,
+                "transition": "quarantined",
+                "predecessor": {"workItemId": "blocked-task"},
+                "predecessorOutcomeDigest": hashlib.sha256(outcome.read_bytes()).hexdigest(),
+                "successor": {"workItemId": "fix", "branch": "codex/fix", "baseCommit": "a" * 40},
+                "successorWorkItemId": "fix",
+                "issue": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/682",
+                "authority": "RayIori",
+                "reason": "corrective route",
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ai_generate_status, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(ai_generate_status, "BACKTRACK_REPORT", tmp_path / "backtrack.json")
+    monkeypatch.setattr(ai_generate_status, "ownership_preview", lambda **_kwargs: [])
+    monkeypatch.setattr(
+        ai_generate_status,
+        "create_observability",
+        lambda **_kwargs: type("Obs", (), {"status_generated": lambda *_args, **_kwargs: None})(),
+    )
+
+    ai_generate_status.write_active_status(contract, summary, output=output)
+    assert "## Successor Transition" in output.read_text(encoding="utf-8")
+    assert "- Color: `yellow`" in output.read_text(encoding="utf-8")
+
+    receipt_data = json.loads(receipt.read_text(encoding="utf-8"))
+    receipt_data["predecessorOutcomeDigest"] = "0" * 64
+    receipt.write_text(json.dumps(receipt_data), encoding="utf-8")
+    ai_generate_status.write_active_status(contract, summary, output=output)
+    assert "- Color: `red`" in output.read_text(encoding="utf-8")
+    assert "outcome_digest_mismatch" in output.read_text(encoding="utf-8")
+
+
 def test_generate_active_status_demotes_ready_for_review_when_ownership_is_unresolved(
     tmp_path, monkeypatch
 ):

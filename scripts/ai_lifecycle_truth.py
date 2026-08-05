@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import json
 import shutil
+import sys
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -18,6 +19,7 @@ from typing import Any
 
 RUNTIME_NAME = "ai_lifecycle_truth.py"
 REQUIRED_RUNTIME = (RUNTIME_NAME,)
+_REPOSITORY_ISSUE_PREFIX = "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/"
 
 
 def _digest(value: bytes) -> str:
@@ -42,6 +44,65 @@ def _read(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise TypeError(f"{path} must contain an object")
     return value
+
+
+def _nonempty(value: object) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def _repository_issue(issue: object) -> bool:
+    if not _nonempty(issue) or not str(issue).startswith(_REPOSITORY_ISSUE_PREFIX):
+        return False
+    number = str(issue).removeprefix(_REPOSITORY_ISSUE_PREFIX)
+    return number.isdecimal()
+
+
+def _successor_is_bound(predecessor: dict[str, str], successor: object) -> bool:
+    if not isinstance(successor, dict):
+        return False
+    task = successor.get("workItemId")
+    return (
+        _nonempty(task)
+        and task != predecessor.get("workItemId")
+        and successor.get("branch") == f"codex/{task}"
+        and isinstance(successor.get("baseCommit"), str)
+        and len(successor["baseCommit"]) == 40
+        and all(char in "0123456789abcdef" for char in successor["baseCommit"].lower())
+    )
+
+
+def validate_successor_receipt(
+    *, predecessor_outcome: Path, predecessor_work_item_id: str, receipt: object
+) -> str | None:
+    """Return a fail-closed reason unless a receipt binds this blocked Outcome."""
+    if not isinstance(receipt, dict) or receipt.get("schemaVersion") != 1:
+        return "malformed_receipt"
+    try:
+        outcome = _read(predecessor_outcome)
+    except (OSError, TypeError, ValueError):
+        return "predecessor_outcome_unreadable"
+    if outcome.get("workItemId") != predecessor_work_item_id or outcome.get("status") != "blocked":
+        return "predecessor_not_blocked"
+    predecessor = receipt.get("predecessor")
+    successor = receipt.get("successor")
+    if predecessor != {"workItemId": predecessor_work_item_id}:
+        return "unbound_predecessor"
+    if not _successor_is_bound({"workItemId": predecessor_work_item_id}, successor):
+        return "unbound_successor"
+    successor_work_item_id = successor.get("workItemId") if isinstance(successor, dict) else None
+    if receipt.get("successorWorkItemId") != successor_work_item_id:
+        return "unbound_successor"
+    if receipt.get("predecessorOutcomeDigest") != _digest(predecessor_outcome.read_bytes()):
+        return "outcome_digest_mismatch"
+    if not _repository_issue(receipt.get("issue")):
+        return "foreign_issue"
+    if not _nonempty(receipt.get("authority")):
+        return "missing_authority"
+    if not _nonempty(receipt.get("reason")):
+        return "missing_reason"
+    if receipt.get("transition") not in {"superseded", "quarantined"}:
+        return "invalid_transition_mode"
+    return None
 
 
 @dataclass(frozen=True)
@@ -228,19 +289,24 @@ def transition_to_successor(
     reason: str,
 ) -> SuccessorTransition:
     """Create the only legal continuation receipt for a blocked predecessor."""
-    if not authority:
+    if not _nonempty(authority):
         return SuccessorTransition(False, "missing_authority", {})
+    if not _nonempty(reason):
+        return SuccessorTransition(False, "missing_reason", {})
     if mode not in {"superseded", "quarantined"}:
         return SuccessorTransition(False, "invalid_transition_mode", {})
-    if not issue.startswith("https://github.com/spirex-ds-dev/ai-cockpit-template/issues/"):
+    if not _repository_issue(issue):
         return SuccessorTransition(False, "foreign_issue", {})
-    outcome = _read(predecessorOutcome)
+    try:
+        outcome = _read(predecessorOutcome)
+    except (OSError, TypeError, ValueError):
+        return SuccessorTransition(False, "predecessor_outcome_unreadable", {})
     if (
         outcome.get("workItemId") != predecessor.get("workItemId")
         or outcome.get("status") != "blocked"
     ):
         return SuccessorTransition(False, "predecessor_not_blocked", {})
-    if successor.get("workItemId") == predecessor.get("workItemId"):
+    if not _successor_is_bound(predecessor, successor):
         return SuccessorTransition(False, "unbound_successor", {})
     receipt = {
         "schemaVersion": 1,
@@ -296,9 +362,57 @@ def main() -> int:
         description="Validate installed lifecycle-truth runtime availability."
     )
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--transition-to-successor", action="store_true")
+    parser.add_argument("--root", type=Path, default=Path("."))
+    parser.add_argument("--predecessor-task")
+    parser.add_argument("--successor-task")
+    parser.add_argument("--successor-branch")
+    parser.add_argument("--successor-base")
+    parser.add_argument("--issue")
+    parser.add_argument("--authority")
+    parser.add_argument("--mode")
+    parser.add_argument("--reason")
     args = parser.parse_args()
     if args.check:
         print("lifecycle truth runtime available")
+    if args.transition_to_successor:
+        required = (
+            args.predecessor_task,
+            args.successor_task,
+            args.successor_branch,
+            args.successor_base,
+            args.issue,
+            args.authority,
+            args.mode,
+            args.reason,
+        )
+        if not all(required):
+            print("missing_transition_input", file=sys.stderr)
+            return 1
+        root = args.root.resolve()
+        outcome = root / ".ai" / "work-items" / "active" / f"{args.predecessor_task}.outcome.json"
+        if not outcome.is_file():
+            print("predecessor_outcome_missing", file=sys.stderr)
+            return 1
+        predecessor = {"workItemId": args.predecessor_task}
+        successor = {
+            "workItemId": args.successor_task,
+            "branch": args.successor_branch,
+            "baseCommit": args.successor_base,
+        }
+        result = transition_to_successor(
+            predecessorOutcome=outcome,
+            predecessor=predecessor,
+            successor=successor,
+            issue=args.issue,
+            authority=args.authority,
+            mode=args.mode,
+            reason=args.reason,
+        )
+        if not result.accepted:
+            print(result.reason, file=sys.stderr)
+            return 1
+        print(json.dumps(result.receipt, ensure_ascii=False, sort_keys=True))
     return 0
 
 

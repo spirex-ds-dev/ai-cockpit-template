@@ -659,6 +659,10 @@ ai-revalidate-contract-amendment:
 check-ai-lifecycle-truth:
 	$(AI_PYTHON) scripts/ai_lifecycle_truth.py --check
 
+ai-transition-to-successor:
+	@test -n "$(PREDECESSOR_TASK)" -a -n "$(SUCCESSOR_TASK)" -a -n "$(SUCCESSOR_BRANCH)" -a -n "$(SUCCESSOR_BASE)" -a -n "$(ISSUE)" -a -n "$(AUTHORITY)" -a -n "$(MODE)" -a -n "$(REASON)" || (echo 'PREDECESSOR_TASK, SUCCESSOR_TASK, SUCCESSOR_BRANCH, SUCCESSOR_BASE, ISSUE, AUTHORITY, MODE, and REASON are required' >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_lifecycle_truth.py --transition-to-successor --root "$(or $(TARGET_ROOT),.)" --predecessor-task "$(PREDECESSOR_TASK)" --successor-task "$(SUCCESSOR_TASK)" --successor-branch "$(SUCCESSOR_BRANCH)" --successor-base "$(SUCCESSOR_BASE)" --issue "$(ISSUE)" --authority "$(AUTHORITY)" --mode "$(MODE)" --reason "$(REASON)"
+
 ai-prepare-hosted-verification-snapshot:
 	@test -n "$(CONTRACT)" || (echo 'CONTRACT=<active-contract.json> is required' >&2; exit 2)
 	$(AI_PYTHON) scripts/ai_prepare_hosted_verification.py \

@@ -69,6 +69,19 @@ cleanup lifecycle.
 
 ## Resume after a corrective predecessor
 
+## Record a successor or quarantine route
+
+When an active Work Item already has a red blocked Outcome and an authorized
+corrective successor, do not write a receipt by hand. Record the limited route
+with `make ai-transition-to-successor PREDECESSOR_TASK=<blocked-task>
+SUCCESSOR_TASK=<new-task> SUCCESSOR_BRANCH=codex/<new-task>
+SUCCESSOR_BASE=<base-sha> ISSUE=https://github.com/<owner>/<repo>/issues/<n>
+AUTHORITY='<recorded human authority>' MODE=quarantined REASON='<why>'`.
+The command validates the blocked Outcome, exact identities, same-repository
+Issue, authority, mode, and receipt location. Status/doctor show a yellow route
+while the predecessor Outcome remains red. It never authorizes archive, merge,
+release, branch deletion, provider mutation, or predecessor evidence rewrite.
+
 When a process defect pauses a Work Item, complete and close the corrective
 Work Item first. Rebase the paused dedicated branch onto the latest discovered
 remote default branch, replace its `predecessorWorkItem` with that corrective's

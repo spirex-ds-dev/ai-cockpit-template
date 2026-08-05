@@ -240,6 +240,31 @@ When the explicit Preflight Gate is enabled, `ai-start` and `ai-finish` return a
 
 Run `make check-ai-status-consistency` after generating or checking `current_status.md` when you need to validate the lifecycle state without finishing the Work Item.
 
+### Blocked Work Item successor route
+
+When a Work Item has a red, active `blocked` Outcome and the user has recorded
+authority for a corrective successor or quarantine, use the governed command
+rather than creating a receipt by hand:
+
+```sh
+make ai-transition-to-successor \
+  PREDECESSOR_TASK=<blocked-task> \
+  SUCCESSOR_TASK=<distinct-successor-task> \
+  SUCCESSOR_BRANCH=codex/<distinct-successor-task> \
+  SUCCESSOR_BASE=<40-character-base-sha> \
+  ISSUE=https://github.com/spirex-ds-dev/ai-cockpit-template/issues/<number> \
+  AUTHORITY='<recorded human authority>' \
+  MODE=quarantined \
+  REASON='<specific corrective reason>'
+```
+
+It validates the blocked Outcome and its digest, both distinct identities, the
+repository Issue, authority, reason, mode, and receipt location before writing
+the one bound successor receipt. Status and doctor show the valid route in
+yellow; the predecessor remains red and blocked until independently resolved.
+The receipt is never authorization to archive, merge, release, delete a branch,
+mutate a provider, or rewrite predecessor evidence.
+
 Run `make repair-ai-status` to regenerate `current_status.md` when there is no active Work Item or exactly one active Contract/Summary pair. It does not repair unpaired files or multiple active Work Items; those require manual cleanup.
 
 After archive, the generated state is `no_active_work_item`. It means no active Contract/Summary pair. No-active status deliberately omits the file list and persists a deterministic clean marker; transient archive-time worktree changes are not serialized. Before the first archive-bundle commit, a current same-task Contract, Summary, manifest, index update, and Start Receipt form one transaction only when the manifest binds the exact archive pair and every live path is named by that archived Summary's `changedFiles`. An omitted or unrelated path, orphan receipt, historical-only or incomplete pair, malformed Summary, or mismatched manifest remains fail closed. Commit the complete archived bundle first, then use `make check-ai-pr AI_BASE_COMMIT=<merge-base>` to validate the clean committed PR diff and archive ownership. `make repair-ai-status` can regenerate stale serialized Status for a valid zero- or one-active-pair lifecycle state; it cannot establish ownership for live changes. If the diagnostic says a path is outside the archive transaction, restore it or create/resume a Work Item instead of retrying repair.

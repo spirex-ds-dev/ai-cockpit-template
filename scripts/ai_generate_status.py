@@ -16,6 +16,7 @@ from ai_check_diff_ownership import counts as ownership_counts_for
 from ai_check_diff_ownership import preview as ownership_preview
 from ai_common import PROJECT_ROOT, changed_paths, load_json
 from ai_governance_compression import derive_governance_status, render_active_status
+from ai_lifecycle_truth import validate_successor_receipt
 from ai_observability import DEFAULT_LOG_PATH, create_observability
 
 DEFAULT_OUTPUT = PROJECT_ROOT / ".ai" / "cockpit" / "current_status.md"
@@ -430,6 +431,35 @@ def write_active_status(
         calibration_inventory=calibration_inventory,
         task_outcome=(summary.get("taskOutcome") if isinstance(summary, dict) else None),
     )
+    receipt_path = contract_path.with_name(
+        f"{contract.get('workItemId', '')}.successor-receipt.json"
+    )
+    if receipt_path.is_file():
+        try:
+            receipt = load_json(receipt_path)
+        except (OSError, ValueError):
+            status_text += (
+                "\n\n## Successor Transition\n\n- Color: `red`\n- Receipt: `unreadable`\n"
+            )
+        else:
+            outcome_path = contract_path.with_name(f"{contract.get('workItemId', '')}.outcome.json")
+            reason = validate_successor_receipt(
+                predecessor_outcome=outcome_path,
+                predecessor_work_item_id=str(contract.get("workItemId", "")),
+                receipt=receipt,
+            )
+            if reason is None:
+                status_text += (
+                    "\n\n## Successor Transition\n\n"
+                    "- Color: `yellow`\n"
+                    f"- Mode: `{receipt['transition']}`\n"
+                    f"- Successor: `{receipt['successorWorkItemId']}`\n"
+                    "- Limitation: receipt is not archive, merge, release, or completion authorization.\n"
+                )
+            else:
+                status_text += (
+                    f"\n\n## Successor Transition\n\n- Color: `red`\n- Receipt: `{reason}`\n"
+                )
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(
         localize_status_markdown(status_text, normalized_language),

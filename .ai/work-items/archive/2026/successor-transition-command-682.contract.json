@@ -1,0 +1,94 @@
+{
+  "contractVersion": 2,
+  "workItemId": "successor-transition-command-682",
+  "mode": "code",
+  "title": "Expose governed successor and quarantine transition command",
+  "baseCommit": "f1ec5616976257d4b5b8743bd1f19d929c54f069",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/successor-transition-command-682.contract.json",
+    ".ai/work-items/active/successor-transition-command-682.summary.json",
+    ".ai/work-items/active/successor-transition-command-682.outcome.json",
+    ".ai/work-items/active/successor-transition-command-682.outcome.md",
+    ".ai/work-items/active/*.successor-receipt.json",
+    ".ai/work-items/starts/successor-transition-command-682.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_lifecycle_truth.py",
+    "scripts/installer/legacy.py",
+    "scripts/ai_doctor.py",
+    "scripts/ai_generate_status.py",
+    "scripts/ai_installer_catalog.json",
+    "tests/test_lifecycle_truth_core_677.py",
+    "tests/test_doctor.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_installed_runtime_parity.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Changing a predecessor Contract, Summary, Outcome, archive, or branch; the command may create only its declared successor receipt after validation.",
+    "Implementing successor product work, provider mutation, archive, merge, release, or branch deletion.",
+    "Changing unrelated Work Item scheduling or verification policy."
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/682", "reason": "Defines the missing public successor/quarantine lifecycle command and required rejection cases."},
+    {"path": ".ai/work-items/archive/2026/active-sync-dirty-successor-702.outcome.json", "reason": "Concrete immutable blocked-predecessor Outcome shape; #704 remains active and is read-only external evidence."},
+    {"path": "scripts/ai_lifecycle_truth.py", "reason": "Contains the existing transition primitive that needs a validated public entrypoint and projections."},
+    {"path": ".ai/cockpit/README.md", "reason": "Canonical user-facing lifecycle command guidance."},
+    {"path": "templates/make/Makefile.ai", "reason": "Installed-template Make parity surface."}
+  ],
+  "declaredIntent": {"summary": "Expose the existing blocked-predecessor transition as a governed, evidence-bound lifecycle command.", "requestedCapabilities": ["ai_governance", "software_design", "documentation", "test_automation"]},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["evidence_integrity", "lifecycle_ordering", "authorization_boundary", "template_parity"],
+    "reason": "A permissive transition could authorize successor work or alter another active Work Item without a blocked Outcome, exact Issue binding, authority, or installed-template parity.",
+    "unknownsReviewComplete": true,
+    "unknownsReviewReason": "The issue, predecessor evidence format, public command inputs, failure boundary, and verification are all available locally; no product decision is missing."
+  },
+  "governanceProfile": {"selected": "strict", "source": "human_override", "reasons": ["Cross-Work-Item lifecycle evidence and authorization boundary require full verification."], "operationClasses": ["repository_governance"], "verificationEscalations": [], "override": {"approvalEvidence": "User authorized automatic execution and supersession/quarantine in this thread.", "reason": "Strict lifecycle command review without provider operations.", "risks": ["evidence_integrity", "lifecycle_ordering", "authorization_boundary"], "notRunChecks": ["Release checks are inapplicable: no release-owned resource is touched."], "workItemOnly": true, "workItemId": "successor-transition-command-682"}},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The user authorized automatic execution and explicitly authorized supersession/quarantine, recorded below and in the raw request."},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "RayIori", "reason": "User granted automatic execution and supersession/quarantine authority; it is limited to a validated receipt created by this command and never authorizes predecessor rewrites, archive, merge, release, or branch deletion."},
+  "preReviewWarnings": [],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record the authorization and public-boundary implementation checkpoints."},
+  "acceptance": [
+    "`make ai-transition-to-successor` and the distributed Makefile invoke a public CLI that requires an explicit predecessor Outcome, predecessor and distinct successor identities, an Issue URL in this repository, a non-empty recorded authority, a reason, and exactly `superseded` or `quarantined`; every invalid input fails closed before a receipt write.",
+    "A successful CLI invocation writes exactly one receipt at the declared active predecessor receipt path, binding the exact blocked Outcome digest, predecessor/successor identities, linked Issue, authority, reason, and mode; it never changes predecessor Contract/Summary/Outcome, archive, Git state, provider state, or release state.",
+    "Status and doctor project a validated successor receipt as a yellow transition route, retain the predecessor blocked/red state, and expose a recovery condition without claiming archive, merge, or completion.",
+    "Focused red-first tests prove acceptance, missing authority, foreign Issue, non-blocked predecessor, same identity, malformed/foreign receipt, and installed-template command parity; source and installed runtime reject missing components fail closed.",
+    "Canonical English/Japanese Cockpit and lifecycle reference documentation state command syntax, authority and receipt ownership boundary, traffic-light meaning, and the explicit non-authorization limitations."
+  ],
+  "guidelines": [
+    "A public lifecycle command must validate every cross-Work-Item identity and authorization before writing evidence.",
+    "Keep lifecycle truth fail-closed: a successor route is not archive, merge, release, or completion authorization.",
+    "Maintain source and installed-template parity, including documented command surfaces and tests.",
+    "Do not import internal modules from other features."
+  ],
+  "intent": {"problem": "The lifecycle runtime has `transition_to_successor()` but no public governed command or declared receipt ownership route. A blocked Work Item therefore cannot consume authorized supersession/quarantine without an out-of-scope direct library write.", "constraints": ["Preserve #704 active evidence unchanged.", "Require a blocked Outcome digest, exact successor identity, in-repository Issue, and recorded user authority.", "Make the only mutation a receipt at an explicitly declared/validated path.", "Do not implement a manual workaround, provider mutation, archive rewrite, merge, release, or branch operation."], "rationale": "An executable, evidence-bound transition resolves the lifecycle deadlock while retaining the predecessor’s immutable red Outcome and making the successor route auditable."},
+  "rawUserRequest": "Execute the plan to completion. I authorize automatic execution, captured in every Work Item Contract. If a process problem occurs, create a corrective Work Item first; do not use temporary repairs. I authorize supersession/quarantine and require Outcome red/yellow/green visibility.",
+  "rawRequestSource": {"type": "human", "reference": "user-goal: converge-and-complete-the-entire-current-plan", "capturedAt": "2026-08-06", "digest": "sha256:user-authorized-successor-transition-682"},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "scenarioCoverage": [
+    {"scenario": "A blocked predecessor has a distinct corrective successor, repository Issue, recorded authority, and valid transition mode.", "expected": "The CLI writes only a digest-bound receipt and doctor/status surface a yellow route while the Outcome remains red/blocked.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Use a temporary repository fixture to execute the public CLI and inspect only the declared receipt mutation and projections."},
+    {"scenario": "Authority, Issue repository, predecessor state/digest, successor identity, mode, or receipt ownership is invalid.", "expected": "The CLI returns non-zero and creates or changes no receipt or predecessor evidence.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Create focused red-first parameterized CLI and projection regressions."},
+    {"scenario": "An installed adopter has the lifecycle runtime but missing or mismatched command target/catalog entry.", "expected": "Parity validation or command invocation fails closed rather than claiming the source capability is installed.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Extend isolated-adopter parity tests for the Make target, runtime catalog, and public CLI."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "rollbackNote": "Revert this Work Item diff; no command invocation against repository evidence is part of this implementation, and all tests use temporary fixtures.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 2200}},
+  "startReceipt": {"path": ".ai/work-items/starts/successor-transition-command-682.json", "baseCommit": "f1ec5616976257d4b5b8743bd1f19d929c54f069", "initialScopeDigest": "a0af3dfa709821b31065a26062e18cab813e0483f47efb591cfc4ef1ccdfad6c", "contractSkeletonDigest": "5f58177edc783dac9c47977c3bfeb50b1b42c34c9aa1ec2a5bb77f4542c6125f"}
+}

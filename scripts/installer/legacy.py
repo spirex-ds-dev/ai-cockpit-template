@@ -68,6 +68,7 @@ RUNTIME_TARGETS = (
     "check-capability-truth",
     "check-source-bound-evidence",
     "ai-synchronize-work-item",
+    "ai-transition-to-successor",
 )
 
 RUNTIME_SURFACE_SCRIPTS = frozenset(

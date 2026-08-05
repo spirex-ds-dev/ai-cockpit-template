@@ -16,6 +16,7 @@ from ai_check_adoption_ready import (
     template_exemption,
 )
 from ai_common import clean_git_environment
+from ai_lifecycle_truth import validate_successor_receipt
 from ai_project_profile import load_profile
 from ai_start import linked_worktree_identity_report
 
@@ -85,6 +86,28 @@ def diagnose(root: Path) -> tuple[list[str], list[str], list[str]]:
                     f"gate={outcome.get('failedGate', outcome.get('failedCheck', 'unknown'))}, "
                     f"recovery={outcome.get('recoveryCondition', 'not recorded')})"
                 )
+            receipt_path = outcome_path.with_name(
+                outcome_path.name.removesuffix(".outcome.json") + ".successor-receipt.json"
+            )
+            if receipt_path.is_file():
+                try:
+                    receipt = __import__("json").loads(receipt_path.read_text(encoding="utf-8"))
+                except (OSError, ValueError):
+                    failures.append(f"Successor receipt is unreadable: {receipt_path}")
+                else:
+                    reason = validate_successor_receipt(
+                        predecessor_outcome=outcome_path,
+                        predecessor_work_item_id=str(outcome.get("workItemId", "")),
+                        receipt=receipt,
+                    )
+                    if reason is None:
+                        warnings.append(
+                            "Lifecycle successor route is recorded "
+                            f"(color=yellow, transition={receipt['transition']}, "
+                            f"successor={receipt['successorWorkItemId']}); it is not closure authorization"
+                        )
+                    else:
+                        failures.append(f"Successor receipt is invalid ({reason}): {receipt_path}")
     identities, identity_errors = linked_worktree_identity_report(root=root)
     warnings.extend(identity_errors)
     for identity in identities:
