@@ -64,6 +64,8 @@ def test_outcome_pipeline_orders_generation_validation_render_validation_and_rec
     state = json.loads(summary_path.read_text(encoding="utf-8"))["taskOutcome"]
     assert state["markdownPath"] == "outcome.md"
     assert state["evidenceCount"] == 1
+    assert state["humanStatusColor"] == "green"
+    assert state["completionFact"] == "All declared finish checks passed."
 
 
 def test_outcome_pipeline_failure_preserves_raw_evidence_and_records_structured_failure(

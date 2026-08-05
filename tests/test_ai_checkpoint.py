@@ -150,3 +150,30 @@ def test_before_edit_never_inherits_existing_verification_without_resume_history
     )
 
     assert record["requiredChecksPassed"] == 0
+
+
+def test_duplicate_before_edit_is_rejected_without_replacing_original_evidence(tmp_path):
+    contract = _checkpoint_contract()
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+    first = {
+        "stage": "before_edit",
+        "recorded": True,
+        "contractHash": ai_checkpoint.contract_hash(contract_path),
+        "acceptanceCount": len(contract["acceptance"]),
+        "unknownCount": 0,
+        "requiredChecks": 2,
+        "requiredChecksPassed": 0,
+    }
+    summary = {"verification": [], "checkpointEvidence": [first]}
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+
+    contract["acceptance"].append("Keep the initial evidence immutable.")
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+    with pytest.raises(ValueError, match="duplicate before_edit prepare is refused"):
+        ai_checkpoint.record_checkpoint(
+            summary, contract, "before_edit", contract_path, summary_path
+        )
+
+    assert json.loads(summary_path.read_text(encoding="utf-8"))["checkpointEvidence"] == [first]
