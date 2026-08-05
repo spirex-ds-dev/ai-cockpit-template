@@ -41,6 +41,15 @@ Contract の現在 baseline を進めます。Start Receipt の baseline は不�
 predecessor、merge commit、archive manifest に拘束されます。手動の
 `baseCommit` または `resumeHistory` 編集は有効な移行証拠ではありません。
 
+active Work Item が current main より遅れ、かつ scope-owned な未コミット変更を
+持つ場合、`synchronizationCheckpoint` はその限定された local synchronization を
+明示的に許可する optional object です。`authorized: true` と空でない `reason` が
+必要です。`make ai-synchronize-work-item` は未帰属または曖昧な path を拒否し、
+checkpoint commit、old/new base、path list、verification invalidation を
+`synchronizationHistory` に記録します。これは stash、手作業 rebase、または隠れた
+temporary commit の代替ではありません。provider mutation、archive rewrite、PR 作成も
+許可しません。
+
 ### 1.2 変更追跡と範囲
 
 - **`baselineDirtyPaths`**: `array[object]`

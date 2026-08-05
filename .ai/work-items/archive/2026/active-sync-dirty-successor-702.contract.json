@@ -1,0 +1,255 @@
+{
+  "contractVersion": 2,
+  "workItemId": "active-sync-dirty-successor-702",
+  "mode": "code",
+  "title": "P1: active Work Item dirty synchronization",
+  "baseCommit": "bc388b78e98b0c7bb2556c6c1b58c3a80a35ba1f",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/active-sync-dirty-successor-702.contract.json",
+    ".ai/work-items/active/active-sync-dirty-successor-702.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/active-sync-dirty-successor-702.outcome.json",
+    ".ai/work-items/active/active-sync-dirty-successor-702.outcome.md",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_resume_work_item.py",
+    "scripts/ai_start_receipt.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/installer/legacy.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_ai_check_work_item.py",
+    "tests/test_installed_runtime_parity.py",
+    ".ai/cockpit/README.md",
+    ".ai/cockpit/README.ja.md",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/repository-workflow.md",
+    "docs/contract-fields.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Rewriting archived #691/#699 Contract, Summary, Outcome, closure, PR, or branch evidence.",
+    "Rebasing, committing, stashing, pushing, or archiving #663 while the corrective protocol is unavailable.",
+    "Provider-side mutation from the synchronization command.",
+    "Relaxing ownership, conflict, stale-evidence, or unsafe-state rejection."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_resume_work_item.py",
+      "reason": "Current synchronization implementation rejects a dirty active Work Item before it can rebase."
+    },
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/702",
+      "reason": "Authoritative corrective requirement derived from #663's current-main synchronization deadlock."
+    },
+    {
+      "path": "git:c8ab3e29:.ai/work-items/archive/2026/active-work-item-sync-successor-699.contract.json",
+      "reason": "Immutable predecessor evidence for the original synchronization capability; it must not be rewritten."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "lifecycle_integrity",
+      "audit_evidence",
+      "false_readiness_signal"
+    ],
+    "reason": "A synchronization transition changes the branch and evidence basis of an active Work Item; it must preserve explicit authority, provenance, conflict safety, and verification invalidation."
+    ,"unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "Work Item synchronization changes governed lifecycle and evidence-binding behavior."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic corrective execution; the Contract bounds the synchronization transaction and its fail-closed tests."
+  },
+  "preReviewWarnings": [
+    "A synchronization checkpoint must be explicit and evidence-bound, never a hidden temporary commit or stash.",
+    "A failed conflict or ownership check must leave the active Work Item recoverable and not falsely synchronized."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "An eligible dirty active Work Item can create a governed synchronization checkpoint and transition to the verified latest remote default base without a manual rebase, temporary commit, or stash.",
+    "The transition records old/new base, exact task/branch/head/Contract/Summary bindings, checkpoint identity, invalidated verification, and a recoverable receipt.",
+    "The command rejects unowned or ambiguous changes, wrong branch, archived Work Item, unrelated dirty paths, provider mutation, invalid remote/base identity, and rebase conflict without claiming synchronization.",
+    "Only a Contract explicitly authorizing the synchronization checkpoint may invoke it; the checkpoint is a first-class lifecycle record rather than an implicit workaround.",
+    "Source and installed-template entrypoints, documentation, and generated capability/documentation-alignment evidence remain in parity.",
+    "Executable tests reproduce the #663 sequence and all unsafe-state rejections."
+  ],
+  "guidelines": [
+    "A synchronization checkpoint must be explicit, deterministic, and bound to active Work Item evidence.",
+    "Do not permit manual rebase, hidden temporary state, provider mutation, or archive rewrite as a synchronization substitute.",
+    "Reject every incomplete, ambiguous, conflicting, or stale lifecycle state before modifying Git state.",
+    "Keep source and installed-template command behavior and documentation aligned."
+  ],
+  "intent": {
+    "problem": "#663 cannot reconcile to current main after #697 because ai-synchronize-work-item correctly rejects a dirty active Work Item, while the existing lifecycle offers no legal way to make its unarchived implementation clean. This produces a deadlock and invites prohibited manual rebase, stash, or temporary-commit workarounds.",
+    "constraints": [
+      "Preserve immutable predecessor evidence.",
+      "Limit the transition to local Git state.",
+      "Record the checkpoint and invalidate stale verification.",
+      "Retain a recoverable active Work Item on every failure.",
+      "Use the user's standing mandate only for this bounded repository-governance operation."
+    ],
+    "rationale": "A first-class, receipt-bound synchronization checkpoint turns the unavoidable pre-archive clean-state requirement into an auditable lifecycle transition. It is not a hidden temporary commit because it is deliberately authorized, recorded, and becomes the rebased active Work Item history."
+  },
+  "rawUserRequest": "Execute the complete remediation plan automatically; if a process problem is encountered, create a corrective Work Item first and do not use a temporary workaround. Use parallelism only when safe. Require explicit Outcome traffic lights.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continuous-authorization-process-corrective-work-items",
+    "capturedAt": "2026-08-06",
+    "digest": "sha256:continuous-authorized-process-corrective-execution"
+  },
+  "declaredIntent": {
+    "summary": "Repair the active dirty Work Item synchronization deadlock revealed by #663 without weakening governance or mutating immutable predecessor evidence.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "action": "modify",
+    "target": "repository_governance",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuation-authorization",
+    "reason": "The user authorized automatic execution and required corrective Work Items for process defects."
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A dirty eligible active Work Item with only declared owned changes synchronizes to a newer verified remote base.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "A receipt records the explicit checkpoint and old/new base; the Work Item remains active and prior verification is invalidated.",
+      "verificationPlan": "An isolated Git fixture exercises the complete #663-style sequence."
+    },
+    {
+      "scenario": "An active Work Item has an unowned path, wrong branch, archived state, invalid remote/base, or a rebase conflict.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The command fails closed without synchronization, provider mutation, or loss of recoverable active evidence.",
+      "verificationPlan": "Focused boundary tests assert rejection and unchanged fixture state."
+    },
+    {
+      "scenario": "An installed adopter invokes the same documented synchronization command.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The installed Make entrypoint retains source-equivalent argument and receipt behavior.",
+      "verificationPlan": "Installed-runtime parity regression executes the command surface."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 808
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/active-sync-dirty-successor-702.json",
+    "baseCommit": "bc388b78e98b0c7bb2556c6c1b58c3a80a35ba1f",
+    "initialScopeDigest": "44150cc5136408f0ac8074487a1e88ee7c07ad58a9fa1db252a7e21876ecc68c",
+    "contractSkeletonDigest": "e8af45c2228e64d0c260b444d490f6fa0c38dbbf7c62a0046e6c91db417314c5"
+  }
+}

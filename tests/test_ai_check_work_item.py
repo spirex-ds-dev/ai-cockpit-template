@@ -57,6 +57,15 @@ def test_contract_schema_accepts_synchronization_history_field():
     )
 
 
+def test_contract_schema_requires_explicit_synchronization_checkpoint_authorization():
+    contract = valid_contract()
+    contract["synchronizationCheckpoint"] = {"authorized": True}
+
+    issues = ai_check_work_item.validate_contract(contract)
+
+    assert "synchronizationCheckpoint.reason is required" in issues
+
+
 def test_required_evidence_context_requires_normalized_structured_inputs():
     contract = valid_contract()
     contract["requiredEvidenceContext"] = {
