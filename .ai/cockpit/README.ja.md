@@ -165,6 +165,24 @@ Cockpit Status はレビュアー向けに Preflight Review を見えるまま�
 
 `current_status.md` を生成または検証した後、Work Item を完了せずにライフサイクル状態だけ確認する場合は `make check-ai-status-consistency` を実行します。
 
+### blocked Work Item の successor route
+
+Work Item に red の active `blocked` Outcome があり、是正 successor または quarantine についてユーザー権限が記録されている場合、receipt を手作業で作成せず、次のガバナンス済みコマンドを使用します。
+
+```sh
+make ai-transition-to-successor \
+  PREDECESSOR_TASK=<blocked-task> \
+  SUCCESSOR_TASK=<distinct-successor-task> \
+  SUCCESSOR_BRANCH=codex/<distinct-successor-task> \
+  SUCCESSOR_BASE=<40-character-base-sha> \
+  ISSUE=https://github.com/spirex-ds-dev/ai-cockpit-template/issues/<number> \
+  AUTHORITY='<recorded human authority>' \
+  MODE=quarantined \
+  REASON='<specific corrective reason>'
+```
+
+このコマンドは、blocked Outcome とその digest、相互に異なる identity、リポジトリ Issue、authority、reason、mode、receipt path を検証してから、唯一の束縛済み successor receipt を書き込みます。Status と doctor は有効な route を yellow と表示しますが、predecessor は独立に解消されるまで red / blocked のままです。receipt は archive、merge、release、branch 削除、provider mutation、または predecessor evidence の書き換えを許可しません。
+
 アクティブ Work Item が 0 件、または 1 組の Contract/Summary ペアだけの場合、`make repair-ai-status` で `current_status.md` を再生成できます。不整合ファイルや複数アクティブ Work Item の修復は含みません。
 
 archive 後の状態は `no_active_work_item` です。これは worktree が clean である意味ではなく、no-active status はファイル一覧を保存しません。最初の archive bundle commit 前に限り、現在変更中の同一 Work Item の Contract、Summary、manifest、index 更新、Start Receipt が揃い、manifest が正確な archive pair を束縛し、すべての live path が archived Summary の `changedFiles` に記録されている場合だけ、同じ transaction として扱います。Summary にない path、無関係な変更、孤立した receipt、履歴にしか存在しない pair、不完全な pair、不正な Summary、manifest の不一致は引き続き fail closed です。完全な archive bundle を先に commit し、アーカイブ証跡と完全 PR diff の所有権を `make check-ai-pr AI_BASE_COMMIT=<merge-base>` で検証します。`repair-ai-status` は有効な 0 件または 1 組の active 状態で stale な Status 表示を再生成できますが、live change の所有権は作れません。archive transaction 外の path が報告された場合は repair を繰り返さず、変更を戻すか Work Item を作成・再開します。

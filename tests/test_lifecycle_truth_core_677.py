@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib
 import importlib.util
 import json
+import sys
 from pathlib import Path
 
 
@@ -130,6 +131,133 @@ def test_only_a_bound_blocked_predecessor_can_be_quarantined_or_superseded_for_i
     )
     assert foreign.accepted is False
     assert foreign.reason in {"missing_authority", "foreign_issue", "unbound_successor"}
+
+
+def test_public_transition_cli_writes_only_a_bound_receipt_and_rejects_foreign_issue(
+    monkeypatch, tmp_path: Path, capsys
+) -> None:
+    runtime = _runtime()
+    predecessor = _identity("blocked-predecessor")
+    outcome = runtime.finish_failure(
+        root=tmp_path,
+        identity=predecessor,
+        failedGate="quality",
+        message="quality failed",
+        archiveRequested=False,
+    ).outcomePath
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_lifecycle_truth.py",
+            "--transition-to-successor",
+            "--root",
+            str(tmp_path),
+            "--predecessor-task",
+            "blocked-predecessor",
+            "--successor-task",
+            "corrective-704",
+            "--successor-branch",
+            "codex/corrective-704",
+            "--successor-base",
+            "a" * 40,
+            "--issue",
+            "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/682",
+            "--authority",
+            "RayIori",
+            "--mode",
+            "quarantined",
+            "--reason",
+            "corrective route",
+        ],
+    )
+    assert runtime.main() == 0
+    receipt = outcome.with_name("blocked-predecessor.successor-receipt.json")
+    assert receipt.is_file()
+    assert json.loads(receipt.read_text(encoding="utf-8"))["predecessorOutcomeDigest"]
+    assert json.loads(outcome.read_text(encoding="utf-8"))["status"] == "blocked"
+
+    receipt.unlink()
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_lifecycle_truth.py",
+            "--transition-to-successor",
+            "--root",
+            str(tmp_path),
+            "--predecessor-task",
+            "blocked-predecessor",
+            "--successor-task",
+            "corrective-704",
+            "--successor-branch",
+            "codex/corrective-704",
+            "--successor-base",
+            "a" * 40,
+            "--issue",
+            "https://example.invalid/issues/682",
+            "--authority",
+            "RayIori",
+            "--mode",
+            "quarantined",
+            "--reason",
+            "foreign",
+        ],
+    )
+    assert runtime.main() == 1
+    assert not receipt.exists()
+    assert "foreign_issue" in capsys.readouterr().err
+
+
+def test_transition_rejects_unbound_successors_and_receipt_tampering_before_writing(
+    tmp_path: Path,
+) -> None:
+    runtime = _runtime()
+    predecessor = _identity("blocked-predecessor")
+    outcome = runtime.finish_failure(
+        root=tmp_path,
+        identity=predecessor,
+        failedGate="quality",
+        message="quality failed",
+        archiveRequested=False,
+    ).outcomePath
+    invalid = runtime.transition_to_successor(
+        predecessorOutcome=outcome,
+        predecessor={"workItemId": "blocked-predecessor"},
+        successor={"workItemId": "corrective-704", "branch": "other", "baseCommit": "a" * 40},
+        issue="https://github.com/spirex-ds-dev/ai-cockpit-template/issues/682/extra",
+        authority="RayIori",
+        mode="quarantined",
+        reason="corrective route",
+    )
+    assert invalid.accepted is False
+    assert invalid.reason == "foreign_issue"
+    assert not outcome.with_name("blocked-predecessor.successor-receipt.json").exists()
+
+    accepted = runtime.transition_to_successor(
+        predecessorOutcome=outcome,
+        predecessor={"workItemId": "blocked-predecessor"},
+        successor={
+            "workItemId": "corrective-704",
+            "branch": "codex/corrective-704",
+            "baseCommit": "a" * 40,
+        },
+        issue="https://github.com/spirex-ds-dev/ai-cockpit-template/issues/682",
+        authority="RayIori",
+        mode="quarantined",
+        reason="corrective route",
+    )
+    assert accepted.accepted is True
+    receipt = dict(accepted.receipt)
+    receipt["predecessorOutcomeDigest"] = "0" * 64
+    assert (
+        runtime.validate_successor_receipt(
+            predecessor_outcome=outcome,
+            predecessor_work_item_id="blocked-predecessor",
+            receipt=receipt,
+        )
+        == "outcome_digest_mismatch"
+    )
 
 
 def test_installer_catalog_template_and_isolated_adopter_require_full_lifecycle_runtime(
