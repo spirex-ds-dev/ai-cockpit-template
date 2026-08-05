@@ -4,12 +4,28 @@ from pathlib import Path
 
 import ai_common
 import ai_doctor
+import ai_start
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_doctor_git_environment_helper_excludes_git_overrides():
     assert all(not key.startswith("GIT_") for key in ai_common.clean_git_environment())
+
+
+def test_doctor_reports_isolated_unrelated_malformed_linked_worktree(tmp_path, monkeypatch):
+    foreign = tmp_path / "foreign"
+    identity = ai_start.LinkedWorktreeIdentity(foreign, "main", "other-task")
+    monkeypatch.setattr(
+        ai_doctor, "linked_worktree_identity_report", lambda **_kwargs: ([identity], [])
+    )
+
+    _passed, warnings, _failures = ai_doctor.diagnose(tmp_path)
+
+    assert any(
+        "isolated for unrelated starts" in warning and "other-task" in warning
+        for warning in warnings
+    )
 
 
 def test_doctor_passes_hard_prerequisites_for_repository():

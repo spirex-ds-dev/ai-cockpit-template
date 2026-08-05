@@ -22,6 +22,13 @@ schedule those tasks and a Work Item never becomes a shared global runtime
 lock. It validates the local record shape and fails closed for malformed,
 unpaired, mismatched, or non-dedicated active branches.
 
+For a start request with a different Work Item ID, a malformed foreign
+linked-worktree identity is isolated rather than becoming a global start
+deadlock. The foreign Work Item is never edited or cleaned automatically;
+starting that same Work Item remains fail-closed until its owner repairs the
+identity. Run `make ai-doctor` to see the isolated identity and its recovery
+boundary before deciding on a corrective Work Item.
+
 When a Work Item is a declared successor, it must wait for its predecessor to
 have evidence for PR merge, archive, local/remote branch deletion, and base
 synchronization. `make check-ai-serial-order` fails closed when that declared

@@ -17,6 +17,7 @@ from ai_check_adoption_ready import (
 )
 from ai_common import clean_git_environment
 from ai_project_profile import load_profile
+from ai_start import linked_worktree_identity_report
 
 
 def command_ok(root: Path, *command: str) -> bool:
@@ -69,6 +70,15 @@ def diagnose(root: Path) -> tuple[list[str], list[str], list[str]]:
         passed.append("Initial Git commit detected")
     else:
         failures.append("Create an initial Git commit before ai-start or --create-adoption")
+    identities, identity_errors = linked_worktree_identity_report(root=root)
+    warnings.extend(identity_errors)
+    for identity in identities:
+        if identity.branch != f"codex/{identity.task}":
+            warnings.append(
+                "Linked worktree active Work Item identity "
+                f"{identity.branch} != codex/{identity.task}: {identity.worktree}; "
+                "it is isolated for unrelated starts and remains fail-closed for its own task."
+            )
     try:
         dirty = subprocess.run(
             ["git", "status", "--porcelain", "-z"],
