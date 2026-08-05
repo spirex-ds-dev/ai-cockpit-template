@@ -11,6 +11,20 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / "requirements-dev.in"
+RECOVERY_COMMANDS = (
+    "python3 -m venv .venv",
+    ".venv/bin/python -m pip install --require-hashes -r requirements-dev.lock",
+    "make project-format-check",
+)
+
+
+def recovery_guidance() -> str:
+    return "\n".join(
+        (
+            "Recovery (from the repository root):",
+            *(f"  {command}" for command in RECOVERY_COMMANDS),
+        )
+    )
 
 
 def direct_pin(manifest: Path, tool: str) -> str:
@@ -49,12 +63,13 @@ def check_tool_version(manifest: Path, tool: str) -> int:
         expected = direct_pin(manifest, tool)
         observed = installed_version(tool)
     except (OSError, RuntimeError, ValueError) as exc:
-        print(f"{tool} version check failed: {exc}", file=sys.stderr)
+        print(f"{tool} version check failed: {exc}\n{recovery_guidance()}", file=sys.stderr)
         return 2
     if observed != expected:
         print(
             f"{tool} version mismatch: expected {expected}, observed {observed}. "
-            "Run project checks from the repository's locked development environment.",
+            "Run project checks from the repository's locked development environment.\n"
+            + recovery_guidance(),
             file=sys.stderr,
         )
         return 1

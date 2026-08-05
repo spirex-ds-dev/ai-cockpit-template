@@ -38,6 +38,12 @@ no shared generated evidence, no ordered dependency, and no required common
 external authority. Otherwise the Agent serializes the affected Work Items and
 records why. Uncertainty is a reason to serialize, not to assume independence.
 
+Generated Cockpit status, active evidence, archive indexes, and release or
+documentation projections are shared evidence until their producing Work Item
+has archived and merged. Candidates that would write any of those paths are
+serial, even if their source-code paths differ. Each dispatched candidate uses
+its own dedicated worktree; no Agent writes a sibling Work Item's checkout.
+
 ## Integration rule
 
 Isolation does not prove compatibility. Before archive, each Work Item must
@@ -45,6 +51,19 @@ reconcile with the latest target base and run its declared integration checks.
 An archive is immutable: never rebase an archived Work Item or regenerate its
 frozen evidence. If a parallel merge makes it incompatible, preserve that audit
 record and create a fresh replacement Work Item from current main.
+
+## Recovery boundary
+
+When a Work Item is blocked, its Contract, Summary, Outcome, worktree, and
+branch remain evidence. Do not repair it with cross-worktree edits, manual
+rebase, stash, temporary commit, environment substitution, archive rewrite, or
+provider-state mutation. First identify whether the failure is a process
+defect. If it is, open and complete its corrective Work Item. Then use the
+governed successor or quarantine transition where applicable, create the
+replacement from current main, and bind the predecessor receipt in the new
+Contract. The replacement is independently verified, archived, reviewed,
+merged, and closed; it does not retroactively turn the predecessor Outcome
+green.
 
 After a group of Work Items closes, the Agent records reusable lessons and
 improves the Skill or reference documentation in its own governed Work Item.
