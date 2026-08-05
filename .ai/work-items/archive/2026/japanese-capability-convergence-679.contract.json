@@ -1,0 +1,192 @@
+{
+  "contractVersion": 2,
+  "workItemId": "japanese-capability-convergence-679",
+  "mode": "code",
+  "title": "P1: break cyclic Japanese and capability-truth evidence binding",
+  "baseCommit": "a2c30dce855d97ee6ca5bdc1e63ac26fb337e289",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/japanese-capability-convergence-679.contract.json",
+    ".ai/work-items/active/japanese-capability-convergence-679.summary.json",
+    ".ai/work-items/active/japanese-capability-convergence-679.outcome.json",
+    ".ai/work-items/active/japanese-capability-convergence-679.outcome.md",
+    ".ai/work-items/starts/japanese-capability-convergence-679.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    "scripts/ai_japanese_capability.py",
+    "scripts/check_pre_release_documentation_alignment.py",
+    "tests/test_japanese_capability.py",
+    "tests/test_pre_release_documentation_alignment.py",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/capability-truth-matrix.json"
+  ],
+  "outOfScope": [
+    "Weakening Japanese bound-evidence validation or accepting manual digest edits.",
+    "Changing Capability Truth claims, source/test inventories, or freshness policy.",
+    "Changing release publication, tags, provider Releases, or immutable archived Work Item evidence.",
+    "Resuming or modifying the frozen #672, #682, #683, #684, #685, #680, or #681 implementations."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/679",
+      "reason": "Authoritative corrective requirement: make the generated evidence chain acyclic and deterministic without weakening the gate."
+    },
+    {
+      "path": "scripts/ai_japanese_capability.py",
+      "reason": "Builds the Japanese assessment and currently binds generated Capability Truth artifacts into its evidence identity."
+    },
+    {
+      "path": "scripts/ai_capability_truth.py",
+      "reason": "Regenerates Capability Truth evidence identities and explains why its generated JSON bytes are volatile input."
+    },
+    {
+      "path": "scripts/check_pre_release_documentation_alignment.py",
+      "reason": "Fails closed when the Japanese assessment's bound evidence does not match current bytes."
+    },
+    {
+      "path": "tests/test_japanese_capability.py",
+      "reason": "Existing assessment evidence-inventory and generated-report regression coverage."
+    },
+    {
+      "path": "tests/test_pre_release_documentation_alignment.py",
+      "reason": "Current full-chain alignment regression that reproduces the defect."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "evidence_integrity",
+      "generated_artifact_convergence",
+      "documentation_truth_drift"
+    ],
+    "reason": "The correction changes what the Japanese assessment cryptographically binds. It must preserve fail-closed validation for actual source evidence while excluding only derived artifacts that make the generator graph cyclic.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "Medium-risk generated-evidence correction with deterministic local regression coverage and no external operation."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic execution and explicitly required formal corrective Work Items rather than temporary workarounds; the cyclic edge and its required regression are concrete."
+  },
+  "preReviewWarnings": [
+    "The solution must remove the generated-artifact dependency edge, not suppress drift diagnostics or hand-edit stored hashes.",
+    "The full canonical generator order must be covered and reach byte-stable Japanese assessment and documentation-alignment reports."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": ["before_edit", "before_finish"],
+    "reason": "Record scope and evidence-boundary review before modifying a release-blocking generated-evidence path."
+  },
+  "acceptance": [
+    "Japanese assessment distinguishes source evidence from derived Capability Truth artifacts, so no generated artifact it binds is rewritten by the canonical generator chain.",
+    "The commands `ai_capability_truth.py --write`, `ai_japanese_capability.py --write`, and `check_pre_release_documentation_alignment.py --write` run in that exact order and leave both checked-in reports fresh and aligned without manual digest editing.",
+    "Regression tests prove the derived-artifact exclusion and exercise the complete generator chain; a mutation of genuinely bound source evidence still blocks alignment.",
+    "Generated Japanese assessment, Capability Truth, and pre-release alignment artifacts are regenerated by their canonical commands and their documentation retains the fail-closed evidence boundary."
+  ],
+  "guidelines": [
+    "Preserve fail-closed evidence validation for source and test inputs.",
+    "Treat generated reports as derived projections, not authoritative source evidence for another generator when that introduces a cycle.",
+    "Document the generator order and limitation without claiming general Japanese fluency or external publication evidence."
+  ],
+  "intent": {
+    "problem": "The Japanese assessment binds docs/reference/capability-truth-matrix.json while the canonical Capability Truth generator rewrites that matrix's evidence/freshness records. Refreshing Capability Truth therefore invalidates the assessment and makes the pre-release alignment report blocked immediately.",
+    "constraints": [
+      "Do not weaken bound-evidence checks, edit evidence digests manually, or treat stale generated reports as aligned.",
+      "Preserve cryptographic binding for concrete source and test evidence used to support Japanese capability claims.",
+      "Keep the repair limited to the evidence dependency boundary and its generated reports/tests; release and frozen successor Work Items remain separate."
+    ],
+    "rationale": "A generator must not cryptographically bind a derived artifact that the required chain regenerates. Making that edge explicit and acyclic lets one deterministic sequence converge while retaining fail-closed validation of real inputs."
+  },
+  "rawUserRequest": "Execute the complete remediation plan without omissions. If a process defect is discovered, create and complete its corrective Work Item rather than applying a temporary patch. Keep Outcome and traffic-light truth visible, use safe parallelism only where it does not expand the issue graph, and publish only after all Issues and Pull Requests are resolved. User authorization applies to every Work Item Contract.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-05 complete-remediation authorization and #679 corrective requirement",
+    "capturedAt": "2026-08-05",
+    "digest": "sha256:679-user-authorized-acyclic-evidence-correction"
+  },
+  "declaredIntent": {
+    "summary": "Make Japanese assessment and Capability Truth generated evidence converge through an acyclic, fail-closed dependency boundary.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "Capability Truth is regenerated before the Japanese assessment and alignment reports.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The subsequent Japanese assessment and pre-release alignment generation produce a fresh aligned state with no bound-evidence drift.",
+      "verificationPlan": "Add an isolated full-chain regression in tests/test_pre_release_documentation_alignment.py and run canonical generator commands."
+    },
+    {
+      "scenario": "A generated Capability Truth artifact changes while all actual Japanese source evidence remains stable.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The assessment evidence inventory excludes the derived artifact and remains valid; source/test binding is not weakened.",
+      "verificationPlan": "Add an evidence-inventory regression in tests/test_japanese_capability.py."
+    },
+    {
+      "scenario": "A genuinely bound Japanese source-evidence file changes after assessment generation.",
+      "required": true,
+      "status": "verified",
+      "evidence": ["tests/test_pre_release_documentation_alignment.py::test_build_report_blocks_when_injected_bound_evidence_drifts"],
+      "expected": "Pre-release alignment stays fail-closed and names the drifting source path."
+    }
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "The user granted automatic execution for every Work Item and authorized formal process corrections, external Work Item takeover, and supersession/quarantine. This approval is limited to the exact active Work Item, generated Cockpit evidence, and declared current source/test/documentation paths."
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/japanese-capability-convergence-679.json",
+    "baseCommit": "a2c30dce855d97ee6ca5bdc1e63ac26fb337e289",
+    "initialScopeDigest": "000bf8725a58a2a61719d04cb239b99825ca732719a19aba95e4525cb2ac5e7c",
+    "contractSkeletonDigest": "7a2a5dfdc75f3ebbd1e1dc8ada1de46bbb0ed05bdf0b9c25b3b5a8b276d60400"
+  },
+  "rollbackNote": "Revert only this Work Item's source, tests, generated reports, and active/archive evidence; regenerate reports through their canonical commands after rollback.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 0}}
+}

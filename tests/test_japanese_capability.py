@@ -118,7 +118,7 @@ def test_assessment_inventory_binds_stable_evidence_not_transient_status():
     assert "scripts/ai_japanese_capability.py" in paths
     assert ".ai/cockpit/current_status.md" not in case_paths
     assert ".ai/cockpit/current_status.md" not in paths
-    assert case_paths <= paths
+    assert case_paths - ai_japanese_capability.DERIVED_EVIDENCE_PATHS <= paths
     assert {
         "README.md",
         "README.zh-CN.md",
@@ -131,9 +131,14 @@ def test_assessment_inventory_binds_stable_evidence_not_transient_status():
         "docs/getting-started/security-release-verification.ja.md",
         "docs/reference/documentation-architecture.md",
         "docs/reference/documentation-architecture.ja.md",
-        "docs/reference/capability-truth-matrix.json",
-        "docs/reference/capability-truth-matrix.md",
     } <= paths
+
+
+def test_assessment_does_not_bind_generated_capability_truth_artifacts():
+    paths = {entry["path"] for entry in evaluate()["evidenceSource"]["files"]}
+
+    assert "docs/reference/capability-truth-matrix.json" not in paths
+    assert "docs/reference/capability-truth-matrix.md" not in paths
 
 
 def test_expected_source_rejects_a_different_checked_out_head(tmp_path):
