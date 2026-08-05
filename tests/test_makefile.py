@@ -170,6 +170,28 @@ def test_makefile_exposes_ordered_pre_edit_preparation_entrypoint():
     assert 'STAGE="before_edit"' in result.stdout
 
 
+def test_makefile_forwards_amendment_revalidation_binding_to_checkpoint_writer():
+    result = subprocess.run(
+        [
+            "make",
+            "-n",
+            "ai-checkpoint",
+            "CONTRACT=.ai/work-items/active/example.contract.json",
+            "SUMMARY=.ai/work-items/active/example.summary.json",
+            "STAGE=contract_amendment_revalidation",
+            "PREVIOUS_CONTRACT_HASH=before-edit-hash",
+            "AMENDMENT_REASON=required-regression",
+        ],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert '--previous-contract-hash "before-edit-hash"' in result.stdout
+    assert '--reason "required-regression"' in result.stdout
+
+
 def test_project_test_uses_stricter_coverage_floor():
     result = subprocess.run(
         ["make", "-n", "project-test"],

@@ -90,6 +90,79 @@ def validate_checkpoint_bindings(
         else 0,
         "requiredChecks": len(command_prefixes(contract)),
     }
+    before_edit = next(
+        (
+            item
+            for item in evidence
+            if item.get("stage") == "before_edit" and item.get("recorded") is True
+        ),
+        None,
+    )
+    before_edit_hash = before_edit.get("contractHash") if isinstance(before_edit, dict) else None
+    before_edit_is_stale = bool(
+        expected_contract_hash
+        and isinstance(before_edit_hash, str)
+        and not (
+            before_edit_hash == expected_contract_hash
+            or before_edit_hash.startswith(expected_contract_hash)
+            or expected_contract_hash.startswith(before_edit_hash)
+        )
+    )
+    amendments = [
+        item
+        for item in evidence
+        if item.get("stage") == "contract_amendment_revalidation" and item.get("recorded") is True
+    ]
+    valid_amendment = False
+    amendment_started = False
+    if before_edit_is_stale:
+        if not amendments:
+            issues.append("missing contract_amendment_revalidation for stale before_edit Contract")
+        expected_previous_hash = before_edit_hash
+        amendment_chain_is_valid = True
+        for amendment in amendments:
+            if (
+                amendment.get("originalBeforeEditContractHash") != before_edit_hash
+                or amendment.get("previousContractHash") != expected_previous_hash
+                or not non_empty_string(amendment.get("contractHash"))
+                or not non_empty_string(amendment.get("reason"))
+            ):
+                amendment_chain_is_valid = False
+                break
+            expected_previous_hash = amendment["contractHash"]
+        final_amendment = amendments[-1] if amendments else {}
+        if not isinstance(final_amendment, dict):
+            final_amendment = {}
+        hashes_match = isinstance(final_amendment.get("contractHash"), str) and (
+            final_amendment["contractHash"] == expected_contract_hash
+            or final_amendment["contractHash"].startswith(expected_contract_hash)
+            or expected_contract_hash.startswith(final_amendment["contractHash"])
+        )
+        if amendments:
+            amendment = final_amendment
+            common_binding_is_valid = (
+                amendment_chain_is_valid
+                and hashes_match
+                and all(amendment.get(key) == expected for key, expected in expected_counts.items())
+                and amendment.get("requiredChecksPassed") == 0
+            )
+            if amendment.get("verificationStarted") is True:
+                amendment_started = True
+                invalidated = amendment.get("invalidatedRequiredChecks")
+                passed_at_amendment = amendment.get("requiredChecksPassedAtAmendment")
+                valid_amendment = (
+                    common_binding_is_valid
+                    and isinstance(invalidated, list)
+                    and sorted(invalidated) == sorted(command_prefixes(contract))
+                    and isinstance(passed_at_amendment, int)
+                    and 0 <= passed_at_amendment <= len(command_prefixes(contract))
+                )
+            else:
+                valid_amendment = common_binding_is_valid
+        if amendment_started and not valid_amendment:
+            issues.append("contract_amendment_revalidation cannot follow required verification")
+        elif amendments and not valid_amendment:
+            issues.append("contract_amendment_revalidation is stale or malformed")
     for item in evidence:
         if item.get("stage") not in required_stages or item.get("recorded") is not True:
             continue
@@ -110,10 +183,16 @@ def validate_checkpoint_bindings(
             or recorded_hash.startswith(expected_contract_hash)
             or expected_contract_hash.startswith(recorded_hash)
         )
-        if expected_contract_hash and not hashes_match:
+        if (
+            expected_contract_hash
+            and not hashes_match
+            and not (stage == "before_edit" and before_edit_is_stale and valid_amendment)
+        ):
             issues.append(f"checkpointEvidence[{stage}] contractHash is stale")
         for key, expected in expected_counts.items():
-            if item.get(key) != expected:
+            if item.get(key) != expected and not (
+                stage == "before_edit" and before_edit_is_stale and valid_amendment
+            ):
                 issues.append(f"checkpointEvidence[{stage}].{key} is stale")
         if stage == "before_edit" and item.get("requiredChecksPassed") != 0:
             issues.append("before_edit checkpoint must be recorded before required verification")

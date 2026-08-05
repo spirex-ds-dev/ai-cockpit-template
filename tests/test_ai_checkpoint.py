@@ -152,7 +152,29 @@ def test_before_edit_never_inherits_existing_verification_without_resume_history
     assert record["requiredChecksPassed"] == 0
 
 
+def test_before_edit_checkpoint_is_immutable_after_implementation_preparation(tmp_path):
+    """Break caught: rerunning preparation silently replaces phase-boundary evidence."""
+    contract = _checkpoint_contract()
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+    summary = {"verification": [], "checkpointEvidence": []}
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+    ai_checkpoint.record_checkpoint(summary, contract, "before_edit", contract_path, summary_path)
+    original = summary_path.read_bytes()
+
+    with pytest.raises(
+        ValueError, match="before_edit.*already exists.*revalidate-contract-amendment"
+    ):
+        ai_checkpoint.record_checkpoint(
+            summary, contract, "before_edit", contract_path, summary_path
+        )
+
+    assert summary_path.read_bytes() == original
+
+
 def test_duplicate_before_edit_is_rejected_without_replacing_original_evidence(tmp_path):
+    """A changed Contract cannot replace the original phase-boundary record."""
     contract = _checkpoint_contract()
     contract_path = tmp_path / "contract.json"
     summary_path = tmp_path / "summary.json"
@@ -171,9 +193,137 @@ def test_duplicate_before_edit_is_rejected_without_replacing_original_evidence(t
 
     contract["acceptance"].append("Keep the initial evidence immutable.")
     contract_path.write_text(json.dumps(contract), encoding="utf-8")
-    with pytest.raises(ValueError, match="duplicate before_edit prepare is refused"):
+    with pytest.raises(
+        ValueError, match="before_edit.*already exists.*revalidate-contract-amendment"
+    ):
         ai_checkpoint.record_checkpoint(
             summary, contract, "before_edit", contract_path, summary_path
         )
 
     assert json.loads(summary_path.read_text(encoding="utf-8"))["checkpointEvidence"] == [first]
+
+
+def test_contract_amendment_revalidation_appends_without_replacing_before_edit(tmp_path):
+    """Break caught: an amended Contract replaces the original authorization-to-edit proof."""
+    contract = _checkpoint_contract()
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+    summary = {
+        "verification": [],
+        "checkpointEvidence": [
+            {
+                "stage": "before_edit",
+                "recorded": True,
+                "contractHash": "original-contract-hash",
+                "acceptanceCount": 1,
+                "unknownCount": 0,
+                "requiredChecks": 2,
+                "requiredChecksPassed": 0,
+            }
+        ],
+    }
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+
+    record = ai_checkpoint.record_contract_amendment_revalidation(
+        summary,
+        contract,
+        contract_path,
+        summary_path,
+        previous_contract_hash="original-contract-hash",
+        reason="Expand scope to include the required regression.",
+    )
+
+    persisted = json.loads(summary_path.read_text(encoding="utf-8"))["checkpointEvidence"]
+    assert persisted[0] == summary["checkpointEvidence"][0]
+    assert [item["stage"] for item in persisted] == [
+        "before_edit",
+        "contract_amendment_revalidation",
+    ]
+    assert record["originalBeforeEditContractHash"] == "original-contract-hash"
+    assert record["previousContractHash"] == "original-contract-hash"
+    assert record["verificationStarted"] is False
+
+
+def test_contract_amendment_after_verification_invalidates_every_required_gate(tmp_path):
+    """Break caught: a post-verification amendment retains an old green gate."""
+    contract = _checkpoint_contract()
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+    summary = {
+        "verification": [{"check": "aiWorkItem", "result": "passed"}],
+        "checkpointEvidence": [
+            {
+                "stage": "before_edit",
+                "recorded": True,
+                "contractHash": "original-contract-hash",
+                "acceptanceCount": 1,
+                "unknownCount": 0,
+                "requiredChecks": 2,
+                "requiredChecksPassed": 0,
+            }
+        ],
+    }
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+
+    record = ai_checkpoint.record_contract_amendment_revalidation(
+        summary,
+        contract,
+        contract_path,
+        summary_path,
+        previous_contract_hash="original-contract-hash",
+        reason="Add the regression exposed by full verification.",
+    )
+
+    assert record["verificationStarted"] is True
+    assert record["invalidatedRequiredChecks"] == ["aiWorkItem", "aiScope"]
+    assert record["requiredChecksPassedAtAmendment"] == 1
+
+
+def test_contract_amendment_revalidation_binds_the_immediately_preceding_amendment(tmp_path):
+    """Break caught: a second governed amendment can only name before_edit, not its predecessor."""
+    contract = _checkpoint_contract()
+    contract_path = tmp_path / "contract.json"
+    summary_path = tmp_path / "summary.json"
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+    summary = {
+        "verification": [],
+        "checkpointEvidence": [
+            {
+                "stage": "before_edit",
+                "recorded": True,
+                "contractHash": "original-contract-hash",
+                "acceptanceCount": 1,
+                "unknownCount": 0,
+                "requiredChecks": 2,
+                "requiredChecksPassed": 0,
+            },
+            {
+                "stage": "contract_amendment_revalidation",
+                "recorded": True,
+                "originalBeforeEditContractHash": "original-contract-hash",
+                "previousContractHash": "original-contract-hash",
+                "contractHash": "first-amendment-hash",
+                "acceptanceCount": 1,
+                "unknownCount": 0,
+                "requiredChecks": 2,
+                "requiredChecksPassed": 0,
+                "reason": "First governed amendment.",
+                "verificationStarted": False,
+            },
+        ],
+    }
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+
+    record = ai_checkpoint.record_contract_amendment_revalidation(
+        summary,
+        contract,
+        contract_path,
+        summary_path,
+        previous_contract_hash="first-amendment-hash",
+        reason="Second governed amendment.",
+    )
+
+    assert record["originalBeforeEditContractHash"] == "original-contract-hash"
+    assert record["previousContractHash"] == "first-amendment-hash"

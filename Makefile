@@ -49,7 +49,7 @@ check-docs-metadata check-capability-claims check-trust-layer-docs check-real-ab
 	ai-verify-focused ai-verify-full \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-guidelines check-ai-review-policy template-adoption-ready \
-	check-ai-scenario-coverage check-ai-start-receipt check-ai-archive-recovery generate-ai-preflight-review check-ai-preflight-review ai-preflight ai-prepare-implementation \
+	check-ai-scenario-coverage check-ai-start-receipt check-ai-archive-recovery generate-ai-preflight-review check-ai-preflight-review ai-preflight ai-prepare-implementation ai-revalidate-contract-amendment \
 	check-ai-lifecycle-truth \
 	ai-prepare-hosted-verification-snapshot \
 	check-ai-change-summary generate-cockpit-status generate-cockpit-status-ja check-ai-status check-ai-status-ja check-ai-status-consistency repair-ai-status archive-work-item ai-close-work-item check-ai-pr check-ai-pr-core check-ai-diff-ownership ai-pre-merge \
@@ -602,7 +602,7 @@ check-ai-agent-risk:
 	$(AI_PYTHON) scripts/ai_check_agent_risk.py $(if $(CONTRACT),--contract $(CONTRACT)) $(if $(SUMMARY),--summary $(SUMMARY))
 
 ai-checkpoint:
-	$(AI_PYTHON) scripts/ai_checkpoint.py --contract $(CONTRACT) $(if $(SUMMARY),--summary $(SUMMARY)) --stage "$(or $(STAGE),manual)"
+	$(AI_PYTHON) scripts/ai_checkpoint.py --contract $(CONTRACT) $(if $(SUMMARY),--summary $(SUMMARY)) --stage "$(or $(STAGE),manual)" $(if $(PREVIOUS_CONTRACT_HASH),--previous-contract-hash "$(PREVIOUS_CONTRACT_HASH)") $(if $(AMENDMENT_REASON),--reason "$(AMENDMENT_REASON)")
 
 check-ai-backtrack:
 	$(AI_PYTHON) scripts/ai_check_backtrack.py
@@ -645,6 +645,11 @@ ai-prepare-implementation:
 	@test -n "$(CONTRACT)" -a -n "$(SUMMARY)" || (echo 'CONTRACT and SUMMARY are required' >&2; exit 2)
 	$(AI_NESTED_MAKE) ai-preflight CONTRACT="$(CONTRACT)"
 	$(AI_NESTED_MAKE) ai-checkpoint CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" STAGE="before_edit"
+
+ai-revalidate-contract-amendment:
+	@test -n "$(CONTRACT)" -a -n "$(SUMMARY)" -a -n "$(PREVIOUS_CONTRACT_HASH)" -a -n "$(AMENDMENT_REASON)" || (echo 'CONTRACT, SUMMARY, PREVIOUS_CONTRACT_HASH, and AMENDMENT_REASON are required' >&2; exit 2)
+	$(AI_NESTED_MAKE) ai-preflight CONTRACT="$(CONTRACT)"
+	$(AI_NESTED_MAKE) ai-checkpoint CONTRACT="$(CONTRACT)" SUMMARY="$(SUMMARY)" STAGE="contract_amendment_revalidation" PREVIOUS_CONTRACT_HASH="$(PREVIOUS_CONTRACT_HASH)" AMENDMENT_REASON="$(AMENDMENT_REASON)"
 
 check-ai-lifecycle-truth:
 	$(AI_PYTHON) scripts/ai_lifecycle_truth.py --check
