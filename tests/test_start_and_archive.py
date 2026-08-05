@@ -295,6 +295,37 @@ def test_linked_worktree_active_pair_with_non_dedicated_branch_fails_closed(tmp_
     )
 
 
+def test_unrelated_malformed_linked_worktree_isolated_but_own_identity_stays_closed(
+    tmp_path, monkeypatch
+):
+    current = tmp_path / "current"
+    other = tmp_path / "other"
+    for root in (current, other):
+        (root / ".ai" / "work-items" / "active").mkdir(parents=True)
+    for suffix in ("contract", "summary"):
+        (other / ".ai" / "work-items" / "active" / f"other-task.{suffix}.json").write_text(
+            '{"workItemId": "other-task"}', encoding="utf-8"
+        )
+    foreign_contract = (
+        other / ".ai" / "work-items" / "active" / "other-task.contract.json"
+    ).read_bytes()
+    foreign_summary = (
+        other / ".ai" / "work-items" / "active" / "other-task.summary.json"
+    ).read_bytes()
+    monkeypatch.setattr(ai_start, "PROJECT_ROOT", current)
+    monkeypatch.setattr(ai_start, "ACTIVE_DIR", current / ".ai" / "work-items" / "active")
+    monkeypatch.setattr(ai_start, "linked_worktree_records", lambda **_kwargs: [(other, "main")])
+
+    assert ai_start.linked_worktree_active_issue("new-task") is None
+    assert "branch does not match its task" in ai_start.linked_worktree_active_issue("other-task")
+    assert (
+        other / ".ai" / "work-items" / "active" / "other-task.contract.json"
+    ).read_bytes() == foreign_contract
+    assert (
+        other / ".ai" / "work-items" / "active" / "other-task.summary.json"
+    ).read_bytes() == foreign_summary
+
+
 def test_linked_worktree_ignores_summary_orphan_with_complete_archive(tmp_path, monkeypatch):
     current = tmp_path / "current"
     other = tmp_path / "other"

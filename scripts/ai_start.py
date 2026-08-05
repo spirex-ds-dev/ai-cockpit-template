@@ -299,6 +299,8 @@ def linked_worktree_active_issue(
                 "for the read-only owner repair route."
             )
         if identity.branch != f"codex/{identity.task}":
+            if requested_task is not None and requested_task != identity.task:
+                continue
             return (
                 "ERROR: linked worktree active Work Item branch does not match its task: "
                 f"{identity.branch} != codex/{identity.task}: {identity.worktree}"

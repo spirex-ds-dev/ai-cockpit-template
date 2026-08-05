@@ -1,0 +1,84 @@
+{
+  "contractVersion": 2,
+  "workItemId": "ai-start-global-identity-deadlock-669",
+  "mode": "code",
+  "title": "Restore governed ai-start after malformed foreign worktree identity deadlock",
+  "baseCommit": "ca800ceaa2dc16152d30e7224ec816bf177d94a0",
+  "baseRemote": "origin",
+  "baseBranch": "main",
+  "baselineDirtyPaths": [],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/ai-start-global-identity-deadlock-669.json",
+    "baseCommit": "ca800ceaa2dc16152d30e7224ec816bf177d94a0",
+    "initialScopeDigest": "00c189b7f086ad47b67c32f3bb92f478ad350e5dae47ab4d9fd327b377282b25",
+    "contractSkeletonDigest": "035e7f7983496ae6dc3fb1cb33fc5e8904cd55407d269e0c0ea262bc5ae62d6a"
+  },
+  "scope": [
+    ".ai/work-items/active/ai-start-global-identity-deadlock-669.contract.json",
+    ".ai/work-items/active/ai-start-global-identity-deadlock-669.summary.json",
+    ".ai/work-items/active/ai-start-global-identity-deadlock-669.outcome.json",
+    ".ai/work-items/active/ai-start-global-identity-deadlock-669.outcome.md",
+    ".ai/work-items/starts/ai-start-global-identity-deadlock-669.json",
+    ".ai/work-items/archive/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_start.py",
+    "scripts/ai_doctor.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_doctor.py",
+    "tests/test_work_item_lifecycle_closure.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Cleaning, editing, or deleting any foreign linked worktree.",
+    "Modifying Work Item #664 evidence or archive.",
+    "Implementing #668 PR critical-coverage or post-archive recovery behavior.",
+    "Merging, releasing, or deleting branches outside this Work Item lifecycle."
+  ],
+  "sources": [
+    {"path": "scripts/ai_start.py", "reason": "The governed start command currently fails closed before a corrective Contract can be created."},
+    {"path": "tests/test_start_and_archive.py", "reason": "Existing lifecycle-start regression coverage defines compatible behavior."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/669", "reason": "Corrective issue records the systemic ai-start identity deadlock."}
+  ],
+  "rawUserRequest": "Create corrective Issue #669 and restore standard governed starts: ai-start cannot create its own corrective Contract because an unrelated dirty malformed linked worktree has a branch/task identity mismatch. User authorizes narrowly scoped automation that writes only #669 evidence and performs no foreign cleanup.",
+  "rawRequestSource": {"type": "human", "reference": "Codex user conversation, 2026-08-05", "capturedAt": "2026-08-05T03:10:00+00:00", "digest": "313c2d66c8029db881af585ac1273202d7f48b7b544840950a32c67ac39e9e17"},
+  "declaredIntent": {"requestedCapabilities": ["ai_governance", "software_design", "test_automation"]},
+  "requestedOperation": {"target": "repository_governance", "action": "modify", "environment": "repository", "effect": "enforce", "authorityRequired": false},
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {"level": "high", "riskTypes": ["governance_deadlock", "foreign_evidence_integrity", "lifecycle_regression"], "reason": "The correction changes fail-closed start behavior and must preserve foreign evidence integrity.", "unknownsReviewComplete": true},
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["A systemic lifecycle deadlock blocks creation of corrective Work Items."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "User authorized only the self-contained bootstrap necessary to restore standard governed starts."},
+  "preReviewWarnings": ["Bootstrap is limited to #669 Contract, Summary, and Start Receipt; implementation must restore normal ai-start behavior without foreign cleanup."],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Record immutable implementation and finish checkpoints for this high-risk lifecycle correction."},
+  "acceptance": [
+    "A malformed or dirty foreign linked worktree cannot permanently prevent an unrelated dedicated branch from creating its own governed corrective Work Item.",
+    "The corrective start path is bounded to self-owned Contract, Summary, Start Receipt, and generated status evidence and performs no foreign cleanup or mutation.",
+    "Ordinary ai-start retains fail-closed validation for ambiguous active Work Item identity and reports a governed recovery route.",
+    "Regression coverage proves the original malformed-foreign-worktree deadlock and the restored standard-start behavior.",
+    "Lifecycle documentation explains the recovery boundary without weakening normal branch/task identity enforcement."
+  ],
+  "guidelines": [
+    "Preserve foreign Work Item evidence and worktrees without mutation.",
+    "Use executable tests for every recovery boundary.",
+    "Keep recovery authorization explicit and limited to the corrective Work Item."
+  ],
+  "intent": {"problem": "A malformed, dirty unrelated linked worktree causes ai-start to fail before it can create a Contract for the corrective Work Item needed to repair that condition.", "constraints": ["User authorizes the bootstrap automation.", "Only #669 evidence may be created during bootstrap.", "No foreign cleanup, mutation, archive change, merge, or release."], "rationale": "A self-only bootstrap breaks the governance deadlock while preserving the normal fail-closed start rule until the corrective implementation restores a standard route."},
+  "scenarioCoverage": [
+    {"scenario": "An unrelated malformed linked worktree blocks ordinary ai-start before Contract creation.", "required": true, "status": "unverified", "evidence": [], "expected": "The standard path remains fail-closed and the governed recovery route is explicit.", "verificationPlan": "Create the malformed foreign identity fixture and assert the normal start denial plus the bounded recovery behavior."},
+    {"scenario": "A valid dedicated Work Item starts while foreign evidence remains untouched.", "required": true, "status": "unverified", "evidence": [], "expected": "Only the new Work Item's Contract, Summary, Start Receipt, and generated status are written.", "verificationPlan": "Compare foreign fixture bytes before and after start, then assert the new Work Item evidence is self-owned."}
+  ],
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": [], "approvalEvidence": null},
+  "restrictedWriteApproval": {"approved": false, "approvedBy": "", "reason": "No restricted paths are approved for this bootstrap."},
+  "rollbackNote": "Revert the #669 Work Item diff; do not alter foreign Work Item evidence or worktrees."
+}
