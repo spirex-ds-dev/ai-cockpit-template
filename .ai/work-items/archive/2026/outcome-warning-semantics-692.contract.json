@@ -1,0 +1,257 @@
+{
+  "contractVersion": 2,
+  "workItemId": "outcome-warning-semantics-692",
+  "mode": "code",
+  "title": "Prevent non-risk hosted-not-required wording from forcing a yellow Outcome",
+  "baseCommit": "e9cfdd02585f06a8d5949f643e1fb420ce6c164b",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/outcome-warning-semantics-692.contract.json",
+    ".ai/work-items/active/outcome-warning-semantics-692.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/outcome-warning-semantics-692.outcome.json",
+    ".ai/work-items/active/outcome-warning-semantics-692.outcome.md",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_summary.py",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_ai_check_summary.py",
+    "docs/contract-fields.md",
+    "docs/features/task-outcome-report.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Immutable archived Work Item evidence, including the yellow #687 Outcome.",
+    "Outcome status rules for genuine known gaps, failed verification, residual risks, or blocked lifecycle states.",
+    "Provider PR, merge, release, and branch-cleanup operations."
+  ],
+  "sources": [
+    {
+      "path": "scripts/ai_finish.py",
+      "reason": "Derives pre-merge Outcome warnings and non-risk explanations from the active Summary."
+    },
+    {
+      "path": "scripts/ai_check_summary.py",
+      "reason": "Validates active Summary metadata before Finish."
+    },
+    {
+      "path": "tests/test_task_outcome_ai_finish_integration.py",
+      "reason": "Covers Finish-to-Outcome evidence derivation."
+    },
+    {
+      "path": "docs/contract-fields.md",
+      "reason": "Defines Summary field semantics for maintainers."
+    },
+    {
+      "path": "docs/features/task-outcome-report.md",
+      "reason": "Documents the Task Outcome warning and non-risk boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "governance_semantics",
+      "false_status_signal"
+    ],
+    "reason": "Outcome color is a human decision signal; suppressing a true gap would overclaim completion, while classifying a non-gap as a warning causes a false yellow signal.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "standard",
+    "source": "automatic",
+    "reasons": [
+      "The Work Item changes governance semantics and the generated human decision signal."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized this corrective Work Item; its implementation and verification boundary is explicit."
+  },
+  "preReviewWarnings": [
+    "Review that genuine knownGaps still generate warning, limitation, and yellow Outcome evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "A Summary can record an informational non-risk explanation without putting that statement in knownGaps.",
+    "ai-finish carries validated Summary nonRiskExplanations into the Outcome without adding Outcome warnings, limitations, or forbidden completion claims for those explanations.",
+    "A completed Outcome with only non-risk explanations remains status completed and has a green human status color.",
+    "A genuine knownGap still becomes an Outcome warning with limitation and non-risk binding and remains completed_with_warnings/yellow when no stronger blocked state applies.",
+    "Summary validation rejects malformed nonRiskExplanations rather than silently dropping them.",
+    "Maintainer documentation distinguishes knownGaps from nonRiskExplanations and states their Outcome-color effect."
+  ],
+  "guidelines": [
+    "Public Summary evidence fields must have explicit, non-overlapping semantics documented for maintainers.",
+    "Do not weaken Outcome handling for genuine gaps, failed verification, or blocked states.",
+    "Keep Outcome generation deterministic and evidence-derived."
+  ],
+  "intent": {
+    "problem": "A completed #687 Work Item was rendered yellow solely because its Summary used knownGaps for the informational statement that hosted verification was not required. knownGaps semantically means an intentionally unaddressed requirement, so the field conflated no-gap context with a real limitation.",
+    "constraints": [
+      "Do not rewrite immutable #687 archive evidence.",
+      "Do not infer non-risk status from prose heuristics or suppress arbitrary knownGaps.",
+      "Preserve fail-closed treatment of malformed Summary evidence.",
+      "Keep the correction backward compatible for existing Summary files that omit the new optional field."
+    ],
+    "rationale": "An explicit structured nonRiskExplanations field retains the informational fact while keeping knownGaps authoritative for unfinished requirements. This makes the green/yellow signal evidence-based rather than text-dependent."
+  },
+  "rawUserRequest": "Discovered in archived Work Item #687. Strict Finish passed all 23 quality gates and archived `completed_with_warnings`, but the Summary sentence `No known implementation gaps. Hosted verification is not required by the Contract.` was parsed as an unresolved warning. This makes the traffic-light Outcome yellow despite no failed gate or residual implementation risk. Acceptance: the Outcome parser distinguishes an explicit Contract inapplicability statement from an unresolved warning; real missing hosted evidence or failed gates remain yellow/red; regression coverage proves the semantic distinction; canonical user-facing Outcome documentation reflects the traffic-light rule. Preserve #687 archive immutability; do not rewrite the archived Outcome.",
+  "rawRequestSource": {
+    "type": "issue",
+    "reference": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/692",
+    "capturedAt": "2026-08-05T16:06:35Z",
+    "digest": "sha256:ea80d62f07852154d2ff9f9d15c9d549b7d27717bce895b42e59d7825cae4074"
+  },
+  "declaredIntent": {
+    "summary": "Separate informational completion context from unresolved Summary gaps so the Task Outcome traffic-light color remains truthful.",
+    "requestedCapabilities": [
+      "ai_governance",
+      "software_design",
+      "test_automation",
+      "documentation"
+    ]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "capabilityClaims": [
+    "human_benefit_report",
+    "repository_governance_layer"
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "A completed Work Item records only a structured non-risk explanation that hosted verification is inapplicable.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Finish emits no warning or limitation for the explanation and the Outcome remains completed.",
+      "verificationPlan": "Focused ai-finish integration test asserts the generated Outcome status, warning list, and nonRiskExplanations section."
+    },
+    {
+      "scenario": "A Work Item records a genuine knownGap.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Finish emits a warning, limitation, and completed_with_warnings Outcome rather than suppressing the gap.",
+      "verificationPlan": "Existing knownGap integration regression is retained and focused tests assert the warning binding."
+    },
+    {
+      "scenario": "A Summary supplies a malformed non-risk explanation.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Summary validation fails closed before Finish can silently discard malformed evidence.",
+      "verificationPlan": "Focused Summary-validator test exercises malformed structured evidence."
+    }
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": false,
+    "approvedBy": "",
+    "reason": "Set only when a human explicitly approves restricted governance paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 805
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/outcome-warning-semantics-692.json",
+    "baseCommit": "e9cfdd02585f06a8d5949f643e1fb420ce6c164b",
+    "initialScopeDigest": "60805f0ed55bfe1ac6592d4f8065605d6620ce02e3b81b62881d70d6263a2a17",
+    "contractSkeletonDigest": "adb7ce77742c5ee8b6035ec2c9b914af750276b965dce5ce6573db3dcc08efb0"
+  }
+}

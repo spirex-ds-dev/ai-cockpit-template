@@ -591,6 +591,23 @@ def test_summary_accepts_nonnumeric_or_generator_owned_archive_sequence():
         )
 
 
+def test_summary_metadata_rejects_malformed_non_risk_explanations():
+    issues = ai_check_summary._validate_summary_metadata(
+        {
+            "risk": {"level": "medium", "detail": "fixture"},
+            "nonRiskExplanations": [
+                {
+                    "sourceWarning": "Hosted verification is not required.",
+                    "reason": "Contract does not require it.",
+                    "evidence": "not-a-list",
+                }
+            ],
+        }
+    )
+
+    assert "nonRiskExplanations[0].evidence must be a list" in issues
+
+
 def test_scenario_coverage_validator_accepts_valid_payload():
     summary = {
         "summaryVersion": 2,
