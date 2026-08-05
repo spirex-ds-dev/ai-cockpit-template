@@ -1,0 +1,257 @@
+{
+  "contractVersion": 2,
+  "workItemId": "fixture-copytree-worktree-exclusion-705",
+  "mode": "code",
+  "title": "P1: exclude retained worktrees from isolated repository verification fixtures",
+  "baseCommit": "b789aeeb00f2ef9d9acc7590b546cfa4551a5181",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/fixture-copytree-worktree-exclusion-705.contract.json",
+    ".ai/work-items/active/fixture-copytree-worktree-exclusion-705.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/fixture-copytree-worktree-exclusion-705.outcome.json",
+    ".ai/work-items/active/fixture-copytree-worktree-exclusion-705.outcome.md",
+    "tests/repository_fixture.py",
+    "tests/test_pre_release_documentation_alignment.py",
+    "tests/test_project_governance.py",
+    "tests/test_project_governance_journey.py",
+    "tests/test_system_invariants.py",
+    "docs/reference/verification-fixture-boundary.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md"
+  ],
+  "outOfScope": [
+    "Deleting, moving, or cleaning retained local worktrees.",
+    "Weakening strict quality, fixture assertions, or documentation-alignment checks.",
+    "Changing production installer, release, or provider behavior.",
+    "Rewriting archived Work Item or Outcome evidence."
+  ],
+  "sources": [
+    {
+      "path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/705",
+      "reason": "Authoritative corrective requirement and observed strict-quality failure."
+    },
+    {
+      "path": "tests/test_pre_release_documentation_alignment.py",
+      "reason": "Contains the two repository-root canonical generator copy fixtures that retained .worktrees."
+    },
+    {
+      "path": "tests/test_project_governance.py",
+      "reason": "Contains the linked isolated repository fixture that must share the runtime-state exclusion."
+    },
+    {
+      "path": "tests/test_project_governance_journey.py",
+      "reason": "Contains the broken-template repository copy fixture that can retain .worktrees."
+    },
+    {
+      "path": "tests/test_system_invariants.py",
+      "reason": "Existing isolated repository view already excludes .worktrees and establishes the required boundary."
+    }
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": [
+      "verification_determinism",
+      "fixture_isolation",
+      "test_regression"
+    ],
+    "reason": "The fix changes shared test-fixture construction. It must preserve source coverage while excluding retained runtime worktree state, and must prove that the exclusion is used by every repository-root copy fixture.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": [
+      "P1 corrective work changes strict-quality fixture isolation and must prove full-quality determinism."
+    ],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic execution of bounded corrective Work Items; the Contract prohibits cleanup and verification bypasses."
+  },
+  "preReviewWarnings": [
+    "Review that every whole-repository or isolated-repository fixture uses the shared exclusion boundary and that no test needs retained worktree runtime state."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The canonical generator-chain test uses the shared root-copy helper instead of a local ignore list.",
+    "The capability-regeneration-chain test uses the shared root-copy helper instead of a local ignore list.",
+    "The project-governance view, governance-journey broken source, and system-invariant view use the shared runtime-state exclusion.",
+    "The shared fixture boundary excludes .worktrees and other retained runtime-only state without excluding source files needed by the fixtures.",
+    "A focused regression creates a source .worktrees sentinel and proves the destination fixture never contains it while required source files remain available.",
+    "The two canonical documentation-generator fixtures continue to converge in an isolated repository with retained worktrees present.",
+    "docs/reference/verification-fixture-boundary.md names retained .worktrees as excluded runtime state and states that fixture results are not provider or production evidence."
+  ],
+  "guidelines": [
+    "Treat retained .worktrees and caches as runtime state, not fixture source input.",
+    "Use one shared, test-only copy boundary rather than repeating divergent ignore lists.",
+    "Preserve each fixture's production-source coverage and fail closed if its required source is missing.",
+    "Do not delete worktrees or weaken quality to make a fixture faster."
+  ],
+  "intent": {
+    "problem": "Strict quality for #704 copied the template checkout into a temporary fixture without excluding retained .worktrees. The checkout contains governed historical worktrees, so the canonical generator fixture recursively copied hundreds of megabytes and stalled the quality lane.",
+    "constraints": [
+      "Keep all retained worktrees intact.",
+      "Do not relax strict quality or turn the fix into a machine-local exception.",
+      "Cover every fixture that copies the repository root, not only the observed test.",
+      "Keep the helper test-only and preserve behavior required by generator and governance fixtures."
+    ],
+    "rationale": "A shared runtime-state exclusion makes isolated repository fixtures deterministic, bounded, and auditable while retaining the source tree they are intended to verify."
+  },
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "user-continuous-authorization",
+    "reason": "The user authorized automatic execution, asked for corrective Work Items before process repairs, and prohibited temporary cleanup workarounds."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 809
+    }
+  },
+  "rawUserRequest": "Execute the complete remediation plan automatically; if a process problem is encountered, create a corrective Work Item first and do not use a temporary workaround. Use parallelism only when safe. Require explicit Outcome traffic lights.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:continuous-authorization-process-corrective-work-items",
+    "capturedAt": "2026-08-06",
+    "digest": "sha256:continuous-authorized-process-corrective-execution"
+  },
+  "declaredIntent": {
+    "summary": "Prevent isolated verification fixtures from recursively copying retained governed worktrees while preserving strict source-based validation.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "action": "modify",
+    "target": "repository_governance",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {
+      "scenario": "A repository source contains retained .worktrees sentinel content.",
+      "required": true,
+      "riskDomain": "fixture_isolation",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The shared isolated-copy helper omits the sentinel and all runtime-only state.",
+      "verificationPlan": "Focused helper regression creates a .worktrees sentinel and asserts it is absent from the copied repository."
+    },
+    {
+      "scenario": "Canonical documentation generators run from an isolated repository while retained worktrees exist in the source checkout.",
+      "required": true,
+      "riskDomain": "verification_determinism",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Both generator orderings converge and no destination .worktrees exists.",
+      "verificationPlan": "Run the focused pre-release documentation alignment fixture tests."
+    },
+    {
+      "scenario": "A linked project-governance view and a broken-template journey source need repository source files.",
+      "required": true,
+      "riskDomain": "source_coverage",
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The relevant source files remain available while runtime-only worktree state is excluded.",
+      "verificationPlan": "Run the focused project governance and journey fixture tests."
+    }
+  ],
+  "startReceipt": {
+    "path": ".ai/work-items/starts/fixture-copytree-worktree-exclusion-705.json",
+    "baseCommit": "b789aeeb00f2ef9d9acc7590b546cfa4551a5181",
+    "initialScopeDigest": "2dd1a9d671c9dfde24cb5b47ebbfd992321de330237346f8771ba1318fd1137c",
+    "contractSkeletonDigest": "ac9745bd09bb55c8ca73ce9098c8503926dc1a3fd890c773a3668a71ab4c40d6"
+  }
+}
