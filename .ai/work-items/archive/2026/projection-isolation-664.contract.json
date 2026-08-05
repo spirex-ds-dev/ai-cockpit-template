@@ -1,0 +1,178 @@
+{
+  "contractVersion": 2,
+  "workItemId": "projection-isolation-664",
+  "mode": "code",
+  "title": "P1 merge-safe generated lifecycle projections",
+  "baseCommit": "ca800ceaa2dc16152d30e7224ec816bf177d94a0",
+  "baselineDirtyPaths": [],
+  "rawUserRequest": "目标：执行计划，到全部完成。 我授权给你自动执行，写入到每个工单的Contract里。可以并行，提高效率么？另外，如果遇到流程问题，要先开工单修正。不要采用临时修补方案。",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-05-continuous-governed-execution",
+    "capturedAt": "2026-08-05T00:00:00+00:00",
+    "digest": "sha256:9ddb388b819a2b82c8fc05bdfb177b6cb05c0cc051b0dd051e5a9c3a0d8d6495"
+  },
+  "declaredIntent": {
+    "summary": "Repair the branch-integrated generated-projection collision discovered by #659 before any claim that parallel Work Item startup is safe.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scope": [
+    ".ai/work-items/active/projection-isolation-664.contract.json",
+    ".ai/work-items/active/projection-isolation-664.summary.json",
+    ".ai/work-items/active/projection-isolation-664.outcome.json",
+    ".ai/work-items/active/projection-isolation-664.outcome.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/guards/coverage_policy.yaml",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    "scripts/ai_start.py",
+    "scripts/ai_finish.py",
+    "scripts/ai_archive_work_item.py",
+    "scripts/ai_close_work_item.py",
+    "scripts/ai_check_work_item.py",
+    "scripts/ai_start_receipt.py",
+    "scripts/ai_projection_lease.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/ai_generated_projection*.py",
+    "tests/test_start_and_archive.py",
+    "tests/test_ai_archive_work_item.py",
+    "tests/test_guards_and_status.py",
+    "tests/test_projection_isolation.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "Makefile"
+  ],
+  "outOfScope": [
+    "Modifying #659 worktree, Contract, Summary, receipt, or branch.",
+    "Creating ordinary Work Item records by bootstrap or weakening ordinary ai-start enforcement.",
+    "Editing unrelated active or archived Work Item evidence.",
+    "Merging, releasing, or deleting branches outside this Work Item lifecycle."
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/664", "reason": "Authoritative corrective requirements and dependency on #659."},
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/659", "reason": "Predecessor evidence identifying branch-integrated generated projections as the collision category."},
+    {"path": "scripts/ai_start.py", "reason": "Current linked-worktree startup ownership behavior."},
+    {"path": "scripts/ai_check_work_item.py", "reason": "Contract schema enforcement for explicit parallel ownership declarations."},
+    {"path": "scripts/ai_start_receipt.py", "reason": "Immutable receipt binding for the declared parallel ownership boundary."},
+    {"path": "scripts/ai_projection_lease.py", "reason": "Persistent ownership and freshness enforcement for branch-integrated generated projections."},
+    {"path": "scripts/ai_finish.py", "reason": "Current final lifecycle generated-output behavior."},
+    {"path": "scripts/ai_archive_work_item.py", "reason": "Current archive/index generated-output behavior."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["workflow", "concurrency", "evidence_integrity", "merge_safety"],
+    "reason": "Concurrent Work Item branches may each produce tracked facts that are locally isolated but collide or become stale when integrated.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "automatic",
+    "reasons": ["P1 lifecycle correction changes concurrency enforcement and branch-integrated evidence ownership."],
+    "override": null
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized automatic execution, and #664 is the required corrective before resuming #659 parallel-start claims."
+  },
+  "preReviewWarnings": ["This self-hosting bootstrap is limited to #664 because normal ai-start is blocked by the predecessor’s active generated-projection collision; it grants no ordinary bootstrap permission."],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": ["before_edit", "before_finish"],
+    "reason": "Record intent and integration topology before code changes and before final lifecycle closure."
+  },
+  "acceptance": [
+    "Every ai-start, ai-finish, and archive generated path that can enter a branch diff is inventoried and classified as task-namespaced/non-committed or serialized through executable ownership.",
+    "A candidate concurrency boundary cannot omit a branch-integrated generated projection; unknown or shared projections fail closed before lifecycle writes, and its receipt binds the exact declaration.",
+    "Actual linked-worktree and synthetic merge-topology regression coverage proves two allowed Work Items integrate without conflicting generated projections.",
+    "Ordinary Work Items remain unable to use this bootstrap and no foreign active evidence is mutated during discovery or denial.",
+    "Lifecycle and canonical generated capability/documentation projections truthfully describe the corrected boundary."
+  ],
+  "guidelines": [
+    "Keep one task, one Work Item, one dedicated branch, one worktree, and one PR.",
+    "Prefer explicit machine-validated ownership over inferred agent convention.",
+    "Preserve fail-closed behavior for unknown, shared, or stale generated projections.",
+    "Prove the result at linked-worktree and merge topology level, not only with unit assertions.",
+    "Do not mutate foreign active evidence during discovery, denial, or recovery."
+  ],
+  "scenarioCoverage": [
+    {
+      "scenario": "Two valid disjoint Work Items in linked worktrees each generate lifecycle projections and their branches are integrated.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "Both branches integrate into one shared base without a generated-projection conflict, and each generated fact remains bound to its owning Work Item.",
+      "verificationPlan": "Create real linked-worktree fixture branches, exercise the allowed boundary, merge both into a shared integration base, and assert no generated projection conflict or stale ownership."
+    },
+    {
+      "scenario": "A candidate omits, shares, or names an unknown branch-integrated generated projection.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "The candidate is denied before lifecycle writes and the diagnostic names the omitted, shared, or unknown generated projection.",
+      "verificationPlan": "Exercise omitted, shared, and unknown categories and assert fail-closed denial before lifecycle writes."
+    },
+    {
+      "scenario": "Ordinary ai-start cannot rely on the #664 self-hosting bootstrap.",
+      "required": true,
+      "status": "unverified",
+      "evidence": [],
+      "expected": "A normal Work Item receives no bootstrap exception and is required to provide the ordinary validated concurrency declaration.",
+      "verificationPlan": "Run normal ai-start in a fixture without this corrective bootstrap and assert dedicated-boundary validation remains mandatory."
+    }
+  ],
+  "intent": {
+    "problem": "#659 made parallel start possible in separate worktrees, but #664 found generated current-status, task-report, archive-index, and documentation projections can still be committed by multiple branches and conflict when merged.",
+    "constraints": ["Do not use temporary bypasses.", "Do not alter #659 worktree.", "Retain normal ai-start fail-closed behavior for ordinary Work Items.", "Treat generated evidence as branch-integrated facts, not merely local files."],
+    "rationale": "Correcting the ownership model before enabling parallelism prevents hidden merge-time corruption or stale evidence from entering the release path."
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true},
+    {"check": "aiScope", "required": true},
+    {"check": "aiGuards", "required": true},
+    {"check": "aiCheckpoint", "required": true},
+    {"check": "aiAgentRisk", "required": true},
+    {"check": "aiReviewPolicy", "required": true},
+    {"check": "aiBacktrack", "required": true},
+    {"check": "aiCoverage", "required": true},
+    {"check": "aiScenarioCoverage", "required": true},
+    {"check": "aiGuidelines", "required": true},
+    {"check": "aiSummary", "required": true},
+    {"check": "aiStatus", "required": true},
+    {"check": "aiStatusCheck", "required": true},
+    {"check": "aiStatusConsistency", "required": true},
+    {"check": "aiDiffOwnership", "required": true},
+    {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "RayIori", "reason": "The user explicitly authorized automatic execution for every Work Item in this governed corrective plan; this approval is limited to the scoped Makefile forwarding change."},
+  "rollbackNote": "Use a new governed corrective to revert this Work Item and restore the prior serialization policy if merge-topology evidence demonstrates a safety regression.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 901}},
+  "startReceipt": {
+    "path": ".ai/work-items/starts/projection-isolation-664.json",
+    "baseCommit": "ca800ceaa2dc16152d30e7224ec816bf177d94a0",
+    "initialScopeDigest": "c1ab8c15ae2379c75289da23a88e1c3c8abf507b71a87de7027e77a767e5c71e",
+    "contractSkeletonDigest": "c7e87250f4a4709bfaf272b407420e29806e10ad855e5849f64c164dc4224dc7"
+  }
+}

@@ -143,6 +143,24 @@ def test_default_coverage_policy_associates_linked_worktree_recovery_with_its_re
     ] == ["scripts/ai_linked_worktree_recovery.py"]
 
 
+def test_default_coverage_policy_associates_projection_isolation_with_topology_regression(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        ai_check_coverage_guard, "POLICY", ROOT / ".ai" / "guards" / "coverage_policy.yaml"
+    )
+    assert (
+        ai_check_coverage_guard.detect(
+            [
+                "scripts/ai_projection_lease.py",
+                "scripts/ai_close_work_item.py",
+                "tests/test_projection_isolation.py",
+            ]
+        )
+        == []
+    )
+
+
 def test_checkpoint_next_action_stops_on_unknowns():
     contract = {"notCodable": False, "unknowns": ["decision"], "verification": []}
     assert ai_checkpoint.next_action(contract, None).startswith("Stop coding")

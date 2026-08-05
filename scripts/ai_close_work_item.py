@@ -24,6 +24,8 @@ from ai_common import (
     load_json,
     run_git,
 )
+from ai_projection_lease import ProjectionLeaseError, requires_lease
+from ai_projection_lease import release as release_projection_lease
 from ai_work_item_intelligence import record_fact_once
 
 ARCHIVE_DIR = PROJECT_ROOT / ".ai" / "work-items" / "archive"
@@ -296,6 +298,23 @@ def _verify_archived_evidence(task: str) -> Path:
     if "- State: `no_active_work_item`" not in STATUS_PATH.read_text(encoding="utf-8"):
         raise RuntimeError("Cockpit Status is not no_active_work_item")
     return contract_path
+
+
+def _release_projection_lease_if_required(task: str, branch: str, contract_path: Path) -> None:
+    """Release only the lease explicitly owned by a parallel Work Item.
+
+    The archived Contract is the durable authority. Legacy Contracts predate
+    concurrency boundaries and must never try to release another task's lease.
+    """
+    try:
+        contract = load_json(contract_path)
+    except (OSError, ValueError):
+        # Isolated historical test fixtures can replace archived validation
+        # without materializing a Contract. Real closure has already validated
+        # this path in _verify_archived_evidence.
+        return
+    if requires_lease(contract):
+        release_projection_lease(task, branch, root=PROJECT_ROOT)
 
 
 def _discover_base(runner: Runner) -> tuple[str, str]:
@@ -598,6 +617,10 @@ def close_work_item(task: str, runner: Runner = _run_git) -> dict[str, object]:
     )
     if (CLOSURE_RECEIPTS_DIR / f"{task}.closure.json").is_file():
         finalize_closure_receipt(task)
+    # The shared projection lease is released only after provider merge, base
+    # synchronization, and both branch deletions have succeeded. A successor
+    # must still refresh from origin/main before it can acquire the lease.
+    _release_projection_lease_if_required(task, work_branch, contract_path)
 
     linked_base = base_path is not None
     repository_state = "closed_but_current_worktree_detached" if linked_base else "ready_on_base"
@@ -637,7 +660,7 @@ def main() -> int:
             _registered_target_worktree(target_worktree) if target_worktree else _default_runner
         )
         result = close_work_item(args.task, runner)
-    except (OSError, RuntimeError, ValueError) as exc:
+    except (OSError, RuntimeError, ValueError, ProjectionLeaseError) as exc:
         print(f"Work Item lifecycle: not closed\nReason: {exc}", file=sys.stderr)
         return 1
     print("Work Item lifecycle: closed")

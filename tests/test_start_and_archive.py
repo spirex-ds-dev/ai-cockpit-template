@@ -32,6 +32,22 @@ from ai_start_receipt import (
 )
 
 
+def _concurrency_boundary(task: str, name: str) -> dict[str, object]:
+    return {
+        "schemaVersion": 1,
+        "implementationPaths": [f"src/{name}.py"],
+        "generatedEvidencePaths": [f"docs/{name}.md"],
+        "verificationOutputPaths": [f"target/quality/{task}/**"],
+        "serializedProjectionPaths": [
+            ".ai/cockpit/current_status.md",
+            ".ai/cockpit/task_report.json",
+            ".ai/cockpit/task_report.md",
+            ".ai/work-items/archive/index.json",
+        ],
+        "reason": "exclusive test ownership",
+    }
+
+
 def test_lifecycle_phase_event_type_is_available_to_start_and_archive() -> None:
     assert AiEventType.LIFECYCLE_PHASE_FINISHED.value == "lifecycle_phase_finished"
 
@@ -97,10 +113,18 @@ def test_real_linked_worktree_duplicate_does_not_block_unrelated_start(tmp_path,
     for worktree in (canonical, foreign):
         active = worktree / ".ai" / "work-items" / "active"
         active.mkdir(parents=True)
-        for suffix in ("contract", "summary"):
-            (active / f"other-task.{suffix}.json").write_text(
-                '{"workItemId":"other-task"}', encoding="utf-8"
-            )
+        (active / "other-task.contract.json").write_text(
+            json.dumps(
+                {
+                    "workItemId": "other-task",
+                    "concurrencyBoundary": _concurrency_boundary("other-task", "other"),
+                }
+            ),
+            encoding="utf-8",
+        )
+        (active / "other-task.summary.json").write_text(
+            '{"workItemId":"other-task"}', encoding="utf-8"
+        )
     foreign_contract = (foreign / ".ai/work-items/active/other-task.contract.json").read_bytes()
     foreign_summary = (foreign / ".ai/work-items/active/other-task.summary.json").read_bytes()
     monkeypatch.setattr(ai_start, "PROJECT_ROOT", root)
@@ -131,10 +155,18 @@ def test_ai_start_main_creates_unrelated_contract_despite_real_foreign_duplicate
     for worktree in (canonical, foreign):
         active = worktree / ".ai" / "work-items" / "active"
         active.mkdir(parents=True)
-        for suffix in ("contract", "summary"):
-            (active / f"other-task.{suffix}.json").write_text(
-                '{"workItemId":"other-task"}', encoding="utf-8"
-            )
+        (active / "other-task.contract.json").write_text(
+            json.dumps(
+                {
+                    "workItemId": "other-task",
+                    "concurrencyBoundary": _concurrency_boundary("other-task", "other"),
+                }
+            ),
+            encoding="utf-8",
+        )
+        (active / "other-task.summary.json").write_text(
+            '{"workItemId":"other-task"}', encoding="utf-8"
+        )
     foreign_contract = (foreign / ".ai/work-items/active/other-task.contract.json").read_bytes()
     foreign_summary = (foreign / ".ai/work-items/active/other-task.summary.json").read_bytes()
     active = root / ".ai" / "work-items" / "active"
@@ -150,7 +182,20 @@ def test_ai_start_main_creates_unrelated_contract_despite_real_foreign_duplicate
         "create_observability",
         lambda **_: type("Obs", (), {"work_item_started": lambda *args, **kwargs: None})(),
     )
-    monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "new-task", "--mode", "investigate"])
+    _git(root, "switch", "-c", "codex/new-task")
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_start.py",
+            "--task",
+            "new-task",
+            "--mode",
+            "investigate",
+            "--concurrency-boundary",
+            json.dumps(_concurrency_boundary("new-task", "new")),
+        ],
+    )
 
     assert ai_start.main() == 0
     assert (active / "new-task.contract.json").exists()
@@ -176,10 +221,18 @@ def test_ai_start_main_creates_unrelated_contract_despite_foreign_canonical_acti
     _git(root, "worktree", "add", "-b", "codex/other-task", str(foreign))
     foreign_active = foreign / ".ai" / "work-items" / "active"
     foreign_active.mkdir(parents=True)
-    for suffix in ("contract", "summary"):
-        (foreign_active / f"other-task.{suffix}.json").write_text(
-            '{"workItemId":"other-task"}', encoding="utf-8"
-        )
+    (foreign_active / "other-task.contract.json").write_text(
+        json.dumps(
+            {
+                "workItemId": "other-task",
+                "concurrencyBoundary": _concurrency_boundary("other-task", "other"),
+            }
+        ),
+        encoding="utf-8",
+    )
+    (foreign_active / "other-task.summary.json").write_text(
+        '{"workItemId":"other-task"}', encoding="utf-8"
+    )
     foreign_contract = (foreign_active / "other-task.contract.json").read_bytes()
     foreign_summary = (foreign_active / "other-task.summary.json").read_bytes()
     active = root / ".ai" / "work-items" / "active"
@@ -195,7 +248,20 @@ def test_ai_start_main_creates_unrelated_contract_despite_foreign_canonical_acti
         "create_observability",
         lambda **_: type("Obs", (), {"work_item_started": lambda *args, **kwargs: None})(),
     )
-    monkeypatch.setattr(sys, "argv", ["ai_start.py", "--task", "new-task", "--mode", "investigate"])
+    _git(root, "switch", "-c", "codex/new-task")
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "ai_start.py",
+            "--task",
+            "new-task",
+            "--mode",
+            "investigate",
+            "--concurrency-boundary",
+            json.dumps(_concurrency_boundary("new-task", "new")),
+        ],
+    )
 
     assert ai_start.main() == 0
     assert (active / "new-task.contract.json").exists()

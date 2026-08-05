@@ -24,6 +24,22 @@ unpaired, mismatched, or non-dedicated active branches.
 
 When a Work Item is a declared successor, it must wait for its predecessor to
 have evidence for PR merge, archive, local/remote branch deletion, and base
+
+### Branch-integrated generated projections
+
+Active Contract, Summary, Outcome, and Start Receipt files are task-namespaced
+worktree evidence. In contrast, `.ai/cockpit/current_status.md`, both
+`.ai/cockpit/task_report.*` projections, and `.ai/work-items/archive/index.json`
+are shared branch-integrated facts. An active status is therefore provisional:
+it can never establish archive or PR ownership by itself.
+
+When a linked Work Item is active, `ai-start` requires each candidate's
+`concurrencyBoundary` to declare the complete serialized-projection inventory,
+plus exclusive implementation, generated-evidence, and quality paths. The
+Start Receipt binds that boundary digest. Finish and archive acquire one
+persistent projection lease, require the latest `origin/main`, and hold the
+lease through merged-PR lifecycle closure. A successor must rebase after the
+prior owner closes before it can regenerate these shared projections.
 synchronization. `make check-ai-serial-order` fails closed when that declared
 dependency is incomplete; independent Work Items do not acquire that edge.
 
