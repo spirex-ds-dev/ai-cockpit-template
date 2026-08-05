@@ -10,15 +10,15 @@ description: Comprehensive, bounded, evidence-backed Japanese repository-governa
 
 - Assessment Work Item: `final-japanese-reassessment-replacement-20260731`
 - Work Item role: `final_reassessment`
-- Assessment digest: `sha256:3c62ba3a90dd6b2bf521ccc8b66a0f94850f1b377f50a798eca596d099d7b469`
-- Evidence source: `sha256:fe02c7d901aeba79a1f7edf64ea108cda39190464d252b61fc2fe20786fa83db` (60 files; `sha256-canonical-json-v1`)
+- Assessment digest: `sha256:a35aa06cea74047da43ac33d91238572c2a908dc9f4834383700a61e7aee0a4d`
+- Evidence source: `sha256:4dab02a04642d4af47aeea213303d246a10841b17610a423c665285a28346664` (58 files; `sha256-canonical-json-v1`)
 - Corpus: `tests/fixtures/japanese-capability-corpus.json` (`14` entries)
 - Blocking findings: `0`
 - [Machine-readable assessment](japanese-capability-assessment.json)
 
 ## Evidence boundary
 
-The matrix evaluates current repository behavior, executable evidence, and Japanese engineer paths. Missing or English-inferred evidence is blocking. General provider/model fluency and native-human translation review remain explicit non-claims.
+The matrix evaluates current repository behavior, executable evidence, and Japanese engineer paths. Capability Truth remains a required report surface, but its regenerated projections are deliberately excluded from this assessment's bound source identity so the canonical generator chain stays acyclic. Missing or English-inferred evidence is blocking. General provider/model fluency and native-human translation review remain explicit non-claims.
 
 ## Matrix
 

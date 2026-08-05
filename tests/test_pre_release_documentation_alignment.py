@@ -1,5 +1,9 @@
 import hashlib
 import json
+import os
+import shutil
+import subprocess
+import sys
 from pathlib import Path
 
 import check_docs_metadata as docs_metadata
@@ -33,6 +37,86 @@ def test_current_report_is_aligned_and_generated_files_match_after_bound_evidenc
     assert Path("docs/reference/pre-release-documentation-alignment.md").read_text(
         encoding="utf-8"
     ) == render_markdown(report)
+
+
+def test_canonical_generator_chain_converges_in_an_isolated_repository(tmp_path):
+    source_root = Path(__file__).resolve().parents[1]
+    isolated_root = tmp_path / "repository"
+    shutil.copytree(
+        source_root,
+        isolated_root,
+        ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__", "*.pyc"),
+    )
+    environment = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
+
+    for script in (
+        "scripts/ai_capability_truth.py",
+        "scripts/ai_japanese_capability.py",
+        "scripts/check_pre_release_documentation_alignment.py",
+    ):
+        result = subprocess.run(
+            [sys.executable, script, "--write"],
+            cwd=isolated_root,
+            env=environment,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        assert result.returncode == 0, result.stderr
+
+    for script, option in (
+        ("scripts/ai_japanese_capability.py", "--check"),
+        ("scripts/check_pre_release_documentation_alignment.py", None),
+    ):
+        command = [sys.executable, script]
+        if option is not None:
+            command.append(option)
+        result = subprocess.run(
+            command,
+            cwd=isolated_root,
+            env=environment,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        assert result.returncode == 0, result.stderr
+
+
+def test_capability_truth_regeneration_cannot_invalidate_japanese_assessment(tmp_path):
+    source_root = Path(__file__).resolve().parents[1]
+    isolated_root = tmp_path / "repository"
+    shutil.copytree(
+        source_root,
+        isolated_root,
+        ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__", "*.pyc"),
+    )
+    environment = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
+
+    for script in (
+        "scripts/ai_japanese_capability.py",
+        "scripts/ai_capability_truth.py",
+        "scripts/check_pre_release_documentation_alignment.py",
+    ):
+        result = subprocess.run(
+            [sys.executable, script, "--write"],
+            cwd=isolated_root,
+            env=environment,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        assert result.returncode == 0, result.stderr
+
+    result = subprocess.run(
+        [sys.executable, "scripts/check_pre_release_documentation_alignment.py"],
+        cwd=isolated_root,
+        env=environment,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stderr
 
 
 def test_build_report_blocks_when_injected_bound_evidence_drifts(tmp_path, monkeypatch):
