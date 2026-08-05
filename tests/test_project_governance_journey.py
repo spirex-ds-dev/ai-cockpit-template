@@ -1,12 +1,12 @@
 import hashlib
 import json
 import os
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 import ai_check_summary
+from repository_fixture import copy_repository_tree
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -400,9 +400,7 @@ def test_documented_project_governance_journey_and_upgrade_rollback(tmp_path):
     assert (project / ".ai" / "project_profile.yaml").read_bytes() == profile_before
 
     broken_source = tmp_path / "broken-source"
-    shutil.copytree(
-        ROOT, broken_source, ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__")
-    )
+    copy_repository_tree(ROOT, broken_source)
     broken_module = broken_source / "scripts" / "ai_check_scope.py"
     broken_module.write_text(
         broken_module.read_text(encoding="utf-8") + "\nthis is invalid python !!!\n",

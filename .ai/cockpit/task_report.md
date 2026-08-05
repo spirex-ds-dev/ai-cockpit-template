@@ -7,7 +7,7 @@ Result: `completed`
 Task Outcome status: `completed`.
 
 ## 实际完成内容 / Completed work
-Task active-sync-dirty-successor-702 generated an evidence-derived outcome with status completed.
+Task fixture-copytree-worktree-exclusion-705 generated an evidence-derived outcome with status completed.
 
 ## 发现的问题 / Findings
 - Detected issues: 0

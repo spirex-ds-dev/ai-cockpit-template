@@ -1,7 +1,6 @@
 import hashlib
 import json
 import os
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -19,6 +18,7 @@ from check_pre_release_documentation_alignment import (
     normalized_path,
     render_markdown,
 )
+from repository_fixture import copy_repository_tree
 
 
 def test_current_report_is_aligned_and_generated_files_match_after_bound_evidence_refresh():
@@ -39,14 +39,25 @@ def test_current_report_is_aligned_and_generated_files_match_after_bound_evidenc
     ) == render_markdown(report)
 
 
+def test_repository_fixture_copy_excludes_retained_worktrees_and_preserves_sources(tmp_path):
+    source = tmp_path / "source"
+    source.mkdir()
+    (source / "README.md").write_text("fixture source\n", encoding="utf-8")
+    retained = source / ".worktrees" / "historical-work-item"
+    retained.mkdir(parents=True)
+    (retained / "sentinel.txt").write_text("must not copy\n", encoding="utf-8")
+
+    destination = tmp_path / "destination"
+    copy_repository_tree(source, destination)
+
+    assert (destination / "README.md").read_text(encoding="utf-8") == "fixture source\n"
+    assert not (destination / ".worktrees").exists()
+
+
 def test_canonical_generator_chain_converges_in_an_isolated_repository(tmp_path):
     source_root = Path(__file__).resolve().parents[1]
     isolated_root = tmp_path / "repository"
-    shutil.copytree(
-        source_root,
-        isolated_root,
-        ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__", "*.pyc"),
-    )
+    copy_repository_tree(source_root, isolated_root)
     environment = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
 
     for script in (
@@ -85,11 +96,7 @@ def test_canonical_generator_chain_converges_in_an_isolated_repository(tmp_path)
 def test_capability_truth_regeneration_cannot_invalidate_japanese_assessment(tmp_path):
     source_root = Path(__file__).resolve().parents[1]
     isolated_root = tmp_path / "repository"
-    shutil.copytree(
-        source_root,
-        isolated_root,
-        ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__", "*.pyc"),
-    )
+    copy_repository_tree(source_root, isolated_root)
     environment = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
 
     for script in (

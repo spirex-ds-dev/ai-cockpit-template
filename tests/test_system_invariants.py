@@ -6,6 +6,7 @@ from pathlib import Path
 import check_system_invariants
 import pytest
 from check_system_invariants import release_contract_issues
+from repository_fixture import copy_repository_tree
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -31,21 +32,7 @@ def _archive_summary_version_issues(issues):
 def _isolated_repository_view(tmp_path, *writable_paths: Path):
     """Build a linked repository view and copy only files this test mutates."""
     copy = tmp_path / "repository"
-    shutil.copytree(
-        ROOT,
-        copy,
-        ignore=shutil.ignore_patterns(
-            ".git",
-            ".venv",
-            ".worktrees",
-            "target",
-            "__pycache__",
-            ".mypy_cache",
-            ".pytest_cache",
-            ".ruff_cache",
-        ),
-        copy_function=os.symlink,
-    )
+    copy_repository_tree(ROOT, copy, copy_function=os.symlink)
     for path in writable_paths:
         destination = copy / path.relative_to(ROOT)
         destination.unlink()

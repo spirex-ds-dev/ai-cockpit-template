@@ -11,6 +11,7 @@ import check_system_invariants
 from ai_check_guard_calibration import calibration_issues
 from ai_project_profile import load_profile, validate_profile
 from check_system_invariants import invariant_issues
+from repository_fixture import copy_repository_tree
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -24,12 +25,7 @@ def test_observability_exposes_the_lifecycle_phase_event_type() -> None:
 def isolated_repository_view(tmp_path, *writable_paths: Path) -> Path:
     """Build a read-only linked repository view, copying only mutated files."""
     copy = tmp_path / "repository"
-    shutil.copytree(
-        ROOT,
-        copy,
-        ignore=shutil.ignore_patterns(".git", ".venv", "target", "__pycache__"),
-        copy_function=os.symlink,
-    )
+    copy_repository_tree(ROOT, copy, copy_function=os.symlink)
     for path in writable_paths:
         relative = path.relative_to(ROOT)
         destination = copy / relative
