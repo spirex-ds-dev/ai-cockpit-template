@@ -1205,7 +1205,8 @@ def test_finish_main_rejects_stale_checkpoint_before_declared_checks(tmp_path, m
     assert executed == []
     error = capsys.readouterr().err
     assert "checkpointEvidence[before_edit] contractHash is stale" in error
-    assert "make ai-prepare-implementation" in error
+    assert "make ai-revalidate-contract-amendment" in error
+    assert "make ai-prepare-implementation" not in error
 
 
 def test_finish_main_source_bound_failure_stops_quality_and_outcome(tmp_path, monkeypatch):

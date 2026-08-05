@@ -1,0 +1,208 @@
+{
+  "contractVersion": 2,
+  "workItemId": "checkpoint-amendment-integration-689",
+  "mode": "code",
+  "title": "P1: integrate #667 contract-amendment recovery onto current main",
+  "baseCommit": "c75ff49139b9b05cc3f4d819823806a7786db6ad",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/checkpoint-amendment-integration-689.contract.json",
+    ".ai/work-items/active/checkpoint-amendment-integration-689.summary.json",
+    ".ai/cockpit/current_status.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/active/checkpoint-amendment-integration-689.outcome.json",
+    ".ai/work-items/active/checkpoint-amendment-integration-689.outcome.md",
+    "scripts/ai_checkpoint.py",
+    "scripts/ai_check_agent_risk.py",
+    "scripts/ai_finish.py",
+    "Makefile",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/commands.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "tests/test_ai_checkpoint.py",
+    "tests/test_ai_check_agent_risk.py",
+    "tests/test_core_gates.py",
+    "tests/test_makefile.py"
+  ],
+  "outOfScope": [],
+  "sources": [
+    {"path": "GitHub Issue #667", "reason": "Original P1 requirement and accepted implementation evidence."},
+    {"path": "GitHub Issue #689", "reason": "Authoritative successor integration requirement from current main."},
+    {"path": "scripts/ai_checkpoint.py", "reason": "Checkpoint and amendment-revalidation implementation."},
+    {"path": "scripts/ai_check_agent_risk.py", "reason": "Fail-closed evidence-chain validation."},
+    {"path": "scripts/ai_finish.py", "reason": "Lifecycle recovery guidance."},
+    {"path": "Makefile", "reason": "Canonical command entrypoint."},
+    {"path": "docs/reference/ai-cockpit-work-item-lifecycle.md", "reason": "Canonical lifecycle semantics."},
+    {"path": "tests/test_ai_checkpoint.py", "reason": "Checkpoint regression coverage."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "medium",
+    "riskTypes": ["evidence_integrity", "lifecycle_ordering", "integration_safety"],
+    "reason": "The successor must preserve #667's append-only evidence semantics while integrating with current lifecycle and generated-evidence changes.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {
+    "selected": "strict",
+    "source": "human_override",
+    "reasons": [
+      "Repository-governance lifecycle behavior and evidence integrity are changed."
+    ],
+    "override": {"approvalEvidence": "User authorized automatic execution for every Work Item and requires formal corrective Work Items.", "reason": "Current-main successor to P1 lifecycle correction.", "risks": ["evidence_integrity", "lifecycle_ordering", "integration_safety"], "notRunChecks": ["Release-preflight and distribution verification are not applicable because this Work Item changes repository-local lifecycle semantics only and must not publish or mutate provider release state."], "workItemOnly": true, "workItemId": "checkpoint-amendment-integration-689"}
+  },
+  "agentCapability": {
+    "canImplement": true,
+    "canVerify": true,
+    "needsHumanDecision": false,
+    "blockedReason": ""
+  },
+  "executionDecision": {
+    "status": "continue",
+    "reason": "The user authorized the successor integration and full governed verification."
+  },
+  "preReviewWarnings": [
+    "Review original before_edit immutability, chained amendment binding, post-verification gate invalidation, and current-main generated evidence."
+  ],
+  "checkpointPolicy": {
+    "requiredBeforeFinish": true,
+    "requiredStages": [
+      "before_edit",
+      "before_finish"
+    ],
+    "reason": "Record at least one checkpoint before finishing to reduce mid-task drift."
+  },
+  "acceptance": [
+    "The #667 append-only Contract-amendment recovery behavior is integrated from current origin/main without modifying #667 archived evidence.",
+    "The original before_edit record remains immutable, and amendment records bind the immediately preceding and current Contract digests in an append-only chain.",
+    "Post-verification amendments invalidate all required checks and force their rerun; malformed or stale chains fail closed with the dedicated recovery command.",
+    "Canonical commands, lifecycle documentation, capability evidence, and focused regression tests align with the executable behavior.",
+    "A current-main Work Item archive and green Outcome are produced before PR review."
+  ],
+  "guidelines": [
+    "Preserve immutable lifecycle evidence and fail closed for malformed or stale amendment chains.",
+    "Do not use manual evidence edits or a test-only bypass for lifecycle recovery.",
+    "Keep canonical command, documentation, generated capability evidence, and regression tests aligned."
+  ],
+  "intent": {
+    "problem": "PR #688 contains a green archived #667 Outcome but is dirty after main advanced with overlapping lifecycle and generated-evidence changes. Resolving that conflict after archive would alter the completed review unit.",
+    "constraints": ["Start from current origin/main.", "Do not alter #667 archived evidence.", "Use canonical generated-evidence commands rather than manual output edits.", "Do not change provider or release state beyond the successor PR lifecycle."],
+    "rationale": "A successor Work Item provides fresh, independently verifiable evidence for the same P1 correction on the current base while preserving the historical #667 Outcome."
+  },
+  "rawUserRequest": "Execute the full remediation plan to completion; authorization is automatic for each Work Item. When a workflow problem is found, first create a formal corrective Work Item; do not apply a temporary workaround. Resolve every Pull Request and Issue before release.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-05-remediation-continuation-and-automatic-work-item-authorization",
+    "capturedAt": "2026-08-05",
+    "digest": "sha256:34b9546c6a979e91ec516578af7b8ce852647914209035809f9cccf5d937eda5"
+  },
+  "declaredIntent": {
+    "summary": "Integrate the #667 Contract-amendment lifecycle recovery onto current main with independently verifiable evidence.",
+    "requestedCapabilities": ["ai_governance", "software_design", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "scenarioCoverage": [
+    {"scenario": "Current-main integration preserves original before_edit evidence", "required": true, "status": "verified", "expected": "The new implementation retains the original before_edit checkpoint and records only append-only amendment revalidations.", "verificationPlan": "Focused checkpoint and agent-risk tests plus full quality.", "evidence": ["137 focused checkpoint/agent-risk/Finish/Make tests passed"]},
+    {"scenario": "Post-verification amendment reruns all required checks", "required": true, "status": "verified", "expected": "A later amendment invalidates every required gate and Finish rejects incomplete reruns.", "verificationPlan": "Focused regression tests plus archived Finish outcome.", "evidence": ["tests/test_ai_checkpoint.py and tests/test_ai_check_agent_risk.py"]},
+    {"scenario": "Canonical evidence is regenerated on current main", "required": true, "status": "verified", "expected": "Commands and multilingual capability evidence match the current executable behavior.", "verificationPlan": "Canonical generators and full quality.", "evidence": ["ai_capability_truth --write; ai_japanese_capability --write; pre-release alignment --write"]}
+  ],
+  "verification": [
+    {
+      "check": "aiWorkItem",
+      "required": true
+    },
+    {
+      "check": "aiScope",
+      "required": true
+    },
+    {
+      "check": "aiGuards",
+      "required": true
+    },
+    {
+      "check": "aiCheckpoint",
+      "required": true
+    },
+    {
+      "check": "aiAgentRisk",
+      "required": true
+    },
+    {
+      "check": "aiReviewPolicy",
+      "required": true
+    },
+    {
+      "check": "aiBacktrack",
+      "required": true
+    },
+    {
+      "check": "aiCoverage",
+      "required": true
+    },
+    {
+      "check": "aiScenarioCoverage",
+      "required": true
+    },
+    {
+      "check": "aiGuidelines",
+      "required": true
+    },
+    {
+      "check": "aiSummary",
+      "required": true
+    },
+    {
+      "check": "aiStatus",
+      "required": true
+    },
+    {
+      "check": "aiStatusCheck",
+      "required": true
+    },
+    {
+      "check": "aiStatusConsistency",
+      "required": true
+    },
+    {
+      "check": "aiDiffOwnership",
+      "required": true
+    },
+    {
+      "check": "quality",
+      "required": true
+    }
+  ],
+  "destructiveChangePolicy": {
+    "allowed": false,
+    "requiresHumanApproval": true,
+    "allowPatterns": []
+  },
+  "restrictedWriteApproval": {
+    "approved": true,
+    "approvedBy": "RayIori",
+    "reason": "The user explicitly authorized automatic execution for every Work Item and requires governed corrections to lifecycle paths."
+  },
+  "rollbackNote": "Revert this Work Item diff and restore related tests and docs.",
+  "budgetImpact": {
+    "expectedMetrics": {
+      "archiveGrowth": 804
+    }
+  },
+  "startReceipt": {
+    "path": ".ai/work-items/starts/checkpoint-amendment-integration-689.json",
+    "baseCommit": "c75ff49139b9b05cc3f4d819823806a7786db6ad",
+    "initialScopeDigest": "544175ba77210d0da3817e1074fce6515a97c9634be3e1f83c5cb5b8f12ea0bb",
+    "contractSkeletonDigest": "29b08e1d15bed2e9ae531fe1550910c9197c199da0eb61f91ab5e4ca8962db5e"
+  }
+}

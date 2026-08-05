@@ -140,6 +140,131 @@ def test_agent_risk_rejects_before_edit_checkpoint_recorded_after_verification_s
     assert "before_edit checkpoint must be recorded before required verification" in issues
 
 
+def _amended_checkpoint_contract() -> dict:
+    return {
+        "verification": [{"check": "quality", "required": True}],
+        "acceptance": ["Concrete amended acceptance evidence."],
+        "unknowns": [],
+        "checkpointPolicy": {
+            "requiredBeforeFinish": True,
+            "requiredStages": ["before_edit"],
+        },
+    }
+
+
+def _original_before_edit() -> dict:
+    return {
+        "stage": "before_edit",
+        "recorded": True,
+        "contractHash": "original-contract-hash",
+        "acceptanceCount": 1,
+        "unknownCount": 0,
+        "requiredChecks": 1,
+        "requiredChecksPassed": 0,
+    }
+
+
+def _amendment_revalidation(*, verification_started: bool = False) -> dict:
+    record = {
+        "stage": "contract_amendment_revalidation",
+        "recorded": True,
+        "originalBeforeEditContractHash": "original-contract-hash",
+        "previousContractHash": "original-contract-hash",
+        "contractHash": "amended-contract-hash",
+        "acceptanceCount": 1,
+        "unknownCount": 0,
+        "requiredChecks": 1,
+        "requiredChecksPassed": 0,
+        "reason": "Expand scope for the required regression.",
+        "verificationStarted": verification_started,
+    }
+    if verification_started:
+        record.update(
+            {
+                "invalidatedRequiredChecks": ["quality"],
+                "requiredChecksPassedAtAmendment": 1,
+            }
+        )
+    return record
+
+
+def test_agent_risk_accepts_original_before_edit_with_valid_append_only_amendment():
+    """Break caught: a valid amended Contract is rejected by the original checkpoint hash."""
+    issues = ai_check_agent_risk.validate_checkpoint_bindings(
+        _amended_checkpoint_contract(),
+        {
+            "checkpointEvidence": [
+                _original_before_edit(),
+                _amendment_revalidation(),
+            ]
+        },
+        expected_contract_hash="amended-contract-hash",
+    )
+
+    assert issues == []
+
+
+def test_agent_risk_rejects_missing_or_verification_started_amendment_revalidation():
+    """Break caught: stale or post-verification Contract scope is accepted without stricter evidence."""
+    missing = ai_check_agent_risk.validate_checkpoint_bindings(
+        _amended_checkpoint_contract(),
+        {"checkpointEvidence": [_original_before_edit()]},
+        expected_contract_hash="amended-contract-hash",
+    )
+    malformed_started = _amendment_revalidation(verification_started=True)
+    malformed_started["invalidatedRequiredChecks"] = []
+    started = ai_check_agent_risk.validate_checkpoint_bindings(
+        _amended_checkpoint_contract(),
+        {
+            "checkpointEvidence": [
+                _original_before_edit(),
+                malformed_started,
+            ]
+        },
+        expected_contract_hash="amended-contract-hash",
+    )
+
+    assert "missing contract_amendment_revalidation for stale before_edit Contract" in missing
+    assert "contract_amendment_revalidation cannot follow required verification" in started
+
+
+def test_agent_risk_accepts_post_verification_amendment_only_when_all_gates_are_invalidated():
+    """Break caught: a stale passed gate survives a post-verification scope amendment."""
+    issues = ai_check_agent_risk.validate_checkpoint_bindings(
+        _amended_checkpoint_contract(),
+        {
+            "checkpointEvidence": [
+                _original_before_edit(),
+                _amendment_revalidation(verification_started=True),
+            ]
+        },
+        expected_contract_hash="amended-contract-hash",
+    )
+
+    assert issues == []
+
+
+def test_agent_risk_accepts_a_digest_chained_second_amendment():
+    """Break caught: a valid second amendment is compared directly with before_edit."""
+    first = _amendment_revalidation()
+    second = _amendment_revalidation()
+    second["previousContractHash"] = "amended-contract-hash"
+    second["contractHash"] = "second-amendment-hash"
+    issues = ai_check_agent_risk.validate_checkpoint_bindings(
+        _amended_checkpoint_contract(),
+        {
+            "checkpointEvidence": [
+                _original_before_edit(),
+                first,
+                second,
+            ]
+        },
+        expected_contract_hash="second-amendment-hash",
+    )
+
+    assert issues == []
+
+
 def _resumed_gate_contract(recorded_at: str) -> dict:
     gates = ["aiWorkItem", "aiScope", "aiAgentRisk", "aiSummary", "aiStatus", "aiStatusCheck"]
     return {
@@ -378,6 +503,7 @@ def test_checkpoint_binding_validation_rejects_stale_contract_before_finish():
     )
 
     assert issues == [
+        "missing contract_amendment_revalidation for stale before_edit Contract",
         "checkpointEvidence[before_edit] contractHash is stale",
         "checkpointEvidence[before_edit].requiredChecks is stale",
     ]
