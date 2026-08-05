@@ -102,8 +102,8 @@ does not permit new Work Items to start on the default branch.
 
 When an active dedicated Work Item is behind the live remote default branch but
 does not have a completed corrective predecessor, do not run Git rebase by
-hand. From its clean dedicated worktree, first fetch the target so the local
-tracking ref equals the live remote head, then run:
+hand. First fetch the target so the local tracking ref equals the live remote
+head, then run:
 
 ```text
 make ai-synchronize-work-item CONTRACT=<active-contract> \
@@ -111,9 +111,12 @@ make ai-synchronize-work-item CONTRACT=<active-contract> \
 ```
 
 The command has local-only authority: it verifies the immutable Start Receipt,
-active Contract/Summary pair, dedicated branch identity, clean state, tracking
-ref freshness, and ancestry; it then performs the local rebase and appends one
-digest-bound `synchronizationHistory` transition. It never pushes,
+active Contract/Summary pair, dedicated branch identity, tracking-ref freshness,
+and ancestry. A clean Work Item rebases directly. A dirty Work Item may proceed
+only with an explicit Contract `synchronizationCheckpoint` authorization and
+only when every dirty path is Contract-owned or a governed generated artifact;
+it first creates a recoverable local checkpoint and records its identity and
+paths in the digest-bound `synchronizationHistory` transition. It never pushes,
 force-pushes, opens a PR, changes provider state, rewrites the Start Receipt,
 or changes archive evidence. A conflict is automatically aborted before any
 active evidence write. A successful synchronization marks prior verification

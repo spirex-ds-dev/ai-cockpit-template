@@ -82,7 +82,7 @@ help:
 	@printf '%s\n' 'AI Cockpit template commands:'
 	@printf '%s\n' '  make ai-start TASK=<task> TITLE="..." MODE=code'
 	@printf '%s\n' '  make ai-resume-work-item CONTRACT=<contract.json> BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>'
-	@printf '%s\n' '  make ai-synchronize-work-item CONTRACT=<contract.json> BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>  # locally rebase an eligible active Work Item and invalidate prior verification'
+	@printf '%s\n' '  make ai-synchronize-work-item CONTRACT=<contract.json> BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>  # synchronize an eligible active Work Item; dirty state requires Contract synchronizationCheckpoint authorization'
 	@printf '%s\n' '  make check-ai-archive-recovery ARGS="--target origin/main"  # run before rebasing archived evidence'
 	@printf '%s\n' '  make ai-onboard [PHASE=1|2|3]'
 	@printf '%s\n' '  make ai-doctor'

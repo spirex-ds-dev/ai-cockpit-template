@@ -14,6 +14,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from ai_common import matches
 from ai_start_receipt import (
     PROJECT_ROOT,
     RESUME_SCHEMA_VERSION,
@@ -66,7 +67,7 @@ def _git(project_root: Path, *args: str) -> str:
     return result.stdout.strip()
 
 
-def _governed_git(project_root: Path, *args: str) -> str:
+def _governed_git(project_root: Path, *args: str, preserve_output: bool = False) -> str:
     """Run a synchronization-only Git query through the absolute executable boundary."""
     executable = governed_git_executable()
     result = subprocess.run(
@@ -79,7 +80,7 @@ def _governed_git(project_root: Path, *args: str) -> str:
     if result.returncode != 0:
         detail = result.stderr.strip() or result.stdout.strip() or "Git command failed"
         raise ResumeError(detail)
-    return result.stdout.strip()
+    return result.stdout if preserve_output else result.stdout.strip()
 
 
 def _atomic_write_json(path: Path, value: dict[str, Any]) -> None:
@@ -127,6 +128,80 @@ def _summary_after_synchronization(summary: dict[str, Any]) -> dict[str, Any]:
 
 def _clean_worktree(project_root: Path) -> bool:
     return not _git(project_root, "status", "--porcelain", "--untracked-files=all")
+
+
+def _dirty_paths(project_root: Path) -> list[str]:
+    """Return ordinary dirty paths, rejecting ambiguous porcelain records."""
+    output = _governed_git(
+        project_root,
+        "status",
+        "--porcelain",
+        "--untracked-files=all",
+        preserve_output=True,
+    )
+    paths: list[str] = []
+    for line in output.splitlines():
+        if len(line) < 4 or line[2] != " ":
+            raise ResumeError("synchronization cannot checkpoint an ambiguous Git status record")
+        path = line[3:]
+        if not path or " -> " in path:
+            raise ResumeError("synchronization cannot checkpoint renamed or ambiguous paths")
+        paths.append(path)
+    return sorted(set(paths))
+
+
+def _checkpoint_authorized_owned_paths(
+    contract: dict[str, Any], paths: list[str], work_item_id: str
+) -> None:
+    """Allow a checkpoint only for explicit Contract-owned active evidence."""
+    checkpoint = contract.get("synchronizationCheckpoint")
+    if not isinstance(checkpoint, dict) or checkpoint.get("authorized") is not True:
+        raise ResumeError("dirty synchronization requires an explicitly authorized checkpoint")
+    if not isinstance(checkpoint.get("reason"), str) or not checkpoint["reason"].strip():
+        raise ResumeError("dirty synchronization checkpoint reason is required")
+    scope = [item for item in contract.get("scope", []) if isinstance(item, str)]
+    scope.extend(
+        [
+            f".ai/work-items/starts/{work_item_id}.json",
+            f".ai/work-items/active/{work_item_id}.contract.json",
+            f".ai/work-items/active/{work_item_id}.summary.json",
+            f".ai/work-items/active/{work_item_id}.outcome.json",
+            f".ai/work-items/active/{work_item_id}.outcome.md",
+            ".ai/cockpit/current_status.md",
+            ".ai/cockpit/task_report.json",
+            ".ai/cockpit/task_report.md",
+            "target/ai_*.json",
+            "target/ai_*.jsonl",
+        ]
+    )
+    out_of_scope = [item for item in contract.get("outOfScope", []) if isinstance(item, str)]
+    for path in paths:
+        if any(matches(pattern, path) for pattern in out_of_scope):
+            raise ResumeError(f"dirty synchronization path is explicitly out of scope: {path}")
+        if not any(matches(pattern, path) for pattern in scope):
+            raise ResumeError(f"dirty synchronization path is not Contract-owned: {path}")
+
+
+def _commit_synchronization_checkpoint(
+    project_root: Path, contract: dict[str, Any], work_item_id: str
+) -> tuple[str | None, str | None, list[str]]:
+    """Commit only an explicitly authorized owned dirty Work Item checkpoint."""
+    if _clean_worktree(project_root):
+        return None, None, []
+    paths = _dirty_paths(project_root)
+    checkpoint = contract.get("synchronizationCheckpoint")
+    if not isinstance(checkpoint, dict) or checkpoint.get("authorized") is not True:
+        raise ResumeError("synchronization requires a clean dedicated Work Item worktree")
+    _checkpoint_authorized_owned_paths(contract, paths, work_item_id)
+    before = _governed_git(project_root, "rev-parse", "HEAD")
+    _governed_git(project_root, "add", "--all", "--", *paths)
+    _governed_git(
+        project_root,
+        "commit",
+        "-m",
+        f"chore(ai): synchronization checkpoint for {work_item_id}",
+    )
+    return before, _governed_git(project_root, "rev-parse", "HEAD"), paths
 
 
 def _rebase_onto(project_root: Path, target: str) -> None:
@@ -195,7 +270,7 @@ def synchronize_contract(
     timestamp: str | None = None,
     project_root: Path = PROJECT_ROOT,
 ) -> dict[str, Any]:
-    """Rebase one clean active Work Item and append its source-bound transition."""
+    """Synchronize one active Work Item and append its source-bound transition."""
     contract_path, summary_path, project_root = (
         contract_path.resolve(),
         summary_path.resolve(),
@@ -219,8 +294,6 @@ def synchronize_contract(
         raise ResumeError("current Work Item evidence is invalid: " + "; ".join(receipt_issues))
     if contract.get("synchronizationHistory") is not None:
         raise ResumeError("Work Item already has a synchronization transition")
-    if not _clean_worktree(project_root):
-        raise ResumeError("synchronization requires a clean dedicated Work Item worktree")
     work_branch = _governed_git(project_root, "branch", "--show-current")
     if not work_branch:
         raise ResumeError("synchronization requires a checked-out dedicated Work Item branch")
@@ -249,6 +322,9 @@ def synchronize_contract(
         raise ResumeError(
             "current Contract baseCommit is not an ancestor of synchronization target"
         ) from exc
+    checkpoint_head_before, checkpoint_head_after, checkpoint_paths = (
+        _commit_synchronization_checkpoint(project_root, contract, work_item_id)
+    )
     head_before = _governed_git(project_root, "rev-parse", "HEAD")
     try:
         _governed_git(project_root, "merge-base", "--is-ancestor", from_base, head_before)
@@ -269,6 +345,10 @@ def synchronize_contract(
         "rebaseHeadBefore": head_before,
         "rebaseHeadAfter": head_after,
     }
+    if checkpoint_head_before is not None and checkpoint_head_after is not None:
+        transition["checkpointHeadBefore"] = checkpoint_head_before
+        transition["checkpointHeadAfter"] = checkpoint_head_after
+        transition["checkpointPaths"] = checkpoint_paths
     candidate_contract = dict(contract)
     candidate_contract["baseCommit"], candidate_contract["synchronizationHistory"] = (
         target,

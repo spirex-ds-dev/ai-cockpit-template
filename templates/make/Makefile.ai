@@ -39,7 +39,7 @@ GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 ai-help:
 	@printf '%s\n' 'AI Cockpit commands:'
 	@printf '%s\n' '  make ai-start TASK=<task> TITLE="..." MODE=code'
-	@printf '%s\n' '  make ai-synchronize-work-item CONTRACT=<contract.json> BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>  # locally rebase an eligible active Work Item and invalidate prior verification'
+	@printf '%s\n' '  make ai-synchronize-work-item CONTRACT=<contract.json> BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>  # synchronize an eligible active Work Item; dirty state requires Contract synchronizationCheckpoint authorization'
 	@printf '%s\n' '  make ai-onboard [PHASE=1|2|3]'
 	@printf '%s\n' '  make ai-doctor'
 	@printf '%s\n' '  make cockpit-doctor'

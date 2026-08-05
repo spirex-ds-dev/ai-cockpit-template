@@ -107,12 +107,15 @@ make ai-synchronize-work-item \
   BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
 ```
 
-tracking ref が stale なら fail closed です。この command は clean な専用 branch、
-active Contract/Summary、immutable Start Receipt を検証し、digest-bound な
-`synchronizationHistory` transition を一つだけ記録します。push、force-push、PR、
-provider、archive、Start Receipt の変更権限はありません。conflict は active evidence
-を書かずに自動 abort し、成功時は以前の verification を無効化するため、Finish 前に
-Preflight と必要な全 check を再実行します。
+tracking ref が stale なら fail closed です。この command は専用 branch、active
+Contract/Summary、immutable Start Receipt を検証します。clean な worktree は直接
+rebase します。dirty な active Work Item は Contract の明示的な
+`synchronizationCheckpoint` authorization と、全 dirty path の Contract ownership が
+ある場合だけ、recorded local checkpoint を作ってから rebase できます。checkpoint
+identity、path、old/new base は digest-bound `synchronizationHistory` に記録され、
+既存 verification は無効化されます。push、force-push、PR、provider、archive、Start
+Receipt の変更権限はありません。conflict は自動 abort し、recoverable checkpoint は
+synchronization 成功を主張しません。Finish 前に Preflight と必要な全 check を再実行します。
 
 1. `make ai-start TASK=<task> TITLE="..." MODE=code` で Work Item を作成する。
 2. Contract の `scope`、`sources`、`acceptance`、`verification`、リスク評価、エージェント能力、実行判断を明確にする。

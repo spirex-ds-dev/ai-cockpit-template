@@ -664,6 +664,92 @@ def test_synchronize_contract_rebases_clean_active_branch_and_records_one_transi
     assert (root / ".ai/work-items/starts/paused-task.json").read_bytes() == original_receipt
 
 
+def test_synchronize_contract_checkpoints_contract_authorized_owned_dirty_worktree(tmp_path):
+    root, contract_path, summary_path, start, target = _synchronization_fixture(tmp_path)
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    contract["synchronizationCheckpoint"] = {
+        "authorized": True,
+        "reason": "Record the governed active Work Item synchronization checkpoint.",
+    }
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    source = root / "src" / "implementation.py"
+    source.parent.mkdir()
+    source.write_text("VALUE = 'active work item change'\n", encoding="utf-8")
+
+    transition = synchronize_contract(
+        contract_path,
+        summary_path=summary_path,
+        base_remote="origin",
+        base_branch="main",
+        timestamp="2026-08-06T01:00:00+00:00",
+        project_root=root,
+    )
+
+    synchronized = json.loads(contract_path.read_text(encoding="utf-8"))
+    assert transition["fromBaseCommit"] == start
+    assert transition["toBaseCommit"] == target
+    assert transition["checkpointHeadBefore"] != transition["checkpointHeadAfter"]
+    assert _git(root, "merge-base", "--is-ancestor", target, "HEAD") == ""
+    assert _git(root, "show", "HEAD:src/implementation.py") == "VALUE = 'active work item change'"
+    assert synchronized["synchronizationHistory"] == [transition]
+
+
+def test_synchronize_contract_checkpoints_modified_owned_path(tmp_path):
+    root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
+    _write_commit(root, "src/implementation.py", "VALUE = 'initial'\n")
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    contract["synchronizationCheckpoint"] = {
+        "authorized": True,
+        "reason": "Record the governed active Work Item synchronization checkpoint.",
+    }
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    (root / "src" / "implementation.py").write_text(
+        "VALUE = 'active work item change'\n", encoding="utf-8"
+    )
+
+    transition = synchronize_contract(
+        contract_path,
+        summary_path=summary_path,
+        base_remote="origin",
+        base_branch="main",
+        project_root=root,
+    )
+
+    assert transition["checkpointPaths"] == [
+        ".ai/work-items/active/paused-task.contract.json",
+        "src/implementation.py",
+    ]
+    assert _git(root, "show", "HEAD:src/implementation.py") == "VALUE = 'active work item change'"
+
+
+def test_synchronization_history_rejects_malformed_checkpoint_evidence(tmp_path):
+    root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    contract["synchronizationCheckpoint"] = {
+        "authorized": True,
+        "reason": "Record the governed active Work Item synchronization checkpoint.",
+    }
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    source = root / "src" / "implementation.py"
+    source.parent.mkdir()
+    source.write_text("VALUE = 'active work item change'\n", encoding="utf-8")
+    synchronize_contract(
+        contract_path,
+        summary_path=summary_path,
+        base_remote="origin",
+        base_branch="main",
+        project_root=root,
+    )
+    synchronized = json.loads(contract_path.read_text(encoding="utf-8"))
+    synchronized["synchronizationHistory"][0]["checkpointPaths"] = []
+
+    issues = ai_start_receipt.validate_synchronization_history_structure(
+        synchronized, synchronized["startReceipt"]["baseCommit"]
+    )
+
+    assert "synchronizationHistory[0].checkpointPaths must be a non-empty list" in issues
+
+
 def test_synchronize_contract_aborts_conflict_without_evidence_write(tmp_path):
     root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
     _write_commit(root, "seed.txt", "work item edit\n")
@@ -690,6 +776,52 @@ def test_synchronize_contract_aborts_conflict_without_evidence_write(tmp_path):
     assert _git(root, "status", "--porcelain") == ""
 
 
+def test_synchronize_contract_keeps_authorized_checkpoint_after_rebase_conflict(tmp_path):
+    root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    contract["synchronizationCheckpoint"] = {
+        "authorized": True,
+        "reason": "Record the governed active Work Item synchronization checkpoint.",
+    }
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    source = root / "src" / "implementation.py"
+    source.parent.mkdir()
+    source.write_text("VALUE = 'active work item change'\n", encoding="utf-8")
+    writer = tmp_path / "provider-writer"
+    _git(
+        tmp_path,
+        "clone",
+        "--branch",
+        "main",
+        _git(root, "remote", "get-url", "origin"),
+        str(writer),
+    )
+    _git(writer, "config", "user.name", "Provider")
+    _git(writer, "config", "user.email", "provider@example.com")
+    _write_commit(writer, "src/implementation.py", "VALUE = 'corrective change'\n")
+    _git(writer, "push", "origin", "main")
+    _git(root, "fetch", "origin", "main")
+    before_summary = summary_path.read_bytes()
+    before_head = _git(root, "rev-parse", "HEAD")
+
+    with pytest.raises(ResumeError, match="rebase conflicted and was aborted"):
+        synchronize_contract(
+            contract_path,
+            summary_path=summary_path,
+            base_remote="origin",
+            base_branch="main",
+            project_root=root,
+        )
+
+    checkpoint_head = _git(root, "rev-parse", "HEAD")
+    retained = json.loads(contract_path.read_text(encoding="utf-8"))
+    assert checkpoint_head != before_head
+    assert retained["synchronizationCheckpoint"]["authorized"] is True
+    assert "synchronizationHistory" not in retained
+    assert summary_path.read_bytes() == before_summary
+    assert _git(root, "status", "--porcelain") == ""
+
+
 def test_synchronize_contract_rejects_dirty_worktree_before_rebase_or_write(tmp_path):
     root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
     (root / "unrelated.txt").write_text("dirty\n", encoding="utf-8")
@@ -708,6 +840,29 @@ def test_synchronize_contract_rejects_dirty_worktree_before_rebase_or_write(tmp_
 
     assert contract_path.read_bytes() == before_contract
     assert summary_path.read_bytes() == before_summary
+    assert _git(root, "rev-parse", "HEAD") == before_head
+
+
+def test_synchronize_contract_rejects_checkpoint_with_unowned_dirty_path(tmp_path):
+    root, contract_path, summary_path, _start, _target = _synchronization_fixture(tmp_path)
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    contract["synchronizationCheckpoint"] = {
+        "authorized": True,
+        "reason": "Record the governed active Work Item synchronization checkpoint.",
+    }
+    contract_path.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+    (root / "unowned.txt").write_text("not governed\n", encoding="utf-8")
+    before_head = _git(root, "rev-parse", "HEAD")
+
+    with pytest.raises(ResumeError, match="not Contract-owned: unowned.txt"):
+        synchronize_contract(
+            contract_path,
+            summary_path=summary_path,
+            base_remote="origin",
+            base_branch="main",
+            project_root=root,
+        )
+
     assert _git(root, "rev-parse", "HEAD") == before_head
 
 

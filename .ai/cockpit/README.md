@@ -158,13 +158,17 @@ make ai-synchronize-work-item \
   BASE_REMOTE=<remote> BASE_BRANCH=<default-branch>
 ```
 
-Fetch first: the command rejects a stale tracking ref. It verifies the clean
-dedicated branch, active Contract/Summary and immutable Start Receipt, then
-records one digest-bound `synchronizationHistory` transition. It has no push,
-force-push, PR, provider, archive, or Start Receipt rewrite authority. A
-conflict aborts automatically without writing active evidence; success
-invalidates prior verification, so rerun Preflight and all required checks
-before Finish.
+Fetch first: the command rejects a stale tracking ref. It verifies the
+dedicated branch, active Contract/Summary and immutable Start Receipt. A clean
+worktree is synchronized directly. A dirty worktree is eligible only when its
+Contract contains an explicit `synchronizationCheckpoint` authorization and
+every dirty path is owned by that Contract or a governed generated artifact;
+the command creates the recorded local checkpoint before rebasing. It records
+one digest-bound `synchronizationHistory` transition and invalidates prior
+verification. It has no push, force-push, PR, provider, archive, or Start
+Receipt rewrite authority. A conflict aborts automatically; the explicit local
+checkpoint remains recoverable and does not claim that synchronization passed.
+Rerun Preflight and all required checks before Finish.
 
 For an existing version-1 Receipt that truthfully records the default branch,
 the resume command has a compatibility-only path: the current branch must be

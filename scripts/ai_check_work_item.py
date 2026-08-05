@@ -64,6 +64,7 @@ ALLOWED_FIELDS = set(REQUIRED_FIELDS) | {
     "predecessorWorkItem",
     "resumeHistory",
     "synchronizationHistory",
+    "synchronizationCheckpoint",
     "budgetImpact",
     "governanceProfile",
     "operationClasses",
@@ -309,6 +310,16 @@ def validate_optional_readiness(data: dict[str, Any]) -> list[str]:
                 issues.append("checkpointPolicy.requiredStages must be a list of non-empty strings")
             if "reason" in checkpoint and not non_empty_string(checkpoint.get("reason")):
                 issues.append("checkpointPolicy.reason must be a non-empty string")
+
+    synchronization_checkpoint = data.get("synchronizationCheckpoint")
+    if synchronization_checkpoint is not None:
+        if not isinstance(synchronization_checkpoint, dict):
+            issues.append("synchronizationCheckpoint must be an object")
+        else:
+            if synchronization_checkpoint.get("authorized") is not True:
+                issues.append("synchronizationCheckpoint.authorized must be true")
+            if not non_empty_string(synchronization_checkpoint.get("reason")):
+                issues.append("synchronizationCheckpoint.reason is required")
 
     issues.extend(validate_scenario_coverage(data.get("scenarioCoverage")))
 

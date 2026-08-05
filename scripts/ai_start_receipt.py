@@ -297,6 +297,22 @@ def validate_synchronization_history_structure(
         for field in ("priorContractDigest", "priorSummaryDigest"):
             if not _is_digest(transition.get(field)):
                 issues.append(f"{location}.{field} must be a SHA-256 digest")
+        checkpoint_fields = (
+            "checkpointHeadBefore",
+            "checkpointHeadAfter",
+            "checkpointPaths",
+        )
+        if any(field in transition for field in checkpoint_fields):
+            for field in ("checkpointHeadBefore", "checkpointHeadAfter"):
+                if not isinstance(transition.get(field), str) or not transition[field].strip():
+                    issues.append(f"{location}.{field} must be a non-empty string")
+            checkpoint_paths = transition.get("checkpointPaths")
+            if (
+                not isinstance(checkpoint_paths, list)
+                or not checkpoint_paths
+                or any(not isinstance(path, str) or not path for path in checkpoint_paths)
+            ):
+                issues.append(f"{location}.checkpointPaths must be a non-empty list")
         expected_from = str(transition.get("toBaseCommit", ""))
     if (
         history
