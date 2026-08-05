@@ -14,6 +14,12 @@ Machine truth is `.ai/work-items/active/<task>.outcome.json`. Its Markdown view 
 
 The report contains these sections: Outcome Summary, Task Overview, Delivered Changes, Findings, Risks, Warnings, Interventions, Forced Stops, Resolutions, Recurrence Prevention, Avoided Impact, Residual Risks, Human Decisions, and Evidence. Empty sections say `None`. Findings are evidence-backed and categorized; risks distinguish observed problems, potential risks, and prevented events. A Resolution links Problem → Action → Verification → Result.
 
+## Warning color semantics
+
+`knownGaps` means an intentionally unaddressed requirement. Each genuine known gap becomes a Warning with a limitation binding and makes an otherwise completed Outcome `completed_with_warnings` (yellow). It must not be used as free-form completion commentary.
+
+For an evidence-backed fact that is not an unresolved requirement—for example, that hosted verification is not required by the active Contract—use the optional Summary `nonRiskExplanations` field. Finish carries that structured explanation into the Non-Risk Explanations section without adding a Warning, limitation, or yellow status. The field requires a statement, reason, and source/subject evidence reference; malformed entries fail Summary validation. Failed verification, blocked states, residual risks, and genuine gaps retain their existing warning or red behavior.
+
 ## Safety and privacy
 
 Task Outcome does not manufacture scores, productivity, time, money, percentages, or trust claims. Avoided Impact is conditional and requires Finding/Risk/Intervention/Stop/Resolution/Test evidence. Residual and accepted risks remain visible. Secrets, credentials, private keys, and unnecessary evidence details do not belong in the PR presentation.
