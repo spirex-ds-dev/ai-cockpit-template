@@ -95,6 +95,7 @@ GITIGNORE_SECTION = """# AI Cockpit local state
 .ai/project_profile.proposed.yaml
 target/ai_*.json
 target/ai_*.jsonl
+target/changed-critical-coverage.json
 target/quality/governance-profile.json
 """
 GITIGNORE_RULES = tuple(
@@ -822,7 +823,11 @@ class Installer:
                 )
             ),
             "baselineDirtyPaths": [],
-            "adoptionBootstrapPaths": ["scripts/ai_*.py"],
+            "adoptionBootstrapPaths": [
+                "scripts/ai_*.py",
+                "scripts/check_changed_critical_coverage.py",
+                "scripts/check_critical_coverage.py",
+            ],
             "scope": [
                 ".ai/**",
                 ".ai/work-items/starts/**",
@@ -830,6 +835,8 @@ class Installer:
                 "scripts/ai_*.py",
                 "scripts/determine_governance_profile.py",
                 "scripts/ai_installer_catalog.json",
+                "scripts/check_changed_critical_coverage.py",
+                "scripts/check_critical_coverage.py",
                 "scripts/bootstrap_*.py",
                 "Makefile.ai",
                 "Makefile.ai.stack",

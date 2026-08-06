@@ -196,12 +196,46 @@ Only after the PR is merged and the Work Item is archived may `make ai-close-wor
 After `make ai-finish TASK=<task>` archives the Work Item, commit the complete
 Work Item bundle, then run `make check-ai-pr AI_BASE_COMMIT=<latest-default-branch-sha>`.
 Do not run the aggregate PR check against an uncommitted archive or generated
-release evidence. Independent review must finish while evidence is active;
-post-archive fixes require a fresh Work Item and replacement PR. The order is:
+release evidence. Independent review must finish while evidence is active. The order is:
 
 ```text
 independent review → ai-finish/archive → commit bundle → check-ai-pr → push → PR
 ```
+
+Before either Finish archive path mutates active evidence, it runs
+`make check-changed-critical-coverage AI_BASE_COMMIT=<Contract baseCommit>`.
+The resulting report binds the immutable Contract base plus the candidate HEAD
+and worktree state observed by the coverage run. A missing or failing result
+produces a blocked active Outcome and denies archive. This guard complements,
+rather than replaces, the clean committed `check-ai-pr` gate.
+
+The installer-created `adopt_ai_cockpit` Contract is the only bounded
+not-applicable case: its explicit `adoptionBootstrapPaths` identify template
+runtime files whose mapped template tests are intentionally not copied into an
+adopter. The command records the Contract-bound applicability result and still
+fails closed for malformed adoption metadata, ordinary Work Items, and missing
+ordinary mappings. Its generated report remains local state and must not alter
+the archive worktree digest.
+
+If `check-ai-pr` discovers a changed-critical-coverage or archive-evidence
+failure only after archive, do not rewrite its Contract, Summary, Outcome, or
+manifest and do not create a duplicate Work Item solely for that repair. Start
+the narrow same-Work-Item route from the clean committed candidate:
+
+```sh
+make ai-open-post-archive-recovery \
+  TASK=<task> AI_BASE_COMMIT=<merge-base-sha> \
+  ISSUE=<repository-issue-url> AUTHORITY='<recorded human authority>' \
+  RECOVERY_PATHS='scripts/example.py tests/test_example.py'
+```
+
+The command first reproduces the failing aggregate PR audit, then writes one
+append-only receipt binding the archive digests, PR base, failure output,
+authority, Issue, and finite repair paths. `check-ai-pr` independently
+revalidates it and grants ownership only to those paths. The receipt never
+authorizes archive rewrite, merge, release, branch deletion, closure, or new
+scope. Use a successor only when the Contract/base/scope itself is invalid or
+a new delivery is required.
 
 Before the `before_finish` checkpoint, complete the current v2 Summary's
 `documentationAlignment` record. It must cover the plan,

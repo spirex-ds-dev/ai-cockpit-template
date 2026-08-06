@@ -45,7 +45,7 @@ check-docs-metadata check-capability-claims check-trust-layer-docs check-real-ab
 	check-deprecated-assets \
 	check-instruction-traceability \
 	check-trust-schemas check-trust-guards check-critical-domain-guards check-decision-protocol check-baseline-evidence \
-	ai-start ai-resume-work-item ai-synchronize-work-item ai-finish ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
+	ai-start ai-resume-work-item ai-synchronize-work-item ai-finish ai-open-post-archive-recovery ai-onboard check-ai check-ai-contract check-ai-work-item check-ai-scope check-ai-guards \
 	ai-verify-focused ai-verify-full \
 	ai-doctor check-ai-adoption-ready \
 	check-ai-agent-risk ai-checkpoint check-ai-backtrack check-ai-coverage-guard check-ai-reference-impact check-ai-test-weakening check-ai-test-weakening-fast check-ai-guidelines check-ai-review-policy template-adoption-ready \
@@ -221,7 +221,7 @@ check-source-bound-evidence:
 	$(AI_PYTHON) scripts/check_pre_release_documentation_alignment.py
 
 check-changed-critical-coverage:
-	$(AI_PYTHON) scripts/check_changed_critical_coverage.py --base "$(AI_BASE_COMMIT)"
+	$(AI_PYTHON) scripts/check_changed_critical_coverage.py --base "$(AI_BASE_COMMIT)" $(if $(CONTRACT),--contract "$(CONTRACT)")
 
 check-release-preflight:
 	$(AI_NESTED_MAKE) check-source-bound-evidence
@@ -664,6 +664,10 @@ check-ai-lifecycle-truth:
 ai-transition-to-successor:
 	@test -n "$(PREDECESSOR_TASK)" -a -n "$(SUCCESSOR_TASK)" -a -n "$(SUCCESSOR_BRANCH)" -a -n "$(SUCCESSOR_BASE)" -a -n "$(ISSUE)" -a -n "$(AUTHORITY)" -a -n "$(MODE)" -a -n "$(REASON)" || (echo 'PREDECESSOR_TASK, SUCCESSOR_TASK, SUCCESSOR_BRANCH, SUCCESSOR_BASE, ISSUE, AUTHORITY, MODE, and REASON are required' >&2; exit 2)
 	$(AI_PYTHON) scripts/ai_lifecycle_truth.py --transition-to-successor --root "$(or $(TARGET_ROOT),.)" --predecessor-task "$(PREDECESSOR_TASK)" --successor-task "$(SUCCESSOR_TASK)" --successor-branch "$(SUCCESSOR_BRANCH)" --successor-base "$(SUCCESSOR_BASE)" --issue "$(ISSUE)" --authority "$(AUTHORITY)" --mode "$(MODE)" --reason "$(REASON)"
+
+ai-open-post-archive-recovery:
+	@test -n "$(TASK)" -a -n "$(AI_BASE_COMMIT)" -a -n "$(ISSUE)" -a -n "$(AUTHORITY)" -a -n "$(RECOVERY_PATHS)" || (echo 'TASK, AI_BASE_COMMIT, ISSUE, AUTHORITY, and RECOVERY_PATHS are required' >&2; exit 2)
+	$(AI_PYTHON) scripts/ai_post_archive_recovery.py --task "$(TASK)" --base "$(AI_BASE_COMMIT)" --issue "$(ISSUE)" --authority "$(AUTHORITY)" $(foreach path,$(RECOVERY_PATHS),--recovery-path "$(path)")
 
 ai-prepare-hosted-verification-snapshot:
 	@test -n "$(CONTRACT)" || (echo 'CONTRACT=<active-contract.json> is required' >&2; exit 2)

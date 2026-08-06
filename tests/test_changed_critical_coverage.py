@@ -50,6 +50,47 @@ def test_changed_critical_selection_rejects_floor_drift():
         )
 
 
+def test_adoption_bootstrap_exemption_is_contract_bound_and_narrow(tmp_path):
+    contract_path = tmp_path / "adoption.contract.json"
+    contract_path.write_text(
+        json.dumps(
+            {
+                "workItemId": "adopt_ai_cockpit",
+                "adoptionBootstrapPaths": [
+                    "scripts/ai_*.py",
+                    "scripts/check_changed_critical_coverage.py",
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert check_changed_critical_coverage.adoption_bootstrap_paths(
+        [
+            "scripts/ai_finish.py",
+            "scripts/check_changed_critical_coverage.py",
+            "scripts/check_critical_coverage.py",
+        ],
+        contract_path,
+    ) == [
+        "scripts/ai_finish.py",
+        "scripts/check_changed_critical_coverage.py",
+    ]
+
+    contract_path.write_text(
+        json.dumps(
+            {"workItemId": "ordinary-work-item", "adoptionBootstrapPaths": ["scripts/ai_*.py"]}
+        ),
+        encoding="utf-8",
+    )
+    assert (
+        check_changed_critical_coverage.adoption_bootstrap_paths(
+            ["scripts/ai_finish.py"], contract_path
+        )
+        == []
+    )
+
+
 def test_focused_coverage_reports_only_selected_critical_failures():
     report = {
         "files": {
@@ -141,3 +182,7 @@ def test_predictor_runs_declared_tests_and_checks_generated_report(tmp_path, mon
         "tests/test_core_gates.py",
     ]
     assert f"--cov-report=json:{report_path}" in commands[0]
+    binding = json.loads(report_path.read_text(encoding="utf-8"))["binding"]
+    assert binding["baseCommit"] == "a" * 40
+    assert binding["candidateHead"]
+    assert binding["candidateStateDigest"]

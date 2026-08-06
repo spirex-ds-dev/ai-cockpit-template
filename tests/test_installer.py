@@ -222,9 +222,13 @@ def test_installed_distribution_contains_adoption_files(tmp_path):
     assert "ai-doctor:" in makefile_ai
     assert "check-ai-adoption-ready:" in makefile_ai
     assert "scripts/ai_check_pr.py" in makefile_ai
+    assert "ai-open-post-archive-recovery:" in makefile_ai
     assert "ai-close-work-item:" in makefile_ai
     assert (tmp_path / "scripts" / "ai_close_work_item.py").is_file()
     assert (tmp_path / "scripts" / "ai_generate_human_report.py").is_file()
+    assert (tmp_path / "scripts" / "ai_post_archive_recovery.py").is_file()
+    assert (tmp_path / "scripts" / "check_changed_critical_coverage.py").is_file()
+    assert (tmp_path / "scripts" / "check_critical_coverage.py").is_file()
     assert "generate-human-benefit-report:" in makefile_ai
     assert "check-human-benefit-report:" in makefile_ai
     assert "scripts/ai_check_guards.py $(if $(CONTRACT),--contract $(CONTRACT))" in makefile_ai
@@ -399,6 +403,32 @@ def test_create_adoption_ignores_ambient_git_dir_and_work_tree(tmp_path, monkeyp
     assert contract["baseCommit"] != ambient_base
     assert summary["documentationAlignment"]["status"] == "aligned"
     assert len(summary["documentationAlignment"]["checks"]) == 5
+
+
+def test_create_adoption_owns_installed_critical_coverage_runtime(tmp_path):
+    init_git_repo(tmp_path, "README.md", "# Project\n", "initial")
+    installer = Installer(
+        source=ROOT,
+        target=tmp_path,
+        stack="generic",
+        force=False,
+        dry_run=False,
+        with_examples=False,
+        update_makefile=True,
+        create_adoption=True,
+    )
+
+    assert installer.install() == 0
+    contract = json.loads(
+        (tmp_path / ".ai/work-items/active/adopt_ai_cockpit.contract.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert "scripts/check_changed_critical_coverage.py" in contract["scope"]
+    assert "scripts/check_critical_coverage.py" in contract["scope"]
+    assert "target/changed-critical-coverage.json" in (tmp_path / ".gitignore").read_text(
+        encoding="utf-8"
+    )
 
 
 def test_fresh_install_rejects_all_conflicting_managed_files_before_writing(tmp_path, capsys):

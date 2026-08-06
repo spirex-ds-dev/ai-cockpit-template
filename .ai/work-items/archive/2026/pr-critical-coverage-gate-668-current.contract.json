@@ -1,0 +1,125 @@
+{
+  "contractVersion": 2,
+  "workItemId": "pr-critical-coverage-gate-668-current",
+  "mode": "code",
+  "title": "Prevent post-archive PR coverage failures and recover within the same Work Item",
+  "rawUserRequest": "Execute existing Issue #668 from clean current origin/main. Require changed-critical coverage before archive, and add a governed same-Work-Item recovery path for a post-archive PR-audit coverage or evidence failure that preserves immutable archive/Outcome history and avoids a duplicate successor. Incorporate #711 evidence but do not modify its archive or use manual rewrite. The user authorizes automatic execution and requires that authority to be recorded in every Work Item Contract.",
+  "rawRequestSource": {
+    "type": "human",
+    "reference": "conversation:2026-08-06-existing-issue-668-current-successor",
+    "capturedAt": "2026-08-06",
+    "digest": "sha256:user-authorized-issue-668-current-same-work-item-recovery"
+  },
+  "declaredIntent": {
+    "summary": "Make changed-critical coverage an archive precondition and retain one immutable Work Item identity when a post-archive PR audit needs a narrowly governed repair.",
+    "requestedCapabilities": ["ai_governance", "test_automation", "documentation"]
+  },
+  "requestedOperation": {
+    "target": "repository_governance",
+    "action": "modify",
+    "environment": "repository",
+    "effect": "enforce",
+    "authorityRequired": false
+  },
+  "baseCommit": "809e403f35d53cf745c09a09fc0406cc10842a71",
+  "baselineDirtyPaths": [],
+  "scope": [
+    ".ai/work-items/active/pr-critical-coverage-gate-668-current.contract.json",
+    ".ai/work-items/active/pr-critical-coverage-gate-668-current.summary.json",
+    ".ai/work-items/active/pr-critical-coverage-gate-668-current.outcome.json",
+    ".ai/work-items/active/pr-critical-coverage-gate-668-current.outcome.md",
+    ".ai/work-items/starts/**",
+    ".ai/work-items/archive/**",
+    ".ai/work-items/recovery-receipts/**",
+    ".ai/cockpit/current_status.md",
+    ".ai/cockpit/task_report.json",
+    ".ai/cockpit/task_report.md",
+    ".gitignore",
+    "Makefile",
+    "templates/make/Makefile.ai",
+    "scripts/ai_finish.py",
+    "scripts/ai_check_pr.py",
+    "scripts/ai_post_archive_recovery.py",
+    "scripts/check_changed_critical_coverage.py",
+    "scripts/ai_installer_catalog.json",
+    "scripts/installer/legacy.py",
+    "docs/reference/ai-cockpit-work-item-lifecycle.md",
+    "docs/reference/work-item-lifecycle-closure.md",
+    "docs/reference/capability-truth-matrix.json",
+    "docs/reference/capability-truth-matrix.md",
+    "docs/reference/pre-release-documentation-alignment.json",
+    "docs/reference/pre-release-documentation-alignment.md",
+    "docs/reference/japanese-capability-assessment.json",
+    "docs/reference/japanese-capability-assessment.md",
+    "tests/test_task_outcome_ai_finish_integration.py",
+    "tests/test_changed_critical_coverage.py",
+    "tests/test_pr_aggregate.py",
+    "tests/test_makefile.py",
+    "tests/test_installer.py",
+    "tests/test_ai_post_archive_recovery.py"
+  ],
+  "outOfScope": [
+    "Mutating the old blocked #668 Work Item, #711 archive, or any other immutable archive/Outcome evidence.",
+    "Publishing a release, merging a PR, changing GitHub provider state, or deleting branches outside this Work Item lifecycle.",
+    "Weakening coverage thresholds, bypassing PR audit, or treating a receipt as merge/release/closure authority."
+  ],
+  "sources": [
+    {"path": "https://github.com/spirex-ds-dev/ai-cockpit-template/issues/668", "reason": "User-authorized corrective Issue and its #711 acceptance case."},
+    {"path": "scripts/ai_finish.py", "reason": "Canonical Finish/archive ordering and Outcome generation."},
+    {"path": "scripts/ai_check_pr.py", "reason": "Canonical clean-commit aggregate PR audit and archive ownership boundary."},
+    {"path": "scripts/check_changed_critical_coverage.py", "reason": "Existing base-bound coverage checker to make pre-archive and receipt-bound."},
+    {"path": "docs/reference/ai-cockpit-work-item-lifecycle.md", "reason": "Current lifecycle instruction that incorrectly forces a fresh Work Item after archive."},
+    {"path": "docs/reference/work-item-lifecycle-closure.md", "reason": "Existing immutable archive and append-only recovery-receipt rules."},
+    {"path": ".ai/glossary.md", "reason": "Repository terminology and architecture boundaries."}
+  ],
+  "unknowns": [],
+  "notCodable": false,
+  "riskAssessment": {
+    "level": "high",
+    "riskTypes": ["archive_integrity", "coverage_enforcement", "ownership_bypass", "installer_parity"],
+    "reason": "The change alters the archive/PR boundary. A malformed recovery route could rewrite evidence, hide failed coverage, or create an unowned PR diff.",
+    "unknownsReviewComplete": true
+  },
+  "governanceProfile": {"selected": "strict", "source": "automatic", "reasons": ["Archive integrity and PR gating require strict verification."], "override": null},
+  "agentCapability": {"canImplement": true, "canVerify": true, "needsHumanDecision": false, "blockedReason": ""},
+  "executionDecision": {"status": "continue", "reason": "The Issue, authority, old-work-item quarantine receipt, scope, acceptance, and verification plan are explicit."},
+  "preReviewWarnings": [
+    "The recovery receipt must be append-only and must never alter archived Contract, Summary, Outcome, or manifest bytes.",
+    "A pre-archive coverage pass must bind the Contract base and candidate state; it complements rather than replaces the clean committed PR audit.",
+    "The installed Makefile and runtime catalog must expose the same fail-closed command as the template source."
+  ],
+  "checkpointPolicy": {"requiredBeforeFinish": true, "requiredStages": ["before_edit", "before_finish"], "reason": "Archive-bound changes require a verified implementation boundary before edits and finish."},
+  "acceptance": [
+    "Every archive path runs changed-critical coverage before archive mutation using the immutable Contract base; a missing or failing result produces a valid active blocked Outcome and leaves active evidence unarchived.",
+    "The changed-critical coverage report binds both Contract base and candidate Git/worktree identity, so stale or foreign results cannot authorize archive.",
+    "A post-archive PR-audit coverage or evidence failure can open an append-only, digest-bound same-Work-Item recovery receipt; it preserves archived Contract, Summary, Outcome, and manifest bytes while owning only declared recovery paths.",
+    "The PR audit rejects forged, stale, incomplete, out-of-scope, or unauthorized recovery receipts and retains the one-Work-Item ownership boundary.",
+    "The installed template distributes every required target/runtime dependency and documents the same recovery boundary.",
+    "Focused red/green regressions, installed-adopter parity, full quality, strict Finish, clean committed PR audit, hosted checks, merge, and governed closure pass."
+  ],
+  "scenarioCoverage": [
+    {"scenario": "Archive is requested without a passing base-bound candidate critical-coverage result.", "expected": "Finish writes a red active Outcome, does not archive, and identifies the failed coverage gate.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add an ai_finish integration test that forces changed-critical coverage failure and asserts archive is not invoked."},
+    {"scenario": "A changed critical runtime file has coverage below its required floor before archive.", "expected": "The pre-archive gate rejects the candidate before immutable archive mutation.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Use a realistic focused coverage fixture and assert the archive command never runs."},
+    {"scenario": "Post-archive check-ai-pr finds coverage or archive-bound evidence failure after a green Finish.", "expected": "A same-Work-Item append-only receipt preserves the archived bytes, scopes repair paths, and permits a repaired PR audit without successor identity.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Add receipt validation and aggregate PR ownership mutation tests with byte comparisons of archived evidence."},
+    {"scenario": "An installed strict adopter invokes the same archive boundary.", "expected": "Its Makefile and copied runtime provide the pre-archive gate and fail closed rather than omitting it.", "required": true, "status": "unverified", "evidence": [], "verificationPlan": "Extend installer and Makefile parity tests."}
+  ],
+  "guidelines": [
+    "Preserve immutable archive evidence byte-for-byte; record recovery only in append-only, digest-bound artifacts.",
+    "Use executable negative and positive tests for each archive/PR ordering rule; do not rely on documentation alone.",
+    "Keep source-template and installed-adopter command surfaces in parity.",
+    "Do not treat a recovery receipt as authorization to merge, publish, delete branches, or close a Work Item."
+  ],
+  "intent": {
+    "problem": "#711 demonstrated that a green Finish/archive can still fail the later clean-commit critical coverage gate. The former process then required a duplicate successor for a small repair, while rewriting archive evidence is prohibited.",
+    "constraints": ["Run the critical coverage guard before archive.", "Bind evidence to Contract base and candidate identity.", "Keep archived Outcome/history immutable.", "Use one same-Work-Item recovery receipt only for post-archive PR-audit coverage/evidence repair.", "Do not weaken gates or create a new GitHub Issue."],
+    "rationale": "A pre-archive guard prevents most irreversible lifecycle inconsistencies; a narrow append-only receipt handles the remaining post-archive discovery without false Work Item proliferation."
+  },
+  "verification": [
+    {"check": "aiWorkItem", "required": true}, {"check": "aiScope", "required": true}, {"check": "aiGuards", "required": true}, {"check": "aiCheckpoint", "required": true}, {"check": "aiAgentRisk", "required": true}, {"check": "aiReviewPolicy", "required": true}, {"check": "aiBacktrack", "required": true}, {"check": "aiCoverage", "required": true}, {"check": "aiScenarioCoverage", "required": true}, {"check": "aiGuidelines", "required": true}, {"check": "aiSummary", "required": true}, {"check": "aiStatus", "required": true}, {"check": "aiStatusCheck", "required": true}, {"check": "aiStatusConsistency", "required": true}, {"check": "aiDiffOwnership", "required": true}, {"check": "quality", "required": true}
+  ],
+  "destructiveChangePolicy": {"allowed": false, "requiresHumanApproval": true, "allowPatterns": []},
+  "restrictedWriteApproval": {"approved": true, "approvedBy": "user", "reason": "User gave standing authorization to execute the plan automatically and record it in each Contract, including successor/quarantine and in-scope governance repairs."},
+  "rollbackNote": "Revert only this Work Item diff. Do not alter old #668, #711, or any archived evidence while rolling back.",
+  "budgetImpact": {"expectedMetrics": {"archiveGrowth": 32}},
+  "startReceipt": {"path": ".ai/work-items/starts/pr-critical-coverage-gate-668-current.json", "baseCommit": "809e403f35d53cf745c09a09fc0406cc10842a71", "initialScopeDigest": "3eb47f6fd280915c36afb56c9ab3a9639b97bfbf830884e6154809e3ba0ef9ff", "contractSkeletonDigest": "62be9d22a2b48c88c418e025c424c27da2a02ed05d5bc515801b122211aebf9b"}
+}

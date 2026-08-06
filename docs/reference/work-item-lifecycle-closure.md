@@ -110,6 +110,20 @@ default one-new-Work-Item-per-PR rule in force.
 
 Archived evidence has one immutable root: `archive-manifest.json` is generated only after the Contract and Summary are frozen, and records their SHA-256 digests. The Summary does not hash itself, and generated `current_status.md` is excluded from this chain. The archive index records the manifest path and digest; records predating this protocol remain readable as legacy evidence.
 
+## Same-Work-Item post-archive PR recovery
+
+For a failed post-archive `check-ai-pr` coverage or archive-evidence gate,
+`make ai-open-post-archive-recovery` is the only same-Work-Item repair route.
+It starts only from a clean committed candidate and writes one append-only
+receipt under `.ai/work-items/recovery-receipts/`. The receipt binds the exact
+archived Contract, Summary, Outcome, and manifest digests, the PR base, the
+failed aggregate command/output digest, the repository Issue, human authority,
+and a finite list of recovery paths. `check-ai-pr` independently recomputes
+each binding and grants ownership only to those paths. A stale, forged,
+incomplete, different-base, archive-mutating, or out-of-scope receipt remains
+unowned and fails the PR audit. It is never a merge, release, branch deletion,
+or closure authorization.
+
 The repository's remote name and default branch are discovered from Git's remote HEAD. Adopter projects therefore do not need to use `origin/main`.
 
 ## Exceptional provider merge-state recovery
