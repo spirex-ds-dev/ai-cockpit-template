@@ -12,9 +12,7 @@ def test_compatibility_runs_on_main_pushes_and_pull_requests():
 
 def test_self_hosted_recovery_is_dispatch_gated_and_diagnostic():
     """Catch a CI change that exposes a personal runner or upgrades its evidence."""
-    workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(
-        encoding="utf-8"
-    )
+    workflow = (ROOT / ".github" / "workflows" / "compatibility.yml").read_text(encoding="utf-8")
 
     assert "  workflow_dispatch:\n    inputs:\n      recovery_diagnostic:" in workflow
     assert "default: false" in workflow
