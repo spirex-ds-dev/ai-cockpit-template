@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 import ai_check_pr
+import ai_post_archive_recovery as recovery
 import pytest
 from ai_start_receipt import build_receipt, receipt_binding, validate_receipt
 
@@ -108,6 +109,86 @@ def test_pr_bundle_accepts_only_a_receipt_declared_same_work_item_recovery_path(
     issues = ai_check_pr.validate_pr_bundle("a" * 40, [pair])
 
     assert not any("scripts/ai_finish.py" in issue for issue in issues)
+
+
+def test_same_work_item_hosted_recovery_revalidates_provider_before_granting_paths(
+    tmp_path, monkeypatch
+):
+    archive = tmp_path / ".ai/work-items/archive/2026"
+    archive.mkdir(parents=True)
+    task = "hosted-recovered"
+    for suffix, value in {
+        "contract": {"workItemId": task},
+        "summary": {"workItemId": task},
+        "outcome": {"workItemId": task, "status": "completed"},
+        "archive-manifest": {"workItemId": task},
+    }.items():
+        (archive / f"{task}.{suffix}.json").write_text(json.dumps(value), encoding="utf-8")
+
+    def provider(endpoint):
+        values = {
+            "/repos/spirex-ds-dev/ai-cockpit-template/actions/runs/42": {
+                "id": 42,
+                "event": "pull_request",
+                "head_sha": "b" * 40,
+                "status": "completed",
+                "conclusion": "failure",
+                "path": ".github/workflows/smoke.yml",
+                "html_url": "https://github.com/spirex-ds-dev/ai-cockpit-template/actions/runs/42",
+                "pull_requests": [{"number": 716}],
+                "run_attempt": 1,
+            },
+            "/repos/spirex-ds-dev/ai-cockpit-template/actions/jobs/84": {
+                "id": 84,
+                "run_id": 42,
+                "name": "template-smoke",
+                "status": "completed",
+                "conclusion": "failure",
+            },
+        }
+        if endpoint.endswith("/logs"):
+            return b"Required test coverage of 85.1% not reached. Total coverage: 85.09%"
+        return json.dumps(values[endpoint]).encode()
+
+    receipt = recovery.open_hosted_post_archive_recovery(
+        root=tmp_path,
+        task=task,
+        base_commit="a" * 40,
+        issue="https://github.com/spirex-ds-dev/ai-cockpit-template/issues/709",
+        authority="standing authority",
+        recovery_paths=["tests/test_resume.py"],
+        repository="spirex-ds-dev/ai-cockpit-template",
+        pull_request=716,
+        failed_candidate_head="b" * 40,
+        run_id=42,
+        job_id=84,
+        fetch_provider=provider,
+        worktree_clean=lambda: True,
+    )
+    assert receipt["provider"]["runAttempt"] == 1
+    contract_path = archive / f"{task}.contract.json"
+    entries = [(contract_path, {"workItemId": task}, {}, (74, task, task))]
+    monkeypatch.setattr(ai_check_pr, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(recovery, "_github_api", provider)
+
+    permitted, receipts = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
+
+    assert permitted == {task: {"tests/test_resume.py"}}
+    assert receipts == {".ai/work-items/recovery-receipts/hosted-recovered.json"}
+
+    def stale_provider(endpoint):
+        payload = provider(endpoint)
+        if endpoint.endswith("/42"):
+            value = json.loads(payload)
+            value["head_sha"] = "c" * 40
+            return json.dumps(value).encode()
+        return payload
+
+    monkeypatch.setattr(recovery, "_github_api", stale_provider)
+    permitted, receipts = ai_check_pr.same_work_item_recovery_paths("a" * 40, entries)
+
+    assert permitted == {}
+    assert receipts == set()
 
 
 def test_pr_boundary_rejects_dirty_worktree(monkeypatch):

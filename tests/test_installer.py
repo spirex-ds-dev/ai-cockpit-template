@@ -223,6 +223,9 @@ def test_installed_distribution_contains_adoption_files(tmp_path):
     assert "check-ai-adoption-ready:" in makefile_ai
     assert "scripts/ai_check_pr.py" in makefile_ai
     assert "ai-open-post-archive-recovery:" in makefile_ai
+    assert "HOSTED_REPOSITORY" in makefile_ai
+    assert "HOSTED_RUN_ID" in makefile_ai
+    assert "HOSTED_JOB_ID" in makefile_ai
     assert "ai-close-work-item:" in makefile_ai
     assert (tmp_path / "scripts" / "ai_close_work_item.py").is_file()
     assert (tmp_path / "scripts" / "ai_generate_human_report.py").is_file()
