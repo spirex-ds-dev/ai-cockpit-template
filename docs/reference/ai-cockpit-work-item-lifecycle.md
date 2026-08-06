@@ -138,6 +138,24 @@ active evidence write. A successful synchronization marks prior verification
 Finish. Replay, stale tracking state, detached/base/foreign branches, dirty
 worktrees, unrelated histories, and malformed evidence fail closed.
 
+## Conflict successor after an automatic synchronization abort
+
+Do not resolve a proven synchronization conflict manually. Create a clean,
+dedicated successor from the live default branch through normal `ai-start`,
+then bind it without modifying the preserved source worktree:
+
+```text
+make ai-transition-conflict-successor SOURCE_ROOT=<source-worktree> \
+  SOURCE_CONTRACT=<source-contract> SUCCESSOR_CONTRACT=<successor-contract> \
+  BASE_REMOTE=<remote> BASE_BRANCH=<default-branch> ISSUE=<issue-url> \
+  AUTHORITY='<recorded human authority>' REASON='<conflict recovery reason>'
+```
+
+The successor-only receipt binds both Start Receipts, source Contract/Summary/
+blocked Outcome digests, source checkpoint HEAD, and the re-proven live target
+base. It never authorizes manual rebase, merge, release, archive mutation,
+source-branch deletion, or provider action.
+
 `TARGET_ROOT` is optional when the target is the current checkout; it is
 required for a caller acting on a distinct target worktree. The runtime treats
 that root as the sole source for Contract/Summary resolution, Git operations,
