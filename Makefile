@@ -37,7 +37,7 @@ GOVERNANCE_RECEIPT ?= target/quality/governance-profile.json
 	ai-cockpit-project-format-check ai-cockpit-project-test ai-cockpit-project-lint ai-cockpit-diff-check ai-cockpit-quality \
 check-docs-metadata check-capability-claims check-trust-layer-docs check-real-absurd-injection-docs check-governance-complexity \
 	check-ai-system-invariants check-ai-project-profile check-ai-calibration-profile check-ai-guard-calibration cockpit-doctor cockpit-calibrate cockpit-calibration-inventory cockpit-validate-calibration \
-	check-bandit-evidence check-bandit-baseline check-sbom check-provenance check-release-evidence refresh-candidate-release-evidence check-secret-scanning \
+	check-bandit-evidence check-bandit-baseline refresh-bandit-baseline check-sbom check-provenance check-release-evidence refresh-candidate-release-evidence check-secret-scanning \
 	check-release-distribution check-release-state-consistency check-japanese-capability check-release-readiness check-release-preflight check-ci-release-evidence \
 	check-source-bound-evidence check-changed-critical-coverage \
 	check-lockfile-reproducibility \
@@ -285,6 +285,9 @@ check-bandit-evidence:
 
 check-bandit-baseline: check-bandit-evidence
 	$(AI_PYTHON) scripts/check_bandit_baseline.py --input target/quality/bandit.json
+
+refresh-bandit-baseline: check-bandit-evidence
+	$(AI_PYTHON) scripts/check_bandit_baseline.py --input target/quality/bandit.json --refresh
 
 check-sbom:
 	$(AI_PYTHON) scripts/check_supply_chain.py sbom

@@ -227,6 +227,20 @@ def test_start_and_archive_use_clean_git_environment():
     assert all(not key.startswith("GIT_") for key in ai_common.clean_git_environment())
 
 
+def test_synchronization_git_queries_use_the_resolved_absolute_executable(tmp_path, monkeypatch):
+    observed: list[list[str]] = []
+
+    def fake_run(command, **_kwargs):
+        observed.append(command)
+        return subprocess.CompletedProcess(command, 0, stdout="ok\n", stderr="")
+
+    monkeypatch.setattr(ai_resume_work_item, "governed_git_executable", lambda: "/trusted/git")
+    monkeypatch.setattr(ai_resume_work_item.subprocess, "run", fake_run)
+
+    assert ai_resume_work_item._git(tmp_path, "status", "--porcelain") == "ok"
+    assert observed == [["/trusted/git", "status", "--porcelain"]]
+
+
 def test_linked_worktree_valid_isolated_active_pair_allows_agent_parallelism(tmp_path, monkeypatch):
     current = tmp_path / "current"
     other = tmp_path / "other"
